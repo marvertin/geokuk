@@ -1,0 +1,7 @@
+.metadata
+Geokuk/bin
+**/bin
+*.class
+*.jar
+*.war
+*.ear
