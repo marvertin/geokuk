@@ -33,8 +33,8 @@ import cz.geokuk.util.exception.FExceptionDumper;
  * "file://".
  */
 public class BrowserOpener {
-  
-  
+
+
   /**
    * Display a file in the system browser.  If you want to display a
    * file, you must include the absolute path name.
@@ -44,20 +44,21 @@ public class BrowserOpener {
    */
   public static void displayURL(URL url) {
     boolean windows = isWindowsPlatform();
-    String cmd = null;
+    String cmd1 = null;
+    String cmd2 = null;
     try {
       if (windows) {
         // cmd = 'rundll32 url.dll,FileProtocolHandler http://...'
-        cmd = WIN_PATH + " " + WIN_FLAG + " " + url;
-        Runtime.getRuntime().exec(cmd);
+        cmd1 = WIN_PATH + " " + WIN_FLAG + " " + url;
+        Runtime.getRuntime().exec(cmd1);
       } else {
         // Under Unix, Netscape has to be running for the "-remote"
         // command to work.  So, we try sending the command and
         // check for an exit value.  If the exit command is 0,
         // it worked, otherwise we need to start the browser.
         // cmd = 'netscape -remote openURL(http://www.javaworld.com)'
-        cmd = UNIX_PATH + " " + UNIX_FLAG + "(" + url + ")";
-        Process p = Runtime.getRuntime().exec(cmd);
+        cmd1 = UNIX_PATH + " " + UNIX_FLAG + "(" + url + ")";
+        Process p = Runtime.getRuntime().exec(cmd1);
         try {
           // wait for exit code -- if it's 0, command worked,
           // otherwise we need to start the browser up.
@@ -65,15 +66,16 @@ public class BrowserOpener {
           if (exitCode != 0) {
             // Command failed, start up the browser
             // cmd = 'netscape http://www.javaworld.com'
-            cmd = UNIX_PATH + " " + url;
-            p = Runtime.getRuntime().exec(cmd);
+            cmd2 = UNIX_PATH + " " + url;
+            p = Runtime.getRuntime().exec(cmd2);
           }
         } catch (InterruptedException x) {
           FExceptionDumper.dump(x, EExceptionSeverity.WORKARROUND, "Přerušení metodou interrupt(), taková výjimka asi nikdy nenastane.");
         }
       }
     } catch (IOException e) {
-      throw new RuntimeException("Nedari se otevrit browser \" pro " + url + "\"");
+      throw new RuntimeException(String.format("Nedari se otevrit browser na %s pro \"%s\" cmd1=\"%s\" cmd2= \"%s\"",
+          System.getProperty("os.name"), url, cmd1, cmd2), e);
     }
   }
 
@@ -94,7 +96,7 @@ public class BrowserOpener {
 
   /**
    * Simple example.
-   * @throws MalformedURLException 
+   * @throws MalformedURLException
    */
   public static void main(String[] args) throws MalformedURLException {
     displayURL(new URL("http://www.javaworld.com"));

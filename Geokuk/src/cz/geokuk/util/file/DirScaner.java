@@ -14,23 +14,23 @@ import java.util.List;
  *
  */
 public  class DirScaner {
-  
+
   private File dir;
   private List<FileAndTime> lastScaned = null;
 
 
   public void setDir(File dir, boolean prenacti) {
-  	if (! prenacti && dir.equals(this.dir)) return;
-  	this.dir = dir;
-  	nulujLastScaned();
+    if (! prenacti && dir.equals(this.dir)) return;
+    this.dir = dir;
+    nulujLastScaned();
   }
-  
+
   public synchronized void nulujLastScaned() {
-  	lastScaned = null;
+    lastScaned = null;
   }
   /**
    * Vrátí null, pokud není co načítat, protože nedošlo ke změně.
-   * Prázdný seznam je něco jiného, to ke změně došlo takové, že 
+   * Prázdný seznam je něco jiného, to ke změně došlo takové, že
    * zmizely všechny soubory
    * @return
    */
@@ -44,14 +44,14 @@ public  class DirScaner {
     }
     return files;
   }
-  
+
   private List<FileAndTime> scanDir(File dir) {
     List<FileAndTime> list = new ArrayList<FileAndTime>();
     if (! dir.isDirectory()) return list;
     String[] fords = dir.list();
     for (String ford : fords) {
-      ford = ford.toLowerCase().trim();
-      if (ford.matches(".*\\.(geokuk|gpx|zip)")) {
+      ford = ford.trim();
+      if (ford.toLowerCase().trim().matches(".*\\.(geokuk|gpx|zip)")) {
         File file = new File(dir, ford);
         if (! file.isDirectory()) {
           FileAndTime fileAndTime = new FileAndTime(file, file.lastModified());
@@ -62,12 +62,12 @@ public  class DirScaner {
     Collections.sort(list); // podle času
     return list;
   }
-  
+
   private static class FileAndTime implements Comparable<FileAndTime> {
-    
+
     private final File file;
     private final long lastmodify;
-    
+
     /**
      * @param aFile
      * @param aLastmodify
@@ -77,20 +77,20 @@ public  class DirScaner {
       file = aFile;
       lastmodify = aLastmodify;
     }
-//    /**
-//     * @return the file
-//     */
-//    public File getFile() {
-//      return file;
-//    }
-//    
-//    /**
-//     * @return the lastmodify
-//     */
-//    public long getLastmodify() {
-//      return lastmodify;
-//    }
-    
+    //    /**
+    //     * @return the file
+    //     */
+    //    public File getFile() {
+    //      return file;
+    //    }
+    //
+    //    /**
+    //     * @return the lastmodify
+    //     */
+    //    public long getLastmodify() {
+    //      return lastmodify;
+    //    }
+
     /* (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */
@@ -138,8 +138,8 @@ public  class DirScaner {
       if (lastmodify == fat.lastmodify) return 0;
       if (lastmodify < fat.lastmodify) return -1; else return 1;
     }
-    
-    
-    
+
+
+
   }
 }
