@@ -14,6 +14,7 @@ import javax.swing.JToolBar;
 import cz.geokuk.core.lookandfeel.LafSupport;
 import cz.geokuk.plugins.kesoid.mapicon.JMenuIkony;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracBestOf;
+import cz.geokuk.plugins.kesoid.mvc.JVybiracFavorit;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracHodnoceni;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracVyletu;
 import cz.geokuk.plugins.refbody.NaKonkretniBodAction;
@@ -140,19 +141,16 @@ public class Menu extends MenuStrujce {
     JLabel lbl;
 
     JVybiracHodnoceni jVybiracHodnoceni = factory.init(new JVybiracHodnoceni ());
-    lbl = new JLabel("Hodnocení: ");
-    lbl.setLabelFor(jVybiracHodnoceni);
-    tb.add(lbl);
     tb.add(jVybiracHodnoceni);
 
     JVybiracBestOf jVybiraceBestOf = factory.init(new JVybiracBestOf());
-    lbl = new JLabel(" BestOf: ");
-    lbl.setLabelFor(jVybiraceBestOf);
-    tb.add(lbl);
     tb.add(jVybiraceBestOf);
 
+    JVybiracFavorit jVybiraceFavorit = factory.init(new JVybiracFavorit());
+    tb.add(jVybiraceFavorit);
+
     JVybiracVyletu iVybiracVyletu = factory.init(new JVybiracVyletu());
-    lbl = new JLabel(" Výlet: ");
+    lbl = new JLabel("Výlet: ");
     lbl.setLabelFor(iVybiracVyletu);
     tb.add(lbl);
     tb.add(iVybiracVyletu);

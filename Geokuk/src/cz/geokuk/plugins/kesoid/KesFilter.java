@@ -27,17 +27,17 @@ public class KesFilter  {
   }
 
   public void onEvent(VyletChangeEvent aEvent) {
-//    if (aEvent.isVelkaZmena()) {
+    //    if (aEvent.isVelkaZmena()) {
     kesoidModel.spustFiltrovani();
-//    } else { // je to jednotlivost
-//      EVylet evyl = (EVylet) prahVyletuModel.getSelectedItem();
-//      if (aEvent.getEvyl().ordinal() < evyl.ordinal() || aEvent.getEvylPuvodni().ordinal() < evyl.ordinal()) {
-//        changeListener.spustFiltrovani();
-//      }
-//    }
+    //    } else { // je to jednotlivost
+    //      EVylet evyl = (EVylet) prahVyletuModel.getSelectedItem();
+    //      if (aEvent.getEvyl().ordinal() < evyl.ordinal() || aEvent.getEvylPuvodni().ordinal() < evyl.ordinal()) {
+    //        changeListener.spustFiltrovani();
+    //      }
+    //    }
   }
-  
-  
+
+
 
   /**
    * @return the jmenaNechtenychAlel
@@ -92,6 +92,9 @@ public class KesFilter  {
       if (kes.getBestOf() != Kes.NENI_HODNOCENI) {
         if (kes.getBestOf() < filterDefinition.getPrahBestOf()) return false;
       }
+      if (kes.getFavorit() != Kes.NENI_HODNOCENI) {
+        if (kes.getFavorit() < filterDefinition.getPrahFavorit()) return false;
+      }
     }
     if (vyletModel != null) {
       EVylet evylKes = vyletModel.get(kesoid);
@@ -101,7 +104,7 @@ public class KesFilter  {
     return true;
 
   }
-  //  
+  //
   //  Board.kesfilter.jenFinal.setSelected(true);
   //  Board.kesfilter.jenJedenUNalezenych.setSelected(true);
   //  Board.kesfilter.smailikNaFinalce.setSelected(true);
@@ -125,7 +128,7 @@ public class KesFilter  {
   public void done() {
     nechteneAlely = null;
   }
-  
+
   /**
    * @return the filterDefinition
    */
@@ -140,15 +143,15 @@ public class KesFilter  {
     this.filterDefinition = filterDefinition;
   }
 
-  
+
 
   public void inject(VyletModel vyletModel) {
     this.vyletModel = vyletModel;
   }
-  
+
   public void inject(KesoidModel kesoidModel) {
     this.kesoidModel = kesoidModel;
   }
 
-  
+
 }

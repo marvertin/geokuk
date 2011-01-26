@@ -10,8 +10,8 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
-import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.plugins.kesoid.mapicon.Genom.CitacAlel;
+import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.lang.CounterMap;
@@ -24,16 +24,17 @@ public class KesBag {
   private List<Kesoid> kesoidy;
 
   private CounterMap<Alela> poctyAlel;
-  
-  
+
+
   private final Indexator<Wpt> indexator;
 
   private int maximalniBestOf = 0;
   private int maximalniHodnoceni;
+  private int maximalniFavorit;
   private final Genom genom;
-  
+
   private final CitacAlel citacAlel;
-  
+
   private InformaceOZdrojich iInformaceOZdrojich;
 
   private boolean locked;
@@ -41,25 +42,24 @@ public class KesBag {
   ////////////////////////////////////////
   public KesBag(final Genom genom) {
     this.genom = genom;
-    this.indexator =new Indexator<Wpt>(BoundingRect.ALL);
-    this.kesoidyset = new HashSet<Kesoid>();
-    this.citacAlel = genom.createCitacAlel();
+    indexator =new Indexator<Wpt>(BoundingRect.ALL);
+    kesoidyset = new HashSet<Kesoid>();
+    citacAlel = genom.createCitacAlel();
   }
-  
+
   public void add(Wpt wpt, Genotyp genotyp) {
-  	if (locked) {
-  		throw new RuntimeException("Nelze uz vkladat waypointy");
-  	}
-  	if (genotyp == null) { // to je zde jen z důvodu optimalizace
-  		genotyp = wpt.getGenotyp(genom);
-  	}
-  	Mou mou = wpt.getMou();
+    if (locked)
+      throw new RuntimeException("Nelze uz vkladat waypointy");
+    if (genotyp == null) { // to je zde jen z důvodu optimalizace
+      genotyp = wpt.getGenotyp(genom);
+    }
+    Mou mou = wpt.getMou();
     if (mou.xx < 0 || mou.yy < 0) {
       //// TODO [veverka] Řešit rozsah [25.11.2009 9:45:59; veverka]
       System.err.println(wpt + " --- " + wpt.getKesoid());
       return;
     }
-  	indexator.vloz(mou.xx, mou.yy, wpt);
+    indexator.vloz(mou.xx, mou.yy, wpt);
     Kesoid kesoid = wpt.getKesoid();
     kesoidyset.add(kesoid);
     wpts.add(wpt);
@@ -67,22 +67,23 @@ public class KesBag {
       Kes kes = (Kes) kesoid;
       maximalniBestOf = Math.max(maximalniBestOf, kes.getBestOf());
       maximalniHodnoceni = Math.max(maximalniHodnoceni, kes.getHodnoceni());
+      maximalniFavorit = Math.max(maximalniFavorit, kes.getFavorit());
     }
     for (Alela alela : genotyp.getAlely()) {
-    	assert alela != null;
-    	citacAlel.add(alela);
+      assert alela != null;
+      citacAlel.add(alela);
     }
   }
-  
+
   public void done() {
-  	kesoidy = new ArrayList<Kesoid>(kesoidyset.size());
+    kesoidy = new ArrayList<Kesoid>(kesoidyset.size());
     kesoidy.addAll(kesoidyset);
-  	kesoidyset = null;
-  	poctyAlel = citacAlel.getCounterMap();
-  	//System.out.println(poctyAlel);
+    kesoidyset = null;
+    poctyAlel = citacAlel.getCounterMap();
+    //System.out.println(poctyAlel);
   }
 
-  
+
   /**
    * @return the genom
    */
@@ -105,17 +106,21 @@ public class KesBag {
     return maximalniHodnoceni;
   }
 
+  public int getMaximalniFavorit() {
+    return maximalniFavorit;
+  }
+
+
+
   public List<Wpt> getWpts() {
-  	if (kesoidy == null) {
-  		throw new RuntimeException("Jeste neni kesBag vytvoren");
-  	}
+    if (kesoidy == null)
+      throw new RuntimeException("Jeste neni kesBag vytvoren");
     return wpts;
   }
 
   public List<Kesoid> getKesoidy() {
-  	if (kesoidy == null) {
-  		throw new RuntimeException("Jeste neni kesBag vytvoren");
-  	}
+    if (kesoidy == null)
+      throw new RuntimeException("Jeste neni kesBag vytvoren");
     return kesoidy;
   }
 
@@ -127,9 +132,9 @@ public class KesBag {
   }
 
   public Set<Alela> getPouziteAlely() {
-  	// TODO optimalizovat
+    // TODO optimalizovat
     Set<Alela> result = poctyAlel.getMap().keySet();
-		return result;
+    return result;
   }
 
   /**

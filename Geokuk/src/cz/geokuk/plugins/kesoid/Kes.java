@@ -24,6 +24,8 @@ public class Kes extends Kesoid {
   private int hodnoceni = Kes.NENI_HODNOCENI;
   private int hodnoceniPocet = Kes.NENI_HODNOCENI;
   private int znamka = Kes.NENI_HODNOCENI;
+  private int favorit = Kes.NENI_HODNOCENI;
+
   private String hint;
   private EKesSize size;
   private String difficulty;
@@ -33,6 +35,7 @@ public class Kes extends Kesoid {
   private static String URL_PREFIX_PRINT = "http://www.geocaching.com/seek/cdpf.aspx?guid=";
   private static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
   public static final int NENI_HODNOCENI = -1;
+
   private String iFountTime;
 
   private Wpt mainWpt;
@@ -186,7 +189,7 @@ public class Kes extends Kesoid {
    * @param aFound
    */
   public void setFoundTime(String fountTime) {
-    this.iFountTime = fountTime;
+    iFountTime = fountTime;
   }
 
   /**
@@ -243,9 +246,8 @@ public class Kes extends Kesoid {
       if (urls.startsWith(URL_PREFIX_SHOW)) {
         URL url = new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));
         return url;
-      } else {
+      } else
         return null;
-      }
     } catch (MalformedURLException e) {
       return null;
     }
@@ -304,6 +306,14 @@ public class Kes extends Kesoid {
     sb.append(getOneLetterDifficulty());
     sb.append(getOneLetterTerrain());
     return sb.toString();
+  }
+
+  public int getFavorit() {
+    return favorit;
+  }
+
+  public void setFavorit(int favorit) {
+    this.favorit = favorit;
   }
 
 
