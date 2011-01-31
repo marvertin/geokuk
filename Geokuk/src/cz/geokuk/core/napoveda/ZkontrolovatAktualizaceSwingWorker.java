@@ -10,7 +10,6 @@ import java.net.URLConnection;
 
 import javax.swing.JOptionPane;
 
-
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.framework.MySwingWorker0;
@@ -52,8 +51,9 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<String, V
         Dlg.info("Používaná verze programu Geokuk " + FConst.VERSION + " je poslední distribuovanou verzí." , "Oznámení");
       }
     } else {
-      Object[] options = {"Spustit novou verzi pomocí Java WebStart",
+      Object[] options = {"Spustit novou",
           "Zobrazit web",
+          "Stáhnout jar",
       "Nedělat nic"};
       int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
           "<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " +
@@ -70,11 +70,13 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<String, V
       break;
       case 1: zobrazitWeb();
       break;
+      case 2: stahnoutJar();
+      break;
       default:
         break;
       }
       System.out.println(n);
-
+      //http://geokuk.cz/geokuk.jar
     }
 
     super.donex();
@@ -83,6 +85,14 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<String, V
   private void zobrazitWeb() {
     try {
       BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "spust.html"));
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private void stahnoutJar() {
+    try {
+      BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "geokuk.jar"));
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }

@@ -634,6 +634,8 @@ public class ImportBuilder {
       return EKesVztah.OWN;
     if (gccomNick.equals(gpxwpt.groundspeak.owner))
       return EKesVztah.OWN;
+    if (gccomNick.equals(gpxwpt.groundspeak.placedBy))
+      return EKesVztah.OWN;
     else if (GEOCACHE_FOUND.equals(gpxwpt.sym))
       return EKesVztah.FOUND;
     else
