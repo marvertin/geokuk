@@ -203,7 +203,9 @@ public class ImportBuilder {
         //      	if ("Czech Geodetic Point".equals(anObject))
         Waymark wm = createWaymarkNormal(gpxwpt);
         boolean pripojeno = zkusPripojitKCgp(wm, gpxwpt, mapaPredTeckou);
-        if (!pripojeno) kesoidy.put(gpxwpt.name, wm);
+        if (!pripojeno) {
+          kesoidy.put(gpxwpt.name, wm);
+        }
         it.remove();
         progressor.setProgress(delkaTasku - list.size());
       }
@@ -212,7 +214,9 @@ public class ImportBuilder {
       if (jeToWaymark) {
         Waymark wm = createWaymarkGeoget(gpxwpt);
         boolean pripojeno = zkusPripojitKCgp(wm, gpxwpt, mapaPredTeckou);
-        if (!pripojeno) kesoidy.put(gpxwpt.name, wm);
+        if (!pripojeno) {
+          kesoidy.put(gpxwpt.name, wm);
+        }
         it.remove();
         progressor.setProgress(delkaTasku - list.size());
       }
@@ -222,7 +226,9 @@ public class ImportBuilder {
     // Teď znovu procházíme a hledáme dodatečné waypointy kešoidů
     for (ListIterator<GpxWpt> it = list.listIterator(); it.hasNext();) {
       GpxWpt gpxwpt = it.next();
-      if (gpxwpt.name.length() < 2) continue;
+      if (gpxwpt.name.length() < 2) {
+        continue;
+      }
       String potentialGccode = "GC" + gpxwpt.name.substring(2);
       //TODO dodatečné waypointy též pro waymarky
       Kesoid kesoid = kesoidy.get(potentialGccode);
@@ -296,9 +302,8 @@ public class ImportBuilder {
   }
 
   private boolean zkusPripojitKCgp(Waymark wm, GpxWpt gpxwpt, Map<String, CzechGeodeticPoint> mapaPredTeckou) {
-    if (! wm.getMainWpt().getSym().equals("Czech Geodetic Points")) {
+    if (! wm.getMainWpt().getSym().equals("Czech Geodetic Points"))
       return false;  // není to ani ta správná kategorie
-    }
     String oznaceniBodu = extractOznaceniBodu(wm.getNazev());
     if (oznaceniBodu == null) return false; // tak ve jméně není označení, zobrazíme jako normální waymark
     CzechGeodeticPoint cgp = mapaPredTeckou.get(oznaceniBodu);
@@ -327,7 +332,9 @@ public class ImportBuilder {
   private String extrahujPrefixPredTeckou(GpxWpt gpxwpt) {
     String jmeno = gpxwpt.groundspeak.name;
     int poz = jmeno.indexOf('.');
-    if (poz < 0) poz = jmeno.length();
+    if (poz < 0) {
+      poz = jmeno.length();
+    }
     return jmeno.substring(0, poz);
   }
 
@@ -371,7 +378,9 @@ public class ImportBuilder {
     CzechGeodeticPoint cgp = new CzechGeodeticPoint();
     String suroveCisloBodu = gpxwpt.groundspeak.name;
     String cisloBodu = suroveCisloBodu;
-    if (cisloBodu.endsWith(" (ETRS)")) cisloBodu = cisloBodu.substring(0, cisloBodu.length() -7);
+    if (cisloBodu.endsWith(" (ETRS)")) {
+      cisloBodu = cisloBodu.substring(0, cisloBodu.length() -7);
+    }
     cgp.setCode(cisloBodu);
     cgp.setVztahx(EKesVztah.NOT);
 
@@ -460,11 +469,15 @@ public class ImportBuilder {
             sb.append(s.substring(0, i)); // tedy bez této mezery připojit a dál už musíme kopírovat
           }
         } else {
-          if (sb != null) sb.append(c);
+          if (sb != null) {
+            sb.append(c);
+          }
           naposledBylaMezera = true;
         }
       } else {
-        if (sb != null) sb.append(c);
+        if (sb != null) {
+          sb.append(c);
+        }
         naposledBylaMezera = false;
       }
 
@@ -478,9 +491,8 @@ public class ImportBuilder {
    */
   private String urciSymCgpZPseudoKese(GpxWpt gpxwpt) {
     EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
-    if (pseudoKesType == EKesType.TRADITIONAL) {
+    if (pseudoKesType == EKesType.TRADITIONAL)
       return (gpxwpt.groundspeak.name.contains("ETRS")) ?  "TrB (ETRS)" : "TrB";
-    }
     if (pseudoKesType == EKesType.LETTERBOX_HYBRID) return "TrB-p";
     if (pseudoKesType == EKesType.MULTI) return "ZhB";
     if (pseudoKesType == EKesType.UNKNOWN) return "ZhB-p";
@@ -506,18 +518,36 @@ public class ImportBuilder {
     if (pseudoKesType == EKesType.TRADITIONAL) {
       nazev = gpxwpt.groundspeak.encodedHints;
     }
-    if (pseudoKesType == EKesType.LETTERBOX_HYBRID) nazev =  gpxwpt.groundspeak.encodedHints;
-    if (pseudoKesType == EKesType.MULTI) nazev =  gpxwpt.groundspeak.encodedHints;
-    if (pseudoKesType == EKesType.UNKNOWN) nazev =  gpxwpt.groundspeak.encodedHints;
-    if (pseudoKesType == EKesType.EARTHCACHE) nazev =  gpxwpt.groundspeak.shortDescription;
-    if (pseudoKesType == EKesType.WHERIGO) nazev =  gpxwpt.groundspeak.shortDescription;
+    if (pseudoKesType == EKesType.LETTERBOX_HYBRID) {
+      nazev =  gpxwpt.groundspeak.encodedHints;
+    }
+    if (pseudoKesType == EKesType.MULTI) {
+      nazev =  gpxwpt.groundspeak.encodedHints;
+    }
+    if (pseudoKesType == EKesType.UNKNOWN) {
+      nazev =  gpxwpt.groundspeak.encodedHints;
+    }
+    if (pseudoKesType == EKesType.EARTHCACHE) {
+      nazev =  gpxwpt.groundspeak.shortDescription;
+    }
+    if (pseudoKesType == EKesType.WHERIGO) {
+      nazev =  gpxwpt.groundspeak.shortDescription;
+    }
 
-    if (pseudoKesType == EKesType.CACHE_IN_TRASH_OUT_EVENT) nazev =  gpxwpt.groundspeak.encodedHints;
-    if (pseudoKesType == EKesType.EVENT) nazev =  gpxwpt.groundspeak.encodedHints;
-    if (pseudoKesType == EKesType.MEGA_EVENT) nazev =  gpxwpt.groundspeak.encodedHints;
+    if (pseudoKesType == EKesType.CACHE_IN_TRASH_OUT_EVENT) {
+      nazev =  gpxwpt.groundspeak.encodedHints;
+    }
+    if (pseudoKesType == EKesType.EVENT) {
+      nazev =  gpxwpt.groundspeak.encodedHints;
+    }
+    if (pseudoKesType == EKesType.MEGA_EVENT) {
+      nazev =  gpxwpt.groundspeak.encodedHints;
+    }
 
     int poz = nazev.indexOf("http://");
-    if (poz >= 0) nazev = nazev.substring(0, poz);
+    if (poz >= 0) {
+      nazev = nazev.substring(0, poz);
+    }
     JtskSouradnice jtsk = extrahujJtsk(nazev);
     if (jtsk != null) {
       nazev = jtsk.pred + jtsk.po;
@@ -526,7 +556,9 @@ public class ImportBuilder {
       wpt.setElevation((int) jtsk.z);
     }
     nazev = nazev.trim();
-    if (nazev.length() == 0) nazev = "Geodetický bod";
+    if (nazev.length() == 0) {
+      nazev = "Geodetický bod";
+    }
     wpt.setNazev(nazev);
   }
 
@@ -543,9 +575,8 @@ public class ImportBuilder {
       sou.z = Double.parseDouble(mat.group(6));
       sou.po = mat.group(7);
       return sou;
-    } else {
+    } else
       return null;
-    }
   }
 
 
@@ -572,6 +603,7 @@ public class ImportBuilder {
     kes.setHodnoceniPocet(gpxwpt.gpxg.hodnoceniPocet);
     kes.setZnamka(gpxwpt.gpxg.znamka);
     kes.setBestOf(gpxwpt.gpxg.bestOf);
+    kes.setFavorit(gpxwpt.gpxg.favorites);
     kes.setFoundTime(gpxwpt.gpxg.found);
 
     Wpt wpt = createWpt(gpxwpt);
@@ -598,27 +630,24 @@ public class ImportBuilder {
 
 
   private EKesVztah urciVztah(GpxWpt gpxwpt) {
-    if (gpxwpt.explicitneUrcenoVlastnictvi) {
+    if (gpxwpt.explicitneUrcenoVlastnictvi)
       return EKesVztah.OWN;
-    }
-    if (gccomNick.equals(gpxwpt.groundspeak.owner)) {
+    if (gccomNick.equals(gpxwpt.groundspeak.owner))
       return EKesVztah.OWN;
-    } else if (GEOCACHE_FOUND.equals(gpxwpt.sym)) {
+    else if (GEOCACHE_FOUND.equals(gpxwpt.sym))
       return EKesVztah.FOUND;
-    } else {
+    else
       return EKesVztah.NORMAL;
-    }
   }
 
   protected EKesStatus urciStatus( boolean archived, boolean availaible) {
-    if (archived) {
+    if (archived)
       return EKesStatus.ARCHIVED;
-    } else {
-      if (!availaible) {
+    else {
+      if (!availaible)
         return EKesStatus.DISABLED;
-      } else {
+      else
         return EKesStatus.ACTIVE;
-      }
     }
   }
 
@@ -650,22 +679,20 @@ public class ImportBuilder {
       patExtrakceCislaCgp = Pattern.compile(".*?([0-9]+-[0-9]+).*");
     }
     Matcher mat = patExtrakceCislaCgp.matcher(celeJmeno);
-    if (mat.matches()) {
+    if (mat.matches())
       return mat.group(1);
-    } else {
+    else
       return null;
-    }
   }
 
   private int urciElevation(GpxWpt gpxwpt) {
-    if (gpxwpt.ele != 0) {
+    if (gpxwpt.ele != 0)
       return (int) gpxwpt.ele;
-    } else {
-      if (gpxwpt.gpxg != null) {
+    else {
+      if (gpxwpt.gpxg != null)
         return gpxwpt.gpxg.elevation;
-      } else {
+      else
         return 0;
-      }
     }
   }
 
@@ -691,7 +718,9 @@ public class ImportBuilder {
       String alelaName = entry.getValue();
       String genName = entry.getKey();
       Alela alela = genom.alela(alelaName, genName);
-      if (alela == null) continue;
+      if (alela == null) {
+        continue;
+      }
       alely.add(alela);
     }
     return alely;

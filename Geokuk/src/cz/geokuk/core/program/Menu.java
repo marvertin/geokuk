@@ -206,8 +206,9 @@ public class Menu extends MenuStrujce {
     menu("Nápověda", "Nápověda, odkazy na web, kotnrola aktualiozací");
     menu.setMnemonic(KeyEvent.VK_N);
     item(akce.napovedaAction);
-    item(akce.zkontrolovatAktualizaceAction);
     item(akce.webovaStrankaAction);
+    item(akce.zadatProblemAction);
+    item(akce.zkontrolovatAktualizaceAction);
     separator();
     item(akce.oProgramuAction);
 

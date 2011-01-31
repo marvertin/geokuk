@@ -18,16 +18,18 @@ public class Gpxg {
   public int hodnoceni;
   public int hodnoceniPocet;
   public int bestOf;
+  public int favorites;
   public int znamka;
   public String czkraj;
   public String czokres;
   public Map<String, String> userTags;
-  
-  
-	public void putUserTag(String genname, String alelaname) {
-	  if (userTags == null) userTags = new HashMap<String, String>();
-	  userTags.put(genname, alelaname);
+
+
+  public void putUserTag(String genname, String alelaname) {
+    if (userTags == null) {
+      userTags = new HashMap<String, String>();
+    }
+    userTags.put(genname, alelaname);
   }
 
 }
- 

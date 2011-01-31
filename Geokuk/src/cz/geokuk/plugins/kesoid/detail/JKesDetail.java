@@ -45,8 +45,9 @@ public class JKesDetail extends JKesoidDetail0 {
   private final JLabel hodnoceni = new JLabel();
   private final JLabel hodnoceniPocet = new JLabel();
   private final JLabel znamka = new JLabel();
-	private JLabel jFoundTime;
-  
+  private JFavorit jFavorit;
+  private JLabel jFoundTime;
+
   private JSmallPictureButton zobrazHint;
 
 
@@ -75,33 +76,33 @@ public class JKesDetail extends JKesoidDetail0 {
     Box box2 = Box.createHorizontalBox();
 
     {
-	    
-	    Box box3 = Box.createVerticalBox();
-	    box3.add(size);
-	    box3.add(Box.createGlue());
-	    box3.add(jFoundTime);
 
-	    box2.add(box3);
+      Box box3 = Box.createVerticalBox();
+      box3.add(size);
+      box3.add(Box.createGlue());
+      box3.add(jFoundTime);
+
+      box2.add(box3);
     }
 
     box2.add(zobrazHint);
 
     {
-	    Box pan4a = Box.createVerticalBox();
-	    JLabel lblObtiznost = new Popisek("D:");
-	    pan4a.add(lblObtiznost);
-	    JLabel lblTeren = new Popisek("T:");
-	    pan4a.add(lblTeren);
+      Box pan4a = Box.createVerticalBox();
+      JLabel lblObtiznost = new Popisek("D:");
+      pan4a.add(lblObtiznost);
+      JLabel lblTeren = new Popisek("T:");
+      pan4a.add(lblTeren);
 
-	    Box pan4b = Box.createVerticalBox();
-	    pan4b.add(difficulty);
-	    pan4b.add(terrain);
-	
-	    box2.add(Box.createHorizontalGlue());
-	
-	    //  pan4.setAlignmentX(RIGHT_ALIGNMENT);
-	    box2.add(pan4a);
-	    box2.add(pan4b);
+      Box pan4b = Box.createVerticalBox();
+      pan4b.add(difficulty);
+      pan4b.add(terrain);
+
+      box2.add(Box.createHorizontalGlue());
+
+      //  pan4.setAlignmentX(RIGHT_ALIGNMENT);
+      box2.add(pan4a);
+      box2.add(pan4b);
 
     }
 
@@ -117,14 +118,16 @@ public class JKesDetail extends JKesoidDetail0 {
     box4.add(znamka);
     box4.add(new Popisek("BestOf:"));
     box4.add(bestOf);
+    jFavorit = new JFavorit(0);
+    box4.add(jFavorit);
     hlav.add(box4);
 
 
-//    Box box5 = Box.createHorizontalBox();
-//
-//    box5.add(Box.createGlue());
-//    box5.add(zobrazHint);
-//    hlav.add(box5);
+    //    Box box5 = Box.createHorizontalBox();
+    //
+    //    box5.add(Box.createGlue());
+    //    box5.add(zobrazHint);
+    //    hlav.add(box5);
 
 
 
@@ -141,12 +144,12 @@ public class JKesDetail extends JKesoidDetail0 {
 
   @Override
   public void napln(Wpt wpt) {
-		kes = (Kes)wpt.getKesoid(); 
+    kes = (Kes)wpt.getKesoid();
     napln();
     boolean mameHint = kes.getHint() != null && ! kes.getHint().trim().isEmpty();
     zobrazHint.setEnabled(mameHint);
   }
-  
+
   public void onEvent(DomaciSouradniceSeZmenilyEvent aEvent) {
     if (isVisible() && kes != null) {
       napln();
@@ -159,12 +162,14 @@ public class JKesDetail extends JKesoidDetail0 {
     difficulty.setIcon(hvezdicky(kes.getDifficulty()));
     terrain.setIcon(hvezdicky(kes.getTerrain()));
     jFoundTime.setText(JKesoidDetail0.formatujDatum(kes.getFountTime()));
-    
+
 
     bestOf.setText(kes.getBestOf() == Kes.NENI_HODNOCENI ? "?" : kes.getBestOf() + "x");
     hodnoceni.setText(kes.getHodnoceni() == Kes.NENI_HODNOCENI ? "?" : kes.getHodnoceni() + "%");
     hodnoceniPocet.setText(kes.getHodnoceniPocet() == Kes.NENI_HODNOCENI  ? "?" : kes.getHodnoceniPocet() + "x");
     znamka.setText(kes.getZnamka() == Kes.NENI_HODNOCENI  ? "?" : kes.getZnamka() + "%");
+    jFavorit.setKolik(kes.getFavorit());
+    jFavorit.setVisible(kes.getFavorit() > 0);
   }
 
 

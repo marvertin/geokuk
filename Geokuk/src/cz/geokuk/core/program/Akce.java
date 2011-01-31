@@ -7,6 +7,7 @@ import cz.geokuk.core.coord.NastavMapuCeskaAction;
 import cz.geokuk.core.coord.OddalMapuAction;
 import cz.geokuk.core.coord.PriblizMapuAction;
 import cz.geokuk.core.napoveda.OProgramuAction;
+import cz.geokuk.core.napoveda.ZadatProblemAction;
 import cz.geokuk.core.napoveda.WebovaStrankaAction;
 import cz.geokuk.core.napoveda.ZkontrolovatAktualizaceAction;
 import cz.geokuk.core.profile.UlozitNastaveniKProgramuAction;
@@ -150,5 +151,6 @@ public class Akce {
   public final KesoidyOnoffAction kesoidyOnoffAction = new KesoidyOnoffAction();
 
   public final NapovedaAction  napovedaAction = new NapovedaAction(null);
+  public final ZadatProblemAction zadatProblemAction = new ZadatProblemAction();
 
 }
