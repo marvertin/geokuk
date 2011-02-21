@@ -244,7 +244,10 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
     //    if (vykreslovatOkamtiteAleDlouho) {
     //      System.out.println("Malujem kesika " + x + " " + y + " --- " +imagant.getImage().getWidth() + " " + imagant.getImage().getHeight());
     //    }
-    if (scale == 1) {
+
+    // JE to zde proto, aby se zabyly warningy.
+    double iscale = scale;
+    if (iscale == 1) {
       int x = p.x + imagant.getXpos();
       int y = p.y + imagant.getYpos();
       g.drawImage(imagant.getImage(), x, y, null);

@@ -121,7 +121,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
 
   public JRenderDialog() {
-    setTitle("Hromadné dotažení mapových dlaždic");
+    setTitle("Rendrování / tisk");
   }
 
 

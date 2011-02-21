@@ -335,6 +335,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
       @Override
       public void windowClosed(WindowEvent aE) {
         ulozeStav();
+        System.exit(0);
       }
 
       @Override

@@ -27,10 +27,11 @@ public class CloseAction extends Action0 {
   /* (non-Javadoc)
    * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
    */
-  
+
   @Override
   public void actionPerformed(ActionEvent e) {
-    getMainFrame().dispose();   
+    getMainFrame().dispose();
+    System.exit(0);
   }
 
 }

@@ -294,7 +294,7 @@ public class Kes extends Kesoid {
   private char naJednoPismeno(String s) {
     char c = s.charAt(0);
     if (s.length() == 1) return c;
-    else return (char) (c - '0' + 'A');
+    else return (char) (c - '1' + 'A');
   }
 
   /**
