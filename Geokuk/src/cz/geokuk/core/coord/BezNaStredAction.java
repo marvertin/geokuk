@@ -33,7 +33,7 @@ public class BezNaStredAction extends Action0 {
    */
   @Override
   public void actionPerformed(ActionEvent aE) {
-    poziceModel.setPozice(moustred.toWgs());
+    poziceModel.setPozice(moustred);
   }
 
   public void onEvent(VyrezChangedEvent event) {

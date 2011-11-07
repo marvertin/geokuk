@@ -22,9 +22,9 @@ public abstract class Nacitac0 {
 
   static Pattern osetriCislo = Pattern.compile("[^0-9]");
 
-  protected abstract void nactiKdyzUmis(InputStream istm, String jmeno, ImportBuilder builder,  Future<?> future) throws IOException;
+  protected abstract void nactiKdyzUmis(InputStream istm, String jmeno, IImportBuilder builder,  Future<?> future) throws IOException;
 
-  protected final void nactiKdyzUmisBezVyjimky(InputStream istm, String jmeno, ImportBuilder builder, Future<?> future) {
+  protected final void nactiKdyzUmisBezVyjimky(InputStream istm, String jmeno, IImportBuilder builder, Future<?> future) {
     try {
       try {
         nactiKdyzUmis(istm, jmeno, builder, future);

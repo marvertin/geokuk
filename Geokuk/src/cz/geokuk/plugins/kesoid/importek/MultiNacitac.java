@@ -61,7 +61,7 @@ public class MultiNacitac {
   public KesBag nacti(Future<?> future, Genom genom) throws IOException {
     List<File> list = ds.coMamNacist();
     if (list == null) return null;
-    ImportBuilder builder = new ImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
+    KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
     builder.init();
     for (File file : list) {
       System.out.println("Nacitam: " + file);
@@ -88,7 +88,7 @@ public class MultiNacitac {
    * @throws IOException
    * @throws FileNotFoundException
    */
-  private void zpracujJedenFile(File file, ImportBuilder builder, Future<?> future) throws ZipException, IOException, FileNotFoundException {
+  private void zpracujJedenFile(File file, KesoidImportBuilder builder, Future<?> future) throws ZipException, IOException, FileNotFoundException {
     if (file.toString().toLowerCase().endsWith("zip")) {
       ZipFile zipFile = new ZipFile(file);
       try {

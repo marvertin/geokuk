@@ -64,6 +64,10 @@ public class Menu extends MenuStrujce {
     item(akce.geocodingAdrAction);
     item(akce.bezNaPoziciAction);
     item(akce.bezNaStredAction);
+    item(akce.bezNaZacatekCestyAction);
+    item(akce.bezNaKonecCestyAction);
+    item(akce.bezNaBodVpredAction);
+    item(akce.bezNaBodVzadAction);
 
     List<NaKonkretniBodAction> geoHomeBodyAction = refbodyModel.nacti();
     if (geoHomeBodyAction.size() > 0) {
@@ -161,12 +165,29 @@ public class Menu extends MenuStrujce {
     item(akce.vyletAnoAction);
     item(akce.vyletNeAction);
     item(akce.vyletNevimAction);
-    separator();
+    separator(); // nad celým výletem
     item(akce.vyletZoomAction);
+    item(akce.zoomCestuAction);
     item(akce.vyletPresClipboardDoGeogetuAction);
+    item(akce.promazatJednobodoveAPrazdneCesty);
+    separator();
+    item(akce.nactiAction);
+    item(akce.importujAction);
+    item(akce.ulozAction);
+    item(akce.ulozJakoAction);
+    item(akce.ulozKopiiAction);
+    item(akce.zavriAction);
+    item(akce.exportujDoGgtAction);
+    separator();
+    item(akce.obratitCestuAction);
+    item(akce.smazatCestuAction);
+    item(akce.uzavritCestuAction);
+    item(akce.pospojovatVzdusneUsekyAction);
     separator();
     item(akce.vyletSmazAnoAction);
     item(akce.vyletSmazNeAction);
+    item(akce.rozdelitCestuAction);
+    item(akce.znovuSpojitCestyAction);
 
     menu("Mřížky", "Různo dekorace na mapě");
     menu.setMnemonic('Y');

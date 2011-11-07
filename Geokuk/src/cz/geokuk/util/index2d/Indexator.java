@@ -21,7 +21,7 @@ public class Indexator<T> {
    * 
    */
   Ctverecnik<T> root;
-  
+
   public Indexator(BoundingRect br) {
     root = new Ctverecnik<T>(br.xx1, br.yy1, br.xx2, br.yy2);
   }
@@ -31,10 +31,9 @@ public class Indexator<T> {
   }
 
   public void vloz(int xx, int yy, T mapobj) {
-    if (! checkRozsah(xx, yy) ) {
+    if (! checkRozsah(xx, yy) )
       throw new RuntimeException("Hodnoty " + xx + " " + yy + " jsou mimo rozsah " + root);
-    }
-      
+
     Sheet<T> sheet = new Sheet<T>(xx, yy, mapobj);
     DuplikHlidac duplikHlidac = new Ctverecnik.DuplikHlidac();
     root.vloz(sheet, duplikHlidac);
@@ -47,8 +46,8 @@ public class Indexator<T> {
     }
   }
 
-	public boolean checkRozsah(int xx, int yy) {
-	  return ! (xx < root.getXx1() || xx >= root.getXx2() || yy < root.getYy1() || yy >= root.getYy2());
+  public boolean checkRozsah(int xx, int yy) {
+    return ! (xx < root.getXx1() || xx >= root.getXx2() || yy < root.getYy1() || yy >= root.getYy2());
   }
 
   public int count(BoundingRect boundingRect) {
@@ -61,7 +60,7 @@ public class Indexator<T> {
     });
     return counta[0];
   }
-  
+
   public List<Node0<T>> shallowList(BoundingRect boundingRect) {
     final List<Node0<T>> list = new ArrayList<Node0<T>>(100);
     root.visit(boundingRect, new SloucenyVisitor<T>() {
@@ -72,23 +71,63 @@ public class Indexator<T> {
     });
     return list;
   }
-  
+
   public List<Sheet<T>> deepList(BoundingRect boundingRect) {
     final List<Sheet<T>> list = new ArrayList<Sheet<T>>(100);
     root.visit(boundingRect, new FlatVisitor<T>() {
+      @Override
       public void visit(Sheet<T> aSheet) {
         list.add(aSheet);
       }
     });
     return list;
   }
-  
+
   public void visit(BoundingRect boundingRect, Visitor<T> visitor) {
     root.visit(boundingRect, visitor);
   }
-  
+
   public void vypis() {
     root.vypis("root", 1);
   }
-  
+
+  public Sheet<T> locateAnyOne(BoundingRect br) {
+    try {
+      visit(br, new FlatVisitor<T>() {
+        @Override
+        public void visit(Sheet<T> sheet) {
+          throw new XNalezeno(sheet);
+        }
+      });
+      return null; // nevypadla výjimka, nebylo nalezeno
+    } catch (XNalezeno e) { // bylo něco nalezeno
+      @SuppressWarnings("unchecked") // vyjimka nemuze byt genericka
+      Sheet<T> sheet = (Sheet<T>) e.sheet;
+      return sheet;
+    }
+
+  }
+
+  public Sheet<T> locateNearestOne(BoundingRect br, final int xx, final int yy) {
+    class Drzak {
+      Sheet<T> tt;
+      long d2 = Long.MAX_VALUE;
+    }
+    final Drzak drzak = new Drzak();
+    visit(br, new FlatVisitor<T>() {
+      @Override
+      public void visit(Sheet<T> sheet) {
+        long dx = (sheet.xx - xx);
+        long dy = (sheet.yy - yy);
+        long d2 =  dx * dx + dy * dy;
+        if (d2 < drzak.d2) {
+          drzak.d2 = d2;
+          drzak.tt = sheet;
+        }
+      }
+    });
+    return drzak.tt;
+
+  }
+
 }

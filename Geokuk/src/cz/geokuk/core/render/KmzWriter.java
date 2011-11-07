@@ -105,9 +105,6 @@ public class KmzWriter {
     if (p.rotation != 0.0) {
       eLatLonBox.appendChild(xmldoc.createElement("rotation")).appendChild(xmldoc.createTextNode(p.rotation + ""));
     }
-
-    // TODO Auto-generated method stub
-
   }
 
 

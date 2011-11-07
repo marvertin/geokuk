@@ -5,26 +5,34 @@ package cz.geokuk.core.program;
 
 
 import java.awt.Cursor;
+import java.awt.Event;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+
+import javax.swing.JPopupMenu;
+import javax.swing.event.MouseInputListener;
 
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coord.PoziceModel;
 import cz.geokuk.core.coord.VyrezModel;
 import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.framework.FKurzory;
+import cz.geokuk.framework.MouseGestureContext;
 
 /**
  * Musí být úplně nahoře, je průhledná
  * a chytá události myši a případně je distribuuje.
  * Také zobrazuje myší kourzor.
  */
-public final class JPresCeleMysovani extends JSingleSlide0 {
+public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInputListener, MouseWheelListener, KeyListener  {
 
   private static final long serialVersionUID = 4979888007463850390L;
 
   private boolean posouvameMapu;
-
 
   /**
    * @param jKachlovnik
@@ -44,33 +52,81 @@ public final class JPresCeleMysovani extends JSingleSlide0 {
   private PoziceModel poziceModel;
 
 
+  private MouseGestureContext ctx() {
+    //    protected void setMouseCursor(Cursor cursor) {
+    //      getMainFrame().setCursor(cursor);
+    //    }
+
+    return new MouseGestureContext() {
+
+    };
+  }
+
   /**
    * Invoked when a mouse button has been pressed on a component.
    */
   @Override
   public void mousePressed(MouseEvent e) {
+    maybeShowPopup(e);
     bod = e.getPoint();
-    if (!e.isShiftDown()) {
-      posouvameMapu = true;
-      setMouseCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+    MouseGestureContext ctx = ctx();
+    chain().mousePressed(e, ctx);
+    if (! e.isConsumed()) {
+      if (!e.isShiftDown()) {
+        posouvameMapu = true;
+        //        skutecneNastavMysiKurzor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+      }
     }
     //System.out.println("UDALOST " + e);
     //System.out.println("Kliknuti mysi v pozici: " + getCoord().getMouCur());
-    chain().mousePressed(e);
     requestFocus();
+    skutecneNastavMysiKurzor(getMouseCursor(true));
+  }
+
+  @Override
+  public Cursor getMouseCursor(boolean pressed) {
+    Cursor kurzor;
+    if (posouvameMapu) {
+      kurzor = FKurzory.POSOUVANI_MAPY;
+    } else {
+      kurzor = super.getMouseCursor(pressed);
+    }
+    if (kurzor == null) {
+      kurzor = FKurzory.STANDARDNI_MAPOVY_KRIZ;
+    }
+
+    return kurzor;
   }
 
   @Override
   public void mouseReleased(MouseEvent e) {
+    maybeShowPopup(e);
     posouvameMapu = false;
-    setMouseCursor(null);
-    chain().mouseReleased(e);
+    MouseGestureContext ctx = ctx();
+    chain().mouseReleased(e, ctx);
+    skutecneNastavMysiKurzor(getMouseCursor(false));
     //zoomovaciObdelnik.mouseReleased(e);
+  }
+
+
+  /**
+   * @param aE
+   */
+  private void maybeShowPopup(MouseEvent e) {
+    if (e.isPopupTrigger()) {
+      JPopupMenu popup = new JPopupMenu();
+      addPopouItems(popup, ctx());
+      if (popup.getComponentCount() >  0) {
+        popup.show(e.getComponent(), e.getX(), e.getY());
+      }
+    }
+
   }
 
 
   @Override
   public void mouseDragged(MouseEvent e) {
+    //posouvameMapu = false;
     if (posouvameMapu) {
       cur = e.getPoint();
       int dx = cur.x - bod.x;
@@ -81,17 +137,31 @@ public final class JPresCeleMysovani extends JSingleSlide0 {
       //getCoord().setMoustredNezadouci(moustred);
       vyrezModel.setMoustred(moustred);
       bod = cur;
+    } else {
+      Point bodik = e.getPoint();
+      Mou mouCur = getSoord().getMouCur(bodik);
+      poziceModel.setMys(bodik, mouCur);
     }
-    chain().mouseDragged(e);
+    MouseGestureContext ctx = ctx();
+    chain().mouseDragged(e, ctx);
+    skutecneNastavMysiKurzor(getMouseCursor(true));
+
+    //ctx.finish();
   }
 
   @Override
   public void mouseMoved(MouseEvent e) {
+    if ((e.getModifiers() & Event.CTRL_MASK) != 0) {
+      // to je proto, abychom při stiskuném Ctrl, kdy chceme začít kreslit cestu, tak dostali fokus
+      requestFocus();
+    }
     cur = e.getPoint();
     Mou mouCur = getSoord().getMouCur(cur);
     poziceModel.setMys(cur, mouCur);
     //System.out.println("Souradnice: " + wgs);
-    chain().mouseMoved(e);
+    MouseGestureContext ctx = ctx();
+    chain().mouseMoved(e, ctx);
+    skutecneNastavMysiKurzor(getMouseCursor(false));
   }
 
   @Override
@@ -99,7 +169,7 @@ public final class JPresCeleMysovani extends JSingleSlide0 {
     int rotation  = e.getWheelRotation();
     //			System.out.println("Rotace: " + rotation);
     int moumer = getSoord().getMoumer() - rotation;
-    Mou mou = getUpravenaMys();
+    Mou mou = getUpravenaMys().getMou();
     vyrezModel.zoomByGivenPoint(moumer, mou);
     requestFocus();
 
@@ -115,5 +185,45 @@ public final class JPresCeleMysovani extends JSingleSlide0 {
     this.poziceModel = poziceModel;
   }
 
+  @Override
+  public void mouseClicked(MouseEvent e) {
+    chain().mouseClicked(e, ctx());
+  }
+
+  @Override
+  public void mouseEntered(MouseEvent e) {
+    chain().mouseEntered(e, ctx());
+  }
+
+  @Override
+  public void mouseExited(MouseEvent e) {
+    chain().mouseExited(e, ctx());
+  }
+
+  private void skutecneNastavMysiKurzor(Cursor cursor) {
+    getParent().setCursor(cursor);
+  }
+
+
+  @Override
+  public void keyPressed(KeyEvent e) {
+    if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+      ctrlKeyPressed(ctx());
+      skutecneNastavMysiKurzor(getMouseCursor(false));
+    }
+  }
+
+  @Override
+  public void keyReleased(KeyEvent e) {
+    if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+      ctrlKeyReleased(ctx());
+      skutecneNastavMysiKurzor(getMouseCursor(false));
+    }
+  }
+
+  @Override
+  public void keyTyped(KeyEvent e) {
+    // Nezájem
+  }
 
 }

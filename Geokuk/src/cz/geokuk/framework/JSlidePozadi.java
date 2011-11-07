@@ -8,6 +8,7 @@ import java.awt.Graphics;
 
 import cz.geokuk.core.coord.ZmenaSouradnicMysiEvent;
 import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.core.coordinates.Mouable;
 
 /**
  * @author veverka
@@ -31,13 +32,17 @@ public class JSlidePozadi extends JSlide0 {
 
   public void onEvent(ZmenaSouradnicMysiEvent event) {
     moumys = event.moucur;
+    //System.out.println("Nastaveni moumys: " + moumys);
+    assert moumys != null;
   }
 
   /* (non-Javadoc)
    * @see cz.geokuk.framework.JSlide0#getUpravenaMys()
    */
   @Override
-  public Mou getUpravenaMys() {
+  public Mouable getUpravenaMys() {
+    //System.out.println("Ziskani moumys: " + moumys);
+    assert moumys != null;
     return moumys;
   }
 

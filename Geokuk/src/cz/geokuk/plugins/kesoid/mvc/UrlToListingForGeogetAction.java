@@ -8,8 +8,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.KeyStroke;
 
-import cz.geokuk.core.coord.Pozice;
 import cz.geokuk.core.coord.PoziceChangedEvent;
+import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.framework.Action0;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Kesoid;
@@ -24,7 +24,7 @@ public class UrlToListingForGeogetAction extends Action0 {
 
   private static final long serialVersionUID = -8054017274338240706L;
   private final Kesoid iKes;
-  private Pozice pozice;
+  private Poziceq poziceq = new Poziceq();
   private KesoidModel kesoidModel;
 
   /**
@@ -37,7 +37,7 @@ public class UrlToListingForGeogetAction extends Action0 {
     //putValue(MNEMONIC_KEY, InputEvent.)
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));
   }
-  
+
   /* (non-Javadoc)
    * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
    */
@@ -46,8 +46,8 @@ public class UrlToListingForGeogetAction extends Action0 {
   public void actionPerformed(ActionEvent e) {
     Kesoid kes = iKes;
     if (kes == null) {
-      if (pozice.getWpt() == null) return;
-      kes = pozice.getWpt().getKesoid();
+      kes = poziceq.getKesoid();
+      if (kes == null) return;
     }
     kesoidModel.otevriListingVGeogetu(kes);
   }
@@ -55,10 +55,10 @@ public class UrlToListingForGeogetAction extends Action0 {
   public void inject(KesoidModel kesoidModel) {
     this.kesoidModel = kesoidModel;
   }
-  
+
   public void onEvent(PoziceChangedEvent event) {
-    pozice = event.pozice;
-    setEnabled(iKes != null || pozice.getWpt() != null);
+    poziceq = event.poziceq;
+    setEnabled(iKes != null || poziceq.getWpt() != null);
   }
 }
 

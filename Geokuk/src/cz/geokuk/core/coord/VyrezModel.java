@@ -38,17 +38,17 @@ public class VyrezModel extends Model0 {
   }
 
   public void vystredovatNaPozici() {
-    if (! poziceModel.getPozice().isNoPosition()) {
-      setMoustred(poziceModel.getWgs().toMou());
+    Mou mou = poziceModel.getPoziceq().getPoziceMou();
+    if (mou != null) {
+      setMoustred(mou);
     }
   }
 
   public boolean isPoziceUprostred() {
-    if (poziceModel.getPozice().isNoPosition()) return false;
-    Mou mouPozice = poziceModel.getWgs().toMou();
+    Mou mouPozice = poziceModel.getPoziceq().getPoziceMou();
     Mou mouStred = moord.getMoustred();
     boolean b = mouPozice.equals(mouStred);
-    System.out.println("KIKUKJU: -------------------------------- " + b);
+    //System.out.println("KIKUKJU: -------------------------------- " + b);
     System.out.println(mouPozice);
     System.out.println(mouStred);
     return b;

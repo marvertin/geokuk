@@ -9,8 +9,10 @@ import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.vylety.EVylet;
-import cz.geokuk.plugins.vylety.VyletChangeEvent;
+import cz.geokuk.plugins.vylety.IgnoreListChangedEvent;
+import cz.geokuk.plugins.vylety.VyletChangedEvent;
 import cz.geokuk.plugins.vylety.VyletModel;
+import cz.geokuk.util.lang.FUtil;
 
 
 
@@ -23,18 +25,33 @@ public class KesFilter  {
   private VyletModel vyletModel;
   private KesoidModel kesoidModel;
 
+  private Set<Wpt> jenTytoVyletoveWaypointyZobrazit;
+
   public KesFilter() {
   }
 
-  public void onEvent(VyletChangeEvent aEvent) {
-    //    if (aEvent.isVelkaZmena()) {
-    kesoidModel.spustFiltrovani();
-    //    } else { // je to jednotlivost
-    //      EVylet evyl = (EVylet) prahVyletuModel.getSelectedItem();
-    //      if (aEvent.getEvyl().ordinal() < evyl.ordinal() || aEvent.getEvylPuvodni().ordinal() < evyl.ordinal()) {
-    //        changeListener.spustFiltrovani();
-    //      }
-    //    }
+  public void onEvent(IgnoreListChangedEvent event) {
+    if (filterDefinition.getPrahVyletu() != EVylet.VSECHNY) {
+      kesoidModel.spustFiltrovani();
+    }
+
+  }
+
+  public void onEvent(VyletChangedEvent aEvent) {
+    EVylet evylPrah = filterDefinition.getPrahVyletu();
+
+    if (evylPrah == EVylet.JEN_V_CESTE) {
+      Set<Wpt> wpts = new HashSet<Wpt>();
+      FUtil.addAll(wpts, aEvent.getDoc().getWpts());
+      if (! wpts.equals(jenTytoVyletoveWaypointyZobrazit)) {
+        jenTytoVyletoveWaypointyZobrazit = wpts;
+        kesoidModel.spustFiltrovani();
+      }
+
+    }
+    else {
+      jenTytoVyletoveWaypointyZobrazit = null;
+    }
   }
 
 
@@ -96,11 +113,7 @@ public class KesFilter  {
         if (kes.getFavorit() < filterDefinition.getPrahFavorit()) return false;
       }
     }
-    if (vyletModel != null) {
-      EVylet evylKes = vyletModel.get(kesoid);
-      EVylet evylPrah = filterDefinition.getPrahVyletu();
-      if (evylKes.ordinal() < evylPrah.ordinal()) return false;
-    }
+    if (! zaraditDlePrahuVyletu(aWpt)) return false;
     return true;
 
   }
@@ -108,6 +121,19 @@ public class KesFilter  {
   //  Board.kesfilter.jenFinal.setSelected(true);
   //  Board.kesfilter.jenJedenUNalezenych.setSelected(true);
   //  Board.kesfilter.smailikNaFinalce.setSelected(true);
+
+  private boolean zaraditDlePrahuVyletu(Wpt aWpt) {
+    if (vyletModel != null) {
+      EVylet evylPrah = filterDefinition.getPrahVyletu();
+      switch (evylPrah) {
+      case VSECHNY: return true;
+      case BEZ_IGNOROVANYCH: return ! vyletModel.isOnIgnoreList(aWpt);
+      case JEN_V_CESTE: return vyletModel.isOnVylet(aWpt);
+      default: return true;
+      }
+    } else
+      return true;
+  }
 
 
   public void setDefaults() {

@@ -17,7 +17,6 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
-import cz.geokuk.core.coord.ZmenaSouradnicMysiEvent;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.pocitadla.Pocitadlo;
@@ -82,11 +81,12 @@ public class EventManager implements EventFirer {
     event.lock();
     boolean logovatx = maSeLogovat(event);
     urovenZanoreni ++;
-    if (logovatx) log("FIRE beg: " + event);
+    if (logovatx) {
+      log("FIRE beg: " + event);
+    }
     try {
-      if (!SwingUtilities.isEventDispatchThread()) {
+      if (!SwingUtilities.isEventDispatchThread())
         throw new RuntimeException("Event " + event + "poslan mimo eventove vlakno");
-      }
       BeanType beanType = BeanType.createForInjectedBean(event);
       _fire(beanType, event);
       if (beanType.hasSubtype()) {
@@ -94,7 +94,9 @@ public class EventManager implements EventFirer {
         _fire(beanTypeWithoutSubtype, event);
       }
     } finally {
-      if (logovatx) log("FIRE end: " + event);
+      if (logovatx) {
+        log("FIRE end: " + event);
+      }
       urovenZanoreni --;
     }
   }
@@ -122,11 +124,15 @@ public class EventManager implements EventFirer {
   private <E> void vyvolej(E event, ObserverInvocation invocation) {
     boolean logovat = maSeLogovat(event);
     urovenZanoreni ++;
-    if (logovat) log("INVOKE beg " + invocation + " " + event);
+    if (logovat) {
+      log("INVOKE beg " + invocation + " " + event);
+    }
     try {
       invocation.invoke(event);
     } finally {
-      if (logovat) log("INVOKE end " + invocation + " " + event);
+      if (logovat) {
+        log("INVOKE end " + invocation + " " + event);
+      }
       urovenZanoreni --;
     }
   }
@@ -137,9 +143,8 @@ public class EventManager implements EventFirer {
    * @return
    */
   private <E> boolean maSeLogovat(E event) {
-    @SuppressWarnings("unused")
-    boolean logovat = false
-    && event.getClass() != ZmenaSouradnicMysiEvent.class;
+    boolean logovat = false;
+    //boolean logovat = event.getClass() != ZmenaSouradnicMysiEvent.class;
     return logovat;
   }
 
@@ -169,34 +174,40 @@ public class EventManager implements EventFirer {
   }
 
 
-  public void registerWeakly(Object observer) {
-    register(observer);
+  public void registerWeakly(Object observer, boolean aOnlyInvoke) {
+    register(observer, aOnlyInvoke);
   }
 
   /**
-   * Zajistí, že se na daném objektu zavolají metody "onEvent"
+   * Zajistí, že se na daném objektu budou volat metody "onEvent"
    * s příslušnými typy parametrů.
    * @param observer
    */
-  private void register(Object observer) {
+  private void register(Object observer, boolean aOnlyInvoke) {
     urovenZanoreni ++;
     boolean logovat = maSeLogovat(null);
-    if (logovat) log("REGISTER beg " + observer);
+    if (logovat) {
+      log("REGISTER beg " + observer);
+    }
     try {
-      _register(observer);
+      _register(observer, aOnlyInvoke);
     } finally {
-      if (logovat) log("REGISTER end " + observer);
+      if (logovat) {
+        log("REGISTER end " + observer);
+      }
       urovenZanoreni --;
     }
 
   }
 
-  private void _register(Object observer) {
+  private void _register(Object observer, boolean aOnlyInvoke) {
     for (Method m : observer.getClass().getMethods()) {
-      if (! m.getName().equals("onEvent")) continue;
+      if (! m.getName().equals("onEvent")) {
+        continue;
+      }
       Class<?>[] parameterTypes = m.getParameterTypes();
       if (parameterTypes.length != 1) return;
-      register(observer, m);
+      register(observer, m, aOnlyInvoke);
     }
   }
 
@@ -206,14 +217,17 @@ public class EventManager implements EventFirer {
    * @param aObserver
    * @param method
    * @param aStrongly
+   * @param aOnlyInvoke Parametr říká, že se vlastně neprovádí registrace, ele pouze se pošlou současné eventy
    */
-  private void register(Object aObserver, Method method) {
+  private void register(Object aObserver, Method method, boolean aOnlyInvoke) {
     Observry observry;
     ObserverInvocation invocation;
     synchronized (this) {
       observry = ziskejObservry(BeanType.createForTargetMethod(aObserver, method));
       invocation = new ObserverInvocation(aObserver, method, observry.listo);
-      observry.listo.add(invocation);
+      if (!aOnlyInvoke) {
+        observry.listo.add(invocation);
+      }
       aktualizujPocitadla();
     }
     if (observry.lastEvent != null) {

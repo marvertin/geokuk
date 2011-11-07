@@ -7,8 +7,8 @@ import cz.geokuk.core.coord.NastavMapuCeskaAction;
 import cz.geokuk.core.coord.OddalMapuAction;
 import cz.geokuk.core.coord.PriblizMapuAction;
 import cz.geokuk.core.napoveda.OProgramuAction;
-import cz.geokuk.core.napoveda.ZadatProblemAction;
 import cz.geokuk.core.napoveda.WebovaStrankaAction;
+import cz.geokuk.core.napoveda.ZadatProblemAction;
 import cz.geokuk.core.napoveda.ZkontrolovatAktualizaceAction;
 import cz.geokuk.core.profile.UlozitNastaveniKProgramuAction;
 import cz.geokuk.core.render.RenderAction;
@@ -56,13 +56,32 @@ import cz.geokuk.plugins.mrizky.MrizkaUtmAction;
 import cz.geokuk.plugins.mrizky.ZhasniVsechnyMrizkyAction;
 import cz.geokuk.plugins.refbody.BezDomuAction;
 import cz.geokuk.plugins.refbody.TadyJsemDomaAction;
-import cz.geokuk.plugins.vylety.VyletAnoAction;
-import cz.geokuk.plugins.vylety.VyletNeAction;
-import cz.geokuk.plugins.vylety.VyletNevimAction;
-import cz.geokuk.plugins.vylety.VyletPresClipboardDoGeogetuAction;
-import cz.geokuk.plugins.vylety.VyletSmazAnoAction;
-import cz.geokuk.plugins.vylety.VyletSmazNeAction;
-import cz.geokuk.plugins.vylety.VyletZoomAction;
+import cz.geokuk.plugins.vylety.akce.BezNaBodVpredAction;
+import cz.geokuk.plugins.vylety.akce.BezNaBodVzadAction;
+import cz.geokuk.plugins.vylety.akce.BezNaKonecCestyAction;
+import cz.geokuk.plugins.vylety.akce.BezNaZacatekCestyAction;
+import cz.geokuk.plugins.vylety.akce.VyletAnoAction;
+import cz.geokuk.plugins.vylety.akce.VyletNeAction;
+import cz.geokuk.plugins.vylety.akce.VyletNevimAction;
+import cz.geokuk.plugins.vylety.akce.VyletPresClipboardDoGeogetuAction;
+import cz.geokuk.plugins.vylety.akce.VyletSmazAnoAction;
+import cz.geokuk.plugins.vylety.akce.VyletSmazNeAction;
+import cz.geokuk.plugins.vylety.akce.bod.RozdelitCestuVBoduAction;
+import cz.geokuk.plugins.vylety.akce.bod.ZnovuSpojitCestyAction;
+import cz.geokuk.plugins.vylety.akce.cesta.ObratitCestuAction;
+import cz.geokuk.plugins.vylety.akce.cesta.PospojovatVzdusneUseky;
+import cz.geokuk.plugins.vylety.akce.cesta.SmazatCestuAction;
+import cz.geokuk.plugins.vylety.akce.cesta.UzavritCestuAction;
+import cz.geokuk.plugins.vylety.akce.cesta.ZoomCestuAction;
+import cz.geokuk.plugins.vylety.akce.doc.PromazatJednobodoveAPrazdneCesty;
+import cz.geokuk.plugins.vylety.akce.doc.VyletZoomAction;
+import cz.geokuk.plugins.vylety.akce.soubor.ExportujDoGgtAction;
+import cz.geokuk.plugins.vylety.akce.soubor.ImportujAction;
+import cz.geokuk.plugins.vylety.akce.soubor.OtevriAction;
+import cz.geokuk.plugins.vylety.akce.soubor.UlozAction;
+import cz.geokuk.plugins.vylety.akce.soubor.UlozJakoAction;
+import cz.geokuk.plugins.vylety.akce.soubor.UlozKopiiAction;
+import cz.geokuk.plugins.vylety.akce.soubor.ZavriAction;
 
 public class Akce {
   public final HledejKesAction hledejKesAction = new HledejKesAction();
@@ -78,7 +97,7 @@ public class Akce {
   public final PriblizMapuAction priblizMapuAction = new PriblizMapuAction();
   public final OddalMapuAction oddalMapuAction = new OddalMapuAction();
 
-  public final VyletZoomAction vyletZoomAction = new VyletZoomAction();
+  public final VyletZoomAction vyletZoomAction = new VyletZoomAction(null);
   public final VyletAnoAction vyletAnoAction = new VyletAnoAction(null);
   public final VyletNeAction vyletNeAction = new VyletNeAction(null);
   public final VyletNevimAction vyletNevimAction = new VyletNevimAction(null);
@@ -153,4 +172,26 @@ public class Akce {
   public final NapovedaAction  napovedaAction = new NapovedaAction(null);
   public final ZadatProblemAction zadatProblemAction = new ZadatProblemAction();
 
+  public final OtevriAction nactiAction = new OtevriAction();
+  public final UlozAction ulozAction = new UlozAction();
+  public final UlozJakoAction ulozJakoAction = new UlozJakoAction();
+  public final UlozKopiiAction ulozKopiiAction = new UlozKopiiAction();
+  public final ZavriAction zavriAction = new ZavriAction();
+  public final ImportujAction importujAction = new ImportujAction();
+  public final ExportujDoGgtAction exportujDoGgtAction = new ExportujDoGgtAction();
+
+  public final BezNaZacatekCestyAction bezNaZacatekCestyAction = new BezNaZacatekCestyAction();
+  public final BezNaKonecCestyAction    bezNaKonecCestyAction = new BezNaKonecCestyAction();
+  public final BezNaBodVpredAction bezNaBodVpredAction = new BezNaBodVpredAction();
+  public final BezNaBodVzadAction bezNaBodVzadAction = new BezNaBodVzadAction();
+
+  public final RozdelitCestuVBoduAction rozdelitCestuAction = new RozdelitCestuVBoduAction(null);
+  public final ZnovuSpojitCestyAction znovuSpojitCestyAction = new ZnovuSpojitCestyAction(null);
+  public final PospojovatVzdusneUseky pospojovatVzdusneUsekyAction = new PospojovatVzdusneUseky(null);
+
+  public final ObratitCestuAction obratitCestuAction = new ObratitCestuAction(null);
+  public final SmazatCestuAction smazatCestuAction = new SmazatCestuAction(null);
+  public final UzavritCestuAction uzavritCestuAction = new UzavritCestuAction(null);
+  public final ZoomCestuAction zoomCestuAction = new ZoomCestuAction(null);
+  public final PromazatJednobodoveAPrazdneCesty promazatJednobodoveAPrazdneCesty = new PromazatJednobodoveAPrazdneCesty(null);
 }

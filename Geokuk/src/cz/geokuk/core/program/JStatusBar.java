@@ -5,7 +5,6 @@ package cz.geokuk.core.program;
 
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -23,12 +22,13 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 
 import cz.geokuk.core.coord.Coord;
-import cz.geokuk.core.coord.Pozice;
 import cz.geokuk.core.coord.PoziceChangedEvent;
+import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.core.coord.VyrezChangedEvent;
 import cz.geokuk.core.coord.ZmenaSouradnicMysiEvent;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.ProgressEvent;
 import cz.geokuk.framework.Progressor;
 import cz.geokuk.plugins.kesoid.Ikonizer;
@@ -38,9 +38,10 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
 import cz.geokuk.plugins.kesoid.mvc.PrekrocenLimitWaypointuVeVyrezuEvent;
-import cz.geokuk.plugins.vylety.EVylet;
-import cz.geokuk.plugins.vylety.VyletChangeEvent;
+import cz.geokuk.plugins.vylety.VyletChangedEvent;
+import cz.geokuk.plugins.vylety.IgnoreListChangedEvent;
 import cz.geokuk.plugins.vylety.VyletModel;
+import cz.geokuk.plugins.vylety.cesty.Doc;
 
 /**
  * @author veverka
@@ -52,7 +53,7 @@ public class JStatusBar extends JPanel {
 
   private Mou cur = new Mou();
 
-  private Pozice pozice = new Pozice();
+  private Poziceq poziceq = new Poziceq();
 
   private final JValue souradnice = new JValue();
 
@@ -81,6 +82,9 @@ public class JStatusBar extends JPanel {
   private final JValue jZdrojeKesoiduPocetNactenych = new JValue();
   private final JSkrtnutaValue jZdrojeKesoiduPocetNenactenych = new JSkrtnutaValue();
   private final JValue jZdrojeKesoiduCas = new JValue();
+
+  private final JValue jSouborSVyletem = new JValue();
+  private final JLabel jSouborSVyletemPotrebujeUlozit = new JLabel();
 
   private KesBag filtrovane;
   private KesBag vsechny;
@@ -168,6 +172,8 @@ public class JStatusBar extends JPanel {
     vylety.add(vyletNe);
     vyletAno.setToolTipText("Počet keší, u kterých má vyznačen příznak, že je budu ignorovat.");
 
+    vylety.add(jSouborSVyletemPotrebujeUlozit);
+    vylety.add(jSouborSVyletem);
     add(vylety);
 
 
@@ -188,7 +194,7 @@ public class JStatusBar extends JPanel {
     zdrojeKesoiduPanel.add(new JLabel("zdroje:"));
     zdrojeKesoiduPanel.add(jZdrojeKesoiduCas);
     jZdrojeKesoiduCas.setToolTipText("Čas nejmladšího načteného souboru.");
-    zdrojeKesoiduPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    zdrojeKesoiduPanel.setCursor(FKurzory.KAM_SE_DA_KLIKNOUT);
     add(zdrojeKesoiduPanel);
 
 
@@ -281,7 +287,7 @@ public class JStatusBar extends JPanel {
   }
 
   public void onEvent(PoziceChangedEvent event) {
-    pozice = event.pozice;
+    poziceq = event.poziceq;
     prepocitejVzdalenostAAzimut();
     //    vzdalenost.setText("");
     //    azimutCislo.setText("");
@@ -289,24 +295,46 @@ public class JStatusBar extends JPanel {
     //    azimutSmer.setIcon(null);
     //System.out.println("VELIKOST STAVOVEHO RADKU: " + JStatusBar.this.getSize());
 
-    if (pozice.isNoPosition()) {
+    if (poziceq.isNoPosition()) {
       //      souradnicePozice.setVisible(false);
       souradnicePozice.setText("N/A");
     } else {
-      souradnicePozice.setText(pozice.getWgs().toString());
+      souradnicePozice.setText(poziceq.getWgs().toString());
       //      souradnicePozice.setVisible(true);
     }
   }
 
-  public void onEvent(VyletChangeEvent aEvent) {
-    VyletModel vyletModel = aEvent.getVyletModel();
-    vyletAno.setText(vyletModel.get(EVylet.ANO).size()+"");
-    vyletNe.setText(vyletModel.get(EVylet.NE).size()+"");
+  public void onEvent(IgnoreListChangedEvent aEvent) {
+    VyletModel vyletModel = aEvent.getModel();
+    //vyletAno.setText(vyletModel.get(EVylet.ANO).size()+"");
+    vyletNe.setText(vyletModel.getPocetIgnorovanychKesoidu()+"");
+  }
+
+  public void onEvent(VyletChangedEvent aEvent) {
+    Doc doc = aEvent.getModel().getDoc();
+    vyletAno.setText(doc.getPocetWaypointu() + "");
+    if (doc.isEmpty()) {
+      jSouborSVyletem.setText(".");
+      jSouborSVyletem.setToolTipText("Výlet není vůbec definován.");
+      jSouborSVyletemPotrebujeUlozit.setText("");
+    } else {
+      if (doc.getFile() != null) {
+        jSouborSVyletem.setText(doc.getFile().getName());
+        jSouborSVyletem.setToolTipText(doc.getFile().toString());
+        jSouborSVyletemPotrebujeUlozit.setText(doc.isChanged() ? "*" : "");
+      } else {
+        jSouborSVyletem.setText("-");
+        jSouborSVyletem.setToolTipText("S výletem není spojen žádný soubor.");
+        jSouborSVyletemPotrebujeUlozit.setText("");
+      }
+    }
+    //    vyletNe.setText(vyletModel.get(EVylet.NE).size()+"");
   }
 
 
+
   private void prepocitejVzdalenostAAzimut() {
-    if (! pozice.isNoPosition()) {
+    if (! poziceq.isNoPosition()) {
       vzdalenost.setText(vzdalenostPoziceAMysia());
       azimutSmer.setIcon(Ikonizer.findSmerIcon(azimutPoziceAMysi()));
       //azimutSmer.set
@@ -334,11 +362,11 @@ public class JStatusBar extends JPanel {
 
 
   private String vzdalenostPoziceAMysia() {
-    return Wgs.vzdalenostStr(cur.toWgs(), pozice.getWgs());
+    return Wgs.vzdalenostStr(cur.toWgs(), poziceq.getWgs());
   }
 
   private double azimutPoziceAMysi() {
-    return pozice.getWgs().azimut(cur.toWgs());
+    return poziceq.getWgs().azimut(cur.toWgs());
   }
 
 
@@ -370,7 +398,7 @@ public class JStatusBar extends JPanel {
     public JValue() {
       //setFocusable(false);
       setEditable(false);
-      setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+      setCursor(FKurzory.TEXTOVY_KURZOR);
       //System.out.println("INPUTOVA MAPA: " + getInputMap().keys() );
       setMargin(new Insets(0, 5, 0, 0));
     }

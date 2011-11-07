@@ -20,18 +20,16 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.OverlayLayout;
 import javax.swing.border.EtchedBorder;
 
-import cz.geokuk.core.coord.JPozicovnik;
+import cz.geokuk.core.coord.JPozicovnikSlide;
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coord.JZoomovaciObdelnik;
 import cz.geokuk.core.coord.SlideListProvider;
-import cz.geokuk.core.profile.ProfileModel;
 import cz.geokuk.core.render.JRenderSlide;
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.framework.Factory;
@@ -44,7 +42,7 @@ import cz.geokuk.plugins.kesoid.detail.JKesoidDetailContainer;
 import cz.geokuk.plugins.kesoid.detailroh.JDetailPrekryvnik;
 import cz.geokuk.plugins.kesoid.detailroh.JZamernyKriz;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
-import cz.geokuk.plugins.kesoidkruhy.JZvyraznovaciKruhy;
+import cz.geokuk.plugins.kesoidkruhy.JZvyraznovaciKruhySlide;
 import cz.geokuk.plugins.kesoidobsazenost.JObsazenost;
 import cz.geokuk.plugins.kesoidpopisky.JPopiskySlide;
 import cz.geokuk.plugins.mapy.kachle.EKaType;
@@ -56,6 +54,7 @@ import cz.geokuk.plugins.mrizky.JMeritkoSlide;
 import cz.geokuk.plugins.mrizky.JMrizkaDdMmMmm;
 import cz.geokuk.plugins.mrizky.JMrizkaDdMmSs;
 import cz.geokuk.plugins.mrizky.JMrizkaUtm;
+import cz.geokuk.plugins.vylety.JCestySlide;
 import cz.geokuk.util.gui.CornerLayoutManager;
 import cz.geokuk.util.gui.ERoh;
 
@@ -69,10 +68,10 @@ public class JMainFrame extends JFrame implements SlideListProvider {
   private KesoidModel kesoidModel;
   private FullScreenAction fullScreenAction;
   private OknoModel oknoModel;
-  private ProfileModel profileModel;
   private Menu menux;
 
   private List<JSingleSlide0> slideList;
+  private CloseAction closeAction;
 
 
   JMainFrame() {
@@ -89,7 +88,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
     imgs.add(ImageLoader.seekResImage("geokuk16.png", 16, 16));
     imgs.add(ImageLoader.seekResImage("geokuk48.png", 48, 48));
     setIconImages(imgs);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 
     // Jen kvůli tomu, aby se nezničilo a chodili eventy
@@ -119,7 +118,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
       smrizema.setLayout(new OverlayLayout(smrizema));
 
 
-      final JComponent mysovani = new JPresCeleMysovani();
+      final JPresCeleMysovani mysovani = new JPresCeleMysovani();
       final JComponent renderSlide = new JRenderSlide();
       final JComponent zoomovaciObdelnik = new JZoomovaciObdelnik();
       final JComponent meritkovnik = new JMeritkoSlide();
@@ -128,10 +127,12 @@ public class JMainFrame extends JFrame implements SlideListProvider {
       final JComponent mrizkaUtm = new JMrizkaUtm();
       //    final JComponent mrizkaS42 = new JMrizkaS42(coord);
       //    final JComponent mrizkaJtsk = new JMrizkaJTSK(coord);
+      final JCestySlide cesty = new JCestySlide();
+
       final JComponent popisyKesiNaMape = new JPopiskySlide();
       final JComponent kesky = new JKesoidySlide(false);
-      final JComponent pozicovnik = new JPozicovnik();
-      final JComponent zvyraznovaciKruhy = new JZvyraznovaciKruhy();
+      final JComponent pozicovnik = new JPozicovnikSlide();
+      final JComponent zvyraznovaciKruhy = new JZvyraznovaciKruhySlide();
       final JComponent obsazenik = new JObsazenost();
       final JComponent kachlovnik = new JKachlovnikPresCele();
       final JComponent pozadi = new JSlidePozadi();
@@ -145,6 +146,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
       smrizema.add(mrizkaUtm);
       //    smrizema.add(mrizkaS42);
       //    smrizema.add(mrizkaJtsk);
+      smrizema.add(cesty);
       smrizema.add(popisyKesiNaMape);
       smrizema.add(kesky);
       smrizema.add(pozicovnik);
@@ -152,6 +154,8 @@ public class JMainFrame extends JFrame implements SlideListProvider {
       smrizema.add(obsazenik);
       smrizema.add(kachlovnik);
       smrizema.add(pozadi);
+
+      mysovani.addKeyListener(mysovani);
 
       factory.init(mysovani);
       factory.init(renderSlide);
@@ -162,6 +166,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
       factory.init(mrizkaUtm);
       //    factory.init(mrizkaS42);
       //    factory.init(mrizkaJtsk);
+      factory.init(cesty);
       factory.init(popisyKesiNaMape);
       factory.init(kesky);
       factory.init(pozicovnik);
@@ -328,8 +333,8 @@ public class JMainFrame extends JFrame implements SlideListProvider {
       @Override
       public void windowClosing(WindowEvent aE) {
         //        System.out.println(aE);
-        profileModel.ulozJenKdyzJeulozPreferenceDoSouboruJenKdyzSeUklaatMaji();
         ulozeStav();
+        closeAction.actionPerformed(null);
       }
 
       @Override
@@ -390,22 +395,22 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 
 
   public void setFullScreen(boolean fs) {
-    JMenuBar menubar = getJMenuBar();
-    if (fs) {
-      menubar.setVisible(false);
-      menubar.setPreferredSize(new Dimension(0, 0));
-      menubar.setVisible(true);
-      statusbar.setVisible(false);
-      toolBar.setVisible(false);
-      setUndecorated(true);
-    } else {
-      menubar.setVisible(false);
-      menubar.setPreferredSize(null);
-      menubar.setVisible(true);
-      statusbar.setVisible(true);
-      toolBar.setVisible(true);
-      setUndecorated(false);
-    }
+    //    JMenuBar menubar = getJMenuBar();
+    //    if (fs) {
+    //      menubar.setVisible(false);
+    //      menubar.setPreferredSize(new Dimension(0, 0));
+    //      menubar.setVisible(true);
+    //      statusbar.setVisible(false);
+    //      toolBar.setVisible(false);
+    //      //setUndecorated(true);
+    //    } else {
+    //      menubar.setVisible(false);
+    //      menubar.setPreferredSize(null);
+    //      menubar.setVisible(true);
+    //      statusbar.setVisible(true);
+    //      toolBar.setVisible(true);
+    //      //setUndecorated(false);
+    //    }
 
   }
 
@@ -423,10 +428,10 @@ public class JMainFrame extends JFrame implements SlideListProvider {
   public void inject(OknoModel oknoModel) {
     this.oknoModel = oknoModel;
   }
-  public void inject(ProfileModel profileModel) {
-    this.profileModel = profileModel;
-  }
 
+  public void inject(CloseAction closeAction) {
+    this.closeAction = closeAction;
+  }
 
   /* (non-Javadoc)
    * @see cz.geokuk.core.coord.SlidListProvider#getSlides()

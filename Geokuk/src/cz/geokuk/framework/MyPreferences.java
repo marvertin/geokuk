@@ -55,7 +55,13 @@ public class MyPreferences extends Preferences {
   }
 
   public File getFile(String key, File defalt) {
-    File result = new File(get(key, defalt.getPath()));
+    File result;
+    try {
+      String fileStr = get(key, defalt == null ? null : defalt.getPath());
+      result = fileStr == null ? null : new File(fileStr);
+    } catch (RuntimeException e) {
+      throw new RuntimeException("key=" + key  + ", defalt=" + defalt);
+    }
     return result;
   }
 
@@ -67,11 +73,14 @@ public class MyPreferences extends Preferences {
 
   public Filex getFilex(String key, Filex defalt) {
 
+    if (defalt == null) {
+      defalt = new Filex(null, false, false);
+    }
     Filex result = new Filex(
-        new File(get(key, defalt.getFile().getPath())),
+        getFile(key, defalt.getFile()),
         getBoolean(key + "_relativeToProgram", defalt.isRelativeToProgram()),
         getBoolean(key + "_active", defalt.isActive()));
-    return result;
+    return result.getFile() == null ? null : result;
   }
 
   // Mou
@@ -241,7 +250,9 @@ public class MyPreferences extends Preferences {
       set = Atom.noneOf(cls);
       for (String s : ss.split(",")) {
         String sss = s.trim();
-        if (sss.length() == 0) continue;
+        if (sss.length() == 0) {
+          continue;
+        }
         //System.out.println("KUKU " + sss);
         E e = Atom.valueOf(cls, sss);
         set.add(e);
@@ -262,7 +273,9 @@ public class MyPreferences extends Preferences {
       set = EnumSet.noneOf(cls);
       for (String s : ss.split(",")) {
         String sss = s.trim();
-        if (sss.length() == 0) continue;
+        if (sss.length() == 0) {
+          continue;
+        }
         //System.out.println("KUKU " + sss);
         E e = Enum.valueOf(cls, sss);
         set.add(e);
@@ -280,9 +293,13 @@ public class MyPreferences extends Preferences {
     StringBuilder sb = new StringBuilder();
     boolean first = true;
     for (String s : val) {
-      if (!first) sb.append(',');
+      if (!first) {
+        sb.append(',');
+      }
       for (char c : s.toCharArray()) {
-        if (c == ',' || c == '\\') sb.append('\\');
+        if (c == ',' || c == '\\') {
+          sb.append('\\');
+        }
         sb.append(c);
       }
       first = false;
@@ -317,7 +334,9 @@ public class MyPreferences extends Preferences {
     StringBuilder sb = new StringBuilder();
     boolean first = true;
     for (E e : val) {
-      if (!first) sb.append(',');
+      if (!first) {
+        sb.append(',');
+      }
       sb.append(e.name());
       first = false;
     }
@@ -329,7 +348,9 @@ public class MyPreferences extends Preferences {
     StringBuilder sb = new StringBuilder();
     boolean first = true;
     for (E e : val) {
-      if (!first) sb.append(',');
+      if (!first) {
+        sb.append(',');
+      }
       sb.append(e.name());
       first = false;
     }
@@ -430,8 +451,8 @@ public class MyPreferences extends Preferences {
    */
   @Override
   public String get(String key, String defvalue) {
-	String s = pref.get(key, defvalue);
-	if (NULL.equals(s)) return null;
+    String s = pref.get(key, defvalue);
+    if (NULL.equals(s)) return null;
     return s;
   }
 
@@ -585,8 +606,11 @@ public class MyPreferences extends Preferences {
    */
   @Override
   public void put(String key, String value) {
-    if (value == null) put(key, NULL);
-    else pref.put(key, value);
+    if (value == null) {
+      put(key, NULL);
+    } else {
+      pref.put(key, value);
+    }
   }
 
   /**
@@ -887,9 +911,8 @@ public class MyPreferences extends Preferences {
   }
 
   public static String uncapitalize(String name) {
-    if (name == null || name.length() == 0) {
+    if (name == null || name.length() == 0)
       return name;
-    }
     return name.substring(0, 1).toLowerCase(ENGLISH) + name.substring(1);
   }
 
@@ -898,22 +921,40 @@ public class MyPreferences extends Preferences {
     for (Method method : methods) {
       Class<?>[] types = method.getParameterTypes();
       String name = method.getName();
-      if (types.length != 2) continue;
-      if (types[0] != String.class) continue;
+      if (types.length != 2) {
+        continue;
+      }
+      if (types[0] != String.class) {
+        continue;
+      }
       Class<?> valueType = types[1];
-      if (valueType == Object.class) continue;
-      if (valueType == Set.class) continue;
-      if (valueType == Enum.class) continue;
-      if (valueType == Atom.class) continue;
-      if (valueType == EnumSet.class) continue;
+      if (valueType == Object.class) {
+        continue;
+      }
+      if (valueType == Set.class) {
+        continue;
+      }
+      if (valueType == Enum.class) {
+        continue;
+      }
+      if (valueType == Atom.class) {
+        continue;
+      }
+      if (valueType == EnumSet.class) {
+        continue;
+      }
       if (name.startsWith("get")) {
-        if (valueType != method.getReturnType()) continue;
+        if (valueType != method.getReturnType()) {
+          continue;
+        }
         Duo duo = duo(valueType);
         if (duo.get != null) throw new RuntimeException(String.format("Duplicita: %s, %s", method, duo.get));
         duo.get = method;
       }
       if (name.startsWith("put")) {
-        if (void.class != method.getReturnType()) continue;
+        if (void.class != method.getReturnType()) {
+          continue;
+        }
         Duo duo = duo(valueType);
         if (duo.put != null) throw new RuntimeException(String.format("Duplicita: %s, %s", method, duo.put));
         duo.put = method;

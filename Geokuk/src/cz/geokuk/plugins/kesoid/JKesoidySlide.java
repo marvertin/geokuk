@@ -20,19 +20,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputListener;
 
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.core.coord.EJakOtacetPriRendrovani;
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coord.PoziceModel;
+import cz.geokuk.core.coord.PoziceSeMaMenitEvent;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.MouRect;
+import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
+import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.Factory;
+import cz.geokuk.framework.MouseGestureContext;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.EAplikaceSkla;
 import cz.geokuk.plugins.kesoid.mapicon.FenotypPreferencesChangedEvent;
@@ -40,13 +45,23 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
 import cz.geokuk.plugins.kesoid.mapicon.SkloAplikant;
+import cz.geokuk.plugins.kesoid.mvc.CenterWaypointAction;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
-import cz.geokuk.plugins.kesoid.mvc.JKesPopup;
+import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
-import cz.geokuk.plugins.vylety.VyletChangeEvent;
+import cz.geokuk.plugins.kesoid.mvc.TiskniNaGcComAction;
+import cz.geokuk.plugins.kesoid.mvc.UrlToClipboardForGeogetAction;
+import cz.geokuk.plugins.kesoid.mvc.UrlToListingForGeogetAction;
+import cz.geokuk.plugins.kesoid.mvc.ZhasniKeseUrciteAlelyAction;
+import cz.geokuk.plugins.kesoid.mvc.ZobrazNaGcComAction;
+import cz.geokuk.plugins.kesoid.mvc.ZoomKesAction;
+import cz.geokuk.plugins.vylety.IgnoreListChangedEvent;
 import cz.geokuk.plugins.vylety.VyletModel;
+import cz.geokuk.plugins.vylety.akce.VyletAnoAction;
+import cz.geokuk.plugins.vylety.akce.VyletNeAction;
+import cz.geokuk.plugins.vylety.akce.VyletNevimAction;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.FlatVisitor;
 import cz.geokuk.util.index2d.Indexator;
@@ -55,14 +70,14 @@ import cz.geokuk.util.pocitadla.PocitadloNula;
 import cz.geokuk.util.process.BrowserOpener;
 
 
-public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, AfterEventReceiverRegistrationInit {
+public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
 
   //  static int POLOMER_KESE = 15; // je to v pixlech
   private static final int POLOMER_CITLIVOSTI = 10;
 
   private final BlockingQueue<WptPaintRequest> frontaWaypointu = new LinkedBlockingQueue<WptPaintRequest>();
   private final PocitadloNula pocitVelikostFrontyWaypointu = new PocitadloNula("Velikost vykreslovací waypointové fronty",
-  "Kolik waypointů čeká na vykreslení.");
+      "Kolik waypointů čeká na vykreslení.");
 
   private static final long serialVersionUID = -5858146658366237217L;
 
@@ -71,8 +86,8 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
 
   private VyletModel vyletModel;
 
-  private Kesoid mysNadKesi;
-  private Wpt mysNadWpt;
+  private Kesoid kesoidPodMysi;
+  private Wpt wptPodMysi;
 
   private final JLabel jakoTooltip = new JLabel();
 
@@ -95,6 +110,9 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
   private final boolean vykreslovatOkamtiteAleDlouho;
 
   private final double scale = 1;
+
+  private KesBag vsechny;
+
 
   public JKesoidySlide(boolean vykreslovatOkamtiteAleDlouho) {
     this.vykreslovatOkamtiteAleDlouho = vykreslovatOkamtiteAleDlouho;
@@ -124,12 +142,16 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
     repaint();
   }
 
-  public void onEvent(VyletChangeEvent aEvent) {
+  public void onEvent(KeskyNactenyEvent event) {
+    vsechny = event.getVsechny();
+  }
+
+  public void onEvent(IgnoreListChangedEvent aEvent) {
     if (aEvent.isVelkaZmena()) {
       Wpt.invalidateAllSklivec();
       repaint();
     } else {
-      repaintWpt(aEvent.getKes().getMainWpt());
+      repaintWpt(aEvent.getWpt());
     }
   }
 
@@ -204,8 +226,8 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
         }
       }
       // Vykreslení zvýrazněných
-      if (mysNadKesi != null) {
-        for (Wpt wpt : mysNadKesi.getWpts()) {
+      if (kesoidPodMysi != null) {
+        for (Wpt wpt : kesoidPodMysi.getWpts()) {
           paintWaypoint(gg, wpt, null, i);
         }
       }
@@ -274,15 +296,20 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
 
   private Genotyp computeGenotyp(Wpt wpt) {
     Genotyp g = wpt.getGenotyp(ikonBag.getGenom());
-    switch (vyletModel.get(wpt.getKesoid())) {
-    case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
-    case NE:  g.put(ikonBag.getGenom().ALELA_ignoru); break;
+    //    switch (vyletModel.get(wpt.getKesoid())) {
+    //    //    case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
+    //    case NE:  g.put(ikonBag.getGenom().ALELA_ignoru); break;
+    //    }
+    if (vyletModel.getDoc().hasWpt(wpt)) {
+      g.put(ikonBag.getGenom().ALELA_lovime);
+    } else if (vyletModel.isOnIgnoreList(wpt)) {
+      g.put(ikonBag.getGenom().ALELA_ignoru);
     }
 
-    if (wpt == mysNadWpt) {
+    if (wpt == wptPodMysi) {
       g.put(ikonBag.getGenom().ALELA_mouseon);
     }
-    if (wpt.getKesoid() == mysNadKesi) {
+    if (wpt.getKesoid() == kesoidPodMysi) {
       g.put(ikonBag.getGenom().ALELA_mousean);
     }
     g.removeAll(fenotypoveZakazaneAlely);
@@ -305,17 +332,7 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
     Rectangle rect2 = new Rectangle(rect.x - bii.right, rect.y - bii.bottom,
         rect.width +  bii.left + bii.right ,
         rect.height + bii.top + bii.bottom);
-    BoundingRect br = preved(rect2);
-    return br;
-  }
-
-  private BoundingRect preved(Rectangle rect) {
-    Point p1 = new Point(rect.x, rect.y);
-    Point p2 = new Point(rect.x + rect.width, rect.y + rect.height);
-    Mou mou1 = getSoord().transform(p1);
-    Mou mou2 = getSoord().transform(p2);
-    // To je spravne, protoze souradnice jdou opacne
-    BoundingRect br = new BoundingRect(mou1.xx, mou2.yy, mou2.xx, mou1.yy);
+    BoundingRect br = getSoord().transforToBounding(rect2);
     return br;
   }
 
@@ -351,32 +368,17 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
   }
 
 
-  private Sheet<Wpt> najdiNejakyWpt(BoundingRect br) {
-    if (indexator == null) return null;
-    try {
-      indexator.visit(br, new FlatVisitor<Wpt>() {
-        @Override
-        public void visit(Sheet<Wpt> sheet) {
-          throw new XNalezeno(sheet);
-        }
-      });
-      return null; // nevypadla výjimka, nebylo nalezeno
-    } catch (XNalezeno e) { // bylo něco nalezeno
-      return e.swpt;
-    }
-
-  }
 
   /* (non-Javadoc)
    * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
    */
   @Override
-  public void mouseClicked(MouseEvent e) {
-    if (mysNadWpt != null) {
+  public void mouseClicked(MouseEvent e, MouseGestureContext ctx) {
+    if (wptPodMysi != null) {
       if (SwingUtilities.isLeftMouseButton(e)) {
-        poziceModel.setPozice(mysNadWpt);
+        poziceModel.setPozice(wptPodMysi);
       }
-      Kesoid kesoid = mysNadWpt.getKesoid();
+      Kesoid kesoid = wptPodMysi.getKesoid();
       if (e.getClickCount() >= 3 && kesoid.getUrlPrint() != null) {
         BrowserOpener.displayURL(kesoid.getUrlPrint());
       } else if (e.getClickCount() >= 2 && kesoid.getUrlShow() != null) {
@@ -384,101 +386,135 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
       }
       e.consume();
     } else {
-      chain().mouseClicked(e);
+      chain().mouseClicked(e, ctx);
     }
   }
 
-  /* (non-Javadoc)
-   * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
-   */
+
   @Override
-  public void mousePressed(MouseEvent e) {
-    boolean jepopup = maybeShowPopup(e);
-    if (!jepopup) {
-      chain().mousePressed(e);
+  public void addPopouItems(JPopupMenu popupMenu, MouseGestureContext ctx) {
+    if (wptPodMysi != null) {
+      initPopupMenuItems(popupMenu, wptPodMysi, vsechny);
     }
+    chain().addPopouItems(popupMenu, ctx);
   }
 
-  /* (non-Javadoc)
-   * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-   */
-  @Override
-  public void mouseReleased(MouseEvent e) {
-    boolean jepopup = maybeShowPopup(e);
-    if (!jepopup) {
-      chain().mouseReleased(e);
-    }
-  }
-
-
-  /**
-   * @param aE
-   */
-  private boolean maybeShowPopup(MouseEvent e) {
-    if (e.isPopupTrigger() && mysNadWpt != null) {
-
-      System.out.println("BYL BY POPUP " + mysNadWpt);
-      JPopupMenu popup = sestavPopup(mysNadWpt);
-      if (popup != null) {
-        popup.show(e.getComponent(), e.getX(), e.getY());
+  private void initPopupMenuItems(JPopupMenu p, Wpt mysNadWpt, KesBag vsechny) {
+    // Přidat zhasínače
+    JMenu zhasinace = new JMenu("Zhasni");
+    p.add(zhasinace);
+    Genotyp genotyp = mysNadWpt.getGenotyp(vsechny.getGenom());
+    for (Alela alela : genotyp.getAlely()) {
+      if (alela.getGen().isVypsatelnyVeZhasinaci() &&  !alela.isVychozi()) {
+        zhasinace.add(factory.init(new ZhasniKeseUrciteAlelyAction(alela)));
       }
-      return true;
-    } else
-      return false;
-  }
+    }
 
-  /**
-   * @param aMysNadWpt
-   * @return
-   */
-  private JPopupMenu sestavPopup(Wpt aMysNadWpt) {
-    return factory.init(new JKesPopup(aMysNadWpt));
+    ///
+    Kesoid kesoid = mysNadWpt.getKesoid();
+    p.add(factory.init(new ZoomKesAction(kesoid)));
+    JMenuItem item = new JMenuItem(factory.init(new CenterWaypointAction(mysNadWpt)));
+    item.setText("Centruj");
+    //TODO Dát ikonu středování
+    item.setIcon(null);
+    p.add(item);
+    if (kesoid.getUrlShow() != null) {
+      p.add(factory.init(new ZobrazNaGcComAction(kesoid)));
+    }
+    if (kesoid.getUrlPrint() != null) {
+      p.add(factory.init(new TiskniNaGcComAction(kesoid)));
+    }
+    if (kesoid.getUrlShow() != null) {
+      p.add(factory.init(new UrlToClipboardForGeogetAction(kesoid)));
+    }
+    if (kesoid.getUrlPrint() != null) {
+      p.add(factory.init(new UrlToListingForGeogetAction(kesoid)));
+    }
+    p.addSeparator();
+    p.add(factory.init(new VyletAnoAction(mysNadWpt)));
+    p.add(factory.init(new VyletNevimAction(mysNadWpt)));
+    p.add(factory.init(new VyletNeAction(mysNadWpt)));
+    p.addSeparator();
+    for (Wpt wpt : kesoid.getWpts()) {
+      p.add(factory.init(new CenterWaypointAction(wpt)));
+    }
   }
 
   /* (non-Javadoc)
    * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
    */
   @Override
-  public void mouseMoved(MouseEvent e) {
-    //System.out.println("POSUNOVACKA TO ASI BUDE: " + e);
-    int polomerCitlivosi = POLOMER_CITLIVOSTI;
-    Rectangle rect = new Rectangle(e.getX() - polomerCitlivosi, e.getY() - polomerCitlivosi,
-        polomerCitlivosi * 2, polomerCitlivosi * 2);
-    Sheet<Wpt> swpt = najdiNejakyWpt(preved(rect));
-    Wpt wpt = swpt == null ? null : swpt.get();
-    mysNadWpt = wpt;
+  public void mouseMoved(MouseEvent e, MouseGestureContext ctx) {
+    Wpt wpt = najdiWptVBlizkosti(new Point(e.getX(), e.getY()));
+    wptPodMysi = wpt;
     Kesoid kes = wpt == null ? null : wpt.getKesoid();
 
-    if (kes != mysNadKesi) {
-      Kesoid staraKes = mysNadKesi;
-      mysNadKesi = kes;
+    if (kes != kesoidPodMysi) {
+      Kesoid staraKes = kesoidPodMysi;
+      kesoidPodMysi = kes;
       //repaint();
       repaintKes(staraKes);
-      repaintKes(mysNadKesi);
+      repaintKes(kesoidPodMysi);
     }
 
-    if (mysNadWpt != null) {
-      Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-      setMouseCursor(cursor);
+    if (wptPodMysi != null) {
       //      setCursor(cursor);
-      jakoTooltip.setText(mysNadWpt.textToolTipu());
+      jakoTooltip.setText(wptPodMysi.textToolTipu());
       jakoTooltip.setOpaque(true);
       jakoTooltip.setBackground(Color.WHITE);
       jakoTooltip.setSize(jakoTooltip.getPreferredSize());
 
-      Point p = getSoord().transform(mysNadWpt.getWgs().toMou());
+      Point p = getSoord().transform(wptPodMysi.getWgs().toMou());
       p.y -= jakoTooltip.getHeight();
       jakoTooltip.setLocation(p);
       jakoTooltip.setVisible(true);
       //System.out.println("TEXTIK ZDE: " + p);
     } else {
-      setMouseCursor(null);
-      //setCursor(null);
       jakoTooltip.setVisible(false);
       //System.out.println("TEXTIK PRYC: ");
     }
     //setToolTipText();
 
+  }
+
+  @Override
+  public Cursor getMouseCursor(boolean pressed) {
+    if (wptPodMysi != null && ! pressed) {
+      Cursor cursor = FKurzory.NAD_WAYPOINTEM;
+      return cursor;
+    } else
+      return super.getMouseCursor(pressed);
+  }
+
+
+  private Wpt najdiWptVBlizkosti(Point p) {
+    //System.out.println("POSUNOVACKA TO ASI BUDE: " + e);
+    int polomerCitlivosi = POLOMER_CITLIVOSTI;
+    Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi,
+        polomerCitlivosi * 2, polomerCitlivosi * 2);
+    Sheet<Wpt> swpt = indexator == null ? null : indexator.locateAnyOne(getSoord().transforToBounding(rect));
+    Wpt wpt = swpt == null ? null : swpt.get();
+    return wpt;
+  }
+
+
+  public void onEvent(PoziceSeMaMenitEvent event) {
+    // TODO-vylet Tato metoda by měla být na modelu, pak je otázkou s jakou citlivostí vybírat
+    int polomerCitlivosi = POLOMER_CITLIVOSTI;
+    Point p = getSoord().transform(event.mou);
+    Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi,
+        polomerCitlivosi * 2, polomerCitlivosi * 2);
+    Sheet<Wpt> swpt = indexator == null ? null : indexator.locateNearestOne(
+        getSoord().transforToBounding(rect), event.mou.xx, event.mou.yy);
+    Wpt wpt = swpt == null ? null : swpt.get();
+    if (wpt != null && wpt.getMou().equals(event.mou)) { // je to přesně on
+      int priorita = 40;
+      if (wpt.isMainWpt()) {
+        priorita = 50;
+      }
+      priorita -= wpt.getKesoid().getKesoidKind().ordinal();
+      event.add(wpt, priorita);
+    }
   }
 
 
@@ -487,11 +523,16 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
    * @return
    */
   @Override
-  public Mou getUpravenaMys() {
-    if (mysNadWpt != null)
-      return mysNadWpt.getWgs().toMou();
+  public Mouable getUpravenaMys() {
+    if (wptPodMysi != null)
+      return wptPodMysi;
     else
       return chain().getUpravenaMys();
+  }
+
+  @Override
+  public Wpt getWptPodMysi() {
+    return wptPodMysi;
   }
 
   private static class WptPaintRequest {
@@ -595,6 +636,7 @@ public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, 
   public void inject(VyletModel vyletModel) {
     this.vyletModel = vyletModel;
   }
+
   public void inject(KesoidModel kesoidModel) {
     this.kesoidModel = kesoidModel;
   }

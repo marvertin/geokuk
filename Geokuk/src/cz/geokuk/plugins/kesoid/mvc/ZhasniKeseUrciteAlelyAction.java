@@ -75,7 +75,6 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
   }
 
   private class PreskrtnutaIkona implements Icon {
-    private static final long serialVersionUID = -3715391092035917434L;
 
     private final Icon icon;
     /**

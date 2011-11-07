@@ -1,6 +1,6 @@
 package cz.geokuk.core.coordinates;
 
-public class Mou {
+public class Mou implements Mouable {
 
   public int xx;
   public int yy;
@@ -63,10 +63,36 @@ public class Mou {
   public Wgs toWgs() {
     return toUtm().toWgs();
   }
-  
+
   @Override
   public Mou clone()  {
-  	return new Mou(xx,yy);
+    return new Mou(xx,yy);
   }
 
+  @Override
+  public Mou getMou() {
+    return this;
+  }
+
+  public long getKvadratVzdalenosti(Mou mou) {
+    if (mou == null) return Long.MAX_VALUE; // nevlastní bod je nekonečně daleko
+    return sub(mou).getKvadratVzdalenosti();
+  }
+
+  public static double dalka(Mouable mouable1, Mouable mouable2) {
+    assert mouable1 != null;
+    assert mouable2 != null;
+    Utm utm1 = efektivneNaUtm(mouable1);
+    Utm utm2 = efektivneNaUtm(mouable2);
+    double dalka = Math.hypot(utm2.ux - utm1.ux, utm2.uy - utm1.uy);
+    return dalka;
+  }
+
+  private static Utm efektivneNaUtm(Mouable mouable) {
+    if (mouable instanceof Utm)
+      return (Utm) mouable;
+    if (mouable instanceof Wgs)
+      return ((Wgs) mouable).toUtm();
+    return mouable.getMou().toUtm();
+  }
 }

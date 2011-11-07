@@ -99,7 +99,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
     jWptName = new JLabel();
     jWptNazev= new JLabel();
     jWptSym= new JLabel();
-    
+
     jType = new JLabel();
     jAuthor = new JLabel();
     jHiddenTime = new JLabel();
@@ -109,7 +109,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
     jAzimut = new JLabel();
     jElevation = new JLabel();
     jElevation.setToolTipText("Nadmořská výška");
-    
+
     jRucnePridany = new JLabel();
 
     jOtevriUrl = new JSmallPictureButton();
@@ -151,7 +151,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
       jKesoidCode.setAlignmentX(RIGHT_ALIGNMENT);
       box2b.add(jKesoidCode);
       box2b.add(jKesoidSym);
-      
+
       Box box2 = Box.createHorizontalBox();
       box2.add(jType);
       box2.add(Box.createHorizontalStrut(5));
@@ -199,18 +199,20 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 
 
   }
-  
+
   public void onEvent(PoziceChangedEvent aEvent) {
-    if (aEvent.pozice.isNoPosition()) {
+    if (aEvent.poziceq.isNoPosition()) {
       setVisible(false);
     } else {
-      wpt = aEvent.pozice.getWpt();
+      wpt = aEvent.poziceq.getWpt();
       if (wpt == null) {
         setVisible(false);
       } else {
         Kesoid k = wpt.getKesoid();
         if (kesoid == null || k.getKesoidKind() != kesoid.getKesoidKind()) {
-          if (kesoid != null) jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(false);
+          if (kesoid != null) {
+            jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(false);
+          }
           kesoid = wpt.getKesoid();
           jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(true);
         } else {
@@ -253,9 +255,9 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
     jWptNazev.setText(formatuj(wpt.getNazev(), kesoid.getStatus()));
     jWptSym.setText(wpt.getSym());
     jRucnePridany.setText(wpt.isRucnePridany() ? "+" : "*");
-    jRucnePridany.setToolTipText(wpt.isRucnePridany() 
-        ? "Waypoint byl ručně přidán v Geogetu nebo podobném programu." 
-        : "Waypoint byl obsažen v PQ"
+    jRucnePridany.setToolTipText(wpt.isRucnePridany()
+        ? "Waypoint byl ručně přidán v Geogetu nebo podobném programu."
+            : "Waypoint byl obsažen v PQ"
     );
     int elevation = wpt.getElevation();
     jElevation.setText(elevation == 0 ? null : elevation + " m n. m.");
@@ -287,13 +289,25 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
   private static String formatuj(String s, EKesStatus status) {
     StringBuilder sb = new StringBuilder();
     sb.append("<html>");
-    if (status != EKesStatus.ACTIVE) sb.append("<strike>");
-    if (status == EKesStatus.DISABLED) sb.append("<font color=\"darkgray\">");
-    if (status == EKesStatus.ARCHIVED) sb.append("<font color=\"red\">");
+    if (status != EKesStatus.ACTIVE) {
+      sb.append("<strike>");
+    }
+    if (status == EKesStatus.DISABLED) {
+      sb.append("<font color=\"darkgray\">");
+    }
+    if (status == EKesStatus.ARCHIVED) {
+      sb.append("<font color=\"red\">");
+    }
     sb.append(s);
-    if (status == EKesStatus.ARCHIVED) sb.append("</font");
-    if (status == EKesStatus.DISABLED) sb.append("</font");
-    if (status != EKesStatus.ACTIVE) sb.append("</strike>");
+    if (status == EKesStatus.ARCHIVED) {
+      sb.append("</font");
+    }
+    if (status == EKesStatus.DISABLED) {
+      sb.append("</font");
+    }
+    if (status != EKesStatus.ACTIVE) {
+      sb.append("</strike>");
+    }
     return sb.toString();
   }
 

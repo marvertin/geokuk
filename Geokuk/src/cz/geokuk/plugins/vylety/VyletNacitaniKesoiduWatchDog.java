@@ -14,12 +14,15 @@ public class VyletNacitaniKesoiduWatchDog {
   private VyletModel vyletModel;
 
   public void onEvent(KeskyNactenyEvent aEvent) {
-    vyletModel.startLoadingVylet(aEvent.getVsechny());
+    vyletModel.startLogingIgnoreList(aEvent.getVsechny());
+    vyletModel.znovuVsechnoPripni();
+    vyletModel.vyresPripadneNahraniZastaralychVyletu();
+
+
   }
 
   public void inject(VyletModel vyletModel) {
     this.vyletModel = vyletModel;
   }
-  
-  
+
 }

@@ -4,8 +4,8 @@
 package cz.geokuk.plugins.refbody;
 
 import cz.geokuk.core.coord.Coord;
-import cz.geokuk.core.coord.Pozice;
 import cz.geokuk.core.coord.PoziceChangedEvent;
+import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.core.coord.VyrezChangedEvent;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.EventFirer;
@@ -18,7 +18,7 @@ import cz.geokuk.framework.EventFirer;
  */
 public class HlidacReferencnihoBodu {
 
-  private Pozice pozice;
+  private Poziceq poziceq = new Poziceq();
   private Wgs stredMapy;
   private Object minulyStredHledani;
   private Coord moord;
@@ -30,14 +30,10 @@ public class HlidacReferencnihoBodu {
   }
 
   public void onEvent(PoziceChangedEvent aEvent) {
-    setPozice(aEvent.pozice);
+    poziceq = aEvent.poziceq;
     fairujSpolecnou(aEvent.getEventFirer());
   }
 
-
-  private void setPozice(Pozice pozice) {
-    this.pozice = pozice;
-  }
 
   private void setStredMapy(Wgs wgs) {
     stredMapy = wgs;
@@ -52,11 +48,10 @@ public class HlidacReferencnihoBodu {
 
 
   private Wgs getReferencniBod() {
-    if (pozice == null || pozice.isNoPosition()) {
+    if (poziceq.isNoPosition())
       return stredMapy;
-    } else {
-      return pozice.getWgs();
-    }
+    else
+      return poziceq.getWgs();
   }
 
 

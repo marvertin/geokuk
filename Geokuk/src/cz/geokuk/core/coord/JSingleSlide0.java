@@ -3,12 +3,8 @@
  */
 package cz.geokuk.core.coord;
 
-import java.awt.Cursor;
 import java.awt.Graphics;
 
-import javax.swing.JFrame;
-
-import cz.geokuk.core.program.MainFrameHolder;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.JSlide0;
 
@@ -21,7 +17,6 @@ public abstract class JSingleSlide0 extends JSlide0 {
 
   private Coord soord;
 
-  private MainFrameHolder mainFrameHolder;
 
   protected Factory factory;
 
@@ -53,17 +48,7 @@ public abstract class JSingleSlide0 extends JSlide0 {
   //
   //  }
 
-  protected void setMouseCursor(Cursor cursor) {
-    getMainFrame().setCursor(cursor);
-  }
 
-  private JFrame getMainFrame() {
-    return mainFrameHolder.getMainFrame();
-  }
-
-  public void inject(MainFrameHolder mainFrameHolder) {
-    this.mainFrameHolder = mainFrameHolder;
-  }
 
   public void inject(Factory factory) {
     this.factory = factory;

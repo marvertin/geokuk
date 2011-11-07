@@ -51,7 +51,20 @@ public class BeanBag implements Factory {
   public <T> T init(T obj) {
     inject(obj);
     callAfterInjectInit(obj);
-    registerEventReceiver(obj);
+    registerEventReceiver(obj, false);
+    callAfterEventReceiverRegistrationInit(obj);
+    return obj;
+  }
+
+  /**
+   * @param <T>
+   * @param obj
+   */
+  @Override
+  public <T> T initNow(T obj) {
+    inject(obj);
+    callAfterInjectInit(obj);
+    registerEventReceiver(obj, true);
     callAfterEventReceiverRegistrationInit(obj);
     return obj;
   }
@@ -67,13 +80,16 @@ public class BeanBag implements Factory {
     try {
       Field[] fields = obj.getClass().getFields();
       for (Field field : fields) {
-        if (Modifier.isStatic(field.getModifiers())) continue;
+        if (Modifier.isStatic(field.getModifiers())) {
+          continue;
+        }
         registerSigleton(field.get(obj));
       }
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
+
 
   public void init() {
 
@@ -84,7 +100,7 @@ public class BeanBag implements Factory {
       callAfterInjectInit(bean);
     }
     for (Object bean : beans) {
-      registerEventReceiver(bean);
+      registerEventReceiver(bean, false);
     }
     for (Object bean : beans) {
       callAfterEventReceiverRegistrationInit(bean);
@@ -113,8 +129,8 @@ public class BeanBag implements Factory {
   /**
    * @param bean
    */
-  private void registerEventReceiver(Object bean) {
-    eveman.registerWeakly(bean);
+  private void registerEventReceiver(Object bean, boolean aOnlyInvoke) {
+    eveman.registerWeakly(bean, aOnlyInvoke);
   }
 
   /**
@@ -143,9 +159,8 @@ public class BeanBag implements Factory {
           callInjection(method, targetBean, injectedBean);
           pocetInjekci ++;
         }
-        if (pocetInjekci == 0) {
+        if (pocetInjekci == 0)
           throw new RuntimeException(String.format("Nenalena injekce targetBean=%s ... targetBeanType=%s ... method=%s", targetBean, targetBeanType, method));
-        }
       }
     }
   }

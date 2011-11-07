@@ -135,9 +135,7 @@ public class JKesDetail extends JKesoidDetail0 {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        // TODO navrátit zobrazování hintu
         Dlg.info(kes.getHint(), "Hint");
-
       }
     });
   }

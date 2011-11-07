@@ -48,4 +48,10 @@ public class Moud {
   public boolean isAnyRozmerEmpty() {
     return dxx <= 0 || dyy <= 0;
   }
+
+  public long getKvadratVzdalenosti() {
+    long lxx = dxx;
+    long lyy = dyy;
+    return lxx * lxx + lyy * lyy;
+  }
 }

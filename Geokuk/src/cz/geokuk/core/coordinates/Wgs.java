@@ -1,6 +1,6 @@
 package cz.geokuk.core.coordinates;
 
-public class Wgs {
+public class Wgs implements Mouable {
 
   public final double lat;
   public final double lon;
@@ -72,7 +72,7 @@ public class Wgs {
     double northing = Double.parseDouble(utm[3]);
     return new Utm(easting, northing);
   }
-  
+
   public Mou toMou() {
     return toUtm().toMou();
   }
@@ -94,20 +94,20 @@ public class Wgs {
     return s;
   }
 
-  
+
   @Override
   public String toString() {
     return "N" + toGeoFormat(lat) + " E" + toGeoFormat(lon);
   }
 
-	public static double vzdalenost(Wgs bod1, Wgs bod2) {
+  public static double vzdalenost(Wgs bod1, Wgs bod2) {
     Utm ucur = bod1.toUtm();
     Utm upoz = bod2.toUtm();
     double dalka = Math.hypot(ucur.ux - upoz.ux, ucur.uy - upoz.uy);
     return dalka;
   }
 
-	public static String vzdalenostStr(Wgs bod1, Wgs bod2) {
+  public static String vzdalenostStr(Wgs bod1, Wgs bod2) {
     double dalka = vzdalenost(bod1, bod2);
     String result;
     if (dalka < 10000) {  // vyjádříme v metrech
@@ -120,33 +120,40 @@ public class Wgs {
     return result;
   }
 
-	public static double azimut(Wgs odkud, Wgs bod) {
+  public static double azimut(Wgs odkud, Wgs bod) {
     Utm ucur = bod.toUtm();
     Utm upoz = odkud.toUtm();
     double uhel = Math.atan2(ucur.ux - upoz.ux, ucur.uy - upoz.uy);
     uhel = uhel * 180 / Math.PI;
-    if (uhel < 0) uhel += 360;
+    if (uhel < 0) {
+      uhel += 360;
+    }
     return uhel;
   }
 
-	public static String azimutStr(Wgs odkud, Wgs bod) {
+  public static String azimutStr(Wgs odkud, Wgs bod) {
     return Math.round(azimut(odkud, bod)) + "°";
   }
 
-	public double vzdalenost(Wgs bod2) {
-		return vzdalenost(this, bod2);
+  public double vzdalenost(Wgs bod2) {
+    return vzdalenost(this, bod2);
   }
 
-	public String vzdalenostStr(Wgs bod2) {
-		return vzdalenostStr(this, bod2);
+  public String vzdalenostStr(Wgs bod2) {
+    return vzdalenostStr(this, bod2);
   }
 
-	public double azimut(Wgs bod) {
-		return azimut(this, bod);
+  public double azimut(Wgs bod) {
+    return azimut(this, bod);
   }
 
-	public String azimutStr(Wgs bod) {
-		return azimutStr(this, bod);
+  public String azimutStr(Wgs bod) {
+    return azimutStr(this, bod);
   }
-	
+
+  @Override
+  public Mou getMou() {
+    return toMou();
+  }
+
 }

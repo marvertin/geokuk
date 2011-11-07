@@ -158,7 +158,6 @@ public class JRenderSlide extends JSingleSlide0 {
   //    g.drawLine(p.x-20, p.y-20, p.x+20, p.y+20);
   //    g.drawLine(p.x-20, p.y+20, p.x+20, p.y-20);
   //    //g.fillOval(p.x-20, p.y-20, 40, 40);
-  //    // TODO Auto-generated method stub
   //
   //  }
 

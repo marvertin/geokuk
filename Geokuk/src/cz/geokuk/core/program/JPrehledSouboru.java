@@ -38,7 +38,6 @@ public class JPrehledSouboru extends JPanel {
   private static final long serialVersionUID = -2491414463002815835L;
 
   private JJedenSouborPanel jKesDir;
-  private JJedenSouborPanel jAnoGgtFile;
   private JJedenSouborPanel jNeGgtFile;
   private JJedenSouborPanel jKachleCacheDir;
 
@@ -92,7 +91,6 @@ public class JPrehledSouboru extends JPanel {
     jKesDir =  pridejJednuPolozkuproEdit(null, tab1, "Složka s keškami získaný z Geogetu nebo jiného programu.",  true, false);
     jGeogetDataDir =  pridejJednuPolozkuproEdit(null, tab1, "Datová složka geogetu.", true, true);
 
-    jAnoGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, na které chci jít na výlet (GGT pro Geoget).",  false, false);
     jNeGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, na které teď na výlet nepůjdeme (GGT pro Geoget).",  false,  false);
     jImage3rdPartyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s rozšiřujícími obrázky jiných geokolegů.",  true, true);
     jImageMyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s mými vlastními rozšiřujícími obrázky.", true, true);
@@ -149,7 +147,6 @@ public class JPrehledSouboru extends JPanel {
             u.setGeogetDataDir(jGeogetDataDir.vezmiSouborAProver());
             u.setImage3rdPartyDir(jImage3rdPartyDir.vezmiSouborAProver());
             u.setImageMyDir(jImageMyDir.vezmiSouborAProver());
-            u.setAnoGgtFile(jAnoGgtFile.vezmiSouborAProver());
             u.setNeGgtFile(jNeGgtFile.vezmiSouborAProver());
             kesoidModel.setUmisteniSouboru(u);
           }
@@ -223,7 +220,6 @@ public class JPrehledSouboru extends JPanel {
     jKesDir.setFilex(u.getKesDir());
     jGeogetDataDir.setFilex(u.getGeogetDataDir());
 
-    jAnoGgtFile.setFilex(u.getAnoGgtFile());
     jNeGgtFile.setFilex(u.getNeGgtFile());
     jImage3rdPartyDir.setFilex(u.getImage3rdPartyDir());
     jImageMyDir.setFilex(u.getImageMyDir());

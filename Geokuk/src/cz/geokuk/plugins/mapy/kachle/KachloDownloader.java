@@ -86,7 +86,7 @@ public class KachloDownloader {
    * 
    */
   private synchronized Image getOfflineImage(EPraznyObrazek typPrazdnehoObrazku) {
-    // FIXME Offline image by měl být průhledný a rozhodně s lepší grafikou.
+    // TODO Offline image by měl být průhledný a rozhodně s lepší grafikou.
 
     Image image = prazdneObrazky.get(typPrazdnehoObrazku);
     if (image == null) {

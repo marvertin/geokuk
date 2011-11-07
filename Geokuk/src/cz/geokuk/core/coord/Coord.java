@@ -126,6 +126,18 @@ public class Coord  {
 
   }
 
+  public BoundingRect transforToBounding(Rectangle rect) {
+    Point p1 = new Point(rect.x, rect.y);
+    Point p2 = new Point(rect.x + rect.width, rect.y + rect.height);
+    Mou mou1 = transform(p1);
+    Mou mou2 = transform(p2);
+    // To je spravne, protoze souradnice jdou opacne
+    BoundingRect br = new BoundingRect(mou1.xx, mou2.yy, mou2.xx, mou1.yy);
+    return br;
+  }
+
+
+
   public Rectangle transform(MouRect mourect) {
     Point p1 = transform(mourect.getSz());
     Point p2 = transform(mourect.getJv());

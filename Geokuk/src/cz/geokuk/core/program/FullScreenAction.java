@@ -39,21 +39,25 @@ public class FullScreenAction extends Action0 {
     boolean jsmeVeFulu = gs.getFullScreenWindow() != null;
 
 
-    //TODO Tady předpokládáme JMainFrame a nevím, zda je to úplně správně
+    //LATER Tady předpokládáme JMainFrame a nevím, zda je to úplně správně
     JMainFrame mainFrame = (JMainFrame) getMainFrame();
 
     //		mainFrame.setVisible(false);
-    mainFrame.dispose();
+    //mainFrame.dispose();
     if (jsmeVeFulu) { // ta kdeme pryc
-      //      System.out.println("DO OKNA");
+      System.out.println("DO OKNA");
       gs.setFullScreenWindow(null);
       mainFrame.setFullScreen(false);
     } else {
-      //      System.out.println("DO FULU");
+      System.out.println("DO FULU 1");
       mainFrame.setFullScreen(true);
+      System.out.println("DO FULU 2");
       gs.setFullScreenWindow(mainFrame);
+      System.out.println("DO FULU 3");
     }
-    mainFrame.setVisible(true);
+    System.out.println("DO FULU 4");
+    //    mainFrame.setVisible(true);
+    System.out.println("DO FULU 5");
 
   }
 

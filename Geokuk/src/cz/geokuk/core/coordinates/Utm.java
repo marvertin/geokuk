@@ -1,6 +1,8 @@
 package cz.geokuk.core.coordinates;
 
-public class Utm {
+public class Utm implements Mouable {
+
+  private static final double MOU_FACTOR = 0.03125;
 
   @Override
   public int hashCode() {
@@ -72,8 +74,8 @@ public class Utm {
   }
 
   public Mou toMou() {
-    double xx = (ux + 3700000) / 0.03125;
-    double yy = (uy - 1300000) / 0.03125;
+    double xx = (ux + 3700000) / MOU_FACTOR;
+    double yy = (uy - 1300000) / MOU_FACTOR;
     return new Mou((int)xx, (int)yy);
   }
 
@@ -81,5 +83,11 @@ public class Utm {
   public String toString() {
     return "UTM[" + ux  + "," + uy  + "]";
   }
+
+  @Override
+  public Mou getMou() {
+    return toMou();
+  }
+
 
 }

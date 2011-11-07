@@ -22,10 +22,6 @@ import cz.geokuk.util.exception.MyExceptionHandler;
  *
  */
 public class GeokukMain  {
-  /**
-   * @author veverka
-   */
-  private static final long serialVersionUID = 3710282424567058076L;
 
   public void execute(String[] args) {
     FConst.logInit();

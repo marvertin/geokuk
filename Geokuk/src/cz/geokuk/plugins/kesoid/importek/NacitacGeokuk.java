@@ -32,7 +32,7 @@ public class NacitacGeokuk extends Nacitac0 {
    * @see Nacitac0#nactiKdyzUmis(java.io.InputStream, java.lang.String, java.util.Map)
    */
   @Override
-  protected void nactiKdyzUmis(InputStream aIstm, String aJmeno, ImportBuilder builder, Future<?> future) throws IOException {
+  protected void nactiKdyzUmis(InputStream aIstm, String aJmeno, IImportBuilder builder, Future<?> future) throws IOException {
 
     BufferedReader rdr = new BufferedReader(new InputStreamReader(aIstm, Charset.forName("UTF8")));
 
@@ -75,7 +75,7 @@ public class NacitacGeokuk extends Nacitac0 {
           gpxwpt.groundspeak.archived = Boolean.parseBoolean(pp[5]);
           gpxwpt.groundspeak.availaible = ! Boolean.parseBoolean(pp[6]);
           gpxwpt.explicitneUrcenoVlastnictvi = Boolean.parseBoolean(pp[8]);
-          gpxwpt.sym = Boolean.parseBoolean(pp[7]) ? ImportBuilder.GEOCACHE_FOUND : ImportBuilder.GEOCACHE;
+          gpxwpt.sym = Boolean.parseBoolean(pp[7]) ? KesoidImportBuilder.GEOCACHE_FOUND : KesoidImportBuilder.GEOCACHE;
           gpxwpt.groundspeak.owner = pp[9].trim().intern();
           gpxwpt.groundspeak.placedBy = pp[9].trim().intern();
           gpxwpt.time = pp[10];

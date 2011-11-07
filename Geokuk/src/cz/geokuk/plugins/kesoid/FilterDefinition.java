@@ -21,7 +21,7 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
   private int prahFavorit =0;
 
 
-  private EVylet prahVyletu = EVylet.NEVIM;
+  private EVylet prahVyletu = EVylet.BEZ_IGNOROVANYCH;
   private boolean jenDoTerenuUNenalezenych = true;
   private boolean jenFinalUNalezenych = true;
 

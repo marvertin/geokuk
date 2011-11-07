@@ -35,11 +35,11 @@ public class TadyJsemDomaAction extends Action0 {
   }
 
   public void onEvent(PoziceChangedEvent aEvent) {
-    if (aEvent.pozice.isNoPosition()) {
+    if (aEvent.poziceq.isNoPosition()) {
       setEnabled(false);
     } else {
       setEnabled(true);
-      hc = aEvent.pozice.getWgs();
+      hc = aEvent.poziceq.getWgs();
     }
   }
 

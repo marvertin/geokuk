@@ -143,7 +143,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 
 
   public void onEvent(PoziceChangedEvent event) {
-    Wpt wpt = event.pozice.getWpt();
+    Wpt wpt = event.poziceq.getWpt();
     if (wpt == null) return;
     if (bag == null) return;
     jmenaVybranychAlel = Alela.alelyToNames(wpt.getGenotyp(bag.getGenom()).getAlely());

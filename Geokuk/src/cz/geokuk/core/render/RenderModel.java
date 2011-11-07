@@ -192,8 +192,6 @@ public class RenderModel extends Model0 {
   //    System.out.printf("Chyby v metrech: S=%d, J=%d, V=%d, Z=%d\n", (int) chybaMetruS, (int)chybaMetruJ, (int)chybaMetruZ, (int)chybaMetruV);
   //    //System.out.printf("Chyby v pixlech: S=%d, J=%d, V=%d, Z=%d\n", pixlunametr*chybaMetruS, pixlunametr*chybaMetruJ, pixlunametr*chybaMetruZ, pixlunametr*chybaMetruV);
   //
-  //    // TODO Auto-generated method stub
-  //
   //  }
 
   private void spocitejVelikost() {

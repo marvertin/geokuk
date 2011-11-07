@@ -14,16 +14,15 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 
-import javax.swing.event.MouseInputListener;
-
 import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.framework.MouseGestureContext;
 
 
 /**
  * @author veverka
  *
  */
-public class JZoomovaciObdelnik extends JSingleSlide0 implements MouseInputListener {
+public class JZoomovaciObdelnik extends JSingleSlide0  {
 
   private static final long serialVersionUID = -4801191981059574701L;
 
@@ -91,30 +90,32 @@ public class JZoomovaciObdelnik extends JSingleSlide0 implements MouseInputListe
 
 
   @Override
-  public void mousePressed(MouseEvent e) {
+  public void mousePressed(MouseEvent e, MouseGestureContext ctx) {
     if (e.isShiftDown()) {
       pocatek = e.getPoint();
     }
-    chain().mousePressed(e);
+    chain().mousePressed(e, ctx);
     //	System.out.println("MYS stisknuta: " + e);
   }
 
   @Override
-  public void mouseReleased(MouseEvent e) {
+  public void mouseReleased(MouseEvent e, MouseGestureContext ctx) {
     if (e.isShiftDown() && getRectangle() != null) {
       //	System.out.println("Budeme zoomovat na " + getRectangle());
       vyrezModel.zoomTo(getSoord().transform(getRectangle()));
     }
     changeEndPoint(null);
-    chain().mouseReleased(e);
+    chain().mouseReleased(e, ctx);
   }
 
   @Override
-  public void mouseDragged(MouseEvent e) {
+  public void mouseDragged(MouseEvent e, MouseGestureContext ctx) {
     Point point = e.getPoint();
-    if (! e.isShiftDown()) point = null;
+    if (! e.isShiftDown()) {
+      point = null;
+    }
     changeEndPoint(point);
-    chain().mouseDragged(e);
+    chain().mouseDragged(e, ctx);
   }
 
   private void changeEndPoint(Point point) {
@@ -125,7 +126,9 @@ public class JZoomovaciObdelnik extends JSingleSlide0 implements MouseInputListe
       repaint(rect); // na starém už nebude
     }
     konec = point;
-    if (konec == null) pocatek = null;
+    if (konec == null) {
+      pocatek = null;
+    }
     rect = getRectangle();
     if (rect != null) {
       rect.width ++;

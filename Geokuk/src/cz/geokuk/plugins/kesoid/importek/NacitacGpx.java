@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.concurrent.Future;
 
 import javax.xml.namespace.QName;
+import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -113,6 +114,10 @@ public class NacitacGpx extends Nacitac0 {
   //<gpxg:Flag>1</gpxg:Flag>
   private static QName GPXG_FLAG = new QName(GPXG_NAMESPACE, "Flag");
 
+  // pro cesty
+  private static QName TRK;
+  private static QName TRKSEG;
+  private static QName TRKPT;
 
 
   private void initNamesTopografic(String topograficNamespaceUri) {
@@ -126,6 +131,10 @@ public class NacitacGpx extends Nacitac0 {
     URLNAME = new QName(topograficNamespaceUri, "urlname");
     SYM = new QName(topograficNamespaceUri, "sym");
     ELE = new QName(topograficNamespaceUri, "ele");
+
+    TRK = new QName(topograficNamespaceUri, "trk");
+    TRKSEG  = new QName(topograficNamespaceUri, "trkseg");
+    TRKPT  = new QName(topograficNamespaceUri, "trkpt");
   }
 
   private void initNamesGroundspeak(String groundspeakNameSpaceUri) {
@@ -170,8 +179,13 @@ public class NacitacGpx extends Nacitac0 {
    * @see Nacitac0#nactiKdyzUmis(java.io.InputStream, java.lang.String, java.util.Map)
    */
   @Override
-  protected void nactiKdyzUmis(InputStream istm, String jmeno, ImportBuilder builder,  Future<?> future) throws IOException {
+  protected void nactiKdyzUmis(InputStream istm, String jmeno, IImportBuilder builder,  Future<?> future) throws IOException {
     if (! jmeno.toLowerCase().trim().endsWith(".gpx")) return; // umíme jen GPX
+    nacti(istm, builder, future);
+  }
+
+  public void nacti(InputStream istm, IImportBuilder builder, Future<?> future)
+      throws FactoryConfigurationError, IOException {
     XMLInputFactory inputFactory = XMLInputFactory.newInstance();
     XMLStreamReader reader;
     try {
@@ -183,7 +197,7 @@ public class NacitacGpx extends Nacitac0 {
   }
 
   // priloudne do waypointu
-  public void load(XMLStreamReader rdr, ImportBuilder builder, Future<?> future) throws XMLStreamException {
+  public void load(XMLStreamReader rdr, IImportBuilder builder, Future<?> future) throws XMLStreamException {
     // nejdrive naplnit tim co uz mame
     while(rdr.hasNext()) {
       if (future != null && future.isCancelled()) return;
@@ -195,164 +209,36 @@ public class NacitacGpx extends Nacitac0 {
         //QName jmeno = rdr.getName();
         if (rdr.getName().equals(WPT)) {
           GpxWpt wpt = new GpxWpt();
-          wpt.wgs = new Wgs(Double.parseDouble(rdr.getAttributeValue(null, "lat")),
-              Double.parseDouble(rdr.getAttributeValue(null, "lon")));
-          // pro celý wayipoint
-          for (;! (rdr.isEndElement() && rdr.getName().equals(WPT)); rdr.next()) {
-            if (rdr.isStartElement()) {
-              QName jmeno = rdr.getName();
-              //System.out.println(" cyklim");
-              if (jmeno.equals(TIME)) {
-                wpt.time = rdr.getElementText(); // nemůžeme to hend použít
-              }
-              if (jmeno.equals(ELE)) {
-                wpt.ele = Double.parseDouble(rdr.getElementText()); // nemůžeme to hend použít
-              }
-              if (jmeno.equals(NAME)) {
-                String name = rdr.getElementText();
-                wpt.name = name;
-              }
-              if (jmeno.equals(URL)) {
-                wpt.link.href = rdr.getElementText();
-              }
-              if (jmeno.equals(LINK)) {
-                wpt.link.href = rdr.getAttributeValue(null, "href");
-                for (;! (rdr.isEndElement() && rdr.getName().equals(LINK)); rdr.next()) {
-                  if (! rdr.isStartElement()) {
-                    continue;
-                  }
-                  QName jmeno3 = rdr.getName();
-                  if (jmeno3.equals(LINK_TEXT)) {
-                    wpt.link.text = rdr.getElementText();
-                  }
-                  if (jmeno.equals(LINK_TYPE)) {
-                    wpt.link.type = rdr.getElementText();
-                  }
-                }
-
-              }
-              if (jmeno.equals(URLNAME)) {
-                wpt.link.text = rdr.getElementText();
-              }
-              if (jmeno.equals(SYM)) {
-                wpt.sym = rdr.getElementText();
-              }
-              if (jmeno.equals(TYPE)) {
-                wpt.type = rdr.getElementText();
-              }
-              if (jmeno.equals(CMT)) {
-                wpt.cmt = rdr.getElementText();
-              }
-              if (jmeno.equals(DESC)) {
-                wpt.desc = rdr.getElementText();
-              }
-              if (rdr.getName().getNamespaceURI().equals(GROUNSPEAK_NAMESPACE_1_0)) {
-                initNamesGroundspeak(GROUNSPEAK_NAMESPACE_1_0);
-              }
-              if (rdr.getName().getNamespaceURI().equals(GROUNSPEAK_NAMESPACE_1_0_1)) {
-                initNamesGroundspeak(GROUNSPEAK_NAMESPACE_1_0_1);
-              }
-              if (jmeno.equals(GS_CACHE)) {
-                wpt.groundspeak = new Groundspeak();
-                wpt.groundspeak.availaible = Boolean.valueOf(rdr.getAttributeValue(null, "available"));
-                wpt.groundspeak.archived = Boolean.valueOf(rdr.getAttributeValue(null, "archived"));
-                for (;! (rdr.isEndElement() && rdr.getName().equals(GS_CACHE)); rdr.next()) {
-                  if (! rdr.isStartElement()) {
-                    continue;
-                  }
-                  QName jmeno2 = rdr.getName();
-                  if (jmeno2.equals(GS_NAME)) {
-                    wpt.groundspeak.name = rdr.getElementText();
-                  }
-                  if (jmeno2.equals(GS_PLACED_BY)) {
-                    wpt.groundspeak.placedBy = rdr.getElementText();
-                  }
-                  if (jmeno2.equals(GS_OWNER)) {
-                    wpt.groundspeak.owner = rdr.getElementText();
-                  }
-                  if (jmeno2.equals(GS_TYPE)) {
-                    wpt.groundspeak.type = rdr.getElementText();
-                  }
-                  if (jmeno2.equals(GS_CONTAINER)) {
-                    wpt.groundspeak.container = rdr.getElementText().intern();
-                  }
-                  if (jmeno2.equals(GS_DIFFICULTY)) {
-                    wpt.groundspeak.difficulty = rdr.getElementText().intern();
-                  }
-                  if (jmeno2.equals(GS_TERREAIN)) {
-                    wpt.groundspeak.terrain = rdr.getElementText().intern();
-                  }
-                  if (jmeno2.equals(GS_COUNTRY)) {
-                    wpt.groundspeak.country = rdr.getElementText().intern();
-                  }
-                  if (jmeno2.equals(GS_STATE)) {
-                    wpt.groundspeak.state = rdr.getElementText().intern();
-                  }
-                  if (jmeno2.equals(GS_SHORT_DESCRIPTION)) {
-                    String shortDescription = rdr.getElementText();
-                    //                    if (shortDescription.startsWith("http")
-                    //                    		|| (wpt.name.length() == 8 && wpt.name.startsWith("GC")) ) { // Tent test je výkonnostní optimalizace, protože víme, že krátké popisky potřebujeme jen pro České Geodetické Body a je zde URL
-                    wpt.groundspeak.shortDescription = shortDescription;
-                    //                    }
-                  }
-                  if (jmeno2.equals(GS_ENCODED_HINTS)) {
-                    wpt.groundspeak.encodedHints = rdr.getElementText();
-                    break; // už mě ten cyklus kolem groundspeak:cache nezajímá
-                  }
-                }
-              } // konec GROUND_SPEAK
-              if (jmeno.equals(GPXG_GEOGET_EXTENSION)) {
-                for (;! (rdr.isEndElement() && rdr.getName().equals(GPXG_GEOGET_EXTENSION)); rdr.next()) {
-                  if (! rdr.isStartElement()) {
-                    continue;
-                  }
-                  QName jmeno4 = rdr.getName();
-                  if (jmeno4.equals(GPXG_FOUND)) {
-                    wpt.gpxg.found = rdr.getElementText();
-                  }
-                  if (jmeno4.equals(GPXG_TAG)) {
-                    String category = rdr.getAttributeValue(null, "Category");
-                    String value = rdr.getElementText();
-                    if ("Hodnoceni".equals(category)) {
-                      wpt.gpxg.hodnoceni = parseCislo(value);
-                    }
-                    if ("Hodnoceni-Pocet".equals(category)) {
-                      wpt.gpxg.hodnoceniPocet = parseCislo(value);
-                    }
-                    if ("BestOf".equals(category)) {
-                      wpt.gpxg.bestOf = parseCislo(value);
-                    }
-                    if ("favorites".equals(category)) {
-                      wpt.gpxg.favorites = parseCislo(value);
-                    }
-                    if ("Znamka".equals(category)) {
-                      wpt.gpxg.znamka = parseCislo(value);
-                    }
-                    if ("Elevation".equals(category)) {
-                      wpt.gpxg.elevation = parseCislo(value);
-                    }
-                    if ("CZ kraj".equals(category)) {
-                      wpt.gpxg.czkraj = value;
-                    }
-                    if ("CZ okres".equals(category)) {
-                      wpt.gpxg.czokres = value;
-                    }
-                    if (category != null && category.startsWith(PREFIX_USERDEFINOANYCH_GENU)) {
-                      wpt.gpxg.putUserTag(category.substring(PREFIX_USERDEFINOANYCH_GENU.length()),  value);
-                    }
-                  }
-                  if (jmeno4.equals(GPXG_FLAG)) {
-                    wpt.gpxg.flag = parseCislo(rdr.getElementText());
-                  }
-                }
-
-              } // konec GPXG
-            } // start element
-          } // konec wpt cyklu
-
-
-
+          readWpt(rdr, wpt, WPT);
           builder.addGpxWpt(wpt);
+          //System.out.println(wpt);
+          //System.out.println(kes);
+          //System.out.println(jmeno + " " + lat + " " + lon );
+        }
+        if (rdr.getName().equals(TRK)) {
+          builder.begTrack();
+          for (;! (rdr.isEndElement() && rdr.getName().equals(TRK)); rdr.next()) {
+            if (rdr.isStartElement() && rdr.getName().equals(NAME)) {
+              String nazev = rdr.getElementText();
+              builder.setTrackName(nazev);
+            }
+
+            if (rdr.isStartElement() && rdr.getName().equals(TRKSEG)) {
+              builder.begTrackSegment();
+              for (;! (rdr.isEndElement() && rdr.getName().equals(TRKSEG)); rdr.next()) {
+                if (rdr.isStartElement() && rdr.getName().equals(TRKPT)) {
+                  GpxWpt wpt = new GpxWpt();
+                  readWpt(rdr, wpt, TRKPT);
+                  builder.addTrackWpt(wpt);
+                  //System.out.println(wpt);
+                  //System.out.println(kes);
+                  //System.out.println(jmeno + " " + lat + " " + lon );
+                }
+              }
+              builder.endTrackSegment();
+            }
+          }
+          builder.endTrack();
           //System.out.println(wpt);
           //System.out.println(kes);
           //System.out.println(jmeno + " " + lat + " " + lon );
@@ -364,6 +250,173 @@ public class NacitacGpx extends Nacitac0 {
     }
 
 
+  }
+
+  private void readWpt(XMLStreamReader rdr, GpxWpt wpt, QName tag)
+      throws XMLStreamException {
+    wpt.wgs = new Wgs(Double.parseDouble(rdr.getAttributeValue(null, "lat")),
+        Double.parseDouble(rdr.getAttributeValue(null, "lon")));
+    // pro celý wayipoint
+    for (;! (rdr.isEndElement() && rdr.getName().equals(tag)); rdr.next()) {
+      if (rdr.isStartElement()) {
+        QName jmeno = rdr.getName();
+        //System.out.println(" cyklim");
+        if (jmeno.equals(TIME)) {
+          wpt.time = rdr.getElementText(); // nemůžeme to hend použít
+        }
+        if (jmeno.equals(ELE)) {
+          wpt.ele = Double.parseDouble(rdr.getElementText()); // nemůžeme to hend použít
+        }
+        if (jmeno.equals(NAME)) {
+          String name = rdr.getElementText();
+          wpt.name = name;
+        }
+        if (jmeno.equals(URL)) {
+          wpt.link.href = rdr.getElementText();
+        }
+        if (jmeno.equals(LINK)) {
+          wpt.link.href = rdr.getAttributeValue(null, "href");
+          for (;! (rdr.isEndElement() && rdr.getName().equals(LINK)); rdr.next()) {
+            if (! rdr.isStartElement()) {
+              continue;
+            }
+            QName jmeno3 = rdr.getName();
+            if (jmeno3.equals(LINK_TEXT)) {
+              wpt.link.text = rdr.getElementText();
+            }
+            if (jmeno.equals(LINK_TYPE)) {
+              wpt.link.type = rdr.getElementText();
+            }
+          }
+
+        }
+        if (jmeno.equals(URLNAME)) {
+          wpt.link.text = rdr.getElementText();
+        }
+        if (jmeno.equals(SYM)) {
+          wpt.sym = rdr.getElementText();
+        }
+        if (jmeno.equals(TYPE)) {
+          wpt.type = rdr.getElementText();
+        }
+        if (jmeno.equals(CMT)) {
+          wpt.cmt = rdr.getElementText();
+        }
+        if (jmeno.equals(DESC)) {
+          wpt.desc = rdr.getElementText();
+        }
+        if (rdr.getName().getNamespaceURI().equals(GROUNSPEAK_NAMESPACE_1_0)) {
+          initNamesGroundspeak(GROUNSPEAK_NAMESPACE_1_0);
+        }
+        if (rdr.getName().getNamespaceURI().equals(GROUNSPEAK_NAMESPACE_1_0_1)) {
+          initNamesGroundspeak(GROUNSPEAK_NAMESPACE_1_0_1);
+        }
+        if (jmeno.equals(GS_CACHE)) {
+          readGroudspeak(rdr, wpt);
+        } // konec GROUND_SPEAK
+        if (jmeno.equals(GPXG_GEOGET_EXTENSION)) {
+          readGeogetExtension(rdr, wpt);
+        } // konec GPXG
+      } // start element
+    } // konec wpt cyklu
+  }
+
+  private void readGroudspeak(XMLStreamReader rdr, GpxWpt wpt)
+      throws XMLStreamException {
+    wpt.groundspeak = new Groundspeak();
+    wpt.groundspeak.availaible = Boolean.valueOf(rdr.getAttributeValue(null, "available"));
+    wpt.groundspeak.archived = Boolean.valueOf(rdr.getAttributeValue(null, "archived"));
+    for (;! (rdr.isEndElement() && rdr.getName().equals(GS_CACHE)); rdr.next()) {
+      if (! rdr.isStartElement()) {
+        continue;
+      }
+      QName jmeno2 = rdr.getName();
+      if (jmeno2.equals(GS_NAME)) {
+        wpt.groundspeak.name = rdr.getElementText();
+      }
+      if (jmeno2.equals(GS_PLACED_BY)) {
+        wpt.groundspeak.placedBy = rdr.getElementText();
+      }
+      if (jmeno2.equals(GS_OWNER)) {
+        wpt.groundspeak.owner = rdr.getElementText();
+      }
+      if (jmeno2.equals(GS_TYPE)) {
+        wpt.groundspeak.type = rdr.getElementText();
+      }
+      if (jmeno2.equals(GS_CONTAINER)) {
+        wpt.groundspeak.container = rdr.getElementText().intern();
+      }
+      if (jmeno2.equals(GS_DIFFICULTY)) {
+        wpt.groundspeak.difficulty = rdr.getElementText().intern();
+      }
+      if (jmeno2.equals(GS_TERREAIN)) {
+        wpt.groundspeak.terrain = rdr.getElementText().intern();
+      }
+      if (jmeno2.equals(GS_COUNTRY)) {
+        wpt.groundspeak.country = rdr.getElementText().intern();
+      }
+      if (jmeno2.equals(GS_STATE)) {
+        wpt.groundspeak.state = rdr.getElementText().intern();
+      }
+      if (jmeno2.equals(GS_SHORT_DESCRIPTION)) {
+        String shortDescription = rdr.getElementText();
+        //                    if (shortDescription.startsWith("http")
+        //                    		|| (wpt.name.length() == 8 && wpt.name.startsWith("GC")) ) { // Tent test je výkonnostní optimalizace, protože víme, že krátké popisky potřebujeme jen pro České Geodetické Body a je zde URL
+        wpt.groundspeak.shortDescription = shortDescription;
+        //                    }
+      }
+      if (jmeno2.equals(GS_ENCODED_HINTS)) {
+        wpt.groundspeak.encodedHints = rdr.getElementText();
+        break; // už mě ten cyklus kolem groundspeak:cache nezajímá
+      }
+    }
+  }
+
+  private void readGeogetExtension(XMLStreamReader rdr, GpxWpt wpt)
+      throws XMLStreamException {
+    for (;! (rdr.isEndElement() && rdr.getName().equals(GPXG_GEOGET_EXTENSION)); rdr.next()) {
+      if (! rdr.isStartElement()) {
+        continue;
+      }
+      QName jmeno4 = rdr.getName();
+      if (jmeno4.equals(GPXG_FOUND)) {
+        wpt.gpxg.found = rdr.getElementText();
+      }
+      if (jmeno4.equals(GPXG_TAG)) {
+        String category = rdr.getAttributeValue(null, "Category");
+        String value = rdr.getElementText();
+        if ("Hodnoceni".equals(category)) {
+          wpt.gpxg.hodnoceni = parseCislo(value);
+        }
+        if ("Hodnoceni-Pocet".equals(category)) {
+          wpt.gpxg.hodnoceniPocet = parseCislo(value);
+        }
+        if ("BestOf".equals(category)) {
+          wpt.gpxg.bestOf = parseCislo(value);
+        }
+        if ("favorites".equals(category)) {
+          wpt.gpxg.favorites = parseCislo(value);
+        }
+        if ("Znamka".equals(category)) {
+          wpt.gpxg.znamka = parseCislo(value);
+        }
+        if ("Elevation".equals(category)) {
+          wpt.gpxg.elevation = parseCislo(value);
+        }
+        if ("CZ kraj".equals(category)) {
+          wpt.gpxg.czkraj = value;
+        }
+        if ("CZ okres".equals(category)) {
+          wpt.gpxg.czokres = value;
+        }
+        if (category != null && category.startsWith(PREFIX_USERDEFINOANYCH_GENU)) {
+          wpt.gpxg.putUserTag(category.substring(PREFIX_USERDEFINOANYCH_GENU.length()),  value);
+        }
+      }
+      if (jmeno4.equals(GPXG_FLAG)) {
+        wpt.gpxg.flag = parseCislo(rdr.getElementText());
+      }
+    }
   }
 
 

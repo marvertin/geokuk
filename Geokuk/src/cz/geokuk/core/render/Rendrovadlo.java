@@ -68,7 +68,7 @@ public class Rendrovadlo {
     // a teď projet směrem nahoru
     //postahujAVyrendrujKachleMap();
 
-    // FIXME řešit kanclování
+    // TODO řešit kanclování
     //if (isCancelled()) return null;
 
 

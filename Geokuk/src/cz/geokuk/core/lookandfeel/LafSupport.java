@@ -40,11 +40,10 @@ public class LafSupport  {
 
   private static final String LOOK_AND_FEEL = "lookAndFeel";
 
-  private static final long serialVersionUID = 6326005207942390499L;
 
 
   private static final String metal    =
-    "javax.swing.plaf.metal.MetalLookAndFeel";
+      "javax.swing.plaf.metal.MetalLookAndFeel";
 
   private static LafItem current;
   private static LafItem metalli;
@@ -114,7 +113,9 @@ public class LafSupport  {
         current = li;
       }
       System.out.println("LookAndFeel: " + lafInfo.getName() + "  " + lafInfo.getClassName());
-      if (lafInfo.getClassName().equals(metal)) metalli = li;
+      if (lafInfo.getClassName().equals(metal)) {
+        metalli = li;
+      }
       lafitems.add(li);
     }
     if (current == null) {
@@ -204,6 +205,7 @@ public class LafSupport  {
       this.laf = laf;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
       setLookAndFeel(laf);
     }
@@ -218,6 +220,7 @@ public class LafSupport  {
       this.theme = theme;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
       MetalLookAndFeel.setCurrentTheme(theme);
       updateLookAndFeel();

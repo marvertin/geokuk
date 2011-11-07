@@ -18,17 +18,13 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
    * 
    */
   public JDetailPrekryvnik() {
-    // TODO To by mělo jít jistojistě odstranit
-    //    getCoord().setMoustred(new Wgs(50.284, 14.3563).toMou());
-    //    getCoord().setMoumer(17);
-
   }
 
   public void onEvent(PoziceChangedEvent aEvent) {
-    if (aEvent.pozice.isNoPosition()) {
+    if (aEvent.poziceq.isNoPosition()) {
       setVisible(false);
     } else {
-      setSoord(getSoord().derive(DETAIL_MOUMER, aEvent.pozice.getWgs().toMou()));
+      setSoord(getSoord().derive(DETAIL_MOUMER, aEvent.poziceq.getWgs().toMou()));
       repaint(); // musíme překreslit při změně středu
       setVisible(true);
     }

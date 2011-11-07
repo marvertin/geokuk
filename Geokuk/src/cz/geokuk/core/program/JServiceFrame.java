@@ -66,8 +66,6 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
         Pocitadlo.callback = null;
       }
     });
-    // TODO Auto-generated method stub
-
   }
 
   @Override
@@ -164,7 +162,9 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
     int i = 0;
     //hodnoty.clear();
     for (Pocitadlo p : pocitadla) {
-      if (!p.getTextovyPopisTypu().equals(typPocitadla)) continue;
+      if (!p.getTextovyPopisTypu().equals(typPocitadla)) {
+        continue;
+      }
       JLabel label = new JLabel(p.getName()+ ": ");
       label.setToolTipText(p.getDescription());
       JLabel value = new JLabel(p.get() + "");
@@ -200,9 +200,15 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 
     for (int i = 0; i < 12; i++) {
       Pocitadlo poc = null;
-      if ( i % 3 == 0) poc = new PocitadloRoste("pociA " + i, "Popis počítadla " + i);
-      if ( i % 3 == 1) poc = new PocitadloMalo("pociB " + i, "Popis počítadla " + i);
-      if ( i % 3 == 2) poc = new PocitadloNula("pociC " + i, "Popis počítadla " + i);
+      if ( i % 3 == 0) {
+        poc = new PocitadloRoste("pociA " + i, "Popis počítadla " + i);
+      }
+      if ( i % 3 == 1) {
+        poc = new PocitadloMalo("pociB " + i, "Popis počítadla " + i);
+      }
+      if ( i % 3 == 2) {
+        poc = new PocitadloNula("pociC " + i, "Popis počítadla " + i);
+      }
       final Pocitadlo po = poc;
       final int ii = i;
       Thread thr = new Thread() {
@@ -228,8 +234,6 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 
   @Override
   protected void initComponents() {
-    // TODO Auto-generated method stub
-
   }
 
   @Override

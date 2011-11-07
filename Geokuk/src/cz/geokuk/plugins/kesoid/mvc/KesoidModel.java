@@ -78,7 +78,6 @@ public class KesoidModel extends Model0 {
     pref.putFilex(FPref.GEOGET_DATA_DIR_value, umisteniSouboru.getGeogetDataDir());
     pref.putFilex(FPref.IMAGE_3RD_PARTY_DIR_value, umisteniSouboru.getImage3rdPartyDir());
     pref.putFilex(FPref.IMAGE_MY_DIR_value, umisteniSouboru.getImageMyDir());
-    pref.putFilex(FPref.ANO_GGT_FILE_value, umisteniSouboru.getAnoGgtFile());
     pref.putFilex(FPref.NE_GGT_FILE_value, umisteniSouboru.getNeGgtFile());
     pref.remove("vyjimkyDir"); // mazat ze starych verzi
     blokovaneZdroje = currPrefe().node(FPref.KESOID_node).getStringSet(FPref.BLOKOVANE_ZDROJE_value, new HashSet<String>());
@@ -145,7 +144,9 @@ public class KesoidModel extends Model0 {
     FilterDefinition filterDefinition = currPrefe().getStructure(FPref.KESFILTER_structure_node, new FilterDefinition());
     int prahVyletuOrdinal = currPrefe().node(FPref.KESFILTER_structure_node).getInt("prahVyletu", filterDefinition.getPrahVyletu().ordinal());
     for (EVylet vylet : EVylet.values()) {
-      if (prahVyletuOrdinal == vylet.ordinal()) filterDefinition.setPrahVyletu(vylet);
+      if (prahVyletuOrdinal == vylet.ordinal()) {
+        filterDefinition.setPrahVyletu(vylet);
+      }
     }
     filter.setFilterDefinition(filterDefinition);
 
@@ -178,14 +179,15 @@ public class KesoidModel extends Model0 {
     u.setGeogetDataDir ( pref.getFilex("geogetDataDir", KesoidUmisteniSouboru.GEOGET_DATA_DIR));
     u.setImage3rdPartyDir ( pref.getFilex("image3rdPartyDir", KesoidUmisteniSouboru.IMAGE_3RDPARTY_DIR));
     u.setImageMyDir ( pref.getFilex("imageMyDir", KesoidUmisteniSouboru.IMAGE_MY_DIR));
-    u.setAnoGgtFile( pref.getFilex("anoGgtFile", KesoidUmisteniSouboru.ANO_GGT));
-    u.setNeGgtFile ( pref.getFilex("neGgtFile", KesoidUmisteniSouboru.NE_GGT));
+    u.setNeGgtFile ( pref.getFilex(FPref.NE_GGT_FILE_value, KesoidUmisteniSouboru.NE_GGT));
     return u;
   }
 
   public void spustFiltrovani() {
     if (vsechny == null) return;
-    if (filteringSwingWorker != null) filteringSwingWorker.cancel(true);
+    if (filteringSwingWorker != null) {
+      filteringSwingWorker.cancel(true);
+    }
     filteringSwingWorker = new KesFilteringSwingWorker(vsechny, vsechny.getGenom(), filter, this, getProgressModel());
     filteringSwingWorker.execute();
   }
@@ -193,8 +195,11 @@ public class KesoidModel extends Model0 {
   public void filtrujDleAlely(String alelaName, boolean zobrazit) {
     Set<String> jmena = new HashSet<String>(filter.getJmenaNechtenychAlel());
     boolean zmena;
-    if (zobrazit) zmena = jmena.remove(alelaName);
-    else zmena = jmena.add(alelaName);
+    if (zobrazit) {
+      zmena = jmena.remove(alelaName);
+    } else {
+      zmena = jmena.add(alelaName);
+    }
     if (! zmena) return; // není změna
     setJmenaNechtenychlel(jmena);
   }
@@ -238,7 +243,7 @@ public class KesoidModel extends Model0 {
    * @param result
    */
   public void setVsechnyKesoidy(KesBag vsechnyKesoidy) {
-    this.vsechny = vsechnyKesoidy;
+    vsechny = vsechnyKesoidy;
     spustFiltrovani();
     fire(new KeskyNactenyEvent(vsechnyKesoidy));
   }
@@ -275,7 +280,7 @@ public class KesoidModel extends Model0 {
    * @param jmenoAktualniSadyIkon the jmenoAktualniSadyIkon to set
    */
   public void setJmenoAktualniSadyIkon(ASada jmenoAktualniSadyIkon) {
-    if (jmenoAktualniSadyIkon.equals(this.jmenaAlelNaToolbaru)) return;
+    if (jmenoAktualniSadyIkon.equals(jmenaAlelNaToolbaru)) return;
     this.jmenoAktualniSadyIkon = jmenoAktualniSadyIkon;
     currPrefe().node(FPref.JMENO_VYBRANE_SADY_IKON_node).putAtom(FPref.JMENO_VYBRANE_SADY_IKON_value, jmenoAktualniSadyIkon);
     fire(new JmenoAktualniSadyIkonChangeEvent(jmenoAktualniSadyIkon));
@@ -342,8 +347,11 @@ public class KesoidModel extends Model0 {
    */
   public void setNacitatSoubor(String jmenoZDroje, boolean nacitat) {
     boolean zmena;
-    if (nacitat) zmena = blokovaneZdroje.remove(jmenoZDroje);
-    else zmena =  blokovaneZdroje.add(jmenoZDroje);
+    if (nacitat) {
+      zmena = blokovaneZdroje.remove(jmenoZDroje);
+    } else {
+      zmena =  blokovaneZdroje.add(jmenoZDroje);
+    }
     if (!zmena) return;
     currPrefe().node(FPref.KESOID_node).putStringSet(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
     startKesLoading();

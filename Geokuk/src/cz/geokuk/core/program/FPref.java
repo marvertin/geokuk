@@ -7,7 +7,8 @@ package cz.geokuk.core.program;
  */
 public class FPref {
 
-  public static final String ANO_GGT_FILE_value = "anoGgtFile";
+  public static final String ZASTARALE_ANO_GGT_FILE_value = "anoGgtFile";
+  public static final String ZASTARALE_ANO_GGT_FILE_UZ_NENACITAT = "anoGgtFileUzNenacitat";
   public static final String BLOKOVANE_ZDROJE_value = "blokovaneZdroje";
   public static final String DOMACI_SOURADNICE_node = "domacisouradnice";
   public static final String GEOCACHING_COM_NICK_value = "geocachingComNick";
@@ -64,5 +65,8 @@ public class FPref {
   public static final String ZOBRAZIT_MMRIZKU_valuePrefix = "zobrazitMrizku";
   public static final String ZVYRAZNOVACI_KRUHY_node    = "zvyraznovaciKruhy";
 
+  public static final String VYLET_node    = "vylet";
+  public static final String AKTUALNI_SOUBOR_value   = "aktualniSoubor";
+  public static final String JE_OTEVRENY_VYLET_value  = "jeOtevrenyVylet";
 
 }

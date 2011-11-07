@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -12,6 +13,7 @@ import javax.swing.event.ChangeListener;
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
+import cz.geokuk.framework.MouseGestureContext;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.util.gui.JBarvovyDvojSlider;
@@ -144,4 +146,9 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
     return new JObsazenost();
   }
 
+  @Override
+  public void mouseDragged(MouseEvent e, MouseGestureContext ctx) {
+    //ctx.setMouseCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+    super.mouseDragged(e, ctx);
+  }
 }

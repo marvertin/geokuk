@@ -26,7 +26,6 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
 
   //  public static final Filex KESOID_CACHE_DIR = new Filex(new File(PRCHAVE_DIR, "kesoids"), false, true);
 
-  public static final Filex ANO_GGT = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "lovim.ggt"), false, true);
   public static final Filex NE_GGT = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "tedne.ggt"), false, true);
 
   private Filex kesDir;
@@ -34,7 +33,6 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
   private Filex image3rdPartyDir;
   private Filex imageMyDir;
 
-  private Filex anoGgtFile;
   private Filex neGgtFile;
 
 
@@ -63,21 +61,6 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
 
 
   /**
-   * @param anoGgtFile the anoGgtFile to set
-   */
-  public void setAnoGgtFile(Filex anoGgtFile) {
-    this.anoGgtFile = anoGgtFile;
-  }
-
-  /**
-   * @return the anoGgtFile
-   */
-  public Filex getAnoGgtFile() {
-    check(kesDir);
-    return anoGgtFile;
-  }
-
-  /**
    * @param neGgtFile the neGgtFile to set
    */
   public void setNeGgtFile(Filex neGgtFile) {
@@ -97,7 +80,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
   }
 
   public void setGeogetDataDir(Filex geogetDir) {
-    this.geogetDataDir = geogetDir;
+    geogetDataDir = geogetDir;
   }
 
   public Filex getImage3rdPartyDir() {
@@ -123,7 +106,6 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((anoGgtFile == null) ? 0 : anoGgtFile.hashCode());
     result = prime * result + ((geogetDataDir == null) ? 0 : geogetDataDir.hashCode());
     result = prime * result + ((image3rdPartyDir == null) ? 0 : image3rdPartyDir.hashCode());
     result = prime * result + ((imageMyDir == null) ? 0 : imageMyDir.hashCode());
@@ -144,11 +126,6 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
     if (getClass() != obj.getClass())
       return false;
     KesoidUmisteniSouboru other = (KesoidUmisteniSouboru) obj;
-    if (anoGgtFile == null) {
-      if (other.anoGgtFile != null)
-        return false;
-    } else if (!anoGgtFile.equals(other.anoGgtFile))
-      return false;
     if (geogetDataDir == null) {
       if (other.geogetDataDir != null)
         return false;

@@ -11,13 +11,14 @@ import cz.geokuk.framework.Event0;
  */
 public class PoziceChangedEvent extends Event0<PoziceModel> {
 
-  public final Pozice pozice;
+  public final Poziceq poziceq;
 
   /**
    * @param aPozice
    * @param aMeloBySeCentrovat
    */
-  PoziceChangedEvent(Pozice aPozice) {
-    pozice = aPozice;
+  PoziceChangedEvent(Poziceq aPoziceq) {
+    assert aPoziceq != null;
+    poziceq = aPoziceq;
   }
 }

@@ -7,18 +7,21 @@ package cz.geokuk.core.program;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JComponent;
+import javax.swing.event.MouseInputListener;
 
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coord.PoziceModel;
+import cz.geokuk.framework.MouseGestureContext;
 
 /**
  * Musí být úplně nahoře, je průhledná
  * a chytá události myši a případně je distribuuje.
  * Také zobrazuje myší kourzor.
  */
-public final class JDetailMysovani extends JSingleSlide0  {
+public final class JDetailMysovani extends JSingleSlide0  implements MouseInputListener, MouseWheelListener  {
 
   private static final long serialVersionUID = 4979888007463850390L;
 
@@ -69,12 +72,32 @@ public final class JDetailMysovani extends JSingleSlide0  {
    */
 
   @Override
+  public void mouseMoved(MouseEvent e, MouseGestureContext ctx) {
+    poziceModel.setMys(e.getPoint(), getSoord().getMouCur(e.getPoint()));
+  }
+
+  @Override
+  public void mouseEntered(MouseEvent e) {
+  }
+
+  @Override
+  public void mouseExited(MouseEvent e) {
+  }
+
+  @Override
+  public void mousePressed(MouseEvent e) {
+  }
+
+  @Override
+  public void mouseReleased(MouseEvent e) {
+  }
+
+  @Override
   public void mouseDragged(MouseEvent e) {
   }
 
   @Override
   public void mouseMoved(MouseEvent e) {
-    poziceModel.setMys(e.getPoint(), getSoord().getMouCur(e.getPoint()));
   }
 
 

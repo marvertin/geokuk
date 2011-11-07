@@ -1,12 +1,13 @@
 package cz.geokuk.plugins.kesoid;
 
 import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.core.coordinates.Uchopenec;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
 
-public class Wpt extends Weikoid0 {
+public class Wpt extends Weikoid0 implements Uchopenec {
 
   public static final String TRADITIONAL_CACHE = "Traditional Cache";
 
@@ -37,7 +38,7 @@ public class Wpt extends Weikoid0 {
 
   public double lat;
   public double lon;
-  
+
   private int xx = -1;
   private int yy = -1;
 
@@ -57,16 +58,16 @@ public class Wpt extends Weikoid0 {
     return new Wgs(lat, lon);
   }
 
+  @Override
   public Mou getMou() {
     if (yy == -1) { // testovat yy, protože se nastavuje později
       Mou mou = getWgs().toMou();
       xx = mou.xx;
       yy = mou.yy;
       return mou;
-    } else {
-//      System.out.println("kesnuto " + xx + " " + yy);
+    } else
+      //      System.out.println("kesnuto " + xx + " " + yy);
       return new Mou(xx, yy);
-    }
   }
 
   /**
@@ -83,7 +84,7 @@ public class Wpt extends Weikoid0 {
 
   public void setNazev(String aNazev) {
     // Je tam strašne moc krátkých názvů jako TrB nebo ZhB
-    this.nazev = aNazev.length() >= 5 ? aNazev : aNazev.intern();
+    nazev = aNazev.length() >= 5 ? aNazev : aNazev.intern();
   }
 
   //  public String getPrefix() {
@@ -110,13 +111,13 @@ public class Wpt extends Weikoid0 {
     EKesWptType type = getType();
     boolean b = type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE
     || TRADITIONAL_CACHE.equals(sym);
-    return b;  
+    return b;
   }
 
   public boolean nutnyKLusteni() {
     return isMainWpt()
     || getType() == EKesWptType.QUESTION_TO_ANSWER
-    || getType() == EKesWptType.STAGES_OF_A_MULTICACHE;  	
+    || getType() == EKesWptType.STAGES_OF_A_MULTICACHE;
   }
 
   /* (non-Javadoc)
@@ -128,15 +129,15 @@ public class Wpt extends Weikoid0 {
   }
 
 
-//  private Genotyp __;
-  
+  //  private Genotyp __;
+
   public Genotyp getGenotyp(Genom genom) {
-//  	if (__ != null) return __;
-//  	
+    //  	if (__ != null) return __;
+    //
     Genotyp g = genom.getGenotypVychozi();
     buildGenotyp(genom, g);
     getKesoid().doBuildGenotyp(genom, g);
-//    __ = g;
+    //    __ = g;
     return g;
   }
 
@@ -152,13 +153,15 @@ public class Wpt extends Weikoid0 {
   }
 
   public Sklivec getSklivec() {
-    if (sklivecValidityCode != currentSklivecValidityCode) sklivec = null;
+    if (sklivecValidityCode != currentSklivecValidityCode) {
+      sklivec = null;
+    }
     return sklivec;
   }
 
   public void setSklivec(Sklivec sklivec) {
     this.sklivec = sklivec;
-    this.sklivecValidityCode = currentSklivecValidityCode;
+    sklivecValidityCode = currentSklivecValidityCode;
   }
 
   /**
@@ -180,28 +183,28 @@ public class Wpt extends Weikoid0 {
     //    if (wpt.getType() != EKesWptType.CACHE && wpt.getType() != EKesWptType.FINAL_LOCATION) {
     //      sb.append("<i>" + wpt.getName() + ": " + wpt.getNazev() + "</i><br>");
     //    }
-//    sb.append("<b>");
-//    sb.append(wpt.getKesoid().getNazev());
-//    sb.append("</b>");
-//    sb.append("<small>");
-//    sb.append(" - ");
-//    sb.append(sym);
-//    sb.append("  (" + wpt.getKesoid().getCode() + ")");
-//    sb.append("</small>");
-//    sb.append("<br>");
+    //    sb.append("<b>");
+    //    sb.append(wpt.getKesoid().getNazev());
+    //    sb.append("</b>");
+    //    sb.append("<small>");
+    //    sb.append(" - ");
+    //    sb.append(sym);
+    //    sb.append("  (" + wpt.getKesoid().getCode() + ")");
+    //    sb.append("</small>");
+    //    sb.append("<br>");
 
     getKesoid().prispejDoTooltipu(sb, wpt);
 
-//    sb.append("<br>");
-//    sb.append("<br>");
-//    sb.append("<b>");
-//    sb.append(wpt.getNazev());
-//    sb.append("</b>");
-//    sb.append("<small>");
-//    sb.append(" - ");
-//    sb.append(sym);
-//    sb.append("  (" + wpt.getName() + ")");
-//    sb.append("</small>");
+    //    sb.append("<br>");
+    //    sb.append("<br>");
+    //    sb.append("<b>");
+    //    sb.append(wpt.getNazev());
+    //    sb.append("</b>");
+    //    sb.append("<small>");
+    //    sb.append(" - ");
+    //    sb.append(sym);
+    //    sb.append("  (" + wpt.getName() + ")");
+    //    sb.append("</small>");
 
     return sb.toString();
   }
