@@ -22,16 +22,16 @@ class CacheNaKachleDisk {
   private static final int MAXIMALNI_VELIKOST_FRONTY_ZAPISUJICI_NA_DISK = 100;
 
   private final PocitadloRoste pocitMinutiDiskoveKese = new PocitadloRoste("Počet minutí dlaždic v DISK cache",
-  "Kolikrát se nepodařilo hledanou dlaždici v paměťové keši minout, co se dělo dál není tímto atributem určeno..");
+      "Kolikrát se nepodařilo hledanou dlaždici v paměťové keši minout, co se dělo dál není tímto atributem určeno..");
 
   private final PocitadloRoste pocitZasahDiskoveKese = new PocitadloRoste("Počet zásahů dlaždic v DISK cache",
-  "Kolikrát se podařilo hledanou dlaždici zasáhnout na disku, tedy naloadovat. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
+      "Kolikrát se podařilo hledanou dlaždici zasáhnout na disku, tedy naloadovat. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
 
   private final PocitadloRoste pocitZapsanoNaDisk = new PocitadloRoste("Počet zapsaných dlaždic na disk",
-  "Kolik dlaždic bylo úspěšně zapsáno na disk asynchronním zapisovačem.");
+      "Kolik dlaždic bylo úspěšně zapsáno na disk asynchronním zapisovačem.");
 
   private final PocitadloNula pocitVelikostZapisoveFronty = new PocitadloNula("Veliksot fronty pro zápisdlaždic na disk",
-  "Kolik dlaždic je ještě ve frontě a čeká na zápis na disk.");
+      "Kolik dlaždic je ještě ve frontě a čeká na zápis na disk.");
 
 
   private final KachleFileManager kfm;
@@ -136,6 +136,7 @@ class CacheNaKachleDisk {
 
   private class DiskovyZapisovac implements Runnable {
 
+    @Override
     public void run() {
       for (;;) {
         try {
@@ -172,6 +173,10 @@ class CacheNaKachleDisk {
     thread.setPriority(Thread.NORM_PRIORITY - 1);
     thread.setDaemon(true);
     thread.start();
+  }
+
+  public void clearMemoryCache() {
+    cache.clearMemoryCache();
   }
 
 

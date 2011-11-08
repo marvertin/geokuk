@@ -338,6 +338,12 @@ public class NacitacGpx extends Nacitac0 {
         wpt.groundspeak.placedBy = rdr.getElementText();
       }
       if (jmeno2.equals(GS_OWNER)) {
+        try {
+          wpt.groundspeak.ownerid = Integer.parseInt(rdr.getAttributeValue(null, "id"));
+        } catch (NumberFormatException e) {
+          System.err.println("Nenumerické číslo vlastníka: " + wpt);
+          wpt.groundspeak.ownerid = -999;
+        }
         wpt.groundspeak.owner = rdr.getElementText();
       }
       if (jmeno2.equals(GS_TYPE)) {

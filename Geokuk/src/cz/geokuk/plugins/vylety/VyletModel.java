@@ -155,9 +155,11 @@ public class VyletModel extends Model0 {
 
 
   public void removeAllFromCesta() {
+    InvalidacniPesek invalidacniPesek = invalidacniPesek();
     for (Wpt wpt : doc.getWpts()) {
       removeFromBoth(wpt);
     }
+    invalidacniPesek.invaliduj();
   }
 
   public void clearIgnoreList() {

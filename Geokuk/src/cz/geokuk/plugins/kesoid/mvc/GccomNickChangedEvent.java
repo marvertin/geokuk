@@ -4,16 +4,16 @@ import cz.geokuk.framework.Event0;
 
 public class GccomNickChangedEvent extends Event0<KesoidModel> {
 
-  private final String gccomNick;
+  private final GccomNick gccomNick;
 
-  public GccomNickChangedEvent(String gccomNick) {
+  public GccomNickChangedEvent(GccomNick gccomNick) {
     super();
     this.gccomNick = gccomNick;
   }
 
-  public String getGccomNick() {
+  public GccomNick getGccomNick() {
     return gccomNick;
   }
-  
-  
+
+
 }

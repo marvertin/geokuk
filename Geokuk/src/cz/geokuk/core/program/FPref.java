@@ -12,6 +12,7 @@ public class FPref {
   public static final String BLOKOVANE_ZDROJE_value = "blokovaneZdroje";
   public static final String DOMACI_SOURADNICE_node = "domacisouradnice";
   public static final String GEOCACHING_COM_NICK_value = "geocachingComNick";
+  public static final String GEOCACHING_COM_NICK_ID_value = "geocachingComNickId";
   public static final String GEOGET_DATA_DIR_value = "geogetDataDir";
   // Hodnoty
   public static final String HC_value = "hc";

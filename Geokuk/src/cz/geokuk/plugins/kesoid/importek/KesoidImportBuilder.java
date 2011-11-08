@@ -29,6 +29,7 @@ import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.Wpt.EZOrder;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
+import cz.geokuk.plugins.kesoid.mvc.GccomNick;
 
 public class KesoidImportBuilder implements IImportBuilder {
 
@@ -54,10 +55,10 @@ public class KesoidImportBuilder implements IImportBuilder {
   private final InformaceOZdrojich informaceOZdrojich = new InformaceOZdrojich();
 
   private ObjectOutputStream outputForCache;
-  private final String gccomNick;
+  private final GccomNick gccomNick;
   private final ProgressModel progressModel;
 
-  public KesoidImportBuilder(String gccomNick, ProgressModel progressModel) {
+  public KesoidImportBuilder(GccomNick gccomNick, ProgressModel progressModel) {
     this.gccomNick = gccomNick;
     this.progressModel = progressModel;
   }
@@ -67,6 +68,10 @@ public class KesoidImportBuilder implements IImportBuilder {
    */
   @Override
   public void addGpxWpt(GpxWpt gpxwpt) {
+    if (gpxwpt.wgs.lat < 8 || gpxwpt.wgs.lat > 80 || gpxwpt.wgs.lon < 1 || gpxwpt.wgs.lon > 30) {
+      System.out.println("Souradnice jsou mimo povoleny rozsah: " + gpxwpt.wgs + " - " + gpxwpt);
+      return;
+    }
     // POkud je otevřena díra do keše, zapisujeme vše do keše
     if (outputForCache != null) {
       try {
@@ -416,7 +421,7 @@ public class KesoidImportBuilder implements IImportBuilder {
   private Waymark createWaymarkGeoget(GpxWpt gpxwpt) {
     Waymark wm = new Waymark();
     wm.setCode(gpxwpt.name);
-    if (gccomNick.equals(gpxwpt.groundspeak.placedBy)) {
+    if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
       wm.setVztahx(EKesVztah.OWN);
     } else {
       wm.setVztahx(EKesVztah.NORMAL);
@@ -440,7 +445,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     Waymark wm = new Waymark();
     wm.setCode(gpxwpt.name);
     if (gpxwpt.groundspeak != null) {
-      if (gccomNick.equals(gpxwpt.groundspeak.placedBy)) {
+      if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
         wm.setVztahx(EKesVztah.OWN);
       } else {
         wm.setVztahx(EKesVztah.NORMAL);
@@ -642,9 +647,11 @@ public class KesoidImportBuilder implements IImportBuilder {
   private EKesVztah urciVztah(GpxWpt gpxwpt) {
     if (gpxwpt.explicitneUrcenoVlastnictvi)
       return EKesVztah.OWN;
-    if (gccomNick.equals(gpxwpt.groundspeak.owner))
+    if (gccomNick.name.equals(gpxwpt.groundspeak.owner))
       return EKesVztah.OWN;
-    if (gccomNick.equals(gpxwpt.groundspeak.placedBy))
+    if (gccomNick.id ==  gpxwpt.groundspeak.ownerid)
+      return EKesVztah.OWN;
+    if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy))
       return EKesVztah.OWN;
     else if (GEOCACHE_FOUND.equals(gpxwpt.sym))
       return EKesVztah.FOUND;

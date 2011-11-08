@@ -23,21 +23,21 @@ import cz.geokuk.util.pocitadla.PocitadloRoste;
  */
 class CacheNaKachleMemory {
 
-  private Pocitadlo pocitMinutiPametoveKese = new PocitadloRoste("Počet minutí dlaždic v memcache: ", 
-  "Kolikrát se nepodařilo hledanou dlaždici v paměťové keši nalézt a co se dělo dál není tímto atributem určeno..");
+  private final Pocitadlo pocitMinutiPametoveKese = new PocitadloRoste("Počet minutí dlaždic v memcache: ",
+      "Kolikrát se nepodařilo hledanou dlaždici v paměťové keši nalézt a co se dělo dál není tímto atributem určeno..");
 
-  private Pocitadlo pocitZasahPametoveKese = new PocitadloRoste("Počet zásahů dlaždic v memcache: ", 
-  "Kolikrát se podařilo hledanou dlaždici zasáhnout v paměti. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
+  private final Pocitadlo pocitZasahPametoveKese = new PocitadloRoste("Počet zásahů dlaždic v memcache: ",
+      "Kolikrát se podařilo hledanou dlaždici zasáhnout v paměti. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
 
-  private Pocitadlo pocitVelikostPametoveKese = new PocitadloMalo("Počet dlaždic v memcache: ", 
-  "Počet závisí na velikosti pro Javu dostupné paměti (-Xmx) a měl by se ustálit na určité hodnotě, občas možná snížit, nikdy však nemůže být menší než počet dlaždic na mapě.");
+  private final Pocitadlo pocitVelikostPametoveKese = new PocitadloMalo("Počet dlaždic v memcache: ",
+      "Počet závisí na velikosti pro Javu dostupné paměti (-Xmx) a měl by se ustálit na určité hodnotě, občas možná snížit, nikdy však nemůže být menší než počet dlaždic na mapě.");
 
-  private Pocitadlo pocitZametenePametoveKese = new PocitadloRoste("Počet zametených dlaždic v memcache: ", 
-  "Počet obrázků, které garbage collector zametrl pryč a my díky tomu odstranili referenci z keše.");
+  private final Pocitadlo pocitZametenePametoveKese = new PocitadloRoste("Počet zametených dlaždic v memcache: ",
+      "Počet obrázků, které garbage collector zametrl pryč a my díky tomu odstranili referenci z keše.");
 
 
-  private ReferenceQueue<Image> referenceQueue = new ReferenceQueue<Image>();
-  private Map<Ka0, Item> cache = new HashMap<Ka0, Item>();
+  private final ReferenceQueue<Image> referenceQueue = new ReferenceQueue<Image>();
+  private final Map<Ka0, Item> cache = new HashMap<Ka0, Item>();
 
 
   public CacheNaKachleMemory() {
@@ -107,6 +107,11 @@ class CacheNaKachleMemory {
     }, "Čistiš keše");
     thread.setDaemon(true);
     thread.start();
+  }
+
+
+  public synchronized void clearMemoryCache() {
+    cache.clear();
   }
 
 }

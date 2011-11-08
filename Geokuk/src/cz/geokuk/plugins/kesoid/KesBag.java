@@ -56,7 +56,7 @@ public class KesBag {
     Mou mou = wpt.getMou();
     if (mou.xx < 0 || mou.yy < 0) {
       //// TODO [veverka] Řešit rozsah [25.11.2009 9:45:59; veverka]
-      System.err.println(wpt + " --- " + wpt.getKesoid());
+      System.err.println("Nelze přidat takový waypoint: " + mou + " / " + mou.xx + ":" + mou.yy + " / " + wpt + " --- " + wpt.getKesoid());
       return;
     }
     indexator.vloz(mou.xx, mou.yy, wpt);

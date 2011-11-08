@@ -61,7 +61,7 @@ public class MultiNacitac {
   public KesBag nacti(Future<?> future, Genom genom) throws IOException {
     List<File> list = ds.coMamNacist();
     if (list == null) return null;
-    KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
+    KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(),  kesoidModel.getProgressModel());
     builder.init();
     for (File file : list) {
       System.out.println("Nacitam: " + file);

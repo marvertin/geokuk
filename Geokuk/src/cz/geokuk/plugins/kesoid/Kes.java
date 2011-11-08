@@ -318,5 +318,10 @@ public class Kes extends Kesoid {
     this.favorit = favorit;
   }
 
+  @Override
+  public String toString() {
+    return "Kes [mainWpt=" + mainWpt + ", finalWpt=" + finalWpt + "]";
+  }
+
 
 }

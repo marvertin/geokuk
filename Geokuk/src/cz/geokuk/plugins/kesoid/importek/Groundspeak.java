@@ -5,6 +5,11 @@ package cz.geokuk.plugins.kesoid.importek;
 
 public class Groundspeak {
 
+  public String name;
+  public String type;
+  public int ownerid;
+  public String owner;
+  public String placedBy;
   public boolean archived;
   public boolean availaible;
   public String encodedHints;
@@ -13,20 +18,19 @@ public class Groundspeak {
   public String terrain;
   public String difficulty;
   public String container;
-  public String type;
-  public String placedBy;
-  public String owner;
-  public String name;
   public String shortDescription;
-  
+
   @Override
   public String toString() {
-    return "Groundspeak [name=" + name + ", type=" + type + ", placedBy="
-    + placedBy + ", archived=" + archived + ", availaible=" + availaible
-    + ", container=" + container + ", terrain=" + terrain
-    + ", difficulty=" + difficulty + ", country=" + country + ", state="
-    + state + ", encodedHints=" + encodedHints + "]";
+    return "Groundspeak [name=" + name + ", type=" + type + ", ownerid="
+        + ownerid + ", owner=" + owner + ", placedBy=" + placedBy
+        + ", archived=" + archived + ", availaible=" + availaible
+        + ", encodedHints=" + encodedHints + ", state=" + state + ", country="
+        + country + ", terrain=" + terrain + ", difficulty=" + difficulty
+        + ", container=" + container + ", shortDescription=" + shortDescription
+        + "]";
   }
+
 
 
 }

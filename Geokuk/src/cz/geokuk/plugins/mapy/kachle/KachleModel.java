@@ -9,6 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import cz.geokuk.core.napoveda.NapovedaModel;
+import cz.geokuk.core.napoveda.NapovedaModelChangedEvent;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.Model0;
@@ -42,7 +43,7 @@ public class KachleModel extends Model0 {
 
   public Pocitadlo pocitRozrazovaciQueue = new PocitadloNula("Velikost rozřazovací fronty",
       "Ve frontě čekají požadavky na zjištění, zda jsou kachle na disku a stačí je zvednout nebo musejí být downloadnuty." +
-  " Frotna je zpracována velmi rychle, požadavky jsou rozřazeny do dalších dvou front");
+      " Frotna je zpracována velmi rychle, požadavky jsou rozřazeny do dalších dvou front");
 
   private Object umisteniSouboru;
 
@@ -113,6 +114,7 @@ public class KachleModel extends Model0 {
 
   }
 
+  @Override
   public void inject(Factory factory) {
     this.factory = factory;
 
@@ -154,4 +156,9 @@ public class KachleModel extends Model0 {
   }
 
 
+  public void onEvent(NapovedaModelChangedEvent eve) {
+    if (eve.getModel().isOnlineMode()) {
+      cache.clearMemoryCache();
+    }
+  }
 }

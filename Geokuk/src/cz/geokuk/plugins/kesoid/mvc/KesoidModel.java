@@ -41,7 +41,7 @@ public class KesoidModel extends Model0 {
   private String jmenoSady ="neznama-sada";
   private IkonBag ikonBag;
   private KesBag vsechny;
-  private String gccomNick;
+  private GccomNick gccomNick;
   private ASada jmenoAktualniSadyIkon;
   private KesoidUmisteniSouboru umisteniSouboru;
   private Set<String> blokovaneZdroje;
@@ -66,12 +66,12 @@ public class KesoidModel extends Model0 {
   public void setUmisteniSouboru(KesoidUmisteniSouboru umisteniSouboru) {
     if (umisteniSouboru.equals(this.umisteniSouboru)) return;
     boolean nacistIkony = this.umisteniSouboru == null
-    || this.umisteniSouboru.getImageMyDir().equals(umisteniSouboru.getImageMyDir())
-    || this.umisteniSouboru.getImage3rdPartyDir().equals(umisteniSouboru.getImage3rdPartyDir())
-    ;
+        || this.umisteniSouboru.getImageMyDir().equals(umisteniSouboru.getImageMyDir())
+        || this.umisteniSouboru.getImage3rdPartyDir().equals(umisteniSouboru.getImage3rdPartyDir())
+        ;
     boolean nacistKese = this.umisteniSouboru == null
-    || this.umisteniSouboru.getKesDir().equals(umisteniSouboru.getKesDir())
-    ;
+        || this.umisteniSouboru.getKesDir().equals(umisteniSouboru.getKesDir())
+        ;
     this.umisteniSouboru = umisteniSouboru;
     MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
     pref.putFilex(FPref.KES_DIR_value, umisteniSouboru.getKesDir());
@@ -140,7 +140,10 @@ public class KesoidModel extends Model0 {
    */
   @Override
   protected void initAndFire() {
-    setGccomNick(currPrefe().node(FPref.NASTAVENI_node).get(FPref.GEOCACHING_COM_NICK_value, "rodinka veverek"));
+    String gccomNickName = currPrefe().node(FPref.NASTAVENI_node).get(FPref.GEOCACHING_COM_NICK_value, "sem napis svuj nick na GC.COM");
+    int gccomNickId    = currPrefe().node(FPref.NASTAVENI_node).getInt(FPref.GEOCACHING_COM_NICK_ID_value, -1);
+
+    setGccomNick(new GccomNick(gccomNickName, gccomNickId));
     FilterDefinition filterDefinition = currPrefe().getStructure(FPref.KESFILTER_structure_node, new FilterDefinition());
     int prahVyletuOrdinal = currPrefe().node(FPref.KESFILTER_structure_node).getInt("prahVyletu", filterDefinition.getPrahVyletu().ordinal());
     for (EVylet vylet : EVylet.values()) {
@@ -265,15 +268,16 @@ public class KesoidModel extends Model0 {
     ikonNacitacLoaderManager.startLoad(prenacti);
   }
 
-  public void setGccomNick(String gccomNick) {
+  public void setGccomNick(GccomNick gccomNick) {
     if (gccomNick.equals(this.gccomNick)) return;
     this.gccomNick = gccomNick;
-    currPrefe().node(FPref.NASTAVENI_node).put(FPref.GEOCACHING_COM_NICK_value, gccomNick);
+    currPrefe().node(FPref.NASTAVENI_node).put(FPref.GEOCACHING_COM_NICK_value, gccomNick.name);
+    currPrefe().node(FPref.NASTAVENI_node).putInt(FPref.GEOCACHING_COM_NICK_ID_value, gccomNick.id);
     fire(new GccomNickChangedEvent(gccomNick));
     startKesLoading();
   }
 
-  public String getGccomNick() {
+  public GccomNick getGccomNick() {
     return gccomNick;
   }
   /**

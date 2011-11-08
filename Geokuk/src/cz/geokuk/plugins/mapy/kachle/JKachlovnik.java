@@ -12,6 +12,7 @@ import java.util.Map;
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.core.napoveda.NapovedaModelChangedEvent;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.util.pocitadla.Pocitadlo;
@@ -29,13 +30,13 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
   private static final long serialVersionUID = -6300199882447791157L;
 
   private static Pocitadlo pocitZustalychKachli = new PocitadloRoste("Počet zůstalých kachlí",
-  "Počet kachlí jKachle, které jako kompoenty zůstaly a jen se změnila její lokace, protože po reinicializaci byly na svém místě (obvykle posun) a nebylo je tudíž nutné znovu vytvářet");
+      "Počet kachlí jKachle, které jako kompoenty zůstaly a jen se změnila její lokace, protože po reinicializaci byly na svém místě (obvykle posun) a nebylo je tudíž nutné znovu vytvářet");
 
   private static Pocitadlo pocitReinicializaceKachlovniku = new PocitadloRoste("Kolikrát bylo nuceno reinicializovat celý kachlovník",
-  "Říká, kolikrát byla zavolána metoda init pro reinicializaci celého kachlovníku v důsledku posunu, změnu velikosti, zůůmování atd.");
+      "Říká, kolikrát byla zavolána metoda init pro reinicializaci celého kachlovníku v důsledku posunu, změnu velikosti, zůůmování atd.");
 
   private static Pocitadlo pocitVynuceneNepouzitiExistujiciKachle = new PocitadloRoste("Vynucené použití neexistující kachle",
-  "Kolikrát do JKachlovnik.ini() přišlo z venku, že JKachle komponenty nesmím použít");
+      "Kolikrát do JKachlovnik.ini() přišlo z venku, že JKachle komponenty nesmím použít");
 
   private final Pocitadlo pocitKachliVKachlovniku1 = new PocitadloMalo("Počet kachlí v kachlovníku 1", "");
   private final Pocitadlo pocitKachliVKachlovniku2 = new PocitadloMalo("Počet kachlí v kachlovníku 2", "");
@@ -108,7 +109,10 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
         JKachle kachle = kachles.remove(lokace);
         boolean kachleSePouzije = smimZnovuPouzitKachle && kachle != null;
         if (! kachleSePouzije) {
-          if (kachle != null) remove(kachle); // odstranit, když už je
+          if (kachle != null)
+          {
+            remove(kachle); // odstranit, když už je
+          }
           kachle = createKachle(new KaAll(lokace, kachloTypesSet), kachleModel, vykreslovatokamzite, this); // když se nepoužije, musí se stvořit nová
           kachle.setVzdalenostOdStredu(soord.getVzdalenostKachleOdStredu(lokace.getMou()));
           add(kachle);          // a přidat jako komponentu
@@ -142,7 +146,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 
   }
 
-  
+
   protected JKachle createKachle(KaAll plny, KachleModel kachleModel, boolean vykreslovatOkamzite, JKachlovnik jKachlovnik) {
     return new JKachle(plny, kachleModel, vykreslovatOkamzite, jKachlovnik);
   }
@@ -155,6 +159,11 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
     return kachloTypesSet;
   }
 
+  public void onEvent(NapovedaModelChangedEvent event) {
+    if (event.getModel().isOnlineMode()) {
+      init(false, Priorita.KACHLE);
+    }
+  }
 
   /**
    * @param aKachloTypes the kachloTypes to set

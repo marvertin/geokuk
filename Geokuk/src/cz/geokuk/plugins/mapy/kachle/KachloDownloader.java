@@ -22,7 +22,7 @@ import cz.geokuk.util.pocitadla.PocitadloRoste;
 public class KachloDownloader {
 
   private final Pocitadlo pocitDownloadleDlazdice = new PocitadloRoste("Downloadlé dlaždice",
-  "Počet dlaždic, které byly downloadovány.");
+      "Počet dlaždic, které byly downloadovány.");
 
   private KachleModel kachleModel;
 
