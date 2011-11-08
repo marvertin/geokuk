@@ -38,8 +38,8 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
 import cz.geokuk.plugins.kesoid.mvc.PrekrocenLimitWaypointuVeVyrezuEvent;
-import cz.geokuk.plugins.vylety.VyletChangedEvent;
 import cz.geokuk.plugins.vylety.IgnoreListChangedEvent;
+import cz.geokuk.plugins.vylety.VyletChangedEvent;
 import cz.geokuk.plugins.vylety.VyletModel;
 import cz.geokuk.plugins.vylety.cesty.Doc;
 
@@ -226,9 +226,9 @@ public class JStatusBar extends JPanel {
   }
 
   public void onEvent(ZmenaSouradnicMysiEvent event) {
-    if (cur.equals(event.moucur) ) return;
-    souradnice.setText(cur.toWgs().toString());
+    if (cur != null && cur.equals(event.moucur) ) return;
     cur = event.moucur;
+    souradnice.setText(cur == null ? "" :  cur.toWgs().toString());
     prepocitejVzdalenostAAzimut();
   }
 
@@ -334,7 +334,7 @@ public class JStatusBar extends JPanel {
 
 
   private void prepocitejVzdalenostAAzimut() {
-    if (! poziceq.isNoPosition()) {
+    if (! poziceq.isNoPosition() && cur  != null) {
       vzdalenost.setText(vzdalenostPoziceAMysia());
       azimutSmer.setIcon(Ikonizer.findSmerIcon(azimutPoziceAMysi()));
       //azimutSmer.set

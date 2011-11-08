@@ -76,8 +76,8 @@ public class JPozicovnikSlide extends JSingleSlide0 {
   }
 
   private void prepocitatBlizkostKrize() {
-    if (! poziceq.isNoPosition()) {
-      double dalka = getSoord().pixleDalka(getSoord().getMouCur(pointcur), poziceq.getWgs().toMou());
+    if (! poziceq.isNoPosition() && pointcur != null) {
+      double dalka = getSoord().pixleDalka(getSoord().transform(pointcur), poziceq.getWgs().toMou());
       boolean pobliz = dalka < 20;
       if (pobliz != mysJePoblizKrize) {
         mysJePoblizKrize = pobliz;
@@ -141,7 +141,7 @@ public class JPozicovnikSlide extends JSingleSlide0 {
     } else {
       if ((e.getModifiers() & Event.CTRL_MASK) == 0) { // jen když není stisknut control
         boolean vystredovat = e.getClickCount() >= 2;
-        poziceModel.setPozice(getSoord().getMouCur(e.getPoint()).toWgs());
+        poziceModel.setPozice(getSoord().transform(e.getPoint()).toWgs());
         if (vystredovat) {
           vyrezModel.vystredovatNaPozici();
         }

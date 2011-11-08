@@ -5,7 +5,9 @@ import cz.geokuk.core.coord.BezNaSouradniceAction;
 import cz.geokuk.core.coord.BezNaStredAction;
 import cz.geokuk.core.coord.NastavMapuCeskaAction;
 import cz.geokuk.core.coord.OddalMapuAction;
+import cz.geokuk.core.coord.PosouvejSipkamiAction;
 import cz.geokuk.core.coord.PriblizMapuAction;
+import cz.geokuk.core.coordinates.ESmer;
 import cz.geokuk.core.napoveda.OProgramuAction;
 import cz.geokuk.core.napoveda.WebovaStrankaAction;
 import cz.geokuk.core.napoveda.ZadatProblemAction;
@@ -194,4 +196,16 @@ public class Akce {
   public final UzavritCestuAction uzavritCestuAction = new UzavritCestuAction(null);
   public final ZoomCestuAction zoomCestuAction = new ZoomCestuAction(null);
   public final PromazatJednobodoveAPrazdneCesty promazatJednobodoveAPrazdneCesty = new PromazatJednobodoveAPrazdneCesty(null);
+
+
+  public final PosouvejSipkamiAction posouvejSipkamiActionSEVER = new PosouvejSipkamiAction(ESmer.SEVER, false);
+  public final PosouvejSipkamiAction posouvejSipkamiActionVYCHOD = new PosouvejSipkamiAction(ESmer.VYCHOD, false);
+  public final PosouvejSipkamiAction posouvejSipkamiActionJIH = new PosouvejSipkamiAction(ESmer.JIH, false);
+  public final PosouvejSipkamiAction posouvejSipkamiActionZAPAD = new PosouvejSipkamiAction(ESmer.ZAPAD, false);
+
+  public final PosouvejSipkamiAction posouvejSipkamiRychleSEVER = new PosouvejSipkamiAction(ESmer.SEVER, true);
+  public final PosouvejSipkamiAction posouvejSipkamiRychleVYCHOD = new PosouvejSipkamiAction(ESmer.VYCHOD, true);
+  public final PosouvejSipkamiAction posouvejSipkamiRychleJIH = new PosouvejSipkamiAction(ESmer.JIH, true);
+  public final PosouvejSipkamiAction posouvejSipkamiRychleZAPAD = new PosouvejSipkamiAction(ESmer.ZAPAD, true);
+
 }

@@ -32,7 +32,7 @@ public class NastavMapuCeskaAction extends Action0 {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    vyrezModel.setMoustred(VyrezModel.DEFAULTNI_DOMACI_SOURADNICE.toMou());
+    vyrezModel.presunMapuNaMoustred(VyrezModel.DEFAULTNI_DOMACI_SOURADNICE.toMou());
     vyrezModel.setMoumer(6);
   }
 

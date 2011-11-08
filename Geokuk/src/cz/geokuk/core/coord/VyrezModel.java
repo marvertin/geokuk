@@ -40,7 +40,7 @@ public class VyrezModel extends Model0 {
   public void vystredovatNaPozici() {
     Mou mou = poziceModel.getPoziceq().getPoziceMou();
     if (mou != null) {
-      setMoustred(mou);
+      presunMapuNaMoustred(mou);
     }
   }
 
@@ -138,7 +138,7 @@ public class VyrezModel extends Model0 {
     setMoord(moord.derive(moumer));
   }
 
-  public void setMoustred(Mou moustred) {
+  public void presunMapuNaMoustred(Mou moustred) {
     setMoord(moord.derive(moustred));
   }
 

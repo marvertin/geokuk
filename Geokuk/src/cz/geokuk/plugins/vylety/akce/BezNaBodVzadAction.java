@@ -25,7 +25,7 @@ public class BezNaBodVzadAction extends VyletAction0 {
     putValue(NAME, "Na další bod vzad");
     putValue(SHORT_DESCRIPTION, "Přesune mapu o jeden bod vzad na vybrané cestě. Pokud není vybraný žádný bod, přesune na začátek cesty, pokud neí vybraná žádná cesta, vybere nejbližší cestu a přesunena její konec.");
     //putValue(MNEMONIC_KEY, KeyEvent.VK_P);
-    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("LEFT"));
+    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("alt LEFT"));
   }
   /* (non-Javadoc)
    * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)

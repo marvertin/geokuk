@@ -194,10 +194,6 @@ public class Coord  {
     return moupoc;
   }
 
-  public Mou getMouCur(Point cur) {
-    return transform(cur);
-  }
-
   public Moud getMouSize() {
     return new Moud(dim.width * pomer, dim.height * pomer);
   }
@@ -367,7 +363,7 @@ public class Coord  {
         && moustred.equals(this.moustred)
         && dim.equals(this.dim)
         && natoceni == this.natoceni
-    ) return this; // vrátíme stejnou instanci, podle čehož se pozná, že nedošlo ke změně
+        ) return this; // vrátíme stejnou instanci, podle čehož se pozná, že nedošlo ke změně
     return new Coord(moumer, moustred, dim, natoceni);
   }
 

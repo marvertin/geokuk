@@ -77,6 +77,15 @@ public class Menu extends MenuStrujce {
       }
     }
 
+    separator();
+    item(akce.posouvejSipkamiActionSEVER);
+    item(akce.posouvejSipkamiActionVYCHOD);
+    item(akce.posouvejSipkamiActionJIH);
+    item(akce.posouvejSipkamiActionZAPAD);
+    item(akce.posouvejSipkamiRychleSEVER);
+    item(akce.posouvejSipkamiRychleVYCHOD);
+    item(akce.posouvejSipkamiRychleJIH);
+    item(akce.posouvejSipkamiRychleZAPAD);
 
     // Ovládat mapy
     menu("Mapy", "Žízení zobrazení součástí map");

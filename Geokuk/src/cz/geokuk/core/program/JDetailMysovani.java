@@ -14,7 +14,6 @@ import javax.swing.event.MouseInputListener;
 
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coord.PoziceModel;
-import cz.geokuk.framework.MouseGestureContext;
 
 /**
  * Musí být úplně nahoře, je průhledná
@@ -44,7 +43,8 @@ public final class JDetailMysovani extends JSingleSlide0  implements MouseInputL
 
   @Override
   public void mouseClicked(MouseEvent e) {
-    poziceModel.setPozice(getSoord().getMouCur(e.getPoint()).toWgs());
+    System.out.println("Detailně klikáme");
+    poziceModel.setPozice(getSoord().transform(e.getPoint()).toWgs());
   }
 
   @Override
@@ -72,8 +72,8 @@ public final class JDetailMysovani extends JSingleSlide0  implements MouseInputL
    */
 
   @Override
-  public void mouseMoved(MouseEvent e, MouseGestureContext ctx) {
-    poziceModel.setMys(e.getPoint(), getSoord().getMouCur(e.getPoint()));
+  public void mouseMoved(MouseEvent e) {
+    poziceModel.setMys(e.getPoint(), getSoord().transform(e.getPoint()));
   }
 
   @Override
@@ -96,9 +96,6 @@ public final class JDetailMysovani extends JSingleSlide0  implements MouseInputL
   public void mouseDragged(MouseEvent e) {
   }
 
-  @Override
-  public void mouseMoved(MouseEvent e) {
-  }
 
 
 

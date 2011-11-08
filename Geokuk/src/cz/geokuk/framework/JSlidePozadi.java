@@ -33,7 +33,7 @@ public class JSlidePozadi extends JSlide0 {
   public void onEvent(ZmenaSouradnicMysiEvent event) {
     moumys = event.moucur;
     //System.out.println("Nastaveni moumys: " + moumys);
-    assert moumys != null;
+    //assert moumys != null;
   }
 
   /* (non-Javadoc)
@@ -41,8 +41,7 @@ public class JSlidePozadi extends JSlide0 {
    */
   @Override
   public Mouable getUpravenaMys() {
-    //System.out.println("Ziskani moumys: " + moumys);
-    assert moumys != null;
+    // Bude zde null, vždy, když je myš mimo obrazovku
     return moumys;
   }
 

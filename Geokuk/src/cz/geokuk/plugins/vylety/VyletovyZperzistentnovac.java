@@ -127,6 +127,7 @@ public class VyletovyZperzistentnovac {
   void zapisGgt(Doc doc, File file) {
     BufferedWriter wrt = null;
     smimCist ++;
+    Set<String> exportovano = new HashSet<String>();
     try {
       try {
         wrt = new BufferedWriter(new FileWriter(file));
@@ -134,7 +135,8 @@ public class VyletovyZperzistentnovac {
           Mouable mouable = bod.getMouable();
           if (mouable instanceof Wpt) {
             Wpt wpt = (Wpt) mouable;
-            wrt.write(String.format("%s%s", wpt.getName(), FConst.NL));
+            zapisKdyzNeni(wrt, wpt.getName(), exportovano);
+            zapisKdyzNeni(wrt, wpt.getKesoid().getCode(), exportovano);
           }
 
         }
@@ -152,6 +154,16 @@ public class VyletovyZperzistentnovac {
       smimCist --;
     }
   }
+
+  private void zapisKdyzNeni(BufferedWriter wrt, String kod, Set<String> exportovano) throws IOException {
+    if (kod == null) return;
+    if (exportovano.add(kod)) {
+      wrt.write(String.format("%s%s", kod, FConst.NL));
+      //    } else {
+      //      wrt.write(String.format("NEBERU %s%s", kod, FConst.NL));
+    }
+  }
+
 
   List<Cesta> nacti(List<File> files, KesBag kesBag) {
     List<Cesta> cesty = new ArrayList<Cesta>();

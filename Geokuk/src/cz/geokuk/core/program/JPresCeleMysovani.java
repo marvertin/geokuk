@@ -20,6 +20,7 @@ import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coord.PoziceModel;
 import cz.geokuk.core.coord.VyrezModel;
 import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.MouseGestureContext;
 
@@ -135,11 +136,11 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
       Mou mou = getSoord().getMoustred();
       Mou moustred = new Mou(mou.xx + -dx * getSoord().getPomer(), mou.yy + dy * getSoord().getPomer());
       //getCoord().setMoustredNezadouci(moustred);
-      vyrezModel.setMoustred(moustred);
+      vyrezModel.presunMapuNaMoustred(moustred);
       bod = cur;
     } else {
       Point bodik = e.getPoint();
-      Mou mouCur = getSoord().getMouCur(bodik);
+      Mou mouCur = getSoord().transform(bodik);
       poziceModel.setMys(bodik, mouCur);
     }
     MouseGestureContext ctx = ctx();
@@ -156,7 +157,7 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
       requestFocus();
     }
     cur = e.getPoint();
-    Mou mouCur = getSoord().getMouCur(cur);
+    Mou mouCur = getSoord().transform(cur);
     poziceModel.setMys(cur, mouCur);
     //System.out.println("Souradnice: " + wgs);
     MouseGestureContext ctx = ctx();
@@ -166,10 +167,12 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 
   @Override
   public void mouseWheelMoved(MouseWheelEvent e) {
+    Mouable upravenaMys = getUpravenaMys();
+    if (upravenaMys == null) return; // to by nemělo nastat, protože pokud jsme nad slidem, tak musím mít myš, ale co kdyby
     int rotation  = e.getWheelRotation();
     //			System.out.println("Rotace: " + rotation);
     int moumer = getSoord().getMoumer() - rotation;
-    Mou mou = getUpravenaMys().getMou();
+    Mou mou = upravenaMys.getMou();
     vyrezModel.zoomByGivenPoint(moumer, mou);
     requestFocus();
 
@@ -197,6 +200,7 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 
   @Override
   public void mouseExited(MouseEvent e) {
+    poziceModel.setMys(null, null);
     chain().mouseExited(e, ctx());
   }
 

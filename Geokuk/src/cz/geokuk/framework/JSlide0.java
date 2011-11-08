@@ -118,7 +118,6 @@ public class JSlide0 extends JComponent implements MySlideListener {
     //    if (upravenaMys == null) {
     //      new Throwable().printStackTrace();
     //    }
-    //assert upravenaMys != null;
     return upravenaMys;
   }
 

@@ -35,7 +35,8 @@ public class Malovadlo {
   private final Coord            soord;
 
   /** Obsahuje bod, který je přidáván, pak se kreslí k němu přidávací čára */
-  private final Mou          pridavanyBod;
+  private final Mou          pridavanyBod1;
+  private final Mou          pridavanyBod2;
 
   private final Mou              mouDeliciNaBlizkemBousku;
 
@@ -50,16 +51,16 @@ public class Malovadlo {
   private static final Ellipse2D bodStartocilu      = new Ellipse2D.Float(-10,
       -10, 20, 20);
 
-  Malovadlo(Graphics2D g, Doc doc, Cesta curta, Bousek0 blizkyBousek,
-      Coord soord, Mou mouPridavanyBod, Mou mouDeliciNaBlizkemBousku, Mouable poziceMouable) {
-    this.g = g;
-    this.doc = doc;
-    this.curta = curta;
-    this.blizkyBousek = blizkyBousek;
-    pridavanyBod = mouPridavanyBod;
-    this.soord = soord;
-    this.mouDeliciNaBlizkemBousku = mouDeliciNaBlizkemBousku;
-    this.poziceMouable = poziceMouable;
+  public Malovadlo(Graphics2D g2, MalovadloParams params) {
+    g = g2;
+    doc = params.doc;
+    curta = params.curta;
+    blizkyBousek = params.blizkyBousek;
+    pridavanyBod1 = params.mouPridavanyBod1;
+    pridavanyBod2 = params.mouPridavanyBod2;
+    soord = params.soord;
+    mouDeliciNaBlizkemBousku = params.mouDeliciNaBlizkemBousku;
+    poziceMouable = params.poziceMouable;
   }
 
   public void paint() {
@@ -72,8 +73,32 @@ public class Malovadlo {
       MalovadloCesty malovadloCesty = new MalovadloCesty(cesta);
       malovadloCesty.paint();
     }
+    paintPridavaciUsecka();
 
   }
+
+
+  private Graphics2D createGraphics() {
+    return (Graphics2D) g.create();
+
+  }
+
+  private void paintPridavaciUsecka() {
+    if (pridavanyBod1 == null || pridavanyBod2 == null) return;
+    Point p1 = soord.transform(pridavanyBod1);
+    // Point p2 = getSoord().transform(semSePridava.getMou());
+    // Point p2 = getSoord().transform(moucur);
+    Point p2 = soord.transform(pridavanyBod2);
+    Graphics2D gg = createGraphics();
+    // gg.setColor(FBarvy.USEK_PRIDAVANY);
+    gg.translate(p1.x, p1.y);
+    gg.rotate(Math.atan2(p2.y - p1.y, p2.x - p1.x));
+    double delka = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+    gg.setStroke(new BasicStroke(2));
+    gg.drawLine(0, -2, (int) delka, -2);
+    gg.drawLine(0, 2, (int) delka, 2);
+  }
+
 
   class MalovadloCesty {
 
@@ -114,9 +139,6 @@ public class Malovadlo {
       paintUseky();
 
       paintBody();
-      if (pridavanyBod != null && jeCurta) {
-        paintPridavaciUsecka();
-      }
 
       // // průsečíková kolečka
       // for (Usek usek : cesta.getUseky()) {
@@ -171,6 +193,9 @@ public class Malovadlo {
           gg.setStroke(new BasicStroke(1));
           gg.drawLine(p1.x, p1.y, p2.x, p2.y);
         } else {
+          if (blizkyBousek == usek.getBousekVzad()) {
+            g.setColor(barvaCestyZaKurzorem);
+          }
           // Hlavní vykreslování úseku
           g.drawLine(p1.x, p1.y, p2.x, p2.y);
         }
@@ -250,21 +275,6 @@ public class Malovadlo {
       // Vykreslení přidáváného bodu pře CTRL
     }
 
-    private void paintPridavaciUsecka() {
-      Point p1 = soord.transform(cesta.getCil().getMou());
-      // Point p2 = getSoord().transform(semSePridava.getMou());
-      // Point p2 = getSoord().transform(moucur);
-      Point p2 = soord.transform(pridavanyBod);
-      Graphics2D gg = createGraphics();
-      // gg.setColor(FBarvy.USEK_PRIDAVANY);
-      gg.translate(p1.x, p1.y);
-      gg.rotate(Math.atan2(p2.y - p1.y, p2.x - p1.x));
-      double delka = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-      gg.setStroke(new BasicStroke(2));
-      gg.drawLine(0, -2, (int) delka, -2);
-      gg.drawLine(0, 2, (int) delka, 2);
-    }
-
     private void natocVeSmeru(Graphics2D gg, Bod bod) {
       Usek uvpred = bod.getUvpred();
       if (uvpred != null) {
@@ -310,11 +320,6 @@ public class Malovadlo {
     //      int r2 = 2 * r;
     //      g.fillOval(p.x - r, p.y - r, r2, r2);
     //    }
-
-    private Graphics2D createGraphics() {
-      return (Graphics2D) g.create();
-
-    }
 
   } // MalovadloCesty
 }

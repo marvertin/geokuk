@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.OverlayLayout;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
 import cz.geokuk.core.coord.JPozicovnikSlide;
@@ -113,12 +114,12 @@ public class JMainFrame extends JFrame implements SlideListProvider {
     srohama.add(createKesInfoRoh(), ERoh.JV);
 
 
+    final JPresCeleMysovani mysovani = new JPresCeleMysovani();
     {
       JComponent smrizema = new JPresCelePrekryvnik();
       smrizema.setLayout(new OverlayLayout(smrizema));
 
 
-      final JPresCeleMysovani mysovani = new JPresCeleMysovani();
       final JComponent renderSlide = new JRenderSlide();
       final JComponent zoomovaciObdelnik = new JZoomovaciObdelnik();
       final JComponent meritkovnik = new JMeritkoSlide();
@@ -207,6 +208,13 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 
     getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F11"),  "fullscreen");
     getRootPane().getActionMap().put("fullscreen", fullScreenAction);
+    SwingUtilities.invokeLater(new Runnable() {
+
+      @Override
+      public void run() {
+        mysovani.requestFocus();
+      }
+    });
   }
 
 

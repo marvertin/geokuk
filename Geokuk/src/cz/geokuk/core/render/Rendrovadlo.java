@@ -103,9 +103,9 @@ public class Rendrovadlo {
           default:
             coco = coco.derive(0.0);
           }
-          factory.init(slide);
           slide.setSoord(coco);
           slide.setSize(coco.getWidth(), coco.getHeight());
+          factory.init(slide); // eventy raději až po nastavení veliksot
           nastavProgressorKachlovniku(slide, progressor);
           slide.render(g);
         }

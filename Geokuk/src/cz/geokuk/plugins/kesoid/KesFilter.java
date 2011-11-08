@@ -72,49 +72,54 @@ public class KesFilter  {
   }
 
   public boolean isFiltered(Wpt aWpt, Genom genom, Genotyp genotyp) {
-    if (genotyp == null) { // to je zde jen z důvodu optimalizace
-      genotyp = aWpt.getGenotyp(genom);
+    try {
+      if (genotyp == null) { // to je zde jen z důvodu optimalizace
+        genotyp = aWpt.getGenotyp(genom);
+      }
+      Set<Alela> alelygenotypu = genotyp.getAlely();
+      if (jmenaNechtenychAlel != null) {
+        if (nechteneAlely == null) {
+          nechteneAlely = genom.namesToAlelyIgnorujNeexistujici(jmenaNechtenychAlel);
+        }
+        Set<Alela> alely = new HashSet<Alela>(nechteneAlely);
+        alely.retainAll(alelygenotypu);
+        if (alely.size() > 0) return false;
+      }
+
+      //    if (aWpt.getType() != AWptType.CACHE && ! wptTypes.contains(aWpt.getType())) return false;
+
+      Kesoid kesoid = aWpt.getKesoid();
+
+      if (filterDefinition.isJenFinalUNalezenych()) {
+        if (kesoid.getVztah() == EKesVztah.FOUND || kesoid.getVztah() == EKesVztah.OWN) {
+          if (aWpt != kesoid.getMainWpt()) return false;
+        }
+      }
+
+      if (kesoid instanceof Kes) {
+        Kes kes = (Kes) kesoid;
+
+        if (kes.getVztah() == EKesVztah.NORMAL) {  // jen u nenalezených
+          if (kes.getFinal() != null && filterDefinition.isJenDoTerenuUNenalezenych() &&
+              (!aWpt.nutnyKLusteni()) && ! Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())) return false;
+        }
+
+        if (kes.getHodnoceni() != Kes.NENI_HODNOCENI) {
+          if (kes.getHodnoceni() <  filterDefinition.getPrahHodnoceni()) return false;
+        }
+        if (kes.getBestOf() != Kes.NENI_HODNOCENI) {
+          if (kes.getBestOf() < filterDefinition.getPrahBestOf()) return false;
+        }
+        if (kes.getFavorit() != Kes.NENI_HODNOCENI) {
+          if (kes.getFavorit() < filterDefinition.getPrahFavorit()) return false;
+        }
+      }
+      if (! zaraditDlePrahuVyletu(aWpt)) return false;
+      return true;
+    } catch (Exception e) {
+      throw new RuntimeException("Filtrovani waypointu: " + aWpt, e);
+
     }
-    Set<Alela> alelygenotypu = genotyp.getAlely();
-    if (jmenaNechtenychAlel != null) {
-      if (nechteneAlely == null) {
-        nechteneAlely = genom.namesToAlely(jmenaNechtenychAlel);
-      }
-      Set<Alela> alely = new HashSet<Alela>(nechteneAlely);
-      alely.retainAll(alelygenotypu);
-      if (alely.size() > 0) return false;
-    }
-
-    //    if (aWpt.getType() != AWptType.CACHE && ! wptTypes.contains(aWpt.getType())) return false;
-
-    Kesoid kesoid = aWpt.getKesoid();
-
-    if (filterDefinition.isJenFinalUNalezenych()) {
-      if (kesoid.getVztah() == EKesVztah.FOUND || kesoid.getVztah() == EKesVztah.OWN) {
-        if (aWpt != kesoid.getMainWpt()) return false;
-      }
-    }
-
-    if (kesoid instanceof Kes) {
-      Kes kes = (Kes) kesoid;
-
-      if (kes.getVztah() == EKesVztah.NORMAL) {  // jen u nenalezených
-        if (kes.getFinal() != null && filterDefinition.isJenDoTerenuUNenalezenych() &&
-            (!aWpt.nutnyKLusteni()) && ! Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())) return false;
-      }
-
-      if (kes.getHodnoceni() != Kes.NENI_HODNOCENI) {
-        if (kes.getHodnoceni() <  filterDefinition.getPrahHodnoceni()) return false;
-      }
-      if (kes.getBestOf() != Kes.NENI_HODNOCENI) {
-        if (kes.getBestOf() < filterDefinition.getPrahBestOf()) return false;
-      }
-      if (kes.getFavorit() != Kes.NENI_HODNOCENI) {
-        if (kes.getFavorit() < filterDefinition.getPrahFavorit()) return false;
-      }
-    }
-    if (! zaraditDlePrahuVyletu(aWpt)) return false;
-    return true;
 
   }
   //
