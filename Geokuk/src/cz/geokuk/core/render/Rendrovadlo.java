@@ -42,15 +42,23 @@ public class Rendrovadlo {
   }
 
   public synchronized BufferedImage rendruj(RenderParams p, Progressor progressor) throws InterruptedException  {
-    citac++;
 
     System.out.printf("Vytvarim obrazek [%d,%d]\n", p.roord.getWidth(), p.roord.getHeight());
     BufferedImage image = createImage(p);
-    System.out.printf("Vytvoren obrazek [%d,%d]\n", image.getWidth(), image.getHeight());
-    Graphics gg = image.getGraphics();
-    gg.setColor(Color.CYAN);
-    gg.fillOval(0, 0, image.getWidth(), image.getHeight());
-    System.out.printf("Vybarvern obrazek [%d,%d]\n", image.getWidth(), image.getHeight());
+    synchronized (image) {
+      System.out.printf("Vytvoren obrazek [%d,%d]\n", image.getWidth(), image.getHeight());
+      Graphics ggOriginal = image.getGraphics();
+      Graphics gg = ggOriginal.create();
+      gg.setColor(Color.CYAN);
+      gg.fillOval(0, 0, image.getWidth(), image.getHeight());
+      System.out.printf("Vybarvern obrazek [%d,%d]\n", image.getWidth(), image.getHeight());
+      rendruj(p, progressor, ggOriginal);
+    }
+    return image;
+  }
+
+  public void rendruj(RenderParams p, Progressor progressor,
+      Graphics ggOriginal) throws InterruptedException {
     //resultImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
 
@@ -63,52 +71,46 @@ public class Rendrovadlo {
     // FIXME řešit kanclování
     //if (isCancelled()) return null;
 
-    synchronized (image) {
 
-      for (JSingleSlide0 slidePuvodni : slides) {
-        if (slidePuvodni.isVisible()) {
-          //          for (int i=0; i<100; i++) {
-          //            slidePuvodni.createRenderableSlide();
+    System.out.println("Rendrovani rendrovadlem spusteno: " +  ++citac);
+    for (JSingleSlide0 slidePuvodni : slides) {
+      if (slidePuvodni.isVisible()) {
+        //          for (int i=0; i<100; i++) {
+        //            slidePuvodni.createRenderableSlide();
+        //          }
+        JSingleSlide0 slide = slidePuvodni.createRenderableSlide();
+        if (slide != null) {
+          ////          if (slide instanceof JKachlovnikRendrovaci) {
+          ////            continue;
           //          }
-          JSingleSlide0 slide = slidePuvodni.createRenderableSlide();
-          if (slide != null) {
-            System.out.println("RENDROVANI: " + slide.getClass());
-            Graphics2D g = (Graphics2D) image.getGraphics().create();
-            Coord coco = p.roord;
-            switch(slide.jakOtacetProRendrovani()) {
-            case COORD:
-              break;
-            case GRAPH2D:
-              coco = coco.derive(0.0);
-              if (p.natacetDoSeveru) {
-                g.translate(coco.getWidth() /2, coco.getHeight() / 2);
-                g.rotate(- p.roord.computNataceciUhel());
-                g.translate(-coco.getWidth() /2, -coco.getHeight() / 2);
-              }
-              break;
-            default:
-              coco = coco.derive(0.0);
+          //          if (slide instanceof JKesoidy) {
+          //            continue;
+          //          }
+          System.out.println("    RENDROVANI: " + slide.getClass());
+          Graphics2D g = (Graphics2D) ggOriginal.create();
+          Coord coco = p.roord;
+          switch(slide.jakOtacetProRendrovani()) {
+          case COORD:
+            break;
+          case GRAPH2D:
+            coco = coco.derive(0.0);
+            if (p.natacetDoSeveru) {
+              g.translate(coco.getWidth() /2, coco.getHeight() / 2);
+              g.rotate(- p.roord.computNataceciUhel());
+              g.translate(-coco.getWidth() /2, -coco.getHeight() / 2);
             }
-            //            slide.setSoord(coco);
-            //            slide.setSize(coco.getWidth(), coco.getHeight());
-            factory.init(slide);
-            slide.setSoord(coco);
-            slide.setSize(coco.getWidth(), coco.getHeight());
-            nastavProgressorKachlovniku(slide, progressor);
-            slide.render(g);
+            break;
+          default:
+            coco = coco.derive(0.0);
           }
+          factory.init(slide);
+          slide.setSoord(coco);
+          slide.setSize(coco.getWidth(), coco.getHeight());
+          nastavProgressorKachlovniku(slide, progressor);
+          slide.render(g);
         }
       }
-      //rendrujMapy(g);
-
-      //      rendrujUtmMrizku(g);
-      //      rendrujWgsMrizku(g);
-
-      // Tady rotujeme coord a necháme nerotovanou grafiku
-      //g = (Graphics2D) p.resultImage.getGraphics().create();
-      //rendrujKesoidy(g);
     }
-    return image;
   }
 
 

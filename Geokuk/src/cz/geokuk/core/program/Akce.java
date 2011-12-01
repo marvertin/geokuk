@@ -141,7 +141,7 @@ public class Akce {
   public final NastavMapuCeskaAction nastavMapuCeskaAction = new NastavMapuCeskaAction();
   public final CloseAction closeAction = new CloseAction();
   public final NastaveniAction nastaveniAction = new NastaveniAction();
-  public final NastavUmisteniSouboru umisteniSouboruAction = new NastavUmisteniSouboru(null);
+  public final UmisteniSouboruAction umisteniSouboruAction = new UmisteniSouboruAction(null);
 
   public final NickEditAction nickEditAction = new NickEditAction();
 

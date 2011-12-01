@@ -4,12 +4,12 @@ import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.framework.JMyDialog0;
 
 
-public class JPrehledSouboruDialog extends JMyDialog0 implements AfterInjectInit {
+public class JUmisteniSouboruDialog extends JMyDialog0 implements AfterInjectInit {
 
   private static final long serialVersionUID = 7180968190465321695L;
   private JPrehledSouboru jPrehledSoubor;
 
-  public JPrehledSouboruDialog() {
+  public JUmisteniSouboruDialog() {
     setTitle("Přehled soubrů a složek");
     init();
   }

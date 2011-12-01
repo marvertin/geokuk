@@ -51,7 +51,9 @@ public class SestavovacPopisku {
     vytvorNahrazovace(nahrazovace, pattern);
     int n = 1;
     for (Nahrazovac nahr : nahrazovace) {
-      if (nahr == NAHRBR) n++;
+      if (nahr == NAHRBR) {
+        n++;
+      }
     }
     pocetRadku = n;
     nahrazky = nahrazovace.toArray(new Nahrazovac[nahrazovace.size()]);
@@ -121,15 +123,6 @@ public class SestavovacPopisku {
 
     @Override
     public void pridej(StringBuilder sb, Context ctx) {
-    }
-
-  }
-
-  private static class NahrBlby implements Nahrazovac {
-
-    @Override
-    public void pridej(StringBuilder sb, Context ctx) {
-      sb.append("blbace");
     }
 
   }

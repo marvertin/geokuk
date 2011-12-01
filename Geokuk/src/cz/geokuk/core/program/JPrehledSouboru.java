@@ -168,7 +168,7 @@ public class JPrehledSouboru extends JPanel {
 
           //Board.multiNacitacLoaderManager.startLoad(true);
 
-          SwingUtilities.getRoot(JPrehledSouboru.this).setVisible(false);
+          ((JUmisteniSouboruDialog)SwingUtilities.getRoot(JPrehledSouboru.this)).dispose();
         } catch (YNejdeTo e) {
           Dlg.error(e.getMessage());
         }
@@ -185,7 +185,9 @@ public class JPrehledSouboru extends JPanel {
     tab.add(panel);
     tab.add(Box.createRigidArea(new Dimension(0,20)));
     panel.setMaximumSize(new Dimension(1000, 40));
-    if (souborPanelName != null) mapaProFokusovani.put(souborPanelName, panel);
+    if (souborPanelName != null) {
+      mapaProFokusovani.put(souborPanelName, panel);
+    }
     return panel;
   }
 
@@ -197,7 +199,9 @@ public class JPrehledSouboru extends JPanel {
     // Zjištěno, že to funguje, pokud je tam i lepidlo
     //panel.setMaximumSize(new Dimension(1000, 40));
     panel.setMaximumSize(new Dimension(panel.getMaximumSize().width, panel.getPreferredSize().height));
-    if (souborPanelName != null) mapaProFokusovani.put(souborPanelName, panel);
+    if (souborPanelName != null) {
+      mapaProFokusovani.put(souborPanelName, panel);
+    }
     return panel;
   }
 

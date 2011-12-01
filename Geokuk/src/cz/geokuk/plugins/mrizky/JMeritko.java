@@ -7,15 +7,14 @@ package cz.geokuk.plugins.mrizky;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.font.TextAttribute;
 import java.util.Hashtable;
 import java.util.Map;
 
 import javax.swing.JPanel;
-
-import cz.geokuk.core.coord.Coord;
-import cz.geokuk.core.coord.VyrezChangedEvent;
 
 
 /**
@@ -25,47 +24,45 @@ import cz.geokuk.core.coord.VyrezChangedEvent;
 public class JMeritko extends JPanel {
 
   private static final int MINIMALNI_SIRKA_DILKU = 20;
-  private static final int MAXIMALNI_SIRKA_CELEHO_DILKU = 400;
+  private static final int ODSTUP_POPISKU_OD_CARKY = 3;
+  //private static final int MINIMALNI_SIRKA_DILKU = 50;
+
+  private final static int tloustka = 6;
+  private final static int vyskaCarky = 6;
 
   private static final long serialVersionUID = -4801191981059574701L;
-  private Coord moord;
+  private double pixluNaMetr = 1;
+  private double metruNaDilek;
+  private int pixluNaDilek;
+  private int pocetDilku;
+  private int sirka;
+  private int vyska;
+  private double maximalniSirkaMeritka = 400;
+  private Font font;
+  private FontMetrics fontMetrics;
 
   public JMeritko() {
-    setPreferredSize(new Dimension(1600, 40));
+    //    setPreferredSize(new Dimension(1600, 40));
+    spocitejMetriky();
+    //setBorder(BorderFactory.createLoweredBevelBorder());
   }
 
-  public void onEvent(VyrezChangedEvent event) {
-    moord = event.getMoord();
+  @Override
+  public Dimension getPreferredSize() {
+    Insets insets = getInsets();
+    return new Dimension(sirka + insets.left + insets.right, vyska + insets.top + insets.bottom);
   }
 
   @Override
   protected void paintComponent(Graphics g) {
-    // nejdříve spočítat šíčku dílku
-    double pixluNaMetr =  moord.getPixluNaMetr();
+    g = g.create();
+    Insets insets = getInsets();
+    g.translate(insets.left, insets.top);
     if (pixluNaMetr <= 0 || Double.isNaN(pixluNaMetr)) return;
-    double metruNaDilek = 1;
-    int pixluNaDilek = 0;
-    while(pixluNaDilek < MINIMALNI_SIRKA_DILKU) {
-      metruNaDilek *= 10;
-      pixluNaDilek = (int) (pixluNaMetr * metruNaDilek);
-    }
-
-
-    Map<TextAttribute, Object> map = new Hashtable<TextAttribute, Object>();
-    //		map.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
-    map.put(TextAttribute.BACKGROUND, Color.WHITE);
-    map.put(TextAttribute.SWAP_COLORS, TextAttribute.SWAP_COLORS_ON);
-    map.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
-    Font font = g.getFont().deriveFont( map );
     g.setFont( font );
 
-
-    int pocetDilku = Math.min(8, MAXIMALNI_SIRKA_CELEHO_DILKU / pixluNaDilek);
-    int pocatekY = 30;
-    int tloustka = 6;
-    int vyskaCarky = 6;
-    int sirka = pixluNaDilek * pocetDilku;
-    int offset = (getParent().getWidth() - sirka) / 2;
+    int offset = (getWidth() - sirka) / 2;
+    int pocatekY = fontMetrics.getHeight() + vyskaCarky + ODSTUP_POPISKU_OD_CARKY;
     for (int i = 0; i < pocetDilku; i ++) {
       double metruOdZacatku = i * metruNaDilek;
       int pixluOdZacatku =  offset + (int) (metruOdZacatku * pixluNaMetr);
@@ -84,21 +81,70 @@ public class JMeritko extends JPanel {
       // teď písmenka
       g.setColor(Color.BLACK);
 
-      g.drawString(popisek(metruOdZacatku), pixluOdZacatku, pocatekY - vyskaCarky - 3);
+      g.drawString(popisek(metruOdZacatku), pixluOdZacatku, pocatekY - vyskaCarky - ODSTUP_POPISKU_OD_CARKY);
     }
     double metruOdZacatku = pocetDilku * metruNaDilek;
-    int pixluOdZacatku =  offset +(int) (metruOdZacatku * pixluNaMetr);
-    g.drawString(jednotka(metruOdZacatku), pixluOdZacatku, pocatekY - vyskaCarky - 3);
+    int pixluOdZacatku =  offset +(int) (metruOdZacatku * getPixluNaMetr());
+    g.drawString(jednotka(metruNaDilek), pixluOdZacatku, pocatekY - vyskaCarky - ODSTUP_POPISKU_OD_CARKY);
+  }
 
+  private void spocitejMetriky() {
+    metruNaDilek = 1;
+    pixluNaDilek = 0;
+    while(pixluNaDilek < MINIMALNI_SIRKA_DILKU) {
+      metruNaDilek *= 10;
+      pixluNaDilek = (int) (pixluNaMetr * metruNaDilek);
+    }
+    pocetDilku = (int) Math.min(8.0, getMaximalniSirkaMeritka() / pixluNaDilek);
+
+
+    Map<TextAttribute, Object> map = new Hashtable<TextAttribute, Object>();
+    //      map.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
+    map.put(TextAttribute.BACKGROUND, Color.WHITE);
+    map.put(TextAttribute.SWAP_COLORS, TextAttribute.SWAP_COLORS_ON);
+    map.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
+    font = Font.decode("ARIAL-BOLD-12").deriveFont( map );
+    fontMetrics = getFontMetrics(font);
+    int naJednotkuNaKonci = fontMetrics.stringWidth(jednotka(metruNaDilek));
+
+    sirka = pixluNaDilek * pocetDilku + naJednotkuNaKonci;
+    vyska = vyskaCarky + tloustka + ODSTUP_POPISKU_OD_CARKY + fontMetrics.getHeight();
   }
 
   private String popisek(double d) {
-    if (d >= 1000) d = d /1000;
+    if (d >= 1000) {
+      d = d /1000;
+    }
     return Math.round(d) + "";
   }
 
   private String jednotka(double d) {
     if (d >= 1000) return "km"; else return "m";
+  }
+
+  public void setPixluNaMetr(double pixluNaMetr) {
+    if (pixluNaMetr == this.pixluNaMetr) return;
+    this.pixluNaMetr = pixluNaMetr;
+    spocitejMetriky();
+    revalidate();
+    repaint();
+  }
+
+  public void setMaximalniSirkaMeritka(double maximalniSirkaMeritka) {
+    if (this.maximalniSirkaMeritka == maximalniSirkaMeritka) return;
+    this.maximalniSirkaMeritka = maximalniSirkaMeritka;
+    spocitejMetriky();
+    revalidate();
+    repaint();
+  }
+
+  public double getPixluNaMetr() {
+    return pixluNaMetr;
+  }
+
+
+  public double getMaximalniSirkaMeritka() {
+    return maximalniSirkaMeritka;
   }
 
 }

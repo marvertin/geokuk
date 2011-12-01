@@ -68,9 +68,10 @@ public class RenderModel extends Model0 {
     case JEN_OBRAZEK: fx = getUmisteniSouboru().getPictureDir(); break;
     case GOOGLE_EARTH: fx = getUmisteniSouboru().getKmzDir(); break;
     case OZI_EXPLORER: fx = getUmisteniSouboru().getOziDir(); break;
+    case TISK: fx = null; break;
     default: assert false : "Nenene: " + renderSettings.getWhatRender();
     }
-    return fx.getEffectiveFile();
+    return fx == null ? null : fx.getEffectiveFile();
   }
 
   public double getOKolikNatacet() {
@@ -309,6 +310,8 @@ public class RenderModel extends Model0 {
     break;
     case OZI_EXPLORER: koswx = new OziExplorerRenderSwingWorker(whatRender);
     break;
+    case TISK: koswx = new PrintingSwingWorker();
+    break;
     default: koswx = new OziExplorerRenderSwingWorker(whatRender);
     break;
     }
@@ -332,7 +335,9 @@ public class RenderModel extends Model0 {
     if (renderResult == null) {
       Dlg.error("Rendrování bylo přerušeno uživatelem.");
     } else {
-      Dlg.info("Byl vytvořen soubor \"" +  renderResult.file + "\"", "Výsledek rendrování");
+      if (renderResult.file != null) {
+        Dlg.info("Byl vytvořen soubor \"" +  renderResult.file + "\"", "Výsledek rendrování");
+      }
     }
   }
 

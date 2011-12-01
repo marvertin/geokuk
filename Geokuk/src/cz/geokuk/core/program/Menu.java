@@ -111,6 +111,7 @@ public class Menu extends MenuStrujce {
     // ////////////////////////////// keškový filtr
     item(akce.filtrIkonyAction);
     tb.add(akce.filtrIkonyAction);
+    tb.add(akce.renderAction);
 
     item(akce.kesoidyOnoffAction);
     item(akce.popiskyOnoffAction);

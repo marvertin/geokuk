@@ -55,7 +55,7 @@ import cz.geokuk.util.pocitadla.PocitadloNula;
 import cz.geokuk.util.process.BrowserOpener;
 
 
-public class JKesoidy extends JSingleSlide0 implements MouseInputListener, AfterEventReceiverRegistrationInit {
+public class JKesoidySlide extends JSingleSlide0 implements MouseInputListener, AfterEventReceiverRegistrationInit {
 
   //  static int POLOMER_KESE = 15; // je to v pixlech
   private static final int POLOMER_CITLIVOSTI = 10;
@@ -92,11 +92,12 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
 
   private KesoidModel kesoidModel;
 
-  private RendrovaciPesek rendrovaciPesek;
+  private final boolean vykreslovatOkamtiteAleDlouho;
 
-  //  private VyrezModel vyrezModel;
+  private final double scale = 1;
 
-  public JKesoidy() {
+  public JKesoidySlide(boolean vykreslovatOkamtiteAleDlouho) {
+    this.vykreslovatOkamtiteAleDlouho = vykreslovatOkamtiteAleDlouho;
     setLayout(null);
     setOpaque(false);
 
@@ -105,7 +106,9 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
 
     repaint();
 
-    new PaintovaciVlakno(this).start();
+    if (!vykreslovatOkamtiteAleDlouho) {
+      new PaintovaciVlakno(this).start();
+    }
   }
 
 
@@ -155,12 +158,12 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
 
   @Override
   protected void paintComponent(Graphics ag) {
-    Graphics2D g = (Graphics2D) ag;
+    Graphics2D gg = (Graphics2D) ag;
 
     if (indexator == null) return;
     if (ikonBag == null) return;
     // Nevykresluju. kdyz je prekrocen limit, ale jen kdyz kreslim na obrazovku
-    final boolean prekrocenLimit = rendrovaciPesek == null && indexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
+    final boolean prekrocenLimit = ! vykreslovatOkamtiteAleDlouho && indexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
@@ -176,7 +179,7 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
 
     // Roztřídit waypointy podle pořadí vykreslování
     if (! prekrocenLimit) {
-      BoundingRect hranice = coVykreslovat(g);
+      BoundingRect hranice = coVykreslovat(gg);
       indexator.visit(hranice, new FlatVisitor<Wpt>() {
         @Override
         public void visit(Sheet<Wpt> aSheet) {
@@ -195,7 +198,7 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
             for (Sheet<Wpt> swpt : list) {
               Wpt wpt = swpt.get();
               Mou mou = new Mou(swpt.getXx(), swpt.getYy());
-              paintWaypoint(g, wpt, mou, i);
+              paintWaypoint(gg, wpt, mou, i);
             }
           }
         }
@@ -203,7 +206,7 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
       // Vykreslení zvýrazněných
       if (mysNadKesi != null) {
         for (Wpt wpt : mysNadKesi.getWpts()) {
-          paintWaypoint(g, wpt, null, i);
+          paintWaypoint(gg, wpt, null, i);
         }
       }
     }
@@ -216,14 +219,20 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
    * @param i
    */
   private void paintWaypoint(Graphics2D g, Wpt wpt, Mou mou, int i) {
-    if (mou == null) mou = wpt.getMou(); // z vykonnostnich duvodu se to vetsinou predava
+    if (mou == null)
+    {
+      mou = wpt.getMou(); // z vykonnostnich duvodu se to vetsinou predava
+    }
     Sklivec sklivec = wpt.getSklivec();
 
     //sklivec = null; // pro ucely testovani vzdfy vykreslujeme
 
     if (sklivec == null) { // nemame sklivce
-      if (rendrovaciPesek != null) rendrovaciPesek.necoSeNevyKreslilo();
-      zaplanujNaplneniSklivce(wpt, mou);
+      if (vykreslovatOkamtiteAleDlouho) {
+        computeSklivec(wpt);
+      } else {
+        zaplanujNaplneniSklivce(wpt, mou);
+      }
       sklivec = wpt.getSklivec(); // kdyby se náhodou už zaplnilo
       if (sklivec == null) return;
     }
@@ -232,9 +241,25 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
 
     Imagant imagant = sklivec.imaganti.get(i);
     if (imagant == null) return;  // neni co vykreslovat
-    int x = p.x + imagant.getXpos();
-    int y = p.y + imagant.getYpos();
-    g.drawImage(imagant.getImage(), x, y, null);
+    //    if (vykreslovatOkamtiteAleDlouho) {
+    //      System.out.println("Malujem kesika " + x + " " + y + " --- " +imagant.getImage().getWidth() + " " + imagant.getImage().getHeight());
+    //    }
+    if (scale == 1) {
+      int x = p.x + imagant.getXpos();
+      int y = p.y + imagant.getYpos();
+      g.drawImage(imagant.getImage(), x, y, null);
+    } else {
+      g = (Graphics2D) g.create();
+      g.translate(p.x, p.y);
+      g.scale(scale, scale);
+      g.translate(imagant.getXpos(), imagant.getYpos());
+      g.drawImage(imagant.getImage(), 0, 0, null);
+    }
+    //    BufferedImage bi = new BufferedImage(imagant.getImage().getWidth(), imagant.getImage().getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+    //    bi.getGraphics().drawImage(imagant.getImage(), 0, 0, null);
+    //    //g.drawImage(imagant.getImage(), x, y, null);
+    //    g.drawImage(bi, x, y, null);
+    //    //g.fillRect(x, y, 50, 50);
   }
 
   private void zaplanujNaplneniSklivce(Wpt wpt, Mou mou) {
@@ -251,17 +276,26 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
     case NE:  g.put(ikonBag.getGenom().ALELA_ignoru); break;
     }
 
-    if (wpt == mysNadWpt) g.put(ikonBag.getGenom().ALELA_mouseon);
-    if (wpt.getKesoid() == mysNadKesi) g.put(ikonBag.getGenom().ALELA_mousean);
+    if (wpt == mysNadWpt) {
+      g.put(ikonBag.getGenom().ALELA_mouseon);
+    }
+    if (wpt.getKesoid() == mysNadKesi) {
+      g.put(ikonBag.getGenom().ALELA_mousean);
+    }
     g.removeAll(fenotypoveZakazaneAlely);
     return g;
   }
 
 
-  private BoundingRect coVykreslovat(Graphics g) {
+  private BoundingRect coVykreslovat(Graphics gg) {
     Insets bii = ikonBag.getSada().getBigiestIconInsets();
-    Rectangle rect = g.getClipBounds();
-    if (rect == null) rect = new Rectangle(getSize());
+    Rectangle rect = gg.getClipBounds();
+    if (vykreslovatOkamtiteAleDlouho) {
+      System.out.println("Omezeni: " + rect);
+    }
+    if (rect == null) {
+      rect = new Rectangle(getSize());
+    }
     //  	klipovanci.add(rect);
     // to right a bottom je v poradku, protoze zvetsujeme obdelnik,
     // abychom chytli vsechy kese, ktere k nam mohou zapadnout
@@ -357,7 +391,9 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
   @Override
   public void mousePressed(MouseEvent e) {
     boolean jepopup = maybeShowPopup(e);
-    if (!jepopup) chain().mousePressed(e);
+    if (!jepopup) {
+      chain().mousePressed(e);
+    }
   }
 
   /* (non-Javadoc)
@@ -366,7 +402,9 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
   @Override
   public void mouseReleased(MouseEvent e) {
     boolean jepopup = maybeShowPopup(e);
-    if (!jepopup) chain().mouseReleased(e);
+    if (!jepopup) {
+      chain().mouseReleased(e);
+    }
   }
 
 
@@ -382,9 +420,8 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
         popup.show(e.getComponent(), e.getX(), e.getY());
       }
       return true;
-    } else {
+    } else
       return false;
-    }
   }
 
   /**
@@ -448,11 +485,10 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
    */
   @Override
   public Mou getUpravenaMys() {
-    if (mysNadWpt != null) {
+    if (mysNadWpt != null)
       return mysNadWpt.getWgs().toMou();
-    } else {
+    else
       return chain().getUpravenaMys();
-    }
   }
 
   private static class WptPaintRequest {
@@ -469,12 +505,12 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
 
   private static class PaintovaciVlakno extends Thread {
 
-    private final WeakReference<JKesoidy> wrKesoidy;
+    private final WeakReference<JKesoidySlide> wrKesoidy;
 
-    public PaintovaciVlakno(JKesoidy jKesoidy) {
+    public PaintovaciVlakno(JKesoidySlide jKesoidy) {
       super ("Paintovani");
-      final ReferenceQueue<JKesoidy> refqueue = new ReferenceQueue<JKesoidy>();
-      wrKesoidy = new WeakReference<JKesoidy>(jKesoidy, refqueue);
+      final ReferenceQueue<JKesoidySlide> refqueue = new ReferenceQueue<JKesoidySlide>();
+      wrKesoidy = new WeakReference<JKesoidySlide>(jKesoidy, refqueue);
       new Thread("Zabijec paintovaciho vlakna") {
         @Override
         public void run() {
@@ -489,7 +525,7 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
 
     @Override
     public void run() {
-      JKesoidy jKesoidy = wrKesoidy.get();
+      JKesoidySlide jKesoidy = wrKesoidy.get();
       if (jKesoidy == null) return; // slide kešoidů už je pryč, takže ani nemá cenu dál něco řešit
       for (;;) {
         try {
@@ -498,7 +534,9 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
           WptPaintRequest wpr = frontaWaypointu2.poll(10000, TimeUnit.MILLISECONDS); // aby umělo vlákno skončit, musí být timeout
           jKesoidy = wrKesoidy.get();
           if (jKesoidy == null) return; // slide kešoidů už je pryč, takže ani nemá cenu dál něco řešit
-          if (wpr == null) continue;
+          if (wpr == null) {
+            continue;
+          }
           MouRect mouRect = new MouRect();
           while (wpr != null) {
             if (wpr.wpt.getSklivec() == null) {
@@ -509,7 +547,6 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
             jKesoidy.pocitVelikostFrontyWaypointu.set(jKesoidy.frontaWaypointu.size());
           }
           vyvolejVykresleni(mouRect, jKesoidy);
-          if (jKesoidy.rendrovaciPesek != null) jKesoidy.rendrovaciPesek.vykreslovaciFrontaBylaVyprazdnena();
         } catch (InterruptedException e) {
           //          System.out.println("Paintovaci vlakno konci diky intrerupci.");
           return;
@@ -521,13 +558,12 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
      * Asynchronně volaná metoda provýpočet sklivce
      * @param wpt
      */
-    private void spocitejSklivece(Wpt wpt, final JKesoidy jKesoidy) {
-      Sklivec sklivec = jKesoidy.ikonBag.getSada().getSklivec(jKesoidy.computeGenotyp(wpt));
-      wpt.setSklivec(sklivec);
+    private void spocitejSklivece(Wpt wpt, final JKesoidySlide jKesoidy) {
+      jKesoidy.computeSklivec(wpt);
     }
 
 
-    private void vyvolejVykresleni(final MouRect aMouRect, final JKesoidy jKesoidy) {
+    private void vyvolejVykresleni(final MouRect aMouRect, final JKesoidySlide jKesoidy) {
       if (aMouRect.isEmpty()) return;
       SwingUtilities.invokeLater(
           new Runnable() {
@@ -577,55 +613,16 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
    */
   @Override
   public void render(Graphics g) {
-    try {
-      do {
-        rendrovaciPesek = new RendrovaciPesek();
-        paintComponent(g);
-        rendrovaciPesek.cekejNaKonec();
-      } while (! rendrovaciPesek.mameVseVykresleno());
-    } finally {
-      rendrovaciPesek = null;
-    }
-
+    paintComponent(g);
   }
 
-  private  class RendrovaciPesek {
-    private boolean necoSeNevykreslilo;
-    private boolean vykreslovaciFrontaBylaVyprazdnena;
-
-    synchronized void necoSeNevyKreslilo() {
-      necoSeNevykreslilo = true;
-      vykreslovaciFrontaBylaVyprazdnena = false;
-    }
-
-    synchronized void vykreslovaciFrontaBylaVyprazdnena() {
-      vykreslovaciFrontaBylaVyprazdnena = true;
-      notify(); // a upozornit, že by se mohlo jet dál
-    }
-
-    synchronized void cekejNaKonec() {
-      if (! necoSeNevykreslilo) return; // pokud už nemám nevykreslence, není nač čekat
-      while (! vykreslovaciFrontaBylaVyprazdnena) { // ček, dokud se frontan nevykreslí
-        // dokud se nevyprazdni fronta, musime cekat
-        try {
-          wait();
-        } catch (InterruptedException e) { // no tak nic
-        }
-      }
-    }
-
-    synchronized boolean mameVseVykresleno() {
-      return ! necoSeNevykreslilo;
-    }
-
-  }
 
   /* (non-Javadoc)
    * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
    */
   @Override
   public JSingleSlide0 createRenderableSlide() {
-    return new JKesoidy();
+    return new JKesoidySlide(true);
   }
 
   @Override
@@ -637,5 +634,11 @@ public class JKesoidy extends JSingleSlide0 implements MouseInputListener, After
   //  public void finalize() {
   //    System.out.println("Kesoidy finalizovány");
   //  }
+
+  private void computeSklivec(Wpt wpt) {
+    Sklivec sklivec = ikonBag.getSada().getSklivec(computeGenotyp(wpt));
+    wpt.setSklivec(sklivec);
+  }
+
 
 }

@@ -265,7 +265,9 @@ public class Kes extends Kesoid {
    * @return
    */
   public char getOneLetterType() {
-    return getMainWpt().getSym().charAt(0);
+    String sym = getMainWpt().getSym();
+    if (sym == null || sym.length() == 0) return '?';
+    return sym.charAt(0);
   }
 
   /**

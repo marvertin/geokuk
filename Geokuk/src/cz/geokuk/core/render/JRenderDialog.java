@@ -13,6 +13,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.Locale;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -39,7 +40,7 @@ import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.core.hledani.RefreshorVysledkuHledani;
 import cz.geokuk.core.hledani.VysledekHledani;
 import cz.geokuk.core.program.ESouborPanelName;
-import cz.geokuk.core.program.NastavUmisteniSouboru;
+import cz.geokuk.core.program.UmisteniSouboruAction;
 import cz.geokuk.core.render.JGeocodingComboBox.Listener;
 import cz.geokuk.core.render.RenderSettings.Patterned;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
@@ -62,28 +63,29 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
   private static final long serialVersionUID = 7180968190465321695L;
 
-  private JButton jSpustit;
-  private JButton jPrerusit;
-
-  private JProgressBar jProgressBar;
   private RenderModel renderModel;
 
-  private JMvRadioPanel<EWhatRender> jWhatRender;
-  private JMvRadioPanel<EImageType> jImgType;
+  private JButton jSpustitButton;
+  private JButton jPrerusitButton;
+
+  private JProgressBar jProgressBar;
+
+  private JMvRadioPanel<EWhatRender> jWhatRenderRadioPanel;
+  private JMvRadioPanel<EImageType> jImgTypeRadioPanel;
 
   //  private JTextField jRendrovaneMeritko;
 
-  private JButton jNastaveniAktualnihoMeritka;
+  private JButton jNastaveniAktualnihoMeritkaButton;
 
   private JNastavovecMeritka jNastavovecMeritka;
 
-  private JGeocodingComboBox jPureJmenoSouboru;
-  private JGeocodingComboBox jKmzFolderNazev;
+  private JGeocodingComboBox jPureJmenoSouboruCombo;
+  private JGeocodingComboBox jKmzFolderNazevCombo;
   private JNastavovacVelikostiDlazdic jNastavovacVelikostiDlazdicX;
 
   private JNastavovacVelikostiDlazdic jNastavovacVelikostiDlazdicY;
 
-  private JLabel jJakouHustotuNaPadesatku;
+  private JLabel jJakouHustotuLabel;
 
   private JSpinner jKmzDrawOrder;
   private JCheckBox jSrovnatDoSeveru;
@@ -92,7 +94,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   private JPapirMeritkoComboBox jPapirMeritkoComboBox;
   private JKalibrBoduSpinner jKalibrBodu;
 
-  private JLabel jPriponaSouboru;
+  private JLabel jPriponaSouboruLabel;
 
   private GeocodingModel geocodingModel;
 
@@ -102,16 +104,20 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
   private Wgs referecniBod;
 
-  private JTwoColumnsPanel jPanOzi;
+  private JTwoColumnsPanel jOziPanel;
 
-  private JTwoColumnsPanel jPanKmz;
+  private JTwoColumnsPanel jKmzPanel;
 
-  private JLabel jOutputFolder;
-  private JButton jChangeOutputFolder;
+  private JLabel jOutputFolderLabel;
+  private JButton jChangeOutputFolderButton;
 
   private JIkonkaPapiru jIkonkaPapiru;
 
-  private JTextField jTerenniRozmer;
+  private JTextField jTerenniRozmerField;
+
+  private JLabel jVystupniSouborLabel;
+
+  private JLabel jVystupniSlozkaLabel;
 
 
   public JRenderDialog() {
@@ -134,10 +140,10 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jSrovnatDoSeveru = new JCheckBox();
     jSrovnatDoSeveru.setText("Srovnat do severu");
-    jNastaveniAktualnihoMeritka = new JButton("čudl bude něco umět");
+    jNastaveniAktualnihoMeritkaButton = new JButton("čudl bude něco umět");
     jNastavovecMeritka = new JNastavovecMeritka();
-    jTerenniRozmer = new JTextField();
-    jTerenniRozmer.setEditable(false);
+    jTerenniRozmerField = new JTextField();
+    jTerenniRozmerField.setEditable(false);
 
 
     JPanel jPanMeritko = new JPanel(new BorderLayout());
@@ -150,8 +156,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     meritkoveNastavovace.add(jSrovnatDoSeveru);
     meritkoveNastavovace.add(new JLabel("Měřítko:"));
     meritkoveNastavovace.add(jNastavovecMeritka);
-    meritkoveNastavovace.add(jNastaveniAktualnihoMeritka);
-    meritkoveNastavovace.add(jTerenniRozmer);
+    meritkoveNastavovace.add(jNastaveniAktualnihoMeritkaButton);
+    meritkoveNastavovace.add(jTerenniRozmerField);
 
     jPanMeritko.add(meritkoveNastavovace, BorderLayout.SOUTH);
 
@@ -163,10 +169,10 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     //box.add(Box.createVerticalStrut(10));
     createrWhatRender();
-    jNastaTypu.add(jWhatRender);
+    jNastaTypu.add(jWhatRenderRadioPanel);
     //box.add(Box.createVerticalStrut(10));
     createImgType();
-    jNastaTypu.add(jImgType);
+    jNastaTypu.add(jImgTypeRadioPanel);
     //box.add(Box.createVerticalStrut(5));
     box.add(jNastaTypu);
 
@@ -176,11 +182,11 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
 
     initOziComponents();
-    box.add(jPanOzi);
+    box.add(jOziPanel);
 
     // KMZ speciality
     intKmzComponents();
-    box.add(jPanKmz);
+    box.add(jKmzPanel);
 
     box.add(Box.createVerticalGlue());
 
@@ -192,17 +198,17 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     jVystup.add(initVystupComponents());
 
     // spouštěcí a zastavovací tlačítka
-    jSpustit = new JButton("Vyberte nějaký výřez");
-    jSpustit.setEnabled(false);
-    jSpustit.setAlignmentX(CENTER_ALIGNMENT);
-    jPrerusit = new JButton("Přerušit rendrování");
-    jPrerusit.setEnabled(false);
-    jPrerusit.setVisible(false);
-    jPrerusit.setAlignmentX(CENTER_ALIGNMENT);
+    jSpustitButton = new JButton("Vyberte nějaký výřez");
+    jSpustitButton.setEnabled(false);
+    jSpustitButton.setAlignmentX(CENTER_ALIGNMENT);
+    jPrerusitButton = new JButton("Přerušit rendrování");
+    jPrerusitButton.setEnabled(false);
+    jPrerusitButton.setVisible(false);
+    jPrerusitButton.setAlignmentX(CENTER_ALIGNMENT);
     jProgressBar = new JProgressBar();
-    jVystup.add(jSpustit);
+    jVystup.add(jSpustitButton);
     jVystup.add(jProgressBar);
-    jVystup.add(jPrerusit);
+    jVystup.add(jPrerusitButton);
     box.add(jVystup);
 
     add(box);
@@ -214,29 +220,29 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
   private JPanel initVystupComponents () {
     JPanel pan = new JPanel(new GridBagLayout());
-    jOutputFolder = new JLabel();
+    jOutputFolderLabel = new JLabel();
     //jOutputFolder.setEditable(false);
     Dimension dm1 = getMinimumSize();
     dm1.width = 300;
     //jOutputFolder.setColumns(50);
     //jOutputFolder.setMinimumSize(dm1);
-    jChangeOutputFolder = new JButton("Změň");
-    jPureJmenoSouboru = new JGeocodingComboBox();
-    jPriponaSouboru = new JLabel();
+    jChangeOutputFolderButton = new JButton("Změň");
+    jPureJmenoSouboruCombo = new JGeocodingComboBox();
+    jPriponaSouboruLabel = new JLabel();
     jIkonkaPapiru = new JIkonkaPapiru();
     jPapirMeritkoComboBox = new JPapirMeritkoComboBox();
-    jJakouHustotuNaPadesatku = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+    jJakouHustotuLabel = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     //jJakouHustotuNaPadesatku.setEditable(false);
     //jJakouHustotuNaPadesatku.setAlignmentX(CENTER_ALIGNMENT);
     Box box1 = Box.createHorizontalBox();
     box1.add(jPapirMeritkoComboBox);
     box1.add(Box.createHorizontalStrut(5));
-    box1.add(jJakouHustotuNaPadesatku);
+    box1.add(jJakouHustotuLabel);
 
     Box box2 = Box.createHorizontalBox();
-    box2.add(jOutputFolder);
+    box2.add(jOutputFolderLabel);
     box2.add(Box.createRigidArea(new Dimension(5, 0)));
-    box2.add(jChangeOutputFolder);
+    box2.add(jChangeOutputFolderButton);
 
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridy = -1;
@@ -253,7 +259,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     gbc.gridy ++;
     gbc.gridx = 0;
-    pan.add(new JLabel("Výstupní složka:"), gbc);
+    jVystupniSlozkaLabel = new JLabel("Výstupní složka:");
+    pan.add(jVystupniSlozkaLabel, gbc);
     gbc.gridx = 1; gbc.weightx = 0;
     pan.add(box2, gbc);
     gbc.weightx = 0;
@@ -262,12 +269,13 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     gbc.gridy ++;
     gbc.gridx = 0;
-    pan.add(new JLabel("Výstupní soubor: "), gbc);
+    jVystupniSouborLabel = new JLabel("Výstupní soubor: ");
+    pan.add(jVystupniSouborLabel, gbc);
     gbc.gridx = 1; gbc.weightx = 0;
-    pan.add(jPureJmenoSouboru, gbc);
+    pan.add(jPureJmenoSouboruCombo, gbc);
     gbc.weightx = 0;
     gbc.gridx = 2;
-    pan.add(jPriponaSouboru, gbc);
+    pan.add(jPriponaSouboruLabel, gbc);
 
     gbc.gridx = 3;
     gbc.gridy = 0;
@@ -286,16 +294,16 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   }
 
   private void initOziComponents() {
-    jPanOzi =  new JTwoColumnsPanel("OZI Explorer");
+    jOziPanel =  new JTwoColumnsPanel("OZI Explorer");
     jKalibrBodu = new JKalibrBoduSpinner();
-    jPanOzi.addx("Počet kalibračních bodů", jKalibrBodu);
+    jOziPanel.addx("Počet kalibračních bodů", jKalibrBodu);
   }
 
 
   private void intKmzComponents() {
-    jPanKmz = new JTwoColumnsPanel("KMZx (GoogleEarth či Oregon)");
-    jPanKmz.setFont(getFont().deriveFont(Font.BOLD));
-    jKmzFolderNazev = new JGeocodingComboBox();
+    jKmzPanel = new JTwoColumnsPanel("KMZx (GoogleEarth či Oregon)");
+    jKmzPanel.setFont(getFont().deriveFont(Font.BOLD));
+    jKmzFolderNazevCombo = new JGeocodingComboBox();
     jKmzFolderDescription = new JTextField();
     jNastavovacVelikostiDlazdicX = new JNastavovacVelikostiDlazdic("vodorovném");
     jNastavovacVelikostiDlazdicY = new JNastavovacVelikostiDlazdic("svislém");
@@ -305,19 +313,19 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     //    jPanKmz.setBorder(BorderFactory.createTitledBorder("KMZ (GoogleEarth či Oregon)"));
 
     //jPanKmz.gbc.insets = new Insets(0, 0, 0, 0);
-    jPanKmz.addx("Název:", jKmzFolderNazev);
-    jPanKmz.gbc.fill = GridBagConstraints.HORIZONTAL;
-    jPanKmz.addx("Popis:", jKmzFolderDescription);
-    jPanKmz.addx("Draw order:", jKmzDrawOrder);
-    jPanKmz.addx("Dlaždice X:", jNastavovacVelikostiDlazdicX);
+    jKmzPanel.addx("Název:", jKmzFolderNazevCombo);
+    jKmzPanel.gbc.fill = GridBagConstraints.HORIZONTAL;
+    jKmzPanel.addx("Popis:", jKmzFolderDescription);
+    jKmzPanel.addx("Draw order:", jKmzDrawOrder);
+    jKmzPanel.addx("Dlaždice X:", jNastavovacVelikostiDlazdicX);
     //jPanKmz.gbc.insets = new Insets(0, 0, 0, 0);
-    jPanKmz.addx("Dlaždice Y:", jNastavovacVelikostiDlazdicY);
+    jKmzPanel.addx("Dlaždice Y:", jNastavovacVelikostiDlazdicY);
   }
 
 
   private void registerEvents() {
 
-    jSpustit.addActionListener(new ActionListener() {
+    jSpustitButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         RenderSettings ss = renderModel.getRenderSettings().copy();
@@ -327,7 +335,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
       }
     });
 
-    jPrerusit.addActionListener(new ActionListener() {
+    jPrerusitButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         renderModel.prerusRendrovani();
@@ -347,7 +355,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
       }
     });
 
-    jNastaveniAktualnihoMeritka.addActionListener(new ActionListener() {
+    jNastaveniAktualnihoMeritkaButton.addActionListener(new ActionListener() {
 
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -358,7 +366,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
       }
     });
 
-    jWhatRender.getSelectionModel().addListener(new SelectionListener<EWhatRender>() {
+    jWhatRenderRadioPanel.getSelectionModel().addListener(new SelectionListener<EWhatRender>() {
       @Override
       public void selectionChanged(SelectionEvent<EWhatRender> event) {
         System.out.println("Vybrano: " + event.getSelected());
@@ -369,7 +377,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     });
 
 
-    jImgType.getSelectionModel().addListener(new SelectionListener<EImageType>() {
+    jImgTypeRadioPanel.getSelectionModel().addListener(new SelectionListener<EImageType>() {
       @Override
       public void selectionChanged(SelectionEvent<EImageType> event) {
         System.out.println("Vybrano: " + event.getSelected());
@@ -380,7 +388,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     });
 
 
-    jKmzFolderNazev.addListener(new Listener() {
+    jKmzFolderNazevCombo.addListener(new Listener() {
       @Override
       public void patternChanged(Patterned patterned) {
         RenderSettings rs = renderModel.getRenderSettings();
@@ -391,14 +399,14 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
       }
     });
 
-    jPureJmenoSouboru.addListener(new Listener() {
+    jPureJmenoSouboruCombo.addListener(new Listener() {
       @Override
       public void patternChanged(Patterned patterned) {
         RenderSettings rs = renderModel.getRenderSettings();
         String vycisteneJmeno = FUtil.vycistiJmenoSouboru(patterned.getText());
         if (! patterned.getText().equals(vycisteneJmeno)) {
           patterned.setText(vycisteneJmeno);
-          jPureJmenoSouboru.setSelectedItem(vycisteneJmeno);
+          jPureJmenoSouboruCombo.setSelectedItem(vycisteneJmeno);
         }
         rs.setPureFileName(patterned);
         renderModel.setRenderSettings(rs);
@@ -479,24 +487,26 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     FComponent.setEnabledChildren(this, maBytEnablovano);
     RenderSettings renderSettings = event.getRenderSettings();
 
-    jWhatRender.getSelectionModel().setSelected(renderSettings.getWhatRender());
-    jImgType.getSelectionModel().setSelected(renderSettings.getImageType());
+    jWhatRenderRadioPanel.getSelectionModel().setSelected(renderSettings.getWhatRender());
+    jImgTypeRadioPanel.getSelectionModel().setSelected(renderSettings.getImageType());
     EStavRendrovani stavRendrovani = event.getStavRendrovani();
-    jPrerusit.setVisible(stavRendrovani == EStavRendrovani.BEH);
-    jPrerusit.setEnabled(stavRendrovani == EStavRendrovani.BEH);
+    jPrerusitButton.setVisible(stavRendrovani == EStavRendrovani.BEH);
+    jPrerusitButton.setEnabled(stavRendrovani == EStavRendrovani.BEH);
     jProgressBar.setVisible(stavRendrovani == EStavRendrovani.BEH || stavRendrovani == EStavRendrovani.PRERUSOVANO);
-    jSpustit.setVisible(stavRendrovani == EStavRendrovani.PRIPRAVA);
+    jSpustitButton.setVisible(stavRendrovani == EStavRendrovani.PRIPRAVA);
 
     long pametMiB = renderModel.odhadniMnozstviZabranePameti() / 1024  / 1024 + 1;
     //jSpustit.setEnabled(true);
-    jSpustit.setText(String.format("<html>Rendrovat <b>%d * %d px</b> - (%d MiB)",
+    jSpustitButton.setText(String.format("<html>%s <b>%d * %d px</b> - (%d MiB)",
+        (renderSettings.getWhatRender() != EWhatRender.TISK ? "Rendrovat " : "Tisknout"),
         renderModel.getDim().width, renderModel.getDim().height, pametMiB));
+    jPrerusitButton.setText((renderSettings.getWhatRender() != EWhatRender.TISK ? "Přerušit rendrování" : "Přerušit tisk"));
     //jRendrovaneMeritko.setText(renderModel.getRenderedMoumer() + "");
-    jNastaveniAktualnihoMeritka.setText("Nastav na meritko: " + renderModel.getCurrentMoumer());
-    jNastaveniAktualnihoMeritka.setEnabled(maBytEnablovano && renderModel.getCurrentMoumer() != renderModel.getRenderedMoumer());
+    jNastaveniAktualnihoMeritkaButton.setText("Nastav na meritko: " + renderModel.getCurrentMoumer());
+    jNastaveniAktualnihoMeritkaButton.setEnabled(maBytEnablovano && renderModel.getCurrentMoumer() != renderModel.getRenderedMoumer());
 
-    jPureJmenoSouboru.setPatterned(renderSettings.getPureFileName());
-    jKmzFolderNazev.setPatterned(renderSettings.getKmzFolder());
+    jPureJmenoSouboruCombo.setPatterned(renderSettings.getPureFileName());
+    jKmzFolderNazevCombo.setPatterned(renderSettings.getKmzFolder());
 
     jNastavovacVelikostiDlazdicX.setMaximalniVelikost(renderSettings.getKmzMaxDlazdiceX());
     jNastavovacVelikostiDlazdicY.setMaximalniVelikost(renderSettings.getKmzMaxDlazdiceY());
@@ -510,12 +520,12 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     double dpi = pixluNaMilimetrMapy * 25.4;
     double vzdalenostBodu = 1000 / pixluNaMilimetrMapy;
     PapirovaMetrika papirovaMetrika = renderModel.getPapirovaMetrika();
-    jJakouHustotuNaPadesatku.setText(String.format("<html>%.0f * %.0f mm - %.0f DPI = %.2f px/mm = %.1f \u03BCm/px",
+    jJakouHustotuLabel.setText(String.format("<html>%.0f * %.0f mm - %.0f DPI = %.2f px/mm = %.1f \u03BCm/px",
         papirovaMetrika.xsize * 1000,
         papirovaMetrika.ysize * 1000,
         dpi, pixluNaMilimetrMapy, vzdalenostBodu));
 
-    jTerenniRozmer.setText(String.format("%.1f * %.1f km", roord.getWidth() / pixluNaMetr / 100, roord.getHeight() / pixluNaMetr / 100));
+    jTerenniRozmerField.setText(String.format("%.1f * %.1f km", roord.getWidth() / pixluNaMetr / 100, roord.getHeight() / pixluNaMetr / 100));
 
     jIkonkaPapiru.setMetrikia(papirovaMetrika);
 
@@ -524,13 +534,14 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     jPapirMeritkoComboBox.setMeritko(renderSettings.getPapiroveMeritko());
     jKalibrBodu.setValue(renderSettings.getKalibrBodu());
 
-    jPriponaSouboru.setText("." + urciPriponuSouboru(renderSettings));
+    jPriponaSouboruLabel.setText("." + urciPriponuSouboru(renderSettings));
     nastavZakladyDoComboboxu(false);
     nastavViditelnost(renderSettings.getWhatRender());
 
-    jOutputFolder.setText(renderModel.getOutputFolder().toString());
-    jChangeOutputFolder.setAction(factory.init(new NastavUmisteniSouboru(urciFokusovanouSlozku(renderSettings))));
-    jChangeOutputFolder.setText("Změň...");
+    File outputFolder = renderModel.getOutputFolder();
+    jOutputFolderLabel.setText(outputFolder == null ? "" : outputFolder.toString());
+    jChangeOutputFolderButton.setAction(factory.init(new UmisteniSouboruAction(urciFokusovanouSlozku(renderSettings))));
+    jChangeOutputFolderButton.setText("Změň...");
   }
 
   private String urciPriponuSouboru(RenderSettings renderSettings) {
@@ -578,8 +589,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
             polozkuDoObou(poradi, "A88-geocoding", nalezenec.adresa);
             poradi++;
           }
-          jKmzFolderNazev.addPatterns(null, patsFolderName);
-          jPureJmenoSouboru.addPatterns(null, patsPureFileName);
+          jKmzFolderNazevCombo.addPatterns(null, patsFolderName);
+          jPureJmenoSouboruCombo.addPatterns(null, patsPureFileName);
         }
       }
 
@@ -622,15 +633,24 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   private void nastavViditelnost(EWhatRender whatRender) {
     boolean jenOzi = whatRender == EWhatRender.OZI_EXPLORER;
     boolean jenKmz = whatRender == EWhatRender.GOOGLE_EARTH;
-    jKmzFolderNazev.setVisible(jenKmz);
+    boolean netiskneSe = whatRender != EWhatRender.TISK;
+    jKmzFolderNazevCombo.setVisible(jenKmz);
     jNastavovacVelikostiDlazdicX.setVisible(jenKmz);
     jNastavovacVelikostiDlazdicY.setVisible(jenKmz);
     jKmzDrawOrder.setVisible(jenKmz);
     jKmzFolderDescription.setVisible(jenKmz);
 
     jKalibrBodu.setVisible(jenOzi);
-    jPanKmz.setVisible(jenKmz);
-    jPanOzi.setVisible(jenOzi);
+    jKmzPanel.setVisible(jenKmz);
+    jOziPanel.setVisible(jenOzi);
+
+    jPureJmenoSouboruCombo.setVisible(netiskneSe);
+    jOutputFolderLabel.setVisible(netiskneSe);
+    jVystupniSlozkaLabel.setVisible(netiskneSe);
+    jPriponaSouboruLabel.setVisible(netiskneSe);
+    jChangeOutputFolderButton.setVisible(netiskneSe);
+    jVystupniSouborLabel.setVisible(netiskneSe);
+    jImgTypeRadioPanel.setVisible(netiskneSe);
   }
 
 
@@ -647,7 +667,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
       pats.put("C1-wgs",  wgs + " z" + moumer);
       pats.put("C2-utm",  wgs.toUtm() + " z" + moumer);
       pats.put("C3-vter",  "N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer);
-      jKmzFolderNazev.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
+      jKmzFolderNazevCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
     }
     {
       SortedMap<String, String> pats = new TreeMap<String, String>();
@@ -655,7 +675,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
       pats.put("C1-wgs", wgs  + " z" + moumer);
       pats.put("C2-utm",  wgs.toUtm()  + " z" + moumer);
       pats.put("C3-vter",  FUtil.vycistiJmenoSouboru("N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer));
-      jPureJmenoSouboru.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
+      jPureJmenoSouboruCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
     }
   }
 
@@ -664,21 +684,22 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     whrm.add(EImageType.bmp, "<html><i>BMP</i> - nekomprimovaný obrázek (pro volný OziExplorer");
     whrm.add(EImageType.jpg, "<html><i>JPG</i> - ztrátová komprimace, vhodné pro fotky, nutné pro Garmin.");
     whrm.add(EImageType.png, "<html><i>PNG</i> - bezeztrátová komprimace, umožňuje průhlednost.");
-    jImgType = new JMvRadioPanel<EImageType>("Typ obrázku");
-    jImgType.setBorder(createBorder("Typ obrázku"));
-    jImgType.setSelectionModel(whrm);
-    jImgType.setAlignmentX(0.5f);
+    jImgTypeRadioPanel = new JMvRadioPanel<EImageType>("Typ obrázku");
+    jImgTypeRadioPanel.setBorder(createBorder("Typ obrázku"));
+    jImgTypeRadioPanel.setSelectionModel(whrm);
+    jImgTypeRadioPanel.setAlignmentX(0.5f);
   }
 
   private void createrWhatRender() {
     SelectionModel<EWhatRender> whrm = new SelectionModel<EWhatRender>();
+    whrm.add(EWhatRender.TISK, "<html><i>Tisk</i> - přímý tisk na tiskárnu (beta)");
     whrm.add(EWhatRender.JEN_OBRAZEK, "<html><i>Obrázek mapy</i> - pro tisk nebo prohlížení");
     whrm.add(EWhatRender.OZI_EXPLORER, "<html><i>OziExplorer</i> - obrázek a kalibrační map soubor.");
     whrm.add(EWhatRender.GOOGLE_EARTH, "<html><i>KMZ</i> soubor pro Google Earth nebo Garmin Oregon.");
-    jWhatRender = new JMvRadioPanel<EWhatRender>("Co rendrovat");
-    jWhatRender.setBorder(createBorder("Co rendrovat"));
-    jWhatRender.setSelectionModel(whrm);
-    jWhatRender.setAlignmentX(0.5f);
+    jWhatRenderRadioPanel = new JMvRadioPanel<EWhatRender>("Co rendrovat");
+    jWhatRenderRadioPanel.setBorder(createBorder("Co rendrovat"));
+    jWhatRenderRadioPanel.setSelectionModel(whrm);
+    jWhatRenderRadioPanel.setAlignmentX(0.5f);
   }
 
 
