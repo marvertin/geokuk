@@ -98,8 +98,8 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
     clearPozice();
   }
 
-  public void setMys(Point cur, Mou mouCur) {
-    fire(new ZmenaSouradnicMysiEvent(cur, mouCur));
+  public void setMys(Point cur, Mou mouCur, Mouable mouable) {
+    fire(new ZmenaSouradnicMysiEvent(cur, mouCur, mouable));
   }
 
   public Poziceq getPoziceq() {

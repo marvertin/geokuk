@@ -141,7 +141,7 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
     } else {
       Point bodik = e.getPoint();
       Mou mouCur = getSoord().transform(bodik);
-      poziceModel.setMys(bodik, mouCur);
+      poziceModel.setMys(bodik, mouCur, getUpravenaMys());
     }
     MouseGestureContext ctx = ctx();
     chain().mouseDragged(e, ctx);
@@ -158,7 +158,7 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
     }
     cur = e.getPoint();
     Mou mouCur = getSoord().transform(cur);
-    poziceModel.setMys(cur, mouCur);
+    poziceModel.setMys(cur, mouCur, getUpravenaMys());
     //System.out.println("Souradnice: " + wgs);
     MouseGestureContext ctx = ctx();
     chain().mouseMoved(e, ctx);
@@ -200,7 +200,7 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 
   @Override
   public void mouseExited(MouseEvent e) {
-    poziceModel.setMys(null, null);
+    poziceModel.setMys(null, null, null);
     chain().mouseExited(e, ctx());
   }
 

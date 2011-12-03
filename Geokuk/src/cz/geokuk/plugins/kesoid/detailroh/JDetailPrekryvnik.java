@@ -37,7 +37,7 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
   }
 
   public void onEvent(ZmenaSouradnicMysiEvent aEvent) {
-    moucur = aEvent.moucur;
+    moucur = aEvent.upravenaMys == null ? aEvent.moucur : aEvent.upravenaMys.getMou();
     nastav();
   }
 

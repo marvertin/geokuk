@@ -73,7 +73,7 @@ public final class JDetailMysovani extends JSingleSlide0  implements MouseInputL
 
   @Override
   public void mouseMoved(MouseEvent e) {
-    poziceModel.setMys(e.getPoint(), getSoord().transform(e.getPoint()));
+    poziceModel.setMys(e.getPoint(), getSoord().transform(e.getPoint()), getUpravenaMys());
   }
 
   @Override
