@@ -75,7 +75,9 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
       @Override
       public void actionPerformed(ActionEvent e) {
         zpozdovaciTimer = null;
-        setSoord(getSoord().derive(DETAIL_MOUMER, moucur));
+        if (moucur != null) {
+          setSoord(getSoord().derive(DETAIL_MOUMER, moucur));
+        }
       }
     });
     zpozdovaciTimer.setRepeats(false);
