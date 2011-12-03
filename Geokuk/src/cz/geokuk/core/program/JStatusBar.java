@@ -113,11 +113,14 @@ public class JStatusBar extends JPanel {
     souradnicePanel.add(meritkoMapy);
     add(souradnicePanel);
 
-    odPozice = createPanel();
+    JPanel jPozicePanel = createPanel();
 
     souradnicePozice.setToolTipText("Spouřadnice aktuálně vybrané pozice, možno vybrat a dát do clipboardu");
-    odPozice.add(new JLabel("Pozice:"));
-    odPozice.add(souradnicePozice);
+    jPozicePanel.add(new JLabel("Pozice:"));
+    jPozicePanel.add(souradnicePozice);
+    add(jPozicePanel);
+
+    odPozice = createPanel();
 
     odPozice.add(new JLabel("Od pozice:"));
     odPozice.add(vzdalenost);
@@ -228,7 +231,7 @@ public class JStatusBar extends JPanel {
   public void onEvent(ZmenaSouradnicMysiEvent event) {
     if (cur != null && cur.equals(event.moucur) ) return;
     cur = event.moucur;
-    souradnice.setText(cur == null ? "" :  cur.toWgs().toString());
+    souradnice.setText(cur == null ? "?" :  cur.toWgs().toString());
     prepocitejVzdalenostAAzimut();
   }
 
