@@ -73,6 +73,7 @@ public class VyletModel extends Model0 {
   private boolean priPrvnimUlozeniSeZapiseZeZastaralySouborAnoGgtUzNebudeNikdyNacitan;
   private PoziceModel poziceModel;
   private Coord moord;
+  private boolean probihaPridavani;
 
   public void addToIgnoreList(Mouable mouable) {
     if (mouable == null) return;
@@ -217,6 +218,7 @@ public class VyletModel extends Model0 {
       otevri(file);
     }
     fireCesta();
+    fire(new PridavaniBoduEvent(false)); // přidávání neprobíhá, tak aŤ se provede příslušný event
   }
 
   public File defaultExportuDoGgt() {
@@ -754,5 +756,11 @@ public class VyletModel extends Model0 {
 
     }
 
+  }
+
+  public void setPridavaniBodu(boolean probihaPridavani) {
+    if (this.probihaPridavani == probihaPridavani) return;
+    this.probihaPridavani = probihaPridavani;
+    fire(new PridavaniBoduEvent(probihaPridavani));
   }
 }

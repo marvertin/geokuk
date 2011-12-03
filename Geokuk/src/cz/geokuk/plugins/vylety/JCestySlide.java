@@ -496,6 +496,7 @@ public class JCestySlide extends JSingleSlide0{
     } else { // jedničku už máme, dvojku doděláváme
       pridavanyBod2 = getUpravenaMys(); // kdyby byla null, nic nepřidváme
     }
+    vyletModel.setPridavaniBodu(true);
   }
 
   private void zrusPridavaniBodu() {
@@ -506,6 +507,7 @@ public class JCestySlide extends JSingleSlide0{
     }
     pridavanyBod1 = null;
     pridavanyBod2 = null;
+    vyletModel.setPridavaniBodu(false);
   }
 
 
