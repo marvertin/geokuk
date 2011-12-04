@@ -1,0 +1,89 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css"  href="styly.css">
+<title>GeoKuk</title>
+</head>
+<body>
+<h1>GeoKuk - TODO list<a class="domu" href="index.html">Domů</a></h1>
+<hr>
+TODO list pomalu, ale jsitě mizí, neboť je nahrazován
+<p style="font-size: 24px;"> 
+<a href="http://code.google.com/p/geokuk/issues/list">systémem pro zprávu požadavků.</a>
+</p>
+<p>
+
+<h3>Zbožná přání uživatelů.</h3>
+<i>Ale taková, která považuji za rozumná a důvodem, proč se to zatím nedělá je vysoká pracnost nebo nutnost
+pořádně promyslet.</i>
+
+<div class="odsad">
+<p>
+<li>Zabránit otevírání více instancí Geokuku (Pokud zjistím, jak jse to v Javě dělá a pokud to vůbec lze bez použití nativního kódu.
+Kdyby to někdo věděl, nechť pošle odkaz.)
+<li>Tisk mapy a seznamu keší.
+<li>Undo (Ctrl Z).
+<li>Jiné zdroje map než mapy.cz.
+<li>Nepřepínat na místa, kde nejsou k dispozici mapy. Fotomapa v nejvyšším zoomu je dostupná pouze v praze, šlo by nějak ošetřit aby na něj v ostatních oblastech nešlo přepnout?
+Jak to poznat, ještě dřív než se tam přepnu a načtou se mapy? Musí se to udělat tak, aby až
+budou data ve vysoém rozlišení všude, nebylo nutné do programu zasahovat.
+<li>Označení vice keši najednou ("zarámečkováním" myší) pro hromadný zařazení/vyřazení z výletu by se občas hodilo. 
+- Vyřeší se, až se bude program rozšiřovat o další funkcionalitu a zavede se koncept multivýběru.
+<li>Optimalizace vykreslování, aby nemusel být uplatňován limit 3000 waypointů na obrazovce. 
+(Není problém s mnoha kešemi celkově v programu, na to tam mám poměrně chytré čtvercovité indexování,
+proto fungují tooltipy a jde na keše klikat.)
+<li>Pro lov označovat jen některé stage z multin.
+</div>
+<h3>To není přece chyba, to je "fičura"!</h3>
+<i>Drobná nelogická chování programu, o kterých autor nakonce rozhodl, že je to vlastně
+chování chtěné a od samé=ho počátku plánované ;-).,</i>
+<p>
+<div class="odsad">
+<li>Pokud zhasnou keše kvůli překročení limitu, jde na ně klikat a zorazuje se tooltip. -
+<i>Žádný limit by neměl existovat, byl zaveden jen proto, že při větším počtu
+vykreslovaných keší je program nepoužitelný. Budu se snažit najít lepší algoritmus
+pro vykreslování.</i>
+</div>
+</h3>
+<h3>Směry dalšího rozvoje</h3>
+<i>To co nás napadlo, že by pogram mohl umět nebo jsme to odvodili z požadavků uživatelů. Aneb kam Geokuk půjde a kam určitě né.</i>
+<p>
+<div class="odsad">
+Koncepčně je Geokuk program pro plánování a vyhodnocení <b>výletů</b> za keškami nad <b>mapou</b> v <b>českém</b> prostředí.
+Lze tedy očekávat zlepšování v těchto oblastech. Budeme podporovat libovolné waypointy, budeme podporovat plánování
+tras i zpracování prošlých tras. (Možná i fotky z výletů, ale to za hooodně dlouho.) Přijdou i základní operace
+na mapách jako je projekce waypointu, měření na mapě a nevím co ještě. Pokud čas dovolí, přijde i podpora jiných map.
+Pokud to bude poptáváno, bude i podpora pluginů. (Třeba zrovna pro ty mapy, abych to nemusel dělat sám.) 
+
+<h4>A co Geokuk není a nebude?</h4>
+Geokuk rozhodě není a nebude další databáze keší. Od toho je zde Geoget, GSAK, MoZiGo 
+a nevím jaké další. A jeden člověk nemůže dělat všechno. V ideálním případě nebude mít
+Geokuk vůbec žádnou databázi. Také nebudeme vlastními silami zobrazovat listingy nebo logy. 
+</div>
+
+</h3>
+<h3>Čeho se ode mě nedočkáte.</h3>
+<i>Protože je to buď proti koncepci programu nebo je to velmi obtížné až nerealizovatelné a nebo na to prostě nemám čas nebo chuť.</i>
+<br>
+<div class="odsad">
+<p>
+<li><b>Nastavení kruhu 161m i u mysterek.</b> - <i>Vysvětlení: Tam, kam autor 
+otazníček na mapu umístil, tam se má zobrazit nebo se nemá zobrazovat vůbec.
+K označení finálovky slouží finální waypoint. Pokud GSAK (znám jen z doslechu)
+používá tuto metodu označování finálek, bylo by dobré upravit jeho exportní makro.
+</i>
+<li>Použití <b>launcher4j</b> nebo podobné projekty pro zabalení aplikace do EXE a vytvoření instaláku. 
+<i>Vysvětlení: Svůj čas, který hodlám geokuku věnovat, věnuji na rozvoj programu. 
+Toto může udělat někdo jiný (a uvítám to).</i>
+</li>
+<li><b>Hezčích webových stránek.</b> <i>Vysvětlení stejné jako v předchozím bodě.
+</li>
+ 
+
+</div>
+<hr>
+<div class="posledni">Poslední změna: 31.1.2011<a class="domu" href="index.html">Domů</a></div>
+</body>
+</html>
+
+                  

@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css"  href="styly.css">
+<title>GeoKuk</title>
+</head>
+<body>
+<h1>GeoKuk - příprava k použití<a class="domu" href="index.html">Domů</a></h1>
+<hr>
+<h2>Krok 1 - první spuštění</h2>
+Existují tři způsoby, jak spustit Geokuk, doporučuji jeden z prvních dvou zde uvedených, třetí je na konci této stránky.
+<div class="odsad" >
+<h3>Přímo z Internetu</h3>
+<div class="odsad" >
+<li>Nejjednodušší bude, když program Geokuk poprvé spustíte tímto odkazem:
+<div class="vyraznyOdkaz">
+<a href="geokuk.jnlp"><b>GeoKuk</b> verze <!--ZZAACCAATTEEKK-->3.1.0<!--KKOONNEECC--></a> ze <!--CCAASS-->13.11.2011 23:13<!--SSAACC-->
+<b> - <a href="changelog.html">popis změn</a></b>
+</div>
+<br>
+Program se nainstaluje do počítače a spustí <small>(technologie
+<a href="http://java.sun.com/javase/technologies/desktop/javawebstart/index.jsp">Java WebStart </a>)</small>. 
+Přitom se vytvoří ikona na ploše a položka menu, příště můžete program už spouštět odtamtud.
+Program zobrazí mapu, ale ještě zde nemáte žádné keše.
+<p span style="color:red">Nyní má program své stránky na <a href="http://wiki.geocaching.cz/wiki/Geokuk" />geowiki</a>,
+kde můžete psát a také snad i najít uživatelskou dokumetnaci.</p>
+</div>
+<h3>Stažení EXE (pouze MS Windows)</h3>
+<div class="odsad" >
+Pokud používáte Microsoft Windows, můžete stáhnout "nativní" aplikaci, někam uložit a používat.
+<div class="vyraznyOdkaz">
+<a href="geokuk.exe"><b>geokuk.exe</b></a> 
+</div>
+</div>
+</div>
+
+<h2>Krok 2 - nahrání seznamu keší</h2>
+<div class="odsad">
+
+
+<li>V programu GeoKuk v menu vyberte volbu <i>Soubor / Umístění souborů</i>. Hned první
+položka udává složku, ve které budou hledány soubory s kešemi s příponami <i>geokuk</i>, <i>gpx</i> a <i>zip</i>.
+Do této složky musíte umístit jeden nebo více souborů se seznamem keší (doporučený formát a přípona je <i>geokuk</i>),
+aby měl geokuk co zobrazovat. Můžete si nastavit vlastní složku.
+
+A teď záleží na tom, jaký program na správu keší používáte.
+<h3>GEOGET</h3>
+<div class="odsad">
+Stáhněte si a nakonfigurujte makro pro export dat a spuštění Geokuku (pokud není už spuštěn) z programu
+<a href="http://geoget.ararat.cz" target="geoget">GEOGET</a>. Postupujte podle pokynů na této stránce.
+Autorem makra je <a href="http://www.geocaching.cz/profile.php?lookup=9175" target="LudekV">LudekV</a> 
+<div class="vyraznyOdkaz">
+<a href="http://geoget.ararat.cz/doku.php/doc:user:file" target=exportniMakroDoGeogetu>geokuk.gge.pas</a> - exportní makro GEOGET
+</div>
+Kdyby to nefungovalo, tak můžete zkusit origiální makro 
+<a href="geokuk.gge.pas">geokuk.gge.pas</a>. Je to obyčejné exportní makro,
+není tak chytré a pohodlné na použití.
+V Geogetu si vyfiltrujte keše, které chcete na mapách zobrazovat a 
+exportujte (Ctrl+E, vybrat "GeoKuk export") do souboru s příponou geokuk (například <tt>kesky.geokuk</tt>), 
+do výše uvedené složky. Program GeoKuk restartovat nemusíte, kešky si načte sám.
+</div> 
+
+<h3>GSAK</h3>
+<div class="odsad">
+Stáhněte si exportní makro pro program GSAK:
+<div class="vyraznyOdkaz">
+<a href="http://www.geocaching.cz/forum/viewthread.php?forum_id=7&thread_id=12917&getfile=170398">
+export_to_geokuk.gsk</a> - exportní makro GSAK
+</div>
+Autorem makra je <a href="http://www.geocaching.cz/profile.php?lookup=5953">XiXi_team</a>. 
+O makru se můžtete více dočíst v <a href="http://www.geocaching.cz/forum/viewthread.php?forum_id=7&thread_id=12917">samostatném vlákně</a>.
+</div> 
+
+<h3>Nic - jen PocketQuery</h3>
+<div class="odsad">
+Tak si nahrejte získané pocket query do složky s daty geokuku. GPX soubory (i zazipované) se načtou,
+ale přijdete o hodnocení keší, o malcorovy bestOf bookmarky a také o označení vlastních keší.
+Nebudete zde mít ani finální waypointy vyřešených mysterek. Raději se zamyslete, zda 
+si nenainstalovat Geoget, protože exportem z něj získáte nejúplnější infroamce.
+</div> 
+
+</div>
+
+<p>
+A je to! Děkujeme za přízeň věnovanou programu. Budeš-li mít nějaké problémy, obrať se na  <a href="mailto:martin.veverka@email.cz">autora programu</a>. 
+<br>
+Jestli se ti program líbí a máš čas a chuť, uvítáme tvoji
+<b><a href="spoluprace.html">spolupráci na dalším vývoji.</a></b>
+<hr/>
+<h2>Nefunguje to :-(</h2>
+<div class="odsad">
+<p>
+<li>Možná máte starou verzi internetového prohlížeče a 
+nemáte nainstalovanou Javu nebo ji máte v prastaré verzi.
+Zkuste si <a href="http://java.com/en/download/">Javu stáhnout a nainstalovat</a>.
+Pak by snad neměl být žádný problém.
+<li>Pokud instalace Javy nepomůže, zkuste jiný prohlížeč.
+<li>A jako poslední, ale určitě fungující možnost bude stáhnout
+si program přímo: <a href="geokuk.jar">geokuk.jar</a>, uložit na disk
+a spustit příkazem:
+<pre>
+java -jar geokuk.jar
+</pre>
+Předpokladem je, že máte Javu instalovanou. Možná bude možné program spustit
+i poklepáním na soubor (V závislosti na operačním systému).
+</div>
+<hr>
+<div class="posledni">Poslední změna: 30.1.2010<a class="domu" href="index.html">Domů</a></div>
+<A HREF="http://counter.cnw.cz/" TARGET=_parent><IMG SRC="http://counter.cnw.cz/charlie.cgi?geokuk&5" BORDER=0 ALT="CNW:Counter"></A> 
+
+<SCRIPT language="JavaScript">
+<!--
+document.write("<A href=\"http://counter.cnw.cz\" target=\"_parent\"><IMG src=\"http://counter.cnw.cz/trackit.cgi?geokuk&t3&" + escape(top.document.referrer) + "\" alt=\"CNW:Tracker\" border=\"0\" width=\"9\" height=\"9\"></A>");
+// -->
+</SCRIPT> 
+
+</body>
+</html>
+

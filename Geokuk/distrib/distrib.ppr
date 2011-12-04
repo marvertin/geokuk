@@ -1,0 +1,47 @@
+[Config]
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.LogType=0
+DefaultDir=C:\Users\tatinek\workspace\Geokuk\distrib
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=0
+[Project tree]
+distrib
+	+distrib
+		favicon.ico
+		geokuk.gge.pas
+		geokuk.jar
+		geokuk.jnlp
+		geokuk16.png
+		geokuk32.png
+		geokuk48.png
+		changelog.html
+		index.html
+		kesky.geokuk
+		spoluprace.html
+		version.txt
+		styly.css
+		spust.html
+		popis.html
+		todo.html
+[Open project files]
+0=changelog.html
+1=index.html
+2=todo.html
+[Selected Project Files]
+Main=index.html
+Selected=changelog.html
+[changelog.html]
+TopLine=1
+Caret=125,9
+[index.html]
+TopLine=45
+Caret=1,61
+[todo.html]
+TopLine=1
+Caret=1,1

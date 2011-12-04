@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp codebase="file:c:\Users\tatinek\workspace\Geokuk\distrib">
+	<information>
+		<title>GeoKuk</title>
+		<vendor>Martin Veverka</vendor>
+    <homepage href="file:c:\Users\tatinek\workspace\Geokuk\distrib"/>
+		<description kind="one-line">GeoKuk - geokeše na českých mapách.</description>
+		<description kind="short">GeoKu - program umožňuje zobrazit geokeše na 
+		  českých mapách serveru "mapy.cz". Podporuje filtrování podle hodnocení
+		  a podle bestof bookmarku. Také umožňuje plánování výletů.</description>
+		<description kind="tooltip">GeoKuk - geokeše na českých mapách.</description>
+    <icon href="geokuk48.png" height="48" width="48" />
+    <icon href="geokuk32.png" height="32" width="32" />
+		<icon href="geokuk16.png" height="16" width="16" />
+		<offline-allowed />
+		<shortcut>
+			<desktop />
+			<menu submenu="GeoKuk" />
+		</shortcut>
+	</information>
+
+	<resources>
+		<j2se version="1.6+" max-heap-size="512m" />
+		<jar href="geokuk_2.1.0.jar" />
+	</resources>
+	<application-desc>
+	</application-desc>
+	<security>
+		<all-permissions />
+	</security>
+	<update check="timeout" />
+</jnlp>

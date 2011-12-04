@@ -1,0 +1,39 @@
+/* CSS Document */
+
+.odsad {
+  padding-left: 50
+}
+
+h3.odsad {
+  padding-left: 25
+}
+
+.vyraznyOdkaz {
+  background-color: ccff99;
+  border-color: ccff99;
+  border-style: solid;
+  padding: 10;
+  width: 400;
+  height:= 30;
+  text-align: center;
+  margin-top: 10;
+  margin-bottom: 10;
+}
+
+li {
+  padding-bottom: 5;
+  list-style-position: outside;
+}
+
+
+a.domu {
+  position: absolute;
+  align: right;
+  right: 0;
+  font-size: medium;
+  padding-right: 15;
+}
+
+.posledni {
+  font-size: x-small;
+}

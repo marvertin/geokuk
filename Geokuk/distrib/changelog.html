@@ -1,0 +1,484 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css"  href="styly.css">
+<title>GeoKuk</title>
+</head>
+<body>
+<h1>GeoKuk - popis změn programu.<a class="domu" href="index.html">Domů</a></h1>
+<a href="http://code.google.com/p/geokuk/issues/list">A toto nás čeká a nemine :-)</a>
+<p>
+
+<table border=1>
+  <thead>
+    <tr>
+      <th>Verze</th>
+      <th>Datum</th>
+      <th>Shrnutí</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="http://code.google.com/p/geokuk/issues/list?can=1&q=label:Verze-3.1.0">3.1.0</a></td>
+      <td>13. &nbsp;října&nbsp;2011</td>
+      <td>Opravy bětších chyb, nejedn těch zapsaných v change logu. Posouvání mapy šipkama.</td>
+    </tr>
+    <tr>
+      <td><a href="http://code.google.com/p/geokuk/issues/list?can=1&q=label:Verze-3.0.1">3.0.1</a></td>
+      <td>8. &nbsp;října&nbsp;2011</td>
+      <td>Opravy drobných chyb.</td>
+    </tr>
+    <tr>
+      <td><a href="http://code.google.com/p/geokuk/issues/list?can=1&q=label:Verze-3.0.0">3.0.0</a></td>
+      <td>7. &nbsp;října&nbsp;2011</td>
+      <td>Zcela nově přepracovaný systém výletů, kdy je možné kreslit detailní cestu, měřit její vzdálenost, zařazovat do cesty jednotlivé waypointy a ne nutně celé keše a podobně.</td>
+    </tr>
+    <tr>
+      <td><a href="http://code.google.com/p/geokuk/issues/list?can=1&q=label:Verze-2.7.1">2.7.1</a></td>
+      <td>21.&nbsp;února&nbsp;2011</td>
+      <td>Opravy drobných chyb.</td>
+    </tr>
+    <tr>
+      <td><a href="http://code.google.com/p/geokuk/issues/list?can=1&q=label:Verze-2.7.0">2.7.0</a></td>
+      <td>8.&nbsp;února&nbsp;2011</td>
+      <td>Tisk v betaverzi.</td>
+    </tr>
+    <tr>
+      <td><a href="http://code.google.com/p/geokuk/issues/list?can=1&q=label:Verze-2.6.1">2.6.1</a></td>
+      <td>1.&nbsp;února&nbsp;2011</td>
+      <td>Změna určení vlastních keší při načítání GPX souboru.</td>
+    </tr>
+    <tr>
+      <td><a href="http://code.google.com/p/geokuk/issues/list?can=1&q=label:Verze-2.6.0">2.6.0</a></td>
+      <td>31.&nbsp;ledna&nbsp;2011</td>
+      <td>Podpora "favorites" a zavedení <a href="http://code.google.com/p/geokuk/issues/list"><b>systému evidence problémů (chyb a požadavků)</b></a> 
+      Systém je také dostupný přímo z Geokuku pod <i>Nápověda / Zadat problém</i>. Evidujme zde všechny chyby Geokuku a požadavky na jeho rošíření.</td>
+    </tr>
+  </tbody>  
+</table>
+
+<h3>26. 1. 2011 - Verze 2.5.3</h3>
+<div class="odsad">
+<ul>
+<li><b>Zhášení vybíráčů favorit, bestOf a hodnocení na toolbáru: </b>Pokud nemáme načteny žádné keše s favoritami, bestOf nebo hodnoceními, odpovídající nastavovač filtru na stavovém řádku zhasne, ať tam zbytečně nestraší.
+Doposud když jsem například nastavil, že nechci rodlišovat multiny, místo multin jsem měl červeou kostku jako obecný bod, dnes tam bude truhlička jako obecná ikona keše.
+<li><b>Obecné ikony pro keš a geodetický bod: </b>Do standardních ikony přibyly dvě nové ikony. Projeví se na toolbáru, kde už nebude tolik červených kostek a také při výběru fenotypu.
+Doposud když jsem například nastavil, že nechci rodlišovat multiny, místo multin jsem měl červeou kostku jako obecný bod, dnes tam bude truhlička jako obecná ikona keše.
+</li>
+</ul>
+</div>
+
+<h3>25. 1. 2011 - Verze 2.5.2</h3>
+<div class="odsad">
+<ul>
+<li><b>Otvírání webového prohlížeče: </b>Opraveno, mělo by to fungovat na všech systémech. Díky uživateli Pitel.</li>
+</ul>
+</div>
+
+<h3>24. 1. 2011 - Verze 2.5.1</h3>
+<div class="odsad">
+Opravy chyb
+</p>
+<ul>
+<li><b>Case insensitivita na Unixech: </b>Chyba načítání souborů na Unixech ajiných case senzitivních systémech. Nebylo možné mít v souborech velká písmena.</li>
+<li><b>Otvírání webovéh prohlížeče: </b>Doplněna lepší diagnostika, více informací se vypíše do výjimky, aby bylo možné řešit vzniklé problémy.</li>
+</ul>
+</div>
+
+
+<h3>20. 1. 2011 - Verze 2.5.0</h3>
+<div class="odsad">
+<p>
+Nové vlastnosti
+</p>
+<ul>
+<li><b>Popisky na mapě: </b>Možnost definovat obsah popisky podobně jako na geocaching.cz (Ctrl F12)</li>
+<li><b>Ikony: </b>Doposud nenalezené keše možno vypínat přímo z tollbáru. A také keše nevyluštěné.</li>
+</ul>
+<p>
+Opravy chyb
+</p>
+<ul>
+<li>Chyba vybírátka barev opravena.</b></li>
+</ul>
+</div>
+
+
+
+<h3>17. 1. 2011 - Verze 2.4.0</h3>
+<div class="odsad">
+<p>
+Nové vlastnosti
+</p>
+<ul>
+<li><b>Rendrování: </b>Dokončeno. Zásadní změna rendrovaího dialogu s dalšími funkcemi.</li>
+<li><b>Nápověda: </b>Každý dialog má tlačítko "Nápověda" vedoucí na wiki a klávesu F1. Nápověda bude postupně plněna.</li>
+<li><b>Geocoding data: </b>Nová položka v popup menu nad aktuální pozicí. Zobrazí Internetový prohlížeč s detetailními informacemi o vybraném místě. Dokument je ve formátu XML, tak jak je vracen příslušnou službou.</li>
+</ul>
+<p>
+Opravy chyb
+</p>
+<ul>
+<li><b>Chyby rendrování: </b>Opraveny chyby rendrování, především chyby pro práci s pamětí.</li>
+<li><b>Složka pro rendrování prostých obrázků:</b> Prosté obrázky se ukládali do složky s OziExplorer mapami. A to není asi moc dobré. Byla tedy zavedena možnost nastavit adresář pro samostatné obrázky.</li>
+<li><b>Umístení souborů:</b> Zpřehlednění rozdělením do zložek, odstranění pomalosti otvírání dialogu .</li>
+<li><b>Service:</b> Po zavření okna "service" se neuvolnily zdroje a zpracování byl zpomaleno.</li>
+</ul>
+</div>
+
+<h3>6. 1. 2011 - Verze 2.3.0</h3>
+<div class="odsad">
+<p>
+Na tři krále o krok dále. A co je nového?
+</p>
+<ul>
+<li><b>Rendrovní kalibrovaných map</b> pro OziExplorer, GoogleEarth a Garmin Oregon. Redrovat lze libovolnou vrstvu (mapy, kešoid, mřížky ..)
+a lze vytvořit obrázek mapy daleko větší než se vejde na obrazovku.</li>
+<li><b>Vypínání zobrazování vrstvy kešoidů: .</b>Aby se nemuselo vše složitě vypínat ve filtru, když kešoidy nechci rendrovat.</li>
+<li><b>Pázdný mapový poklad: </b>Aby se dal vyrendrovat průhledný obrázek (nutno zvolit PNG) a na něm třeba jen turistické trasy ci cyklotrasy. 
+GooglEarth doplněný o turistické trasy fakt vypadá dobře.</li>
+<li><b>Konfigurace nových adresářů: </b>Složku pro mapy ozi exploreru a GoogleEarth lze nastavit v umístění souborů.</li>
+</ul>
+<p>Tak jsem to stihl, sice s odřenýma ušima, ale stihl. Chtěl jsem dát ven verzi na Vánoce a vlastně se to povedlo, dnes
+Vánoce oficiálně končí. Takže, nyní je vše venku, už se v programu neschovává nic nového rozpracovaného a nedokončeného.
+Co Geokuk neumí, to v něm ani trochu není a bude se to muset doprogramovat.
+</p>
+</div>
+
+<h3>28. 12. 2010 - Verze 2.2.2</h3>
+<div class="odsad">
+<p>
+Opravy chyb:
+</p>
+<ul>
+<li><b>Klávesové zkratky: </b>Při ztrátě fokusu přestávaly fungovat klávesové zkratky. Nyní se vždy při stispu myši nebo pohybu kolečkem nad pamou nastaví fokus zpět hlavnímu oknu a klávesové zkratky zase fungují.</li>
+<li><b>Stavový řádek: </b>Oprava uřezávání číslic na stavovém řádku v některých skinech.</li>
+<li><b>Toolbár: </b>Bublina se neaktualizovala, pokud se přenačetly keše, byl zde špatný počet keší.</li>
+<li><b>Toolbár: </b>Přibývaly oddělovače ikon vždy, když se načetly keše.</li>
+<li><b>Jít na adresu: </b>V dialogu byly vyplněny aktuální souřadnice, ale nebyly vybrány, takže nešlo hned začít psát a tím je přemazat.</li>
+<li><b>Jít na souřadnice: </b>V dialogu nebyly vyplněny souřadnice aktuální pozice.</li>
+<li><b>Přehled zdrojů kešoidů: </b>Nyní je k dispozici nejen na stavovém řádku, ale i v menu File, tak jak to má být.</li>
+<li><b>Chyba při nedostupnosti dlaždic: </b>Pokud nelze načíst dlaždice z disku, v tichosti se dlaždice smaže a nevypisuje se výjimka.</li>
+</ul></div>
+
+<h3>26. 12. 2010 - Verze 2.2.1</h3>
+<div class="odsad">
+<p>
+Opravy chyb:
+</p>
+<ul>
+<li><b>Hint: </b>Opraveno zobrazování hintu, nezobrazoval se.</li>
+<li><b>Oddělovač řádku ve výletech:</b> Do souboru ".ggt" s GC kódy s kešemi býletu se ukládá správně oddělovač řádků. CRLF na windows, LF na Unixech a CR na Mackintoších.</li>
+</ul></div>
+
+
+<h3>24. 12. 2010 - Verze 2.2.0</h3>
+<div class="odsad">
+<p>Novinky:</p>
+<ul>
+<li><b>Doména gookuk.cz:</b> Geokuk má nyní vlastní doménu. Na ni jsou z programu směrovány kontroly verze a otvírání stránky.</li>
+<li><b>Ikony se vrací:</b> Na toolbáru jsou opět ikony umožňující ovládat jednoduše filtr obdobně jak to bylo
+ve verzi 1. Rozdíl je eď v tom, že vidíme pouze ty ikony, které mají smysl z hlediska načtených kešoidů. 
+(Pokud někdo třeba nezaložil keš, nesmrdí mu tam ikona pro zhasínání vastních keší). Při tom byla odstraněna
+nespolehlivá možnost získávání ikon na toolbár pravým tlačítkem myši v nastavení filtru.</li>
+<li><b>Blokování načítání zdroje:</b> V dialogu pro zapínání zdrojů přibyl checkbox, kterým je možné
+říci, že se některé soubory s kešoidy nemají vůbec brát v úvahu a načítat (jako by ve složce vůbec nebyly).
+<li><b>Jemný výběr pozice:</b> Kliknutím v levém dolním rohu na detail se pozice umístí na místo, kam bylo kliknuto obdobně jako v hlavní mapě.</li>
+<li><b>Nastavení v souboru:</b> Nyní je z GUI programu možné i zrušit ukládání nastavení do souboru.</li>
+<li><b>ZvýrazNóvací kruhy:</b> Nyní se zapnutí či vypnutí zvýrazňovacích kruhů pamatuje zvlášť pro každý mapový podklad.</li>
+<li><b>Kurozor myši na statusbáru:</b> Na statusbáru se mění kurzor myši na kurzor textový tam, kde je možné vybrat text a dát do clipboardu 
+a na kruzor s rukou tam,. kde je možné na něco kliknout (V této verzi jsou to jen zdroje).</li>
+<li><b>Příprava na profily:</b> Odstraněny volby <i>Uložit nastavení</i> a <i>obnovit stav</i>.Fungovaly jen polovičatě,
+připravuje se zavedení uživatelských profilů. 
+<li><b>Vnitřní restrukturalizace:</b> Uvnitř byl program dost refaktorován, aby byl možnýž jeho další rozvoj
+a aby bylo možné některé požadavky vůbec vyřešit (naopř. ikony na toolbáru, připavované undo/redo, připravované profily, pluginizace).
+Program je nyní založen na paradigmatu MVC (model, view, controler). To je také důvod, proč tak dlouho nebyla žádná nová verze
+a proč jsem příliš nereagoval na uživatele. (Dvě verze odmítám udržovat.)
+</ul>
+<p>
+Opravy chyb:
+</p>
+<ul>
+<li>Pokud vyberu italic a bold zároveň pro popisky na mapě, pak po restartu programu zmizí nastavení fontu.</li>
+<li>V umístění souborů se relativně zadaná cesta "." a ".."" správně kanonizuje.</li>
+<li>A různé další chyby, které jsem opravil a sem nenapsal.</li>
+<li>A další chyby, které se opravily samy. Napílad mám pocit, že horké klávesy už fungují správně.</li>
+</ul></div>
+
+<h3>6.7.2010 - Verze 2.1.1</h3>
+<div class="odsad"><ul>
+<li>Odstraněna zanesená chyba zcela znemožňující otevřít dialog "<i>Ladění ikon</i>."</li>
+</ul></div>
+<h3>26.5.2010 - Verze 2.1.0</h3>
+<div class="odsad"><ul>
+<li>Ikony všech WM kategorií zahrnuty do geokuku. (Mám je od rsc_cz)</li>
+<li>Mysterky mají modrý(netknmuté), oranžový (rozluštěné), červený (zásek), zelený(vyluštěné) otazník podle toho, jak jsem s nimi daleko.</li>
+<li>Optimalizace hledání ikon k zobrazení (umožnilo zahrnout mnoho orázků waymarkových kategorií).</li>
+<li>Podpora waymarkových kategorií, které mají ve jméně hvězdičku, lomítko a jiné paznaky,
+jenž nemohou být ve jméně souboru. Ve jméně souboru uvedeme [hvezdicka], [otaznik], [uvozovky], [lomitko], [dvojtecka]</li>
+<li>Uživatelské geny i alely.</li>
+<li>Odstranění teček z názvů tlačítek a titulků okna.</li>
+</ul></div>
+
+<h3>3.4.2010 - Verze 2.0.7</h3>
+<div class="odsad"><ul>
+<li>Zcela se ignoruje finální waypoint tradiční keše, nacházející se v blízkosti souřadnice keše. 
+Takové keše existují z doby, kdy ještě mohly existovat mysterky s dodatečnými podmínkami.</li>
+<li>Ikonky se kreslí vždy v pořadí ostatní, dodatečné waypointy keše, úvodní waypointy keše, finální waypoint.
+Takže se nemůže stát, že by třeba stage multiny byla nad ikonkou multiny nebo referenční bod překrýval ikonku 
+jiné keše.
+</li>
+</ul></div>
+
+<h3>14.3.2010 - Verze 2.0.6</h3>
+<div class="odsad"><ul>
+<li>Podpora nivelačních bodů a dataz souborů s GSAK ve jméně.</li>
+<li>V GPX sopuboru jsou už povinné jen souřadnice, vše ostatní má smysluplné defaulty.</li>
+<li>V tabulce keší je sloupce se jménem waypointu resizovatelný.</li>
+</ul></div>
+
+<h3>26.2.2010 - Verze 2.0.5</h3>
+<div class="odsad"><ul>
+<li>Opravena chyba při nášítání GPX, kdy má jméno waypointu délku 1.</li>
+<li>Přizpůsobení geokuku novému formátu dataz.zip od rsc_cz.</li>
+<li>Opravena chyba při načítání Waymárků se slůvkem Praha (pozůstatek ladění).
+Přidružené body triangulačnch bodů jsou nyní jako letterboxy, dříve to byly Event keše.</li>
+</ul></div>
+
+<h3>22.2.2010 - Verze 2.0.4</h3>
+<div class="odsad"><ul>
+<li>Opravena chyba při nášítání divokého souboru geokuk obsahující
+neúplná data (z Geogetu vylezl soubor, kde byly parkoviště jako samsotatné kešoidy.)</li>
+</ul></div>
+
+
+<h3>20.2.2010 - Verze 2.0.3</h3>
+<div class="odsad"><ul>
+<li>Opravena závažná chyba, která mohla znemožnit spuštění programu.</li>
+</ul></div>
+
+<h3>18.2.2010 - Verze 2.0.2</h3>
+<div class="odsad"><ul>
+<li>Opravena chybka ve vyhodnocení terénu a obtížnosti. Problém byl ve filtrech i ikonách.</li>
+<li>Podpora importu jmenného prostoru http://www.groundspeak.com/cache/1/0/1, (doposud byla podporována jen verze bez té poslední jedničky.)</li>
+<li>Ikony filtru na toolbáru. Ve filtru klikni pravým tlačítkem na checkbox a ikona se objecí na toolbáru nebo zmizne.</li>
+</ul></div>
+
+
+<h3>17.2.2010 - Verze 2.0.1</h3>
+<div class="odsad"><ul>
+<li>Pod Ctrl-12 se skrývá dialog s nastavením některých atributů popisků, některé přijdou později.</li>
+<li>Stahují se i dlaždice měřítka 13 turistické mapy, prostě, stahuje se to, co se stahovat má.</li>
+<li>Šoupátka už nezískávají fokus.</li>
+<li>Ve filtrech jsou počty waypointů s danou alelou. Ve výběru fenotypu jsou počty neodfiltrovaných waypointů s danou alelou.
+(Zapamatovat lze snadno. Ani v jednom okně nemůže být nula, to by ten řádek vůbec nebyl zorbazen.)
+</li>
+<li>F6 - klávesová zkratka pro výběr fenotypu.</li>
+</ul></div>
+
+
+<h3>16.2.2010 - Verze 2.0</h3>
+<div class="odsad"><ul>
+<li>Možnost definovat uživatelské sady ikon.</li>
+<li>Podora různých druhů kešoidů (Keš, Waymark, Český geodetický bod a jednoduchý waypoint.</li>
+<li>Lepší podpora načítání GPX. Načítání specifických atributů z GEOGETu: (bestOf, hodnocení, známka, čas nálezu).</li>
+<li>Nově atributy "nadmořská výška" a "čas nálezu".</li>
+<li>Možnost zhasnout některé "dekorace" ikon. Například je možné místo smailíka u nalozených
+keší říct, že se zobrazují původní ikony, jako by keše nebyly nalezeny.</li>  
+<li>Vyhledávání podle adres (Ctrl-M). A také převod souřadnic na adresy. (Ctrl-M - nic nezadat - klikat po mapě).</li>
+<li>Zobrazení názvů keší přímo na mapě (F12).</li>
+<li>Na stavovém řádku je měřítko mapy.</li>
+<li>Zelený otazník u vyluštěných mysterek ve standardní ikonářské sadě</li>
+<li>Při vyhledávání (Ctrl-F) lze zadat i GC kód nebo kód geodetického bodu.</li>
+</ul>
+<br>
+<br>
+<ul>
+<li>Opraven únik paměti při otevření dialogu a zavření jiným způsobem než křížkem.</li>
+<li>Zrychlení vykreslování ikonek kešoidů (ikony jsou sestavány na pozadí).</li>
+<li>Popup window nad záměrným křížem (zatím jednoduché volby).</li>
+<li>Oprava chyby: změna průhlednosti a černosti 161 m kruhů.</li>
+</ul></div>
+
+<h3>27.1.2010 - Verze 1.11.2</h3>
+<div class="odsad"><ul>
+<li>Opraveno špatné zotavení z chyby při načítání keší. Dříve byly keše nekonzistentní
+a později způsobily destabilizaci programu, nyní se špatná kež ignoruje a loguje se chyba.</li>
+<li>Přidána možnost načítat velikost keší "Unknown".</li>
+<li>Přidány scroll báry do "Umístění souborů".</li>
+<li>Opraveno umísťování oken tak, aby okna byla umístěna vždy na obrazovku.</li>
+</ul></div>
+
+<h3>20.1.2010 - Verze 1.11.1</h3>
+<div class="odsad"><ul>
+<li>Opravena chyba při načítání bezejmenných waypointů.
+</ul></div>
+
+<h3>20.1.2010 - Verze 1.11</h3>
+<div class="odsad"><ul>
+<li>Podpora plánování výletů mezi geopřáteli. Pokud do datového adrsáře
+umístíme soubory vygenerované z databází více různých kačerů, budou jako nalezené
+respektive vlastní kešky označeny ty, které nalezel respektive založil aspoň jeden
+z těchto kačerů. Ty kešky, které nenalezl nikdo zůstanou neoznačené a ty je vhodné se vypravit.
+</ul></div>
+
+<h3>13.1.2010 - Verze 1.10</h3>
+<div class="odsad"><ul>
+<li>Orpava chyby: vybraný skin se nastaví při spuštění programu</li>
+<li>Otevření listingu ve spuštěném Geogetu. V kontextovém menu na keši a klávesou F3
+pro vybranou keš. Geoget musí být spuštěn. Požadovaná vere Geogetu 2.2.5.541 a vyšší.</li>
+</ul></div>
+
+<h3>9.1.2010 - Verze 1.9</h3>
+<div class="odsad"><ul>
+<li>Stáhnutí určité oblasti map na disk (<i>Mapy / Postahovat dlaždice...</i>).</li>
+<li>Odstraněna chyba při ukládání příznaku online módu, už se online režim sám nezapíná.</li>
+<li>Zavedena možnost vypnout ukládat mapy na disk.</li>
+<li>Zoomování kolečkem keše na myší nebo záměrným křížem zůmuje vůči nad keši nebo středu kříže.
+(Prostě keš ani kříž už neposkakují po mapě).</li>
+<li>Nová funkce: Jít / Na střed.</li>
+<li>Odstraněna duplicita klávesových zkratek Alt-F5.</li>
+<li>Už se otevírá listing na GC.COM jen jednou.</li>
+<li>Alt-F8 lze teď použít na přepínání nastavené velikosti kruhů a velikosti jednotkové (10m, 100m, 1km, 10km atd.)</li>
+<li>Vybraný skin se uschová do preferencí.</li>
+</ul></div>
+
+<h3>6.1.2010 - Verze 1.8</h3>
+<div class="odsad"><ul>
+<li>Odstraněna chyba, kdy se shroutilo načítání GPX, pokud tam
+byl waypoint se souřdnicemi mimo rozsah Geokuku, tedy mimo rozsah map na mapy.cz.</li>
+
+<li>Podpora megaeventů.</li>
+<li>Podpora skinování v samostatném menu Skin.</li>
+<li>Drobná spolupráce s geogetem. </li>
+<li>V kontextovém menu, v menu Kešky a klávesou F7 se
+vloží plné URL na listing keše do schránky, na což zareaguje spuštěný Geoget
+vložením keše do seznamu, nebo vyhledání v něm.</li>
+<li>V menu "výlety" je možné celý výlet odeslat do Geogetu
+tak, že se postupně vkládají URL všech keší do schránky, na což
+reaguje otevřený Geoget jejich zobrazením v seznamu. Před použím
+této funkce je vhodné mít seznam v Geogetu promazán.</li>
+</ul></div>
+
+<h3>5.1.2010 - Verze 1.7</h3>
+<div class="odsad"><ul>
+<li>EDIT 7.1.2010: Odstraněno Alt-F4, nevylučuji, že to bylo v jiné verzi ;-)</li>	
+<li>Ve full screen režimu fungují klávesové zkratky.</li>
+<li>Možnost zvýraznit mapu kolem waypointů pomocí kruhů (podobně jako vzdálenost 161 metrů). Rozdíl je v tom, že kruhy mají 
+vždy stejnou velikost pro všechna měřítka, jsou u všech druhů waypointů, ale jen u těch zobrazených. Velikost kruhu, jeho barvu a průhlednost lze nastavit.</li>
+<li>Při najetí myši nad waypoint se zobrazují všechny waypointy keše i ty, které byly pomocí filtrů zhasnuty,
+nezobrazuje se podklad ikony (obdélník s kulatými rohy) a žlutý kruh se vykresluje dříve
+než ikony, takže nedochází k překrytí ikon žlutým kruhem, pokud jsou stage blízko sebe.</li>
+<li>Nová volba v menu "Jít", která přesune na pozici záměrného kříže.</li>
+<li>Nové volby, které přesunou na referenční body z Geogetu dle souboru <tt>geohome.ini</tt>. Musí všakj být nastaven datový
+adresář geogetu v "Soubor/Umístění souborů" (to je také nová položka). Pokud 
+nepoužíváte Geoget a chcete použít tuto funkcinalitu, lze soubor vytvořit ručně textovým editorem. Příklad:
+<pre>
+49.284 16.3563 Doma
+49.28745 16.9866333333333 Babička
+49.20805 16.5995833333333 Chata
+</pre>
+</li>
+<li>Červený záměrný kříž označující aktuální pozici se zvýrazní, pokud se k němu přiblíží ukazatel myši. (Příprava na kontextové menu.)
+</ul></div>
+
+<h3>3.1.2010 - Verze 1.6.3</h3>
+<div class="odsad"><ul>
+<li>Při vyčerpání paměti se zobrazí chybová hláška a program se ukončí, protože tento stav může vést k mnoha nestabilitám.</li>
+<li>Poté co se začnou nastavení (preference)) ukládat k souboru, je tato položka v menu šedá. Odšedit lze smazáním souboru a restartem Geokuku.</li>
+<li>Zablokována volba "bez mapy", protože nefunguje a pak program nejde nastartovat bez vymazání preferencí.</li>
+</ul></div>
+
+<h3>29.12.2009 - Verze 1.6.2</h3>
+<div class="odsad"><ul>
+<li>Oprava ikony na ploše a v menu při spuštění přes Java WebStart</li>
+<li>Pokud není k dispozici jar v souboru (napřklad při spouštění přes Java WebStart),
+nezobrazuje se složka s tímto jarem a není ani možnost složky a soubory určovat relativně k 
+tomuto jaru. Jsou relativně k aktuální složce.</li>
+</ul></div>
+
+<h3>27.12.2009 - Verze 1.6.1</h3>
+<div class="odsad"><ul>
+<li>Oprava zobrazování stavového řádku. Nezobrazovaly se celé údaje.
+</ul></div>
+
+
+<h3>27.12.2009 - Verze 1.6</h3>
+<div class="odsad"><ul>
+<li>Jména souborů a složek lze nyní zadávat relativně k programu (soubor geokuk.jar), relativně k aktuální složce
+a absolutně. Už se všechny cesty nepřevádějí na absolutní. Modře je v dialogu vždy znázorněna
+plná aktuální cesta, ale ta se počítá.</li>
+<li>Je možné nastavení uložit do souboru "geokuk-preferences.xml" vedle souboru geokuk.jar.
+Pokud tento soubor je při spuštění nalezen a je novější než data v proeferencích, dostává přednost.
+To umožňuje používat přenostnou instalaci (na flash disku) a dokonce střídat přenostnou a pevnou 
+instalaci programu.</li>
+<li>Složka pro výjimky již opět nastavit nelze, ale byla nasměrována do dočasného adresáře.
+Její jméno lze zjistit v <i>Umístění souborů</i>.</li>
+<li>Oprava vypisovaného čísla řádku při chybě čtení ze souboru (nebyl tam započten řádek hlavičky)</li>
+<li>Při chybě způsobené čtením ze souboru se do výjimky vkládá i plné jméno souboru, nejen číslo řádku.</li>
+<li>Pokud se vyskytne taková chyba, že ani nejde uložit výjimku do souboru,
+vypíše se tato na standardní výstup, aby se dala analyzovat příčina. Dříve tam byla nesmyslná hláš "tak yeda"
+(nebo tak nějak :-)</li>
+<li>Snížena výška stavového řádku. Všechny údaje jsou zde stejným způsobem a všechny jsou 
+vybratelné a zkopírovatelné do clipboardu.</li>
+<li>Zmenšena tlačítka v detailu keše a přidána tlačítka pro manipulaci s výlety.</li>
+<li>Plynulé otáčení azimutu.</li>
+<li>Při spouštění programu přes <tt> java -jar geokuk.jar</tt> se zobrazá splash screen. Nefunguje
+při spouštění přes Java WebStart.</li>
+</ul></div>
+
+<h3>23.12.2009 - Verze 1.5</h3>
+<div class="odsad"><ul>
+<li>Zůmování na oblast, kde jsou vybrány keše na výlet (v menu Vylet).</li>
+<li>Kontextové menu pravým tlačíkem myši nad keší a tam nějaké prvotní volby.
+Z nových funkcí je to nazůmování oblasti s vybranými kešemi pro výlet.</li>
+<li>Rozchozen dotaz na aktualizace programu v menu "Nápověda".</li>
+<li>Samostatně stahovatelný jar se jmenuje a nadále bude jmenovat vždy <tt>"geokuk.jar"</tt>.
+To proto, ayb ti, kterří si jar stahují nemuseli měnit skripty. Verzi pak lze
+vyčíst ze souboru v jaru: "META-INF/MANIFEST.MF".
+Jar stahovaný pomocí Java WebStart verzi obsahuje, protože kdyby se jeho jméno neměnilo,
+nové verze bychom se asi nedočkali.</li>
+</ul></div>
+
+<h3>22.12.2009 - Verze 1.4</h3>
+<div class="odsad"><ul>
+<li>Zůmování výběrem myši. - S držením shiftu vybereš obdélník a takto vybraná oblast
+se nazůmuje.</li>
+<li>Nová položka v menu, která nastavní mapu na celou Českou republiku.</li>
+</ul></div>
+                    
+<h3>21.12.2009 - Verze 1.3</h3>
+<div class="odsad"><ul>
+<li>Podpora locationlessek.</li>
+<li>Full screen režim (klávesa F11).</li>
+<li>V importovaném souboru <tt>*.geokuk</tt> povolena čárka v hodnotách obtížnosti a terénu.</li>
+<li>Pokud vstoupí datum uložení keše ve formátu YYYMMDD, správně česky se naformátuje na DD.MM.YYYY.</li>
+<li>Pokud v souboru s kešemi bude na místě některého s atributů hodnocení či bestof "?" otazník,
+zobrazí se pak v detailu keše otazník. Otazník se zobnrazí i v případě, kdy keš
+pochází z GPX souboru.</li>
+<li>Maximální číslo hodnocení ve spineru v toolbáru odpovídá hodnocení nejlepší načtené keše.
+Spinery zešednou, pokud nelze dle hodnocení vybírat.</li>
+</ul></div>
+
+<h3>20.12.2009 - Verze 1.2</h3>
+<div class="odsad"><ul>
+<li>Je možné nastavit umístění složek a souborů se kterými GeoKuk pracuje.</li>
+<li>Odstraněna chyba vykreslování, kdy zůstávaly nevykreslené půlky kešek.</li>
+<li>Opravena chyba přetečení zásobníku při vyhledávání keší podle jména a z toho důvodu vypisovaných zbytečných výjimek.</li>
+</ul></div>
+<h3>17.12.2009 - Verze 1.1</h3>
+<div class="odsad"><ul>
+<li>Podpora načítání GPX (zkoušeno na PQ) a zip s GPX.</li>
+<li>Načítají se všechny soubory s příponami zip, geokuk a gpx
+ze složky "geokuk" v profilu uživatele.</li>
+<li>Slidovníky vpravo na obrazovce pro obládání sytosti 161 metropvé hranice jsou funkční.</li>
+<li>Opraveny nesmyslný tooltip.</li>
+<li>Opravena práce s URL (nepovedená optimalizace paměti). Nyní může být URL jakékoli.</li>
+<li>Azimut ve statusbaru zobrazen kromě šipečky i číslem.</li>
+</ul></div>
+<h3>17.12.2009 - Verze 1.0</h3>
+<div class="odsad"><ul>
+<li>Prvotní veze programu.
+</ul></div>
+</body>
+</html>
