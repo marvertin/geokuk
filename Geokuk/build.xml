@@ -4,7 +4,7 @@
 	<property name="backupsrcdir" location="a:\\backup\\geokuk" />
 
 	<property name="imagesddir" location="${basedir}/src/cz/geokuk/image" />
-  <property file="../../web/data.properties" />
+  <property file="v:/users/tatinek/Heslo ke ftp.geokuk.cz na gigaserveru.properties" />
 
 	<tstamp>
 		<format property="touch.time" pattern="d.M.yyyy HH:mm" offset="0" unit="hour" />
@@ -55,7 +55,7 @@
 
 	<target name="clesses" depends="init, imagesdirlist">
 		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" endcoding="utf-8">
+		<javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" encoding="utf-8">
 			<src path="src" />
 			<classpath refid="GeoKuk.classpath" />
 		</javac>
@@ -117,6 +117,7 @@
 	<target name="build" depends="verzevestrance, jar, ikony, exe" />
 
   <target name="ftp" depends="build, src, backup">
+    <fail unless="heslisko" message="Soubor s heslem k ftp.geokuk.cz nebyl nalezen" />
     <ftp server="ftp.geokuk.cz" passive="yes"  userid="geokuk_cz" password="${heslisko}" remotedir="geokuk.cz" depends="yes" verbose="yes">
       <fileset dir="distrib" />
     </ftp>

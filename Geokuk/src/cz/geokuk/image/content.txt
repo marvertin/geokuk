@@ -574,7 +574,7 @@ map/Standard/skloNormal/5typy/wm!Mom and Pop Rock Shops.gif
 map/Standard/skloNormal/5typy/wm!Monarchs of the World.gif
 map/Standard/skloNormal/5typy/wm!Monopoly in the Real World.gif
 map/Standard/skloNormal/5typy/wm!Montana Historical Markers.gif
-map/Standard/skloNormal/5typy/wm!Monuments Historiques Français.gif
+map/Standard/skloNormal/5typy/wm!Monuments Historiques Francais.gif
 map/Standard/skloNormal/5typy/wm!Moon Trees.gif
 map/Standard/skloNormal/5typy/wm!Moose Lodges and Centers.gif
 map/Standard/skloNormal/5typy/wm!Mormon Temples.gif
@@ -716,7 +716,7 @@ map/Standard/skloNormal/5typy/wm!Plank Roads.gif
 map/Standard/skloNormal/5typy/wm!Play Ball!.gif
 map/Standard/skloNormal/5typy/wm!Police Memorials.gif
 map/Standard/skloNormal/5typy/wm!Police Stations.gif
-map/Standard/skloNormal/5typy/wm!Ponce de León.gif
+map/Standard/skloNormal/5typy/wm!Ponce de Leon.gif
 map/Standard/skloNormal/5typy/wm!Pony Express Monuments.gif
 map/Standard/skloNormal/5typy/wm!Population Signs.gif
 map/Standard/skloNormal/5typy/wm!Portugal Geodetic Points.gif
@@ -929,7 +929,7 @@ map/Standard/skloNormal/5typy/wm!Veteran Cemeteries.gif
 map/Standard/skloNormal/5typy/wm!Victorian Houses.gif
 map/Standard/skloNormal/5typy/wm!Victorian Post Boxes.gif
 map/Standard/skloNormal/5typy/wm!Video Arcades.gif
-map/Standard/skloNormal/5typy/wm!Vietnam POW[lomítko]MIA Monuments.gif
+map/Standard/skloNormal/5typy/wm!Vietnam POW[lomitko]MIA Monuments.gif
 map/Standard/skloNormal/5typy/wm!Vietnam War Memorials.gif
 map/Standard/skloNormal/5typy/wm!Vintage Ad Locations.gif
 map/Standard/skloNormal/5typy/wm!Vintage Gas Stations.gif
@@ -968,7 +968,7 @@ map/Standard/skloNormal/5typy/wm!Welcome Signs.gif
 map/Standard/skloNormal/5typy/wm!Wendy's Restaurants.gif
 map/Standard/skloNormal/5typy/wm!Wesleyan Churches.gif
 map/Standard/skloNormal/5typy/wm!West Virginia Historical Markers.gif
-map/Standard/skloNormal/5typy/wm!Where's In A Name [otazník].gif
+map/Standard/skloNormal/5typy/wm!Where's In A Name [otaznik].gif
 map/Standard/skloNormal/5typy/wm!Whispering Giant Sculptures.gif
 map/Standard/skloNormal/5typy/wm!White Castle.gif
 map/Standard/skloNormal/5typy/wm!Whitewater Rafting Trips.gif
