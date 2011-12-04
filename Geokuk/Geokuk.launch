@@ -13,5 +13,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="cz.geokuk.core.program.GeokukMain"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Geokuk"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea&#13;&#10;-D...prefroot=develop&#13;&#10;-Dhttp.proxyHost=wwwproxy&#13;&#10;-Dhttp.proxyPort=3128"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea&#13;&#10;-Dprefroot=develop&#13;&#10;-D....http.proxyHost=wwwproxy&#13;&#10;-D....http.proxyPort=3128"/>
 </launchConfiguration>

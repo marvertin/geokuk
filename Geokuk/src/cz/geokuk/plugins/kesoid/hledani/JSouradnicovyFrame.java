@@ -42,8 +42,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
@@ -59,11 +57,14 @@ import cz.geokuk.core.coord.VyrezChangedEvent;
 import cz.geokuk.core.coord.VyrezModel;
 import cz.geokuk.core.coordinates.CoordinateConversionOriginal;
 import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.core.coordinates.WgsParser;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
 public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiverRegistrationInit, DocumentListener {
+
+  private static final Double SPATNY_FORMAT = Double.NEGATIVE_INFINITY;
 
   private static final long serialVersionUID = 7087453419069194768L;
 
@@ -72,15 +73,9 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   private static final double DELKA_MIN =  0;
   private static final double DELKA_MAX = 40;
 
-  private static final Pattern pat =
-    Pattern.compile(" *[nNeE]? *(?:([0-9]+\\.?[0-9]*) *[° ] *(?:([0-9]+\\.?[0-9]*) *[' ] *(?:([0-9]+\\.?[0-9]*) *[\" ] *)?)?)?[nNeE]? *");
-  //  Pattern.compile(" *[nNeE]? *([0-9]+\\.?[0-9]*) *[° ] *(?:([0-9]+\\.?[0-9]*) *[°' ] *)?(?:([0-9]+\\.?[0-9]*) *[\" ])?");
-  private static final Double SPATNY_FORMAT = Double.NEGATIVE_INFINITY;
 
-  private JTextField jSirka;
-  private JTextField jDelka;
-  private JLabel jSirkaLabel;
-  private JLabel jDelkaLabel;
+  private JTextField jSouEdit;
+  private JLabel jSouEditLabel;
   private JButton jButtonCentruj;
   private JLabel jHotovaSirka;
   private JLabel jHotovaDelka;
@@ -107,8 +102,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   public JSouradnicovyFrame() {
     setTitle("Zadání souřadnic");
     init();
-    jSirka.getDocument().addDocumentListener(this);
-    jDelka.getDocument().addDocumentListener(this);
+    jSouEdit.getDocument().addDocumentListener(this);
 
     registerEvents();
 
@@ -143,17 +137,13 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   @Override
   protected void initComponents() {
     String tooltip = "Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny)," +
-    " jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. " +
-    " Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
-    jSirka = new JTextField();
-    jSirka.setToolTipText(tooltip);
-    jDelka = new JTextField();
-    jDelka.setToolTipText(tooltip);
+        " jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. " +
+        " Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
+    jSouEdit = new JTextField();
+    jSouEdit.setToolTipText(tooltip);
 
-    jSirkaLabel = new JLabel("Šířka: ");
-    jSirkaLabel.setLabelFor(jSirka);
-    jDelkaLabel = new JLabel("Délka: ");
-    jDelkaLabel.setLabelFor(jDelka);
+    jSouEditLabel = new JLabel("Souřadnice: ");
+    jSouEditLabel.setLabelFor(jSouEdit);
 
     jButtonCentruj = new JButton("Centruj");
     jButtonCentruj.setToolTipText("Centruje mapu na zadaných souřadnicích.");
@@ -186,51 +176,43 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
     layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(jSirkaLabel)
-                .addComponent(jDelkaLabel)
+                .addComponent(jSouEditLabel)
+                )
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jSouEdit)
+                    )
             )
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(jSirka)
-                .addComponent(jDelka)
-            )
-        )
-        .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(jHotovaSirka)
-                .addComponent(jHotovaDelka)
-            )
-            .addComponent(jButtonCentruj)
-        )
-        .addComponent(jUtm)
-    );
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jHotovaSirka)
+                    .addComponent(jHotovaDelka)
+                    )
+                    .addComponent(jButtonCentruj)
+                )
+                .addComponent(jUtm)
+        );
 
     layout.setVerticalGroup(layout.createSequentialGroup()
         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup()
-                    .addComponent(jSirkaLabel)
-                    .addComponent(jSirka)
-                )
-                .addGroup(layout.createParallelGroup()
-                    .addComponent(jDelkaLabel)
-                    .addComponent(jDelka)
+                    .addComponent(jSouEditLabel)
+                    .addComponent(jSouEdit)
+                    )
                 )
             )
-        )
-        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jHotovaSirka)
-                .addComponent(jHotovaDelka)
-            )
-            .addComponent(jButtonCentruj)
-        )
-        .addComponent(jUtm)
-    );
-    jSirka.setPreferredSize(new Dimension(100, jSirka.getPreferredSize().height));
-    jDelka.setPreferredSize(new Dimension(100, jDelka.getPreferredSize().height));
-    jSirka.setText("");
-    jDelka.setText("");
-    entryBg = jSirka.getBackground();
+            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(jHotovaSirka)
+                    .addComponent(jHotovaDelka)
+                    )
+                    .addComponent(jButtonCentruj)
+                )
+                .addComponent(jUtm)
+        );
+    jSouEdit.setPreferredSize(new Dimension(150, jSouEdit.getPreferredSize().height));
+    jSouEdit.setText("");
+    entryBg = jSouEdit.getBackground();
     edituj();
 
   }
@@ -239,10 +221,8 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
     if (wgs.equals(souradniceReferencni)) return;
     souradniceReferencni = wgs;
     if (!souradniceNastavenyRukama) {
-      jDelka.setText(Wgs.toGeoFormat(wgs.lon));
-      jSirka.setText(Wgs.toGeoFormat(wgs.lat));
-      jSirka.selectAll();
-      jDelka.selectAll();
+      jSouEdit.setText(Wgs.toGeoFormat(wgs.lat) + " ; " + Wgs.toGeoFormat(wgs.lon));
+      jSouEdit.selectAll();
       souradniceNastavenyRukama = false; // toto se může zdát zbytečné, ale řádky před tím to změní
     }
     edituj();
@@ -251,14 +231,16 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   private void edituj() {
     //if (souradnice == null) return;
     boolean ok;
-    double sirka = parseCela(jSirka.getText());
-    double delka = parseCela(jDelka.getText());
-    boolean okSirka = aplikuj(jHotovaSirka, jSirka, sirka, SIRKA_MIN, SIRKA_MAX);
-    boolean okDelka = aplikuj(jHotovaDelka, jDelka, delka, DELKA_MIN, DELKA_MAX);
+    Wgs wgs = new WgsParser().parsruj(jSouEdit.getText());
+    if (wgs == null) { // prizpusobeni puvodni verzi
+      wgs = new Wgs(SPATNY_FORMAT, SPATNY_FORMAT);
+    }
+    boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, wgs.lat, SIRKA_MIN, SIRKA_MAX);
+    boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, wgs.lon, DELKA_MIN, DELKA_MAX);
     ok = okSirka && okDelka;
     if (ok) {
-      souradniceEditovane = new Wgs(sirka, delka);
-      jUtm.setText(konvertor.latLon2UTM(sirka, delka));
+      souradniceEditovane = wgs;
+      jUtm.setText(konvertor.latLon2UTM(wgs.lat, wgs.lon));
     } else {
       jUtm.setText("UTM = ?");
     }
@@ -280,8 +262,8 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
    */
   private boolean jsmeVycentrovaniSeZadanouPozici() {
     boolean jsmeNaMiste =
-      (souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni))
-      && vyrezModel.isPoziceUprostred();
+        (souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni))
+        && vyrezModel.isPoziceUprostred();
     return jsmeNaMiste;
   }
 
@@ -313,25 +295,6 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
       }
     }
     return ok;
-  }
-
-  private double parseCela(String s) {
-    s = s.replace(',', '.').replaceAll("([nNeE])", " $1") + " "; // mezera, aby byl jistě nějaký ukončovač
-    Matcher mat = pat.matcher(s);
-    double x;
-    if (mat.matches()) {
-      x = parseOne(mat.group(1)) + parseOne(mat.group(2))/60 + parseOne(mat.group(3))/3600;
-    } else {
-      //System.out.println(s + " - " + mat.toMatchResult());
-      x= SPATNY_FORMAT;
-    }
-    return x;
-  }
-
-  private double parseOne(String s) {
-    if (s == null || s.length() == 0) return 0;
-    double result = Double.parseDouble(s);
-    return result;
   }
 
   // DocumentListener methods
@@ -367,10 +330,8 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
     @Override
     public void actionPerformed(ActionEvent ev) {
       //      hilit.removeAllHighlights();
-      jSirka.setText("");
-      jDelka.setText("");
-      jSirka.setBackground(entryBg);
-      jDelka.setBackground(entryBg);
+      jSouEdit.setText("");
+      jSouEdit.setBackground(entryBg);
     }
   }
 

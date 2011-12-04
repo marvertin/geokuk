@@ -80,7 +80,7 @@ public class Wgs implements Mouable {
   public static String toGeoFormat(double d) {
     double stupne = Math.floor(d);
     double minuty = (d - stupne) * 60.0;
-    String s = String.format("%02d°%06.3f", (int)stupne, minuty);
+    String s = String.format("%02d°%06.3f", (int)stupne, minuty).replace(',', '.');
     return s;
   }
 
