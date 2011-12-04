@@ -12,11 +12,6 @@ import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 
-
-/**
- * 
- */
-
 /**
  * @author veverka
  *
@@ -33,19 +28,19 @@ public class NacitacGeokuk extends Nacitac0 {
    */
   @Override
   protected void nactiKdyzUmis(InputStream aIstm, String aJmeno, IImportBuilder builder, Future<?> future) throws IOException {
+    if (! aJmeno.toLowerCase().trim().endsWith(".geokuk")) return; // umíme jen GPX
 
     BufferedReader rdr = new BufferedReader(new InputStreamReader(aIstm, Charset.forName("UTF8")));
 
-    if (! aJmeno.toLowerCase().trim().endsWith(".geokuk")) return; // umíme jen GPX
-
     String hlavicka = rdr.readLine();
-    if (hlavicka.charAt(0) == 0xfeff) hlavicka = hlavicka.substring(1);
+    if (hlavicka.charAt(0) == 0xfeff) {
+      hlavicka = hlavicka.substring(1);
+    }
     System.out.println(Integer.toHexString(hlavicka.charAt(0)));
-    if (! HLAVICKA.equals(hlavicka)) {
+    if (! HLAVICKA.equals(hlavicka))
       throw new RuntimeException("Přečtena hlavička: \"" + hlavicka +
           "\", ale má tam být\"" + HLAVICKA +
-      "\"");
-    }
+          "\"");
     String line;
     int linenumber = 1;  // máme přeci přečtnou hlavičku
     int ncaches = 0;
@@ -59,7 +54,9 @@ public class NacitacGeokuk extends Nacitac0 {
       try {
         linenumber++;
         line = line.trim();
-        if (line.length() == 0) continue;
+        if (line.length() == 0) {
+          continue;
+        }
         char cmd = line.charAt(0);
         String[] pp = line.substring(1).split("\\|",19);
 
@@ -90,13 +87,19 @@ public class NacitacGeokuk extends Nacitac0 {
           break;
         }
         case '-': {
-          if (gpxwpt == null) gpxwpt = new GpxWpt();
+          if (gpxwpt == null) {
+            gpxwpt = new GpxWpt();
+          }
           gpxwpt.name = pp[0] + jmenoAktualniKese.substring(2);
-          if (gpxwpt.sym == null) gpxwpt.sym = pp[1];
+          if (gpxwpt.sym == null) {
+            gpxwpt.sym = pp[1];
+          }
           gpxwpt.wgs = new Wgs(Double.parseDouble(pp[2]),Double.parseDouble(pp[3]));
           String nazev = pp.length > 4 ? pp[4] : "";
           gpxwpt.cmt = nazev;
-          if (gpxwpt.groundspeak != null) gpxwpt.groundspeak.name = nazev;
+          if (gpxwpt.groundspeak != null) {
+            gpxwpt.groundspeak.name = nazev;
+          }
           builder.addGpxWpt(gpxwpt);
           gpxwpt = null;
           nwpts ++;

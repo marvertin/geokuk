@@ -7,6 +7,7 @@ import cz.geokuk.core.coord.NastavMapuCeskaAction;
 import cz.geokuk.core.coord.OddalMapuAction;
 import cz.geokuk.core.coord.PosouvejSipkamiAction;
 import cz.geokuk.core.coord.PriblizMapuAction;
+import cz.geokuk.core.coord.SouradniceDoClipboarduAction;
 import cz.geokuk.core.coordinates.ESmer;
 import cz.geokuk.core.napoveda.OProgramuAction;
 import cz.geokuk.core.napoveda.WebovaStrankaAction;
@@ -207,5 +208,7 @@ public class Akce {
   public final PosouvejSipkamiAction posouvejSipkamiRychleVYCHOD = new PosouvejSipkamiAction(ESmer.VYCHOD, true);
   public final PosouvejSipkamiAction posouvejSipkamiRychleJIH = new PosouvejSipkamiAction(ESmer.JIH, true);
   public final PosouvejSipkamiAction posouvejSipkamiRychleZAPAD = new PosouvejSipkamiAction(ESmer.ZAPAD, true);
+
+  public final SouradniceDoClipboarduAction souradniceDoClipboarduAction = new SouradniceDoClipboarduAction(null);
 
 }

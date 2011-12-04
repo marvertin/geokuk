@@ -4,11 +4,16 @@
 package cz.geokuk.core.coord;
 
 import java.awt.Point;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
+import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.framework.Model0;
+import cz.geokuk.util.exception.EExceptionSeverity;
+import cz.geokuk.util.exception.FExceptionDumper;
 
 /**
  * @author veverka
@@ -73,6 +78,19 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
       fire(new PoziceChangedEvent(poziceq));
     }
   }
+
+  public void souradniceDoClipboardu(Mouable mouable) {
+    if (mouable == null) return;
+    Clipboard scl = getSystemClipboard();
+    Wgs wgs = mouable.getMou().toWgs();
+    StringSelection ss = new StringSelection(wgs.toString());
+    try {
+      scl.setContents(ss, null);
+    } catch (IllegalStateException e2) {
+      FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
+    }
+  }
+
 
   public void refreshPozice() {
     if (! poziceq.isNoPosition()) {

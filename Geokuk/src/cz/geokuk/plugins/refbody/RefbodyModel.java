@@ -2,8 +2,9 @@ package cz.geokuk.plugins.refbody;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import cz.geokuk.util.exception.FExceptionDumper;
 public class RefbodyModel extends Model0 {
 
   private static final Wgs DEFAULTNI_DOMACI_SOURADNICE = new Wgs(49.8, 15.5);
-  
+
   private Wgs hc;
 
   private Factory factory;
@@ -40,8 +41,8 @@ public class RefbodyModel extends Model0 {
   protected void initAndFire() {
     setHc(currPrefe().node(FPref.DOMACI_SOURADNICE_node).getWgs(FPref.HC_value, DEFAULTNI_DOMACI_SOURADNICE));
   }
-  
-  
+
+
   public List<NaKonkretniBodAction> nacti()  {
     // TODO Předělat načítání z Geogetu, nevhodně se zde kombinuje model a controlery
     final List<NaKonkretniBodAction> list = new ArrayList<NaKonkretniBodAction>();
@@ -50,13 +51,15 @@ public class RefbodyModel extends Model0 {
         .getEffectiveFile(), "geohome.ini");
     try {
       if (file.canRead()) {
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        // TODO prozkoumat, zda opravdu geogetí data jsou v tomto kódování
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "CP1250"));
         try {
           String line;
           while ((line = br.readLine()) != null) {
             String[] aa = line.split(" +", 3);
-            if (aa.length != 3)
+            if (aa.length != 3) {
               continue;
+            }
             try {
               Wgs wgs = new Wgs(Double.parseDouble(aa[0]), Double
                   .parseDouble(aa[1]));
@@ -65,7 +68,7 @@ public class RefbodyModel extends Model0 {
             } catch (Throwable e) {
               FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND,
                   "Pokus nacist data ze souboru " + file + ", radek "
-                  + (list.size() + 1));
+                      + (list.size() + 1));
             }
           }
         } finally {
@@ -78,19 +81,20 @@ public class RefbodyModel extends Model0 {
     } catch (IOException e) {
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND,
           "Pokus nacist data ze souboru " + file + ", radek "
-          + (list.size() + 1));
+              + (list.size() + 1));
       return list;
     }
   }
 
+  @Override
   public void inject(Factory factory) {
     this.factory = factory;
   }
-  
+
   public void inject(KesoidModel kesoidModel) {
     this.kesoidModel = kesoidModel;
   }
-  
-  
-  
+
+
+
 }

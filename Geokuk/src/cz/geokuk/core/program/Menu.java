@@ -68,6 +68,7 @@ public class Menu extends MenuStrujce {
     item(akce.bezNaKonecCestyAction);
     item(akce.bezNaBodVpredAction);
     item(akce.bezNaBodVzadAction);
+    item(akce.souradniceDoClipboarduAction);
 
     List<NaKonkretniBodAction> geoHomeBodyAction = refbodyModel.nacti();
     if (geoHomeBodyAction.size() > 0) {

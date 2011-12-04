@@ -4,6 +4,7 @@
 package cz.geokuk.core.program;
 
 
+import java.nio.charset.Charset;
 import java.util.prefs.BackingStoreException;
 
 import javax.swing.SwingUtilities;
@@ -25,6 +26,7 @@ public class GeokukMain  {
 
   public void execute(String[] args) {
     FConst.logInit();
+    System.out.println("Default character encoding: " + Charset.defaultCharset());
     nastavSkin();
     Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler());
     promazPreferencePokudJeToPrikazano(args);
