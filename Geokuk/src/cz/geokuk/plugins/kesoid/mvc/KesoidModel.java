@@ -78,6 +78,7 @@ public class KesoidModel extends Model0 {
     pref.putFilex(FPref.GEOGET_DATA_DIR_value, umisteniSouboru.getGeogetDataDir());
     pref.putFilex(FPref.IMAGE_3RD_PARTY_DIR_value, umisteniSouboru.getImage3rdPartyDir());
     pref.putFilex(FPref.IMAGE_MY_DIR_value, umisteniSouboru.getImageMyDir());
+    pref.putFilex(FPref.ANO_GGT_FILE_value, umisteniSouboru.getAnoGgtFile());
     pref.putFilex(FPref.NE_GGT_FILE_value, umisteniSouboru.getNeGgtFile());
     pref.remove("vyjimkyDir"); // mazat ze starych verzi
     blokovaneZdroje = currPrefe().node(FPref.KESOID_node).getStringSet(FPref.BLOKOVANE_ZDROJE_value, new HashSet<String>());
@@ -182,6 +183,7 @@ public class KesoidModel extends Model0 {
     u.setGeogetDataDir ( pref.getFilex("geogetDataDir", KesoidUmisteniSouboru.GEOGET_DATA_DIR));
     u.setImage3rdPartyDir ( pref.getFilex("image3rdPartyDir", KesoidUmisteniSouboru.IMAGE_3RDPARTY_DIR));
     u.setImageMyDir ( pref.getFilex("imageMyDir", KesoidUmisteniSouboru.IMAGE_MY_DIR));
+    u.setAnoGgtFile ( pref.getFilex(FPref.ANO_GGT_FILE_value, KesoidUmisteniSouboru.ANO_GGT));
     u.setNeGgtFile ( pref.getFilex(FPref.NE_GGT_FILE_value, KesoidUmisteniSouboru.NE_GGT));
     return u;
   }

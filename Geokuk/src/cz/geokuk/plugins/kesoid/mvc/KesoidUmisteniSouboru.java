@@ -26,6 +26,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
 
   //  public static final Filex KESOID_CACHE_DIR = new Filex(new File(PRCHAVE_DIR, "kesoids"), false, true);
 
+  public static final Filex ANO_GGT = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "lovim.ggt"), false, true);
   public static final Filex NE_GGT = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "tedne.ggt"), false, true);
 
   private Filex kesDir;
@@ -34,6 +35,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
   private Filex imageMyDir;
 
   private Filex neGgtFile;
+  private Filex anoGgtFile;
 
 
 
@@ -68,12 +70,29 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
   }
 
   /**
+   * @param neGgtFile the neGgtFile to set
+   */
+  public void setAnoGgtFile(Filex anoGgtFile) {
+    this.anoGgtFile = anoGgtFile;
+  }
+
+
+  /**
    * @return the neGgtFile
    */
   public Filex getNeGgtFile() {
     check(kesDir);
     return neGgtFile;
   }
+
+  /**
+   * @return the neGgtFile
+   */
+  public Filex getAnoGgtFile() {
+    check(kesDir);
+    return anoGgtFile;
+  }
+
 
   public Filex getGeogetDataDir() {
     return geogetDataDir;
@@ -111,6 +130,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
     result = prime * result + ((imageMyDir == null) ? 0 : imageMyDir.hashCode());
     result = prime * result + ((kesDir == null) ? 0 : kesDir.hashCode());
     result = prime * result + ((neGgtFile == null) ? 0 : neGgtFile.hashCode());
+    result = prime * result + ((anoGgtFile == null) ? 0 : anoGgtFile.hashCode());
     return result;
   }
 
@@ -150,6 +170,11 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
       if (other.neGgtFile != null)
         return false;
     } else if (!neGgtFile.equals(other.neGgtFile))
+      return false;
+    if (anoGgtFile == null) {
+      if (other.anoGgtFile != null)
+        return false;
+    } else if (!anoGgtFile.equals(other.anoGgtFile))
       return false;
     return true;
   }

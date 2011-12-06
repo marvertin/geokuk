@@ -14,12 +14,12 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
 
   public VyletActionIndividual0(String string, Kesoid kes) {
     super(string);
-    this.kespevna = kes;
+    kespevna = kes;
     setEnabled(false);
   }
 
   public void onEvent(PoziceChangedEvent aEvent) {
-    Wpt wpt = aEvent.pozice.getWpt();
+    Wpt wpt = aEvent.poziceq.getWpt();
     if (wpt != null) {
       kesdocasna = wpt.getKesoid();
       enablujPokudMaSmysl();
@@ -28,7 +28,7 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
       setEnabled(false);
     }
   }
-  
+
   @Override
   protected void vyletChanged() {
     super.vyletChanged();
@@ -37,7 +37,7 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
     }
   }
 
-  protected abstract void enablujPokudMaSmysl(); 
+  protected abstract void enablujPokudMaSmysl();
 
   /* (non-Javadoc)
    * @see cz.geokuk.program.AfterInjectInit#initAfterInject()
@@ -48,7 +48,7 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
       enablujPokudMaSmysl();
     }
   }
-  
+
   protected Kesoid kesoid() {
     if (kespevna != null) return kespevna;
     return kesdocasna;

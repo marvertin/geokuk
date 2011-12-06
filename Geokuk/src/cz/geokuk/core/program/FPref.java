@@ -42,6 +42,7 @@ public class FPref {
   public static final String MRIZKA_node = "mrizka";
   public static final String NASTAVENI_node    = "nastaveni";
   public static final String NE_GGT_FILE_value = "neGgtFile";
+  public static final String ANO_GGT_FILE_value = "anoGgtFile";
   public static final String NODE_KTERE_MAPY_node = "kteremapy";
 
   public static final String OKNO_structure_node = "okno";

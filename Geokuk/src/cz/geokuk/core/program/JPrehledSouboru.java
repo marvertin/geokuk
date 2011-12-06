@@ -39,6 +39,7 @@ public class JPrehledSouboru extends JPanel {
 
   private JJedenSouborPanel jKesDir;
   private JJedenSouborPanel jNeGgtFile;
+  private JJedenSouborPanel jAnoGgtFile;
   private JJedenSouborPanel jKachleCacheDir;
 
   private JJedenSouborPanel jGeogetDataDir;
@@ -92,6 +93,7 @@ public class JPrehledSouboru extends JPanel {
     jGeogetDataDir =  pridejJednuPolozkuproEdit(null, tab1, "Datová složka geogetu.", true, true);
 
     jNeGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, na které teď na výlet nepůjdeme (GGT pro Geoget).",  false,  false);
+    jAnoGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, které se chysáme jít lovit (GGT pro Geoget).",  false,  false);
     jImage3rdPartyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s rozšiřujícími obrázky jiných geokolegů.",  true, true);
     jImageMyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s mými vlastními rozšiřujícími obrázky.", true, true);
 
@@ -148,6 +150,7 @@ public class JPrehledSouboru extends JPanel {
             u.setImage3rdPartyDir(jImage3rdPartyDir.vezmiSouborAProver());
             u.setImageMyDir(jImageMyDir.vezmiSouborAProver());
             u.setNeGgtFile(jNeGgtFile.vezmiSouborAProver());
+            u.setAnoGgtFile(jAnoGgtFile.vezmiSouborAProver());
             kesoidModel.setUmisteniSouboru(u);
           }
           {
@@ -221,6 +224,7 @@ public class JPrehledSouboru extends JPanel {
     jGeogetDataDir.setFilex(u.getGeogetDataDir());
 
     jNeGgtFile.setFilex(u.getNeGgtFile());
+    jAnoGgtFile.setFilex(u.getAnoGgtFile());
     jImage3rdPartyDir.setFilex(u.getImage3rdPartyDir());
     jImageMyDir.setFilex(u.getImageMyDir());
   }
