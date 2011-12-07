@@ -1,0 +1,91 @@
+package cz.geokuk.plugins.cesty.akce;
+
+
+import javax.swing.Icon;
+
+import cz.geokuk.framework.Action0;
+import cz.geokuk.framework.AfterInjectInit;
+import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
+import cz.geokuk.plugins.cesty.VyletChangedEvent;
+import cz.geokuk.plugins.cesty.VyletModel;
+import cz.geokuk.plugins.cesty.data.Cesta;
+import cz.geokuk.plugins.cesty.data.Doc;
+
+
+
+public abstract class VyletAction0 extends Action0 implements AfterInjectInit {
+
+  private static final long serialVersionUID = -2637836928166450446L;
+
+  protected VyletModel vyletModel;
+  private String puvodniJednoducheJmeno;
+
+  private boolean užPřišelHlavníEvent;
+
+  public VyletAction0() {
+    setEnabled(false);
+  }
+
+
+  @Override
+  public final void initAfterInject() {
+    puvodniJednoducheJmeno = (String) getValue(NAME);
+  }
+
+  @Override
+  public void setEnabled(boolean newValue) {
+    super.setEnabled(newValue);
+    if (! newValue) {
+      if (puvodniJednoducheJmeno != null) {
+        putValue(NAME, puvodniJednoducheJmeno);
+      }
+    }
+  }
+
+  public VyletAction0(String string) {
+    super(string);
+    setEnabled(false);
+  }
+
+  /**
+   * @param aString
+   * @param aSeekResIcon
+   */
+  public VyletAction0(String aString, Icon aIcon) {
+    super(aString, aIcon);
+    setEnabled(false);
+  }
+
+  public final void onEvent(VyletChangedEvent aEvent) {
+    //System.out.println("********* dorucen event na: " + System.identityHashCode(this) + ": " + getClass().getName());
+    aEvent.getDoc().kontrolaKonzistence();
+    užPřišelHlavníEvent = true;
+    vyletChanged();
+  }
+
+  public final void onEvent(IgnoreListChangedEvent aEvent) {
+    if (! užPřišelHlavníEvent) return; // ještě je čas
+    vyletChanged();
+  }
+
+
+  protected void vyletChanged() {
+  }
+
+
+  public final void inject(VyletModel vyletModel) {
+    this.vyletModel = vyletModel;
+
+  }
+
+  protected final Cesta curta() {
+    return vyletModel.getCurta();
+  }
+
+  protected final Doc curdoc() {
+    return vyletModel.getDoc();
+  }
+
+}
+
+

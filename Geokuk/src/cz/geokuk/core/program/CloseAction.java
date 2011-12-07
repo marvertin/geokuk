@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 
 import cz.geokuk.core.profile.ProfileModel;
 import cz.geokuk.framework.Action0;
-import cz.geokuk.plugins.vylety.akce.soubor.UlozAction;
+import cz.geokuk.plugins.cesty.akce.soubor.UlozAction;
 
 /**
  * @author veverka

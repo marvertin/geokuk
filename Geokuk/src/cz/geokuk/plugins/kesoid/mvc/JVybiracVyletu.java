@@ -8,9 +8,9 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
+import cz.geokuk.plugins.cesty.EVylet;
 import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
-import cz.geokuk.plugins.vylety.EVylet;
 
 public class JVybiracVyletu extends JComboBox implements AfterEventReceiverRegistrationInit {
 

@@ -18,8 +18,8 @@ import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.MouseGestureContext;
+import cz.geokuk.plugins.cesty.akce.VyletAnoAction;
 import cz.geokuk.plugins.geocoding.GeocodingBorowserXmlAction;
-import cz.geokuk.plugins.vylety.akce.VyletAnoAction;
 import cz.geokuk.util.lang.FUtil;
 
 public class JPozicovnikSlide extends JSingleSlide0 {

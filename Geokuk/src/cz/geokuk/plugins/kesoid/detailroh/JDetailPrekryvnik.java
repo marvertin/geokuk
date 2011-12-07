@@ -13,7 +13,7 @@ import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.core.coord.ZmenaSouradnicMysiEvent;
 import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.plugins.vylety.PridavaniBoduEvent;
+import cz.geokuk.plugins.cesty.PridavaniBoduEvent;
 
 /**
  * @author veverka

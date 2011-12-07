@@ -1,8 +1,8 @@
 package cz.geokuk.framework;
 
 import cz.geokuk.core.coordinates.Mouable;
+import cz.geokuk.plugins.cesty.data.Bousek0;
 import cz.geokuk.plugins.kesoid.Wpt;
-import cz.geokuk.plugins.vylety.data.Bousek0;
 
 
 public class MouseGestureContext {

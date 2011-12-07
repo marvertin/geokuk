@@ -4,14 +4,14 @@ package cz.geokuk.plugins.kesoid;
 import java.util.HashSet;
 import java.util.Set;
 
+import cz.geokuk.plugins.cesty.EVylet;
+import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
+import cz.geokuk.plugins.cesty.VyletChangedEvent;
+import cz.geokuk.plugins.cesty.VyletModel;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
-import cz.geokuk.plugins.vylety.EVylet;
-import cz.geokuk.plugins.vylety.IgnoreListChangedEvent;
-import cz.geokuk.plugins.vylety.VyletChangedEvent;
-import cz.geokuk.plugins.vylety.VyletModel;
 import cz.geokuk.util.lang.FUtil;
 
 

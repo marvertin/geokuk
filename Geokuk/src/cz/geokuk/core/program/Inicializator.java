@@ -13,6 +13,9 @@ import cz.geokuk.framework.BeanBag;
 import cz.geokuk.framework.EventManager;
 import cz.geokuk.framework.Prefe;
 import cz.geokuk.framework.ProgressModel;
+import cz.geokuk.plugins.cesty.VyletModel;
+import cz.geokuk.plugins.cesty.VyletNacitaniKesoiduWatchDog;
+import cz.geokuk.plugins.cesty.VyletovyZperzistentnovac;
 import cz.geokuk.plugins.geocoding.GeocodingModel;
 import cz.geokuk.plugins.kesoid.KesFilter;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
@@ -25,9 +28,6 @@ import cz.geokuk.plugins.mapy.kachle.KachloDownloader;
 import cz.geokuk.plugins.mrizky.MrizkaModel;
 import cz.geokuk.plugins.refbody.HlidacReferencnihoBodu;
 import cz.geokuk.plugins.refbody.RefbodyModel;
-import cz.geokuk.plugins.vylety.VyletModel;
-import cz.geokuk.plugins.vylety.VyletNacitaniKesoiduWatchDog;
-import cz.geokuk.plugins.vylety.VyletovyZperzistentnovac;
 
 /**
  * @author veverka

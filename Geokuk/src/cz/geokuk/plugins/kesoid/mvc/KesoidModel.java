@@ -12,6 +12,7 @@ import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.framework.MyPreferences;
 import cz.geokuk.framework.ProgressModel;
+import cz.geokuk.plugins.cesty.EVylet;
 import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.KesFilter;
@@ -24,7 +25,6 @@ import cz.geokuk.plugins.kesoid.mapicon.ASada;
 import cz.geokuk.plugins.kesoid.mapicon.FenotypPreferencesChangedEvent;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 import cz.geokuk.plugins.kesoid.mapicon.IkonNacitacManager;
-import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 

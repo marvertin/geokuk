@@ -38,6 +38,7 @@ import cz.geokuk.framework.JPresCelePrekryvnik;
 import cz.geokuk.framework.JSRohamaPrekryvnik;
 import cz.geokuk.framework.JSlidePozadi;
 import cz.geokuk.img.ImageLoader;
+import cz.geokuk.plugins.cesty.JCestySlide;
 import cz.geokuk.plugins.kesoid.JKesoidySlide;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetailContainer;
 import cz.geokuk.plugins.kesoid.detailroh.JDetailPrekryvnik;
@@ -55,7 +56,6 @@ import cz.geokuk.plugins.mrizky.JMeritkoSlide;
 import cz.geokuk.plugins.mrizky.JMrizkaDdMmMmm;
 import cz.geokuk.plugins.mrizky.JMrizkaDdMmSs;
 import cz.geokuk.plugins.mrizky.JMrizkaUtm;
-import cz.geokuk.plugins.vylety.JCestySlide;
 import cz.geokuk.util.gui.CornerLayoutManager;
 import cz.geokuk.util.gui.ERoh;
 

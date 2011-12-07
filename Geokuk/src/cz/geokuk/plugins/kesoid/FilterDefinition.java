@@ -7,7 +7,7 @@ import cz.geokuk.framework.Copyable;
 import cz.geokuk.framework.Preferenceble;
 import cz.geokuk.framework.PreferencebleIgnore;
 import cz.geokuk.framework.PreferencebleProperty;
-import cz.geokuk.plugins.vylety.EVylet;
+import cz.geokuk.plugins.cesty.EVylet;
 
 /**
  * @author veverka

@@ -31,6 +31,10 @@ import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.ProgressEvent;
 import cz.geokuk.framework.Progressor;
+import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
+import cz.geokuk.plugins.cesty.VyletChangedEvent;
+import cz.geokuk.plugins.cesty.VyletModel;
+import cz.geokuk.plugins.cesty.data.Doc;
 import cz.geokuk.plugins.kesoid.Ikonizer;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
@@ -38,10 +42,6 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
 import cz.geokuk.plugins.kesoid.mvc.PrekrocenLimitWaypointuVeVyrezuEvent;
-import cz.geokuk.plugins.vylety.IgnoreListChangedEvent;
-import cz.geokuk.plugins.vylety.VyletChangedEvent;
-import cz.geokuk.plugins.vylety.VyletModel;
-import cz.geokuk.plugins.vylety.data.Doc;
 
 /**
  * @author veverka
