@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.lovim;
+package cz.geokuk.plugins.vylety;
 
 
 import javax.swing.Icon;
@@ -30,13 +30,13 @@ public abstract class VyletAction0 extends Action0 {
   public final void onEvent(VyletChangeEvent aEvent) {
     vyletChanged();
   }
-  
+
   protected void vyletChanged() {
   }
 
 
   public void inject(VyletModel vyletModel) {
     this.vyletModel = vyletModel;
-    
+
   }
 }

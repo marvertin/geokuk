@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.lovim;
+package cz.geokuk.plugins.vylety;
 
 
 import java.awt.event.ActionEvent;

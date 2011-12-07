@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.lovim;
+package cz.geokuk.plugins.vylety;
 
 
 import java.io.BufferedReader;
@@ -21,7 +21,7 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 public class VyletovyZperzistentnovac {
 
   private int smimCist;
-  
+
   private KesoidModel kesoidModel;
 
   private VyletPul loadGgt(File file) throws IOException {
@@ -34,7 +34,9 @@ public class VyletovyZperzistentnovac {
       //FExceptionDumper.dump(e, EExceptionSeverity.CATCHE, "Nacitani vyletu.");
       return new VyletPul(new HashSet<String>());
     } finally {
-      if (filere != null) filere.close();
+      if (filere != null) {
+        filere.close();
+      }
     }
   }
 
@@ -54,7 +56,9 @@ public class VyletovyZperzistentnovac {
     Set<String> set = new HashSet<String>();
     while ((line = reader.readLine()) != null) {
       line = line.trim();
-      if (line.length() == 0) continue;
+      if (line.length() == 0) {
+        continue;
+      }
       set.add(line);
     }
     VyletPul vyletPul = new VyletPul(set);
@@ -88,12 +92,13 @@ public class VyletovyZperzistentnovac {
         }
         wrt.close();
       } catch (IOException e) {
-        if (wrt != null)
+        if (wrt != null) {
           try {
             wrt.close();
           } catch (IOException e1) { // co s tím jiného
           }
-          throw new RuntimeException(e);
+        }
+        throw new RuntimeException(e);
       }
     } finally {
       smimCist --;

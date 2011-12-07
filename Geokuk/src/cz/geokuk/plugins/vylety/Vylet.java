@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.lovim;
+package cz.geokuk.plugins.vylety;
 
 
 import java.util.Collections;
@@ -11,8 +11,8 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 
 public class Vylet {
 
-  private Set<Kesoid> ano = new HashSet<Kesoid>();
-  private Set<Kesoid> ne  = new HashSet<Kesoid>();
+  private final Set<Kesoid> ano = new HashSet<Kesoid>();
+  private final Set<Kesoid> ne  = new HashSet<Kesoid>();
 
 
   EVylet add(EVylet evyl, Kesoid kes) {
@@ -20,11 +20,11 @@ public class Vylet {
     switch (evyl) {
     case ANO: ano.add(kes); ne.remove(kes); break;
     case NE:  ne.add(kes); ano.remove(kes); break;
-    case NEVIM: 
+    case NEVIM:
       ano.remove(kes);
       ne.remove(kes);
       break;
-    default: assert false;		
+    default: assert false;
     }
     return evylPuvodni;
   }

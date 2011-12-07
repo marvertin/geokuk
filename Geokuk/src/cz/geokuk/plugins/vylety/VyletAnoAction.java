@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.lovim;
+package cz.geokuk.plugins.vylety;
 
 
 import java.awt.event.ActionEvent;
@@ -15,7 +15,7 @@ public class VyletAnoAction extends VyletActionIndividual0 {
 
   public VyletAnoAction(Kesoid kes) {
     super("Lovím", kes);
-    
+
     putValue(SHORT_DESCRIPTION, "Zařadí keš mezi favority, které chci lovit.");
     putValue(MNEMONIC_KEY, KeyEvent.VK_L);
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('+'));

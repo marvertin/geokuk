@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cz.geokuk.plugins.lovim;
+package cz.geokuk.plugins.vylety;
 
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -25,7 +25,7 @@ public class VyletModel extends Model0 {
   private Vylet vylet;
 
   private VyletovyZperzistentnovac vyletovyZperzistentnovac;
-  
+
   private Worker worker;
 
   public void add(EVylet evyl, Kesoid kes) {
@@ -72,8 +72,8 @@ public class VyletModel extends Model0 {
     vylet = newvylet;
     fire(new VyletChangeEvent(this, null, null, null));
   }
-  
-  
+
+
   public void inject(VyletovyZperzistentnovac vyletovyZperzistentnovac) {
     this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;
   }
@@ -87,7 +87,9 @@ public class VyletModel extends Model0 {
   }
 
   public void nasypVypetDoGeogetu() {
-    if (worker != null) worker.cancel(true); 
+    if (worker != null) {
+      worker.cancel(true);
+    }
     worker = new Worker(new ArrayList<Kesoid>(get(EVylet.ANO)));
     worker.execute();
   }
@@ -95,13 +97,13 @@ public class VyletModel extends Model0 {
   private class Worker extends SwingWorker<Void, Void> {
 
     private final List<Kesoid> kese;
-    
-    
+
+
 
     public Worker(List<Kesoid> kese) {
       this.kese = kese;
     }
-    
+
     /* (non-Javadoc)
      * @see javax.swing.SwingWorker#doInBackground()
      */
@@ -109,13 +111,15 @@ public class VyletModel extends Model0 {
     protected Void doInBackground() throws Exception {
       Clipboard scl = getSystemClipboard();
       for (Kesoid kes : kese) {
-        if (isCancelled()) break;
+        if (isCancelled()) {
+          break;
+        }
         scl.setContents(new StringSelection(kes.getUrlShow().toExternalForm()), null);
         Thread.sleep(100);
       }
       return null;
     }
-    
+
   }
-  
+
 }

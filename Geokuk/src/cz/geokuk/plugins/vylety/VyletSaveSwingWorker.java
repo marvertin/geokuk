@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cz.geokuk.plugins.lovim;
+package cz.geokuk.plugins.vylety;
 
 
 import java.util.concurrent.ExecutionException;
@@ -42,7 +42,7 @@ public class VyletSaveSwingWorker extends MySwingWorker0<Vylet, Void> {
     Vylet result = get();
     if (result == null) return; // asi zkanclváno
     System.out.printf("Nahran vylet, %d lovenych a %d ignorovanych: \n",
-        result.get(EVylet.ANO).size(), 
+        result.get(EVylet.ANO).size(),
         result.get(EVylet.NE).size());
     //Board.eveman.fire(new VyletChangeEvent(result, null, null, null));
   }

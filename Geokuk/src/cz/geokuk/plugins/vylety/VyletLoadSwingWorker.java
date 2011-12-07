@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cz.geokuk.plugins.lovim;
+package cz.geokuk.plugins.vylety;
 
 
 import java.util.concurrent.ExecutionException;
@@ -24,7 +24,7 @@ public class VyletLoadSwingWorker extends MySwingWorker0<Vylet, Void> {
 
 
   public VyletLoadSwingWorker(VyletovyZperzistentnovac vyletovyZperzistentnovac2, KesBag vsechny, VyletModel vyletModel) {
-    this.vyletovyZperzistentnovac = vyletovyZperzistentnovac2;
+    vyletovyZperzistentnovac = vyletovyZperzistentnovac2;
     this.vsechny = vsechny;
     this.vyletModel = vyletModel;
   }
@@ -46,7 +46,7 @@ public class VyletLoadSwingWorker extends MySwingWorker0<Vylet, Void> {
     Vylet result = get();
     if (result == null) return; // asi zkanclváno
     System.out.printf("Nahran vylet, %d lovenych a %d ignorovanych: \n",
-        result.get(EVylet.ANO).size(), 
+        result.get(EVylet.ANO).size(),
         result.get(EVylet.NE).size());
     vyletModel.setNewVylet(result);
   }

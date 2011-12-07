@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.lovim;
+package cz.geokuk.plugins.vylety;
 
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.framework.AfterInjectInit;
