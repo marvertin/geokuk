@@ -15,12 +15,12 @@ import cz.geokuk.framework.MySwingWorker0;
 public class IgnoreListSaveSwingWorker extends MySwingWorker0<IgnoreList, Void> {
 
 
-  private final VyletovyZperzistentnovac vyletovyZperzistentnovac;
+  private final CestyZperzistentnovac cestyZperzistentnovac;
   private final IgnoreList vylet;
 
 
-  public IgnoreListSaveSwingWorker(VyletovyZperzistentnovac vyletovyZperzistentnovac, IgnoreList vylet) {
-    this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;
+  public IgnoreListSaveSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, IgnoreList vylet) {
+    this.cestyZperzistentnovac = cestyZperzistentnovac;
     this.vylet = vylet;
   }
 
@@ -29,7 +29,7 @@ public class IgnoreListSaveSwingWorker extends MySwingWorker0<IgnoreList, Void> 
    */
   @Override
   protected IgnoreList doInBackground() throws Exception {
-    vyletovyZperzistentnovac.immediatlyZapisIgnoreList(vylet);
+    cestyZperzistentnovac.immediatlyZapisIgnoreList(vylet);
     return null;
   }
 

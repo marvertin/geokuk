@@ -59,7 +59,7 @@ public class JCestySlide extends JSingleSlide0{
   /** Nejbližší bod nebo śek cesty ke kurozru myši, pokud nějaký vůbec blízko je */
   private Bousek0 blizkyBousek;
 
-  private VyletModel vyletModel;
+  private CestyModel cestyModel;
 
   private final JCestaTooltip cestaToolTip = new JCestaTooltip();
 
@@ -115,7 +115,7 @@ public class JCestySlide extends JSingleSlide0{
     void mouseReleased() {
       if (stavPropojovaniCest == 2 && jeMoznostSpojovani()) {
         System.out.println("Spojujeme !!!!!!!!!!!!!!!!!");
-        vyletModel.spojCestyVPrekryvnemBode((Bod) blizkyBousek);
+        cestyModel.spojCestyVPrekryvnemBode((Bod) blizkyBousek);
       }
       stavPropojovaniCest = 0;
     }
@@ -138,7 +138,7 @@ public class JCestySlide extends JSingleSlide0{
   }
 
 
-  public void onEvent(VyletChangedEvent event) {
+  public void onEvent(CestyChangedEvent event) {
     doc = event.getDoc();
     // TODO repaintovat jen to, co je potřeba
     repaint();
@@ -164,7 +164,7 @@ public class JCestySlide extends JSingleSlide0{
         blizkyBousek = null;
       } else {
         if (doc != null) {
-          blizkyBousek = doc.locateNejblizsiDoKvadratuVzdalenosi(moucur, getKvadratMaximalniVzdalenosti(), vyletModel.getCurta(), true);
+          blizkyBousek = doc.locateNejblizsiDoKvadratuVzdalenosi(moucur, getKvadratMaximalniVzdalenosti(), cestyModel.getCurta(), true);
         } else {
           blizkyBousek = null;
         }
@@ -178,7 +178,7 @@ public class JCestySlide extends JSingleSlide0{
     //LATER Takto nebude vzdálenost přesná v blízkosti uchopovanců, asi by to chtělo
     // uchopenou myš
     if (moucur == null) return; // nemůžeme zobrazovat dálkoviny, když tam nemáme myš
-    Cesta curta = vyletModel.getCurta();
+    Cesta curta = cestyModel.getCurta();
     if (pridavanyBod1 != null && curta != null) {
       cestaToolTip.setPridavaciDalkoviny(curta, moucur);
       napozicujCestaTolltip();
@@ -236,7 +236,7 @@ public class JCestySlide extends JSingleSlide0{
     if (doc == null) return;
     MalovadloParams params = new MalovadloParams();
     params.doc = doc;
-    params.curta = vyletModel.getCurta();
+    params.curta = cestyModel.getCurta();
     params.blizkyBousek = blizkyBousek;
     params.soord = getSoord();
     params.mouPridavanyBod1  = pridavanyBod1 == null ? null : pridavanyBod1.getMou();
@@ -281,7 +281,7 @@ public class JCestySlide extends JSingleSlide0{
     //kesky.mouseClicked(e);
     //if (e.isConsumed()) return;
     if (SwingUtilities.isRightMouseButton(e)) {
-      vyletModel.setCurta(null);
+      cestyModel.setCurta(null);
     }
     if (SwingUtilities.isLeftMouseButton(e)) {
       if (blizkyBousek instanceof Bod) {
@@ -293,14 +293,14 @@ public class JCestySlide extends JSingleSlide0{
 
     if (SwingUtilities.isLeftMouseButton(e) && (e.getModifiers() & Event.CTRL_MASK) != 0) {
       if (pridavanyBod1 != null && pridavanyBod2 != null) {
-        if (vyletModel.getCurta() != null) {
-          Bod bod = vyletModel.pridejBodNaKonec(upravenaMys);
-          vyletModel.spojCestyVPrekryvnemBode(bod);
+        if (cestyModel.getCurta() != null) {
+          Bod bod = cestyModel.pridejBodNaKonec(upravenaMys);
+          cestyModel.spojCestyVPrekryvnemBode(bod);
         } else {
-          Bod bod1 = vyletModel.pridejBodNaKonec(pridavanyBod1);
-          Bod bod2 = vyletModel.pridejBodNaKonec(pridavanyBod2);
-          vyletModel.spojCestyVPrekryvnemBode(bod1);
-          vyletModel.spojCestyVPrekryvnemBode(bod2);
+          Bod bod1 = cestyModel.pridejBodNaKonec(pridavanyBod1);
+          Bod bod2 = cestyModel.pridejBodNaKonec(pridavanyBod2);
+          cestyModel.spojCestyVPrekryvnemBode(bod1);
+          cestyModel.spojCestyVPrekryvnemBode(bod2);
         }
         zrusPridavaniBodu();
         zahajPridavaniBodux();
@@ -327,7 +327,7 @@ public class JCestySlide extends JSingleSlide0{
     dragujeme = blizkyBousek != null;
     if (SwingUtilities.isLeftMouseButton(e)) {
       if (blizkyBousek != null) {
-        vyletModel.setCurta(blizkyBousek.getCesta());
+        cestyModel.setCurta(blizkyBousek.getCesta());
       }
     }
     chain().mousePressed(e, ctx);
@@ -377,12 +377,12 @@ public class JCestySlide extends JSingleSlide0{
         Wpt wptPodMysi = getWptPodMysi();
         //Mouable mouable = wptPodMysi != null ? wptPodMysi : mouNovy;
         //Mouable mouable = wptPodMysi != null ? wptPodMysi : getUpravenaMys();
-        vyletModel.presunBod(bb, mouNovy);
+        cestyModel.presunBod(bb, mouNovy);
         long kvadratOdklonu = bb.computeKvadratOdklonu();
         //System.out.println("1111: " + kvadratOdklonu + " -- " + getKvadratMaximalniVzdalenosti());
         if (kvadratOdklonu < getKvadratMaximalniVzdalenosti() && wptPodMysi == null) {
           if (! bb.isNaHraniciSegmentu()) {
-            blizkyBousek = vyletModel.removeBod(bb);
+            blizkyBousek = cestyModel.removeBod(bb);
           }
         }
         repaint();
@@ -393,7 +393,7 @@ public class JCestySlide extends JSingleSlide0{
         Mou mouact = getSoord().transform(e.getPoint());
         long kvadratVzdalenosti = usek.computeKvadratVzdalenostiBoduKUsecce(mouact);
         if (kvadratVzdalenosti > getKvadratMaximalniVzdalenosti()) {
-          blizkyBousek = vyletModel.rozdelUsekNaDvaNove(usek, mouNovy.getMou());
+          blizkyBousek = cestyModel.rozdelUsekNaDvaNove(usek, mouNovy.getMou());
         }
         repaint();
       }
@@ -410,7 +410,7 @@ public class JCestySlide extends JSingleSlide0{
     // Ošetřit, že dosedne do nějaké cesty
     long kvadratMaximalniVzdalenosti = getKvadratMaximalniVzdalenosti();
     for (Cesta cesta : doc.getCesty()) {
-      if (cesta == vyletModel.getCurta()) {
+      if (cesta == cestyModel.getCurta()) {
         //  continue;
       }
       if (cesta.getStart() == null || cesta.getCil() == null) {
@@ -470,8 +470,8 @@ public class JCestySlide extends JSingleSlide0{
     popupMenu.add(factory.initNow(new SmazatUsekAOtevritNeboRozdelitCestu(usek, moucur)));
   }
 
-  public void inject(VyletModel vyletModel) {
-    this.vyletModel = vyletModel;
+  public void inject(CestyModel cestyModel) {
+    this.cestyModel = cestyModel;
   }
 
 
@@ -483,20 +483,20 @@ public class JCestySlide extends JSingleSlide0{
   private void zahajPridavaniBodux() {
     if (pridavanyBod1 == null) {
       // ještě jsme nezačali přidávat, tak začínáme
-      if (vyletModel.getCurta() == null) { // pokud není nic aktivní, tak hned jdeme na to
+      if (cestyModel.getCurta() == null) { // pokud není nic aktivní, tak hned jdeme na to
         if (poziceq.isNoPosition()) { // nemáme pozici, tak stváříme
           pridavanyBod1 = getUpravenaMys(); // kdyby byla null, nic nepřidváme
         } else {
           pridavanyBod1 = poziceq.getPoziceMouable();
         }
       } else { // máme curtu
-        pridavanyBod1 = vyletModel.getCurta().getCil().getMouable();
+        pridavanyBod1 = cestyModel.getCurta().getCil().getMouable();
       }
       pridavanyBod2 = pridavanyBod1; // kdyby byla null, nic nepřidváme
     } else { // jedničku už máme, dvojku doděláváme
       pridavanyBod2 = getUpravenaMys(); // kdyby byla null, nic nepřidváme
     }
-    vyletModel.setPridavaniBodu(true);
+    cestyModel.setPridavaniBodu(true);
   }
 
   private void zrusPridavaniBodu() {
@@ -507,7 +507,7 @@ public class JCestySlide extends JSingleSlide0{
     }
     pridavanyBod1 = null;
     pridavanyBod2 = null;
-    vyletModel.setPridavaniBodu(false);
+    cestyModel.setPridavaniBodu(false);
   }
 
 

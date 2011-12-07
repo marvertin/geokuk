@@ -34,7 +34,7 @@ public class PrepniVzdusnostUseku extends UsekAction0 {
 
   @Override
   protected void provedProUsek(Usek usek, Mou mou) {
-    vyletModel.prepniVzdusnostUseku(usek, ! usek.isVzdusny());
+    cestyModel.prepniVzdusnostUseku(usek, ! usek.isVzdusny());
   }
 
 

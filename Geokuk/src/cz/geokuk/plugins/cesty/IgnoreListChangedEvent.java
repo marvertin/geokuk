@@ -3,7 +3,7 @@ package cz.geokuk.plugins.cesty;
 import cz.geokuk.framework.Event0;
 import cz.geokuk.plugins.kesoid.Wpt;
 
-public class IgnoreListChangedEvent extends Event0<VyletModel> {
+public class IgnoreListChangedEvent extends Event0<CestyModel> {
 
   private final Wpt wpt;
 

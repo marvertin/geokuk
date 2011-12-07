@@ -8,7 +8,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 import cz.geokuk.framework.Dlg;
-import cz.geokuk.plugins.cesty.VyletChangedEvent;
+import cz.geokuk.plugins.cesty.CestyChangedEvent;
 import cz.geokuk.plugins.cesty.data.Doc;
 
 public class UlozKopiiAction extends SouboeCestaAction0 {
@@ -30,19 +30,19 @@ public class UlozKopiiAction extends SouboeCestaAction0 {
     JFileChooser fc = new JFileChooser();
     fc.addChoosableFileFilter(new GpxFilter());
     fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    fc.setSelectedFile(vyletModel.getImplicitniVyletSaveCopyNovyFile());
+    fc.setSelectedFile(cestyModel.getImplicitniVyletSaveCopyNovyFile());
     int result = fc.showDialog(Dlg.parentFrame(), "Uložit kopii");
     if (result == JFileChooser.APPROVE_OPTION) {
       File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
       if (selectedFile.exists()) { // dtaz na přepsání
         if (! Dlg.prepsatSoubor(selectedFile)) return;
       }
-      vyletModel.uloz(selectedFile, doc, false);
+      cestyModel.uloz(selectedFile, doc, false);
       System.out.println("Uložena cesta do: " + doc.getFile());
     }
   }
 
-  public void onEvent(VyletChangedEvent event) {
+  public void onEvent(CestyChangedEvent event) {
     doc = event.getDoc();
     setEnabled(doc != null && (! doc.isEmpty() || doc.isChanged()));
   }

@@ -39,7 +39,7 @@ public class PresunoutSemVychoziBodUzavreneCesty extends BodAction0 {
 
   @Override
   protected void provedProBod(Bod bod) {
-    vyletModel.presunoutVyhoziBod(bod);
+    cestyModel.presunoutVyhoziBod(bod);
   }
 
 }

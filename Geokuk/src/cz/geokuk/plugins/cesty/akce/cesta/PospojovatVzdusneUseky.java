@@ -31,7 +31,7 @@ public class PospojovatVzdusneUseky extends CestaAction0 {
 
   @Override
   protected void provedProCestu(Cesta cesta) {
-    vyletModel.pospojujVzdusneUseky(cesta);
+    cestyModel.pospojujVzdusneUseky(cesta);
   }
 
 

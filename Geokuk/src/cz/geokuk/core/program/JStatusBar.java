@@ -32,8 +32,8 @@ import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.ProgressEvent;
 import cz.geokuk.framework.Progressor;
 import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
-import cz.geokuk.plugins.cesty.VyletChangedEvent;
-import cz.geokuk.plugins.cesty.VyletModel;
+import cz.geokuk.plugins.cesty.CestyChangedEvent;
+import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.cesty.data.Doc;
 import cz.geokuk.plugins.kesoid.Ikonizer;
 import cz.geokuk.plugins.kesoid.KesBag;
@@ -308,12 +308,12 @@ public class JStatusBar extends JPanel {
   }
 
   public void onEvent(IgnoreListChangedEvent aEvent) {
-    VyletModel vyletModel = aEvent.getModel();
-    //vyletAno.setText(vyletModel.get(EVylet.ANO).size()+"");
-    vyletNe.setText(vyletModel.getPocetIgnorovanychKesoidu()+"");
+    CestyModel cestyModel = aEvent.getModel();
+    //vyletAno.setText(cestyModel.get(EVylet.ANO).size()+"");
+    vyletNe.setText(cestyModel.getPocetIgnorovanychKesoidu()+"");
   }
 
-  public void onEvent(VyletChangedEvent aEvent) {
+  public void onEvent(CestyChangedEvent aEvent) {
     Doc doc = aEvent.getModel().getDoc();
     vyletAno.setText(doc.getPocetWaypointu() + "");
     if (doc.isEmpty()) {
@@ -331,7 +331,7 @@ public class JStatusBar extends JPanel {
         jSouborSVyletemPotrebujeUlozit.setText("");
       }
     }
-    //    vyletNe.setText(vyletModel.get(EVylet.NE).size()+"");
+    //    vyletNe.setText(cestyModel.get(EVylet.NE).size()+"");
   }
 
 

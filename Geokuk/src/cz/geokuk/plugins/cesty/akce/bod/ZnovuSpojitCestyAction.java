@@ -39,7 +39,7 @@ public class ZnovuSpojitCestyAction extends BodAction0 {
 
   @Override
   protected void provedProBod(Bod bod) {
-    vyletModel.spojCestyVPrekryvnemBode(bod);
+    cestyModel.spojCestyVPrekryvnemBode(bod);
   }
 
 }

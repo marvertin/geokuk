@@ -34,7 +34,7 @@ import cz.geokuk.util.index2d.Sheet;
 
 
 
-public class VyletovyZperzistentnovac {
+public class CestyZperzistentnovac {
 
   private int smimCist;
 

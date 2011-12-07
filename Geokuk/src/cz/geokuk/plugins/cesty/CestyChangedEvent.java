@@ -4,10 +4,10 @@ import cz.geokuk.framework.Event0;
 import cz.geokuk.plugins.cesty.data.Cesta;
 import cz.geokuk.plugins.cesty.data.Doc;
 
-public class VyletChangedEvent extends Event0<VyletModel> {
+public class CestyChangedEvent extends Event0<CestyModel> {
   private final Doc doc;
 
-  public VyletChangedEvent(Doc doc, Cesta curta) {
+  public CestyChangedEvent(Doc doc, Cesta curta) {
     this.doc = doc;
   }
 

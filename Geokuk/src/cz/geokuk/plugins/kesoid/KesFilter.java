@@ -6,8 +6,8 @@ import java.util.Set;
 
 import cz.geokuk.plugins.cesty.EVylet;
 import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
-import cz.geokuk.plugins.cesty.VyletChangedEvent;
-import cz.geokuk.plugins.cesty.VyletModel;
+import cz.geokuk.plugins.cesty.CestyChangedEvent;
+import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
@@ -22,7 +22,7 @@ public class KesFilter  {
   private Set<Alela> nechteneAlely;
   private Set<String> jmenaNechtenychAlel;
 
-  private VyletModel vyletModel;
+  private CestyModel cestyModel;
   private KesoidModel kesoidModel;
 
   private Set<Wpt> jenTytoVyletoveWaypointyZobrazit;
@@ -37,7 +37,7 @@ public class KesFilter  {
 
   }
 
-  public void onEvent(VyletChangedEvent aEvent) {
+  public void onEvent(CestyChangedEvent aEvent) {
     EVylet evylPrah = filterDefinition.getPrahVyletu();
 
     if (evylPrah == EVylet.JEN_V_CESTE) {
@@ -128,12 +128,12 @@ public class KesFilter  {
   //  Board.kesfilter.smailikNaFinalce.setSelected(true);
 
   private boolean zaraditDlePrahuVyletu(Wpt aWpt) {
-    if (vyletModel != null) {
+    if (cestyModel != null) {
       EVylet evylPrah = filterDefinition.getPrahVyletu();
       switch (evylPrah) {
       case VSECHNY: return true;
-      case BEZ_IGNOROVANYCH: return ! vyletModel.isOnIgnoreList(aWpt);
-      case JEN_V_CESTE: return vyletModel.isOnVylet(aWpt);
+      case BEZ_IGNOROVANYCH: return ! cestyModel.isOnIgnoreList(aWpt);
+      case JEN_V_CESTE: return cestyModel.isOnVylet(aWpt);
       default: return true;
       }
     } else
@@ -176,8 +176,8 @@ public class KesFilter  {
 
 
 
-  public void inject(VyletModel vyletModel) {
-    this.vyletModel = vyletModel;
+  public void inject(CestyModel cestyModel) {
+    this.cestyModel = cestyModel;
   }
 
   public void inject(KesoidModel kesoidModel) {

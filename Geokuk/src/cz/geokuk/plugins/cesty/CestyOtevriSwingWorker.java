@@ -20,19 +20,19 @@ import cz.geokuk.plugins.kesoid.KesBag;
  * @author veverka
  *
  */
-public class VyletOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
+public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
 
 
-  private final VyletovyZperzistentnovac vyletovyZperzistentnovac;
+  private final CestyZperzistentnovac cestyZperzistentnovac;
   private final KesBag kesBag;
-  private final VyletModel vyletModel;
+  private final CestyModel cestyModel;
   private final File file;
 
 
-  public VyletOtevriSwingWorker(VyletovyZperzistentnovac vyletovyZperzistentnovac, KesBag vsechny, VyletModel vyletModel, File file) {
-    this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;
+  public CestyOtevriSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, KesBag vsechny, CestyModel cestyModel, File file) {
+    this.cestyZperzistentnovac = cestyZperzistentnovac;
     kesBag = vsechny;
-    this.vyletModel = vyletModel;
+    this.cestyModel = cestyModel;
     this.file = file;
   }
 
@@ -44,7 +44,7 @@ public class VyletOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
   public Doc doInBackground() throws Exception {
     Doc doc = new Doc();
     doc.setFile(file);
-    List<Cesta> cesty = vyletovyZperzistentnovac.nacti(Collections.singletonList(file), kesBag);
+    List<Cesta> cesty = cestyZperzistentnovac.nacti(Collections.singletonList(file), kesBag);
     for (Cesta cesta : cesty) {
       doc.xadd(cesta);
     }
@@ -59,7 +59,7 @@ public class VyletOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
     Doc doc = get();
     if (doc == null) return; // asi zkanclváno
     System.out.printf("Načten dokument %s: \n",  doc.getFile());
-    vyletModel.prevezmiNoveOtevrenyDokument(doc);
+    cestyModel.prevezmiNoveOtevrenyDokument(doc);
   }
 
 

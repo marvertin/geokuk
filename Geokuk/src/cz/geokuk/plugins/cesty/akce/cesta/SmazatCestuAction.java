@@ -30,7 +30,7 @@ public class SmazatCestuAction extends CestaAction0 {
 
   @Override
   protected void provedProCestu(Cesta cesta) {
-    vyletModel.removeCestu(cesta);
+    cestyModel.removeCestu(cesta);
   }
 
 

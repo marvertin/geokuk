@@ -39,7 +39,7 @@ public class UzavritCestuAction extends CestaAction0 {
 
   @Override
   protected void provedProCestu(Cesta cesta) {
-    vyletModel.uzavriCestu(cesta);
+    cestyModel.uzavriCestu(cesta);
   }
 
 }

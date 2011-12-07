@@ -30,7 +30,7 @@ public class ObratitCestuAction extends CestaAction0 {
 
   @Override
   protected void provedProCestu(Cesta cesta) {
-    vyletModel.reverseCestu(cesta);
+    cestyModel.reverseCestu(cesta);
   }
 
 

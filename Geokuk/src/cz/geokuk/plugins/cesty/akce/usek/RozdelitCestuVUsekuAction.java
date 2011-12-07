@@ -40,7 +40,7 @@ public class RozdelitCestuVUsekuAction extends UsekAction0 {
 
   @Override
   protected void provedProUsek(Usek usek, Mou mou) {
-    vyletModel.rozdelCestuVUseku(usek, mou, false);
+    cestyModel.rozdelCestuVUseku(usek, mou, false);
   }
 
 }

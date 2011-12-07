@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
-import cz.geokuk.plugins.cesty.VyletChangedEvent;
+import cz.geokuk.plugins.cesty.CestyChangedEvent;
 import cz.geokuk.plugins.cesty.data.Doc;
 
 public class UlozAction extends SouboeCestaAction0 {
@@ -28,7 +28,7 @@ public class UlozAction extends SouboeCestaAction0 {
     ulozit();
   }
 
-  public void onEvent(VyletChangedEvent event) {
+  public void onEvent(CestyChangedEvent event) {
     Doc doc = event.getDoc();
     setEnabled(doc != null && doc.isChanged());
   }

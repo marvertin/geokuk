@@ -33,7 +33,7 @@ public class OtevriAction extends SouboeCestaAction0 {
     }
     fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
     //fc.setCurrentDirectory(new File(jtext.getText()));
-    fc.setSelectedFile(vyletModel.defaultAktualnihoVyletuFile());
+    fc.setSelectedFile(cestyModel.defaultAktualnihoVyletuFile());
 
     int result = fc.showDialog(Dlg.parentFrame(), "Otevřít");
     if (result == JFileChooser.APPROVE_OPTION) {
@@ -41,7 +41,7 @@ public class OtevriAction extends SouboeCestaAction0 {
       if (! new GpxFilter().accept(selectedFile)) {
         Dlg.error("Soubor \"" + selectedFile + "\" nemá příponu GPX!");
       } else { // je to dobré, otvíráme
-        vyletModel.otevri(selectedFile);
+        cestyModel.otevri(selectedFile);
         System.out.println("Nactena cesta z: " + selectedFile);
       }
     }

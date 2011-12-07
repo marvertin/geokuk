@@ -26,11 +26,11 @@ public class VyletNeAction extends VyletActionIndividual0 {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    vyletModel.addToIgnoreList(effectiveMouable());
+    cestyModel.addToIgnoreList(effectiveMouable());
   }
 
   @Override
   protected void enablujPokudMaSmysl() {
-    setEnabled(! vyletModel.isOnIgnoreList(effectiveMouable()) && (effectiveMouable() instanceof Wpt));
+    setEnabled(! cestyModel.isOnIgnoreList(effectiveMouable()) && (effectiveMouable() instanceof Wpt));
   }
 }

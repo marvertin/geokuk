@@ -18,15 +18,15 @@ import cz.geokuk.plugins.kesoid.KesBag;
 public class IgnoreListLoadSwingWorker extends MySwingWorker0<IgnoreList, Void> {
 
 
-  private final VyletovyZperzistentnovac vyletovyZperzistentnovac;
+  private final CestyZperzistentnovac cestyZperzistentnovac;
   private final KesBag vsechny;
-  private final VyletModel vyletModel;
+  private final CestyModel cestyModel;
 
 
-  public IgnoreListLoadSwingWorker(VyletovyZperzistentnovac vyletovyZperzistentnovac2, KesBag vsechny, VyletModel vyletModel) {
-    vyletovyZperzistentnovac = vyletovyZperzistentnovac2;
+  public IgnoreListLoadSwingWorker(CestyZperzistentnovac cestyZperzistentnovac2, KesBag vsechny, CestyModel cestyModel) {
+    cestyZperzistentnovac = cestyZperzistentnovac2;
     this.vsechny = vsechny;
-    this.vyletModel = vyletModel;
+    this.cestyModel = cestyModel;
   }
 
 
@@ -35,7 +35,7 @@ public class IgnoreListLoadSwingWorker extends MySwingWorker0<IgnoreList, Void> 
    */
   @Override
   public IgnoreList doInBackground() throws Exception {
-    return vyletovyZperzistentnovac.immediatlyNactiIgnoreList(vsechny);
+    return cestyZperzistentnovac.immediatlyNactiIgnoreList(vsechny);
   }
 
   /* (non-Javadoc)
@@ -47,7 +47,7 @@ public class IgnoreListLoadSwingWorker extends MySwingWorker0<IgnoreList, Void> 
     if (result == null) return; // asi zkanclváno
     System.out.printf("Nahran ignorelist %d ignorovanych: \n",
         result.getIgnoreList().size());
-    vyletModel.setNewlyLoadedIgnoreList(result);
+    cestyModel.setNewlyLoadedIgnoreList(result);
   }
 
 

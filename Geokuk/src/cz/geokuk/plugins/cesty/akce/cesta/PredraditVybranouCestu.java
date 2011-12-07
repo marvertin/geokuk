@@ -45,7 +45,7 @@ public class PredraditVybranouCestu extends CestaAction0 {
   protected void provedProCestu(Cesta cesta) {
     cesta.kontrolaKonzistence();
     curta().kontrolaKonzistence();
-    vyletModel.pripojitCestuPred(cesta, curta());
+    cestyModel.pripojitCestuPred(cesta, curta());
     cesta.kontrolaKonzistence();
     curta().kontrolaKonzistence();
   }

@@ -40,7 +40,7 @@ public class PromazatJednobodoveAPrazdneCesty extends DocAction0 {
       }
     }
     for (Cesta cesta : cesty) {
-      vyletModel.removeCestu(cesta);
+      cestyModel.removeCestu(cesta);
     }
   }
 

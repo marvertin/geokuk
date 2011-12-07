@@ -33,7 +33,7 @@ public class BezNaKonecCestyAction extends VyletAction0 {
    */
   @Override
   public void actionPerformed(ActionEvent aE) {
-    vyletModel.bezNaKonecCesty(curta());
+    cestyModel.bezNaKonecCesty(curta());
     vyrezModel.vystredovatNaPozici();
   }
 

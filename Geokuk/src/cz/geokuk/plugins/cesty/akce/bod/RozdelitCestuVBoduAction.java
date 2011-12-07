@@ -39,7 +39,7 @@ public class RozdelitCestuVBoduAction extends BodAction0 {
 
   @Override
   protected void provedProBod(Bod bod) {
-    vyletModel.rozdelCestuVBode(bod, false);
+    cestyModel.rozdelCestuVBode(bod, false);
   }
 
 }

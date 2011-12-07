@@ -19,15 +19,15 @@ public class VyletSmazNeAction extends VyletAction0 {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (Dlg.anone("Opravdu odstranit z výletu " + vyletModel.getPocetIgnorovanychKesoidu() + " keší, které chcete ignorovat?")) {
-      vyletModel.clearIgnoreList();
+    if (Dlg.anone("Opravdu odstranit z výletu " + cestyModel.getPocetIgnorovanychKesoidu() + " keší, které chcete ignorovat?")) {
+      cestyModel.clearIgnoreList();
     }
   }
 
   @Override
   protected void vyletChanged() {
     super.vyletChanged();
-    setEnabled(vyletModel.getPocetIgnorovanychKesoidu() > 0);
+    setEnabled(cestyModel.getPocetIgnorovanychKesoidu() > 0);
   }
 
 }

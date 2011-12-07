@@ -18,19 +18,19 @@ import cz.geokuk.plugins.kesoid.KesBag;
  * @author veverka
  *
  */
-public class VyletImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
+public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 
 
-  private final VyletovyZperzistentnovac vyletovyZperzistentnovac;
+  private final CestyZperzistentnovac cestyZperzistentnovac;
   private final KesBag kesBag;
-  private final VyletModel vyletModel;
+  private final CestyModel cestyModel;
   private final List<File> files;
 
 
-  public VyletImportSwingWorker(VyletovyZperzistentnovac vyletovyZperzistentnovac, KesBag vsechny, VyletModel vyletModel, List<File> files) {
-    this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;
+  public CestyImportSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, KesBag vsechny, CestyModel cestyModel, List<File> files) {
+    this.cestyZperzistentnovac = cestyZperzistentnovac;
     kesBag = vsechny;
-    this.vyletModel = vyletModel;
+    this.cestyModel = cestyModel;
     this.files = files;
   }
 
@@ -40,7 +40,7 @@ public class VyletImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
    */
   @Override
   public List<Cesta> doInBackground() throws Exception {
-    List<Cesta> cesty = vyletovyZperzistentnovac.nacti(files, kesBag);
+    List<Cesta> cesty = cestyZperzistentnovac.nacti(files, kesBag);
     return cesty;
   }
 
@@ -52,7 +52,7 @@ public class VyletImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
     List<Cesta> cesty = get();
     if (cesty == null) return; // asi zkanclváno
     System.out.printf("Načteny cesty %d: \n",  cesty.size());
-    vyletModel.prevezmiImportovaneCesty(cesty);
+    cestyModel.prevezmiImportovaneCesty(cesty);
   }
 
 

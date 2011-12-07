@@ -47,7 +47,7 @@ import cz.geokuk.util.process.BrowserOpener;
  * @author veverka
  *
  */
-public class VyletModel extends Model0 {
+public class CestyModel extends Model0 {
 
   private static final String MUJ_VYLET = "Můj výlet";
   public static final String VYLET_EXTENSION = "gpx";
@@ -59,7 +59,7 @@ public class VyletModel extends Model0 {
   private Cesta curta;
 
 
-  private VyletovyZperzistentnovac vyletovyZperzistentnovac;
+  private CestyZperzistentnovac cestyZperzistentnovac;
 
   private Worker worker;
   private KesBag kesBag;
@@ -138,7 +138,7 @@ public class VyletModel extends Model0 {
 
 
   private void ulozIgnoreListAFiruj(Wpt wptx) {
-    IgnoreListSaveSwingWorker worker = new IgnoreListSaveSwingWorker(vyletovyZperzistentnovac, ignoreList);
+    IgnoreListSaveSwingWorker worker = new IgnoreListSaveSwingWorker(cestyZperzistentnovac, ignoreList);
     worker.execute();
     for (Wpt w : wptx.getKesoid().getWpts()) {
       onChangeIgnoreList(w);
@@ -192,7 +192,7 @@ public class VyletModel extends Model0 {
    * @param vsechny
    */
   public void startLogingIgnoreList(KesBag vsechny) {
-    IgnoreListLoadSwingWorker worker = new IgnoreListLoadSwingWorker(vyletovyZperzistentnovac, vsechny, this);
+    IgnoreListLoadSwingWorker worker = new IgnoreListLoadSwingWorker(cestyZperzistentnovac, vsechny, this);
     worker.execute();
   }
 
@@ -202,8 +202,8 @@ public class VyletModel extends Model0 {
   }
 
 
-  public void inject(VyletovyZperzistentnovac vyletovyZperzistentnovac) {
-    this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;
+  public void inject(CestyZperzistentnovac cestyZperzistentnovac) {
+    this.cestyZperzistentnovac = cestyZperzistentnovac;
   }
 
   /* (non-Javadoc)
@@ -377,7 +377,7 @@ public class VyletModel extends Model0 {
     if (curta != null) {
       curta.kontrolaKonzistence();
     }
-    fire(new VyletChangedEvent(doc, curta));
+    fire(new CestyChangedEvent(doc, curta));
   }
 
   void prevezmiNoveOtevrenyDokument(Doc doc) {
@@ -402,12 +402,12 @@ public class VyletModel extends Model0 {
   public void otevri(File file ) {
     Doc doc = new Doc();
     doc.setFile(file);
-    VyletOtevriSwingWorker wrk = new VyletOtevriSwingWorker(vyletovyZperzistentnovac, kesBag, this, file);
+    CestyOtevriSwingWorker wrk = new CestyOtevriSwingWorker(cestyZperzistentnovac, kesBag, this, file);
     wrk.execute();
   }
 
   public void importuj(List<File> files) {
-    VyletImportSwingWorker wrk = new VyletImportSwingWorker(vyletovyZperzistentnovac, kesBag, this, files);
+    CestyImportSwingWorker wrk = new CestyImportSwingWorker(cestyZperzistentnovac, kesBag, this, files);
     wrk.execute();
   }
 
@@ -451,7 +451,7 @@ public class VyletModel extends Model0 {
   }
 
   public void exportujDoGgt(File file, Doc doc2) {
-    vyletovyZperzistentnovac.zapisGgt(doc, file);
+    cestyZperzistentnovac.zapisGgt(doc, file);
   }
 
   private void setDefaultProAktualniVyletFile(File file) {
@@ -513,7 +513,7 @@ public class VyletModel extends Model0 {
   }
 
   public void znovuVsechnoPripni() {
-    vyletovyZperzistentnovac.pripniNaWayponty(doc.getCesty(), kesBag);
+    cestyZperzistentnovac.pripniNaWayponty(doc.getCesty(), kesBag);
     fireCesta();
   }
 

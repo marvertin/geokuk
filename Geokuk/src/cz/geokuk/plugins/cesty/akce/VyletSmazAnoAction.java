@@ -19,15 +19,15 @@ public class VyletSmazAnoAction extends VyletAction0 {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (Dlg.anone("Opravdu odstranit z výletu " + vyletModel.getPocetWaypointuVeVyletu() + " waypointů, které jste chtěli navštívit?")) {
-      vyletModel.removeAllFromCesta();
+    if (Dlg.anone("Opravdu odstranit z výletu " + cestyModel.getPocetWaypointuVeVyletu() + " waypointů, které jste chtěli navštívit?")) {
+      cestyModel.removeAllFromCesta();
     }
   }
 
   @Override
   protected void vyletChanged() {
     super.vyletChanged();
-    setEnabled(vyletModel.getPocetWaypointuVeVyletu() > 0);
+    setEnabled(cestyModel.getPocetWaypointuVeVyletu() > 0);
   }
 
 

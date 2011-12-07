@@ -19,13 +19,13 @@ public class VyletPresClipboardDoGeogetuAction extends VyletAction0 {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    vyletModel.nasypVyletDoGeogetu();
+    cestyModel.nasypVyletDoGeogetu();
   }
 
   @Override
   protected void vyletChanged() {
     super.vyletChanged();
-    setEnabled(vyletModel.getPocetWaypointuVeVyletu() > 0);
+    setEnabled(cestyModel.getPocetWaypointuVeVyletu() > 0);
   }
 
 

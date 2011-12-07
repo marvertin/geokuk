@@ -13,9 +13,9 @@ import cz.geokuk.framework.BeanBag;
 import cz.geokuk.framework.EventManager;
 import cz.geokuk.framework.Prefe;
 import cz.geokuk.framework.ProgressModel;
-import cz.geokuk.plugins.cesty.VyletModel;
-import cz.geokuk.plugins.cesty.VyletNacitaniKesoiduWatchDog;
-import cz.geokuk.plugins.cesty.VyletovyZperzistentnovac;
+import cz.geokuk.plugins.cesty.CestyModel;
+import cz.geokuk.plugins.cesty.CestyNacitaniKesoiduWatchDog;
+import cz.geokuk.plugins.cesty.CestyZperzistentnovac;
 import cz.geokuk.plugins.geocoding.GeocodingModel;
 import cz.geokuk.plugins.kesoid.KesFilter;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
@@ -45,13 +45,13 @@ public class Inicializator {
     bb.registerSigleton(new Prefe());
 
 
-    bb.registerSigleton(new VyletovyZperzistentnovac());
+    bb.registerSigleton(new CestyZperzistentnovac());
 
     // modely
     bb.registerSigleton(new PoziceModel());
     bb.registerSigleton(new VyrezModel());
-    bb.registerSigleton(new VyletModel());
-    bb.registerSigleton(new VyletNacitaniKesoiduWatchDog());
+    bb.registerSigleton(new CestyModel());
+    bb.registerSigleton(new CestyNacitaniKesoiduWatchDog());
     bb.registerSigleton(new KesFilter());
     bb.registerSigleton(new PopiskyModel());
     bb.registerSigleton(new KruhyModel());

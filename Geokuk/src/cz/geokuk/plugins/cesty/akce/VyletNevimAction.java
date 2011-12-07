@@ -24,11 +24,11 @@ public class VyletNevimAction extends VyletActionIndividual0 {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    vyletModel.removeFromBoth(effectiveMouable());
+    cestyModel.removeFromBoth(effectiveMouable());
   }
 
   @Override
   protected void enablujPokudMaSmysl() {
-    setEnabled(vyletModel.isOnVylet(effectiveMouable()) || vyletModel.isOnIgnoreList(effectiveMouable()));
+    setEnabled(cestyModel.isOnVylet(effectiveMouable()) || cestyModel.isOnIgnoreList(effectiveMouable()));
   }
 }

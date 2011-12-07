@@ -34,7 +34,7 @@ public class BezNaZacatekCestyAction extends VyletAction0 {
   @Override
   public void actionPerformed(ActionEvent aE) {
     //poziceModel.setPozice(pozice);
-    vyletModel.bezNaZacatekCesty(curta());
+    cestyModel.bezNaZacatekCesty(curta());
     vyrezModel.vystredovatNaPozici();
 
     //  	Board.eveman.fire(new PoziceChangedEvent(pozice, true));

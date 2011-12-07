@@ -11,12 +11,12 @@ import javax.swing.filechooser.FileFilter;
 
 import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.Dlg;
-import cz.geokuk.plugins.cesty.VyletModel;
+import cz.geokuk.plugins.cesty.CestyModel;
 
 public class ImportujAction extends Action0 {
 
   private static final long serialVersionUID = 1L;
-  private VyletModel vyletModel;
+  private CestyModel cestyModel;
   private JFileChooser fc;
 
   public ImportujAction() {
@@ -38,17 +38,17 @@ public class ImportujAction extends Action0 {
     fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
     fc.setMultiSelectionEnabled(true);
     //fc.setCurrentDirectory(new File(jtext.getText()));
-    fc.setSelectedFile(vyletModel.defaultAktualnihoVyletuFile());
+    fc.setSelectedFile(cestyModel.defaultAktualnihoVyletuFile());
     int result = fc.showDialog(Dlg.parentFrame(), "Importovat");
     if (result == JFileChooser.APPROVE_OPTION) {
       File[] selectedFiles = fc.getSelectedFiles();
-      vyletModel.importuj(Arrays.asList(selectedFiles));
+      cestyModel.importuj(Arrays.asList(selectedFiles));
       System.out.println("Nactena cesta z: " + Arrays.asList(selectedFiles));
     }
   }
 
-  public void inject(VyletModel vyletModel) {
-    this.vyletModel = vyletModel;
+  public void inject(CestyModel cestyModel) {
+    this.cestyModel = cestyModel;
   }
 
 

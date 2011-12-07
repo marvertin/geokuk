@@ -4,7 +4,7 @@ package cz.geokuk.plugins.cesty.akce.soubor;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import cz.geokuk.plugins.cesty.VyletChangedEvent;
+import cz.geokuk.plugins.cesty.CestyChangedEvent;
 import cz.geokuk.plugins.cesty.data.Doc;
 
 public class ZavriAction extends SouboeCestaAction0 {
@@ -24,11 +24,11 @@ public class ZavriAction extends SouboeCestaAction0 {
   @Override
   public void actionPerformed(ActionEvent e) {
     if (!super.ulozitSDotazem()) return; // mělo se ukládat a řeklo se, že ne
-    vyletModel.zavri();
+    cestyModel.zavri();
     //    if (doc.getFile() == null) { // ještě nebyl určen soubor, musíme se zeptat
     //      JFileChooser fc = new JFileChooser();
     //      fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    //      fc.setSelectedFile(vyletModel.getImplicitniVyletNovyFile());
+    //      fc.setSelectedFile(cestyModel.getImplicitniVyletNovyFile());
     //      int result = fc.showDialog(Dlg.parentFrame(), "Uložit");
     //      if (result == JFileChooser.APPROVE_OPTION) {
     //        File selectedFile = fc.getSelectedFile();
@@ -40,11 +40,11 @@ public class ZavriAction extends SouboeCestaAction0 {
     //        return;
     //    }
     //    // TODO ukládat na pozadí a také mít jinde ukládací dialog
-    //    vyletModel.uloz(doc.getFile(), doc, true);
+    //    cestyModel.uloz(doc.getFile(), doc, true);
     //    System.out.println("Uložena cesta do: " + doc.getFile());
   }
 
-  public void onEvent(VyletChangedEvent event) {
+  public void onEvent(CestyChangedEvent event) {
     doc = event.getDoc();
     setEnabled(doc != null && ! doc.isEmpty());
   }

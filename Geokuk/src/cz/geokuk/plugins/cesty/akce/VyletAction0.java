@@ -6,8 +6,8 @@ import javax.swing.Icon;
 import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
-import cz.geokuk.plugins.cesty.VyletChangedEvent;
-import cz.geokuk.plugins.cesty.VyletModel;
+import cz.geokuk.plugins.cesty.CestyChangedEvent;
+import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.cesty.data.Cesta;
 import cz.geokuk.plugins.cesty.data.Doc;
 
@@ -17,7 +17,7 @@ public abstract class VyletAction0 extends Action0 implements AfterInjectInit {
 
   private static final long serialVersionUID = -2637836928166450446L;
 
-  protected VyletModel vyletModel;
+  protected CestyModel cestyModel;
   private String puvodniJednoducheJmeno;
 
   private boolean užPřišelHlavníEvent;
@@ -56,7 +56,7 @@ public abstract class VyletAction0 extends Action0 implements AfterInjectInit {
     setEnabled(false);
   }
 
-  public final void onEvent(VyletChangedEvent aEvent) {
+  public final void onEvent(CestyChangedEvent aEvent) {
     //System.out.println("********* dorucen event na: " + System.identityHashCode(this) + ": " + getClass().getName());
     aEvent.getDoc().kontrolaKonzistence();
     užPřišelHlavníEvent = true;
@@ -73,17 +73,17 @@ public abstract class VyletAction0 extends Action0 implements AfterInjectInit {
   }
 
 
-  public final void inject(VyletModel vyletModel) {
-    this.vyletModel = vyletModel;
+  public final void inject(CestyModel cestyModel) {
+    this.cestyModel = cestyModel;
 
   }
 
   protected final Cesta curta() {
-    return vyletModel.getCurta();
+    return cestyModel.getCurta();
   }
 
   protected final Doc curdoc() {
-    return vyletModel.getDoc();
+    return cestyModel.getDoc();
   }
 
 }

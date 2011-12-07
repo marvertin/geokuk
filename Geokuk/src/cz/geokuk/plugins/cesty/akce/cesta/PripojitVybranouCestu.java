@@ -45,7 +45,7 @@ public class PripojitVybranouCestu extends CestaAction0 {
   protected void provedProCestu(Cesta cesta) {
     cesta.kontrolaKonzistence();
     curta().kontrolaKonzistence();
-    vyletModel.pripojitCestuZa(cesta, curta());
+    cestyModel.pripojitCestuZa(cesta, curta());
     cesta.kontrolaKonzistence();
     curta().kontrolaKonzistence();
   }

@@ -35,7 +35,7 @@ public class SmazatUsekAOtevritNeboRozdelitCestu extends UsekAction0 {
   @Override
   protected void provedProUsek(Usek usek, Mou mou) {
     //LATER zamyšlet se nad krajovými úseky
-    vyletModel.smazatUsekAOtevritNeboRozdelitCestu(usek);
+    cestyModel.smazatUsekAOtevritNeboRozdelitCestu(usek);
   }
 
 

@@ -39,7 +39,7 @@ public class UriznoutCestuVBoduAction extends BodAction0 {
 
   @Override
   protected void provedProBod(Bod bod) {
-    vyletModel.rozdelCestuVBode(bod, true);
+    cestyModel.rozdelCestuVBode(bod, true);
   }
 
 }

@@ -8,7 +8,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 import cz.geokuk.framework.Dlg;
-import cz.geokuk.plugins.cesty.VyletChangedEvent;
+import cz.geokuk.plugins.cesty.CestyChangedEvent;
 import cz.geokuk.plugins.cesty.data.Doc;
 
 public class UlozJakoAction extends SouboeCestaAction0 {
@@ -30,7 +30,7 @@ public class UlozJakoAction extends SouboeCestaAction0 {
     JFileChooser fc = new JFileChooser();
     fc.addChoosableFileFilter(new GpxFilter());
     fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    fc.setSelectedFile(vyletModel.getImplicitniVyletSaveAsNovyFile());
+    fc.setSelectedFile(cestyModel.getImplicitniVyletSaveAsNovyFile());
     int result = fc.showDialog(Dlg.parentFrame(), "Uložit jako");
     if (result == JFileChooser.APPROVE_OPTION) {
       File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
@@ -38,13 +38,13 @@ public class UlozJakoAction extends SouboeCestaAction0 {
         if (! Dlg.prepsatSoubor(selectedFile)) return;
       }
       doc.setFile(selectedFile);
-      vyletModel.uloz(doc.getFile(), doc, true);
+      cestyModel.uloz(doc.getFile(), doc, true);
       System.out.println("Uložena cesta do: " + doc.getFile());
     }
     // TODO ukládat na pozadí
   }
 
-  public void onEvent(VyletChangedEvent event) {
+  public void onEvent(CestyChangedEvent event) {
     doc = event.getDoc();
     setEnabled(doc != null && (! doc.isEmpty()));
   }

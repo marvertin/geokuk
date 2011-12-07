@@ -33,11 +33,11 @@ public class VyletAnoAction extends VyletAction0 {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    vyletModel.addToVylet(effectiveMouable());
+    cestyModel.addToVylet(effectiveMouable());
   }
 
   protected void enablujPokudMaSmysl() {
-    setEnabled(effectiveMouable() != null && ! vyletModel.isOnVylet(effectiveMouable()));
+    setEnabled(effectiveMouable() != null && ! cestyModel.isOnVylet(effectiveMouable()));
   }
 
 

@@ -39,7 +39,7 @@ import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.MouseGestureContext;
 import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
-import cz.geokuk.plugins.cesty.VyletModel;
+import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.cesty.akce.VyletAnoAction;
 import cz.geokuk.plugins.cesty.akce.VyletNeAction;
 import cz.geokuk.plugins.cesty.akce.VyletNevimAction;
@@ -84,7 +84,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
   private Indexator<Wpt> indexator;
 
-  private VyletModel vyletModel;
+  private CestyModel cestyModel;
 
   private Kesoid kesoidPodMysi;
   private Wpt wptPodMysi;
@@ -296,13 +296,13 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
   private Genotyp computeGenotyp(Wpt wpt) {
     Genotyp g = wpt.getGenotyp(ikonBag.getGenom());
-    //    switch (vyletModel.get(wpt.getKesoid())) {
+    //    switch (cestyModel.get(wpt.getKesoid())) {
     //    //    case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
     //    case NE:  g.put(ikonBag.getGenom().ALELA_ignoru); break;
     //    }
-    if (vyletModel.getDoc().hasWpt(wpt)) {
+    if (cestyModel.getDoc().hasWpt(wpt)) {
       g.put(ikonBag.getGenom().ALELA_lovime);
-    } else if (vyletModel.isOnIgnoreList(wpt)) {
+    } else if (cestyModel.isOnIgnoreList(wpt)) {
       g.put(ikonBag.getGenom().ALELA_ignoru);
     }
 
@@ -633,8 +633,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
   public void inject(PoziceModel poziceModel) {
     this.poziceModel = poziceModel;
   }
-  public void inject(VyletModel vyletModel) {
-    this.vyletModel = vyletModel;
+  public void inject(CestyModel cestyModel) {
+    this.cestyModel = cestyModel;
   }
 
   public void inject(KesoidModel kesoidModel) {
