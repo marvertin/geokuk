@@ -5,14 +5,14 @@ import cz.geokuk.core.coordinates.MouRect;
 import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.cesty.data.Cesta;
 
-public class ZoomCestuAction extends CestaAction0 {
+public class ZoomovatCestuAction extends CestaAction0 {
 
   private static final long serialVersionUID = 1L;
 
-  public ZoomCestuAction(Cesta cesta) {
+  public ZoomovatCestuAction(Cesta cesta) {
     super(cesta);
     //putValue(NAME,  "<html>Odstraň cestu <i>" + jCestaMenu.getNazev() + "</i> " + (jCestaMenu.getMouDelkaCesta() + " mou"));
-    putValue(NAME,  "Zoom cestu");
+    putValue(NAME,  "Zoomovat cestu");
     putValue(SHORT_DESCRIPTION, "Vybranou cestu nazoomuje do mapy tak, aby byla celá vidět.");
     //putValue(MNEMONIC_KEY, KeyEvent.VK_V);
     //putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));

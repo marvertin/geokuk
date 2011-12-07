@@ -17,7 +17,7 @@ public class OtevriAction extends SouboeCestaAction0 {
   private JFileChooser fc;
 
   public OtevriAction() {
-    super("Otevři výlet (gpx)");
+    super("Otevřít cesty (gpx)");
     putValue(SHORT_DESCRIPTION, "Otevře zadaný výlet v GPX a nahradí jim všechyn načtené cesty.");
     putValue(MNEMONIC_KEY, KeyEvent.VK_V);
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));

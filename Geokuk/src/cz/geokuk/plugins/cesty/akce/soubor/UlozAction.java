@@ -15,7 +15,7 @@ public class UlozAction extends SouboeCestaAction0 {
 
 
   public UlozAction() {
-    super("Ulož výlet (gpx)");
+    super("Uložit cesty (gpx)");
     putValue(SHORT_DESCRIPTION, "Uloží zadaný výlet do GPX");
     putValue(MNEMONIC_KEY, KeyEvent.VK_V);
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl S"));

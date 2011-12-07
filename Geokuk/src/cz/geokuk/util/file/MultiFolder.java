@@ -29,13 +29,13 @@ public class MultiFolder {
   private static final String REMOVE_SUFFIX = ".remove";
   private static final String CONTENT_TXT = "content.txt";
 
-  private KeyTree<String, LamUrl> tree = new KeyTree<String, LamUrl>();
+  private final KeyTree<String, LamUrl> tree = new KeyTree<String, LamUrl>();
 
   public KeyNode<String,LamUrl> getNode(String key) {
-  	String[] ss = key.split("/");
-  	return tree.locate(Arrays.asList(ss));
+    String[] ss = key.split("/");
+    return tree.locate(Arrays.asList(ss));
   }
-  
+
   public void addFolderTree(File dir) {
     List<String> emptyList = Collections.emptyList();
     addOneFord(dir, emptyList);
@@ -46,7 +46,7 @@ public class MultiFolder {
     lamUrl.url = fileToUrl(ford);
     lamUrl.lastModified = ford.lastModified();
     lamUrl.name = ford.getName();
-    tree.add(lamUrl, names); 
+    tree.add(lamUrl, names);
     if (ford.isDirectory()) {
       for (String s : ford.list()) {
         List<String> list = new ArrayList<String>(names.size() + 1);
@@ -86,7 +86,9 @@ public class MultiFolder {
     try {
       while((line = bis.readLine()) != null) {
         line = line.trim();
-        if (line.length() == 0) continue;
+        if (line.length() == 0) {
+          continue;
+        }
         String s = rootresource + "/" + line;
         URL url = classLoader.getResource(s);
         String[] jmena = line.split("/");
@@ -100,12 +102,13 @@ public class MultiFolder {
           tree.add(lamUrl, jmena);
         }
       }
+      bis.close();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
-  
+
   /* (non-Javadoc)
    * @see java.lang.Object#hashCode()
    */

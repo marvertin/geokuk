@@ -9,14 +9,14 @@ import javax.swing.KeyStroke;
 import cz.geokuk.core.coordinates.Uchopenec;
 import cz.geokuk.img.ImageLoader;
 
-public class CestyNevimAction extends CestyActionIndividual0 {
+public class OdebratZCestyAction extends CestyActionIndividual0 {
 
   private static final long serialVersionUID = 1L;
 
-  public CestyNevimAction(Uchopenec uchopenec) {
+  public OdebratZCestyAction(Uchopenec uchopenec) {
     super(uchopenec);
-    putValue(NAME, "Smaž z cesty");
-    putValue(SHORT_DESCRIPTION, "Odstraní bod z cesty. Pokud je to kešoid a není na cestě, ale je na ignorelistu, odstraní ho odstud.");
+    putValue(NAME, "Odebrat z cesty");
+    putValue(SHORT_DESCRIPTION, "Odstraní bod z cesty.");
     putValue(MNEMONIC_KEY, KeyEvent.VK_N);
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("DELETE"));
     putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletNevim.png"));

@@ -14,7 +14,7 @@ public class ZavriAction extends SouboeCestaAction0 {
 
 
   public ZavriAction() {
-    super("Zavři výlet (gpx)");
+    super("Zavři cesty (gpx)");
     putValue(SHORT_DESCRIPTION, "Odstraní všechny cesty z obrazovky a uzavře otevřený soubor");
     putValue(MNEMONIC_KEY, KeyEvent.VK_Z);
     //putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl S"));

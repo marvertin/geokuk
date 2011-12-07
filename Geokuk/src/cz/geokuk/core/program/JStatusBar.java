@@ -94,6 +94,8 @@ public class JStatusBar extends JPanel {
 
   private Akce akce;
 
+  private final JValue jPocetKesiVCestach = new JValue();
+
   public JStatusBar() {
     initComponents();
   }
@@ -178,6 +180,8 @@ public class JStatusBar extends JPanel {
 
     vylety.add(jSouborSVyletemPotrebujeUlozit);
     vylety.add(jSouborSVyletem);
+    vylety.add(jPocetKesiVCestach);
+    jPocetKesiVCestach.setToolTipText("Počet waypointů dohromady / počet cest.");
     add(vylety);
 
 
@@ -332,6 +336,7 @@ public class JStatusBar extends JPanel {
         jSouborSVyletemPotrebujeUlozit.setText("");
       }
     }
+    jPocetKesiVCestach.setText(doc.getPocetWaypointu() + "/" + doc.getPocetCest());
     //    vyletNe.setText(cestyModel.get(EVylet.NE).size()+"");
   }
 

@@ -136,6 +136,7 @@
       </pathconvert>
 
       <echo file="${imagesddir}/content.txt">${imgResourceList}</echo>
+		  <echo>Vytvoren soubor "${imagesddir}/content.txt"</echo>
   </target>
 
 

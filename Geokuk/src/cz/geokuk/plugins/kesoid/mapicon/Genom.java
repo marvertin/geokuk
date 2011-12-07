@@ -73,6 +73,10 @@ public class Genom {
   public Alela ALELA_pqimported =coale("pqimported", "Imporotvané z PQ");
   public Alela ALELA_handedited =coale("handedited", "Ručně přidané");
 
+  public Alela ALELA_mimocesticu =coale("mimocesticu", "Mimo cestu");
+  public Alela ALELA_nacestejsou =coale("nacestejsou", "Na cestě");
+
+
   public Alela ALELA_ter0 =coale("ter0", "Nespecifikovaný");
   public Alela ALELA_ter10 =coale("ter10", "1");
   public Alela ALELA_ter15 =coale("ter15", "1,5");
@@ -220,6 +224,11 @@ public class Genom {
     ale(ALELA_nevime);
     ale(ALELA_lovime);
     ale(ALELA_ignoru);
+
+    gen("Cesty", true);
+    ale(ALELA_mimocesticu);
+    ale(ALELA_nacestejsou);
+
 
     gen("Postavení k myši", false);
     ale(ALELA_nomouse);

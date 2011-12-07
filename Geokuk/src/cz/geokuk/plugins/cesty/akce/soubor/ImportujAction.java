@@ -20,7 +20,7 @@ public class ImportujAction extends Action0 {
   private JFileChooser fc;
 
   public ImportujAction() {
-    super("Importuj výlety (gpx, ggt)");
+    super("Importovat cesty (gpx, ggt)");
     putValue(SHORT_DESCRIPTION, "Do otevřeného výletu importuje cesty z GPX souborů a GGT soubory.");
     putValue(MNEMONIC_KEY, KeyEvent.VK_V);
     //putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));

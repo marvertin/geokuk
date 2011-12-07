@@ -13,22 +13,21 @@ import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.kesoid.Wpt;
 
-public class CestyAnoAction extends CestyAction0 {
+public class PridatDoCestyAction extends CestyAction0 {
 
   private static final long serialVersionUID = 1L;
 
   private final Mouable kontextoveMouable;
   private Poziceq poziceq;
 
-  public CestyAnoAction(Mouable kontextoveMouable) {
+  public PridatDoCestyAction(Mouable kontextoveMouable) {
     this.kontextoveMouable = kontextoveMouable;
 
-    putValue(NAME, "Přidej do cesty");
+    putValue(NAME, "Přidat do cesty");
     putValue(SHORT_DESCRIPTION, "Zařadí waypoint nebo pozici vybrané cesty, pokud žádná cesta není vybraná, vybere se automaticky nejbližší cesta. Když však žádná cesta neexistuje, je založena." +
     " Pokud se jedná o waypoint keše, která byla je na ignore listu, je z ignore listu odstraněna.");
     putValue(MNEMONIC_KEY, KeyEvent.VK_L);
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("INSERT"));
-    putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
   }
 
   @Override

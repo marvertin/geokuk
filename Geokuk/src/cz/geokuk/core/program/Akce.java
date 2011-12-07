@@ -20,8 +20,8 @@ import cz.geokuk.plugins.cesty.akce.BezNaBodVpredAction;
 import cz.geokuk.plugins.cesty.akce.BezNaBodVzadAction;
 import cz.geokuk.plugins.cesty.akce.BezNaKonecCestyAction;
 import cz.geokuk.plugins.cesty.akce.BezNaZacatekCestyAction;
-import cz.geokuk.plugins.cesty.akce.CestyAnoAction;
-import cz.geokuk.plugins.cesty.akce.CestyNevimAction;
+import cz.geokuk.plugins.cesty.akce.PridatDoCestyAction;
+import cz.geokuk.plugins.cesty.akce.OdebratZCestyAction;
 import cz.geokuk.plugins.cesty.akce.CestyPresClipboardDoGeogetuAction;
 import cz.geokuk.plugins.cesty.akce.bod.RozdelitCestuVBoduAction;
 import cz.geokuk.plugins.cesty.akce.bod.ZnovuSpojitCestyAction;
@@ -29,7 +29,7 @@ import cz.geokuk.plugins.cesty.akce.cesta.ObratitCestuAction;
 import cz.geokuk.plugins.cesty.akce.cesta.PospojovatVzdusneUseky;
 import cz.geokuk.plugins.cesty.akce.cesta.SmazatCestuAction;
 import cz.geokuk.plugins.cesty.akce.cesta.UzavritCestuAction;
-import cz.geokuk.plugins.cesty.akce.cesta.ZoomCestuAction;
+import cz.geokuk.plugins.cesty.akce.cesta.ZoomovatCestuAction;
 import cz.geokuk.plugins.cesty.akce.doc.CestyZoomAction;
 import cz.geokuk.plugins.cesty.akce.doc.PromazatJednobodoveAPrazdneCesty;
 import cz.geokuk.plugins.cesty.akce.soubor.ExportujDoGgtAction;
@@ -105,8 +105,8 @@ public class Akce {
   public final OddalMapuAction oddalMapuAction = new OddalMapuAction();
 
   public final CestyZoomAction cestyZoomAction = new CestyZoomAction(null);
-  public final CestyAnoAction cestyAnoAction = new CestyAnoAction(null);
-  public final CestyNevimAction cestyNevimAction = new CestyNevimAction(null);
+  public final PridatDoCestyAction pridatDoCestyAction = new PridatDoCestyAction(null);
+  public final OdebratZCestyAction odebratZCestyAction = new OdebratZCestyAction(null);
   public final CestyPresClipboardDoGeogetuAction cestyPresClipboardDoGeogetuAction = new CestyPresClipboardDoGeogetuAction();
   public final KruhyOnoffAction kruhyOnoffAction = new KruhyOnoffAction();
   public final JenDoTerenuUNenalezenychAction jednotkoveKruhyAction = new JenDoTerenuUNenalezenychAction();
@@ -196,7 +196,7 @@ public class Akce {
   public final ObratitCestuAction obratitCestuAction = new ObratitCestuAction(null);
   public final SmazatCestuAction smazatCestuAction = new SmazatCestuAction(null);
   public final UzavritCestuAction uzavritCestuAction = new UzavritCestuAction(null);
-  public final ZoomCestuAction zoomCestuAction = new ZoomCestuAction(null);
+  public final ZoomovatCestuAction zoomovatCestuAction = new ZoomovatCestuAction(null);
   public final PromazatJednobodoveAPrazdneCesty promazatJednobodoveAPrazdneCesty = new PromazatJednobodoveAPrazdneCesty(null);
 
 

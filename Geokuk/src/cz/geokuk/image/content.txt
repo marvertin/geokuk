@@ -2,12 +2,14 @@ content.txt
 map/Standard/groups.properties
 map/Standard/iconofsada.png
 map/Standard/skla.txt
+map/Standard/skloNormal/1obrysy/_nacestejsou_nomouse.properties
 map/Standard/skloNormal/2ctverce/_gc_actv_nomouse.properties
 map/Standard/skloNormal/2ctverce/_gc_dsbl_nomouse.properties
 map/Standard/skloNormal/2ctverce/_h_ignoru_nomouse_p6.properties
 map/Standard/skloNormal/2ctverce/_h_lovime_nomouse_p6.properties
 map/Standard/skloNormal/2ctverce/_pokus111.properties
 map/Standard/skloNormal/2ctverce/_v_lovime_nomouse_p6.properties
+map/Standard/skloNormal/3obrysy/_nacestejsou_nomouse.properties
 map/Standard/skloNormal/5typy/_gb_p4.png
 map/Standard/skloNormal/5typy/_gc_p4.png
 map/Standard/skloNormal/5typy/_h_fnd_p6.png
@@ -1007,7 +1009,9 @@ map/Standard/skloZvyrazneni/1zlutekruhy/_mouseon_mousean.properties
 map
 map/Standard
 map/Standard/skloNormal
+map/Standard/skloNormal/1obrysy
 map/Standard/skloNormal/2ctverce
+map/Standard/skloNormal/3obrysy
 map/Standard/skloNormal/5typy
 map/Standard/skloNormal/7zesedeni
 map/Standard/skloZvyrazneni

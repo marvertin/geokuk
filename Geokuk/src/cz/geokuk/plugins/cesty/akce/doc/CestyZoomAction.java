@@ -15,8 +15,8 @@ public class CestyZoomAction extends DocAction0 {
 
   public CestyZoomAction(Doc doc) {
     super(doc);
-    putValue(NAME, "Zoom výlet");
-    putValue(SHORT_DESCRIPTION, "Zobrazí měřítko a výřez mapy tak, aby na mapě byly všechny cesty vybrané do výletu.");
+    putValue(NAME, "Zoomovat cesty");
+    putValue(SHORT_DESCRIPTION, "Zobrazí měřítko a výřez mapy tak, aby na mapě byly všechny nakreslené cesty.");
     putValue(MNEMONIC_KEY, KeyEvent.VK_Z);
   }
 

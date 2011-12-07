@@ -21,7 +21,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.MouseGestureContext;
-import cz.geokuk.plugins.cesty.akce.CestyNevimAction;
+import cz.geokuk.plugins.cesty.akce.OdebratZCestyAction;
 import cz.geokuk.plugins.cesty.akce.bod.PresunoutSemVychoziBodUzavreneCesty;
 import cz.geokuk.plugins.cesty.akce.bod.RozdelitCestuVBoduAction;
 import cz.geokuk.plugins.cesty.akce.bod.UriznoutCestuVBoduAction;
@@ -32,7 +32,7 @@ import cz.geokuk.plugins.cesty.akce.cesta.PredraditVybranouCestu;
 import cz.geokuk.plugins.cesty.akce.cesta.PripojitVybranouCestu;
 import cz.geokuk.plugins.cesty.akce.cesta.SmazatCestuAction;
 import cz.geokuk.plugins.cesty.akce.cesta.UzavritCestuAction;
-import cz.geokuk.plugins.cesty.akce.cesta.ZoomCestuAction;
+import cz.geokuk.plugins.cesty.akce.cesta.ZoomovatCestuAction;
 import cz.geokuk.plugins.cesty.akce.usek.PrepniVzdusnostUseku;
 import cz.geokuk.plugins.cesty.akce.usek.RozdelitCestuVUsekuAction;
 import cz.geokuk.plugins.cesty.akce.usek.SmazatUsekAOtevritNeboRozdelitCestu;
@@ -444,7 +444,7 @@ public class JCestySlide extends JSingleSlide0{
   }
 
   private void addPopupItems(JPopupMenu popupMenu, Cesta cesta) {
-    popupMenu.add(factory.initNow(new ZoomCestuAction(cesta)));
+    popupMenu.add(factory.initNow(new ZoomovatCestuAction(cesta)));
     popupMenu.add(factory.initNow(new SmazatCestuAction(cesta)));
     popupMenu.add(factory.initNow(new ObratitCestuAction(cesta)));
     popupMenu.add(factory.initNow(new UzavritCestuAction(cesta)));
@@ -456,7 +456,7 @@ public class JCestySlide extends JSingleSlide0{
   }
 
   private void addPopupItems(JPopupMenu popupMenu, Bod bod) {
-    popupMenu.add(factory.initNow(new CestyNevimAction(bod)));
+    popupMenu.add(factory.initNow(new OdebratZCestyAction(bod)));
     popupMenu.add(factory.initNow(new RozdelitCestuVBoduAction(bod)));
     popupMenu.add(factory.initNow(new UriznoutCestuVBoduAction(bod)));
     popupMenu.add(factory.initNow(new ZnovuSpojitCestyAction(bod)));

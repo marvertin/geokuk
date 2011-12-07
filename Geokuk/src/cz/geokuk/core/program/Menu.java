@@ -184,11 +184,11 @@ public class Menu extends MenuStrujce {
 
     menu("Cesty", "Plánování cest");
     menu.setMnemonic(KeyEvent.VK_V);
-    item(akce.cestyAnoAction);
-    item(akce.cestyNevimAction);
+    item(akce.pridatDoCestyAction);
+    item(akce.odebratZCestyAction);
     separator(); // nad celým výletem
     item(akce.cestyZoomAction);
-    item(akce.zoomCestuAction);
+    item(akce.zoomovatCestuAction);
     item(akce.cestyPresClipboardDoGeogetuAction);
     item(akce.promazatJednobodoveAPrazdneCesty);
     separator();

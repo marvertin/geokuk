@@ -39,11 +39,12 @@ import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.MouseGestureContext;
 import cz.geokuk.plugins.cesty.CestyModel;
-import cz.geokuk.plugins.cesty.akce.CestyAnoAction;
-import cz.geokuk.plugins.cesty.akce.CestyNevimAction;
+import cz.geokuk.plugins.cesty.akce.OdebratZCestyAction;
+import cz.geokuk.plugins.cesty.akce.PridatDoCestyAction;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.EAplikaceSkla;
 import cz.geokuk.plugins.kesoid.mapicon.FenotypPreferencesChangedEvent;
+import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
@@ -291,22 +292,23 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
   }
 
   private Genotyp computeGenotyp(Wpt wpt) {
-    Genotyp g = wpt.getGenotyp(ikonBag.getGenom());
+    Genom genom = ikonBag.getGenom();
+    Genotyp g = wpt.getGenotyp(genom);
     //    switch (cestyModel.get(wpt.getKesoid())) {
     //    //    case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
     //    case NE:  g.put(ikonBag.getGenom().ALELA_ignoru); break;
     //    }
     switch (vyletModel.get(wpt.getKesoid())) {
-    case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
-    case NE:  g.put(ikonBag.getGenom().ALELA_ignoru); break;
+    case ANO: g.put(genom.ALELA_lovime); break;
+    case NE:  g.put(genom.ALELA_ignoru); break;
     }
-
+    g.put(cestyModel.isOnVylet(wpt) ? genom.ALELA_nacestejsou : genom.ALELA_mimocesticu);
 
     if (wpt == wptPodMysi) {
-      g.put(ikonBag.getGenom().ALELA_mouseon);
+      g.put(genom.ALELA_mouseon);
     }
     if (wpt.getKesoid() == kesoidPodMysi) {
-      g.put(ikonBag.getGenom().ALELA_mousean);
+      g.put(genom.ALELA_mousean);
     }
     g.removeAll(fenotypoveZakazaneAlely);
     return g;
@@ -427,8 +429,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
       p.add(factory.init(new UrlToListingForGeogetAction(kesoid)));
     }
     p.addSeparator();
-    p.add(factory.init(new CestyAnoAction(mysNadWpt)));
-    p.add(factory.init(new CestyNevimAction(mysNadWpt)));
+    p.add(factory.init(new PridatDoCestyAction(mysNadWpt)));
+    p.add(factory.init(new OdebratZCestyAction(mysNadWpt)));
     p.addSeparator();
     p.add(factory.init(new VyletAnoAction(kesoid)));
     p.add(factory.init(new VyletNeAction(kesoid)));
