@@ -5,7 +5,6 @@ import javax.swing.Icon;
 
 import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.AfterInjectInit;
-import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
 import cz.geokuk.plugins.cesty.CestyChangedEvent;
 import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.cesty.data.Cesta;
@@ -60,11 +59,6 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
     //System.out.println("********* dorucen event na: " + System.identityHashCode(this) + ": " + getClass().getName());
     aEvent.getDoc().kontrolaKonzistence();
     užPřišelHlavníEvent = true;
-    vyletChanged();
-  }
-
-  public final void onEvent(IgnoreListChangedEvent aEvent) {
-    if (! užPřišelHlavníEvent) return; // ještě je čas
     vyletChanged();
   }
 

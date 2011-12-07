@@ -17,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import cz.geokuk.core.coord.Coord;
@@ -51,7 +50,6 @@ public class CestyModel extends Model0 {
 
   private static final String MUJ_VYLET = "Můj výlet";
   public static final String VYLET_EXTENSION = "gpx";
-  private IgnoreList ignoreList;
   private Doc doc = new Doc();
 
   private final Updator updator = new Updator();
@@ -75,55 +73,10 @@ public class CestyModel extends Model0 {
   private Coord moord;
   private boolean probihaPridavani;
 
-  public void addToIgnoreList(Mouable mouable) {
-    if (mouable == null) return;
-    if (mouable instanceof Wpt) {
-      Wpt wpt = (Wpt) mouable;
-      for (Wpt w : wpt.getKesoid().getWpts()) {
-        odeberBod(w);
-      }
-      boolean zmenaIgnoreListu = ignoreList.addToIgnoreList(wpt);
-      if (zmenaIgnoreListu) {
-        ulozIgnoreListAFiruj(wpt);
-      }
-    }
-    odeberBod(mouable);
-  }
-
   public void addToVylet(Mouable mouable) {
     pridejBodNaMisto(mouable);
   }
 
-  public void removeFromBoth(Mouable mouable) {
-    boolean zmenaIgnoreListu = false;
-    if (mouable instanceof Wpt) {
-      Wpt wpt = (Wpt) mouable;
-      zmenaIgnoreListu = ignoreList.removeFromIgnoreList(wpt);
-      if (zmenaIgnoreListu) {
-        ulozIgnoreListAFiruj(wpt);
-      }
-    }
-    odeberBod(mouable);
-  }
-
-  private void removeFromIgnorList(Mouable mouable) {
-    if (mouable instanceof Wpt) {
-      Wpt wpt = (Wpt) mouable;
-      wpt.invalidate();
-      boolean zmenaIgnoreListu = ignoreList.removeFromIgnoreList(wpt);
-      if (zmenaIgnoreListu) {
-        ulozIgnoreListAFiruj(wpt);
-      }
-    }
-  }
-
-  public boolean isOnIgnoreList(Mouable mouable) {
-    if (mouable instanceof Wpt) {
-      Wpt wpt = (Wpt) mouable;
-      return ignoreList.isOnIgnoreList(wpt);
-    } else
-      return false;
-  }
 
   public boolean isOnVylet(Mouable mouable) {
     if (mouable == null) return false;
@@ -137,14 +90,6 @@ public class CestyModel extends Model0 {
   }
 
 
-  private void ulozIgnoreListAFiruj(Wpt wptx) {
-    IgnoreListSaveSwingWorker worker = new IgnoreListSaveSwingWorker(cestyZperzistentnovac, ignoreList);
-    worker.execute();
-    for (Wpt w : wptx.getKesoid().getWpts()) {
-      onChangeIgnoreList(w);
-    }
-  }
-
   //  public EVylet get(Wpt wpt) {
   //    boolean onIgnoreList = vylet.isOnIgnoreList(wpt.getKesoid());
   //    if (onIgnoreList) return EVylet.NE;
@@ -155,51 +100,10 @@ public class CestyModel extends Model0 {
   //  }
 
 
-  public void removeAllFromCesta() {
-    InvalidacniPesek invalidacniPesek = invalidacniPesek();
-    for (Wpt wpt : doc.getWpts()) {
-      removeFromBoth(wpt);
-    }
-    invalidacniPesek.invaliduj();
-  }
-
-  public void clearIgnoreList() {
-    boolean zmena = ignoreList.clear();
-    if (zmena) {
-      // cokoli se mohlo změnit
-      onChangeIgnoreList(null);
-    }
-  }
-
-
-  public int getPocetIgnorovanychKesoidu() {
-    int pocet = ignoreList.getIgnoreList().size();
-    return pocet;
-
-  }
-
   public int getPocetWaypointuVeVyletu() {
     return doc.getPocetWaypointu();
   }
 
-
-  private void onChangeIgnoreList(Wpt wpt) {
-    if (!SwingUtilities.isEventDispatchThread()) return;
-    fire(new IgnoreListChangedEvent(wpt));
-  }
-
-  /**
-   * @param vsechny
-   */
-  public void startLogingIgnoreList(KesBag vsechny) {
-    IgnoreListLoadSwingWorker worker = new IgnoreListLoadSwingWorker(cestyZperzistentnovac, vsechny, this);
-    worker.execute();
-  }
-
-  void setNewlyLoadedIgnoreList(IgnoreList newIgnoreList) {
-    ignoreList = newIgnoreList;
-    fire(new IgnoreListChangedEvent(null));
-  }
 
 
   public void inject(CestyZperzistentnovac cestyZperzistentnovac) {
@@ -211,7 +115,6 @@ public class CestyModel extends Model0 {
    */
   @Override
   protected void initAndFire() {
-    setNewlyLoadedIgnoreList(new IgnoreList());
     boolean mameOtevritVylet = currPrefe().node(FPref.VYLET_node).getBoolean(FPref.JE_OTEVRENY_VYLET_value, false);
     File file = currPrefe().node(FPref.VYLET_node).getFile(FPref.AKTUALNI_SOUBOR_value, null);
     if (mameOtevritVylet && file != null && file.canRead()) {
@@ -275,7 +178,6 @@ public class CestyModel extends Model0 {
 
 
   public void pridejBodNaMisto(Mouable mouable) {
-    removeFromIgnorList(mouable);
     if (curta == null) {
       Cesta cesta = doc.findNejblizsiCesta(mouable.getMou());
       if (cesta == null) {
@@ -289,7 +191,6 @@ public class CestyModel extends Model0 {
   }
 
   public Bod pridejBodNaKonec(Mouable mouable) {
-    removeFromIgnorList(mouable);
     if (curta == null) {
       Cesta cesta = Cesta.create();
       updator.xadd(doc, cesta);
@@ -333,7 +234,6 @@ public class CestyModel extends Model0 {
       Bod bod = (Bod) mouable;
       mouable = bod.getMouable();
     }
-    removeFromIgnorList(mouable);
     invalidate(mouable);
     invalidate(bb);
     if (bb.isStartocil()) {

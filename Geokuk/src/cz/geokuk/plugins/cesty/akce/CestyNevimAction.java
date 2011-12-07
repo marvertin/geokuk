@@ -24,11 +24,11 @@ public class CestyNevimAction extends CestyActionIndividual0 {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    cestyModel.removeFromBoth(effectiveMouable());
+    cestyModel.odeberBod(effectiveMouable());
   }
 
   @Override
   protected void enablujPokudMaSmysl() {
-    setEnabled(cestyModel.isOnVylet(effectiveMouable()) || cestyModel.isOnIgnoreList(effectiveMouable()));
+    setEnabled(cestyModel.isOnVylet(effectiveMouable()));
   }
 }

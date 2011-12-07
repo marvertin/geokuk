@@ -58,17 +58,6 @@ public class CestyZperzistentnovac {
     }
   }
 
-  public IgnoreList immediatlyNactiIgnoreList(KesBag vsechny) {
-    try {
-      IgnoreList novyvylet = new IgnoreList();
-      //      aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getAnoGgtFile().getEffectiveFile()), EVylet.ANO, vsechny);
-      aktualizujIgnoreList(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getNeGgtFile().getEffectiveFile()), vsechny);
-      return novyvylet;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
   private Ggt loadGgt(BufferedReader reader) throws IOException {
     String line;
     Set<String> set = new HashSet<String>();
@@ -83,46 +72,6 @@ public class CestyZperzistentnovac {
     return vyletPul;
   }
 
-  private void aktualizujIgnoreList(IgnoreList novyIgnoreList, Ggt ggt, KesBag kesBeg) {
-    if (kesBeg != null) {
-      for (Kesoid kesoid : kesBeg.getKesoidy()) {
-        if (ggt.kesides.contains(kesoid.getCode())) {
-          // je jedno, které wpt pošleme, protože se stejně všechmo ignoruje
-          novyIgnoreList.addToIgnoreList(kesoid.getMainWpt());
-        }
-      }
-    }
-  }
-
-
-  public void immediatlyZapisIgnoreList(IgnoreList ignoreList) {
-    //zapis(vylet, kesoidModel.getUmisteniSouboru().getAnoGgtFile().getEffectiveFile(), EVylet.ANO);
-    zapisGgt(ignoreList, kesoidModel.getUmisteniSouboru().getNeGgtFile().getEffectiveFile());
-  }
-
-  private void zapisGgt(IgnoreList ignoreList, File file) {
-    BufferedWriter wrt = null;
-    smimCist ++;
-    try {
-      try {
-        wrt = new BufferedWriter(new FileWriter(file));
-        for (Kesoid kes : ignoreList.getIgnoreList()) {
-          wrt.write(String.format("%s%s", kes.getCode(), FConst.NL));
-        }
-        wrt.close();
-      } catch (IOException e) {
-        if (wrt != null) {
-          try {
-            wrt.close();
-          } catch (IOException e1) { // co s tím jiného
-          }
-        }
-        throw new RuntimeException(e);
-      }
-    } finally {
-      smimCist --;
-    }
-  }
 
   void zapisGgt(Doc doc, File file) {
     BufferedWriter wrt = null;

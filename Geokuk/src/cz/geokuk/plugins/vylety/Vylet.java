@@ -14,6 +14,15 @@ public class Vylet {
   private final Set<Kesoid> ano = new HashSet<Kesoid>();
   private final Set<Kesoid> ne  = new HashSet<Kesoid>();
 
+  void removeAll(EVylet evyl) {
+    switch (evyl) {
+    case ANO: ano.clear(); break;
+    case NE:  ne.clear(); break;
+    case NEVIM:
+      break;
+    default: assert false;
+    }
+  }
 
   EVylet add(EVylet evyl, Kesoid kes) {
     EVylet evylPuvodni = get(kes);

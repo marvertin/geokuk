@@ -21,11 +21,8 @@ import cz.geokuk.plugins.cesty.akce.BezNaBodVzadAction;
 import cz.geokuk.plugins.cesty.akce.BezNaKonecCestyAction;
 import cz.geokuk.plugins.cesty.akce.BezNaZacatekCestyAction;
 import cz.geokuk.plugins.cesty.akce.CestyAnoAction;
-import cz.geokuk.plugins.cesty.akce.CestyNeAction;
 import cz.geokuk.plugins.cesty.akce.CestyNevimAction;
 import cz.geokuk.plugins.cesty.akce.CestyPresClipboardDoGeogetuAction;
-import cz.geokuk.plugins.cesty.akce.CestySmazAnoAction;
-import cz.geokuk.plugins.cesty.akce.CestySmazNeAction;
 import cz.geokuk.plugins.cesty.akce.bod.RozdelitCestuVBoduAction;
 import cz.geokuk.plugins.cesty.akce.bod.ZnovuSpojitCestyAction;
 import cz.geokuk.plugins.cesty.akce.cesta.ObratitCestuAction;
@@ -109,11 +106,8 @@ public class Akce {
 
   public final CestyZoomAction cestyZoomAction = new CestyZoomAction(null);
   public final CestyAnoAction cestyAnoAction = new CestyAnoAction(null);
-  public final CestyNeAction cestyNeAction = new CestyNeAction(null);
   public final CestyNevimAction cestyNevimAction = new CestyNevimAction(null);
   public final CestyPresClipboardDoGeogetuAction cestyPresClipboardDoGeogetuAction = new CestyPresClipboardDoGeogetuAction();
-  public final CestySmazAnoAction cestySmazAnoAction = new CestySmazAnoAction();
-  public final CestySmazNeAction cestySmazNeAction = new CestySmazNeAction();
   public final KruhyOnoffAction kruhyOnoffAction = new KruhyOnoffAction();
   public final JenDoTerenuUNenalezenychAction jednotkoveKruhyAction = new JenDoTerenuUNenalezenychAction();
   public final NastavParametryZvyraznovacichKruhuAction nastavParametryZvyraznovacichKruhuAction = new NastavParametryZvyraznovacichKruhuAction();

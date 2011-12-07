@@ -115,14 +115,14 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
     jOtevriUrl = new JSmallPictureButton();
 
     vyletAnoButton = new JSmallPictureButton(ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
-    vyletAnoButton.setAction(akce.cestyAnoAction);
+    vyletAnoButton.setAction(akce.vyletAnoAction);
     vyletAnoButton.setText(null);
     //vyletAnoButton.setPreferredSize(new Dimension(30,10));
     vyletNeButton = new JSmallPictureButton(ImageLoader.seekResIcon("x16/vylet/vyletNe.png"));
-    vyletNeButton.setAction(akce.cestyNeAction);
+    vyletNeButton.setAction(akce.vyletNeAction);
     vyletNeButton.setText(null);
     vyletNevimButton = new JSmallPictureButton(ImageLoader.seekResIcon("x16/vylet/vyletNevim.png"));
-    vyletNevimButton.setAction(akce.cestyNevimAction);
+    vyletNevimButton.setAction(akce.vyletNevimAction);
     vyletNevimButton.setText(null);
 
     jKesoidCode.setForeground(Color.RED);
@@ -258,7 +258,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
     jRucnePridany.setToolTipText(wpt.isRucnePridany()
         ? "Waypoint byl ručně přidán v Geogetu nebo podobném programu."
             : "Waypoint byl obsažen v PQ"
-    );
+        );
     int elevation = wpt.getElevation();
     jElevation.setText(elevation == 0 ? null : elevation + " m n. m.");
     jAuthor.setText(kesoid.getAuthor());

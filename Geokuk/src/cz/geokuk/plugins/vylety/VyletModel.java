@@ -44,10 +44,10 @@ public class VyletModel extends Model0 {
 
 
   public void removeAll(EVylet evyl) {
-    List<Kesoid> list  = new ArrayList<Kesoid>(get(evyl));
-    for (Kesoid kes : list) {
-      add(EVylet.NEVIM, kes);
-    }
+    vylet.removeAll(evyl);
+    VyletSaveSwingWorker worker = new VyletSaveSwingWorker(vyletovyZperzistentnovac, vylet);
+    worker.execute();
+    onChange(null, null, null);
   }
 
   public Set<Kesoid> get(EVylet evyl) {

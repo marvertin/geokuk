@@ -185,7 +185,6 @@ public class Menu extends MenuStrujce {
     menu("Cesty", "Plánování cest");
     menu.setMnemonic(KeyEvent.VK_V);
     item(akce.cestyAnoAction);
-    item(akce.cestyNeAction);
     item(akce.cestyNevimAction);
     separator(); // nad celým výletem
     item(akce.cestyZoomAction);
@@ -206,8 +205,6 @@ public class Menu extends MenuStrujce {
     item(akce.uzavritCestuAction);
     item(akce.pospojovatVzdusneUsekyAction);
     separator();
-    item(akce.cestySmazAnoAction);
-    item(akce.cestySmazNeAction);
     item(akce.rozdelitCestuAction);
     item(akce.znovuSpojitCestyAction);
 

@@ -39,9 +39,7 @@ import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.MouseGestureContext;
 import cz.geokuk.plugins.cesty.CestyModel;
-import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
 import cz.geokuk.plugins.cesty.akce.CestyAnoAction;
-import cz.geokuk.plugins.cesty.akce.CestyNeAction;
 import cz.geokuk.plugins.cesty.akce.CestyNevimAction;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.EAplikaceSkla;
@@ -62,7 +60,11 @@ import cz.geokuk.plugins.kesoid.mvc.UrlToListingForGeogetAction;
 import cz.geokuk.plugins.kesoid.mvc.ZhasniKeseUrciteAlelyAction;
 import cz.geokuk.plugins.kesoid.mvc.ZobrazNaGcComAction;
 import cz.geokuk.plugins.kesoid.mvc.ZoomKesAction;
+import cz.geokuk.plugins.vylety.VyletAnoAction;
 import cz.geokuk.plugins.vylety.VyletChangeEvent;
+import cz.geokuk.plugins.vylety.VyletModel;
+import cz.geokuk.plugins.vylety.VyletNeAction;
+import cz.geokuk.plugins.vylety.VyletNevimAction;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.FlatVisitor;
 import cz.geokuk.util.index2d.Indexator;
@@ -114,6 +116,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
   private KesBag vsechny;
 
+  private VyletModel vyletModel;
+
 
   public JKesoidySlide(boolean vykreslovatOkamtiteAleDlouho) {
     this.vykreslovatOkamtiteAleDlouho = vykreslovatOkamtiteAleDlouho;
@@ -145,15 +149,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
   public void onEvent(KeskyNactenyEvent event) {
     vsechny = event.getVsechny();
-  }
-
-  public void onEvent(IgnoreListChangedEvent aEvent) {
-    if (aEvent.isVelkaZmena()) {
-      Wpt.invalidateAllSklivec();
-      repaint();
-    } else {
-      repaintWpt(aEvent.getWpt());
-    }
   }
 
   public void onEvent(KesoidOnoffEvent event) {
@@ -301,11 +296,11 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
     //    //    case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
     //    case NE:  g.put(ikonBag.getGenom().ALELA_ignoru); break;
     //    }
-    if (cestyModel.getDoc().hasWpt(wpt)) {
-      g.put(ikonBag.getGenom().ALELA_lovime);
-    } else if (cestyModel.isOnIgnoreList(wpt)) {
-      g.put(ikonBag.getGenom().ALELA_ignoru);
+    switch (vyletModel.get(wpt.getKesoid())) {
+    case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
+    case NE:  g.put(ikonBag.getGenom().ALELA_ignoru); break;
     }
+
 
     if (wpt == wptPodMysi) {
       g.put(ikonBag.getGenom().ALELA_mouseon);
@@ -434,7 +429,10 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
     p.addSeparator();
     p.add(factory.init(new CestyAnoAction(mysNadWpt)));
     p.add(factory.init(new CestyNevimAction(mysNadWpt)));
-    p.add(factory.init(new CestyNeAction(mysNadWpt)));
+    p.addSeparator();
+    p.add(factory.init(new VyletAnoAction(kesoid)));
+    p.add(factory.init(new VyletNeAction(kesoid)));
+    p.add(factory.init(new VyletNevimAction(kesoid)));
     p.addSeparator();
     for (Wpt wpt : kesoid.getWpts()) {
       p.add(factory.init(new CenterWaypointAction(wpt)));
@@ -695,5 +693,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
     wpt.setSklivec(sklivec);
   }
 
+  public void inject(VyletModel vyletModel) {
+    this.vyletModel = vyletModel;
+  }
 
 }
