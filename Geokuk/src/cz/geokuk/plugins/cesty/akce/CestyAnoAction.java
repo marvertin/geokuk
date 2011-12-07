@@ -13,14 +13,14 @@ import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.kesoid.Wpt;
 
-public class VyletAnoAction extends VyletAction0 {
+public class CestyAnoAction extends CestyAction0 {
 
   private static final long serialVersionUID = 1L;
 
   private final Mouable kontextoveMouable;
   private Poziceq poziceq;
 
-  public VyletAnoAction(Mouable kontextoveMouable) {
+  public CestyAnoAction(Mouable kontextoveMouable) {
     this.kontextoveMouable = kontextoveMouable;
 
     putValue(NAME, "Přidej do cesty");

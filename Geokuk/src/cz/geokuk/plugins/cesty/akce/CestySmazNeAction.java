@@ -7,11 +7,11 @@ import java.awt.event.KeyEvent;
 import cz.geokuk.framework.Dlg;
 
 
-public class VyletSmazNeAction extends VyletAction0 {
+public class CestySmazNeAction extends CestyAction0 {
 
   private static final long serialVersionUID = -7547868179813232769L;
 
-  public VyletSmazNeAction() {
+  public CestySmazNeAction() {
     super("Žádné neignoruji");
     putValue(SHORT_DESCRIPTION, "Odstraní příznak ignorace u všech keší.");
     putValue(MNEMONIC_KEY, KeyEvent.VK_N);

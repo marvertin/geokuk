@@ -40,9 +40,9 @@ import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.MouseGestureContext;
 import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
 import cz.geokuk.plugins.cesty.CestyModel;
-import cz.geokuk.plugins.cesty.akce.VyletAnoAction;
-import cz.geokuk.plugins.cesty.akce.VyletNeAction;
-import cz.geokuk.plugins.cesty.akce.VyletNevimAction;
+import cz.geokuk.plugins.cesty.akce.CestyAnoAction;
+import cz.geokuk.plugins.cesty.akce.CestyNeAction;
+import cz.geokuk.plugins.cesty.akce.CestyNevimAction;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.EAplikaceSkla;
 import cz.geokuk.plugins.kesoid.mapicon.FenotypPreferencesChangedEvent;
@@ -431,9 +431,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
       p.add(factory.init(new UrlToListingForGeogetAction(kesoid)));
     }
     p.addSeparator();
-    p.add(factory.init(new VyletAnoAction(mysNadWpt)));
-    p.add(factory.init(new VyletNevimAction(mysNadWpt)));
-    p.add(factory.init(new VyletNeAction(mysNadWpt)));
+    p.add(factory.init(new CestyAnoAction(mysNadWpt)));
+    p.add(factory.init(new CestyNevimAction(mysNadWpt)));
+    p.add(factory.init(new CestyNeAction(mysNadWpt)));
     p.addSeparator();
     for (Wpt wpt : kesoid.getWpts()) {
       p.add(factory.init(new CenterWaypointAction(wpt)));

@@ -6,7 +6,7 @@ import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.kesoid.Wpt;
 
-public abstract class VyletActionIndividual0 extends VyletAction0  {
+public abstract class CestyActionIndividual0 extends CestyAction0  {
 
   private static final long serialVersionUID = -649900052004328014L;
 
@@ -14,7 +14,7 @@ public abstract class VyletActionIndividual0 extends VyletAction0  {
   private Poziceq poziceq;
 
 
-  public VyletActionIndividual0(Mouable kontextoveMouable) {
+  public CestyActionIndividual0(Mouable kontextoveMouable) {
     this.kontextoveMouable = kontextoveMouable;
     setEnabled(false);
   }

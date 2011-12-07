@@ -7,11 +7,11 @@ import java.awt.event.KeyEvent;
 import cz.geokuk.framework.Dlg;
 
 
-public class VyletSmazAnoAction extends VyletAction0 {
+public class CestySmazAnoAction extends CestyAction0 {
 
   private static final long serialVersionUID = -7547868179813232769L;
 
-  public VyletSmazAnoAction() {
+  public CestySmazAnoAction() {
     super("Žádné nelovím");
     putValue(SHORT_DESCRIPTION, "Odstraní příznak lovení u všech keší.");
     putValue(MNEMONIC_KEY, KeyEvent.VK_N);

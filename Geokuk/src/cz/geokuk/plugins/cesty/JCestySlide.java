@@ -21,7 +21,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.MouseGestureContext;
-import cz.geokuk.plugins.cesty.akce.VyletNevimAction;
+import cz.geokuk.plugins.cesty.akce.CestyNevimAction;
 import cz.geokuk.plugins.cesty.akce.bod.PresunoutSemVychoziBodUzavreneCesty;
 import cz.geokuk.plugins.cesty.akce.bod.RozdelitCestuVBoduAction;
 import cz.geokuk.plugins.cesty.akce.bod.UriznoutCestuVBoduAction;
@@ -456,7 +456,7 @@ public class JCestySlide extends JSingleSlide0{
   }
 
   private void addPopupItems(JPopupMenu popupMenu, Bod bod) {
-    popupMenu.add(factory.initNow(new VyletNevimAction(bod)));
+    popupMenu.add(factory.initNow(new CestyNevimAction(bod)));
     popupMenu.add(factory.initNow(new RozdelitCestuVBoduAction(bod)));
     popupMenu.add(factory.initNow(new UriznoutCestuVBoduAction(bod)));
     popupMenu.add(factory.initNow(new ZnovuSpojitCestyAction(bod)));

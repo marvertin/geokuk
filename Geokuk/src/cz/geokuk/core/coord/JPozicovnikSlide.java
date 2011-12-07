@@ -18,7 +18,7 @@ import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.MouseGestureContext;
-import cz.geokuk.plugins.cesty.akce.VyletAnoAction;
+import cz.geokuk.plugins.cesty.akce.CestyAnoAction;
 import cz.geokuk.plugins.geocoding.GeocodingBorowserXmlAction;
 import cz.geokuk.util.lang.FUtil;
 
@@ -167,7 +167,7 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 
       popupMenu.add(new JMenuItem(factory.init(new ZoomPoziceAction(wgs))));
       popupMenu.add(new JMenuItem(factory.init(new OdstranKrizAction())));
-      popupMenu.add(new JMenuItem(factory.init(new VyletAnoAction(poziceq.getPoziceMouable()))));
+      popupMenu.add(new JMenuItem(factory.init(new CestyAnoAction(poziceq.getPoziceMouable()))));
       popupMenu.add(new JMenuItem(factory.init(new GeocodingBorowserXmlAction(wgs))));
       popupMenu.add(new JMenuItem(factory.init(new SouradniceDoClipboarduAction(wgs))));
     }

@@ -13,7 +13,7 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 
 
-public abstract class VyletAction0 extends Action0 implements AfterInjectInit {
+public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 
   private static final long serialVersionUID = -2637836928166450446L;
 
@@ -22,7 +22,7 @@ public abstract class VyletAction0 extends Action0 implements AfterInjectInit {
 
   private boolean užPřišelHlavníEvent;
 
-  public VyletAction0() {
+  public CestyAction0() {
     setEnabled(false);
   }
 
@@ -42,7 +42,7 @@ public abstract class VyletAction0 extends Action0 implements AfterInjectInit {
     }
   }
 
-  public VyletAction0(String string) {
+  public CestyAction0(String string) {
     super(string);
     setEnabled(false);
   }
@@ -51,7 +51,7 @@ public abstract class VyletAction0 extends Action0 implements AfterInjectInit {
    * @param aString
    * @param aSeekResIcon
    */
-  public VyletAction0(String aString, Icon aIcon) {
+  public CestyAction0(String aString, Icon aIcon) {
     super(aString, aIcon);
     setEnabled(false);
   }

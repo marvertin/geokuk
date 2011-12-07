@@ -115,14 +115,14 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
     jOtevriUrl = new JSmallPictureButton();
 
     vyletAnoButton = new JSmallPictureButton(ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
-    vyletAnoButton.setAction(akce.vyletAnoAction);
+    vyletAnoButton.setAction(akce.cestyAnoAction);
     vyletAnoButton.setText(null);
     //vyletAnoButton.setPreferredSize(new Dimension(30,10));
     vyletNeButton = new JSmallPictureButton(ImageLoader.seekResIcon("x16/vylet/vyletNe.png"));
-    vyletNeButton.setAction(akce.vyletNeAction);
+    vyletNeButton.setAction(akce.cestyNeAction);
     vyletNeButton.setText(null);
     vyletNevimButton = new JSmallPictureButton(ImageLoader.seekResIcon("x16/vylet/vyletNevim.png"));
-    vyletNevimButton.setAction(akce.vyletNevimAction);
+    vyletNevimButton.setAction(akce.cestyNevimAction);
     vyletNevimButton.setText(null);
 
     jKesoidCode.setForeground(Color.RED);

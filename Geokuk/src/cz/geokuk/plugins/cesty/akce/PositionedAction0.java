@@ -35,7 +35,7 @@ package cz.geokuk.plugins.cesty.akce;
 
 
  */
-public abstract class PositionedAction0 extends VyletAction0  {
+public abstract class PositionedAction0 extends CestyAction0  {
 
   private static final long serialVersionUID = -5593905643299540151L;
 

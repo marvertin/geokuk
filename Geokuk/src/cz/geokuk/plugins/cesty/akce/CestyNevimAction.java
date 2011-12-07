@@ -9,11 +9,11 @@ import javax.swing.KeyStroke;
 import cz.geokuk.core.coordinates.Uchopenec;
 import cz.geokuk.img.ImageLoader;
 
-public class VyletNevimAction extends VyletActionIndividual0 {
+public class CestyNevimAction extends CestyActionIndividual0 {
 
   private static final long serialVersionUID = 1L;
 
-  public VyletNevimAction(Uchopenec uchopenec) {
+  public CestyNevimAction(Uchopenec uchopenec) {
     super(uchopenec);
     putValue(NAME, "Smaž z cesty");
     putValue(SHORT_DESCRIPTION, "Odstraní bod z cesty. Pokud je to kešoid a není na cestě, ale je na ignorelistu, odstraní ho odstud.");

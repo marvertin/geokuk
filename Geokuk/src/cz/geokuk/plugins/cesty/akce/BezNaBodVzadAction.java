@@ -13,7 +13,7 @@ import javax.swing.KeyStroke;
  * @author veverka
  *
  */
-public class BezNaBodVzadAction extends VyletAction0 {
+public class BezNaBodVzadAction extends CestyAction0 {
 
   private static final long serialVersionUID = -2882817111560336824L;
 

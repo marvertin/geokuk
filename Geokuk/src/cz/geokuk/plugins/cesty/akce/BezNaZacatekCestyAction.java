@@ -14,7 +14,7 @@ import javax.swing.KeyStroke;
  * @author veverka
  *
  */
-public class BezNaZacatekCestyAction extends VyletAction0 {
+public class BezNaZacatekCestyAction extends CestyAction0 {
 
   private static final long serialVersionUID = -2882817111560336824L;
 

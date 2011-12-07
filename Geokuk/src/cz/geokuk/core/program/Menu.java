@@ -169,16 +169,28 @@ public class Menu extends MenuStrujce {
     lbl.setLabelFor(iVybiracVyletu);
     tb.add(lbl);
     tb.add(iVybiracVyletu);
+    //    menu("Výlety", "Plánování výletů");
+    //    menu.setMnemonic(KeyEvent.VK_V);
+    //    item(akce.vyletAnoAction);
+    //    item(akce.vyletNeAction);
+    //    item(akce.vyletNevimAction);
+    //    separator();
+    //    item(akce.vyletZoomAction);
+    //    item(akce.vyletPresClipboardDoGeogetuAction);
+    //    separator();
+    //    item(akce.vyletSmazAnoAction);
+    //    item(akce.vyletSmazNeAction);
 
-    menu("Výlety", "Plánování výletů");
+
+    menu("Cesty", "Plánování cest");
     menu.setMnemonic(KeyEvent.VK_V);
-    item(akce.vyletAnoAction);
-    item(akce.vyletNeAction);
-    item(akce.vyletNevimAction);
+    item(akce.cestyAnoAction);
+    item(akce.cestyNeAction);
+    item(akce.cestyNevimAction);
     separator(); // nad celým výletem
     item(akce.vyletZoomAction);
     item(akce.zoomCestuAction);
-    item(akce.vyletPresClipboardDoGeogetuAction);
+    item(akce.cestyPresClipboardDoGeogetuAction);
     item(akce.promazatJednobodoveAPrazdneCesty);
     separator();
     item(akce.nactiAction);
@@ -194,8 +206,8 @@ public class Menu extends MenuStrujce {
     item(akce.uzavritCestuAction);
     item(akce.pospojovatVzdusneUsekyAction);
     separator();
-    item(akce.vyletSmazAnoAction);
-    item(akce.vyletSmazNeAction);
+    item(akce.cestySmazAnoAction);
+    item(akce.cestySmazNeAction);
     item(akce.rozdelitCestuAction);
     item(akce.znovuSpojitCestyAction);
 

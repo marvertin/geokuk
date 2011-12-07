@@ -10,11 +10,11 @@ import cz.geokuk.core.coordinates.Uchopenec;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Wpt;
 
-public class VyletNeAction extends VyletActionIndividual0 {
+public class CestyNeAction extends CestyActionIndividual0 {
 
   private static final long serialVersionUID = -2637836928166450446L;
 
-  public VyletNeAction(Uchopenec uchopenec) {
+  public CestyNeAction(Uchopenec uchopenec) {
     super(uchopenec);
     putValue(NAME, "Přidej na ignorlist");
     putValue(SHORT_DESCRIPTION, "Zařadí kešoid mezi kešoidy ignorované. Pokud byl výlet v nějaké cestě, odstraní ho.");
