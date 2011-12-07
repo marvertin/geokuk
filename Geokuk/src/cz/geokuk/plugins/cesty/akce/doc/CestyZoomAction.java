@@ -8,12 +8,12 @@ import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.cesty.data.Doc;
 
 
-public class VyletZoomAction extends DocAction0 {
+public class CestyZoomAction extends DocAction0 {
 
   private static final long serialVersionUID = -7547868179813232769L;
 
 
-  public VyletZoomAction(Doc doc) {
+  public CestyZoomAction(Doc doc) {
     super(doc);
     putValue(NAME, "Zoom výlet");
     putValue(SHORT_DESCRIPTION, "Zobrazí měřítko a výřez mapy tak, aby na mapě byly všechny cesty vybrané do výletu.");

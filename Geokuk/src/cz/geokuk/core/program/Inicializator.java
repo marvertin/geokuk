@@ -28,6 +28,9 @@ import cz.geokuk.plugins.mapy.kachle.KachloDownloader;
 import cz.geokuk.plugins.mrizky.MrizkaModel;
 import cz.geokuk.plugins.refbody.HlidacReferencnihoBodu;
 import cz.geokuk.plugins.refbody.RefbodyModel;
+import cz.geokuk.plugins.vylety.VyletModel;
+import cz.geokuk.plugins.vylety.VyletNacitaniKesoiduWatchDog;
+import cz.geokuk.plugins.vylety.VyletovyZperzistentnovac;
 
 /**
  * @author veverka
@@ -46,12 +49,16 @@ public class Inicializator {
 
 
     bb.registerSigleton(new CestyZperzistentnovac());
+    bb.registerSigleton(new VyletovyZperzistentnovac());
+
 
     // modely
     bb.registerSigleton(new PoziceModel());
     bb.registerSigleton(new VyrezModel());
     bb.registerSigleton(new CestyModel());
+    bb.registerSigleton(new VyletModel());
     bb.registerSigleton(new CestyNacitaniKesoiduWatchDog());
+    bb.registerSigleton(new VyletNacitaniKesoiduWatchDog());
     bb.registerSigleton(new KesFilter());
     bb.registerSigleton(new PopiskyModel());
     bb.registerSigleton(new KruhyModel());

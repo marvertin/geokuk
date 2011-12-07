@@ -4,15 +4,13 @@ package cz.geokuk.plugins.kesoid;
 import java.util.HashSet;
 import java.util.Set;
 
-import cz.geokuk.plugins.cesty.EVylet;
-import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
-import cz.geokuk.plugins.cesty.CestyChangedEvent;
 import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
-import cz.geokuk.util.lang.FUtil;
+import cz.geokuk.plugins.vylety.EVylet;
+import cz.geokuk.plugins.vylety.VyletModel;
 
 
 
@@ -26,34 +24,35 @@ public class KesFilter  {
   private KesoidModel kesoidModel;
 
   private Set<Wpt> jenTytoVyletoveWaypointyZobrazit;
+  private VyletModel vyletModel;
 
   public KesFilter() {
   }
 
-  public void onEvent(IgnoreListChangedEvent event) {
-    if (filterDefinition.getPrahVyletu() != EVylet.VSECHNY) {
-      kesoidModel.spustFiltrovani();
-    }
+  //  public void onEvent(IgnoreListChangedEvent event) {
+  //    if (filterDefinition.getPrahVyletu() != EVylet.VSECHNY) {
+  //      kesoidModel.spustFiltrovani();
+  //    }
+  //
+  //  }
 
-  }
-
-  public void onEvent(CestyChangedEvent aEvent) {
-    EVylet evylPrah = filterDefinition.getPrahVyletu();
-
-    if (evylPrah == EVylet.JEN_V_CESTE) {
-      Set<Wpt> wpts = new HashSet<Wpt>();
-      FUtil.addAll(wpts, aEvent.getDoc().getWpts());
-      if (! wpts.equals(jenTytoVyletoveWaypointyZobrazit)) {
-        jenTytoVyletoveWaypointyZobrazit = wpts;
-        kesoidModel.spustFiltrovani();
-      }
-
-    }
-    else {
-      jenTytoVyletoveWaypointyZobrazit = null;
-    }
-  }
-
+  //  public void onEvent(CestyChangedEvent aEvent) {
+  //    EVylet evylPrah = filterDefinition.getPrahVyletu();
+  //
+  //    if (evylPrah == EVylet.JEN_V_CESTE) {
+  //      Set<Wpt> wpts = new HashSet<Wpt>();
+  //      FUtil.addAll(wpts, aEvent.getDoc().getWpts());
+  //      if (! wpts.equals(jenTytoVyletoveWaypointyZobrazit)) {
+  //        jenTytoVyletoveWaypointyZobrazit = wpts;
+  //        kesoidModel.spustFiltrovani();
+  //      }
+  //
+  //    }
+  //    else {
+  //      jenTytoVyletoveWaypointyZobrazit = null;
+  //    }
+  //  }
+  //
 
 
   /**
@@ -114,7 +113,11 @@ public class KesFilter  {
           if (kes.getFavorit() < filterDefinition.getPrahFavorit()) return false;
         }
       }
-      if (! zaraditDlePrahuVyletu(aWpt)) return false;
+      if (vyletModel != null) {
+        EVylet evylKes = vyletModel.get(kesoid);
+        EVylet evylPrah = filterDefinition.getPrahVyletu();
+        if (evylKes.ordinal() < evylPrah.ordinal()) return false;
+      }
       return true;
     } catch (Exception e) {
       throw new RuntimeException("Filtrovani waypointu: " + aWpt, e);
@@ -122,24 +125,6 @@ public class KesFilter  {
     }
 
   }
-  //
-  //  Board.kesfilter.jenFinal.setSelected(true);
-  //  Board.kesfilter.jenJedenUNalezenych.setSelected(true);
-  //  Board.kesfilter.smailikNaFinalce.setSelected(true);
-
-  private boolean zaraditDlePrahuVyletu(Wpt aWpt) {
-    if (cestyModel != null) {
-      EVylet evylPrah = filterDefinition.getPrahVyletu();
-      switch (evylPrah) {
-      case VSECHNY: return true;
-      case BEZ_IGNOROVANYCH: return ! cestyModel.isOnIgnoreList(aWpt);
-      case JEN_V_CESTE: return cestyModel.isOnVylet(aWpt);
-      default: return true;
-      }
-    } else
-      return true;
-  }
-
 
   public void setDefaults() {
     //Atom.of(AWptType.FINAL_LOCATION);
@@ -174,6 +159,9 @@ public class KesFilter  {
     this.filterDefinition = filterDefinition;
   }
 
+  public void inject(VyletModel vyletModel) {
+    this.vyletModel = vyletModel;
+  }
 
 
   public void inject(CestyModel cestyModel) {

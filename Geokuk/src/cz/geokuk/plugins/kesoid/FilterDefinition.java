@@ -7,7 +7,7 @@ import cz.geokuk.framework.Copyable;
 import cz.geokuk.framework.Preferenceble;
 import cz.geokuk.framework.PreferencebleIgnore;
 import cz.geokuk.framework.PreferencebleProperty;
-import cz.geokuk.plugins.cesty.EVylet;
+import cz.geokuk.plugins.vylety.EVylet;
 
 /**
  * @author veverka
@@ -21,7 +21,7 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
   private int prahFavorit =0;
 
 
-  private EVylet prahVyletu = EVylet.BEZ_IGNOROVANYCH;
+  private EVylet prahVyletu = EVylet.NEVIM;
   private boolean jenDoTerenuUNenalezenych = true;
   private boolean jenFinalUNalezenych = true;
 

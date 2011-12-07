@@ -1,6 +1,6 @@
 package cz.geokuk.plugins.cesty;
 
-public enum EVylet {
+public enum ECeystyVylet {
   VSECHNY ("Všechny"),   // NE
   BEZ_IGNOROVANYCH ("Bez vynechaných"),  // NEVIM
   JEN_V_CESTE("Jen lovené"),  // ANO
@@ -8,7 +8,7 @@ public enum EVylet {
 
   private final String doKomboBoxu;
 
-  EVylet(String doKomboBoxu) {
+  ECeystyVylet(String doKomboBoxu) {
     this.doKomboBoxu = doKomboBoxu;
   }
 

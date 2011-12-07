@@ -38,8 +38,8 @@ import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.FKurzory;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.MouseGestureContext;
-import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
 import cz.geokuk.plugins.cesty.CestyModel;
+import cz.geokuk.plugins.cesty.IgnoreListChangedEvent;
 import cz.geokuk.plugins.cesty.akce.CestyAnoAction;
 import cz.geokuk.plugins.cesty.akce.CestyNeAction;
 import cz.geokuk.plugins.cesty.akce.CestyNevimAction;
@@ -62,6 +62,7 @@ import cz.geokuk.plugins.kesoid.mvc.UrlToListingForGeogetAction;
 import cz.geokuk.plugins.kesoid.mvc.ZhasniKeseUrciteAlelyAction;
 import cz.geokuk.plugins.kesoid.mvc.ZobrazNaGcComAction;
 import cz.geokuk.plugins.kesoid.mvc.ZoomKesAction;
+import cz.geokuk.plugins.vylety.VyletChangeEvent;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.FlatVisitor;
 import cz.geokuk.util.index2d.Indexator;
@@ -514,6 +515,15 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
       }
       priorita -= wpt.getKesoid().getKesoidKind().ordinal();
       event.add(wpt, priorita);
+    }
+  }
+
+  public void onEvent(VyletChangeEvent aEvent) {
+    if (aEvent.isVelkaZmena()) {
+      Wpt.invalidateAllSklivec();
+      repaint();
+    } else {
+      repaintWpt(aEvent.getKes().getMainWpt());
     }
   }
 

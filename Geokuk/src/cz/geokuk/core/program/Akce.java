@@ -33,8 +33,8 @@ import cz.geokuk.plugins.cesty.akce.cesta.PospojovatVzdusneUseky;
 import cz.geokuk.plugins.cesty.akce.cesta.SmazatCestuAction;
 import cz.geokuk.plugins.cesty.akce.cesta.UzavritCestuAction;
 import cz.geokuk.plugins.cesty.akce.cesta.ZoomCestuAction;
+import cz.geokuk.plugins.cesty.akce.doc.CestyZoomAction;
 import cz.geokuk.plugins.cesty.akce.doc.PromazatJednobodoveAPrazdneCesty;
-import cz.geokuk.plugins.cesty.akce.doc.VyletZoomAction;
 import cz.geokuk.plugins.cesty.akce.soubor.ExportujDoGgtAction;
 import cz.geokuk.plugins.cesty.akce.soubor.ImportujAction;
 import cz.geokuk.plugins.cesty.akce.soubor.OtevriAction;
@@ -85,6 +85,13 @@ import cz.geokuk.plugins.mrizky.MrizkaUtmAction;
 import cz.geokuk.plugins.mrizky.ZhasniVsechnyMrizkyAction;
 import cz.geokuk.plugins.refbody.BezDomuAction;
 import cz.geokuk.plugins.refbody.TadyJsemDomaAction;
+import cz.geokuk.plugins.vylety.VyletAnoAction;
+import cz.geokuk.plugins.vylety.VyletNeAction;
+import cz.geokuk.plugins.vylety.VyletNevimAction;
+import cz.geokuk.plugins.vylety.VyletPresClipboardDoGeogetuAction;
+import cz.geokuk.plugins.vylety.VyletSmazAnoAction;
+import cz.geokuk.plugins.vylety.VyletSmazNeAction;
+import cz.geokuk.plugins.vylety.VyletZoomAction;
 
 public class Akce {
   public final HledejKesAction hledejKesAction = new HledejKesAction();
@@ -100,7 +107,7 @@ public class Akce {
   public final PriblizMapuAction priblizMapuAction = new PriblizMapuAction();
   public final OddalMapuAction oddalMapuAction = new OddalMapuAction();
 
-  public final VyletZoomAction vyletZoomAction = new VyletZoomAction(null);
+  public final CestyZoomAction cestyZoomAction = new CestyZoomAction(null);
   public final CestyAnoAction cestyAnoAction = new CestyAnoAction(null);
   public final CestyNeAction cestyNeAction = new CestyNeAction(null);
   public final CestyNevimAction cestyNevimAction = new CestyNevimAction(null);
@@ -210,5 +217,14 @@ public class Akce {
   public final PosouvejSipkamiAction posouvejSipkamiRychleZAPAD = new PosouvejSipkamiAction(ESmer.ZAPAD, true);
 
   public final SouradniceDoClipboarduAction souradniceDoClipboarduAction = new SouradniceDoClipboarduAction(null);
+
+
+  public final VyletZoomAction vyletZoomAction = new VyletZoomAction();
+  public final VyletAnoAction vyletAnoAction = new VyletAnoAction(null);
+  public final VyletNeAction vyletNeAction = new VyletNeAction(null);
+  public final VyletNevimAction vyletNevimAction = new VyletNevimAction(null);
+  public final VyletPresClipboardDoGeogetuAction vyletPresClipboardDoGeogetuAction = new VyletPresClipboardDoGeogetuAction();
+  public final VyletSmazAnoAction vyletSmazAnoAction = new VyletSmazAnoAction();
+  public final VyletSmazNeAction vyletSmazNeAction = new VyletSmazNeAction();
 
 }
