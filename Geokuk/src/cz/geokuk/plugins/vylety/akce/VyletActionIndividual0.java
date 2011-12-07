@@ -4,7 +4,7 @@ import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.plugins.kesoid.Wpt;
-import cz.geokuk.plugins.vylety.cesty.Bod;
+import cz.geokuk.plugins.vylety.data.Bod;
 
 public abstract class VyletActionIndividual0 extends VyletAction0  {
 

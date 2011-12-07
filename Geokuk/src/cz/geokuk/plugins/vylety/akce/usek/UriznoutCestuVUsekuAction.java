@@ -5,7 +5,7 @@ package cz.geokuk.plugins.vylety.akce.usek;
 
 
 import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.plugins.vylety.cesty.Usek;
+import cz.geokuk.plugins.vylety.data.Usek;
 
 /**
  * Jde na vybranou pozici

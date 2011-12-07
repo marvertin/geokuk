@@ -11,11 +11,11 @@ import java.awt.geom.Ellipse2D;
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
-import cz.geokuk.plugins.vylety.cesty.Bod;
-import cz.geokuk.plugins.vylety.cesty.Bousek0;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
-import cz.geokuk.plugins.vylety.cesty.Doc;
-import cz.geokuk.plugins.vylety.cesty.Usek;
+import cz.geokuk.plugins.vylety.data.Bod;
+import cz.geokuk.plugins.vylety.data.Bousek0;
+import cz.geokuk.plugins.vylety.data.Cesta;
+import cz.geokuk.plugins.vylety.data.Doc;
+import cz.geokuk.plugins.vylety.data.Usek;
 
 public class Malovadlo {
   private final Graphics2D       g;

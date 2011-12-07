@@ -4,8 +4,8 @@ package cz.geokuk.plugins.vylety.akce.doc;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.geokuk.plugins.vylety.cesty.Cesta;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Cesta;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 
 public class PromazatJednobodoveAPrazdneCesty extends DocAction0 {

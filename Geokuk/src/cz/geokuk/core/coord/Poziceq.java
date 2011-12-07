@@ -6,7 +6,7 @@ import cz.geokuk.core.coordinates.Utm;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
-import cz.geokuk.plugins.vylety.cesty.Bod;
+import cz.geokuk.plugins.vylety.data.Bod;
 
 public class Poziceq {
 

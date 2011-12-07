@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.plugins.vylety.akce.BousekAction0;
-import cz.geokuk.plugins.vylety.cesty.Bod;
+import cz.geokuk.plugins.vylety.data.Bod;
 
 public abstract class BodAction0 extends BousekAction0 {
 

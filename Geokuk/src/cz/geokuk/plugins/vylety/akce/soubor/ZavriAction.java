@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import cz.geokuk.plugins.vylety.VyletChangedEvent;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 public class ZavriAction extends SouboeCestaAction0 {
 

@@ -1,7 +1,7 @@
 package cz.geokuk.plugins.vylety.akce.cesta;
 
 
-import cz.geokuk.plugins.vylety.cesty.Cesta;
+import cz.geokuk.plugins.vylety.data.Cesta;
 
 public class SmazatCestuAction extends CestaAction0 {
 

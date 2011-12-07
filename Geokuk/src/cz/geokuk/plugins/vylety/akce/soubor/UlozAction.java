@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 
 import cz.geokuk.plugins.vylety.VyletChangedEvent;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 public class UlozAction extends SouboeCestaAction0 {
 

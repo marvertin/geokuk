@@ -3,7 +3,7 @@ package cz.geokuk.plugins.vylety.akce.doc;
 import java.awt.event.ActionEvent;
 
 import cz.geokuk.plugins.vylety.akce.PositionedAction0;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 public abstract class DocAction0 extends PositionedAction0 {
 

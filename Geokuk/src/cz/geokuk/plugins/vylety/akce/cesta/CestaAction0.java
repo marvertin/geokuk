@@ -3,7 +3,7 @@ package cz.geokuk.plugins.vylety.akce.cesta;
 import java.awt.event.ActionEvent;
 
 import cz.geokuk.plugins.vylety.akce.PositionedAction0;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
+import cz.geokuk.plugins.vylety.data.Cesta;
 
 public abstract class CestaAction0 extends PositionedAction0 {
 

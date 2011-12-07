@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.plugins.vylety.akce.BousekAction0;
-import cz.geokuk.plugins.vylety.cesty.Usek;
+import cz.geokuk.plugins.vylety.data.Usek;
 
 public abstract class UsekAction0 extends BousekAction0 implements AfterInjectInit {
 

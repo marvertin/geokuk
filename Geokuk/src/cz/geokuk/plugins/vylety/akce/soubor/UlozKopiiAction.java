@@ -9,7 +9,7 @@ import javax.swing.JFileChooser;
 
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.plugins.vylety.VyletChangedEvent;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 public class UlozKopiiAction extends SouboeCestaAction0 {
 

@@ -8,8 +8,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.plugins.vylety.cesty.Bousek0;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
+import cz.geokuk.plugins.vylety.data.Bousek0;
+import cz.geokuk.plugins.vylety.data.Cesta;
 
 public class JCestaTooltip extends JComponent {
 

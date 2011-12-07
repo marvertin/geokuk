@@ -38,11 +38,11 @@ import cz.geokuk.plugins.vylety.akce.usek.PrepniVzdusnostUseku;
 import cz.geokuk.plugins.vylety.akce.usek.RozdelitCestuVUsekuAction;
 import cz.geokuk.plugins.vylety.akce.usek.SmazatUsekAOtevritNeboRozdelitCestu;
 import cz.geokuk.plugins.vylety.akce.usek.UriznoutCestuVUsekuAction;
-import cz.geokuk.plugins.vylety.cesty.Bod;
-import cz.geokuk.plugins.vylety.cesty.Bousek0;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
-import cz.geokuk.plugins.vylety.cesty.Doc;
-import cz.geokuk.plugins.vylety.cesty.Usek;
+import cz.geokuk.plugins.vylety.data.Bod;
+import cz.geokuk.plugins.vylety.data.Bousek0;
+import cz.geokuk.plugins.vylety.data.Cesta;
+import cz.geokuk.plugins.vylety.data.Doc;
+import cz.geokuk.plugins.vylety.data.Usek;
 
 
 public class JCestySlide extends JSingleSlide0{

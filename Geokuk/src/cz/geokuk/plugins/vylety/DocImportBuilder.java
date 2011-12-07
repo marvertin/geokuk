@@ -5,10 +5,10 @@ import java.util.List;
 
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.IImportBuilder;
-import cz.geokuk.plugins.vylety.cesty.Bod;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
-import cz.geokuk.plugins.vylety.cesty.Updator;
-import cz.geokuk.plugins.vylety.cesty.Usek;
+import cz.geokuk.plugins.vylety.data.Bod;
+import cz.geokuk.plugins.vylety.data.Cesta;
+import cz.geokuk.plugins.vylety.data.Updator;
+import cz.geokuk.plugins.vylety.data.Usek;
 
 public class DocImportBuilder implements IImportBuilder {
 

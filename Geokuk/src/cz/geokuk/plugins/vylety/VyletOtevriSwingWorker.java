@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutionException;
 
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Cesta;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 
 

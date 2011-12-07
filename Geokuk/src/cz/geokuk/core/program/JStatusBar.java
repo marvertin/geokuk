@@ -41,7 +41,7 @@ import cz.geokuk.plugins.kesoid.mvc.PrekrocenLimitWaypointuVeVyrezuEvent;
 import cz.geokuk.plugins.vylety.IgnoreListChangedEvent;
 import cz.geokuk.plugins.vylety.VyletChangedEvent;
 import cz.geokuk.plugins.vylety.VyletModel;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 /**
  * @author veverka

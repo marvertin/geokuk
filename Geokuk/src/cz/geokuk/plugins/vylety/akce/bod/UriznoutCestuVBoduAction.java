@@ -4,7 +4,7 @@
 package cz.geokuk.plugins.vylety.akce.bod;
 
 
-import cz.geokuk.plugins.vylety.cesty.Bod;
+import cz.geokuk.plugins.vylety.data.Bod;
 
 /**
  * Jde na vybranou pozici

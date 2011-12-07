@@ -2,8 +2,8 @@ package cz.geokuk.plugins.vylety.akce.cesta;
 
 
 import cz.geokuk.core.coordinates.MouRect;
-import cz.geokuk.plugins.vylety.cesty.Bod;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
+import cz.geokuk.plugins.vylety.data.Bod;
+import cz.geokuk.plugins.vylety.data.Cesta;
 
 public class ZoomCestuAction extends CestaAction0 {
 

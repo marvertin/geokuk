@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.plugins.vylety.VyletModel;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 
 

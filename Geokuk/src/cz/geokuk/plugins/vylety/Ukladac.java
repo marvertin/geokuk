@@ -10,9 +10,9 @@ import java.util.Locale;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.plugins.vylety.cesty.Bod;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Bod;
+import cz.geokuk.plugins.vylety.data.Cesta;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 public class Ukladac {
 

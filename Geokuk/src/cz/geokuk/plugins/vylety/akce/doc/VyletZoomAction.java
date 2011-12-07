@@ -4,8 +4,8 @@ package cz.geokuk.plugins.vylety.akce.doc;
 import java.awt.event.KeyEvent;
 
 import cz.geokuk.core.coordinates.MouRect;
-import cz.geokuk.plugins.vylety.cesty.Bod;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Bod;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 
 public class VyletZoomAction extends DocAction0 {

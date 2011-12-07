@@ -11,7 +11,7 @@ import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Wpt;
-import cz.geokuk.plugins.vylety.cesty.Bod;
+import cz.geokuk.plugins.vylety.data.Bod;
 
 public class VyletAnoAction extends VyletAction0 {
 

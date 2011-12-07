@@ -7,7 +7,7 @@ package cz.geokuk.plugins.vylety.akce.cesta;
 import java.awt.Color;
 
 import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
+import cz.geokuk.plugins.vylety.data.Cesta;
 
 /**
  * Jde na vybranou pozici

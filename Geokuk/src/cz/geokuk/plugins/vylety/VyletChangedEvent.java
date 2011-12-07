@@ -1,8 +1,8 @@
 package cz.geokuk.plugins.vylety;
 
 import cz.geokuk.framework.Event0;
-import cz.geokuk.plugins.vylety.cesty.Cesta;
-import cz.geokuk.plugins.vylety.cesty.Doc;
+import cz.geokuk.plugins.vylety.data.Cesta;
+import cz.geokuk.plugins.vylety.data.Doc;
 
 public class VyletChangedEvent extends Event0<VyletModel> {
   private final Doc doc;
