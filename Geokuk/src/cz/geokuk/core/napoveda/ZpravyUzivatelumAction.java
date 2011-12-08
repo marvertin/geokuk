@@ -34,7 +34,6 @@ public class ZpravyUzivatelumAction extends DialogOpeningAction0 {
   @Override
   public JMyDialog0 createDialog() {
     JZpravyUzivatelumDialog dlg = new JZpravyUzivatelumDialog(zpravyUzivatelum);
-    dlg.setModal(true);
     return dlg;
   }
 
