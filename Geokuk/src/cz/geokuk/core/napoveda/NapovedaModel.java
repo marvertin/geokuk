@@ -2,6 +2,7 @@ package cz.geokuk.core.napoveda;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.framework.Model0;
@@ -9,14 +10,28 @@ import cz.geokuk.util.process.BrowserOpener;
 
 public class NapovedaModel extends Model0 {
 
+  private List<ZpravaUzivateli> zpravyUzivatelum;
+
+  public List<ZpravaUzivateli> getZpravyUzivatelum() {
+    return zpravyUzivatelum;
+  }
+
+
+  public void setZpravyUzivatelum(List<ZpravaUzivateli> zpravyUzivatelum) {
+    this.zpravyUzivatelum = zpravyUzivatelum;
+    fire(new NapovedaModelChangedEvent());
+  }
+
+
   @Override
   protected void initAndFire() {
     fire(new NapovedaModelChangedEvent());
   }
 
+
   public void zkontrolujNoveAktualizace(boolean zobrazovatInfoPriSpravneVerzi) {
     if (isOnlineMode()) {
-      new ZkontrolovatAktualizaceSwingWorker(zobrazovatInfoPriSpravneVerzi).execute();
+      new ZkontrolovatAktualizaceSwingWorker(zobrazovatInfoPriSpravneVerzi, this).execute();
     }
 
   }

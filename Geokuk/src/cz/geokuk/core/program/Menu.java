@@ -250,6 +250,7 @@ public class Menu extends MenuStrujce {
     item(akce.webovaStrankaAction);
     item(akce.zadatProblemAction);
     item(akce.zkontrolovatAktualizaceAction);
+    item(akce.zpravyUzivatelumAction);
     separator();
     item(akce.oProgramuAction);
 

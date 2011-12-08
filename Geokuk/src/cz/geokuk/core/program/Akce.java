@@ -13,6 +13,7 @@ import cz.geokuk.core.napoveda.OProgramuAction;
 import cz.geokuk.core.napoveda.WebovaStrankaAction;
 import cz.geokuk.core.napoveda.ZadatProblemAction;
 import cz.geokuk.core.napoveda.ZkontrolovatAktualizaceAction;
+import cz.geokuk.core.napoveda.ZpravyUzivatelumAction;
 import cz.geokuk.core.profile.UlozitNastaveniKProgramuAction;
 import cz.geokuk.core.render.RenderAction;
 import cz.geokuk.framework.NapovedaAction;
@@ -20,9 +21,9 @@ import cz.geokuk.plugins.cesty.akce.BezNaBodVpredAction;
 import cz.geokuk.plugins.cesty.akce.BezNaBodVzadAction;
 import cz.geokuk.plugins.cesty.akce.BezNaKonecCestyAction;
 import cz.geokuk.plugins.cesty.akce.BezNaZacatekCestyAction;
-import cz.geokuk.plugins.cesty.akce.PridatDoCestyAction;
-import cz.geokuk.plugins.cesty.akce.OdebratZCestyAction;
 import cz.geokuk.plugins.cesty.akce.CestyPresClipboardDoGeogetuAction;
+import cz.geokuk.plugins.cesty.akce.OdebratZCestyAction;
+import cz.geokuk.plugins.cesty.akce.PridatDoCestyAction;
 import cz.geokuk.plugins.cesty.akce.bod.RozdelitCestuVBoduAction;
 import cz.geokuk.plugins.cesty.akce.bod.ZnovuSpojitCestyAction;
 import cz.geokuk.plugins.cesty.akce.cesta.ObratitCestuAction;
@@ -160,6 +161,7 @@ public class Akce {
 
   public final WebovaStrankaAction webovaStrankaAction = new WebovaStrankaAction();
   public final OProgramuAction oProgramuAction = new OProgramuAction();
+  public final ZpravyUzivatelumAction  zpravyUzivatelumAction = new ZpravyUzivatelumAction();
   public final FullScreenAction fullScreenAction = new FullScreenAction();
   public final NastavMapuCeskaAction nastavMapuCeskaAction = new NastavMapuCeskaAction();
   public final CloseAction closeAction = new CloseAction();
@@ -220,5 +222,6 @@ public class Akce {
   public final VyletPresClipboardDoGeogetuAction vyletPresClipboardDoGeogetuAction = new VyletPresClipboardDoGeogetuAction();
   public final VyletSmazAnoAction vyletSmazAnoAction = new VyletSmazAnoAction();
   public final VyletSmazNeAction vyletSmazNeAction = new VyletSmazNeAction();
+
 
 }

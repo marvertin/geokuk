@@ -19,16 +19,18 @@ import cz.geokuk.framework.Dlg;
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.util.process.BrowserOpener;
 
-public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<String, Void> {
+public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVerze, Void> {
 
   private final boolean zobrazitDialogPriPosledniVerzi;
+  private final NapovedaModel napovedaModel;
 
-  public ZkontrolovatAktualizaceSwingWorker(boolean zobrazitDialogPriPosledniVerzi) {
+  public ZkontrolovatAktualizaceSwingWorker(boolean zobrazitDialogPriPosledniVerzi, NapovedaModel napovedaModel) {
     this.zobrazitDialogPriPosledniVerzi = zobrazitDialogPriPosledniVerzi;
+    this.napovedaModel = napovedaModel;
   }
 
   @Override
-  protected String doInBackground() throws Exception {
+  protected ZpravyAVerze doInBackground() throws Exception {
     try {
       int msgnad = 1;
       URL url = new URL(FConst.WEB_PAGE_URL + "version.php?verze=" + FConst.VERSION + "&msgnad=" + msgnad);
@@ -38,14 +40,14 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<String, V
       BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
       String lastVersion = readVersion(br);
 
-      List<Zprava> zpravy = nactiSeznamZprav(br);
+      List<ZpravaUzivateli> zpravy = nactiSeznamZprav(br);
       br.close();
-      for (Zprava zprava : zpravy) {
-        System.out.println(zprava);
+      for (ZpravaUzivateli zpravaUzivateli : zpravy) {
+        System.out.println(zpravaUzivateli);
       }
       System.out.println("Posledni verze: '" + lastVersion +
           "' ");
-      return lastVersion;
+      return new ZpravyAVerze(zpravy, lastVersion);
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     } catch (IOException e) {
@@ -64,17 +66,17 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<String, V
     return null;
   }
 
-  private List<Zprava> nactiSeznamZprav(BufferedReader br) throws IOException {
+  private List<ZpravaUzivateli> nactiSeznamZprav(BufferedReader br) throws IOException {
     String line;
     Pattern pat = Pattern.compile("<h1>==(.*)==</h1>");
     StringBuilder sb = null;
     int msgnum = 0;
-    List<Zprava> list = new ArrayList<Zprava>();
+    List<ZpravaUzivateli> list = new ArrayList<ZpravaUzivateli>();
     while ((line = br.readLine()) != null) {
       Matcher matcher = pat.matcher(line);
       if (matcher.matches()) {
         if (sb != null  && sb.length() > 0) {
-          list.add(new Zprava(msgnum, sb.toString()));
+          list.add(new ZpravaUzivateli(msgnum, sb.toString()));
         }
         sb = new StringBuilder();
         msgnum = Integer.parseInt(matcher.group(1));
@@ -87,30 +89,16 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<String, V
 
     }
     if (sb != null  && sb.length() > 0) {
-      list.add(new Zprava(msgnum, sb.toString()));
+      list.add(new ZpravaUzivateli(msgnum, sb.toString()));
     }
     return list;
   }
 
-  private static class Zprava {
-    final int msgnum;
-    final String text;
-
-    public Zprava(int msgnum, String text) {
-      this.msgnum = msgnum;
-      this.text = text;
-    }
-
-    @Override
-    public String toString() {
-      return "Zprava [msgnum=" + msgnum + ", text=" + text + "]";
-    }
-  }
 
   @Override
   protected void donex() throws Exception {
-    String lastVersion = get();
-    if (FConst.VERSION.equals(lastVersion)) {
+    ZpravyAVerze vysledek = get();
+    if (FConst.VERSION.equals(vysledek.lastVersion)) {
       if (zobrazitDialogPriPosledniVerzi) {
         Dlg.info("Používaná verze programu Geokuk " + FConst.VERSION + " je poslední distribuovanou verzí." , "Oznámení");
       }
@@ -121,7 +109,7 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<String, V
       "Nedělat nic"};
       int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
           "<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " +
-              "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + lastVersion
+              "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + vysledek.lastVersion
               + ".",
               "Spuštění nové verze",
               JOptionPane.YES_NO_CANCEL_OPTION,
@@ -140,8 +128,10 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<String, V
         break;
       }
       System.out.println(n);
+
       //http://geokuk.cz/geokuk.jar
     }
+    napovedaModel.setZpravyUzivatelum(vysledek.zpravy);
 
     super.donex();
   }
