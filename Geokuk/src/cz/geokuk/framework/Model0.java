@@ -86,7 +86,7 @@ public abstract class Model0 implements AfterInjectInit {
     this.mainFrameHolder = mainFrameHolder;
   }
 
-  protected void factoryInit(Object obj) {
-    factory.init(obj);
+  protected <T> T factoryInit(T obj) {
+    return factory.init(obj);
   }
 }

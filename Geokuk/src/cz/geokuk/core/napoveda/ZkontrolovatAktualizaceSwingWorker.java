@@ -32,7 +32,7 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
   @Override
   protected ZpravyAVerze doInBackground() throws Exception {
     try {
-      int msgnad = 1;
+      int msgnad = napovedaModel.getLastViewedMsgNum();
       URL url = new URL(FConst.WEB_PAGE_URL + "version.php?verze=" + FConst.VERSION + "&msgnad=" + msgnad);
 
       URLConnection connection = url.openConnection();
