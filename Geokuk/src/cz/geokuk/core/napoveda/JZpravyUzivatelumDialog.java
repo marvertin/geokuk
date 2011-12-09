@@ -47,7 +47,7 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
 
     //Put the editor pane in a scroll pane.
     jZpravy = new JScrollPane(editorPane);
-    jZpravy.setPreferredSize(new Dimension(250, 145));
+    jZpravy.setPreferredSize(new Dimension(600, 400));
     jZpravy.setMinimumSize(new Dimension(10, 10));
 
 

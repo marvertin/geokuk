@@ -14,21 +14,21 @@
 ?>  
 <?php if ($msgnad < 1) { ?>
 <h1>==1==</h1>
-Toto je zpráva číslo jedna.
+Milí, uživatelé.
+<p>
+Od verze 3.3.0 máme novinku spočívající v možnosti
+zobrazovat uživatelům zprávy při spuštění geokuku.
+Zprávy si pomocí tlačítek vlevo a vpravo můžete prohlížet
+a přečtení potvrdit tlačítkem "Přečteno".
+Přečtené zprávy se už nebudou zobrazovat.
+
+<h2>Vrácení zpět funkce "lovím" a oddělení od cest</h2>
+Funkce "lovím", která označovala waypointy zeleně je nyní v původní podobě
+a je nezávisla na vytváření cest. Obě funcionality můžete dle libosti využívat
+na různé účely, například zeleně si označit keše, které vás zajímají z
+dlouhodobého hlediska a cesty použít pro konkrétní výlet.
 <?php } ?>
 
-<?php if ($msgnad < 2) { ?>
-<h1>==2==</h1>
-Toto je zpráva číslo 2.
-A ta je delší <b>a s bólden</b>
-<?php } ?>
-
-<?php if ($msgnad < 3) { ?>
-<h1>==3==</h1>
-Toto je zpráva číslo 3.
-Příliš žluťoučký kůň úpěl ďábelské ódy.
-A ta je delší <i>a s kurzívou</i>
-<?php } ?>
 <? include "zastatistikuj.php"; ?>
 </body>
 </html>
