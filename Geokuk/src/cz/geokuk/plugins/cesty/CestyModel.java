@@ -6,17 +6,13 @@ package cz.geokuk.plugins.cesty;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import cz.geokuk.core.coord.Coord;
@@ -26,7 +22,6 @@ import cz.geokuk.core.coord.VyrezChangedEvent;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.program.FPref;
-import cz.geokuk.framework.Dlg;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.cesty.data.Cesta;
@@ -38,9 +33,7 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
-import cz.geokuk.util.file.Filex;
 import cz.geokuk.util.lang.FUtil;
-import cz.geokuk.util.process.BrowserOpener;
 
 /**
  * @author veverka
@@ -295,7 +288,6 @@ public class CestyModel extends Model0 {
     }
     invalidate(doc);
     fireCesta();
-    osetriPrevzeninahranehoVyletuNaZStaralyAnoGgtFile();
   }
 
 
@@ -357,7 +349,6 @@ public class CestyModel extends Model0 {
   private void setDefaultProAktualniVyletFile(File file) {
     currPrefe().node(FPref.VYLET_node).putFile(FPref.AKTUALNI_SOUBOR_value, file);
     currPrefe().node(FPref.VYLET_node).putBoolean(FPref.JE_OTEVRENY_VYLET_value, true);
-    oznacZeUzSeNikdyNebudeNacitatAnoGgtFile();
   }
 
   public void inject(PoziceModel poziceModel) {
@@ -423,56 +414,6 @@ public class CestyModel extends Model0 {
     doc = new Doc();
     currPrefe().node(FPref.VYLET_node).putBoolean(FPref.JE_OTEVRENY_VYLET_value, false);
     fireCesta();
-  }
-
-  private void oznacZeUzSeNikdyNebudeNacitatAnoGgtFile() {
-    if (priPrvnimUlozeniSeZapiseZeZastaralySouborAnoGgtUzNebudeNikdyNacitan) {
-      currPrefe().node(FPref.UMISTENI_SOUBORU_node).putBoolean(FPref.ZASTARALE_ANO_GGT_FILE_UZ_NENACITAT, true);
-    }
-  }
-
-  public void vyresPripadneNahraniZastaralychVyletu() {
-    if (probihaNahravaniZastaralehoAnoGgtFile || zastaralyAnoGgtFileBylNahran) return; // načtení proběhlo nebo probíhá
-    boolean anoGgtFileUzNenacitat = currPrefe().node(FPref.UMISTENI_SOUBORU_node).getBoolean(FPref.ZASTARALE_ANO_GGT_FILE_UZ_NENACITAT, false);
-    if (anoGgtFileUzNenacitat) return; // je řečeno, že se načítat nebude, protože uživatel soubor asi uložil
-    Filex filex = currPrefe().node(FPref.UMISTENI_SOUBORU_node).getFilex(FPref.ZASTARALE_ANO_GGT_FILE_value, null);
-    if (filex == null) return; // asi se jedná o novou instalaci, kde nebyla předchozí verze a tudíš není důvod nic načítat
-
-    if (! filex.getEffectiveFile().canRead()) return; // soubor je sice nastaven, ale nelze číst, tak to zkusíme asi někdy jindy
-    if (! doc.isEmpty()) return; // něco je načteno, tak nebudeme donačítat další soubor
-
-    probihaNahravaniZastaralehoAnoGgtFile = true;
-    zastaralySouborSVyletem = filex.getEffectiveFile();
-    importuj(Collections.singletonList(filex.getEffectiveFile()));
-
-  }
-
-  private void osetriPrevzeninahranehoVyletuNaZStaralyAnoGgtFile() {
-    if (!probihaNahravaniZastaralehoAnoGgtFile) return;
-    zastaralyAnoGgtFileBylNahran = true;
-    probihaNahravaniZastaralehoAnoGgtFile = false;
-    if (doc.isEmpty()) return;
-    Object[] options = {"Beru na vědomí",
-    "Zobrazit nápovědu"};
-    int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
-        "<html>Byl nalezen výlet v souboru <b>\"" + zastaralySouborSVyletem + "\"</b><br> a byl nahrán, ulož si jej do GPX souboru.",
-        "Převedení výletu",
-        JOptionPane.YES_NO_CANCEL_OPTION,
-        JOptionPane.QUESTION_MESSAGE,
-        null,
-        options,
-        options[0]);
-
-    if (n == 1) {
-      try {
-        BrowserOpener.displayURL(new URL("http://wiki.geocaching.cz/wiki/Geokuk_-_pl%C3%A1nov%C3%A1n%C3%AD_v%C3%BDlet%C5%AF"));
-      } catch (MalformedURLException e) { // no tak co
-      }
-    }
-
-    //    Dlg.info("<html>Byl nalezen výlet v souboru <b>\"" + zastaralySouborSVyletem + "\"</b><br> a byl nahrán, ulož si jej do GPX souboru." +
-    //        "<br><a href=\"http://wiki.geocaching.cz/wiki/Geokuk_-_pl%C3%A1nov%C3%A1n%C3%AD_v%C3%BDlet%C5%AF\">doku</a>", "Převedení výletu");
-    // http://wiki.geocaching.cz/wiki/Geokuk_-_pl%C3%A1nov%C3%A1n%C3%AD_v%C3%BDlet%C5%AF
   }
 
   public void removeCestu(Cesta cesta) {

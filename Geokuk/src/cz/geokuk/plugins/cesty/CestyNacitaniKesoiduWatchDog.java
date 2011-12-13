@@ -15,9 +15,6 @@ public class CestyNacitaniKesoiduWatchDog {
 
   public void onEvent(KeskyNactenyEvent aEvent) {
     cestyModel.znovuVsechnoPripni();
-    cestyModel.vyresPripadneNahraniZastaralychVyletu();
-
-
   }
 
   public void inject(CestyModel cestyModel) {
