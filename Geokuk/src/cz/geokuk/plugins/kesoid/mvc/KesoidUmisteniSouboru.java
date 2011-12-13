@@ -17,6 +17,7 @@ import cz.geokuk.util.file.Filex;
 public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
 
   public static final Filex GEOKUK_DATA_DIR = new Filex(new File(FConst.HOME_DIR, "geokuk"), false, true);
+  public static final Filex CESTY_DIR  = new Filex(new File(FConst.HOME_DIR, "geokuk/cesty"), false, true);
   public static final Filex GEOGET_DATA_DIR = new Filex(new File("C:\\geoget\\data"), false, true);
 
   public static final Filex IMAGE_3RDPARTY_DIR = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "images3rdParty"), false, false);
@@ -30,6 +31,8 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
   public static final Filex NE_GGT = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "tedne.ggt"), false, true);
 
   private Filex kesDir;
+  private Filex cestyDir;
+
   private Filex geogetDataDir;
   private Filex image3rdPartyDir;
   private Filex imageMyDir;
@@ -53,6 +56,12 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
     this.kesDir = kesDir;
   }
 
+  public void setCestyDir(Filex cestyDir) {
+    this.cestyDir = cestyDir;
+  }
+
+
+
   /**
    * @return the kesDir
    */
@@ -60,6 +69,12 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
     check(kesDir);
     return kesDir;
   }
+
+  public Filex getCestyDir() {
+    check(cestyDir);
+    return cestyDir;
+  }
+
 
 
   /**
@@ -81,7 +96,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
    * @return the neGgtFile
    */
   public Filex getNeGgtFile() {
-    check(kesDir);
+    check(neGgtFile);
     return neGgtFile;
   }
 
@@ -89,7 +104,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
    * @return the neGgtFile
    */
   public Filex getAnoGgtFile() {
-    check(kesDir);
+    check(anoGgtFile);
     return anoGgtFile;
   }
 
@@ -129,6 +144,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
     result = prime * result + ((image3rdPartyDir == null) ? 0 : image3rdPartyDir.hashCode());
     result = prime * result + ((imageMyDir == null) ? 0 : imageMyDir.hashCode());
     result = prime * result + ((kesDir == null) ? 0 : kesDir.hashCode());
+    result = prime * result + ((cestyDir == null) ? 0 : cestyDir.hashCode());
     result = prime * result + ((neGgtFile == null) ? 0 : neGgtFile.hashCode());
     result = prime * result + ((anoGgtFile == null) ? 0 : anoGgtFile.hashCode());
     return result;
@@ -166,6 +182,11 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
         return false;
     } else if (!kesDir.equals(other.kesDir))
       return false;
+    if (cestyDir == null) {
+      if (other.cestyDir != null)
+        return false;
+    } else if (!cestyDir.equals(other.cestyDir))
+      return false;
     if (neGgtFile == null) {
       if (other.neGgtFile != null)
         return false;
@@ -178,7 +199,6 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
       return false;
     return true;
   }
-
 
 
 }

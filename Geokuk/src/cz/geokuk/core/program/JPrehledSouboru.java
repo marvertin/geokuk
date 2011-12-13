@@ -38,6 +38,7 @@ public class JPrehledSouboru extends JPanel {
   private static final long serialVersionUID = -2491414463002815835L;
 
   private JJedenSouborPanel jKesDir;
+  private JJedenSouborPanel jCestyDir;
   private JJedenSouborPanel jNeGgtFile;
   private JJedenSouborPanel jAnoGgtFile;
   private JJedenSouborPanel jKachleCacheDir;
@@ -59,6 +60,7 @@ public class JPrehledSouboru extends JPanel {
   private JTabbedPane jTabbedPane;
 
   private final EnumMap<ESouborPanelName, JJedenSouborPanel> mapaProFokusovani = new EnumMap<ESouborPanelName, JJedenSouborPanel>(ESouborPanelName.class);
+
 
   public JPrehledSouboru(Void v) {
     initComponents();
@@ -90,6 +92,7 @@ public class JPrehledSouboru extends JPanel {
 
 
     jKesDir =  pridejJednuPolozkuproEdit(null, tab1, "Složka s keškami získaný z Geogetu nebo jiného programu.",  true, false);
+    jCestyDir =  pridejJednuPolozkuproEdit(null, tab1, "Složka, do které se implicitně ukládají cesty.",  true, false);
     jGeogetDataDir =  pridejJednuPolozkuproEdit(null, tab1, "Datová složka geogetu.", true, true);
 
     jNeGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, na které teď na výlet nepůjdeme (GGT pro Geoget).",  false,  false);
@@ -146,6 +149,8 @@ public class JPrehledSouboru extends JPanel {
           {
             KesoidUmisteniSouboru u = new KesoidUmisteniSouboru();
             u.setKesDir(jKesDir.vezmiSouborAProver());
+            u.setCestyDir(jCestyDir.vezmiSouborAProver());
+
             u.setGeogetDataDir(jGeogetDataDir.vezmiSouborAProver());
             u.setImage3rdPartyDir(jImage3rdPartyDir.vezmiSouborAProver());
             u.setImageMyDir(jImageMyDir.vezmiSouborAProver());
@@ -221,6 +226,7 @@ public class JPrehledSouboru extends JPanel {
   public void onEvent(KesoidUmisteniSouboruChangedEvent event) {
     KesoidUmisteniSouboru u = event.getUmisteniSouboru();
     jKesDir.setFilex(u.getKesDir());
+    jCestyDir.setFilex(u.getCestyDir());
     jGeogetDataDir.setFilex(u.getGeogetDataDir());
 
     jNeGgtFile.setFilex(u.getNeGgtFile());

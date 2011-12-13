@@ -124,7 +124,7 @@ public class CestyModel extends Model0 {
 
 
   public File defaultAktualnihoVyletuFile() {
-    File defaultFile = new File(kesoidModel.getUmisteniSouboru().getKesDir().getEffectiveFile(), "Můj výlet.gpx");
+    File defaultFile = new File(kesoidModel.getUmisteniSouboru().getCestyDir().getEffectiveFile(), "Můj výlet.gpx");
     File file = currPrefe().node(FPref.VYLET_node).getFile(FPref.AKTUALNI_SOUBOR_value, defaultFile);
     return file;
   }
