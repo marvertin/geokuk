@@ -19,8 +19,6 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
   protected CestyModel cestyModel;
   private String puvodniJednoducheJmeno;
 
-  private boolean užPřišelHlavníEvent;
-
   public CestyAction0() {
     setEnabled(false);
   }
@@ -58,7 +56,6 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
   public final void onEvent(CestyChangedEvent aEvent) {
     //System.out.println("********* dorucen event na: " + System.identityHashCode(this) + ": " + getClass().getName());
     aEvent.getDoc().kontrolaKonzistence();
-    užPřišelHlavníEvent = true;
     vyletChanged();
   }
 

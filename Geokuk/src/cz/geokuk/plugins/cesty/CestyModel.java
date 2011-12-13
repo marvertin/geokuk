@@ -58,10 +58,6 @@ public class CestyModel extends Model0 {
 
   private KesoidModel kesoidModel;
 
-  private boolean zastaralyAnoGgtFileBylNahran;
-  private boolean probihaNahravaniZastaralehoAnoGgtFile;
-  private File zastaralySouborSVyletem;
-  private boolean priPrvnimUlozeniSeZapiseZeZastaralySouborAnoGgtUzNebudeNikdyNacitan;
   private PoziceModel poziceModel;
   private Coord moord;
   private boolean probihaPridavani;

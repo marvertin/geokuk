@@ -4,11 +4,9 @@ package cz.geokuk.plugins.kesoid;
 import java.util.HashSet;
 import java.util.Set;
 
-import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
-import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.plugins.vylety.VyletModel;
 
@@ -20,10 +18,6 @@ public class KesFilter  {
   private Set<Alela> nechteneAlely;
   private Set<String> jmenaNechtenychAlel;
 
-  private CestyModel cestyModel;
-  private KesoidModel kesoidModel;
-
-  private Set<Wpt> jenTytoVyletoveWaypointyZobrazit;
   private VyletModel vyletModel;
 
   public KesFilter() {
@@ -163,14 +157,6 @@ public class KesFilter  {
     this.vyletModel = vyletModel;
   }
 
-
-  public void inject(CestyModel cestyModel) {
-    this.cestyModel = cestyModel;
-  }
-
-  public void inject(KesoidModel kesoidModel) {
-    this.kesoidModel = kesoidModel;
-  }
 
 
 }

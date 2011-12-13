@@ -27,7 +27,6 @@ import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.importek.NacitacGpx;
-import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.index2d.Sheet;
@@ -37,8 +36,6 @@ import cz.geokuk.util.index2d.Sheet;
 public class CestyZperzistentnovac {
 
   private int smimCist;
-
-  private KesoidModel kesoidModel;
 
   private final Updator updator = new Updator();
 
@@ -180,9 +177,6 @@ public class CestyZperzistentnovac {
     return smimCist == 0;
   }
 
-  public void inject(KesoidModel kesoidModel) {
-    this.kesoidModel = kesoidModel;
-  }
 
 
 }
