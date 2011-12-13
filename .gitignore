@@ -1,7 +1,9 @@
 .metadata
 Geokuk/bin
 **/bin
+**/build
 *.class
 *.jar
 *.war
 *.ear
+*.exe
