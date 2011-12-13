@@ -8,7 +8,6 @@ package cz.geokuk.core.program;
 public class FPref {
 
   public static final String ZASTARALE_ANO_GGT_FILE_value = "anoGgtFile";
-  public static final String ZASTARALE_ANO_GGT_FILE_UZ_NENACITAT = "anoGgtFileUzNenacitat";
   public static final String BLOKOVANE_ZDROJE_value = "blokovaneZdroje";
   public static final String DOMACI_SOURADNICE_node = "domacisouradnice";
   public static final String GEOCACHING_COM_NICK_value = "geocachingComNick";
