@@ -65,7 +65,10 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
   private void initComponents() {
 
     TitledBorder border = BorderFactory.createTitledBorder(label);
-    border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
+    Font titleFont = border.getTitleFont();
+    if (titleFont != null) {
+      border.setTitleFont(titleFont.deriveFont(Font.BOLD));
+    }
     setBorder(border);
 
     jtext = new JTextField();
