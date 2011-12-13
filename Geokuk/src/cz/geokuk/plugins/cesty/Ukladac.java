@@ -27,7 +27,7 @@ public class Ukladac {
     }
 
     p("<?xml version=\"1.0\" encoding=\"UTF-8\"  ?>");
-    p("<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" version=\"1.1\" >");
+    p("<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" version=\"1.1\" creator=\"http://geokuk.cz\" >");
     uloz(doc);
 
     p("</gpx>");
