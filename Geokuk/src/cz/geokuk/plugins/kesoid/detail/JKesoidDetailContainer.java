@@ -191,6 +191,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
     jDetailyKesoidu.put(EKesoidKind.KES, factory.init(new JKesDetail()));
     jDetailyKesoidu.put(EKesoidKind.WAYMARK, factory.init(new JWaymarkDetail()));
     jDetailyKesoidu.put(EKesoidKind.SIMPLEWAYPOINT, factory.init(new JSimpleWaypointDetail()));
+    jDetailyKesoidu.put(EKesoidKind.MUNZEE, factory.init(new JMunzeeDetail()));
     for (EKesoidKind kind : EKesoidKind.values()) {
       JKesoidDetail0 detail = jDetailyKesoidu.get(kind);
       detail.setVisible(false);

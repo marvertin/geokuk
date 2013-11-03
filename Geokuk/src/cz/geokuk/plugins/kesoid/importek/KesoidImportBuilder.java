@@ -23,6 +23,7 @@ import cz.geokuk.plugins.kesoid.EKesWptType;
 import cz.geokuk.plugins.kesoid.Kes;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Munzee;
 import cz.geokuk.plugins.kesoid.SimpleWaypoint;
 import cz.geokuk.plugins.kesoid.Waymark;
 import cz.geokuk.plugins.kesoid.Wpt;
@@ -39,6 +40,8 @@ public class KesoidImportBuilder implements IImportBuilder {
   private static final String WAYMARK = "Waymark";
   private static final String WM = "WM";
   private static final String GC = "GC";
+  private static final String MZ = "MZ";
+  private static final String MU = "MU";
   static final String GEOCACHE = "Geocache";
   static final String GEOCACHE_FOUND = "Geocache Found";
 
@@ -236,6 +239,19 @@ public class KesoidImportBuilder implements IImportBuilder {
         progressor.setProgress(delkaTasku - list.size());
       }
 
+    }
+    
+    // Hledáme munzee
+    for (ListIterator<GpxWpt> it = list.listIterator(); it.hasNext();) {
+      GpxWpt gpxwpt = it.next();
+      boolean jeToMunzee = (gpxwpt.name.startsWith(MZ) || gpxwpt.name.startsWith(MU))
+          && (GEOCACHE.equals(gpxwpt.sym) || GEOCACHE_FOUND.equals(gpxwpt.sym));
+      if (jeToMunzee) {
+        Munzee mz = createMunzee(gpxwpt);
+        kesoidy.put(gpxwpt.name, mz);
+        it.remove();
+        progressor.setProgress(delkaTasku - list.size());
+      }
     }
 
     // Teď znovu procházíme a hledáme dodatečné waypointy kešoidů
@@ -464,6 +480,33 @@ public class KesoidImportBuilder implements IImportBuilder {
     wm.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
 
     return wm;
+  }
+  
+  private Munzee createMunzee(GpxWpt gpxwpt) {
+    Munzee mz = new Munzee();
+    mz.setCode(gpxwpt.name);
+    if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
+      mz.setVztahx(EKesVztah.OWN);
+    } else if (GEOCACHE_FOUND.equals(gpxwpt.sym)) {
+      mz.setVztahx(EKesVztah.FOUND);
+    } else {
+      mz.setVztahx(EKesVztah.NORMAL);
+    }
+    mz.setUrl(gpxwpt.link.href);
+    mz.setAuthor(gpxwpt.groundspeak.placedBy);
+    mz.setHidden(gpxwpt.time);
+
+
+    Wpt wpt = createWpt(gpxwpt);
+    wpt.setNazev(gpxwpt.groundspeak.name);
+    if(gpxwpt.name.startsWith(MZ))
+        wpt.setSym("MZ " + odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+    else
+        wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+
+    mz.addWpt(wpt);
+    mz.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+    return mz;
   }
 
   /**

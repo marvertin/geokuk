@@ -20,7 +20,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
   private String waymarkPattern = "{nazev} ({wpt})";
   private String cgpPattern = "{wpt}";
   private String simplewaypointPattern = "{nazev} ({wpt})";
-
+  private String munzeePattern = "{nazev} ({wpt})";
 
 
   public EnumMap<EKesoidKind, String> asMap() {
@@ -29,6 +29,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
     map.put(EKesoidKind.WAYMARK, waymarkPattern);
     map.put(EKesoidKind.CGP, cgpPattern);
     map.put(EKesoidKind.SIMPLEWAYPOINT, simplewaypointPattern);
+    map.put(EKesoidKind.MUNZEE, munzeePattern);
     return map;
   }
 
