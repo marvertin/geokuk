@@ -25,7 +25,7 @@ public class FConst {
 
   public static final String WEB_PAGE_WIKI = "  http://wiki.geocaching.cz/wiki/Geokuk";
 
-  public static final int MAX_POC_WPT_NA_MAPE = 3000;
+  public static final int MAX_POC_WPT_NA_MAPE = 30000;
 
   public static final File HOME_DIR = new File(System.getProperty("user.home"));
 
