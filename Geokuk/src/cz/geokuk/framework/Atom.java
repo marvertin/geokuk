@@ -13,8 +13,8 @@ public abstract class Atom implements Comparable<Atom> {
   private static Map<Class<? extends Atom>, TypAtomu> repo 
   = new HashMap<Class<? extends Atom>, TypAtomu>();
 
-  private String name;
-  private int ordinal;
+  String name;
+  int ordinal;
 
   public static <E extends Atom> Set<E> of(E... types) {
     return new HashSet<E>(Arrays.asList(types));

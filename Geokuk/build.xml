@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project name="GeoKuk" basedir="." default="build">
-  <property name="launch4j.dir" location="c:\\Program files\launch4j" />
+  <property name="launch4j.dir" location="C:\Program Files (x86)\Launch4j" />
 	<property name="backupsrcdir" location="a:\\backup\\geokuk" />
 
 	<property name="imagesddir" location="${basedir}/src/cz/geokuk/image" />
@@ -149,5 +149,9 @@
        fileVersion="${version}.0"  txtFileVersion="${version}"
        productVersion="${version}.0"  txtProductVersion="${version}"
     />
+  </target>
+  
+  <target name="echoheslo">
+     <echo>${heslisko}</echo>
   </target>
 </project>
