@@ -26,9 +26,13 @@ public class HledaciPodminka extends HledaciPodminka0 {
       sb.append(URL_PREFIX);
       sb.append("&address=");
       sb.append(URLEncoder.encode(getVzorek(), "utf8"));
-      sb.append("&bounds=");
-      sb.append(String.format("%s,%s|%s,%s", getStredHledani().lat -1, getStredHledani().lon -1, getStredHledani().lat +1, getStredHledani().lon +1));
-//      sb.append(URL_PREFIX);
+      sb.append("&language=cs");
+      
+//      sb.append("&bounds=");
+//      sb.append(String.format("%s,%s|%s,%s", getStredHledani().lat -1, getStredHledani().lon -1, getStredHledani().lat +1, getStredHledani().lon +1));
+
+      
+      //      sb.append(URL_PREFIX);
 //      sb.append("&q=");
 //      sb.append(URLEncoder.encode(getVzorek(), "utf8"));
 //      sb.append("&ll=");

@@ -119,7 +119,8 @@ public class JAdrTable extends JPanel {
   private void nastavVlastnostiSLoupcu() {
     TableColumn column;
     column = table.getColumnModel().getColumn(0);
-    column.setMaxWidth(25);
+    column.setMaxWidth(225);
+    column.setPreferredWidth(150);
     column.setResizable(false);
 
     column = table.getColumnModel().getColumn(1);
@@ -189,7 +190,7 @@ public class JAdrTable extends JPanel {
 
       Object s = null;
       switch (col) {
-      case 0: s = nalezenec.accurancy; break;
+      case 0: s = nalezenec.locationType; break;
       case 1: s = Math.round(nalezenec.getVzdalenost() / 100) / 10.0; break;
       case 2: s = Ikonizer.findSmerIcon(nalezenec.getAzimut()); break;
       case 3: s = nalezenec.adresa; break;

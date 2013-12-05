@@ -3,112 +3,142 @@
  */
 package cz.geokuk.plugins.geocoding;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
 
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.core.hledani.Hledac0;
 import cz.geokuk.core.hledani.HledaciPodminka0;
 
-
-
 /**
  * @author veverka
- *
+ * 
  */
 public class Hledac extends Hledac0<Nalezenec> {
 
-  private final DocumentBuilderFactory builderFactory;
+	private XPathFactory factory = XPathFactory.newInstance();
 
-  public Hledac() {
-    builderFactory = DocumentBuilderFactory.newInstance();
-  }
+	public Hledac() {
+	}
 
-  @Override
-  public List<Nalezenec> hledej(HledaciPodminka0 aPodm) {
-    HledaciPodminka podm = (HledaciPodminka) aPodm;
-    //http://maps.google.com/maps/geo?q=vranovice&output=xml&sensor=false&key=geokuk&gl=CZ
-    URL url = podm.computeUrl();
-    try {
-      DocumentBuilder builder = builderFactory.newDocumentBuilder();
-      InputStream stm = url.openStream();
-      Document document;
-      try {
-        document = builder.parse(stm);
-      } finally {
-        stm.close();
-      }
-      System.out.println("Vysledek: "+ document.toString());
-      document.getDocumentElement().normalize();
-      System.out.println(document.getDocumentElement().getNodeName());
-      Element rootElement = document.getDocumentElement();
-      List<Nalezenec> list = new ArrayList<Nalezenec>();
-      NodeList adressList = rootElement.getElementsByTagName("address");
-      NodeList coordinatesList = rootElement.getElementsByTagName("coordinates");
-      NodeList adressDetailsList = rootElement.getElementsByTagName("AddressDetails");
-      //      public String administrativeArea; // Jihomoravský Kraj, vYSOČINA
-      //      public String subAdministrativeAreaName; // Brno, Jihlava, Maršov; Veverská Bítýška
-      //      public String locality; // Černá pole; Henčov; -; -; Pazderna
-      //      public String thoroughfare; // Lidická 1880/50 ; 4079; 163
+	@Override
+	public List<Nalezenec> hledej(HledaciPodminka0 aPodm) {
+		HledaciPodminka podm = (HledaciPodminka) aPodm;
+		// starý způsob:
+		// http://maps.google.com/maps/geo?q=vranovice&output=xml&sensor=false&key=geokuk&gl=CZ
+		URL url = podm.computeUrl();
 
-      NodeList administrativeAreaList = rootElement.getElementsByTagName("AdministrativeAreaName");
-      NodeList subAdministrativeAreaList = rootElement.getElementsByTagName("SubAdministrativeAreaName");
-      NodeList localityList = rootElement.getElementsByTagName("LocalityName");
-      NodeList thoroughfareList = rootElement.getElementsByTagName("ThoroughfareName");
+		XPath xpath = factory.newXPath();
 
-      for (int i=0; i < adressList.getLength(); i++) {
-        Node item = adressList.item(i);
-        System.out.println("    " + item.getTextContent());
-        Nalezenec nalezenec = new Nalezenec();
-        nalezenec.adresa = item.getTextContent();
-        if (administrativeAreaList != null && i < administrativeAreaList.getLength()) {
-          nalezenec.administrativeArea = administrativeAreaList.item(i).getTextContent();
-        }
-        if (subAdministrativeAreaList != null && i < subAdministrativeAreaList.getLength()) {
-          nalezenec.subAdministrativeArea = subAdministrativeAreaList.item(i).getTextContent();
-        }
-        if (localityList != null && i < localityList.getLength()) {
-          nalezenec.locality = localityList.item(i).getTextContent();
-        }
-        if (thoroughfareList != null && i < thoroughfareList.getLength()) {
-          nalezenec.thoroughfare = thoroughfareList.item(i).getTextContent();
-        }
-        nalezenec.wgs = parseWgs(coordinatesList.item(i).getTextContent());
-        nalezenec.accurancy = adressDetailsList.item(i).getAttributes().getNamedItem("Accuracy").getTextContent();
-        list.add(nalezenec);
-      }
-      return list;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } catch (SAXException e) {
-      throw new RuntimeException(e);
-    } catch (ParserConfigurationException e) {
-      throw new RuntimeException(e);
-    }
+		InputStream stm = null;
+		try {
+			stm = url.openStream();
+			InputSource inputXml = new InputSource(stm);
+			NodeList adressList = (NodeList) xpath.evaluate(
+					"GeocodeResponse/result", inputXml,
+					XPathConstants.NODESET);
+			List<Nalezenec> list = new ArrayList<Nalezenec>();
 
-  }
-
-
-  private Wgs parseWgs(String coords) {
-    String[] ss = coords.split(",");
-    Wgs result = new Wgs(Double.parseDouble(ss[1]), Double.parseDouble(ss[0]));
-    return result;
-  }
-
+			for (int i = 0; i < adressList.getLength(); i++) {
+				Node item = adressList.item(i);
+				//System.out.println("xpath    " + item.getTextContent());
+				
+				String formatovanaAdresa = xpath.evaluate("formatted_address", item);
+				//System.out.println("xpath    " + formatovanaAdresa);
+				Nalezenec nalezenec = new Nalezenec();
+				nalezenec.adresa = formatovanaAdresa;
+				nalezenec.wgs = new Wgs(Double.parseDouble(xpath.evaluate("geometry/location/lat", item)), 
+						                Double.parseDouble(xpath.evaluate("geometry/location/lng", item)));
+				nalezenec.locationType = xpath.evaluate("geometry/location_type", item);
+				list.add(nalezenec);
+			}
+			return list;
+		} catch (XPathExpressionException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			if (stm != null) {
+				try {
+					stm.close();
+				} catch (IOException e) {				}
+			}
+		}
+	}
 
 
 }
+
+// <GeocodeResponse>
+// <status>OK</status>
+// <result>
+// <type>neighborhood</type>
+// <type>political</type>
+// <formatted_address>Třebčín, 783 42 Lutín, Česká republika</formatted_address>
+// <address_component>
+// <long_name>Třebčín</long_name>
+// <short_name>Třebčín</short_name>
+// <type>neighborhood</type>
+// <type>political</type>
+// </address_component>
+// <address_component>
+// <long_name>Lutín</long_name>
+// <short_name>Lutín</short_name>
+// <type>locality</type>
+// <type>political</type>
+// </address_component>
+// <address_component>
+// <long_name>Olomouc</long_name>
+// <short_name>Olomouc</short_name>
+// <type>administrative_area_level_2</type>
+// <type>political</type>
+// </address_component>
+// <address_component>
+// <long_name>Olomoucký kraj</long_name>
+// <short_name>Olomoucký kraj</short_name>
+// <type>administrative_area_level_1</type>
+// <type>political</type>
+// </address_component>
+// <address_component>
+// <long_name>Česká republika</long_name>
+// <short_name>CZ</short_name>
+// <type>country</type>
+// <type>political</type>
+// </address_component>
+// <address_component>
+// <long_name>783 42</long_name>
+// <short_name>783 42</short_name>
+// <type>postal_code</type>
+// </address_component>
+// <geometry>
+// <location>
+// <lat>49.5486497</lat>
+// <lng>17.1150528</lng>
+// </location>
+// <location_type>APPROXIMATE</location_type>
+// <viewport>
+// <southwest>
+// <lat>49.5414098</lat>
+// <lng>17.0990454</lng>
+// </southwest>
+// <northeast>
+// <lat>49.5558885</lat>
+// <lng>17.1310602</lng>
+// </northeast>
+// </viewport>
+// </geometry>
+// </result>
+// </GeocodeResponse>
