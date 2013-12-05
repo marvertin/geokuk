@@ -52,7 +52,9 @@ public class Hledac extends Hledac0<Nalezenec> {
       } finally {
         stm.close();
       }
+      System.out.println("Vysledek: "+ document.toString());
       document.getDocumentElement().normalize();
+      System.out.println(document.getDocumentElement().getNodeName());
       Element rootElement = document.getDocumentElement();
       List<Nalezenec> list = new ArrayList<Nalezenec>();
       NodeList adressList = rootElement.getElementsByTagName("address");
