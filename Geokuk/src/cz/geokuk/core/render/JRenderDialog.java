@@ -758,7 +758,10 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
   static Border createBorder(String titleText) {
     TitledBorder border = BorderFactory.createTitledBorder(titleText);
-    border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD | Font.ITALIC));
+    Font titleFont = border.getTitleFont();
+    if (titleFont != null) {
+    	border.setTitleFont(titleFont.deriveFont(Font.BOLD | Font.ITALIC));
+    }
     return border;
 
   }

@@ -20,7 +20,9 @@ public class JTwoColumnsPanel extends JPanel {
 
   public JTwoColumnsPanel(String titleText) {
     TitledBorder border = BorderFactory.createTitledBorder(titleText);
-    border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD | Font.ITALIC));
+    if (border.getTitleFont() != null) {
+    	border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD | Font.ITALIC));
+    }
     setBorder(border);
     setLayout(new GridBagLayout());
     createNewConstraint();
