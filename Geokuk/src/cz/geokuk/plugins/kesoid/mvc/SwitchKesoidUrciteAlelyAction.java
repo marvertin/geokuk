@@ -56,7 +56,7 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
   }
 
   private String sestavJmeno() {
-    return String.format("<html>%s: <b>%s</b> <i>(%d)</i>",
+	return String.format("<html>%s: <b>%s</b> <i>(%d)</i>",
         alela.getGen().getDisplayName(),
         alela.getDisplayName(),
         vsechny.getPoctyAlel().count(alela));
@@ -67,6 +67,7 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
   }
 
   public void onEvent(KeskyVyfiltrovanyEvent event) {
+	vsechny = event.getVsechny();
     boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().contains(alela.toString());
     setSelected(! nechtena);
     super.putValue(SHORT_DESCRIPTION, sestavJmeno());

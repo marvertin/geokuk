@@ -123,7 +123,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
     KesBag result = get();
     if (result == null) return; // asi zkanclváno
     // TODO řešit progresy nějak ssematicky
-    kesoidModel.fire(new KeskyVyfiltrovanyEvent(result));
+    kesoidModel.fire(new KeskyVyfiltrovanyEvent(result, vsechny));
     System.out.printf("FILTERING %d - finished, filtered %d caches, %d=%d waypoints, %d ms.\n",
         cisloFiltrovani,
         result.getKesoidy().size(),
