@@ -10,8 +10,8 @@ import cz.geokuk.plugins.mapy.EMapPodklad;
 
 public enum EKaType {
   BASE_N(true, 4, 16, 16),
-  TURIST(true, 4, 13, 13),
-  OPHOTO(true, 4, 18, 17),
+  TURIST(true, 4, 16, 16),
+  OPHOTO(true, 4, 18, 16),
   ARMY2(true, 5, 13, 13),
   OPHOTO0203(true, 4, 16, 16),
   _BEZ_PODKLADU(true, 4, 18, 18),
