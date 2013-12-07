@@ -29,6 +29,16 @@ na různé účely, například zeleně si označit keše, které vás zajímaj�
 dlouhodobého hlediska a cesty použít pro konkrétní výlet.
 <?php } ?>
 
+<?php if ($msgnad < 2) { ?>
+<h1>==2==</h1>
+<h2>Nová služba pro vyhledávání adres a jiných názvů zeměpisných míst (Ctrl+M).</h2>
+Od verze 3.5 je použita nová služba Google. Popis služby je zde:
+<a href="https://developers.google.com/maps/documentation/geocoding">https://developers.google.com/maps/documentation/geocoding</a>.
+Základním rozdílem oproti dříve používané službě je limit v počtu provedených dotazů na 2500 / 24 hodin. Zdá se to jako dost,
+ale vzhledem k tomu, že vyhledávání probíhá při každém stisku znaku v okně Ctrl+M, může být limit vyčerpán.
+Pokud se to ukáže jako problé, budu počty hledání optimalizovat.
+<?php } ?>
+
 <? include "zastatistikuj.php"; ?>
 </body>
 </html>
