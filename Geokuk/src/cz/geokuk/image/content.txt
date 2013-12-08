@@ -14,6 +14,9 @@ map/Standard/skloNormal/5typy/_gb_p4.png
 map/Standard/skloNormal/5typy/_gc_p4.png
 map/Standard/skloNormal/5typy/_h_fnd_p6.png
 map/Standard/skloNormal/5typy/_h_own_p6.png
+map/Standard/skloNormal/5typy/_h_cpt_p6.png
+map/Standard/skloNormal/5typy/_h_dpl_p6.png
+map/Standard/skloNormal/5typy/_mz_p4.png
 map/Standard/skloNormal/5typy/_p3.png
 map/Standard/skloNormal/5typy/_wm_p4.png
 map/Standard/skloNormal/5typy/cgp!BTP.gif
@@ -49,6 +52,29 @@ map/Standard/skloNormal/5typy/gcawp!Question to Answer.jpg
 map/Standard/skloNormal/5typy/gcawp!Reference Point.jpg
 map/Standard/skloNormal/5typy/gcawp!Stages of a Multicache.jpg
 map/Standard/skloNormal/5typy/gcawp!Trailhead.jpg
+map/Standard/skloNormal/5typy/mz!Business.png
+map/Standard/skloNormal/5typy/mz!Captured.png
+map/Standard/skloNormal/5typy/mz!Diamond.png
+map/Standard/skloNormal/5typy/mz!Eyeball.png
+map/Standard/skloNormal/5typy/mz!Longsword.png
+map/Standard/skloNormal/5typy/mz!Mace.png
+map/Standard/skloNormal/5typy/mz!Maintenance.png
+map/Standard/skloNormal/5typy/mz!Motel.png
+map/Standard/skloNormal/5typy/mz!Motelmunzee.png
+map/Standard/skloNormal/5typy/mz!Movember.png
+map/Standard/skloNormal/5typy/mz!Munzee.png
+map/Standard/skloNormal/5typy/mz!Mystery.png
+map/Standard/skloNormal/5typy/mz!Nfc.png
+map/Standard/skloNormal/5typy/mz!Normal.png
+map/Standard/skloNormal/5typy/mz!Owned.png
+map/Standard/skloNormal/5typy/mz!Premium.png
+map/Standard/skloNormal/5typy/mz!Quiz.png
+map/Standard/skloNormal/5typy/mz!Tradi.png
+map/Standard/skloNormal/5typy/mz!Virtual.png
+map/Standard/skloNormal/5typy/mz!MZ Cache In Trash Out Event.png
+map/Standard/skloNormal/5typy/mz!MZ Captured.png
+map/Standard/skloNormal/5typy/mz!MZ Mega-Event Cache.png
+map/Standard/skloNormal/5typy/mz!MZ Webcam Cache.png
 map/Standard/skloNormal/5typy/wm!'Marry Me' Markers.gif
 map/Standard/skloNormal/5typy/wm!'You Are Here' Maps.gif
 map/Standard/skloNormal/5typy/wm!'Z' Welcome Signs.gif

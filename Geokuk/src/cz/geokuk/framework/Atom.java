@@ -31,8 +31,8 @@ public abstract class Atom implements Comparable<Atom> {
     E atom = ta.mapa.get(jmeno);
     if (atom == null) {
       atom = vytvorInstanci(clazz);
-      atom.name = jmeno;
-      atom.ordinal = ta.mapa.size();
+      atom.setName(jmeno);
+      atom.setOrdinal(ta.mapa.size());
       ta.mapa.put(jmeno, atom);
     }
     return atom;
@@ -45,6 +45,14 @@ public abstract class Atom implements Comparable<Atom> {
 
   public int ordinal() {
     return ordinal;
+  }
+  
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setOrdinal(int ordinal) {
+    this.ordinal = ordinal;
   }
 
   public static <E> Set<E> noneOf(Class<E> e) {

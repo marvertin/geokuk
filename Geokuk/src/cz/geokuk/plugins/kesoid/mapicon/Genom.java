@@ -36,11 +36,14 @@ public class Genom {
   public Alela ALELA_wm =coale("wm", "Waymark");
   public Alela ALELA_gb =coale("gb", "Český geodetický bod");
   public Alela ALELA_wp =coale("wp", "Obecný waypoint");
+  public Alela ALELA_mz =coale("mz", "Munzee");
 
   public Alela ALELA_hnf =coale("hnf", "Nehledané");
   public Alela ALELA_fnd =coale("fnd", "Nalezené");
   public Alela ALELA_own =coale("own", "Moje vlastní");
   public Alela ALELA_not =coale("not", "Neexistující");
+  public Alela ALELA_cpt =coale("cpt", "Captured");
+  public Alela ALELA_dpl =coale("dpl", "Deployed");
 
   public Alela ALELA_actv =coale("actv", "Aktivmí");
   public Alela ALELA_dsbl =coale("dsbl", "Disablovaná");
@@ -194,6 +197,7 @@ public class Genom {
     ale(ALELA_00);
     ale(ALELA_gc);
     ale(ALELA_wm);
+    ale(ALELA_mz);
     ale(ALELA_gb);
     ale(ALELA_wp);
 
@@ -202,6 +206,8 @@ public class Genom {
     ale(ALELA_fnd);
     ale(ALELA_own);
     ale(ALELA_not);
+    ale(ALELA_cpt);
+    ale(ALELA_dpl);
 
     gen("Stav", true);
     ale(ALELA_actv);
