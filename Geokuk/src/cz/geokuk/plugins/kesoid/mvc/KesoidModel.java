@@ -325,6 +325,17 @@ public class KesoidModel extends Model0 {
   }
 
 
+  public void pridejKodKesoiduDoClipboardu(Kesoid kes) {
+    if (kes == null) return;
+    Clipboard scl = getSystemClipboard();
+    StringSelection ss = new StringSelection(kes.getCode());
+    try {
+      scl.setContents(ss, null);
+    } catch (IllegalStateException e2) {
+      FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
+    }
+  }
+
 
   public void inject(ProgressModel progressModel) {
     this.progressModel = progressModel;

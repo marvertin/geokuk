@@ -53,6 +53,7 @@ import cz.geokuk.plugins.kesoid.mvc.CenterWaypointAction;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
+import cz.geokuk.plugins.kesoid.mvc.KesoidCodeToClipboard;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
 import cz.geokuk.plugins.kesoid.mvc.TiskniNaGcComAction;
@@ -428,6 +429,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
     if (kesoid.getUrlPrint() != null) {
       p.add(factory.init(new UrlToListingForGeogetAction(kesoid)));
     }
+    if (kesoid.getCode() != null) {
+        p.add(factory.init(new KesoidCodeToClipboard(kesoid)));
+      }
     p.addSeparator();
     p.add(factory.init(new PridatDoCestyAction(mysNadWpt)));
     p.add(factory.init(new OdebratZCestyAction(mysNadWpt)));
