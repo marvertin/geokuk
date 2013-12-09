@@ -2,5 +2,3 @@ Manifest-Version: 1.0
 SplashScreen-Image: geokuk/imgicons/splash.png
 Main-Class: cz.geokuk.core.program.GeokukMain
 
-
-
