@@ -89,19 +89,33 @@ public class KachloDownloader {
     // TODO Offline image by měl být průhledný a rozhodně s lepší grafikou.
 
     Image image = prazdneObrazky.get(typPrazdnehoObrazku);
+    InputStream istm = null;
     if (image == null) {
       try {
-        InputStream istm = getClass().getResourceAsStream(typPrazdnehoObrazku.getRecourceName());
-        image = ImageIO.read(istm);
-        istm.close();
+        istm = getClass().getResourceAsStream(typPrazdnehoObrazku.getRecourceName());
+        if (istm != null) {
+            image = ImageIO.read(istm);
+        }
       } catch (IOException e) {
+          System.out.println("Nelze nacist prazdny obrazek! " + typPrazdnehoObrazku.getRecourceName());
+      } finally {
+        if (istm != null) {
+            try {
+                istm.close();
+            } catch (IOException e) {
+                System.out.println("Nelze zavrit stream pro " + typPrazdnehoObrazku.getRecourceName());
+                e.printStackTrace();
+            }
+        }
+      }
+      if (image == null) {
         // K tomu pravděpodobně nedojde, ale co když ,tak vyplníme nesmyslem
-        e.printStackTrace();
         image = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB_PRE);
         Graphics2D g = (Graphics2D) image.getGraphics();
         g.setColor(new Color(128,128,128,128));
         g.fillOval(30, 30, 196, 196);
       }
+
       prazdneObrazky.put(typPrazdnehoObrazku, image);
     }
     return image;

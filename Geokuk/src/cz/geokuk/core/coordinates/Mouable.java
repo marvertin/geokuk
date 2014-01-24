@@ -1,7 +1,7 @@
 package cz.geokuk.core.coordinates;
 
 /**
- * Schopen ze sevbe vychrlit mouřadnice.
+ * Schopen ze sebe vychrlit mouřadnice.
  * @author veverka
  *
  */
