@@ -5,6 +5,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
@@ -25,7 +27,7 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
   private KesBag vsechny;
 
   public JInformaceOZdrojichDialog() {
-    setTitle("Přehled zdrojhů kešoidů");
+    setTitle("Přehled zdrojů kešoidů");
   }
 
   @Override
@@ -35,6 +37,7 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
     jTable = new JTable(new Model());
     //jTable.setPreferredScrollableViewportSize(new Dimension(600, 70));
     jTable.setFillsViewportHeight(true);
+    jTable.setRowSorter(new TableRowSorter<TableModel>(jTable.getModel()));
 
     //Create the scroll pane and add the table to it.
     JScrollPane scrollPane = new JScrollPane(jTable);
@@ -163,8 +166,8 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
       case 0: r = Boolean.class; break;
       case 1: r = String.class; break;
       case 2: r = String.class; break;
-      case 3: r = String.class; break;
-      case 4: r = String.class; break;
+      case 3: r = Integer.class; break;
+      case 4: r = Integer.class; break;
       }
       return r;
     }
