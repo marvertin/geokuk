@@ -22,7 +22,6 @@ public class Poziceq {
   }
 
   /**
-   * @param aWgs
    */
   public Poziceq(Mouable mouable) {
     this.mouable = mouable;
@@ -73,6 +72,15 @@ public class Poziceq {
 
 
   public Wgs getWgs() {
+    // Here, if the underlying mouable has latitude and longitude, simply return its Wgs, because it's more accurate
+    // than converting the coordinates many times. At the moment, only waypoints satisfy this condition, but if other
+    // mouables are introduced, this should be adjusted and an interface should be introduced
+    Wpt wpt = getWpt();
+    if (wpt != null) {
+      return wpt.getWgs();
+    }
+
+    // if not, just do it the old way
     Mou mou = getPoziceMou();
     return mou == null ? null : mou.toWgs();
   }
