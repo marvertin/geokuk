@@ -67,11 +67,15 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
   private JFontChooser fontChooser;
   private JAlfaColorChooser backgroudChooser;
   private JTextField jKesPatternEdit;
+  private JTextField jGeospyPatternEdit;
+  private JTextField jMunzeePatternEdit;
   private JTextField jWaymarkPatternEdit;
   private JTextField jCgpPatternEdit;
   private JTextField jSimplewaypontPatternEdit;
 
   private final JLabel jKesPatternLabel = new JLabel("Keš:");
+  private final JLabel jGeospyPatternLabel = new JLabel("GeoSpy:");
+  private final JLabel jMunzeePatternLabel = new JLabel("Munzee:");
   private final JLabel jWaymarkPatternLabel = new JLabel("Waymark:");
   private final JLabel jCgpPatternLabel = new JLabel("Czech geodetic point:");
   private final JLabel jSimplewaypontPatternLabel = new JLabel("Simple waypoint:");
@@ -91,6 +95,8 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
     backgroudChooser.getSelectionModel().setSelectedColorWithAlfa(pose.background);
     fontChooser.setFont(pose.font);
     setPattern(jKesPatternEdit, pose.getPatterns().getKesPattern());
+    setPattern(jGeospyPatternEdit, pose.getPatterns().getGeospyPattern());
+    setPattern(jMunzeePatternEdit, pose.getPatterns().getMunzeePattern());
     setPattern(jWaymarkPatternEdit, pose.getPatterns().getWaymarkPattern());
     setPattern(jCgpPatternEdit, pose.getPatterns().getCgpPattern());
     setPattern(jSimplewaypontPatternEdit, pose.getPatterns().getSimplewaypointPattern());
@@ -114,6 +120,8 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
     backgroudChooser = new JAlfaColorChooser(Color.WHITE);
     fontChooser = new JFontChooser();
     jKesPatternEdit = new JTextField();
+    jGeospyPatternEdit = new JTextField();
+    jMunzeePatternEdit = new JTextField();
     jWaymarkPatternEdit = new JTextField();
     jCgpPatternEdit = new JTextField();
     jSimplewaypontPatternEdit = new JTextField();
@@ -161,12 +169,16 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
     layout.setHorizontalGroup(layout.createSequentialGroup()       //hroup
         .addGroup(layout.createParallelGroup()  //h1
             .addComponent(jKesPatternLabel)
+            .addComponent(jGeospyPatternLabel)
+            .addComponent(jMunzeePatternLabel)
             .addComponent(jWaymarkPatternLabel)
             .addComponent(jCgpPatternLabel)
             .addComponent(jSimplewaypontPatternLabel)
         )
         .addGroup(layout.createParallelGroup()  //h1
             .addComponent(jKesPatternEdit)
+            .addComponent(jGeospyPatternEdit)
+            .addComponent(jMunzeePatternEdit)
             .addComponent(jWaymarkPatternEdit)
             .addComponent(jCgpPatternEdit)
             .addComponent(jSimplewaypontPatternEdit)
@@ -176,6 +188,14 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
         .addGroup(layout.createParallelGroup()  //h1
             .addComponent(jKesPatternLabel)
             .addComponent(jKesPatternEdit)
+        )
+        .addGroup(layout.createParallelGroup()  //h1
+            .addComponent(jGeospyPatternLabel)
+            .addComponent(jGeospyPatternEdit)
+        )
+        .addGroup(layout.createParallelGroup()  //h1
+            .addComponent(jMunzeePatternLabel)
+            .addComponent(jMunzeePatternEdit)
         )
         .addGroup(layout.createParallelGroup()  //h1
             .addComponent(jWaymarkPatternLabel)
@@ -229,6 +249,46 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
       private void zmena() {
         PopiskySettings data = popiskyModel.getData();
         data.patterns.setKesPattern(jKesPatternEdit.getText());
+        popiskyModel.setData(data);
+      }
+    });
+    
+    jGeospyPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+        zmena();
+      }
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+        zmena();
+      }
+      @Override
+      public void changedUpdate(DocumentEvent e) {
+        zmena();
+      }
+      private void zmena() {
+        PopiskySettings data = popiskyModel.getData();
+        data.patterns.setGeospyPattern(jGeospyPatternEdit.getText());
+        popiskyModel.setData(data);
+      }
+    });
+    
+    jMunzeePatternEdit.getDocument().addDocumentListener(new DocumentListener() {
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+        zmena();
+      }
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+        zmena();
+      }
+      @Override
+      public void changedUpdate(DocumentEvent e) {
+        zmena();
+      }
+      private void zmena() {
+        PopiskySettings data = popiskyModel.getData();
+        data.patterns.setMunzeePattern(jMunzeePatternEdit.getText());
         popiskyModel.setData(data);
       }
     });

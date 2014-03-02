@@ -70,9 +70,12 @@ public class JToolbarOvladaceAlel extends JPanel {
     ovladac(vsechny, genom.ALELA_arch);
     ovladac(vsechny, genom.ALELA_cpt);
     ovladac(vsechny, genom.ALELA_dpl);
+    ovladac(vsechny, genom.ALELA_gsown);
+    ovladac(vsechny, genom.ALELA_gssec);
     //add(new JToolBar.Separator());
     add(new JSeparator(SwingConstants.VERTICAL));
     ovladac(vsechny, genom.ALELA_gc);
+    ovladac(vsechny, genom.ALELA_gs);
     ovladac(vsechny, genom.ALELA_mz);
     ovladac(vsechny, genom.ALELA_wm);
     ovladac(vsechny, genom.ALELA_gb);

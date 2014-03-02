@@ -12,10 +12,13 @@ map/Standard/skloNormal/2ctverce/_v_lovime_nomouse_p6.properties
 map/Standard/skloNormal/3obrysy/_nacestejsou_nomouse.properties
 map/Standard/skloNormal/5typy/_gb_p4.png
 map/Standard/skloNormal/5typy/_gc_p4.png
-map/Standard/skloNormal/5typy/_h_fnd_p6.png
-map/Standard/skloNormal/5typy/_h_own_p6.png
+map/Standard/skloNormal/5typy/_gs_p4.png
 map/Standard/skloNormal/5typy/_h_cpt_p6.png
 map/Standard/skloNormal/5typy/_h_dpl_p6.png
+map/Standard/skloNormal/5typy/_h_fnd_p6.png
+map/Standard/skloNormal/5typy/_h_own_p6.png
+map/Standard/skloNormal/5typy/_h_gsown_p6.png
+map/Standard/skloNormal/5typy/_h_gssec_p6.png
 map/Standard/skloNormal/5typy/_mz_p4.png
 map/Standard/skloNormal/5typy/_p3.png
 map/Standard/skloNormal/5typy/_wm_p4.png
@@ -52,6 +55,13 @@ map/Standard/skloNormal/5typy/gcawp!Question to Answer.jpg
 map/Standard/skloNormal/5typy/gcawp!Reference Point.jpg
 map/Standard/skloNormal/5typy/gcawp!Stages of a Multicache.jpg
 map/Standard/skloNormal/5typy/gcawp!Trailhead.jpg
+map/Standard/skloNormal/5typy/gs!Civil.png
+map/Standard/skloNormal/5typy/gs!Historic and religious.png
+map/Standard/skloNormal/5typy/gs!Military.png
+map/Standard/skloNormal/5typy/gs!Natural.png
+map/Standard/skloNormal/5typy/gs!Own.png
+map/Standard/skloNormal/5typy/gs!Secured.png
+map/Standard/skloNormal/5typy/gs!Technical.png
 map/Standard/skloNormal/5typy/mz!Business.png
 map/Standard/skloNormal/5typy/mz!Captured.png
 map/Standard/skloNormal/5typy/mz!Diamond.png

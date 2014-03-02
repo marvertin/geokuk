@@ -23,6 +23,7 @@ import cz.geokuk.plugins.kesoid.EKesWptType;
 import cz.geokuk.plugins.kesoid.Kes;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Geospy;
 import cz.geokuk.plugins.kesoid.Munzee;
 import cz.geokuk.plugins.kesoid.SimpleWaypoint;
 import cz.geokuk.plugins.kesoid.Waymark;
@@ -40,6 +41,7 @@ public class KesoidImportBuilder implements IImportBuilder {
   private static final String WAYMARK = "Waymark";
   private static final String WM = "WM";
   private static final String GC = "GC";
+  private static final String GS = "GS";
   private static final String MZ = "MZ";
   private static final String MU = "MU";
   static final String GEOCACHE = "Geocache";
@@ -239,6 +241,19 @@ public class KesoidImportBuilder implements IImportBuilder {
         progressor.setProgress(delkaTasku - list.size());
       }
 
+    }
+    
+    // Hledáme geospy
+    for (ListIterator<GpxWpt> it = list.listIterator(); it.hasNext();) {
+      GpxWpt gpxwpt = it.next();
+      boolean jeToGeospy = gpxwpt.name.startsWith(GS)
+          && (GEOCACHE.equals(gpxwpt.sym) || GEOCACHE_FOUND.equals(gpxwpt.sym));
+      if (jeToGeospy) {
+        Geospy gs = createGeospy(gpxwpt);
+        kesoidy.put(gpxwpt.name, gs);
+        it.remove();
+        progressor.setProgress(delkaTasku - list.size());
+      }
     }
     
     // Hledáme munzee
@@ -480,6 +495,30 @@ public class KesoidImportBuilder implements IImportBuilder {
     wm.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
 
     return wm;
+  }
+  
+  private Geospy createGeospy(GpxWpt gpxwpt) {
+    Geospy gs = new Geospy();
+    gs.setCode(gpxwpt.name);
+    if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
+      gs.setVztahx(EKesVztah.OWN);
+    } else if (GEOCACHE_FOUND.equals(gpxwpt.sym)) {
+      gs.setVztahx(EKesVztah.FOUND);
+    } else {
+      gs.setVztahx(EKesVztah.NORMAL);
+    }
+    gs.setUrl(gpxwpt.link.href);
+    gs.setAuthor(gpxwpt.groundspeak.placedBy);
+    gs.setHidden(gpxwpt.time);
+
+
+    Wpt wpt = createWpt(gpxwpt);
+    wpt.setNazev(gpxwpt.groundspeak.name);
+    wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+
+    gs.addWpt(wpt);
+    gs.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+    return gs;
   }
   
   private Munzee createMunzee(GpxWpt gpxwpt) {

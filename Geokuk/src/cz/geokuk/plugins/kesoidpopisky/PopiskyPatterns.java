@@ -20,16 +20,18 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
   private String waymarkPattern = "{nazev} ({wpt})";
   private String cgpPattern = "{wpt}";
   private String simplewaypointPattern = "{nazev} ({wpt})";
+  private String geospyPattern = "{nazev} ({wpt})";
   private String munzeePattern = "{nazev} ({wpt})";
 
 
   public EnumMap<EKesoidKind, String> asMap() {
     EnumMap<EKesoidKind, String> map = new EnumMap<EKesoidKind, String>(EKesoidKind.class);
     map.put(EKesoidKind.KES, kesPattern);
+    map.put(EKesoidKind.GEOSPY, geospyPattern);
+    map.put(EKesoidKind.MUNZEE, munzeePattern);
     map.put(EKesoidKind.WAYMARK, waymarkPattern);
     map.put(EKesoidKind.CGP, cgpPattern);
     map.put(EKesoidKind.SIMPLEWAYPOINT, simplewaypointPattern);
-    map.put(EKesoidKind.MUNZEE, munzeePattern);
     return map;
   }
 
@@ -51,7 +53,38 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
     this.kesPattern = kesPattern;
   }
 
+  
+  /**
+   * @return the geospyPattern
+   */
+  public String getGeospyPattern() {
+    return geospyPattern;
+  }
 
+  /**
+   * @param geospyPattern the geospyPattern to set
+   */
+  public void setGeospyPattern(String geospyPattern) {
+    this.geospyPattern = geospyPattern;
+  }
+  
+  
+  
+    /**
+   * @return the munzeePattern
+   */
+  public String getMunzeePattern() {
+    return munzeePattern;
+  }
+
+  /**
+   * @param munzeePattern the munzeePattern to set
+   */
+  public void setMunzeePattern(String munzeePattern) {
+    this.munzeePattern = munzeePattern;
+  }
+  
+  
 
   /**
    * @return the waymarkPattern
@@ -112,7 +145,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
    */
   @Override
   public String toString() {
-    return "PopiskyPatterns [kesPattern=" + kesPattern + ", waymarkPattern=" + waymarkPattern + ", cgpPattern=" + cgpPattern + ", simplewaypointPattern="
+    return "PopiskyPatterns [kesPattern=" + kesPattern + ", geospyPattern=" + geospyPattern + ", munzeePattern=" + munzeePattern + ", waymarkPattern=" + waymarkPattern + ", cgpPattern=" + cgpPattern + ", simplewaypointPattern="
     + simplewaypointPattern + "]";
   }
 
@@ -129,6 +162,8 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
     result = prime * result + ((kesPattern == null) ? 0 : kesPattern.hashCode());
     result = prime * result + ((simplewaypointPattern == null) ? 0 : simplewaypointPattern.hashCode());
     result = prime * result + ((waymarkPattern == null) ? 0 : waymarkPattern.hashCode());
+    result = prime * result + ((geospyPattern == null) ? 0 : geospyPattern.hashCode());
+    result = prime * result + ((munzeePattern == null) ? 0 : munzeePattern.hashCode());
     return result;
   }
 
@@ -165,6 +200,16 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
       if (other.waymarkPattern != null)
         return false;
     } else if (!waymarkPattern.equals(other.waymarkPattern))
+      return false;
+    if (geospyPattern == null) {
+      if (other.geospyPattern != null)
+        return false;
+    } else if (!geospyPattern.equals(other.geospyPattern))
+      return false;
+    if (munzeePattern == null) {
+      if (other.munzeePattern != null)
+        return false;
+    } else if (!munzeePattern.equals(other.munzeePattern))
       return false;
     return true;
   }
