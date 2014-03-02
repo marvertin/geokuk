@@ -8,3 +8,4 @@ Geokuk/bin
 *.ear
 *.exe
 data
+!/Geokuk/geoget/geokuk.jar

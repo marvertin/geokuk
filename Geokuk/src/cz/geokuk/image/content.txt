@@ -64,6 +64,7 @@ map/Standard/skloNormal/5typy/mz!Motelmunzee.png
 map/Standard/skloNormal/5typy/mz!Movember.png
 map/Standard/skloNormal/5typy/mz!Munzee.png
 map/Standard/skloNormal/5typy/mz!Mystery.png
+map/Standard/skloNormal/5typy/mz!Mysteryvirtual.png
 map/Standard/skloNormal/5typy/mz!Nfc.png
 map/Standard/skloNormal/5typy/mz!Normal.png
 map/Standard/skloNormal/5typy/mz!Owned.png
