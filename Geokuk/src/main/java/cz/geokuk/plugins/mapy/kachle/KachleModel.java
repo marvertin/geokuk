@@ -59,7 +59,7 @@ public class KachleModel extends Model0 {
    */
   public KachleModel() {
     cache = new CacheNaKachleDisk(this);
-    synchronizator =  new Synchronizator<DlazebniPosilac>(cache);
+    synchronizator = new Synchronizator<DlazebniPosilac>(cache);
     assert kachleCacheFolderHolder != null;
   }
 
@@ -74,7 +74,6 @@ public class KachleModel extends Model0 {
     //   return Settings.vseobecne.ukladatMapyNaDisk.isSelected();
     boolean b = currPrefe().getBoolean("ukladatMapyNaDisk", true);
     return b;
-
   }
 
 

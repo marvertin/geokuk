@@ -3,7 +3,7 @@ package cz.geokuk.plugins.mapy.kachle;
 import java.io.IOException;
 import java.io.OutputStream;
 
-class DiskSaveByteArray implements DiskSaveSpi {
+class DiskSaveByteArray implements ImageSaver {
 
   private final byte[] data;
 

@@ -1,15 +1,15 @@
 package cz.geokuk.plugins.kesoid;
 
 
+import cz.geokuk.img.ImageLoader;
+import cz.geokuk.img.MissingIcon;
+
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
-import cz.geokuk.img.ImageLoader;
-import cz.geokuk.img.MissingIcon;
 
 public class Ikonizer {
 

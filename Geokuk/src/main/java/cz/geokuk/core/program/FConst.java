@@ -35,7 +35,7 @@ public class FConst {
   static {
     try {
       Properties prop = new Properties();
-      String VERSION_PROPERTIES = "cz/geokuk/version.properties";
+      String VERSION_PROPERTIES = "version.properties";
       versionproperties = FConst.class.getClassLoader().getResource(VERSION_PROPERTIES);
       String s = versionproperties.toExternalForm();
       Pattern pat1 = Pattern.compile("jar:file:/(.*)!/geokuk/version.properties");

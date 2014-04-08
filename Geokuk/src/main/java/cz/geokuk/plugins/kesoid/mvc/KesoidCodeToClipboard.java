@@ -6,12 +6,9 @@ package cz.geokuk.plugins.kesoid.mvc;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.KeyStroke;
-
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.framework.Action0;
-import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Kesoid;
 
 

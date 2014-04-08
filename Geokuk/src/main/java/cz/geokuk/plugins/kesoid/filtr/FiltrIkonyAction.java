@@ -10,7 +10,6 @@ import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.img.ImageLoader;
 
 
-
 public class FiltrIkonyAction extends DialogOpeningAction0 {
 
   private static final long serialVersionUID = -2637836928166450446L;

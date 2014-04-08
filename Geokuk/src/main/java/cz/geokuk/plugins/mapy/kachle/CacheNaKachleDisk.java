@@ -34,7 +34,7 @@ class CacheNaKachleDisk {
       "Kolik dlaždic je ještě ve frontě a čeká na zápis na disk.");
 
 
-  private final KachleFileManager kfm;
+  private final KachleManager km;
 
   private final BlockingQueue<DiskSaveRequest> naZapsaniNaDisk = new LinkedBlockingQueue<DiskSaveRequest>(MAXIMALNI_VELIKOST_FRONTY_ZAPISUJICI_NA_DISK);
 
@@ -46,7 +46,7 @@ class CacheNaKachleDisk {
 
   public CacheNaKachleDisk(KachleModel kachleModel) {
     this.kachleModel = kachleModel;
-    kfm = new KachleFileManager(kachleModel.getKachleCacheFolderHolder());
+    km = KachleManagerFactory.getInstance(); //new KachleFileManager(kachleModel.getKachleCacheFolderHolder());
   }
 
   /**
@@ -58,7 +58,7 @@ class CacheNaKachleDisk {
    * @param img
    * @param dss Nemusí být, pak se neukládá.
    */
-  public void putKachle(Ka0 klic, Image img, DiskSaveSpi dss) {
+  public void putKachle(Ka0 klic, Image img, ImageSaver dss) {
     if (img == null) return;
     cache.putKachle(klic, img);
     if (dss != null){
@@ -98,7 +98,7 @@ class CacheNaKachleDisk {
   }
 
   public boolean isOnDisk(Ka0 ki) {
-    return kfm.exists(ki);
+    return km.exists(ki);
   }
 
   public Image memoryCachedImage(Ka0 klic) {
@@ -115,11 +115,11 @@ class CacheNaKachleDisk {
   public Image diskCachedImage(Ka0 klic) {
     Image img = cache.memoryCachedImage(klic);
     if (img != null) return img;
-    if (! kfm.exists(klic)) {
+    if (! km.exists(klic)) {
       pocitMinutiDiskoveKese.inc();
       return null;
     }
-    img = kfm.load(klic);
+    img = km.load(klic);
     if (img != null) {
       pocitZasahDiskoveKese.inc();
       cache.putKachle(klic, img); // do paměťové keše vždy, když se vytáhne z disku
@@ -142,7 +142,7 @@ class CacheNaKachleDisk {
         try {
           DiskSaveRequest dsr = naZapsaniNaDisk.take();
           if (kachleModel.isUkladatMapyNaDisk()) {
-            kfm.save(dsr.getKlic(), dsr.getUkladac());
+            km.save(dsr.getKlic(), dsr.getUkladac());
           }
           pocitZapsanoNaDisk.inc();
           int size = naZapsaniNaDisk.size();

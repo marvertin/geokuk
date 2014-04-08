@@ -18,13 +18,13 @@ class DiskSaveRequest {
 	@SuppressWarnings("unused") 	// drží image jen proto, aby ho ;; garbage collector
   private Image img;   
 	
-	private DiskSaveSpi ukladac;  // ví jak zapsat do streamu data
+	private ImageSaver ukladac;  // ví jak zapsat do streamu data
 	
 	public DiskSaveRequest(Ka0 klic, Image img, byte[] data) {
 	  this(klic, img, new DiskSaveByteArray(data));
   }
 
-	public DiskSaveRequest(Ka0 klic, Image img, DiskSaveSpi dss) {
+	public DiskSaveRequest(Ka0 klic, Image img, ImageSaver dss) {
 	  super();
 	  this.klic = klic;
 	  this.img = img;
@@ -40,7 +40,7 @@ class DiskSaveRequest {
 		ukladac.save(ostm);
 	}
 
-	public DiskSaveSpi getUkladac() {
+	public ImageSaver getUkladac() {
   	return ukladac;
   }
 }

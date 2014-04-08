@@ -1,5 +1,7 @@
 package cz.geokuk.plugins.kesoid.detail;
 
+import cz.geokuk.img.ImageLoader;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -16,8 +18,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
-import cz.geokuk.img.ImageLoader;
 
 public class JFavorit extends JComponent {
 

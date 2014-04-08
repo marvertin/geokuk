@@ -49,6 +49,7 @@ public class VyrezModel extends Model0 {
     Mou mouStred = moord.getMoustred();
     boolean b = mouPozice.equals(mouStred);
     //System.out.println("KIKUKJU: -------------------------------- " + b);
+
     System.out.println(mouPozice);
     System.out.println(mouStred);
     return b;

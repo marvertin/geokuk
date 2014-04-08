@@ -44,7 +44,7 @@ public class IkonNacitacLoader {
     if (aPrenacti) lastScan = null;
     // Nejdříve skenovat, čímž také zjistíme, zda došlo ke změně
     MultiFolder mf = new MultiFolder();
-    mf.addResourceTree("cz/geokuk/image");
+    mf.addResourceTree("img");
     if (imageMyDir != null) mf.addFolderTree(imageMyDir);
     if (image3rdPartyDir != null) mf.addFolderTree(image3rdPartyDir);
 
@@ -55,7 +55,7 @@ public class IkonNacitacLoader {
     KeyNode<String, LamUrl> mapNode = mf.getNode(MAPUZEL);
 
     ikonBag.setJmenaSad(mapNode.getKeys());
-    ikonBag.setJmenaAIkonySad(nactiIkonySad(mapNode)); 
+    ikonBag.setJmenaAIkonySad(nactiIkonySad(mapNode));
 
 
     IkonNacitacSada ikonNacitacSada = new IkonNacitacSada(ikonBag.getGenom());
@@ -68,7 +68,7 @@ public class IkonNacitacLoader {
 
 
   public Map<ASada, Icon> nactiIkonySad(KeyNode<String, LamUrl> mapNode) {
-    Map<ASada, Icon> jmenaAIkonySad = new TreeMap<ASada, Icon>();
+    Map<ASada, Icon> jmenaAIkonySad = new TreeMap<>();
     List<KeyNode<String,LamUrl>> subNodes = mapNode.getSubNodes();
     for (KeyNode<String,LamUrl> nodeSada : subNodes) {
       Icon icon = null;

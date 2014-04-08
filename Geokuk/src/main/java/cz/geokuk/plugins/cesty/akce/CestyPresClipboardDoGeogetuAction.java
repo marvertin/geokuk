@@ -1,10 +1,10 @@
 package cz.geokuk.plugins.cesty.akce;
 
 
+import cz.geokuk.img.ImageLoader;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
-import cz.geokuk.img.ImageLoader;
 
 
 public class CestyPresClipboardDoGeogetuAction extends CestyAction0 {
