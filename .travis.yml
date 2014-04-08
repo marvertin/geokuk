@@ -1,0 +1,7 @@
+language: java
+
+script: cd Geokuk && mvn clean install
+
+jdk:
+  - oraclejdk7
+  - openjdk7
