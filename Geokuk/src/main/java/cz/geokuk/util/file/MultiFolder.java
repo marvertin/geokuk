@@ -45,7 +45,7 @@ public class MultiFolder {
         tree.add(lamUrl, names);
         if (ford.isDirectory()) {
             for (String s : ford.list()) {
-                List<String> list = new ArrayList<String>(names.size() + 1);
+                List<String> list = new ArrayList<>(names.size() + 1);
                 list.addAll(names);
                 if (s.endsWith(REMOVE_SUFFIX)) {
                     list.add(s.substring(0, s.length() - REMOVE_SUFFIX.length()));

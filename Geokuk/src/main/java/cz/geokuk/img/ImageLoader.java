@@ -40,6 +40,8 @@ public class ImageLoader {
    * @return
    */
   public static BufferedImage locateResImageNoCache(String path) {
+      // FIXME hack
+      path = "/img/" + path;
     try {
       URL imgURL = ImageLoader.class.getResource(path);
       if (imgURL == null)
