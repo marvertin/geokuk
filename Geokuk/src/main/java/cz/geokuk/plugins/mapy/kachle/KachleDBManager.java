@@ -1,6 +1,8 @@
 package cz.geokuk.plugins.mapy.kachle;
 
 import cz.geokuk.core.coordinates.Mou;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.schema.SqlJetConflictAction;
@@ -20,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by dan on 7.4.14.
  */
 public class KachleDBManager implements KachleManager {
+
+    private static final Logger log = LogManager.getLogger(KachleDBManager.class.getSimpleName());
     // TODO : improve the hardcoded values
 
     final Map<Thread, SqlJetDb> connections = new ConcurrentHashMap<>();
@@ -37,14 +41,14 @@ public class KachleDBManager implements KachleManager {
                 connections.put(t, database);
                 return database;
             } catch (SqlJetException e) {
-                System.err.println("Unable to establish the DB connection!");
+                log.error("Unable to establish the DB connection!", e);
                 return null;
             }
         }
     }
 
     public KachleDBManager() {
-        System.out.println("Constructor " + Thread.currentThread().getName());
+        log.trace("Constructor " + Thread.currentThread().getName());
         SqlJetDb database = getDatabaseConnection();
         try {
             Set<String> tables = database.getSchema().getTableNames();
@@ -60,12 +64,12 @@ public class KachleDBManager implements KachleManager {
                 });
             }
         } catch (SqlJetException e) {
-            e.printStackTrace();
+            log.error("A database error has occurred!", e);
         } finally {
             try {
                 database.commit();
             } catch (SqlJetException e) {
-                System.err.println("Couldn't commit to the database!");
+                log.error("Couldn't commit to the database!", e);
             }
         }
     }
@@ -90,29 +94,29 @@ public class KachleDBManager implements KachleManager {
             if (cursor.eof()) {
                 return null;
             }
-            System.out.println(cursor.getRowId() + " : " +
+            log.info(cursor.getRowId() + " : " +
                     cursor.getInteger("x") + " " +
                     cursor.getInteger("y") + " " +
                     cursor.getInteger("z") + " " +
                     cursor.getString("s") + " loading from DB!");
             img = ImageIO.read(cursor.getBlobAsStream("image"));
             if (img == null) {
-                System.out.println("null");
+                log.info("Loaded DB image is null!");
             }
         } catch (SqlJetException | IOException e) {
-            e.printStackTrace();
+            log.error("A database error has occurred!", e);
         } finally {
             if (cursor != null) {
                 try {
                     cursor.close();
                 } catch (SqlJetException e) {
-                    System.err.println("Couldn't close the cursor!");
+                    log.error("Couldn't close the cursor!", e);
                 }
             }
             try {
                 database.commit();
             } catch (SqlJetException e) {
-                System.err.println("Couldn't commit to the database!");
+                log.error("Couldn't commit to the database!", e);
             }
         }
         return img;
@@ -125,7 +129,7 @@ public class KachleDBManager implements KachleManager {
         try {
             dss.save(bos);
         } catch (IOException e) {
-            System.err.println("Uhm... Something's terribly wrong");
+            log.error("Uhm... Something's terribly wrong", e);
             return false;
         }
 
@@ -139,7 +143,7 @@ public class KachleDBManager implements KachleManager {
                     ki.typToString(), dataToSave);
             return true;
         } catch (SqlJetException e) {
-            e.printStackTrace();
+            log.error("A database error has occurred!", e);
             return false;
         } finally {
             try {

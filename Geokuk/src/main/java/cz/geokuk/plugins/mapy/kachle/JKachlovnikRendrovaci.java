@@ -1,9 +1,15 @@
 package cz.geokuk.plugins.mapy.kachle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.awt.Component;
 import java.awt.Graphics;
 
 public class JKachlovnikRendrovaci extends JKachlovnik {
+
+    private static final Logger log = LogManager.getLogger(JKachlovnikRendrovaci.class.getSimpleName());
+
   private static final long serialVersionUID = -3170605712662727739L;
   private Progressor progressor;
   private int citacZpracovanychKachli;
@@ -40,7 +46,7 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
           kachle.uzTeNepotrebuju();
         }
       }
-      System.out.println("Opoustim cekani");
+      log.trace("Opoustim cekani");
     }
     //paint(g);
   }
