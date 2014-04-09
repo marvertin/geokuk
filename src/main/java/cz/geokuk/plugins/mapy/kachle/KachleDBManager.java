@@ -152,9 +152,6 @@ public class KachleDBManager implements KachleManager {
 
     /**
      * Constructs a new instance of the DB Manager.
-     * The constructor also verifies the database and creates the necessary tables if needed.
-     * Creating multiple instances at the same location from multiple threads should be avoided
-     * and a single instance should be used for all threads.
      */
     public KachleDBManager(KachleCacheFolderHolder holder) {
         log.trace("Constructor " + Thread.currentThread().getName());
