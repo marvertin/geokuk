@@ -1,5 +1,8 @@
 package cz.geokuk.util.lang;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -18,6 +21,9 @@ import java.util.Map;
 public class CCounterMap<T>
 implements CounterMap<T>, java.io.Serializable
 {
+    private static final Logger log =
+            LogManager.getLogger(CCounterMap.class.getSimpleName());
+
   static final long serialVersionUID = 4829239030839775643L;
 
   private final Map<T, Citac> iCitace = new LinkedHashMap<T, Citac>();
@@ -231,17 +237,18 @@ implements CounterMap<T>, java.io.Serializable
   private static <T> void  _testVypis(CounterMap<T> aMap)
   {
     Map<T, Integer> m = aMap.getMap();
-     System.out.println("Vypis mavy citacu");
+      log.debug("Vypis mavy citacu");
     for(Iterator<Map.Entry<T, Integer>> i=m.entrySet().iterator(); i.hasNext();)
     {
       Map.Entry<T, Integer> me = i.next();
-      System.out.println("  " + me.getKey() + ": " + me.getValue() + "  " + aMap.count(me.getKey()));
+        log.debug("  " + me.getKey() + ": " + me.getValue() + "  " + aMap.count(me.getKey()));
     }
-    System.out.println("     Celkovy pocet = " + aMap.count());
+      log.debug("     Celkovy pocet = " + aMap.count());
   }
 
   public static void main(String args[])
   {
+      // TODO : test?
     CounterMap<String> cm2 = new CCounterMap<String>();
     cm2.set("martin",1200);
     cm2.set("helena",1400);
@@ -250,48 +257,48 @@ implements CounterMap<T>, java.io.Serializable
     CounterMap<String> cm = new CCounterMap<String>();
     _testVypis(cm);
 
-    System.out.println(cm.add("adam",3));
-    System.out.println(cm.inc("adam"));
-    System.out.println(cm.dec("marketa"));
-    System.out.println(cm.add("marketa",7));
-    System.out.println(cm.dec("marketa"));
-    System.out.println(cm.add("robert",5));
-    System.out.println(cm.add("robert",8));
+      log.debug(cm.add("adam",3));
+      log.debug(cm.inc("adam"));
+      log.debug(cm.dec("marketa"));
+      log.debug(cm.add("marketa",7));
+      log.debug(cm.dec("marketa"));
+      log.debug(cm.add("robert",5));
+      log.debug(cm.add("robert",8));
 
     cm.add("robert",264656);
     cm.add("aneta",4477);
     cm.add("helena",1);
 
-    System.out.println("");
-    System.out.println("");
-    System.out.println(cm);
+      log.debug("");
+      log.debug("");
+      log.debug(cm);
 
     _testVypis(cm);
-    System.out.println(cm.add("marketa",4));
+      log.debug(cm.add("marketa",4));
     _testVypis(cm);
-    System.out.println(cm.add("marketa",-3));
+      log.debug(cm.add("marketa",-3));
     _testVypis(cm);
-    System.out.println(cm.add("marketa",-11));
-    System.out.println(cm.set("robert",71));
-    System.out.println(cm.set("aneta",18));
+      log.debug(cm.add("marketa",-11));
+      log.debug(cm.set("robert",71));
+      log.debug(cm.set("aneta",18));
 
     _testVypis(cm);
-    System.out.println(cm.add(cm2));
+      log.debug(cm.add(cm2));
     _testVypis(cm);
-    System.out.println(cm.dec("adam"));
-    System.out.println(cm.dec("adam"));
+      log.debug(cm.dec("adam"));
+      log.debug(cm.dec("adam"));
 
     _testVypis(cm);
-    System.out.println(cm.dec("adam"));
+      log.debug(cm.dec("adam"));
     _testVypis(cm);
-    System.out.println(cm.dec("adam"));
-    System.out.println(cm.add("aneta",-6));
+      log.debug(cm.dec("adam"));
+      log.debug(cm.add("aneta",-6));
     _testVypis(cm);
-    System.out.println(cm.dec("adam"));
-    System.out.println(cm.reset("aneta"));
+      log.debug(cm.dec("adam"));
+      log.debug(cm.reset("aneta"));
     _testVypis(cm);
-    System.out.println("nikdo: " + cm.count("nikdo"));
-    System.out.println(cm.reset());
+      log.debug("nikdo: " + cm.count("nikdo"));
+      log.debug(cm.reset());
     _testVypis(cm);
 
   }

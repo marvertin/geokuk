@@ -18,8 +18,12 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.util.process.BrowserOpener;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVerze, Void> {
+
+    private static final Logger log = LogManager.getLogger(ZkontrolovatAktualizaceSwingWorker.class.getSimpleName());
 
   private final boolean zobrazitDialogPriPosledniVerzi;
   private final NapovedaModel napovedaModel;
@@ -43,9 +47,9 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
       List<ZpravaUzivateli> zpravy = nactiSeznamZprav(br);
       br.close();
       for (ZpravaUzivateli zpravaUzivateli : zpravy) {
-        System.out.println(zpravaUzivateli);
+        log.debug(zpravaUzivateli);
       }
-      System.out.println("Posledni verze: '" + lastVersion +
+      log.info("Posledni verze: '" + lastVersion +
           "' ");
       return new ZpravyAVerze(zpravy, lastVersion);
     } catch (MalformedURLException e) {

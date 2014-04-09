@@ -13,7 +13,8 @@ import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.cesty.data.Cesta;
 import cz.geokuk.plugins.cesty.data.Doc;
 import cz.geokuk.plugins.kesoid.KesBag;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -21,6 +22,8 @@ import cz.geokuk.plugins.kesoid.KesBag;
  *
  */
 public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
+
+    private static final Logger log = LogManager.getLogger(CestyOtevriSwingWorker.class.getSimpleName());
 
 
   private final CestyZperzistentnovac cestyZperzistentnovac;
@@ -58,7 +61,7 @@ public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
   protected void donex() throws InterruptedException, ExecutionException {
     Doc doc = get();
     if (doc == null) return; // asi zkanclváno
-    System.out.printf("Načten dokument %s: \n",  doc.getFile());
+    log.info("Načten dokument {}.",  doc.getFile());
     cestyModel.prevezmiNoveOtevrenyDokument(doc);
   }
 

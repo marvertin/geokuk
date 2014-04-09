@@ -49,7 +49,7 @@ public class JFavorit extends JComponent {
 
     g2.drawImage(ImageLoader.seekResImage("icon_fav.png"), 8, 7, null);
 
-    String ss = new Integer(kolik).toString();
+    String ss = String.valueOf(kolik);
     g2.setFont(sFont);
     g2.setColor(Color.BLACK);
     g2.drawString(ss, 25, 22);
@@ -58,7 +58,7 @@ public class JFavorit extends JComponent {
   public void setKolik(int kolik) {
     if (kolik == this.kolik) return;
     this.kolik = kolik;
-    String ss = new Integer(kolik).toString();
+    String ss = String.valueOf(kolik);
     int stringWidth = super.getFontMetrics(sFont).stringWidth(ss);
     Dimension newPrefferedSize = new Dimension(33 + stringWidth ,30);
     setPreferredSize(newPrefferedSize);

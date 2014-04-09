@@ -90,7 +90,7 @@ public class Cesta implements Iterable<Bousek0> {
     } else if (usbod instanceof Bod) {
       Bod bod = (Bod) usbod;
       Bod b = null;
-      if (bod == start) {
+      if (bod.equals(start)) {
         b = pridejNaZacatek(mouable);
       } else {
         b = pridejNaKonec(mouable);
@@ -397,7 +397,7 @@ public class Cesta implements Iterable<Bousek0> {
   }
 
   public boolean isJednobodova() {
-    return start == cil;
+    return start.equals(cil);
   }
 
   public boolean isKruh() {
@@ -580,7 +580,7 @@ public class Cesta implements Iterable<Bousek0> {
       kon (bousek.getCesta() == this);
       bousek.kontrolaKonzistence();
       if (bousek.getBousekVpred() == null) {
-        kon (bousek == cil);
+        kon (bousek.equals(cil));
       }
       pocetBousku ++;
     }
@@ -589,7 +589,7 @@ public class Cesta implements Iterable<Bousek0> {
       kon (bousek.getCesta() == this);
       bousek.kontrolaKonzistence();
       if (bousek.getBousekVzad() == null) {
-        kon (bousek == start);
+        kon(bousek.equals(start));
       }
     }
 

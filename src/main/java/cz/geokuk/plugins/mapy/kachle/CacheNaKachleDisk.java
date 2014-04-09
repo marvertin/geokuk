@@ -46,7 +46,7 @@ class CacheNaKachleDisk {
 
   public CacheNaKachleDisk(KachleModel kachleModel) {
     this.kachleModel = kachleModel;
-    km = KachleManagerFactory.getInstance(); //new KachleFileManager(kachleModel.getKachleCacheFolderHolder());
+    km = KachleManagerFactory.getInstance();
   }
 
   /**

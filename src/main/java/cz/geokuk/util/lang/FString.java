@@ -130,7 +130,7 @@ public final class FString
    */
   //TOTO: (JP) předělat z odsekávání textu na StringTokenizer - pro texty obsahující hodně oddělovačů je funkce velmi pomalá.
   @Deprecated
-  public static final String[] splitText(String text, String delimiter, boolean multidelim) {
+  public static String[] splitText(String text, String delimiter, boolean multidelim) {
     //nullové varianty
     if (text == null || delimiter == null) {
       return null;
@@ -754,7 +754,7 @@ public final class FString
     int		rightLen	= right.length();
     int		escapedLen	= escaped.length();
 
-    if (right != "") {
+    if (right.equals("")) {
       for (int i = result.indexOf(right, 0); i != -1; i = result.indexOf(right, i + escapedLen)) {
         result = result.substring(0, i) + escaped + result.substring(i + rightLen);
       }

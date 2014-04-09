@@ -105,7 +105,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
     Mou mou = new Mou();
     for (mou.xx = mou0.xx; soord.transform(mou).x < xn; mou.xx += soord.getMoukrok()) {
       for (mou.yy = mou0.yy; soord.transform(mou).y > 0; mou.yy += soord.getMoukrok()) { // y ukazuje na spodek kachle
-        KaLoc lokace = new KaLoc(mou.clone(), soord.getMoumer());
+        KaLoc lokace = new KaLoc(new Mou(mou), soord.getMoumer());
         JKachle kachle = kachles.remove(lokace);
         boolean kachleSePouzije = smimZnovuPouzitKachle && kachle != null;
         if (! kachleSePouzije) {

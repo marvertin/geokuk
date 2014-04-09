@@ -184,7 +184,9 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
       sb.append(matcher.group(2)); // závažnost
       sb.append('/'); // oddělovač adresářů
       String cislo = matcher.group(3);
-      while (cislo.length() < 4) cislo = '0' + cislo;
+      while (cislo.length() < 4) {
+          cislo = '0' + cislo;
+      }
       int rozdel = cislo.length() - 2; // aby byla stovka na složku
       sb.append(cislo.substring(0, rozdel));
     } else {

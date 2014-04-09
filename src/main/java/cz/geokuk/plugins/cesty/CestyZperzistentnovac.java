@@ -30,153 +30,155 @@ import cz.geokuk.plugins.kesoid.importek.NacitacGpx;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.index2d.Sheet;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class CestyZperzistentnovac {
 
-  private int smimCist;
+    private static final Logger log = LogManager.getLogger(CestyZperzistentnovac.class.getSimpleName());
 
-  private final Updator updator = new Updator();
+    private int smimCist;
 
-  private Ggt loadGgt(File file) throws IOException {
-    FileReader filere = null;
-    try {
-      filere = new FileReader(file);
-      BufferedReader br = new BufferedReader(filere);
-      return loadGgt(br);
-    } catch (FileNotFoundException e) {
-      //FExceptionDumper.dump(e, EExceptionSeverity.CATCHE, "Nacitani vyletu.");
-      return new Ggt(new HashSet<String>());
-    } finally {
-      if (filere != null) {
-        filere.close();
-      }
-    }
-  }
+    private final Updator updator = new Updator();
 
-  private Ggt loadGgt(BufferedReader reader) throws IOException {
-    String line;
-    Set<String> set = new HashSet<String>();
-    while ((line = reader.readLine()) != null) {
-      line = line.trim();
-      if (line.length() == 0) {
-        continue;
-      }
-      set.add(line);
-    }
-    Ggt vyletPul = new Ggt(set);
-    return vyletPul;
-  }
-
-
-  void zapisGgt(Doc doc, File file) {
-    BufferedWriter wrt = null;
-    smimCist ++;
-    Set<String> exportovano = new HashSet<String>();
-    try {
-      try {
-        wrt = new BufferedWriter(new FileWriter(file));
-        for (Bod bod : doc.getBody()) {
-          Mouable mouable = bod.getMouable();
-          if (mouable instanceof Wpt) {
-            Wpt wpt = (Wpt) mouable;
-            zapisKdyzNeni(wrt, wpt.getName(), exportovano);
-            zapisKdyzNeni(wrt, wpt.getKesoid().getCode(), exportovano);
-          }
-
+    private Ggt loadGgt(File file) throws IOException {
+        FileReader filere = null;
+        try {
+            filere = new FileReader(file);
+            BufferedReader br = new BufferedReader(filere);
+            return loadGgt(br);
+        } catch (FileNotFoundException e) {
+            //FExceptionDumper.dump(e, EExceptionSeverity.CATCHE, "Nacitani vyletu.");
+            return new Ggt(new HashSet<String>());
+        } finally {
+            if (filere != null) {
+                filere.close();
+            }
         }
-        wrt.close();
-      } catch (IOException e) {
-        if (wrt != null) {
-          try {
-            wrt.close();
-          } catch (IOException e1) { // co s tím jiného
-          }
+    }
+
+    private Ggt loadGgt(BufferedReader reader) throws IOException {
+        String line;
+        Set<String> set = new HashSet<String>();
+        while ((line = reader.readLine()) != null) {
+            line = line.trim();
+            if (line.length() == 0) {
+                continue;
+            }
+            set.add(line);
         }
-        throw new RuntimeException(e);
-      }
-    } finally {
-      smimCist --;
+        Ggt vyletPul = new Ggt(set);
+        return vyletPul;
     }
-  }
-
-  private void zapisKdyzNeni(BufferedWriter wrt, String kod, Set<String> exportovano) throws IOException {
-    if (kod == null) return;
-    if (exportovano.add(kod)) {
-      wrt.write(String.format("%s%s", kod, FConst.NL));
-      //    } else {
-      //      wrt.write(String.format("NEBERU %s%s", kod, FConst.NL));
-    }
-  }
 
 
-  List<Cesta> nacti(List<File> files, KesBag kesBag) {
-    List<Cesta> cesty = new ArrayList<Cesta>();
-    for (File file : files) {
-      try {
-        System.out.println("Nacitam z: " + file);
-        String pureName = file.getName().toLowerCase();
-        if (pureName.endsWith(".ggt")) {
-          Ggt ggt = loadGgt(file);
-          Cesta cesta = zbuildujCestuZGgt(ggt, kesBag);
-          cesty.add(cesta);
-        } else if (pureName.endsWith(".gpx")) {
-          DocImportBuilder builder = new DocImportBuilder();
-          InputStream  istm = new BufferedInputStream(new FileInputStream(file));
-          NacitacGpx nacitac = new NacitacGpx();
-          nacitac.nacti(istm, builder, null);
-          cesty.addAll(builder.getCesty());
+    void zapisGgt(Doc doc, File file) {
+        BufferedWriter wrt = null;
+        smimCist++;
+        Set<String> exportovano = new HashSet<String>();
+        try {
+            try {
+                wrt = new BufferedWriter(new FileWriter(file));
+                for (Bod bod : doc.getBody()) {
+                    Mouable mouable = bod.getMouable();
+                    if (mouable instanceof Wpt) {
+                        Wpt wpt = (Wpt) mouable;
+                        zapisKdyzNeni(wrt, wpt.getName(), exportovano);
+                        zapisKdyzNeni(wrt, wpt.getKesoid().getCode(), exportovano);
+                    }
+
+                }
+                wrt.close();
+            } catch (IOException e) {
+                if (wrt != null) {
+                    try {
+                        wrt.close();
+                    } catch (IOException e1) { // co s tím jiného
+                    }
+                }
+                throw new RuntimeException(e);
+            }
+        } finally {
+            smimCist--;
         }
-      } catch (Exception e) {
-        throw new RuntimeException("Problém se souborem: \"" + file + "\"", e);
-      }
     }
-    pripniNaWayponty(cesty, kesBag);
-    return cesty;
-  }
 
-
-  private Cesta zbuildujCestuZGgt(Ggt ggt, KesBag kesBag) {
-    Cesta cesta = Cesta.create();
-    if (kesBag != null) {
-      for (Kesoid kesoid : kesBag.getKesoidy()) {
-        if (ggt.kesides.contains(kesoid.getCode())) {
-          updator.pridejNaMisto(cesta, kesoid.getMainWpt());
+    private void zapisKdyzNeni(BufferedWriter wrt, String kod, Set<String> exportovano) throws IOException {
+        if (kod == null) return;
+        if (exportovano.add(kod)) {
+            wrt.write(String.format("%s%s", kod, FConst.NL));
+            //    } else {
+            //      wrt.write(String.format("NEBERU %s%s", kod, FConst.NL));
         }
-      }
     }
-    return cesta;
-  }
 
-  void pripniNaWayponty(Iterable<Cesta> cesty, KesBag kesBag) {
-    for (Cesta cesta : cesty) {
-      for (Bod bod : cesta.getBody()) {
-        Mou mou = bod.getMou();
-        Wpt wpt = najdiExtremneBlizouckyWpt(mou, kesBag);
-        updator.setMouableButNoChange(bod, wpt != null ? wpt : mou);
-        if (wpt != null) {
-          wpt.invalidate();
+
+    List<Cesta> nacti(List<File> files, KesBag kesBag) {
+        List<Cesta> cesty = new ArrayList<Cesta>();
+        for (File file : files) {
+            try {
+                log.debug("Nacitam z: " + file);
+                String pureName = file.getName().toLowerCase();
+                if (pureName.endsWith(".ggt")) {
+                    Ggt ggt = loadGgt(file);
+                    Cesta cesta = zbuildujCestuZGgt(ggt, kesBag);
+                    cesty.add(cesta);
+                } else if (pureName.endsWith(".gpx")) {
+                    DocImportBuilder builder = new DocImportBuilder();
+                    InputStream istm = new BufferedInputStream(new FileInputStream(file));
+                    NacitacGpx nacitac = new NacitacGpx();
+                    nacitac.nacti(istm, builder, null);
+                    cesty.addAll(builder.getCesty());
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Problém se souborem: \"" + file + "\"", e);
+            }
         }
-      }
+        pripniNaWayponty(cesty, kesBag);
+        return cesty;
     }
-  }
 
 
-  private Wpt najdiExtremneBlizouckyWpt(Mou mou, KesBag kesBag) {
-    if (kesBag == null) return null;
-    Indexator<Wpt> indexator = kesBag.getIndexator();
-    BoundingRect br = new BoundingRect(mou.xx, mou.yy, mou.xx, mou.yy).rozsir(100);
-    Sheet<Wpt> sheet = indexator.locateAnyOne(br);
-    if (sheet == null) return null;
-    return sheet.get();
-  }
+    private Cesta zbuildujCestuZGgt(Ggt ggt, KesBag kesBag) {
+        Cesta cesta = Cesta.create();
+        if (kesBag != null) {
+            for (Kesoid kesoid : kesBag.getKesoidy()) {
+                if (ggt.kesides.contains(kesoid.getCode())) {
+                    updator.pridejNaMisto(cesta, kesoid.getMainWpt());
+                }
+            }
+        }
+        return cesta;
+    }
+
+    void pripniNaWayponty(Iterable<Cesta> cesty, KesBag kesBag) {
+        for (Cesta cesta : cesty) {
+            for (Bod bod : cesta.getBody()) {
+                Mou mou = bod.getMou();
+                Wpt wpt = najdiExtremneBlizouckyWpt(mou, kesBag);
+                updator.setMouableButNoChange(bod, wpt != null ? wpt : mou);
+                if (wpt != null) {
+                    wpt.invalidate();
+                }
+            }
+        }
+    }
 
 
-  public boolean smimCist() {
-    return smimCist == 0;
-  }
+    private Wpt najdiExtremneBlizouckyWpt(Mou mou, KesBag kesBag) {
+        if (kesBag == null) return null;
+        Indexator<Wpt> indexator = kesBag.getIndexator();
+        BoundingRect br = new BoundingRect(mou.xx, mou.yy, mou.xx, mou.yy).rozsir(100);
+        Sheet<Wpt> sheet = indexator.locateAnyOne(br);
+        if (sheet == null) return null;
+        return sheet.get();
+    }
 
+
+    public boolean smimCist() {
+        return smimCist == 0;
+    }
 
 
 }

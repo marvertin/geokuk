@@ -1,6 +1,6 @@
 package cz.geokuk.core.coordinates;
 
-public class Mou implements Mouable {
+public class Mou implements Mouable, Cloneable {
 
   public int xx;
   public int yy;
@@ -62,11 +62,6 @@ public class Mou implements Mouable {
 
   public Wgs toWgs() {
     return toUtm().toWgs();
-  }
-
-  @Override
-  public Mou clone()  {
-    return new Mou(xx,yy);
   }
 
   @Override

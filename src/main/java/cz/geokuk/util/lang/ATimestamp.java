@@ -296,8 +296,9 @@ private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefault
             int milis = 0;
             if (smilis != null)
             {
-              while (smilis.length() < 3) smilis += "0"; // nevýkonné, aůle
-                                                         // neude se dělat často
+              while (smilis.length() < 3) {
+                  smilis += "0"; // nevýkonné, ale nebude se dělat často
+              }
               if (smilis.length() > 3) smilis = smilis.substring(0,3);
               milis = Integer.parseInt(smilis);
             }
@@ -763,9 +764,9 @@ private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefault
     public String toString() {
       long offset = getOffset();
       String vysl = MessageFormat.format(
-          "{0,number,0000}-{1,number,00}-{2,number,00} {3,number,00}:{4,number,00}:{5,number,00}.{6,number,000} GMT{7,number,+00;-00}", new Object[] {
-              new Integer(getYearNumber()), new Integer(getMonthNumber()), new Integer(getDayNumber()), new Integer(getHour()), new Integer(getMinute()),
-              new Integer(getSecond()), new Integer(getMilisecond()), new Long(offset / 3600000) });
+          "{0,number,0000}-{1,number,00}-{2,number,00} {3,number,00}:{4,number,00}:{5,number,00}.{6,number,000} GMT{7,number,+00;-00}",
+              getYearNumber(), getMonthNumber(), getDayNumber(), getHour(), getMinute(),
+              getSecond(), getMilisecond(), offset / 3600000);
       if (offset % 3600000 != 0) {
         vysl += ":" + offset / 60000;
       }
@@ -777,8 +778,8 @@ private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefault
      */
     public String toIsoString() {
       String result = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00}T{3,number,00}:{4,number,00}:{5,number,00}.{6,number,000}",
-          new Object[] { new Integer(getYearNumber()), new Integer(getMonthNumber()), new Integer(getDayNumber()), new Integer(getHour()),
-              new Integer(getMinute()), new Integer(getSecond()), new Integer(getMilisecond()), });
+              getYearNumber(), getMonthNumber(), getDayNumber(), getHour(),getMinute(), getSecond(),
+              getMilisecond());
       return result + offsetStr();
     }
 

@@ -182,7 +182,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
           //System.out.println(mou);
           if (isCancelled()) return -1;
           for (mou.yy = mou0.yy; coco.transform(mou).y > 0; mou.yy += coco.getMoukrok()) { // y ukazuje na spodek kachle
-            KaLoc kaloc = new KaLoc(mou.clone(), coco.getMoumer());
+            KaLoc kaloc = new KaLoc(new Mou(mou), coco.getMoumer());
             if (zafrontovat) {
               JKachle kachle = new JKachle(new KaAll(kaloc, totoSeTaha.kaSet), kachleModel, false, null); // když se nepoužije, musí se stvořit nová
               kachle.setVzdalenostOdStredu(coco.getVzdalenostKachleOdStredu(kaloc.getMou()));

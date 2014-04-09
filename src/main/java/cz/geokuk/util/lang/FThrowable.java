@@ -45,10 +45,10 @@ public final class FThrowable {
     
     Integer číslo = sVýjimkaNaČíslo.get(th);
     if (číslo == null) {
-      číslo = new Integer(++sČítačVypisovačů);
+      číslo = ++sČítačVypisovačů;
       sVýjimkaNaČíslo.put(th, číslo);
     }
-    return číslo.intValue();
+    return číslo;
   }
 
   

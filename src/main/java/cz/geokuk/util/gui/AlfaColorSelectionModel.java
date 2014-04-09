@@ -3,11 +3,17 @@
  */
 package cz.geokuk.util.gui;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.awt.Color;
 
 import javax.swing.colorchooser.DefaultColorSelectionModel;
 
 public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
+
+    private static final Logger log =
+            LogManager.getLogger(AlfaColorSelectionModel.class.getSimpleName());
   private static final long serialVersionUID = -1718047742587104573L;
   private int alfa;
 
@@ -32,7 +38,7 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
   public void setSelectedColorWithAlfa(Color color) {
     int alfaOld = alfa;
     alfa = color.getAlpha();
-    System.out.println("MODEL-setSelectedColorWithAlfa: " + alfa);
+    log.debug("MODEL-setSelectedColorWithAlfa: " + alfa);
     Color colorBezAlfy = new Color(color.getRGB() & 0xFFFFFF);
     boolean barvaBezAlfyZustava = super.getSelectedColor().equals(colorBezAlfy);
     super.setSelectedColor(colorBezAlfy); // nastavit bez alfy, čímže jsou notifikovány lsitenery, pokud změna
@@ -42,9 +48,9 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
   }
 
   public Color getSelectedColorWithAlfa() {
-    System.out.println("MODEL-getSelectedColorWithAlfa1: " + alfa);
+      log.debug("MODEL-getSelectedColorWithAlfa1: " + alfa);
     Color color = new Color(super.getSelectedColor().getRGB() & 0xFFFFFF | (alfa << 24), true);
-    System.out.println("MODEL-getSelectedColorWithAlfa2: " + color + color.getAlpha() + " " + alfa);
+      log.debug("MODEL-getSelectedColorWithAlfa2: " + color + color.getAlpha() + " " + alfa);
     return color;
   }
 
@@ -52,14 +58,14 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
    * @return the alfa
    */
   public int getAlfa() {
-    System.out.println("MODEL-getAlfa: " + alfa);
+      log.debug("MODEL-getAlfa: " + alfa);
     return alfa;
   }
 
   public void setAlfa(int aAlfa) {
     if (alfa == aAlfa) return;
     alfa = aAlfa;
-    System.out.println("MODEL-setAlfa: " + alfa);
+      log.debug("MODEL-setAlfa: " + alfa);
     fireStateChanged();
   }
 
