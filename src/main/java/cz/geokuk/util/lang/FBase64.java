@@ -101,8 +101,9 @@ public final class FBase64 {
                         {
                                 destLen --; //A pokud jsou tam dvě tak ještě méně
                                 jsoudva = true;
-                        } else
-                                jsoutri = true;
+                        } else {
+                            jsoutri = true;
+                        }
                 }
                 // tak alokujeme výstupní buffer o již známé délce
                 byte b[] = new byte[destLen];

@@ -14,7 +14,8 @@ import cz.geokuk.util.file.RefinedWhiteWriter;
 import cz.geokuk.util.lang.ATimestamp;
 import cz.geokuk.util.lang.FThrowable;
 import cz.geokuk.util.lang.FThrowable.ThrowableAndSourceMethod;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -22,6 +23,9 @@ import cz.geokuk.util.lang.FThrowable.ThrowableAndSourceMethod;
  * Velmi lehký objekt, který naformátuje výjimku a pošle ji do repozitoře.
  */
 public class ExceptionDumper {
+
+    private static final Logger log =
+            LogManager.getLogger(ExceptionDumper.class.getSimpleName());
   /** Signleton proměnná pri implicitní repozitoř */
 
   private List<AditionalInfoEntry> iStackx = new ArrayList<AditionalInfoEntry>();
@@ -152,10 +156,10 @@ public class ExceptionDumper {
         pwrt.println();
         pwrt.println();
 //        if (DeveloperSettingBase.cfg.isPrintDumpedExceptionMessageToStdErr()) {
-          System.err.println(Arrays.asList(aCircumstances));
+          log.error(Arrays.asList(aCircumstances));
           FThrowable.printStackTrace(throwable, System.err, "dump-" + id);
-          System.err.println("ERR");
-          System.out.println("OUT");
+          log.error("ERR");
+          log.error("OUT");
           printShortExceptionList(System.err, throwable);
 //        }
       }
@@ -182,19 +186,19 @@ public class ExceptionDumper {
       throw e;
     } catch (Throwable e) {  // to je průšvih, došlo k chybě při dumpování chyby
       // tak jednoduše vypsat na standardní chybový výstup a kočit, jako by se nic nestalo
-      System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      System.err.println("Exception while processing exception!");
+      log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.error("Exception while processing exception!");
       FThrowable.printStackTrace(e, System.err, "exceptionOnEception");
-      System.err.println("-----------------------------");
+        log.error("-----------------------------");
       for (int j=0; j<throwables.length; j++) {
         Throwable throwable = throwables[j];
         FThrowable.printStackTrace(throwable, System.err, "originalException"+j);
       }
-      System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       return AExcId.from("excIsInSystemErr");
     }
     
@@ -207,7 +211,7 @@ public class ExceptionDumper {
    */
   private void logZeVyjimkaBylaVypsana(EExceptionSeverity aExceptionSeverity, AExcId id, ExceptionDumperRepositorySpi aRepository) {
     String logMsg = "!!! DUMPED EXCEPTION '" + id +  "' into \"" + aRepository.getUrl(id) + "\" !!!";
-    System.err.println(logMsg); // nechci, aby se dalo zabránit tomuto výpisu, tak přímo na standardní výstup
+    log.error(logMsg); // nechci, aby se dalo zabránit tomuto výpisu, tak přímo na standardní výstup
   }
 
   /**

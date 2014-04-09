@@ -70,12 +70,14 @@ public abstract class DocAction0 extends PositionedAction0 {
     if (curdoc() != null) {
       curdoc().kontrolaKonzistence();
     }
-    if (kontextovyDoc != null)
-      //System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-getClass " + getClass());
-      //kontextovaCesta.kontrolaKonzistence();
-      return kontextovyDoc;
-    else
-      return curdoc();
+    if (kontextovyDoc != null) {
+        //System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-getClass " + getClass());
+        //kontextovaCesta.kontrolaKonzistence();
+        return kontextovyDoc;
+    }
+    else {
+        return curdoc();
+    }
   }
 
 

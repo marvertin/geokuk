@@ -8,6 +8,6 @@ package cz.geokuk.framework;
  *
  */
 public interface AfterInjectInit {
-  public void initAfterInject();
+  void initAfterInject();
 
 }

@@ -91,49 +91,40 @@ public class MultiNacitac {
      * @throws IOException
      * @throws FileNotFoundException
      */
-    private void zpracujJedenFile(File file, KesoidImportBuilder builder, Future<?> future) throws ZipException, IOException, FileNotFoundException {
+    private void zpracujJedenFile(File file, KesoidImportBuilder builder, Future<?> future) throws IOException {
         if (file.toString().toLowerCase().endsWith("zip")) {
-            ZipFile zipFile = new ZipFile(file);
-            try {
+            try (ZipFile zipFile = new ZipFile(file)) {
                 for (Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements(); ) {
                     ZipEntry entry = en.nextElement();
                     if (entry.getName().matches(".*\\.(geokuk|gpx)")) {
                         for (Nacitac0 nacitac : nacitace) {
-                            InputStream istm = new BufferedInputStream(
+                            try (InputStream istm = new BufferedInputStream(
                                     new ProgressorInputStream(kesoidModel.getProgressModel(), "Loadig: " + file,
                                             zipFile.getInputStream(entry))
-                            );
-                            try {
+                            )) {
                                 String jmenoZdroje = file.getName() + "!" + entry.getName();
                                 boolean nacitat = kesoidModel.maSeNacist(jmenoZdroje);
                                 builder.setCurrentlyLoaded(jmenoZdroje, file.lastModified(), nacitat);
                                 if (nacitat) {
                                     nacitac.nactiKdyzUmisBezVyjimky(istm, jmenoZdroje, builder, future);
                                 }
-                            } finally {
-                                istm.close();
                             }
                         }
                     }
                 }
-            } finally {
-                zipFile.close();
             }
         } else {
             for (Nacitac0 nacitac : nacitace) {
-                InputStream istm = new BufferedInputStream(
+                try (InputStream istm = new BufferedInputStream(
                         new ProgressorInputStream(kesoidModel.getProgressModel(), "Loadig: " + file,
                                 new FileInputStream(file))
-                );
-                try {
+                )) {
                     String jmenoZdroje = file.getName();
                     boolean nacitat = kesoidModel.maSeNacist(jmenoZdroje);
                     builder.setCurrentlyLoaded(jmenoZdroje, file.lastModified(), nacitat);
                     if (nacitat) {
                         nacitac.nactiKdyzUmisBezVyjimky(istm, jmenoZdroje, builder, future);
                     }
-                } finally {
-                    istm.close();
                 }
             }
         }

@@ -40,6 +40,6 @@ public final class FLong
             if (value.length() > 1) value = value.substring(1);
         }
 
-        return new Long(Long.parseLong(value, base));
+        return Long.parseLong(value, base);
     }
 }

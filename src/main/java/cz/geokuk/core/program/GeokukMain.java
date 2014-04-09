@@ -57,7 +57,7 @@ public class GeokukMain  {
 
   private void promazPreferencePokudJeToPrikazano(String[] args) {
     for (String s : args) {
-      if (s.trim().toLowerCase().equals("--reset")) {
+      if (s.trim().equalsIgnoreCase("--reset")) {
         try {
           MyPreferences.root().removeNode();
         } catch (BackingStoreException e) {

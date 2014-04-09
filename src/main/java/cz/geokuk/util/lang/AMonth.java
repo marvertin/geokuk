@@ -159,7 +159,6 @@ public final class AMonth
      */
     public int daysIn() {
         Calendar cal = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
-        ;
         cal.set(getYearNumber() - 1, getMonthNumber(), 1); // proč je tam to - není vůbec jasné
         cal.add(Calendar.MONTH, 12);
         cal.add(Calendar.DAY_OF_MONTH, -1);
@@ -337,7 +336,9 @@ public final class AMonth
      * @return Počet měsíců rozdílu.
      */
     public long getDistance(AMonth aObject) {
-        if (aObject == null) throw new NullPointerException();
+        if (aObject == null) {
+            throw new IllegalArgumentException("aObject is null!");
+        }
         return diff(aObject);
     }
 
@@ -350,8 +351,9 @@ public final class AMonth
             int rok = Integer.parseInt(mat.group(1));
             int mes = Integer.parseInt(mat.group(2));
             return fromItems(rok, mes);
-        } else
+        } else {
             throw new XCreateElement("Syntakticka chyba v roku a mesici '" + aString + "'");
+        }
 
     }
 

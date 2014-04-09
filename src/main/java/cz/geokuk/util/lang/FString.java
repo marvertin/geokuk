@@ -2,7 +2,9 @@ package cz.geokuk.util.lang;
 
 import java.lang.reflect.Array;
 import java.text.StringCharacterIterator;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 
@@ -86,7 +88,7 @@ public final class FString
    * @param	aIterator		Kolekce nějakých objektů, jejichž hodnoty .toString() budou spojeny do výsledku.
    * @author polakm
    */
-  public static final String merge(String aDelimiter, Iterator<? extends Object> aIterator) {
+  public static String merge(String aDelimiter, Iterator<? extends Object> aIterator) {
     if (aIterator == null) {
       return null;
     }
@@ -96,7 +98,7 @@ public final class FString
     for (Iterator<? extends Object> i = aIterator; i.hasNext(); ) {
 
       result.append(delimiter);
-      result.append("" + i.next());
+      result.append(i.next());
       delimiter = aDelimiter;
     }
 
@@ -107,7 +109,7 @@ public final class FString
    * @author roztocil
    * @since 2008-10-03
    */
-  public static final String nullConcat(Object ... aItems) {
+  public static String nullConcat(Object ... aItems) {
     StringBuffer sb = new StringBuffer();
     for (Object item : aItems) {
       if (item == null) {
@@ -144,11 +146,11 @@ public final class FString
     int delimlength = delimiter.length();
 
     //neobsahuje delimiter
-    if (delimlength == 0 || text.indexOf(delimiter) == -1) {
+    if (delimlength == 0 || !text.contains(delimiter)) {
       return new String[] {text};
     }
 
-    Vector<String> v = new Vector<String>();
+    List<String> v = new ArrayList<>();
     //jestliže máme považovat posloupnost oddělovačů za jeden, otrimuj oddělovače
     if (multidelim) {
       text = leftRemove(text, delimiter);
@@ -160,7 +162,7 @@ public final class FString
     //dokud existuje v textu oddělovač
     while (p > -1) {
       //přidej do vectoru text před oddělovačem
-      v.addElement(text.substring(0, p));
+      v.add(text.substring(0, p));
       //odřízni od textu levou část i s oddělovačem
       text = text.substring(p + delimlength);
       //jestliže máme považovat posloupnost oddělovačů za jeden, otrimuj možné oddělovače
@@ -171,14 +173,12 @@ public final class FString
       p = text.indexOf(delimiter);
     }
     if (text.length() > 0) {
-      v.addElement(text);
+      v.add(text);
     }
 
     //vrať výsledné pole
     String[] result = new String[v.size()];
-    v.copyInto(result);
-
-    return result;
+      return v.toArray(result);
   }
 
   /**Převede řetězec na pole, rozseká zadaným oddělovačem.
@@ -329,7 +329,7 @@ public final class FString
    * @see {@link alignLeft}
    *
    */
-  public static final String rightAdd (String text, int length, char pattern) {
+  public static String rightAdd (String text, int length, char pattern) {
 
     int len = text.length();
     if (len >= length) {
@@ -338,7 +338,9 @@ public final class FString
 
     len = length - len;
     char[] p = new char[len];
-    for (int i = 0; i < len; i++) p[i] = pattern;
+    for (int i = 0; i < len; i++) {
+        p[i] = pattern;
+    }
 
     return text + new String(p);
   }
@@ -362,7 +364,9 @@ public final class FString
 
     len = length - len;
     char[] p = new char[len];
-    for (int i = 0; i < len; i++) p[i] = pattern;
+    for (int i = 0; i < len; i++) {
+        p[i] = pattern;
+    }
 
     return new String(p) + text;
   }
@@ -947,7 +951,9 @@ public final class FString
    */
   public static String repeat(int n, char c) {
     StringBuffer sb = new StringBuffer(n);
-    for (int i = 0; i < n; i++) sb.append(c);
+    for (int i = 0; i < n; i++) {
+        sb.append(c);
+    }
     return sb.toString();
   }
 
@@ -961,7 +967,9 @@ public final class FString
   public static String repeat(int n, String s) {
     if (s == null || s.length() == 0 ) throw new IllegalArgumentException("Řetězec, ze kterého se má poskládat výsledek nesmí být prázdný");
     StringBuffer sb = new StringBuffer(n);
-    for (int i = 0; i < n; i++) sb.append(s);
+    for (int i = 0; i < n; i++) {
+        sb.append(s);
+    }
     return sb.toString();
   }
 
@@ -1040,7 +1048,9 @@ public final class FString
     for (int i = 0; i < length; i++) {
       char c = s.charAt(i);
       // bílý znak nahradíme mezerou
-      if (c == ' ' || c == '\t' || c == '\n' || c == '\r') jeTamMezera = uzBylNejakyNemezerovyZnak; 
+      if (c == ' ' || c == '\t' || c == '\n' || c == '\r') {
+          jeTamMezera = uzBylNejakyNemezerovyZnak;
+      }
       else {  // ani mezera, ani tabulator ani konec radku
         // pokud byl mezitím konec řádku, dáváme jen jednu mezeru
         if (jeTamMezera) { // pošleme mezeru, pokud tam je

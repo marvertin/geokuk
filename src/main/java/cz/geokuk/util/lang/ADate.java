@@ -680,7 +680,9 @@ public final class ADate
      * @return Počet dnů rozdílu.
      */
     public long getDistance(ADate aObject) {
-        if (aObject == null) throw new NullPointerException();
+        if (aObject == null) {
+            throw new IllegalArgumentException("aObject is null!");
+        }
         return daysBetw(aObject);
     }
 

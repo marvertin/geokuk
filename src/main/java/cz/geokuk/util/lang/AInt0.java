@@ -35,7 +35,7 @@ public abstract class AInt0 extends AObject0 implements IAtomInt, Comparable<AIn
       checkRange();
       validate();
     } catch (Exception e) {
-      throw new RuntimeException("Illegal value \"" + aValue + "\" for type \"" + getClass().getName() + "\"") ;
+      throw new RuntimeException("Illegal value \"" + aValue + "\" for type \"" + getClass().getName() + "\"", e) ;
     }
   }
 

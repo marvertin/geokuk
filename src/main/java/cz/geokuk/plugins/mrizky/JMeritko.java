@@ -119,7 +119,11 @@ public class JMeritko extends JPanel {
   }
 
   private String jednotka(double d) {
-    if (d >= 1000) return "km"; else return "m";
+    if (d >= 1000) {
+        return "km";
+    } else {
+        return "m";
+    }
   }
 
   public void setPixluNaMetr(double pixluNaMetr) {

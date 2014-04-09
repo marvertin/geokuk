@@ -59,10 +59,11 @@ public class ImageLoader {
   /** Returns an ImageIcon, or null if the path was invalid. */
   public static Icon locateResIcon(String path) {
     BufferedImage bi = locateResImageNoCache(path);
-    if (bi == null)
-      return null;
-    else
-      return new ImageIcon(bi);
+    if (bi == null) {
+        return null;
+    } else {
+        return new ImageIcon(bi);
+    }
   }
 
   /** Returns an ImageIcon, or null if the path was invalid. */

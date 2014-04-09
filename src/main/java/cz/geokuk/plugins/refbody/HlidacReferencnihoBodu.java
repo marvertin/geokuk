@@ -48,10 +48,12 @@ public class HlidacReferencnihoBodu {
 
 
   private Wgs getReferencniBod() {
-    if (poziceq.isNoPosition())
-      return stredMapy;
-    else
-      return poziceq.getWgs();
+    if (poziceq.isNoPosition()) {
+        return stredMapy;
+    }
+    else {
+        return poziceq.getWgs();
+    }
   }
 
 

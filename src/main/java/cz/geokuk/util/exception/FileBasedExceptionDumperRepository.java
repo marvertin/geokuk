@@ -40,7 +40,9 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
    */
   public FileBasedExceptionDumperRepository(File aDir) {
     try {
-      if (aDir == null) throw new NullPointerException("The parameter aDir is null");
+      if (aDir == null) {
+          throw new IllegalArgumentException("The parameter aDir is null");
+      }
       File dir = aDir.getCanonicalFile();
       initDir(dir);
       iDir = dir;

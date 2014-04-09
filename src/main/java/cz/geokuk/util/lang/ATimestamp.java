@@ -287,8 +287,9 @@ private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefault
                char prvni = zonastr.charAt(0);
                if (prvni == '+' || prvni == '-') zonastr = "GMT" + zonastr;
                zona = TimeZone.getTimeZone(zonastr);
-            } else
-               zona = aDefaultTimeZone;
+            } else {
+                zona = aDefaultTimeZone;
+            }
             if (zona == null)
                throw new XCreateElement("Pokus o vytvoreni ATimestamp z '" + aDatStr + "', v retezci neni uvedena casova zona a ve volani neni casova zona specifikovana");
             // zpracovat milisekundy
@@ -312,8 +313,9 @@ private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefault
               _rezezNaCislo(mat.group(6),0),
               milis, zona
             );
-          } else
-            throw new XCreateElement("Pokus o vytvoreni ATimestamp z '" + aDatStr + "', retezec ma spatnou syntaxi");
+          } else {
+              throw new XCreateElement("Pokus o vytvoreni ATimestamp z '" + aDatStr + "', retezec ma spatnou syntaxi");
+          }
         }  
 
  private static void testZona(String aStr) {
@@ -555,8 +557,9 @@ private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefault
    * @return
    */
   public static ATimestamp from(int aRok, int aMesic, int aDen, int aHodina, int aMinuta, int aSekunda, int aMilisekund, TimeZone aTimeZone) {
-    if (aTimeZone == null)
-      throw new NullPointerException("Casova zona musi byt uvedena");
+    if (aTimeZone == null) {
+        throw new IllegalArgumentException("Casova zona musi byt uvedena");
+    }
 
     return new ATimestamp(fromItems(aRok, aMesic, aDen, aHodina, aMinuta, aSekunda, aMilisekund, aTimeZone));
   }
@@ -813,7 +816,9 @@ private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefault
    * @return Počet milisekund rozdílu.
    */
   public long getDistance(ATimestamp aObject) {
-    if (aObject == null) throw new NullPointerException();
+    if (aObject == null) {
+        throw new IllegalArgumentException();
+    }
     return diff(aObject);
   }
 

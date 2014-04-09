@@ -208,23 +208,25 @@ public class JCestySlide extends JSingleSlide0{
     //boolean zachytavano = false;
     if (blizkyBousek != null) {
       if (pressed) {
-        if (zachytavano)
-          return FKurzory.NAD_WAYPOINTEM_DRAGOVANI_BODU;
-        else
-          return FKurzory.BLIZKO_BOUSKU_DRAGOVANI;
+        if (zachytavano) {
+            return FKurzory.NAD_WAYPOINTEM_DRAGOVANI_BODU;
+        }
+        else {
+            return FKurzory.BLIZKO_BOUSKU_DRAGOVANI;
+        }
       } else {
-        Cursor cursor = FKurzory.BLIZKO_BOUSKU_NORMAL;
-        return cursor;
+          return FKurzory.BLIZKO_BOUSKU_NORMAL;
       }
     } else {
       if (pridavanyBod1 != null) {
-        if (zachytavano)
-          return FKurzory.NAD_WAYPOINTEM_PRIDAVANI_BODU;
-        else
-          return FKurzory.PRIDAVANI_BODU;
-      } else
-        return super.getMouseCursor(pressed);
-
+        if (zachytavano) {
+            return FKurzory.NAD_WAYPOINTEM_PRIDAVANI_BODU;
+        } else {
+            return FKurzory.PRIDAVANI_BODU;
+        }
+      } else {
+          return super.getMouseCursor(pressed);
+      }
     }
   }
 

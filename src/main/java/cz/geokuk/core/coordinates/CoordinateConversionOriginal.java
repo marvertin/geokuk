@@ -5,11 +5,17 @@
  */
 package cz.geokuk.core.coordinates;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.Hashtable;
 import java.util.Map;
 
 public class CoordinateConversionOriginal
 {
+
+    private static final Logger log =
+            LogManager.getLogger(CoordinateConversionOriginal.class.getSimpleName());
 
   public CoordinateConversionOriginal()
   {
@@ -722,18 +728,15 @@ public class CoordinateConversionOriginal
 
       }
     }
-
   }
 
-  
   private static void test(double lat, double lon) {
-	  System.out.println(lat + " " + lon + "----"
+	  log.debug(lat + " " + lon + "----"
 			  + new CoordinateConversionOriginal().latLon2UTM(lat, lon));
 	  
   }
   
   public static void main(String[] args) {
 	  test(49.28391,16.35622);
-	
   }
 }

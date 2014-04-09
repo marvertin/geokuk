@@ -22,7 +22,8 @@ import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.pocitadla.Pocitadlo;
 import cz.geokuk.util.pocitadla.PocitadloMalo;
 import cz.geokuk.util.pocitadla.PocitadloRoste;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -30,6 +31,9 @@ import cz.geokuk.util.pocitadla.PocitadloRoste;
  *
  */
 public class EventManager implements EventFirer {
+
+    private static final Logger log =
+            LogManager.getLogger(EventManager.class.getSimpleName());
 
   private static Pocitadlo pocitTypy = new PocitadloMalo("Počet typů registrovaných eventů", "Kolik registrovaných typů eventů (tříd) je ve třídě Eventmanager, mělo by to být v v jednotkách či malých desítkách a nemělo by narůstat.");
   private static Pocitadlo pocitObservery = new PocitadloMalo("Počet observerů za všechny typy dohromady", "Kolik celkem observerů je regostrováno pro události. Musí být v desítkách a nesmí růst.");
@@ -154,7 +158,7 @@ public class EventManager implements EventFirer {
   private void log(String text) {
     String pading = "                                                                                 "
       .substring(0,urovenZanoreni*3);
-    System.out.println(pading +  text);
+    log.debug(pading + text);
   }
 
   private synchronized <E> Observry ziskejObservry(BeanType beanType) {
@@ -271,14 +275,12 @@ public class EventManager implements EventFirer {
     public void invoke(Object event) {
       Object observerObject = get();
       if (observerObject == null) {
-        System.err.println("Vypadlo nam: " + observerClass);
+        log.debug("Vypadlo nam: " + observerClass);
         return;
       }
       try {
         observerOnEventMethod.invoke(observerObject, event);
-      } catch (IllegalAccessException e) {
-        throw new RuntimeException(e);
-      } catch (InvocationTargetException e) {
+      } catch (IllegalAccessException | InvocationTargetException e) {
         throw new RuntimeException(e);
       }
     }

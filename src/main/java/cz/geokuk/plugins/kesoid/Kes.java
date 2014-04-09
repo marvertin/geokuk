@@ -246,8 +246,9 @@ public class Kes extends Kesoid {
       if (urls.startsWith(URL_PREFIX_SHOW)) {
         URL url = new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));
         return url;
-      } else
-        return null;
+      } else {
+          return null;
+      }
     } catch (MalformedURLException e) {
       return null;
     }
@@ -293,8 +294,11 @@ public class Kes extends Kesoid {
 
   private char naJednoPismeno(String s) {
     char c = s.charAt(0);
-    if (s.length() == 1) return c;
-    else return (char) (c - '1' + 'A');
+    if (s.length() == 1) {
+        return c;
+    } else {
+        return (char) (c - '1' + 'A');
+    }
   }
 
   /**

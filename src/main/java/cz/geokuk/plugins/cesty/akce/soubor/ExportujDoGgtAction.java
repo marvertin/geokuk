@@ -10,8 +10,13 @@ import javax.swing.JFileChooser;
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.plugins.cesty.CestyChangedEvent;
 import cz.geokuk.plugins.cesty.data.Doc;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ExportujDoGgtAction extends SouboeCestaAction0 {
+
+    private static final Logger log =
+            LogManager.getLogger(ExportujDoGgtAction.class.getSimpleName());
 
   private static final long serialVersionUID = 1L;
   private Doc doc;
@@ -38,7 +43,7 @@ public class ExportujDoGgtAction extends SouboeCestaAction0 {
         if (! Dlg.prepsatSoubor(selectedFile)) return;
       }
       cestyModel.exportujDoGgt(selectedFile, doc);
-      System.out.println("Uložena cesta do: " + doc.getFile());
+      log.info("Uložena cesta do: " + doc.getFile());
     }
     // TODO ukládat na pozadí
   }

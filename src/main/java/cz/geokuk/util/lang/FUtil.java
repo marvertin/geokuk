@@ -120,17 +120,7 @@ public final class FUtil {
   }
 
   public static <T> boolean equalsa(T o1, T o2) {
-    if (o1 == null) {
-      if (o2 == null)
-        return true;
-      else
-        return false;
-    } else {
-      if (o2 == null)
-        return false;
-      else
-        return o1.equals(o2);
-    }
+      return ((o1 == null && o2 == null) || (o1 != null && o1.equals(o2)));
   }
 
   public static <T>  boolean addAll(Collection<? super T> col, Iterable<? extends T> iterable) {

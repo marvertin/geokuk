@@ -13,61 +13,70 @@ public final class FNumber {
 	/**Převede byte na short (bez znaménka)
 	 * -32 převede na 224
 	 */
-	public static final short unsignedByteToShort (byte base) {
+	public static short unsignedByteToShort (byte base) {
 
-		if (base < 0)
-			return (short)(0x100 + base);
-		else
-			return base;
+		if (base < 0) {
+            return (short) (0x100 + base);
+        }
+		else {
+            return base;
+        }
 	}
 
 	/**Převede byte na int (bez znaménka)
 	 * -32 převede na 224
 	 */
-	public static final int unsignedByteToInt (byte base) {
+	public static int unsignedByteToInt (byte base) {
 
-		if (base < 0)
-			return (0x100 + base);
-		else
-			return base;
+		if (base < 0) {
+            return (0x100 + base);
+        }
+		else {
+            return base;
+        }
 	}
 
 	/**Převede short na int (bez znaménka)
 	 */
-	public static final int unsignedShortToInt (short base) {
+	public static int unsignedShortToInt (short base) {
 
-		if (base < 0)
-			return 0x10000 + base;
-		else
-			return base;
+		if (base < 0) {
+            return 0x10000 + base;
+        }
+		else {
+            return base;
+        }
 	}
 
 	/**Převede short na long (bez znaménka)
 	 */
-	public static final long unsignedShortToLong (short base) {
+	public static long unsignedShortToLong (short base) {
 
-		if (base < 0)
-			return (0x10000 + base);
-		else
-			return base;
+		if (base < 0) {
+            return (0x10000 + base);
+        }
+		else {
+            return base;
+        }
 	}
 
 	/**Převede int na long (bez znaménka)
 	 */
-	public static final long unsignedIntToLong (int base) {
+	public static long unsignedIntToLong (int base) {
 
-		if (base < 0)
-			return (0x100000000L + base);
-		else
-			return base;
+		if (base < 0) {
+            return (0x100000000L + base);
+        }
+		else {
+            return base;
+        }
 	}
 
 	/**Převede short do pole bytů.
 	 * @param short číslo k převedení
 	 * @return byte[] Pole bytů čísla, první byte je nejvyšší byte původního čísla
 	 */
-	public static final byte[] toByteArray (short n) {
-
+	public static byte[] toByteArray (short n) {
 		return new byte[] {(byte)(n >>> 8), (byte)(n & 0xFF)};
 	}
 
@@ -75,7 +84,7 @@ public final class FNumber {
 	 * @param byte[] Pole bytů čísla, první byte je nejvyšší byte původního čísla
 	 * @return short
 	 */
-	public static final short shortFromByteArray (byte[] a) {
+	public static short shortFromByteArray (byte[] a) {
 
 		return (short)((a[0] << 8) + unsignedByteToShort(a[1]));
 	}
@@ -84,7 +93,7 @@ public final class FNumber {
 	 * @param int číslo k převedení
 	 * @return byte[] Pole bytů čísla, první byte je nejvyšší byte původního čísla
 	 */
-	public static final byte[] toByteArray (int n) {
+	public static byte[] toByteArray (int n) {
 
 		return new byte[] {(byte)(n >>> 24), (byte)(n >>> 16), (byte)(n >>> 8), (byte)(n & 0xFF)};
 	}
@@ -93,7 +102,7 @@ public final class FNumber {
 	 * @param byte[] Pole bytů čísla, první byte je nejvyšší byte původního čísla
 	 * @return int
 	 */
-	public static final int intFromByteArray (byte[] a) {
+	public static int intFromByteArray (byte[] a) {
 
 		return unsignedByteToInt(a[3]) + (a[2] << 8 & 0xFF00) + (a[1] << 16 & 0xFF0000) + (a[0] << 24 & 0xFF000000);
 	}
@@ -102,7 +111,7 @@ public final class FNumber {
 	 * @param long číslo k převedení
 	 * @return byte[] Pole bytů čísla, první byte je nejvyšší byte původního čísla
 	 */
-	public static final byte[] toByteArray (long n) {
+	public static byte[] toByteArray (long n) {
 
 		return new byte[] {(byte)(n >>> 56), (byte)(n >>> 48), (byte)(n >>> 40), (byte)(n >>> 32),
 			(byte)(n >>> 24), (byte)(n >>> 16), (byte)(n >>> 8), (byte)(n & 0xFF)};
@@ -112,7 +121,7 @@ public final class FNumber {
 	 * @param byte[] Pole bytů čísla, první byte je nejvyšší byte původního čísla
 	 * @return long
 	 */
-	public static final long longFromByteArray (byte[] a) {
+	public static long longFromByteArray (byte[] a) {
 
 		return (unsignedByteToInt(a[7]) + (a[6] << 8 & 0xFF00) +
 		(a[5] << 16 & 0xFF0000) +				(a[4] << 24 & 0xFF000000) +

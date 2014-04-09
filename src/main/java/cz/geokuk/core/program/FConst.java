@@ -1,5 +1,8 @@
 package cz.geokuk.core.program;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +12,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FConst {
+
+    private static final Logger log =
+            LogManager.getLogger(FConst.class.getSimpleName());
 
   public static final boolean ZAKAZAT_PRIPRAVOVANOU_FUNKCIONALITU = false;
 
@@ -52,7 +58,7 @@ public class FConst {
         JAR_DIR = new File("").getAbsoluteFile();
         JAR_DIR_EXISTUJE = false;
       }
-      System.out.println(JAR_DIR);
+      log.debug(JAR_DIR);
       //versionproperties.
       InputStream istm = versionproperties.openStream();
       prop.load(istm);
@@ -68,12 +74,12 @@ public class FConst {
   }
 
   public static void logInit() {
-    System.out.println("GEOKUK " + VERSION);
-    System.out.println("VERSION PROEPRTIES: " + versionproperties);
-    System.out.println("JAR_DIR = " + JAR_DIR);
-    System.out.println("JAR_DIR_EXISTUJE = " + JAR_DIR_EXISTUJE);
-    System.out.println("HOME_DIR = " + HOME_DIR);
-    System.out.println("WEB_PAGE_URL = " + WEB_PAGE_URL);
+    log.info("GEOKUK " + VERSION);
+      log.info("VERSION PROEPRTIES: " + versionproperties);
+      log.info("JAR_DIR = " + JAR_DIR);
+      log.info("JAR_DIR_EXISTUJE = " + JAR_DIR_EXISTUJE);
+      log.info("HOME_DIR = " + HOME_DIR);
+      log.info("WEB_PAGE_URL = " + WEB_PAGE_URL);
   }
 
 

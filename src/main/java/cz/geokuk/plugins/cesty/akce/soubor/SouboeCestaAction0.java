@@ -42,8 +42,9 @@ public abstract class SouboeCestaAction0 extends Action0 {
           if (! Dlg.prepsatSoubor(selectedFile)) return false;
         }
         xdoc.setFile(selectedFile);
-      } else
-        return false;
+      } else {
+          return false;
+      }
     }
     // TODO ukládat na pozadí a také mít jinde ukládací dialog
     cestyModel.uloz(xdoc.getFile(), xdoc, true);
@@ -71,12 +72,10 @@ public abstract class SouboeCestaAction0 extends Action0 {
         options[2]);
     System.out.println(n);
     if (n == 0) {
-      boolean result = ulozit();
-      return result;
-    } else if (n ==1)
-      return true;
-    else
-      return false; // končit nebudeme
+        return ulozit();
+    } else {
+        return n == 1;
+    }
 
   }
 

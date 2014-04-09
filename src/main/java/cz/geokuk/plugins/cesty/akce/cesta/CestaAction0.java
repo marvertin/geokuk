@@ -75,8 +75,9 @@ public abstract class CestaAction0 extends PositionedAction0 {
       //System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-getClass " + getClass());
       kontextovaCesta.kontrolaKonzistence();
       return kontextovaCesta;
-    } else
-      return curta();
+    } else {
+        return curta();
+    }
   }
 
 

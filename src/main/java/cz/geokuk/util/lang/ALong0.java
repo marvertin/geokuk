@@ -35,7 +35,7 @@ public abstract class ALong0 extends AObject0 implements IAtomLong, IAtomBigDeci
       checkRange();
       validate();
     } catch (Exception e) {
-      throw new RuntimeException("Illegal value \"" + aValue + "\" for type \"" + getClass().getName() + "\"") ;
+      throw new RuntimeException("Illegal value \"" + aValue + "\" for type \"" + getClass().getName() + "\"", e) ;
     }
   }
 
@@ -49,7 +49,7 @@ public abstract class ALong0 extends AObject0 implements IAtomLong, IAtomBigDeci
       checkRange();
       validate();
     } catch (Exception e) {
-      throw new RuntimeException("Illegal value \"" + aValue + "\" for type \"" + getClass().getName() + "\"") ;
+      throw new RuntimeException("Illegal value \"" + aValue + "\" for type \"" + getClass().getName() + "\"", e) ;
     }
   }
   

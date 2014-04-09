@@ -23,17 +23,19 @@ public static void enableMouseSroll(JComponent component) {
 public static void setEnabled(Component component, boolean enabled) {
   component.setEnabled(enabled);
   if (component instanceof Container) {
-    Container container = (Container) component;
-    for (Component c : container.getComponents())
-      setEnabled(c, enabled);
+      Container container = (Container) component;
+      for (Component c : container.getComponents()) {
+          setEnabled(c, enabled);
+      }
   }
 }
 
 public static void setEnabledChildren(Component component, boolean enabled) {
   if (component instanceof Container) {
     Container container = (Container) component;
-    for (Component c : container.getComponents())
-      setEnabled(c, enabled);
+    for (Component c : container.getComponents()) {
+        setEnabled(c, enabled);
+    }
   }
 }
 

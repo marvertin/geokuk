@@ -21,8 +21,11 @@ public abstract class DekoraceAction0 extends ToggleAction0 {
   
   protected void nastavDekoraci(boolean onoff) {
     EnumSet<EMapDekorace> dekoraces = mapyModel.getDekorace();
-    if (onoff) dekoraces.add(getDekorace()); 
-        else dekoraces.remove(getDekorace());
+    if (onoff) {
+        dekoraces.add(getDekorace());
+    } else {
+        dekoraces.remove(getDekorace());
+    }
     mapyModel.setDekorace(dekoraces);
   }
   

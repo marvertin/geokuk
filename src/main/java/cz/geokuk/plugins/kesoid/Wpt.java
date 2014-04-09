@@ -65,9 +65,10 @@ public class Wpt extends Weikoid0 implements Uchopenec {
       xx = mou.xx;
       yy = mou.yy;
       return mou;
-    } else
-      //      System.out.println("kesnuto " + xx + " " + yy);
-      return new Mou(xx, yy);
+    } else {
+        //      System.out.println("kesnuto " + xx + " " + yy);
+        return new Mou(xx, yy);
+    }
   }
 
   /**

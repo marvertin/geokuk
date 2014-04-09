@@ -30,8 +30,8 @@ import java.io.Serializable;
 public final class A3Boolean extends AObject0 implements IElement, Serializable {
   private  static final long serialVersionUID = -9099084640819425965L;
 
-  public static final A3Boolean TRUE = new A3Boolean(new Boolean(true));
-  public static final A3Boolean FALSE = new A3Boolean(new Boolean(false));
+  public static final A3Boolean TRUE = new A3Boolean(true);
+  public static final A3Boolean FALSE = new A3Boolean(false);
   public static final A3Boolean NOT_AVAILABLE = new A3Boolean(null);
 
   private static final String _TRUE = "yes";
@@ -51,8 +51,7 @@ public final class A3Boolean extends AObject0 implements IElement, Serializable 
 
   public static A3Boolean from(Boolean aValue) {
 
-    A3Boolean result = (aValue == null) ? NOT_AVAILABLE : (aValue.booleanValue()) ? TRUE : FALSE;
-    return result;
+      return (aValue == null) ? NOT_AVAILABLE : (aValue.booleanValue()) ? TRUE : FALSE;
   }
 
   public static A3Boolean from(String aValue) {
@@ -160,11 +159,14 @@ public final class A3Boolean extends AObject0 implements IElement, Serializable 
     if (aValue == null) throw new RuntimeException ("Null value prohibited !");
     if (_value == null) {
 
-      if (aValue._value != null && !aValue._value.booleanValue()) return FALSE; else return NOT_AVAILABLE;
+      if (aValue._value != null && !aValue._value) {
+          return FALSE;
+      } else {
+          return NOT_AVAILABLE;
+      }
     }
     else {
-
-      return (_value.booleanValue()) ? aValue : FALSE;
+      return _value ? aValue : FALSE;
     }
   }
 
@@ -173,11 +175,15 @@ public final class A3Boolean extends AObject0 implements IElement, Serializable 
     if (aValue == null) throw new RuntimeException ("Null value prohibited !");
     if (_value == null) {
 
-      if (aValue._value != null && aValue._value.booleanValue()) return TRUE; else return NOT_AVAILABLE;
+      if (aValue._value != null && aValue._value) {
+          return TRUE;
+      } else {
+          return NOT_AVAILABLE;
+      }
     }
     else {
 
-      return (_value.booleanValue()) ? TRUE : aValue;
+      return _value ? TRUE : aValue;
     }
   }
 

@@ -50,9 +50,8 @@ public class ABigDecimal extends AObject0 implements Serializable, IAtomBigDecim
   private final BigDecimal iValue;
 
   private ABigDecimal(BigDecimal aValue) {
-
     if (aValue == null)
-      throw new NullPointerException("new ABigDecimal(null) is prohibited !");
+      throw new IllegalArgumentException("new ABigDecimal(null) is prohibited !");
     iValue = aValue;
   }
 
@@ -592,7 +591,7 @@ public class ABigDecimal extends AObject0 implements Serializable, IAtomBigDecim
    * @param aNumber
    * @return nová instance ABigDecimal
    */
-  private final ABigDecimal _add(BigDecimal aNumber) {
+  private ABigDecimal _add(BigDecimal aNumber) {
     BigDecimal result = iValue.add(aNumber);
     return ABigDecimal.fromBigDecimal(result);
   }
@@ -635,7 +634,7 @@ public class ABigDecimal extends AObject0 implements Serializable, IAtomBigDecim
    * @param aNumber
    * @return nová instance ABigDecimal
    */
-  private final ABigDecimal _subtract(BigDecimal aNumber) {
+  private ABigDecimal _subtract(BigDecimal aNumber) {
     BigDecimal result = iValue.subtract(aNumber);
     return ABigDecimal.fromBigDecimal(result);
   }

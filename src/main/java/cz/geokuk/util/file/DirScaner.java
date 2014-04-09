@@ -135,8 +135,14 @@ public  class DirScaner {
      */
     @Override
     public int compareTo(FileAndTime fat) {
-      if (lastmodify == fat.lastmodify) return 0;
-      if (lastmodify < fat.lastmodify) return -1; else return 1;
+      if (lastmodify == fat.lastmodify) {
+          return 0;
+      }
+      if (lastmodify < fat.lastmodify) {
+          return -1;
+      } else {
+          return 1;
+      }
     }
 
 

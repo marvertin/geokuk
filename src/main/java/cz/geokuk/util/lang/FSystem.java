@@ -59,25 +59,26 @@ public final class FSystem {
 		catch (UnknownHostException e) {
 
 			addr = null;
-		};
+		}
 
 		if (addr != null) {
 
 			LOCAL_HOST_IP = addr.getHostAddress();
 			LOCAL_HOST_NAME = addr.getHostName();
 
-			int dotPos = LOCAL_HOST_NAME.indexOf(".");
-			if (dotPos > 0)
-				COMPUTER_NAME = LOCAL_HOST_NAME.substring(0, dotPos);
-			else
-				COMPUTER_NAME = LOCAL_HOST_NAME;
+			int dotPos = LOCAL_HOST_NAME.indexOf('.');
+			if (dotPos > 0) {
+                COMPUTER_NAME = LOCAL_HOST_NAME.substring(0, dotPos);
+            }
+			else {
+                COMPUTER_NAME = LOCAL_HOST_NAME;
+            }
 		}
 		else {
-
-			LOCAL_HOST_IP = null;
+            LOCAL_HOST_IP = null;
 			LOCAL_HOST_NAME = null;
 			COMPUTER_NAME = null;
-		};
+		}
 
 
 	}

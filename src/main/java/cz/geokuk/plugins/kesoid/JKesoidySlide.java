@@ -114,7 +114,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
   private final boolean vykreslovatOkamtiteAleDlouho;
 
-  private final double scale = 1;
+  private static final double scale = 1;
 
   private KesBag vsechny;
 
@@ -487,8 +487,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
     if (wptPodMysi != null && ! pressed) {
       Cursor cursor = FKurzory.NAD_WAYPOINTEM;
       return cursor;
-    } else
-      return super.getMouseCursor(pressed);
+    } else {
+        return super.getMouseCursor(pressed);
+    }
   }
 
 
@@ -538,10 +539,11 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
    */
   @Override
   public Mouable getUpravenaMys() {
-    if (wptPodMysi != null)
-      return wptPodMysi;
-    else
-      return chain().getUpravenaMys();
+    if (wptPodMysi != null) {
+        return wptPodMysi;
+    } else {
+        return chain().getUpravenaMys();
+    }
   }
 
   @Override

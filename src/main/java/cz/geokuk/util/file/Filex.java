@@ -63,7 +63,7 @@ public class Filex {
           .replace('\\', File.separatorChar);
 
       // Ujistěme se, že máme absolutní cestu. Relativní cesty není dobré normalizovat.
-      int colon = path.indexOf(":");
+      int colon = path.indexOf(':');
 
       if (!path.startsWith(File.separator) &&
           !(path.length() >= 2 &&

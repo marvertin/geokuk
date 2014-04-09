@@ -52,10 +52,11 @@ public class Usek extends Bousek0 {
     public Mou getNejblizsiBodKolmoKUsecce(Mou mou) {
         if (mou == null) return null;
         Mou m = prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
-        if (jeVOpsanemObdelniku(m))
+        if (jeVOpsanemObdelniku(m)) {
             return m;
-        else
+        } else {
             return null;
+        }
     }
 
     /**
@@ -66,9 +67,10 @@ public class Usek extends Bousek0 {
      * @return
      */
     public Mou getNejblizsiBodKPrimce(Mou mou) {
-        if (mou == null) return null;
-        Mou m = prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
-        return m;
+        if (mou == null) {
+            return null;
+        }
+        return prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
     }
 
     public long computeKvadratVzdalenostiBoduKUsecce(Mou mou) {

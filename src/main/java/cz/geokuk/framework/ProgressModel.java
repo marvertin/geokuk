@@ -38,8 +38,8 @@ public class ProgressModel extends Model0 {
     private final long startTime = System.currentTimeMillis();
 
 
-    private final long millisToDecideToPopup = 500;
-    private final long millisToPopup = 2000;
+    private static final long millisToDecideToPopup = 500;
+    private static final long millisToPopup = 2000;
 
     /**
      * 

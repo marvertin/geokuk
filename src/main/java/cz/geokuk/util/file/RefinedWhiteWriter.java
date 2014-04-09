@@ -44,8 +44,9 @@ public class RefinedWhiteWriter
     throws IOException
   {
     int xxdo = aOd + aPocet;
-    for (int i=aOd; i< xxdo; i++) // všechny znaky po jednom zpracovat
-      zpracujZnak(aZnaky[i]);
+    for (int i=aOd; i< xxdo; i++) { // všechny znaky po jednom zpracovat
+        zpracujZnak(aZnaky[i]);
+    }
   }
 
   public void flush()
@@ -95,8 +96,9 @@ public class RefinedWhiteWriter
     {
       iLfNeukoncuje = false;
       iPotrebaUkoncitRadek = true; // pokud byl vypsán nějaký znak je na konci streamu potřeba ukončit řádek
-      for (int i=0; i< iCitacMezer; i++)
-        iWriter.write(' ');   // dozapisovat všechny mezery
+      for (int i=0; i< iCitacMezer; i++) {
+          iWriter.write(' ');   // dozapisovat všechny mezery
+      }
       iCitacMezer = 0;
       iWriter.write(c);  // a zapsat ten přišlý znak
     }

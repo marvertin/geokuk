@@ -353,13 +353,17 @@ public class RenderModel extends Model0 {
 
   public EStavRendrovani getStavRendrovani() {
     if (koswx != null) {
-      if (koswx.isCancelled())
-        return EStavRendrovani.PRERUSOVANO; // běží
-      else
-        return EStavRendrovani.BEH;
+      if (koswx.isCancelled()) {
+          return EStavRendrovani.PRERUSOVANO; // běží
+      } else {
+          return EStavRendrovani.BEH;
+      }
     }
-    if (jsmeVRendrovani) return EStavRendrovani.PRIPRAVA; else return EStavRendrovani.NIC; // běží
-
+    if (jsmeVRendrovani) {
+        return EStavRendrovani.PRIPRAVA;
+    } else {
+        return EStavRendrovani.NIC; // běží
+    }
   }
 
   /** Vrací rendrovací informace */

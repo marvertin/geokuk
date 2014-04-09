@@ -62,9 +62,9 @@ public class WgsParser {
       if (sou.minuty.isVyplneno() && sou.stupne.isDesetinne()) return null; // když desetinné stupně, tak žádné minuty nesmí být
       if (sou.vteriny.isVyplneno() && sou.minuty.isDesetinne()) return null; // když desetinné minuty, tak žádné vteřiny nesmí být
       return sou;
-    } else
-      return null;
-
+    } else {
+        return null;
+    }
   }
 
 
@@ -186,7 +186,7 @@ public class WgsParser {
     }
 
     boolean isDesetinne() {
-      return s.indexOf(".") >= 0;
+      return s.contains(".");
     }
 
     private double toDouble() {

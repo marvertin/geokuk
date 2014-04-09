@@ -73,10 +73,12 @@ public abstract class BodAction0 extends BousekAction0 {
   protected abstract void provedProBod(Bod bod);
 
   protected Bod getBod() {
-    if (kontextovyBod != null)
-      return kontextovyBod;
-    else
-      return poziceq.getBod();
+    if (kontextovyBod != null) {
+        return kontextovyBod;
+    }
+    else {
+        return poziceq.getBod();
+    }
   }
 
 

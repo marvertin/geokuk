@@ -29,7 +29,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 
   private static final long serialVersionUID = 7180968190465321695L;
 
-  private final int LIMIT_DLAZDIC = 100000;
+  private static final int LIMIT_DLAZDIC = 100000;
 
   private JTextPane uvod;
   private JButton spustit;

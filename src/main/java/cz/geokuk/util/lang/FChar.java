@@ -37,7 +37,11 @@ public final class FChar {
       if (c == ' ' || c == '-') { // prázdný znak, říkající, že příští písmeno bude velké
         pristivelky = true;
       } else { // písmeno
-        if (pristivelky) sb.append(c); else sb.append(Character.toLowerCase(c));
+        if (pristivelky) {
+            sb.append(c);
+        } else {
+            sb.append(Character.toLowerCase(c));
+        }
         pristivelky = false;
       }
     }

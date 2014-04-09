@@ -301,8 +301,9 @@ public class Genom {
     }
     Alela alela = makeAlela(alelaName);
     if (alela.hasGen()) {
-      if (alela.getGen() == gen)
-        return alela; // tak vrátíme tu alelu
+      if (alela.getGen() == gen) {
+          return alela; // tak vrátíme tu alelu
+      }
       else {
         System.err.println(String.format("Je pozadovana alela %s v genu %s, ale tato alela jiz existuje v genu %s", alelaName, genName, gen));
         return null;

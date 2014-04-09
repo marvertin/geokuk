@@ -97,7 +97,9 @@ implements Serializable, Comparable<AString0>
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
   public int compareTo(AString0 aObject) {
-    if (aObject == null) throw new NullPointerException("Cannot compare with null");
+    if (aObject == null) {
+        throw new IllegalArgumentException("Cannot compare with null");
+    }
     return iValue.compareTo(aObject.iValue);
   }
 

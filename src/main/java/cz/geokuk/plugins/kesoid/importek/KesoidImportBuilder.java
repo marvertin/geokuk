@@ -503,10 +503,12 @@ public class KesoidImportBuilder implements IImportBuilder {
 
         Wpt wpt = createWpt(gpxwpt);
         wpt.setNazev(gpxwpt.groundspeak.name);
-        if (gpxwpt.name.startsWith(MZ))
+        if (gpxwpt.name.startsWith(MZ)) {
             wpt.setSym("MZ " + odstranNadbytecneMezery(gpxwpt.groundspeak.type));
-        else
+        }
+        else {
             wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+        }
 
         mz.addWpt(wpt);
         mz.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
@@ -637,8 +639,9 @@ public class KesoidImportBuilder implements IImportBuilder {
             sou.z = Double.parseDouble(mat.group(6));
             sou.po = mat.group(7);
             return sou;
-        } else
+        } else {
             return null;
+        }
     }
 
 
@@ -691,28 +694,31 @@ public class KesoidImportBuilder implements IImportBuilder {
 
 
     private EKesVztah urciVztah(GpxWpt gpxwpt) {
-        if (gpxwpt.explicitneUrcenoVlastnictvi)
+        if (gpxwpt.explicitneUrcenoVlastnictvi) {
             return EKesVztah.OWN;
-        if (gccomNick.name.equals(gpxwpt.groundspeak.owner))
+        }
+        if (gccomNick.name.equals(gpxwpt.groundspeak.owner)) {
             return EKesVztah.OWN;
-        if (gccomNick.id == gpxwpt.groundspeak.ownerid)
+        }
+        if (gccomNick.id == gpxwpt.groundspeak.ownerid) {
             return EKesVztah.OWN;
-        if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy))
+        }
+        if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
             return EKesVztah.OWN;
-        else if (GEOCACHE_FOUND.equals(gpxwpt.sym))
+        } else if (GEOCACHE_FOUND.equals(gpxwpt.sym)) {
             return EKesVztah.FOUND;
-        else
+        } else {
             return EKesVztah.NORMAL;
+        }
     }
 
     protected EKesStatus urciStatus(boolean archived, boolean availaible) {
-        if (archived)
+        if (archived) {
             return EKesStatus.ARCHIVED;
-        else {
-            if (!availaible)
-                return EKesStatus.DISABLED;
-            else
-                return EKesStatus.ACTIVE;
+        } else if (!availaible) {
+            return EKesStatus.DISABLED;
+        } else {
+            return EKesStatus.ACTIVE;
         }
     }
 
@@ -744,20 +750,22 @@ public class KesoidImportBuilder implements IImportBuilder {
             patExtrakceCislaCgp = Pattern.compile(".*?([0-9]+-[0-9]+).*");
         }
         Matcher mat = patExtrakceCislaCgp.matcher(celeJmeno);
-        if (mat.matches())
+        if (mat.matches()) {
             return mat.group(1);
-        else
+        } else {
             return null;
+        }
     }
 
     private int urciElevation(GpxWpt gpxwpt) {
         if (gpxwpt.ele != 0)
             return (int) gpxwpt.ele;
         else {
-            if (gpxwpt.gpxg != null)
+            if (gpxwpt.gpxg != null) {
                 return gpxwpt.gpxg.elevation;
-            else
+            } else {
                 return 0;
+            }
         }
     }
 

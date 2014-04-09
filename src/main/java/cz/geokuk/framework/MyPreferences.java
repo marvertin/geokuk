@@ -60,7 +60,7 @@ public class MyPreferences extends Preferences {
       String fileStr = get(key, defalt == null ? null : defalt.getPath());
       result = fileStr == null ? null : new File(fileStr);
     } catch (RuntimeException e) {
-      throw new RuntimeException("key=" + key  + ", defalt=" + defalt);
+      throw new RuntimeException("key=" + key  + ", defalt=" + defalt, e);
     }
     return result;
   }

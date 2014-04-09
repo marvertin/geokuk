@@ -34,12 +34,17 @@ import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.lang.FUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author veverka
  *
  */
 public class CestyModel extends Model0 {
+
+    private static final Logger log =
+            LogManager.getLogger(CestyModel.class.getSimpleName());
 
   private static final String MUJ_VYLET = "Můj výlet";
   public static final String VYLET_EXTENSION = "gpx";
@@ -363,8 +368,9 @@ public class CestyModel extends Model0 {
 
   public File getImplicitniVyletSaveAsNovyFile() {
     File file = doc.getFile();
-    if (file == null)
-      return getImplicitniVyletNovyFile();
+    if (file == null) {
+        return getImplicitniVyletNovyFile();
+    }
     else {
       File result = najdiNeexistujiciSoubor(file);
       return result;
@@ -373,8 +379,9 @@ public class CestyModel extends Model0 {
 
   public File getImplicitniVyletSaveCopyNovyFile() {
     File file = doc.getFile();
-    if (file == null)
-      return getImplicitniVyletNovyFile();
+    if (file == null) {
+        return getImplicitniVyletNovyFile();
+    }
     else {
       File result = najdiNeexistujiciSoubor(new File(file.getParentFile(), "Kopie " + file.getName()));
       return result;
@@ -386,8 +393,8 @@ public class CestyModel extends Model0 {
     String pureName = aFile.getName();
     Pattern pat = Pattern.compile("^(.*?)(?: *\\(\\d+\\))?(\\.[^.]+)?$");
     Matcher mat = pat.matcher(pureName);
-    System.out.println(pureName + ": " + mat.matches() + " -- " + pat);
-    System.out.println(mat.group(1) + " * " + mat.group(2));
+    log.debug(pureName + ": " + mat.matches() + " -- " + pat);
+    log.debug(mat.group(1) + " * " + mat.group(2));
     //    String baseName = poz < 0 ? pureName : pureName.substring(0, poz);
     //    String extension = poz < 0 ? "" : pureName.substring(poz);
     String baseName = mat.group(1);

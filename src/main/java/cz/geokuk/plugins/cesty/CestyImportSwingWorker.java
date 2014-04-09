@@ -11,7 +11,8 @@ import java.util.concurrent.ExecutionException;
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.cesty.data.Cesta;
 import cz.geokuk.plugins.kesoid.KesBag;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -20,6 +21,8 @@ import cz.geokuk.plugins.kesoid.KesBag;
  */
 public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 
+    private static final Logger log =
+            LogManager.getLogger(CestyImportSwingWorker.class.getSimpleName());
 
   private final CestyZperzistentnovac cestyZperzistentnovac;
   private final KesBag kesBag;
@@ -51,7 +54,7 @@ public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
   protected void donex() throws InterruptedException, ExecutionException {
     List<Cesta> cesty = get();
     if (cesty == null) return; // asi zkanclváno
-    System.out.printf("Načteny cesty %d: \n",  cesty.size());
+    log.info("Načteny cesty %d: \n",  cesty.size());
     cestyModel.prevezmiImportovaneCesty(cesty);
   }
 

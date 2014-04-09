@@ -121,10 +121,11 @@ public class JPozicovnikSlide extends JSingleSlide0 {
    */
   @Override
   public Mouable getUpravenaMys() {
-    if (mysJePoblizKrize)
-      return poziceq.getPoziceMou();
-    else
-      return chain().getUpravenaMys();
+    if (mysJePoblizKrize) {
+        return poziceq.getPoziceMou();
+    } else {
+        return chain().getUpravenaMys();
+    }
   }
 
   /**

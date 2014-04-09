@@ -1,7 +1,13 @@
 package cz.geokuk.util.index2d;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Ctverecnik<T> extends Node0<T> {
+
+    private static final Logger log =
+            LogManager.getLogger(Ctverecnik.class.getSimpleName());
 
   private Node0<T> jz;
   private Node0<T> jv;
@@ -168,7 +174,7 @@ public class Ctverecnik<T> extends Node0<T> {
   @Override
   void vypis(String prefix, int aLevel) {
     String mezery = String.format("%" + (aLevel * 2) + "s", " ");
-    System.out.printf("%s%s: (%d) [%d,%d] - [%d,%d]\n", mezery, prefix, count, xx1, yy1, xx2, yy2);
+    log.debug("{}{}: ({}) [{},{}] - [{},{}]", mezery, prefix, count, xx1, yy1, xx2, yy2);
     podvypis(jz, "jz", aLevel+1);
     podvypis(jv, "jv", aLevel+1);
     podvypis(sz, "sz", aLevel+1);
@@ -183,7 +189,7 @@ public class Ctverecnik<T> extends Node0<T> {
   private void podvypis(Node0<T> aNode, String aPrefix, int aLevel) {
     if (aNode == null) {
       String mezery = String.format("%" + (aLevel * 2) + "s", " ");
-      System.out.printf("%s%s: null\n", mezery, aPrefix);
+      log.debug("{}{}: null", mezery, aPrefix);
     } else {
       aNode.vypis(aPrefix, aLevel);
     }
