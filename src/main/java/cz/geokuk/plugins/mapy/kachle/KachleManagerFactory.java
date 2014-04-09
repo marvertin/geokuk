@@ -12,7 +12,7 @@ public class KachleManagerFactory {
      * @return
      *      The appropriate KachleManager instance.
      */
-    public static KachleManager getInstance() {
-        return new KachleDBManager();
+    public static KachleManager getInstance(KachleCacheFolderHolder folderHolder) {
+        return new KachleDBManager(folderHolder);
     }
 }

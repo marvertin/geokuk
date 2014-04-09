@@ -14,8 +14,8 @@ import org.tmatesoft.sqljet.core.table.SqlJetDb;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
+import java.util.AbstractMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -23,10 +23,14 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Danstahr
  */
-// TODO : remove hardcoded values and magic constants
 public class KachleDBManager implements KachleManager {
 
     private static final Logger log = LogManager.getLogger(KachleDBManager.class.getSimpleName());
+
+    /**
+     * The name of the SQLite file
+     */
+    private static final String FILE_NAME = "tiles.sqlite";
 
     /**
      * The name of the table with tiles
@@ -46,15 +50,16 @@ public class KachleDBManager implements KachleManager {
      * number of threads is small enough, we don't need a connection pool and instead we've got
      * a connection for each thread.
       */
-    final Map<Thread, SqlJetDb> connections = new ConcurrentHashMap<>();
+    final Map<Map.Entry<Thread, File>, SqlJetDb> connections = new ConcurrentHashMap<>();
 
     /**
      * The DB file.
      */
-    final File databaseFile = new File("/tmp/database.sqlite");
+    final KachleCacheFolderHolder folderHolder;
 
     /**
-     * Get a connection to the database for the current thread.
+     * Get a connection to the database for the current thread. Also closes all invalid connections for the current
+     * thread.
      * @return
      *      The connection or null if the connection couldn't be established.
      *
@@ -62,16 +67,85 @@ public class KachleDBManager implements KachleManager {
      */
     private SqlJetDb getDatabaseConnection() {
         Thread t = Thread.currentThread();
-        if (connections.containsKey(t)) {
-            return connections.get(t);
+        File folder = folderHolder.getKachleCacheFolder().getEffectiveFile();
+        File f = new File(folder, FILE_NAME);
+        AbstractMap.SimpleImmutableEntry<Thread, File> mapKey = new AbstractMap.SimpleImmutableEntry<>(t, f);
+
+        if (connections.containsKey(mapKey)) {
+            // Got a valid connection
+            return connections.get(mapKey);
         } else {
             try {
-                SqlJetDb database = SqlJetDb.open(databaseFile, true);
-                connections.put(t, database);
+                // create a new connection
+                SqlJetDb database = SqlJetDb.open(f, true);
+
+                // Initialize the DB if needed
+                if (!isDbInitialized(database)) {
+                    initDb(database);
+                }
+
+                // Close all deprecated connections (should be exactly one or zero)
+                // Done here for synchronization reasons. This way, we never close an active connection that's
+                // needed elsewhere at the same moment and there's always at most one connection per thread.
+                for (Map.Entry<Map.Entry<Thread, File>, SqlJetDb> conn : connections.entrySet()) {
+                    if (conn.getKey().getKey().equals(t)) {
+                        conn.getValue().close();
+                        connections.remove(conn.getKey());
+                    }
+                }
+
+                // Now, store the new connection and return it
+                connections.put(mapKey, database);
                 return database;
             } catch (SqlJetException e) {
                 log.error("Unable to establish the DB connection!", e);
                 return null;
+            }
+        }
+    }
+
+    /**
+     * Checks whether the DB at the current location is initialized and rady for use.
+     * @param connection
+     *      A connection to the database.
+     * @return
+     *      True if its initialized, false otherwise
+     */
+    private boolean isDbInitialized(SqlJetDb connection) {
+        try {
+            return connection.getSchema().getTableNames().contains(TABLE_NAME);
+        } catch (SqlJetException e) {
+            log.error("A database error has occurred!", e);
+            return false;
+        }
+    }
+
+    /**
+     * Initializes the database (if needed)
+     * @param connection
+     *      A connection to the database.
+     */
+    private synchronized void initDb(SqlJetDb connection) {
+        // Another thread might have already done this, so check it once again
+        if (!isDbInitialized(connection)) {
+            // load and initialize the new DB
+            try {
+                connection.getOptions().setAutovacuum(true);
+                connection.runWriteTransaction(new ISqlJetTransaction() {
+                    @Override
+                    public Object run(SqlJetDb sqlJetDb) throws SqlJetException {
+                        sqlJetDb.createTable(TABLE_CREATE_QUERY);
+                        return true;
+                    }
+                });
+            } catch (SqlJetException e) {
+                log.error("A database error has occurred!", e);
+            } finally {
+                try {
+                    connection.commit();
+                } catch (SqlJetException e) {
+                    log.error("Couldn't commit to the database!", e);
+                }
             }
         }
     }
@@ -82,30 +156,9 @@ public class KachleDBManager implements KachleManager {
      * Creating multiple instances at the same location from multiple threads should be avoided
      * and a single instance should be used for all threads.
      */
-    public KachleDBManager() {
+    public KachleDBManager(KachleCacheFolderHolder holder) {
         log.trace("Constructor " + Thread.currentThread().getName());
-        SqlJetDb database = getDatabaseConnection();
-        try {
-            Set<String> tables = database.getSchema().getTableNames();
-            if (!tables.contains(TABLE_NAME)) {
-                database.getOptions().setAutovacuum(true);
-                database.runWriteTransaction(new ISqlJetTransaction() {
-                    @Override
-                    public Object run(SqlJetDb sqlJetDb) throws SqlJetException {
-                        sqlJetDb.createTable(TABLE_CREATE_QUERY);
-                        return true;
-                    }
-                });
-            }
-        } catch (SqlJetException e) {
-            log.error("A database error has occurred!", e);
-        } finally {
-            try {
-                database.commit();
-            } catch (SqlJetException e) {
-                log.error("Couldn't commit to the database!", e);
-            }
-        }
+        folderHolder = holder;
     }
 
     /**
@@ -169,7 +222,7 @@ public class KachleDBManager implements KachleManager {
         try {
             dss.save(bos);
         } catch (IOException e) {
-            log.error("Uhm... Something's terribly wrong", e);
+            log.error("Uhm... Something's terribly wrong.", e);
             return false;
         }
 
