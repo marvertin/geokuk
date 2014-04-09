@@ -1,7 +1,5 @@
 package cz.geokuk.plugins.mapy.kachle;
 
-import cz.geokuk.plugins.mapy.KachleUmisteniSouboru;
-
 /**
  * A factory for Kachle Managers.
  */
