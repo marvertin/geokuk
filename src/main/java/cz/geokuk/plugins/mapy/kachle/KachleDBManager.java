@@ -15,6 +15,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
 import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -130,7 +132,7 @@ public class KachleDBManager implements KachleManager {
         if (!isDbInitialized(connection)) {
             // load and initialize the new DB
             try {
-                connection.getOptions().setAutovacuum(true);
+                System.out.println(connection.getOptions());
                 connection.runWriteTransaction(new ISqlJetTransaction() {
                     @Override
                     public Object run(SqlJetDb sqlJetDb) throws SqlJetException {
@@ -157,6 +159,8 @@ public class KachleDBManager implements KachleManager {
         log.trace("Constructor " + Thread.currentThread().getName());
         folderHolder = holder;
     }
+
+
 
     /**
      * {@inheritDoc}
@@ -211,35 +215,63 @@ public class KachleDBManager implements KachleManager {
 
     /**
      * {@inheritDoc}
+     * @deprecated
+     */
+    @Deprecated
+    @Override
+    public boolean save(Ka0 ki, ImageSaver dss) {
+        return save(Arrays.asList(new DiskSaveRequest(ki, null, dss)));
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
-    public boolean save(final Ka0 ki, ImageSaver dss) {
+    public boolean save(Collection<DiskSaveRequest> imagesToSave) {
         SqlJetDb database = getDatabaseConnection();
+
         ByteArrayOutputStream bos = new ByteArrayOutputStream(256*256);
-        try {
-            dss.save(bos);
-        } catch (IOException e) {
-            log.error("Uhm... Something's terribly wrong.", e);
-            return false;
-        }
+
+        // in case something goes wrong, rollback the transaction
+        boolean failed = false;
 
         final byte[] dataToSave = bos.toByteArray();
         try {
             database.beginTransaction(SqlJetTransactionMode.WRITE);
-            Mou mou = ki.getLoc().getMou();
-            log.debug("Adding {} {} {} {}", mou.xx, mou.yy, ki.getLoc().getMoumer(), ki.typToString());
-            database.getTable(TABLE_NAME).insertOr(SqlJetConflictAction.REPLACE, mou.xx, mou.yy, ki.getLoc().getMoumer(),
-                    ki.typToString(), dataToSave);
-            return true;
+            for (DiskSaveRequest imageToSave : imagesToSave) {
+                Ka0 ki = imageToSave.getKlic();
+                ImageSaver dss = imageToSave.getUkladac();
+                bos.reset();
+
+                // Get the blob as array of bytes
+                try {
+                    dss.save(bos);
+                } catch (IOException e) {
+                    log.error("Uhm... Something's terribly wrong.", e);
+                    failed = true;
+                }
+
+                // Save to the database
+                Mou mou = ki.getLoc().getMou();
+                log.debug("Adding {} {} {} {}", mou.xx, mou.yy, ki.getLoc().getMoumer(), ki.typToString());
+                database.getTable(TABLE_NAME).insertOr(SqlJetConflictAction.REPLACE, mou.xx, mou.yy,
+                        ki.getLoc().getMoumer(), ki.typToString(), dataToSave);
+            }
         } catch (SqlJetException e) {
             log.error("A database error has occurred!", e);
-            return false;
+            failed = true;
         } finally {
             try {
-                database.commit();
+                if (failed) {
+                    database.rollback();
+                } else {
+                    database.commit();
+                }
             } catch (SqlJetException e) {
-                log.error("Couldn't commit to the database!", e);
+                log.error("Couldn't commit/rollback to the database!", e);
+                failed = true;
             }
         }
+        return !failed;
     }
 }

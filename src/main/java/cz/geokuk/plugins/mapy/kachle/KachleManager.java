@@ -1,6 +1,8 @@
 package cz.geokuk.plugins.mapy.kachle;
 
 import java.awt.*;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Common interface for the tiles storage.
@@ -36,6 +38,18 @@ public interface KachleManager {
      *     The image dump that's to be saved.
      * @return
      *     True if the save was successful, false otherwise.
+     * @deprecated
+     *     Use the batch version {@link #save(java.util.Collection)}
      */
+    @Deprecated
     public boolean save(Ka0 ki, ImageSaver dss);
+
+    /**
+     * Save many tiles to the storage. Should be atomic ("all or nothing")
+     * @param itemsToSave
+     *     Collection of items (identifier of the tile -> image dump)
+     * @return
+     *     true if the saving of ALL items was successful, false otherwise
+     */
+    public boolean save(Collection<DiskSaveRequest> itemsToSave);
 }
