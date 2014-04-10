@@ -132,7 +132,6 @@ public class KachleDBManager implements KachleManager {
         if (!isDbInitialized(connection)) {
             // load and initialize the new DB
             try {
-                System.out.println(connection.getOptions());
                 connection.runWriteTransaction(new ISqlJetTransaction() {
                     @Override
                     public Object run(SqlJetDb sqlJetDb) throws SqlJetException {
