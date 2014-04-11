@@ -234,7 +234,7 @@ public class KachleDBManager implements KachleManager {
         // in case something goes wrong, rollback the transaction
         boolean failed = false;
 
-        final byte[] dataToSave = bos.toByteArray();
+        byte[] dataToSave;
         try {
             database.beginTransaction(SqlJetTransactionMode.WRITE);
             for (DiskSaveRequest imageToSave : imagesToSave) {
@@ -249,6 +249,8 @@ public class KachleDBManager implements KachleManager {
                     log.error("Uhm... Something's terribly wrong.", e);
                     failed = true;
                 }
+
+                dataToSave = bos.toByteArray();
 
                 // Save to the database
                 Mou mou = ki.getLoc().getMou();
