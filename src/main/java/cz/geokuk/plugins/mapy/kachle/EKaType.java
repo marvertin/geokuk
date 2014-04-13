@@ -10,6 +10,7 @@ import cz.geokuk.plugins.mapy.EMapPodklad;
 public enum EKaType {
     BASE_N(true, 4, 16, 16),
     TURIST(true, 4, 16, 16),
+    TURIST_WINTER(true, 4, 16, 16),
     OPHOTO(true, 4, 18, 16),
     ARMY2(true, 5, 13, 13),
     OPHOTO0203(true, 4, 16, 16),
@@ -47,7 +48,7 @@ public enum EKaType {
         if (this == _BEZ_PODKLADU) {
             throw new RuntimeException("není možné downloadovat žádný podklad");
         }
-        sb.append(name().toLowerCase().replace('_', '-'));
+        sb.append(name().toLowerCase());
     }
 
     public int getMinMoumer() {
@@ -74,6 +75,9 @@ public enum EKaType {
                 break;
             case TURIST:
                 set.add(EKaType.TURIST);
+                break;
+            case TURIST_WINTER:
+                set.add(EKaType.TURIST_WINTER);
                 break;
             case OPHOTO:
                 set.add(EKaType.OPHOTO);

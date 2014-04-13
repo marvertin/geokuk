@@ -89,12 +89,13 @@ public class Menu extends MenuStrujce {
     item(akce.posouvejSipkamiRychleZAPAD);
 
     // Ovládat mapy
-    menu("Mapy", "Žízení zobrazení součástí map");
+    menu("Mapy", "Řízení zobrazení součástí map");
     menu.setMnemonic(KeyEvent.VK_M);
 
     ButtonGroup mapPodkladButtonGroup = new ButtonGroup();
     item(akce.baseNPodkladAction, mapPodkladButtonGroup);
     item(akce.turistPokladAction, mapPodkladButtonGroup);
+    item(akce.winterTuristPodkladAction, mapPodkladButtonGroup);
     item(akce.ophototPodkladAction, mapPodkladButtonGroup);
     item(akce.army2PodkladAction, mapPodkladButtonGroup);
     item(akce.ophot0203PodkladAction, mapPodkladButtonGroup);

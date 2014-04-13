@@ -61,16 +61,7 @@ import cz.geokuk.plugins.kesoidpopisky.PopiskyNastavParametryAction;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyOffAction;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyOnAction;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyOnoffAction;
-import cz.geokuk.plugins.mapy.Army2PodkladAction;
-import cz.geokuk.plugins.mapy.BaseNPodkladAction;
-import cz.geokuk.plugins.mapy.HybridDekoraceAction;
-import cz.geokuk.plugins.mapy.Ophot0203PodkladAction;
-import cz.geokuk.plugins.mapy.OphototPodkladAction;
-import cz.geokuk.plugins.mapy.ReliefDekoraceAction;
-import cz.geokuk.plugins.mapy.TcykloDekoraceAction;
-import cz.geokuk.plugins.mapy.TturDekoraceAction;
-import cz.geokuk.plugins.mapy.TuristPokladAction;
-import cz.geokuk.plugins.mapy.ZadnePodkladAction;
+import cz.geokuk.plugins.mapy.*;
 import cz.geokuk.plugins.mapy.kachle.OnlineModeAction;
 import cz.geokuk.plugins.mapy.kachle.UkladatMapyNaDiskAction;
 import cz.geokuk.plugins.mapy.stahovac.KachleOflinerAction;
@@ -132,6 +123,7 @@ public class Akce {
 
   public final BaseNPodkladAction baseNPodkladAction = new BaseNPodkladAction();
   public final TuristPokladAction turistPokladAction = new TuristPokladAction();
+  public final WinterTuristPodkladAction winterTuristPodkladAction = new WinterTuristPodkladAction();
   public final OphototPodkladAction ophototPodkladAction = new OphototPodkladAction();
   public final Army2PodkladAction army2PodkladAction = new Army2PodkladAction();
   public final Ophot0203PodkladAction ophot0203PodkladAction = new Ophot0203PodkladAction();
