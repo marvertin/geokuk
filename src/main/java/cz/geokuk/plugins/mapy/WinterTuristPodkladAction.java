@@ -3,11 +3,9 @@ package cz.geokuk.plugins.mapy;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
-/**
- * Created by dan on 13.4.14.
- */
 public class WinterTuristPodkladAction extends PodkladAction0 {
-    private static final long serialVersionUID = -262970268937158619L;
+
+    private static final long serialVersionUID = 43564813465663197L;
 
     public WinterTuristPodkladAction() {
         super("Turistická zimní");
