@@ -17,7 +17,9 @@ class DlazebniPosilac {
 
 
   public void add(EKaType type, Image img) {
-    if (img == null) return;
+    if (img == null || kombiner == null) {
+        return;
+    }
     kombiner.add(type, img);
     BufferedImage kombinedImage = kombiner.getKombinedImage();
     boolean hotovo = kombiner.isHotovo();

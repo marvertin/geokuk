@@ -78,13 +78,6 @@ public class KachloDownloader {
         imda.data = null; // tím, že nevrátíme bytová data, neuloží se ta napodobenina na disk
         imda.img = getOfflineImage(typPrazdneho);
         return imda;
-        //    BufferedImage image = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB_PRE);
-        //    Graphics2D g = (Graphics2D) image.getGraphics();
-        //    g.setColor(new Color(128,128,128,128));
-        //    g.fillOval(30, 30, 196, 196);
-        //    g.setBackground(new Color(60,128,200,0));
-        //    g.clearRect(100, 100, 130, 150);
-
     }
 
     /**

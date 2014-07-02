@@ -23,8 +23,13 @@ import javax.swing.event.DocumentListener;
 
 import cz.geokuk.core.program.JPrehledSouboru.YNejdeTo;
 import cz.geokuk.util.file.Filex;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class JJedenSouborPanel extends JPanel implements DocumentListener {
+
+    private static final Logger log =
+            LogManager.getLogger(JJedenSouborPanel.class.getSimpleName());
 
   private static final long serialVersionUID = -3579395922979423765L;
 
@@ -148,7 +153,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
   public Filex vezmiSouborAProver() throws YNejdeTo {
     prepocitej();
     File dir = filex.getEffectiveFile();
-    System.out.println("Prověřuji soubor: " + dir);
+    log.debug("Prověřuji soubor: " + dir);
     if (!jenAdresare) {
       dir = dir.getParentFile();
     }
