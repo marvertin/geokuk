@@ -52,8 +52,6 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
       log.info("Posledni verze: '" + lastVersion +
           "' ");
       return new ZpravyAVerze(zpravy, lastVersion);
-    } catch (MalformedURLException e) {
-      throw new RuntimeException(e);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -75,7 +73,7 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
     Pattern pat = Pattern.compile("<h1>==(.*)==</h1>");
     StringBuilder sb = null;
     int msgnum = 0;
-    List<ZpravaUzivateli> list = new ArrayList<ZpravaUzivateli>();
+    List<ZpravaUzivateli> list = new ArrayList<>();
     while ((line = br.readLine()) != null) {
       Matcher matcher = pat.matcher(line);
       if (matcher.matches()) {

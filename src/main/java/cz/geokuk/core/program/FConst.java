@@ -26,8 +26,9 @@ public class FConst {
 
   public static final File PREFERENCES_FILE;
 
-  public static final String WEB_PAGE_URL = "http://geokuk.cz/";
   public static final String POST_PROBLEM_URL = "http://code.google.com/p/geokuk/issues/entry";
+
+  public static final String WEB_PAGE_URL = "http://geokuk.cz/";
 
   public static final String WEB_PAGE_WIKI = "  http://wiki.geocaching.cz/wiki/Geokuk";
 

@@ -8,13 +8,13 @@ import cz.geokuk.plugins.mapy.EMapPodklad;
 
 
 public enum EKaType {
-    BASE_N(true, 4, 16, 16),
-    TURIST(true, 4, 16, 16),
-    TURIST_WINTER(true, 4, 16, 16),
-    OPHOTO(true, 4, 18, 16),
-    ARMY2(true, 5, 13, 13),
-    OPHOTO0203(true, 4, 16, 16),
-    _BEZ_PODKLADU(true, 4, 18, 18),
+    BASE_N(true, 4, 16, 16, "base-n"),
+    TURIST(true, 4, 16, 16, "turist"),
+    TURIST_WINTER(true, 4, 16, 16, "turist_winter"),
+    OPHOTO(true, 4, 18, 16, "ophoto"),
+    ARMY2(true, 5, 13, 13, "army2"),
+    OPHOTO0203(true, 4, 16, 16, "ophoto0203"),
+    _BEZ_PODKLADU(true, 4, 18, 18, null),
 
     RELIEF(false),
     TCYKLO(false),
@@ -25,6 +25,7 @@ public enum EKaType {
     private final int minMoumer;
     private final int maxMoumer;
     private final int maxAutoMoumer;
+    private final String url_type;
 
     public boolean isPodklad() {
         return podklad;
@@ -35,20 +36,22 @@ public enum EKaType {
         minMoumer = 3;
         maxMoumer = 18;
         maxAutoMoumer = 17;
+        url_type = name().toLowerCase();
     }
 
-    private EKaType(boolean podklad, int minMoumer, int maxMoumer, int maxAutoMoumer) {
+    private EKaType(boolean podklad, int minMoumer, int maxMoumer, int maxAutoMoumer, String url_type) {
         this.podklad = podklad;
         this.minMoumer = minMoumer;
         this.maxMoumer = maxMoumer;
         this.maxAutoMoumer = maxAutoMoumer;
+        this.url_type = url_type;
     }
 
     public void addToUrl(StringBuilder sb) {
         if (this == _BEZ_PODKLADU) {
             throw new RuntimeException("není možné downloadovat žádný podklad");
         }
-        sb.append(name().toLowerCase());
+        sb.append(url_type);
     }
 
     public int getMinMoumer() {
