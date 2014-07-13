@@ -42,7 +42,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
   private static final long serialVersionUID = 5761908785083097975L;
 
 
-  private final Map<Pocitadlo, JLabel> hodmap = new WeakHashMap<Pocitadlo, JLabel>();
+  private final Map<Pocitadlo, JLabel> hodmap = new WeakHashMap<>();
 
   public JServiceFrame() {
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -76,7 +76,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
   @Override
   public void onChange() {
     SystemovaPocitadla.spustPocitani();
-    List<Pocitadlo> pocitadla = new ArrayList<Pocitadlo>(SpravcePocitadel.getPocitadla());
+    List<Pocitadlo> pocitadla = new ArrayList<>(SpravcePocitadel.getPocitadla());
     //    initComponents();
     //    pack();
     if (hodmap == null || pocitadla.size() != hodmap.size()) {

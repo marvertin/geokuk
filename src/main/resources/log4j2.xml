@@ -4,17 +4,16 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{20} - %msg%n"/>
         </Console>
-        <!--
-        <File name="MyFile" fileName="logs/app.log">
+        <File name="FileLog" fileName="logs/geokuk.log">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
-        </File>-->
+        </File>
     </Appenders>
     <Loggers>
-        <Root level="trace">
+        <Root level="info">
             <AppenderRef ref="Console"/>
-            <!-- <AppenderRef ref="MyFile"/> -->
+            <AppenderRef ref="FileLog"/>
         </Root>
     </Loggers>
 </Configuration>

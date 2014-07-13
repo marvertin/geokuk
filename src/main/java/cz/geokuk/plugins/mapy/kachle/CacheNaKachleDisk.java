@@ -153,6 +153,8 @@ class CacheNaKachleDisk {
                             // pokud fronta roste, musíme ukláadat.
                             Thread.sleep(20);
                         }
+                    } else {
+                        Thread.sleep(20);
                     }
                     //					System.out.println("Ukládám na disk: " + dsr);
                 } catch (Throwable e) { // vlákno nesmí spadnout
@@ -180,6 +182,4 @@ class CacheNaKachleDisk {
     public void clearMemoryCache() {
         cache.clearMemoryCache();
     }
-
-
 }
