@@ -150,7 +150,7 @@ class CacheNaKachleDisk {
                         pocitVelikostZapisoveFronty.set(size);
                         if (size < LIMIT_POZADAVKU_VE_FRONTE_PRO_NECEKANI) {
                             // čekáme, jen když toho máme málo, abychom zbytečně nebrzdili,
-                            // pokud fronta roste, musíme ukláadat.
+                            // pokud fronta roste, musíme ukládat.
                             Thread.sleep(20);
                         }
                     } else {
