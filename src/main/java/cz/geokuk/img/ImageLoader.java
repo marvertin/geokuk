@@ -45,7 +45,7 @@ public class ImageLoader {
     try {
       URL imgURL = ImageLoader.class.getResource(path);
       if (imgURL == null)
-        throw new IOException("Cannot find resource \"" + path + "\" using + " + ImageLoader.class.getName());
+        throw new IOException("Cannot find resource \"" + path + "\" using " + ImageLoader.class.getName());
       BufferedImage bi = ImageIO.read(imgURL);
       return bi;
     } catch (IOException e) {

@@ -157,8 +157,8 @@ public class JKesDetail extends JKesoidDetail0 {
 
   private void napln() {
     size.setIcon(velikost(kes.getSize()));
-    difficulty.setIcon(hvezdicky(kes.getDifficulty()));
-    terrain.setIcon(hvezdicky(kes.getTerrain()));
+    difficulty.setIcon(hvezdicky(kes.getDifficulty().toNumberString()));
+    terrain.setIcon(hvezdicky(kes.getTerrain().toNumberString()));
     jFoundTime.setText(JKesoidDetail0.formatujDatum(kes.getFountTime()));
 
 
@@ -172,7 +172,9 @@ public class JKesDetail extends JKesoidDetail0 {
 
 
   private static Icon hvezdicky(String kolik) {
-    String path = "gccom/stars/stars" + kolik.replace('.','_') + ".gif";
+      // TODO : revisit this...
+      String kolikAdjusted = kolik.replaceAll("\\.(0+|$)", "");
+    String path = "gccom/stars/stars" + kolikAdjusted.replace('.','_') + ".gif";
     BufferedImage image = ImageLoader.seekResImage(path, 61, 13);
     Icon icon = new ImageIcon(image);
     return icon;

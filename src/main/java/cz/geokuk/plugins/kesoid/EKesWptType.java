@@ -26,7 +26,7 @@ public enum EKesWptType {
         try {
             return EKesWptType.valueOf(upravNaVyctovec(aKesWptTpeStr));
         } catch (IllegalArgumentException e) {
-            log.warn("Unknown waypoint type : {}", aKesWptTpeStr);
+            // log.warn("Unknown waypoint type : {}", aKesWptTpeStr);
             return null;
         }
     }

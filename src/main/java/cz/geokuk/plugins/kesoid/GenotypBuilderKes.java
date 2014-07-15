@@ -49,13 +49,17 @@ class GenotypBuilderKes {
     }
     if (kes.getFinal() != null) g.put(genom.ALELA_vylusteno);
 
-
-    g.put (genom.seekAlela("ter" + upravCislo(kes.getTerrain())));
-    g.put (genom.seekAlela("dif" + upravCislo(kes.getDifficulty())));
+    // TODO : tohle by chtelo cele predelat
+    g.put (genom.seekAlela("ter" + upravCislo(kes.getTerrain().toNumberString())));
+    g.put (genom.seekAlela("dif" + upravCislo(kes.getDifficulty().toNumberString())));
   }
 
   private String upravCislo(String terdifu) {
-    return (terdifu + "0").replace(".", "5").substring(0, 2);
+      if (terdifu.equals("0")) {
+          return terdifu;
+      } else {
+          return (terdifu + "0").replace(".", "").substring(0, 2);
+      }
   }
 
 

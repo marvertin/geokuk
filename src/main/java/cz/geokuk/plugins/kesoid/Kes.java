@@ -28,8 +28,8 @@ public class Kes extends Kesoid {
 
   private String hint;
   private EKesSize size;
-  private String difficulty;
-  private String terrain;
+  private EKesDiffTerRating difficulty;
+  private EKesDiffTerRating terrain;
   //private String guid;
   private Wpt finalWpt;
   private static String URL_PREFIX_PRINT = "http://www.geocaching.com/seek/cdpf.aspx?guid=";
@@ -137,22 +137,21 @@ public class Kes extends Kesoid {
     this.size = size;
   }
 
-  public String getDifficulty() {
+  public EKesDiffTerRating getDifficulty() {
     return difficulty;
   }
 
-  public void setDifficulty(String difficulty) {
+  public void setDifficulty(EKesDiffTerRating difficulty) {
     this.difficulty = difficulty;
   }
 
-  public String getTerrain() {
+  public EKesDiffTerRating getTerrain() {
     return terrain;
   }
 
-  public void setTerrain(String terrain) {
+  public void setTerrain(EKesDiffTerRating terrain) {
     this.terrain = terrain;
   }
-
 
   /**
    * @return
@@ -160,9 +159,6 @@ public class Kes extends Kesoid {
   public Wpt getFinal() {
     return finalWpt;
   }
-
-
-
 
   @Override
   public void buildGenotyp(Genom genom, Genotyp g) {
@@ -282,23 +278,14 @@ public class Kes extends Kesoid {
    * @return
    */
   public char getOneLetterDifficulty() {
-    return naJednoPismeno(getDifficulty());
+      return getDifficulty().toSingleChar();
   }
 
   /**
    * @return
    */
   public char getOneLetterTerrain() {
-    return naJednoPismeno(getTerrain());
-  }
-
-  private char naJednoPismeno(String s) {
-    char c = s.charAt(0);
-    if (s.length() == 1) {
-        return c;
-    } else {
-        return (char) (c - '1' + 'A');
-    }
+      return getTerrain().toSingleChar();
   }
 
   /**

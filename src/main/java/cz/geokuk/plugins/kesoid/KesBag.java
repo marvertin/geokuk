@@ -15,11 +15,15 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.lang.CounterMap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class KesBag {
+    private static final Logger log =
+            LogManager.getLogger(KesBag.class.getSimpleName());
 
-  private final List<Wpt> wpts = new ArrayList<Wpt>();
+  private final List<Wpt> wpts = new ArrayList<>();
   private Set<Kesoid> kesoidyset;
   private List<Kesoid> kesoidy;
 
@@ -56,7 +60,8 @@ public class KesBag {
     Mou mou = wpt.getMou();
     if (mou.xx < 0 || mou.yy < 0) {
       //// TODO [veverka] Řešit rozsah [25.11.2009 9:45:59; veverka]
-      System.err.println("Nelze přidat takový waypoint: " + mou + " / " + mou.xx + ":" + mou.yy + " / " + wpt + " --- " + wpt.getKesoid());
+      log.error("Nelze přidat takový waypoint: " + mou + " / " + mou.xx + ":" + mou.yy + " / " + wpt + " --- " +
+              wpt.getKesoid());
       return;
     }
     indexator.vloz(mou.xx, mou.yy, wpt);
@@ -133,8 +138,7 @@ public class KesBag {
 
   public Set<Alela> getPouziteAlely() {
     // TODO optimalizovat
-    Set<Alela> result = poctyAlel.getMap().keySet();
-    return result;
+      return poctyAlel.getMap().keySet();
   }
 
   /**

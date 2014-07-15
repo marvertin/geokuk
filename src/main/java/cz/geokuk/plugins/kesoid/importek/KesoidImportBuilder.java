@@ -14,19 +14,7 @@ import java.util.regex.Pattern;
 
 import cz.geokuk.framework.ProgressModel;
 import cz.geokuk.framework.Progressor;
-import cz.geokuk.plugins.kesoid.CzechGeodeticPoint;
-import cz.geokuk.plugins.kesoid.EKesSize;
-import cz.geokuk.plugins.kesoid.EKesStatus;
-import cz.geokuk.plugins.kesoid.EKesType;
-import cz.geokuk.plugins.kesoid.EKesVztah;
-import cz.geokuk.plugins.kesoid.EKesWptType;
-import cz.geokuk.plugins.kesoid.Kes;
-import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.Kesoid;
-import cz.geokuk.plugins.kesoid.Munzee;
-import cz.geokuk.plugins.kesoid.SimpleWaypoint;
-import cz.geokuk.plugins.kesoid.Waymark;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.Wpt.EZOrder;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
@@ -655,8 +643,8 @@ public class KesoidImportBuilder implements IImportBuilder {
         kes.setHint(gpxwpt.groundspeak.encodedHints);
 
 
-        kes.setTerrain(gpxwpt.groundspeak.terrain);
-        kes.setDifficulty(gpxwpt.groundspeak.difficulty);
+        kes.setTerrain(EKesDiffTerRating.parse(gpxwpt.groundspeak.terrain));
+        kes.setDifficulty(EKesDiffTerRating.parse(gpxwpt.groundspeak.difficulty));
         kes.setSize(EKesSize.decode(gpxwpt.groundspeak.container));
         //		kes.set(gpxwpt.groundspeak.);
         //		kes.set(gpxwpt.groundspeak.);

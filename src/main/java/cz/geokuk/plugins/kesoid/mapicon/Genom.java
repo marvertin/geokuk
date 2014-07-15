@@ -155,7 +155,7 @@ public class Genom {
   }
 
   public Genotyp getGenotypProAlelu(Alela alela) {
-    Set<Alela> alely = new HashSet<Alela>();
+    Set<Alela> alely = new HashSet<>();
     for (Gen gen : genyList) {
       if (gen.getAlely().contains(alela)) {
         alely.add(alela);
