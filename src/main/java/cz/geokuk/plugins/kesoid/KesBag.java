@@ -46,8 +46,8 @@ public class KesBag {
   ////////////////////////////////////////
   public KesBag(final Genom genom) {
     this.genom = genom;
-    indexator =new Indexator<Wpt>(BoundingRect.ALL);
-    kesoidyset = new HashSet<Kesoid>();
+    indexator =new Indexator<>(BoundingRect.ALL);
+    kesoidyset = new HashSet<>();
     citacAlel = genom.createCitacAlel();
   }
 
@@ -81,7 +81,7 @@ public class KesBag {
   }
 
   public void done() {
-    kesoidy = new ArrayList<Kesoid>(kesoidyset.size());
+    kesoidy = new ArrayList<>(kesoidyset.size());
     kesoidy.addAll(kesoidyset);
     kesoidyset = null;
     poctyAlel = citacAlel.getCounterMap();
@@ -154,6 +154,4 @@ public class KesBag {
   public InformaceOZdrojich getInformaceOZdrojich() {
     return iInformaceOZdrojich;
   }
-
-
 }
