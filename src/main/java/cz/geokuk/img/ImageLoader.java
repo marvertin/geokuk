@@ -46,8 +46,7 @@ public class ImageLoader {
       URL imgURL = ImageLoader.class.getResource(path);
       if (imgURL == null)
         throw new IOException("Cannot find resource \"" + path + "\" using " + ImageLoader.class.getName());
-      BufferedImage bi = ImageIO.read(imgURL);
-      return bi;
+        return ImageIO.read(imgURL);
     } catch (IOException e) {
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Vyhledavani obrazku \""+ path + "\"");
       // neexistující image

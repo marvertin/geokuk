@@ -91,7 +91,7 @@ public class Genom {
   public Alela ALELA_ter45 =coale("ter45", "4,5");
   public Alela ALELA_ter50 =coale("ter50", "5");
 
-  public Alela ALELA_def0 =coale("def0", "Nespecifokovaná");
+  public Alela ALELA_def0 =coale("dif0", "Nespecifikovaná");
   public Alela ALELA_dif10 =coale("dif10", "1");
   public Alela ALELA_dif15 =coale("dif15", "1,5");
   public Alela ALELA_dif20 =coale("dif20", "2");

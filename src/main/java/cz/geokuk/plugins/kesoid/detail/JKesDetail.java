@@ -161,7 +161,6 @@ public class JKesDetail extends JKesoidDetail0 {
     terrain.setIcon(hvezdicky(kes.getTerrain().toNumberString()));
     jFoundTime.setText(JKesoidDetail0.formatujDatum(kes.getFountTime()));
 
-
     bestOf.setText(kes.getBestOf() == Kes.NENI_HODNOCENI ? "?" : kes.getBestOf() + "x");
     hodnoceni.setText(kes.getHodnoceni() == Kes.NENI_HODNOCENI ? "?" : kes.getHodnoceni() + "%");
     hodnoceniPocet.setText(kes.getHodnoceniPocet() == Kes.NENI_HODNOCENI  ? "?" : kes.getHodnoceniPocet() + "x");

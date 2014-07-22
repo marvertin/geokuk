@@ -40,6 +40,10 @@ public enum EKesDiffTerRating {
     }
 
     public static EKesDiffTerRating parse(String toParse) {
+        if (toParse == null) {
+            log.warn("Null passed as parameter to EKesDiffTerRating parser!");
+            return UNKNOWN;
+        }
         try {
             float f = Float.parseFloat(toParse);
             int ordinal = (int)(f * 2 - 2);
