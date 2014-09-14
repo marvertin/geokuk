@@ -21,7 +21,7 @@ public class Doc implements Iterable<Cesta> {
   private File file;
   private boolean changed;
 
-  private final List<Cesta> cesty = new ArrayList<Cesta>();
+  private final List<Cesta> cesty = new ArrayList<>();
 
   public boolean hasWpt(Wpt wpt) {
     for (Cesta cesta : cesty) {

@@ -314,7 +314,6 @@ public class Bod extends Bousek0 implements Uchopenec {
   }
 
   public boolean isMeziVzdusnymiUseky() {
-    if (isKrajovy()) return false;
-    return uvpred.isVzdusny() && uvzad.isVzdusny();
+    return !isKrajovy() && uvpred.isVzdusny() && uvzad.isVzdusny();
   }
 }

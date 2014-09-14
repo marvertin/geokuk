@@ -70,7 +70,7 @@ public class Alela {
   }
 
   public static Set<String> alelyToNames(Set<Alela> alely) {
-    Set<String> jmenaAlel = new HashSet<String>(alely.size());
+    Set<String> jmenaAlel = new HashSet<>(alely.size());
     for (Alela alela : alely) {
       jmenaAlel.add(alela.name());
     }

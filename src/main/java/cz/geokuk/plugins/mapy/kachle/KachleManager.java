@@ -2,7 +2,6 @@ package cz.geokuk.plugins.mapy.kachle;
 
 import java.awt.*;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * Common interface for the tiles storage.

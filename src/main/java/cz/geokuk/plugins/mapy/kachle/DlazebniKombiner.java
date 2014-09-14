@@ -32,7 +32,7 @@ class DlazebniKombiner {
 
   private boolean hotovo;
 
-  private EnumMap<EKaType, Image> imgs = new EnumMap<EKaType, Image>(EKaType.class);
+  private EnumMap<EKaType, Image> imgs = new EnumMap<>(EKaType.class);
 
   public DlazebniKombiner(EnumSet<EKaType> coCekam) {
     super();

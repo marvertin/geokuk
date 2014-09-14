@@ -81,7 +81,7 @@ public class JFavorit extends JComponent {
       @Override
       public void mouseClicked(MouseEvent mouseevent) {
         System.out.println("Prasteno do mysi " + jFavorit.kolik);
-      };
+      }
     });
 
     new Timer(1000, new ActionListener() {

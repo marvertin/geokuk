@@ -11,9 +11,9 @@ import java.util.Set;
 public class Vrstva {
 
 	
-	private Map<Alela, Seznamec> icondefsProSymbol = new HashMap<Alela, Seznamec>();
+	private Map<Alela, Seznamec> icondefsProSymbol = new HashMap<>();
 	private Seznamec hlavickaObecnych = new Seznamec();
-	private Set<Alela> pouziteAlely = new HashSet<Alela>();
+	private Set<Alela> pouziteAlely = new HashSet<>();
 
 	private int pocet;
 	
@@ -49,7 +49,7 @@ public class Vrstva {
 	public IconDef locate(Genotyp genotyp) {
 
 		Set<Alela> hledaneAlely = genotyp.getAlely();
-		List<IconDef> vybrane = new ArrayList<IconDef>(pocet);
+		List<IconDef> vybrane = new ArrayList<>(pocet);
 		int maxPriorita = -1;
 		
 		for (Seznamec seznamec =  najdiPocatek(genotyp); seznamec != null; seznamec = seznamec.next) {

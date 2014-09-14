@@ -27,7 +27,7 @@ public class Gpxg {
 
   public void putUserTag(String genname, String alelaname) {
     if (userTags == null) {
-      userTags = new HashMap<String, String>();
+      userTags = new HashMap<>();
     }
     userTags.put(genname, alelaname);
   }

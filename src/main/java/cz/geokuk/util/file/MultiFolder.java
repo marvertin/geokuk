@@ -25,7 +25,7 @@ public class MultiFolder {
     private static final String REMOVE_SUFFIX = ".remove";
     private static final String CONTENT_TXT = "content.txt";
 
-    private final KeyTree<String, LamUrl> tree = new KeyTree<String, LamUrl>();
+    private final KeyTree<String, LamUrl> tree = new KeyTree<>();
 
     public KeyNode<String, LamUrl> getNode(String key) {
         String[] ss = key.split("/");

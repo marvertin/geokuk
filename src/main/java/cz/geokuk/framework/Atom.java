@@ -10,14 +10,13 @@ import java.util.Set;
 public abstract class Atom implements Comparable<Atom> {
 
   @SuppressWarnings("rawtypes")
-  private static Map<Class<? extends Atom>, TypAtomu> repo 
-  = new HashMap<Class<? extends Atom>, TypAtomu>();
+  private static Map<Class<? extends Atom>, TypAtomu> repo = new HashMap<>();
 
   String name;
   int ordinal;
 
   public static <E extends Atom> Set<E> of(E... types) {
-    return new HashSet<E>(Arrays.asList(types));
+    return new HashSet<>(Arrays.asList(types));
   }
 
   public static <E extends Atom> E valueOf(Class<E> clazz, String jmeno) {
@@ -56,15 +55,13 @@ public abstract class Atom implements Comparable<Atom> {
   }
 
   public static <E> Set<E> noneOf(Class<E> e) {
-    return new HashSet<E>();
+    return new HashSet<>();
   }
 
   private static <E extends Atom> E vytvorInstanci(Class<E> clazz) {
     try {
       return clazz.newInstance();
-    } catch (InstantiationException e) {
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }
@@ -73,7 +70,7 @@ public abstract class Atom implements Comparable<Atom> {
     @SuppressWarnings("unchecked")
     TypAtomu<E> typAtomu = repo.get(typ);
     if (typAtomu == null) {
-      typAtomu = new TypAtomu<E>();
+      typAtomu = new TypAtomu<>();
       repo.put(typ, typAtomu);
     }
     return typAtomu;
@@ -81,7 +78,7 @@ public abstract class Atom implements Comparable<Atom> {
 
 
   private static class TypAtomu<E extends Atom> {
-    Map<String, E> mapa = new LinkedHashMap<String, E>();
+    Map<String, E> mapa = new LinkedHashMap<>();
   }
 
   @Override

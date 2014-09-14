@@ -35,7 +35,7 @@ public class Hledac extends Hledac0<Nalezenec> {
   public List<Nalezenec> hledej(HledaciPodminka0 podm) {
     System.out.println("Hledy, hledy, hledy: " + kesBag.getKesoidy().size() + " " + podm.getVzorek());
     Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());
-    List<Nalezenec> list = new ArrayList<Nalezenec>();
+    List<Nalezenec> list = new ArrayList<>();
     for (Kesoid kesoid : kesBag.getKesoidy()) {
       if (getFuture() != null && getFuture().isCancelled()) return null;
       String[] prohledavanci = kesoid.getProhledavanci();

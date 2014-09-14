@@ -90,7 +90,7 @@ public class VyletModel extends Model0 {
     if (worker != null) {
       worker.cancel(true);
     }
-    worker = new Worker(new ArrayList<Kesoid>(get(EVylet.ANO)));
+    worker = new Worker(new ArrayList<>(get(EVylet.ANO)));
     worker.execute();
   }
 

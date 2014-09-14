@@ -61,10 +61,10 @@ public abstract class JVyberIkon0 extends Box {
   //	onInitRefreshing();
   	
     final Genom genom = bag.getGenom();
-    final Set<String> jmenaVybranychAlel = new HashSet<String>(aJmenaVybranychAlel);
+    final Set<String> jmenaVybranychAlel = new HashSet<>(aJmenaVybranychAlel);
     jvyber1.removeAll();
     jvyber2.removeAll();
-    final Set<Alela> vybraneAlely  = new HashSet<Alela>();
+    final Set<Alela> vybraneAlely  = new HashSet<>();
 
     for (Gen gen : genom.getGeny()) {
       ButtonGroup bg = new ButtonGroup();
@@ -156,7 +156,7 @@ public abstract class JVyberIkon0 extends Box {
 	/**
    * @return
    */
-  private final JToggleButton createToggleButton() {
+  private JToggleButton createToggleButton() {
     return iRadioButton ? new JRadioButton() : new JCheckBox();
   }
 

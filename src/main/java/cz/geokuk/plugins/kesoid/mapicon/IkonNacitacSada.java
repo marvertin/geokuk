@@ -34,36 +34,33 @@ public class IkonNacitacSada {
       return null;
     }
 
-    BufferedReader br = new BufferedReader(new InputStreamReader(sadyTxt.getData().url.openStream()));
-    try {
-      String line;
-      Map<String, Sklo> nactenaSkla = new HashMap<String, Sklo>();
-      while ((line = br.readLine()) != null) {
-        line = line.trim();
-        if (line.length() == 0) continue;
-        String[] dvoj = line.split("\\.", 2);
-        String skloName = dvoj[0];
-        String aplikaceSklaName = dvoj[1];
+      try (BufferedReader br = new BufferedReader(new InputStreamReader(sadyTxt.getData().url.openStream()))) {
+          String line;
+          Map<String, Sklo> nactenaSkla = new HashMap<>();
+          while ((line = br.readLine()) != null) {
+              line = line.trim();
+              if (line.length() == 0) continue;
+              String[] dvoj = line.split("\\.", 2);
+              String skloName = dvoj[0];
+              String aplikaceSklaName = dvoj[1];
 
-        SkloAplikant skloAplikant = new SkloAplikant();
-        skloAplikant.aplikaceSkla = Enum.valueOf(EAplikaceSkla.class, aplikaceSklaName);
+              SkloAplikant skloAplikant = new SkloAplikant();
+              skloAplikant.aplikaceSkla = Enum.valueOf(EAplikaceSkla.class, aplikaceSklaName);
 
-        Sklo sklo = nactenaSkla.get(skloName);
-        if (sklo == null) {
-          KeyNode<String, LamUrl> skloNode = nodeSada.locate(skloName);
-          if (skloNode == null || skloNode.getData() == null) {
-            error("Nenalezeno sklo " + skloName + " referencing from " + sadyTxt.getData().url);
-            continue;
+              Sklo sklo = nactenaSkla.get(skloName);
+              if (sklo == null) {
+                  KeyNode<String, LamUrl> skloNode = nodeSada.locate(skloName);
+                  if (skloNode == null || skloNode.getData() == null) {
+                      error("Nenalezeno sklo " + skloName + " referencing from " + sadyTxt.getData().url);
+                      continue;
+                  }
+                  sklo = loadSklo(skloNode);
+                  nactenaSkla.put(skloName, sklo);
+              }
+              skloAplikant.sklo = sklo;
+              sada.skloAplikanti.add(skloAplikant);
           }
-          sklo = loadSklo(skloNode);
-          nactenaSkla.put(skloName, sklo);
-        }
-        skloAplikant.sklo = sklo;
-        sada.skloAplikanti.add(skloAplikant);
       }
-    } finally {
-      br.close();
-    }
     return sada;
   }
 
@@ -74,12 +71,9 @@ public class IkonNacitacSada {
   private void loadGroupDisplayNames(KeyNode<String, LamUrl> nodeSada) throws IOException {
     KeyNode<String, LamUrl> gropNamesNode = nodeSada.locate(GROUPS_PROPERTIES);
     if (gropNamesNode != null) {
-      InputStream stm = gropNamesNode.getData().url.openStream();
-      try {
-        groupDisplayNames.load(stm);
-      } finally {
-        stm.close();
-      }
+        try (InputStream stm = gropNamesNode.getData().url.openStream()) {
+            groupDisplayNames.load(stm);
+        }
     }
   }
 

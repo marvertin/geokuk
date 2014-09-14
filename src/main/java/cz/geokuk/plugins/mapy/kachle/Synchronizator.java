@@ -18,7 +18,7 @@ class Synchronizator<T> {
 
   public static final Image NEZISKAVEJ = new BufferedImage(1, 1, 1);
 
-  private final Map<Ka0, List<T>> ziskavanci = new HashMap<Ka0, List<T>>();
+  private final Map<Ka0, List<T>> ziskavanci = new HashMap<>();
 
   private final CacheNaKachleDisk cache;
 
@@ -40,7 +40,7 @@ class Synchronizator<T> {
     if (img != null) return img; // máme ho v paměti, není co řešit
     List<T> list = ziskavanci.get(ki);
     if (list == null)  { // nikdo neziskava, budu ziskavat ja¨
-      list = new ArrayList<T>();
+      list = new ArrayList<>();
       ziskavanci.put(ki, list);
       img = null;
     } else {

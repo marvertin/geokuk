@@ -22,12 +22,7 @@ public class HledaciPodminka extends HledaciPodminka0 {
   URL computeUrl() {
     URL url;
     try {
-      StringBuilder sb = new StringBuilder();
-      sb.append(URL_PREFIX);
-      sb.append("&address=");
-      sb.append(URLEncoder.encode(getVzorek(), "utf8"));
-      sb.append("&language=cs");
-      
+
 //      sb.append("&bounds=");
 //      sb.append(String.format("%s,%s|%s,%s", getStredHledani().lat -1, getStredHledani().lon -1, getStredHledani().lat +1, getStredHledani().lon +1));
 
@@ -41,14 +36,12 @@ public class HledaciPodminka extends HledaciPodminka0 {
 //      sb.append(getStredHledani().lon);
 //      sb.append("&spn=");
 //      sb.append("1,1");
-      url = new URL(sb.toString());
+      url = new URL(URL_PREFIX + "&address=" + URLEncoder.encode(getVzorek(), "utf8") + "&language=cs");
       System.out.println("Hledaci URL: " + url);
-    } catch (MalformedURLException e1) {
+    } catch (MalformedURLException | UnsupportedEncodingException e1) {
       throw new RuntimeException(e1);
-    } catch (UnsupportedEncodingException e) {
-      throw new RuntimeException(e);
     }
-    return url;
+      return url;
   }
 
 }

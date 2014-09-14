@@ -13,7 +13,7 @@ import java.util.Map;
 public class HledaciSluzba  {
 
   private final Map<RefreshorVysledkuHledani<? extends Nalezenec0>, HledaciRunnableSwingWorker<? extends Nalezenec0>> map
-  = new IdentityHashMap<RefreshorVysledkuHledani<? extends Nalezenec0>, HledaciRunnableSwingWorker<? extends Nalezenec0>>();
+  = new IdentityHashMap<>();
 
   /**
    * Spustí vyhledávání zadaným hledačem, zaanou hledací podmínkou
@@ -30,7 +30,7 @@ public class HledaciSluzba  {
       if (hledaciRunnableNaKancl != null)  hledaciRunnableNaKancl.cancel(true); // zkanclovat, když se hledalo
       //System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnableNaKancl) + ": CANCEL");
     }
-    HledaciRunnableSwingWorker<T> hledaciRunnable = new HledaciRunnableSwingWorker<T>(new Finishor<T>(refreshor), podm, hledac);
+    HledaciRunnableSwingWorker<T> hledaciRunnable = new HledaciRunnableSwingWorker<>(new Finishor<>(refreshor), podm, hledac);
     map.put(refreshor, hledaciRunnable);
     //System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnable) + ": EXECUTE");
     hledaciRunnable.execute();

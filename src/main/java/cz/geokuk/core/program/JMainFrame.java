@@ -84,7 +84,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
   public void init() {
     // umistitOkno();
     setTitle("GeoKuk");
-    List<Image> imgs = new ArrayList<Image>();
+    List<Image> imgs = new ArrayList<>();
     imgs.add(ImageLoader.seekResImage("geokuk32.png", 32, 32));
     imgs.add(ImageLoader.seekResImage("geokuk16.png", 16, 16));
     imgs.add(ImageLoader.seekResImage("geokuk48.png", 48, 48));
@@ -179,7 +179,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
       // Obezlička, aby myšování bylo podle myšího toku událostí nahoře, ale komponentně dole.
       // Musí být dole ,aby fungovaly slidery.
       smrizema.remove(mysovani);
-      slideList = new ArrayList<JSingleSlide0>();
+      slideList = new ArrayList<>();
       for (Component comp : smrizema.getComponents()) {
         if (comp instanceof JSingleSlide0) {
           JSingleSlide0 slide = (JSingleSlide0) comp;
@@ -264,7 +264,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
       //System.out.println("Ukladam stav: " + extendedState);
     }
     oknoModel.setStavOkna(extendedState);
-  };
+  }
 
 
 

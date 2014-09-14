@@ -21,7 +21,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
     @Override
     protected void onSetOnOff(boolean onoff) {
       putVisibleToPreferences(onoff);
-    };
+    }
   };
 
 

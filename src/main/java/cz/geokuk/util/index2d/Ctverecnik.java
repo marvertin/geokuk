@@ -147,7 +147,7 @@ public class Ctverecnik<T> extends Node0<T> {
         dh.duplicita = true; // takovy uz tam mame
         return node; // beze zmeny
       }
-      Ctverecnik<T> ctver = new Ctverecnik<T>(xx1, yy1, xx2, yy2);
+      Ctverecnik<T> ctver = new Ctverecnik<>(xx1, yy1, xx2, yy2);
       ctver.vloz(sheet, dh);
       ctver.vloz(aSheet, dh);
       return ctver;

@@ -82,7 +82,7 @@ public class Filex {
           dosWithDrive = true;
 
           char[] ca = path.replace('/', '\\').toCharArray();
-          StringBuffer sbRoot = new StringBuffer();
+          StringBuilder sbRoot = new StringBuilder();
           for (int i = 0; i < colon; i++) {
               sbRoot.append(Character.toUpperCase(ca[i]));
           }
@@ -93,7 +93,7 @@ public class Filex {
           root = sbRoot.toString();
 
           // Eliminate consecutive slashes after the drive spec
-          StringBuffer sbPath = new StringBuffer();
+          StringBuilder sbPath = new StringBuilder();
           for (int i = colon + 1; i < ca.length; i++) {
               if ((ca[i] != '\\') ||
                   (ca[i] == '\\' && ca[i - 1] != '\\')) {
@@ -116,26 +116,26 @@ public class Filex {
           }
       }
 
-      Stack<String> s = new Stack<String>();
+      Stack<String> s = new Stack<>();
       s.push(root);
       StringTokenizer tok = new StringTokenizer(path, File.separator);
       while (tok.hasMoreTokens()) {
           String thisToken = tok.nextToken();
-          if (".".equals(thisToken)) {
-              continue;
-          } else if ("..".equals(thisToken)) {
-              if (s.size() < 2) {
-                  // nevadí, prostě jdeme dále
-//                  throw new IllegalArgumentException("Cannot resolve path " + orig + ", because thera are .. which goes before start of path");
-              } else {
-                  s.pop();
+          if (!".".equals(thisToken)) {
+              if ("..".equals(thisToken)) {
+                  if (s.size() < 2) {
+                      // nevadí, prostě jdeme dále
+    //                  throw new IllegalArgumentException("Cannot resolve path " + orig + ", because thera are .. which goes before start of path");
+                  } else {
+                      s.pop();
+                  }
+              } else { // plain component
+                  s.push(thisToken);
               }
-          } else { // plain component
-              s.push(thisToken);
           }
       }
 
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       for (int i = 0; i < s.size(); i++) {
           if (i > 1) {
               // not before the filesystem root and not after it, since root

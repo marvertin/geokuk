@@ -11,8 +11,8 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 
 public class Vylet {
 
-  private final Set<Kesoid> ano = new HashSet<Kesoid>();
-  private final Set<Kesoid> ne  = new HashSet<Kesoid>();
+  private final Set<Kesoid> ano = new HashSet<>();
+  private final Set<Kesoid> ne  = new HashSet<>();
 
   void removeAll(EVylet evyl) {
     switch (evyl) {

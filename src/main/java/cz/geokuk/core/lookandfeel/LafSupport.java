@@ -53,7 +53,7 @@ public class LafSupport  {
   private static ButtonGroup lafMenuGroup = new ButtonGroup();
   private static ButtonGroup themesMenuGroup = new ButtonGroup();
 
-  private static List<LafItem> lafitems = new ArrayList<LafItem>();
+  private static List<LafItem> lafitems = new ArrayList<>();
   // Used only if swingset is an application
   private static JFrame frame;
 

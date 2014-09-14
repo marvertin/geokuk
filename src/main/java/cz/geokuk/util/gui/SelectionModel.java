@@ -13,11 +13,11 @@ import cz.geokuk.util.lang.FObject;
  */
 public class SelectionModel<T> {
   
-  final List<Item<T>> items = new ArrayList<Item<T>>();
+  final List<Item<T>> items = new ArrayList<>();
   
   private Item<T> selectedItem;
 
-  private final List<SelectionListener<T>> listeners = new ArrayList<SelectionListener<T>>();
+  private final List<SelectionListener<T>> listeners = new ArrayList<>();
   
   
 //  public void add(Map<? extends T, String> map) {
@@ -25,7 +25,7 @@ public class SelectionModel<T> {
 //  }
 
   public void add(T item, String displayText) {
-    items.add(new Item<T>(item, displayText, items.size()));
+    items.add(new Item<>(item, displayText, items.size()));
   }
   
   public void addListener(SelectionListener<T> listener) {
@@ -58,7 +58,7 @@ public class SelectionModel<T> {
   void setSelectedItem(Item<T> item) {
     if (selectedItem != item) { // mohu přímo porovnávat, protože je to jeden z našeho
       selectedItem = item;
-      fire(new SelectionEvent<T>(this, selectedItem));
+      fire(new SelectionEvent<>(this, selectedItem));
     }
   }
   

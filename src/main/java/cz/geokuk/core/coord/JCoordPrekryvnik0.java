@@ -22,7 +22,7 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 
   private Coord soord = Coord.prozatimniInicializacni();
 
-  private final List<JSingleSlide0> slides = new ArrayList<JSingleSlide0>();
+  private final List<JSingleSlide0> slides = new ArrayList<>();
 
   /**
    * @return the coord

@@ -15,6 +15,6 @@ public class FenotypPreferencesChangedEvent extends Event0<KesoidModel> {
   }
 
   public Set<String> getJmenaNefenotypovanychAlel() {
-    return new HashSet<String>(jmenaNefenotypovanychAlel);
+    return new HashSet<>(jmenaNefenotypovanychAlel);
   }
 }

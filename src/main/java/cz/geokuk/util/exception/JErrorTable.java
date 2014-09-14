@@ -147,7 +147,7 @@ public class JErrorTable extends JPanel {
   class MyTableModel extends AbstractTableModel {
     private static final long serialVersionUID = -1777521413836209700L;
 
-    private List<Problem> problemlist = new ArrayList<Problem>();
+    private List<Problem> problemlist = new ArrayList<>();
 
     private String[] columnNames = {
         "Závažnost",

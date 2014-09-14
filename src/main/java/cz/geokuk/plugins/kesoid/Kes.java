@@ -211,7 +211,7 @@ public class Kes extends Kesoid {
     sb.append("<small>");
     sb.append(" - ");
     sb.append(getFirstWpt().getSym());
-    sb.append("  (" + getCode() + ")");
+    sb.append("  (").append(getCode()).append(")");
     sb.append("</small>");
     sb.append("<br>");
     if (wpt != getFirstWpt()) {
@@ -227,7 +227,7 @@ public class Kes extends Kesoid {
       sb.append("<small>");
       sb.append(" - ");
       sb.append(wpt.getSym());
-      sb.append("  (" + wpt.getName() + ")");
+      sb.append("  (").append(wpt.getName()).append(")");
       sb.append("</small>");
     }
     //}
@@ -293,12 +293,7 @@ public class Kes extends Kesoid {
    * @return
    */
   public String getInfo() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getOneLetterType());
-    sb.append(getOneLetterSize());
-    sb.append(getOneLetterDifficulty());
-    sb.append(getOneLetterTerrain());
-    return sb.toString();
+      return String.valueOf(getOneLetterType()) + getOneLetterSize() + getOneLetterDifficulty() + getOneLetterTerrain();
   }
 
   public int getFavorit() {

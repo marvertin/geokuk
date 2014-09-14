@@ -59,7 +59,7 @@ public class JPrehledSouboru extends JPanel {
 
   private JTabbedPane jTabbedPane;
 
-  private final EnumMap<ESouborPanelName, JJedenSouborPanel> mapaProFokusovani = new EnumMap<ESouborPanelName, JJedenSouborPanel>(ESouborPanelName.class);
+  private final EnumMap<ESouborPanelName, JJedenSouborPanel> mapaProFokusovani = new EnumMap<>(ESouborPanelName.class);
 
 
   public JPrehledSouboru(Void v) {

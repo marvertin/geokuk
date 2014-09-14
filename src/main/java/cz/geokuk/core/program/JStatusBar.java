@@ -77,7 +77,7 @@ public class JStatusBar extends JPanel {
 
   private JPanel odPozice;
 
-  private final Map<Progressor, JProgressBar> jFilterProgressMap = new HashMap<Progressor, JProgressBar>();
+  private final Map<Progressor, JProgressBar> jFilterProgressMap = new HashMap<>();
   private JPanel jFilterProgressPanel;
 
   private final JValue jZdrojeKesoiduPocetNactenych = new JValue();
@@ -213,8 +213,7 @@ public class JStatusBar extends JPanel {
       @Override
       public void mouseClicked(MouseEvent aE) {
         akce.informaceoZdrojichAction.fire();
-      };
-
+      }
     });
   }
 

@@ -185,7 +185,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
   }
 
   Set<String> seznamTypu(List<Pocitadlo> pocitadla) {
-    Set<String> types = new HashSet<String>();
+    Set<String> types = new HashSet<>();
     for (Pocitadlo p : pocitadla) {
       types.add(p.getTextovyPopisTypu());
     }

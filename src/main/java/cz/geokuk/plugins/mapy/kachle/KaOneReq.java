@@ -11,7 +11,7 @@ class KaOneReq extends Ka0Req implements Comparable<KaOneReq> {
   private final DlazebniPosilac dlazebniPosilac;
 
 
-  public KaOneReq(KaOne ka, KaAllReq pricina, DlazebniPosilac dlazebniPosilac, Priorita priorita) {
+  public KaOneReq(KaOne ka, KaAllReq pricina, DlazebniPosilac dlazebniPosilac, Priority priorita) {
     super(ka, priorita);
     this.pricina = pricina;
     this.dlazebniPosilac = dlazebniPosilac;
@@ -21,10 +21,10 @@ class KaOneReq extends Ka0Req implements Comparable<KaOneReq> {
     KaOne ka1 = getKa();
     KaOne ka2 = kaReq.getKa();
 
-    int prioritaDiff = getPriorita().ordinal() - getPriorita().ordinal();
+    int prioritaDiff = getPriorita().ordinal() - kaReq.getPriorita().ordinal();
     if (prioritaDiff != 0) return prioritaDiff;
 
-    if (getPriorita() == Priorita.KACHLE) { // prioritní se dotahují dle podkladů a pak od středu
+    if (getPriorita() == Priority.KACHLE) { // prioritní se dotahují dle podkladů a pak od středu
       int ordinalDiff = ka1.getType().ordinal() - ka2.getType().ordinal();
       if (ordinalDiff != 0) return ordinalDiff;
 

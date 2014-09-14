@@ -60,7 +60,7 @@ public class CestyZperzistentnovac {
 
     private Ggt loadGgt(BufferedReader reader) throws IOException {
         String line;
-        Set<String> set = new HashSet<String>();
+        Set<String> set = new HashSet<>();
         while ((line = reader.readLine()) != null) {
             line = line.trim();
             if (line.length() == 0) {
@@ -76,7 +76,7 @@ public class CestyZperzistentnovac {
     void zapisGgt(Doc doc, File file) {
         BufferedWriter wrt = null;
         smimCist++;
-        Set<String> exportovano = new HashSet<String>();
+        Set<String> exportovano = new HashSet<>();
         try {
             try {
                 wrt = new BufferedWriter(new FileWriter(file));
@@ -115,7 +115,7 @@ public class CestyZperzistentnovac {
 
 
     List<Cesta> nacti(List<File> files, KesBag kesBag) {
-        List<Cesta> cesty = new ArrayList<Cesta>();
+        List<Cesta> cesty = new ArrayList<>();
         for (File file : files) {
             try {
                 log.debug("Nacitam z: " + file);

@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class InformaceOZdrojich {
-  private final Map<String, InformaceOZdroji> map = new LinkedHashMap<String, InformaceOZdroji>();
-  private final List<InformaceOZdroji> list= new ArrayList<InformaceOZdroji>();
+  private final Map<String, InformaceOZdroji> map = new LinkedHashMap<>();
+  private final List<InformaceOZdroji> list= new ArrayList<>();
 
   public int getSourceCount() {
     return map.size();

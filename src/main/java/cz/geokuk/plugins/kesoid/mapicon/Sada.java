@@ -23,9 +23,9 @@ public class Sada {
   private Pocitadlo pocitSklivcu = new PocitadloMalo("Sklivce - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
   private static Pocitadlo pocitSklivcuZasah = new PocitadloRoste("Sklivce - zásah cache", "");
 
-  List<SkloAplikant> skloAplikanti = new ArrayList<SkloAplikant>();
+  List<SkloAplikant> skloAplikanti = new ArrayList<>();
 
-  Map<Genotyp.Otisk, Sklivec> cache = new HashMap<Genotyp.Otisk, Sklivec>();
+  Map<Genotyp.Otisk, Sklivec> cache = new HashMap<>();
 
   private final String name;
 
@@ -78,7 +78,7 @@ public class Sada {
 
   private void zuzNaObrazkove(Genotyp genotyp) {
     Set<Alela> pouziteAlely2 = getPouziteAlely();
-    for (Alela alela : new ArrayList<Alela>(genotyp.getAlely())) {
+    for (Alela alela : new ArrayList<>(genotyp.getAlely())) {
       if (! pouziteAlely2.contains(alela)) {
       	if (! pouziteAlely2.contains(alela.getGen().getVychoziAlela())) {
       		genotyp.remove(alela);
@@ -112,7 +112,7 @@ public class Sada {
    */
   public Set<Alela> getPouziteAlely() {
     if (pouziteAlely == null) {
-      Set<Alela> alely = new HashSet<Alela>();
+      Set<Alela> alely = new HashSet<>();
       for (SkloAplikant skloAplikant : skloAplikanti) {
         for (Vrstva vrstva : skloAplikant.sklo.vrstvy) {
           		alely.addAll(vrstva.getPouziteAlely());
@@ -125,7 +125,7 @@ public class Sada {
 
   public Set<Gen> getPouziteGeny() {
     if (pouziteGeny == null) {
-      Set<Gen> geny = new HashSet<Gen>();
+      Set<Gen> geny = new HashSet<>();
       Set<Alela> pouziteAlely = getPouziteAlely();
       for (Alela alela : pouziteAlely) {
         geny.add(alela.getGen());

@@ -37,7 +37,8 @@ class CacheNaKachleDisk {
 
     private final KachleManager km;
 
-    private final BlockingQueue<DiskSaveRequest> naZapsaniNaDisk = new LinkedBlockingQueue<DiskSaveRequest>(MAXIMALNI_VELIKOST_FRONTY_ZAPISUJICI_NA_DISK);
+    private final BlockingQueue<DiskSaveRequest> naZapsaniNaDisk = new LinkedBlockingQueue<>(
+            MAXIMALNI_VELIKOST_FRONTY_ZAPISUJICI_NA_DISK);
 
 
     private final CacheNaKachleMemory cache = new CacheNaKachleMemory();

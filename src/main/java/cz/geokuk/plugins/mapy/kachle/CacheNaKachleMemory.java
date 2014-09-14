@@ -36,8 +36,8 @@ class CacheNaKachleMemory {
       "Počet obrázků, které garbage collector zametrl pryč a my díky tomu odstranili referenci z keše.");
 
 
-  private final ReferenceQueue<Image> referenceQueue = new ReferenceQueue<Image>();
-  private final Map<Ka0, Item> cache = new HashMap<Ka0, Item>();
+  private final ReferenceQueue<Image> referenceQueue = new ReferenceQueue<>();
+  private final Map<Ka0, Item> cache = new HashMap<>();
 
 
   public CacheNaKachleMemory() {

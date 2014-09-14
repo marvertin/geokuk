@@ -6,7 +6,7 @@ import java.util.List;
 
 public class WatchDogGroup {
 
-  private final List<FileWatchDog<?>> list = new ArrayList<FileWatchDog<?>>();
+  private final List<FileWatchDog<?>> list = new ArrayList<>();
 
   void forceIfAnyModified() {
     boolean zmena = false;

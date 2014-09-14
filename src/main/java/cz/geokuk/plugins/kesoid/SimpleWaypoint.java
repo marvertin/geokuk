@@ -34,7 +34,7 @@ public class SimpleWaypoint extends Kesoid {
     sb.append("<small>");
     sb.append(" - ");
     sb.append(getFirstWpt().getSym());
-    sb.append("  (" + getCode() + ")");
+    sb.append("  (").append(getCode()).append(")");
     sb.append("</small>");
     sb.append("<br>");
     if (wpt != getFirstWpt()) {
@@ -50,7 +50,7 @@ public class SimpleWaypoint extends Kesoid {
       sb.append("<small>");
       sb.append(" - ");
       sb.append(wpt.getSym());
-      sb.append("  (" + wpt.getName() + ")");
+      sb.append("  (").append(wpt.getName()).append(")");
       sb.append("</small>");
     }
   }

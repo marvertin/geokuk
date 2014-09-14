@@ -24,7 +24,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 
 
   public EnumMap<EKesoidKind, String> asMap() {
-    EnumMap<EKesoidKind, String> map = new EnumMap<EKesoidKind, String>(EKesoidKind.class);
+    EnumMap<EKesoidKind, String> map = new EnumMap<>(EKesoidKind.class);
     map.put(EKesoidKind.KES, kesPattern);
     map.put(EKesoidKind.WAYMARK, waymarkPattern);
     map.put(EKesoidKind.CGP, cgpPattern);

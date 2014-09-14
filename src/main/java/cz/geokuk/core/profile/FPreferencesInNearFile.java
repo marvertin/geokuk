@@ -43,19 +43,13 @@ public final class FPreferencesInNearFile {
   }
 
   private static File saveNearToProgram() {
-    BufferedOutputStream bos = null;
-    try {
-      bos = new BufferedOutputStream(new FileOutputStream(FConst.PREFERENCES_FILE));
+    try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(FConst.PREFERENCES_FILE))){
       MyPreferences.root().exportSubtree(bos);
       bos.close();
       updateLastModified();
       ukladatDoSouboru = true;
       System.out.printf("FPreferencesInNearFile: Ulozena vesera nastaveni do souboru \"%s\"\n", FConst.PREFERENCES_FILE);
     } catch (Exception e) {
-      try {
-        if (bos != null) bos.close();
-      } catch (IOException e1) {
-      }
       throw new RuntimeException("Problem while saving preferences to \"" + FConst.PREFERENCES_FILE + "\"", e);
     }
     return FConst.PREFERENCES_FILE;
@@ -77,18 +71,12 @@ public final class FPreferencesInNearFile {
   }
 
   private static void loadNearToProgram() {
-    BufferedInputStream bis = null;
-    try {
-      bis = new BufferedInputStream(new FileInputStream(FConst.PREFERENCES_FILE));
+    try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(FConst.PREFERENCES_FILE))){
       Preferences.importPreferences(bis);
       bis.close();
       updateLastModified();
       System.out.printf("FPreferencesInNearFile: Nactena vesera nastaveni do souboru \"%s\"\n", FConst.PREFERENCES_FILE);
     } catch (Exception e) {
-      try {
-        if (bis != null) bis.close();
-      } catch (IOException e1) {
-      }
       throw new RuntimeException("Problem while saving preferences to \"" + FConst.PREFERENCES_FILE + "\"", e);
     }
   }

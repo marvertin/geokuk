@@ -37,7 +37,7 @@ import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 public class SestavovacPopisku {
 
 
-  private static Map<String, Nahrazovac> sNahrazovace = new TreeMap<String, Nahrazovac>();
+  private static Map<String, Nahrazovac> sNahrazovace = new TreeMap<>();
   private final Nahrazovac[] nahrazky;
   private static final NahrBr NAHRBR = new NahrBr();
 
@@ -47,7 +47,7 @@ public class SestavovacPopisku {
    * 
    */
   public SestavovacPopisku(String pattern) {
-    List<Nahrazovac> nahrazovace = new ArrayList<Nahrazovac>();
+    List<Nahrazovac> nahrazovace = new ArrayList<>();
     vytvorNahrazovace(nahrazovace, pattern);
     int n = 1;
     for (Nahrazovac nahr : nahrazovace) {

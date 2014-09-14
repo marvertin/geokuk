@@ -42,7 +42,7 @@ import cz.geokuk.util.file.Filex;
  */
 public class MyPreferences extends Preferences {
 
-  private static final Map<Class<?>, Duo> sMetody = new HashMap<Class<?>, Duo>();
+  private static final Map<Class<?>, Duo> sMetody = new HashMap<>();
 
   private static final String NULL = "<{<[NULL]>}>";
   private final Preferences pref;
@@ -224,7 +224,7 @@ public class MyPreferences extends Preferences {
   }
 
   public void putStringSet(String key, Set<String> val) {
-    put(key, zabal(new ArrayList<String>(val)));
+    put(key, zabal(new ArrayList<>(val)));
   }
 
   public List<String> getStringList(String key, List<String> defval) {
@@ -233,7 +233,7 @@ public class MyPreferences extends Preferences {
   }
 
   public Set<String> getStringSet(String key, Set<String> defval) {
-    return new HashSet<String>(getStringList(key, new ArrayList<String>(defval)));
+    return new HashSet<>(getStringList(key, new ArrayList<>(defval)));
   }
 
   public <E extends Atom> E getAtom(String key, E def, Class<E> cls) {
@@ -309,7 +309,7 @@ public class MyPreferences extends Preferences {
 
   private List<String> rozbal(String val) {
     if (val == null) return null;
-    List<String> list = new ArrayList<String>();
+    List<String> list = new ArrayList<>();
     StringBuilder sb = new StringBuilder();
     boolean skipnext = false;
     for (char c : val.toCharArray()) {
@@ -875,7 +875,7 @@ public class MyPreferences extends Preferences {
 
   private static Map<String, PropertyDescriptor> findProperties(Class<?> cls) {
     try {
-      Map<String, PropertyDescriptor> descrs = new HashMap<String, PropertyDescriptor>();
+      Map<String, PropertyDescriptor> descrs = new HashMap<>();
       for (Method method : cls.getMethods()) {
         if (!method.isAnnotationPresent(PreferencebleIgnore.class)) {
           proverProperties("is", method, descrs, cls);

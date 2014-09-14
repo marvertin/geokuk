@@ -18,7 +18,7 @@ public class Sklivec {
   /**
    * Obrázky pro jednotlivá skla, jak jsou definována ve sklo.txt
    */
-  public List<Imagant> imaganti = new ArrayList<Imagant>();
+  public List<Imagant> imaganti = new ArrayList<>();
 
   /**
    * 

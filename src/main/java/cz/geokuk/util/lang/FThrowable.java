@@ -32,7 +32,7 @@ public final class FThrowable {
     private FThrowable() { /* Nikdo z venku nesmí tvořit instance. */ }
 
     private static int sČítačVypisovačů = 0;
-    private static final Map<Throwable, Integer> sVýjimkaNaČíslo = new WeakHashMap<Throwable, Integer>();
+    private static final Map<Throwable, Integer> sVýjimkaNaČíslo = new WeakHashMap<>();
 
     public static int getExceptionNumber(Throwable aTh) {
         if (aTh == null) return 0;
@@ -77,7 +77,7 @@ public final class FThrowable {
      * @return Pole textů vyjímek s prvotní v prvním indexu.
      */
     public static String[] getMessages(Throwable t) {
-        List<String> messages = new ArrayList<String>();
+        List<String> messages = new ArrayList<>();
         for (; ; ) {
             messages.add(extractMessage(t));
             if (t.getCause() == null)
@@ -116,8 +116,7 @@ public final class FThrowable {
     @Deprecated
     public static Throwable getNextThrowable(Throwable thr) {
         ThrowableAndSourceMethod[] vazy = getThrowableChain(thr);
-        for (int i = 0; i < vazy.length; i++) {
-            ThrowableAndSourceMethod vaz = vazy[i];
+        for (ThrowableAndSourceMethod vaz : vazy) {
             if (vaz.iThrowable != thr)
                 return vaz.iThrowable; // aby se zabránilo cyklů, pokudb by nějaká vjimka odkazovala na sebe
         }
@@ -157,7 +156,7 @@ public final class FThrowable {
      * @deprecated MPoužívej stejnojmennou metodu se dvěma parametry, pokud je výjimka vypsaná bez prefixu, těžko se lze v logu orientovat.
      */
     @Deprecated
-    public final static String getStackTrace(Throwable thr) {
+    public static String getStackTrace(Throwable thr) {
         return getStackTrace(thr, "::");
     }
 
@@ -174,7 +173,7 @@ public final class FThrowable {
      * @return Víceřádkový řetězec s informacemi o výjimce určeným pro programátora
      * nebo správce systému, obsahuje i výpis zásobníku, veškeré řádky výjimky jsou odsazeny prefixem.
      */
-    public final static String getStackTrace(Throwable thr, String aPrefix) {
+    public static String getStackTrace(Throwable thr, String aPrefix) {
         StringWriter wrt = new StringWriter();
         PrintWriter pwrt = new PrintWriter(wrt);
         printStackTrace(thr, pwrt, aPrefix);
@@ -228,8 +227,7 @@ public final class FThrowable {
         if (!Throwable.class.isAssignableFrom(aExcType))
             throw new XRuntime("findExceptionType: třída " + aExcType + " není výjimka");
         ThrowableAndSourceMethod[] vazy = getThrowableChain(thr);
-        for (int i = 0; i < vazy.length; i++) {
-            ThrowableAndSourceMethod vaz = vazy[i];
+        for (ThrowableAndSourceMethod vaz : vazy) {
             if (aExcType.isAssignableFrom(vaz.iThrowable.getClass()))
                 return vaz.iThrowable; // aby se zabránilo cyklů, pokudb by nějaká vjimka odkazovala na sebe
         }
@@ -372,7 +370,7 @@ public final class FThrowable {
             boolean vypisujJmenoMetody = true;
             synchronized (wrt) {
                 ThrowableAndSourceMethod[] vazy = ThrowableChainPicker.from(thr).poskládejŘetězVýjimek();
-                Set<String> vypsanci = new HashSet<String>(); // poznání co se vypsalo, aby se dalo označit hvězdičkou
+                Set<String> vypsanci = new HashSet<>(); // poznání co se vypsalo, aby se dalo označit hvězdičkou
                 for (int i = 0; i < vazy.length; i++) {
                     ThrowableAndSourceMethod vaz = vazy[i];
                     if (!(vaz.iThrowable instanceof XTopRenderingException)) { // Není to ta renderovací pseudovýjimka
@@ -530,7 +528,7 @@ public final class FThrowable {
      * @author veverka
      */
     private static class ThrowableChainPicker {
-        private final Set<Throwable> iJizZarazeneVyjimkyx = new HashSet<Throwable>();
+        private final Set<Throwable> iJizZarazeneVyjimkyx = new HashSet<>();
         private final Throwable iThr;
     
 
@@ -548,7 +546,7 @@ public final class FThrowable {
 
         public ThrowableAndSourceMethod[] poskládejŘetězVýjimek() {
             iJizZarazeneVyjimkyx.clear();
-            List<ThrowableAndSourceMethod> list = new ArrayList<ThrowableAndSourceMethod>();
+            List<ThrowableAndSourceMethod> list = new ArrayList<>();
             poskládejŘetězVýjimek(list, iThr, null);
             return list.toArray(new ThrowableAndSourceMethod[list.size()]);
         }
@@ -568,8 +566,7 @@ public final class FThrowable {
             vaz1x.iSourceMethod = aZdrojMetoda;
             aList.add(vaz1x);
             ThrowableAndSourceMethod[] vazy = pickoutNestedThrowable(th);
-            for (int i = 0; i < vazy.length; i++) {
-                ThrowableAndSourceMethod vaz = vazy[i];
+            for (ThrowableAndSourceMethod vaz : vazy) {
                 poskládejŘetězVýjimek(aList, vaz.iThrowable, vaz.iSourceMethod);
             }
         }
@@ -584,7 +581,7 @@ public final class FThrowable {
          * @since 31.10.2006 11:04:27
          */
         private static ThrowableAndSourceMethod[] pickoutNestedThrowable(Throwable thr) {
-            List<ThrowableAndSourceMethod> list = new ArrayList<ThrowableAndSourceMethod>(3);
+            List<ThrowableAndSourceMethod> list = new ArrayList<>(3);
             // Standardní getCause() je nutno ověřit přednostně, aby se výjimky správně řadily, pokud někdo doplní getMostSpecificCause,
             // jak to s voblibó činí spring.
             if (thr.getCause() != null) {
@@ -598,8 +595,7 @@ public final class FThrowable {
                 list.add(vaz);
             }
             Method[] mets = thr.getClass().getMethods();
-            for (int i = 0; i < mets.length; i++) {
-                Method method = mets[i];
+            for (Method method : mets) {
                 if (method.getParameterTypes().length != 0)
                     continue; // metoda není bezparametrická
                 if (Modifier.isStatic(method.getModifiers()))
@@ -612,7 +608,7 @@ public final class FThrowable {
                 // tak teď víme, že metoda vrací buď přímo výjimku nebo pole výjimek
                 try {
                     //System.out.p rintln("Volam metodu " + method.getName() + " na " + thr);
-                    Object vysledek = method.invoke(thr, new Object[0]);
+                    Object vysledek = method.invoke(thr);
                     if (vysledek instanceof Throwable) {
                         ThrowableAndSourceMethod vaz = new ThrowableAndSourceMethod();
                         vaz.iThrowable = (Throwable) vysledek;
@@ -620,19 +616,15 @@ public final class FThrowable {
                         list.add(vaz);
                     } else if (vysledek instanceof Throwable[]) {
                         Throwable[] vyjimky = (Throwable[]) vysledek;
-                        for (int j = 0; j < vyjimky.length; j++) {
+                        for (Throwable aVyjimky : vyjimky) {
                             ThrowableAndSourceMethod vaz = new ThrowableAndSourceMethod();
-                            vaz.iThrowable = vyjimky[j];
+                            vaz.iThrowable = aVyjimky;
                             vaz.iSourceMethod = method;
                             list.add(vaz);
                         }
                     }
                     // a když to vrátí null, tak nedělám samozřejmě nic
-                } catch (IllegalArgumentException e) {
-                    // INTENTIONAL: budeme ticho, nehodí se vyhazovat výjimku, pokud nelze zjistit příčinu.
-                } catch (IllegalAccessException e) {
-                    // INTENTIONAL: budeme ticho, nehodí se vyhazovat výjimku, pokud nelze zjistit příčinu.
-                } catch (InvocationTargetException e) {
+                } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                     // INTENTIONAL: budeme ticho, nehodí se vyhazovat výjimku, pokud nelze zjistit příčinu.
                 }
             }

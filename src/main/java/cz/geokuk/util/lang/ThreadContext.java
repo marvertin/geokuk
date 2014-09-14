@@ -13,7 +13,7 @@ import java.util.WeakHashMap;
  */
 public final class ThreadContext {
 
-  private static final Map<Thread, Object> contexts = new WeakHashMap<Thread, Object>();
+  private static final Map<Thread, Object> contexts = new WeakHashMap<>();
   
   public static ThreadContext getInstance() {
     Thread currentThread = Thread.currentThread();
@@ -27,7 +27,7 @@ public final class ThreadContext {
   
   private ThreadContext() {}
   
-  private final Map<String, Object> storage = new HashMap<String, Object>();
+  private final Map<String, Object> storage = new HashMap<>();
   
   public void setAttribute(String key, Object value) {
     storage.put(key, value);

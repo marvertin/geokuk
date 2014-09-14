@@ -30,7 +30,7 @@ public class IconDef {
 	
 	synchronized Set<IconSubDef> getSubdefs() {
 		if (subdefs == null) {
-			subdefs = new HashSet<IconSubDef>();
+			subdefs = new HashSet<>();
 			rozmnoz(alelyx, subdefs);
 			alelyx = null;
 		}
@@ -45,7 +45,7 @@ public class IconDef {
    */
   private void rozmnoz (Set<Alela> set, Set<IconSubDef> sese) {
     //Set<Set<Alela>> sese = new HashSet<Set<Alela>>();
-    Map<Gen, Alela> geny = new HashMap<Gen, Alela>();
+    Map<Gen, Alela> geny = new HashMap<>();
     for (Alela alela : set) {
     	if (! alela.hasGen()) {
     		continue;
@@ -53,8 +53,8 @@ public class IconDef {
       Gen gen = alela.getGen();
       Alela lastAlela = geny.get(gen);
       if (lastAlela != null) { // duplicita
-        Set<Alela> set1 = new HashSet<Alela>(set);
-        Set<Alela> set2 = new HashSet<Alela>(set);
+        Set<Alela> set1 = new HashSet<>(set);
+        Set<Alela> set2 = new HashSet<>(set);
         set1.remove(alela);
         set2.remove(lastAlela);
         rozmnoz(set1, sese);

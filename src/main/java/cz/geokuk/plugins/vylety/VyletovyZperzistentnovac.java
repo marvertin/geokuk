@@ -53,7 +53,7 @@ public class VyletovyZperzistentnovac {
 
   private VyletPul loadGgt(BufferedReader reader) throws IOException {
     String line;
-    Set<String> set = new HashSet<String>();
+    Set<String> set = new HashSet<>();
     while ((line = reader.readLine()) != null) {
       line = line.trim();
       if (line.length() == 0) {

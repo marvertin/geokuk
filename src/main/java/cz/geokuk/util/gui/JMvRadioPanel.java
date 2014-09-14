@@ -17,8 +17,8 @@ public class JMvRadioPanel<T> extends JPanel {
 
   private static final long serialVersionUID = -4181105935856103641L;
 
-  private SelectionModel<T> model = new SelectionModel<T>();
-  private final List<JRadioButton> buttons = new ArrayList<JRadioButton>();
+  private SelectionModel<T> model = new SelectionModel<>();
+  private final List<JRadioButton> buttons = new ArrayList<>();
 
   public JMvRadioPanel(String title) {
     setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));

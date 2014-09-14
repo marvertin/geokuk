@@ -108,7 +108,7 @@ public class IconDefNacitac {
     }
 
     private Set<Alela> nactiAlely(String alelygroup) {
-        Set<Alela> alely = new HashSet<Alela>();
+        Set<Alela> alely = new HashSet<>();
         for (String s : alelygroup.split("_")) {
             if (s.length() == 0) continue;
             Alela alela;

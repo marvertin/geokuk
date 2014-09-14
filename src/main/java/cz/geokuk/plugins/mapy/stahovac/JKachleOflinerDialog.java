@@ -18,12 +18,8 @@ import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.JKachle;
-import cz.geokuk.plugins.mapy.kachle.KaAll;
-import cz.geokuk.plugins.mapy.kachle.KaLoc;
-import cz.geokuk.plugins.mapy.kachle.KaSet;
-import cz.geokuk.plugins.mapy.kachle.KachleModel;
-import cz.geokuk.plugins.mapy.kachle.Priorita;
+import cz.geokuk.plugins.mapy.kachle.*;
+import cz.geokuk.plugins.mapy.kachle.Priority;
 
 public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
@@ -199,7 +195,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
     @Override
     protected void process(List<JKachle> chunks) {
       for (JKachle kachle : chunks) {
-        kachle.ziskejObsah(Priorita.STAHOVANI);
+        kachle.ziskejObsah(Priority.STAHOVANI);
       }
     }
     @Override

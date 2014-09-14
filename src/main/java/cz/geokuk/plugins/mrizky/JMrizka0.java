@@ -87,7 +87,7 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
       korigujZnamenkaKroku();
       posunX0Y0ZaKonec();
       // příprava prvního řádku
-      List<Point> a = new ArrayList<Point>();
+      List<Point> a = new ArrayList<>();
       //Point p = convert(x0, y0);
       {
         double x = x0;
@@ -103,7 +103,7 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
       double y = y0;
       do {
         y -= ykrok;
-        List<Point> b = new ArrayList<Point>(a.size());
+        List<Point> b = new ArrayList<>(a.size());
         b.add(convert(x0, y));
         double x = x0 - xkrok;
         for (int i=1; i<a.size(); i++) {

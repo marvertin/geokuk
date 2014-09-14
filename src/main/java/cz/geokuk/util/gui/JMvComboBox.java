@@ -14,7 +14,7 @@ public class JMvComboBox<T> extends JComboBox {
 
   private static final long serialVersionUID = 3831515220850009660L;
 
-  private SelectionModel<T> model = new SelectionModel<T>();
+  private SelectionModel<T> model = new SelectionModel<>();
 
   public void setSelectionModel(final SelectionModel<T> model) {
     this.model = model;

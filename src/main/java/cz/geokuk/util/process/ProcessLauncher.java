@@ -22,7 +22,7 @@ public class ProcessLauncher {
 
     StreamGobbler(InputStream aIs) {
       is = aIs;
-      content = new ArrayList<ResultItem>();
+      content = new ArrayList<>();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ProcessLauncher {
 
     private List<String> _textFromResItem(List<ResultItem> aData) {
       
-      List<String> result = new ArrayList<String>();
+      List<String> result = new ArrayList<>();
       if (aData != null) {
         for (ResultItem item : aData) {
           
@@ -130,7 +130,7 @@ public class ProcessLauncher {
    */
   public static Result exec(String aPrgFileName, String... aParams) {
 
-    StringBuffer cmd = new StringBuffer();
+    StringBuilder cmd = new StringBuilder();
     cmd.append(aPrgFileName.trim());
     String delimiter = " ";
     for (String s : aParams) {

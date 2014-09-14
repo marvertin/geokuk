@@ -47,7 +47,7 @@ import java.util.List;
 public class XCompoundException extends RuntimeException {
   private static final long serialVersionUID = 1L;
   
-  private final List<Throwable> causes = new ArrayList<Throwable>();
+  private final List<Throwable> causes = new ArrayList<>();
   
   /** Nový sběrač vyjímek, bez zprávy a prvotní příčiny. */
   public XCompoundException() {

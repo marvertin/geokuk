@@ -74,7 +74,7 @@ public class KesFilter  {
         if (nechteneAlely == null) {
           nechteneAlely = genom.namesToAlelyIgnorujNeexistujici(jmenaNechtenychAlel);
         }
-        Set<Alela> alely = new HashSet<Alela>(nechteneAlely);
+        Set<Alela> alely = new HashSet<>(nechteneAlely);
         alely.retainAll(alelygenotypu);
         if (alely.size() > 0) return false;
       }

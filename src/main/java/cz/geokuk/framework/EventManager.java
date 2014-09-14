@@ -39,9 +39,9 @@ public class EventManager implements EventFirer {
   private static Pocitadlo pocitObservery = new PocitadloMalo("Počet observerů za všechny typy dohromady", "Kolik celkem observerů je regostrováno pro události. Musí být v desítkách a nesmí růst.");
   private static Pocitadlo pocitReistraceOdregistrace = new PocitadloRoste("Počet registrací observerů", "Kolikrát se registrovaly a odregistrovávaly observery (dohromady), číslo stále roste, ale nesmí moc rychle, neboť registrace a deregistrace nemusí být laciná," +
   " ale pravděpodobně poroste s otvíráním a zavíráním různých oken.");
-  public ReferenceQueue<Object> referencequeue = new ReferenceQueue<Object>();
+  public ReferenceQueue<Object> referencequeue = new ReferenceQueue<>();
 
-  Map<BeanType, Observry> mapaclsobs = new HashMap<BeanType, Observry>();
+  Map<BeanType, Observry> mapaclsobs = new HashMap<>();
 
   private int urovenZanoreni;
 
@@ -51,7 +51,7 @@ public class EventManager implements EventFirer {
       public void run() {
         for (;;) {
           try {
-            Reference<? extends Object> ref = referencequeue.remove();
+            Reference<?> ref = referencequeue.remove();
             ObserverInvocation obsin = (ObserverInvocation) ref;
             synchronized(this) {
               obsin.iParentList.remove(obsin);
@@ -173,7 +173,7 @@ public class EventManager implements EventFirer {
 
 
   private class Observry {
-    List<ObserverInvocation> listo = new LinkedList<ObserverInvocation>();
+    List<ObserverInvocation> listo = new LinkedList<>();
     private Object lastEvent;
   }
 

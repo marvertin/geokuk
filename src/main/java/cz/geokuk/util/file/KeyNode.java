@@ -17,7 +17,7 @@ import java.util.TreeMap;
 public class KeyNode<K, D> {
 
   private D data;
-  private final SortedMap<K, KeyNode<K,D>> items = new TreeMap<K, KeyNode<K,D>>();
+  private final SortedMap<K, KeyNode<K,D>> items = new TreeMap<>();
 
   public KeyNode<K, D> locate(List<K> keys) {
     if (keys.isEmpty()) {
@@ -39,7 +39,7 @@ public class KeyNode<K, D> {
   }
 
   public List<KeyNode<K, D>> getSubNodes() {
-    return new ArrayList<KeyNode<K, D>> (items.values());
+    return new ArrayList<>(items.values());
 
   }
 
@@ -54,7 +54,7 @@ public class KeyNode<K, D> {
       K key = keys.get(0);
       KeyNode<K, D> node = items.get(key);
       if (node == null) {
-        node = new KeyNode<K, D>();
+        node = new KeyNode<>();
         items.put(key, node);
       }
       node.add(data, keys.subList(1, keys.size())); // a s o jedno míň zařaď

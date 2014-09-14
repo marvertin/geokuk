@@ -12,7 +12,7 @@ public class KaAllReq extends Ka0Req {
 
   private ImageReceiver imageReceiver;
 
-  public KaAllReq(KaAll ka, ImageReceiver imageReceiver, Priorita priorita) {
+  public KaAllReq(KaAll ka, ImageReceiver imageReceiver, Priority priorita) {
     super(ka, priorita);
     this.imageReceiver = imageReceiver;
   }

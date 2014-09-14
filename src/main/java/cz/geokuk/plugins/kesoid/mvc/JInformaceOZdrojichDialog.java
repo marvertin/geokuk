@@ -5,7 +5,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
@@ -37,7 +36,7 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
     jTable = new JTable(new Model());
     //jTable.setPreferredScrollableViewportSize(new Dimension(600, 70));
     jTable.setFillsViewportHeight(true);
-    jTable.setRowSorter(new TableRowSorter<TableModel>(jTable.getModel()));
+    jTable.setRowSorter(new TableRowSorter<>(jTable.getModel()));
 
     //Create the scroll pane and add the table to it.
     JScrollPane scrollPane = new JScrollPane(jTable);

@@ -41,7 +41,7 @@ public class JToolbarOvladaceAlel extends JPanel {
 
   //////////////////////////////////////////
   // TODO Celkově nějak refactorovat
-  private final Map<String, JIconCheckBox> mapka = new HashMap<String, JIconCheckBox>();
+  private final Map<String, JIconCheckBox> mapka = new HashMap<>();
 
   private void ovladac(KesBag vsechny, Alela alela) {
     JIconCheckBox cb = mapka.get(alela.toString());

@@ -574,8 +574,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
       @Override
       public void refreshVysledekHledani(VysledekHledani<Nalezenec> vysledekHledani) {
-        patsPureFileName = new TreeMap<String, String>();
-        patsFolderName = new TreeMap<String, String>();
+        patsPureFileName = new TreeMap<>();
+        patsFolderName = new TreeMap<>();
         if (vysledekHledani.nalezenci != null) {
           int poradi=0;
           for (Nalezenec nalezenec : vysledekHledani.nalezenci) {
@@ -663,14 +663,14 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     Wgs wgs = referecniBod;
     int moumer = renderModel.getRenderedMoumer();
     {
-      SortedMap<String, String> pats = new TreeMap<String, String>();
+      SortedMap<String, String> pats = new TreeMap<>();
       pats.put("C1-wgs",  wgs + " z" + moumer);
       pats.put("C2-utm",  wgs.toUtm() + " z" + moumer);
       pats.put("C3-vter",  "N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer);
       jKmzFolderNazevCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
     }
     {
-      SortedMap<String, String> pats = new TreeMap<String, String>();
+      SortedMap<String, String> pats = new TreeMap<>();
       pats.put("C0-compact", String.format(Locale.ENGLISH, "n%7fe%7fz%d", wgs.lat, wgs.lon, moumer).replace(".", ""));
       pats.put("C1-wgs", wgs  + " z" + moumer);
       pats.put("C2-utm",  wgs.toUtm()  + " z" + moumer);
@@ -680,23 +680,23 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   }
 
   private void createImgType() {
-    SelectionModel<EImageType> whrm = new SelectionModel<EImageType>();
+    SelectionModel<EImageType> whrm = new SelectionModel<>();
     whrm.add(EImageType.bmp, "<html><i>BMP</i> - nekomprimovaný obrázek (pro volný OziExplorer");
     whrm.add(EImageType.jpg, "<html><i>JPG</i> - ztrátová komprimace, vhodné pro fotky, nutné pro Garmin.");
     whrm.add(EImageType.png, "<html><i>PNG</i> - bezeztrátová komprimace, umožňuje průhlednost.");
-    jImgTypeRadioPanel = new JMvRadioPanel<EImageType>("Typ obrázku");
+    jImgTypeRadioPanel = new JMvRadioPanel<>("Typ obrázku");
     jImgTypeRadioPanel.setBorder(createBorder("Typ obrázku"));
     jImgTypeRadioPanel.setSelectionModel(whrm);
     jImgTypeRadioPanel.setAlignmentX(0.5f);
   }
 
   private void createrWhatRender() {
-    SelectionModel<EWhatRender> whrm = new SelectionModel<EWhatRender>();
+    SelectionModel<EWhatRender> whrm = new SelectionModel<>();
     whrm.add(EWhatRender.TISK, "<html><i>Tisk</i> - přímý tisk na tiskárnu (beta)");
     whrm.add(EWhatRender.JEN_OBRAZEK, "<html><i>Obrázek mapy</i> - pro tisk nebo prohlížení");
     whrm.add(EWhatRender.OZI_EXPLORER, "<html><i>OziExplorer</i> - obrázek a kalibrační map soubor.");
     whrm.add(EWhatRender.GOOGLE_EARTH, "<html><i>KMZ</i> soubor pro Google Earth nebo Garmin Oregon.");
-    jWhatRenderRadioPanel = new JMvRadioPanel<EWhatRender>("Co rendrovat");
+    jWhatRenderRadioPanel = new JMvRadioPanel<>("Co rendrovat");
     jWhatRenderRadioPanel.setBorder(createBorder("Co rendrovat"));
     jWhatRenderRadioPanel.setSelectionModel(whrm);
     jWhatRenderRadioPanel.setAlignmentX(0.5f);

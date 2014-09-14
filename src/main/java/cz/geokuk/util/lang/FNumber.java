@@ -136,7 +136,7 @@ public final class FNumber {
 	 * @param aMax Maximální hodntoa, kterou smí výsledek nabývat
 	 * @return Hodnota aCo, pokud je v intervalu <aMin,aMax> nebo krajní mez intervalu, k níž je hodnota blíž.
 	 */
-	public static final long fit(long aCo, long aMin, long aMax)
+	public static long fit(long aCo, long aMin, long aMax)
 	{
 		if (aMax < aMin)
 			throw new RuntimeException("Hodnotu " + aCo + " nelze umístit do intervalu <"+aMin+","+aMax+"> z důvodů překrývání mezí");
@@ -151,7 +151,7 @@ public final class FNumber {
    * @param aCo Převáděné číslo
    * @return Číslo převedené na byte a pře vedené určitě správně.
    */
-  public static final byte safeConvertToByte(long aCo) {
+  public static byte safeConvertToByte(long aCo) {
     if (aCo < Byte.MIN_VALUE || aCo > Byte.MAX_VALUE) throw new IllegalArgumentException("Value " + aCo + " is out of 'byte' baunderies");
     return (byte) aCo;
   }
@@ -162,7 +162,7 @@ public final class FNumber {
    * @param aCo Převáděné číslo
    * @return Číslo převedené na byte a pře vedené určitě správně.
    */
-  public static final byte safeConvertToByte(int aCo) {
+  public static byte safeConvertToByte(int aCo) {
     if (aCo < Byte.MIN_VALUE || aCo > Byte.MAX_VALUE) throw new IllegalArgumentException("Value " + aCo + " is out of 'byte' baunderies");
     return (byte) aCo;
   }
@@ -173,7 +173,7 @@ public final class FNumber {
    * @param aCo Převáděné číslo
    * @return Číslo převedené na byte a pře vedené určitě správně.
    */
-  public static final byte safeConvertToByte(short aCo) {
+  public static byte safeConvertToByte(short aCo) {
     if (aCo < Byte.MIN_VALUE || aCo > Byte.MAX_VALUE) throw new IllegalArgumentException("Value " + aCo + " is out of 'byte' baunderies");
     return (byte) aCo;
   }
@@ -184,7 +184,7 @@ public final class FNumber {
    * @param aCo Převáděný integer
    * @return Číslo převedené na short a pře vedené určitě správně.
    */
-  public static final short safeConvertToShort(int aCo) {
+  public static short safeConvertToShort(int aCo) {
     if (aCo < Short.MIN_VALUE || aCo > Short.MAX_VALUE) throw new IllegalArgumentException("Value " + aCo + " is out of 'short' baunderies");
     return (short) aCo;
   }
@@ -196,7 +196,7 @@ public final class FNumber {
    * @param aCo Převáděný long
    * @return Číslo převedené na short a pře vedené určitě správně.
    */
-  public static final short safeConvertToShort(long aCo) {
+  public static short safeConvertToShort(long aCo) {
     if (aCo < Short.MIN_VALUE || aCo > Short.MAX_VALUE) throw new IllegalArgumentException("Value " + aCo + " is out of 'short' baunderies");
     return (short) aCo;
   }
@@ -207,7 +207,7 @@ public final class FNumber {
    * @param aCo Převáděný long
    * @return Číslo převedené na int a pře vedené určitě správně.
    */
-  public static final int safeConvertToInt(long aCo) {
+  public static int safeConvertToInt(long aCo) {
     if (aCo < Integer.MIN_VALUE || aCo > Integer.MAX_VALUE) throw new IllegalArgumentException("Value " + aCo + " is out of 'int' baunderies");
     return (int) aCo;
   }

@@ -35,11 +35,11 @@ public class KachleModel extends Model0 {
 
   public final Synchronizator<DlazebniPosilac> synchronizator;
 
-  public final BlockingQueue<KaOneReq> downLoadQueue = new PriorityBlockingQueue<KaOneReq>(100);
+  public final BlockingQueue<KaOneReq> downLoadQueue = new PriorityBlockingQueue<>(100);
 
-  public final BlockingQueue<KaOneReq> fromFileQueue = new PriorityBlockingQueue<KaOneReq>(100); // a nové fronty
+  public final BlockingQueue<KaOneReq> fromFileQueue = new PriorityBlockingQueue<>(100); // a nové fronty
 
-  public final BlockingQueue<Ka0Req> rozrazovaciQueue = new LinkedBlockingQueue<Ka0Req>();
+  public final BlockingQueue<Ka0Req> rozrazovaciQueue = new LinkedBlockingQueue<>();
 
   public Pocitadlo pocitRozrazovaciQueue = new PocitadloNula("Velikost rozřazovací fronty",
       "Ve frontě čekají požadavky na zjištění, zda jsou kachle na disku a stačí je zvednout nebo musejí být downloadnuty." +
@@ -59,7 +59,7 @@ public class KachleModel extends Model0 {
    */
   public KachleModel() {
     cache = new CacheNaKachleDisk(this);
-    synchronizator = new Synchronizator<DlazebniPosilac>(cache);
+    synchronizator = new Synchronizator<>(cache);
     assert kachleCacheFolderHolder != null;
   }
 

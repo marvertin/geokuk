@@ -30,7 +30,7 @@ public final class FChar {
    */
   public static String getCharNameAsIdentifier(char cc) {
     String jmeno = getCharName(cc);
-    StringBuffer sb = new StringBuffer(jmeno.length());
+    StringBuilder sb = new StringBuilder(jmeno.length());
     boolean pristivelky = true;
     for (int i = 0; i < jmeno.length(); i++) {
       char c = jmeno.charAt(i);

@@ -68,7 +68,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
   private JSmallPictureButton vyletNevimButton;
 
 
-  private final EnumMap<EKesoidKind, JKesoidDetail0> jDetailyKesoidu = new EnumMap<EKesoidKind, JKesoidDetail0>(EKesoidKind.class);
+  private final EnumMap<EKesoidKind, JKesoidDetail0> jDetailyKesoidu = new EnumMap<>(EKesoidKind.class);
 
   private IkonBag ikonBag;
 

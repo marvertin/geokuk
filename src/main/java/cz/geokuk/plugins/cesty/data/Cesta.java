@@ -324,7 +324,7 @@ public class Cesta implements Iterable<Bousek0> {
      * @return
      */
     public Set<Wpt> getWpts() {
-        Set<Wpt> wpts = new HashSet<Wpt>();
+        Set<Wpt> wpts = new HashSet<>();
         for (Bod bod : getBody()) {
             if (bod.mouable instanceof Wpt) {
                 wpts.add((Wpt) bod.mouable);
@@ -454,7 +454,7 @@ public class Cesta implements Iterable<Bousek0> {
 
 
     void reverse() {
-        ArrayList<Usek> useky = new ArrayList<Usek>();
+        ArrayList<Usek> useky = new ArrayList<>();
         for (Usek usek : getUseky()) {
             useky.add(usek);
         }
@@ -478,7 +478,7 @@ public class Cesta implements Iterable<Bousek0> {
     /**
      * Dálku v km v zadané barvě
      */
-    public static final String dalkaHtml(double dalka, Color color) {
+    public static String dalkaHtml(double dalka, Color color) {
         return String.format("<font color=%s><i>%.1f km</i></font>", FUtil.getHtmlColor(color), dalka / 1000);
     }
 
@@ -614,7 +614,7 @@ public class Cesta implements Iterable<Bousek0> {
     }
 
     public void pospojujVzdusneUseky() {
-        List<Bod> keSmazani = new ArrayList<Bod>();
+        List<Bod> keSmazani = new ArrayList<>();
         for (Bod bod : getBody()) {
             if (bod.isMeziVzdusnymiUseky()) {
                 keSmazani.add(bod);

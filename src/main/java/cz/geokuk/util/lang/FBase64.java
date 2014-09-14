@@ -40,7 +40,7 @@ public final class FBase64 {
 
                 if (b == null) return null;
 
-                StringBuffer s = new StringBuffer(b.length * 4 / 3 + 10);
+                StringBuilder s = new StringBuilder(b.length * 4 / 3 + 10);
 
                 int delka = b.length / 3 * 3;
                 //Nejdříve vyřešíme plné triplety

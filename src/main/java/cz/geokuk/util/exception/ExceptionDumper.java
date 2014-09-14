@@ -28,7 +28,7 @@ public class ExceptionDumper {
             LogManager.getLogger(ExceptionDumper.class.getSimpleName());
   /** Signleton proměnná pri implicitní repozitoř */
 
-  private List<AditionalInfoEntry> iStackx = new ArrayList<AditionalInfoEntry>();
+  private List<AditionalInfoEntry> iStackx = new ArrayList<>();
   private int iStackSize;
   
   /**
@@ -87,9 +87,9 @@ public class ExceptionDumper {
     // Odstranění null
     // Nejdříve zjistíme, kolik je jich v oli nenulových
     int pocetNeNull = 0;
-    for (int i = 0; i < aThrowables.length; i++) {
-      if (aThrowables[i] != null) pocetNeNull ++;
-    }
+      for (Throwable aThrowable : aThrowables) {
+          if (aThrowable != null) pocetNeNull++;
+      }
     // Teď vše zkopírujeme do menšího pole
     Throwable [] throwables = new Throwable[pocetNeNull];
     String [] circumstances = new String[pocetNeNull];
@@ -147,22 +147,21 @@ public class ExceptionDumper {
       }      
       pwrt.println("<hr/>");
       pwrt.println("<h2>Stack trace for exceptions (" + throwables.length + ")</h2>");
-      for (int j=0; j<throwables.length; j++) {
-        Throwable throwable = throwables[j];
-        // vlastní výjimku
-        pwrt.println("<pre>");
-        FThrowable.printStackTraceHtml(throwable, pwrt, "**");
-        pwrt.println("</pre>");
-        pwrt.println();
-        pwrt.println();
+        for (Throwable throwable : throwables) {
+            // vlastní výjimku
+            pwrt.println("<pre>");
+            FThrowable.printStackTraceHtml(throwable, pwrt, "**");
+            pwrt.println("</pre>");
+            pwrt.println();
+            pwrt.println();
 //        if (DeveloperSettingBase.cfg.isPrintDumpedExceptionMessageToStdErr()) {
-          log.error(Arrays.asList(aCircumstances));
-          FThrowable.printStackTrace(throwable, System.err, "dump-" + id);
-          log.error("ERR");
-          log.error("OUT");
-          printShortExceptionList(System.err, throwable);
+            log.error(Arrays.asList(aCircumstances));
+            FThrowable.printStackTrace(throwable, System.err, "dump-" + id);
+            log.error("ERR");
+            log.error("OUT");
+            printShortExceptionList(System.err, throwable);
 //        }
-      }
+        }
 
 
       // Systémové property
@@ -258,7 +257,7 @@ public class ExceptionDumper {
    * @param pwrt
    */
   private void printSystemProperties(PrintWriter pwrt) {
-    SortedMap<String,String> sm = new TreeMap<String,String>();
+    SortedMap<String,String> sm = new TreeMap<>();
     for(Object oklic : System.getProperties().keySet()) {
       String sklic = oklic + "";  // pomalost zde nevadí
       sm.put(sklic, System.getProperty(sklic));
@@ -272,10 +271,9 @@ public class ExceptionDumper {
       boolean jeToCesta = strings.length > 1 && (key.endsWith(".path") || key.endsWith(".dirs"));
       if (jeToCesta) {
         pwrt.println(key + " = ");
-        for (int i = 0; i < strings.length; i++) {
-          String string = strings[i];
-          pwrt.println("        " + string);
-        }
+          for (String string : strings) {
+              pwrt.println("        " + string);
+          }
       } else {
         pwrt.println(key + " = " + value);
       }
@@ -286,7 +284,7 @@ public class ExceptionDumper {
 	  //Prevence proti java.util.ConcurrentModificationException
 	  //Zřejmě občas docházelo k tomu, že v průběhu tady tohoto výpisu
 	  //někdo (nějaký zaregistrovaný AditionalInfoProvider) vrtnul do iStackx
-	  List<AditionalInfoEntry> copiedStackx = new ArrayList<AditionalInfoEntry>(iStackx);
+	  List<AditionalInfoEntry> copiedStackx = new ArrayList<>(iStackx);
     for (AditionalInfoEntry entry : copiedStackx) {
       entry.dump(pwrt);
     }

@@ -385,7 +385,7 @@ public class CoordinateConversionOriginal
     protected String getHemisphere(String latZone)
     {
       String hemisphere = "N";
-      if (southernHemisphere.indexOf(latZone) > -1)
+      if (southernHemisphere.contains(latZone))
       {
         hemisphere = "S";
       }
@@ -540,9 +540,9 @@ public class CoordinateConversionOriginal
 
   private class Digraphs
   {
-    private Map<Integer,String> digraph1 = new Hashtable<Integer,String>();
+    private Map<Integer,String> digraph1 = new Hashtable<>();
 
-    private Map<Integer,String> digraph2 = new Hashtable<Integer,String>();
+    private Map<Integer,String> digraph2 = new Hashtable<>();
 
     private String[] digraph1Array = { "A", "B", "C", "D", "E", "F", "G", "H",
         "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X",

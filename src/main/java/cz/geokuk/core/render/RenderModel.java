@@ -418,7 +418,7 @@ public class RenderModel extends Model0 {
   }
 
   public List<Wgs> spocitejKalibracniBody(Coord cocox, int kalibrBodu) {
-    List<Wgs> wgss = new ArrayList<Wgs>();
+    List<Wgs> wgss = new ArrayList<>();
     int width = cocox.getDim().width;
     int height = cocox.getDim().height;
     int kalistrana = (int)(Math.ceil(Math.sqrt(kalibrBodu))); // počet kalibračních bodů rastru ve sloupci a řádku

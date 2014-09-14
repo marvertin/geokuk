@@ -13,5 +13,5 @@ public enum EJakOtacetPriRendrovani {
   COORD,
 
   /** Otočíme grafiku, aby se otočilo vše. Nutné u MAP */
-  GRAPH2D;
+  GRAPH2D
 }

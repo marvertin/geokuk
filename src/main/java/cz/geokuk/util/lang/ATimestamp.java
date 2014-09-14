@@ -137,7 +137,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
   private static long fromString(String datum) {
 
     try {
-      return Long.valueOf(datum).longValue();
+      return Long.valueOf(datum);
     } catch (Exception e) {
       return fromFormatedStringByRegexp(datum, null); // pi použití této metody
                                                       // musí být zadána zóna
@@ -423,9 +423,7 @@ private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefault
   public boolean isLess(Object b) {
 
     ATimestamp obj = (ATimestamp) checkCompare(b);
-    if (obj == null)
-      return false;
-    return asLong() < obj.asLong();
+    return obj != null && asLong() < obj.asLong();
   }
 
   public boolean isLess(ATimestamp b) {
@@ -793,7 +791,7 @@ private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefault
       char sign = offset < 0 ? '-' : '+';
       offset = Math.abs(offset);
       offset = offset / (1000 * 60); // a je to v minutách
-      return sign + MessageFormat.format("{0,number,00}{1,number,00}", new Object[] { new Long(offset / 60), new Long(offset % 60), });
+      return sign + MessageFormat.format("{0,number,00}{1,number,00}", new Object[] {offset / 60, offset % 60, });
     }
   }
 

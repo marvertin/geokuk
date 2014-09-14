@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -43,14 +42,12 @@ public class Hledac extends Hledac0<Nalezenec> {
 
 		XPath xpath = factory.newXPath();
 
-		InputStream stm = null;
-		try {
-			stm = url.openStream();
+		try (InputStream stm = url.openStream()){
 			InputSource inputXml = new InputSource(stm);
 			NodeList adressList = (NodeList) xpath.evaluate(
 					"GeocodeResponse/result", inputXml,
 					XPathConstants.NODESET);
-			List<Nalezenec> list = new ArrayList<Nalezenec>();
+			List<Nalezenec> list = new ArrayList<>();
 
 			for (int i = 0; i < adressList.getLength(); i++) {
 				Node item = adressList.item(i);
@@ -66,16 +63,8 @@ public class Hledac extends Hledac0<Nalezenec> {
 				list.add(nalezenec);
 			}
 			return list;
-		} catch (XPathExpressionException e) {
+		} catch (XPathExpressionException | IOException e) {
 			throw new RuntimeException(e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (stm != null) {
-				try {
-					stm.close();
-				} catch (IOException e) {				}
-			}
 		}
 	}
 

@@ -221,13 +221,13 @@ public final class ADate
 
             int iDateParts[] = new int[3];
             if (poradi == 0) {
-                iDateParts[0] = Integer.valueOf(Parts[0]).intValue();
-                iDateParts[1] = Integer.valueOf(Parts[1]).intValue();
-                iDateParts[2] = Integer.valueOf(Parts[2]).intValue();
+                iDateParts[0] = Integer.valueOf(Parts[0]);
+                iDateParts[1] = Integer.valueOf(Parts[1]);
+                iDateParts[2] = Integer.valueOf(Parts[2]);
             } else {
-                iDateParts[0] = Integer.valueOf(Parts[2]).intValue();
-                iDateParts[1] = Integer.valueOf(Parts[1]).intValue();
-                iDateParts[2] = Integer.valueOf(Parts[0]).intValue();
+                iDateParts[0] = Integer.valueOf(Parts[2]);
+                iDateParts[1] = Integer.valueOf(Parts[1]);
+                iDateParts[2] = Integer.valueOf(Parts[0]);
             }
 
             return fromRokMesicDen(iDateParts[0], iDateParts[1], iDateParts[2]);

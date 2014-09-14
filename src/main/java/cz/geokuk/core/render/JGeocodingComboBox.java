@@ -21,16 +21,16 @@ public class JGeocodingComboBox extends JComboBox {
 
   private static final long serialVersionUID = 8614892946049285548L;
 
-  public static final SortedMap<String, String> PRAZDNE_GEOTAGGINGG_PATTERNS = new TreeMap<String, String>();
+  public static final SortedMap<String, String> PRAZDNE_GEOTAGGINGG_PATTERNS = new TreeMap<>();
 
   private RenderSettings.Patterned patterned = new RenderSettings.Patterned();
 
-  private final SortedMap<String, String> allPatterns = new TreeMap<String, String>();
-  private final SortedMap<String, String> souradnicovePatterns = new TreeMap<String, String>();
-  private final SortedMap<String, String> geotaggingPatterns = new TreeMap<String, String>();
-  private final List<String> keys = new ArrayList<String>();
+  private final SortedMap<String, String> allPatterns = new TreeMap<>();
+  private final SortedMap<String, String> souradnicovePatterns = new TreeMap<>();
+  private final SortedMap<String, String> geotaggingPatterns = new TreeMap<>();
+  private final List<String> keys = new ArrayList<>();
 
-  private final List<Listener> listeners = new ArrayList<Listener>();
+  private final List<Listener> listeners = new ArrayList<>();
 
   private boolean blokujEventy;
 

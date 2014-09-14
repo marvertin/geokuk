@@ -25,8 +25,7 @@ public final class Dlg {
   }
 
   public static boolean prepsatSoubor(File file) {
-    if (! file.exists()) return true;
-    return anone("Soubor \"" + file.getAbsolutePath() + "\" existuje, má být přepsán?");
+    return !file.exists() || anone("Soubor \"" + file.getAbsolutePath() + "\" existuje, má být přepsán?");
   }
 
   public static  void info(String informace, String titulek) {

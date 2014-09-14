@@ -18,7 +18,7 @@ import cz.geokuk.framework.MultiInjection;
 public class ZhasniVsechnyMrizkyAction extends Action0 {
 
   private static final long serialVersionUID = -8054017274338240706L;
-  private List<MrizkaModel> mrizkaModels = new ArrayList<MrizkaModel>();
+  private List<MrizkaModel> mrizkaModels = new ArrayList<>();
 
   /**
    * 

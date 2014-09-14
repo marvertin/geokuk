@@ -14,7 +14,7 @@ public class Grupa {
   private final String grupaName;
   private String displayName;
 
-  private Set<Alela> alely = new LinkedHashSet<Alela>();
+  private Set<Alela> alely = new LinkedHashSet<>();
 
   /**
    * @return the alely

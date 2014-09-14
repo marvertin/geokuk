@@ -5,7 +5,6 @@ import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 
 /**
@@ -22,7 +21,7 @@ public final class FString
   private FString() { /* INTENDED: zabránění externí instanciace. */ }
 
   /** Odstraní ze zadaného řetězce poslední znak. */
-  public static final String removeNextChar(String s) {
+  public static String removeNextChar(String s) {
     if (s == null || s.length() == 0) {
       return s;
     }
@@ -30,7 +29,7 @@ public final class FString
   }
 
   /** Pokud to lze, zařízne String na danou délku. */
-  public static final String truncateRight(String s, int maxlen) {
+  public static String truncateRight(String s, int maxlen) {
     if (s.length() > maxlen) {
       return s.substring(0,maxlen);
     }
@@ -38,7 +37,7 @@ public final class FString
   }
 
   /** Pokud to lze, zařízne String na danou délku. */
-  public static final String truncateLeft(String s, int maxlen) {
+  public static String truncateLeft(String s, int maxlen) {
     if (s.length() > maxlen) {
       return s.substring(s.length() - maxlen, s.length());
     }
@@ -46,14 +45,14 @@ public final class FString
   }
 
   /** Vrací true, pokud je řětězec null nebo délku 0. */
-  public static final boolean isVoid(String s) {
+  public static boolean isVoid(String s) {
     return (s == null || s.length() == 0);
   }
 
   /** Vrací true, pokud je řetězec prázdný, to znamená null, nebo prázdný
    * nebo mezery.
    */
-  public static final boolean isEmpty(String s) {
+  public static boolean isEmpty(String s) {
     return StringUtils.isBlank(s);
   }
 
@@ -62,7 +61,7 @@ public final class FString
    * @param	aDelimiter	Oddělovač.
    * @param	aPole		Pole nějakých objektů, jejichž hodnoty .toString() budou spojeny do výsledku.
    */
-  public static final String mergeArray(String aDelimiter, Object aPole) {
+  public static String mergeArray(String aDelimiter, Object aPole) {
     if (aPole == null) {
       return null;
     }
@@ -70,7 +69,7 @@ public final class FString
     Class<?> c = aPole.getClass();
     if (!c.isArray())       throw new IllegalArgumentException("Argument aPole typu " + c + " není pole.");
 
-    StringBuffer result = new StringBuffer(300);
+    StringBuilder result = new StringBuilder(300);
     int len = Array.getLength(aPole);
     for (int i = 0; i < len; i++) {
       if (i > 0) {
@@ -88,17 +87,17 @@ public final class FString
    * @param	aIterator		Kolekce nějakých objektů, jejichž hodnoty .toString() budou spojeny do výsledku.
    * @author polakm
    */
-  public static String merge(String aDelimiter, Iterator<? extends Object> aIterator) {
+  public static String merge(String aDelimiter, Iterator<?> aIterator) {
     if (aIterator == null) {
       return null;
     }
 
-    StringBuffer result = new StringBuffer(300);
+    StringBuilder result = new StringBuilder(300);
     String delimiter = "";
-    for (Iterator<? extends Object> i = aIterator; i.hasNext(); ) {
+    for (; aIterator.hasNext(); ) {
 
       result.append(delimiter);
-      result.append(i.next());
+      result.append(aIterator.next());
       delimiter = aDelimiter;
     }
 
@@ -110,15 +109,14 @@ public final class FString
    * @since 2008-10-03
    */
   public static String nullConcat(Object ... aItems) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     for (Object item : aItems) {
       if (item == null) {
         return null;
       }
       sb.append(item);
     }
-    String result = sb.toString();
-    return result;
+      return sb.toString();
   }
 
   /**Převede řetězec na pole, rozseká zadaným oddělovačem.
@@ -190,7 +188,7 @@ public final class FString
    * @deprecated náhradou je metoda split()
    */
   @Deprecated
-  public static final String[] splitText(String text, String delimiter) {
+  public static String[] splitText(String text, String delimiter) {
     return splitText(text, delimiter, true);
   }
 
@@ -202,7 +200,7 @@ public final class FString
    * @return pole s rozsekaným textem
    * @author Jiří Polák
    */
-  public static final String[] splitByLength(String text, int Size) {
+  public static String[] splitByLength(String text, int Size) {
     if (text == null){
       return null;
     }
@@ -245,7 +243,7 @@ public final class FString
    * @return zřetězení prvků od First do Last, pokud je pole prázdné nebo null, vrací null
    * @author Jiří Polák
    */
-  public static final String concatenate (String[] strArray, int firstIndex, int lastIndex)
+  public static String concatenate (String[] strArray, int firstIndex, int lastIndex)
   {
     if (strArray == null || strArray.length == 0) {
       return null;
@@ -272,7 +270,7 @@ public final class FString
       direction = -1;
     }
 
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     int index = firstIndex;
     while (index != lastIndex){
       //přidej vše kromě posledního indexu
@@ -293,7 +291,7 @@ public final class FString
    * @param pattern Mazaný řetězec.
    * @return Řetězec ne delší než zadaný s případně smazanými řetězci. Nikdy ne null.
    */
-  public static final String leftRemove (String text, String pattern) {
+  public static String leftRemove (String text, String pattern) {
     int length = pattern.length();
     while (text.startsWith(pattern)) {
       text = text.substring (length);
@@ -310,7 +308,7 @@ public final class FString
    */
   /**Dokud jsou zprava zadané řetězce, maž je
    */
-  public static final String rightRemove (String text, String pattern) {
+  public static String rightRemove (String text, String pattern) {
     int length = pattern.length();
     while (text.endsWith(pattern)) {
       text = text.substring (0, text.length() - length);
@@ -355,7 +353,7 @@ public final class FString
    * @see {@link alignLeft}
    *
    */
-  public static final String leftAdd (String text, int length, char pattern) {
+  public static String leftAdd (String text, int length, char pattern) {
 
     int len = text.length();
     if (len >= length) {
@@ -381,13 +379,13 @@ public final class FString
    * @return text s provedenou substitucí
    * @author Jiří Polák
    */
-  public static final String subst(String text, String searched,  String replaced)
+  public static String subst(String text, String searched,  String replaced)
   {
     if (text == null || searched == null || "".equals(searched) || text.length() < searched.length()){
       return text;
     }
 
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
 
     int searchLength = searched.length();
     int lastPos = 0;
@@ -437,7 +435,7 @@ public final class FString
    * @return  aText s provedenou substitucí.
    * @author  Bohuslav Roztočil
    */
-  public static final String subst(String aText, String[] aPatterns, String[] aReplacements)
+  public static String subst(String aText, String[] aPatterns, String[] aReplacements)
   {
     if (aPatterns.length != aReplacements.length) {
       throw new IllegalArgumentException(
@@ -445,7 +443,7 @@ public final class FString
       );
     }
 
-    StringBuffer    result = new StringBuffer(aText.length()*2);
+    StringBuilder result = new StringBuilder(aText.length()*2);
     char[]          text = aText.toCharArray();
     int             position = 0;
 
@@ -489,7 +487,7 @@ public final class FString
    * @param	aReplacement	Řetězec vrácený, pokud platí {@link isEmpty() isEmpty(aString)}.
    * @return	Původní řetězec nebo jeho náhrada.
    */
-  public static final String ifEmpty(String aString, String aReplacement)
+  public static String ifEmpty(String aString, String aReplacement)
   {
     if (isEmpty(aString))	return aReplacement;
     return aString;
@@ -502,7 +500,7 @@ public final class FString
    * @param	aReplacement	Řetězec vrácený, pokud platí {@link isVoid() isVoid(aString)}.
    * @return	Původní řetězec nebo jeho náhrada.
    */
-  public static final String ifVoid(String aString, String aReplacement)
+  public static String ifVoid(String aString, String aReplacement)
   {
     if (isVoid(aString))	return aReplacement;
     return aString;
@@ -515,7 +513,7 @@ public final class FString
    * @param	aReplacement	Řetězec vrácený, pokud platí <code>aString == null</code>.
    * @return	Původní řetězec nebo jeho náhrada.
    */
-  public static final String ifNull(String aString, String aReplacement)
+  public static String ifNull(String aString, String aReplacement)
   {
     if (aString == null)	return aReplacement;
     return aString;
@@ -527,7 +525,7 @@ public final class FString
    * @param	aString		Hodnota, kterou chceme oříznout.
    * @return				Hodnota {@link aString} zbavená okrajových mezer nebo "", byla-li původní hodnota <b>null</b>.
    */
-  public static final String safeTrim(String aString)
+  public static String safeTrim(String aString)
   {
     if (aString == null)	return "";
     return aString.trim();
@@ -538,7 +536,7 @@ public final class FString
    * @param aString Hodnota, kterou chceme oříznout.
    * @return Hodnota {@link aString} zbavená okrajových mezer nebo <b>null</b>, byla-li původní hodnota <b>null</b>.
    */
-  public static final String trimOrNull(String aString) {
+  public static String trimOrNull(String aString) {
     if (aString == null) {
       return null; 
     }
@@ -551,7 +549,7 @@ public final class FString
    * @param	aString		Hodnota, kterou chceme zabezpečit.
    * @return				Hadaná hodnota {@link aString} nebo "", byla-li původní hodnota <b>null</b>.
    */
-  public static final String notNull(String aString)
+  public static String notNull(String aString)
   {
     if (aString == null)	return "";
     return aString;
@@ -567,12 +565,12 @@ public final class FString
    *                                      *					Je-li prázdný nebo null, použije se jedna mezera.
    * @return	Zadaný řetězec doplněný zprava na požadovanou délku určený vyplňovacím řetězcem.
    */
-  public static final String alignRight(String s, int len, String fill)
+  public static String alignRight(String s, int len, String fill)
   {
     if (s.length() == len) return s;
     if (s.length() < len) {
       if (isVoid(fill)) fill = " ";
-      StringBuffer sb = new StringBuffer(len);
+      StringBuilder sb = new StringBuilder(len);
       sb.append(s);
       while (sb.length() < len) {
         sb.append(fill);
@@ -592,7 +590,7 @@ public final class FString
    * @param	fill	Znak, kterým má být zarovnávaný řetězec doplněn na požadovanou délku.
    * @return	Zadaný řetězec doplněný zprava na požadovanou délku určený vyplňovacím znakem.
    */
-  public static final String alignRight(String s, int len, char fill)
+  public static String alignRight(String s, int len, char fill)
   {
     return alignRight(s, len, String.valueOf(fill));
   }
@@ -608,7 +606,7 @@ public final class FString
    *                                      *					Je-li prázdný nebo null, použije se jedna mezera.
    * @return	Zadaný řetězec doplněný zleva na požadovanou délku určený vyplňovacím řetězcem.
    */
-  public static final String alignLeft(String s, int len, String fill)
+  public static String alignLeft(String s, int len, String fill)
   {
     if (isVoid(fill))	fill = " ";
     while (s.length() <= len) {
@@ -626,7 +624,7 @@ public final class FString
    * @param	fill	Znak, kterým má být zarovnávaný řetězec doplněn na požadovanou délku.
    * @return	Zadaný řetězec doplněný zleva na požadovanou délku určený vyplňovacím znakem.
    */
-  public static final String alignLeft(String s, int len, char fill)
+  public static String alignLeft(String s, int len, char fill)
   {
     return alignLeft(s, len, String.valueOf(fill));
   }
@@ -639,7 +637,7 @@ public final class FString
    * @param	aOffset		Pozice, odkud se má porovnávat v řetězci {@link aString}.
    * @return	Na pozici {@link aOffset} řetězce {@link aString} začíná řetězec {@link aPattern}.
    */
-  public static final boolean startsWithIgnoreCase(String aString, String aPattern, int aOffset)
+  public static boolean startsWithIgnoreCase(String aString, String aPattern, int aOffset)
   {
     return aString.regionMatches(true, aOffset, aPattern, 0, aPattern.length());
   }
@@ -651,7 +649,7 @@ public final class FString
    * @param	aPattern	Hledaný řetězec.
    * @return	Řetězec {@link aString} začíná řetězcem {@link aPattern}.
    */
-  public static final boolean startsWithIgnoreCase(String aString, String aPattern)
+  public static boolean startsWithIgnoreCase(String aString, String aPattern)
   {
     return aString.regionMatches(true, 0, aPattern, 0, aPattern.length());
   }
@@ -663,7 +661,7 @@ public final class FString
    * @param	aPattern	Hledaný řetězec.
    * @return	Řetězec {@link aString} končí řetězcem {@link aPattern}.
    */
-  public static final boolean endsWithIgnoreCase(String aString, String aPattern)
+  public static boolean endsWithIgnoreCase(String aString, String aPattern)
   {
     return aString.regionMatches(
         true,
@@ -684,7 +682,7 @@ public final class FString
    *                                             *						počínaje pozicí {@link aOffset}.
    *                                             *						Není-li řetězec nalezen, je vrácena hodnota <b>-1</b>.
    */
-  public static final int indexOfIgnoreCase(String aString, String aPattern, int aOffset)
+  public static int indexOfIgnoreCase(String aString, String aPattern, int aOffset)
   {
     return aString.toLowerCase().indexOf(aPattern.toLowerCase(), aOffset);
   }
@@ -697,7 +695,7 @@ public final class FString
    * @return				Pozice prvního znaku prvního výskytu řetězce {@link aPattern} v řetězci {@link aString}.
    *                                             *						Není-li řetězec nalezen, je vrácena hodnota <b>-1</b>.
    */
-  public static final int indexOfIgnoreCase(String aString, String aPattern)
+  public static int indexOfIgnoreCase(String aString, String aPattern)
   {
     return indexOfIgnoreCase(aString, aPattern, 0);
   }
@@ -712,7 +710,7 @@ public final class FString
    *						počínaje pozicí {@link aOffset}.
    *						Není-li řetězec nalezen, je vrácena hodnota <b>-1</b>.
    */
-  public static final int lastIndexOfIgnoreCase(String aString, String aPattern, int aOffset)
+  public static int lastIndexOfIgnoreCase(String aString, String aPattern, int aOffset)
   {
     return aString.toLowerCase().lastIndexOf(aPattern.toLowerCase(), aOffset);
   }
@@ -725,7 +723,7 @@ public final class FString
    * @return				Pozice prvního znaku posledního výskytu řetězce {@link aPattern} v řetězci {@link aString}.
    *						Není-li řetězec nalezen, je vrácena hodnota <b>-1</b>.
    */
-  public static final int lastIndexOfIgnoreCase(String aString, String aPattern)
+  public static int lastIndexOfIgnoreCase(String aString, String aPattern)
   {
     return lastIndexOfIgnoreCase(aString, aPattern, 0);
   }
@@ -747,7 +745,7 @@ public final class FString
    *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     							s vnořenými hodnotami pravého omezovače {@link aRight} nahrazenými za {@link aEscapedRight}
    *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     							nebo hodnotu <code>null</code>, má-li řetězec hodnotu <b>null</b>.
    */
-  public static final String getDelimited(String aString, String aLeft, String aRight, String aEscapedRight, boolean aTrim)
+  public static String getDelimited(String aString, String aLeft, String aRight, String aEscapedRight, boolean aTrim)
   {
     if (aString == null)	return null;
 
@@ -776,12 +774,12 @@ public final class FString
    *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             							nebo parametr {@link aString} s odstraněnými okrajovými mezerami, vložený mezi uvozovky
    *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             							a s vnořenými uvozovkami nahrazenými za posloupnost <code>\"</code>.
    */
-  public static final String getQuoted(String aString)
+  public static String getQuoted(String aString)
   {
     return getDelimited(aString, "\"", "\"", "\\\"", true);
   }
 
-  public static final String getQuoted(Object o) {
+  public static String getQuoted(Object o) {
 
     return (o == null) ? "null" : getQuoted("" + o);
   }
@@ -794,12 +792,12 @@ public final class FString
    *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             							nebo parametr {@link aString} s odstraněnými okrajovými mezerami, vložený mezi apostrofy
    *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             							a se zdvojenými vnořenými apostrofy.
    */
-  public static final String getSingleQuoted(String aString)
+  public static String getSingleQuoted(String aString)
   {
     return getDelimited(aString, "'", "'", "''", true);
   }
 
-  public static final String getSingleQuoted(Object o) {
+  public static String getSingleQuoted(Object o) {
 
     return (o == null) ? "null" : getSingleQuoted("" + o);
   }
@@ -811,7 +809,7 @@ public final class FString
    * @param	aReplacement	Množina hledaných znaků.
    * @return	Pozici prvního libovolného znaku ze zadané množny.
    */
-  public static final int firstOf(String aString, String aSet)
+  public static int firstOf(String aString, String aSet)
   { 
     StringCharacterIterator i = new StringCharacterIterator(aString);
     for (char c = i.first(); c == StringCharacterIterator.DONE; c = i.next()) {
@@ -827,7 +825,7 @@ public final class FString
    * @param	aReplacement	Množina hledaných znaků.
    * @return	Pozici posledního libovolného znaku ze zadané množny.
    */
-  public static final int lastOf(String aString, String aSet)
+  public static int lastOf(String aString, String aSet)
   {
     StringCharacterIterator i = new StringCharacterIterator(aString);
     for (char c = i.last(); c == StringCharacterIterator.DONE; c = i.previous()) {
@@ -843,7 +841,7 @@ public final class FString
    * @param	aReplacement	Množina nehledaných znaků.
    * @return	Pozici prvního libovolného znaku, který není ze zadané množny.
    */
-  public static final int firstOfNot(String aString, String aSet)
+  public static int firstOfNot(String aString, String aSet)
   {
     StringCharacterIterator i = new StringCharacterIterator(aString);
     for (char c = i.first(); c == StringCharacterIterator.DONE; c = i.next()) {
@@ -859,7 +857,7 @@ public final class FString
    * @param	aReplacement	Množina nehledaných znaků.
    * @return	Pozici posledního libovolného znaku, který není ze zadané množny.
    */
-  public static final int lastOfNot(String aString, String aSet)
+  public static int lastOfNot(String aString, String aSet)
   {
     StringCharacterIterator i = new StringCharacterIterator(aString);
     for (char c = i.last(); c == StringCharacterIterator.DONE; c = i.previous()) {
@@ -873,9 +871,9 @@ public final class FString
   public static String toDump(String s)
   {
     final int LINECHARS = 16;  //počet řádků na lajnu
-    StringBuffer sbc = new StringBuffer();
-    StringBuffer sbh = new StringBuffer();
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sbc = new StringBuilder();
+    StringBuilder sbh = new StringBuilder();
+    StringBuilder sb = new StringBuilder();
 
     for (int i=0; i<s.length(); i++)
     {
@@ -918,18 +916,11 @@ public final class FString
     return true;
   }
 
-  public static boolean safeEquals(String s1, String s2)
-  {
+  public static boolean safeEquals(String s1, String s2)  {
     if (s1 == null) {
-      if (s2 == null) {
-        return true;
-      }
-      return false;
+        return s2 == null;
     }
-    if (s2 == null) {
-      return false;
-    }
-    return s1.equals(s2);
+    return s2 != null && s1.equals(s2);
   }
 
   /**
@@ -950,7 +941,7 @@ public final class FString
    * @since 2002.12.13.1
    */
   public static String repeat(int n, char c) {
-    StringBuffer sb = new StringBuffer(n);
+    StringBuilder sb = new StringBuilder(n);
     for (int i = 0; i < n; i++) {
         sb.append(c);
     }
@@ -966,7 +957,7 @@ public final class FString
    */
   public static String repeat(int n, String s) {
     if (s == null || s.length() == 0 ) throw new IllegalArgumentException("Řetězec, ze kterého se má poskládat výsledek nesmí být prázdný");
-    StringBuffer sb = new StringBuffer(n);
+    StringBuilder sb = new StringBuilder(n);
     for (int i = 0; i < n; i++) {
         sb.append(s);
     }
@@ -980,9 +971,7 @@ public final class FString
    * @return
    */
   public static boolean equals(String s1, String s2) {
-    if (s1 == null && s2 == null) return true;
-    if (s1 == null || s2 == null) return false;
-    return s1.equals(s2);
+    return s1 == null && s2 == null || !(s1 == null || s2 == null) && s1.equals(s2);
   }
 
   public static int compare(String s1, String s2) {
@@ -1042,7 +1031,7 @@ public final class FString
       return s;  // není nutné nic měnit
     }
     // a teď vyhazovat
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     boolean uzBylNejakyNemezerovyZnak = false;
     boolean jeTamMezera = false;
     for (int i = 0; i < length; i++) {

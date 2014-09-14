@@ -98,7 +98,7 @@ public class JMeritko extends JPanel {
     pocetDilku = (int) Math.min(8.0, getMaximalniSirkaMeritka() / pixluNaDilek);
 
 
-    Map<TextAttribute, Object> map = new Hashtable<TextAttribute, Object>();
+    Map<TextAttribute, Object> map = new Hashtable<>();
     //      map.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
     map.put(TextAttribute.BACKGROUND, Color.WHITE);
     map.put(TextAttribute.SWAP_COLORS, TextAttribute.SWAP_COLORS_ON);

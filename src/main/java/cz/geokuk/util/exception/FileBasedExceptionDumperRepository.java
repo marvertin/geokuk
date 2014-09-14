@@ -125,39 +125,30 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
    */
   public static int loadAndIncrementNumberInFile(File aFile) throws IOException {
     aFile.getCanonicalFile().getParentFile().mkdirs();
-    RandomAccessFile raf = new RandomAccessFile(aFile, "rw");
-    int runNumber = 0;
-    try {
-      FileChannel channel = raf.getChannel();
-      try {
-  
-        // Use the file channel to create a lock on the file.
-        // This method blocks until it can retrieve the lock.
-        FileLock lock = channel.lock();
-        try {
-          
-          int c;
-          while ((c = raf.read()) >=0 ) {
-            if (c >= '0' && c <= '9') { // jen číslice nás zajímají
-              runNumber = runNumber * 10 + (c - '0');
-            }
+      int runNumber = 0;
+      try (RandomAccessFile raf = new RandomAccessFile(aFile, "rw")) {
+          try (FileChannel channel = raf.getChannel()) {
+
+              // Use the file channel to create a lock on the file.
+              // This method blocks until it can retrieve the lock.
+              FileLock lock = channel.lock();
+              try {
+                  int c;
+                  while ((c = raf.read()) >= 0) {
+                      if (c >= '0' && c <= '9') { // jen číslice nás zajímají
+                          runNumber = runNumber * 10 + (c - '0');
+                      }
+                  }
+                  runNumber++; // inkrementujeme načtené číslo, pokud jsme nenačetli minule nic, inkrementujeme jedničku
+                  raf.seek(0);
+                  raf.write(Integer.toString(runNumber).getBytes());
+                  raf.setLength(raf.getFilePointer());
+              } finally {
+                  // Release the lock
+                  lock.release();
+              }
           }
-          runNumber ++; // inkrementujeme načtené číslo, pokud jsme nenačetli minule nic, inkrementujeme jedničku
-          raf.seek(0);
-          raf.write(Integer.toString(runNumber).getBytes());
-          raf.setLength(raf.getFilePointer());
-        } finally {
-          // Release the lock
-          lock.release();
-        }
-      // Close the file
-      channel.close();
-      } finally {
-        channel.close();
       }
-    } finally {
-      raf.close();
-    }
     return runNumber;
   }
 
@@ -178,7 +169,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
   private String toRelativePath(AExcId aCode) {
     // pokud začíná kódem lokace, tah ho odstraníme
     String code = aCode.toString().trim().toLowerCase();
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     Matcher matcher = pat.matcher(code);
     if (matcher.matches()) {
       sb.append(matcher.group(1)); // pořadové číslo

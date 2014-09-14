@@ -40,7 +40,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     private static Pattern patExtrakceCislaCgp;
     private static Pattern patExtrakceSouradnicJtsk;
 
-    private final Map<String, GpxWpt> gpxwpts = new HashMap<String, GpxWpt>(1023);
+    private final Map<String, GpxWpt> gpxwpts = new HashMap<>(1023);
 
     private Genom genom;
     private KesBag kesBag;
@@ -124,11 +124,11 @@ public class KesoidImportBuilder implements IImportBuilder {
         //      System.out.println("Nacteno: " + gpwpwt);
         //    }
         // přesypeme do seznamu
-        List<GpxWpt> list = new LinkedList<GpxWpt>(gpxwpts.values());
+        List<GpxWpt> list = new LinkedList<>(gpxwpts.values());
 
-        Map<String, Kesoid> kesoidy = new HashMap<String, Kesoid>();
-        List<GpxWpt> listCgpPridruzene = new LinkedList<GpxWpt>();
-        Map<String, CzechGeodeticPoint> mapaPredTeckou = new HashMap<String, CzechGeodeticPoint>();
+        Map<String, Kesoid> kesoidy = new HashMap<>();
+        List<GpxWpt> listCgpPridruzene = new LinkedList<>();
+        Map<String, CzechGeodeticPoint> mapaPredTeckou = new HashMap<>();
         // Procházíme a hledáme české geodetické body, ony jsou tam jako speciální keše,
         // tak je nejdříve vyzobeme
         for (ListIterator<GpxWpt> it = list.listIterator(); it.hasNext(); ) {
@@ -777,7 +777,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     private Set<Alela> definujUzivatslskeAlely(GpxWpt gpxwpt) {
         //if (true) return null;
         if (gpxwpt.gpxg.userTags == null) return null;
-        Set<Alela> alely = new HashSet<Alela>();
+        Set<Alela> alely = new HashSet<>();
         for (Map.Entry<String, String> entry : gpxwpt.gpxg.userTags.entrySet()) {
             String alelaName = entry.getValue();
             String genName = entry.getKey();

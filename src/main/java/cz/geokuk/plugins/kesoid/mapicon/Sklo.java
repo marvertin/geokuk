@@ -29,9 +29,9 @@ public class Sklo implements ImagantCache {
 	private Pocitadlo pocitSourceImagu = new PocitadloMalo("Zdrojové obrázky - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
 	private static Pocitadlo pocitSourceImaguZasah = new PocitadloRoste("Zdrojové obrázky - zásah cache", "");
 
-	List<Vrstva> vrstvy = new ArrayList<Vrstva>();
+	List<Vrstva> vrstvy = new ArrayList<>();
 
-	private Map<Genotyp.Otisk, Imagant> cache = new HashMap<Genotyp.Otisk, Imagant>();
+	private Map<Genotyp.Otisk, Imagant> cache = new HashMap<>();
 	private Map<URL, BufferedImage> sourceImageCache  = Collections.synchronizedMap(new HashMap<URL, BufferedImage>());
 
 	private final String iName;
@@ -76,7 +76,7 @@ public class Sklo implements ImagantCache {
 	 */
 	Imagant render(Genotyp genotyp) {
 		// Vyrendrovat jednotlivé vrstvy samostatně
-		Deque<Imagant> imaganti = new ArrayDeque<Imagant>();
+		Deque<Imagant> imaganti = new ArrayDeque<>();
 		for (Vrstva vrstva : vrstvy) {
 			IconDef iconDef = vrstva.locate(genotyp);
 			if (iconDef != null) {
@@ -84,7 +84,7 @@ public class Sklo implements ImagantCache {
 			}
 		}
 
-		List<Imagant> list = new ArrayList<Imagant>();
+		List<Imagant> list = new ArrayList<>();
 		for (Iterator<Imagant> it = imaganti.descendingIterator(); it.hasNext(); ) {
 			Imagant ima = it.next();
 			list.add(ima);

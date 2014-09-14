@@ -12,10 +12,10 @@ abstract class Ka0Req  {
   private final Ka0 ka;
   private int vzdalenostOdStredu;
 
-  private final Priorita priorita;
+  private final Priority priorita;
 
 
-  protected Ka0Req(Ka0 ka, Priorita priorita) {
+  protected Ka0Req(Ka0 ka, Priority priorita) {
     super();
     this.ka = ka;
     this.priorita = priorita;
@@ -43,7 +43,7 @@ abstract class Ka0Req  {
     this.vzdalenostOdStredu = vzdalenostOdStredu;
   }
 
-  public Priorita getPriorita() {
+  public Priority getPriorita() {
     return priorita;
   }
 

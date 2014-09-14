@@ -19,7 +19,7 @@ import cz.geokuk.util.exception.FExceptionDumper;
 
 public class ImageLoader {
 
-  private static Map<String, BufferedImage> imagesCache = new HashMap<String, BufferedImage>();
+  private static Map<String, BufferedImage> imagesCache = new HashMap<>();
 
   /**
    * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky

@@ -15,9 +15,9 @@ public class Genom {
   //public static Genom G = new Genom();
 
   public static final String NEZARAZENY_GEN = "<Nezařazení>";
-  private final Map<String, Alela> alely = new LinkedHashMap<String, Alela>();
-  private final Map<String, Gen> geny = new LinkedHashMap<String, Gen>();
-  private final List<Gen> genyList = new ArrayList<Gen>();
+  private final Map<String, Alela> alely = new LinkedHashMap<>();
+  private final Map<String, Gen> geny = new LinkedHashMap<>();
+  private final List<Gen> genyList = new ArrayList<>();
 
   private Gen symGen;
 
@@ -167,7 +167,7 @@ public class Genom {
   }
 
   public Genotyp getGenotypVychozi() {
-    Set<Alela> alely = new HashSet<Alela>();
+    Set<Alela> alely = new HashSet<>();
     for (Gen gen : genyList) {
       assert alely != null;
       assert gen != null;
@@ -319,7 +319,7 @@ public class Genom {
   }
 
   public Set<Alela> namesToAlely(Set<String> jmenaAlel) {
-    Set<Alela> alely = new HashSet<Alela>();
+    Set<Alela> alely = new HashSet<>();
     for (String jmeno : jmenaAlel) {
       if (jmeno != null && jmeno.length() > 0) {
         Alela alela = seekAlela(jmeno);
@@ -331,7 +331,7 @@ public class Genom {
 
 
   public Set<Alela> namesToAlelyIgnorujNeexistujici(Set<String> jmenaAlel) {
-    Set<Alela> alely = new HashSet<Alela>();
+    Set<Alela> alely = new HashSet<>();
     for (String jmeno : jmenaAlel) {
       if (jmeno != null && jmeno.length() > 0) {
         Alela alela = locateAlela(jmeno);
@@ -386,7 +386,7 @@ public class Genom {
     }
 
     public CounterMap<Alela> getCounterMap() {
-      CounterMap<Alela> cm = new CCounterMap<Alela>();
+      CounterMap<Alela> cm = new CCounterMap<>();
       for (Alela alela : alely.values()) {
         int celkovePoradi = alela.getCelkovePoradi();
         cm.set(alela, celkovePoradi >= pocty.length ? 0 : pocty[celkovePoradi]);

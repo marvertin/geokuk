@@ -85,7 +85,7 @@ public class JPopiskySlide extends JSingleSlide0 {
     final FontMetrics fontMetrics = g.getFontMetrics();
     final int height2 = fontMetrics.getHeight();
     final int posuny = fontMetrics.getDescent() - height2;
-    final EnumMap<EKesoidKind, SestavovacPopisku> sestavmapa = new EnumMap<EKesoidKind, SestavovacPopisku>(EKesoidKind.class);
+    final EnumMap<EKesoidKind, SestavovacPopisku> sestavmapa = new EnumMap<>(EKesoidKind.class);
     for (Map.Entry<EKesoidKind, String> entry : popiskyModel.getData().getPatterns().asMap().entrySet()) {
       sestavmapa.put(entry.getKey(),  new SestavovacPopisku(entry.getValue()));
     }

@@ -26,7 +26,7 @@ class HledaciRunnableSwingWorker<T extends Nalezenec0> extends MySwingWorker0<Vy
 
   @Override
   protected VysledekHledani<T> doInBackground() throws Exception {
-    VysledekHledani<T> result = new VysledekHledani<T>();
+    VysledekHledani<T> result = new VysledekHledani<>();
     hledac.setFuture(this);
     try {
       result.nalezenci = hledac.najdiASerad(podminka);

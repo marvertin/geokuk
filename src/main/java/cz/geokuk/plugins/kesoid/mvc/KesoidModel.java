@@ -155,7 +155,7 @@ public class KesoidModel extends Model0 {
     }
     filter.setFilterDefinition(filterDefinition);
 
-    Set<String> defval = new HashSet<String>();
+    Set<String> defval = new HashSet<>();
     defval.add("fnd");
     defval.add("dsbl");
     defval.add("arch");
@@ -200,7 +200,7 @@ public class KesoidModel extends Model0 {
   }
 
   public void filtrujDleAlely(String alelaName, boolean zobrazit) {
-    Set<String> jmena = new HashSet<String>(filter.getJmenaNechtenychAlel());
+    Set<String> jmena = new HashSet<>(filter.getJmenaNechtenychAlel());
     boolean zmena;
     if (zobrazit) {
       zmena = jmena.remove(alelaName);

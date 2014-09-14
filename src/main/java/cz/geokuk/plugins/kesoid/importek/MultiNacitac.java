@@ -39,7 +39,7 @@ public class MultiNacitac {
 
     private final DirScaner ds;
 
-    private final List<Nacitac0> nacitace = new ArrayList<Nacitac0>();
+    private final List<Nacitac0> nacitace = new ArrayList<>();
 
     private final KesoidModel kesoidModel;
 

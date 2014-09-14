@@ -33,7 +33,7 @@ public class PromazatJednobodoveAPrazdneCesty extends DocAction0 {
 
   @Override
   protected void provedProDoc(Doc doc) {
-    final List<Cesta> cesty = new ArrayList<Cesta>();
+    final List<Cesta> cesty = new ArrayList<>();
     for (Cesta cesta : doc) {
       if (cesta.isEmpty() || cesta.isJednobodova()) {
         cesty.add(cesta);

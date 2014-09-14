@@ -147,7 +147,7 @@ public class JAdrTable extends JPanel {
   class MyTableModel extends AbstractTableModel {
     private static final long serialVersionUID = -1777521413836209700L;
 
-    private List<Nalezenec> adressList = new ArrayList<Nalezenec>();
+    private List<Nalezenec> adressList = new ArrayList<>();
 
     private String[] columnNames = {
         "Přesnost",

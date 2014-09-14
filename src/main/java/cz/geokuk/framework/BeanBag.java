@@ -17,7 +17,7 @@ public class BeanBag implements Factory {
 
   private boolean initialized;
 
-  private final List<Object> beans = new ArrayList<Object>();
+  private final List<Object> beans = new ArrayList<>();
 
   private EventManager eveman;
 

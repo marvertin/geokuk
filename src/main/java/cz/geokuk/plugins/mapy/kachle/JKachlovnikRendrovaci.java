@@ -27,7 +27,7 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
       paintComponent(g);
       //if (true) return;
       vykreslovatokamzite = true;
-      init(false, Priorita.STAHOVANI);
+      init(false, Priority.STAHOVANI);
       paint(g);
       Component[] components = getComponents();
       celkovyPocetKachliKtereRendruejeme = components.length;

@@ -51,7 +51,7 @@ public final class A3Boolean extends AObject0 implements IElement, Serializable 
 
   public static A3Boolean from(Boolean aValue) {
 
-      return (aValue == null) ? NOT_AVAILABLE : (aValue.booleanValue()) ? TRUE : FALSE;
+      return (aValue == null) ? NOT_AVAILABLE : (aValue) ? TRUE : FALSE;
   }
 
   public static A3Boolean from(String aValue) {
@@ -102,14 +102,14 @@ public final class A3Boolean extends AObject0 implements IElement, Serializable 
     }
   }
 
-  public boolean isTrue() {return (_value != null && _value.booleanValue());}
-  public boolean isFalse() {return (_value != null && !_value.booleanValue());}
+  public boolean isTrue() {return (_value != null && _value);}
+  public boolean isFalse() {return (_value != null && !_value);}
   public boolean isNotAvailable() {return _value == null;}
 
   @Override
   public String asString() {
 
-    return (_value == null) ? _NOT_AVAILABLE : (_value.booleanValue()) ? _TRUE : _FALSE;
+    return (_value == null) ? _NOT_AVAILABLE : (_value) ? _TRUE : _FALSE;
   }
 
   @Override
@@ -151,7 +151,7 @@ public final class A3Boolean extends AObject0 implements IElement, Serializable 
 
   public A3Boolean not() {
 
-    return (_value == null) ? NOT_AVAILABLE : (_value.booleanValue()) ? FALSE : TRUE;
+    return (_value == null) ? NOT_AVAILABLE : (_value) ? FALSE : TRUE;
   }
 
   public A3Boolean and(A3Boolean aValue) {

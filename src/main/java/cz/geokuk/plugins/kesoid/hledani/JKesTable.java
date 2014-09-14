@@ -162,7 +162,7 @@ public class JKesTable extends JPanel {
   class MyTableModel extends AbstractTableModel {
     private static final long serialVersionUID = -1777521413836209700L;
 
-    private List<Nalezenec> keslist = new ArrayList<Nalezenec>();
+    private List<Nalezenec> keslist = new ArrayList<>();
 
     private final String[] columnNames = {
         "Typ",
@@ -242,16 +242,8 @@ public class JKesTable extends JPanel {
 
     private Object formatuj(Nalezenec nal, String s) {
       // Zde je správně použito porovnání referencí, protože řetězec zde jen identifikuje, kde přesně došlo k nálezu
-      if (nal.getKdeNalezeno() != s) return s;
-      StringBuilder sb = new StringBuilder();
-      sb.append("<html>");
-      sb.append(s.substring(0, nal.getPoc()));
-      sb.append("<b bgcolor='yellow'>");
-      sb.append(s.substring(nal.getPoc(), nal.getKon()));
-      sb.append("</b>");
-      sb.append(s.substring(nal.getKon()));
-      sb.append("</html>");
-      return sb.toString();
+      if (!nal.getKdeNalezeno().equals(s)) return s;
+        return "<html>" + s.substring(0, nal.getPoc()) + "<b bgcolor='yellow'>" + s.substring(nal.getPoc(), nal.getKon()) + "</b>" + s.substring(nal.getKon()) + "</html>";
     }
 
     private Icon kesIkona(Kesoid kes) {

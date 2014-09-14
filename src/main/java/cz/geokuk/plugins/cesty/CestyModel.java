@@ -162,7 +162,7 @@ public class CestyModel extends Model0 {
     if (worker != null) {
       worker.cancel(true);
     }
-    List<Kesoid> kesoidy = new ArrayList<Kesoid>();
+    List<Kesoid> kesoidy = new ArrayList<>();
     for (Wpt wpt : doc.getWpts()){
       kesoidy.add(wpt.getKesoid());
     }
@@ -577,7 +577,7 @@ public class CestyModel extends Model0 {
   }
 
   private class InvalidacniPesek {
-    private Set<Wpt> puvodnici = new HashSet<Wpt>();
+    private Set<Wpt> puvodnici = new HashSet<>();
 
     public InvalidacniPesek(Iterable<Wpt> wpts) {
       FUtil.addAll(puvodnici, wpts);

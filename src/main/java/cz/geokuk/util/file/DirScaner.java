@@ -38,7 +38,7 @@ public  class DirScaner {
     List<FileAndTime> list = scanDir(dir);
     if (list.equals(lastScaned)) return null; // nezměnilo se nic
     lastScaned = list;
-    List<File> files = new ArrayList<File>();
+    List<File> files = new ArrayList<>();
     for (FileAndTime fat : list) {
       files.add(fat.file);
     }
@@ -46,7 +46,7 @@ public  class DirScaner {
   }
 
   private List<FileAndTime> scanDir(File dir) {
-    List<FileAndTime> list = new ArrayList<FileAndTime>();
+    List<FileAndTime> list = new ArrayList<>();
     if (! dir.isDirectory()) return list;
     String[] fords = dir.list();
     for (String ford : fords) {

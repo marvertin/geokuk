@@ -80,7 +80,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
   //  static int POLOMER_KESE = 15; // je to v pixlech
   private static final int POLOMER_CITLIVOSTI = 10;
 
-  private final BlockingQueue<WptPaintRequest> frontaWaypointu = new LinkedBlockingQueue<WptPaintRequest>();
+  private final BlockingQueue<WptPaintRequest> frontaWaypointu = new LinkedBlockingQueue<>();
   private final PocitadloNula pocitVelikostFrontyWaypointu = new PocitadloNula("Velikost vykreslovací waypointové fronty",
       "Kolik waypointů čeká na vykreslení.");
 
@@ -192,7 +192,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
     });
 
     // vytvoření prázdných seznamů
-    final EnumMap<Wpt.EZOrder, List<Sheet<Wpt>>> mapa = new EnumMap<Wpt.EZOrder, List<Sheet<Wpt>>>(Wpt.EZOrder.class);
+    final EnumMap<Wpt.EZOrder, List<Sheet<Wpt>>> mapa = new EnumMap<>(Wpt.EZOrder.class);
     for (Wpt.EZOrder zorder : Wpt.EZOrder.values()) {
       mapa.put(zorder, new ArrayList<Sheet<Wpt>>(10000));
     }
@@ -569,8 +569,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
     public PaintovaciVlakno(JKesoidySlide jKesoidy) {
       super ("Paintovani");
-      final ReferenceQueue<JKesoidySlide> refqueue = new ReferenceQueue<JKesoidySlide>();
-      wrKesoidy = new WeakReference<JKesoidySlide>(jKesoidy, refqueue);
+      final ReferenceQueue<JKesoidySlide> refqueue = new ReferenceQueue<>();
+      wrKesoidy = new WeakReference<>(jKesoidy, refqueue);
       new Thread("Zabijec paintovaciho vlakna") {
         @Override
         public void run() {
@@ -579,7 +579,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
           } catch (InterruptedException e) { // když přeruší, tak také přeruším
           }
           PaintovaciVlakno.this.interrupt();
-        };
+        }
       }.start();
     }
 

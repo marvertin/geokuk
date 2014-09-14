@@ -23,7 +23,7 @@ public class Indexator<T> {
   Ctverecnik<T> root;
 
   public Indexator(BoundingRect br) {
-    root = new Ctverecnik<T>(br.xx1, br.yy1, br.xx2, br.yy2);
+    root = new Ctverecnik<>(br.xx1, br.yy1, br.xx2, br.yy2);
   }
 
   public Indexator() {
@@ -34,12 +34,12 @@ public class Indexator<T> {
     if (! checkRozsah(xx, yy) )
       throw new RuntimeException("Hodnoty " + xx + " " + yy + " jsou mimo rozsah " + root);
 
-    Sheet<T> sheet = new Sheet<T>(xx, yy, mapobj);
+    Sheet<T> sheet = new Sheet<>(xx, yy, mapobj);
     DuplikHlidac duplikHlidac = new Ctverecnik.DuplikHlidac();
     root.vloz(sheet, duplikHlidac);
     while (duplikHlidac.duplicita) {
       //throw new RuntimeException("Duplicita");
-      sheet = new Sheet<T>(sheet.xx + 3, sheet.yy + 7, mapobj);
+      sheet = new Sheet<>(sheet.xx + 3, sheet.yy + 7, mapobj);
       duplikHlidac = new Ctverecnik.DuplikHlidac();
       root.vloz(sheet, duplikHlidac);
       //System.out.println("Duplicita resena " + mapobj);
@@ -62,7 +62,7 @@ public class Indexator<T> {
   }
 
   public List<Node0<T>> shallowList(BoundingRect boundingRect) {
-    final List<Node0<T>> list = new ArrayList<Node0<T>>(100);
+    final List<Node0<T>> list = new ArrayList<>(100);
     root.visit(boundingRect, new SloucenyVisitor<T>() {
       @Override
       protected void visitNod(Node0<T> aNode) {
@@ -73,7 +73,7 @@ public class Indexator<T> {
   }
 
   public List<Sheet<T>> deepList(BoundingRect boundingRect) {
-    final List<Sheet<T>> list = new ArrayList<Sheet<T>>(100);
+    final List<Sheet<T>> list = new ArrayList<>(100);
     root.visit(boundingRect, new FlatVisitor<T>() {
       @Override
       public void visit(Sheet<T> aSheet) {

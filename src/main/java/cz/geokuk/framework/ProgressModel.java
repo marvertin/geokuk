@@ -91,8 +91,8 @@ public class ProgressModel extends Model0 {
             long predictedCompletionTime;
             if (nv > 0) {
               predictedCompletionTime = (int)(dT *
-                  (max - 0) /
-                  (nv - 0));
+                  (max) /
+                  (nv));
             } else {
               predictedCompletionTime = millisToPopup;
             }

@@ -14,7 +14,7 @@ import java.util.Set;
 public class Genotyp {
 
   
-  private final Set<Alela> alely = new HashSet<Alela>();
+  private final Set<Alela> alely = new HashSet<>();
 	private final Genom genom;
 
   /**

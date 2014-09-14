@@ -1,7 +1,5 @@
 package cz.geokuk.plugins.mapy.kachle;
 
-
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,7 +14,6 @@ import javax.swing.SwingUtilities;
 
 import cz.geokuk.util.pocitadla.Pocitadlo;
 import cz.geokuk.util.pocitadla.PocitadloRoste;
-
 
 public class JKachle extends JComponent implements ImageReceiver {
 
@@ -40,7 +37,7 @@ public class JKachle extends JComponent implements ImageReceiver {
   private static final long serialVersionUID = -5445121736003161730L;
 
   // Jen kvůli zahazování. Možná to ani není potřeba.
-  private List<WeakReference<KaAllReq>> kachLoadRequests = new ArrayList<WeakReference<KaAllReq>>();
+  private List<WeakReference<KaAllReq>> kachLoadRequests = new ArrayList<>();
 
   private EnumSet<EKaType> coMam = EnumSet.noneOf(EKaType.class);
   private Image img;
@@ -172,7 +169,7 @@ public class JKachle extends JComponent implements ImageReceiver {
     this.vzdalenostOdStredu = vzdalenostOdStredu;
   }
 
-  public void ziskejObsah(Priorita priorita) {
+  public void ziskejObsah(Priority priorita) {
     //System.out.println("V kesi nalezeny image " + memoryCachedImages + " pro " + lokace);
 
 
@@ -184,7 +181,7 @@ public class JKachle extends JComponent implements ImageReceiver {
     // můžeme požádat o plný
     KaAllReq klr = new KaAllReq(plny, this, priorita);
     klr.setVzdalenostOdStredu(vzdalenostOdStredu);
-    kachLoadRequests.add(new WeakReference<KaAllReq>(klr)); // ať si request drží kachle
+    kachLoadRequests.add(new WeakReference<>(klr)); // ať si request drží kachle
     kachleModel.rozrazovaciQueue.add(klr);
     kachleModel.pocitRozrazovaciQueue.set(kachleModel.rozrazovaciQueue.size());
 

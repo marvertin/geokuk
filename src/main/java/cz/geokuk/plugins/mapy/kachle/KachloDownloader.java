@@ -34,7 +34,7 @@ public class KachloDownloader {
     private static final String URLBASE2 = ".mapserver.mapy.cz/";
 
 
-    private final EnumMap<EPraznyObrazek, Image> prazdneObrazky = new EnumMap<EPraznyObrazek, Image>(EPraznyObrazek.class);
+    private final EnumMap<EPraznyObrazek, Image> prazdneObrazky = new EnumMap<>(EPraznyObrazek.class);
 
     public KachloDownloader() {
     }

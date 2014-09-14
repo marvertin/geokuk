@@ -62,7 +62,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
         final Progressor progressor = progresModel.start(pocetvsech, "Filtruji");
         try {
             final KesBag kesbag = new KesBag(iGenom);
-            final BlockingQueue<Dvojka> queue = new LinkedBlockingDeque<Dvojka>();
+            final BlockingQueue<Dvojka> queue = new LinkedBlockingDeque<>();
             log.debug("FILTERING {} - start, source: {} caches, {}={} waypoints.", cisloFiltrovani, vsechny2.getKesoidy().size(),
                     pocetvsech, vsechny2.getIndexator().count(BoundingRect.ALL));
             startTime = System.currentTimeMillis();
@@ -90,9 +90,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
                         }
                         queue.put(ZARAZKA);
-                    } catch (InterruptedException e) {
-                        return;
-                    } finally {
+                    } catch (InterruptedException ignored) {
                     }
                 }
             }, "Filtrovani kesoidu").start();

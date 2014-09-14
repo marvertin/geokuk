@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class WgsParser {
 
-  private static final List<PovolenaVariacePismen> povoleneVariace = new ArrayList<PovolenaVariacePismen>();
+  private static final List<PovolenaVariacePismen> povoleneVariace = new ArrayList<>();
 
   private static final Pattern pat =
       Pattern.compile("([0-9]+[.,]?[0-9]*) *°? *(?:([0-9]+[.,]?[0-9]*) *'? *(?:([0-9]+[.,]?[0-9]*) *\"? *)?)?");

@@ -14,7 +14,7 @@ public class DocImportBuilder implements IImportBuilder {
 
 
   private Cesta cesta;
-  private List<Cesta> cesty = new ArrayList<Cesta>();
+  private List<Cesta> cesty = new ArrayList<>();
 
   private boolean zacatekSegmentu;
 

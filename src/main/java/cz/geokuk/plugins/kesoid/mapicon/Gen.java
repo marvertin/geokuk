@@ -10,8 +10,8 @@ import cz.geokuk.util.lang.FString;
 public class Gen {
 
   private final String displayName;
-  private final Set<Alela> alely = new LinkedHashSet<Alela>();
-  private final Map<String, Grupa> grupy = new HashMap<String, Grupa>();
+  private final Set<Alela> alely = new LinkedHashSet<>();
+  private final Map<String, Grupa> grupy = new HashMap<>();
   
   private Alela vychoziAlela;
   private boolean locked;

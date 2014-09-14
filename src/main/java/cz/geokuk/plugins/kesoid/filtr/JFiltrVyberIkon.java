@@ -53,7 +53,7 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
    */
   @Override
   protected boolean shouldRender(Gen gen) {
-    Set<Alela> alely = new HashSet<Alela>(gen.getAlely());
+    Set<Alela> alely = new HashSet<>(gen.getAlely());
     alely.retainAll(kesBag.getPouziteAlely());
     return alely.size() > 1;
   }

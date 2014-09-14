@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ implements CounterMap<T>, java.io.Serializable
 
   static final long serialVersionUID = 4829239030839775643L;
 
-  private final Map<T, Citac> iCitace = new LinkedHashMap<T, Citac>();
+  private final Map<T, Citac> iCitace = new LinkedHashMap<>();
   private int iAllCount; // počet všech čítání
 
   /**Inkrtementuje o jedničku čítač specifikovaný zadaným klíčem
@@ -132,7 +131,7 @@ implements CounterMap<T>, java.io.Serializable
    */
   public Map<T, Integer> getMap()
   {
-    Map<T, Integer> m = new HashMap<T, Integer>();
+    Map<T, Integer> m = new HashMap<>();
     for (Map.Entry<T, Citac> entry : iCitace.entrySet()) {
       m.put(entry.getKey(), entry.getValue().get());
     }
@@ -168,7 +167,7 @@ implements CounterMap<T>, java.io.Serializable
     // spočítat počet míst
     int pocetmist = 0;
     while (maxvalue > 0) { maxvalue /= 10; pocetmist ++; }
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     for (Map.Entry<T, Citac> entry : iCitace.entrySet()) {
       //String klic = (String)entry.getKey();
       int hodnota = entry.getValue().get();
@@ -207,12 +206,10 @@ implements CounterMap<T>, java.io.Serializable
   private int _addsub(CounterMap<T> aMap, int aZnamenko)
   {
     int minule = iAllCount;
-    for(Iterator<Map.Entry<T, Integer>> i=aMap.getMap().entrySet().iterator(); i.hasNext();)
-    {
-      Map.Entry<T, Integer> me = i.next();
-      this.add(me.getKey(),me.getValue().intValue() * aZnamenko ); // přičíst hodnotu ze zpracovávaného mapu
+      for (Map.Entry<T, Integer> me : aMap.getMap().entrySet()) {
+          this.add(me.getKey(), me.getValue() * aZnamenko); // přičíst hodnotu ze zpracovávaného mapu
 //    System.err.p rintln("  " + me.getKey() + ": " + me.getValue() + "  " + aMap.count(me.getKey()));
-    }
+      }
     return minule;
   }
 
@@ -238,23 +235,21 @@ implements CounterMap<T>, java.io.Serializable
   {
     Map<T, Integer> m = aMap.getMap();
       log.debug("Vypis mavy citacu");
-    for(Iterator<Map.Entry<T, Integer>> i=m.entrySet().iterator(); i.hasNext();)
-    {
-      Map.Entry<T, Integer> me = i.next();
-        log.debug("  " + me.getKey() + ": " + me.getValue() + "  " + aMap.count(me.getKey()));
-    }
+      for (Map.Entry<T, Integer> me : m.entrySet()) {
+          log.debug("  " + me.getKey() + ": " + me.getValue() + "  " + aMap.count(me.getKey()));
+      }
       log.debug("     Celkovy pocet = " + aMap.count());
   }
 
   public static void main(String args[])
   {
       // TODO : test?
-    CounterMap<String> cm2 = new CCounterMap<String>();
+    CounterMap<String> cm2 = new CCounterMap<>();
     cm2.set("martin",1200);
     cm2.set("helena",1400);
     cm2.set("aneta", 1500);
 
-    CounterMap<String> cm = new CCounterMap<String>();
+    CounterMap<String> cm = new CCounterMap<>();
     _testVypis(cm);
 
       log.debug(cm.add("adam",3));

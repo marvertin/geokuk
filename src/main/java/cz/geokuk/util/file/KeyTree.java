@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class KeyTree<K, D> {
   
-  private final KeyNode<K, D> root = new KeyNode<K, D>();
+  private final KeyNode<K, D> root = new KeyNode<>();
 
   public KeyNode<K, D> locate(List<K> keys) {
   	return root.locate(keys);

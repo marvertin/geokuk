@@ -34,17 +34,12 @@ public class FDouble {
 	 * Pokud je aspoň jedno číslo null, pak je výsledek vždy false.
 	 */
 	public static boolean isSimilar(Double a, Double b, double epsilon) {
-
-
-		if (a == null || b == null) return false;
-
-		return isSimilar (a.doubleValue(), b.doubleValue(), epsilon);
-	}
+      return !(a == null || b == null) && isSimilar(a.doubleValue(), b.doubleValue(), epsilon);
+    }
 
 	/**Vrací true, pokud vzdálenost je menší než epsilon.
 	 */
 	public static boolean isSimilar(double a, double b, double epsilon) {
-
 		return Math.abs(a - b) < epsilon;
 	}
 
@@ -52,16 +47,13 @@ public class FDouble {
 	 * Pokud je aspoň jedno číslo null, pak je výsledek vždy false.
 	 */
 	public static boolean isFromInterval(Double a, Double min, Double max) {
-
-		if (a == null || min == null || max == null) return false;
-
-		return isFromInterval(a.doubleValue(), min.doubleValue(), max.doubleValue());
-	}
+        return !(a == null || min == null || max == null) && isFromInterval(a.doubleValue(), min.doubleValue(),
+                max.doubleValue());
+    }
 
 	/**Vrací true, pokud je číslo z otevřeného intervalu.
 	 */
 	public static boolean isFromInterval(double a, double min, double max) {
-
 		return min < a && a < max;
-	}
+    }
 }
