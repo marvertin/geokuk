@@ -94,9 +94,7 @@ class CacheNaKachleDisk {
     //	}
 
     public boolean isOnDiskOrMemory(Ka0 klic) {
-        if (memoryCachedImage(klic) != null) return true;
-        if (isOnDisk(klic)) return true;
-        return false;
+        return memoryCachedImage(klic) != null || isOnDisk(klic);
     }
 
     public boolean isOnDisk(Ka0 ki) {
@@ -104,8 +102,7 @@ class CacheNaKachleDisk {
     }
 
     public Image memoryCachedImage(Ka0 klic) {
-        Image img = cache.memoryCachedImage(klic);
-        return img;
+        return cache.memoryCachedImage(klic);
     }
 
     /**

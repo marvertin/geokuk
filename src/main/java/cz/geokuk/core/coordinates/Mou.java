@@ -79,8 +79,7 @@ public class Mou implements Mouable, Cloneable {
     assert mouable2 != null;
     Utm utm1 = efektivneNaUtm(mouable1);
     Utm utm2 = efektivneNaUtm(mouable2);
-    double dalka = Math.hypot(utm2.ux - utm1.ux, utm2.uy - utm1.uy);
-    return dalka;
+      return Math.hypot(utm2.ux - utm1.ux, utm2.uy - utm1.uy);
   }
 
   private static Utm efektivneNaUtm(Mouable mouable) {

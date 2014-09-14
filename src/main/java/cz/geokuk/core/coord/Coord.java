@@ -132,8 +132,7 @@ public class Coord  {
     Mou mou1 = transform(p1);
     Mou mou2 = transform(p2);
     // To je spravne, protoze souradnice jdou opacne
-    BoundingRect br = new BoundingRect(mou1.xx, mou2.yy, mou2.xx, mou1.yy);
-    return br;
+    return new BoundingRect(mou1.xx, mou2.yy, mou2.xx, mou1.yy);
   }
 
 
@@ -141,16 +140,14 @@ public class Coord  {
   public Rectangle transform(MouRect mourect) {
     Point p1 = transform(mourect.getSz());
     Point p2 = transform(mourect.getJv());
-    Rectangle rect = new Rectangle(p1, new Dimension(p2.x - p1.x, p2.y - p1.y));
     //System.err.println("RORERO: " + rect + " --- " + mourect + " / " + p1 + "+" + p2);
-    return rect;
+    return new Rectangle(p1, new Dimension(p2.x - p1.x, p2.y - p1.y));
   }
 
   public double pixleDalka(Mou mou1, Mou mou2) {
     Point p1 = transform(mou1);
     Point p2 = transform(mou2);
-    double d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-    return d;
+    return Math.hypot(p1.x - p2.x, p1.y - p2.y);
   }
 
   public Point transform(Mou mou) {
@@ -178,8 +175,7 @@ public class Coord  {
     Coord c = derive(newMoumer); // pokusne tam nastavit nové měřítko
     Moud rozdil = c.transform(pointZoomStred).sub(mouZoomStred); // korigovat střed map, aby zůstal střed zůmování
     //System.out.println("CCCCCCCCCCCCCCCCCCC: " + rozdil + " " + pointZoomStred + " " + zoomMouStred);
-    Mou newMoustred = getMoustred().sub(rozdil);
-    return newMoustred;
+    return getMoustred().sub(rozdil);
   }
 
 
@@ -190,8 +186,7 @@ public class Coord  {
   }
 
   public Mou getMoupoc() {
-    Mou moupoc = new Mou(moustred.xx - dim.width * pomer / 2, moustred.yy - dim.height * pomer / 2);
-    return moupoc;
+      return new Mou(moustred.xx - dim.width * pomer / 2, moustred.yy - dim.height * pomer / 2);
   }
 
   public Moud getMouSize() {
@@ -257,8 +252,7 @@ public class Coord  {
   public BoundingRect getBoundingRect() {
     Mou jz = getMouJZ();
     Mou sv = getMouSV();
-    BoundingRect boundingRect = new BoundingRect(jz.xx, jz.yy, sv.xx, sv.yy);
-    return boundingRect;
+      return new BoundingRect(jz.xx, jz.yy, sv.xx, sv.yy);
   }
 
   /* (non-Javadoc)
@@ -284,8 +278,7 @@ public class Coord  {
     Utm ujz = getMouJZ().toUtm();
     Utm usv = getMouSV().toUtm();
     double odKrajeKeKraji = Math.abs(ujz.ux - usv.ux);
-    double pixluNaMetr = dim.width / odKrajeKeKraji;
-    return pixluNaMetr;
+      return dim.width / odKrajeKeKraji;
   }
 
   public double getWidthMetru() {
@@ -316,13 +309,12 @@ public class Coord  {
     if (mourect == null) return null;
 
     Rectangle r = transform(mourect);
-    Rectangle rect = new Rectangle(
+      //System.out.println("Kompjuted rektangle: " + rect + " | " + r + " -- " + mourect);
+    return new Rectangle(
         r.x - insets.left,
         r.y - insets.top,
         r.width + insets.left + insets.right,
         r.height + insets.top + insets.bottom);
-    //System.out.println("Kompjuted rektangle: " + rect + " | " + r + " -- " + mourect);
-    return rect;
   }
 
   /**
@@ -338,8 +330,7 @@ public class Coord  {
     final double lon = (wgsS.lon + wgsJ.lon) / 2; // stredova délka
     final Mou mouSq = new Wgs(wgsS.lat, lon).toMou();
     final Mou mouJq = new Wgs(wgsJ.lat, lon).toMou();
-    double uhel = Math.atan( (double)(mouSq.xx - mouJq.xx) / (double)(mouSq.yy - mouJq.yy));
-    return uhel;
+      return Math.atan( (double)(mouSq.xx - mouJq.xx) / (double)(mouSq.yy - mouJq.yy));
   }
 
   /**
@@ -463,9 +454,7 @@ public class Coord  {
         return false;
     } else if (!moustred.equals(other.moustred))
       return false;
-    if (Double.doubleToLongBits(natoceni) != Double.doubleToLongBits(other.natoceni))
-      return false;
-    return true;
+      return Double.doubleToLongBits(natoceni) == Double.doubleToLongBits(other.natoceni);
   }
 
 

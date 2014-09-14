@@ -172,7 +172,6 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
         init(false, Priority.KACHLE);
     }
 
-
     public void inject(KachleModel kachleModel) {
         this.kachleModel = kachleModel;
     }
