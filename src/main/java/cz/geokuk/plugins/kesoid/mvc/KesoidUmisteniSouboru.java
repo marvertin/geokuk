@@ -155,7 +155,9 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+      return super.equals(obj);
+      // TODO : Fix this
+    /*if (this == obj)
       return true;
     if (obj == null)
       return false;
@@ -197,7 +199,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
         return false;
     } else if (!anoGgtFile.equals(other.anoGgtFile))
       return false;
-    return true;
+    return true;*/
   }
 
 

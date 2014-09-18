@@ -1,6 +1,7 @@
 package cz.geokuk.util.process;
 
 import java.awt.Desktop;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -30,8 +31,6 @@ import java.net.URL;
  * "file://".
  */
 public class BrowserOpener {
-
-
   /**
    * Display a file in the system browser.  If you want to display a
    * file, you must include the absolute path name.
@@ -43,16 +42,12 @@ public class BrowserOpener {
     try {
       Desktop.getDesktop().browse(url.toURI());
     } catch (Exception e) {
-      throw new RuntimeException(String.format("Nedari se otevrit browser na pro \"%s\"", url), e);
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec("xdg-open " + url);
+        } catch (Exception e1) {
+            throw new RuntimeException(String.format("Nedari se otevrit browser na pro \"%s\"", url), e);
+        }
     }
-  }
-
-
-  /**
-   * Simple example.
-   * @throws MalformedURLException
-   */
-  public static void main(String[] args) throws MalformedURLException {
-    displayURL(new URL("http://www.javaworld.com"));
   }
 }

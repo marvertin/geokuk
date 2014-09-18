@@ -29,11 +29,7 @@ import cz.geokuk.plugins.mapy.kachle.KachleModel;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.Filex;
 
-
-
-
 public class JPrehledSouboru extends JPanel {
-
 
   private static final long serialVersionUID = -2491414463002815835L;
 

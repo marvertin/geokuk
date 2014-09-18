@@ -98,6 +98,11 @@ public class Sklo implements ImagantCache {
 		if (imaganti.isEmpty()) return null;
 		BoundingRect br = Sklo.sjednoceni(imaganti);
 
+        if (br == null) {
+            //TODO log.warn()
+            return null;
+        }
+
 		// vytvořit cílový brázek ve správné velikosti
 		int width = br.xx2 - br.xx1;
 		int height = br.yy2 - br.yy1;

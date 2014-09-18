@@ -97,8 +97,4 @@ public class IkonNacitacLoader {
   public void setImageMyDir(File imageMyDir) {
     this.imageMyDir = imageMyDir;
   }
-
-
-
-
 }
