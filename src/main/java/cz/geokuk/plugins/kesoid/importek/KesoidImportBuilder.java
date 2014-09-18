@@ -119,10 +119,6 @@ public class KesoidImportBuilder implements IImportBuilder {
         int delkaTasku = gpxwpts.size();
         Progressor progressor = progressModel.start(delkaTasku, "Vytvářím waypointy");
 
-
-        //    for (GpxWpt gpwpwt : gpxwpts.values()) {
-        //      System.out.println("Nacteno: " + gpwpwt);
-        //    }
         // přesypeme do seznamu
         List<GpxWpt> list = new LinkedList<>(gpxwpts.values());
 
@@ -775,9 +771,8 @@ public class KesoidImportBuilder implements IImportBuilder {
 
 
     private Set<Alela> definujUzivatslskeAlely(GpxWpt gpxwpt) {
-        //if (true) return null;
-        if (gpxwpt.gpxg.userTags == null) return null;
         Set<Alela> alely = new HashSet<>();
+
         for (Map.Entry<String, String> entry : gpxwpt.gpxg.userTags.entrySet()) {
             String alelaName = entry.getValue();
             String genName = entry.getKey();
@@ -787,6 +782,7 @@ public class KesoidImportBuilder implements IImportBuilder {
             }
             alely.add(alela);
         }
+
         return alely;
     }
 

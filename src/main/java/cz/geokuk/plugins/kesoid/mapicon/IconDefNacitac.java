@@ -29,7 +29,8 @@ public class IconDefNacitac {
     //private IconDef iconDef;
 
     IkonDrawingProperties idp;
-    private static Pattern pat = Pattern.compile("([a-z0-9]+!)*([^_]*)((?:_[a-z-]+)*)(_x-?[0-9]+)*(_y-?[0-9]+)*(_p[0-9])*\\.([a-z]+)");
+    // TODO : The alelas should have a more generic name
+    private static Pattern pat = Pattern.compile("([a-z0-9]+!)*([^_]*)((?:_[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮa-zA-z -]+)*)(_x-?[0-9]+)*(_y-?[0-9]+)*(_p[0-9])*\\.([a-z]+)");
     private final URL url;
 
     private final Genom genom;
@@ -110,7 +111,9 @@ public class IconDefNacitac {
     private Set<Alela> nactiAlely(String alelygroup) {
         Set<Alela> alely = new HashSet<>();
         for (String s : alelygroup.split("_")) {
-            if (s.length() == 0) continue;
+            if (s.isEmpty())  {
+                continue;
+            }
             Alela alela;
             int pozminus = s.indexOf('-');
             if (pozminus < 0) { // žádné mínus, alela musí existovat

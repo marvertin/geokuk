@@ -89,7 +89,9 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
      */
     @Override
     public synchronized void paintIcon(Component c, Graphics g, int x, int y) {
-      icon.paintIcon(c, g, x, y);
+        if (icon != null) {
+            icon.paintIcon(c, g, x, y);
+        }
       g.drawLine(0, 0, getIconWidth(), getIconHeight());
       g.drawLine(0, getIconHeight(), getIconWidth(), 0);
     }
@@ -100,7 +102,7 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
      */
     @Override
     public int getIconWidth() {
-      return icon.getIconWidth();
+      return icon != null ? icon.getIconWidth() : 0;
     }
 
     /**
@@ -109,7 +111,7 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
      */
     @Override
     public int getIconHeight() {
-      return icon.getIconHeight();
+      return icon != null ? icon.getIconHeight() : 0;
     }
   }
 

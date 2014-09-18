@@ -22,7 +22,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
   //protected static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
 
 
-  /** Jednoznacnaidentifikace jako GC124X4 nebo WM4587 */
+  /** Jednoznacna identifikace jako GC124X4 nebo WM4587 */
   private String code;
 
   private EKesVztah vztah = EKesVztah.NORMAL;
