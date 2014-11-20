@@ -9,12 +9,16 @@ import java.io.File;
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.core.program.UmisteniSouboru0;
 import cz.geokuk.util.file.Filex;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author veverka
  *
  */
 public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
+
+  private static final Logger log = LogManager.getLogger(KesoidUmisteniSouboru.class.getSimpleName());
 
   public static final Filex GEOKUK_DATA_DIR = new Filex(new File(FConst.HOME_DIR, "geokuk"), false, true);
   public static final Filex CESTY_DIR  = new Filex(new File(FConst.HOME_DIR, "geokuk/cesty"), false, true);
@@ -150,57 +154,22 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
     return result;
   }
 
-  /* (non-Javadoc)
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
   @Override
-  public boolean equals(Object obj) {
-      return super.equals(obj);
-      // TODO : Fix this
-    /*if (this == obj)
-      return true;
-    if (obj == null)
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    KesoidUmisteniSouboru that = (KesoidUmisteniSouboru) o;
+
+    if (anoGgtFile != null ? !anoGgtFile.equals(that.anoGgtFile) : that.anoGgtFile != null) return false;
+    if (cestyDir != null ? !cestyDir.equals(that.cestyDir) : that.cestyDir != null) return false;
+    if (geogetDataDir != null ? !geogetDataDir.equals(that.geogetDataDir) : that.geogetDataDir != null) return false;
+    if (image3rdPartyDir != null ? !image3rdPartyDir.equals(that.image3rdPartyDir) : that.image3rdPartyDir != null)
       return false;
-    if (getClass() != obj.getClass())
-      return false;
-    KesoidUmisteniSouboru other = (KesoidUmisteniSouboru) obj;
-    if (geogetDataDir == null) {
-      if (other.geogetDataDir != null)
-        return false;
-    } else if (!geogetDataDir.equals(other.geogetDataDir))
-      return false;
-    if (image3rdPartyDir == null) {
-      if (other.image3rdPartyDir != null)
-        return false;
-    } else if (!image3rdPartyDir.equals(other.image3rdPartyDir))
-      return false;
-    if (imageMyDir == null) {
-      if (other.imageMyDir != null)
-        return false;
-    } else if (!imageMyDir.equals(other.imageMyDir))
-      return false;
-    if (kesDir == null) {
-      if (other.kesDir != null)
-        return false;
-    } else if (!kesDir.equals(other.kesDir))
-      return false;
-    if (cestyDir == null) {
-      if (other.cestyDir != null)
-        return false;
-    } else if (!cestyDir.equals(other.cestyDir))
-      return false;
-    if (neGgtFile == null) {
-      if (other.neGgtFile != null)
-        return false;
-    } else if (!neGgtFile.equals(other.neGgtFile))
-      return false;
-    if (anoGgtFile == null) {
-      if (other.anoGgtFile != null)
-        return false;
-    } else if (!anoGgtFile.equals(other.anoGgtFile))
-      return false;
-    return true;*/
+    if (imageMyDir != null ? !imageMyDir.equals(that.imageMyDir) : that.imageMyDir != null) return false;
+    if (kesDir != null ? !kesDir.equals(that.kesDir) : that.kesDir != null) return false;
+    if (neGgtFile != null ? !neGgtFile.equals(that.neGgtFile) : that.neGgtFile != null) return false;
+
+    return true;
   }
-
-
 }

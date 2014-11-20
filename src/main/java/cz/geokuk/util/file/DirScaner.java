@@ -6,10 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 
- */
-
-/**
  * @author veverka
  *
  */
@@ -17,7 +13,6 @@ public  class DirScaner {
 
   private File dir;
   private List<FileAndTime> lastScaned = null;
-
 
   public void setDir(File dir, boolean prenacti) {
     if (! prenacti && dir.equals(this.dir)) return;
@@ -77,19 +72,6 @@ public  class DirScaner {
       file = aFile;
       lastmodify = aLastmodify;
     }
-    //    /**
-    //     * @return the file
-    //     */
-    //    public File getFile() {
-    //      return file;
-    //    }
-    //
-    //    /**
-    //     * @return the lastmodify
-    //     */
-    //    public long getLastmodify() {
-    //      return lastmodify;
-    //    }
 
     /* (non-Javadoc)
      * @see java.lang.Object#hashCode()
@@ -144,8 +126,5 @@ public  class DirScaner {
           return 1;
       }
     }
-
-
-
   }
 }

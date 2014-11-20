@@ -22,13 +22,10 @@ public class Gpxg {
   public int znamka;
   public String czkraj;
   public String czokres;
-  public Map<String, String> userTags;
+  public Map<String, String> userTags = new HashMap<>();
 
 
   public void putUserTag(String genname, String alelaname) {
-    if (userTags == null) {
-      userTags = new HashMap<>();
-    }
     userTags.put(genname, alelaname);
   }
 

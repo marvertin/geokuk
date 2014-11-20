@@ -34,10 +34,8 @@ public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
    */
   @Override
   protected IkonBag doInBackground() throws Exception {
-
     assert kesoidModel.getJmenoAktualniSadyIkon() != null;
-    IkonBag ikonBag = ikonNacitac.nacti(this, iPrenacti, kesoidModel.getJmenoAktualniSadyIkon());
-    return ikonBag;
+    return ikonNacitac.nacti(this, iPrenacti, kesoidModel.getJmenoAktualniSadyIkon());
   }
 
   /* (non-Javadoc)

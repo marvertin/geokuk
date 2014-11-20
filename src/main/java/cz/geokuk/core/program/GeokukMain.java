@@ -1,8 +1,4 @@
-/**
- * 
- */
 package cz.geokuk.core.program;
-
 
 import java.nio.charset.Charset;
 import java.util.prefs.BackingStoreException;
@@ -15,8 +11,8 @@ import cz.geokuk.framework.MyPreferences;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.exception.MyExceptionHandler;
-
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author veverka
@@ -24,9 +20,11 @@ import cz.geokuk.util.exception.MyExceptionHandler;
  */
 public class GeokukMain  {
 
+  private static final Logger log = LogManager.getLogger(GeokukMain.class.getSimpleName());
+
   public void execute(String[] args) {
     FConst.logInit();
-    System.out.println("Default character encoding: " + Charset.defaultCharset());
+    log.info("Default character encoding: {}", Charset.defaultCharset());
     nastavSkin();
     Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler());
     promazPreferencePokudJeToPrikazano(args);
@@ -44,7 +42,6 @@ public class GeokukMain  {
         inicializator.zkontrolovatAktualizace();
       }
     });
-
   }
 
   private void nastavSkin() {
@@ -66,7 +63,6 @@ public class GeokukMain  {
       }
     }
   }
-
 
   public static void main(String[] args)  {
     new GeokukMain().execute(args);

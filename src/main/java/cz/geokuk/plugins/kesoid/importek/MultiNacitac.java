@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.kesoid.importek;
 
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,11 +24,6 @@ import cz.geokuk.util.file.DirScaner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
-/**
- *
- */
-
 /**
  * @author veverka
  */
@@ -45,9 +39,6 @@ public class MultiNacitac {
 
     //private static final String CACHE_SUFFIX = ".cache.serialized";
 
-    /**
-     *
-     */
     public MultiNacitac(KesoidModel kesoidModel) {
 
         this.kesoidModel = kesoidModel;
@@ -56,14 +47,15 @@ public class MultiNacitac {
         nacitace.add(new NacitacGpx());
     }
 
-
     public void setDir(File dir, boolean prenacti) {
         ds.setDir(dir, prenacti);
     }
 
     public KesBag nacti(Future<?> future, Genom genom) throws IOException {
         List<File> list = ds.coMamNacist();
-        if (list == null) return null;
+        if (list == null) {
+            return null;
+        }
         KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
         builder.init();
         for (File file : list) {
@@ -75,7 +67,6 @@ public class MultiNacitac {
                 ds.nulujLastScaned(); // ať se načte znovu
             }
         }
-        //System.out.println("A co tam mame: " + mapa.size());
 
         builder.done(genom);
 

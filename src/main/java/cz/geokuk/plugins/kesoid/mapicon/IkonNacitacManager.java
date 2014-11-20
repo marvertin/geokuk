@@ -1,32 +1,44 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 import javax.swing.Timer;
 
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoid.mvc.KesoidUmisteniSouboru;
+import cz.geokuk.util.file.Filex;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class IkonNacitacManager {
 
+  private static final Logger log = LogManager.getLogger(IkonNacitacManager.class.getSimpleName());
 
   private final IkonNacitacLoader ikonNacitacLoader;
-
   private IkonNacitacSwingWorker sw;
-
   private final KesoidModel kesoidModel;
+
+  private Filex lastThirdParty;
+  private Filex lastMyOwn;
 
   public void startLoad( boolean prenacti) {
     KesoidUmisteniSouboru umisteniSouboru = kesoidModel.getUmisteniSouboru();
-    ikonNacitacLoader.setImage3rdPartyDir(umisteniSouboru.getImage3rdPartyDir().isActive() ?
-        umisteniSouboru.getImage3rdPartyDir().getEffectiveFile() : null);
-    ikonNacitacLoader.setImageMyDir(umisteniSouboru.getImageMyDir().isActive() ?
-        umisteniSouboru.getImageMyDir().getEffectiveFile() : null);
-    if (sw == null || sw.isDone()) {
-      sw = new IkonNacitacSwingWorker(ikonNacitacLoader, prenacti, kesoidModel);
-      sw.execute();
+    Filex thirdParty = umisteniSouboru.getImage3rdPartyDir();
+    Filex myDir = umisteniSouboru.getImageMyDir();
+
+    if (!prenacti && Objects.equals(lastThirdParty, thirdParty) && Objects.equals(lastMyOwn, myDir)) {
+      log.info("Icon folders unchanged.");
+    } else {
+      lastMyOwn = myDir;
+      lastThirdParty = thirdParty;
+      ikonNacitacLoader.setImage3rdPartyDir(thirdParty.isActive() ? thirdParty.getEffectiveFile() : null);
+      ikonNacitacLoader.setImageMyDir(myDir.isActive() ? myDir.getEffectiveFile() : null);
+      if (sw == null || sw.isDone()) {
+        sw = new IkonNacitacSwingWorker(ikonNacitacLoader, prenacti, kesoidModel);
+        sw.execute();
+      }
     }
   }
 
