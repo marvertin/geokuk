@@ -40,7 +40,6 @@ public class MultiNacitac {
     //private static final String CACHE_SUFFIX = ".cache.serialized";
 
     public MultiNacitac(KesoidModel kesoidModel) {
-
         this.kesoidModel = kesoidModel;
         ds = new DirScaner();
         nacitace.add(new NacitacGeokuk());
@@ -72,7 +71,6 @@ public class MultiNacitac {
 
         return builder.getKesBag();
     }
-
 
     /**
      * @param file

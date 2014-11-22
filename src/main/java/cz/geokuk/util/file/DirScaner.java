@@ -7,15 +7,16 @@ import java.util.List;
 
 /**
  * @author veverka
- *
  */
 public  class DirScaner {
-
+  // TODO : Use file watchers
   private File dir;
   private List<FileAndTime> lastScaned = null;
 
   public void setDir(File dir, boolean prenacti) {
-    if (! prenacti && dir.equals(this.dir)) return;
+    if (!prenacti && dir.equals(this.dir)) {
+      return;
+    }
     this.dir = dir;
     nulujLastScaned();
   }

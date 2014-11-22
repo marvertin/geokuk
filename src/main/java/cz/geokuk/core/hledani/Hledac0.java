@@ -32,7 +32,7 @@ public abstract class Hledac0<T extends Nalezenec0> {
     try {
       Collections.sort(list, new PorovnavacOdStredu(getFuture()));
     } catch (XZaknclovanoRazeni e) {
-      return null; // hned zkoncit, protože řazení  nedoběhlo
+      return null; // hned zkoncit, protože řazení nedoběhlo
     }
     return list;
 

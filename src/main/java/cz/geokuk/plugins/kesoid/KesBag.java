@@ -29,7 +29,6 @@ public class KesBag {
 
   private CounterMap<Alela> poctyAlel;
 
-
   private final Indexator<Wpt> indexator;
 
   private int maximalniBestOf = 0;
@@ -43,7 +42,6 @@ public class KesBag {
 
   private boolean locked;
 
-  ////////////////////////////////////////
   public KesBag(final Genom genom) {
     this.genom = genom;
     indexator =new Indexator<>(BoundingRect.ALL);
@@ -114,8 +112,6 @@ public class KesBag {
   public int getMaximalniFavorit() {
     return maximalniFavorit;
   }
-
-
 
   public List<Wpt> getWpts() {
     if (kesoidy == null)

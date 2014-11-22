@@ -29,7 +29,6 @@ public class Mou implements Mouable, Cloneable {
     return new Mou(xx + dxx, yy + dyy);
   }
 
-
   public Mou add(Moud moud) {
     return new Mou(xx + moud.dxx, yy + moud.dyy);
   }
@@ -46,7 +45,6 @@ public class Mou implements Mouable, Cloneable {
   public int hashCode() {
     return xx ^ yy;
   }
-
 
   @Override
   public boolean equals(Object obj) {

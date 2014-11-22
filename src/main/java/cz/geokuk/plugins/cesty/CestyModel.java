@@ -119,15 +119,13 @@ public class CestyModel extends Model0 {
   }
 
   public File defaultExportuDoGgt() {
-    File file = new File(kesoidModel.getUmisteniSouboru().getGeogetDataDir().getEffectiveFile(), "lovim.ggt");
-    return file;
+    return new File(kesoidModel.getUmisteniSouboru().getGeogetDataDir().getEffectiveFile(), "lovim.ggt");
   }
 
 
   public File defaultAktualnihoVyletuFile() {
     File defaultFile = new File(kesoidModel.getUmisteniSouboru().getCestyDir().getEffectiveFile(), "Můj výlet.gpx");
-    File file = currPrefe().node(FPref.VYLET_node).getFile(FPref.AKTUALNI_SOUBOR_value, defaultFile);
-    return file;
+    return currPrefe().node(FPref.VYLET_node).getFile(FPref.AKTUALNI_SOUBOR_value, defaultFile);
   }
 
   private class Worker extends SwingWorker<Void, Void> {

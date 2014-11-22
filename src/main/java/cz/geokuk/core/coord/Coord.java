@@ -26,8 +26,6 @@ public class Coord  {
   private static int MAX_MOU_X = 0x0c000000;
   private static int MAX_MOU_Y = 0x0c000000;
 
-
-
   //	X_UTM=(sX*0,03125)-3700000 = 292576
   //	Y_UTM=(sY*0,03125)+1300000 = 5570080
 
@@ -82,8 +80,6 @@ public class Coord  {
     this.natoceni = natoceni;
     computeAffineTransforms();
   }
-
-
 
   private void computeAffineTransforms() {
     if (natoceni == 0) {
@@ -151,8 +147,6 @@ public class Coord  {
     }
     return p;
   }
-
-
 
   /**
    * Spočítá nový moustred, který musí být pokud se zazůmuje na danou veliksot,

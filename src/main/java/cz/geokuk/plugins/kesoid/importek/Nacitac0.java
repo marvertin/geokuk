@@ -9,11 +9,6 @@ import cz.geokuk.plugins.kesoid.Kes;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 
-
-/**
- * 
- */
-
 /**
  * @author veverka
  *
@@ -35,8 +30,6 @@ public abstract class Nacitac0 {
       FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Problem při načítání kešek, ale jedeme dál");
     }
   }
-
-
 
   /**
    * @param aString
