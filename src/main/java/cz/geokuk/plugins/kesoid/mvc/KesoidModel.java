@@ -6,7 +6,6 @@ package cz.geokuk.plugins.kesoid.mvc;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import cz.geokuk.core.program.FPref;

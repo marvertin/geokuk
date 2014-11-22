@@ -127,6 +127,7 @@ public class Akce {
   public final OphototPodkladAction ophototPodkladAction = new OphototPodkladAction();
   public final Army2PodkladAction army2PodkladAction = new Army2PodkladAction();
   public final Ophot0203PodkladAction ophot0203PodkladAction = new Ophot0203PodkladAction();
+  public final GeographyPodkladAction geographyPodkladAction = new GeographyPodkladAction();
   public final ZadnePodkladAction zadnePodkladAction = new ZadnePodkladAction();
 
   public final TturDekoraceAction tturDekoraceAction = new TturDekoraceAction();

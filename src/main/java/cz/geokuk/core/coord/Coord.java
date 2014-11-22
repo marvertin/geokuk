@@ -1,7 +1,5 @@
 package cz.geokuk.core.coord;
 
-
-
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
@@ -15,9 +13,6 @@ import cz.geokuk.core.coordinates.Moud;
 import cz.geokuk.core.coordinates.Utm;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.util.index2d.BoundingRect;
-
-
-
 
 /**
  * Objekt je immuitable.
@@ -114,10 +109,7 @@ public class Coord  {
     if (zpet != null) {
       zpet.transform(p, p);
     }
-    Mou mou = new Mou();
-    mou.xx = getMoupoc().xx + p.x * pomer;
-    mou.yy = getMoupoc().yy + (dim.height - p.y) * pomer;
-    return mou;
+    return new Mou(getMoupoc().xx + p.x * pomer, getMoupoc().yy + (dim.height - p.y) * pomer);
   }
 
   public MouRect transform(Rectangle rect) {
