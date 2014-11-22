@@ -45,7 +45,7 @@ public class Menu extends MenuStrujce {
     item(akce.ulozitNastaveniKProgramuAction);
     item(akce.tadyJsemDomaAction);
     item(akce.zobrazServisniOknoAction);
-    if (! FConst.ZAKAZAT_PRIPRAVOVANOU_FUNKCIONALITU) {
+    if (!FConst.ZAKAZAT_PRIPRAVOVANOU_FUNKCIONALITU) {
       item(akce.renderAction);
     }
 
@@ -96,6 +96,7 @@ public class Menu extends MenuStrujce {
     item(akce.baseNPodkladAction, mapPodkladButtonGroup);
     item(akce.turistPokladAction, mapPodkladButtonGroup);
     item(akce.winterTuristPodkladAction, mapPodkladButtonGroup);
+    item(akce.geographyPodkladAction, mapPodkladButtonGroup);
     item(akce.ophototPodkladAction, mapPodkladButtonGroup);
     item(akce.army2PodkladAction, mapPodkladButtonGroup);
     item(akce.ophot0203PodkladAction, mapPodkladButtonGroup);

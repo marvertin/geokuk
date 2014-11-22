@@ -14,6 +14,7 @@ public enum EKaType {
     OPHOTO(true, 4, 18, 16, "ophoto"),
     ARMY2(true, 5, 13, 13, "army2"),
     OPHOTO0203(true, 4, 16, 16, "ophoto0203"),
+    ZEMEPIS(true, 4, 16, 16, "zemepis"),
     _BEZ_PODKLADU(true, 4, 18, 18, null),
 
     RELIEF(false),
@@ -69,7 +70,6 @@ public enum EKaType {
     }
 
     public static EnumSet<EKaType> compute(EMapPodklad p, EnumSet<EMapDekorace> d) {
-        //System.out.println("Tal co tu mame: " + p + " " + d);
         if (p == null) return null;
         EnumSet<EKaType> set = EnumSet.noneOf(EKaType.class);
         switch (p) {
@@ -90,6 +90,9 @@ public enum EKaType {
                 break;
             case OPHOTO0203:
                 set.add(EKaType.OPHOTO0203);
+                break;
+            case ZEMEPIS:
+                set.add(EKaType.ZEMEPIS);
                 break;
             case ZADNE:
                 set.add(EKaType._BEZ_PODKLADU);

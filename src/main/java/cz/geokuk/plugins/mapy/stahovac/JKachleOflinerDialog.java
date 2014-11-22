@@ -173,11 +173,10 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
         //int yn = h;
         int moumaska = ~ (coco.getMoukrok()-1);
         Mou mou0 = new Mou(coco.getMoupoc().xx & moumaska, coco.getMoupoc().yy & moumaska);
-        Mou mou = new Mou();
-        for (mou.xx = mou0.xx; coco.transform(mou).x < xn; mou.xx += coco.getMoukrok()) {
-          //System.out.println(mou);
+        Mou mou = new Mou(mou0);
+        while (coco.transform(mou).x < xn) {
           if (isCancelled()) return -1;
-          for (mou.yy = mou0.yy; coco.transform(mou).y > 0; mou.yy += coco.getMoukrok()) { // y ukazuje na spodek kachle
+          while (coco.transform(mou).y > 0) {
             KaLoc kaloc = new KaLoc(new Mou(mou), coco.getMoumer());
             if (zafrontovat) {
               JKachle kachle = new JKachle(new KaAll(kaloc, totoSeTaha.kaSet), kachleModel, false, null); // když se nepoužije, musí se stvořit nová
@@ -185,9 +184,10 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
               publish(kachle);
             }
             pocetKachli += totoSeTaha.kaSet.getKts().size(); // po každý podklad jedna kachle
-          } // konec iterace dle Y
-        } // konec iterace dle X
-
+            mou = mou.add(0, coco.getMoukrok());
+          }
+          mou = mou.add(coco.getMoukrok(), 0);
+        }
       }
       return pocetKachli;
     }

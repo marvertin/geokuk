@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.mapy.kachle;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -19,7 +18,6 @@ import cz.geokuk.util.pocitadla.PocitadloMalo;
 import cz.geokuk.util.pocitadla.PocitadloRoste;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
 
@@ -59,7 +57,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
     protected boolean vykreslovatokamzite;
 
 
-    // je to jen kvuli garamge collectoru, aby nezrusil, NERUSIT PROMENNU i kdyz zdanlive je to na nic
+    // je to jen kvuli garbage collectoru, aby nezrusil, NERUSIT PROMENNU i kdyz zdanlive je to na nic
     public JKachlovnik() {
         setLayout(null);
         setPreferredSize(new Dimension(800, 600));
@@ -105,9 +103,9 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
         // a teď jedeme
         Map<KaLoc, JKachle> newKachles = new HashMap<>(200);
 
-        Mou mou = new Mou();
-        for (mou.xx = mou0.xx; soord.transform(mou).x < xn; mou.xx += soord.getMoukrok()) {
-            for (mou.yy = mou0.yy; soord.transform(mou).y > 0; mou.yy += soord.getMoukrok()) { // y ukazuje na spodek kachle
+        Mou mou = new Mou(mou0);
+        while (soord.transform(mou).x < xn) {
+            while (soord.transform(mou).y > 0) {
                 KaLoc lokace = new KaLoc(new Mou(mou), soord.getMoumer());
                 JKachle kachle = kachles.remove(lokace);
                 boolean kachleSePouzije = smimZnovuPouzitKachle && kachle != null;
@@ -133,7 +131,9 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
                 kachle.setLocation(x, y);
                 kachle.setPoziceJenProVypsani(lokace);
                 newKachles.put(lokace, kachle);  // děláme vždy novou mapu kachlí i když je znovu používáme
+                mou = mou.add(0, soord.getMoukrok());
             }
+            mou = new Mou(mou.xx + soord.getMoukrok(), mou0.yy);
         }
         //System.out.println("mame komponent: " + super.getComponentCount());
         //System.out.println("Nahrazenych kachli: " + kachles.size());

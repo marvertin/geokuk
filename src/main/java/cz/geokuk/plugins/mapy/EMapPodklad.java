@@ -8,6 +8,7 @@ public enum EMapPodklad {
   OPHOTO(4, 18, true),
   ARMY2(5, 13, true),
   OPHOTO0203(4, 16, true),
+  ZEMEPIS(3, 16, false),
   ZADNE(4, 18, true);
 
   private final int minMoumer;
