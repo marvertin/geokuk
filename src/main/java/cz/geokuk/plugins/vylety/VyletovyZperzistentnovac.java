@@ -16,7 +16,6 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 public class VyletovyZperzistentnovac {
 
     private static final Logger log = LogManager.getLogger(VyletovyZperzistentnovac.class.getSimpleName());
@@ -24,26 +23,20 @@ public class VyletovyZperzistentnovac {
     private KesoidModel kesoidModel;
 
     private VyletPul loadGgt(File file) throws IOException {
-        FileReader filere = null;
-        try {
-            filere = new FileReader(file);
-            BufferedReader br = new BufferedReader(filere);
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             return loadGgt(br);
         } catch (FileNotFoundException e) {
-            //FExceptionDumper.dump(e, EExceptionSeverity.CATCHE, "Nacitani vyletu.");
             return new VyletPul(new HashSet<String>());
-        } finally {
-            if (filere != null) {
-                filere.close();
-            }
         }
     }
 
     public Vylet immediatlyNactiVylet(KesBag vsechny) {
         try {
             Vylet novyvylet = new Vylet();
-            aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getAnoGgtFile().getEffectiveFile()), EVylet.ANO, vsechny);
-            aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getNeGgtFile().getEffectiveFile()), EVylet.NE, vsechny);
+            aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getAnoGgtFile().getEffectiveFile()),
+                    EVylet.ANO, vsechny);
+            aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getNeGgtFile().getEffectiveFile()),
+                    EVylet.NE, vsechny);
             return novyvylet;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -55,7 +48,7 @@ public class VyletovyZperzistentnovac {
         Set<String> set = new HashSet<>();
         while ((line = reader.readLine()) != null) {
             line = line.trim();
-            if (line.length() == 0) {
+            if (line.isEmpty()) {
                 continue;
             }
             set.add(line);
@@ -72,7 +65,6 @@ public class VyletovyZperzistentnovac {
             }
         }
     }
-
 
     public void immediatlyZapisVylet(Vylet vylet) {
         zapis(vylet, kesoidModel.getUmisteniSouboru().getAnoGgtFile().getEffectiveFile(), EVylet.ANO);
@@ -132,5 +124,4 @@ public class VyletovyZperzistentnovac {
     public void inject(KesoidModel kesoidModel) {
         this.kesoidModel = kesoidModel;
     }
-
 }

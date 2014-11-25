@@ -241,9 +241,11 @@ public class JKesTable extends JPanel {
     }
 
     private Object formatuj(Nalezenec nal, String s) {
+      // TODO : ??
       // Zde je správně použito porovnání referencí, protože řetězec zde jen identifikuje, kde přesně došlo k nálezu
-      if (!nal.getKdeNalezeno().equals(s)) return s;
-        return "<html>" + s.substring(0, nal.getPoc()) + "<b bgcolor='yellow'>" + s.substring(nal.getPoc(), nal.getKon()) + "</b>" + s.substring(nal.getKon()) + "</html>";
+      if (nal.getKdeNalezeno() != s) return s;
+      return "<html>" + s.substring(0, nal.getPoc()) + "<b bgcolor='yellow'>" + s.substring(nal.getPoc(), nal.getKon())
+              + "</b>" + s.substring(nal.getKon()) + "</html>";
     }
 
     private Icon kesIkona(Kesoid kes) {

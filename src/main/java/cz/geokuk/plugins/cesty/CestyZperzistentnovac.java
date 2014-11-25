@@ -175,10 +175,7 @@ public class CestyZperzistentnovac {
         return sheet.get();
     }
 
-
     public boolean smimCist() {
         return smimCist == 0;
     }
-
-
 }

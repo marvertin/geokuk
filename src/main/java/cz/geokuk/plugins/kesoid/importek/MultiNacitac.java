@@ -88,7 +88,7 @@ public class MultiNacitac {
                     if (entry.getName().matches(".*\\.(geokuk|gpx)")) {
                         for (Nacitac0 nacitac : nacitace) {
                             try (InputStream istm = new BufferedInputStream(
-                                    new ProgressorInputStream(kesoidModel.getProgressModel(), "Loadig: " + file,
+                                    new ProgressorInputStream(kesoidModel.getProgressModel(), "Loading: " + file,
                                             zipFile.getInputStream(entry))
                             )) {
                                 String jmenoZdroje = file.getName() + "!" + entry.getName();
@@ -105,7 +105,7 @@ public class MultiNacitac {
         } else {
             for (Nacitac0 nacitac : nacitace) {
                 try (InputStream istm = new BufferedInputStream(
-                        new ProgressorInputStream(kesoidModel.getProgressModel(), "Loadig: " + file,
+                        new ProgressorInputStream(kesoidModel.getProgressModel(), "Loading: " + file,
                                 new FileInputStream(file))
                 )) {
                     String jmenoZdroje = file.getName();
