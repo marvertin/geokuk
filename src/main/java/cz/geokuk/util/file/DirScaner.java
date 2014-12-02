@@ -42,12 +42,13 @@ public  class DirScaner {
   }
 
   private List<FileAndTime> scanDir(File dir) {
+    // TODO : other image formats than JPG
     List<FileAndTime> list = new ArrayList<>();
     if (! dir.isDirectory()) return list;
     String[] fords = dir.list();
     for (String ford : fords) {
       ford = ford.trim();
-      if (ford.toLowerCase().trim().matches(".*\\.(geokuk|gpx|zip)")) {
+      if (ford.toLowerCase().trim().matches(".*\\.(geokuk|gpx|zip|jpg)")) {
         File file = new File(dir, ford);
         if (! file.isDirectory()) {
           FileAndTime fileAndTime = new FileAndTime(file, file.lastModified());

@@ -168,8 +168,7 @@ public class Kes extends Kesoid {
 
   @Override
   public String[] getProhledavanci() {
-    String[] prohledavanci = new String[] {getNazev(), getCode(), getAuthor()};
-    return prohledavanci;
+    return new String[] {getNazev(), getCode(), getAuthor()};
   }
 
   @Override
@@ -240,8 +239,7 @@ public class Kes extends Kesoid {
     try {
       String urls = getUrl();
       if (urls.startsWith(URL_PREFIX_SHOW)) {
-        URL url = new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));
-        return url;
+        return new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));
       } else {
           return null;
       }

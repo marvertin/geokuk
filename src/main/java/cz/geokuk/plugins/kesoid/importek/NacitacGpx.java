@@ -233,26 +233,16 @@ public class NacitacGpx extends Nacitac0 {
                                     GpxWpt wpt = new GpxWpt();
                                     readWpt(rdr, wpt, TRKPT);
                                     builder.addTrackWpt(wpt);
-                                    //System.out.println(wpt);
-                                    //System.out.println(kes);
-                                    //System.out.println(jmeno + " " + lat + " " + lon );
                                 }
                             }
                             builder.endTrackSegment();
                         }
                     }
                     builder.endTrack();
-                    //System.out.println(wpt);
-                    //System.out.println(kes);
-                    //System.out.println(jmeno + " " + lat + " " + lon );
                 }
             }
-            //System.out.println("velikost: " + mapa.size());
-
             rdr.next();
         }
-
-
     }
 
     private void readWpt(XMLStreamReader rdr, GpxWpt wpt, QName tag)
@@ -275,7 +265,6 @@ public class NacitacGpx extends Nacitac0 {
         for (; !(rdr.isEndElement() && rdr.getName().equals(tag)); rdr.next()) {
             if (rdr.isStartElement()) {
                 QName jmeno = rdr.getName();
-                //System.out.println(" cyklim");
                 if (jmeno.equals(TIME)) {
                     wpt.time = rdr.getElementText(); // nemůžeme to hend použít
                 }

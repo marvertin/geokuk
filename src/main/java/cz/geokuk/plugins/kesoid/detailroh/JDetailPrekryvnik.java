@@ -67,7 +67,6 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
   }
 
   private void nastavSeSpozdenim() {
-
     if (zpozdovaciTimer != null) {
       zpozdovaciTimer.stop();
     }
@@ -93,7 +92,4 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
       setVisible(true);
     }
   }
-
-
-
 }

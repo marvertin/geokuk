@@ -1,11 +1,6 @@
 package cz.geokuk.plugins.kesoid.importek;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -44,6 +39,7 @@ public class MultiNacitac {
         ds = new DirScaner();
         nacitace.add(new NacitacGeokuk());
         nacitace.add(new NacitacGpx());
+        nacitace.add(new NacitacImageMetadata());
     }
 
     public void setDir(File dir, boolean prenacti) {
@@ -81,7 +77,8 @@ public class MultiNacitac {
      * @throws FileNotFoundException
      */
     private void zpracujJedenFile(File file, KesoidImportBuilder builder, Future<?> future) throws IOException {
-        if (file.toString().toLowerCase().endsWith("zip")) {
+        // Clean this up, more distinguishing
+        if (isZipFile(file)) {
             try (ZipFile zipFile = new ZipFile(file)) {
                 for (Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements(); ) {
                     ZipEntry entry = en.nextElement();
@@ -119,5 +116,28 @@ public class MultiNacitac {
         }
     }
 
+    /**
+     * Checks whether the given file is a ZIP file.
+     * Copied from
+     * http://www.java2s.com/Code/Java/File-Input-Output/DeterminewhetherafileisaZIPFile.htm
+     *
+     *
+     */
+    private static boolean isZipFile(File fileToTest) {
+        if(fileToTest.isDirectory()) {
+            return false;
+        }
+        if(fileToTest.length() < 4) {
+            return false;
+        }
+        try (DataInputStream in = new DataInputStream(new BufferedInputStream(
+                new FileInputStream(fileToTest)))) {
+            int test = in.readInt();
+            return test == 0x504b0304;
+        } catch (IOException e) {
+            throw new IllegalArgumentException("The file " + fileToTest + " cannot be checked!",
+                    e);
+        }
+    }
 
 }

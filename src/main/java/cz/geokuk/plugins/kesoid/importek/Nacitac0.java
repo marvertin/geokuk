@@ -60,8 +60,4 @@ public abstract class Nacitac0 {
       return Kes.NENI_HODNOCENI; // je to španě, tak asi není hodnocení
     }
   }
-
-
-
-
 }

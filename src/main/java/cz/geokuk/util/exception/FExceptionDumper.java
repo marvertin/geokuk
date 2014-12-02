@@ -10,8 +10,6 @@ import cz.geokuk.util.file.TPumpReaderToWriter;
 import cz.geokuk.util.lang.FThrowable;
 import cz.geokuk.util.lang.StringUtils;
 
-
-
 /**
  * Pomocná třída pro dumpování výjimek.
  * Volání metod na této třídě je ekvivalentní

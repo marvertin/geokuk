@@ -14,8 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 public class IkonNacitacManager {
 
-  private static final Logger log = LogManager.getLogger(IkonNacitacManager.class.getSimpleName());
-
   private final IkonNacitacLoader ikonNacitacLoader;
   private IkonNacitacSwingWorker sw;
   private final KesoidModel kesoidModel;
@@ -28,9 +26,7 @@ public class IkonNacitacManager {
     Filex thirdParty = umisteniSouboru.getImage3rdPartyDir();
     Filex myDir = umisteniSouboru.getImageMyDir();
 
-    if (!prenacti && Objects.equals(lastThirdParty, thirdParty) && Objects.equals(lastMyOwn, myDir)) {
-      log.info("Icon folders unchanged.");
-    } else {
+    if (prenacti || !Objects.equals(lastThirdParty, thirdParty) || !Objects.equals(lastMyOwn, myDir)) {
       lastMyOwn = myDir;
       lastThirdParty = thirdParty;
       ikonNacitacLoader.setImage3rdPartyDir(thirdParty.isActive() ? thirdParty.getEffectiveFile() : null);
