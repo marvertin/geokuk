@@ -2,8 +2,6 @@ package cz.geokuk.plugins.kesoid.mvc;
 
 import javax.swing.Box;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
@@ -11,13 +9,14 @@ import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdroji;
-import cz.geokuk.util.lang.ATimestamp;
+import org.jdesktop.swingx.JXTreeTable;
+import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
 public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
   private static final long serialVersionUID = 5215923043342722378L;
 
-  private JTable jTable;
+  private JXTreeTable jTable;
 
   //private final InformaceOZdrojich iInformaceOZdrojich;
 
@@ -33,110 +32,64 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
   protected void initComponents() {
     Box box = Box.createVerticalBox();
 
-    jTable = new JTable(new Model());
+    jTable = new JXTreeTable(new Model());
     //jTable.setPreferredScrollableViewportSize(new Dimension(600, 70));
     jTable.setFillsViewportHeight(true);
-    jTable.setRowSorter(new TableRowSorter<>(jTable.getModel()));
 
     //Create the scroll pane and add the table to it.
     JScrollPane scrollPane = new JScrollPane(jTable);
 
-
-    nastavVlastnostiSLoupcu();
+    nastavVlastnostiSloupcu();
     box.add(scrollPane);
     add(box);
   }
 
-  public void nastavVlastnostiSLoupcu() {
+  public void nastavVlastnostiSloupcu() {
     TableColumn column;
+
     column = jTable.getColumnModel().getColumn(0);
-    //column.setMaxWidth(200);
-    column.setMinWidth(20);
-    column.setPreferredWidth(50);
-    column.setResizable(false);
-    column.setMaxWidth(50);
-
-
-    column = jTable.getColumnModel().getColumn(1);
-    //column.setMaxWidth(200);
     column.setMinWidth(200);
     column.setPreferredWidth(200);
     column.setResizable(true);
 
+    column = jTable.getColumnModel().getColumn(1);
+    //column.setMaxWidth(200);
+    column.setMinWidth(20);
+    column.setPreferredWidth(50);
+    column.setResizable(true);
+    column.setMaxWidth(100);
+
     column = jTable.getColumnModel().getColumn(2);
-    column.setMaxWidth(200);
-    column.setMinWidth(200);
-    column.setPreferredWidth(200);
-    column.setResizable(false);
+    column.setMaxWidth(100);
+    column.setMinWidth(50);
+    column.setPreferredWidth(100);
+    column.setResizable(true);
 
     column = jTable.getColumnModel().getColumn(3);
-    column.setMaxWidth(50);
+    column.setMaxWidth(100);
     column.setMinWidth(50);
-    column.setPreferredWidth(50);
-    column.setResizable(false);
-
-    column = jTable.getColumnModel().getColumn(4);
-    column.setMaxWidth(50);
-    column.setMinWidth(50);
-    column.setPreferredWidth(50);
-    column.setResizable(false);
+    column.setPreferredWidth(100);
+    column.setResizable(true);
 
   }
 
 
-  private class Model extends AbstractTableModel {
+  private class Model extends AbstractTreeTableModel {
+    public Model() {
+      super(vsechny.getInformaceOZdrojich().getRoot());
+    }
 
-    private static final long serialVersionUID = 1L;
-
-    //    private final KesBag vsechny2;
-    //    /**
-    //     *
-    //     */
-    //    public Model(KesBag vsechny) {
-    //      vsechny2 = vsechny;
-    //    }
-
+    @Override
+    public boolean isCellEditable(Object node, int column) {
+      return column == 1;
+    }
 
     /* (non-Javadoc)
      * @see javax.swing.table.TableModel#getColumnCount()
      */
     @Override
     public int getColumnCount() {
-      return 5;
-    }
-
-    /* (non-Javadoc)
-     * @see javax.swing.table.TableModel#getRowCount()
-     */
-    @Override
-    public int getRowCount() {
-      return vsechny == null ? 0 : vsechny.getInformaceOZdrojich().getSourceCount();
-    }
-
-    /* (non-Javadoc)
-     * @see javax.swing.table.TableModel#getValueAt(int, int)
-     */
-    @Override
-    public Object getValueAt(int row, int col) {
-      if (vsechny == null) return null;
-      InformaceOZdroji ioz = vsechny.getInformaceOZdrojich().get(row);
-      Object r = null;
-      switch (col) {
-      case 0: r = kesoidModel.maSeNacist(ioz.jmenoZDroje); break;
-      case 1: r = ioz.jmenoZDroje; break;
-      case 2: r = ATimestamp.from(ioz.lastModified).toIsoStringLocal(); break;
-      case 3: r = ioz.pocetWaypointuBranych; break;
-      case 4: r = ioz.pocetWaypointuCelkem; break;
-      }
-      return r;
-    }
-
-    /* (non-Javadoc)
-     * @see javax.swing.table.AbstractTableModel#isCellEditable(int, int)
-     */
-    @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
-      return columnIndex == 0;
+      return 4;
     }
 
     /* (non-Javadoc)
@@ -144,15 +97,35 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
      */
     @Override
     public String getColumnName(int col) {
-      String r = "xxx";
+      String r = "";
       switch (col) {
-      case 0: r = "Načíst"; break;
-      case 1: r = "Zdroj"; break;
-      case 2: r = "Čas změny"; break;
-      case 3: r = "Waypointů braných"; break;
-      case 4: r = "Waypointů celkem"; break;
+      case 0: r = "Zdroj"; break;
+      case 1: r = "Načíst"; break;
+      case 2: r = "WP braných"; break;
+      case 3: r = "WP celkem"; break;
       }
       return r;
+    }
+
+    @Override
+    public Object getValueAt(Object o, int i) {
+      if (o == null) {
+        return null;
+      }
+      InformaceOZdroji ioz = (InformaceOZdroji)o;
+
+      switch(i) {
+        case 0:
+          return vsechny.getInformaceOZdrojich().getRoot() == ioz
+                  ? ioz.jmenoZdroje.getAbsolutePath() : ioz.jmenoZdroje.getName();
+        case 1:
+          return kesoidModel.maSeNacist(ioz.jmenoZdroje);
+        case 2:
+          return isLeaf(o) ? ioz.pocetWaypointuBranych : null;
+        case 3:
+          return isLeaf(o) ? ioz.pocetWaypointuCelkem : null;
+      }
+      return null;
     }
 
     /* (non-Javadoc)
@@ -162,8 +135,7 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
     public Class<?> getColumnClass(int col) {
       Class<?> r = String.class;
       switch (col) {
-      case 0: r = Boolean.class; break;
-      case 1: r = String.class; break;
+      case 1: r = Boolean.class; break;
       case 2: r = String.class; break;
       case 3: r = Integer.class; break;
       case 4: r = Integer.class; break;
@@ -171,14 +143,26 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
       return r;
     }
 
-    /* (non-Javadoc)
-     * @see javax.swing.table.AbstractTableModel#setValueAt(java.lang.Object, int, int)
-     */
     @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-      if (columnIndex == 0) {
-        kesoidModel.setNacitatSoubor(vsechny.getInformaceOZdrojich().get(rowIndex).jmenoZDroje, (Boolean) aValue);
-      }
+    public Object getChild(Object parent, int index) {
+      InformaceOZdroji p = (InformaceOZdroji)parent;
+      return p.getChildren().get(index);
+    }
+
+    @Override
+    public int getChildCount(Object parent) {
+      return ((InformaceOZdroji)parent).getChildren().size();
+    }
+
+    @Override
+    public int getIndexOfChild(Object parent, Object child) {
+      return ((InformaceOZdroji)parent).getChildren().indexOf(child);
+    }
+
+    public void setValueAt(Object value, Object node, int col) {
+      InformaceOZdroji ioz = (InformaceOZdroji)node;
+
+      kesoidModel.setNacitatSoubor(ioz.jmenoZdroje, (Boolean) value);
     }
   }
 

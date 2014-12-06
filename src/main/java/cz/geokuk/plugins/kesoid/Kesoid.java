@@ -40,8 +40,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
    */
   public Wpt getFirstWpt() {
     if (next instanceof Wpt) {
-      Wpt wpt = (Wpt) next;
-      return wpt;
+      return (Wpt) next;
     } else {
       return null;
     }
@@ -75,7 +74,6 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
     return null;
   }
 
-
   /**
    * @param aUrl the url to set
    */
@@ -104,8 +102,6 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
       @Override
       public Iterator<Wpt> iterator() {
-
-
         return new Iterator<Wpt>() {
 
           private Weikoid0 curwk = Kesoid.this.next; // na první waypoint

@@ -3,72 +3,74 @@
  */
 package cz.geokuk.plugins.kesoid.importek;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.File;
+import java.util.*;
 
 public class InformaceOZdrojich {
-  private final Map<String, InformaceOZdroji> map = new LinkedHashMap<>();
-  private final List<InformaceOZdroji> list= new ArrayList<>();
+  private InformaceOZdroji root;
 
-  public int getSourceCount() {
-    return map.size();
-  }
+  private final Map<File, InformaceOZdroji> map = new LinkedHashMap<>();
 
-  /**
-   * Vrátíá počet načtených nebo naopak nenačtených potovr.
-   * @param nactenych
-   * @return
-   */
-  public int getSourceCount(boolean nactenych) {
-    int pocet = 0;
-    for (InformaceOZdroji info : list) {
-      if (info.nacteno == nactenych) {
-        pocet ++;
+  public int getSourceCount(boolean loaded) {
+    int loadedCount = 0;
+    int notLoadedCount = 0;
+    for (InformaceOZdroji ioz : map.values()) {
+      if (ioz.getChildren().isEmpty()) {
+        if (ioz.nacteno) {
+          ++loadedCount;
+        } else {
+          ++notLoadedCount;
+        }
       }
     }
-    return pocet;
+    return loaded ? loadedCount : notLoadedCount;
   }
 
-  public int getNenactenychSourceCount() {
-    return map.size();
-  }
-
-
-
-  public InformaceOZdroji add(String aJmenoZdroje, long aLastModified, boolean nacteno) {
+  public InformaceOZdroji add(File aJmenoZdroje, boolean nacteno) {
+    // TODO : perhaps it's not needed to bother with the whole path to root... Maybe canonical path and longest
+    // common prefix will do?
     InformaceOZdroji ioz = map.get(aJmenoZdroje);
     if (ioz == null) {
-      ioz = new InformaceOZdroji();
-      ioz.jmenoZDroje = aJmenoZdroje;
-      ioz.lastModified = aLastModified;
-      ioz.nacteno = nacteno;
+      ioz = new InformaceOZdroji(aJmenoZdroje, nacteno);
       map.put(aJmenoZdroje, ioz);
-      list.add(ioz);
-    }
-    return ioz;
-  }
-
-  public long getYungest() {
-    long x = 0;
-    for (InformaceOZdroji info : map.values()) {
-      if (info.nacteno) {
-        x = Math.max(x, info.lastModified);
+      InformaceOZdroji last = ioz;
+      File parent = aJmenoZdroje.getParentFile();
+      while (parent != null) {
+        InformaceOZdroji parentIoz = map.get(parent);
+        if (parentIoz != null) {
+          parentIoz.addChild(last);
+          last.parent = parentIoz;
+          break;
+        }
+        parentIoz = new InformaceOZdroji(parent, false);
+        parentIoz.addChild(last);
+        last.parent = parentIoz;
+        map.put(parent, parentIoz);
+        last = parentIoz;
+        parent = parent.getParentFile();
+      }
+      if (parent == null) {
+        root = last;
       }
     }
-    return x;
+    return map.get(aJmenoZdroje);
   }
 
-  public InformaceOZdroji get(int index) {
-    return list.get(index);
+  public InformaceOZdroji getRoot() {
+    while (root.getChildren().size() == 1) {
+      root = root.getChildren().get(0);
+    }
+    return root.parent;
+  }
+
+  public InformaceOZdroji get(File key) {
+    return map.get(key);
   }
 
   /**
    * @return
    */
-  public Set<String> getJmenaZdroju() {
+  public Set<File> getJmenaZdroju() {
     return map.keySet();
   }
 }

@@ -1,5 +1,6 @@
 package cz.geokuk.plugins.kesoid.importek;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
@@ -98,8 +99,6 @@ public class KesoidImportBuilder implements IImportBuilder {
         if (old != null) {
             old.iInformaceOZdroji.pocetWaypointuBranych--; // a u té staré potvory musíme snížit brané, protože jsou přepsané
         }
-
-
     }
 
     /* (non-Javadoc)
@@ -786,23 +785,14 @@ public class KesoidImportBuilder implements IImportBuilder {
         return alely;
     }
 
-    /* (non-Javadoc)
-     * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#setCurrentlyLoaded(java.lang.String, long, boolean)
-     */
-    public synchronized void setCurrentlyLoaded(String aJmenoZdroje, long aLastModified, boolean nacteno) {
-        infoOCurrentnimZdroji = informaceOZdrojich.add(aJmenoZdroje, aLastModified, nacteno);
+    public synchronized void setCurrentlyLoaded(File aJmenoZdroje, long aLastModified, boolean nacteno) {
+        infoOCurrentnimZdroji = informaceOZdrojich.add(aJmenoZdroje, nacteno);
     }
 
-    /* (non-Javadoc)
-     * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#setOutputForCache(java.io.ObjectOutputStream)
-     */
     public void setOutputForCache(ObjectOutputStream outputForCache) {
         this.outputForCache = outputForCache;
     }
 
-    /* (non-Javadoc)
-     * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#getOutputForCache()
-     */
     public ObjectOutputStream getOutputForCache() {
         return outputForCache;
     }

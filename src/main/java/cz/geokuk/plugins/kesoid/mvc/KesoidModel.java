@@ -1,10 +1,8 @@
-/**
- * 
- */
 package cz.geokuk.plugins.kesoid.mvc;
 
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,7 +42,7 @@ public class KesoidModel extends Model0 {
   private GccomNick gccomNick;
   private ASada jmenoAktualniSadyIkon;
   private KesoidUmisteniSouboru umisteniSouboru;
-  private Set<String> blokovaneZdroje;
+  private Set<File> blokovaneZdroje;
 
   // injektovanci
   private final MultiNacitacLoaderManager multiNacitacLoaderManager = new MultiNacitacLoaderManager(this);
@@ -82,7 +80,8 @@ public class KesoidModel extends Model0 {
     pref.putFilex(FPref.ANO_GGT_FILE_value, umisteniSouboru.getAnoGgtFile());
     pref.putFilex(FPref.NE_GGT_FILE_value, umisteniSouboru.getNeGgtFile());
     pref.remove("vyjimkyDir"); // mazat ze starych verzi
-    blokovaneZdroje = currPrefe().node(FPref.KESOID_node).getStringSet(FPref.BLOKOVANE_ZDROJE_value, new HashSet<String>());
+    // TODO : reenable deserialization
+    blokovaneZdroje = new HashSet<>();//currPrefe().node(FPref.KESOID_node).getStringSet(FPref.BLOKOVANE_ZDROJE_value, new HashSet<File>());
     fire(new KesoidUmisteniSouboruChangedEvent(umisteniSouboru));
     if (nacistIkony) {
       startIkonLoad(true);
@@ -93,15 +92,6 @@ public class KesoidModel extends Model0 {
     }
   }
 
-
-  /**
-   * 
-   */
-  public KesoidModel() {
-  }
-  /**
-   * @param jmenaNefenotypovanychAlel the jmenaNefenotypovanychAlel to set
-   */
   public void setJmenaNefenotypovanychAlel(Set<String> jmenaNefenotypovanychAlel) {
     if (jmenaNefenotypovanychAlel.equals(this.jmenaNefenotypovanychAlel)) return;
     this.jmenaNefenotypovanychAlel = jmenaNefenotypovanychAlel;
@@ -109,18 +99,12 @@ public class KesoidModel extends Model0 {
     fire(new FenotypPreferencesChangedEvent(jmenaNefenotypovanychAlel));
   }
 
-
-  /**
-   * @return the filter
-   */
   public KesFilter getFilter() {
     return filter;
   }
 
-
   public FilterDefinition getDefinition() {
-    FilterDefinition result = filter.getFilterDefinition().copy();
-    return result;
+    return filter.getFilterDefinition().copy();
   }
 
   public void setDefinition(FilterDefinition filterDefinition) {
@@ -130,7 +114,6 @@ public class KesoidModel extends Model0 {
     currPrefe().node(FPref.KESFILTER_structure_node).putInt("prahVyletu", filterDefinition.getPrahVyletu().ordinal());
     fajruj();
   }
-
 
   private void fajruj() {
     fire(new FilterDefinitionChangedEvent(filter.getFilterDefinition(), filter.getJmenaNechtenychAlel(), jmenaAlelNaToolbaru));
@@ -180,13 +163,13 @@ public class KesoidModel extends Model0 {
   private KesoidUmisteniSouboru loadUmisteniSouboru() {
     KesoidUmisteniSouboru u = new KesoidUmisteniSouboru();
     MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
-    u.setKesDir ( pref.getFilex("kesDir", KesoidUmisteniSouboru.GEOKUK_DATA_DIR));
-    u.setCestyDir( pref.getFilex(FPref.CESTY_DIR_value, KesoidUmisteniSouboru.CESTY_DIR));
-    u.setGeogetDataDir ( pref.getFilex("geogetDataDir", KesoidUmisteniSouboru.GEOGET_DATA_DIR));
-    u.setImage3rdPartyDir ( pref.getFilex("image3rdPartyDir", KesoidUmisteniSouboru.IMAGE_3RDPARTY_DIR));
-    u.setImageMyDir ( pref.getFilex("imageMyDir", KesoidUmisteniSouboru.IMAGE_MY_DIR));
-    u.setAnoGgtFile ( pref.getFilex(FPref.ANO_GGT_FILE_value, KesoidUmisteniSouboru.ANO_GGT));
-    u.setNeGgtFile ( pref.getFilex(FPref.NE_GGT_FILE_value, KesoidUmisteniSouboru.NE_GGT));
+    u.setKesDir(pref.getFilex("kesDir", KesoidUmisteniSouboru.GEOKUK_DATA_DIR));
+    u.setCestyDir(pref.getFilex(FPref.CESTY_DIR_value, KesoidUmisteniSouboru.CESTY_DIR));
+    u.setGeogetDataDir(pref.getFilex("geogetDataDir", KesoidUmisteniSouboru.GEOGET_DATA_DIR));
+    u.setImage3rdPartyDir(pref.getFilex("image3rdPartyDir", KesoidUmisteniSouboru.IMAGE_3RDPARTY_DIR));
+    u.setImageMyDir(pref.getFilex("imageMyDir", KesoidUmisteniSouboru.IMAGE_MY_DIR));
+    u.setAnoGgtFile(pref.getFilex(FPref.ANO_GGT_FILE_value, KesoidUmisteniSouboru.ANO_GGT));
+    u.setNeGgtFile(pref.getFilex(FPref.NE_GGT_FILE_value, KesoidUmisteniSouboru.NE_GGT));
     return u;
   }
 
@@ -236,27 +219,20 @@ public class KesoidModel extends Model0 {
     startIkonLoad(false);
   }
 
-
-  /**
-   * @param informaceOZdrojich
-   */
   private void vycistiBlokovaneZdroje(InformaceOZdrojich informaceOZdrojich) {
     boolean zmena = blokovaneZdroje.retainAll(informaceOZdrojich.getJmenaZdroju());
     if (!zmena) return;
-    currPrefe().node(FPref.KESOID_node).putStringSet(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
+    return;
+    // TODO : reenable serialization
+    // currPrefe().node(FPref.KESOID_node).putStringSet(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
   }
 
-  /**
-   * @param result
-   */
   public void setVsechnyKesoidy(KesBag vsechnyKesoidy) {
     vsechny = vsechnyKesoidy;
     spustFiltrovani();
     fire(new KeskyNactenyEvent(vsechnyKesoidy));
   }
-  /**
-   * @param result
-   */
+
   public void setIkonBag(IkonBag ikonBag) {
     this.ikonBag = ikonBag;
     fire(new IkonyNactenyEvent(ikonBag, getJmenoAktualniSadyIkon()));
@@ -285,9 +261,6 @@ public class KesoidModel extends Model0 {
     return gccomNick;
   }
 
-  /**
-   * @param jmenoAktualniSadyIkon the jmenoAktualniSadyIkon to set
-   */
   public void setJmenoAktualniSadyIkon(ASada jmenoAktualniSadyIkon) {
     if (jmenoAktualniSadyIkon.equals(jmenaAlelNaToolbaru)) return;
     this.jmenoAktualniSadyIkon = jmenoAktualniSadyIkon;
@@ -296,9 +269,6 @@ public class KesoidModel extends Model0 {
     startIkonLoad(true);
   }
 
-  /**
-   * @return the jmenoAktualniSadyIkon
-   */
   public ASada getJmenoAktualniSadyIkon() {
     return jmenoAktualniSadyIkon;
   }
@@ -346,26 +316,23 @@ public class KesoidModel extends Model0 {
     return progressModel;
   }
 
-  /**
-   * @param prekrocenLimit
-   */
   public void setPrekrocenLimitWaypointuVeVyrezu(boolean prekrocenLimit) {
     fire(new PrekrocenLimitWaypointuVeVyrezuEvent(prekrocenLimit));
   }
 
-  /**
-   * @param file
-   * @return
-   */
-  public boolean maSeNacist(String jmenoZdroje) {
-    return ! blokovaneZdroje.contains(jmenoZdroje);
+  public boolean maSeNacist(File jmenoZdroje) {
+    // TODO : speed up
+    while (jmenoZdroje != null) {
+      if (blokovaneZdroje.contains(jmenoZdroje)) {
+        return false;
+      }
+      jmenoZdroje = jmenoZdroje.getParentFile();
+    }
+    return true;
   }
 
-  /**
-   * @param jmenoZDroje
-   * @param aValue
-   */
-  public void setNacitatSoubor(String jmenoZDroje, boolean nacitat) {
+  public void setNacitatSoubor(File jmenoZDroje, boolean nacitat) {
+    // TODO : reenabling root also enables previously disabled ones
     boolean zmena;
     if (nacitat) {
       zmena = blokovaneZdroje.remove(jmenoZDroje);
@@ -373,14 +340,12 @@ public class KesoidModel extends Model0 {
       zmena =  blokovaneZdroje.add(jmenoZDroje);
     }
     if (!zmena) return;
-    currPrefe().node(FPref.KESOID_node).putStringSet(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
+    // TODO : reenable serialization
+    // currPrefe().node(FPref.KESOID_node).putStringSet(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
     startKesLoading();
-    //    System.out.println(jmenoZDroje + " " + aValue);
+    //    System.out.println(jmenoZdroje + " " + aValue);
   }
 
-  /**
-   * @param nastaveno
-   */
   public void setOnoff(boolean onoff) {
     if (this.onoff != null && this.onoff == onoff) return;
     this.onoff = onoff;

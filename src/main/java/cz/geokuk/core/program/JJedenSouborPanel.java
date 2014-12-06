@@ -1,6 +1,5 @@
 package cz.geokuk.core.program;
 
-
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
@@ -50,12 +49,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
   private final ESouborPanelName souborPanelName;
 
   /**
-   * 
    * @param souborPanelName identifikátor panelu. Je jen proto, aby se podle něj mohl panel najít.
-   * @param label
-   * @param jenAdresare
-   * @param editovatelne
-   * @param lzeDeaktivovat
    */
   public JJedenSouborPanel(ESouborPanelName souborPanelName, String label, final boolean jenAdresare, boolean editovatelne, boolean lzeDeaktivovat) {
     this.souborPanelName = souborPanelName;
@@ -68,7 +62,6 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
   }
 
   private void initComponents() {
-
     TitledBorder border = BorderFactory.createTitledBorder(label);
     Font titleFont = border.getTitleFont();
     if (titleFont != null) {
@@ -113,7 +106,6 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
     //    add(panel);
     //    add(Box.createVerticalStrut(20));
     jbut.addActionListener(new ActionListener() {
-
       private JFileChooser fc;
 
       @Override
@@ -131,7 +123,6 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
         }
       }
     });
-
 
     prepocitej();
     jtext.getDocument().addDocumentListener(this);

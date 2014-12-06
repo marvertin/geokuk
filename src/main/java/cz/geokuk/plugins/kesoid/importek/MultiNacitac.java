@@ -77,7 +77,7 @@ public class MultiNacitac {
      * @throws FileNotFoundException
      */
     private void zpracujJedenFile(File file, KesoidImportBuilder builder, Future<?> future) throws IOException {
-        // Clean this up, more distinguishing
+        // TODO : Clean this up, more distinguishing
         if (isZipFile(file)) {
             try (ZipFile zipFile = new ZipFile(file)) {
                 for (Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements(); ) {
@@ -89,8 +89,8 @@ public class MultiNacitac {
                                             zipFile.getInputStream(entry))
                             )) {
                                 String jmenoZdroje = file.getName() + "!" + entry.getName();
-                                boolean nacitat = kesoidModel.maSeNacist(jmenoZdroje);
-                                builder.setCurrentlyLoaded(jmenoZdroje, file.lastModified(), nacitat);
+                                boolean nacitat = kesoidModel.maSeNacist(file);
+                                builder.setCurrentlyLoaded(file, file.lastModified(), nacitat);
                                 if (nacitat) {
                                     nacitac.nactiKdyzUmisBezVyjimky(istm, jmenoZdroje, builder, future);
                                 }
@@ -106,8 +106,8 @@ public class MultiNacitac {
                                 new FileInputStream(file))
                 )) {
                     String jmenoZdroje = file.getName();
-                    boolean nacitat = kesoidModel.maSeNacist(jmenoZdroje);
-                    builder.setCurrentlyLoaded(jmenoZdroje, file.lastModified(), nacitat);
+                    boolean nacitat = kesoidModel.maSeNacist(file);
+                    builder.setCurrentlyLoaded(file, file.lastModified(), nacitat);
                     if (nacitat) {
                         nacitac.nactiKdyzUmisBezVyjimky(istm, jmenoZdroje, builder, future);
                     }

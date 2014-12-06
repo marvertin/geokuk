@@ -40,8 +40,6 @@ public class KesBag {
 
   private InformaceOZdrojich iInformaceOZdrojich;
 
-  private boolean locked;
-
   public KesBag(final Genom genom) {
     this.genom = genom;
     indexator =new Indexator<>(BoundingRect.ALL);
@@ -50,8 +48,6 @@ public class KesBag {
   }
 
   public void add(Wpt wpt, Genotyp genotyp) {
-    if (locked)
-      throw new RuntimeException("Nelze uz vkladat waypointy");
     if (genotyp == null) { // to je zde jen z důvodu optimalizace
       genotyp = wpt.getGenotyp(genom);
     }
@@ -85,7 +81,6 @@ public class KesBag {
     poctyAlel = citacAlel.getCounterMap();
     //System.out.println(poctyAlel);
   }
-
 
   /**
    * @return the genom

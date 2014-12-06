@@ -1,14 +1,18 @@
 package cz.geokuk.util.file;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.FileFilter;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author veverka
  */
 public  class DirScaner {
+
+  // case insensitive, TODO : other image formats than JPG
+  private static final Pattern FILE_NAME_REGEX = Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg)");
+
   // TODO : Use file watchers
   private File dir;
   private List<FileAndTime> lastScaned = null;
@@ -42,20 +46,24 @@ public  class DirScaner {
   }
 
   private List<FileAndTime> scanDir(File dir) {
-    // TODO : other image formats than JPG
     List<FileAndTime> list = new ArrayList<>();
     if (! dir.isDirectory()) return list;
-    String[] fords = dir.list();
-    for (String ford : fords) {
-      ford = ford.trim();
-      if (ford.toLowerCase().trim().matches(".*\\.(geokuk|gpx|zip|jpg)")) {
-        File file = new File(dir, ford);
-        if (! file.isDirectory()) {
-          FileAndTime fileAndTime = new FileAndTime(file, file.lastModified());
-          list.add(fileAndTime);
-        }
+    Deque<File> deque = new ArrayDeque<>();
+    deque.add(dir);
+    while (!deque.isEmpty()) {
+      File f = deque.pop();
+      if (f.isDirectory()) {
+        deque.addAll(Arrays.asList(f.listFiles(new FileFilter() {
+          @Override
+          public boolean accept(File pathname) {
+            return pathname.isDirectory() || FILE_NAME_REGEX.matcher(pathname.getName()).matches();
+          }
+        })));
+      } else {
+        list.add(new FileAndTime(f));
       }
     }
+
     Collections.sort(list); // podle času
     return list;
   }
@@ -65,12 +73,11 @@ public  class DirScaner {
     private final File file;
     private final long lastmodify;
 
-    /**
-     * @param aFile
-     * @param aLastmodify
-     */
+    public FileAndTime(File aFile) {
+      this(aFile, aFile.lastModified());
+    }
+
     public FileAndTime(File aFile, long aLastmodify) {
-      super();
       file = aFile;
       lastmodify = aLastmodify;
     }
