@@ -67,9 +67,21 @@ public class InformaceOZdrojich {
     return map.get(key);
   }
 
-  /**
-   * @return
-   */
+  public Collection<InformaceOZdroji> getSubtree(File subTreeRoot) {
+    List<InformaceOZdroji> toReturn = new ArrayList<>();
+    return getSubtree(get(subTreeRoot), toReturn);
+  }
+
+  private Collection<InformaceOZdroji> getSubtree(InformaceOZdroji subTreeRoot,
+                                                          Collection<InformaceOZdroji> buffer) {
+    List<InformaceOZdroji> children = subTreeRoot.getChildren();
+    buffer.add(subTreeRoot);
+    for (InformaceOZdroji child : children) {
+      getSubtree(child, buffer);
+    }
+    return buffer;
+  }
+
   public Set<File> getJmenaZdroju() {
     return map.keySet();
   }

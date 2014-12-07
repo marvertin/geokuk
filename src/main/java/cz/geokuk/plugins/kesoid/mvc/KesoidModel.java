@@ -3,9 +3,12 @@ package cz.geokuk.plugins.kesoid.mvc;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.framework.MyPreferences;
@@ -16,6 +19,7 @@ import cz.geokuk.plugins.kesoid.KesFilter;
 import cz.geokuk.plugins.kesoid.KesFilteringSwingWorker;
 import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
+import cz.geokuk.plugins.kesoid.importek.InformaceOZdroji;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
 import cz.geokuk.plugins.kesoid.importek.MultiNacitacLoaderManager;
 import cz.geokuk.plugins.kesoid.mapicon.ASada;
@@ -80,8 +84,8 @@ public class KesoidModel extends Model0 {
     pref.putFilex(FPref.ANO_GGT_FILE_value, umisteniSouboru.getAnoGgtFile());
     pref.putFilex(FPref.NE_GGT_FILE_value, umisteniSouboru.getNeGgtFile());
     pref.remove("vyjimkyDir"); // mazat ze starych verzi
-    // TODO : reenable deserialization
-    blokovaneZdroje = new HashSet<>();//currPrefe().node(FPref.KESOID_node).getStringSet(FPref.BLOKOVANE_ZDROJE_value, new HashSet<File>());
+    blokovaneZdroje = new HashSet<>(currPrefe().node(FPref.KESOID_node).getFileCollection(FPref.BLOKOVANE_ZDROJE_value,
+            new HashSet<File>()));
     fire(new KesoidUmisteniSouboruChangedEvent(umisteniSouboru));
     if (nacistIkony) {
       startIkonLoad(true);
@@ -222,9 +226,7 @@ public class KesoidModel extends Model0 {
   private void vycistiBlokovaneZdroje(InformaceOZdrojich informaceOZdrojich) {
     boolean zmena = blokovaneZdroje.retainAll(informaceOZdrojich.getJmenaZdroju());
     if (!zmena) return;
-    return;
-    // TODO : reenable serialization
-    // currPrefe().node(FPref.KESOID_node).putStringSet(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
+    currPrefe().node(FPref.KESOID_node).putFileCollection(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
   }
 
   public void setVsechnyKesoidy(KesBag vsechnyKesoidy) {
@@ -321,29 +323,29 @@ public class KesoidModel extends Model0 {
   }
 
   public boolean maSeNacist(File jmenoZdroje) {
-    // TODO : speed up
-    while (jmenoZdroje != null) {
-      if (blokovaneZdroje.contains(jmenoZdroje)) {
-        return false;
-      }
-      jmenoZdroje = jmenoZdroje.getParentFile();
-    }
-    return true;
+    return !blokovaneZdroje.contains(jmenoZdroje);
   }
 
   public void setNacitatSoubor(File jmenoZDroje, boolean nacitat) {
-    // TODO : reenabling root also enables previously disabled ones
+    // TODO : speed up
     boolean zmena;
+    Collection<File> changedFiles = Collections2.transform(
+            vsechny.getInformaceOZdrojich().getSubtree(jmenoZDroje),
+            new Function<InformaceOZdroji, File>() {
+              @Override
+              public File apply(InformaceOZdroji informaceOZdroji) {
+                return informaceOZdroji.jmenoZdroje;
+              }
+            }
+    );
     if (nacitat) {
-      zmena = blokovaneZdroje.remove(jmenoZDroje);
+      zmena = blokovaneZdroje.removeAll(changedFiles);
     } else {
-      zmena =  blokovaneZdroje.add(jmenoZDroje);
+      zmena =  blokovaneZdroje.addAll(changedFiles);
     }
     if (!zmena) return;
-    // TODO : reenable serialization
-    // currPrefe().node(FPref.KESOID_node).putStringSet(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
+    currPrefe().node(FPref.KESOID_node).putFileCollection(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
     startKesLoading();
-    //    System.out.println(jmenoZdroje + " " + aValue);
   }
 
   public void setOnoff(boolean onoff) {

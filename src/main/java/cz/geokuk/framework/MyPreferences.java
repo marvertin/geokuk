@@ -19,12 +19,15 @@ import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
 import com.google.common.base.Function;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Collections2;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.Filex;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author veverka
@@ -32,11 +35,15 @@ import cz.geokuk.util.file.Filex;
  */
 public class MyPreferences extends Preferences {
 
+  private static final Logger log = LogManager.getLogger(MyPreferences.class.getSimpleName());
+
   private static final Map<Class<?>, Duo> sMetody = new HashMap<>();
 
   private static final String NULL = "<{<[NULL]>}>";
   private static final char LIST_DELIMITER_CHAR = ';';
   private static final char ESCAPE_CHAR = '\\';
+  private static final String PART_PATTERN = ";cont";
+  private static final String NUMBERED_PART_PATTERN = PART_PATTERN + "%d";
   private final Preferences pref;
 
 
@@ -149,7 +156,7 @@ public class MyPreferences extends Preferences {
     put(key, pack(fileCollection));
   }
 
-  public Collection<File> getEnumFileCollection(String key, Collection<File> def) {
+  public Collection<File> getFileCollection(String key, Collection<File> def) {
     String s = get(key, null);
     if (s == null) {
       return def;
@@ -293,6 +300,7 @@ public class MyPreferences extends Preferences {
     if (o == null) {
       return null;
     }
+
     if (o instanceof String) {
       return pack((String) o);
     }
@@ -316,6 +324,9 @@ public class MyPreferences extends Preferences {
     }
     if (o instanceof Mou) {
       return pack((Mou)o);
+    }
+    if (o instanceof File) {
+      return pack((File)o);
     }
     throw new IllegalArgumentException("Unknown object to pack : " + o.getClass() + " " + o);
   }
@@ -360,6 +371,14 @@ public class MyPreferences extends Preferences {
 
   private String pack(String s) {
     return s;
+  }
+
+  private String pack(File f) {
+    try {
+      return f.getCanonicalPath();
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Unable to retrieve canonical path from " + f, e);
+    }
   }
 
   private List<String> unpack(String packedString) {
@@ -440,7 +459,19 @@ public class MyPreferences extends Preferences {
 
   @Override
   public String get(String key, String defvalue) {
-    String s = pref.get(key, defvalue);
+    StringBuilder sb = new StringBuilder();
+    String s = pref.get(key, null);
+    if (s == null) {
+      return defvalue;
+    }
+    String contKey;
+    int part = 0;
+    while (s != null) {
+      sb.append(s);
+      contKey = key + String.format(NUMBERED_PART_PATTERN, part++);
+      s = pref.get(contKey, null);
+    }
+    s = sb.toString();
     if (NULL.equals(s)) return null;
     return s;
   }
@@ -517,10 +548,25 @@ public class MyPreferences extends Preferences {
 
   @Override
   public void put(String key, String value) {
+    if (key.matches(PART_PATTERN + "[0-9]+")) {
+      throw new IllegalArgumentException("Unable to insert a key with name " + key + "! This" +
+              "key name is reserved for multi-part values");
+    }
     if (value == null) {
       put(key, NULL);
     } else {
-      pref.put(key, value);
+      if (value.length() <= Preferences.MAX_VALUE_LENGTH) {
+        pref.put(key, value);
+      } else {
+        String first = value.substring(0, Preferences.MAX_VALUE_LENGTH);
+        Iterable<String> rest = Splitter.fixedLength(Preferences.MAX_VALUE_LENGTH).split(
+                value.substring(Preferences.MAX_VALUE_LENGTH));
+        pref.put(key, first);
+        int i = 0;
+        for (String s : rest) {
+          pref.put(key + String.format(NUMBERED_PART_PATTERN, i++), s);
+        }
+      }
     }
   }
 
