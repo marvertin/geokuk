@@ -21,7 +21,7 @@
 
 	<resources>
 		<j2se version="1.7+" max-heap-size="512m" />
-		<jar href="geokuk_3.5.0.jar" />
+		<jar href="geokuk_3.5.1.jar" />
 	</resources>
 	<application-desc>
 	</application-desc>
