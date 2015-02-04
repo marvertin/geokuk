@@ -1,0 +1,27 @@
+# Používat Unixové oddìlovaèe, i když to dìláme na Wondows, je to lepší
+* text=auto eol=lf
+ 
+# Zdrojáky
+*.java text
+*.pas text
+*.cmd text
+*.html text
+*.css text
+*.jnlp text
+*.launch text
+*.properties text
+*.xml text
+*.MF text
+
+# Obrázky
+*.gif -text
+*.jpg -text
+*.png -text
+*.ico -text
+
+# Zipy
+*.jar -text
+*.zip -text
+
+# A další
+*.kestore -text
