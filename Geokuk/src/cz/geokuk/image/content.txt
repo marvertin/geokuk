@@ -16,9 +16,9 @@ map/Standard/skloNormal/5typy/_gs_p4.png
 map/Standard/skloNormal/5typy/_h_cpt_p6.png
 map/Standard/skloNormal/5typy/_h_dpl_p6.png
 map/Standard/skloNormal/5typy/_h_fnd_p6.png
-map/Standard/skloNormal/5typy/_h_own_p6.png
 map/Standard/skloNormal/5typy/_h_gsown_p6.png
 map/Standard/skloNormal/5typy/_h_gssec_p6.png
+map/Standard/skloNormal/5typy/_h_own_p6.png
 map/Standard/skloNormal/5typy/_mz_p4.png
 map/Standard/skloNormal/5typy/_p3.png
 map/Standard/skloNormal/5typy/_wm_p4.png
@@ -67,6 +67,10 @@ map/Standard/skloNormal/5typy/mz!Captured.png
 map/Standard/skloNormal/5typy/mz!Diamond.png
 map/Standard/skloNormal/5typy/mz!Eyeball.png
 map/Standard/skloNormal/5typy/mz!Longsword.png
+map/Standard/skloNormal/5typy/mz!MZ Cache In Trash Out Event.png
+map/Standard/skloNormal/5typy/mz!MZ Captured.png
+map/Standard/skloNormal/5typy/mz!MZ Mega-Event Cache.png
+map/Standard/skloNormal/5typy/mz!MZ Webcam Cache.png
 map/Standard/skloNormal/5typy/mz!Mace.png
 map/Standard/skloNormal/5typy/mz!Maintenance.png
 map/Standard/skloNormal/5typy/mz!Motel.png
@@ -82,10 +86,6 @@ map/Standard/skloNormal/5typy/mz!Premium.png
 map/Standard/skloNormal/5typy/mz!Quiz.png
 map/Standard/skloNormal/5typy/mz!Tradi.png
 map/Standard/skloNormal/5typy/mz!Virtual.png
-map/Standard/skloNormal/5typy/mz!MZ Cache In Trash Out Event.png
-map/Standard/skloNormal/5typy/mz!MZ Captured.png
-map/Standard/skloNormal/5typy/mz!MZ Mega-Event Cache.png
-map/Standard/skloNormal/5typy/mz!MZ Webcam Cache.png
 map/Standard/skloNormal/5typy/wm!'Marry Me' Markers.gif
 map/Standard/skloNormal/5typy/wm!'You Are Here' Maps.gif
 map/Standard/skloNormal/5typy/wm!'Z' Welcome Signs.gif
