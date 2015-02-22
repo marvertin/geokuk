@@ -3,7 +3,11 @@ package cz.geokuk.plugins.kesoid.mapicon;
 import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * Alela is a value of a property (i.e. a value of {@link Gen}.
+ *
+ * <p>For example, Gen {@code size of cache} has alelas {@code micro}, {@code small}, {@code regular}...
+ */
 public class Alela {
 
   private final String alelaName;
@@ -64,7 +68,6 @@ public class Alela {
     return gen.getVychoziAlela() == this;
   }
 
-
   public String name() {
     return alelaName;
   }
@@ -80,7 +83,6 @@ public class Alela {
 	public int getCelkovePoradi() {
   	return celkovePoradi;
   }
-	
 	
 	public Genom getGenom() {
 		return getGen().getGenom();

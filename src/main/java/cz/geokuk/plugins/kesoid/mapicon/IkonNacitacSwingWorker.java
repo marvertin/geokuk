@@ -1,6 +1,3 @@
-/**
- * 
- */
 package cz.geokuk.plugins.kesoid.mapicon;
 
 
@@ -14,7 +11,6 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
  *
  */
 public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
-
 
   private final IkonNacitacLoader ikonNacitac;
   private final boolean iPrenacti;

@@ -31,9 +31,6 @@ public class Genom {
     // TODO : refactor this so the alelas are loaded from an external file (-> possibility of user addition of new alelas
     // easily).
 
-
-    //////////
-
     public Alela ALELA_Waypoint = coale("Waypoint", "Obecný waypoint");
 
     public Alela ALELA_h = coale("h", "Hlavní waypoint");
@@ -135,8 +132,11 @@ public class Genom {
 
     public Alela seekAlela(String alelaName) {
         Alela alela = alely.get(alelaName);
-        if (alela == null)
-            throw new RuntimeException("Alela \"" + alelaName + "\" neni definovana.");
+        if (alela == null) {
+            log.warn("Alela [{}] neni definovana!", alelaName);
+            alela = makeAlela(alelaName);
+        }
+
         return alela;
     }
 

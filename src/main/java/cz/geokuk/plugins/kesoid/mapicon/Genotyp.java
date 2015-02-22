@@ -1,18 +1,10 @@
-/**
- * 
- */
 package cz.geokuk.plugins.kesoid.mapicon;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author veverka
- *
- */
 public class Genotyp {
-
   
   private final Set<Alela> alely = new HashSet<>();
 	private final Genom genom;
@@ -28,7 +20,6 @@ public class Genotyp {
   public void put(Alela alela) {
   	if (alela == null) return;
   	alely.removeAll(alela.getGen().getAlely());
-  	assert alela != null;
   	alely.add(alela);
   }
   

@@ -7,6 +7,11 @@ import java.util.Set;
 
 import cz.geokuk.util.lang.FString;
 
+/**
+ * Determines a property of a {@link cz.geokuk.plugins.kesoid.Kesoid}.
+ *
+ * <p>For example, gen can be {@code size of the cache} or {@code type of the waypoint}.
+ */
 public class Gen {
 
   private final String displayName;
@@ -103,8 +108,4 @@ public class Gen {
   public boolean isVypsatelnyVeZhasinaci() {
     return vypsatelnyVeZhasinaci;
   }
-
-	
-	
-
 }

@@ -30,20 +30,6 @@ public interface KachleManager {
     public Image load(Ka0 ki);
 
     /**
-     * Saves a tile to the storage.
-     * @param ki
-     *     The identifier of the tile.
-     * @param dss
-     *     The image dump that's to be saved.
-     * @return
-     *     True if the save was successful, false otherwise.
-     * @deprecated
-     *     Use the batch version {@link #save(java.util.Collection)}
-     */
-    @Deprecated
-    public boolean save(Ka0 ki, ImageSaver dss);
-
-    /**
      * Save many tiles to the storage. Should be atomic ("all or nothing")
      * @param itemsToSave
      *     Collection of items (identifier of the tile -> image dump)

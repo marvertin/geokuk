@@ -1,6 +1,3 @@
-/**
- * 
- */
 package cz.geokuk.plugins.kesoid.importek;
 
 import java.io.File;
@@ -57,6 +54,10 @@ public class InformaceOZdrojich {
   }
 
   public InformaceOZdroji getRoot() {
+    if (root == null) {
+      return null;
+    }
+
     while (root.getChildren().size() == 1) {
       root = root.getChildren().get(0);
     }

@@ -19,9 +19,6 @@ import java.util.List;
  * @author veverka
  */
 public class MultiFolder {
-    /**
-     *
-     */
     private static final String REMOVE_SUFFIX = ".remove";
     private static final String CONTENT_TXT = "content.txt";
 

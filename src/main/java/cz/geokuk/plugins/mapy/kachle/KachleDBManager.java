@@ -15,7 +15,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
 import java.util.AbstractMap;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -107,7 +106,7 @@ public class KachleDBManager implements KachleManager {
     }
 
     /**
-     * Checks whether the DB at the current location is initialized and rady for use.
+     * Checks whether the DB at the current location is initialized and ready for use.
      * @param connection
      *      A connection to the database.
      * @return
@@ -159,8 +158,6 @@ public class KachleDBManager implements KachleManager {
         folderHolder = holder;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -210,16 +207,6 @@ public class KachleDBManager implements KachleManager {
             }
         }
         return img;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @deprecated
-     */
-    @Deprecated
-    @Override
-    public boolean save(Ka0 ki, ImageSaver dss) {
-        return save(Arrays.asList(new DiskSaveRequest(ki, null, dss)));
     }
 
     /**
