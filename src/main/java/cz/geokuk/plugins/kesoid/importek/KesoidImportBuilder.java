@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -553,60 +554,49 @@ public class KesoidImportBuilder implements IImportBuilder {
         return "Unknown Cgp";
     }
 
-    /**
-     * @param cgp
-     * @param wpt
-     * @param aGpxwpt
-     * @return
-     */
     private void urciNazevCgpZPseudoKese(CzechGeodeticPoint cgp, Wpt wpt, GpxWpt gpxwpt) {
-        String nazev = "Unknown Cgp";
+        String name = firstNonNull(gpxwpt.groundspeak.name, "Unknown CGP");
+
         EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
-        if (pseudoKesType == EKesType.TRADITIONAL) {
-            nazev = gpxwpt.groundspeak.encodedHints;
-        }
-        if (pseudoKesType == EKesType.LETTERBOX_HYBRID) {
-            nazev = gpxwpt.groundspeak.encodedHints;
-        }
-        if (pseudoKesType == EKesType.MULTI) {
-            nazev = gpxwpt.groundspeak.encodedHints;
-        }
-        if (pseudoKesType == EKesType.UNKNOWN) {
-            nazev = gpxwpt.groundspeak.encodedHints;
-        }
-        if (pseudoKesType == EKesType.EARTHCACHE) {
-            nazev = gpxwpt.groundspeak.shortDescription;
-        }
-        if (pseudoKesType == EKesType.WHERIGO) {
-            nazev = gpxwpt.groundspeak.shortDescription;
+
+        String nameCandidate = null;
+
+        switch (pseudoKesType) {
+            case TRADITIONAL:
+            case LETTERBOX_HYBRID:
+            case MULTI:
+            case UNKNOWN:
+            case CACHE_IN_TRASH_OUT_EVENT:
+            case EVENT:
+            case MEGA_EVENT:
+                name = firstNonNull(gpxwpt.groundspeak.encodedHints, name);
+                break;
+            case EARTHCACHE:
+            case WHERIGO:
+                name = firstNonNull(gpxwpt.groundspeak.shortDescription, name);
+                break;
+            default:
+                // Just fall through.
         }
 
-        if (pseudoKesType == EKesType.CACHE_IN_TRASH_OUT_EVENT) {
-            nazev = gpxwpt.groundspeak.encodedHints;
-        }
-        if (pseudoKesType == EKesType.EVENT) {
-            nazev = gpxwpt.groundspeak.encodedHints;
-        }
-        if (pseudoKesType == EKesType.MEGA_EVENT) {
-            nazev = gpxwpt.groundspeak.encodedHints;
-        }
+        name = firstNonNull(nameCandidate, name);
 
-        int poz = nazev.indexOf("http://");
+        int poz = name.indexOf("http://");
         if (poz >= 0) {
-            nazev = nazev.substring(0, poz);
+            name = name.substring(0, poz);
         }
-        JtskSouradnice jtsk = extrahujJtsk(nazev);
+        JtskSouradnice jtsk = extrahujJtsk(name);
         if (jtsk != null) {
-            nazev = jtsk.pred + jtsk.po;
+            name = jtsk.pred + jtsk.po;
             cgp.setXjtsk(jtsk.x);
             cgp.setYjtsk(jtsk.y);
             wpt.setElevation((int) jtsk.z);
         }
-        nazev = nazev.trim();
-        if (nazev.length() == 0) {
-            nazev = "Geodetický bod";
+        name = name.trim();
+        if (name.length() == 0) {
+            name = "Geodetický bod";
         }
-        wpt.setNazev(nazev);
+        wpt.setNazev(name);
     }
 
     private JtskSouradnice extrahujJtsk(String celyretez) {
@@ -627,6 +617,15 @@ public class KesoidImportBuilder implements IImportBuilder {
         }
     }
 
+    private <T> T firstNonNull(T... objects) {
+        for (T object : objects) {
+            if (object != null) {
+                return object;
+            }
+        }
+
+        throw new NoSuchElementException("No non-null object found among " + objects);
+    }
 
     private Kesoid createKes(GpxWpt gpxwpt) {
         Kes kes = new Kes();
