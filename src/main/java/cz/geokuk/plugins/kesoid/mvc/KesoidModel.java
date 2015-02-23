@@ -195,12 +195,14 @@ public class KesoidModel extends Model0 {
       zmena = jmena.add(alelaName);
     }
     if (! zmena) return; // není změna
-    setJmenaNechtenychlel(jmena);
+    setJmenaNechtenychAlel(jmena);
   }
 
 
-  public void setJmenaNechtenychlel(Set<String> jmenaNechtenychAlel) {
-    if (jmenaNechtenychAlel.equals(filter.getJmenaNechtenychAlel())) return;
+  public void setJmenaNechtenychAlel(Set<String> jmenaNechtenychAlel) {
+    if (jmenaNechtenychAlel.equals(filter.getJmenaNechtenychAlel())) {
+      return;
+    }
     filter.setJmenaNechtenychAlel(jmenaNechtenychAlel);
     currPrefe().node(FPref.KESOID_FILTR_node).putStringSet(FPref.KESOID_FILTER_ALELY_value, jmenaNechtenychAlel);
     fajruj();

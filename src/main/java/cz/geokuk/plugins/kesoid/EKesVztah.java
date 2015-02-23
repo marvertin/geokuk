@@ -5,5 +5,4 @@ public enum EKesVztah {
   FOUND,
   OWN,
   NOT,
-  
 }

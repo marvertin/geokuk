@@ -35,7 +35,7 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
   @Override
   protected void zmenaVyberu(Set<Alela> aAlely) {
     System.out.println("Vyber alel, které se Filtrují pryč: " + aAlely);
-    kesoidModel.setJmenaNechtenychlel(Alela.alelyToNames(aAlely));
+    kesoidModel.setJmenaNechtenychAlel(Alela.alelyToNames(aAlely));
   }
 
 

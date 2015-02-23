@@ -26,16 +26,12 @@ import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.Filex;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * @author veverka
  *
  */
 public class MyPreferences extends Preferences {
-
-  private static final Logger log = LogManager.getLogger(MyPreferences.class.getSimpleName());
 
   private static final Map<Class<?>, Duo> sMetody = new HashMap<>();
 
@@ -232,7 +228,12 @@ public class MyPreferences extends Preferences {
   }
 
   public Set<String> getStringSet(String key, Set<String> defval) {
-    return new HashSet<>(getStringList(key, new ArrayList<>(defval)));
+    List<String> stringList = getStringList(key, null);
+    if (stringList == null) {
+      return defval;
+    } else {
+      return new HashSet<>(stringList);
+    }
   }
 
   public <E extends Atom> E getAtom(String key, E def, Class<E> cls) {
@@ -337,14 +338,8 @@ public class MyPreferences extends Preferences {
 
   private String pack(Collection<?> val) {
     StringBuilder sb = new StringBuilder();
-    boolean first = true;
     for (Object singleVal : val) {
-      listEscapeToSb(pack(singleVal), sb);
-      if (first) {
-        first = false;
-      } else {
-        sb.append(LIST_DELIMITER_CHAR);
-      }
+      listEscapeToSb(pack(singleVal), sb).append(LIST_DELIMITER_CHAR);
     }
     return sb.toString();
   }
@@ -409,7 +404,7 @@ public class MyPreferences extends Preferences {
     return new ArrayList<>(Collections2.transform(unpack(packedString), parseFunc));
   }
 
-  private MyPreferences(Preferences aPreferences) {
+  MyPreferences(Preferences aPreferences) {
     pref = aPreferences;
   }
 
