@@ -1,6 +1,3 @@
-/**
- * 
- */
 package cz.geokuk.plugins.kesoid;
 
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
@@ -8,15 +5,9 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 
 class GenotypBuilderMunzee {
 
-  /**
-   * 
-   */
 	private final Genotyp g;
   private final Genom genom;
 
-  /**
-   * 
-   */
   public GenotypBuilderMunzee(Genom genom, Genotyp g) {
 		this.genom = genom;
     this.g = g;
@@ -32,8 +23,4 @@ class GenotypBuilderMunzee {
     case NOT:    g.put(genom.ALELA_not); break;
     }
   }
-
-
-
-
 }

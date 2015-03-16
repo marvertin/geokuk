@@ -123,10 +123,7 @@ public class Filex {
           String thisToken = tok.nextToken();
           if (!".".equals(thisToken)) {
               if ("..".equals(thisToken)) {
-                  if (s.size() < 2) {
-                      // nevadí, prostě jdeme dále
-    //                  throw new IllegalArgumentException("Cannot resolve path " + orig + ", because thera are .. which goes before start of path");
-                  } else {
+                  if (s.size() >= 2) {
                       s.pop();
                   }
               } else { // plain component

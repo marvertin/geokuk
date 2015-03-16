@@ -19,10 +19,6 @@ class DiskSaveRequest {
   private Image img;   
 	
 	private ImageSaver ukladac;  // ví jak zapsat do streamu data
-	
-	public DiskSaveRequest(Ka0 klic, Image img, byte[] data) {
-	  this(klic, img, new DiskSaveByteArray(data));
-  }
 
 	public DiskSaveRequest(Ka0 klic, Image img, ImageSaver dss) {
 	  super();

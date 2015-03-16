@@ -30,13 +30,6 @@ public class Doc implements Iterable<Cesta> {
     return false;
   }
 
-  //  public boolean hasBod(Mou mou) {
-  //    for (Cesta cesta : cesty) {
-  //      if (cesta.hasBod(mou)) return true;
-  //    }
-  //    return false;
-  //  }
-
   public int getPocetWaypointu() {
     int suma = 0;
     for (Cesta cesta : cesty) {

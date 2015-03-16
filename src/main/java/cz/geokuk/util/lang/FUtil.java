@@ -7,15 +7,7 @@ import java.util.Collection;
 
 public final class FUtil {
 
-  private static long cas = System.currentTimeMillis();
-
   private FUtil() {}
-
-  public static void prof(String kde) {
-    long newCas = System.currentTimeMillis();
-    System.out.printf("PROFILUJI: %s: %d ms%n", kde, newCas - cas);
-    cas = newCas;
-  }
 
   public static String cestinuPryc(String s) {
     int i;

@@ -66,14 +66,8 @@ public class Ukladac {
     p("    <trkpt lat=\"%f\" lon=\"%f\" />", wgs.lat, wgs.lon);
   }
 
-
-
   private void p(String format, Object ... p) {
     pwrt.printf(Locale.US, format, p);
     pwrt.println();
   }
-
-
-
-
 }

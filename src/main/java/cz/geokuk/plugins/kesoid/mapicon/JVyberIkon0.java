@@ -102,10 +102,10 @@ public abstract class JVyberIkon0 extends Box {
               if (iRadioButton) bg.add(rb);
               boxgen.add(radiosikonou);
               if (jmenaVybranychAlel.contains(alela.name())) {
-                rb.setSelected(true ^ iOdskrtnutiVybira);
+                rb.setSelected(!iOdskrtnutiVybira);
                 vybraneAlely.add(alela);
               } else {
-                rb.setSelected(false ^ iOdskrtnutiVybira);
+                rb.setSelected(iOdskrtnutiVybira);
               }
               // nastavit listener
               rb.getModel().addItemListener(new ItemListener() {

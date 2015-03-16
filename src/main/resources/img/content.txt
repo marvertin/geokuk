@@ -75,6 +75,7 @@ map/Standard/skloNormal/5typy/mz!MZ Cache In Trash Out Event.png
 map/Standard/skloNormal/5typy/mz!MZ Captured.png
 map/Standard/skloNormal/5typy/mz!MZ Mega-Event Cache.png
 map/Standard/skloNormal/5typy/mz!MZ Webcam Cache.png
+map/Standard/skloNormal/5typy/pic!Photo.gif
 map/Standard/skloNormal/5typy/wm!'Marry Me' Markers.gif
 map/Standard/skloNormal/5typy/wm!'You Are Here' Maps.gif
 map/Standard/skloNormal/5typy/wm!'Z' Welcome Signs.gif

@@ -1,7 +1,6 @@
 package cz.geokuk.plugins.mapy.kachle;
 
 
-
 import java.awt.Image;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
@@ -16,9 +15,9 @@ import cz.geokuk.util.pocitadla.PocitadloMalo;
 import cz.geokuk.util.pocitadla.PocitadloRoste;
 
 
-
 /**
  * To je keš na kachlice
+ *
  * @author tatinek
  */
 class CacheNaKachleMemory {
@@ -86,10 +85,10 @@ class CacheNaKachleMemory {
     Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        for (;;) {
+        for (; ; ) {
           try {
             Reference<? extends Image> ref = referenceQueue.remove();
-            Item item = (Item)ref;
+            Item item = (Item) ref;
             synchronized (CacheNaKachleMemory.this) {
               Image image = memoryCachedImage(item.klic);
               if (image == null) {
@@ -113,5 +112,4 @@ class CacheNaKachleMemory {
   public synchronized void clearMemoryCache() {
     cache.clear();
   }
-
 }

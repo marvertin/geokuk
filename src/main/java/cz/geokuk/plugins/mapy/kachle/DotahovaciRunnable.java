@@ -44,17 +44,13 @@ public class DotahovaciRunnable implements Runnable {
   public DotahovaciRunnable(BlockingQueue<KaOneReq> queue, String server) {
     this.queue = queue;
     this.server = server;
-    loguj(-1000);
   }
 
   @Override
   public void run() {
-    loguj(-99);
 
     try {
-      loguj(-1);
       for(;;) {
-        loguj(0);
         zapocitejFronty();
         KaOneReq kaOne = queue.take();
         zapocitejFronty();
@@ -103,9 +99,6 @@ public class DotahovaciRunnable implements Runnable {
       pocitVelikostDownloadoveFronty.set(queue.size());
     }
     pocitPocetParalenichy.set(kachleModel.synchronizator.pocetZiskavancu());
-  }
-
-  private void loguj(int i) {
   }
 
   public void inject(KachleModel kachleModel) {

@@ -173,7 +173,6 @@ public class WgsParser {
 
     Cislo(String s) {
       this.s = s == null ? null : s.replace(',', '.');
-      if (s == null) return;
     }
 
     @Override

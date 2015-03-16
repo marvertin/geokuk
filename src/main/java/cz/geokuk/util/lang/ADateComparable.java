@@ -18,6 +18,4 @@ public interface ADateComparable {
   boolean isLessOrEqual     (ADate b);
   boolean isGreater         (ADate b);
   boolean isGreaterOrEqual  (ADate b);
-  boolean isEqual           (ADate b);
-  boolean isNotEqual        (ADate b);
 }

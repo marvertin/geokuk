@@ -69,11 +69,6 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
   }
 
   @Override
-  public void finalize() {
-    System.out.println("Finalizován JServiceFrmame");
-  }
-
-  @Override
   public void onChange() {
     SystemovaPocitadla.spustPocitani();
     List<Pocitadlo> pocitadla = new ArrayList<>(SpravcePocitadel.getPocitadla());

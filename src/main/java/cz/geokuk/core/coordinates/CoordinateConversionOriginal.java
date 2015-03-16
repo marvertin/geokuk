@@ -697,11 +697,6 @@ public class CoordinateConversionOriginal
             latIndex = i - 1;
             break;
           }
-          else
-          {
-            continue;
-          }
-
         }
 
       }
