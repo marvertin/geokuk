@@ -30,12 +30,12 @@ public class KesoidImportBuilder implements IImportBuilder {
 
   private static final String PREFIX_BEZEJMENNYCH_WAYPOINTU = "Geokuk";
   private static final String DEFAULT_SYM = "Waypoint";
-  //private static final String ZNB = "ZNB";
   private static final String WAYMARK = "Waymark";
   private static final String WM = "WM";
   private static final String GC = "GC";
   private static final String MZ = "MZ";
   private static final String MU = "MU";
+  private static final String PIC = "pic";
   static final String GEOCACHE = "Geocache";
   static final String GEOCACHE_FOUND = "Geocache Found";
 
@@ -129,6 +129,8 @@ public class KesoidImportBuilder implements IImportBuilder {
     processMunzees(list, resultKesoidsByName);
     progressor.setProgress(delkaTasku - list.size());
 
+    processPhotos(list, resultKesoidsByName);
+
     // Teď znovu procházíme a hledáme dodatečné waypointy kešoidů
     for (ListIterator<GpxWpt> it = list.listIterator(); it.hasNext(); ) {
       GpxWpt gpxwpt = it.next();
@@ -204,6 +206,20 @@ public class KesoidImportBuilder implements IImportBuilder {
     return gpxwpt.groundspeak.type != null
         ? EKesType.decode(gpxwpt.groundspeak.type)
         : EKesType.decode(gpxwpt.type.substring(9));
+  }
+
+  private void processPhotos(List<GpxWpt> gpxWpts, Map<String, Kesoid> resultMap) {
+    for (ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
+      GpxWpt gpxWpt = it.next();
+      if (isPhoto(gpxWpt)) {
+        resultMap.put(gpxWpt.name, createPhoto(gpxWpt));
+        it.remove();
+      }
+    }
+  }
+
+  private boolean isPhoto(GpxWpt gpxWpt) {
+    return PIC.equals(gpxWpt.type);
   }
 
   private void processGeocaches(List<GpxWpt> gpxWpts, Map<String, Kesoid> resultMap) {
@@ -358,11 +374,24 @@ public class KesoidImportBuilder implements IImportBuilder {
     wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
 
     SimpleWaypoint simpleWaypoint = new SimpleWaypoint();
-    simpleWaypoint.setCode(gpxwpt.name);
+    simpleWaypoint.setIdentifier(gpxwpt.name);
     simpleWaypoint.setUrl(gpxwpt.link.href);
     simpleWaypoint.addWpt(wpt);
     simpleWaypoint.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
     return simpleWaypoint;
+  }
+
+  private Photo createPhoto(GpxWpt gpxwpt) {
+    Wpt wpt = createWpt(gpxwpt);
+    wpt.setSym(gpxwpt.sym);
+
+    Photo photo = new Photo();
+    photo.setIdentifier(gpxwpt.link.href);
+
+    photo.addWpt(wpt);
+    log.info(photo.getFirstWpt());
+    photo.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+    return photo;
   }
 
   private String extrahujPrefixPredTeckou(GpxWpt gpxwpt) {
@@ -398,7 +427,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     if (cisloBodu.endsWith(" (ETRS)")) {
       cisloBodu = cisloBodu.substring(0, cisloBodu.length() - 7);
     }
-    cgp.setCode(cisloBodu);
+    cgp.setIdentifier(cisloBodu);
     cgp.setVztahx(EKesVztah.NOT);
 
     //		System.out.println(gpxwpt.groundspeak.name);
@@ -422,7 +451,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
   private Waymark createWaymarkGeoget(GpxWpt gpxwpt) {
     Waymark wm = new Waymark();
-    wm.setCode(gpxwpt.name);
+    wm.setIdentifier(gpxwpt.name);
     if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
       wm.setVztahx(EKesVztah.OWN);
     } else {
@@ -445,7 +474,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
   private Waymark createWaymarkNormal(GpxWpt gpxwpt) {
     Waymark wm = new Waymark();
-    wm.setCode(gpxwpt.name);
+    wm.setIdentifier(gpxwpt.name);
     if (gpxwpt.groundspeak != null) {
       if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
         wm.setVztahx(EKesVztah.OWN);
@@ -470,7 +499,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
   private Munzee createMunzee(GpxWpt gpxwpt) {
     Munzee mz = new Munzee();
-    mz.setCode(gpxwpt.name);
+    mz.setIdentifier(gpxwpt.name);
     if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
       mz.setVztahx(EKesVztah.OWN);
     } else if (GEOCACHE_FOUND.equals(gpxwpt.sym)) {
@@ -590,7 +619,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
   private Kesoid createKes(GpxWpt gpxwpt) {
     Kes kes = new Kes();
-    kes.setCode(gpxwpt.name);
+    kes.setIdentifier(gpxwpt.name);
     kes.setAuthor(gpxwpt.groundspeak.placedBy);
     //    kes.setState(gpxwpt.groundspeak.state);
     //    kes.setCountry(gpxwpt.groundspeak.country);

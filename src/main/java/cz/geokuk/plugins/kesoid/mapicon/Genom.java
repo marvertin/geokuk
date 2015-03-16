@@ -42,6 +42,7 @@ public class Genom {
     public Alela ALELA_gb = coale("gb", "Český geodetický bod");
     public Alela ALELA_wp = coale("wp", "Obecný waypoint");
     public Alela ALELA_mz = coale("mz", "Munzee");
+    public Alela ALELA_pic = coale("pic", "Obrázek");
 
     public Alela ALELA_hnf = coale("hnf", "Nehledané");
     public Alela ALELA_fnd = coale("fnd", "Nalezené");
@@ -191,6 +192,7 @@ public class Genom {
         ale(ALELA_gc);
         ale(ALELA_wm);
         ale(ALELA_mz);
+        ale(ALELA_pic);
         ale(ALELA_gb);
         ale(ALELA_wp);
 

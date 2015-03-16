@@ -59,7 +59,7 @@ public class VyletovyZperzistentnovac {
     private void aktualizujVylet(Vylet novyvylet, VyletPul vyletPul, EVylet evyl, KesBag vsechny) {
         if (vsechny != null) {
             for (Kesoid kes : vsechny.getKesoidy()) {
-                if (vyletPul.kesides.contains(kes.getCode())) {
+                if (vyletPul.kesides.contains(kes.getIdentifier())) {
                     novyvylet.add(evyl, kes);
                 }
             }
@@ -75,7 +75,7 @@ public class VyletovyZperzistentnovac {
         Set<Kesoid> caches = vylet.get(evyl);
         Set<String> tripGeocodes = new HashSet<>(caches.size());
         for (Kesoid cache : caches) {
-            tripGeocodes.add(cache.getCode());
+            tripGeocodes.add(cache.getIdentifier());
         }
         List<String> toWrite = new ArrayList<>();
 

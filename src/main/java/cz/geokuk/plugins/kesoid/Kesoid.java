@@ -1,5 +1,6 @@
 package cz.geokuk.plugins.kesoid;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -23,7 +24,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
 
   /** Jednoznacna identifikace jako GC124X4 nebo WM4587 */
-  private String code;
+  private String identifier;
 
   private EKesVztah vztah = EKesVztah.NORMAL;
   private EKesStatus status = EKesStatus.ACTIVE;
@@ -68,6 +69,10 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
     } catch (MalformedURLException e) {
       return null;
     }
+  }
+
+  public File getSourceFile() {
+    return null;
   }
 
   public URL getUrlPrint() {
@@ -149,12 +154,12 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
     if (vztah.ordinal() > this.vztah.ordinal()) this.vztah = vztah;
   }
 
-  public String getCode() {
-    return code;
+  public String getIdentifier() {
+    return identifier;
   }
 
-  public void setCode(String code) {
-    this.code = code;
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
   }
 
   public void addWpt(Wpt wpt) {
@@ -170,13 +175,12 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
   public abstract void buildGenotyp(Genom genom, Genotyp g);
 
-
   public String getNazev() {
     return getFirstWpt().getNazev();
   }
 
   public String[] getProhledavanci() {
-    return new String[] {getNazev(), getCode()};
+    return new String[] {getNazev(), getIdentifier()};
   }
 
   public String getAuthor() {
@@ -218,7 +222,6 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
         g.put(alela);
       }
     }
-
   }
 
   public void setUserDefinedAlelas(Set<Alela> userDefinedAlelas) {

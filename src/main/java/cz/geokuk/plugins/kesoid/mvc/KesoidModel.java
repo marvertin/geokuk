@@ -303,7 +303,7 @@ public class KesoidModel extends Model0 {
   public void pridejKodKesoiduDoClipboardu(Kesoid kes) {
     if (kes == null) return;
     Clipboard scl = getSystemClipboard();
-    StringSelection ss = new StringSelection(kes.getCode());
+    StringSelection ss = new StringSelection(kes.getIdentifier());
     try {
       scl.setContents(ss, null);
     } catch (IllegalStateException e2) {

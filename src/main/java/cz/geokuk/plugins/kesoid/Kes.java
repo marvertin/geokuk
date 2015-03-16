@@ -168,7 +168,7 @@ public class Kes extends Kesoid {
 
   @Override
   public String[] getProhledavanci() {
-    return new String[] {getNazev(), getCode(), getAuthor()};
+    return new String[] {getNazev(), getIdentifier(), getAuthor()};
   }
 
   @Override
@@ -210,7 +210,7 @@ public class Kes extends Kesoid {
     sb.append("<small>");
     sb.append(" - ");
     sb.append(getFirstWpt().getSym());
-    sb.append("  (").append(getCode()).append(")");
+    sb.append("  (").append(getIdentifier()).append(")");
     sb.append("</small>");
     sb.append("<br>");
     if (wpt != getFirstWpt()) {

@@ -227,7 +227,7 @@ public class JKesTable extends JPanel {
       case 0: s = kesIkona(kesoid); break;
       case 1: s = Math.round(nalezenec.getVzdalenost() / 100) / 10.0; break;
       case 2: s = Ikonizer.findSmerIcon(nalezenec.getAzimut()); break;
-      case 3: s = formatuj(nalezenec, kesoid.getCode()); break;
+      case 3: s = formatuj(nalezenec, kesoid.getIdentifier()); break;
       case 4: s = formatuj(nalezenec, kesoid.getNazev());  break;
       case 5: s = formatuj(nalezenec, computeAutora(kesoid));  break;
       //case 6: s = kes.getStatus() == EKesStatus.DISABLED;  break;

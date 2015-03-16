@@ -125,11 +125,12 @@ public class Wpt extends Weikoid0 implements Uchopenec {
     }
 
     public boolean obsazujeOblast() {
-        if (getKesoid().getStatus() == EKesStatus.ARCHIVED) return false;
+        if (getKesoid().getStatus() == EKesStatus.ARCHIVED) {
+            return false;
+        }
         EKesWptType type = getType();
-        boolean b = type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE
+        return type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE
                 || TRADITIONAL_CACHE.equals(sym);
-        return b;
     }
 
     public boolean nutnyKLusteni() {
@@ -143,7 +144,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
      */
     @Override
     public String toString() {
-        return "Wpt [name=" + nazev + ", type=" + getType() + ", wgs=" + getWgs() + "] " + (getKesoid() == null ? "" : getKesoid().getCode());
+        return "Wpt [name=" + nazev + ", type=" + getType() + ", wgs=" + getWgs() + "] " + (getKesoid() == null ? "" : getKesoid().getIdentifier());
     }
 
 
@@ -207,7 +208,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
         //    sb.append("<small>");
         //    sb.append(" - ");
         //    sb.append(sym);
-        //    sb.append("  (" + wpt.getKesoid().getCode() + ")");
+        //    sb.append("  (" + wpt.getKesoid().getIdentifier() + ")");
         //    sb.append("</small>");
         //    sb.append("<br>");
 

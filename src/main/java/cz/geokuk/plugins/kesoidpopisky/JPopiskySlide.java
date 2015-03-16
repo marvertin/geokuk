@@ -41,9 +41,6 @@ public class JPopiskySlide extends JSingleSlide0 {
     initComponents();
   }
 
-  /**
-   * 
-   */
   private void initComponents() {
     setLayout(new BorderLayout());
     Box box = Box.createVerticalBox();
@@ -100,7 +97,6 @@ public class JPopiskySlide extends JSingleSlide0 {
         Point p = getSoord().transform(mou);
         p.x -= 10;
         p.y += 25;
-        //        g.setStroke(prerus);
         g.setColor(barvaPodkladu);
         String[] popisky = sestavmapa.get(wpt.getKesoid().getKesoidKind()).sestavPopisek(wpt);
         int stringWidth = 0;
@@ -135,6 +131,5 @@ public class JPopiskySlide extends JSingleSlide0 {
 
   public void inject (PopiskyModel popiskyModel) {
     this.popiskyModel = popiskyModel;
-
   }
 }

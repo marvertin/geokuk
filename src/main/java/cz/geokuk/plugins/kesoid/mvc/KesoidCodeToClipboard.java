@@ -3,15 +3,12 @@
  */
 package cz.geokuk.plugins.kesoid.mvc;
 
-
 import java.awt.event.ActionEvent;
 
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.framework.Action0;
 import cz.geokuk.plugins.kesoid.Kesoid;
-
-
 
 /**
  * @author veverka
@@ -28,7 +25,7 @@ public class KesoidCodeToClipboard extends Action0 {
    * 
    */
   public KesoidCodeToClipboard(Kesoid aKesoid) {
-    super("<html>GC kód <i>" + aKesoid.getCode() + "</i> do schráky");
+    super("<html>Identifikátor <i>" + aKesoid.getIdentifier() + "</i> do schráky");
     kesoid = aKesoid;
     putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží kód kešoidu.");
     //putValue(MNEMONIC_KEY, InputEvent.)

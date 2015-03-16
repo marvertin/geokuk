@@ -28,8 +28,6 @@ import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 import cz.geokuk.plugins.refbody.RefbodyModel;
 import cz.geokuk.util.gui.JSmallPictureButton;
 
-
-
 /**
  * Detailní informace o vybrané keši.
  * @author Spikodrob
@@ -192,13 +190,17 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
     jDetailyKesoidu.put(EKesoidKind.WAYMARK, factory.init(new JWaymarkDetail()));
     jDetailyKesoidu.put(EKesoidKind.SIMPLEWAYPOINT, factory.init(new JSimpleWaypointDetail()));
     jDetailyKesoidu.put(EKesoidKind.MUNZEE, factory.init(new JMunzeeDetail()));
+    // TODO : change this
+    jDetailyKesoidu.put(EKesoidKind.PHOTO, factory.init(new JKesoidDetail0() {
+      @Override
+      public void napln(Wpt wpt) {
+      }
+    }));
     for (EKesoidKind kind : EKesoidKind.values()) {
       JKesoidDetail0 detail = jDetailyKesoidu.get(kind);
       detail.setVisible(false);
       hlav.add(detail);
     }
-
-
   }
 
   public void onEvent(PoziceChangedEvent aEvent) {
@@ -248,7 +250,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
   }
 
   protected void napln() {
-    jKesoidCode.setText(kesoid.getKesoidKind() == EKesoidKind.CGP ? wpt.getName() : kesoid.getCode());
+    jKesoidCode.setText(kesoid.getKesoidKind() == EKesoidKind.CGP ? wpt.getName() : kesoid.getIdentifier());
     jKesoidNazev.setText(formatuj(kesoid.getNazev(), kesoid.getStatus()));
     jKesoidSym.setText(kesoid.getFirstWpt().getSym());
 

@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidCodeToClipboard;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
+import cz.geokuk.plugins.kesoid.mvc.OpenFileAction;
 import cz.geokuk.plugins.kesoid.mvc.TiskniNaGcComAction;
 import cz.geokuk.plugins.kesoid.mvc.UrlToClipboardForGeogetAction;
 import cz.geokuk.plugins.kesoid.mvc.UrlToListingForGeogetAction;
@@ -399,6 +401,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
   }
 
   private void initPopupMenuItems(JPopupMenu p, Wpt mysNadWpt, KesBag vsechny) {
+    // TODO : these should be based on the waypoint type
     // Přidat zhasínače
     JMenu zhasinace = new JMenu("Zhasni");
     p.add(zhasinace);
@@ -429,9 +432,13 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
     if (kesoid.getUrlPrint() != null) {
       p.add(factory.init(new UrlToListingForGeogetAction(kesoid)));
     }
-    if (kesoid.getCode() != null) {
-        p.add(factory.init(new KesoidCodeToClipboard(kesoid)));
-      }
+    File kesoidSourceFile = kesoid.getSourceFile();
+    if (kesoidSourceFile != null) {
+      p.add(factory.init(new OpenFileAction(kesoidSourceFile)));
+    }
+    if (kesoid.getIdentifier() != null) {
+      p.add(factory.init(new KesoidCodeToClipboard(kesoid)));
+    }
     p.addSeparator();
     p.add(factory.init(new PridatDoCestyAction(mysNadWpt)));
     p.add(factory.init(new OdebratZCestyAction(mysNadWpt)));

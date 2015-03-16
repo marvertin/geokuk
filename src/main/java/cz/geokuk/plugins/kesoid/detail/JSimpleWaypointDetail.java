@@ -7,8 +7,6 @@ import cz.geokuk.plugins.kesoid.SimpleWaypoint;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 
-
-
 /**
  * Detailní informace o vybrané keši.
  * @author Spikodrob
@@ -16,18 +14,13 @@ import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
  */
 public class JSimpleWaypointDetail extends JKesoidDetail0 {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = -3323887260932949747L;
 
   private SimpleWaypoint simwpt;
-
   
   public JSimpleWaypointDetail() {
     initComponents();
   }
-
 
   private void initComponents() {
 
@@ -36,7 +29,6 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
 
     Box box2 = Box.createHorizontalBox();
 
-
     Box pan4b = Box.createVerticalBox();
 
     box2.add(Box.createHorizontalGlue());
@@ -44,17 +36,11 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
     //  pan4.setAlignmentX(RIGHT_ALIGNMENT);
     box2.add(pan4b);
 
-
     hlav.add(box2);
 
     Box box3 = Box.createHorizontalBox();
     box3.add(Box.createGlue());
     hlav.add(box3);
-
-
-
-
-
   }
 
   @Override
@@ -69,11 +55,6 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
     }
   }
 
-
   private void napln() {
   }
-
-
- 
-
 }

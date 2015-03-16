@@ -105,7 +105,7 @@ public class MultiNacitac {
             new ProgressorInputStream(kesoidModel.getProgressModel(), "Loading: " + file,
                 new FileInputStream(file))
         )) {
-          String jmenoZdroje = file.getName();
+          String jmenoZdroje = file.getAbsolutePath();
           boolean nacitat = kesoidModel.maSeNacist(file);
           builder.setCurrentlyLoaded(file, nacitat);
           if (nacitat) {

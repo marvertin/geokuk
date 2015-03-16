@@ -34,7 +34,7 @@ public class Munzee extends Kesoid {
     sb.append("<small>");
     sb.append(" - ");
     sb.append(getFirstWpt().getSym());
-    sb.append("  (").append(getCode()).append(")");
+    sb.append("  (").append(getIdentifier()).append(")");
     sb.append("</small>");
     sb.append("<br>");
     if (wpt != getFirstWpt()) {

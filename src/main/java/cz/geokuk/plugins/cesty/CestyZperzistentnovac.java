@@ -85,7 +85,7 @@ public class CestyZperzistentnovac {
                     if (mouable instanceof Wpt) {
                         Wpt wpt = (Wpt) mouable;
                         zapisKdyzNeni(wrt, wpt.getName(), exportovano);
-                        zapisKdyzNeni(wrt, wpt.getKesoid().getCode(), exportovano);
+                        zapisKdyzNeni(wrt, wpt.getKesoid().getIdentifier(), exportovano);
                     }
 
                 }
@@ -144,7 +144,7 @@ public class CestyZperzistentnovac {
         Cesta cesta = Cesta.create();
         if (kesBag != null) {
             for (Kesoid kesoid : kesBag.getKesoidy()) {
-                if (ggt.kesides.contains(kesoid.getCode())) {
+                if (ggt.kesides.contains(kesoid.getIdentifier())) {
                     updator.pridejNaMisto(cesta, kesoid.getMainWpt());
                 }
             }

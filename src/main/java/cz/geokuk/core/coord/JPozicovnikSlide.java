@@ -171,6 +171,7 @@ public class JPozicovnikSlide extends JSingleSlide0 {
       popupMenu.add(new JMenuItem(factory.init(new PridatDoCestyAction(poziceq.getPoziceMouable()))));
       popupMenu.add(new JMenuItem(factory.init(new GeocodingBorowserXmlAction(wgs))));
       popupMenu.add(new JMenuItem(factory.init(new SouradniceDoClipboarduAction(wgs))));
+      popupMenu.add(new JMenuItem(factory.init(new OpenStreetViewAction(wgs))));
     }
     chain().addPopouItems(popupMenu, ctx);
   }

@@ -21,7 +21,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
   private String cgpPattern = "{wpt}";
   private String simplewaypointPattern = "{nazev} ({wpt})";
   private String munzeePattern = "{nazev} ({wpt})";
-
+  private String photoPattern = "{wpt}";
 
   public EnumMap<EKesoidKind, String> asMap() {
     EnumMap<EKesoidKind, String> map = new EnumMap<>(EKesoidKind.class);
@@ -30,10 +30,9 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
     map.put(EKesoidKind.CGP, cgpPattern);
     map.put(EKesoidKind.SIMPLEWAYPOINT, simplewaypointPattern);
     map.put(EKesoidKind.MUNZEE, munzeePattern);
+    map.put(EKesoidKind.PHOTO, photoPattern);
     return map;
   }
-
-
 
   /**
    * @return the kesPattern
@@ -42,16 +41,12 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
     return kesPattern;
   }
 
-
-
   /**
    * @param kesPattern the kesPattern to set
    */
   public void setKesPattern(String kesPattern) {
     this.kesPattern = kesPattern;
   }
-
-
 
   /**
    * @return the waymarkPattern
@@ -60,16 +55,12 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
     return waymarkPattern;
   }
 
-
-
   /**
    * @param waymarkPattern the waymarkPattern to set
    */
   public void setWaymarkPattern(String waymarkPattern) {
     this.waymarkPattern = waymarkPattern;
   }
-
-
 
   /**
    * @return the cgpPattern
@@ -78,16 +69,12 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
     return cgpPattern;
   }
 
-
-
   /**
    * @param cgpPattern the cgpPattern to set
    */
   public void setCgpPattern(String cgpPattern) {
     this.cgpPattern = cgpPattern;
   }
-
-
 
   /**
    * @return the simplewaypointPattern
@@ -96,16 +83,12 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
     return simplewaypointPattern;
   }
 
-
-
   /**
    * @param simplewaypointPattern the simplewaypointPattern to set
    */
   public void setSimplewaypointPattern(String simplewaypointPattern) {
     this.simplewaypointPattern = simplewaypointPattern;
   }
-
-
 
   /* (non-Javadoc)
    * @see java.lang.Object#toString()
