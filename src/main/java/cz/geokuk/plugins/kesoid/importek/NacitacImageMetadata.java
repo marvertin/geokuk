@@ -52,7 +52,7 @@ public class NacitacImageMetadata extends Nacitac0 {
     if (exifLocation != null) {
       GpxWpt gpxWpt = new GpxWpt();
       gpxWpt.wgs = new Wgs(exifLocation.getLatitude(), exifLocation.getLongitude());
-      gpxWpt.name = Iterables.getLast(Arrays.asList(jmeno.split(File.separator)), "");
+      gpxWpt.name = Iterables.getLast(Arrays.asList(jmeno.split(Pattern.quote(File.separator))), "");
       gpxWpt.link.href = jmeno;
       gpxWpt.desc = "EXIF coordinates";
       gpxWpt.type = "pic";
