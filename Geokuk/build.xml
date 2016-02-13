@@ -16,9 +16,9 @@
 	<property name="target" value="1.7" />
 	<property name="source" value="1.7" />
 
-	<property name="geokuk.jar" location="distrib/geokuk_${version}.jar" />
-	<property name="geokuk-src.zip" location="distrib/geokuk-src_${version}.zip" />
-	<property name="geokuk-backup.zip" location="${backupsrcdir}/geokuk-backup_${version}.zip" />
+	<property name="geokuk.jar" location="distrib/geokuk-${version}.jar" />
+	<property name="geokuk-src.zip" location="distrib/geokuk-${version}-sources.jar" />
+	<property name="geokuk-backup.zip" location="${backupsrcdir}/geokuk-backup-${version}.zip" />
 
 	<path id="GeoKuk.classpath">
 		<pathelement location="build/classes" />
@@ -106,7 +106,7 @@
     	<fileset dir="distrib" includes="spust.html" />
 		</replaceregexp>
 		-->
-    <replaceregexp match='geokuk_[\.0-9a-zA-Z]*\.jar' flags="g" replace='geokuk_${version}.jar' encoding="UTF-8" >
+    <replaceregexp match='geokuk-[\.0-9a-zA-Z]*\.jar' flags="g" replace='geokuk-${version}.jar' encoding="UTF-8" >
       <fileset dir="distrib" includes="geokuk.jnlp" />
     </replaceregexp>
 

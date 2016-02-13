@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <jnlp codebase="http://geokuk.cz">
 	<information>
 		<title>GeoKuk</title>
@@ -21,7 +21,7 @@
 
 	<resources>
 		<j2se version="1.7+" max-heap-size="512m" />
-		<jar href="geokuk_3.5.1.jar" />
+		<jar href="geokuk-3.5.1.jar" />
 	</resources>
 	<application-desc>
 	</application-desc>
