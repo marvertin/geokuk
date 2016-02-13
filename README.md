@@ -1,6 +1,14 @@
 # Geokuk
  
-Desktopový Java program, který dokáže zobrazovat kešky na českých mapách oblíbeného serveru http://mapy.cz/turisticka.
+Free desktopový Java program, který dokáže zobrazovat kešky na českých mapách oblíbeného serveru [mapy.cz](http://mapy.cz/turisticka).
+
+**[Dokumentaci na wiki](http://wiki.geocaching.cz/wiki/Geokuk)** serveru http://geocaching.cz
+
+**[DOWNLOAD Geokuk free](https://github.com/marvertin/geokuk/releases/latest)**
+
+<div  style="border-style: solid; border-color: ccff99;">
+Program si zde můžete <b>zdarma <a href="spust.html">spustit</a> a používat</b>
+</div>
 
 ## Funkce programu
 
