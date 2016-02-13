@@ -103,10 +103,9 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
         Dlg.info("Používaná verze programu Geokuk " + FConst.VERSION + " je poslední distribuovanou verzí." , "Oznámení");
       }
     } else {
-      Object[] options = {"Spustit novou",
-          "Zobrazit web",
-          "Stáhnout jar",
-      "Nedělat nic"};
+      Object[] options = {"Zobrazit web",
+          "Stáhnout nejnovější verzi",
+      "Připomenout příště"};
       int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
           "<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " +
               "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + vysledek.lastVersion
@@ -118,11 +117,9 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
               options,
               options[2]);
       switch (n) {
-      case 0: spustitJavaWebStart();
+      case 0: zobrazitWeb();
       break;
-      case 1: zobrazitWeb();
-      break;
-      case 2: stahnoutJar();
+      case 1: stahnoutJar();
       break;
       default:
         break;
@@ -146,7 +143,7 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
 
   private void stahnoutJar() {
     try {
-      BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "geokuk.jar"));
+      BrowserOpener.displayURL(new URL(FConst.LATEST_RELEASE_URL));
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
