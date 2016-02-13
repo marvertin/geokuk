@@ -114,7 +114,9 @@
 	</target>
 
 
-	<target name="build" depends="verzevestrance, jar, ikony, exe" />
+	<target name="build-without-exe" depends="verzevestrance, jar, ikony" />
+  
+  <target name="build" depends="build-without-exe, exe" />
 
   <target name="ftp" depends="build, src, backup">
     <fail unless="heslisko" message="Soubor s heslem k ftp.geokuk.cz nebyl nalezen" />
