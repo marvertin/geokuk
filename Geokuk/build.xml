@@ -106,7 +106,7 @@
     	<fileset dir="distrib" includes="spust.html" />
 		</replaceregexp>
 		-->
-    <replaceregexp match='geokuk-[\.0-9a-zA-Z]*\.jar' flags="g" replace='geokuk-${version}.jar' encoding="UTF-8" >
+    <replaceregexp match='geokuk-[\.0-9a-zA-Z-]*\.jar' flags="g" replace='geokuk-${version}.jar' encoding="UTF-8" >
       <fileset dir="distrib" includes="geokuk.jnlp" />
     </replaceregexp>
 
