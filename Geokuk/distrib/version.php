@@ -31,12 +31,27 @@ dlouhodobého hlediska a cesty použít pro konkrétní výlet.
 
 <?php if ($msgnad < 2) { ?>
 <h1>==2==</h1>
-<h2>Nová služba pro vyhledávání adres a jiných názvů zeměpisných míst (Ctrl+M).</h2>
+<h2>Nová služba pro vyhledávání adres a jiných názvů zeměpisných míst (Ctrl+M)</h2>
 Od verze 3.5 je použita nová služba Google. Popis služby je zde:
 <a href="https://developers.google.com/maps/documentation/geocoding">https://developers.google.com/maps/documentation/geocoding</a>.
 Základním rozdílem oproti dříve používané službě je limit v počtu provedených dotazů na 2500 / 24 hodin. Zdá se to jako dost,
 ale vzhledem k tomu, že vyhledávání probíhá při každém stisku znaku v okně Ctrl+M, může být limit vyčerpán.
 Pokud se to ukáže jako problé, budu počty hledání optimalizovat.
+<?php } ?>
+
+<?php if ($msgnad < 3) { ?>
+<h1>==3==</h1>
+<h2>Přechod z GoogleCode na GitHub</h2>
+Google zrušil svoji službu pro vývoj programů google code. Z toho důvodu
+bylo nutné přejít na <a href="https://github.com/marvertin/geokuk/releases/latest">GitHub</a> od verze 3.6.0, kde také
+budeš nacházet nejnovější verze programu. Změna se týká
+<ul>
+<li>úložiště zdrojových kódů Geokuku</li>
+<li>systému pro zprávu požadavků a chyb</li>
+<li>místo pro stažení Geokuku</li>
+</ul> 
+
+<p>Jako hlavní stránka stále zůstává <a href="http://geokuk.cz">http://geokuk.cz</a> 
 <?php } ?>
 
 <? include "zastatistikuj.php"; ?>

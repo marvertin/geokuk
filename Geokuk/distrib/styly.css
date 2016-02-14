@@ -37,3 +37,34 @@ a.domu {
 .posledni {
   font-size: x-small;
 }
+
+.upozorneni {
+  border: solid 2px;
+  background-color: #FFFFDD;
+  color: red;
+  padding: 5px
+}
+
+#obsah {position: absolute; width: 800px; top: 80px; left: 200px}
+#hlavicka { position: absolute; 
+  width: 760px; 
+  height: 120px; 
+  top: 0px; 
+  left: 0px;
+  margin: 10px;
+}
+#levy {position: absolute; width: 200px; top: 80px; left: 0px}
+#pravy{position: absolute; width: 110px; top: 120px; left: 650px}
+
+.nazevProgramu {
+  display: inline;
+  font-family: Arial, sans-serif;
+  font-size: 20pt ;
+  vertical-align: middle;
+  margin: 30px;
+  padding-top: 10px;
+}
+
+.logo {
+  vertical-align: middle;
+}
