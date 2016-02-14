@@ -135,7 +135,7 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
 
   private void zobrazitWeb() {
     try {
-      BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "spust.html"));
+      BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL));
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }

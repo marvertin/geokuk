@@ -17,6 +17,7 @@
 	<property name="source" value="1.7" />
 
 	<property name="geokuk.jar" location="distrib/geokuk-${version}.jar" />
+  <property name="geokuk.exe" location="distrib/geokuk-${version}.exe" />
 	<property name="geokuk-src.zip" location="distrib/geokuk-${version}-sources.jar" />
 	<property name="geokuk-backup.zip" location="${backupsrcdir}/geokuk-backup-${version}.zip" />
 
@@ -99,12 +100,9 @@
 	</target>
 
 	<target name="verzevestrance">
-		<replaceregexp file="distrib/spust.html" match="(ZZAACCAATTEEKK--&gt;).*(&lt;!--KKOONNEECC)" replace="\1${version}\2" />
-		<replaceregexp file="distrib/spust.html" match="(CCAASS--&gt;).*(&lt;!--SSAACC)" replace="\1${touch.time}\2" />
-		<!--
-    <replaceregexp match='geokuk_[\.0-9a-zA-Z]*\.jar' flags="g" replace='geokuk_${version}.jar' >
-    	<fileset dir="distrib" includes="spust.html" />
-		</replaceregexp>
+		<!-- pri odkomentovani odstranit mezeru mezi minusy 
+		<replaceregexp file="distrib/spust.html" match="(ZZAACCAATTEEKK- -&gt;).*(&lt;!- -KKOONNEECC)" replace="\1${version}\2" />
+		<replaceregexp file="distrib/spust.html" match="(CCAASS- -&gt;).*(&lt;!- -SSAACC)" replace="\1${touch.time}\2" />
 		-->
     <replaceregexp match='geokuk-[\.0-9a-zA-Z-]*\.jar' flags="g" replace='geokuk-${version}.jar' encoding="UTF-8" >
       <fileset dir="distrib" includes="geokuk.jnlp" />
@@ -151,6 +149,8 @@
        fileVersion="${version}.0"  txtFileVersion="${version}"
        productVersion="${version}.0"  txtProductVersion="${version}"
     />
+    <copy file="distrib/geokuk.exe" tofile="${geokuk.exe}" />
+    
   </target>
   
   <target name="echoheslo">

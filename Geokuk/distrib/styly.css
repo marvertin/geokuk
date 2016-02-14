@@ -25,6 +25,29 @@ li {
   list-style-position: outside;
 }
 
+#levy >ul>li {
+  padding-bottom: 15;
+  list-style-type: none;
+  margin-bottom: 5px;
+}
+
+#levy ul li ul {
+  padding-top: 5;
+}
+
+#levy ul li li{
+  list-style-type: none;
+  padding-left: 25px;
+  margin: 0;
+  margin-top: 4px;
+
+}
+
+#levy ul, #levy li {
+  padding: 0;
+  margin: 0;
+}
+
 
 a.domu {
   position: absolute;
@@ -45,15 +68,29 @@ a.domu {
   padding: 5px
 }
 
-#obsah {position: absolute; width: 800px; top: 80px; left: 200px}
+#obsah {position: absolute; width: 906; top: 80px; left: 180px;  
+  background-color: #eeffe0;
+  padding: 10px;
+  margin: 10px;
+}
 #hlavicka { position: absolute; 
-  width: 760px; 
-  height: 120px; 
+  width: 1086; 
+  height: 50px; 
   top: 0px; 
   left: 0px;
   margin: 10px;
+  background-color: #ddffd0;
+  padding: 10px;
+  margin: 10px;
+  //padding-left: 190px;
+
 }
-#levy {position: absolute; width: 200px; top: 80px; left: 0px}
+#levy { 
+  position: absolute; width: 150px; top: 80px; left: 0px;
+  background-color: #ddffd0;
+  padding: 10px;
+  margin: 10px;
+}
 #pravy{position: absolute; width: 110px; top: 120px; left: 650px}
 
 .nazevProgramu {
@@ -67,4 +104,17 @@ a.domu {
 
 .logo {
   vertical-align: middle;
+  margin-right: 95px;
 }
+
+body {
+  background-color: #ffffee;
+}
+
+.hrajes, h2 {
+  font-family: Arial, sans-serif;
+  font-size: 16pt;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+

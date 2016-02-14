@@ -51,7 +51,9 @@ budeš nacházet nejnovější verze programu. Změna se týká
 <li>místo pro stažení Geokuku</li>
 </ul> 
 
-<p>Jako hlavní stránka stále zůstává <a href="http://geokuk.cz">http://geokuk.cz</a> 
+<p>Jako hlavní stránka stále zůstává <a href="http://geokuk.cz">http://geokuk.cz</a>
+<br>
+Stránka je upravena a obsahuje všechny důležité odkazy. 
 <?php } ?>
 
 <? include "zastatistikuj.php"; ?>
