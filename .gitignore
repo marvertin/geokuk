@@ -7,5 +7,4 @@ Geokuk/bin
 *.war
 *.ear
 *.exe
-data
 !/Geokuk/geoget/geokuk.jar
