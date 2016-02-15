@@ -1,4 +1,140 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project name="geokuk" basedir="." >
-  <ant dir="Geokuk" target="build-without-exe"/>
+<project name="GeoKuk" basedir="." default="build">
+  <property name="launch4j.dir" location="C:\Program Files (x86)\Launch4j" />
+
+	<property name="imagesddir" location="${basedir}/src/main/resources/cz/geokuk/image" />
+  <property file="v:/users/tatinek/Heslo ke ftp.geokuk.cz na gigaserveru.properties" />
+
+	<tstamp>
+		<format property="touch.time" pattern="d.M.yyyy HH:mm" offset="0" unit="hour" />
+	</tstamp>
+
+	<property environment="env" />
+	<property file="src/main/resources/cz/geokuk/version.properties" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.7" />
+	<property name="source" value="1.7" />
+
+	<property name="geokuk.jar" location="distrib/geokuk-${version}.jar" />
+  <property name="geokuk.exe" location="distrib/geokuk-${version}.exe" />
+	
+	<path id="GeoKuk.classpath">
+		<pathelement location="build/classes" />
+	</path>
+
+	<target name="init">
+		<mkdir dir="build/classes" />
+	</target>
+
+	<target name="clean">
+		<delete dir="build/classes" />
+		<delete>
+    	<fileset dir="distrib">
+				<include name="geokuk*.exe" />
+				<include name="geokuk*.jar" />
+				<include name="geokuk*.zip" />
+				<include name="version.txt" />
+			</fileset>
+    </delete>
+	</target>
+
+	<target name="cleanall" depends="clean" />
+
+	<target name="clesses" depends="init, imagesdirlist">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" encoding="utf-8">
+			<src path="src/main/java" />
+			<classpath refid="GeoKuk.classpath" />
+		</javac>
+		<copy includeemptydirs="false" todir="build/classes">
+			<fileset dir="src/main/resources">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="jar" depends="clesses">
+		<delete>
+			<fileset dir="distrib" includes="*.jar" />
+		</delete>
+		<jar destfile="${geokuk.jar}">
+			<fileset dir="build/classes" />
+			<manifest>
+				<attribute name="Main-Class" value="cz.geokuk.core.program.GeokukMain" />
+				<attribute name="Implementation-Title" value="GeoKuk" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="Martin Veverka, Marsov u Brna" />
+        <attribute name="SplashScreen-Image" value="cz/geokuk/img/geokuk400.jpg" />
+			</manifest>
+		</jar>
+		<signjar keystore="buildSrc/geokuk.keystore" storepass="keydrob" jar="${geokuk.jar}" alias="marvertin">
+		</signjar>
+		<copy file="${geokuk.jar}" tofile="distrib/geokuk.jar" />
+	</target>
+
+
+	<target name="ikony">
+		<copy todir="distrib">
+			<fileset dir="src/main/resources/cz/geokuk/img" includes="geokuk*.png " />
+		</copy>
+	</target>
+
+	<target name="verzevestrance">
+		<!-- pri odkomentovani odstranit mezeru mezi minusy 
+		<replaceregexp file="distrib/spust.html" match="(ZZAACCAATTEEKK- -&gt;).*(&lt;!- -KKOONNEECC)" replace="\1${version}\2" />
+		<replaceregexp file="distrib/spust.html" match="(CCAASS- -&gt;).*(&lt;!- -SSAACC)" replace="\1${touch.time}\2" />
+		-->
+    <replaceregexp match='geokuk-[\.0-9a-zA-Z-]*\.jar' flags="g" replace='geokuk-${version}.jar' encoding="UTF-8" >
+      <fileset dir="distrib" includes="geokuk.jnlp" />
+    </replaceregexp>
+
+		<echo file="distrib/version.txt" message="${version}" />
+	</target>
+
+
+	<target name="build-without-exe" depends="verzevestrance, jar, ikony" />
+  
+  <target name="build" depends="build-without-exe, exe" />
+
+  <target name="ftp" depends="build">
+    <fail unless="heslisko" message="Soubor s heslem k ftp.geokuk.cz nebyl nalezen" />
+    <ftp server="ftp.geokuk.cz" passive="yes"  userid="geokuk_cz" password="${heslisko}" remotedir="geokuk.cz" depends="yes" verbose="yes">
+      <fileset dir="distrib" />
+    </ftp>
+  </target>
+
+
+	<target name="distrib" depends="build, ftp">
+	</target>
+
+
+	<target name="imagesdirlist" >
+      <pathconvert property="imgResourceList" pathsep="&#13;&#10;" dirsep="/">
+        <fileset dir="${imagesddir}" />
+        <dirset dir="${imagesddir}" includes="*/**"/>
+        <map from="${imagesddir}/" to="" />
+      </pathconvert>
+
+      <echo file="${imagesddir}/content.txt">${imgResourceList}</echo>
+		  <echo>Vytvoren soubor "${imagesddir}/content.txt"</echo>
+  </target>
+
+
+  <target name="exe" depends="ikony, jar">
+    <taskdef name="launch4j"
+      classname="net.sf.launch4j.ant.Launch4jTask"
+      classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+
+    <launch4j configFile="buildSrc/geokuk-launcher4j.xml"
+       fileVersion="${version}.0"  txtFileVersion="${version}"
+       productVersion="${version}.0"  txtProductVersion="${version}"
+    />
+    <copy file="distrib/geokuk.exe" tofile="${geokuk.exe}" />
+    
+  </target>
+  
+  <target name="echoheslo">
+     <echo>${heslisko}</echo>
+  </target>
 </project>
