@@ -56,6 +56,19 @@ budeš nacházet nejnovější verze programu. Změna se týká
 Stránka je upravena a obsahuje všechny důležité odkazy. 
 <?php } ?>
 
+<?php if ($msgnad < 4) { ?>
+<h1>==4==</h1>
+<h2>Sloučení s vezí danstahr/Geokuk</h2>
+Zjistil jsem, že Geokuk hodně vyvinul Dan Stahr na GitHubu v roce
+2014 a 2015, za což
+mu patří velký dík. Jeho verze se stala základem verze 4.0.0.
+Je zde hodně změn a oprav, časem snad popíšu jaké jsou.
+<p>
+Ve verzi 4 na chvíli zmizela podpora geospy. Pokuím se ji tam v dohledné 
+době opět dostat.
+
+<?php } ?>
+
 <? include "zastatistikuj.php"; ?>
 </body>
 </html>
