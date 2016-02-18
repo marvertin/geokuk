@@ -26,7 +26,8 @@ public class FConst {
 
   public static final File PREFERENCES_FILE;
 
-  public static final String POST_PROBLEM_URL = "http://code.google.com/p/geokuk/issues/entry";
+  public static final String LATEST_RELEASE_URL = "https://github.com/marvertin/geokuk/releases/latest";
+  public static final String POST_PROBLEM_URL = "https://github.com/marvertin/geokuk/issues/new";
 
   public static final String WEB_PAGE_URL = "http://geokuk.cz/";
 

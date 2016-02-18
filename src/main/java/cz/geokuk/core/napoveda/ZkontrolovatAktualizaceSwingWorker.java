@@ -100,75 +100,67 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
     }
 
 
-    @Override
-    protected void donex() throws Exception {
-        ZpravyAVerze vysledek = get();
-        if (FConst.VERSION.equals(vysledek.lastVersion)) {
-            if (zobrazitDialogPriPosledniVerzi) {
-                Dlg.info("Používaná verze programu Geokuk " + FConst.VERSION + " je poslední distribuovanou verzí.", "Oznámení");
-            }
-        } else if (vysledek.lastVersion != null) {
-            Object[] options = {"Spustit novou",
-                    "Zobrazit web",
-                    "Stáhnout jar",
-                    "Nedělat nic"};
-            int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
-                    "<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " +
-                            "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + vysledek.lastVersion
-                            + ".",
-                    "Spuštění nové verze",
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[2]);
-            switch (n) {
-                case 0:
-                    spustitJavaWebStart();
-                    break;
-                case 1:
-                    zobrazitWeb();
-                    break;
-                case 2:
-                    stahnoutJar();
-                    break;
-                default:
-                    break;
-            }
-            System.out.println(n);
+  @Override
+  protected void donex() throws Exception {
+    ZpravyAVerze vysledek = get();
+    if (FConst.VERSION.equals(vysledek.lastVersion)) {
+      if (zobrazitDialogPriPosledniVerzi) {
+        Dlg.info("Používaná verze programu Geokuk " + FConst.VERSION + " je poslední distribuovanou verzí." , "Oznámení");
+      }
+    } else {
+      Object[] options = {"Zobrazit web",
+          "Stáhnout nejnovější verzi",
+      "Připomenout příště"};
+      int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
+          "<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " +
+              "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + vysledek.lastVersion
+              + ".",
+              "Spuštění nové verze",
+              JOptionPane.YES_NO_CANCEL_OPTION,
+              JOptionPane.QUESTION_MESSAGE,
+              null,
+              options,
+              options[2]);
+      switch (n) {
+      case 0: zobrazitWeb();
+      break;
+      case 1: stahnoutJar();
+      break;
+      default:
+        break;
+      }
+      System.out.println(n);
 
-            //http://geokuk.cz/geokuk.jar
-        } else {
-            log.warn("No version was returned from the server. The whole result : {}", vysledek);
-        }
-        napovedaModel.setZpravyUzivatelum(vysledek.zpravy);
-
-        super.donex();
+      //http://geokuk.cz/geokuk.jar
     }
+    napovedaModel.setZpravyUzivatelum(vysledek.zpravy);
 
-    private void zobrazitWeb() {
-        try {
-            BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "spust.html"));
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    super.donex();
+  }
 
-    private void stahnoutJar() {
-        try {
-            BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "geokuk.jar"));
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+  private void zobrazitWeb() {
+    try {
+      BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL));
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    private void spustitJavaWebStart() {
-        try {
-            BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "geokuk.jnlp"));
-            System.exit(0);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+  private void stahnoutJar() {
+    try {
+      BrowserOpener.displayURL(new URL(FConst.LATEST_RELEASE_URL));
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
     }
+  }
+
+  private void spustitJavaWebStart() {
+    try {
+      BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "geokuk.jnlp"));
+      System.exit(0);
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
 }
