@@ -1,14 +1,11 @@
-Geokuk
-======
+# [Geokuk](http://geokuk.cz)
+**Plánování geovýletů za na českých mapách.** 
 
-A fork of https://code.google.com/p/geokuk/
+* podpora pro geocaching
+* desktopový platformově nezávislý program (Java)
+* online i offline režim
 
-Build status
-============
+Více informací se dozvíte na hlavní stránce programu
+**http://geokuk.cz** a ve wiki.
 
-[![Build Status](https://travis-ci.org/Danstahr/Geokuk.svg?branch=master)](https://travis-ci.org/Danstahr/Geokuk)
-
-Download
-========
-
-Nightly builds can be downloaded at http://dan-stahr.tk/geokuk_nightly.jar
+![Geokuk screenshot ](https://github.com/marvertin/geokuk/blob/master/doc/img/screenshot-3.6.0.jpg)
