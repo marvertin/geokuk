@@ -11,7 +11,7 @@
     </tstamp>
 
     <property environment="env"/>
-    <property file="src/cz/geokuk/version.properties"/>
+    <property file="src/main/resources/version.properties"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
@@ -96,7 +96,7 @@
 
     <target name="ikony">
         <copy todir="distrib">
-            <fileset dir="src/cz/geokuk/img" includes="geokuk*.png "/>
+            <fileset dir="src/main/resources/img" includes="geokuk*.png "/>
         </copy>
     </target>
 
@@ -144,7 +144,7 @@
     </target>
 
 
-    <target name="exe" depends="ikony, jar">
+    <target name="exe" depends="ikony">
         <taskdef name="launch4j"
                  classname="net.sf.launch4j.ant.Launch4jTask"
                  classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>

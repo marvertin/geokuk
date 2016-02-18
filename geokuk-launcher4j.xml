@@ -1,14 +1,14 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>distrib\geokuk.jar</jar>
-  <outfile>distrib\geokuk.exe</outfile>
+  <jar>target\geokuk-4.0.0.jar</jar>
+  <outfile>target\geokuk.exe</outfile>
   <errTitle>Geouk ERROR</errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
   <priority>normal</priority>
-  <downloadUrl>http://java.com/download</downloadUrl>
-  <supportUrl>http://code.google.com/p/geokuk/issues/entry</supportUrl>
+  <downloadUrl>https://github.com/marvertin/geokuk/releases/latest</downloadUrl>
+  <supportUrl>https://github.com/marvertin/geokuk/issues/new</supportUrl>
   <customProcName>false</customProcName>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
@@ -25,10 +25,10 @@
     <maxHeapSize>512</maxHeapSize>
   </jre>
   <versionInfo>
-    <fileVersion>0.0.0.0</fileVersion>
+    <fileVersion>4.0.0</fileVersion>
     <txtFileVersion>neuvedena</txtFileVersion>
     <fileDescription>GEOUK - program pro praci s keskami nad mapy.cz.</fileDescription>
-    <copyright>(c) Martin Veverka 2009 - 2011</copyright>
+    <copyright>(c) Martin Veverka, 2009 - 2011, Dan Stahr 2014 - 2015</copyright>
     <productVersion>0.0.0.0</productVersion>
     <txtProductVersion>neuvedena</txtProductVersion>
     <productName>Geokuk</productName>
