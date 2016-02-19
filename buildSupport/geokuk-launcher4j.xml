@@ -2,7 +2,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
   <jar>target\geokuk-4.0.0.jar</jar>
-  <outfile>target\geokuk.exe</outfile>
+  <outfile>..\target\geokuk.exe</outfile>
   <errTitle>Geouk ERROR</errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
