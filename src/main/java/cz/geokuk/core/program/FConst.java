@@ -1,26 +1,29 @@
 package cz.geokuk.core.program;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.jcabi.manifests.Manifests;
+
 public class FConst {
 
-    private static final Logger log =
-            LogManager.getLogger(FConst.class.getSimpleName());
+  private static final String NOT_VERSION_I_AM_IN_DEVELOP = "develop";
+
+  private static final Logger log =
+      LogManager.getLogger(FConst.class.getSimpleName());
 
   public static final boolean ZAKAZAT_PRIPRAVOVANOU_FUNKCIONALITU = false;
 
   public static final boolean JAR_DIR_EXISTUJE;
 
   public static final String VERSION;
+
+  public static final boolean I_AM_IN_DEVELOPMENT_ENVIRONMENT;
 
   public static final File JAR_DIR;
 
@@ -37,51 +40,51 @@ public class FConst {
 
   public static final File HOME_DIR = new File(System.getProperty("user.home"));
 
-  private static final URL versionproperties;
+  private static final URL zarazkatxt;
 
 
   static {
-    try {
-      Properties prop = new Properties();
-      String VERSION_PROPERTIES = "version.properties";
-      versionproperties = FConst.class.getClassLoader().getResource(VERSION_PROPERTIES);
-      String s = versionproperties.toExternalForm();
-      Pattern pat1 = Pattern.compile("jar:file:/(.*)!/geokuk/version.properties");
-      Pattern pat2 = Pattern.compile("file:/(.*)/geokuk/version.properties");
-      Matcher mat1 = pat1.matcher(s);
-      Matcher mat2 = pat2.matcher(s);
-      if (mat1.matches()) { // je to z jaru
-        JAR_DIR = new File(mat1.group(1)).getParentFile();
-        JAR_DIR_EXISTUJE = true;
-      } else if (mat2.matches()) {
-        JAR_DIR = new File(mat2.group(1));
-        JAR_DIR_EXISTUJE = true;
-      } else {
-        JAR_DIR = new File("").getAbsoluteFile();
-        JAR_DIR_EXISTUJE = false;
-      }
-      log.debug(JAR_DIR);
-      //versionproperties.
-      InputStream istm = versionproperties.openStream();
-      prop.load(istm);
-      VERSION = prop.getProperty("version");
-
-      // preferenčník
-      PREFERENCES_FILE = new File(JAR_DIR, "geokuk-preferences.xml");
-
-
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    final String ZARAZKA_TXT = "zarazka.txt";
+    zarazkatxt = FConst.class.getClassLoader().getResource(ZARAZKA_TXT);
+    final String s = zarazkatxt.toExternalForm();
+    final Pattern pat1 = Pattern.compile("jar:file:/(.*)!/geokuk/" + ZARAZKA_TXT);
+    final Pattern pat2 = Pattern.compile("file:/(.*)/geokuk/"+ ZARAZKA_TXT);
+    final Matcher mat1 = pat1.matcher(s);
+    final Matcher mat2 = pat2.matcher(s);
+    if (mat1.matches()) { // je to z jaru
+      JAR_DIR = new File(mat1.group(1)).getParentFile();
+      JAR_DIR_EXISTUJE = true;
+    } else if (mat2.matches()) {
+      JAR_DIR = new File(mat2.group(1));
+      JAR_DIR_EXISTUJE = true;
+    } else {
+      JAR_DIR = new File("").getAbsoluteFile();
+      JAR_DIR_EXISTUJE = false;
     }
+    log.debug(JAR_DIR);
+    //versionproperties.
+    String version;
+    boolean iamindevelopmentenvi;
+    try {
+      version =   Manifests.read("Geokuk-Version");;
+      iamindevelopmentenvi = false;
+    } catch (final IllegalArgumentException e) {
+      version = NOT_VERSION_I_AM_IN_DEVELOP;
+      iamindevelopmentenvi = true;
+    }
+    VERSION = version;
+    I_AM_IN_DEVELOPMENT_ENVIRONMENT = iamindevelopmentenvi;
+    // preferenčník
+    PREFERENCES_FILE = new File(JAR_DIR, "geokuk-preferences.xml");
+
   }
 
   public static void logInit() {
     log.info("GEOKUK " + VERSION);
-      log.info("VERSION PROEPRTIES: " + versionproperties);
-      log.info("JAR_DIR = " + JAR_DIR);
-      log.info("JAR_DIR_EXISTUJE = " + JAR_DIR_EXISTUJE);
-      log.info("HOME_DIR = " + HOME_DIR);
-      log.info("WEB_PAGE_URL = " + WEB_PAGE_URL);
+    log.info("JAR_DIR = " + JAR_DIR);
+    log.info("JAR_DIR_EXISTUJE = " + JAR_DIR_EXISTUJE);
+    log.info("HOME_DIR = " + HOME_DIR);
+    log.info("WEB_PAGE_URL = " + WEB_PAGE_URL);
   }
 
 

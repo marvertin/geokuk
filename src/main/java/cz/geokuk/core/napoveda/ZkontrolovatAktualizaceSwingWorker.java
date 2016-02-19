@@ -15,103 +15,107 @@ import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.util.process.BrowserOpener;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVerze, Void> {
 
-    private static final Logger log = LogManager.getLogger(ZkontrolovatAktualizaceSwingWorker.class.getSimpleName());
+  private static final Logger log = LogManager.getLogger(ZkontrolovatAktualizaceSwingWorker.class.getSimpleName());
 
-    private final boolean zobrazitDialogPriPosledniVerzi;
-    private final NapovedaModel napovedaModel;
+  private final boolean zobrazitDialogPriPosledniVerzi;
+  private final NapovedaModel napovedaModel;
 
-    public ZkontrolovatAktualizaceSwingWorker(boolean zobrazitDialogPriPosledniVerzi, NapovedaModel napovedaModel) {
-        this.zobrazitDialogPriPosledniVerzi = zobrazitDialogPriPosledniVerzi;
-        this.napovedaModel = napovedaModel;
+  public ZkontrolovatAktualizaceSwingWorker(final boolean zobrazitDialogPriPosledniVerzi, final NapovedaModel napovedaModel) {
+    this.zobrazitDialogPriPosledniVerzi = zobrazitDialogPriPosledniVerzi;
+    this.napovedaModel = napovedaModel;
+  }
+
+  @Override
+  protected ZpravyAVerze doInBackground() throws Exception {
+    try {
+      final int msgnad = napovedaModel.getLastViewedMsgNum();
+      final URL url = new URL(FConst.WEB_PAGE_URL + "version.php?verze=" + FConst.VERSION + "&msgnad=" + msgnad);
+
+      final URLConnection connection = url.openConnection();
+      connection.setRequestProperty("User-Agent", "Geokuk/" + FConst.VERSION + " (" + FConst.WEB_PAGE_URL + ")");
+      connection.setConnectTimeout(60000);
+      final BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+      final String lastVersion = readVersion(br);
+
+      final List<ZpravaUzivateli> zpravy = nactiSeznamZprav(br);
+      br.close();
+      for (final ZpravaUzivateli zpravaUzivateli : zpravy) {
+        log.debug(zpravaUzivateli);
+      }
+      log.info("Posledni verze: '" + lastVersion +
+          "' ");
+      return new ZpravyAVerze(zpravy, lastVersion);
+    } catch (final IOException e) {
+      log.error("An error has occurred while retrieving the info!", e);
+      return new ZpravyAVerze(Collections.<ZpravaUzivateli>emptyList(), null);
     }
+  }
 
-    @Override
-    protected ZpravyAVerze doInBackground() throws Exception {
-        try {
-            int msgnad = napovedaModel.getLastViewedMsgNum();
-            URL url = new URL(FConst.WEB_PAGE_URL + "version.php?verze=" + FConst.VERSION + "&msgnad=" + msgnad);
-
-            URLConnection connection = url.openConnection();
-            connection.setRequestProperty("User-Agent", "Geokuk/" + FConst.VERSION + " (" + FConst.WEB_PAGE_URL + ")");
-            connection.setConnectTimeout(60000);
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-            String lastVersion = readVersion(br);
-
-            List<ZpravaUzivateli> zpravy = nactiSeznamZprav(br);
-            br.close();
-            for (ZpravaUzivateli zpravaUzivateli : zpravy) {
-                log.debug(zpravaUzivateli);
-            }
-            log.info("Posledni verze: '" + lastVersion +
-                    "' ");
-            return new ZpravyAVerze(zpravy, lastVersion);
-        } catch (IOException e) {
-            log.error("An error has occurred while retrieving the info!", e);
-            return new ZpravyAVerze(Collections.<ZpravaUzivateli>emptyList(), null);
-        }
+  private String readVersion(final BufferedReader br) throws IOException {
+    final Pattern pat = Pattern.compile("<h1>\\[\\[(.*)\\]\\]</h1>");
+    String line;
+    while ((line = br.readLine()) != null) {
+      final Matcher matcher = pat.matcher(line);
+      if (matcher.matches()) {
+        return matcher.group(1);
+      }
     }
+    return null;
+  }
 
-    private String readVersion(BufferedReader br) throws IOException {
-        Pattern pat = Pattern.compile("<h1>\\[\\[(.*)\\]\\]</h1>");
-        String line;
-        while ((line = br.readLine()) != null) {
-            Matcher matcher = pat.matcher(line);
-            if (matcher.matches())
-                return matcher.group(1);
-        }
-        return null;
-    }
-
-    private List<ZpravaUzivateli> nactiSeznamZprav(BufferedReader br) throws IOException {
-        String line;
-        Pattern pat = Pattern.compile("<h1>==(.*)==</h1>");
-        StringBuilder sb = null;
-        int msgnum = 0;
-        List<ZpravaUzivateli> list = new ArrayList<>();
-        while ((line = br.readLine()) != null) {
-            Matcher matcher = pat.matcher(line);
-            if (matcher.matches()) {
-                if (sb != null && sb.length() > 0) {
-                    list.add(new ZpravaUzivateli(msgnum, sb.toString()));
-                }
-                sb = new StringBuilder();
-                msgnum = Integer.parseInt(matcher.group(1));
-            } else {
-                if (sb != null) {
-                    sb.append(line);
-                    sb.append("\n");
-                }
-            }
-
-        }
+  private List<ZpravaUzivateli> nactiSeznamZprav(final BufferedReader br) throws IOException {
+    String line;
+    final Pattern pat = Pattern.compile("<h1>==(.*)==</h1>");
+    StringBuilder sb = null;
+    int msgnum = 0;
+    final List<ZpravaUzivateli> list = new ArrayList<>();
+    while ((line = br.readLine()) != null) {
+      final Matcher matcher = pat.matcher(line);
+      if (matcher.matches()) {
         if (sb != null && sb.length() > 0) {
-            list.add(new ZpravaUzivateli(msgnum, sb.toString()));
+          list.add(new ZpravaUzivateli(msgnum, sb.toString()));
         }
-        return list;
+        sb = new StringBuilder();
+        msgnum = Integer.parseInt(matcher.group(1));
+      } else {
+        if (sb != null) {
+          sb.append(line);
+          sb.append("\n");
+        }
+      }
+
     }
+    if (sb != null && sb.length() > 0) {
+      list.add(new ZpravaUzivateli(msgnum, sb.toString()));
+    }
+    return list;
+  }
 
 
   @Override
   protected void donex() throws Exception {
-    ZpravyAVerze vysledek = get();
-    if (FConst.VERSION.equals(vysledek.lastVersion)) {
+    final ZpravyAVerze vysledek = get();
+    if (FConst.I_AM_IN_DEVELOPMENT_ENVIRONMENT) {
+      log.info("LAST VERSION: " + vysledek.lastVersion + " i have no version, i am in development environment");
+    } else if (FConst.VERSION.equals(vysledek.lastVersion)) {
       if (zobrazitDialogPriPosledniVerzi) {
         Dlg.info("Používaná verze programu Geokuk " + FConst.VERSION + " je poslední distribuovanou verzí." , "Oznámení");
       }
     } else {
-      Object[] options = {"Zobrazit web",
+      final Object[] options = {"Zobrazit web",
           "Stáhnout nejnovější verzi",
       "Připomenout příště"};
-      int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
+      final int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
           "<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " +
               "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + vysledek.lastVersion
               + ".",
@@ -141,7 +145,7 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
   private void zobrazitWeb() {
     try {
       BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL));
-    } catch (MalformedURLException e) {
+    } catch (final MalformedURLException e) {
       throw new RuntimeException(e);
     }
   }
@@ -149,7 +153,7 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
   private void stahnoutJar() {
     try {
       BrowserOpener.displayURL(new URL(FConst.LATEST_RELEASE_URL));
-    } catch (MalformedURLException e) {
+    } catch (final MalformedURLException e) {
       throw new RuntimeException(e);
     }
   }
@@ -158,7 +162,7 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
     try {
       BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "geokuk.jnlp"));
       System.exit(0);
-    } catch (MalformedURLException e) {
+    } catch (final MalformedURLException e) {
       throw new RuntimeException(e);
     }
   }

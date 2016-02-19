@@ -1,0 +1,1 @@
+Tento soubor slouží pro snadné zjištění, zda běžíme z jaru.
