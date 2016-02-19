@@ -23,26 +23,32 @@ public class LineWrappingDecorationWriter extends LineDecorationWriter {
 
   private String iPrefix;
   private String iSuffix;
-  
+
   /**
    * @param out
    */
-  public LineWrappingDecorationWriter(Writer out) {
+  public LineWrappingDecorationWriter(final Writer out) {
     super(out);
   }
 
   /* (non-Javadoc)
    * @see cz.tconsult.tw.util.LineDecorationWriter#onLineBeg()
    */
+  @Override
   protected void onLineBeg() throws IOException {
-    if (iPrefix != null) super.out.write(iPrefix);
+    if (iPrefix != null) {
+      super.out.write(iPrefix);
+    }
   }
 
   /* (non-Javadoc)
    * @see cz.tconsult.tw.util.LineDecorationWriter#onLineEnd()
    */
+  @Override
   protected void onLineEnd()  throws IOException {
-    if (iSuffix != null) super.out.write(iSuffix);
+    if (iSuffix != null) {
+      super.out.write(iSuffix);
+    }
   }
 
   /**
@@ -62,44 +68,48 @@ public class LineWrappingDecorationWriter extends LineDecorationWriter {
   /**
    * @param aString
    */
-  public void setPrefix(String aString) {
+  public void setPrefix(final String aString) {
     iPrefix = aString;
   }
 
   /**
    * @param aString
    */
-  public void setSuffix(String aString) {
+  public void setSuffix(final String aString) {
     iSuffix = aString;
   }
 
 
-  private static void vyja(int pocet) {
-    if (pocet <= 0 ) throw new RuntimeException("yyyyyyyyyyyyyyyyy");
+  private static void vyja(final int pocet) {
+    if (pocet <= 0 ) {
+      throw new RuntimeException("yyyyyyyyyyyyyyyyy");
+    }
     vyja (pocet -1);
   }
-  
-  public static void main(String[] args) {
-    System.out.println("JEDU");
-    LineWrappingDecorationWriter wrt =
-     new LineWrappingDecorationWriter(new OutputStreamWriter(System.out));
-    wrt.setPrefix("[[[[[[[["); 
-    wrt.setSuffix("]]]]]]]"); 
 
-    PrintWriter pwrt = new PrintWriter(wrt, true);
-    pwrt.print("aaaaaaaa");
-    pwrt.print("bbbbbbb");
-    pwrt.print("cccccccc\r");
-    pwrt.flush();
-    pwrt.print("\nNOVY");
-    pwrt.println("dddddd");
-    pwrt.println();
-    pwrt.println();
-    pwrt.println("aaaaaaaaaaaa\r\rbbbbbbbbbbbbbbbb\r\nccccccccccccc\n\n");
-    try {
-      vyja(10);  
-    } catch (Exception e) {
-      FThrowable.printStackTrace(e, System.err, "POKUSNA");
+  public static void main(final String[] args) {
+    System.out.println("JEDU");
+    final LineWrappingDecorationWriter wrt =
+        new LineWrappingDecorationWriter(new OutputStreamWriter(System.out));
+    wrt.setPrefix("[[[[[[[[");
+    wrt.setSuffix("]]]]]]]");
+
+    try (PrintWriter pwrt = new PrintWriter(wrt, true)) {
+      pwrt.print("aaaaaaaa");
+      pwrt.print("bbbbbbb");
+      pwrt.print("cccccccc\r");
+      pwrt.flush();
+      pwrt.print("\nNOVY");
+      pwrt.println("dddddd");
+      pwrt.println();
+      pwrt.println();
+      pwrt.println("aaaaaaaaaaaa\r\rbbbbbbbbbbbbbbbb\r\nccccccccccccc\n\n");
+      try {
+        vyja(10);
+      } catch (final Exception e) {
+        FThrowable.printStackTrace(e, System.err, "POKUSNA");
+      }
+
     }
   }
 

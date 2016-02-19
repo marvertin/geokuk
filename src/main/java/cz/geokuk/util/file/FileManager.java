@@ -58,8 +58,8 @@ public class FileManager {
    * @param aBufferSize
    * @return
    */
-  public static FileManager getInstance(int aBufferSize) {
-    FileManager fm = new FileManager();
+  public static FileManager getInstance(final int aBufferSize) {
+    final FileManager fm = new FileManager();
     fm.setBufferSize(aBufferSize);
     return fm;
   }
@@ -70,8 +70,10 @@ public class FileManager {
    * @param aTo Cílový soubor, pokud je to adresář, je hlášena chyba.
    * @throws IOException Při chybě
    */
-  public void copyFileToFile(File aFrom, File aTo) throws IOException {
-     if (aTo.isDirectory()) throw new IOException("Path " + aTo + " is directory");
+  public void copyFileToFile(final File aFrom, final File aTo) throws IOException {
+    if (aTo.isDirectory()) {
+      throw new IOException("Path " + aTo + " is directory");
+    }
     _copy(aFrom, aTo);
   }
 
@@ -81,9 +83,11 @@ public class FileManager {
    * @param aTo Cílový adresář, pokud to není adresář, je hlášena chyba.
    * @throws IOException Při chybě
    */
-  public void copyFileToDir(File aFrom, File aTo) throws IOException {
-     if (! aTo.isDirectory()) throw new IOException("Path " + aTo + " is not directory");
-     aTo = new File(aTo, aFrom.getName());
+  public void copyFileToDir(final File aFrom, File aTo) throws IOException {
+    if (! aTo.isDirectory()) {
+      throw new IOException("Path " + aTo + " is not directory");
+    }
+    aTo = new File(aTo, aFrom.getName());
     _copy(aFrom, aTo);
   }
 
@@ -95,8 +99,10 @@ public class FileManager {
    * @param aTo Cílový soubor, pokud je to adresář, je hlášena chyba.
    * @throws IOException Při chybě
    */
-  public void moveFileToFile(File aFrom, File aTo) throws IOException {
-     if (aTo.isDirectory()) throw new IOException("Path " + aTo + " is directory");
+  public void moveFileToFile(final File aFrom, final File aTo) throws IOException {
+    if (aTo.isDirectory()) {
+      throw new IOException("Path " + aTo + " is directory");
+    }
     _copy(aFrom, aTo);
     aFrom.delete();
   }
@@ -109,9 +115,11 @@ public class FileManager {
    * @param aTo Cílový adresář, pokud to není adresář, je hlášena chyba.
    * @throws IOException Při chybě
    */
-  public void moveFileToDir(File aFrom, File aTo) throws IOException {
-     if (! aTo.isDirectory()) throw new IOException("Path " + aTo + " is not directory");
-     aTo = new File(aTo, aFrom.getName());
+  public void moveFileToDir(final File aFrom, File aTo) throws IOException {
+    if (! aTo.isDirectory()) {
+      throw new IOException("Path " + aTo + " is not directory");
+    }
+    aTo = new File(aTo, aFrom.getName());
     _copy(aFrom, aTo);
     aFrom.delete();
   }
@@ -129,8 +137,12 @@ public class FileManager {
    */
   public void setBufferSize(int aBufferSize) {
     aBufferSize = (aBufferSize + MIN_BUFFER_SIZE-1) / MIN_BUFFER_SIZE * MIN_BUFFER_SIZE;
-    if (aBufferSize < MIN_BUFFER_SIZE) aBufferSize = MIN_BUFFER_SIZE;
-    if (aBufferSize > MAX_BUFFER_SIZE) aBufferSize = MAX_BUFFER_SIZE;
+    if (aBufferSize < MIN_BUFFER_SIZE) {
+      aBufferSize = MIN_BUFFER_SIZE;
+    }
+    if (aBufferSize > MAX_BUFFER_SIZE) {
+      aBufferSize = MAX_BUFFER_SIZE;
+    }
     iBufferSize = aBufferSize;
   }
 
@@ -141,22 +153,24 @@ public class FileManager {
    * @param aEncoding Kódování, pokud je null, nečte nic.
    * @return
    */
-  public byte[] readWholeFileAsBytes(File aFile) throws IOException {
-      FileInputStream in = new FileInputStream(aFile);
-      FileChannel chan = in.getChannel();
-      ByteBuffer buffer = ByteBuffer.allocate((int)chan.size());
+  public byte[] readWholeFileAsBytes(final File aFile) throws IOException {
+    try (FileInputStream in = new FileInputStream(aFile)) {
+      final FileChannel chan = in.getChannel();
+      final ByteBuffer buffer = ByteBuffer.allocate((int)chan.size());
       buffer.clear();
-      int pocet = chan.read(buffer);
-      if (pocet != chan.size()) throw new RuntimeException("Z nejakeho duvodu bylo precteno jen " + pocet + " bytu, kdyz melo byt precteno" + chan.size());
+      final int pocet = chan.read(buffer);
+      if (pocet != chan.size()) {
+        throw new RuntimeException("Z nejakeho duvodu bylo precteno jen " + pocet + " bytu, kdyz melo byt precteno" + chan.size());
+      }
       buffer.flip();
 
-      byte vysl[] = new byte[(int)chan.size()];
+      final byte vysl[] = new byte[(int)chan.size()];
       buffer.get(vysl);
       //if (pocet != chan.size()) throw new RuntimeException("Z nejakeho duvodu bylo zapsano jen " + pocet + " bytu, kdyz melo byt zapsano" + chan.size());
       buffer.clear();
       chan.close();
-      in.close();
       return vysl;
+    }
   }
 
   /**
@@ -165,8 +179,8 @@ public class FileManager {
    * @param aEncoding Kódování, pokud je null, nečte nic.
    * @return Obsah souborui vrácený jako řetězec.
    */
-  public String readWholeFileAsString(File aFile, String aCharSetName) throws IOException {
-    byte[] bb = readWholeFileAsBytes(aFile);
+  public String readWholeFileAsString(final File aFile, final String aCharSetName) throws IOException {
+    final byte[] bb = readWholeFileAsBytes(aFile);
     return new String(bb, aCharSetName);
   }
 
@@ -176,8 +190,8 @@ public class FileManager {
    * @param aEncoding Kódování, pokud je null, nečte nic.
    * @return Obsah souborui vrácený jako řetězec.
    */
-  public String readWholeFileAsString(File aFile) throws IOException {
-    byte[] bb = readWholeFileAsBytes(aFile);
+  public String readWholeFileAsString(final File aFile) throws IOException {
+    final byte[] bb = readWholeFileAsBytes(aFile);
     return new String(bb);
   }
 
@@ -189,8 +203,8 @@ public class FileManager {
    * @param aEncoding Požadované kódování, null pokud defaultní.
    * @throws IOException
    */
-  public void writeStringToFile(File aFile, String aString, String aEncoding) throws IOException {
-    Writer wrt = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(aFile), aEncoding));
+  public void writeStringToFile(final File aFile, final String aString, final String aEncoding) throws IOException {
+    final Writer wrt = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(aFile), aEncoding));
     //System.out.p rintln(">>>>>>>>"+aString+"<<<<<<<<");
     wrt.write(aString);
     wrt.close();
@@ -203,8 +217,8 @@ public class FileManager {
    * @param aEncoding Požadované kódování, null pokud defaultní.
    * @throws IOException
    */
-  public void writeStringToFile(File aFile, String aString) throws IOException {
-    Writer wrt = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(aFile)));
+  public void writeStringToFile(final File aFile, final String aString) throws IOException {
+    final Writer wrt = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(aFile)));
     wrt.write(aString);
     wrt.close();
   }
@@ -216,15 +230,16 @@ public class FileManager {
    * pokud neexistuje, musí existovat adresářová cesta k němu.
    * @throws IOException
    */
-  public void copyInputStreamToFile(InputStream aIs, File aOut) throws IOException {
-    FileOutputStream out = new FileOutputStream(aOut);
-    FileChannel outc = out.getChannel();
-    ByteBuffer buffer = ByteBuffer.allocate( iBufferSize );
-    byte[] bb = new byte[iBufferSize];
+  public void copyInputStreamToFile(final InputStream aIs, final File aOut) throws IOException {
+    final FileOutputStream out = new FileOutputStream(aOut);
+    final FileChannel outc = out.getChannel();
+    final ByteBuffer buffer = ByteBuffer.allocate( iBufferSize );
+    final byte[] bb = new byte[iBufferSize];
     while (true) {
-      int len = aIs.read(bb);
-      if (len <=0) // nothing left to read
+      final int len = aIs.read(bb);
+      if (len <=0) {
         break;
+      }
       buffer.put(bb, 0, len);
       buffer.flip();
       outc.write( buffer );
@@ -234,33 +249,34 @@ public class FileManager {
     out.close();
     aIs.close();
   }
-  
-///////////////////////////////////// privátní metody /////////////
 
-  private void _copy(File aIn, File aOut) throws IOException {
-     FileInputStream in = new FileInputStream(aIn);
-     FileOutputStream out = new FileOutputStream(aOut);
-     pumpFileChannels(in.getChannel(),
-                      out.getChannel());
-     in.close();
-     out.close();
-     aOut.setLastModified(aIn.lastModified());
+  ///////////////////////////////////// privátní metody /////////////
+
+  private void _copy(final File aIn, final File aOut) throws IOException {
+    final FileInputStream in = new FileInputStream(aIn);
+    final FileOutputStream out = new FileOutputStream(aOut);
+    pumpFileChannels(in.getChannel(),
+        out.getChannel());
+    in.close();
+    out.close();
+    aOut.setLastModified(aIn.lastModified());
   }
-  private void pumpFileChannels(FileChannel inc, FileChannel outc) throws IOException {
-      ByteBuffer buffer = ByteBuffer.allocate( iBufferSize );
-      while (true) {
-        int ret = inc.read( buffer );
-        if (ret==-1) // nothing left to read
-          break;
-        buffer.flip();
-        outc.write( buffer );
+  private void pumpFileChannels(final FileChannel inc, final FileChannel outc) throws IOException {
+    final ByteBuffer buffer = ByteBuffer.allocate( iBufferSize );
+    while (true) {
+      final int ret = inc.read( buffer );
+      if (ret==-1) {
+        break;
+      }
+      buffer.flip();
+      outc.write( buffer );
       buffer.clear(); // Make room for the next read
     }
     inc.close();
     outc.close();
   }
 
-  
+
 
 
 }
