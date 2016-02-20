@@ -10,7 +10,7 @@ public class OphototPodkladAction extends PodkladAction0 {
   private static final long serialVersionUID = -262970268937158619L;
 
   public OphototPodkladAction() {
-    super("Fotomapa");
+    super("Letecká");
     putValue(SHORT_DESCRIPTION, "Ortho foto mapa");
     putValue(MNEMONIC_KEY, KeyEvent.VK_F);
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('f'));
