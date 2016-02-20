@@ -10,7 +10,7 @@ public class WinterTuristPodkladAction extends PodkladAction0 {
     public WinterTuristPodkladAction() {
         super("Turistická zimní");
         putValue(SHORT_DESCRIPTION, "Zimní turistická mapa.");
-        putValue(MNEMONIC_KEY, KeyEvent.VK_W);
+        putValue(MNEMONIC_KEY, KeyEvent.VK_M);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('w'));
     }
 

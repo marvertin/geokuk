@@ -96,13 +96,17 @@ public class Menu extends MenuStrujce {
     item(akce.baseNPodkladAction, mapPodkladButtonGroup);
     item(akce.turistPokladAction, mapPodkladButtonGroup);
     item(akce.winterTuristPodkladAction, mapPodkladButtonGroup);
+    //nefunguje, podklady stené jako turistická
+    //em(akce.aquaticTuristPodkladAction, mapPodkladButtonGroup);
     item(akce.geographyPodkladAction, mapPodkladButtonGroup);
     item(akce.ophototPodkladAction, mapPodkladButtonGroup);
     item(akce.army2PodkladAction, mapPodkladButtonGroup);
     item(akce.ophot0203PodkladAction, mapPodkladButtonGroup);
+    item(akce.ophot0406PodkladAction, mapPodkladButtonGroup);
+    //nefunguje, nemají podklady ve staré podobě
+    //item(akce.ophot1012PodkladAction, mapPodkladButtonGroup);
     item(akce.zadnePodkladAction, mapPodkladButtonGroup);
     separator();
-
 
     item(akce.tturDekoraceAction);
     item(akce.tcykloDekoraceAction);
