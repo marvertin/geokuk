@@ -104,12 +104,12 @@ public class GeogetLoader extends Nacitac0 {
         groundspeak.terrain = rs.getString("terrain");
         groundspeak.country = rs.getString("country");
         groundspeak.state = rs.getString("state");
+        groundspeak.encodedHints = rs.getString("hint");
 
         InputStream shortDescBlob = rs.getBinaryStream("shortdesc");
         InflaterInputStream inflaterStream = new InflaterInputStream(shortDescBlob);
         groundspeak.shortDescription = CharStreams.toString(new InputStreamReader(inflaterStream, Charsets.UTF_8));
         Closeables.closeQuietly(inflaterStream);
-        groundspeak.encodedHints = rs.getString("hint");
 
         int cacheStatus = rs.getInt("cachestatus");
         switch (cacheStatus) {
@@ -131,6 +131,10 @@ public class GeogetLoader extends Nacitac0 {
         gpxWpt.desc = String.format("%s by %s (%s / %s)",
             gpxWpt.groundspeak.name, gpxWpt.groundspeak.placedBy,
             gpxWpt.groundspeak.difficulty, gpxWpt.groundspeak.terrain);
+
+        gpxWpt.link.href = "http://coord.info/" + gpxWpt.name;
+        gpxWpt.link.text = String.format("%s by %s", gpxWpt.groundspeak.name, gpxWpt.groundspeak.placedBy);;
+
         builder.addGpxWpt(gpxWpt);
       }
     }
