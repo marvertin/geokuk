@@ -28,6 +28,14 @@ public enum EKesDiffTerRating {
             return String.valueOf(this.ordinal() / 2. + 1);
         }
     }
+    
+    public String to2DigitNumberString() {
+      if (this == UNKNOWN) {
+        return "0";
+      } else {
+        return Integer.toString(this.ordinal() * 5 + 10);
+      }
+    }
 
     public char toSingleChar() {
         if (this == EKesDiffTerRating.UNKNOWN) {

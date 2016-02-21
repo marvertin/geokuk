@@ -11,14 +11,14 @@ class GenotypBuilderKes {
   /**
    * 
    */
-	private final Genotyp g;
+  private final Genotyp g;
   private final Genom genom;
 
   /**
    * 
    */
   public GenotypBuilderKes(Genom genom, Genotyp g) {
-		this.genom = genom;
+    this.genom = genom;
     this.g = g;
   }
   
@@ -49,18 +49,8 @@ class GenotypBuilderKes {
     }
     if (kes.getFinal() != null) g.put(genom.ALELA_vylusteno);
 
-    // TODO : tohle by chtelo cele predelat
-    g.put (genom.seekAlela("ter" + upravCislo(kes.getTerrain().toNumberString())));
-    g.put (genom.seekAlela("dif" + upravCislo(kes.getDifficulty().toNumberString())));
+    g.put (genom.seekAlela("ter" + kes.getTerrain().to2DigitNumberString()));
+    g.put (genom.seekAlela("dif" + kes.getDifficulty().to2DigitNumberString()));
   }
-
-  private String upravCislo(String terdifu) {
-      if (terdifu.equals("0")) {
-          return terdifu;
-      } else {
-          return (terdifu + "0").replace(".", "").substring(0, 2);
-      }
-  }
-
 
 }
