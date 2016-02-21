@@ -60,6 +60,4 @@ public enum EKesDiffTerRating {
             return UNKNOWN;
         }
     }
-
-
 }

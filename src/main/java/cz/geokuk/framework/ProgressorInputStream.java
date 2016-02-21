@@ -5,11 +5,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-
-
 package cz.geokuk.framework;
-
-
 
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -17,8 +13,6 @@ import java.io.InputStream;
 
 import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
-
-
 
 /** 
  * Monitors the progress of reading from some InputStream. This ProgressMonitor

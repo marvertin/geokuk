@@ -45,7 +45,7 @@ public class KachleDBManager implements KachleManager {
             "z int, s varchar(10), image blob, PRIMARY KEY(x, y, z, s))", TABLE_NAME);
 
     /**
-     * Since we've got many threads that can write to the database, using a single connection
+     * Since we've got multiple threads that can write to the database, using a single connection
      * is hardly possible (would require synchronization on code level, which is not the way
      * to go). We also want to avoid exposing the implementation details further. Since the
      * number of threads is small enough, we don't need a connection pool and instead we've got

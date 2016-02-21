@@ -66,7 +66,7 @@ public class FConst {
     String version;
     boolean iamindevelopmentenvi;
     try {
-      version =   Manifests.read("Geokuk-Version");;
+      version = Manifests.read("Geokuk-Version");
       iamindevelopmentenvi = false;
     } catch (final IllegalArgumentException e) {
       version = NOT_VERSION_I_AM_IN_DEVELOP;

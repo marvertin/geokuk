@@ -61,6 +61,4 @@ class GenotypBuilderKes {
           return (terdifu + "0").replace(".", "").substring(0, 2);
       }
   }
-
-
 }
