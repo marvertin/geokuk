@@ -73,6 +73,8 @@ public class GeogetLoader extends Nacitac0 {
     }
   }
 
+  private static int kratke;
+  
   private void loadCaches(Statement statement, IImportBuilder builder, Future<?> future)
       throws SQLException, IOException {
     try (ResultSet rs = statement.executeQuery(GEOGET_CACHES_QUERY)) {
@@ -106,10 +108,14 @@ public class GeogetLoader extends Nacitac0 {
         groundspeak.state = rs.getString("state");
         groundspeak.encodedHints = rs.getString("hint");
 
-        InputStream shortDescBlob = rs.getBinaryStream("shortdesc");
-        InflaterInputStream inflaterStream = new InflaterInputStream(shortDescBlob);
-        groundspeak.shortDescription = CharStreams.toString(new InputStreamReader(inflaterStream, Charsets.UTF_8));
-        Closeables.closeQuietly(inflaterStream);
+        try {
+          InputStream shortDescBlob = rs.getBinaryStream("shortdesc");
+          InflaterInputStream inflaterStream = new InflaterInputStream(shortDescBlob);
+          groundspeak.shortDescription = CharStreams.toString(new InputStreamReader(inflaterStream, Charsets.UTF_8));
+          Closeables.closeQuietly(inflaterStream);
+        } catch (NullPointerException e) {
+          // Asi chyba v JDBC driveru, měl se vrátit null a ne spadnout uvnitř na výjimku, když není v geogetu vyplněno.
+        }
 
         int cacheStatus = rs.getInt("cachestatus");
         switch (cacheStatus) {
