@@ -8,10 +8,10 @@ import java.util.regex.Pattern;
 /**
  * @author veverka
  */
-public  class DirScaner {
+public  class DirScanner {
 
-  // case insensitive, TODO : other image formats than JPG
-  private static final Pattern FILE_NAME_REGEX = Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg)");
+  // case insensitive, TODO : other image formats than JPG, raw and tif
+  private static final Pattern FILE_NAME_REGEX = Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif|db3)");
 
   // TODO : Use file watchers
   private File dir;

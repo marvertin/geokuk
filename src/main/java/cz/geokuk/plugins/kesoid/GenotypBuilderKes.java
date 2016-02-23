@@ -52,5 +52,4 @@ class GenotypBuilderKes {
     g.put (genom.seekAlela("ter" + kes.getTerrain().to2DigitNumberString()));
     g.put (genom.seekAlela("dif" + kes.getDifficulty().to2DigitNumberString()));
   }
-
 }

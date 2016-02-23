@@ -1,12 +1,11 @@
 package cz.geokuk.plugins.kesoid.importek;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.concurrent.Future;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.util.exception.EExceptionSeverity;
@@ -23,13 +22,7 @@ public class NacitacGeokuk extends Nacitac0 {
    */
   private static final String HLAVICKA = "*geokuk:exportversion=2";
 
-  /* (non-Javadoc)
-   * @see Nacitac0#nactiKdyzUmis(java.io.InputStream, java.lang.String, java.util.Map)
-   */
-  @Override
-  protected void nactiKdyzUmis(InputStream aIstm, String aJmeno, IImportBuilder builder, Future<?> future) throws IOException {
-    if (! aJmeno.toLowerCase().trim().endsWith(".geokuk")) return; // umíme jen GPX
-
+  private void nacti(InputStream aIstm, IImportBuilder builder, Future<?> future) throws IOException {
     BufferedReader rdr = new BufferedReader(new InputStreamReader(aIstm, Charset.forName("UTF8")));
 
     String hlavicka = rdr.readLine();
@@ -112,11 +105,41 @@ public class NacitacGeokuk extends Nacitac0 {
           break;
         }
       } catch (Exception e) {
-        String positionInfo = "ERORR on line=" + linenumber + " in \""  + aJmeno + "\" when reading cache " +  jmenoAktualniKese;
+        String positionInfo = "ERORR on line=" + linenumber + " while reading cache " +  jmenoAktualniKese;
         FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, positionInfo);
       }
     }
     System.out.println("Precteno: " + ncaches + " keší a " + nwpts + " waypointů.");
   }
 
+  @Override
+  protected void nacti(File file, IImportBuilder builder, Future<?> future) throws IOException {
+    if (!umiNacist(file)) {
+      throw new IllegalArgumentException("Cannot load file " + file);
+    }
+    nacti(new BufferedInputStream(new FileInputStream(file)), builder, future);
+  }
+
+  @Override
+  protected void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> future)
+      throws IOException {
+    if (!umiNacist(zipEntry)) {
+      throw new IllegalArgumentException("Cannot load zipped entry " + zipEntry + " from file " + zipFile);
+    }
+    nacti(new BufferedInputStream(zipFile.getInputStream(zipEntry)), builder, future);
+  }
+
+  @Override
+  boolean umiNacist(ZipEntry zipEntry) {
+    return umiNacist(zipEntry.getName());
+  }
+
+  @Override
+  boolean umiNacist(File file) {
+    return umiNacist(file.getName());
+  }
+
+  private boolean umiNacist(String resourceName) {
+    return resourceName.toLowerCase().trim().endsWith(".geokuk");
+  }
 }
