@@ -9,6 +9,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.KesFilter;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.exception.EExceptionSeverity;
@@ -29,6 +30,8 @@ public class MultiNacitac {
   private final List<Nacitac0> nacitace = new ArrayList<>();
 
   private final KesoidModel kesoidModel;
+  
+
 
   //private static final String CACHE_SUFFIX = ".cache.serialized";
 
@@ -82,7 +85,7 @@ public class MultiNacitac {
           for (Nacitac0 nacitac : nacitace) {
             builder.setCurrentlyLoaded(file, nacitat);
             if (nacitat && nacitac.umiNacist(entry)) {
-              nacitac.nactiBezVyjimky(zipFile, entry, builder, future);
+              nacitac.nactiBezVyjimky(zipFile, entry, builder, future, kesoidModel.getProgressModel());
             }
           }
         }
@@ -92,7 +95,7 @@ public class MultiNacitac {
         boolean nacitat = kesoidModel.maSeNacist(file);
         builder.setCurrentlyLoaded(file, nacitat);
         if (nacitat && nacitac.umiNacist(file)) {
-          nacitac.nactiBezVyjimky(file, builder, future);
+          nacitac.nactiBezVyjimky(file, builder, future, kesoidModel.getProgressModel());
         }
       }
     }

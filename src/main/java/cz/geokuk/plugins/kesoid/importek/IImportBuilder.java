@@ -16,5 +16,7 @@ public interface IImportBuilder {
   public abstract void endTrack();
 
   public abstract void setTrackName(String aTrackName);
+  
+  public abstract GpxWpt get(String name);
 
 }

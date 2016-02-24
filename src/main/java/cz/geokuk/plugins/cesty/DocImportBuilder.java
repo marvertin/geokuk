@@ -70,4 +70,9 @@ public class DocImportBuilder implements IImportBuilder {
     updator.setNazev(cesta, aTrackName);
   }
 
+  @Override
+  public GpxWpt get(String aName) {
+    throw new RuntimeException("Neimplementovano");
+  }
+
 }

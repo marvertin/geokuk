@@ -65,7 +65,7 @@ public class KesoidImportBuilder implements IImportBuilder {
   @Override
   public void addGpxWpt(GpxWpt gpxwpt) {
     if (gpxwpt.wgs == null || gpxwpt.wgs.lat < 8 || gpxwpt.wgs.lat > 80 || gpxwpt.wgs.lon < 1 || gpxwpt.wgs.lon > 30) {
-      log.warn("Souradnice jsou mimo povoleny rozsah: " + gpxwpt.wgs + " - " + gpxwpt);
+      log.debug("Souradnice jsou mimo povoleny rozsah: {} - {}", gpxwpt.wgs, gpxwpt);
       return;
     }
 
@@ -800,5 +800,10 @@ public class KesoidImportBuilder implements IImportBuilder {
 
   @Override
   public void setTrackName(String aTrackName) {
+  }
+
+  @Override
+  public GpxWpt get(String aName) {
+    return gpxwpts.get(aName);
   }
 }

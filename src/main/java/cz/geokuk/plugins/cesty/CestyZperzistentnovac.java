@@ -128,7 +128,7 @@ public class CestyZperzistentnovac {
                     DocImportBuilder builder = new DocImportBuilder();
                     InputStream istm = new BufferedInputStream(new FileInputStream(file));
                     NacitacGpx nacitac = new NacitacGpx();
-                    nacitac.nacti(istm, builder, null);
+                    nacitac.nacti(istm, file.toString(), builder, null);
                     cesty.addAll(builder.getCesty());
                 }
             } catch (Exception e) {

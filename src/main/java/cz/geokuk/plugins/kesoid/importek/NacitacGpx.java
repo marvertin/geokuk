@@ -13,6 +13,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.framework.ProgressModel;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * @author veverka
  */
-public class NacitacGpx extends Nacitac0 {
+public class NacitacGpx extends NacitacInputStream0 {
 
   private static final Logger log =
       LogManager.getLogger(NacitacGpx.class.getSimpleName());
@@ -179,7 +181,8 @@ public class NacitacGpx extends Nacitac0 {
     GS_SHORT_DESCRIPTION = new QName(groundspeakNameSpaceUri, "short_description");
   }
 
-  public void nacti(InputStream istm, IImportBuilder builder, Future<?> future)
+  @Override
+  public void nacti(InputStream istm, String name, IImportBuilder builder, Future<?> future)
       throws FactoryConfigurationError, IOException {
     XMLInputFactory inputFactory = XMLInputFactory.newInstance();
     XMLStreamReader reader;
@@ -421,23 +424,6 @@ public class NacitacGpx extends Nacitac0 {
         wpt.gpxg.flag = parseCislo(rdr.getElementText());
       }
     }
-  }
-
-  @Override
-  protected void nacti(File file, IImportBuilder builder, Future<?> future) throws IOException {
-    if (!umiNacist(file)) {
-      throw new IllegalArgumentException("Cannot load file " + file);
-    }
-    nacti(new BufferedInputStream(new FileInputStream(file)), builder, future);
-  }
-
-  @Override
-  protected void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> future)
-      throws IOException {
-    if (!umiNacist(zipEntry)) {
-      throw new IllegalArgumentException("Cannot load zipped entry " + zipEntry + " from file " + zipFile);
-    }
-    nacti(new BufferedInputStream(zipFile.getInputStream(zipEntry)), builder, future);
   }
 
   @Override

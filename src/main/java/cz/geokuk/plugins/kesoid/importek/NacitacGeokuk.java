@@ -1,13 +1,19 @@
 package cz.geokuk.plugins.kesoid.importek;
 
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.concurrent.Future;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.framework.ProgressModel;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 
@@ -15,14 +21,15 @@ import cz.geokuk.util.exception.FExceptionDumper;
  * @author veverka
  *
  */
-public class NacitacGeokuk extends Nacitac0 {
+public class NacitacGeokuk extends NacitacInputStream0 {
 
   /**
    * 
    */
   private static final String HLAVICKA = "*geokuk:exportversion=2";
 
-  private void nacti(InputStream aIstm, IImportBuilder builder, Future<?> future) throws IOException {
+  @Override
+  protected void nacti(InputStream aIstm, String name, IImportBuilder builder, Future<?> future) throws IOException {
     BufferedReader rdr = new BufferedReader(new InputStreamReader(aIstm, Charset.forName("UTF8")));
 
     String hlavicka = rdr.readLine();
@@ -112,22 +119,7 @@ public class NacitacGeokuk extends Nacitac0 {
     System.out.println("Precteno: " + ncaches + " keší a " + nwpts + " waypointů.");
   }
 
-  @Override
-  protected void nacti(File file, IImportBuilder builder, Future<?> future) throws IOException {
-    if (!umiNacist(file)) {
-      throw new IllegalArgumentException("Cannot load file " + file);
-    }
-    nacti(new BufferedInputStream(new FileInputStream(file)), builder, future);
-  }
 
-  @Override
-  protected void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> future)
-      throws IOException {
-    if (!umiNacist(zipEntry)) {
-      throw new IllegalArgumentException("Cannot load zipped entry " + zipEntry + " from file " + zipFile);
-    }
-    nacti(new BufferedInputStream(zipFile.getInputStream(zipEntry)), builder, future);
-  }
 
   @Override
   boolean umiNacist(ZipEntry zipEntry) {
