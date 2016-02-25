@@ -44,6 +44,7 @@ public class GeogetLoader extends Nacitac0 {
           "  geocache.dthidden as dthidden,",
           "  geocache.country as country,",
           "  geocache.state as state,",
+          "  geocache.dtfound as dtfound,",
           "  geolist.shortdesc as shortdesc,",
           "  geolist.hint as hint",
           "FROM geocache",
@@ -167,6 +168,12 @@ public class GeogetLoader extends Nacitac0 {
 
         gpxWpt.link.href = "http://coord.info/" + gpxWpt.name;
         gpxWpt.link.text = String.format("%s by %s", gpxWpt.groundspeak.name, gpxWpt.groundspeak.placedBy);
+
+        long dtfound = rs.getLong("dtfound");
+        if (dtfound != 0) {
+          gpxWpt.sym = "Geocache Found";
+          gpxWpt.gpxg.found = Long.toString(dtfound);
+        }
 
         builder.addGpxWpt(gpxWpt);
       }
