@@ -5,16 +5,12 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.CharStreams;
-import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.ProgressModel;
 import cz.geokuk.framework.Progressor;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.*;
 import java.util.concurrent.Future;
 import java.util.zip.*;
@@ -70,8 +66,6 @@ public class GeogetLoader extends Nacitac0 {
       "WM", "Waymark",
       "MU", "Geocache");
   
-  
-  
   private static final String GEOGET_TAGS_QUERY_FRAGMENT = 
       Joiner.on('\n').join(
           "FROM geotag t ",
@@ -79,14 +73,10 @@ public class GeogetLoader extends Nacitac0 {
           "  ON t.ptrkat = c.key ",
           "LEFT JOIN geotagvalue v ",
           "  ON t.ptrvalue = v.key ",
-          "WHERE c.value IN ('favorites', 'Elevation', 'Hodnoceni-Pocet', 'Hodnoceni', 'BestOf', 'Znamka') "  
-          );
+          "WHERE c.value IN ('favorites', 'Elevation', 'Hodnoceni-Pocet', 'Hodnoceni', 'BestOf', 'Znamka') ");
 
   private static final String GEOGET_TAGS_COUNT = 
           "SELECT count(*) " + GEOGET_TAGS_QUERY_FRAGMENT;
-  //  CREATE TABLE geotag (key INTEGER PRIMARY KEY, id TEXT, flag INTEGER DEFAULT "0",ptrkat INTEGER DEFAULT "0",ptrvalue INTEGER DEFAULT "0");
-  //  CREATE TABLE geotagcategory (key INTEGER PRIMARY KEY, value TEXT, flag INTEGER DEFAULT "0");
-  //  CREATE TABLE geotagvalue (key INTEGER PRIMARY KEY, value TEXT, flag INTEGER DEFAULT "0");
   private static final String GEOGET_TAGS_QUERY = 
       Joiner.on('\n').join(
           "SELECT",
@@ -95,10 +85,9 @@ public class GeogetLoader extends Nacitac0 {
           "  v.value as value "
           ) + GEOGET_TAGS_QUERY_FRAGMENT;
 
-
-
   @Override
-  protected void nacti(File file, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) throws IOException {
+  protected void nacti(File file, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel)
+      throws IOException {
     if (!umiNacist(file)) {
       throw new IllegalArgumentException("Cannot load from file " + file);
     }
@@ -113,8 +102,8 @@ public class GeogetLoader extends Nacitac0 {
     }
   }
 
-  private void loadCaches(Statement statement, String fileName, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel)
-      throws SQLException, IOException {
+  private void loadCaches(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
+      ProgressModel aProgressModel) throws SQLException, IOException {
     final Progressor progressor = startProgressor(statement, GEOGET_CACHES_COUNT, fileName, aProgressModel);
     try (ResultSet rs = statement.executeQuery(GEOGET_CACHES_QUERY)) {
       while (rs.next()) {
@@ -148,13 +137,11 @@ public class GeogetLoader extends Nacitac0 {
         groundspeak.state = rs.getString("state");
         groundspeak.encodedHints = rs.getString("hint");
 
-        try {
-          InputStream shortDescBlob = rs.getBinaryStream("shortdesc");
-          InflaterInputStream inflaterStream = new InflaterInputStream(shortDescBlob);
-          groundspeak.shortDescription = CharStreams.toString(new InputStreamReader(inflaterStream, Charsets.UTF_8));
-          Closeables.closeQuietly(inflaterStream);
-        } catch (NullPointerException e) {
-          // Asi chyba v JDBC driveru, měl se vrátit null a ne spadnout uvnitř na výjimku, když není v geogetu vyplněno.
+        byte[] shortDescBytes = rs.getBytes("shortdesc");
+        if (shortDescBytes != null) {
+          try (InputStream is = new InflaterInputStream(new ByteArrayInputStream(shortDescBytes))) {
+            groundspeak.shortDescription = CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
+          }
         }
 
         int cacheStatus = rs.getInt("cachestatus");
@@ -179,19 +166,18 @@ public class GeogetLoader extends Nacitac0 {
             gpxWpt.groundspeak.difficulty, gpxWpt.groundspeak.terrain);
 
         gpxWpt.link.href = "http://coord.info/" + gpxWpt.name;
-        gpxWpt.link.text = String.format("%s by %s", gpxWpt.groundspeak.name, gpxWpt.groundspeak.placedBy);;
+        gpxWpt.link.text = String.format("%s by %s", gpxWpt.groundspeak.name, gpxWpt.groundspeak.placedBy);
 
         builder.addGpxWpt(gpxWpt);
       }
     } finally {
       progressor.finish();
-      log.info("loaded");
-      
+      log.info("Geocaches loaded.");
     }
   }
 
-
-  private void loadWaypoints(Statement statement, String fileName, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) throws SQLException {
+  private void loadWaypoints(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
+        ProgressModel aProgressModel) throws SQLException {
     final Progressor progressor = startProgressor(statement, GEOGET_WAYPOINTS_COUNT, fileName, aProgressModel);
     try (ResultSet rs = statement.executeQuery(GEOGET_WAYPOINTS_QUERY)) {
       while (rs.next()) {
@@ -213,12 +199,12 @@ public class GeogetLoader extends Nacitac0 {
     }
     finally {
       progressor.finish();
-      log.info("loaded");
-      
+      log.info("Waypoints loaded.");
     }
   }
   
-  private void loadTags(Statement statement, String fileName, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) throws SQLException {
+  private void loadTags(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
+        ProgressModel aProgressModel) throws SQLException {
     final Progressor progressor = startProgressor(statement, GEOGET_TAGS_COUNT, fileName, aProgressModel);
     try (ResultSet rs = statement.executeQuery(GEOGET_TAGS_QUERY)) {
       while (rs.next()) {
@@ -231,57 +217,56 @@ public class GeogetLoader extends Nacitac0 {
         String category = rs.getString("category");
         String value = rs.getString("value");
         GpxWpt gpxWpt = builder.get(name);
-        if ("favorites".equals(category)) {
-          try {
-            gpxWpt.gpxg.favorites = Integer.parseInt(value);
-          } catch (NumberFormatException e) { // bohužel
-          }
+
+        if (name == null || category == null || value == null || gpxWpt == null) {
+          continue;
         }
-        if ("Elevation".equals(category)) {
-          try {
-            gpxWpt.gpxg.elevation = Integer.parseInt(value);
-          } catch (NumberFormatException e) { // bohužel
+
+        try {
+          switch (category) {
+            case "favorites":
+              gpxWpt.gpxg.favorites = Integer.parseInt(value);
+              break;
+            case "Elevation":
+              gpxWpt.gpxg.elevation = Integer.parseInt(value);
+              break;
+            case "BestOf":
+              gpxWpt.gpxg.bestOf = Integer.parseInt(value);
+              break;
+            case "Hodnoceni":
+              if (!value.isEmpty()) {
+                gpxWpt.gpxg.hodnoceni = Integer.parseInt(value.substring(0, value.length() - 1)); // odříznout procenta
+              }
+              break;
+            case "Hodnoceni-Pocet":
+              if (!value.isEmpty()) {
+                gpxWpt.gpxg.hodnoceniPocet = Integer.parseInt(value.substring(0, value.length() - 1)); // odříznout x
+              }
+              break;
+            case "Znamka":
+              gpxWpt.gpxg.znamka = Integer.parseInt(value);
+              break;
+            default:
+              log.warn("Unknown tag category: {}", category);
           }
-        }
-        if ("BestOf".equals(category)) {
-          try {
-            gpxWpt.gpxg.bestOf = Integer.parseInt(value);
-          } catch (NumberFormatException e) { // bohužel
-          }
-        }
-        if ("Hodnoceni".equals(category)) {
-          try {
-            gpxWpt.gpxg.hodnoceni = Integer.parseInt(value.substring(0, value.length()-1)); // odříznout procenta
-          } catch (NumberFormatException e) { // bohužel
-          }
-        }
-        if ("Hodnoceni-Pocet".equals(category)) {
-          try {
-            gpxWpt.gpxg.hodnoceniPocet = Integer.parseInt(value.substring(0, value.length()-1)); // odříznout x
-          } catch (NumberFormatException e) { // bohužel
-          }
-        }
-        if ("Znamka".equals(category)) {
-          try {
-            gpxWpt.gpxg.znamka = Integer.parseInt(value); // odříznout x
-          } catch (NumberFormatException e) { // bohužel
-          }
+        } catch (NumberFormatException e) {
+          log.warn("Unable to parse number!", e);
         }
       }
     }
     finally {
       progressor.finish();
-      log.info("loaded");
-
+      log.info("Tags loaded.");
     }
   }
 
-  private Progressor startProgressor(Statement statement, String query, String fileName, ProgressModel aProgressModel) throws SQLException {
+  private Progressor startProgressor(Statement statement, String query, String fileName, ProgressModel aProgressModel)
+      throws SQLException {
     final Progressor progressor;
     try (ResultSet rs = statement.executeQuery(query)) {
       int pocet = rs.getInt(1);
-      log.info("Start loading {} rows  from {} - {}", pocet, fileName, query);
-      progressor = aProgressModel.start(pocet, "Loading geocaches " + fileName);
+      log.info("Start loading {} rows from {} - {}", pocet, fileName, query);
+      progressor = aProgressModel.start(pocet, "Loading waypoints " + fileName);
     }
     return progressor;
   }
@@ -294,7 +279,8 @@ public class GeogetLoader extends Nacitac0 {
   }
 
   @Override
-  protected void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> f, ProgressModel aProgressModel) throws IOException {
+  protected void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> f,
+        ProgressModel aProgressModel) throws IOException {
     throw new UnsupportedOperationException();
   }
 

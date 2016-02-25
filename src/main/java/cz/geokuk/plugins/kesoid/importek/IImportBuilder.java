@@ -3,20 +3,19 @@ package cz.geokuk.plugins.kesoid.importek;
 
 public interface IImportBuilder {
 
-  public abstract void addGpxWpt(GpxWpt gpxwpt);
+  void addGpxWpt(GpxWpt gpxwpt);
 
-  public abstract void addTrackWpt(GpxWpt wpt);
+  void addTrackWpt(GpxWpt wpt);
 
-  public abstract void begTrackSegment();
+  void begTrackSegment();
 
-  public abstract void endTrackSegment();
+  void endTrackSegment();
 
-  public abstract void begTrack();
+  void begTrack();
 
-  public abstract void endTrack();
+  void endTrack();
 
-  public abstract void setTrackName(String aTrackName);
+  void setTrackName(String aTrackName);
   
-  public abstract GpxWpt get(String name);
-
+  GpxWpt get(String name);
 }

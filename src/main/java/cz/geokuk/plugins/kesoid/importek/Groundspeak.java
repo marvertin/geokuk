@@ -30,7 +30,4 @@ public class Groundspeak {
         + ", container=" + container + ", shortDescription=" + shortDescription
         + "]";
   }
-
-
-
 }
