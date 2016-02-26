@@ -1,10 +1,11 @@
 package cz.geokuk.plugins.kesoid.importek;
 
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.Future;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.FactoryConfigurationError;
@@ -12,11 +13,10 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.framework.ProgressModel;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import cz.geokuk.core.coordinates.Wgs;
 
 /**
  *
@@ -30,7 +30,6 @@ public class NacitacGpx extends NacitacInputStream0 {
   private static final Logger log =
       LogManager.getLogger(NacitacGpx.class.getSimpleName());
 
-  private static final String PREFIX_USERDEFINOANYCH_GENU = "geokuk_";
   private static String TOPOGRAFIC_NAMESPACE_1_0 = "http://www.topografix.com/GPX/1/0";
   private static String TOPOGRAFIC_NAMESPACE_1_1 = "http://www.topografix.com/GPX/1/1";
   private static String GROUNSPEAK_NAMESPACE_1_0 = "http://www.groundspeak.com/cache/1/0";

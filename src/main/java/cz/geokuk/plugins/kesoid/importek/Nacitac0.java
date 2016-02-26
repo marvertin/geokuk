@@ -20,6 +20,7 @@ import cz.geokuk.util.exception.FExceptionDumper;
  */
 public abstract class Nacitac0 {
 
+  protected static final String PREFIX_USERDEFINOANYCH_GENU = "geokuk_";
   static Pattern osetriCislo = Pattern.compile("[^0-9]");
 
   protected abstract void nacti(File file, IImportBuilder builder,  Future<?> future, ProgressModel aProgressModel) throws IOException;

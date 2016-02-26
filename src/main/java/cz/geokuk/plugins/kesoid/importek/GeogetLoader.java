@@ -74,7 +74,8 @@ public class GeogetLoader extends Nacitac0 {
           "  ON t.ptrkat = c.key ",
           "LEFT JOIN geotagvalue v ",
           "  ON t.ptrvalue = v.key ",
-          "WHERE c.value IN ('favorites', 'Elevation', 'Hodnoceni-Pocet', 'Hodnoceni', 'BestOf', 'Znamka') ");
+          "WHERE (c.value IN ('favorites', 'Elevation', 'Hodnoceni-Pocet', 'Hodnoceni', 'BestOf', 'Znamka') or c.value like '"
+          + PREFIX_USERDEFINOANYCH_GENU + "%')");
 
   private static final String GEOGET_TAGS_COUNT = 
           "SELECT count(*) " + GEOGET_TAGS_QUERY_FRAGMENT;
@@ -230,31 +231,35 @@ public class GeogetLoader extends Nacitac0 {
         }
 
         try {
-          switch (category) {
-            case "favorites":
-              gpxWpt.gpxg.favorites = Integer.parseInt(value);
-              break;
-            case "Elevation":
-              gpxWpt.gpxg.elevation = Integer.parseInt(value);
-              break;
-            case "BestOf":
-              gpxWpt.gpxg.bestOf = Integer.parseInt(value);
-              break;
-            case "Hodnoceni":
-              if (!value.isEmpty()) {
-                gpxWpt.gpxg.hodnoceni = Integer.parseInt(value.substring(0, value.length() - 1)); // odříznout procenta
-              }
-              break;
-            case "Hodnoceni-Pocet":
-              if (!value.isEmpty()) {
-                gpxWpt.gpxg.hodnoceniPocet = Integer.parseInt(value.substring(0, value.length() - 1)); // odříznout x
-              }
-              break;
-            case "Znamka":
-              gpxWpt.gpxg.znamka = Integer.parseInt(value);
-              break;
-            default:
-              log.warn("Unknown tag category: {}", category);
+          if (category != null && category.startsWith(PREFIX_USERDEFINOANYCH_GENU)) {
+            gpxWpt.gpxg.putUserTag(category.substring(PREFIX_USERDEFINOANYCH_GENU.length()), value);
+          } else {
+            switch (category) {
+              case "favorites":
+                gpxWpt.gpxg.favorites = Integer.parseInt(value);
+                break;
+              case "Elevation":
+                gpxWpt.gpxg.elevation = Integer.parseInt(value);
+                break;
+              case "BestOf":
+                gpxWpt.gpxg.bestOf = Integer.parseInt(value);
+                break;
+              case "Hodnoceni":
+                if (!value.isEmpty()) {
+                  gpxWpt.gpxg.hodnoceni = Integer.parseInt(value.substring(0, value.length() - 1)); // odříznout procenta
+                }
+                break;
+              case "Hodnoceni-Pocet":
+                if (!value.isEmpty()) {
+                  gpxWpt.gpxg.hodnoceniPocet = Integer.parseInt(value.substring(0, value.length() - 1)); // odříznout x
+                }
+                break;
+              case "Znamka":
+                gpxWpt.gpxg.znamka = Integer.parseInt(value);
+                break;
+              default:
+                log.warn("Unknown tag category: {}", category);
+            }
           }
         } catch (NumberFormatException e) {
           log.warn("Unable to parse number!", e);
