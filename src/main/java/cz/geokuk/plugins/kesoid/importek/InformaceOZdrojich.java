@@ -3,9 +3,14 @@ package cz.geokuk.plugins.kesoid.importek;
 import java.io.File;
 import java.util.*;
 
-public class InformaceOZdrojich {
-  private InformaceOZdroji root;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+public class InformaceOZdrojich {
+  private static final Logger log = LogManager.getLogger(GeogetLoader.class.getSimpleName());
+  
+  private InformaceOZdroji root;
+  
   private final Map<File, InformaceOZdroji> map = new LinkedHashMap<>();
 
   public int getSourceCount(boolean loaded) {
@@ -24,7 +29,8 @@ public class InformaceOZdrojich {
   }
 
   public InformaceOZdroji add(File aJmenoZdroje, boolean nacteno) {
-    // TODO : perhaps it's not needed to bother with the whole path to root... Maybe canonical path and longest
+    // TODO : perhaps it's not needed to bother with the whole path to root...
+    // Maybe canonical path and longest
     // common prefix will do?
     InformaceOZdroji ioz = map.get(aJmenoZdroje);
     if (ioz == null) {
@@ -73,8 +79,7 @@ public class InformaceOZdrojich {
     return getSubtree(get(subTreeRoot), toReturn);
   }
 
-  private Collection<InformaceOZdroji> getSubtree(InformaceOZdroji subTreeRoot,
-                                                          Collection<InformaceOZdroji> buffer) {
+  private Collection<InformaceOZdroji> getSubtree(InformaceOZdroji subTreeRoot, Collection<InformaceOZdroji> buffer) {
     List<InformaceOZdroji> children = subTreeRoot.getChildren();
     buffer.add(subTreeRoot);
     for (InformaceOZdroji child : children) {
@@ -86,4 +91,16 @@ public class InformaceOZdrojich {
   public Set<File> getJmenaZdroju() {
     return map.keySet();
   }
+
+  public long getYungest() {
+    long x = 0;
+    for (InformaceOZdroji info : map.values()) {
+      if (info.nacteno) {
+        x = Math.max(x, info.getLastModified());
+      }
+    }
+    log.info("Spocitano nejmladsi datum: {}", x);
+    return x;
+  }
+
 }

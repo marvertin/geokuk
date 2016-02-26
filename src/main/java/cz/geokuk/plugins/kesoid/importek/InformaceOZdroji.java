@@ -19,6 +19,10 @@ public class InformaceOZdroji {
     this.nacteno = nacteno;
   }
 
+  public long getLastModified() {
+    return jmenoZdroje.lastModified();
+  }
+  
   public void addChild(InformaceOZdroji child) {
     // TODO : use a sane data structure for this
     children.add(child);

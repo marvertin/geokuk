@@ -200,7 +200,7 @@ public class JStatusBar extends JPanel {
     zdrojeKesoiduPanel.add(jZdrojeKesoiduPocetNenactenych);
     jZdrojeKesoiduPocetNenactenych.setToolTipText("Počet souborů s kešoidy, jejichž načtení bylo zabráněno odškrtnutím.");
     zdrojeKesoiduPanel.add(new JLabel("zdroje:"));
-    // zdrojeKesoiduPanel.add(jZdrojeKesoiduCas);
+    zdrojeKesoiduPanel.add(jZdrojeKesoiduCas);
     jZdrojeKesoiduCas.setToolTipText("Čas nejmladšího načteného souboru.");
     zdrojeKesoiduPanel.setCursor(FKurzory.KAM_SE_DA_KLIKNOUT);
     add(zdrojeKesoiduPanel);
@@ -259,6 +259,8 @@ public class JStatusBar extends JPanel {
     jZdrojeKesoiduPocetNenactenych.setText(pocetNenactenych + "");
     jZdrojeKesoiduPocetNenactenych.setVisible(pocetNenactenych > 0);
 
+    String formatedCas = String.format("%tF %<tR", informaceOZdrojich.getYungest());
+    jZdrojeKesoiduCas.setText(formatedCas);
     revalidate();
   }
 
