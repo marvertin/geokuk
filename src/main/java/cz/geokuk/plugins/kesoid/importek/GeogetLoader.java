@@ -9,6 +9,7 @@ import com.google.common.io.Files;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.ProgressModel;
 import cz.geokuk.framework.Progressor;
+import cz.geokuk.util.lang.ATimestamp;
 
 import java.io.*;
 import java.sql.*;
@@ -27,6 +28,11 @@ public class GeogetLoader extends Nacitac0 {
   
   private static final Logger log = LogManager.getLogger(GeogetLoader.class.getSimpleName());
 
+  private static int PROGRESS_VAHA_CACHES = 1;
+  private static int PROGRESS_VAHA_WAYPOINTS = 16;
+  private static int PROGRESS_VAHA_TAGS = 18;
+  
+  
   private static final String GEOGET_CACHES_QUERY =
       Joiner.on('\n').join(
           "SELECT",
@@ -95,24 +101,41 @@ public class GeogetLoader extends Nacitac0 {
     }
     try (Connection c = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
          Statement statement = c.createStatement()) {
-        loadCaches(statement, file.toString(), builder, future, aProgressModel);
-        loadWaypoints(statement, file.toString(), builder, future, aProgressModel);
-        loadTags(statement, file.toString(), builder, future, aProgressModel);
+        int pocet = count(statement, GEOGET_CACHES_COUNT) * PROGRESS_VAHA_CACHES 
+            + count(statement, GEOGET_WAYPOINTS_COUNT)  * PROGRESS_VAHA_WAYPOINTS
+            + count(statement, GEOGET_TAGS_COUNT) * PROGRESS_VAHA_TAGS;
+        Progressor progressor = aProgressModel.start(pocet, "Loading " + file.toString());
+        loadCaches(statement, file.toString(), builder, future, progressor);
+        loadWaypoints(statement, file.toString(), builder, future, progressor);
+        loadTags(statement, file.toString(), builder, future, progressor);
+        progressor.finish();
       }
     catch (SQLException e) {
       throw new IOException("Unable to load from " + file, e);
     }
   }
 
+  private int count(Statement statement, String countQuery) throws SQLException {
+    try (ResultSet rs = statement.executeQuery(countQuery)) {
+      return rs.getInt(1);
+    }
+  }
+  
+  private void logResult(String nazev, ATimestamp startTime, int pocet) {
+    long trvani = ATimestamp.now().diff(startTime);
+    log.info("{} {} loaded in {} s, it is {} ites/s. ", pocet, nazev, trvani/1000.0, pocet * 1000 / trvani);
+  }
+  
   private void loadCaches(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
-      ProgressModel aProgressModel) throws SQLException, IOException {
-    final Progressor progressor = startProgressor(statement, GEOGET_CACHES_COUNT, fileName, aProgressModel);
+      Progressor progressor) throws SQLException, IOException {
+    ATimestamp startTime = ATimestamp.now();
+    int citac = 0;
     try (ResultSet rs = statement.executeQuery(GEOGET_CACHES_QUERY)) {
       while (rs.next()) {
         if (future != null && future.isCancelled()) {
           return;
         }
-        progressor.incProgress();
+        progressor.addProgress(PROGRESS_VAHA_CACHES);
         GpxWpt gpxWpt = new GpxWpt();
         gpxWpt.wgs = new Wgs(rs.getDouble("lat"), rs.getDouble("lon"));
         gpxWpt.name = rs.getString("id");
@@ -138,7 +161,7 @@ public class GeogetLoader extends Nacitac0 {
         groundspeak.country = rs.getString("country");
         groundspeak.state = rs.getString("state");
         groundspeak.encodedHints = rs.getString("hint");
-
+//
         byte[] shortDescBytes = rs.getBytes("shortdesc");
         if (shortDescBytes != null) {
           try (InputStream is = new InflaterInputStream(new ByteArrayInputStream(shortDescBytes))) {
@@ -177,22 +200,25 @@ public class GeogetLoader extends Nacitac0 {
         }
 
         builder.addGpxWpt(gpxWpt);
+        citac++;
+
       }
     } finally {
       progressor.finish();
-      log.info("Geocaches loaded.");
+      logResult("Geocaches", startTime, citac);
     }
   }
 
   private void loadWaypoints(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
-        ProgressModel aProgressModel) throws SQLException {
-    final Progressor progressor = startProgressor(statement, GEOGET_WAYPOINTS_COUNT, fileName, aProgressModel);
+      Progressor progressor) throws SQLException {
+    ATimestamp startTime = ATimestamp.now();
+    int citac = 0;
     try (ResultSet rs = statement.executeQuery(GEOGET_WAYPOINTS_QUERY)) {
       while (rs.next()) {
         if (future != null && future.isCancelled()) {
           return;
         }
-        progressor.incProgress();
+        progressor.addProgress(PROGRESS_VAHA_WAYPOINTS);
         GpxWpt gpxWpt = new GpxWpt();
         gpxWpt.wgs = new Wgs(rs.getDouble("lat"), rs.getDouble("lon"));
         String parentId = rs.getString("id");
@@ -203,23 +229,25 @@ public class GeogetLoader extends Nacitac0 {
         gpxWpt.sym = rs.getString("wpttype");
         gpxWpt.desc = rs.getString("name");
         builder.addGpxWpt(gpxWpt);
+        citac++;
       }
     }
     finally {
       progressor.finish();
-      log.info("Waypoints loaded.");
+      logResult("Waypoints", startTime, citac);
     }
   }
   
   private void loadTags(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
-        ProgressModel aProgressModel) throws SQLException {
-    final Progressor progressor = startProgressor(statement, GEOGET_TAGS_COUNT, fileName, aProgressModel);
+      Progressor progressor) throws SQLException {
+    ATimestamp startTime = ATimestamp.now();
+    int citac = 0;
     try (ResultSet rs = statement.executeQuery(GEOGET_TAGS_QUERY)) {
       while (rs.next()) {
         if (future != null && future.isCancelled()) {
           return;
         }
-        progressor.incProgress();
+        progressor.addProgress(PROGRESS_VAHA_TAGS);
         
         String name = rs.getString("id");
         String category = rs.getString("category");
@@ -264,23 +292,13 @@ public class GeogetLoader extends Nacitac0 {
         } catch (NumberFormatException e) {
           log.warn("Unable to parse number!", e);
         }
+        citac++;
       }
     }
     finally {
       progressor.finish();
-      log.info("Tags loaded.");
+      logResult("Tags", startTime, citac);
     }
-  }
-
-  private Progressor startProgressor(Statement statement, String query, String fileName, ProgressModel aProgressModel)
-      throws SQLException {
-    final Progressor progressor;
-    try (ResultSet rs = statement.executeQuery(query)) {
-      int pocet = rs.getInt(1);
-      log.info("Start loading {} rows from {} - {}", pocet, fileName, query);
-      progressor = aProgressModel.start(pocet, "Loading waypoints " + fileName);
-    }
-    return progressor;
   }
 
   private String formatDateTime(int yyyymmddDate) {
