@@ -15,6 +15,7 @@ public abstract class Atom implements Comparable<Atom> {
   String name;
   int ordinal;
 
+  @SafeVarargs
   public static <E extends Atom> Set<E> of(E... types) {
     return new HashSet<>(Arrays.asList(types));
   }

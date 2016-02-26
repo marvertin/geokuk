@@ -1,8 +1,6 @@
 package cz.geokuk.util.process;
 
 import java.awt.Desktop;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 

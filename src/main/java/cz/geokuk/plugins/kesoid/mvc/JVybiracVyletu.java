@@ -12,10 +12,10 @@ import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
 import cz.geokuk.plugins.vylety.EVylet;
 
-public class JVybiracVyletu extends JComboBox implements AfterEventReceiverRegistrationInit {
+public class JVybiracVyletu extends JComboBox<EVylet> implements AfterEventReceiverRegistrationInit {
 
   private static final long serialVersionUID = 1L;
-  private final DefaultComboBoxModel model = new DefaultComboBoxModel(EVylet.values());
+  private final DefaultComboBoxModel<EVylet> model = new DefaultComboBoxModel<>(EVylet.values());
   private KesoidModel kesoidModel;
 
   public JVybiracVyletu() {

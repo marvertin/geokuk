@@ -17,7 +17,7 @@ import javax.swing.JComboBox;
  * @author veverka
  *
  */
-public class JGeocodingComboBox extends JComboBox {
+public class JGeocodingComboBox extends JComboBox<String> {
 
   private static final long serialVersionUID = 8614892946049285548L;
 

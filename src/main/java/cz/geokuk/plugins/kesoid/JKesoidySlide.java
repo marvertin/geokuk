@@ -304,6 +304,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
     switch (vyletModel.get(wpt.getKesoid())) {
     case ANO: g.put(genom.ALELA_lovime); break;
     case NE:  g.put(genom.ALELA_ignoru); break;
+    case NEVIM: break;
     }
     g.put(cestyModel.isOnVylet(wpt) ? genom.ALELA_nacestejsou : genom.ALELA_mimocesticu);
 

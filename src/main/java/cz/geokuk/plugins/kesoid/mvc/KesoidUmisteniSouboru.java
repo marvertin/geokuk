@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class KesoidUmisteniSouboru extends UmisteniSouboru0  {
 
+  @SuppressWarnings("unused")
   private static final Logger log = LogManager.getLogger(KesoidUmisteniSouboru.class.getSimpleName());
 
   public static final Filex GEOKUK_DATA_DIR = new Filex(new File(FConst.HOME_DIR, "geokuk"), false, true);

@@ -10,6 +10,8 @@ import java.io.IOException;
 
 public class OpenFileAction extends Action0 {
 
+  private static final long serialVersionUID = 9155605907779458631L;
+
   private final Logger log = org.apache.logging.log4j.LogManager.getLogger(OpenFileAction.class.getSimpleName());
 
   private final File fileToOpen;

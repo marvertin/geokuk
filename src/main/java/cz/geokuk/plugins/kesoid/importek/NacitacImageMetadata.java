@@ -1,5 +1,17 @@
 package cz.geokuk.plugins.kesoid.importek;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.concurrent.Future;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
@@ -8,19 +20,8 @@ import com.drew.metadata.exif.GpsDirectory;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
+
 import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.framework.ProgressModel;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.*;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.concurrent.Future;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public class NacitacImageMetadata extends NacitacInputStream0 {
 

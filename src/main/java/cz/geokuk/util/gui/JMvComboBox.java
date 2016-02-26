@@ -10,7 +10,7 @@ import javax.swing.event.ListDataListener;
 
 import cz.geokuk.util.gui.SelectionModel.Item;
 
-public class JMvComboBox<T> extends JComboBox {
+public class JMvComboBox<T> extends JComboBox<Item<T>> {
 
   private static final long serialVersionUID = 3831515220850009660L;
 
@@ -18,7 +18,7 @@ public class JMvComboBox<T> extends JComboBox {
 
   public void setSelectionModel(final SelectionModel<T> model) {
     this.model = model;
-    final DefaultComboBoxModel defmod = new DefaultComboBoxModel();
+    final DefaultComboBoxModel<Item<T>> defmod = new DefaultComboBoxModel<>();
     setModel(defmod);
     List<Item<T>> items = model.items;
     for (Item<T> item : items) {

@@ -22,7 +22,7 @@ public class KeyTree<K, D> {
     root.add(data, keys);
   }
 
-  void add(D data, K... keys) {
+  void add(D data, @SuppressWarnings("unchecked") K... keys) {
     add(data, Arrays.asList(keys));
   }
   
@@ -30,7 +30,7 @@ public class KeyTree<K, D> {
     root.remove(keys);
   }
   
-  void remove(K... keys) {
+  void remove(@SuppressWarnings("unchecked") K... keys) {
     remove(Arrays.asList(keys));
   }
   

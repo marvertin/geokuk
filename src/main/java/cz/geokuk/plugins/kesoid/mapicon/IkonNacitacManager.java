@@ -9,8 +9,6 @@ import javax.swing.Timer;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoid.mvc.KesoidUmisteniSouboru;
 import cz.geokuk.util.file.Filex;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class IkonNacitacManager {
 

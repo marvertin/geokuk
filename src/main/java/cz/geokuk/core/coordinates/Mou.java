@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Mou implements Mouable, Cloneable {
 
+  @SuppressWarnings("unused")
   private static final Logger log = LogManager.getLogger(Mou.class.getSimpleName());
 
   public final int xx;

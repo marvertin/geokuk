@@ -6,7 +6,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
 
-public class JPapirMeritkoComboBox extends JComboBox {
+public class JPapirMeritkoComboBox extends JComboBox<String> {
 
   private static final long serialVersionUID = -3121505662505169240L;
 

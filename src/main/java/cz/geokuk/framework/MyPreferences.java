@@ -297,6 +297,7 @@ public class MyPreferences extends Preferences {
     return sb;
   }
 
+  @SuppressWarnings("rawtypes")
   private String pack(Object o) {
     if (o == null) {
       return null;
@@ -360,7 +361,7 @@ public class MyPreferences extends Preferences {
     return val == null ? null : val.name();
   }
 
-  private String pack(Enum val) {
+  private String pack(Enum<?> val) {
     return val == null ? null : val.name();
   }
 

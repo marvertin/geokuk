@@ -192,6 +192,8 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
     jDetailyKesoidu.put(EKesoidKind.MUNZEE, factory.init(new JMunzeeDetail()));
     // TODO : change this
     jDetailyKesoidu.put(EKesoidKind.PHOTO, factory.init(new JKesoidDetail0() {
+      private static final long serialVersionUID = 7253981658581992444L;
+
       @Override
       public void napln(Wpt wpt) {
       }

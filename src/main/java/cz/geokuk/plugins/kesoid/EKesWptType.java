@@ -19,6 +19,7 @@ public enum EKesWptType {
     PARKING_AREA,
     TRAILHEAD;
 
+    @SuppressWarnings("unused")
     private static final Logger log =
             LogManager.getLogger(EKesWptType.class.getSimpleName());
 

@@ -158,6 +158,10 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
     }
   }
 
+  /**
+   * Dočasně zablokováno.
+   */
+  @SuppressWarnings("unused")
   private void spustitJavaWebStart() {
     try {
       BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "geokuk.jnlp"));

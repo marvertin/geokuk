@@ -3,14 +3,14 @@ package cz.geokuk.plugins.kesoid.mvc;
 import javax.swing.Box;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableRowSorter;
+
+import org.jdesktop.swingx.JXTreeTable;
+import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdroji;
-import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
 public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 

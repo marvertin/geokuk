@@ -79,9 +79,9 @@ public class JFontChooser extends JComponent {
 
 	private FontSelectionModel selectionModel;
 
-	private JList fontList;
+	private JList<String> fontList;
 
-	private JList sizeList;
+	private JList<Integer> sizeList;
 
 	private JCheckBox boldCheckBox;
 
@@ -217,14 +217,14 @@ public class JFontChooser extends JComponent {
 
 		Insets ins = new Insets(2, 2, 2, 2);
 
-		fontList = new JList(FONTS);
+		fontList = new JList<>(FONTS);
 		fontList.setVisibleRowCount(10);
 		fontList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		add(new JScrollPane(fontList), new GridBagConstraints(0, 0, 1, 1, 2, 2,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				ins, 0, 0));
 
-		sizeList = new JList(SIZES);
+		sizeList = new JList<>(SIZES);
 		((JLabel)sizeList.getCellRenderer()).setHorizontalAlignment(JLabel.RIGHT);
 		sizeList.setVisibleRowCount(10);
 		sizeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
