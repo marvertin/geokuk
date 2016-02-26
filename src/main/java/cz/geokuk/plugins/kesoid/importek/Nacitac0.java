@@ -13,6 +13,7 @@ import cz.geokuk.framework.ProgressModel;
 import cz.geokuk.framework.ProgressorInputStream;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
+import cz.geokuk.util.lang.FString;
 
 /**
  * @author veverka
@@ -72,5 +73,8 @@ public abstract class Nacitac0 {
     return new BufferedInputStream(
                           new ProgressorInputStream(aProgressModel, "Loading: " + sourceName,
                               istm));
+  }
+  protected String intern(String aString) {
+    return FString.intern(aString);
   }
 }

@@ -152,14 +152,14 @@ public class GeogetLoader extends Nacitac0 {
         Groundspeak groundspeak = new Groundspeak();
         groundspeak.ownerid = rs.getInt("gs_ownerid");
         groundspeak.name = rs.getString("name");
-        groundspeak.placedBy = rs.getString("author");
-        groundspeak.owner = groundspeak.placedBy;
-        groundspeak.type = rs.getString("cachetype");
-        groundspeak.container = rs.getString("cachesize");
-        groundspeak.difficulty = rs.getString("difficulty");
-        groundspeak.terrain = rs.getString("terrain");
-        groundspeak.country = rs.getString("country");
-        groundspeak.state = rs.getString("state");
+        groundspeak.placedBy = intern(rs.getString("author"));
+        groundspeak.owner = intern(groundspeak.placedBy);
+        groundspeak.type = intern(rs.getString("cachetype"));
+        groundspeak.container = intern(rs.getString("cachesize"));
+        groundspeak.difficulty = intern(rs.getString("difficulty"));
+        groundspeak.terrain = intern(rs.getString("terrain"));
+        groundspeak.country = intern(rs.getString("country"));
+        groundspeak.state = intern(rs.getString("state"));
         groundspeak.encodedHints = rs.getString("hint");
 //
         byte[] shortDescBytes = rs.getBytes("shortdesc");
@@ -208,6 +208,7 @@ public class GeogetLoader extends Nacitac0 {
       logResult("Geocaches", startTime, citac);
     }
   }
+
 
   private void loadWaypoints(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
       Progressor progressor) throws SQLException {
