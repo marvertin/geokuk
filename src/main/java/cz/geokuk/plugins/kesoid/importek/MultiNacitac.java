@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -21,6 +22,8 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.DirScanner;
+import cz.geokuk.util.file.KeFile;
+import cz.geokuk.util.file.Root;
 
 /**
  * @author veverka
@@ -35,6 +38,8 @@ public class MultiNacitac {
 
   private final KesoidModel kesoidModel;
   
+  private static final Pattern FILE_NAME_REGEX_GEOKUK_DIR = Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)");
+  private static final Pattern FILE_NAME_REGEX_GEOGET_DIR = Pattern.compile("geoget.db3");
 
 
   //private static final String CACHE_SUFFIX = ".cache.serialized";
@@ -48,18 +53,23 @@ public class MultiNacitac {
     nacitace.add(new GeogetLoader());
   }
 
-  public void setDir(File dir, boolean prenacti) {
-    ds.setDir(dir, prenacti);
+  public void setRootDirs(boolean prenacti, File kesDir, File geogetDir) {
+    ds.seRootDirs(prenacti, new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR), 
+        new Root(geogetDir, FILE_NAME_REGEX_GEOGET_DIR));
+  }
+
+  public void setGeogetDataDir(File aEffectiveFile, boolean aPrenacti) {
+    // TODO Auto-generated method stub
   }
 
   public KesBag nacti(Future<?> future, Genom genom) throws IOException {
-    List<File> list = ds.coMamNacist();
+    List<KeFile> list = ds.coMamNacist();
     if (list == null) {
       return null;
     }
     KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
     builder.init();
-    for (File file : list) {
+    for (KeFile file : list) {
       log.debug("Nacitam: " + file);
       try {
         zpracujJedenFile(file, builder, future);
@@ -75,19 +85,20 @@ public class MultiNacitac {
   }
 
   /**
-   * @param file
+   * @param kefile
    * @param builder
    * @param future
    * @throws IOException
    */
-  private void zpracujJedenFile(File file, KesoidImportBuilder builder, Future<?> future) throws IOException {
+  private void zpracujJedenFile(KeFile kefile, KesoidImportBuilder builder, Future<?> future) throws IOException {
+    File file = kefile.getFile();
     if (isZipFile(file)) {
       try (ZipFile zipFile = new ZipFile(file)) {
-        boolean nacitat = kesoidModel.maSeNacist(file);
+        boolean nacitat = kesoidModel.maSeNacist(kefile);
         for (Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements(); ) {
           ZipEntry entry = en.nextElement();
           for (Nacitac0 nacitac : nacitace) {
-            builder.setCurrentlyLoaded(file, nacitat);
+            builder.setCurrentlyLoading(kefile, nacitat);
             if (nacitat && nacitac.umiNacist(entry)) {
               nacitac.nactiBezVyjimky(zipFile, entry, builder, future, kesoidModel.getProgressModel());
             }
@@ -96,8 +107,8 @@ public class MultiNacitac {
       }
     } else {
       for (Nacitac0 nacitac : nacitace) {
-        boolean nacitat = kesoidModel.maSeNacist(file);
-        builder.setCurrentlyLoaded(file, nacitat);
+        boolean nacitat = kesoidModel.maSeNacist(kefile);
+        builder.setCurrentlyLoading(kefile, nacitat);
         if (nacitat && nacitac.umiNacist(file)) {
           nacitac.nactiBezVyjimky(file, builder, future, kesoidModel.getProgressModel());
         }
@@ -126,4 +137,5 @@ public class MultiNacitac {
           e);
     }
   }
+
 }

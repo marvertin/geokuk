@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.framework.MyPreferences;
@@ -29,6 +30,7 @@ import cz.geokuk.plugins.kesoid.mapicon.IkonNacitacManager;
 import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
+import cz.geokuk.util.file.KeFile;
 
 /**
  * @author veverka
@@ -324,11 +326,11 @@ public class KesoidModel extends Model0 {
     fire(new PrekrocenLimitWaypointuVeVyrezuEvent(prekrocenLimit));
   }
 
-  public boolean maSeNacist(File jmenoZdroje) {
-    return !blokovaneZdroje.contains(jmenoZdroje);
+  public boolean maSeNacist(KeFile jmenoZdroje) {
+    return !blokovaneZdroje.contains(jmenoZdroje.getFile());
   }
 
-  public void setNacitatSoubor(File jmenoZDroje, boolean nacitat) {
+  public void setNacitatSoubor(KeFile jmenoZDroje, boolean nacitat) {
     // TODO : speed up
     boolean zmena;
     Collection<File> changedFiles = Collections2.transform(
@@ -336,7 +338,7 @@ public class KesoidModel extends Model0 {
             new Function<InformaceOZdroji, File>() {
               @Override
               public File apply(InformaceOZdroji informaceOZdroji) {
-                return informaceOZdroji.jmenoZdroje;
+                return informaceOZdroji.jmenoZdroje.getFile();
               }
             }
     );

@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.kesoid.importek;
 
-import java.io.File;
+import static com.google.common.base.MoreObjects.firstNonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,17 +13,31 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cz.geokuk.framework.ProgressModel;
 import cz.geokuk.framework.Progressor;
-import cz.geokuk.plugins.kesoid.*;
+import cz.geokuk.plugins.kesoid.CzechGeodeticPoint;
+import cz.geokuk.plugins.kesoid.EKesDiffTerRating;
+import cz.geokuk.plugins.kesoid.EKesSize;
+import cz.geokuk.plugins.kesoid.EKesStatus;
+import cz.geokuk.plugins.kesoid.EKesType;
+import cz.geokuk.plugins.kesoid.EKesVztah;
+import cz.geokuk.plugins.kesoid.EKesWptType;
+import cz.geokuk.plugins.kesoid.Kes;
+import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Munzee;
+import cz.geokuk.plugins.kesoid.Photo;
+import cz.geokuk.plugins.kesoid.SimpleWaypoint;
+import cz.geokuk.plugins.kesoid.Waymark;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.Wpt.EZOrder;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mvc.GccomNick;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import static com.google.common.base.MoreObjects.firstNonNull;
+import cz.geokuk.util.file.KeFile;
 
 public class KesoidImportBuilder implements IImportBuilder {
 
@@ -49,7 +64,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
   private int citacBezejmennychWaypintu;
   private InformaceOZdroji infoOCurrentnimZdroji;
-  private final InformaceOZdrojich informaceOZdrojich = new InformaceOZdrojich();
+  private final InformaceOZdrojich.Builder informaceOZdrojichBuilder = InformaceOZdrojich.builder();
 
   private final GccomNick gccomNick;
   private final ProgressModel progressModel;
@@ -104,6 +119,7 @@ public class KesoidImportBuilder implements IImportBuilder {
    */
   public void done(Genom genom) {
     this.genom = genom;
+    InformaceOZdrojich informaceOZdrojich = informaceOZdrojichBuilder.done();
     int delkaTasku = gpxwpts.size();
     Progressor progressor = progressModel.start(delkaTasku, "Vytvářím waypointy");
 
@@ -774,8 +790,8 @@ public class KesoidImportBuilder implements IImportBuilder {
     return alely;
   }
 
-  public synchronized void setCurrentlyLoaded(File aJmenoZdroje, boolean nacteno) {
-    infoOCurrentnimZdroji = informaceOZdrojich.add(aJmenoZdroje, nacteno);
+  public synchronized void setCurrentlyLoading(KeFile aJmenoZdroje, boolean nacteno) {
+    infoOCurrentnimZdroji = informaceOZdrojichBuilder.add(aJmenoZdroje, nacteno);
   }
 
   @Override

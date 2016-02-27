@@ -6,21 +6,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import cz.geokuk.util.file.KeFile;
+
 public class InformaceOZdroji {
-  public final File jmenoZdroje;
+  public final KeFile jmenoZdroje;
   public int pocetWaypointuCelkem;
   public int pocetWaypointuBranych;
   public final boolean nacteno;
   private final List<InformaceOZdroji> children = new ArrayList<>();
   public InformaceOZdroji parent;
 
-  public InformaceOZdroji(File jmenoZdroje, boolean nacteno) {
+  public InformaceOZdroji(KeFile jmenoZdroje, boolean nacteno) {
     this.jmenoZdroje = jmenoZdroje;
     this.nacteno = nacteno;
   }
 
   public long getLastModified() {
-    return jmenoZdroje.lastModified();
+    return jmenoZdroje.getLastModified();
   }
   
   public void addChild(InformaceOZdroji child) {
@@ -38,7 +40,7 @@ public class InformaceOZdroji {
 
     @Override
     public int compare(InformaceOZdroji o1, InformaceOZdroji o2) {
-      return FileDirComparator.INSTANCE.compare(o1.jmenoZdroje, o2.jmenoZdroje);
+      return FileDirComparator.INSTANCE.compare(o1.jmenoZdroje.getFile(), o2.jmenoZdroje.getFile());
     }
   }
 
@@ -60,4 +62,23 @@ public class InformaceOZdroji {
       return file1.getName().compareToIgnoreCase(file2.getName());
     }
   }
+ 
+  
+  /**
+   * Rekuzivně vypíše intormace
+   * @param maToBytParent
+   */
+  public void print(String odsazovac, InformaceOZdroji maToBytParent) {
+    String parentProblem = parent == maToBytParent ? "" : "!!!  NESEDI PARENT: " + parent + " <> " + maToBytParent; 
+    System.out.println(odsazovac + jmenoZdroje + parentProblem);
+    for (InformaceOZdroji info : getChildren()) {
+      info.print(odsazovac + "  ", this);
+    }
+  }
+
+  @Override
+  public String toString() {
+    return jmenoZdroje.toString();
+  }
+  
 }

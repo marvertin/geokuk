@@ -22,7 +22,9 @@ public class MultiNacitacLoaderManager {
 
   public void startLoad(boolean prenacti, Genom genom) {
     if (iTimer != null) iTimer.stop();
-    multiNacitac.setDir(kesoidModel.getUmisteniSouboru().getKesDir().getEffectiveFile(), prenacti);
+    multiNacitac.setRootDirs(prenacti, 
+          kesoidModel.getUmisteniSouboru().getKesDir().getEffectiveFile(),
+          kesoidModel.getUmisteniSouboru().getGeogetDataDir().getEffectiveFile());
     if (klsw == null || klsw.isDone()) {
       klsw = new MultiNacitacSwingWorker(multiNacitac, genom, kesoidModel);
       klsw.execute();
