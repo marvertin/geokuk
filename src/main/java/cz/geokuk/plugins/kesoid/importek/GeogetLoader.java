@@ -32,7 +32,6 @@ public class GeogetLoader extends Nacitac0 {
   private static int PROGRESS_VAHA_WAYPOINTS = 16;
   private static int PROGRESS_VAHA_TAGS = 18;
   
-  
   private static final String GEOGET_CACHES_QUERY =
       Joiner.on('\n').join(
           "SELECT",
@@ -105,9 +104,9 @@ public class GeogetLoader extends Nacitac0 {
             + count(statement, GEOGET_WAYPOINTS_COUNT)  * PROGRESS_VAHA_WAYPOINTS
             + count(statement, GEOGET_TAGS_COUNT) * PROGRESS_VAHA_TAGS;
         Progressor progressor = aProgressModel.start(pocet, "Loading " + file.toString());
-        loadCaches(statement, file.toString(), builder, future, progressor);
-        loadWaypoints(statement, file.toString(), builder, future, progressor);
-        loadTags(statement, file.toString(), builder, future, progressor);
+        loadCaches(statement, builder, future, progressor);
+        loadWaypoints(statement, builder, future, progressor);
+        loadTags(statement, builder, future, progressor);
         progressor.finish();
       }
     catch (SQLException e) {
@@ -122,11 +121,11 @@ public class GeogetLoader extends Nacitac0 {
   }
   
   private void logResult(String nazev, ATimestamp startTime, int pocet) {
-    long trvani = ATimestamp.now().diff(startTime);
-    log.info("{} {} loaded in {} s, it is {} ites/s. ", pocet, nazev, trvani/1000.0, pocet * 1000 / trvani);
+    double trvani = ATimestamp.now().diff(startTime);
+    log.info("{} {} loaded in {} s, it is {} items/s. ", pocet, nazev, trvani / 1000.0, pocet * 1000 / trvani);
   }
   
-  private void loadCaches(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
+  private void loadCaches(Statement statement, IImportBuilder builder, Future<?> future,
       Progressor progressor) throws SQLException, IOException {
     ATimestamp startTime = ATimestamp.now();
     int citac = 0;
@@ -161,7 +160,7 @@ public class GeogetLoader extends Nacitac0 {
         groundspeak.country = intern(rs.getString("country"));
         groundspeak.state = intern(rs.getString("state"));
         groundspeak.encodedHints = rs.getString("hint");
-//
+
         byte[] shortDescBytes = rs.getBytes("shortdesc");
         if (shortDescBytes != null) {
           try (InputStream is = new InflaterInputStream(new ByteArrayInputStream(shortDescBytes))) {
@@ -209,8 +208,7 @@ public class GeogetLoader extends Nacitac0 {
     }
   }
 
-
-  private void loadWaypoints(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
+  private void loadWaypoints(Statement statement, IImportBuilder builder, Future<?> future,
       Progressor progressor) throws SQLException {
     ATimestamp startTime = ATimestamp.now();
     int citac = 0;
@@ -239,7 +237,7 @@ public class GeogetLoader extends Nacitac0 {
     }
   }
   
-  private void loadTags(Statement statement, String fileName, IImportBuilder builder, Future<?> future,
+  private void loadTags(Statement statement, IImportBuilder builder, Future<?> future,
       Progressor progressor) throws SQLException {
     ATimestamp startTime = ATimestamp.now();
     int citac = 0;
@@ -260,7 +258,7 @@ public class GeogetLoader extends Nacitac0 {
         }
 
         try {
-          if (category != null && category.startsWith(PREFIX_USERDEFINOANYCH_GENU)) {
+          if (category.startsWith(PREFIX_USERDEFINOANYCH_GENU)) {
             gpxWpt.gpxg.putUserTag(category.substring(PREFIX_USERDEFINOANYCH_GENU.length()), value);
           } else {
             switch (category) {
