@@ -70,7 +70,7 @@ public class InformaceOZdroji {
    */
   public void print(String odsazovac, InformaceOZdroji maToBytParent) {
     String parentProblem = parent == maToBytParent ? "" : "!!!  NESEDI PARENT: " + parent + " <> " + maToBytParent; 
-    System.out.println(odsazovac + jmenoZdroje + parentProblem);
+    System.out.println(odsazovac + jmenoZdroje.getFile() + parentProblem);
     for (InformaceOZdroji info : getChildren()) {
       info.print(odsazovac + "  ", this);
     }

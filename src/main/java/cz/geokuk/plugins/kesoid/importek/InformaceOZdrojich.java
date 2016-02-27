@@ -78,7 +78,8 @@ public class InformaceOZdrojich {
     /** Objekt je hotov */
     public InformaceOZdrojich done() {
       // našvindlený root
-      root = new InformaceOZdroji(new KeFile(new FileAndTime(new File("[gc]"), 0), new Root(new File("[gc]"), Pattern.compile("."))), false);
+      File pseudoFile = new File("[gc]");
+      root = new InformaceOZdroji(new KeFile(new FileAndTime(pseudoFile, 0), new Root(pseudoFile, Pattern.compile("."))), false);
       for (Strom strom : stromy.values()) {
         root.addChild(strom.root);  
         strom.root.parent = root;
@@ -107,14 +108,7 @@ public class InformaceOZdrojich {
   
 
   public InformaceOZdroji getRoot() {
-    if (root == null) {
-      return null;
-    }
-
-    while (root.getChildren().size() == 1) {
-      root = root.getChildren().get(0);
-    }
-    return root.parent;
+    return root;
   }
 
   public InformaceOZdroji get(KeFile key) {
@@ -177,6 +171,6 @@ public class InformaceOZdrojich {
   }
 
   public void print() {
-    root.print(":: ", root);
+    root.print(":: ", null);
   }
 }
