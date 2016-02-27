@@ -12,6 +12,8 @@ public class InformaceOZdroji {
   public final KeFile jmenoZdroje;
   public int pocetWaypointuCelkem;
   public int pocetWaypointuBranych;
+  public int pocetWaypointuCelkemChildren;
+  public int pocetWaypointuBranychChildren;
   public final boolean nacteno;
   private final List<InformaceOZdroji> children = new ArrayList<>();
   public InformaceOZdroji parent;
@@ -29,6 +31,12 @@ public class InformaceOZdroji {
     // TODO : use a sane data structure for this
     children.add(child);
     Collections.sort(children, InformaceOZdrojiComparator.INSTANCE);
+  }
+  
+  public InformaceOZdroji removeChild(int index) {
+    InformaceOZdroji odebranec = children.remove(index);
+    odebranec.parent = null;
+    return odebranec;
   }
 
   public List<InformaceOZdroji> getChildren() {
@@ -80,5 +88,31 @@ public class InformaceOZdroji {
   public String toString() {
     return jmenoZdroje.toString();
   }
-  
+
+  public String getDisplayName() {
+    if (parent.parent != null) {
+      return parent.jmenoZdroje.getFile().toPath().relativize(jmenoZdroje.getFile().toPath()).toString();
+    } else {
+      return jmenoZdroje.getFile().getAbsolutePath();
+    }
+  }
+
+  void spocitejSiPocetWaipointuChildren() {
+    pocetWaypointuBranychChildren = 0;
+    pocetWaypointuCelkemChildren = 0;
+    for (InformaceOZdroji ioz : children) {
+      ioz.spocitejSiPocetWaipointuChildren();
+      pocetWaypointuBranychChildren += ioz.getPocetWaypointuBranychSDetmi();
+      pocetWaypointuCelkemChildren += ioz.getPocetWaypointuCelkemSDetmi();
+    }
+    
+  }
+
+  public int getPocetWaypointuBranychSDetmi() {
+    return pocetWaypointuBranych + pocetWaypointuBranychChildren;
+  }
+
+  public int getPocetWaypointuCelkemSDetmi() {
+    return pocetWaypointuCelkem + pocetWaypointuCelkemChildren;
+  }
 }

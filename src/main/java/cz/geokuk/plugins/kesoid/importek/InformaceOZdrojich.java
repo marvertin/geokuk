@@ -75,6 +75,8 @@ public class InformaceOZdrojich {
       return ioz;
     }
 
+
+    
     /** Objekt je hotov */
     public InformaceOZdrojich done() {
       // našvindlený root
@@ -84,6 +86,8 @@ public class InformaceOZdrojich {
         root.addChild(strom.root);  
         strom.root.parent = root;
       }
+      //setřepáníNevětvenýchCest(root);
+      root.spocitejSiPocetWaipointuChildren();
       print();
       return InformaceOZdrojich.this;
 
@@ -171,6 +175,8 @@ public class InformaceOZdrojich {
   }
 
   public void print() {
+    System.out.println("================= prin strom - START");
     root.print(":: ", null);
+    System.out.println("================= prin strom - END");
   }
 }

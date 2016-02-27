@@ -116,14 +116,14 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 
       switch(i) {
         case 0:
-          return vsechny.getInformaceOZdrojich().getRoot() == ioz
-                  ? ioz.jmenoZdroje.getFile().getAbsolutePath() : ioz.jmenoZdroje.getFile().getName();
+          return  vsechny.getInformaceOZdrojich().getRoot() == ioz
+                  ? "1:" + ioz.jmenoZdroje.getFile().getAbsolutePath() : ioz.getDisplayName();
         case 1:
           return kesoidModel.maSeNacist(ioz.jmenoZdroje);
         case 2:
-          return isLeaf(o) ? ioz.pocetWaypointuBranych : null;
+          return ioz.getPocetWaypointuBranychSDetmi();
         case 3:
-          return isLeaf(o) ? ioz.pocetWaypointuCelkem : null;
+          return ioz.getPocetWaypointuCelkemSDetmi();
       }
       return null;
     }
@@ -178,7 +178,8 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
   }
 
   public void onEvent(KesoidUmisteniSouboruChangedEvent event) {
-    setTitle("Přehled zdrojů kešoidů: \""+event.getUmisteniSouboru().getKesDir().getEffectiveFile()+ "\"");
+    // Není to pravda, když jich míme více
+    // setTitle("Přehled zdrojů kešoidů: \""+event.getUmisteniSouboru().getKesDir().getEffectiveFile()+ "\"");
   }
 
 
