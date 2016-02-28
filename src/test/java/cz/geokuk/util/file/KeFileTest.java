@@ -28,62 +28,60 @@ public class KeFileTest {
   
   @Test
   public void testKeFile1() {
-    KeFile k = create("c:\\aa\\bb\\ccc", "c:\\aa\\bb");
-    assertFile("c:/aa/bb/ccc", k.getFile());
+    KeFile k = create("/c//aa//bb//ccc", "/c//aa//bb");
+    assertFile("/c/aa/bb/ccc", k.getFile());
   }
 
   @Test
   public void testKeFile2() {
-    KeFile k = create("c:/aa/bb/ccc", "c:/aa/bb");
-    assertFile("c:/aa/bb/ccc", k.getFile());
+    KeFile k = create("/c/aa/bb/ccc", "/c/aa/bb");
+    assertFile("/c/aa/bb/ccc", k.getFile());
   }
 
   @Test
   public void testKeFile3() {
-    KeFile k = create("c:/aa/bb/ccc", "c:/aa/bb");
-    assertFile("c:/aa/bb", k.root.dir);
+    KeFile k = create("/c/aa/bb/ccc", "/c/aa/bb");
+    assertFile("/c/aa/bb", k.root.dir);
   }
 
   @Test
   public void testGetParent1() {
-    KeFile k = create("c:\\aa\\bb\\ccc/ddd", "c:\\aa\\bb");
-    assertFile("c:/aa/bb/ccc", k.getParent().getFile());
+    KeFile k = create("/c//aa//bb//ccc/ddd", "/c//aa//bb");
+    assertFile("/c/aa/bb/ccc", k.getParent().getFile());
   }
 
   @Test
   public void testGetParent2() {
-    KeFile k = create("c:\\aa\\bb", "c:\\aa\\bb");
+    KeFile k = create("/c//aa//bb", "/c//aa//bb");
     Assert.assertNull(k.getParent());
   }
 
   @Test(expected=XRelativizeDubleDot.class)
   public void testGetParent3() {
-    create("c:\\jedna\\bb", "c:\\dva\\bb");
+    create("/c//jedna//bb", "/c//dva//bb");
   }
 
   @Test(expected=XRelativizeDubleDot.class)
   public void testGetParent4() {
-    create("c:\\aa\\bb", "c:\\aa\\bb/cc/dd");
+    create("/c//aa//bb", "/c//aa//bb/cc/dd");
   }
 
-
-  @Test(expected=IllegalArgumentException.class)
-  public void testGetParent5() {
-    create("c:\\jedna\\bb", "d:\\dva\\bb");
-  }
-
+// problém s testy na Unixech, nedokážeme zařídit, aby cesty nebyly navzájem ralitivizovtelné
+//  @Test(expected=IllegalArgumentException.class)
+//  public void testGetParent5() {
+//    create("/c//jedna//bb", "d://dva//bb");
+//  }
 
   @Test
   public void testGetLastModified() {
-    KeFile k = create("c:\\aa\\bb\\ccc/ddd", "c:\\aa\\bb");
+    KeFile k = create("/c//aa//bb//ccc/ddd", "/c//aa//bb");
     Assert.assertEquals(NOW, k.getLastModified());
   }
 
-
   @Test
   public void testGetRelativePath() {
-    KeFile k = create("c:\\aa\\bb\\ccc/ddd", "c:\\aa\\bb");
-    Assert.assertEquals(Paths.get("ccc\\ddd"), k.getRelativePath());
+    KeFile k = create("/c//aa//bb//ccc/ddd", "/c//aa//bb");
+    Assert.assertEquals(Paths.get("ccc//ddd"), k.getRelativePath());
   }
 
   @Test(expected=NullPointerException.class)
@@ -139,8 +137,8 @@ public class KeFileTest {
 
   @Test
   public void testEquals1() {
-    KeFile k1 = create("c:\\aa\\bb\\ccc/ddd", "c:\\aa\\bb");
-    KeFile k2 = create("c:/aa\\bb\\ccc/ddd", "c:/aa\\bb");
+    KeFile k1 = create("/c//aa//bb//ccc/ddd", "/c//aa//bb");
+    KeFile k2 = create("/c/aa//bb//ccc/ddd", "/c/aa//bb");
     Assert.assertTrue(k1.equals(k2));
     Assert.assertTrue(k2.equals(k1));
     Assert.assertEquals(k1.hashCode(), k2.hashCode());
@@ -148,16 +146,16 @@ public class KeFileTest {
 
   @Test
   public void testNotEquals2() {
-    KeFile k1 = create("c:\\aa\\bb\\ccc/ddd", "c:\\aa");
-    KeFile k2 = create("c:/aa\\bb\\ccc/ddd", "c:/aa\\bb");
+    KeFile k1 = create("/c//aa//bb//ccc/ddd", "/c//aa");
+    KeFile k2 = create("/c/aa//bb//ccc/ddd", "/c/aa//bb");
     Assert.assertFalse(k1.equals(k2));
     Assert.assertFalse(k2.equals(k1));
   }
 
   @Test
   public void testEquals3() {
-    KeFile k1 = create("c:\\aa\\bb\\ccc/ddd", "c:\\aa\\bb", NOW, PATTERN);
-    KeFile k2 = create("c:/aa\\bb\\ccc/ddd", "c:/aa\\bb", 45456564, PATTERN);
+    KeFile k1 = create("/c//aa//bb//ccc/ddd", "/c//aa//bb", NOW, PATTERN);
+    KeFile k2 = create("/c/aa//bb//ccc/ddd", "/c/aa//bb", 45456564, PATTERN);
     Assert.assertTrue(k1.equals(k2));
     Assert.assertTrue(k2.equals(k1));
     Assert.assertEquals(k1.hashCode(), k2.hashCode());
@@ -165,8 +163,8 @@ public class KeFileTest {
 
   @Test
   public void testEquals4() {
-    KeFile k1 = create("c:\\aa\\bb\\ccc/ddd", "c:\\aa\\bb", NOW, PATTERN);
-    KeFile k2 = create("c:/aa\\bb\\ccc/ddd", "c:/aa\\bb", NOW, PATTERN2);
+    KeFile k1 = create("/c//aa//bb//ccc/ddd", "/c//aa//bb", NOW, PATTERN);
+    KeFile k2 = create("/c/aa//bb//ccc/ddd", "/c/aa//bb", NOW, PATTERN2);
     Assert.assertTrue(k1.equals(k2));
     Assert.assertTrue(k2.equals(k1));
     Assert.assertEquals(k1.hashCode(), k2.hashCode());
@@ -174,8 +172,8 @@ public class KeFileTest {
 
   @Test
   public void testNotEquals1() {
-    KeFile k1 = create("c:\\aa\\bb\\ccXc/ddd", "c:\\aa\\bb");
-    KeFile k2 = create("c:/aa\\bb\\ccc/ddd", "c:/aa\\bb");
+    KeFile k1 = create("/c//aa//bb//ccXc/ddd", "/c//aa//bb");
+    KeFile k2 = create("/c/aa//bb//ccc/ddd", "/c/aa//bb");
     Assert.assertFalse(k1.equals(k2));
     Assert.assertFalse(k2.equals(k1));
   }
@@ -183,8 +181,8 @@ public class KeFileTest {
 
   @Test
   public void testNotEquals3() {
-    KeFile k1 = create("c:\\aa\\bb\\ccXc/ddd1", "c:\\aa\\bb");
-    KeFile k2 = create("c:\\aa\\bb\\ccXc/ddd2", "c:\\aa\\bb");
+    KeFile k1 = create("/c//aa//bb//ccXc/ddd1", "/c//aa//bb");
+    KeFile k2 = create("/c//aa//bb//ccXc/ddd2", "/c//aa//bb");
     Assert.assertFalse(k1.equals(k2));
     Assert.assertFalse(k2.equals(k1));
   }
