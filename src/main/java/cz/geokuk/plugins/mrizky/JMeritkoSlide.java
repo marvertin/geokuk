@@ -33,7 +33,7 @@ public class JMeritkoSlide extends JSingleSlide0 implements AfterInjectInit {
   private void initComponents() {
     setLayout(new BorderLayout());
     meritko = new JMeritko();
-    meritko.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+    meritko.setBorder(BorderFactory.createEmptyBorder(0, 0, 25, 0));
     add(meritko, BorderLayout.SOUTH);
     //    //add(new JMeritko(), BorderLayout.SOUTH);
     //    add(new JMeritko(), BorderLayout.WEST);
