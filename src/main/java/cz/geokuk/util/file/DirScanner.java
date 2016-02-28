@@ -7,12 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -72,6 +67,9 @@ public  class DirScanner {
   }
   
   private List<KeFile> scanDir(final Root root){
+    if (!root.dir.exists()) {
+      return Collections.emptyList();
+    }
     try {
       final List<KeFile> list = new ArrayList<>();
       Files.walkFileTree(root.dir.toPath(), EnumSet.of(FileVisitOption.FOLLOW_LINKS), root.def.maxDepth, new SimpleFileVisitor<Path>() {
