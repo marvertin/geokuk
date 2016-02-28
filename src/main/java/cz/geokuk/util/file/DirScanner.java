@@ -1,15 +1,17 @@
 package cz.geokuk.util.file;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayDeque;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
+
 
 /**
  * Třída je zodpověd na projití zadaných rootu
@@ -43,7 +45,7 @@ public  class DirScanner {
    * @return
    */
   public synchronized List<KeFile> coMamNacist() {
-    Set<KeFile> set = new TreeSet<>();
+    Set<KeFile> set = new HashSet<>();
     for (Root dir : roots) {
       List<KeFile> li = scanDir(dir);
       set.addAll(li);
@@ -54,26 +56,21 @@ public  class DirScanner {
     return list;
   }
 
-  private List<KeFile> scanDir(final Root root) {
-    List<KeFile> list = new ArrayList<>();
-    if (! root.dir.isDirectory()) return list;
-    Deque<File> deque = new ArrayDeque<>();
-    deque.add(root.dir);
-    while (!deque.isEmpty()) {
-      File f = deque.pop();
-      if (f.isDirectory()) {
-        deque.addAll(Arrays.asList(f.listFiles(new FileFilter() {
-          @Override
-          public boolean accept(File pathname) {
-            return pathname.isDirectory() || root.pattern.matcher(pathname.getName()).matches();
+  private List<KeFile> scanDir(final Root root){
+    try {
+      final List<KeFile> list = new ArrayList<>();
+      Files.walkFileTree(root.dir.toPath(), new SimpleFileVisitor<Path>() {
+        @Override
+        public FileVisitResult visitFile(Path path, BasicFileAttributes aAttrs) throws IOException {
+          if (root.pattern.matcher(path.getFileName().toString()).matches()) {
+            list.add(new KeFile(new FileAndTime(path.toFile()), root));
           }
-        })));
-      } else {
-        list.add(new KeFile(new FileAndTime(f), root));
-      }
+          return FileVisitResult.CONTINUE;
+        }
+      });
+      return list;
+    } catch (Exception e) {
+      throw new RuntimeException("Skenovani od " + root, e);
     }
-
-    Collections.sort(list); // podle času
-    return list;
   }
 }
