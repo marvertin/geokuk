@@ -75,7 +75,7 @@ public class InformaceOZdrojich {
     }
 
     private void setřepáníNevětvenýchCest(InformaceOZdroji aIoz) {
-      if (aIoz.getChildren().size() == 1) {
+      if (aIoz.getChildren().size() == 1 && aIoz.parent != null) {
         InformaceOZdroji jedinacek = aIoz.getChildren().get(0);
         aIoz.parent.remplaceChild(aIoz, jedinacek);
         jedinacek.parent = aIoz.parent;

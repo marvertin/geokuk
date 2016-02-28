@@ -26,6 +26,14 @@ public class Filex {
     return relativeToProgram;
   }
 
+  /**
+   * Pokud je nastaven adresář jako aktivní, tak bere efektivní soubor, jinak null.
+   * @return
+   */
+  public File getEffectiveFileIfActive() {
+    return isActive() ? getEffectiveFile() : null;
+  }
+  
   public File getEffectiveFile() {
     File f = file;
     if (! file.isAbsolute()) {

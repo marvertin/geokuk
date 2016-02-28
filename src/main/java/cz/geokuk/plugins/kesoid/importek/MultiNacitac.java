@@ -63,8 +63,14 @@ public class MultiNacitac {
   }
 
   public void setRootDirs(boolean prenacti, File kesDir, File geogetDir) {
-    ds.seRootDirs(prenacti, new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR), 
-        new Root(geogetDir, FILE_NAME_REGEX_GEOGET_DIR));
+    List<Root> roots = new ArrayList<>();
+    if (kesDir != null) {
+      roots.add(new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR));
+    }
+    if (geogetDir != null) {
+      roots.add(new Root(geogetDir, FILE_NAME_REGEX_GEOGET_DIR));
+    }
+    ds.seRootDirs(prenacti, roots.toArray(new Root[roots.size()]));
   }
 
   public void setGeogetDataDir(File aEffectiveFile, boolean aPrenacti) {
