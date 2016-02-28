@@ -234,12 +234,11 @@ public class Wpt extends Weikoid0 implements Uchopenec {
     }
 
     public void setSym(String sym) {
-        String adjustedSym = null;
-        adjustedSym = wptMapping.get(sym);
+        String adjustedSym = wptMapping.get(sym);
         if (adjustedSym == null) {
             adjustedSym = sym;
         }
-        this.sym = adjustedSym.intern();
+        this.sym = adjustedSym == null ? "unknown_sym" : adjustedSym.intern();
     }
 
 
