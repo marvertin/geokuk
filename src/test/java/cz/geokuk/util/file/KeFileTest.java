@@ -2,7 +2,6 @@ package cz.geokuk.util.file;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,14 +11,14 @@ import cz.geokuk.util.file.KeFile.XRelativizeDubleDot;
 public class KeFileTest {
 
   private static long NOW = System.currentTimeMillis();
-  private static Pattern PATTERN = Pattern.compile(".");
-  private static Pattern PATTERN2 = Pattern.compile("2");
+  private static  Root.Def PATTERN = new Root.Def(0,  null,  null);
+  private static  Root.Def PATTERN2 =  new Root.Def(1,  null,  null);
   
   private KeFile create(String file, String root) {
     return create(file, root, NOW, PATTERN);
   }
 
-  private KeFile create(String file, String root, long cas, Pattern pattern) {
+  private KeFile create(String file, String root, long cas, Root.Def pattern) {
     return new KeFile(new FileAndTime(new File(file), cas), new Root(new File(root), pattern));
   }
 

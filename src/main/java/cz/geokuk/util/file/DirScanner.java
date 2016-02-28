@@ -1,6 +1,7 @@
 package cz.geokuk.util.file;
 
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,6 +9,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,13 +58,27 @@ public  class DirScanner {
     return list;
   }
 
+  private boolean matches(String fileName, Root.Def def) {
+    if (def.patternExcludes != null) {
+      if (def.patternExcludes.matcher(fileName).matches()) {
+        return false;
+      }
+    }
+    if (def.patternIncludes != null) {
+      return def.patternIncludes.matcher(fileName).matches();
+    } else {
+      return true; // není matcher tak mečuje vše
+    }
+  }
+  
   private List<KeFile> scanDir(final Root root){
     try {
       final List<KeFile> list = new ArrayList<>();
-      Files.walkFileTree(root.dir.toPath(), new SimpleFileVisitor<Path>() {
+      Files.walkFileTree(root.dir.toPath(), EnumSet.of(FileVisitOption.FOLLOW_LINKS), root.def.maxDepth, new SimpleFileVisitor<Path>() {
         @Override
         public FileVisitResult visitFile(Path path, BasicFileAttributes aAttrs) throws IOException {
-          if (root.pattern.matcher(path.getFileName().toString()).matches()) {
+          
+          if (matches(path.getFileName().toString(), root.def)) {
             list.add(new KeFile(new FileAndTime(path.toFile()), root));
           }
           return FileVisitResult.CONTINUE;

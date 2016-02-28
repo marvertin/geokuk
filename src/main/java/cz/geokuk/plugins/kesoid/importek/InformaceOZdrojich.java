@@ -8,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -92,7 +91,7 @@ public class InformaceOZdrojich {
     public InformaceOZdrojich done() {
       // našvindlený root
       File pseudoFile = new File("[gc]");
-      root = new InformaceOZdroji(new KeFile(new FileAndTime(pseudoFile, 0), new Root(pseudoFile, Pattern.compile("."))), false);
+      root = new InformaceOZdroji(new KeFile(new FileAndTime(pseudoFile, 0), new Root(pseudoFile, new Root.Def(0,  null,  null))), false);
       for (Strom strom : stromy.values()) {
         root.addChild(strom.root);  
         strom.root.parent = root;

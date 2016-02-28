@@ -5,13 +5,13 @@ import java.util.regex.Pattern;
 
 public class Root {
   public final File dir;
-  public final Pattern pattern;
+  public final Def def;
 
-  public Root(File aRoot, Pattern aPattern) {
+  public Root(File aRoot, Def aDef) {
     super();
     dir = aRoot;
-    pattern = aPattern;
-    if (pattern == null) {
+    def = aDef;
+    if (def == null) {
       throw new NullPointerException();
     }
     if (dir == null) {
@@ -19,11 +19,30 @@ public class Root {
     }
   }
 
+  public static class Def {
+    final int maxDepth;
+    final Pattern patternIncludes;
+    final Pattern patternExcludes;
+    
+    public Def(int aMaxDepth, Pattern aPatternIncludes, Pattern aPatternExcludes) {
+      super();
+      maxDepth = aMaxDepth;
+      patternIncludes = aPatternIncludes;
+      patternExcludes = aPatternExcludes;
+    }
+
+    @Override
+    public String toString() {
+      return "Def [maxDepth=" + maxDepth + ", patternIncludes=" + patternIncludes + ", patternExcludes=" + patternExcludes + "]";
+    }
+    
+      
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((pattern == null) ? 0 : pattern.hashCode());
     result = prime * result + ((dir == null) ? 0 : dir.hashCode());
     return result;
   }
@@ -37,11 +56,6 @@ public class Root {
     if (getClass() != obj.getClass())
       return false;
     Root other = (Root) obj;
-    if (pattern == null) {
-      if (other.pattern != null)
-        return false;
-    } else if (!pattern.equals(other.pattern))
-      return false;
     if (dir == null) {
       if (other.dir != null)
         return false;
@@ -52,8 +66,12 @@ public class Root {
 
   @Override
   public String toString() {
-    return "Root [dir=" + dir + ", pattern=" + pattern + "]";
+    return "Root [dir=" + dir + ", def=" + def + "]";
   }
+  
+
+  
+
   
   
 }

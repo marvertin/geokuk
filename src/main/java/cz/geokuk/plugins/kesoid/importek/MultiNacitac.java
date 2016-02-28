@@ -38,8 +38,17 @@ public class MultiNacitac {
 
   private final KesoidModel kesoidModel;
   
-  private static final Pattern FILE_NAME_REGEX_GEOKUK_DIR = Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)");
-  private static final Pattern FILE_NAME_REGEX_GEOGET_DIR = Pattern.compile(".*\\.db3");
+  private static final Root.Def FILE_NAME_REGEX_GEOKUK_DIR = new Root.Def(
+      Integer.MAX_VALUE,
+      Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"),
+      null
+      );
+  private static final Root.Def FILE_NAME_REGEX_GEOGET_DIR  = new Root.Def(
+      1,
+      Pattern.compile("(?i).*\\.db3"),
+      Pattern.compile("(?i).*\\.[0-9]{8}\\.db3")
+      );
+      
 
 
   //private static final String CACHE_SUFFIX = ".cache.serialized";
