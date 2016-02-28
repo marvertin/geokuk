@@ -5,7 +5,7 @@
 
 	<groupId>cz.geokuk</groupId>
 	<artifactId>geokuk</artifactId>
-	<version>4.1.1</version>
+	<version>4.1.2</version>
 
 	<build>
 		<plugins>
@@ -16,6 +16,14 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<finalName>temporary</finalName>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -41,6 +49,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -117,7 +126,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--  manifest version reading -->
+		<!-- manifest version reading -->
 		<dependency>
 			<groupId>com.jcabi</groupId>
 			<artifactId>jcabi-manifests</artifactId>
