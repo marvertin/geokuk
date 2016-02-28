@@ -39,6 +39,12 @@ public class InformaceOZdroji {
     return odebranec;
   }
 
+  public int remplaceChild(InformaceOZdroji iozOld, InformaceOZdroji iozNew) {
+    int index = children.indexOf(iozOld);
+    children.set(index, iozNew);
+    return index;
+  }
+
   public List<InformaceOZdroji> getChildren() {
     return Collections.unmodifiableList(children);
   }

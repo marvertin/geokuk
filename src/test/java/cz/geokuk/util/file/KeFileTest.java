@@ -181,5 +181,14 @@ public class KeFileTest {
     Assert.assertFalse(k2.equals(k1));
   }
 
-  
+
+  @Test
+  public void testNotEquals3() {
+    KeFile k1 = create("c:\\aa\\bb\\ccXc/ddd1", "c:\\aa\\bb");
+    KeFile k2 = create("c:\\aa\\bb\\ccXc/ddd2", "c:\\aa\\bb");
+    Assert.assertFalse(k1.equals(k2));
+    Assert.assertFalse(k2.equals(k1));
+  }
+
+
 }

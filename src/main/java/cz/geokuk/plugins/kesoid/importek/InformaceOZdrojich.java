@@ -75,7 +75,18 @@ public class InformaceOZdrojich {
       return ioz;
     }
 
-
+    private void setřepáníNevětvenýchCest(InformaceOZdroji aIoz) {
+      if (aIoz.getChildren().size() == 1) {
+        InformaceOZdroji jedinacek = aIoz.getChildren().get(0);
+        aIoz.parent.remplaceChild(aIoz, jedinacek);
+        jedinacek.parent = aIoz.parent;
+      }
+      // po sesypání nebo bez sesypání, děti sesypeme
+      for (InformaceOZdroji ioz : aIoz.getChildren()) {
+        setřepáníNevětvenýchCest(ioz); // pro 0 se nedělá nic a pro více než 1 se nesetřepává
+      }
+    }
+    
     
     /** Objekt je hotov */
     public InformaceOZdrojich done() {
@@ -86,7 +97,7 @@ public class InformaceOZdrojich {
         root.addChild(strom.root);  
         strom.root.parent = root;
       }
-      //setřepáníNevětvenýchCest(root);
+      setřepáníNevětvenýchCest(root);
       root.spocitejSiPocetWaipointuChildren();
       print();
       return InformaceOZdrojich.this;

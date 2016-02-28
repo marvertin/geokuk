@@ -161,7 +161,6 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 
     public void setValueAt(Object value, Object node, int col) {
       InformaceOZdroji ioz = (InformaceOZdroji)node;
-
       kesoidModel.setNacitatSoubor(ioz.jmenoZdroje, (Boolean) value);
     }
   }

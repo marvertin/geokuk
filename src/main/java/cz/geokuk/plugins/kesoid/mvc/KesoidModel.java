@@ -343,8 +343,10 @@ public class KesoidModel extends Model0 {
             }
     );
     if (nacitat) {
+      System.out.println("++++XNASTAVENI " + changedFiles);
       zmena = blokovaneZdroje.removeAll(changedFiles);
     } else {
+      System.out.println("----XNASTAVENI " + changedFiles);
       zmena =  blokovaneZdroje.addAll(changedFiles);
     }
     if (!zmena) return;

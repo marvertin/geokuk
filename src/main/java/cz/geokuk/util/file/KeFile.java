@@ -3,7 +3,7 @@ package cz.geokuk.util.file;
 import java.io.File;
 import java.nio.file.Path;
 
-public class KeFile implements Comparable<KeFile> {
+public class KeFile {
   public final Root root;
   public final FileAndTime fat;
   
@@ -12,11 +12,6 @@ public class KeFile implements Comparable<KeFile> {
     fat = aFat;
     root = aRoot;
     getRelativePath(); // jen kvůli vyhození výjimky, aby nešel stvořit obje,kt, který lze relativizovat
-  }
-
-  @Override
-  public int compareTo(KeFile aO) {
-    return fat.compareTo(aO.fat);
   }
 
   public File getFile() {
