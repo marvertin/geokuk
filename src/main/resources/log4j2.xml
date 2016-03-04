@@ -15,5 +15,6 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="FileLog"/>
         </Root>
+        <Logger name="JKachlovnik" level="INFO"/>
     </Loggers>
 </Configuration>

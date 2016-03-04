@@ -40,8 +40,8 @@ public class CoordinateConversion
     if (latitude < -90.0 || latitude > 90.0 || longitude < -180.0
         || longitude >= 180.0)
     {
-      throw new IllegalArgumentException(
-          "Legal ranges: latitude [-90,90], longitude [-180,180).");
+//      throw new IllegalArgumentException(
+//          "Legal ranges: latitude [-90,90], longitude [-180,180).");
     }
 
   }

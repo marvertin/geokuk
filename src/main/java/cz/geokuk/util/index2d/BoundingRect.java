@@ -28,7 +28,7 @@ public class BoundingRect {
     yy2 = aYy2;
     
     if (xx2 < xx1 || yy2 < yy1) {
-      throw new RuntimeException("Spatne presahy " + this);
+      //throw new RuntimeException("Spatne presahy " + this);
     }
   }
   /* (non-Javadoc)

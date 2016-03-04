@@ -141,7 +141,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
     prepocetKachli();
   }
 
-  public class KachleOflinerSwingWorker extends MySwingWorker0<Integer, JKachle> {
+  public class KachleOflinerSwingWorker extends MySwingWorker0<Integer, Kachle> {
 
     private final boolean zafrontovat;
 
@@ -172,15 +172,16 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
         int xn = w;
         //int yn = h;
         int moumaska = ~ (coco.getMoukrok()-1);
-        Mou mou0 = new Mou(coco.getMoupoc().xx & moumaska, coco.getMoupoc().yy & moumaska);
+        Mou mou0 = new Mou(coco.getMouJZ().xx & moumaska, coco.getMouJZ().yy & moumaska);
         Mou mou = new Mou(mou0);
         while (coco.transform(mou).x < xn) {
           if (isCancelled()) return -1;
           while (coco.transform(mou).y > 0) {
-            KaLoc kaloc = new KaLoc(new Mou(mou), coco.getMoumer());
+            KaLoc kaloc = KaLoc.ofSZ(new Mou(mou), coco.getMoumer());
             if (zafrontovat) {
-              JKachle kachle = new JKachle(new KaAll(kaloc, totoSeTaha.kaSet), kachleModel, false, null); // když se nepoužije, musí se stvořit nová
-              kachle.setVzdalenostOdStredu(coco.getVzdalenostKachleOdStredu(kaloc.getMou()));
+              Kachle kachle = new Kachle(new KaAll(kaloc, totoSeTaha.kaSet), kachleModel, false, null); // když se nepoužije, musí se stvořit nová
+              
+              kachle.setVzdalenostOdStredu(coco.getVzdalenostKachleOdStredu(kaloc.getMouSZ()));
               publish(kachle);
             }
             pocetKachli += totoSeTaha.kaSet.getKts().size(); // po každý podklad jedna kachle
@@ -193,8 +194,8 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
     }
 
     @Override
-    protected void process(List<JKachle> chunks) {
-      for (JKachle kachle : chunks) {
+    protected void process(List<Kachle> chunks) {
+      for (Kachle kachle : chunks) {
         kachle.ziskejObsah(Priority.STAHOVANI);
       }
     }

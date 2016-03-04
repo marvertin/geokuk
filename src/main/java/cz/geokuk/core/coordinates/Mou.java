@@ -14,7 +14,6 @@ public class Mou implements Mouable, Cloneable {
 
   public final int xx;
   public final int yy;
-  boolean called = false;
 
   public Mou(int xx, int yy) {
     this.xx = xx;
@@ -62,14 +61,16 @@ public class Mou implements Mouable, Cloneable {
   }
 
   public Utm toUtm() {
-    called = true;
-    double ux = (xx * 0.03125) - 3700000;
-    double uy = (yy * 0.03125) + 1300000;
-    return new Utm(ux, uy);
+    return toWgs().toUtm();
+
+// takto to bylo v seznamových mapách
+//    double ux = (xx * 0.03125) - 3700000;
+//    double uy = (yy * 0.03125) + 1300000;
+//    return new Utm(ux, uy);
   }
 
   public Wgs toWgs() {
-    return toUtm().toWgs();
+    return FGeoKonvertor.toWgs(this);
   }
 
   @Override

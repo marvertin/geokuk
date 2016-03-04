@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.EnumMap;
 
@@ -49,12 +50,7 @@ public class KachloDownloader {
                 return prazdnyObrazekBezDat(EPraznyObrazek.BEZ_PODKLADU); // v offline módu jen vyprazdňuji frontu
             if (!kachleModel.isOnlineMode())
                 return prazdnyObrazekBezDat(EPraznyObrazek.OFFLINE); // v offline módu jen vyprazdňuji frontu
-            StringBuilder sb = new StringBuilder();
-            sb.append(URLBASE1);
-            sb.append(server);
-            sb.append(URLBASE2);
-            kaOne.addToUrl(sb);
-            URL url = new URL(sb.toString());
+            URL url = buildSeznamoveUrl(kaOne, server);
             ImageWithData imda = new ImageWithData();
             DataHoldingInputStream dhis = new DataHoldingInputStream(url.openStream());
             InputStream stm = new BufferedInputStream(dhis);
@@ -68,6 +64,23 @@ public class KachloDownloader {
             log.error("Unable to download tile image!", e);
             return prazdnyObrazekBezDat(EPraznyObrazek.ERROR);
         }
+    }
+
+    private URL buildSeznamoveUrl(KaOne kaOne, String server) throws MalformedURLException {
+      StringBuilder sb = new StringBuilder();
+      sb.append(URLBASE1);
+      sb.append(server);
+      sb.append(URLBASE2);
+      KaLoc kaloc = kaOne.getLoc();
+      kaOne.getType().addToUrl(sb);
+      sb.append('/');
+      sb.append(kaloc.getMoumer());
+      sb.append('-');
+      sb.append(kaloc.getFromSzUnsignedX());
+      sb.append('-');
+      sb.append(kaloc.getFromSzUnsignedY());      
+      URL url = new URL(sb.toString());
+      return url;
     }
 
     /**

@@ -35,9 +35,14 @@ public class Wgs implements Mouable {
   }
 
 
+  /**
+   * Souřdnice se normalizují na interval <-180,180)
+   * @param lat
+   * @param lon
+   */
   public Wgs(double lat, double lon) {
-    this.lat = lat;
-    this.lon = lon;
+    this.lat = FGeoKonvertor.normalizujUhel(lat);
+    this.lon = FGeoKonvertor.normalizujUhel(lon);
   }
 
   public Wgs(Wgs wgs) {
@@ -74,8 +79,13 @@ public class Wgs implements Mouable {
   }
 
   public Mou toMou() {
-    return toUtm().toMou();
+    return FGeoKonvertor.toMou(this);
   }
+
+  public Mercator toMercator() {
+    return FGeoKonvertor.toMercator(this);
+  }
+
 
   public static String toGeoFormat(double d) {
     double stupne = Math.floor(d);
@@ -155,5 +165,7 @@ public class Wgs implements Mouable {
   public Mou getMou() {
     return toMou();
   }
+
+
 
 }

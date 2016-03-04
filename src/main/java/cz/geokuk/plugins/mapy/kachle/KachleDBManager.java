@@ -1,6 +1,16 @@
 package cz.geokuk.plugins.mapy.kachle;
 
-import cz.geokuk.core.coordinates.Mou;
+import java.awt.Image;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.imageio.ImageIO;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tmatesoft.sqljet.core.SqlJetException;
@@ -10,14 +20,6 @@ import org.tmatesoft.sqljet.core.table.ISqlJetCursor;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.ISqlJetTransaction;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.*;
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * An implementation of KachleManager that stores the data to SQLite database.
@@ -179,8 +181,8 @@ public class KachleDBManager implements KachleManager {
         try {
             ISqlJetTable table = database.getTable(TABLE_NAME);
             database.beginTransaction(SqlJetTransactionMode.READ_ONLY);
-            cursor = table.lookup(table.getPrimaryKeyIndexName(), ki.getLoc().getMou().xx,
-                    ki.getLoc().getMou().yy, ki.getLoc().getMoumer(), ki.typToString());
+            cursor = table.lookup(table.getPrimaryKeyIndexName(), ki.getLoc().getFromSzUnsignedX(),
+                    ki.getLoc().getFromSzUnsignedY(), ki.getLoc().getMoumer(), ki.typToString());
             if (cursor.eof()) {
                 return null;
             }
@@ -240,10 +242,12 @@ public class KachleDBManager implements KachleManager {
                 dataToSave = bos.toByteArray();
 
                 // Save to the database
-                Mou mou = ki.getLoc().getMou();
-                log.debug("Adding {} {} {} {}", mou.xx, mou.yy, ki.getLoc().getMoumer(), ki.typToString());
-                database.getTable(TABLE_NAME).insertOr(SqlJetConflictAction.REPLACE, mou.xx, mou.yy,
-                        ki.getLoc().getMoumer(), ki.typToString(), dataToSave);
+                KaLoc kaloc = ki.getLoc();
+                int kx = kaloc.getFromSzUnsignedX();
+                int ky = kaloc.getFromSzUnsignedY();
+                log.debug("Adding {} {} {} {}", kx, ky, kaloc.getMoumer(), ki.typToString());
+                database.getTable(TABLE_NAME).insertOr(SqlJetConflictAction.REPLACE, kx, ky,
+                        kaloc.getMoumer(), ki.typToString(), dataToSave);
             }
         } catch (SqlJetException e) {
             log.error("A database error has occurred!", e);

@@ -10,6 +10,7 @@ import javax.swing.KeyStroke;
 
 import cz.geokuk.core.coordinates.ESmer;
 import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.core.coordinates.Moud;
 import cz.geokuk.framework.Action0;
 
 
@@ -40,7 +41,7 @@ public class PosouvejSipkamiAction extends Action0 {
       putValue(SHORT_DESCRIPTION, "Posun mapy severně.");
       putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(zrychlovac +"UP"));
       dx = 0;
-      dy = 1;
+      dy = -1;
       break;
     case VYCHOD:
       putValue(NAME, "Východně");
@@ -54,7 +55,7 @@ public class PosouvejSipkamiAction extends Action0 {
       putValue(SHORT_DESCRIPTION, "Posun mapy jižně.");
       putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(zrychlovac + "DOWN"));
       dx = 0;
-      dy = -1;
+      dy = 1;
       break;
     case ZAPAD:
       putValue(NAME, "Západně");
@@ -76,11 +77,10 @@ public class PosouvejSipkamiAction extends Action0 {
   public void actionPerformed(ActionEvent e) {
     Coord moord = vyrezModel.getMoord();
     Mou mou = moord.getMoustred();
-    int dxx = daleko ?  dx * moord.getMouSize().dxx / 2 :  dx * moord.getPomer() * KROK_MALY;
-    int dyy = daleko ?  dy * moord.getMouSize().dyy / 2 :  dy * moord.getPomer() * KROK_MALY;
-
-    moord.getMouSize();
-    Mou moustred = new Mou(mou.xx + dxx, mou.yy + dyy);
+    
+    Moud dd = moord.transformShift(dx * (daleko ?  moord.getWidth() / 2 : KROK_MALY), 
+                                 dy * (daleko ? moord.getHeight() / 2 : KROK_MALY));
+    Mou moustred = mou.add(dd);
     vyrezModel.presunMapuNaMoustred(moustred);
   }
 

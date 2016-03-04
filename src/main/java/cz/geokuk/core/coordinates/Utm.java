@@ -2,8 +2,6 @@ package cz.geokuk.core.coordinates;
 
 public class Utm implements Mouable {
 
-  private static final double MOU_FACTOR = 0.03125;
-
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -74,9 +72,11 @@ public class Utm implements Mouable {
   }
 
   public Mou toMou() {
-    double xx = (ux + 3700000) / MOU_FACTOR;
-    double yy = (uy - 1300000) / MOU_FACTOR;
-    return new Mou((int)xx, (int)yy);
+    // Takto to bylo v seznamových mapách
+    //double xx = (ux + 3700000) / MOU_FACTOR;
+    //double yy = (uy - 1300000) / MOU_FACTOR;
+    //return new Mou((int)xx, (int)yy);
+    return toWgs().toMou();
   }
 
   @Override

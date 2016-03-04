@@ -134,7 +134,8 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
       int dy = cur.y - bod.y;
 
       Mou mou = getSoord().getMoustred();
-      Mou moustred = new Mou(mou.xx + -dx * getSoord().getPomer(), mou.yy + dy * getSoord().getPomer());
+      //Mou moustred = new Mou(mou.xx + -dx * getSoord().getPomer(), mou.yy + dy * getSoord().getPomer());
+      Mou moustred = mou.add(getSoord().transformShift(-dx, -dy));
       //getCoord().setMoustredNezadouci(moustred);
       vyrezModel.presunMapuNaMoustred(moustred);
       bod = cur;
@@ -158,6 +159,15 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
     }
     cur = e.getPoint();
     Mou mouCur = getSoord().transform(cur);
+    //ХХSystem.out.println("MYSUJEME: " + cur + " --- " + mouCur + " - " + mouCur.toWgs());
+//    System.out.printf("stred=%s=%s, jz=%s, sz=%s, jv=%s, sv=%s", 
+//        getSoord().getMoustred().toWgs(), getSoord().getMoustred(),
+//        getSoord().getMouJZ().toWgs(),
+//        getSoord().getMouSZ().toWgs(),
+//        getSoord().getMouJV().toWgs(),
+//        getSoord().getMouSV().toWgs()
+//        );
+
     poziceModel.setMys(cur, mouCur, getUpravenaMys());
     //System.out.println("Souradnice: " + wgs);
     MouseGestureContext ctx = ctx();

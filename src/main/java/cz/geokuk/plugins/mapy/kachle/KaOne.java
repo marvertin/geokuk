@@ -53,11 +53,5 @@ class KaOne extends Ka0 {
     return true;
   }
 
-  public void addToUrl(StringBuilder sb) {
-    type.addToUrl(sb);
-    sb.append('/');
-    getLoc().addToUrl(sb);
-  }
-
 
 }

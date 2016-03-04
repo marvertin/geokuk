@@ -9,7 +9,7 @@ public class JKachlovnikDoRohu extends JKachlovnik {
 
   @Override
   public void setKachloTypes(KaSet aKachloSet) {
-    super.setKachloTypes(new KaSet(EnumSet.of(EKaType.OPHOTO)));
+    super.setKachloTypes(new KaSet(EnumSet.of(EKaType.OPHOTO_M)));
   }
 
 }

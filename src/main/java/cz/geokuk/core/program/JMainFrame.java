@@ -392,7 +392,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
     detailRoh.add(detailKachlovnik);
     factory.init(detailKachlovnik);
     factory.init(mysovani);
-    detailKachlovnik.setKachloTypes(new KaSet(EnumSet.of(EKaType.OPHOTO)));
+    detailKachlovnik.setKachloTypes(new KaSet(EnumSet.of(EKaType.OPHOTO_M)));
     detailRoh.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
     return detailRoh;
   }

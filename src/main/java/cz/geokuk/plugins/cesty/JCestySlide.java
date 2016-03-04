@@ -260,7 +260,8 @@ public class JCestySlide extends JSingleSlide0{
   }
 
   private long getKvadratMaximalniVzdalenosti() {
-    long maximalniVzdalenost = getSoord().getPomer() * MIRA_VZDALENOSTI_PRO_ZVYRAZNENI;
+    // Využíváme transformace v jednom směru, možná by to chtělo speciální funkci.
+    long maximalniVzdalenost = getSoord().transformPoindDiff(MIRA_VZDALENOSTI_PRO_ZVYRAZNENI);
     long kvadratMaximalniVzdalenosti = maximalniVzdalenost * maximalniVzdalenost;
     return kvadratMaximalniVzdalenosti;
   }
