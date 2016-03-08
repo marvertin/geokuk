@@ -1,5 +1,8 @@
 package cz.geokuk.core.program;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import cz.geokuk.core.coord.BezNaPoziciAction;
 import cz.geokuk.core.coord.BezNaSouradniceAction;
 import cz.geokuk.core.coord.BezNaStredAction;
@@ -61,21 +64,7 @@ import cz.geokuk.plugins.kesoidpopisky.PopiskyNastavParametryAction;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyOffAction;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyOnAction;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyOnoffAction;
-import cz.geokuk.plugins.mapy.AquaticTuristPodkladAction;
-import cz.geokuk.plugins.mapy.Army2PodkladAction;
-import cz.geokuk.plugins.mapy.BaseNPodkladAction;
-import cz.geokuk.plugins.mapy.GeographyPodkladAction;
-import cz.geokuk.plugins.mapy.HybridDekoraceAction;
-import cz.geokuk.plugins.mapy.Ophot0203PodkladAction;
-import cz.geokuk.plugins.mapy.Ophot0406PodkladAction;
-import cz.geokuk.plugins.mapy.Ophot1012PodkladAction;
-import cz.geokuk.plugins.mapy.OphototPodkladAction;
-import cz.geokuk.plugins.mapy.ReliefDekoraceAction;
-import cz.geokuk.plugins.mapy.TcykloDekoraceAction;
-import cz.geokuk.plugins.mapy.TturDekoraceAction;
-import cz.geokuk.plugins.mapy.TuristPokladAction;
-import cz.geokuk.plugins.mapy.WinterTuristPodkladAction;
-import cz.geokuk.plugins.mapy.ZadnePodkladAction;
+import cz.geokuk.plugins.mapy.MapyAction0;
 import cz.geokuk.plugins.mapy.kachle.OnlineModeAction;
 import cz.geokuk.plugins.mapy.kachle.UkladatMapyNaDiskAction;
 import cz.geokuk.plugins.mapy.stahovac.KachleOflinerAction;
@@ -134,24 +123,6 @@ public class Akce {
   public final UkladatMapyNaDiskAction ukladatMapyNaDiskAction = new UkladatMapyNaDiskAction();
   public final OnlineModeAction onlineModeAction = new OnlineModeAction();
   public final TadyJsemDomaAction tadyJsemDomaAction = new TadyJsemDomaAction();
-
-  public final BaseNPodkladAction baseNPodkladAction = new BaseNPodkladAction();
-  public final TuristPokladAction turistPokladAction = new TuristPokladAction();
-  public final WinterTuristPodkladAction winterTuristPodkladAction = new WinterTuristPodkladAction();
-  public final AquaticTuristPodkladAction aquaticTuristPodkladAction = new AquaticTuristPodkladAction();
-  public final OphototPodkladAction ophototPodkladAction = new OphototPodkladAction();
-  public final Army2PodkladAction army2PodkladAction = new Army2PodkladAction();
-  public final Ophot0203PodkladAction ophot0203PodkladAction = new Ophot0203PodkladAction();
-  public final Ophot0406PodkladAction ophot0406PodkladAction = new Ophot0406PodkladAction();
-  // Nefunguje ce staré struktuře
-  public final Ophot1012PodkladAction ophot1012PodkladAction = new Ophot1012PodkladAction();
-  public final GeographyPodkladAction geographyPodkladAction = new GeographyPodkladAction();
-  public final ZadnePodkladAction zadnePodkladAction = new ZadnePodkladAction();
-
-  public final TturDekoraceAction tturDekoraceAction = new TturDekoraceAction();
-  public final TcykloDekoraceAction tcykloDekoraceAction = new TcykloDekoraceAction();
-  public final ReliefDekoraceAction reliefDekoraceAction = new ReliefDekoraceAction();
-  public final HybridDekoraceAction hybridDekoraceAction = new HybridDekoraceAction();
 
   public final ImplicitniVyberZobrazenychKesiAction implicitniVyberZobrazenychKesi = new ImplicitniVyberZobrazenychKesiAction();
   public final JenFinalUNalezenychAction jenFinalUNalezenychAction = new JenFinalUNalezenychAction();
@@ -234,5 +205,6 @@ public class Akce {
   public final VyletSmazAnoAction vyletSmazAnoAction = new VyletSmazAnoAction();
   public final VyletSmazNeAction vyletSmazNeAction = new VyletSmazNeAction();
 
+  public final List<MapyAction0> mapoakce = new LinkedList<>();
 
 }

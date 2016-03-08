@@ -17,6 +17,9 @@ import cz.geokuk.plugins.kesoid.mvc.JVybiracBestOf;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracFavorit;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracHodnoceni;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracVyletu;
+import cz.geokuk.plugins.mapy.DekoraceAction;
+import cz.geokuk.plugins.mapy.MapyAction0;
+import cz.geokuk.plugins.mapy.PodkladAction;
 import cz.geokuk.plugins.refbody.NaKonkretniBodAction;
 import cz.geokuk.plugins.refbody.RefbodyModel;
 import cz.geokuk.util.gui.MenuStrujce;
@@ -92,28 +95,8 @@ public class Menu extends MenuStrujce {
     menu("Mapy", "Řízení zobrazení součástí map");
     menu.setMnemonic(KeyEvent.VK_M);
 
-    ButtonGroup mapPodkladButtonGroup = new ButtonGroup();
-    item(akce.baseNPodkladAction, mapPodkladButtonGroup);
-    item(akce.turistPokladAction, mapPodkladButtonGroup);
-    item(akce.winterTuristPodkladAction, mapPodkladButtonGroup);
-    //nefunguje, podklady stené jako turistická
-    //em(akce.aquaticTuristPodkladAction, mapPodkladButtonGroup);
-    item(akce.geographyPodkladAction, mapPodkladButtonGroup);
-    item(akce.ophototPodkladAction, mapPodkladButtonGroup);
-    item(akce.army2PodkladAction, mapPodkladButtonGroup);
-    item(akce.ophot0203PodkladAction, mapPodkladButtonGroup);
-    item(akce.ophot0406PodkladAction, mapPodkladButtonGroup);
-    //nefunguje, nemají podklady ve staré podobě
-    //item(akce.ophot1012PodkladAction, mapPodkladButtonGroup);
-    item(akce.zadnePodkladAction, mapPodkladButtonGroup);
-    separator();
-
-    item(akce.tturDekoraceAction);
-    item(akce.tcykloDekoraceAction);
-    item(akce.reliefDekoraceAction);
-    item(akce.hybridDekoraceAction);
-
-
+    makeMapSubmenuPart(akce);
+    
     separator();
     item(akce.priblizMapuAction);
     item(akce.oddalMapuAction);
@@ -264,6 +247,23 @@ public class Menu extends MenuStrujce {
     tb.addOvladaceAlel();
     tb.add(Box.createHorizontalGlue());
 
+  }
+  
+  public void makeMapSubmenuPart(Akce akce) {
+    ButtonGroup mapPodkladButtonGroup = new ButtonGroup();
+    for (MapyAction0 mapoakce1 : akce.mapoakce) {
+      if (mapoakce1 instanceof PodkladAction) {
+        item(mapoakce1, mapPodkladButtonGroup);
+      }
+    }
+
+    separator();
+
+    for (MapyAction0 mapoakce1 : akce.mapoakce) {
+      if (mapoakce1 instanceof DekoraceAction) {
+        item(mapoakce1);
+      }
+    }
   }
 
   public JToolBar getToolBar() {

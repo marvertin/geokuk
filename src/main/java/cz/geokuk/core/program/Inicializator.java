@@ -22,7 +22,11 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoidkruhy.KruhyModel;
 import cz.geokuk.plugins.kesoidobsazenost.ObsazenostModel;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyModel;
+import cz.geokuk.plugins.mapy.DekoraceAction;
+import cz.geokuk.plugins.mapy.MapyAction0;
 import cz.geokuk.plugins.mapy.MapyModel;
+import cz.geokuk.plugins.mapy.PodkladAction;
+import cz.geokuk.plugins.mapy.kachle.EKaType;
 import cz.geokuk.plugins.mapy.kachle.KachleModel;
 import cz.geokuk.plugins.mapy.kachle.KachloDownloader;
 import cz.geokuk.plugins.mrizky.MrizkaModel;
@@ -93,10 +97,23 @@ public class Inicializator {
     bb.registerSigleton(akce);
     bb.registrFieldsAsSingleton(akce);
 
+    intMapAkce(bb, akce);
     //
     bb.registerSigleton(mainFrameHolder);
     bb.init();
     //Board.eveman = eveman;
+  }
+  
+  public void intMapAkce(BeanBag bb, Akce akce) {
+    for (EKaType ka : EKaType.values()) {
+      MapyAction0 jednamapoakce = 
+      ka.isPodklad() ?
+        new PodkladAction(ka) :
+        new DekoraceAction(ka);
+      akce.mapoakce.add(jednamapoakce);
+      bb.registerSigleton(jednamapoakce);
+      
+    }
   }
 
   public void setMainFrame(JMainFrame frame) {

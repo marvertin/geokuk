@@ -10,26 +10,26 @@ import cz.geokuk.plugins.mapy.kachle.KaSet;
 public class MapyModel extends Model0 {
 
   
-  private EMapPodklad podklad;
+  private EKaType podklad;
   
-  public EMapPodklad getPodklad() {
+  public EKaType getPodklad() {
     return podklad;
   }
 
-  public EnumSet<EMapDekorace> getDekorace() {
+  public EnumSet<EKaType> getDekorace() {
     return dekorace.clone();
   }
 
-  private EnumSet<EMapDekorace> dekorace;
+  private EnumSet<EKaType> dekorace;
 
-  public void setPodklad(EMapPodklad podklad) {
+  public void setPodklad(EKaType podklad) {
     if (podklad == this.podklad) return;
     this.podklad = podklad;
     currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnum(FPref.VALUE_MAPOVE_PODKLADY_value, podklad);
     fajruj();
   }
   
-  public void setDekorace(EnumSet<EMapDekorace> dekorace) {
+  public void setDekorace(EnumSet<EKaType> dekorace) {
     if (dekorace.equals(this.dekorace)) return;
     this.dekorace = dekorace.clone(); 
     currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, dekorace);
@@ -37,7 +37,8 @@ public class MapyModel extends Model0 {
   }
 
   public KaSet getKaSet() {
-    EnumSet<EKaType> kts = EKaType.compute(podklad, dekorace);
+    EnumSet<EKaType> kts = EnumSet.of(podklad);
+    kts.addAll(dekorace);
     assert kts != null;
     KaSet kaSet = new KaSet(kts);
     return kaSet;
@@ -51,8 +52,8 @@ public class MapyModel extends Model0 {
 
   @Override
   protected void initAndFire() {
-    EMapPodklad podklad = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnum(FPref.VALUE_MAPOVE_PODKLADY_value, EMapPodklad.TURIST, EMapPodklad.class);
-    EnumSet<EMapDekorace> dekorace = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, EnumSet.of(EMapDekorace.TTUR), EMapDekorace.class);
+    EKaType podklad = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnum(FPref.VALUE_MAPOVE_PODKLADY_value, EKaType.TURIST_M, EKaType.class);
+    EnumSet<EKaType> dekorace = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, EnumSet.of(EKaType.TTUR_M), EKaType.class);
     setPodklad(podklad);
     setDekorace(dekorace);
   }

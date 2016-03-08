@@ -2,31 +2,29 @@ package cz.geokuk.plugins.mapy;
 
 import java.util.EnumSet;
 
-import cz.geokuk.framework.ToggleAction0;
+import cz.geokuk.plugins.mapy.kachle.EKaType;
 
-public abstract class DekoraceAction0 extends ToggleAction0 {
+public class DekoraceAction extends MapyAction0 {
 
   private static final long serialVersionUID = 8106696486908484270L;
-  protected MapyModel mapyModel;
 
-  public DekoraceAction0(String name) {
-    super(name);
+
+  public DekoraceAction(EKaType aKatype) {
+    super(aKatype);
   }
 
-  public void inject(MapyModel mapyModel) {
-    this.mapyModel = mapyModel;
+  protected EKaType getDekorace() {
+    return super.getKaType();
   }
-  
-  protected abstract EMapDekorace getDekorace();
   
   protected void nastavDekoraci(boolean onoff) {
-    EnumSet<EMapDekorace> dekoraces = mapyModel.getDekorace();
+    EnumSet<EKaType> dekoraces = getMapyModel().getDekorace();
     if (onoff) {
         dekoraces.add(getDekorace());
     } else {
         dekoraces.remove(getDekorace());
     }
-    mapyModel.setDekorace(dekoraces);
+    getMapyModel().setDekorace(dekoraces);
   }
   
   @Override
@@ -35,7 +33,7 @@ public abstract class DekoraceAction0 extends ToggleAction0 {
   }
   
   public void onEvent(ZmenaMapNastalaEvent event) {
-    EnumSet<EMapDekorace> dekoraces = mapyModel.getDekorace();
+    EnumSet<EKaType> dekoraces = getMapyModel().getDekorace();
     boolean nastaveno = dekoraces.contains(getDekorace());
     setSelected(nastaveno);
   }
