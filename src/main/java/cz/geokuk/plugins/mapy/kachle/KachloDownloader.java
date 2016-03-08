@@ -8,16 +8,16 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.EnumMap;
 
 import javax.imageio.ImageIO;
 
-import cz.geokuk.util.pocitadla.Pocitadlo;
-import cz.geokuk.util.pocitadla.PocitadloRoste;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import cz.geokuk.util.pocitadla.Pocitadlo;
+import cz.geokuk.util.pocitadla.PocitadloRoste;
 
 
 public class KachloDownloader {
@@ -30,9 +30,6 @@ public class KachloDownloader {
 
     private KachleModel kachleModel;
 
-    private static final String URLBASE1 = "http://";
-
-    private static final String URLBASE2 = ".mapserver.mapy.cz/";
 
 
     private final EnumMap<EPraznyObrazek, Image> prazdneObrazky = new EnumMap<>(EPraznyObrazek.class);
@@ -50,7 +47,7 @@ public class KachloDownloader {
                 return prazdnyObrazekBezDat(EPraznyObrazek.BEZ_PODKLADU); // v offline módu jen vyprazdňuji frontu
             if (!kachleModel.isOnlineMode())
                 return prazdnyObrazekBezDat(EPraznyObrazek.OFFLINE); // v offline módu jen vyprazdňuji frontu
-            URL url = buildSeznamoveUrl(kaOne, server);
+            URL url = kaOne.getType().getUrlBuilder().buildUrl(kaOne);
             ImageWithData imda = new ImageWithData();
             DataHoldingInputStream dhis = new DataHoldingInputStream(url.openStream());
             InputStream stm = new BufferedInputStream(dhis);
@@ -66,22 +63,6 @@ public class KachloDownloader {
         }
     }
 
-    private URL buildSeznamoveUrl(KaOne kaOne, String server) throws MalformedURLException {
-      StringBuilder sb = new StringBuilder();
-      sb.append(URLBASE1);
-      sb.append(server);
-      sb.append(URLBASE2);
-      KaLoc kaloc = kaOne.getLoc();
-      kaOne.getType().addToUrl(sb);
-      sb.append('/');
-      sb.append(kaloc.getMoumer());
-      sb.append('-');
-      sb.append(kaloc.getFromSzUnsignedX());
-      sb.append('-');
-      sb.append(kaloc.getFromSzUnsignedY());      
-      URL url = new URL(sb.toString());
-      return url;
-    }
 
     /**
      * @return
