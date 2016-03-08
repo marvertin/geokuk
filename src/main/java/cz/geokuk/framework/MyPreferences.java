@@ -175,6 +175,9 @@ public class MyPreferences extends Preferences {
     T result;
     try {
       result = Enum.valueOf(cls, s);
+    } catch (java.lang.IllegalArgumentException e) {
+      // nebudeme nic dělat ani odstraňovat. Může se to hodit jiné verzi
+      return def; // vrátit default, jako by tam nic nebylo
     } catch (Exception e) { // když je to špatná hodnota, jako by nebyla žádná
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Nesmysl v preferencich: " + key + "=" + s);
       remove(key);
