@@ -10,17 +10,17 @@ import cz.geokuk.core.coordinates.Wgs;
 public class JMrizkaDdMmSs extends JMrizkaWgs {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = -4045265652174560904L;
 
   @Override
-  public String getTextY(double y) {
+  public String getTextY(final double y) {
     return Wgs.toDdMmSsFormat(y);
   }
 
   @Override
-  public String getTextX(double x) {
+  public String getTextX(final double x) {
     return Wgs.toDdMmSsFormat(x);
   }
 
@@ -28,7 +28,7 @@ public class JMrizkaDdMmSs extends JMrizkaWgs {
    * @see mrizka.JMrizka0#initPainting(mrizka.JMrizka0.Vykreslovac)
    */
   @Override
-  public void initPainting(Vykreslovac v) {
+  public void initPainting(final Vykreslovac v) {
     v.setColor(Color.CYAN);
     v.rastr(VTERINA * 1 , 1);
     v.rastr(VTERINA * 2 , 5);
@@ -57,6 +57,11 @@ public class JMrizkaDdMmSs extends JMrizkaWgs {
   @Override
   public JSingleSlide0 createRenderableSlide() {
     return new JMrizkaDdMmSs();
+  }
+
+  @Override
+  public boolean smimVykreslovat() {
+    return true;
   }
 
 }

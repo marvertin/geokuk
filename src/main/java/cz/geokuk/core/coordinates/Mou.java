@@ -15,29 +15,29 @@ public class Mou implements Mouable, Cloneable {
   public final int xx;
   public final int yy;
 
-  public Mou(int xx, int yy) {
+  public Mou(final int xx, final int yy) {
     this.xx = xx;
     this.yy = yy;
   }
 
-  public Mou(Mou mou) {
+  public Mou(final Mou mou) {
     xx = mou.xx;
     yy = mou.yy;
   }
 
-  public Mou add(int dxx, int dyy) {
+  public Mou add(final int dxx, final int dyy) {
     return new Mou(xx + dxx, yy + dyy);
   }
 
-  public Mou add(Moud moud) {
+  public Mou add(final Moud moud) {
     return new Mou(xx + moud.dxx, yy + moud.dyy);
   }
 
-  public Mou sub(Moud moud) {
+  public Mou sub(final Moud moud) {
     return new Mou(xx - moud.dxx, yy - moud.dyy);
   }
 
-  public Moud sub(Mou mou) {
+  public Moud sub(final Mou mou) {
     return new Moud(xx - mou.xx, yy - mou.yy);
   }
 
@@ -47,10 +47,14 @@ public class Mou implements Mouable, Cloneable {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) return true;
-    if (! (obj instanceof Mou)) return false;
-    Mou m = (Mou) obj;
+  public boolean equals(final Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (! (obj instanceof Mou)) {
+      return false;
+    }
+    final Mou m = (Mou) obj;
     return xx == m.xx && yy == m.yy;
   }
 
@@ -58,15 +62,6 @@ public class Mou implements Mouable, Cloneable {
   @Override
   public String toString() {
     return "[" + Integer.toHexString(xx)  + "," + Integer.toHexString(yy)  + "]";
-  }
-
-  public Utm toUtm() {
-    return toWgs().toUtm();
-
-// takto to bylo v seznamových mapách
-//    double ux = (xx * 0.03125) - 3700000;
-//    double uy = (yy * 0.03125) + 1300000;
-//    return new Utm(ux, uy);
   }
 
   public Wgs toWgs() {
@@ -78,24 +73,16 @@ public class Mou implements Mouable, Cloneable {
     return this;
   }
 
-  public long getKvadratVzdalenosti(Mou mou) {
-    if (mou == null) return Long.MAX_VALUE; // nevlastní bod je nekonečně daleko
+  public long getKvadratVzdalenosti(final Mou mou) {
+    if (mou == null)
+    {
+      return Long.MAX_VALUE; // nevlastní bod je nekonečně daleko
+    }
     return sub(mou).getKvadratVzdalenosti();
   }
 
-  public static double dalka(Mouable mouable1, Mouable mouable2) {
-    assert mouable1 != null;
-    assert mouable2 != null;
-    Utm utm1 = efektivneNaUtm(mouable1);
-    Utm utm2 = efektivneNaUtm(mouable2);
-      return Math.hypot(utm2.ux - utm1.ux, utm2.uy - utm1.uy);
+  public static double dalka(final Mouable mouable1, final Mouable mouable2) {
+    return FGeoKonvertor.dalka(mouable1.getMou().toWgs(), mouable2.getMou().toWgs());
   }
 
-  private static Utm efektivneNaUtm(Mouable mouable) {
-    if (mouable instanceof Utm)
-      return (Utm) mouable;
-    if (mouable instanceof Wgs)
-      return ((Wgs) mouable).toUtm();
-    return mouable.getMou().toUtm();
-  }
 }

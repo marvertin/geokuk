@@ -4,7 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Future;
 
-import cz.geokuk.core.coordinates.Utm;
+import cz.geokuk.core.coordinates.FGeoKonvertor;
+import cz.geokuk.core.coordinates.Wgs;
 
 public abstract class Hledac0<T extends Nalezenec0> {
 
@@ -23,7 +24,7 @@ public abstract class Hledac0<T extends Nalezenec0> {
   public List<T> najdiASerad(HledaciPodminka0 podm) {
     List<T> list = hledej(podm);
     // dopočítat vzdálenost a azimut
-    Utm stredHledani = podm.getStredHledani().toUtm();
+    Wgs stredHledani = podm.getStredHledani();
     for (T nal : list) {
       dopicitejVzdalenostAAzimut(nal, stredHledani);
     }
@@ -41,11 +42,10 @@ public abstract class Hledac0<T extends Nalezenec0> {
    * @param aNal
    * @param aStredHledani
    */
-  protected void dopicitejVzdalenostAAzimut(Nalezenec0 aNal, Utm aStredHledani) {
+  protected void dopicitejVzdalenostAAzimut(Nalezenec0 aNal, Wgs aStredHledani) {
+    double dalka = FGeoKonvertor.dalka(aNal.getWgs(), aStredHledani);
     if (aStredHledani == null) return;
-    Utm ukes = aNal.getWgs().toUtm();
-    double dalka = Math.hypot(ukes.ux - aStredHledani.ux, ukes.uy - aStredHledani.uy);
-    double uhel = Math.atan2(ukes.ux - aStredHledani.ux, ukes.uy - aStredHledani.uy);
+    double uhel = Wgs.azimut(aStredHledani, aNal.getWgs()); 
     uhel = uhel * 180 / Math.PI;
     if (uhel < 0) uhel += 360;
     aNal.setVzdalenost(dalka);

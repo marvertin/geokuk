@@ -36,6 +36,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cz.geokuk.core.coord.Coord;
+import cz.geokuk.core.coordinates.CoordinateConversion;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.core.hledani.RefreshorVysledkuHledani;
 import cz.geokuk.core.hledani.VysledekHledani;
@@ -665,7 +666,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     {
       SortedMap<String, String> pats = new TreeMap<>();
       pats.put("C1-wgs",  wgs + " z" + moumer);
-      pats.put("C2-utm",  wgs.toUtm() + " z" + moumer);
+      pats.put("C2-utm",  new CoordinateConversion().latLon2UTM(wgs.lat, wgs.lon) + " z" + moumer);
       pats.put("C3-vter",  "N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer);
       jKmzFolderNazevCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
     }
@@ -673,7 +674,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
       SortedMap<String, String> pats = new TreeMap<>();
       pats.put("C0-compact", String.format(Locale.ENGLISH, "n%7fe%7fz%d", wgs.lat, wgs.lon, moumer).replace(".", ""));
       pats.put("C1-wgs", wgs  + " z" + moumer);
-      pats.put("C2-utm",  wgs.toUtm()  + " z" + moumer);
+      pats.put("C2-utm",  new CoordinateConversion().latLon2UTM(wgs.lat, wgs.lon));
       pats.put("C3-vter",  FUtil.vycistiJmenoSouboru("N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer));
       jPureJmenoSouboruCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
     }

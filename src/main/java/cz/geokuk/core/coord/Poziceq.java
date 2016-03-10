@@ -2,7 +2,6 @@ package cz.geokuk.core.coord;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
-import cz.geokuk.core.coordinates.Utm;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.kesoid.Kesoid;
@@ -85,10 +84,10 @@ public class Poziceq {
     return mou == null ? null : mou.toWgs();
   }
 
-  public Utm getUtm() {
-    Mou mou = getPoziceMou();
-    return mou == null ? null : mou.toUtm();
-  }
+//  public Utm getUtm() {
+//    Mou mou = getPoziceMou();
+//    return mou == null ? null : mou.toUtm();
+//  }
 
 
 }

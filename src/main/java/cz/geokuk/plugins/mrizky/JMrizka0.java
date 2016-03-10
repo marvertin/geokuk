@@ -42,9 +42,14 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
   public abstract double convertToX(Mou mou);
   public abstract double convertToY(Mou mou);
 
-  private Point convert(double x, double y) {
-    Point result = getSoord().transform(convertToMou(x, y));
-    return result;
+  private Point convert(final double x, final double y) {
+    try {
+      final Point result = getSoord().transform(convertToMou(x, y));
+      //System.out.printf("Mřížkování: %s (%f,%f) -> (%d,%d)%n",  getClass().getSimpleName(), x, y, result.x, result.y);
+      return result;
+    } catch (Exception e) {
+      throw new RuntimeException( x + " " + y,e);
+    }
   }
 
 
@@ -57,11 +62,13 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
    * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
    */
   @Override
-  protected void paintComponent(Graphics aG) {
-    Vykreslovac vykreslovac = new Vykreslovac();
-    initPainting(vykreslovac);
-    vykreslovac.paint(aG);
-    donePainting();
+  protected void paintComponent(final Graphics aG) {
+    if (smimVykreslovat()) {
+      final Vykreslovac vykreslovac = new Vykreslovac();
+      initPainting(vykreslovac);
+      vykreslovac.paint(aG);
+      donePainting();
+    }
   }
 
   protected class Vykreslovac {
@@ -78,14 +85,18 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
     private Color color = Color.BLACK;
 
-    void paint(Graphics aG) {
-      if (ykrok == 0 || ykrok == 0) return; // at se nezacykli
-      Graphics2D g = (Graphics2D) aG;
+    void paint(final Graphics aG) {
+      if (ykrok == 0 || ykrok == 0)
+      {
+        return; // at se nezacykli
+      }
+      final Graphics2D g = (Graphics2D) aG;
       g.setColor(color);
       //      if (true) return;
 
       korigujZnamenkaKroku();
-      posunX0Y0ZaKonec();
+      boolean vlezeSeDoOkna = posunX0Y0ZaKonec();
+      if (!vlezeSeDoOkna) return;
       // příprava prvního řádku
       List<Point> a = new ArrayList<>();
       //Point p = convert(x0, y0);
@@ -103,13 +114,13 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
       double y = y0;
       do {
         y -= ykrok;
-        List<Point> b = new ArrayList<>(a.size());
+        final List<Point> b = new ArrayList<>(a.size());
         b.add(convert(x0, y));
         double x = x0 - xkrok;
         for (int i=1; i<a.size(); i++) {
-          Point p = a.get(i);
-          Point p1 = a.get(i-1);
-          Point p2 = convert(x, y);
+          final Point p = a.get(i);
+          final Point p1 = a.get(i-1);
+          final Point p2 = convert(x, y);
           g.setStroke(naSilneY(y + ykrok) ? silne : slabe);
           g.drawLine(p.x, p.y , p1.x, p1.y);
           g.setStroke(naSilneX(x) ? silne : slabe);
@@ -140,89 +151,109 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
     /* (non-Javadoc)
      * @see mrizka.JMrizka0#initPainting(coordinates.Mou)
      */
-    private int convertVzdalenostMensi(double vzdalenost) {
-      Mou moustred = getSoord().getMoustred();
-      double x1 = convertToX(moustred);
-      double y1 = convertToY(moustred);
-      double x2 = x1 + vzdalenost;
-      double y2 = y1 + vzdalenost;
-      Point p1 = convert(x1, y1);
-      Point p2 = convert(x2, y2);
-      int dx = Math.abs(p1.x - p2.x);
-      int dy = Math.abs(p1.x - p2.x);
-      int d = Math.min(dx, dy);
+    private int convertVzdalenostMensi(final double vzdalenost) {
+      final Mou moustred = getSoord().getMoustred();
+      final double x1 = convertToX(moustred);
+      final double y1 = convertToY(moustred);
+      final double x2 = x1 + vzdalenost;
+      final double y2 = y1 + vzdalenost;
+      final Point p1 = convert(x1, y1);
+      final Point p2 = convert(x2, y2);
+      final int dx = Math.abs(p1.x - p2.x);
+      final int dy = Math.abs(p1.x - p2.x);
+      final int d = Math.min(dx, dy);
 
       //      lat = Math.round(lat / krok) * krok;
       //      lon = Math.round(lon / krok) * krok;
       return d;
     }
 
-    protected final void setColor(Color color) {
+    protected final void setColor(final Color color) {
       this.color = color;
     }
 
-    protected final void rastr(double krok, int tlustsi) {
-      if (xkrok > 0) return; // už bylo nastaveno
-      int d = convertVzdalenostMensi(krok);
-      if (d < PIXLMEZ) return; // to je ještě málo;
+    protected final void rastr(final double krok, final int tlustsi) {
+      if (xkrok > 0)
+      {
+        return; // už bylo nastaveno
+      }
+      final int d = convertVzdalenostMensi(krok);
+      if (d < PIXLMEZ)
+      {
+        return; // to je ještě málo;
+      }
       this.xkrok = krok;
       this.ykrok = krok;
       this.tlustsiX = tlustsi;
       this.tlustsiY = tlustsi;
-      Mou moustred = getSoord().getMoustred();
+      final Mou moustred = getSoord().getMoustred();
       x0 = Math.round(convertToX(moustred) / krok) * krok;
       y0 = Math.round(convertToY(moustred) / krok) * krok;
       //System.out.println("KROK A SILA:  " +  tlustsi + " | " + krok);
+      //System.out.printf("x0y0: (%f;%f) ---- %f ------ (%f;%f)%n", convertToX(moustred), convertToY(moustred), krok, x0 , y0);
     }
 
-    private boolean naSilneX(double x) {
-      boolean result = Math.round(x / xkrok) % tlustsiX == 0;
+    private boolean naSilneX(final double x) {
+      final boolean result = Math.round(x / xkrok) % tlustsiX == 0;
       return result;
     }
 
-    private boolean naSilneY(double y) {
-      boolean result = Math.round(y / ykrok) % tlustsiY == 0;
+    private boolean naSilneY(final double y) {
+      final boolean result = Math.round(y / ykrok) % tlustsiY == 0;
       return result;
     }
 
     /**
-     * 
+     * Vrací true, pokud se podařilo nastavit a má smysl vykreslovat
      */
-    private void posunX0Y0ZaKonec() {
-      int width = getWidth();
-      while(convert(x0, y0).x < width) {
+    private boolean posunX0Y0ZaKonec() {
+      // Tady je problé, že mapy malého měřítka se vejdou na obrazovku vícekrát,
+      // a pak se nikdy nemůžeme dostat mimo obrazovky, tak utneme
+      final int width = getWidth();
+      int px, py, lastPx = Integer.MIN_VALUE, lastPy = Integer.MIN_VALUE;
+      while((px = convert(x0, y0).x) < width && Math.abs(x0) < 1000) {
+        if (px <= lastPx) return false;
+        lastPx = px;
         x0 += xkrok;
+        //System.out.println("Zase se zvětšuje: " + x0 + " --- " + xkrok + " //// " + convert(x0, y0).x + "  ---- " + convertToMou(x0,  y0));
       }
       x0 += xkrok * 2; // a ještě jeden pro jistotu
-      int height = getHeight();
-      while(convert(x0, y0).y < height) {
+      final int height = getHeight();
+      while((py = convert(x0, y0).y) < height && Math.abs(y0) < 1000) {
+        if (py <= lastPy) return false;
+        lastPy = py;
         y0 += ykrok;
       }
       y0 += ykrok * 2; // a ještě jeden pro jistotu
+      return true;
     }
 
     /**
-     * 
+     *
      */
     private void korigujZnamenkaKroku() {
-      Point p = convert(x0, y0);
-      Point r = convert(x0 + xkrok, y0 + ykrok);
-      if (r.x < p.x) xkrok = - xkrok;
-      if (r.y < p.y) ykrok = - ykrok;
+      final Point p = convert(x0, y0);
+      final Point r = convert(x0 + xkrok, y0 + ykrok);
+      if (r.x < p.x) {
+        xkrok = - xkrok;
+      }
+      if (r.y < p.y) {
+        ykrok = - ykrok;
+      }
     }
 
   }
 
 
   private String kterouMamMrizku() {
-    String kn = getClass().getName();
-    int poz = kn.indexOf("JMrizka");
-    String result = kn.substring(poz + "JMrizka".length());
+    final String kn = getClass().getName();
+    final int poz = kn.indexOf("JMrizka");
+    final String result = kn.substring(poz + "JMrizka".length());
     return result;
   }
 
   @BeanSubtype
-  public void onEvent(MrizkaEvent event) {
+  public void onEvent(final MrizkaEvent event) {
     setVisible(event.onoff);
   }
 
@@ -236,4 +267,5 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
   //    System.out.println("Mřížky finalizovány");
   //  }
 
+  public abstract boolean smimVykreslovat();
 }

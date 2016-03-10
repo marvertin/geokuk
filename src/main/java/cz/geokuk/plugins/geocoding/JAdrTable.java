@@ -124,7 +124,8 @@ public class JAdrTable extends JPanel {
     column.setResizable(false);
 
     column = table.getColumnModel().getColumn(1);
-    column.setMaxWidth(45);
+    column.setMaxWidth(150);
+    column.setPreferredWidth(150);
     column.setResizable(false);
 
 
@@ -132,7 +133,7 @@ public class JAdrTable extends JPanel {
     column.setMaxWidth(25);
 
     column = table.getColumnModel().getColumn(3);
-    column.setPreferredWidth(500);
+    column.setPreferredWidth(700);
     column.setResizable(true);
 
   }

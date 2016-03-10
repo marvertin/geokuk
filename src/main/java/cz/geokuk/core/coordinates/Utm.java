@@ -8,67 +8,75 @@ public class Utm implements Mouable {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(ux);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(uy);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    Utm other = (Utm) obj;
-    if (Double.doubleToLongBits(ux) != Double.doubleToLongBits(other.ux))
+    }
+    final Utm other = (Utm) obj;
+    if (Double.doubleToLongBits(ux) != Double.doubleToLongBits(other.ux)) {
       return false;
-    if (Double.doubleToLongBits(uy) != Double.doubleToLongBits(other.uy))
+    }
+    if (Double.doubleToLongBits(uy) != Double.doubleToLongBits(other.uy)) {
       return false;
+    }
     return true;
   }
 
 
 
-  public double ux;
-  public double uy;
+  public final double ux;
+  public final double uy;
+  public final int polednikovaZona;
+  public final char rovnobezkovaZona;
 
-  public Utm() {}
 
-  public Utm(double ux, double uy) {
+  public Utm(final double ux, final double uy, final int polednikovaZona, final char rovnobezkovaZona) {
     this.ux = ux;
     this.uy = uy;
+    this.polednikovaZona = polednikovaZona;
+    this.rovnobezkovaZona = rovnobezkovaZona;
   }
 
-  public Utm(Utm mou) {
-    ux = mou.ux;
-    uy = mou.uy;
+  /**
+   * Vrací jiné místo na zemi, ale ve stejné zóně.
+   * @param ux
+   * @param uy
+   * @return
+   */
+  public Utm toUtmInTheSameZone(final double ux, final double uy) {
+    return new Utm(ux, uy, this.polednikovaZona, this.rovnobezkovaZona);
   }
 
-  public Utm add(double dxx, double dyy) {
-    return new Utm(ux + dxx, uy + dyy);
+  /**
+   * Vrací stejné místo na zemi, ael v souřadnicích vyjádřených v jiné zóně.
+   * @param ux
+   * @param uy
+   * @return
+   */
+  public Utm toSampePlaceInAnotherZone( final int polednikovaZona, final char rovnobezkovaZona) {
+    return new Utm(this.ux, this.uy, polednikovaZona, rovnobezkovaZona);
   }
-
-
-  public Utm add(Utmd moud) {
-    return new Utm(ux + moud.dux, uy + moud.duy);
-  }
-
-  public Utm sub(Utmd moud) {
-    return new Utm(ux - moud.dux, uy - moud.duy);
-  }
-
-  public Utmd sub(Utm mou) {
-    return new Utmd(ux - mou.ux, uy - mou.uy);
-  }
-
 
   public Wgs toWgs() {
-    String s = "33 U " + ux + " " + uy;
-    double[] utm2LatLon = new CoordinateConversion(33).utm2LatLon(s);
-    return new Wgs(utm2LatLon[0], utm2LatLon[1]);
+    try {
+      final double[] utm2LatLon = new CoordinateConversion().utm2LatLon(toString());
+      return new Wgs(utm2LatLon[0], utm2LatLon[1]);
+    } catch (final Exception e) {
+      throw new RuntimeException("Nelze převést na WGS: " + this, e);
+    }
   }
 
   public Mou toMou() {
@@ -81,7 +89,7 @@ public class Utm implements Mouable {
 
   @Override
   public String toString() {
-    return "UTM[" + ux  + "," + uy  + "]";
+    return polednikovaZona + " " + rovnobezkovaZona + " " + ux + " " + uy;
   }
 
   @Override

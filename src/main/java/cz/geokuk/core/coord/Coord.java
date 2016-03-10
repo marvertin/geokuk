@@ -10,7 +10,6 @@ import java.awt.geom.NoninvertibleTransformException;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.MouRect;
 import cz.geokuk.core.coordinates.Moud;
-import cz.geokuk.core.coordinates.Utm;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.plugins.mapy.kachle.KaLoc;
 import cz.geokuk.util.index2d.BoundingRect;
@@ -277,13 +276,15 @@ public class Coord  {
   }
 
   /**
-   *
+   * Vrací koli metrů odpovídá jednomu pixklu uprostřed plochy.
+   * 
    */
   public double getPixluNaMetr() {
-    final Utm ujz = getMouJZ().toUtm();
-    final Utm usv = getMouSV().toUtm();
-    final double odKrajeKeKraji = Math.abs(ujz.ux - usv.ux);
-    return dim.width / odKrajeKeKraji;
+    
+    Wgs wgs = getMoustred().toWgs();
+    double pixlyNaMetr = 1 / (wgs.metryNaMou() * mouNaPixl);
+    //System.out.println("PIXLU NA METR: " + metry + "        " + 1 / metry);
+    return pixlyNaMetr;
   }
 
   public double getWidthMetru() {

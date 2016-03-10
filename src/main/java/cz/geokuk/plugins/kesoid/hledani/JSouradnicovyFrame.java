@@ -55,7 +55,7 @@ import javax.swing.event.DocumentListener;
 import cz.geokuk.core.coord.PoziceModel;
 import cz.geokuk.core.coord.VyrezChangedEvent;
 import cz.geokuk.core.coord.VyrezModel;
-import cz.geokuk.core.coordinates.CoordinateConversionOriginal;
+import cz.geokuk.core.coordinates.CoordinateConversion;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.core.coordinates.WgsParser;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
@@ -68,10 +68,13 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
   private static final long serialVersionUID = 7087453419069194768L;
 
-  private static final double SIRKA_MIN = 30;
-  private static final double SIRKA_MAX = 70;
-  private static final double DELKA_MIN =  0;
-  private static final double DELKA_MAX = 40;
+
+  // FIXME skutečnou hodnotu maximální šířky sem dát
+  private static final double SIRKA_MAX = 80;
+  private static final double SIRKA_MIN = -80;
+
+  private static final double DELKA_MIN =  -180;
+  private static final double DELKA_MAX = 180;
 
 
   private JTextField jSouEdit;
@@ -90,7 +93,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   private Wgs souradniceEditovane;
   private Wgs souradniceReferencni;
 
-  private final CoordinateConversionOriginal konvertor = new CoordinateConversionOriginal();
+  private final CoordinateConversion konvertor = new CoordinateConversion();
 
   private PoziceModel poziceModel;
 
@@ -113,19 +116,19 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
     jButtonCentruj.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         poziceModel.setPozice(souradniceEditovane);
         vyrezModel.vystredovatNaPozici();
       }
     });
   }
 
-  public void onEvent(ReferencniBodSeZmenilEvent aEvent) {
+  public void onEvent(final ReferencniBodSeZmenilEvent aEvent) {
     setSouradniceReferencni(aEvent.wgs);
     vyhodnotEnableCentrovacihoTlacitka();
   }
 
-  public void onEvent(VyrezChangedEvent aEvent) {
+  public void onEvent(final VyrezChangedEvent aEvent) {
     vyhodnotEnableCentrovacihoTlacitka();
   }
 
@@ -136,7 +139,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
   @Override
   protected void initComponents() {
-    String tooltip = "Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny)," +
+    final String tooltip = "Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny)," +
         " jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. " +
         " Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
     jSouEdit = new JTextField();
@@ -149,7 +152,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
     jButtonCentruj.setToolTipText("Centruje mapu na zadaných souřadnicích.");
     getRootPane().setDefaultButton(jButtonCentruj);
 
-    Font hotovoFont = new Font("Monospaced", Font.BOLD, 20);
+    final Font hotovoFont = new Font("Monospaced", Font.BOLD, 20);
     jHotovaSirka = new JLabel();
     jHotovaSirka.setFont(hotovoFont);
     jHotovaSirka.setOpaque(true);
@@ -160,8 +163,8 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
     setTitle("Zadání souřadnic");
 
-    JPanel panel = new JPanel();
-    GroupLayout layout = new GroupLayout(panel);
+    final JPanel panel = new JPanel();
+    final GroupLayout layout = new GroupLayout(panel);
     panel.setLayout(layout);
     add(panel);
 
@@ -178,18 +181,18 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
             .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addComponent(jSouEditLabel)
                 )
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jSouEdit)
-                    )
-            )
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jHotovaSirka)
-                    .addComponent(jHotovaDelka)
-                    )
-                    .addComponent(jButtonCentruj)
+            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(jSouEdit)
                 )
-                .addComponent(jUtm)
+            )
+        .addGroup(layout.createSequentialGroup()
+            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(jHotovaSirka)
+                .addComponent(jHotovaDelka)
+                )
+            .addComponent(jButtonCentruj)
+            )
+        .addComponent(jUtm)
         );
 
     layout.setVerticalGroup(layout.createSequentialGroup()
@@ -201,14 +204,14 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
                     )
                 )
             )
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jHotovaSirka)
-                    .addComponent(jHotovaDelka)
-                    )
-                    .addComponent(jButtonCentruj)
+        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jHotovaSirka)
+                .addComponent(jHotovaDelka)
                 )
-                .addComponent(jUtm)
+            .addComponent(jButtonCentruj)
+            )
+        .addComponent(jUtm)
         );
     jSouEdit.setPreferredSize(new Dimension(150, jSouEdit.getPreferredSize().height));
     jSouEdit.setText("");
@@ -217,8 +220,10 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
   }
 
-  private void setSouradniceReferencni(Wgs wgs) {
-    if (wgs.equals(souradniceReferencni)) return;
+  private void setSouradniceReferencni(final Wgs wgs) {
+    if (wgs.equals(souradniceReferencni)) {
+      return;
+    }
     souradniceReferencni = wgs;
     if (!souradniceNastavenyRukama) {
       jSouEdit.setText(Wgs.toGeoFormat(wgs.lat) + " ; " + Wgs.toGeoFormat(wgs.lon));
@@ -231,16 +236,18 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   private void edituj() {
     //if (souradnice == null) return;
     boolean ok;
-    Wgs wgs = new WgsParser().parsruj(jSouEdit.getText());
+    final Wgs wgs = new WgsParser().parsruj(jSouEdit.getText());
     if (wgs == null) { // prizpusobeni puvodni verzi
-      wgs = new Wgs(SPATNY_FORMAT, SPATNY_FORMAT);
+      //  wgs = new Wgs(SPATNY_FORMAT, SPATNY_FORMAT);
     }
-    boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, wgs.lat, SIRKA_MIN, SIRKA_MAX);
-    boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, wgs.lon, DELKA_MIN, DELKA_MAX);
+    final double lat = wgs == null ? SPATNY_FORMAT : wgs.lat;
+    final double lon = wgs == null ? SPATNY_FORMAT : wgs.lon;
+    final boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, lat, SIRKA_MIN, SIRKA_MAX);
+    final boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, lon, DELKA_MIN, DELKA_MAX);
     ok = okSirka && okDelka;
     if (ok) {
       souradniceEditovane = wgs;
-      jUtm.setText(konvertor.latLon2UTM(wgs.lat, wgs.lon));
+      jUtm.setText(konvertor.latLon2UTM(lat, lon));
     } else {
       jUtm.setText("UTM = ?");
     }
@@ -248,10 +255,10 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   }
 
   /**
-   * 
+   *
    */
   private void vyhodnotEnableCentrovacihoTlacitka() {
-    boolean jsmeNaMiste = jsmeVycentrovaniSeZadanouPozici();
+    final boolean jsmeNaMiste = jsmeVycentrovaniSeZadanouPozici();
 
     //jsmeNaMiste = vyrezModel.isPoziceUprostred();
     jButtonCentruj.setEnabled(!jsmeNaMiste);
@@ -261,14 +268,14 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
    * @return
    */
   private boolean jsmeVycentrovaniSeZadanouPozici() {
-    boolean jsmeNaMiste =
-        (souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni))
+    final boolean jsmeNaMiste =
+        souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni)
         && vyrezModel.isPoziceUprostred();
     return jsmeNaMiste;
   }
 
 
-  private boolean aplikuj(JLabel jHotova, JTextField editacni,  double val, double min, double max) {
+  private boolean aplikuj(final JLabel jHotova, final JTextField editacni,  final double val, final double min, final double max) {
     boolean ok;
     if (val == SPATNY_FORMAT) {
       jHotova.setText("Grrrr!");
@@ -300,19 +307,19 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   // DocumentListener methods
 
   @Override
-  public void insertUpdate(DocumentEvent ev) {
+  public void insertUpdate(final DocumentEvent ev) {
     souradniceNastavenyRukama = true;
     edituj();
   }
 
   @Override
-  public void removeUpdate(DocumentEvent ev) {
+  public void removeUpdate(final DocumentEvent ev) {
     souradniceNastavenyRukama = true;
     edituj();
   }
 
   @Override
-  public void changedUpdate(DocumentEvent ev) {
+  public void changedUpdate(final DocumentEvent ev) {
     souradniceNastavenyRukama = true;
     edituj();
   }
@@ -328,7 +335,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
     private static final long serialVersionUID = -480129891208539096L;
 
     @Override
-    public void actionPerformed(ActionEvent ev) {
+    public void actionPerformed(final ActionEvent ev) {
       //      hilit.removeAllHighlights();
       jSouEdit.setText("");
       jSouEdit.setBackground(entryBg);
@@ -350,11 +357,11 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   //  }
 
 
-  public void inject(PoziceModel poziceModel) {
+  public void inject(final PoziceModel poziceModel) {
     this.poziceModel = poziceModel;
   }
 
-  public void inject(VyrezModel vyrezModel) {
+  public void inject(final VyrezModel vyrezModel) {
     this.vyrezModel = vyrezModel;
   }
 

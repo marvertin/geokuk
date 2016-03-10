@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.mrizky;
 
@@ -26,36 +26,41 @@ public class JMrizkaUtm extends JMrizka0 {
    * @see mrizka.JMrizka0#convertToMou(double, double)
    */
   @Override
-  public Mou convertToMou(double aX, double aY) {
-    Utm utm = new Utm(aX, aY);
-    Mou mou = utm.toMou();
+  public Mou convertToMou(final double aX, final double aY) {
+    final Mou mou =  getUtmStredu().toUtmInTheSameZone(aX, aY).toMou();
     return mou;
+  }
+
+  private Utm getUtmStredu() {
+    return super.getSoord().getMoustred().toWgs().toUtm();
   }
 
   /* (non-Javadoc)
    * @see mrizka.JMrizka0#convertToX(coordinates.Mou)
    */
   @Override
-  public double convertToX(Mou aMou) {
-    return aMou.toUtm().ux;
+  public double convertToX(final Mou aMou) {
+    final Utm utmStredu = getUtmStredu();
+    return aMou.toWgs().toUtm().toSampePlaceInAnotherZone(utmStredu.polednikovaZona, utmStredu.rovnobezkovaZona).ux;
   }
 
   /* (non-Javadoc)
    * @see mrizka.JMrizka0#convertToY(coordinates.Mou)
    */
   @Override
-  public double convertToY(Mou aMou) {
-    return aMou.toUtm().uy;
+  public double convertToY(final Mou aMou) {
+    final Utm utmStredu = getUtmStredu();
+    return aMou.toWgs().toUtm().toSampePlaceInAnotherZone(utmStredu.polednikovaZona, utmStredu.rovnobezkovaZona).uy;
   }
 
 
   @Override
-  public String getTextY(double y) {
+  public String getTextY(final double y) {
     return (long)y + "";
   }
 
   @Override
-  public String getTextX(double x) {
+  public String getTextX(final double x) {
     return (long)x + "";
   }
 
@@ -63,7 +68,7 @@ public class JMrizkaUtm extends JMrizka0 {
    * @see mrizka.JMrizka0#initPainting(mrizka.JMrizka0.Vykreslovac)
    */
   @Override
-  public void initPainting(Vykreslovac v) {
+  public void initPainting(final Vykreslovac v) {
     v.setColor(Color.BLUE);
     for (int rad =1; rad < 100000000; rad = rad * 10) {
       v.rastr(rad, 1);
@@ -79,4 +84,21 @@ public class JMrizkaUtm extends JMrizka0 {
   public JSingleSlide0 createRenderableSlide() {
     return new JMrizkaUtm();
   }
+
+  @Override
+  public boolean smimVykreslovat() {
+    final int polednikovaZonaVychod = getSoord().getMouV().toWgs().toUtm().polednikovaZona;
+    final int polednikovaZonaZapad = getSoord().getMouZ().toWgs().toUtm().polednikovaZona;
+    if (polednikovaZonaVychod == 60 && polednikovaZonaZapad == 1) {
+      return true; // přechod kolem datumové čáry
+    }
+    if (Math.abs(polednikovaZonaZapad - polednikovaZonaVychod) <= 1) {
+      return true;
+    }
+    // JE to moc daleko od sebe, tak nevykreslujeme
+    return false;
+  }
+
+
+
 }
