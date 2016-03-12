@@ -7,13 +7,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import cz.geokuk.core.coordinates.FGeoKonvertor;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.plugins.cesty.FBarvy;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.util.lang.FUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class Cesta implements Iterable<Bousek0> {
 
@@ -440,7 +442,7 @@ public class Cesta implements Iterable<Bousek0> {
   public double dalkaStartuACile() {
     //System.out.println(System.identityHashCode(this) + ": dalkaStartuACile "+ start + " " + cil);
     kontrolaKonzistence();
-    return Mou.dalka(start, cil);
+    return FGeoKonvertor.dalka(start, cil);
   }
 
   public String dalkaStartuACileHtml() {

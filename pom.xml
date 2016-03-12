@@ -5,7 +5,7 @@
 
 	<groupId>cz.geokuk</groupId>
 	<artifactId>geokuk</artifactId>
-	<version>4.1.2</version>
+	<version>5.0.0-beta1</version>
 
 	<build>
 		<plugins>

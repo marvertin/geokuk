@@ -48,31 +48,23 @@ public class JKachle extends JComponent {
   @Override
   protected void paintComponent(Graphics aG) {
     super.paintComponent(aG);
+    boolean zobrazovatNaKachlichPozice = false;
     //    if (true) return;
     Graphics2D g = (Graphics2D) aG.create();
     if (kachle.isVykreslovatOkamzite()) {
       // Pokud rendruji do KMZ č souboru, a ne naobrazovku tak mám možná otočeno a nestojím o žádné uříznuití.
       g.setClip(null);
     }
-    if (kachle.getImg() == null) {
+    if (kachle.getImg() != null) {
+      g.drawImage(kachle.getImg(), 0, 0, null);
+    }
+    if (kachle.getImg() == null || zobrazovatNaKachlichPozice) {
       g.setColor(Color.blue);
       drawPsanicko(g);
-
       g.setColor(Color.RED);
       vypisPozici(g);
-    } else {
-      g.drawImage(kachle.getImg(), 0, 0, null);
-      //       g.drawRect(0, 0, getWidth() -1, getHeight()-1);
-      //       System.out.println(cictac ++ +  ". vykresleno " + iPoziceJenProVypsani);
-      //       vypisPozici(g);
-      g.setColor(Color.blue);
-      drawPsanicko(g);
-
-      g.setColor(Color.RED);
-      vypisPozici(g);      
     }
     super.paintComponent(aG);
-    //System.out.println("Pejntuji komponentu " + getLocation());
   }
 
   private void vypisPozici(Graphics2D g) {

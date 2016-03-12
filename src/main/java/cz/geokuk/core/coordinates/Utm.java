@@ -1,6 +1,6 @@
 package cz.geokuk.core.coordinates;
 
-public class Utm implements Mouable {
+public class Utm extends Misto0 {
 
   @Override
   public int hashCode() {
@@ -70,13 +70,18 @@ public class Utm implements Mouable {
     return new Utm(this.ux, this.uy, polednikovaZona, rovnobezkovaZona);
   }
 
+  @Override
+  public String toString() {
+    return polednikovaZona + " " + rovnobezkovaZona + " " + ux + " " + uy;
+  }
+
   public Wgs toWgs() {
-    try {
-      final double[] utm2LatLon = new CoordinateConversion().utm2LatLon(toString());
-      return new Wgs(utm2LatLon[0], utm2LatLon[1]);
-    } catch (final Exception e) {
-      throw new RuntimeException("Nelze převést na WGS: " + this, e);
-    }
+    return FGeoKonvertor.toWgs(this);
+  }
+
+  @Override
+  public Mercator toMercator() {
+    return FGeoKonvertor.toMercator(this);
   }
 
   public Mou toMou() {
@@ -88,13 +93,8 @@ public class Utm implements Mouable {
   }
 
   @Override
-  public String toString() {
-    return polednikovaZona + " " + rovnobezkovaZona + " " + ux + " " + uy;
-  }
-
-  @Override
-  public Mou getMou() {
-    return toMou();
+  public Utm toUtm() {
+    return this;
   }
 
 

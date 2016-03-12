@@ -33,7 +33,7 @@ public class Test1 {
       } else {
         spatne ++;
       }
-      System.out.printf("%s -- %s\n", wgs1, new CoordinateConversion().latLon2UTM(lat, lon));
+      System.out.printf("%s -- %s\n", wgs1, new UtmMgrsWgsConvertor().latLon2UTM(lat, lon));
       
       System.out.printf("difflat: %f  ---- difflon: %f  %s => %s\n", difflat, difflon, wgs1, wgs2);
     }

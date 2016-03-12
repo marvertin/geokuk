@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
  * Mapy.cz coordinates.
  */
 
-public class Mou implements Mouable, Cloneable {
+public class Mou extends Misto0 {
 
   @SuppressWarnings("unused")
   private static final Logger log = LogManager.getLogger(Mou.class.getSimpleName());
@@ -64,14 +64,6 @@ public class Mou implements Mouable, Cloneable {
     return "[" + Integer.toHexString(xx)  + "," + Integer.toHexString(yy)  + "]";
   }
 
-  public Wgs toWgs() {
-    return FGeoKonvertor.toWgs(this);
-  }
-
-  @Override
-  public Mou getMou() {
-    return this;
-  }
 
   public long getKvadratVzdalenosti(final Mou mou) {
     if (mou == null)
@@ -81,8 +73,23 @@ public class Mou implements Mouable, Cloneable {
     return sub(mou).getKvadratVzdalenosti();
   }
 
-  public static double dalka(final Mouable mouable1, final Mouable mouable2) {
-    return FGeoKonvertor.dalka(mouable1.getMou().toWgs(), mouable2.getMou().toWgs());
+  public Wgs toWgs() {
+    return FGeoKonvertor.toWgs(this);
+  }
+
+  @Override
+  public Mercator toMercator() {
+    return FGeoKonvertor.toMercator(this);
+  }
+
+  @Override
+  public Mou toMou() {
+    return this;
+  }
+
+  @Override
+  public Utm toUtm() {
+    return FGeoKonvertor.toUtm(this);
   }
 
 }

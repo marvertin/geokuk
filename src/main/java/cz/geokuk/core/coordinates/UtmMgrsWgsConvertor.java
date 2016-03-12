@@ -8,16 +8,16 @@ package cz.geokuk.core.coordinates;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class CoordinateConversion
+class UtmMgrsWgsConvertor
 {
 
-  public double[] utm2LatLon(final String UTM)
+  double[] utm2LatLon(final String UTM)
   {
     final UTM2LatLon c = new UTM2LatLon();
     return c.convertUTMToLatLong(UTM);
   }
 
-  public String latLon2UTM(final double latitude, final double longitude)
+  String latLon2UTM(final double latitude, final double longitude)
   {
     final LatLon2UTM c = new LatLon2UTM();
     return c.convertLatLonToUTM(latitude, longitude);
@@ -35,25 +35,26 @@ public class CoordinateConversion
 
   }
 
-  public String latLon2MGRUTM(final double latitude, final double longitude)
+  String latLon2MGRUTM(final double latitude, final double longitude)
   {
     final LatLon2MGRUTM c = new LatLon2MGRUTM();
     return c.convertLatLonToMGRUTM(latitude, longitude);
 
   }
 
-  public double[] mgrutm2LatLon(final String MGRUTM)
+  double[] mgrutm2LatLon(final String MGRUTM)
   {
     final MGRUTM2LatLon c = new MGRUTM2LatLon();
     return c.convertMGRUTMToLatLong(MGRUTM);
   }
 
-  public double degreeToRadian(final double degree)
+  private double degreeToRadian(final double degree)
   {
     return degree * Math.PI / 180;
   }
 
-  public double radianToDegree(final double radian)
+  @SuppressWarnings("unused")
+  private double radianToDegree(final double radian)
   {
     return radian * 180 / Math.PI;
   }
@@ -89,15 +90,15 @@ public class CoordinateConversion
       setVariables(latitude, longitude);
 
       final String longZone = getLongZone(longitude);
-      final LatZones latZones = new LatZones();
-      final String latZone = latZones.getLatZone(latitude);
+      final LatBands latBands = new LatBands();
+      final String latBand = latBands.getLatBand(latitude);
 
       final double _easting = getEasting();
       final double _northing = getNorthing(latitude);
 
-      UTM = longZone + " " + latZone + " " + (int) _easting + " "
+      UTM = longZone + " " + latBand + " " + (int) _easting + " "
           + (int) _northing;
-      // UTM = longZone + " " + latZone + " " + decimalFormat.format(_easting) +
+      // UTM = longZone + " " + latBand + " " + decimalFormat.format(_easting) +
       // " "+ decimalFormat.format(_northing);
 
       return UTM;
@@ -263,8 +264,8 @@ public class CoordinateConversion
       setVariables(latitude, longitude);
 
       final String longZone = getLongZone(longitude);
-      final LatZones latZones = new LatZones();
-      final String latZone = latZones.getLatZone(latitude);
+      final LatBands latBands = new LatBands();
+      final String latBand = latBands.getLatBand(latitude);
 
       final double _easting = getEasting();
       final double _northing = getNorthing(latitude);
@@ -289,7 +290,7 @@ public class CoordinateConversion
       }
       northing = northing.substring(northing.length() - 5);
 
-      mgrUTM = longZone + latZone + digraph1 + digraph2 + easting + northing;
+      mgrUTM = longZone + latBand + digraph1 + digraph2 + easting + northing;
       return mgrUTM;
     }
   }
@@ -301,17 +302,17 @@ public class CoordinateConversion
       final double[] latlon = { 0.0, 0.0 };
       // 02CNR0634657742
       final int zone = Integer.parseInt(mgrutm.substring(0, 2));
-      final String latZone = mgrutm.substring(2, 3);
+      final String latBand = mgrutm.substring(2, 3);
 
       final String digraph1 = mgrutm.substring(3, 4);
       final String digraph2 = mgrutm.substring(4, 5);
       easting = Double.parseDouble(mgrutm.substring(5, 10));
       northing = Double.parseDouble(mgrutm.substring(10, 15));
 
-      final LatZones lz = new LatZones();
-      final double latZoneDegree = lz.getLatZoneDegree(latZone);
+      final LatBands lz = new LatBands();
+      final double latBandDegree = lz.getLatBandDegree(latBand);
 
-      final double a1 = latZoneDegree * 40000000 / 360.0;
+      final double a1 = latBandDegree * 40000000 / 360.0;
       final double a2 = 2000000 * Math.floor(a1 / 2000000.0);
 
       final Digraphs digraphs = new Digraphs();
@@ -343,7 +344,7 @@ public class CoordinateConversion
       double latitude = 0;
       latitude = 180 * (phi1 - fact1 * (fact2 + fact3 + fact4)) / Math.PI;
 
-      if (latZoneDegree < 0)
+      if (latBandDegree < 0)
       {
         latitude = 90 - latitude;
       }
@@ -351,7 +352,7 @@ public class CoordinateConversion
       final double d = _a2 * 180 / Math.PI;
       final double longitude = zoneCM - d;
 
-      if (getHemisphere(latZone).equals("S"))
+      if (getHemisphere(latBand).equals("S"))
       {
         latitude = -latitude;
       }
@@ -372,10 +373,10 @@ public class CoordinateConversion
 
     String southernHemisphere = "ACDEFGHJKLM";
 
-    protected String getHemisphere(final String latZone)
+    protected String getHemisphere(final String latBand)
     {
       String hemisphere = "N";
-      if (southernHemisphere.contains(latZone))
+      if (southernHemisphere.contains(latBand))
       {
         hemisphere = "S";
       }
@@ -387,10 +388,10 @@ public class CoordinateConversion
       final double[] latlon = { 0.0, 0.0 };
       final String[] utm = UTM.split(" ");
       zone = Integer.parseInt(utm[0]);
-      final String latZone = utm[1];
+      final String latBand = utm[1];
       easting = Double.parseDouble(utm[2]);
       northing = Double.parseDouble(utm[3]);
-      final String hemisphere = getHemisphere(latZone);
+      final String hemisphere = getHemisphere(latBand);
       double latitude = 0.0;
       double longitude = 0.0;
 
@@ -606,7 +607,7 @@ public class CoordinateConversion
 
   }
 
-  private class LatZones
+  private class LatBands
   {
     private final char[] letters = { 'A', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K',
         'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Z' };
@@ -627,11 +628,11 @@ public class CoordinateConversion
 
     private final int arrayLength = 22;
 
-    public LatZones()
+    public LatBands()
     {
     }
 
-    public int getLatZoneDegree(final String letter)
+    public int getLatBandDegree(final String letter)
     {
       final char ltr = letter.charAt(0);
       for (int i = 0; i < arrayLength; i++)
@@ -644,7 +645,7 @@ public class CoordinateConversion
       return -100;
     }
 
-    public String getLatZone(final double latitude)
+    public String getLatBand(final double latitude)
     {
       int latIndex = -2;
       final int lat = (int) latitude;

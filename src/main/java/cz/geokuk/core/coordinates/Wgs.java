@@ -1,6 +1,6 @@
 package cz.geokuk.core.coordinates;
 
-public class Wgs implements Mouable {
+public class Wgs extends Misto0 {
 
   public final double lat;
   public final double lon;
@@ -71,28 +71,6 @@ public class Wgs implements Mouable {
   public Wgsd sub(final Wgs wgs) {
     return new Wgsd(lat - wgs.lat, lon - wgs.lon);
   }
-
-  public Utm toUtm() {
-    //String s = "33 U " + ux + " " + uy;
-    final String s = new CoordinateConversion().latLon2UTM(lat, lon);
-    final String[] utm = s.split(" ");
-    //zone = Integer.parseInt(utm[0]);
-    //String latZone = utm[1];
-    final double easting = Double.parseDouble(utm[2]);
-    final double northing = Double.parseDouble(utm[3]);
-    final int polednikovaZona = Integer.parseInt(utm[0]);
-    final char rovnobezkovaZona = utm[3].charAt(0);
-    return new Utm(easting, northing, polednikovaZona, rovnobezkovaZona);
-  }
-
-  public Mou toMou() {
-    return FGeoKonvertor.toMou(this);
-  }
-
-  public Mercator toMercator() {
-    return FGeoKonvertor.toMercator(this);
-  }
-
 
   public static String toGeoFormat(final double d) {
     final double stupne = Math.floor(d);
@@ -165,17 +143,29 @@ public class Wgs implements Mouable {
     return azimutStr(this, bod);
   }
 
-  @Override
-  public Mou getMou() {
-    return toMou();
-  }
-
   /**
    * Vrátí, kolik metrů vychází na mou souřanici na dané šířce.
    * @return
    */
   public double metryNaMou() {
     return FGeoKonvertor.metryNaMou(lat);
+  }
+
+  @Override
+  public Wgs toWgs() {
+    return this;
+  }
+
+  public Mercator toMercator() {
+    return FGeoKonvertor.toMercator(this);
+  }
+
+  public Mou toMou() {
+    return FGeoKonvertor.toMou(this);
+  }
+
+  public Utm toUtm() {
+    return FGeoKonvertor.toUtm(this);
   }
 
 

@@ -6,7 +6,7 @@ package cz.geokuk.plugins.cesty.akce.cesta;
 
 import java.awt.Color;
 
-import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.core.coordinates.FGeoKonvertor;
 import cz.geokuk.plugins.cesty.data.Cesta;
 
 /**
@@ -38,7 +38,7 @@ public class PripojitVybranouCestu extends CestaAction0 {
   @Override
   protected void nastavJmenoAkce(Cesta cesta, boolean aZKontextovehoMenu) {
     putValue(NAME, "<html>Připojit k" + cesta.getNazevADalkaHtml() + " vybranou cestu" +
-        curta().getNazevADalkaHtml() + " usekem " + Cesta.dalkaHtml(Mou.dalka(cesta.getCil(), curta().getStart()), Color.BLACK));
+        curta().getNazevADalkaHtml() + " usekem " + Cesta.dalkaHtml(FGeoKonvertor.dalka(cesta.getCil(), curta().getStart()), Color.BLACK));
   }
 
   @Override

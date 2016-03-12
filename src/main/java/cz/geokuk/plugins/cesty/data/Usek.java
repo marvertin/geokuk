@@ -1,5 +1,6 @@
 package cz.geokuk.plugins.cesty.data;
 
+import cz.geokuk.core.coordinates.FGeoKonvertor;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.coordinates.Moud;
@@ -210,13 +211,13 @@ public class Usek extends Bousek0 {
     public double getMouDelkaVpred(Mou aMou) {
         if (isVzdusny()) return 0;
         Mou mou = getNejblizsiBodKPrimce(aMou);
-        return Mou.dalka(mou, bvpred);
+        return FGeoKonvertor.dalka(mou, bvpred);
     }
 
     public double getMouDelkaVzad(Mou aMou) {
         if (isVzdusny()) return 0;
         Mou mou = getNejblizsiBodKPrimce(aMou);
-        return Mou.dalka(mou, bvzad);
+        return FGeoKonvertor.dalka(mou, bvzad);
     }
 
     @Override
@@ -235,7 +236,7 @@ public class Usek extends Bousek0 {
     public double dalka() {
         if (isVzdusny()) return 0;
         if (dalka < 0) {
-            dalka = Mou.dalka(bvpred, bvzad);
+            dalka = FGeoKonvertor.dalka(bvpred, bvzad);
         }
         return dalka;
     }

@@ -55,7 +55,6 @@ import javax.swing.event.DocumentListener;
 import cz.geokuk.core.coord.PoziceModel;
 import cz.geokuk.core.coord.VyrezChangedEvent;
 import cz.geokuk.core.coord.VyrezModel;
-import cz.geokuk.core.coordinates.CoordinateConversion;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.core.coordinates.WgsParser;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
@@ -92,8 +91,6 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
   private Wgs souradniceEditovane;
   private Wgs souradniceReferencni;
-
-  private final CoordinateConversion konvertor = new CoordinateConversion();
 
   private PoziceModel poziceModel;
 
@@ -247,7 +244,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
     ok = okSirka && okDelka;
     if (ok) {
       souradniceEditovane = wgs;
-      jUtm.setText(konvertor.latLon2UTM(lat, lon));
+      jUtm.setText(wgs.toUtm().toString());
     } else {
       jUtm.setText("UTM = ?");
     }

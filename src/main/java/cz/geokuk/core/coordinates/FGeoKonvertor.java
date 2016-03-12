@@ -21,6 +21,8 @@ public class FGeoKonvertor {
   public static final double Q_METRY_NA_MOU = OBVOD_ZEME / OBVOD_ZEME_V_MOU;
 
   public static final double STUPEN_NA_ROVNIKU_V_METRECH = PI / 180 * RZ;
+  
+  private static UtmMgrsWgsConvertor utmWgsConvertor = new UtmMgrsWgsConvertor();
 
   public static double normalizujUhel(double uhel) {
     // TODO optimálněji, ale možná to v praxi stačí
@@ -48,12 +50,17 @@ public class FGeoKonvertor {
     return new Wgs(lat, lon);
   }
 
-  public static Mou toMou(final Wgs w) {
-    return toMou(toMercator(w));
-  }
-
-  public static Wgs toWgs(final Mou mou) {
-    return toWgs(toMercator(mou));
+  public static Utm toUtm(Wgs wgs) {
+    //String s = "33 U " + ux + " " + uy;
+    final String s = utmWgsConvertor.latLon2UTM(wgs.lat, wgs.lon);
+    final String[] utm = s.split(" ");
+    //zone = Integer.parseInt(utm[0]);
+    //String latBand = utm[1];
+    final double easting = Double.parseDouble(utm[2]);
+    final double northing = Double.parseDouble(utm[3]);
+    final int polednikovaZona = Integer.parseInt(utm[0]);
+    final char rovnobezkovaZona = utm[3].charAt(0);
+    return new Utm(easting, northing, polednikovaZona, rovnobezkovaZona);    
   }
 
   public static Mercator toMercator(final Mou mou) {
@@ -66,8 +73,42 @@ public class FGeoKonvertor {
     final double yyd = mer.my / Q_METRY_NA_MOU;
     final Mou mou = new Mou((int)xxd, (int)yyd);
     return mou;
-
+  
   }
+
+  public static Wgs toWgs(Utm utm) {
+    try {
+      final double[] utm2LatLon = utmWgsConvertor.utm2LatLon(utm.toString());
+      return new Wgs(utm2LatLon[0], utm2LatLon[1]);
+    } catch (final Exception e) {
+      throw new RuntimeException("Nelze převést na WGS: " + utm, e);
+    }
+  }
+
+  public static Mou toMou(final Wgs w) {
+    return toMou(toMercator(w));
+  }
+
+  public static Wgs toWgs(final Mou mou) {
+    return toWgs(toMercator(mou));
+  }
+
+  public static Utm toUtm(Mercator mercator) {
+    return toUtm(toWgs(mercator));
+  }
+
+  public static Mercator toMercator(Utm utm) {
+    return toMercator(toWgs(utm));
+  }
+
+  public static Utm toUtm(Mou mou) {
+    return toUtm(toWgs(mou));
+  }
+
+  public static Mou toMou(Utm utm) {
+    return toMou(toWgs(utm));
+  }
+
 
   /**
    * Kolik metrůpřipadá na jeden krok mou, na dané šířce
@@ -102,6 +143,11 @@ public class FGeoKonvertor {
     final double dalka = uhel * RZ;
     return dalka;
   }
+
+  public static double dalka(final Mouable mouable1, final Mouable mouable2) {
+    return FGeoKonvertor.dalka(mouable1.getMou().toWgs(), mouable2.getMou().toWgs());
+  }
+
 
   public static void main(final String[] args) {
     System.out.println(-3.25 % 1);

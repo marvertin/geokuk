@@ -101,7 +101,7 @@ package cz.geokuk.core.coordinates;
              UNIT["metre",1,
                  AUTHORITY["EPSG","9001"]]]*
  */
-public class Mercator {
+public class Mercator extends Misto0 {
   
   /** Poloměr země v metrech */
   public final double mx;
@@ -114,11 +114,6 @@ public class Mercator {
   }
 
   
-  public Wgs toWgs() {
-    return FGeoKonvertor.toWgs(this);
-  }
-
-
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -152,6 +147,30 @@ public class Mercator {
   @Override
   public String toString() {
     return String.format("Mercator[%f ; %f]", mx, my);
+  }
+
+
+
+  public Wgs toWgs() {
+    return FGeoKonvertor.toWgs(this);
+  }
+
+
+  @Override
+  public Mercator toMercator() {
+    return this;
+  }
+
+
+  @Override
+  public Mou toMou() {
+    return FGeoKonvertor.toMou(this);
+  }
+
+
+  @Override
+  public Utm toUtm() {
+    return FGeoKonvertor.toUtm(this);
   }
   
 

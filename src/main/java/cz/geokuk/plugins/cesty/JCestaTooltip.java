@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import cz.geokuk.core.coordinates.FGeoKonvertor;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.plugins.cesty.data.Bousek0;
 import cz.geokuk.plugins.cesty.data.Cesta;
@@ -32,7 +33,7 @@ public class JCestaTooltip extends JComponent {
   public void setPridavaciDalkoviny(Cesta cesta, Mou mou) {
 
     double dalkaPuvodni = cesta == null ? 0 : cesta.dalka();
-    double dalkaDodana =  cesta == null ? 0 : Mou.dalka(cesta.getCil(), mou);
+    double dalkaDodana =  cesta == null ? 0 : FGeoKonvertor.dalka(cesta.getCil(), mou);
     jVzad.setText("<html>" + Cesta.dalkaHtml(dalkaPuvodni, FBarvy.CURTA_NORMALNE) + "<font color=white> +</font>" + Cesta.dalkaHtml(dalkaDodana, Color.WHITE) );
     jVzad.setVisible(true);
     jVpred.setVisible(false);
