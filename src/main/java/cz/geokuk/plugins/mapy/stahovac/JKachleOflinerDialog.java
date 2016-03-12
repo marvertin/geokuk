@@ -10,20 +10,30 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coord.VyrezChangedEvent;
-import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.program.ZobrazServisniOknoAction;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.*;
+import cz.geokuk.plugins.mapy.kachle.JKachlovnik;
+import cz.geokuk.plugins.mapy.kachle.KaAll;
+import cz.geokuk.plugins.mapy.kachle.KaLoc;
+import cz.geokuk.plugins.mapy.kachle.KaSet;
+import cz.geokuk.plugins.mapy.kachle.Kachle;
+import cz.geokuk.plugins.mapy.kachle.KachleModel;
+import cz.geokuk.plugins.mapy.kachle.Kaputer;
 import cz.geokuk.plugins.mapy.kachle.Priority;
 
 public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
   private static final long serialVersionUID = 7180968190465321695L;
+
+  private static final Logger log = LogManager.getLogger(JKachlovnik.class.getSimpleName());
 
   private static final int LIMIT_DLAZDIC = 100000;
 
@@ -169,26 +179,23 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
         moumer--;
         Coord coco = new Coord(moumer, moord.getMoustred(), new Dimension(w,h), 0.0);
 
-        int xn = w;
-        //int yn = h;
-        int moumaska = ~ (coco.getMoukrok()-1);
-        Mou mou0 = new Mou(coco.getMouJZ().xx & moumaska, coco.getMouJZ().yy & moumaska);
-        Mou mou = new Mou(mou0);
-        while (coco.transform(mou).x < xn) {
-          if (isCancelled()) return -1;
-          while (coco.transform(mou).y > 0) {
-            KaLoc kaloc = KaLoc.ofSZ(new Mou(mou), coco.getMoumer());
-            if (zafrontovat) {
-              Kachle kachle = new Kachle(new KaAll(kaloc, totoSeTaha.kaSet), kachleModel, false, null); // když se nepoužije, musí se stvořit nová
-              
-              kachle.setVzdalenostOdStredu(coco.getVzdalenostKachleOdStredu(kaloc.getMouSZ()));
-              publish(kachle);
-            }
-            pocetKachli += totoSeTaha.kaSet.getKts().size(); // po každý podklad jedna kachle
-            mou = mou.add(0, coco.getMoukrok());
-          }
-          mou = mou.add(coco.getMoukrok(), 0);
+        Kaputer kaputer = new Kaputer(coco);
+        if (log.isTraceEnabled()) {
+          log.trace("Vykreslovani kachli od {} pro {} -- {}", kaputer.getKachlePoint(0, 0), kaputer.getKachleMou(0, 0), kaputer);
         }
+        for (int yi = 0; yi < kaputer.getPocetKachliY(); yi++) {
+            log.trace(" .... řádek", coco);
+            for (int xi = 0; xi < kaputer.getPocetKachliX(); xi++) {
+              KaLoc kaloc = kaputer.getKaloc(xi, yi);
+              if (zafrontovat) {
+                Kachle kachle = new Kachle(new KaAll(kaloc, totoSeTaha.kaSet), kachleModel, false, null); // když se nepoužije, musí se stvořit nová
+                kachle.setVzdalenostOdStredu(kaputer.getVzdalenostKachleOdStredu(kaloc.getMouSZ()));
+                publish(kachle);
+              }
+              pocetKachli += totoSeTaha.kaSet.getKts().size(); // po každý podklad jedna kachle
+            }
+        }
+        
       }
       return pocetKachli;
     }

@@ -11,7 +11,6 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.MouRect;
 import cz.geokuk.core.coordinates.Moud;
 import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.plugins.mapy.kachle.KaLoc;
 import cz.geokuk.util.index2d.BoundingRect;
 
 /**
@@ -21,10 +20,19 @@ import cz.geokuk.util.index2d.BoundingRect;
  */
 public class Coord  {
 
-  private static int MIN_MOU_X = 0x04000000;
-  private static int MIN_MOU_Y = 0x04000000;
-  private static int MAX_MOU_X = 0x0c000000;
-  private static int MAX_MOU_Y = 0x0c000000;
+  /** Počet bitů mou 2^MOU_BITS obtáčí rovník kolem dokola (odpovídá 40 000 km*/
+  public static final int MOU_BITS = 32;
+  
+  /** Počet bitů, na kterém je zobrazena celá země v merkátoru, když je nejmenší možné měřítko a to. 0
+   * 2^ MOUMER_0_BITS je hrana čtverce nejmenší kachle (ale, o kachlích se zde mluvi nesmí).
+   * Takže je to počet pixlů, do kterého se vejde celá země při měřítkui 0.
+   */
+  public static final int MOUMER_0_BITS = 8;
+
+  /**
+   * Teoreticky možné největší měřítko, kdy jedomu pixlu odpovídá jedna mouřadnice.
+   */
+  public static final int MAX_MOUMER = MOU_BITS - MOUMER_0_BITS;  // 24
 
   //	X_UTM=(sX*0,03125)-3700000 = 292576
   //	Y_UTM=(sY*0,03125)+1300000 = 5570080
@@ -58,7 +66,7 @@ public class Coord  {
      *   << .... z pixklů udělá mou
      *   >> .... z mou uděllá pixly
      */
-    mpShift = KaLoc.MAX_MOUMER - moumer;
+    mpShift = MAX_MOUMER - moumer;
     mouNaPixl = 1 << mpShift;
 
     //moustred
@@ -296,18 +304,6 @@ public class Coord  {
   }
 
 
-  public int getMoukrok() {
-    return moumer == 0  ? 0 : 1 << (KaLoc.MOU_BITS - moumer); // o kolik mou je to od kachle ke kachli (pro moumer=0 je to 2^32, tedy v integeru 0, což odpovídá, že se stále zobrazuje stejná kachle)    
-  }
-  
-  public int getVzdalenostKachleOdStredu(final Mou moupoc) {
-    final int mouHranaPul = getMoukrok() / 2;
-    final Mou moustredx = getMoustred();
-    final double hypot = Math.hypot(moupoc.xx + mouHranaPul - moustredx.xx,
-        moupoc.yy + mouHranaPul - moustredx.yy);
-    return (int) hypot;
-  }
-
   /**
    * Vypočítá obdélník vyhovující souřadnicovému obdélníku a přidá nějaké pixly
    * na stranách podle incestu.
@@ -485,7 +481,7 @@ public class Coord  {
 
 
   public static Coord prozatimniInicializacni() {
-    return new Coord(0, new Mou((MIN_MOU_X + MAX_MOU_X) / 2, (MIN_MOU_Y + MAX_MOU_Y) / 2),
+    return new Coord(0, new Mou(0x0800_000, 0x0800_000),
         new Dimension(100,100), 0.0);
   }
 

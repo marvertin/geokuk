@@ -25,6 +25,8 @@ import cz.geokuk.util.pocitadla.PocitadloNula;
  */
 public class KachleModel extends Model0 {
 
+  private static int POCET_PARALELNICH_DOWNLOADERU = 16;
+  
   private Factory factory;
 
   public final CacheNaKachleDisk cache;
@@ -45,6 +47,12 @@ public class KachleModel extends Model0 {
       "Ve frontě čekají požadavky na zjištění, zda jsou kachle na disku a stačí je zvednout nebo musejí být downloadnuty." +
       " Frotna je zpracována velmi rychle, požadavky jsou rozřazeny do dalších dvou front");
 
+  private static Pocitadlo pocitVelikostSouboroveFronty = new PocitadloNula("Velikost souborové fronty", 
+  "Počet požadavků čekajících na načtení z disku.");
+
+  private static Pocitadlo pocitVelikostDownloadoveFronty = new PocitadloNula("Velikost downloadové fronty",
+  "Počet požadavků na download čekajících ve forntě.");
+  
   private Object umisteniSouboru;
 
   private NapovedaModel napovedaModel;
@@ -98,15 +106,16 @@ public class KachleModel extends Model0 {
       thread.setDaemon(true);
       thread.start();
     }
+
     {
-      DotahovaciRunnable dotah = factory.init(new DotahovaciRunnable(fromFileQueue, "x"));
+      DotahovaciRunnable dotah = factory.init(new DotahovaciRunnable(fromFileQueue, pocitVelikostSouboroveFronty));
       Thread thread = new Thread(dotah, "Čteč z disku");
       thread.setDaemon(true);
       thread.start();
     }
-    for (String server : kachloDownloader.getServers()) {
-      DotahovaciRunnable dotah = factory.init(new DotahovaciRunnable(downLoadQueue, server));
-      Thread thread = new Thread(dotah, "Download " + server);
+    for (int i=0; i< POCET_PARALELNICH_DOWNLOADERU; i++) {
+      DotahovaciRunnable dotah = factory.init(new DotahovaciRunnable(downLoadQueue, pocitVelikostDownloadoveFronty));
+      Thread thread = new Thread(dotah, "Download " + i);
       thread.setDaemon(true);
       thread.start();
     }

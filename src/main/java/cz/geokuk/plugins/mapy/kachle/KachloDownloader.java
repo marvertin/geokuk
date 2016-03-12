@@ -37,11 +37,8 @@ public class KachloDownloader {
     public KachloDownloader() {
     }
 
-    public String[] getServers() {
-        return new String[]{"m1", "m2", "m3", "m4"};
-    }
 
-    public ImageWithData downloadImage(KaOne kaOne, String server) {
+    public ImageWithData downloadImage(KaOne kaOne) {
         URL url = null;
         try {
             if (kaOne.getType() == EKaType._BEZ_PODKLADU)

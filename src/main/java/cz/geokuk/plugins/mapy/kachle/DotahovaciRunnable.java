@@ -14,12 +14,6 @@ import cz.geokuk.util.pocitadla.PocitadloRoste;
 
 public class DotahovaciRunnable implements Runnable {
 
-  private static Pocitadlo pocitVelikostSouboroveFronty = new PocitadloNula("Velikost souborové fronty", 
-  "Počet požadavků čekajících na načtení z disku.");
-
-  private static Pocitadlo pocitVelikostDownloadoveFronty = new PocitadloNula("Velikost downloadové fronty",
-  "Počet požadavků na download čekajících ve forntě.");
-
   private static Pocitadlo pocitPocetParalenichy = new PocitadloNula("Počet paralelně získávaných dlaždic",
   "Ty, které jsou ve třídě Synchronization, která zajišťuje, aby se nic nezískávalo vícekrát.");
 
@@ -39,11 +33,11 @@ public class DotahovaciRunnable implements Runnable {
   // nebo z venku nechci dal pracovat
   private final BlockingQueue<KaOneReq> queue;
 
-  private final String server;
-
-  public DotahovaciRunnable(BlockingQueue<KaOneReq> queue, String server) {
+  private final Pocitadlo pocitadloFrony;
+  
+  public DotahovaciRunnable(BlockingQueue<KaOneReq> queue, Pocitadlo pocitadloFrony) {
     this.queue = queue;
-    this.server = server;
+    this.pocitadloFrony = pocitadloFrony;
   }
 
   @Override
@@ -66,7 +60,7 @@ public class DotahovaciRunnable implements Runnable {
             img = kachleModel.cache.diskCachedImage(ka);
             byte[] data = null;
             if (img == null) {
-              ImageWithData imda = kachleModel.kachloDownloader.downloadImage(ka, server);
+              ImageWithData imda = kachleModel.kachloDownloader.downloadImage(ka);
               img = imda == null ? null : imda.img;
               data = imda == null ? null : imda.data;
             }
@@ -93,11 +87,7 @@ public class DotahovaciRunnable implements Runnable {
 
 
   public void zapocitejFronty() {
-    if (server.equals("x")) {
-      pocitVelikostSouboroveFronty.set(queue.size());
-    } else {
-      pocitVelikostDownloadoveFronty.set(queue.size());
-    }
+    pocitadloFrony.set(queue.size());
     pocitPocetParalenichy.set(kachleModel.synchronizator.pocetZiskavancu());
   }
 

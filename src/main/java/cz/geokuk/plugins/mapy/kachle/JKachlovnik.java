@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coord.JSingleSlide0;
-import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.napoveda.NapovedaModelChangedEvent;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
@@ -87,46 +86,16 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
             pocitVynuceneNepouzitiExistujiciKachle.inc();
         }
 
-        //System.out.println(System.identityHashCode(this) + " kachlovnik se inicializuje: " + getWidth() + " " + getHeight() );
-        int xn = getWidth();
-        int yn = getHeight();
-
-        // kraj krajove kachle vlevo dole, ktera se jeste musi zobrazit
-        //int moukrok = soord.getMoukrok();
-        //int moumaska = ~(moukrok - 1);
-        //Mou mou0 = new Mou(soord.getMoupoc().xx & moumaska, soord.getMoupoc().yy & moumaska);
-
-        //System.out.println(xn + " --- " + yn);
-
-        Mou moustred = soord.getMoustred();
-        int moumer = soord.getMoumer();
-        int moukrok = soord.getMoukrok(); // o kolik mou je to od kachle ke kachli (pro moumer=0 je to 2^32, tedy v integeru 0, což odpovídá, že se stále zobrazuje stejná kachle)
-        int maskaHorni =  ~ (moukrok - 1);
-        int xx0 = moustred.xx &  maskaHorni; // posuneme od středu nalevo na nejbližší hranici kachlí
-        int yy0 = moustred.yy &  maskaHorni; // posuneme od středu dolů na nejbližší hranici kachlí
-        int xd = (moustred.xx >> (KaLoc.MAX_MOUMER - moumer))  & KaLoc.KACHLE_MASKA; // o tolik pixlů nalevo od středu bude svislá hranice kachlí
-        int yd = (moustred.yy >> (KaLoc.MAX_MOUMER - moumer))  & KaLoc.KACHLE_MASKA; // o tolik pixklů dolů od středu bude vodorovná hranice kachlí
-        assert xd >=0 && xd < KaLoc.KACHLE_PIXELS;
-        assert yd >=0 && yd < KaLoc.KACHLE_PIXELS;
-        log.trace("moukrok ={} moumer={}  - [{},{}] maskaHorni={}", Integer.toHexString(moukrok), moumer, Integer.toHexString(xx0), Integer.toHexString(yy0), Integer.toHexString(maskaHorni));
-        int x0, y0;
-        for (x0 = xn / 2 - xd; x0 > 0; x0 -= KaLoc.KACHLE_PIXELS, xx0-=moukrok); // nastavit x0 i xx zleva před kreslenou plochu (- je zde, protože nalevo od středu)
-        for (y0 = yn / 2 + yd; y0 > 0; y0 -= KaLoc.KACHLE_PIXELS, yy0+=moukrok); // nastavit x0 i yy shora před kreslenou plochu (+ je zde, protože dolů od středu, druhé plus, ptotož mouy jde sdola nahoru)
-        assert x0 <=0 && y0 <= 0;
-        // nyní máme [x0,y0] a [xx0, yy0] souřadnice styku čtyř kachlí. S tím, že kachle, která od tohoto bodu jde
-        //  dolů (jižně) a vpravo (východně) zasáhne nejméně jedním pixlem do levého horního roku okna.
-        // a teď jedeme
+        Kaputer kaputer = new Kaputer(soord);
         Map<KaLoc, Kachle> newKachles = new HashMap<>(200);
-
-        log.trace("Vykreslovani kachli od [{},{}] pro mou[{},{}] {}", x0, y0, Integer.toHexString(xx0), Integer.toHexString(yy0), soord);
-        final Point p = new Point();
-        int xx, yy;
+        if (log.isTraceEnabled()) {
+          log.trace("Vykreslovani kachli od {} pro {} -- {}", kaputer.getKachlePoint(0, 0), kaputer.getKachleMou(0, 0), kaputer);
+        }
         int indexComponenty = 0;
-        for (yy = yy0, p.y = y0; p.y < yn; yy-=moukrok, p.y += KaLoc.KACHLE_PIXELS) {
+        for (int yi = 0; yi < kaputer.getPocetKachliY(); yi++) {
             log.trace(" .... řádek", soord);
-            for (xx = xx0, p.x = x0; p.x < xn; xx+=moukrok, p.x += KaLoc.KACHLE_PIXELS) {
-                Mou mou = new Mou(xx, yy); // toto jsou vždy souřadnice levého horního rohu kachle, "p" jsou souřadnice levého horního rohu v okně
-                KaLoc lokace = KaLoc.ofSZ (new Mou(mou), soord.getMoumer());
+            for (int xi = 0; xi < kaputer.getPocetKachliX(); xi++) {
+                KaLoc lokace = kaputer.getKaloc(xi, yi);
                 Kachle kachle = kachles.remove(lokace);
                 boolean kachleSePouzije = smimZnovuPouzitKachle && kachle != null;
                 final JKachle jkachle;
@@ -139,19 +108,19 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
                 indexComponenty ++;
                 if (!kachleSePouzije) {
                     kachle = createKachle(new KaAll(lokace, kachloTypesSet), kachleModel, vykreslovatokamzite, this, jkachle); // když se nepoužije, musí se stvořit nová
-                    kachle.setVzdalenostOdStredu(soord.getVzdalenostKachleOdStredu(lokace.getMouSZ()));
+                    kachle.setVzdalenostOdStredu(kaputer.getVzdalenostKachleOdStredu(lokace.getMouSZ()));
                     kachle.ziskejObsah(priorita);
                 } else {  // použije se původní kachle
                     pocitZustalychKachli.inc();
                 }
                 jkachle.setKachle(kachle);
                 // napozicujeme každou kachli do správné podoby
+                Point p = kaputer.getKachlePoint(xi,  yi);
                 log.trace("....... vykresulji kachli {} na {}", lokace, p);
                 //System.out.println("KACHLE xx: " + new Point(x,y) + " ********* " + getSize());
                 jkachle.setLocation(p.x, p.y);
                 kachle.setPoziceJenProVypsani(lokace);
                 newKachles.put(lokace, kachle);  // děláme vždy novou mapu kachlí i když je znovu používáme
-                mou = mou.add(0, moukrok);
             }
         }
         //System.out.println("mame komponent: " + super.getComponentCount());
@@ -176,11 +145,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
       return new JKachle(this);
     }
 
-//    protected JKachle createKachle(KaAll plny, KachleModel kachleModel, boolean vykreslovatOkamzite, JKachlovnik jKachlovnik) {
-//        JKachle jkachle = new JKachle(jKachlovnik);
-//        jkachle.setKachle(new Kachle(plny, kachleModel, vykreslovatOkamzite, jkachle));
-//        return jkachle;
-//    }
+
 
     /**
      * @return the kachloTypes

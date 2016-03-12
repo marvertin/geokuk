@@ -1,15 +1,11 @@
 package cz.geokuk.plugins.mapy.kachle;
 
+import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coordinates.Mou;
 
 
 public class KaLoc {
 
-  public static final int MOU_BITS = 32;
-  public static final int KACHLE_BITS = 8;
-  public static final int MAX_MOUMER = MOU_BITS - KACHLE_BITS;  // 24
-  public static final int KACHLE_PIXELS = 1 << KACHLE_BITS; // 256
-  public static final int KACHLE_MASKA  = KACHLE_PIXELS - 1; // 255
 
   private final int moumer;
   private final int ksx;
@@ -23,7 +19,7 @@ public class KaLoc {
    */
   public static KaLoc ofSZ(Mou mouSZ, int moumer) {
     if (moumer == 0) return new KaLoc(0, 0, moumer);
-    return ofJZ(new Mou(mouSZ.xx, mouSZ.yy  - (1 << (MOU_BITS - moumer)) ), moumer);
+    return ofJZ(new Mou(mouSZ.xx, mouSZ.yy  - (1 << (Coord.MOU_BITS - moumer)) ), moumer);
   }
 
   /**
@@ -34,8 +30,8 @@ public class KaLoc {
    */
   public static KaLoc ofJZ(Mou mouJZ, int moumer) {
     if (moumer == 0) return new KaLoc(0, 0, moumer);
-    int ksx = mouJZ.xx >> (MOU_BITS - moumer);
-    int ksy = mouJZ.yy >> (MOU_BITS - moumer);
+    int ksx = mouJZ.xx >> (Coord.MOU_BITS - moumer);
+    int ksy = mouJZ.yy >> (Coord.MOU_BITS - moumer);
     return new KaLoc(ksx, ksy, moumer);
   }
 
@@ -48,7 +44,7 @@ public class KaLoc {
    * @return
    */
   public Mou getMouJZ() {
-    return new Mou(ksx << (MOU_BITS - moumer), ksy << (MOU_BITS - moumer));
+    return new Mou(ksx << (Coord.MOU_BITS - moumer), ksy << (Coord.MOU_BITS - moumer));
   }  
 
   /**
@@ -58,7 +54,7 @@ public class KaLoc {
    * @return
    */
   public Mou getMouSZ() {
-    return getMouJZ().add(0, (1 << (MOU_BITS - moumer)));
+    return getMouJZ().add(0, (1 << (Coord.MOU_BITS - moumer)));
   }  
   
   
