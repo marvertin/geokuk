@@ -6,7 +6,7 @@ import javax.swing.KeyStroke;
 
 public enum EKaType {
 
-  
+  // Mapové podklady, dále neprůhledné
   BASE_M(true, false, 0, 16, 16,  "Základní", "Základní mapa se silnicemi.", KeyEvent.VK_Z,  KeyStroke.getKeyStroke('z'), new MapyCzUrlBuilder("base-m")),
   TURIST_M(true, false, 0, 16, 16,  "Turistická", "Turistická mapa.", KeyEvent.VK_T, KeyStroke.getKeyStroke('t') , new MapyCzUrlBuilder("turist-m")),
   OPHOTO_M(true, true, 0, 18, 16,  "Letecká", "Letecká ortho foto mapa", KeyEvent.VK_L, KeyStroke.getKeyStroke('f'), new MapyCzUrlBuilder("ophoto-m")),
@@ -23,6 +23,7 @@ public enum EKaType {
   // Todo vyřešit problémy s certifikátem
   //OPEN_CYKLO(true, false, 0, 18, 18,  "Open cyclo", "Open streat map.", KeyEvent.VK_Y, KeyStroke.getKeyStroke('c') , new OpenStreatMapUrlBuilder("https://b.tile.thunderforest.com/cycle/")),
 
+  // Překryvná data, kachle musí být průhledné.
   TTUR_M(false,  "Turistické trasy", "Turistické trasy, červená, modrá, zelená, žlutá.", KeyEvent.VK_U, KeyStroke.getKeyStroke('u'), new MapyCzUrlBuilder("hybrid-tz-m")),
   TCYKLO_M(false,  "Cyklotrasy", "Cyklistické trasy fialově.", KeyEvent.VK_C, KeyStroke.getKeyStroke('c'), new MapyCzUrlBuilder("hybrid-cyklo-m")),
   HYBRID_M(false,  "Popisy", "Cesty a názvy měst na fotomapách.", KeyEvent.VK_P, KeyStroke.getKeyStroke('p'), new MapyCzUrlBuilder("hybrid-m")),
@@ -51,6 +52,15 @@ public enum EKaType {
     return podklad;
   }
 
+  /**
+   * 
+   * @param podklad true, pokud se jedná o neprůhledný podlad, false jinak.
+   * @param nazev Název mapy, tak se objeví v menu.
+   * @param popis Bližší popis mapy, objeví se jako tooltip v menu.
+   * @param klavesa Hot-key, která mapu vyvolá.
+   * @param keyStroke Písmeno z nazev, které lze použít pro výběr při rozbaleném menu.
+   * @param urlBuilder Implementace třídy, která sestaví URL pro zobrazení mapy.
+   */
   private EKaType(final boolean podklad,  String nazev, String popis, int klavesa, KeyStroke keyStroke, KachleUrlBuilder urlBuilder) {
     this.podklad = podklad;
     this.urlBuilder = urlBuilder;
@@ -63,6 +73,18 @@ public enum EKaType {
     this.keyStroke = keyStroke;
   }
 
+  /**
+ * @param podklad true, pokud se jedná o neprůhledný podlad, false jinak.
+ * @param jeMozneNavrsitTexty zde je možné ještě aplikovat samostatnou vrstvu s texty. Zadejte true, pokud mapa texty neobsahuje (napříkald fotomapy).
+ * @param minMoumer Minimáklní měřítko, ke kterému jsou podklady. Věřme, že to bude dne světšinou 0. (U starých seznamových map to bylo 3 nebo 4).
+ * @param maxMoumer Maximální měřítko, pro který jsou kachle.
+ * @param maxAutoMoumer už přesně nevím, nutno analyzovat, nastavujem to stejnějako maxMoumer
+ * @param nazev Název mapy, tak se objeví v menu.
+ * @param popis Bližší popis mapy, objeví se jako tooltip v menu.
+ * @param klavesa Hot-key, která mapu vyvolá.
+ * @param keyStroke Písmeno z nazev, které lze použít pro výběr při rozbaleném menu.
+ * @param urlBuilder Implementace třídy, která sestaví URL pro zobrazení mapy.
+ */
   private EKaType(final boolean podklad, final boolean jeMozneNavrsitTexty,
       final int minMoumer, final int maxMoumer, final int maxAutoMoumer, 
       String nazev, String popis, int klavesa, KeyStroke keyStroke, KachleUrlBuilder urlBuilder) {
