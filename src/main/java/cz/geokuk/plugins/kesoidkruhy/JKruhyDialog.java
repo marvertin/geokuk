@@ -41,6 +41,7 @@ import java.awt.Color;
 
 import javax.swing.Box;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
@@ -48,7 +49,6 @@ import javax.swing.event.ChangeListener;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
-import cz.geokuk.util.gui.JAlfaColorChooser;
 
 public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
@@ -56,7 +56,7 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 
   private JLabel velikostLabel;
   private JSlider velikostSlider;
-  private JAlfaColorChooser alfaColorChooser;
+  private JColorChooser alfaColorChooser;
   private JCheckBox jJednotkoveKruhy;
 
   private KruhyModel kruhyModel;
@@ -76,7 +76,7 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
       public void stateChanged(ChangeEvent e) {
         //Board.mainFrame.parametryZvyraznovaceKruhuSeZmenily();
         KruhySettings kruhy = new KruhySettings();
-        Color barva = alfaColorChooser.getSelectionModel().getSelectedColorWithAlfa();
+        Color barva = alfaColorChooser.getSelectionModel().getSelectedColor();
         System.out.println("KRUHY1: " + barva + barva.getAlpha());
         kruhy.setBarva(barva);
         System.out.println("KRUHY2: " + barva + barva.getAlpha());
@@ -100,7 +100,7 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
     velikostLabel = new JLabel("Velikost kruhů");
     velikostSlider = new JSlider();
     velikostSlider.setToolTipText("Nastavení velikosti výrazňovacího kruhu.");
-    alfaColorChooser = new JAlfaColorChooser(Color.WHITE);
+    alfaColorChooser = new JColorChooser(Color.WHITE);
     alfaColorChooser.setToolTipText("Nastavení barvy a průhlednosti zvýrazňovaího kruhu");
     jJednotkoveKruhy = new JCheckBox();
     jJednotkoveKruhy.setText("Jednotkové kruhy");
@@ -127,7 +127,7 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
     jJednotkoveKruhy.getModel().setSelected(event.kruhy.isJednotkovaVelikost());
     velikostSlider.getModel().setValue(event.kruhy.getVelikost());
     Color barva = event.kruhy.getBarva();
-    alfaColorChooser.getSelectionModel().setSelectedColorWithAlfa(barva);
+    alfaColorChooser.getSelectionModel().setSelectedColor(barva);
   }
 
   /* (non-Javadoc)

@@ -43,6 +43,7 @@ import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.GroupLayout;
+import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -54,7 +55,6 @@ import javax.swing.event.DocumentListener;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
-import cz.geokuk.util.gui.JAlfaColorChooser;
 import cz.geokuk.util.gui.fontchoser.JFontChooser;
 
 public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
@@ -63,9 +63,9 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 
   private JSpinner xspinner;
   private JSpinner yspinner;
-  private JAlfaColorChooser foregroundChooser;
+  private JColorChooser foregroundChooser;
   private JFontChooser fontChooser;
-  private JAlfaColorChooser backgroudChooser;
+  private JColorChooser backgroudChooser;
   private JTextField jKesPatternEdit;
   private JTextField jWaymarkPatternEdit;
   private JTextField jCgpPatternEdit;
@@ -85,10 +85,10 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 
   public void onEvent(PopiskyPreferencesChangeEvent event) {
     PopiskySettings pose = event.pose;
-    foregroundChooser.getSelectionModel().setSelectedColorWithAlfa(pose.foreground);
+    foregroundChooser.getSelectionModel().setSelectedColor(pose.foreground);
     xspinner.setValue(pose.posuX);
     yspinner.setValue(pose.posuY);
-    backgroudChooser.getSelectionModel().setSelectedColorWithAlfa(pose.background);
+    backgroudChooser.getSelectionModel().setSelectedColor(pose.background);
     fontChooser.setFont(pose.font);
     setPattern(jKesPatternEdit, pose.getPatterns().getKesPattern());
     setPattern(jWaymarkPatternEdit, pose.getPatterns().getWaymarkPattern());
@@ -110,8 +110,8 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
   protected void initComponents() {
     xspinner = new JSpinner();
     yspinner = new JSpinner();
-    foregroundChooser = new JAlfaColorChooser(Color.BLACK);
-    backgroudChooser = new JAlfaColorChooser(Color.WHITE);
+    foregroundChooser = new JColorChooser(Color.BLACK);
+    backgroudChooser = new JColorChooser(Color.WHITE);
     fontChooser = new JFontChooser();
     jKesPatternEdit = new JTextField();
     jWaymarkPatternEdit = new JTextField();
@@ -203,10 +203,10 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
       @Override
       public void stateChanged(ChangeEvent e) {
         PopiskySettings pose = popiskyModel.getData();
-        pose.foreground = foregroundChooser.getSelectionModel().getSelectedColorWithAlfa();
+        pose.foreground = foregroundChooser.getSelectionModel().getSelectedColor();
         pose.posuX = (Integer) xspinner.getValue();
         pose.posuY = (Integer) yspinner.getValue();
-        pose.background = backgroudChooser.getSelectionModel().getSelectedColorWithAlfa();
+        pose.background = backgroudChooser.getSelectionModel().getSelectedColor();
         pose.font = fontChooser.getFont();
         System.out.println("POPIPOP: " +pose);
         popiskyModel.setData(pose);
