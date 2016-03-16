@@ -46,14 +46,16 @@ public class KachloDownloader {
             if (!kachleModel.isOnlineMode())
                 return prazdnyObrazekBezDat(EPraznyObrazek.OFFLINE); // v offline módu jen vyprazdňuji frontu
             url = kaOne.getType().getUrlBuilder().buildUrl(kaOne);
+            log.debug("Loading kachle from URL: \"{}\"", url);
             ImageWithData imda = new ImageWithData();
             DataHoldingInputStream dhis = new DataHoldingInputStream(url.openStream());
-            InputStream stm = new BufferedInputStream(dhis);
-            imda.img = ImageIO.read(stm);
-            stm.close();
+            try (InputStream stm = new BufferedInputStream(dhis)) {
+              imda.img = ImageIO.read(stm);
+            }
             imda.data = dhis.getData();
             pocitDownloadleDlazdice.inc();
             //Thread.sleep(300);
+            log.debug("Loaded {} bytes", imda.data.length);
             return imda;
         } catch (Exception e) {
             log.error("Unable to download tile image! \"" + url + "\"", e);

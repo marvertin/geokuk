@@ -16,5 +16,6 @@
             <AppenderRef ref="FileLog"/>
         </Root>
         <Logger name="JKachlovnik" level="INFO"/>
+        <Logger name="KachloDownloader" level="INFO"/>
     </Loggers>
 </Configuration>

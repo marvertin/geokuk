@@ -1,8 +1,6 @@
 package cz.geokuk.plugins.mapy.kachle;
 
 import java.awt.Graphics;
-import java.awt.Image;
-import java.util.EnumSet;
 
 public class KachleRendrovaci extends Kachle {
 
@@ -13,9 +11,9 @@ public class KachleRendrovaci extends Kachle {
   Graphics grf;
 
   @Override
-  protected synchronized void setImageImmadiately(EnumSet<EKaType> types, Image img2, boolean aJeToUzCelyObrazek) {
-    if (aJeToUzCelyObrazek) {
-      super.setImageImmadiately(types, img2, aJeToUzCelyObrazek);
+  protected synchronized void setImageImmadiately(KachloStav kachloStav) {
+    if (kachloStav.jeToUzCelyObrazek) {
+      super.setImageImmadiately(kachloStav);
       if (grf != null) {
         //System.out.println("Paintuji odloženě");
         super.getJkachle().paintComponent(grf);

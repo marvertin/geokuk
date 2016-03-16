@@ -72,11 +72,11 @@ public class Kachle implements ImageReceiver {
 
 
   @Override
-  public synchronized void setImage(final EnumSet<EKaType> types, final Image img2, final boolean aJeToUzCelyObrazek) {
+  public synchronized void setImage(KachloStav kachloStav) {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        setImageImmadiately(types, img2, aJeToUzCelyObrazek);
+        setImageImmadiately(kachloStav);
       }
     };
     if (vykreslovatOkamzite) {
@@ -90,19 +90,19 @@ public class Kachle implements ImageReceiver {
    * Toto musí běžen na hlavním vlákně.
    * @param types
    * @param img2
-   * @param aJeToUzCelyObrazek
+   * @param jeToUzCelyObrazek
    */
-  protected synchronized void setImageImmadiately(final EnumSet<EKaType> types, final Image img2, boolean aJeToUzCelyObrazek) {
+  protected synchronized void setImageImmadiately(KachloStav kachloStav) {
     if (kachleJeZnicena) {
       pocitPlneniImageDoZnicenychKachli.inc();
       return;
     }
-    if (! coMam.equals(types)) {
-      img = img2;
-      coMam = types;
+    if (! coMam.equals(kachloStav.types)) {
+      img = kachloStav.img2;
+      coMam = kachloStav.types;
       if (jkachle != null) jkachle.repaint();
     }
-    if (aJeToUzCelyObrazek) {
+    if (kachloStav.jeToUzCelyObrazek) {
       jeTamUzCelyObrazek = true;
       if (jkachle != null && jkachle.getjKachlovnik() != null) {
         jkachle.getjKachlovnik().kachleZpracovana(jkachle);
@@ -123,7 +123,7 @@ public class Kachle implements ImageReceiver {
 
     Image img = kachleModel.cache.memoryCachedImage(plny);
     if (img != null) {
-      setImageImmadiately(plny.kaSet.getKts(), img, true);
+      setImageImmadiately(new KachloStav(plny.kaSet.getKts(), img, true));
       return; // to bylo jednoduché, je to celé zde
     }
     // můžeme požádat o plný
@@ -137,7 +137,7 @@ public class Kachle implements ImageReceiver {
     img = kachleModel.cache.memoryCachedImage(plny.getPodklad());
     if (img != null) {
       // tak aspoň uložíme ten nakešlý podklad
-      setImageImmadiately(EnumSet.of(plny.getPodkladType()), img, false);
+      setImageImmadiately(new KachloStav(EnumSet.of(plny.getPodkladType()), img, false));
     }
   }
 

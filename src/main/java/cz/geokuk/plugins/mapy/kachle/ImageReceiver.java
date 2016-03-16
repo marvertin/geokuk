@@ -3,10 +3,6 @@
  */
 package cz.geokuk.plugins.mapy.kachle;
 
-
-import java.awt.Image;
-import java.util.EnumSet;
-
 /**
  * @author veverka
  *
@@ -14,10 +10,11 @@ import java.util.EnumSet;
 public interface ImageReceiver {
 
   /**
+   * @param kachloStav TODO
    * @param aTyp
    * @param aImg
    */
-  public void setImage(EnumSet<EKaType> types, Image img2, boolean aJeToUzCelyObrazek);
+  public void setImage(KachloStav kachloStav);
 
 
 }

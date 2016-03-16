@@ -26,7 +26,7 @@ class DlazebniPosilac {
     if (kombinedImage != null) {
       // Jen pokud už se něco podařilo nakombinovat budu někam posílat.
       // NULL je zde tehdy, když přišly nejdříve dekorace jako turistické trasy či stíny, ale ještě není podklad
-      imgrcv.setImage(kombiner.getCoMam(), kombinedImage, hotovo);
+      imgrcv.setImage(new KachloStav(kombiner.getCoMam(), kombinedImage, hotovo));
     }
     if (hotovo) {
       this.kombiner.uzTeNepotrebuju();
