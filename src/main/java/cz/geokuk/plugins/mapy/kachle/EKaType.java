@@ -19,7 +19,7 @@ public enum EKaType {
   ARMY2_M(true, true, 0, 13, 13,  "Historická", "Historická mapa z let 1836-52", KeyEvent.VK_H, KeyStroke.getKeyStroke('h'), new MapyCzUrlBuilder("army2-m")),
   _BEZ_PODKLADU(true, true, 0, 18, 18, "žádná",  "Mapy bez podkladu.", 0, null, new MapyCzUrlBuilder(null)),
 
-  OPEN_STREAT(true, false, 0, 18, 18,  "Open streat", "Open streat map.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o') , new OpenStreatMapUrlBuilder("https://b.tile.openstreetmap.org/")),
+  OPEN_STREAT(true, false, 0, 18, 18,  "Openstreetmap", "Openstreetmap.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o') , new OpenStreatMapUrlBuilder("https://b.tile.openstreetmap.org/")),
   // Todo vyřešit problémy s certifikátem
   //OPEN_CYKLO(true, false, 0, 18, 18,  "Open cyclo", "Open streat map.", KeyEvent.VK_Y, KeyStroke.getKeyStroke('c') , new OpenStreatMapUrlBuilder("https://b.tile.thunderforest.com/cycle/")),
 
