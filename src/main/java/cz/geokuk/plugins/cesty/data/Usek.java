@@ -131,28 +131,30 @@ public class Usek extends Bousek0 {
             return new Mou(m3);
         }
 
-        long x1 = m1.xx;
-        long y1 = m1.yy;
-        long x2 = m2.xx;
-        long y2 = m2.yy;
-        long x3 = m3.xx;
-        long y3 = m3.yy;
+        double x1 = m1.xx;
+        double y1 = m1.yy;
+        double x2 = m2.xx;
+        double y2 = m2.yy;
+        double x3 = m3.xx;
+        double y3 = m3.yy;
 
-        long a11 = x1 - x2;
-        long a12 = y1 - y2;
-        long a21 = a12;
-        long a22 = -a11;
-        long b1 = -((a22) * x3 + (-a12) * y3);
-        long b2 = -(x1 * y2 - x2 * y1);
+        double a11 = x1 - x2;
+        double a12 = y1 - y2;
+        double a21 = a12;
+        double a22 = -a11;
+        double b1 = -((a22) * x3 + (-a12) * y3);
+        double b2 = -(x1 * y2 - x2 * y1);
 
-        long d = a11 * a22 - a12 * a21;
-        long d1 = b1 * a22 - a12 * b2;
-        long d2 = a11 * b2 - b1 * a21;
+        double d = a11 * a22 - a12 * a21;
+        double d1 = b1 * a22 - a12 * b2;
+        double d2 = a11 * b2 - b1 * a21;
 
-        long x = d1 / d;
-        long y = d2 / d;
+        double x = d1 / d;
+        double y = d2 / d;
 
         Mou mou = new Mou((int) x, (int) y);
+        //System.out.printf("pruseCikk [%d,%d] --- [%d,%d]  | [%d,%d] = [%d,%d]%n", x1, y1, x2, y2, x3, y3, x, y);
+        //System.out.printf("pruseCikk (%d,%d) %n", a11, a12);
         return mou;
 
     }
