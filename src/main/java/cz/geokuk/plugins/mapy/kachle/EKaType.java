@@ -20,6 +20,16 @@ public enum EKaType {
   _BEZ_PODKLADU(true, true, 0, 18, 18, "žádná",  "Mapy bez podkladu.", 0, null, new MapyCzUrlBuilder(null)),
 
   OPEN_STREAT(true, false, 0, 18, 18,  "Open streat", "Open streat map.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o') , new OpenStreatMapUrlBuilder("https://b.tile.openstreetmap.org/")),
+  //http://otile{switch:1,2,3,4}.mqcdn.com/tiles/1.0.0/osm/{zoom}/{x}/{y}.png
+  MAPBOX     (true, false, 0, 18, 18,  "Map box", "Open streat map box.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o') , new OpenStreatMapUrlBuilder("http://otile1.mqcdn.com/tiles/1.0.0/osm/")),
+  TUR_FREEMAP_SK_T     (true, false, 0, 18, 18,  "Slovensko turistická", "turistika.freemap.sk - turisktická mapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/T/")),
+  TUR_FREEMAP_SK_A     (true, false, 0, 18, 18,  "Slovensko automapa",  "turistika.freemap.sk - automapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/A/")),
+  TUR_FREEMAP_SK_C     (true, false, 0, 18, 18,  "Slovensko cyklomapa", "turistika.freemap.sk - cyklomapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/C/")),
+  TUR_FREEMAP_SK_K     (true, false, 0, 18, 18,  "Slovensko lyžařská  ", "turistika.freemap.sk - lyžařská mapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/K/")),
+    
+  // Nefunguje, jakási ochrana přes kukačku
+  //HIKING_SK_TOPO     (true, false, 0, 18, 18,  "Slovensko turistická  ", "mapy.hiking.sk - topo", 0, null, new OpenStreatMapUrlBuilder("http://mapy.hiking.sk/layers/topo/")),
+    
   // Todo vyřešit problémy s certifikátem
   //OPEN_CYKLO(true, false, 0, 18, 18,  "Open cyclo", "Open streat map.", KeyEvent.VK_Y, KeyStroke.getKeyStroke('c') , new OpenStreatMapUrlBuilder("https://b.tile.thunderforest.com/cycle/")),
 
