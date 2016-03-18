@@ -25,7 +25,7 @@ import cz.geokuk.util.pocitadla.PocitadloNula;
  */
 public class KachleModel extends Model0 {
 
-  private static int POCET_PARALELNICH_DOWNLOADERU = 16;
+  private static int POCET_PARALELNICH_DOWNLOADERU = 5;
   
   private Factory factory;
 

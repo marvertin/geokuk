@@ -8,6 +8,7 @@ import javax.swing.JComponent;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.plugins.mapy.kachle.KachloStav.EFaze;
 
 public class JKachle extends JComponent {
 
@@ -63,6 +64,41 @@ public class JKachle extends JComponent {
       drawPsanicko(g);
       g.setColor(Color.RED);
       vypisPozici(g);
+
+      if (kachle.kachloStav != null && kachle.kachloStav.faze != null) {
+        //System.out.println("FAZE: " + kachle.faze);
+      switch (kachle.kachloStav.faze) {
+        case ZACINAM_STAHOVAT:
+          g.setColor(Color.YELLOW);
+          g.drawString("STAHUJI ", 5,  170);
+          break;
+        case ZACINAM_NACITAT_Z_DISKU:
+          g.setColor(Color.MAGENTA);
+          g.drawString("NAČÍTÁM Z DISKU ", 5,  170);
+          break;
+        case STAZENA_POSLEDNI_KACHLE:
+          break;
+        case STAZENA_PRUBEZNA_KACHLE:
+          break;
+        case CHYBA:
+          g.setColor(Color.RED);
+          g.drawString("CHYBA ", 5,  170);
+          g.drawString(kachle.kachloStav.thr + "", 5,  185);
+          break;
+        case OFFLINE_MODE:
+          g.setColor(Color.YELLOW);
+          g.drawString("OFF-LINE-MODE ", 5,  170);
+          break;
+        }
+      }
+      if (kachle.kachloStav != null && kachle.kachloStav.url != null) {
+        String s = kachle.kachloStav.url.toString();
+        int index = ordinalIndexOf(s, '/', 2) + 1;
+        g.setColor(Color.YELLOW);
+        g.drawString(s.substring(0, index), 5,  190);
+        g.drawString(s.substring(index), 10,  205);
+      }
+
     }
     super.paintComponent(aG);
   }
@@ -124,4 +160,10 @@ public class JKachle extends JComponent {
     kachle = aKachle;
   }
 
+  private static int ordinalIndexOf(String str, char c, int n) {
+    int pos = str.indexOf(c, 0);
+    while (n-- > 0 && pos != -1)
+        pos = str.indexOf(c, pos+1);
+    return pos;
+  }
 }

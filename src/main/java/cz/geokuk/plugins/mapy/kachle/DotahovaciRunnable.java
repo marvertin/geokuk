@@ -3,9 +3,12 @@ package cz.geokuk.plugins.mapy.kachle;
 
 
 import java.awt.Image;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
+import cz.geokuk.plugins.mapy.kachle.KachloDownloader.EPraznyObrazek;
+import cz.geokuk.plugins.mapy.kachle.KachloStav.EFaze;
 import cz.geokuk.util.pocitadla.Pocitadlo;
 import cz.geokuk.util.pocitadla.PocitadloNula;
 import cz.geokuk.util.pocitadla.PocitadloRoste;
@@ -54,23 +57,47 @@ public class DotahovaciRunnable implements Runnable {
           continue; // pro nikoho stejne nepracuji
         }
         Image img = kachleModel.synchronizator.chciZiskat(ka, kaOne.getPosilac());
+        EFaze faze;
+        Throwable thr = null;
         if (img == null) { // v paměti to nebylo
           List<DlazebniPosilac> dlazebniPosilace;
           try {
+            kaOne.getPosilac().zacinamNacitatZDisku();
             img = kachleModel.cache.diskCachedImage(ka);
+            //Thread.sleep(2000);
             byte[] data = null;
             if (img == null) {
-              ImageWithData imda = kachleModel.kachloDownloader.downloadImage(ka);
-              img = imda == null ? null : imda.img;
-              data = imda == null ? null : imda.data;
+              if (ka.getType() == EKaType._BEZ_PODKLADU) {
+                ImageWithData imda = kachleModel.kachloDownloader.prazdnyObrazekBezDat(EPraznyObrazek.BEZ_PODKLADU);
+                img = imda.img;
+                data = null;
+                dlazebniPosilace = kachleModel.synchronizator.ziskalJsem(ka, img, null);
+                faze = null;
+              } else if (!kachleModel.isOnlineMode()) {
+                dlazebniPosilace = kachleModel.synchronizator.nepovedloSe(ka);
+                faze = EFaze.OFFLINE_MODE;
+              } else { // stahujeme
+                URL url = ka.getType().getUrlBuilder().buildUrl(ka);
+                kaOne.getPosilac().zacinamStahovat(url);
+                ImageWithData imda = kachleModel.kachloDownloader.downloadImage(url);
+                //Thread.sleep(3000);
+                img = imda == null ? null : imda.img;
+                data = imda == null ? null : imda.data;
+                dlazebniPosilace = kachleModel.synchronizator.ziskalJsem(ka, img, data);
+                faze = null;
+              }
+            } else { // už jsem měl, nemusel jsem stahovat
+              dlazebniPosilace = kachleModel.synchronizator.ziskalJsem(ka, img, data);
+              faze = null;
             }
-            dlazebniPosilace = kachleModel.synchronizator.ziskalJsem(ka, img, data);
-          } catch (RuntimeException e) {
-            kachleModel.synchronizator.nepovedloSe(ka);
-            throw e;
+          } catch (Exception e) {
+            dlazebniPosilace = kachleModel.synchronizator.nepovedloSe(ka);
+            faze = EFaze.CHYBA;
+            thr = e;
           }
           for (DlazebniPosilac posilac : dlazebniPosilace) {
-            posilac.add(ka.getType(), img);
+            if (img != null) posilac.add(ka.getType(), img);
+            if (faze != null) posilac.neziskano(ka.getType(), faze, thr);
           }
         } else if (img == Synchronizator.NEZISKAVEJ) {
           pocitZiskananychNekymJinym.inc();

@@ -38,14 +38,7 @@ public class KachloDownloader {
     }
 
 
-    public ImageWithData downloadImage(KaOne kaOne) {
-        URL url = null;
-        try {
-            if (kaOne.getType() == EKaType._BEZ_PODKLADU)
-                return prazdnyObrazekBezDat(EPraznyObrazek.BEZ_PODKLADU); // v offline módu jen vyprazdňuji frontu
-            if (!kachleModel.isOnlineMode())
-                return prazdnyObrazekBezDat(EPraznyObrazek.OFFLINE); // v offline módu jen vyprazdňuji frontu
-            url = kaOne.getType().getUrlBuilder().buildUrl(kaOne);
+    public ImageWithData downloadImage(final URL url) throws IOException {
             log.debug("Loading kachle from URL: \"{}\"", url);
             ImageWithData imda = new ImageWithData();
             DataHoldingInputStream dhis = new DataHoldingInputStream(url.openStream());
@@ -56,18 +49,16 @@ public class KachloDownloader {
             pocitDownloadleDlazdice.inc();
             //Thread.sleep(300);
             log.debug("Loaded {} bytes", imda.data.length);
+            //if (Math.random() > 0.9) throw new RuntimeException("Nepovedlo se");
             return imda;
-        } catch (Exception e) {
-            log.error("Unable to download tile image! \"" + url + "\"", e);
-            return prazdnyObrazekBezDat(EPraznyObrazek.ERROR);
-        }
+
     }
 
 
     /**
      * @return
      */
-    private ImageWithData prazdnyObrazekBezDat(EPraznyObrazek typPrazdneho) {
+    public ImageWithData prazdnyObrazekBezDat(EPraznyObrazek typPrazdneho) {
         ImageWithData imda = new ImageWithData();
         imda.data = null; // tím, že nevrátíme bytová data, neuloží se ta napodobenina na disk
         imda.img = getOfflineImage(typPrazdneho);
@@ -120,7 +111,7 @@ public class KachloDownloader {
     /**
      * Nepřejmenovávat hodnoty, odvozuje se z něj název resourcu
      */
-    private enum EPraznyObrazek {
+    public static enum EPraznyObrazek {
         OFFLINE, ERROR, BEZ_PODKLADU;
 
         /**

@@ -52,9 +52,8 @@ class Synchronizator<T> {
   }
 
 
-  public synchronized void nepovedloSe(Ka0 ki) {
-    ziskavanci.remove(ki);
-    System.out.println("Ziskavanci nepovedleSe: " + ziskavanci.size());
+  public synchronized  List<T> nepovedloSe(Ka0 ki) {
+    return ziskavanci.remove(ki);
   }
 
   /**
@@ -77,5 +76,7 @@ class Synchronizator<T> {
   public synchronized int pocetZiskavancu() {
     return ziskavanci.size();
   }
+
+
 
 }

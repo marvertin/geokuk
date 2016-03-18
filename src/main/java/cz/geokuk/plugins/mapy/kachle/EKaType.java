@@ -17,7 +17,6 @@ public enum EKaType {
   OPHOTO0203_M(true, true, 0, 16, 16,  "Letecká 2003", "Starší fotomapa", KeyEvent.VK_3, null, new MapyCzUrlBuilder("ophoto0203-m")),
   ZEMEPIS_M(true, false, 0, 16, 16,  "Zeměpisná", "Zeměpisná mapa", KeyEvent.VK_G, KeyStroke.getKeyStroke('g'), new MapyCzUrlBuilder("zemepis-m")),
   ARMY2_M(true, true, 0, 13, 13,  "Historická", "Historická mapa z let 1836-52", KeyEvent.VK_H, KeyStroke.getKeyStroke('h'), new MapyCzUrlBuilder("army2-m")),
-  _BEZ_PODKLADU(true, true, 0, 18, 18, "žádná",  "Mapy bez podkladu.", 0, null, new MapyCzUrlBuilder(null)),
 
   OPEN_STREAT(true, false, 0, 18, 18,  "Open streat", "Open streat map.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o') , new OpenStreatMapUrlBuilder("https://b.tile.openstreetmap.org/")),
   //http://otile{switch:1,2,3,4}.mqcdn.com/tiles/1.0.0/osm/{zoom}/{x}/{y}.png
@@ -26,7 +25,9 @@ public enum EKaType {
   TUR_FREEMAP_SK_A     (true, false, 0, 18, 18,  "Slovensko automapa",  "turistika.freemap.sk - automapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/A/")),
   TUR_FREEMAP_SK_C     (true, false, 0, 18, 18,  "Slovensko cyklomapa", "turistika.freemap.sk - cyklomapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/C/")),
   TUR_FREEMAP_SK_K     (true, false, 0, 18, 18,  "Slovensko lyžařská  ", "turistika.freemap.sk - lyžařská mapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/K/")),
-    
+
+  _BEZ_PODKLADU(true, true, 0, 18, 18, "žádná",  "Mapy bez podkladu.", 0, null, new MapyCzUrlBuilder(null)),
+
   // Nefunguje, jakási ochrana přes kukačku
   //HIKING_SK_TOPO     (true, false, 0, 18, 18,  "Slovensko turistická  ", "mapy.hiking.sk - topo", 0, null, new OpenStreatMapUrlBuilder("http://mapy.hiking.sk/layers/topo/")),
     

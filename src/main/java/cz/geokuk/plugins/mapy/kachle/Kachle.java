@@ -2,12 +2,14 @@ package cz.geokuk.plugins.mapy.kachle;
 
 import java.awt.Image;
 import java.lang.ref.WeakReference;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import cz.geokuk.plugins.mapy.kachle.KachloStav.EFaze;
 import cz.geokuk.util.pocitadla.Pocitadlo;
 import cz.geokuk.util.pocitadla.PocitadloRoste;
 
@@ -49,6 +51,7 @@ public class Kachle implements ImageReceiver {
   private final boolean vykreslovatOkamzite;
   //private static int cictac;
   private final JKachle jkachle;
+  public KachloStav kachloStav;
 
   //Point mou = new Point();  // souřadnice roho
 
@@ -93,8 +96,23 @@ public class Kachle implements ImageReceiver {
    * @param jeToUzCelyObrazek
    */
   protected synchronized void setImageImmadiately(KachloStav kachloStav) {
+    this.kachloStav = kachloStav;
+    switch (kachloStav.faze) {
+    case ZACINAM_STAHOVAT:
+      jkachle.repaint();
+      break;
+    case ZACINAM_NACITAT_Z_DISKU:
+      jkachle.repaint();
+      break;
+    case CHYBA:
+    case OFFLINE_MODE:
+      jkachle.repaint();
+      break;
+    case STAZENA_POSLEDNI_KACHLE:
+    case STAZENA_PRUBEZNA_KACHLE:
     if (kachleJeZnicena) {
       pocitPlneniImageDoZnicenychKachli.inc();
+      System.out.println("Znicena kachle");
       return;
     }
     if (! coMam.equals(kachloStav.types)) {
@@ -102,13 +120,15 @@ public class Kachle implements ImageReceiver {
       coMam = kachloStav.types;
       if (jkachle != null) jkachle.repaint();
     }
-    if (kachloStav.jeToUzCelyObrazek) {
+    if (kachloStav.faze == EFaze.STAZENA_POSLEDNI_KACHLE) {
       jeTamUzCelyObrazek = true;
       if (jkachle != null && jkachle.getjKachlovnik() != null) {
         jkachle.getjKachlovnik().kachleZpracovana(jkachle);
       }
       notifyAll();
     }
+    }
+    if (jkachle.getParent() != null) jkachle.getParent().repaint();
     //System.out.println("  ... notifikovano=");
   }
 
@@ -123,7 +143,7 @@ public class Kachle implements ImageReceiver {
 
     Image img = kachleModel.cache.memoryCachedImage(plny);
     if (img != null) {
-      setImageImmadiately(new KachloStav(plny.kaSet.getKts(), img, true));
+      setImageImmadiately(new KachloStav(plny.kaSet.getKts(), img, EFaze.STAZENA_POSLEDNI_KACHLE));
       return; // to bylo jednoduché, je to celé zde
     }
     // můžeme požádat o plný
@@ -137,7 +157,7 @@ public class Kachle implements ImageReceiver {
     img = kachleModel.cache.memoryCachedImage(plny.getPodklad());
     if (img != null) {
       // tak aspoň uložíme ten nakešlý podklad
-      setImageImmadiately(new KachloStav(EnumSet.of(plny.getPodkladType()), img, false));
+      setImageImmadiately(new KachloStav(EnumSet.of(plny.getPodkladType()), img, EFaze.STAZENA_PRUBEZNA_KACHLE));
     }
   }
 

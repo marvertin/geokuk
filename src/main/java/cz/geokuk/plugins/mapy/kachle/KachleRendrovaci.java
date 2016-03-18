@@ -2,6 +2,8 @@ package cz.geokuk.plugins.mapy.kachle;
 
 import java.awt.Graphics;
 
+import cz.geokuk.plugins.mapy.kachle.KachloStav.EFaze;
+
 public class KachleRendrovaci extends Kachle {
 
   /**
@@ -12,7 +14,7 @@ public class KachleRendrovaci extends Kachle {
 
   @Override
   protected synchronized void setImageImmadiately(KachloStav kachloStav) {
-    if (kachloStav.jeToUzCelyObrazek) {
+    if (kachloStav.faze == EFaze.STAZENA_POSLEDNI_KACHLE) {
       super.setImageImmadiately(kachloStav);
       if (grf != null) {
         //System.out.println("Paintuji odloženě");
