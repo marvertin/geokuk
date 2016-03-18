@@ -12,6 +12,7 @@ import cz.geokuk.util.pocitadla.PocitadloNula;
 
 /**
  * Kombinuje do sebe různé dlaždice, aby se to nemusel dělat draze v paintu.
+ * Není nijak aktivní ve smyslu, že by něco provolával, když je hotov.
  * @author tatinek
  *
  */
@@ -34,32 +35,56 @@ class DlazebniKombiner {
 
   private EnumMap<EKaType, Image> imgs = new EnumMap<>(EKaType.class);
 
-  public DlazebniKombiner(EnumSet<EKaType> coCekam) {
+  /**
+   * Nová instance bude kombinovat kachle daných mapových podkladů.
+   * Až nakombinuje, vrací. Ale vrátit dokáže i postupně.
+   * @param coCekam
+   */
+  public DlazebniKombiner(final EnumSet<EKaType> coCekam) {
     super();
     this.coCekam = coCekam;
     pocitadloInstanci.inc();
   }
 
-  public synchronized void add(EKaType type, Image img) {
-    if (coMam.contains(type)) return; // to už mám
-    int pocetPred = imgs.size();
+  /**
+   * Vloží obrázek kachle daného typu.
+   * Pro daný typ lpe obrázek vložit jen jednou. Pokud ho dostane podruhé (nemělo by se stát), neudělá nic.
+   * Pokud vloží obrázek, který nečekám, tak také neudělám nic.
+   * Pokud mám hotovo, neudělá nic.
+   * @param type
+   * @param img
+   */
+  public synchronized void add(final EKaType type, final Image img) {
+    if (hotovo) {
+      return;
+    }
+    if (coMam.contains(type))  {
+      return; // to už mám
+    }
+    if (!coCekam.contains(type))  {
+      return; // to nečekám, tak nevím proč to posílají. Nechci to
+    }
+    final int pocetPred = imgs.size();
     imgs.put(type, img);
     rekombinuj();
-    int rozdil = (imgs == null ? 0 : imgs.size()) - pocetPred;
+    final int rozdil = (imgs == null ? 0 : imgs.size()) - pocetPred;
     pocitadloRozpracovanychObrazkuVKombinerech.add(rozdil);
   }
 
   private void rekombinuj() {
-    for (EKaType typ : EKaType.values()) {
-      boolean cekam = coCekam.contains(typ);
-      boolean mam   = coMam.contains(typ);
+    for (final EKaType typ : EKaType.values()) {
+      final boolean cekam = coCekam.contains(typ);
+      final boolean mam   = coMam.contains(typ);
       if (!cekam) {
         imgs.remove(typ); // kdyby to tam náhodou bylo, aŤ se uvolní, ale nemá proč.
         continue; // pokud to nečekám, tak se nic neděje
       }
-      if (mam) continue; // to co mám už mám
+      if (mam)
+      {
+        continue; // to co mám už mám
+      }
       // takže toto čekám, ale nemám
-      Image img = imgs.get(typ); // neto by sem patřil
+      final Image img = imgs.get(typ); // neto by sem patřil
       if (img == null) {
         //        if (kombinedImage == null) {
         //          System.out.println("NEMAM JESTE: " + typ + ", ale mam uz " + imgs.keySet());
@@ -78,24 +103,38 @@ class DlazebniKombiner {
   }
 
 
-  private void prikresli(Image img) {
+  private void prikresli(final Image img) {
     if (kombinedImage == null) {
       kombinedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
       mameTadyObrazek = true;
       pocitadloRozpracovanychObrazkuVKombinerech.inc();
     }
-    Graphics2D g = kombinedImage.createGraphics();
+    final Graphics2D g = kombinedImage.createGraphics();
     g.drawImage(img, 0, 0, null);
   }
 
+  /**
+   * Vrátí co mám.
+   * @return Pokud nic nemám, je set prázdný.
+   */
   public EnumSet<EKaType> getCoMam() {
     return coMam.clone();
   }
 
+  /**
+   * Vrátí nakombinovaný image. Může být částečně nakombinovaný, pokdu nedošlo vše.
+   * Ale nikdy se vrstvy nepřekračují. Když už došla 1. a 2. a 4. vrstva, vrací image nakombinovaný jen
+   * z prvních dvou vrstev. Když mám jen vrstvy 2. a 3., vrací null. Nemůže tedy vrátit jen vrstvu turistických tras bez podkladu.
+   * @return Pokud nic nemám, vracéí se null.
+   */
   public BufferedImage getKombinedImage() {
     return kombinedImage;
   }
 
+  /**
+   * Pokud je už vše nakombinováno, co má být.
+   * @return
+   */
   public boolean isHotovo() {
     return hotovo;
   }
@@ -112,6 +151,9 @@ class DlazebniKombiner {
     }
   }
 
+  /**
+   * Jen kvůli úpravě statistik.
+   */
   public synchronized void uzTeNepotrebuju() {
     pocitadloRozpracovanychObrazkuVKombinerech.sub(imgs == null ? 0 : imgs.size());
     imgs = null;
