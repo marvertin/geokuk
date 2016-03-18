@@ -8,7 +8,6 @@ import javax.swing.JComponent;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.plugins.mapy.kachle.KachloStav.EFaze;
 
 public class JKachle extends JComponent {
 
@@ -32,26 +31,28 @@ public class JKachle extends JComponent {
   private final JKachlovnik jKachlovnik;
   private Kachle kachle;
   //private static int cictac;
+  private final KaLoc kaloc;
 
   //Point mou = new Point();  // souřadnice roho
 
   //	private boolean jakoZeJeVykresleno;
 
-  public JKachle(JKachlovnik jKachlovnik) {
+  public JKachle(final JKachlovnik jKachlovnik, final KaLoc kaloc) {
     this.jKachlovnik = jKachlovnik;
+    this.kaloc = kaloc;
     setSize(KACHLE_WIDTH, KACHLE_HEIGHT);
   }
 
   public void init() {
-    
+
   }
 
   @Override
-  protected void paintComponent(Graphics aG) {
+  protected void paintComponent(final Graphics aG) {
     super.paintComponent(aG);
-    boolean zobrazovatNaKachlichPozice = false;
+    final boolean zobrazovatNaKachlichPozice = false;
     //    if (true) return;
-    Graphics2D g = (Graphics2D) aG.create();
+    final Graphics2D g = (Graphics2D) aG.create();
     if (kachle.isVykreslovatOkamzite()) {
       // Pokud rendruji do KMZ č souboru, a ne naobrazovku tak mám možná otočeno a nestojím o žádné uříznuití.
       g.setClip(null);
@@ -67,7 +68,7 @@ public class JKachle extends JComponent {
 
       if (kachle.kachloStav != null && kachle.kachloStav.faze != null) {
         //System.out.println("FAZE: " + kachle.faze);
-      switch (kachle.kachloStav.faze) {
+        switch (kachle.kachloStav.faze) {
         case ZACINAM_STAHOVAT:
           g.setColor(Color.YELLOW);
           g.drawString("STAHUJI ", 5,  170);
@@ -92,8 +93,8 @@ public class JKachle extends JComponent {
         }
       }
       if (kachle.kachloStav != null && kachle.kachloStav.url != null) {
-        String s = kachle.kachloStav.url.toString();
-        int index = ordinalIndexOf(s, '/', 2) + 1;
+        final String s = kachle.kachloStav.url.toString();
+        final int index = ordinalIndexOf(s, '/', 2) + 1;
         g.setColor(Color.YELLOW);
         g.drawString(s.substring(0, index), 5,  190);
         g.drawString(s.substring(index), 10,  205);
@@ -103,35 +104,35 @@ public class JKachle extends JComponent {
     super.paintComponent(aG);
   }
 
-  private void vypisPozici(Graphics2D g) {
-    KaLoc p = kachle.getiPoziceJenProVypsani();
+  private void vypisPozici(final Graphics2D g) {
+    final KaLoc p = kachle.getiPoziceJenProVypsani();
     if (p != null) {
-      Mou mou = p.getMouSZ(); // souřadnice SZ kachle
-      int xx = mou.xx;
-      int yy = mou.yy;
+      final Mou mou = p.getMouSZ(); // souřadnice SZ kachle
+      final int xx = mou.xx;
+      final int yy = mou.yy;
       g.setColor(Color.WHITE);
       g.drawString("x = " + toHex(xx), 5,  15);
       g.drawString("y = " + toHex(yy), 5,  30);
       g.drawString("z = " + p.getMoumer(), 5, 45);
-      
-      Wgs wgs = mou.toWgs();
+
+      final Wgs wgs = mou.toWgs();
       g.drawString("lat = " + wgs.lat, 5, 70);
       g.drawString("lon = " + wgs.lon, 5, 89);
-      
+
       g.drawString("[" + p.getSignedX() + "," + p.getSignedY() + "]" , 120,  133);
       g.drawString("[" + p.getFromSzUnsignedX() + "," + p.getFromSzUnsignedY() + "]" , 120,  148);
-      
+
 
     }
   }
 
-  
-  private void drawPsanicko(Graphics2D g) {
-    int kraj = 3;
-    int x1 = kraj;
-    int y1 = kraj;
-    int x2 = getSize().width - 1 - kraj;
-    int y2 = getSize().height - 1 - kraj;
+
+  private void drawPsanicko(final Graphics2D g) {
+    final int kraj = 3;
+    final int x1 = kraj;
+    final int y1 = kraj;
+    final int x2 = getSize().width - 1 - kraj;
+    final int y2 = getSize().height - 1 - kraj;
     g.drawLine(x1, y1, x1, y2);
     g.drawLine(x1, y1, x2, y1);
     g.drawLine(x1, y2, x2, y2);
@@ -141,7 +142,7 @@ public class JKachle extends JComponent {
   }
 
 
-  private static String toHex(int cc) {
+  private static String toHex(final int cc) {
     String s = Integer.toHexString(cc);
     s = "00000000".substring(0, 8-s.length()) + s;
     s = s.substring(0,4) + " " + s.substring(4);
@@ -156,14 +157,20 @@ public class JKachle extends JComponent {
     return kachle;
   }
 
-  public void setKachle(Kachle aKachle) {
+  public void setKachle(final Kachle aKachle) {
     kachle = aKachle;
   }
 
-  private static int ordinalIndexOf(String str, char c, int n) {
+  private static int ordinalIndexOf(final String str, final char c, int n) {
     int pos = str.indexOf(c, 0);
-    while (n-- > 0 && pos != -1)
-        pos = str.indexOf(c, pos+1);
+    while (n-- > 0 && pos != -1) {
+      pos = str.indexOf(c, pos+1);
+    }
     return pos;
+  }
+
+
+  public KaLoc getKaLoc() {
+    return kaloc;
   }
 }

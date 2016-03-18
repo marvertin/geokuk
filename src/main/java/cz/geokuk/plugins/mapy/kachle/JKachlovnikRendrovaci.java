@@ -70,8 +70,8 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
     }
 
     @Override
-    protected JKachle createJKachle() {
-      return new JKachleRendrovaci(this);
+    protected JKachle createJKachle(KaLoc kaloc) {
+      return new JKachleRendrovaci(this, kaloc);
     }    
 //    @Override
 //    protected JKachle createKachle(KaAll plny, KachleModel kachleModel, boolean vykreslovatOkamzite, JKachlovnik jKachlovnik) {
