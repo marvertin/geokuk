@@ -3,14 +3,23 @@ package cz.geokuk.plugins.mapy.kachle;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.net.URL;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.swing.JComponent;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.plugins.mapy.kachle.KachloStav.EFaze;
+import cz.geokuk.util.pocitadla.PocitadloMalo;
 
 public class JKachle extends JComponent {
 
+  private static   final boolean ZOBRAZOVAT_NA_KACHLICH_DIAGNOSTICKE_INFORMACE = false;
+  //  Staré mapy.cz. Takto to tam bylo:
   //	(2) ad mapy.cz: jejich vnitřní XY souřadnice jsou odvozeninou UTM souřadnic.
   //	čtverec s nejzápadnějčím bodem ČR je na http://m4.mapserver.mapy.cz/turist/13_79D8000_8250000
   //	sX = dec(79D8000) = 127762432
@@ -29,75 +38,78 @@ public class JKachle extends JComponent {
   private static final long serialVersionUID = -5445121736003161730L;
 
   private final JKachlovnik jKachlovnik;
-  private Kachle kachle;
   //private static int cictac;
-  private final KaLoc kaloc;
+  private final KaAll kaall;
+  private Kanceler kanceler;
 
+  private Image image;
+  private boolean jeTamUzCelyObrazek;
+
+  private final Set<DiagnosticsData> diagnosticsDatas = Collections.synchronizedSet(new LinkedHashSet<>());
+  private String diagnosticesFazeStr;
   //Point mou = new Point();  // souřadnice roho
 
-  //	private boolean jakoZeJeVykresleno;
+  private static final PocitadloMalo pocitJKAchle = new PocitadloMalo("#JKachle",
+      "Počet kompomnent JKachle přes hlavní okno, okno v rohu, rendry, stahování, prostě všude.");
 
-  public JKachle(final JKachlovnik jKachlovnik, final KaLoc kaloc) {
+  public JKachle(final JKachlovnik jKachlovnik, final KaAll kaall) {
     this.jKachlovnik = jKachlovnik;
-    this.kaloc = kaloc;
+    this.kaall = kaall;
     setSize(KACHLE_WIDTH, KACHLE_HEIGHT);
-  }
-
-  public void init() {
+    pocitJKAchle.inc();
 
   }
 
   @Override
-  protected void paintComponent(final Graphics aG) {
+  protected void finalize() throws Throwable {
+    super.finalize();
+    pocitJKAchle.dec();
+  }
+
+  @Override
+  // Synchronizuje se, prtotže se může během zpracování změnit obrázek ,který se vykresluje
+  protected synchronized void paintComponent(final Graphics aG) {
     super.paintComponent(aG);
-    final boolean zobrazovatNaKachlichPozice = false;
     //    if (true) return;
     final Graphics2D g = (Graphics2D) aG.create();
-    if (kachle.isVykreslovatOkamzite()) {
-      // Pokud rendruji do KMZ č souboru, a ne naobrazovku tak mám možná otočeno a nestojím o žádné uříznuití.
-      g.setClip(null);
+    //    if (isVykreslovatOkamzite()) {
+    //      // Pokud rendruji do KMZ č souboru, a ne naobrazovku tak mám možná otočeno a nestojím o žádné uříznuití.
+    //      g.setClip(null);
+    //    }
+    if (image != null) {
+      g.drawImage(image, 0, 0, null);
     }
-    if (kachle.getImg() != null) {
-      g.drawImage(kachle.getImg(), 0, 0, null);
-    }
-    if (kachle.getImg() == null || zobrazovatNaKachlichPozice) {
+    if (image == null || ZOBRAZOVAT_NA_KACHLICH_DIAGNOSTICKE_INFORMACE) {
       g.setColor(Color.blue);
       drawPsanicko(g);
       g.setColor(Color.RED);
       vypisPozici(g);
 
-      if (kachle.kachloStav != null && kachle.kachloStav.faze != null) {
-        //System.out.println("FAZE: " + kachle.faze);
-        switch (kachle.kachloStav.faze) {
-        case ZACINAM_STAHOVAT:
-          g.setColor(Color.YELLOW);
-          g.drawString("STAHUJI ", 5,  170);
-          break;
-        case ZACINAM_NACITAT_Z_DISKU:
-          g.setColor(Color.MAGENTA);
-          g.drawString("NAČÍTÁM Z DISKU ", 5,  170);
-          break;
-        case STAZENA_POSLEDNI_KACHLE:
-          break;
-        case STAZENA_PRUBEZNA_KACHLE:
-          break;
-        case CHYBA:
-          g.setColor(Color.RED);
-          g.drawString("CHYBA ", 5,  170);
-          g.drawString(kachle.kachloStav.thr + "", 5,  185);
-          break;
-        case OFFLINE_MODE:
-          g.setColor(Color.YELLOW);
-          g.drawString("OFF-LINE-MODE ", 5,  170);
-          break;
-        }
+      int y = 75;
+      if (diagnosticesFazeStr != null) {
+        g.setColor(Color.MAGENTA);
+        g.drawString(diagnosticesFazeStr, 5,  y);
+        y += 15;
       }
-      if (kachle.kachloStav != null && kachle.kachloStav.url != null) {
-        final String s = kachle.kachloStav.url.toString();
-        final int index = ordinalIndexOf(s, '/', 2) + 1;
-        g.setColor(Color.YELLOW);
-        g.drawString(s.substring(0, index), 5,  190);
-        g.drawString(s.substring(index), 10,  205);
+
+
+      for (final DiagnosticsData ss : diagnosticsDatas.toArray(new DiagnosticsData[0])) {
+        final Object dato = ss.getDato();
+        if (dato instanceof URL) {
+          final String s = dato.toString();
+          final int index = ordinalIndexOf(s, '/', 2) + 1;
+          g.setColor(Color.YELLOW);
+          g.drawString(s.substring(0, index), 5,  y);
+          y += 15;
+          g.drawString(s.substring(index), 10,  y);
+        } else if (dato instanceof Throwable) {
+          g.setColor(Color.RED);
+          g.drawString(dato.toString(), 5,  y);
+        } else {
+          g.setColor(Color.CYAN);
+          g.drawString((ss.getNazev() == null ? "" : ss.getNazev() + " = ") + dato, 5,  y);
+        }
+        y += 15;
       }
 
     }
@@ -105,7 +117,7 @@ public class JKachle extends JComponent {
   }
 
   private void vypisPozici(final Graphics2D g) {
-    final KaLoc p = kachle.getiPoziceJenProVypsani();
+    final KaLoc p = kaall.getLoc();
     if (p != null) {
       final Mou mou = p.getMouSZ(); // souřadnice SZ kachle
       final int xx = mou.xx;
@@ -116,11 +128,11 @@ public class JKachle extends JComponent {
       g.drawString("z = " + p.getMoumer(), 5, 45);
 
       final Wgs wgs = mou.toWgs();
-      g.drawString("lat = " + wgs.lat, 5, 70);
-      g.drawString("lon = " + wgs.lon, 5, 89);
+      g.drawString("lat = " + wgs.lat, 100, 15);
+      g.drawString("lon = " + wgs.lon, 100, 30);
 
-      g.drawString("[" + p.getSignedX() + "," + p.getSignedY() + "]" , 120,  133);
-      g.drawString("[" + p.getFromSzUnsignedX() + "," + p.getFromSzUnsignedY() + "]" , 120,  148);
+      g.drawString("[" + p.getSignedX() + "," + p.getSignedY() + "]" , 140,  50);
+      g.drawString("[" + p.getFromSzUnsignedX() + "," + p.getFromSzUnsignedY() + "]" , 140,  65);
 
 
     }
@@ -149,18 +161,6 @@ public class JKachle extends JComponent {
     return s;
   }
 
-  public JKachlovnik getjKachlovnik() {
-    return jKachlovnik;
-  }
-
-  public Kachle getKachle() {
-    return kachle;
-  }
-
-  public void setKachle(final Kachle aKachle) {
-    kachle = aKachle;
-  }
-
   private static int ordinalIndexOf(final String str, final char c, int n) {
     int pos = str.indexOf(c, 0);
     while (n-- > 0 && pos != -1) {
@@ -171,6 +171,69 @@ public class JKachle extends JComponent {
 
 
   public KaLoc getKaLoc() {
-    return kaloc;
+    return kaall.getLoc();
   }
+
+
+  /**
+   * Získá obsah
+   * @param kachleModel
+   * @param priorita
+   */
+  public void ziskejObsah(final KachleModel kachleModel, final Priority priorita) {
+    final KaAllReq req = new KaAllReq(kaall, kastat -> {
+
+      synchronized (JKachle.this) { // paintování spoléhá na stálost údajů
+        if (kastat.img != null) {
+          image = kastat.img; // přepíšeme, jen když jde něco lepšího
+        }
+        if (kastat.faze == EFaze.RESULT_ALL_POSLEDNI) {
+          jeTamUzCelyObrazek = true;
+          ziskanPlnyObrazek(image);
+          if (jKachlovnik != null) {
+            jKachlovnik.kachleZpracovana(this);
+          }
+          JKachle.this.notifyAll();
+        }
+      }
+      repaint(); // prý můžeme volat z libovolného vlákna
+    }, priorita);
+
+    final DiagnosticsData.Listener diagListener = (diagnosticsData, diagnosticesFazeStr) ->  {
+      JKachle.this.diagnosticesFazeStr = diagnosticesFazeStr;
+      for (DiagnosticsData dd = diagnosticsData; dd != null; dd = dd.getParent()) {
+        diagnosticsDatas.add(dd);
+      }
+    };
+    final String nazevKachlovniku = jKachlovnik == null ? null : jKachlovnik.nazevKachlovniku;
+    kanceler = kachleModel.getZiskavac().ziskejObsah(req,  DiagnosticsData.create(null, nazevKachlovniku , diagListener).with("kaAllReq", req));
+  }
+
+  public boolean jeTamUzCelyObrazek() {
+    return jeTamUzCelyObrazek;
+  }
+
+  public synchronized void waitNaDotazeniDlazdice() throws InterruptedException {
+    while (! jeTamUzCelyObrazek()) {
+      wait();
+    }
+  }
+
+  /*
+   * Rendrovací kachlovník může použít pro dopaintování.
+   */
+  protected void ziskanPlnyObrazek(final Image img) {
+
+  }
+  /**
+   * Už nebudu výsledek potřebovat, tak všechnoi můžeme stornovat
+   */
+  public void uzTeNepotrebuju() {
+    if (kanceler != null) {
+      kanceler.cancel();
+    }
+  }
+
+
+
 }

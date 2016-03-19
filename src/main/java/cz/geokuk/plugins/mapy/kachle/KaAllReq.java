@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.mapy.kachle;
 
@@ -12,7 +12,7 @@ public class KaAllReq extends Ka0Req {
 
   private ImageReceiver imageReceiver;
 
-  public KaAllReq(KaAll ka, ImageReceiver imageReceiver, Priority priorita) {
+  public KaAllReq(final KaAll ka, final ImageReceiver imageReceiver, final Priority priorita) {
     super(ka, priorita);
     this.imageReceiver = imageReceiver;
   }
@@ -35,11 +35,6 @@ public class KaAllReq extends Ka0Req {
     return imageReceiver;
   }
 
-
-  @Override
-  public boolean jesteToChceme() {
-    return imageReceiver != null;
-  }
 
 
 

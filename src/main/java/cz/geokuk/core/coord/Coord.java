@@ -22,7 +22,7 @@ public class Coord  {
 
   /** Počet bitů mou 2^MOU_BITS obtáčí rovník kolem dokola (odpovídá 40 000 km*/
   public static final int MOU_BITS = 32;
-  
+
   /** Počet bitů, na kterém je zobrazena celá země v merkátoru, když je nejmenší možné měřítko a to. 0
    * 2^ MOUMER_0_BITS je hrana čtverce nejmenší kachle (ale, o kachlích se zde mluvi nesmí).
    * Takže je to počet pixlů, do kterého se vejde celá země při měřítkui 0.
@@ -47,10 +47,10 @@ public class Coord  {
   //poměr mezi mou a pixlama, kolik mou souřadnic je na pixel. U teoreticky nejvyššího měřítka 24 to bude 1:1.
   // Jinak vždy jsou mou drobnější než pisly a jeden z pixl se kládá z mnoha mou (mocniny dvou).
   // Vždy to bude rozumné číslo v intu (maximálně 16 milionů, takže se s tím dá normálně počítat)
-  private final int mouNaPixl;  
-  
+  private final int mouNaPixl;
+
   private final int mpShift;
-  
+
   private AffineTransform tam;
   private AffineTransform zpet;
 
@@ -106,22 +106,22 @@ public class Coord  {
     }
     // pozor na to, že pro moumer blížící se k nule může dojít k přetečení při posunu
     // pro případ, kdy se v okně objeví celá mapa světa vícekrát
-    Mou moujz = getMouJZ();
+    final Mou moujz = getMouJZ();
     //System.out.println("TRANSUJEME: " +   p + " / " + moustred + " -/- " + moujz + " -+++- " + moustred.toWgs() + " -/- " + moujz.toWgs());
 
-    return new Mou(moujz.xx + (p.x << mpShift), moujz.yy + ((dim.height - p.y) << mpShift));
+    return new Mou(moujz.xx + (p.x << mpShift), moujz.yy + (dim.height - p.y << mpShift));
   }
-  
+
 
   /*
-   * Transformuje vzdálnost v pixlech na vzdálenost v mouřadnicích. 
+   * Transformuje vzdálnost v pixlech na vzdálenost v mouřadnicích.
    */
-  public int transformPoindDiff(int pointDiff) {
+  public int transformPoindDiff(final int pointDiff) {
     return pointDiff << mpShift;
   }
-  
+
   /** transformuje posun v pixlech na posun v mouřadnicích */
-  public Moud transformShift(int dx, int dy) {
+  public Moud transformShift(final int dx, final int dy) {
     // minus zde je proto, že na obrazovce jdou souadnice shora dolu a mouřadnice naopak
     return new Moud(transformPoindDiff(dx), - transformPoindDiff(dy));
   }
@@ -156,17 +156,17 @@ public class Coord  {
     return Math.hypot(p1.x - p2.x, p1.y - p2.y);
   }
 
-  
+
   public Point transform(final Mou mou) {
     // pro moumer blížící se k nule nemusí být transformace jednoznačná, protože plocha v bodech
-    // je větší než rozsah mou, mapa je zobrazena vícekrát, takže jednem mou odpovídá více pointů. 
+    // je větší než rozsah mou, mapa je zobrazena vícekrát, takže jednem mou odpovídá více pointů.
     // Zde se spočítá nejjihozápadnější bod.
-    
+
     // souřadnice mohou být i záporné
     final Point p = new Point();
-    Mou moujz = getMouJZ();
-    p.x = (mou.xx - moujz.xx) >> mpShift;
-    p.y = dim.height - ((mou.yy - moujz.yy) >> mpShift);
+    final Mou moujz = getMouJZ();
+    p.x = mou.xx - moujz.xx >> mpShift;
+    p.y = dim.height - (mou.yy - moujz.yy >> mpShift);
     if (tam != null) {
       tam.transform(p, p);
     }
@@ -232,8 +232,8 @@ public class Coord  {
    */
   public Mou getMouJZ() {
     // ta minus jednička je zde proto, že jdeme od středu, je to vlastně dělení dvěma.
-    Moud d = new Moud(dim.width << (mpShift - 1), dim.height << (mpShift - 1));
-    Mou mou = moustred.sub(d);
+    final Moud d = new Moud(dim.width << mpShift - 1, dim.height << mpShift - 1);
+    final Mou mou = moustred.sub(d);
     //System.out.printf("mpShift=%d, dim=%s | moustred=%s=%s + %s = moujz=%s=%s%n", mpShift, dim, moustred, moustred.toWgs(), d, mou, mou.toWgs());
     return mou;
   }
@@ -279,18 +279,17 @@ public class Coord  {
    *
    */
   public double getMouboduNaMetr() {
-   // FIXME přepočítat velikosti
     return getPixluNaMetr() * mouNaPixl;
   }
 
   /**
    * Vrací koli metrů odpovídá jednomu pixklu uprostřed plochy.
-   * 
+   *
    */
   public double getPixluNaMetr() {
-    
-    Wgs wgs = getMoustred().toWgs();
-    double pixlyNaMetr = 1 / (wgs.metryNaMou() * mouNaPixl);
+
+    final Wgs wgs = getMoustred().toWgs();
+    final double pixlyNaMetr = 1 / (wgs.metryNaMou() * mouNaPixl);
     //System.out.println("PIXLU NA METR: " + metry + "        " + 1 / metry);
     return pixlyNaMetr;
   }

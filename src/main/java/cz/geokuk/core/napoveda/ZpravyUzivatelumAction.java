@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.napoveda;
 
@@ -33,11 +33,11 @@ public class ZpravyUzivatelumAction extends DialogOpeningAction0 {
    */
   @Override
   public JMyDialog0 createDialog() {
-    JZpravyUzivatelumDialog dlg = new JZpravyUzivatelumDialog(zpravyUzivatelum);
+    final JZpravyUzivatelumDialog dlg = new JZpravyUzivatelumDialog(zpravyUzivatelum);
     return dlg;
   }
 
-  public void onEvent(NapovedaModelChangedEvent event) {
+  public void onEvent(final NapovedaModelChangedEvent event) {
     zpravyUzivatelum = event.getModel().getZpravyUzivatelum();
     setEnabled(zpravyUzivatelum != null && zpravyUzivatelum.size() > 0);
   }

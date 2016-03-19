@@ -1,11 +1,12 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.napoveda;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
+import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.Action0;
 
 
@@ -29,17 +30,17 @@ public class ZkontrolovatAktualizaceAction extends Action0 {
    * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
    */
   @Override
-  public void actionPerformed(ActionEvent aE) {
+  public void actionPerformed(final ActionEvent aE) {
     napovedaModel.zkontrolujNoveAktualizace(true);
   }
-  
-  public void onEvent(NapovedaModelChangedEvent event) { 
-    setEnabled(napovedaModel.isOnlineMode());
+
+  public void onEvent(final OnofflineModelChangeEvent event) {
+    setEnabled(event.isOnlineMOde());
   }
 
-  public void inject(NapovedaModel napovedaModel) {
+  public void inject(final NapovedaModel napovedaModel) {
     this.napovedaModel = napovedaModel;
   }
 
-  
+
 }

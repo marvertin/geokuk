@@ -35,7 +35,7 @@ public class Cesta implements Iterable<Bousek0> {
   private Cesta() {
   }
 
-  Bod createBod(Mouable mouable) {
+  Bod createBod(final Mouable mouable) {
     return new Bod(this, mouable);
   }
 
@@ -46,52 +46,54 @@ public class Cesta implements Iterable<Bousek0> {
   /**
    * Zahájí novou cestu, zruší vše, co zde bylo.
    */
-  Bod zacni(Mouable mouable) {
+  Bod zacni(final Mouable mouable) {
     start = createBod(mouable);
     cil = start;
     return start;
   }
 
-  Bod pridejNaKonec(Mouable mouable) {
+  Bod pridejNaKonec(final Mouable mouable) {
     if (isEmpty()) {
       return zacni(mouable);
     } else if (jsouMocBlizko(cil, mouable)) {
       return cil;
     } else {
-      Bod bod = createBod(mouable);
-      Usek usek = createUsek();
+      final Bod bod = createBod(mouable);
+      final Usek usek = createUsek();
       usek.spoj(cil, bod);
       cil = bod;
       return bod;
     }
   }
 
-  Bod pridejNaZacatek(Mouable mouable) {
+  Bod pridejNaZacatek(final Mouable mouable) {
     if (isEmpty()) {
       return zacni(mouable);
     } else {
-      Bod bod = createBod(mouable);
-      if (jsouMocBlizko(bod, start)) return start;
-      Usek usek = createUsek();
+      final Bod bod = createBod(mouable);
+      if (jsouMocBlizko(bod, start)) {
+        return start;
+      }
+      final Usek usek = createUsek();
       usek.spoj(bod, start);
       start = bod;
       return bod;
     }
   }
 
-  private boolean jsouMocBlizko(Mouable b1, Mouable b2) {
-    long kvadratVzdalenosti = FUtil.soucetKvadratu(b1.getMou().xx - b2.getMou().xx, b1.getMou().yy - b2.getMou().yy);
+  private boolean jsouMocBlizko(final Mouable b1, final Mouable b2) {
+    final long kvadratVzdalenosti = FUtil.soucetKvadratu(b1.getMou().xx - b2.getMou().xx, b1.getMou().yy - b2.getMou().yy);
     return kvadratVzdalenosti < 1000;
   }
 
-  Bod pridejNaMisto(Mouable mouable) {
-    Bousek0 usbod = locateBousekKamNejlepeVlozit(mouable.getMou());
+  Bod pridejNaMisto(final Mouable mouable) {
+    final Bousek0 usbod = locateBousekKamNejlepeVlozit(mouable.getMou());
     if (usbod instanceof Usek) {
-      Usek usek = (Usek) usbod;
-      Bod bod = usek.rozdelAZanikni(mouable);
+      final Usek usek = (Usek) usbod;
+      final Bod bod = usek.rozdelAZanikni(mouable);
       return bod;
     } else if (usbod instanceof Bod) {
-      Bod bod = (Bod) usbod;
+      final Bod bod = (Bod) usbod;
       Bod b = null;
       if (bod.equals(start)) {
         b = pridejNaZacatek(mouable);
@@ -118,11 +120,11 @@ public class Cesta implements Iterable<Bousek0> {
    * @param maximalniVzdalenost
    * @return
    */
-  public SearchResult locateNejblizsiDoKvadratuVzdalenosi(Mou mou, long kvadratMaximalniVzdalenosti, boolean aDatPrednostBoduPredUsekem) {
+  public SearchResult locateNejblizsiDoKvadratuVzdalenosi(final Mou mou, final long kvadratMaximalniVzdalenosti, final boolean aDatPrednostBoduPredUsekem) {
     long minKvadrat = Long.MAX_VALUE;
     Bousek0 neblizsiBousek = null;
-    for (Bod bod : getBody()) {
-      long kvadratVzdalenosti = bod.computeKvadratVzdalenosti(mou);
+    for (final Bod bod : getBody()) {
+      final long kvadratVzdalenosti = bod.computeKvadratVzdalenosti(mou);
       if (kvadratVzdalenosti <= kvadratMaximalniVzdalenosti) {
         if (kvadratVzdalenosti <= minKvadrat) {
           minKvadrat = kvadratVzdalenosti;
@@ -131,13 +133,13 @@ public class Cesta implements Iterable<Bousek0> {
       }
     }
     if (aDatPrednostBoduPredUsekem && neblizsiBousek != null) {
-      SearchResult sr = new SearchResult();
+      final SearchResult sr = new SearchResult();
       sr.bousek = neblizsiBousek;
       sr.kvadradVzdalenosti = minKvadrat;
       return sr;
     }
-    for (Usek usek : getUseky()) {
-      long kvadratVzdalenosti = usek.computeKvadratVzdalenostiBoduKUsecce(mou);
+    for (final Usek usek : getUseky()) {
+      final long kvadratVzdalenosti = usek.computeKvadratVzdalenostiBoduKUsecce(mou);
       if (kvadratVzdalenosti <= kvadratMaximalniVzdalenosti) {
         if (kvadratVzdalenosti < minKvadrat) {
           minKvadrat = kvadratVzdalenosti;
@@ -145,7 +147,7 @@ public class Cesta implements Iterable<Bousek0> {
         }
       }
     }
-    SearchResult sr = new SearchResult();
+    final SearchResult sr = new SearchResult();
     sr.bousek = neblizsiBousek;
     sr.kvadradVzdalenosti = minKvadrat;
     return sr;
@@ -163,15 +165,15 @@ public class Cesta implements Iterable<Bousek0> {
    * @param mou Null vrací jen pokud je cesta úplně prázdná.
    * @return
    */
-  public Bousek0 locateBousekKamNejlepeVlozit(Mou mou) {
-    Bousek0 bousek = locateNejblizsi(mou);
+  public Bousek0 locateBousekKamNejlepeVlozit(final Mou mou) {
+    final Bousek0 bousek = locateNejblizsi(mou);
     if (bousek instanceof Usek) {
-      Usek usek = (Usek) bousek;
+      final Usek usek = (Usek) bousek;
       return usek;
     }
     if (bousek instanceof Bod) {
-      Bod bod = (Bod) bousek;
-      Usek usek = bod.getBlizsiUsek(mou);
+      final Bod bod = (Bod) bousek;
+      final Usek usek = bod.getBlizsiUsek(mou);
       return usek == null ? bod : usek;
     }
     return null; // cesta je úplně prázdná
@@ -186,18 +188,18 @@ public class Cesta implements Iterable<Bousek0> {
    * @param maximalniVzdalenost
    * @return
    */
-  public Bousek0 locateNejblizsi(Mou mou) {
+  public Bousek0 locateNejblizsi(final Mou mou) {
     long minKvadrat = Long.MAX_VALUE;
     Bousek0 neblizsiUsta = null;
-    for (Bod bod : getBody()) {
-      long kvadratVzdalenosti = bod.computeKvadratVzdalenosti(mou);
+    for (final Bod bod : getBody()) {
+      final long kvadratVzdalenosti = bod.computeKvadratVzdalenosti(mou);
       if (kvadratVzdalenosti < minKvadrat) {
         minKvadrat = kvadratVzdalenosti;
         neblizsiUsta = bod;
       }
     }
-    for (Usek usek : getUseky()) {
-      long kvadratVzdalenosti = usek.computeKvadratVzdalenosti(mou);
+    for (final Usek usek : getUseky()) {
+      final long kvadratVzdalenosti = usek.computeKvadratVzdalenosti(mou);
       if (kvadratVzdalenosti < minKvadrat) {
         minKvadrat = kvadratVzdalenosti;
         neblizsiUsta = usek;
@@ -228,7 +230,7 @@ public class Cesta implements Iterable<Bousek0> {
 
           @Override
           public Usek next() {
-            Usek result = currUsek;
+            final Usek result = currUsek;
             currUsek = currUsek.getBvpred().getUvpred();
             return result;
           }
@@ -264,7 +266,7 @@ public class Cesta implements Iterable<Bousek0> {
 
           @Override
           public Bod next() {
-            Bod result = nextBod;
+            final Bod result = nextBod;
             nextBod = nextBod.getUvpred() == null ? null : nextBod.getUvpred().getBvpred();
             return result;
           }
@@ -300,7 +302,7 @@ public class Cesta implements Iterable<Bousek0> {
 
           @Override
           public Bousek0 next() {
-            Bousek0 result = nextBousek;
+            final Bousek0 result = nextBousek;
             nextBousek = nextBousek.getBousekVpred() == null ? null : nextBousek.getBousekVpred();
             return result;
           }
@@ -321,8 +323,8 @@ public class Cesta implements Iterable<Bousek0> {
    * @return
    */
   public Set<Wpt> getWpts() {
-    Set<Wpt> wpts = new HashSet<>();
-    for (Bod bod : getBody()) {
+    final Set<Wpt> wpts = new HashSet<>();
+    for (final Bod bod : getBody()) {
       if (bod.mouable instanceof Wpt) {
         wpts.add((Wpt) bod.mouable);
       }
@@ -337,15 +339,15 @@ public class Cesta implements Iterable<Bousek0> {
     cil = null;
   }
 
-  Usek odeberBodNechceme(Mouable mouable) {
+  Usek odeberBodNechceme(final Mouable mouable) {
     if (mouable instanceof Bod) {
-      Bod bod = (Bod) mouable;
-      Usek usek = bod.remove();
+      final Bod bod = (Bod) mouable;
+      final Usek usek = bod.remove();
       return usek;
     } else {
-      for (Bod bod : getBody()) {
+      for (final Bod bod : getBody()) {
         if (bod.mouable == mouable) {
-          Usek usek = bod.remove();
+          final Usek usek = bod.remove();
           return usek;
         }
       }
@@ -353,12 +355,13 @@ public class Cesta implements Iterable<Bousek0> {
     return null;
   }
 
-  public boolean hasWpt(Wpt wpt) {
+  public boolean hasWpt(final Wpt wpt) {
     //System.out.println("Volá se hasWpt");
-    //FIXME-vylet Optimalizovat, volá se často.
-    for (Bod bod : getBody()) {
-      if (bod.mouable == wpt)
+    //TODO-vylet Optimalizovat, volá se často.
+    for (final Bod bod : getBody()) {
+      if (bod.mouable == wpt) {
         return true;
+      }
     }
     return false;
   }
@@ -366,9 +369,9 @@ public class Cesta implements Iterable<Bousek0> {
   public int getPocetWaypointu() {
     //System.out.println("Volá se getPocetWaypointu");
     //new Throwable().printStackTrace();
-    //FIXME-vylet Optimalizovat, volá se často.
+    //TODO-vylet Optimalizovat, volá se často.
     int sum = 0;
-    for (Bod bod : getBody()) {
+    for (final Bod bod : getBody()) {
       if (bod.mouable instanceof Wpt) {
         sum++;
       }
@@ -384,7 +387,7 @@ public class Cesta implements Iterable<Bousek0> {
     return start;
   }
 
-  void setStart(Bod start) {
+  void setStart(final Bod start) {
     if (start == null) {
       clear();
     } else {
@@ -393,7 +396,7 @@ public class Cesta implements Iterable<Bousek0> {
     }
   }
 
-  void setCil(Bod cil) {
+  void setCil(final Bod cil) {
     if (cil == null) {
       clear();
     } else {
@@ -411,9 +414,15 @@ public class Cesta implements Iterable<Bousek0> {
   }
 
   public boolean isKruh() {
-    if (isEmpty()) return false; // prázdná není kruh
-    if (isJednobodova()) return false;  // jednobodová není kruh
-    boolean result = start.getMouable().equals(cil.getMouable());
+    if (isEmpty())
+    {
+      return false; // prázdná není kruh
+    }
+    if (isJednobodova())
+    {
+      return false;  // jednobodová není kruh
+    }
+    final boolean result = start.getMouable().equals(cil.getMouable());
     return result;
   }
 
@@ -423,13 +432,13 @@ public class Cesta implements Iterable<Bousek0> {
     }
   }
 
-  void setDoc(Doc doc2) {
+  void setDoc(final Doc doc2) {
     doc = doc2;
   }
 
   public double dalka() {
     double suma = 0;
-    for (Usek usek : getUseky()) {
+    for (final Usek usek : getUseky()) {
       suma += usek.dalka();
     }
     return suma;
@@ -451,20 +460,20 @@ public class Cesta implements Iterable<Bousek0> {
 
 
   void reverse() {
-    ArrayList<Usek> useky = new ArrayList<>();
-    for (Usek usek : getUseky()) {
+    final ArrayList<Usek> useky = new ArrayList<>();
+    for (final Usek usek : getUseky()) {
       useky.add(usek);
     }
-    for (Usek usek : useky) {
-      Bod bod = usek.getBvpred();
+    for (final Usek usek : useky) {
+      final Bod bod = usek.getBvpred();
       usek.setBvpred(usek.getBvzad());
       usek.setBvzad(bod);
     }
-    for (Usek usek : useky) {
+    for (final Usek usek : useky) {
       usek.getBvpred().setUvzad(usek);
       usek.getBvzad().setUvpred(usek);
     }
-    Bod bod = start;
+    final Bod bod = start;
     start = cil;
     cil = bod;
     start.setUvzad(null);
@@ -475,25 +484,29 @@ public class Cesta implements Iterable<Bousek0> {
   /**
    * Dálku v km v zadané barvě
    */
-  public static String dalkaHtml(double dalka, Color color) {
+  public static String dalkaHtml(final double dalka, final Color color) {
     return String.format("<font color=%s><i>%.1f km</i></font>", FUtil.getHtmlColor(color), dalka / 1000);
   }
 
-  public boolean hasBod(Mou mou) {
-    for (Bod bod : getBody()) {
-      if (bod.getMou().equals(mou)) return true;
+  public boolean hasBod(final Mou mou) {
+    for (final Bod bod : getBody()) {
+      if (bod.getMou().equals(mou)) {
+        return true;
+      }
     }
     return false;
   }
 
   void remove() {
-    if (doc == null) return;
+    if (doc == null) {
+      return;
+    }
     doc.removex(this);
     doc = null;
   }
 
   public void napojBouskyNaTutoCestu() {
-    for (Bousek0 bousek : this) {
+    for (final Bousek0 bousek : this) {
       bousek.cesta = this;
     }
   }
@@ -521,7 +534,7 @@ public class Cesta implements Iterable<Bousek0> {
    *
    * @param cesta
    */
-  void prijmyBodyZJine(Cesta cesta) {
+  void prijmyBodyZJine(final Cesta cesta) {
     assert cesta != this;
     setStart(cesta.getStart());
     setCil(cesta.getCil());
@@ -530,21 +543,21 @@ public class Cesta implements Iterable<Bousek0> {
     napojBouskyNaTutoCestu();
   }
 
-  void pripojitZa(Cesta cesta2) {
-    Cesta cesta = Doc.propojCestyDoJine(this, cesta2);
+  void pripojitZa(final Cesta cesta2) {
+    final Cesta cesta = Doc.propojCestyDoJine(this, cesta2);
     prijmyBodyZJine(cesta);
     doc.removex(cesta2);
   }
 
-  void pripojitPred(Cesta cesta1) {
-    Cesta cesta = Doc.propojCestyDoJine(cesta1, this);
+  void pripojitPred(final Cesta cesta1) {
+    final Cesta cesta = Doc.propojCestyDoJine(cesta1, this);
     prijmyBodyZJine(cesta);
     doc.removex(cesta1);
   }
 
   public int getPocetVzdusnychUseku() {
     int pocet = 0;
-    for (Usek usek : getUseky()) {
+    for (final Usek usek : getUseky()) {
       if (usek.isVzdusny()) {
         pocet++;
       }
@@ -560,7 +573,7 @@ public class Cesta implements Iterable<Bousek0> {
   public int getPocetPodcestVzdusnychUseku() {
     int pocet = 0;
     boolean minuleBylVzdusny = false;
-    for (Usek usek : getUseky()) {
+    for (final Usek usek : getUseky()) {
       if (usek.isVzdusny() && !minuleBylVzdusny) {
         pocet++;
       }
@@ -570,21 +583,26 @@ public class Cesta implements Iterable<Bousek0> {
   }
 
 
-  private void kon(boolean podm) {
-    if (!podm)
+  private void kon(final boolean podm) {
+    if (!podm) {
       throw new RuntimeException("Selhala kontrola konzistence cesty");
+    }
   }
 
   public void kontrolaKonzistence() {
     boolean assertsEnabled = false;
     assert assertsEnabled = true;
-    if (!assertsEnabled) return;
+    if (!assertsEnabled) {
+      return;
+    }
 
     kon(doc != null);
     doc.kontrolaZeJeTady(this);
 
     kon(start == null && cil == null || start != null && cil != null);
-    if (start == null) return;
+    if (start == null) {
+      return;
+    }
     kon(start.getUvzad() == null);
     kon(cil.getUvpred() == null);
 
@@ -611,13 +629,13 @@ public class Cesta implements Iterable<Bousek0> {
   }
 
   public void pospojujVzdusneUseky() {
-    List<Bod> keSmazani = new ArrayList<>();
-    for (Bod bod : getBody()) {
+    final List<Bod> keSmazani = new ArrayList<>();
+    for (final Bod bod : getBody()) {
       if (bod.isMeziVzdusnymiUseky()) {
         keSmazani.add(bod);
       }
     }
-    for (Bod bod : keSmazani) {
+    for (final Bod bod : keSmazani) {
       bod.remove();
     }
   }
@@ -626,7 +644,7 @@ public class Cesta implements Iterable<Bousek0> {
     return nazev;
   }
 
-  void setNazev(String nazev) {
+  void setNazev(final String nazev) {
     this.nazev = nazev;
   }
 

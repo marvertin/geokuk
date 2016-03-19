@@ -14,7 +14,7 @@ public interface ImageReceiver {
    * @param aTyp
    * @param aImg
    */
-  public void setImage(KachloStav kachloStav);
+  public void send(KachloStav kachloStav);
 
 
 }

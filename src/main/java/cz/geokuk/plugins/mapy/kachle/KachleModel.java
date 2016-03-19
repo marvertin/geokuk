@@ -1,23 +1,15 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.mapy.kachle;
 
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-
-import cz.geokuk.core.napoveda.NapovedaModel;
-import cz.geokuk.core.napoveda.NapovedaModelChangedEvent;
+import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.core.program.FPref;
-import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.framework.MyPreferences;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboru;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboruChangedEvent;
-import cz.geokuk.util.pocitadla.Pocitadlo;
-import cz.geokuk.util.pocitadla.PocitadloNula;
 
 /**
  * @author veverka
@@ -25,54 +17,25 @@ import cz.geokuk.util.pocitadla.PocitadloNula;
  */
 public class KachleModel extends Model0 {
 
-  private static int POCET_PARALELNICH_DOWNLOADERU = 5;
-  
-  private Factory factory;
-
-  public final CacheNaKachleDisk cache;
-
   private final KachleCacheFolderHolder kachleCacheFolderHolder = new KachleCacheFolderHolder();
 
   public KachloDownloader kachloDownloader;
 
-  public final Synchronizator<DlazebniPosilac> synchronizator;
 
-  public final BlockingQueue<KaOneReq> downLoadQueue = new PriorityBlockingQueue<>(100);
-
-  public final BlockingQueue<KaOneReq> fromFileQueue = new PriorityBlockingQueue<>(100); // a nové fronty
-
-  public final BlockingQueue<Ka0Req> rozrazovaciQueue = new LinkedBlockingQueue<>();
-
-  public Pocitadlo pocitRozrazovaciQueue = new PocitadloNula("Velikost rozřazovací fronty",
-      "Ve frontě čekají požadavky na zjištění, zda jsou kachle na disku a stačí je zvednout nebo musejí být downloadnuty." +
-      " Frotna je zpracována velmi rychle, požadavky jsou rozřazeny do dalších dvou front");
-
-  private static Pocitadlo pocitVelikostSouboroveFronty = new PocitadloNula("Velikost souborové fronty", 
-  "Počet požadavků čekajících na načtení z disku.");
-
-  private static Pocitadlo pocitVelikostDownloadoveFronty = new PocitadloNula("Velikost downloadové fronty",
-  "Počet požadavků na download čekajících ve forntě.");
-  
   private Object umisteniSouboru;
 
-  private NapovedaModel napovedaModel;
 
+  private KachleZiskavac ziskavac;
 
+  public final KachleManager kachleManager;
 
-  //  public boolean onlineMode = true;
-  //  public boolean ukladatMapyNaDisk = true;
 
   /**
    * @param bb
    */
   public KachleModel() {
-    cache = new CacheNaKachleDisk(this);
-    synchronizator = new Synchronizator<>(cache);
+    kachleManager = KachleManagerFactory.getInstance(getKachleCacheFolderHolder());
     assert kachleCacheFolderHolder != null;
-  }
-
-  boolean isOnlineMode() {
-    return napovedaModel.isOnlineMode();
   }
 
   /**
@@ -80,7 +43,7 @@ public class KachleModel extends Model0 {
    */
   public boolean isUkladatMapyNaDisk() {
     //   return Settings.vseobecne.ukladatMapyNaDisk.isSelected();
-    boolean b = currPrefe().getBoolean("ukladatMapyNaDisk", true);
+    final boolean b = currPrefe().getBoolean("ukladatMapyNaDisk", true);
     return b;
   }
 
@@ -88,8 +51,10 @@ public class KachleModel extends Model0 {
   /**
    * @param ukladatMapyNaDisk the ukladatMapyNaDisk to set
    */
-  public void setUkladatMapyNaDisk(boolean ukladatMapyNaDisk) {
-    if (ukladatMapyNaDisk == isUkladatMapyNaDisk()) return;
+  public void setUkladatMapyNaDisk(final boolean ukladatMapyNaDisk) {
+    if (ukladatMapyNaDisk == isUkladatMapyNaDisk()) {
+      return;
+    }
     currPrefe().putBoolean("ukladatMapyNaDisk", ukladatMapyNaDisk);
     fire(new KachleModelChangeEvent());
   }
@@ -101,48 +66,32 @@ public class KachleModel extends Model0 {
   protected void initAndFire() {
     setUmisteniSouboru(loadUmisteniSouboru());
     fire(new KachleModelChangeEvent());
-    {
-      Thread thread = new Thread(factory.init(new Rozrazovac()), "Rozřazovač");
-      thread.setDaemon(true);
-      thread.start();
-    }
-
-    {
-      DotahovaciRunnable dotah = factory.init(new DotahovaciRunnable(fromFileQueue, pocitVelikostSouboroveFronty));
-      Thread thread = new Thread(dotah, "Čteč z disku");
-      thread.setDaemon(true);
-      thread.start();
-    }
-    for (int i=0; i< POCET_PARALELNICH_DOWNLOADERU; i++) {
-      DotahovaciRunnable dotah = factory.init(new DotahovaciRunnable(downLoadQueue, pocitVelikostDownloadoveFronty));
-      Thread thread = new Thread(dotah, "Download " + i);
-      thread.setDaemon(true);
-      thread.start();
-    }
-
   }
 
-  @Override
-  public void inject(Factory factory) {
-    this.factory = factory;
 
+  public void inject(final KachleZiskavac kachleZiskavac) {
+    ziskavac = kachleZiskavac;
+    ziskavac.setKachleManager(kachleManager);
   }
+
   /**
    * @param umisteniSouboru the umisteniSouboru to set
    */
-  public void setUmisteniSouboru(KachleUmisteniSouboru umisteniSouboru) {
-    if (umisteniSouboru.equals(this.umisteniSouboru)) return;
+  public void setUmisteniSouboru(final KachleUmisteniSouboru umisteniSouboru) {
+    if (umisteniSouboru.equals(this.umisteniSouboru)) {
+      return;
+    }
     this.umisteniSouboru = umisteniSouboru;
     kachleCacheFolderHolder.setKachleCacheDir(umisteniSouboru.getKachleCacheDir());
-    MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
+    final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
     pref.putFilex(FPref.KACHLE_CACHE_DIR_value, umisteniSouboru.getKachleCacheDir());
     pref.remove("vyjimkyDir"); // mazat ze starych verzi
     fire(new KachleUmisteniSouboruChangedEvent(umisteniSouboru));
   }
 
   private KachleUmisteniSouboru loadUmisteniSouboru() {
-    KachleUmisteniSouboru u = new KachleUmisteniSouboru();
-    MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
+    final KachleUmisteniSouboru u = new KachleUmisteniSouboru();
+    final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
     u.setKachleCacheDir ( pref.getFilex("kachleCacheDir", KachleUmisteniSouboru.KACHLE_CACHE_DIR));
     return u;
   }
@@ -155,18 +104,17 @@ public class KachleModel extends Model0 {
     return kachleCacheFolderHolder;
   }
 
-  public void inject(KachloDownloader kachloDownloader) {
+  public void inject(final KachloDownloader kachloDownloader) {
     this.kachloDownloader = kachloDownloader;
   }
 
-  public void inject(NapovedaModel napovedaModel) {
-    this.napovedaModel = napovedaModel;
+  public void onEvent(final OnofflineModelChangeEvent eve) {
+    if (eve.isOnlineMOde()) {
+      ziskavac.clearMemoryCache();
+    }
   }
 
-
-  public void onEvent(NapovedaModelChangedEvent eve) {
-    if (eve.getModel().isOnlineMode()) {
-      cache.clearMemoryCache();
-    }
+  public KachleZiskavac getZiskavac() {
+    return ziskavac;
   }
 }

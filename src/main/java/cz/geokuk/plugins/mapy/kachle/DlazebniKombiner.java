@@ -6,9 +6,11 @@ import java.awt.image.BufferedImage;
 import java.util.EnumMap;
 import java.util.EnumSet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cz.geokuk.util.pocitadla.Pocitadlo;
 import cz.geokuk.util.pocitadla.PocitadloMalo;
-import cz.geokuk.util.pocitadla.PocitadloNula;
 
 /**
  * Kombinuje do sebe různé dlaždice, aby se to nemusel dělat draze v paintu.
@@ -17,23 +19,21 @@ import cz.geokuk.util.pocitadla.PocitadloNula;
  *
  */
 class DlazebniKombiner {
+  private static final Logger log = LogManager.getLogger(DlazebniKombiner.class.getSimpleName());
+
   private static Pocitadlo pocitadloInstanci = new PocitadloMalo("Počet dlažebních kombinérů.",
       "Počítá, kolik máme instancí " + DlazebniKombiner.class.getName() + ".");
-  private static Pocitadlo pocitadloInstanciSHotovymObrazkem = new PocitadloNula("Počet dlažebních kombinérů s hotovým obrázkem.",
-      "Počítá, kolik máme instancí " + DlazebniKombiner.class.getName() + " ve kterých je už hotový obrázek.");
-  private static Pocitadlo pocitadloRozpracovanychObrazkuVKombinerech = new PocitadloNula("Počet rozpracovaných obrázků v dlažebních kombinérech.",
-      "Počítá, kolik máme celkem obrázků v dlažebních kombinérech ve fázo rozpracovanostik.");
 
   private EnumSet<EKaType> coCekam; // co čekám, že nakombinuju
   private final EnumSet<EKaType> coMam = EnumSet.noneOf(EKaType.class);   // co už mám nakombinováno
 
   private BufferedImage kombinedImage;
-  // Jen pro potřeby čítačů, jinak přímo použít kombinedImage
-  private boolean mameTadyObrazek;
 
   private boolean hotovo;
 
-  private EnumMap<EKaType, Image> imgs = new EnumMap<>(EKaType.class);
+  private EnumMap<EKaType, ImageOrException> imgs = new EnumMap<>(EKaType.class);
+
+  private Throwable firstException;
 
   /**
    * Nová instance bude kombinovat kachle daných mapových podkladů.
@@ -55,6 +55,22 @@ class DlazebniKombiner {
    * @param img
    */
   public synchronized void add(final EKaType type, final Image img) {
+    log.debug("add image type={}", type);
+    add(type, new ImageOrException(img));
+  }
+
+  /**
+   * Vloží výjimku při získávání kachle daného typu.
+   * Vzhledem k ostatnímu posuzování je to jako prázdný obrázek.
+   * @param type
+   * @param img
+   */
+  public synchronized void add(final EKaType type, final Throwable thr) {
+    log.debug("add exception type={}", type);
+    add(type, new ImageOrException(thr));
+  }
+
+  private synchronized void add(final EKaType type, final ImageOrException imageOrException) {
     if (hotovo) {
       return;
     }
@@ -64,11 +80,8 @@ class DlazebniKombiner {
     if (!coCekam.contains(type))  {
       return; // to nečekám, tak nevím proč to posílají. Nechci to
     }
-    final int pocetPred = imgs.size();
-    imgs.put(type, img);
+    imgs.put(type, imageOrException);
     rekombinuj();
-    final int rozdil = (imgs == null ? 0 : imgs.size()) - pocetPred;
-    pocitadloRozpracovanychObrazkuVKombinerech.add(rozdil);
   }
 
   private void rekombinuj() {
@@ -84,33 +97,52 @@ class DlazebniKombiner {
         continue; // to co mám už mám
       }
       // takže toto čekám, ale nemám
-      final Image img = imgs.get(typ); // neto by sem patřil
-      if (img == null) {
+      final ImageOrException imageOrException = imgs.get(typ); // neto by sem patřil
+      if (imageOrException == null) {
         //        if (kombinedImage == null) {
         //          System.out.println("NEMAM JESTE: " + typ + ", ale mam uz " + imgs.keySet());
         //        }
         return; // ukončím celý cyklus i metodu, nemohu přidat, protože to nemám
       }
-      prikresli(img); // obrázek je připraven na přikreslení
+      prikresli(imageOrException); // obrázek je připraven na přikreslení
       coMam.add(typ); // a už ho mám
       imgs.remove(typ); // a už ho nebudu potřebovat
     }
     // když už konečně dojdu na konec cyklu, vše je zkominováno
     imgs = null;
     coCekam = null;
-    pocitadloInstanciSHotovymObrazkem.inc();
     hotovo = true;
   }
 
+  /**
+   * Vrací první výjimku, která byla zjiětěna. To znamená na první dlaždici, která se stahovala.
+   * @return
+   */
+  public synchronized Throwable getFirstException() {
+    return firstException;
+  }
 
-  private void prikresli(final Image img) {
+
+  private void prikresli(final ImageOrException imageOrException) {
+    prikresliImage(imageOrException.image);
+    prikresliRxception(imageOrException.throwable);
+  }
+
+  private void prikresliRxception(final Throwable thr) {
+    if (firstException == null && thr != null) {
+      firstException = thr;
+    }
+  }
+
+  private void prikresliImage(final Image image) {
+    if (image == null) {
+      return;
+    }
     if (kombinedImage == null) {
-      kombinedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-      mameTadyObrazek = true;
-      pocitadloRozpracovanychObrazkuVKombinerech.inc();
+      kombinedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
     }
     final Graphics2D g = kombinedImage.createGraphics();
-    g.drawImage(img, 0, 0, null);
+    g.drawImage(image, 0, 0, null);
   }
 
   /**
@@ -142,30 +174,38 @@ class DlazebniKombiner {
   @Override
   public void finalize() {
     pocitadloInstanci.dec();
-    if (hotovo) {
-      pocitadloInstanciSHotovymObrazkem.dec();
-      kombinedImage = null;
-    }
-    if (mameTadyObrazek) {
-      pocitadloRozpracovanychObrazkuVKombinerech.dec();
-    }
   }
 
   /**
    * Jen kvůli úpravě statistik.
    */
-  public synchronized void uzTeNepotrebuju() {
-    pocitadloRozpracovanychObrazkuVKombinerech.sub(imgs == null ? 0 : imgs.size());
-    imgs = null;
-    if (hotovo) {
-      pocitadloInstanciSHotovymObrazkem.dec();
-      hotovo = false;
-    }
-    if (kombinedImage != null) {
-      pocitadloRozpracovanychObrazkuVKombinerech.dec();
-      kombinedImage = null;
-      mameTadyObrazek = false;
-    }
-  }
+  //  public synchronized void uzTeNepotrebuju() {
+  //    pocitadloRozpracovanychObrazkuVKombinerech.sub(imgs == null ? 0 : imgs.size());
+  //    imgs = null;
+  //    if (hotovo) {
+  //      pocitadloInstanciSHotovymObrazkem.dec();
+  //      hotovo = false;
+  //    }
+  //    if (kombinedImage != null) {
+  //      pocitadloRozpracovanychObrazkuVKombinerech.dec();
+  //      kombinedImage = null;
+  //      mameTadyObrazek = false;
+  //    }
+  //  }
 
+  private static class ImageOrException {
+    final Image image;
+    final Throwable throwable;
+
+    ImageOrException(final Image image) {
+      this.image = image;
+      this.throwable = null;
+    }
+
+    ImageOrException(final Throwable throwable) {
+      this.throwable = throwable;
+      this.image = null;
+    }
+
+  }
 }

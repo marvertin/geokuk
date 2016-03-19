@@ -30,7 +30,7 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
 
   private NapovedaModel napovedaModel;
 
-  public JZpravyUzivatelumDialog(List<ZpravaUzivateli> zpravyUzivatelum) {
+  public JZpravyUzivatelumDialog(final List<ZpravaUzivateli> zpravyUzivatelum) {
     this.zpravyUzivatelum = zpravyUzivatelum;
     setTitle("Zprávy uživatelům");
     init();
@@ -56,7 +56,7 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
     jPredchozi = new JButton("<<<");
     jZpravy.setAlignmentX(CENTER_ALIGNMENT);
     jPrecteno.setAlignmentX(CENTER_ALIGNMENT);
-    JPanel panel = new JPanel();
+    final JPanel panel = new JPanel();
     add(panel);
 
     grlay(panel);
@@ -66,7 +66,7 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
     jPrecteno.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         napovedaModel.setLastViewedMsgNum(zpravyUzivatelum.get(ukazatel).msgnum);
         dispose();
       }
@@ -75,7 +75,7 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
     jPredchozi.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         //TODO Zapamoatovat si, že zprávy jsou přečteny
         ukazatel --;
         naplndaty();
@@ -85,7 +85,7 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
     jDalsi.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         //TODO Zapamoatovat si, že zprávy jsou přečteny
         ukazatel ++;
         naplndaty();
@@ -102,8 +102,8 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
   }
 
 
-  private void grlay(JPanel panel) {
-    GroupLayout layout = new GroupLayout(panel);
+  private void grlay(final JPanel panel) {
+    final GroupLayout layout = new GroupLayout(panel);
     //panel.setBorder(BorderFactory.createTitledBorder("Nastvit nickVzorky popisků: " + SestavovacPopisku.getNahrazovaceDisplay()));
     panel.setLayout(layout);
     layout.setAutoCreateGaps(true);
@@ -141,9 +141,9 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
     return "ZpravyUzivatelum";
   }
 
-  public void inject(NapovedaModel napovedaModel) {
+  public void inject(final NapovedaModel napovedaModel) {
     this.napovedaModel = napovedaModel;
-    for (ZpravaUzivateli zprava : zpravyUzivatelum) {
+    for (final ZpravaUzivateli zprava : zpravyUzivatelum) {
       if (zprava.msgnum >= napovedaModel.getLastViewedMsgNum()) { // rovnost raději ne, ale procházíme postupně
         ukazatel = zpravyUzivatelum.indexOf(zprava);
       }

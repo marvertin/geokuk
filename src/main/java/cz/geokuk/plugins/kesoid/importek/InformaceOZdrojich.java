@@ -19,10 +19,10 @@ import cz.geokuk.util.file.Root;
 public class InformaceOZdrojich {
   private static final Logger log = LogManager.getLogger(GeogetLoader.class.getSimpleName());
 
-  private Map<Root, Strom> stromy = new LinkedHashMap<>();
+  private final Map<Root, Strom> stromy = new LinkedHashMap<>();
 
   private InformaceOZdroji root;
-  
+
   private InformaceOZdrojich() {
   }
 
@@ -33,12 +33,12 @@ public class InformaceOZdrojich {
   public class Builder {
     /**
      * Tady postupně budujeme stromy načítaných zdrojů.
-     * 
+     *
      * @param aJmenoZdroje
      * @param nacteno
      * @return
      */
-    public InformaceOZdroji add(KeFile aJmenoZdroje, boolean nacteno) {
+    public InformaceOZdroji add(final KeFile aJmenoZdroje, final boolean nacteno) {
       // TODO : perhaps it's not needed to bother with the whole path to root...
       // Maybe canonical path and longest
       // common prefix will do?
@@ -74,26 +74,26 @@ public class InformaceOZdrojich {
       return ioz;
     }
 
-    private void setřepáníNevětvenýchCest(InformaceOZdroji aIoz) {
+    private void setřepáníNevětvenýchCest(final InformaceOZdroji aIoz) {
       if (aIoz.getChildren().size() == 1 && aIoz.parent != null) {
-        InformaceOZdroji jedinacek = aIoz.getChildren().get(0);
+        final InformaceOZdroji jedinacek = aIoz.getChildren().get(0);
         aIoz.parent.remplaceChild(aIoz, jedinacek);
         jedinacek.parent = aIoz.parent;
       }
       // po sesypání nebo bez sesypání, děti sesypeme
-      for (InformaceOZdroji ioz : aIoz.getChildren()) {
+      for (final InformaceOZdroji ioz : aIoz.getChildren()) {
         setřepáníNevětvenýchCest(ioz); // pro 0 se nedělá nic a pro více než 1 se nesetřepává
       }
     }
-    
-    
+
+
     /** Objekt je hotov */
     public InformaceOZdrojich done() {
       // našvindlený root
-      File pseudoFile = new File("[gc]");
+      final File pseudoFile = new File("[gc]");
       root = new InformaceOZdroji(new KeFile(new FileAndTime(pseudoFile, 0), new Root(pseudoFile, new Root.Def(0,  null,  null))), false);
-      for (Strom strom : stromy.values()) {
-        root.addChild(strom.root);  
+      for (final Strom strom : stromy.values()) {
+        root.addChild(strom.root);
         strom.root.parent = root;
       }
       setřepáníNevětvenýchCest(root);
@@ -104,11 +104,11 @@ public class InformaceOZdrojich {
     }
 
   }
- 
-  public int getSourceCount(boolean loaded) {
+
+  public int getSourceCount(final boolean loaded) {
     int loadedCount = 0;
     int notLoadedCount = 0;
-    for (InformaceOZdroji ioz : getSetInformaciOZdrojich()) {
+    for (final InformaceOZdroji ioz : getSetInformaciOZdrojich()) {
       if (ioz.getChildren().isEmpty()) {
         if (ioz.nacteno) {
           ++loadedCount;
@@ -119,50 +119,50 @@ public class InformaceOZdrojich {
     }
     return loaded ? loadedCount : notLoadedCount;
   }
-  
+
 
   public InformaceOZdroji getRoot() {
     return root;
   }
 
-  public InformaceOZdroji get(KeFile key) {
-    InformaceOZdroji informaceOZdroji = stromy.get(key.root).map.get(key);
+  public InformaceOZdroji get(final KeFile key) {
+    final InformaceOZdroji informaceOZdroji = stromy.get(key.root).map.get(key);
     return informaceOZdroji;
   }
 
-  public Collection<InformaceOZdroji> getSubtree(KeFile subTreeRoot) {
-    List<InformaceOZdroji> toReturn = new ArrayList<>();
+  public Collection<InformaceOZdroji> getSubtree(final KeFile subTreeRoot) {
+    final List<InformaceOZdroji> toReturn = new ArrayList<>();
     return getSubtree(get(subTreeRoot), toReturn);
   }
 
-  private Collection<InformaceOZdroji> getSubtree(InformaceOZdroji subTreeRoot, Collection<InformaceOZdroji> buffer) {
-    List<InformaceOZdroji> children = subTreeRoot.getChildren();
+  private Collection<InformaceOZdroji> getSubtree(final InformaceOZdroji subTreeRoot, final Collection<InformaceOZdroji> buffer) {
+    final List<InformaceOZdroji> children = subTreeRoot.getChildren();
     buffer.add(subTreeRoot);
-    for (InformaceOZdroji child : children) {
+    for (final InformaceOZdroji child : children) {
       getSubtree(child, buffer);
     }
     return buffer;
   }
 
   public Set<File> getJmenaZdroju() {
-    Set<File> files = new LinkedHashSet<>();
-    for (KeFile kefile : getKeJmenaZdroju()) {
+    final Set<File> files = new LinkedHashSet<>();
+    for (final KeFile kefile : getKeJmenaZdroju()) {
       files.add(kefile.getFile());
     }
     return files;
   }
 
   public Set<KeFile> getKeJmenaZdroju() {
-    Set<KeFile> files = new LinkedHashSet<>();
-    for (Strom strom : stromy.values()) {
+    final Set<KeFile> files = new LinkedHashSet<>();
+    for (final Strom strom : stromy.values()) {
       files.addAll(strom.map.keySet());
     }
     return files;
   }
 
   public Set<InformaceOZdroji> getSetInformaciOZdrojich() {
-    Set<InformaceOZdroji> infas = new LinkedHashSet<>();
-    for (Strom strom : stromy.values()) {
+    final Set<InformaceOZdroji> infas = new LinkedHashSet<>();
+    for (final Strom strom : stromy.values()) {
       infas.addAll(strom.map.values());
     }
     return infas;
@@ -175,7 +175,7 @@ public class InformaceOZdrojich {
 
   public long getYungest() {
     long x = 0;
-    for (InformaceOZdroji info : getSetInformaciOZdrojich()) {
+    for (final InformaceOZdroji info : getSetInformaciOZdrojich()) {
       if (info.nacteno) {
         x = Math.max(x, info.getLastModified());
       }
@@ -185,8 +185,10 @@ public class InformaceOZdrojich {
   }
 
   public void print() {
-    System.out.println("================= prin strom - START");
-    root.print(":: ", null);
-    System.out.println("================= prin strom - END");
+    if (log.isDebugEnabled()) {
+      System.out.println("================= prin strom - START");
+      root.print(":: ", null);
+      System.out.println("================= prin strom - END");
+    }
   }
 }

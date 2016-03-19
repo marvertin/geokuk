@@ -1,39 +1,53 @@
 package cz.geokuk.plugins.mapy.kachle;
 
 import java.awt.Image;
-import java.net.URL;
-import java.util.EnumSet;
 
 public class KachloStav {
-  public final EnumSet<EKaType> types;
-  public final Image img2;
   public final EFaze faze;
-  public final URL url;
+  public final Image img;
   public final Throwable thr;
+  public final byte[] imageData;
 
-  public KachloStav(EnumSet<EKaType> types, Image img2, EFaze faze) {
-    this(types, img2, faze, null, null);
+
+
+  public KachloStav(final EFaze faze, final Image img) {
+    this(faze, img, null, null);
   }
-  
-  public KachloStav(EnumSet<EKaType> types, Image img2, EFaze faze, URL url, Throwable thr) {
-    this.types = types;
-    this.img2 = img2;
+
+  public KachloStav(final EFaze faze, final Image img, final byte[] imageData) {
+    this(faze, img, imageData, null);
+  }
+
+  public KachloStav(final EFaze faze, final Throwable thr) {
+    this(faze, null, null, thr);
+  }
+
+  public KachloStav(final EFaze faze, final Image img, final Throwable thr) {
+    this(faze, img, null, thr);
+  }
+
+
+  private KachloStav(final EFaze faze, final Image img, final byte[] imageData, final Throwable thr) {
     this.faze = faze;
-    this.url = url;
+    this.img = img;
+    this.imageData = imageData;
     this.thr = thr;
   }
 
 
+
   public static enum EFaze {
-    ZACINAM_STAHOVAT,
-    ZACINAM_NACITAT_Z_DISKU,
-    STAZENA_PRUBEZNA_KACHLE,
-    
-    // tyto jsou konečné
-    STAZENA_POSLEDNI_KACHLE,
-    OFFLINE_MODE,
-    CHYBA,
-    
-    
+    RESULT_ONE,
+
+    RESULT_ALL_PRUBEH,
+    RESULT_ALL_POSLEDNI,
+    ;
+  }
+
+
+
+  @Override
+  public String toString() {
+    return "KachloStav [faze=" + faze + ", img=" + img + ", thr=" + thr + "]";
   }
 }

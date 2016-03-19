@@ -14,7 +14,7 @@ import com.google.common.collect.LinkedListMultimap;
 
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coord.JSingleSlide0;
-import cz.geokuk.core.napoveda.NapovedaModelChangedEvent;
+import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.util.pocitadla.Pocitadlo;
@@ -39,19 +39,27 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
   private static Pocitadlo pocitVynuceneNepouzitiExistujiciKachle = new PocitadloRoste("Vynucené použití neexistující " +
       "kachle", "Kolikrát do JKachlovnik.ini() přišlo z venku, že JKachle komponenty nesmím použít");
 
-  private final Pocitadlo pocitKachliVKachlovniku2 = new PocitadloMalo("Počet kachlí v kachlovníku", "");
+  private static final Pocitadlo pocitKachliVKachlovniku2 = new PocitadloMalo("#kachlí v kachlovníku", "");
 
   private KaSet kachloTypesSet = new KaSet(EnumSet.noneOf(EKaType.class));
 
   private KachleModel kachleModel;
 
 
-  // FIXME musí to být private a musí být na tru nastaveno jen při rendrování
+  // TODO musí to být private a musí být na tru nastaveno jen při rendrování
   protected boolean vykreslovatokamzite;
+
+  /** Jen pro ladící účely */
+  public final String nazevKachlovniku;
+
+  private final Priority priorita;
+
 
 
   // je to jen kvuli garbage collectoru, aby nezrusil, NERUSIT PROMENNU i kdyz zdanlive je to na nic
-  public JKachlovnik() {
+  public JKachlovnik(final String nazevKachlovniku, final Priority priority) {
+    this.nazevKachlovniku = nazevKachlovniku;
+    this.priorita = priority;
     setLayout(null);
     setPreferredSize(new Dimension(800, 600));
     setBackground(Color.GREEN);
@@ -61,7 +69,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 
   @Override
   public void onVyrezChanged() {
-    init(true, Priority.KACHLE);
+    init(true);
   }
 
   private void registerEvents() {
@@ -72,7 +80,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
     setKachloTypes(event.getKaSet());
   }
 
-  protected void init(final boolean smimZnovuPouzitKachle, final Priority priorita) {
+  protected void init(final boolean smimZnovuPouzitKachle) {
     if (!isSoordInitialized()) {
       return;
     }
@@ -100,7 +108,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
     Arrays.stream(getComponents()).map(jka -> (JKachle)jka).forEach(jka -> {
       mapaKachli.put(jka.getKaLoc(),  jka);
     });;
-
+    log.trace("Mapa {} kachlí {}", getComponents().length, mapaKachli);
     final Kaputer kaputer = new Kaputer(soord);
     if (log.isTraceEnabled()) {
       log.trace("Vykreslovani kachli od {} pro {} -- {}", kaputer.getKachlePoint(0, 0), kaputer.getKachleMou(0, 0), kaputer);
@@ -113,13 +121,12 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
         final boolean kachleSePouzije = smimZnovuPouzitKachle && seznamStejnychKachli.size() > 0;
         final JKachle jkachle;
         if (! kachleSePouzije) {
-          jkachle = createJKachle(kaloc);
+          log.trace("............... Vytváření JKachle" + kaloc);
+          jkachle = createJKachle(new KaAll(kaloc, kachloTypesSet));
           add(jkachle);          // a přidat jako komponentu
-          final Kachle kachle = createKachle(new KaAll(kaloc, kachloTypesSet), kachleModel, vykreslovatokamzite, this, jkachle); // když se nepoužije, musí se stvořit nová
-          kachle.setVzdalenostOdStredu(kaputer.getVzdalenostKachleOdStredu(kaloc.getMouSZ()));
-          kachle.ziskejObsah(priorita);
-          kachle.setPoziceJenProVypsani(kaloc);
-          jkachle.setKachle(kachle);
+          //kachle.ziskejObsah(priorita);
+          jkachle.ziskejObsah(kachleModel, priorita);
+
         } else {  // použije se původní kachle
           jkachle = seznamStejnychKachli.remove(0);  // jednu z nich vezmeme, je jedno kterou, všechny mají stejný obsah
           pocitZustalychKachli.inc();
@@ -136,19 +143,16 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 
     // Kachle, které zbyly v mapě jsou komponenty, jenž nebyly recyklovány, musí být odstraněny
     mapaKachli.values().forEach(jka -> {
-      jka.getKachle().uzTeNepotrebuju();
+      jka.uzTeNepotrebuju();
       remove(jka);
     });
     pocitKachliVKachlovniku2.set(getComponentCount());
     log.trace("Počet komponent (nejspíš kachlí) v kachlovníku: {}", getComponentCount());
   }
 
-  protected Kachle createKachle(final KaAll plny, final KachleModel kachleModel, final boolean vykreslovatOkamzite, final JKachlovnik jKachlovnik, final JKachle jkachle) {
-    return new Kachle(plny, kachleModel, vykreslovatOkamzite, jkachle);
-  }
 
-  protected JKachle createJKachle(final KaLoc kaloc) {
-    return new JKachle(this, kaloc);
+  protected JKachle createJKachle(final KaAll kaall) {
+    return new JKachle(this, kaall);
   }
 
 
@@ -160,11 +164,13 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
     return kachloTypesSet;
   }
 
-  public void onEvent(final NapovedaModelChangedEvent event) {
-    if (event.getModel().isOnlineMode()) {
-      init(false, Priority.KACHLE);
+  public void onEvent(final OnofflineModelChangeEvent event) {
+    if (event.isOnlineMOde()) {
+      // Při zapnutí online módu e musí překlreslit. To se stane  i když není online mód právě zapínán, ale to nevadí.
+      init(false);
     }
   }
+
 
   /**
    * @param aKachloTypes the kachloTypes to set
@@ -174,7 +180,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
       return;
     }
     kachloTypesSet = aKachloSet;
-    init(false, Priority.KACHLE);
+    init(false);
   }
 
   public void inject(final KachleModel kachleModel) {

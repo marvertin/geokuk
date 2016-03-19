@@ -12,7 +12,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.NodeChangeListener;
 import java.util.prefs.PreferenceChangeListener;
@@ -21,6 +28,7 @@ import java.util.prefs.Preferences;
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Collections2;
+
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.util.exception.EExceptionSeverity;
@@ -43,33 +51,33 @@ public class MyPreferences extends Preferences {
   private final Preferences pref;
 
 
-  public void putFile(String key, File file) {
+  public void putFile(final String key, final File file) {
     put(key, file.getPath());
   }
 
-  public File getFile(String key, File defalt) {
+  public File getFile(final String key, final File defalt) {
     File result;
     try {
-      String fileStr = get(key, defalt == null ? null : defalt.getPath());
+      final String fileStr = get(key, defalt == null ? null : defalt.getPath());
       result = fileStr == null ? null : new File(fileStr);
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       throw new RuntimeException("key=" + key  + ", defalt=" + defalt, e);
     }
     return result;
   }
 
-  public void putFilex(String key, Filex filex) {
+  public void putFilex(final String key, final Filex filex) {
     put(key, filex.getFile().getPath());
     putBoolean(key + "_relativeToProgram", filex.isRelativeToProgram());
     putBoolean(key + "_active", filex.isActive());
   }
 
-  public Filex getFilex(String key, Filex defalt) {
+  public Filex getFilex(final String key, Filex defalt) {
 
     if (defalt == null) {
       defalt = new Filex(null, false, false);
     }
-    Filex result = new Filex(
+    final Filex result = new Filex(
         getFile(key, defalt.getFile()),
         getBoolean(key + "_relativeToProgram", defalt.isRelativeToProgram()),
         getBoolean(key + "_active", defalt.isActive()));
@@ -77,17 +85,19 @@ public class MyPreferences extends Preferences {
   }
 
   // Mou
-  public void putMou(String key, Mou bod) {
+  public void putMou(final String key, final Mou bod) {
     put(key, pack(bod));
   }
 
-  public Mou getMou(String key, Mou def) {
-    String s = get(key, pack(def));
-    if (s == null) return null;
-    String[] ss = s.split(",");
+  public Mou getMou(final String key, final Mou def) {
+    final String s = get(key, pack(def));
+    if (s == null) {
+      return null;
+    }
+    final String[] ss = s.split(",");
     try {
       return new Mou(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]));
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Nesmysl v preferencich: " + key + "=" + s);
       remove(key); // když je tam blbost, raději mažeme
       return def;
@@ -95,17 +105,19 @@ public class MyPreferences extends Preferences {
   }
 
   // Point
-  public void putPoint(String key, Point bod) {
+  public void putPoint(final String key, final Point bod) {
     put(key, pack(bod));
   }
 
-  public Point getPoint(String key, Point def) {
-    String s = get(key, pack(def));
-    if (s == null) return null;
-    String[] ss = s.split(",");
+  public Point getPoint(final String key, final Point def) {
+    final String s = get(key, pack(def));
+    if (s == null) {
+      return null;
+    }
+    final String[] ss = s.split(",");
     try {
       return new Point(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]));
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Nesmysl v preferencich: " + key + "=" + s);
       remove(key); // když je tam blbost, raději mažeme
       return def;
@@ -113,17 +125,19 @@ public class MyPreferences extends Preferences {
   }
 
   //Dimension
-  public void putDimension(String key, Dimension bod) {
+  public void putDimension(final String key, final Dimension bod) {
     put(key, pack(bod));
   }
 
-  public Dimension getDimension(String key, Dimension def) {
-    String s = get(key, pack(def));
-    if (s == null) return null;
-    String[] ss = s.split(",");
+  public Dimension getDimension(final String key, final Dimension def) {
+    final String s = get(key, pack(def));
+    if (s == null) {
+      return null;
+    }
+    final String[] ss = s.split(",");
     try {
       return new Dimension(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]));
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Nesmysl v preferencich: " + key + "=" + s);
       remove(key); // když je tam blbost, raději mažeme
       return def;
@@ -131,54 +145,58 @@ public class MyPreferences extends Preferences {
   }
 
   //Wgs
-  public void putWgs(String key, Wgs bod) {
+  public void putWgs(final String key, final Wgs bod) {
     put(key, pack(bod));
   }
 
-  public Wgs getWgs(String key, Wgs def) {
-    String s = get(key, pack(def));
-    if (s == null) return null;
-    String[] ss = s.split(",");
+  public Wgs getWgs(final String key, final Wgs def) {
+    final String s = get(key, pack(def));
+    if (s == null) {
+      return null;
+    }
+    final String[] ss = s.split(",");
     try {
       return new Wgs(Double.parseDouble(ss[0]), Double.parseDouble(ss[1]));
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Nesmysl v preferencich: " + key + "=" + s);
       remove(key); // když je tam blbost, raději mažeme
       return def;
     }
   }
 
-  public void putFileCollection(String key, Collection<File> fileCollection) {
+  public void putFileCollection(final String key, final Collection<File> fileCollection) {
     put(key, pack(fileCollection));
   }
 
-  public Collection<File> getFileCollection(String key, Collection<File> def) {
-    String s = get(key, null);
+  public Collection<File> getFileCollection(final String key, final Collection<File> def) {
+    final String s = get(key, null);
     if (s == null) {
       return def;
     }
     return unpack(s, new Function<String, File>() {
       @Override
-      public File apply(String s) {
+      public File apply(final String s) {
         return new File(s);
       }
     });
   }
 
-  public void putEnum(String key, Enum<?> e) {
+  public void putEnum(final String key, final Enum<?> e) {
     put(key, e == null ? null : e.name());
   }
 
-  public <T extends Enum<T>> T getEnum(String key, T def, Class<T> cls) {
-    String s = get(key, def == null ? null : def.name());
-    if (s == null) return null;
+  public <T extends Enum<T>> T getEnum(final String key, final T def, final Class<T> cls) {
+    final String s = get(key, def == null ? null : def.name());
+    if (s == null) {
+      return null;
+    }
     T result;
     try {
       result = Enum.valueOf(cls, s);
-    } catch (java.lang.IllegalArgumentException e) {
+    } catch (final java.lang.IllegalArgumentException e) {
       // nebudeme nic dělat ani odstraňovat. Může se to hodit jiné verzi
       return def; // vrátit default, jako by tam nic nebylo
-    } catch (Exception e) { // když je to špatná hodnota, jako by nebyla žádná
+    } catch (final Exception e) { // když je to špatná hodnota, jako by nebyla žádná
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Nesmysl v preferencich: " + key + "=" + s);
       remove(key);
       return def;
@@ -188,13 +206,15 @@ public class MyPreferences extends Preferences {
 
   // nedokázal jsem to jinak, abych to mohl mít v getAnyElement
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public Enum getEnumxx(String key, Enum<?> def, Class<Enum> cls) {
-    String s = get(key, def == null ? null : def.name());
-    if (s == null) return null;
+  public Enum getEnumxx(final String key, final Enum<?> def, final Class<Enum> cls) {
+    final String s = get(key, def == null ? null : def.name());
+    if (s == null) {
+      return null;
+    }
     Enum result;
     try {
       result = Enum.valueOf(cls, s);
-    } catch (Exception e) { // když je to špatná hodnota, jako by nebyla žádná
+    } catch (final Exception e) { // když je to špatná hodnota, jako by nebyla žádná
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Nesmysl v preferencich: " + key + "=" + s);
       remove(key);
       return def;
@@ -202,36 +222,36 @@ public class MyPreferences extends Preferences {
     return result;
   }
 
-  public <E extends Enum<E>> void putEnumSet(String key, EnumSet<E> val) {
+  public <E extends Enum<E>> void putEnumSet(final String key, final EnumSet<E> val) {
     put(key, pack(val));
   }
 
-  public <E extends Atom> void putAtom(String key, E val) {
+  public <E extends Atom> void putAtom(final String key, final E val) {
     put(key, val == null ? null : val.name());
   }
 
-  public <E extends Atom> void putAtomSet(String key, Set<E> val) {
+  public <E extends Atom> void putAtomSet(final String key, final Set<E> val) {
     put(key, pack(val));
   }
 
-  public void putStringList(String key, List<String> val) {
+  public void putStringList(final String key, final List<String> val) {
     put(key, pack(val));
   }
 
-  public List<String> getStringList(String key, List<String> defval) {
-    String ss = get(key, null);
+  public List<String> getStringList(final String key, final List<String> defval) {
+    final String ss = get(key, null);
     if (ss == null) {
       return defval;
     }
     return unpack(ss);
   }
 
-  public void putStringSet(String key, Set<String> val) {
+  public void putStringSet(final String key, final Set<String> val) {
     put(key, pack(new ArrayList<>(val)));
   }
 
-  public Set<String> getStringSet(String key, Set<String> defval) {
-    List<String> stringList = getStringList(key, null);
+  public Set<String> getStringSet(final String key, final Set<String> defval) {
+    final List<String> stringList = getStringList(key, null);
     if (stringList == null) {
       return defval;
     } else {
@@ -239,59 +259,59 @@ public class MyPreferences extends Preferences {
     }
   }
 
-  public <E extends Atom> E getAtom(String key, E def, Class<E> cls) {
-    String val = get(key, def == null ? null : def.name());
+  public <E extends Atom> E getAtom(final String key, final E def, final Class<E> cls) {
+    final String val = get(key, def == null ? null : def.name());
     return Atom.valueOf(cls, val);
   }
 
-  public <E extends Atom> Set<E> getAtomSet(String key, Set<E> def, final Class<E> cls) {
-    String ss =  get(key, null);
+  public <E extends Atom> Set<E> getAtomSet(final String key, final Set<E> def, final Class<E> cls) {
+    final String ss =  get(key, null);
     if (ss == null) {
       return def;
     }
     try {
-      List<E> atoms = unpack(key, new Function<String, E>() {
+      final List<E> atoms = unpack(ss, new Function<String, E>() {
         @Override
-        public E apply(String s) {
+        public E apply(final String s) {
           return Atom.valueOf(cls, s);
         }
       });
-      Set<E> set = Atom.noneOf(cls);
+      final Set<E> set = Atom.noneOf(cls);
       set.addAll(atoms);
       return set;
-    } catch (Exception e) { // pokud je tam něco blbě, bere se default
+    } catch (final Exception e) { // pokud je tam něco blbě, bere se default
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Nesmysl v preferencich: " + key + "=" + ss);
       remove(key);
       return def;
     }
   }
 
-  public <E extends Enum<E>> EnumSet<E> getEnumSet(String key, EnumSet<E> def, final Class<E> cls) {
-    String ss =  get(key, null);
+  public <E extends Enum<E>> EnumSet<E> getEnumSet(final String key, final EnumSet<E> def, final Class<E> cls) {
+    final String ss =  get(key, null);
     if (ss == null) {
       return def;
     }
     try {
-      List<E> enums = unpack(key, new Function<String, E>() {
+      final List<E> enums = unpack(ss, new Function<String, E>() {
         @Override
-        public E apply(String s) {
+        public E apply(final String s) {
           return Enum.valueOf(cls, s);
         }
       });
-      EnumSet<E> set = EnumSet.noneOf(cls);
+      final EnumSet<E> set = EnumSet.noneOf(cls);
       set.addAll(enums);
       return set;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Nesmysl v preferencich: " + key + "=" + ss);
       remove(key);
       return def;
     }
   }
 
-  private StringBuilder listEscapeToSb(String toEscape, StringBuilder sb) {
-    int length = toEscape.length();
+  private StringBuilder listEscapeToSb(final String toEscape, final StringBuilder sb) {
+    final int length = toEscape.length();
     for (int i = 0; i < length; ++i) {
-      char c = toEscape.charAt(i);
+      final char c = toEscape.charAt(i);
       if (c == LIST_DELIMITER_CHAR || c == ESCAPE_CHAR) {
         sb.append(ESCAPE_CHAR);
       }
@@ -301,7 +321,7 @@ public class MyPreferences extends Preferences {
   }
 
   @SuppressWarnings("rawtypes")
-  private String pack(Object o) {
+  private String pack(final Object o) {
     if (o == null) {
       return null;
     }
@@ -336,59 +356,59 @@ public class MyPreferences extends Preferences {
     throw new IllegalArgumentException("Unknown object to pack : " + o.getClass() + " " + o);
   }
 
-  private String pack(Mou bod) {
+  private String pack(final Mou bod) {
     return bod == null ? null : bod.xx + "," + bod.yy;
   }
 
-  private String pack(Collection<?> val) {
-    StringBuilder sb = new StringBuilder();
-    for (Object singleVal : val) {
+  private String pack(final Collection<?> val) {
+    final StringBuilder sb = new StringBuilder();
+    for (final Object singleVal : val) {
       listEscapeToSb(pack(singleVal), sb).append(LIST_DELIMITER_CHAR);
     }
     return sb.toString();
   }
 
-  private String pack(Point bod) {
+  private String pack(final Point bod) {
     return bod == null ? null : bod.x + "," + bod.y;
   }
 
-  private String pack(Dimension bod) {
+  private String pack(final Dimension bod) {
     return bod == null ? null : bod.width + "," + bod.height;
   }
 
-  private String pack(Wgs bod) {
+  private String pack(final Wgs bod) {
     return bod == null ? null : bod.lat + "," + bod.lon;
   }
 
-  private String pack(Atom val) {
+  private String pack(final Atom val) {
     return val == null ? null : val.name();
   }
 
-  private String pack(Enum<?> val) {
+  private String pack(final Enum<?> val) {
     return val == null ? null : val.name();
   }
 
-  private String pack(String s) {
+  private String pack(final String s) {
     return s;
   }
 
-  private String pack(File f) {
+  private String pack(final File f) {
     try {
       return f.getCanonicalPath();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new IllegalArgumentException("Unable to retrieve canonical path from " + f, e);
     }
   }
 
-  private List<String> unpack(String packedString) {
+  private List<String> unpack(final String packedString) {
     if (packedString == null) {
       return null;
     }
-    List<String> toReturn = new ArrayList<>();
-    StringBuilder sb = new StringBuilder();
+    final List<String> toReturn = new ArrayList<>();
+    final StringBuilder sb = new StringBuilder();
     boolean escaped = false;
     for (int i = 0; i < packedString.length(); ++i) {
-      char c = packedString.charAt(i);
+      final char c = packedString.charAt(i);
       if (escaped) {
         escaped = false;
         sb.append(c);
@@ -404,11 +424,11 @@ public class MyPreferences extends Preferences {
     return toReturn;
   }
 
-  private <T> List<T> unpack(String packedString, Function<String, T> parseFunc) {
+  private <T> List<T> unpack(final String packedString, final Function<String, T> parseFunc) {
     return new ArrayList<>(Collections2.transform(unpack(packedString), parseFunc));
   }
 
-  MyPreferences(Preferences aPreferences) {
+  MyPreferences(final Preferences aPreferences) {
     pref = aPreferences;
   }
 
@@ -422,12 +442,12 @@ public class MyPreferences extends Preferences {
   }
 
   @Override
-  public void addNodeChangeListener(NodeChangeListener aArg0) {
+  public void addNodeChangeListener(final NodeChangeListener aArg0) {
     pref.addNodeChangeListener(aArg0);
   }
 
   @Override
-  public void addPreferenceChangeListener(PreferenceChangeListener aArg0) {
+  public void addPreferenceChangeListener(final PreferenceChangeListener aArg0) {
     pref.addPreferenceChangeListener(aArg0);
   }
 
@@ -437,17 +457,17 @@ public class MyPreferences extends Preferences {
   }
 
   @Override
-  public boolean equals(Object aObj) {
+  public boolean equals(final Object aObj) {
     return pref.equals(aObj);
   }
 
   @Override
-  public void exportNode(OutputStream aArg0) throws IOException, BackingStoreException {
+  public void exportNode(final OutputStream aArg0) throws IOException, BackingStoreException {
     pref.exportNode(aArg0);
   }
 
   @Override
-  public void exportSubtree(OutputStream aArg0) throws IOException, BackingStoreException {
+  public void exportSubtree(final OutputStream aArg0) throws IOException, BackingStoreException {
     pref.exportSubtree(aArg0);
   }
 
@@ -457,8 +477,8 @@ public class MyPreferences extends Preferences {
   }
 
   @Override
-  public String get(String key, String defvalue) {
-    StringBuilder sb = new StringBuilder();
+  public String get(final String key, final String defvalue) {
+    final StringBuilder sb = new StringBuilder();
     String s = pref.get(key, null);
     if (s == null) {
       return defvalue;
@@ -471,37 +491,39 @@ public class MyPreferences extends Preferences {
       s = pref.get(contKey, null);
     }
     s = sb.toString();
-    if (NULL.equals(s)) return null;
+    if (NULL.equals(s)) {
+      return null;
+    }
     return s;
   }
 
   @Override
-  public boolean getBoolean(String key, boolean value) {
+  public boolean getBoolean(final String key, final boolean value) {
     return pref.getBoolean(key, value);
   }
 
   @Override
-  public byte[] getByteArray(String key, byte[] value) {
+  public byte[] getByteArray(final String key, final byte[] value) {
     return pref.getByteArray(key, value);
   }
 
   @Override
-  public double getDouble(String key, double value) {
+  public double getDouble(final String key, final double value) {
     return pref.getDouble(key, value);
   }
 
   @Override
-  public float getFloat(String key, float value) {
+  public float getFloat(final String key, final float value) {
     return pref.getFloat(key, value);
   }
 
   @Override
-  public int getInt(String key, int value) {
+  public int getInt(final String key, final int value) {
     return pref.getInt(key, value);
   }
 
   @Override
-  public long getLong(String key, long value) {
+  public long getLong(final String key, final long value) {
     return pref.getLong(key, value);
   }
 
@@ -531,12 +553,12 @@ public class MyPreferences extends Preferences {
   }
 
   @Override
-  public MyPreferences node(String aArg0) {
+  public MyPreferences node(final String aArg0) {
     return new MyPreferences(pref.node(aArg0));
   }
 
   @Override
-  public boolean nodeExists(String aArg0) throws BackingStoreException {
+  public boolean nodeExists(final String aArg0) throws BackingStoreException {
     return pref.nodeExists(aArg0);
   }
 
@@ -546,10 +568,10 @@ public class MyPreferences extends Preferences {
   }
 
   @Override
-  public void put(String key, String value) {
+  public void put(final String key, final String value) {
     if (key.matches(PART_PATTERN + "[0-9]+")) {
       throw new IllegalArgumentException("Unable to insert a key with name " + key + "! This" +
-              "key name is reserved for multi-part values");
+          "key name is reserved for multi-part values");
     }
     if (value == null) {
       put(key, NULL);
@@ -557,12 +579,12 @@ public class MyPreferences extends Preferences {
       if (value.length() <= Preferences.MAX_VALUE_LENGTH) {
         pref.put(key, value);
       } else {
-        String first = value.substring(0, Preferences.MAX_VALUE_LENGTH);
-        Iterable<String> rest = Splitter.fixedLength(Preferences.MAX_VALUE_LENGTH).split(
-                value.substring(Preferences.MAX_VALUE_LENGTH));
+        final String first = value.substring(0, Preferences.MAX_VALUE_LENGTH);
+        final Iterable<String> rest = Splitter.fixedLength(Preferences.MAX_VALUE_LENGTH).split(
+            value.substring(Preferences.MAX_VALUE_LENGTH));
         pref.put(key, first);
         int i = 0;
-        for (String s : rest) {
+        for (final String s : rest) {
           pref.put(key + String.format(NUMBERED_PART_PATTERN, i++), s);
         }
       }
@@ -570,37 +592,37 @@ public class MyPreferences extends Preferences {
   }
 
   @Override
-  public void putBoolean(String key, boolean value) {
+  public void putBoolean(final String key, final boolean value) {
     pref.putBoolean(key, value);
   }
 
   @Override
-  public void putByteArray(String key, byte[] value) {
+  public void putByteArray(final String key, final byte[] value) {
     pref.putByteArray(key, value);
   }
 
   @Override
-  public void putDouble(String key, double value) {
+  public void putDouble(final String key, final double value) {
     pref.putDouble(key, value);
   }
 
   @Override
-  public void putFloat(String key, float value) {
+  public void putFloat(final String key, final float value) {
     pref.putFloat(key, value);
   }
 
   @Override
-  public void putInt(String key, int value) {
+  public void putInt(final String key, final int value) {
     pref.putInt(key, value);
   }
 
   @Override
-  public void putLong(String key, long value) {
+  public void putLong(final String key, final long value) {
     pref.putLong(key, value);
   }
 
   @Override
-  public void remove(String key) {
+  public void remove(final String key) {
     pref.remove(key);
   }
 
@@ -610,12 +632,12 @@ public class MyPreferences extends Preferences {
   }
 
   @Override
-  public void removeNodeChangeListener(NodeChangeListener aArg0) {
+  public void removeNodeChangeListener(final NodeChangeListener aArg0) {
     pref.removeNodeChangeListener(aArg0);
   }
 
   @Override
-  public void removePreferenceChangeListener(PreferenceChangeListener aArg0) {
+  public void removePreferenceChangeListener(final PreferenceChangeListener aArg0) {
     pref.removePreferenceChangeListener(aArg0);
   }
 
@@ -634,7 +656,7 @@ public class MyPreferences extends Preferences {
   }
 
   public static MyPreferences current() {
-    String root = System.getProperty("prefroot", "current");
+    final String root = System.getProperty("prefroot", "current");
     return root().node(root);
   }
 
@@ -642,31 +664,31 @@ public class MyPreferences extends Preferences {
     return root().node("home");
   }
 
-  public Color getColor(String name, Color defaultBarva) {
+  public Color getColor(final String name, final Color defaultBarva) {
     return new Color(getInt(name, defaultBarva.getRGB()), true);
   }
 
-  public void putColor(String nameg, Color color) {
+  public void putColor(final String nameg, final Color color) {
     putInt(nameg, color.getRGB());
   }
 
-  public Font getFont(String name, Font fontdef) {
-    String fontstr = get(name, fontToString(fontdef));
-    Font font = Font.decode(fontstr);
+  public Font getFont(final String name, final Font fontdef) {
+    final String fontstr = get(name, fontToString(fontdef));
+    final Font font = Font.decode(fontstr);
     return font;
   }
 
-  public void putFont(String name, Font font) {
+  public void putFont(final String name, final Font font) {
     put(name, fontToString(font));
   }
 
-  private String fontToString(Font font) {
-    return (font.getFamily() + "-" + fontStyleToString(font.getStyle())
-        + "-" + font.getSize());
+  private String fontToString(final Font font) {
+    return font.getFamily() + "-" + fontStyleToString(font.getStyle())
+    + "-" + font.getSize();
 
   }
 
-  private String fontStyleToString(int style) {
+  private String fontStyleToString(final int style) {
     switch(style) {
     case Font.PLAIN: return "PLAIN";
     case Font.ITALIC: return "ITALIC";
@@ -682,7 +704,7 @@ public class MyPreferences extends Preferences {
     Class<?> cls;
   }
 
-  private static Duo duo(Class<?> cls) {
+  private static Duo duo(final Class<?> cls) {
     Duo duo = sMetody.get(cls);
     if (duo == null) {
       duo = new Duo();
@@ -693,92 +715,104 @@ public class MyPreferences extends Preferences {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T getAnyElement(String key, T defx, Class<T> cls) {
+  public <T> T getAnyElement(final String key, final T defx, final Class<T> cls) {
     if (cls.isEnum()) {
       // Nedokázal jsem to jinak
       @SuppressWarnings("rawtypes")
+      final
       Enum<?> enumxx = getEnumxx(key, (Enum<?>) defx, (Class<Enum>) cls);
-      T result = (T) enumxx;
+      final T result = (T) enumxx;
       return result;
     } else {
       if (cls.isAnnotationPresent(Preferenceble.class)) {
         try {
-          T result = getStructure(key, cls.newInstance());
+          final T result = getStructure(key, cls.newInstance());
           return result;
-        } catch (Exception e) {
+        } catch (final Exception e) {
           throw new RuntimeException(e);
         }
       } else {
-        Duo duo = sMetody.get(cls);
-        if (duo == null) throw new RuntimeException("Neexistuje pristupova metoda pro element typu: " + cls + ", mozna je to struktura a postrada anotaci");
+        final Duo duo = sMetody.get(cls);
+        if (duo == null) {
+          throw new RuntimeException("Neexistuje pristupova metoda pro element typu: " + cls + ", mozna je to struktura a postrada anotaci");
+        }
         try {
-          T result = (T) duo.get.invoke(this, key, defx);
+          final T result = (T) duo.get.invoke(this, key, defx);
           return result;
-        } catch (Exception e) {
+        } catch (final Exception e) {
           throw new RuntimeException(e);
         }
       }
     }
   }
 
-  public <T> void putAnyElement(String name, T value, Class<T> cls) {
+  public <T> void putAnyElement(final String name, final T value, final Class<T> cls) {
     if (cls.isEnum()) {
       putEnum(name, (Enum<?>) value);
     } else {
       if (cls.isAnnotationPresent(Preferenceble.class)) {
         putStructure(name, value);
       } else {
-        Duo duo = sMetody.get(cls);
-        if (duo == null) throw new RuntimeException("Neexistuje pristupova metoda pro element typu: " + cls + ", mozna je to struktura a postrada anotaci");
+        final Duo duo = sMetody.get(cls);
+        if (duo == null) {
+          throw new RuntimeException("Neexistuje pristupova metoda pro element typu: " + cls + ", mozna je to struktura a postrada anotaci");
+        }
         try {
           duo.put.invoke(this, name, value);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           throw new RuntimeException(e);
         }
       }
     }
   }
 
-  public <T> T getStructure(String name, T defautStructure) {
+  public <T> T getStructure(final String name, final T defautStructure) {
     try {
       @SuppressWarnings("unchecked")
+      final
       Class<T> cls = (Class<T>) defautStructure.getClass();
-      T stucture = cls.newInstance();
-      if (! cls.isAnnotationPresent(Preferenceble.class)) throw new RuntimeException("Klasa " + cls + " postrada anotaci " + Preferenceble.class);
-      MyPreferences node = node(name);
-      for (Map.Entry<String, PropertyDescriptor> entry : findProperties(cls).entrySet()) {
-        Object defaultValue = entry.getValue().getReadMethod().invoke(defautStructure);
+      final T stucture = cls.newInstance();
+      if (! cls.isAnnotationPresent(Preferenceble.class)) {
+        throw new RuntimeException("Klasa " + cls + " postrada anotaci " + Preferenceble.class);
+      }
+      final MyPreferences node = node(name);
+      for (final Map.Entry<String, PropertyDescriptor> entry : findProperties(cls).entrySet()) {
+        final Object defaultValue = entry.getValue().getReadMethod().invoke(defautStructure);
         @SuppressWarnings("unchecked")
+        final
         Class<Object> valueType = (Class<Object>) entry.getValue().getPropertyType();
-        Object newValue = node.getAnyElement(entry.getKey(), defaultValue, valueType);
+        final Object newValue = node.getAnyElement(entry.getKey(), defaultValue, valueType);
         entry.getValue().getWriteMethod().invoke(stucture, newValue);
       }
       return stucture;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  public void putStructure(String name, Object structure) {
+  public void putStructure(final String name, final Object structure) {
     try {
-      Class<?> cls = structure.getClass();
-      if (! cls.isAnnotationPresent(Preferenceble.class)) throw new RuntimeException("Klasa " + cls + " postrada anotaci " + Preferenceble.class);
-      MyPreferences node = node(name);
-      for (Map.Entry<String, PropertyDescriptor> entry : findProperties(cls).entrySet()) {
-        Object value = entry.getValue().getReadMethod().invoke(structure);
+      final Class<?> cls = structure.getClass();
+      if (! cls.isAnnotationPresent(Preferenceble.class)) {
+        throw new RuntimeException("Klasa " + cls + " postrada anotaci " + Preferenceble.class);
+      }
+      final MyPreferences node = node(name);
+      for (final Map.Entry<String, PropertyDescriptor> entry : findProperties(cls).entrySet()) {
+        final Object value = entry.getValue().getReadMethod().invoke(structure);
         @SuppressWarnings("unchecked")
+        final
         Class<Object> valueType = (Class<Object>) entry.getValue().getPropertyType();
         node.putAnyElement(entry.getKey(), value, valueType);
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  private static Map<String, PropertyDescriptor> findProperties(Class<?> cls) {
+  private static Map<String, PropertyDescriptor> findProperties(final Class<?> cls) {
     try {
-      Map<String, PropertyDescriptor> descrs = new HashMap<>();
-      for (Method method : cls.getMethods()) {
+      final Map<String, PropertyDescriptor> descrs = new HashMap<>();
+      for (final Method method : cls.getMethods()) {
         if (!method.isAnnotationPresent(PreferencebleIgnore.class)) {
           proverProperties("is", method, descrs, cls);
           proverProperties("get", method, descrs, cls);
@@ -786,7 +820,7 @@ public class MyPreferences extends Preferences {
         }
       }
       return descrs;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new RuntimeException(e);
     }
   }
@@ -797,13 +831,15 @@ public class MyPreferences extends Preferences {
    * @param descrs
    * @throws IntrospectionException
    */
-  private static void proverProperties(String prefix, Method method, Map<String, PropertyDescriptor> descrs, Class<?> cls) throws IntrospectionException {
-    String methodName = method.getName();
+  private static void proverProperties(final String prefix, final Method method, final Map<String, PropertyDescriptor> descrs, final Class<?> cls) throws IntrospectionException {
+    final String methodName = method.getName();
     if (methodName.startsWith(prefix)) {
-      String javaPropertyName = uncapitalize(methodName.substring(prefix.length()));
-      if ("class".equals(javaPropertyName)) return;
-      PropertyDescriptor pd = new PropertyDescriptor(javaPropertyName, cls);
-      PreferencebleProperty annotation = method.getAnnotation(PreferencebleProperty.class);
+      final String javaPropertyName = uncapitalize(methodName.substring(prefix.length()));
+      if ("class".equals(javaPropertyName)) {
+        return;
+      }
+      final PropertyDescriptor pd = new PropertyDescriptor(javaPropertyName, cls);
+      final PreferencebleProperty annotation = method.getAnnotation(PreferencebleProperty.class);
       String prefePropertyName = javaPropertyName;
       if (annotation != null) {
         prefePropertyName = annotation.name();
@@ -812,24 +848,25 @@ public class MyPreferences extends Preferences {
     }
   }
 
-  public static String uncapitalize(String name) {
-    if (name == null || name.length() == 0)
+  public static String uncapitalize(final String name) {
+    if (name == null || name.length() == 0) {
       return name;
+    }
     return name.substring(0, 1).toLowerCase(ENGLISH) + name.substring(1);
   }
 
   static {
-    Method[] methods = MyPreferences.class.getMethods();
-    for (Method method : methods) {
-      Class<?>[] types = method.getParameterTypes();
-      String name = method.getName();
+    final Method[] methods = MyPreferences.class.getMethods();
+    for (final Method method : methods) {
+      final Class<?>[] types = method.getParameterTypes();
+      final String name = method.getName();
       if (types.length != 2) {
         continue;
       }
       if (types[0] != String.class) {
         continue;
       }
-      Class<?> valueType = types[1];
+      final Class<?> valueType = types[1];
       if (valueType == Object.class) {
         continue;
       }
@@ -849,22 +886,30 @@ public class MyPreferences extends Preferences {
         if (valueType != method.getReturnType()) {
           continue;
         }
-        Duo duo = duo(valueType);
-        if (duo.get != null) throw new RuntimeException(String.format("Duplicita: %s, %s", method, duo.get));
+        final Duo duo = duo(valueType);
+        if (duo.get != null) {
+          throw new RuntimeException(String.format("Duplicita: %s, %s", method, duo.get));
+        }
         duo.get = method;
       }
       if (name.startsWith("put")) {
         if (void.class != method.getReturnType()) {
           continue;
         }
-        Duo duo = duo(valueType);
-        if (duo.put != null) throw new RuntimeException(String.format("Duplicita: %s, %s", method, duo.put));
+        final Duo duo = duo(valueType);
+        if (duo.put != null) {
+          throw new RuntimeException(String.format("Duplicita: %s, %s", method, duo.put));
+        }
         duo.put = method;
       }
     }
-    for (Duo duo : sMetody.values()) {
-      if (duo.get == null) throw new RuntimeException(String.format("Neexistuje get pro: %s, ale mame %s", duo.cls, duo.put));
-      if (duo.put == null) throw new RuntimeException(String.format("Neexistuje put pro: %s, ale mame %s", duo.cls, duo.get));
+    for (final Duo duo : sMetody.values()) {
+      if (duo.get == null) {
+        throw new RuntimeException(String.format("Neexistuje get pro: %s, ale mame %s", duo.cls, duo.put));
+      }
+      if (duo.put == null) {
+        throw new RuntimeException(String.format("Neexistuje put pro: %s, ale mame %s", duo.cls, duo.get));
+      }
     }
   }
 }

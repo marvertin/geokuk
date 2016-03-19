@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.mapy.kachle;
 
 import java.awt.Graphics;
+import java.awt.Image;
 
 public class JKachleRendrovaci extends JKachle {
 
@@ -9,24 +10,33 @@ public class JKachleRendrovaci extends JKachle {
    * jinak by nebyla potřeba.
    */
   private static final long serialVersionUID = -4855904714968272822L;
+  private Graphics grf;
 
-  public JKachleRendrovaci(final JKachlovnik jKachlovnik, final KaLoc kaloc) {
-    super(jKachlovnik, kaloc);
+  public JKachleRendrovaci(final JKachlovnik jKachlovnik, final KaAll kaall) {
+    super(jKachlovnik, kaall);
 
 
   }
 
 
   @Override
+  protected void ziskanPlnyObrazek(final Image img) {
+    if (grf != null) {
+      super.paintComponent(grf);
+      uzTeNepotrebuju();
+    }
+  }
+
+  @Override
   protected synchronized void paintComponent(final Graphics aG) {
-    if (getKachle().jeTamUzCelyObrazek) {
-      //System.out.println("Paintuji normálně");
+    super.paintComponent(aG);
+
+    if (jeTamUzCelyObrazek()) {
       super.paintComponent(aG);
-      getKachle().uzTeNepotrebuju();
-      ((KachleRendrovaci)getKachle()).grf = null;
+      uzTeNepotrebuju();
+      grf = null;
     } else {
-      //System.out.println("Odkládám paintování");
-      ((KachleRendrovaci)getKachle()).grf = aG.create();
+      grf = aG.create();
     }
   }
 }

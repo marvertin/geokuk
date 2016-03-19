@@ -2,7 +2,7 @@ package cz.geokuk.core.render;
 
 import javax.swing.KeyStroke;
 
-import cz.geokuk.core.napoveda.NapovedaModelChangedEvent;
+import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.img.ImageLoader;
@@ -20,7 +20,7 @@ public class RenderAction extends DialogOpeningAction0 {
 
   }
 
-  public void onEvent(NapovedaModelChangedEvent event) {
+  public void onEvent(final OnofflineModelChangeEvent event) {
     //    setEnabled(event.getModel().isOnlineMode());
   }
 

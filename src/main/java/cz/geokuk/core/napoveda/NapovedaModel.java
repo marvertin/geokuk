@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
@@ -13,6 +14,7 @@ public class NapovedaModel extends Model0 {
 
   private List<ZpravaUzivateli> zpravyUzivatelum;
   private int lastViewedMsgNum;
+  private boolean onlineMode;
 
   public int getLastViewedMsgNum() {
     return lastViewedMsgNum;
@@ -24,7 +26,7 @@ public class NapovedaModel extends Model0 {
   }
 
 
-  public void setZpravyUzivatelum(List<ZpravaUzivateli> zpravyUzivatelum) {
+  public void setZpravyUzivatelum(final List<ZpravaUzivateli> zpravyUzivatelum) {
     this.zpravyUzivatelum = zpravyUzivatelum;
     fire(new NapovedaModelChangedEvent());
 
@@ -41,43 +43,27 @@ public class NapovedaModel extends Model0 {
     fire(new NapovedaModelChangedEvent());
   }
 
-  public void setLastViewedMsgNum(int aLastViewedMsgNum) {
+  public void setLastViewedMsgNum(final int aLastViewedMsgNum) {
     lastViewedMsgNum = aLastViewedMsgNum;
     currPrefe().node(FPref.VSEOBECNE_node).putInt(FPref.LAST_VIEWED_MSG_NUM_value, lastViewedMsgNum);
   }
 
 
-  public void zkontrolujNoveAktualizace(boolean zobrazovatInfoPriSpravneVerzi) {
-    if (isOnlineMode()) {
+  public void zkontrolujNoveAktualizace(final boolean zobrazovatInfoPriSpravneVerzi) {
+    if (onlineMode) {
       new ZkontrolovatAktualizaceSwingWorker(zobrazovatInfoPriSpravneVerzi, this).execute();
     }
 
   }
 
-  /**
-   * @param onlineMode the onlineMode to set
-   */
-  public void setOnlineMode(boolean onlineMode) {
-    if (onlineMode == isOnlineMode()) return;
-    currPrefe().putBoolean("onlineMode", onlineMode);
-    fire(new NapovedaModelChangedEvent());
+  public void onEvent(final OnofflineModelChangeEvent event) {
+    onlineMode = event.isOnlineMOde();
   }
 
-
-  /**
-   * @return the onlineMode
-   */
-  public boolean isOnlineMode() {
-    //    return Settings.vseobecne.onlineMode.isSelected();
-    boolean b = currPrefe().getBoolean("onlineMode", true);
-    return b;
-  }
-
-
-  public void zobrazNapovedu(String tema) {
+  public void zobrazNapovedu(final String tema) {
     try {
       BrowserOpener.displayURL(new URL(tema == null ? FConst.WEB_PAGE_WIKI : FConst.WEB_PAGE_WIKI + "/" + tema));
-    } catch (MalformedURLException e) {
+    } catch (final MalformedURLException e) {
       throw new RuntimeException(e);
     }
 

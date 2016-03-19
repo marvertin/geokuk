@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.program;
 
@@ -7,6 +7,7 @@ import cz.geokuk.core.coord.PoziceModel;
 import cz.geokuk.core.coord.VyrezModel;
 import cz.geokuk.core.hledani.HledaciSluzba;
 import cz.geokuk.core.napoveda.NapovedaModel;
+import cz.geokuk.core.onoffline.OnofflineModel;
 import cz.geokuk.core.profile.ProfileModel;
 import cz.geokuk.core.render.RenderModel;
 import cz.geokuk.framework.BeanBag;
@@ -28,6 +29,7 @@ import cz.geokuk.plugins.mapy.MapyModel;
 import cz.geokuk.plugins.mapy.PodkladAction;
 import cz.geokuk.plugins.mapy.kachle.EKaType;
 import cz.geokuk.plugins.mapy.kachle.KachleModel;
+import cz.geokuk.plugins.mapy.kachle.KachleZiskavac;
 import cz.geokuk.plugins.mapy.kachle.KachloDownloader;
 import cz.geokuk.plugins.mrizky.MrizkaModel;
 import cz.geokuk.plugins.refbody.HlidacReferencnihoBodu;
@@ -46,7 +48,7 @@ public class Inicializator {
   private NapovedaModel napovedaModel;
 
   public void inicializace() {
-    BeanBag bb = new BeanBag();
+    final BeanBag bb = new BeanBag();
     bb.registerSigleton(bb);
     bb.registerSigleton(new EventManager());
     bb.registerSigleton(new Prefe());
@@ -88,12 +90,15 @@ public class Inicializator {
     bb.registerSigleton(new OknoModel());
     bb.registerSigleton(new RenderModel());
     napovedaModel = bb.registerSigleton(new NapovedaModel());
+    bb.registerSigleton(new OnofflineModel());
     bb.registerSigleton(new GeocodingModel());
 
     bb.registerSigleton(new HledaciSluzba());
 
+    bb.registerSigleton(new KachleZiskavac());
+
     // akce
-    Akce akce = new Akce();
+    final Akce akce = new Akce();
     bb.registerSigleton(akce);
     bb.registrFieldsAsSingleton(akce);
 
@@ -103,20 +108,20 @@ public class Inicializator {
     bb.init();
     //Board.eveman = eveman;
   }
-  
-  public void intMapAkce(BeanBag bb, Akce akce) {
-    for (EKaType ka : EKaType.values()) {
-      MapyAction0 jednamapoakce = 
-      ka.isPodklad() ?
-        new PodkladAction(ka) :
-        new DekoraceAction(ka);
-      akce.mapoakce.add(jednamapoakce);
-      bb.registerSigleton(jednamapoakce);
-      
+
+  public void intMapAkce(final BeanBag bb, final Akce akce) {
+    for (final EKaType ka : EKaType.values()) {
+      final MapyAction0 jednamapoakce =
+          ka.isPodklad() ?
+              new PodkladAction(ka) :
+                new DekoraceAction(ka);
+              akce.mapoakce.add(jednamapoakce);
+              bb.registerSigleton(jednamapoakce);
+
     }
   }
 
-  public void setMainFrame(JMainFrame frame) {
+  public void setMainFrame(final JMainFrame frame) {
     mainFrameHolder.setMainFrame(frame);
   }
 

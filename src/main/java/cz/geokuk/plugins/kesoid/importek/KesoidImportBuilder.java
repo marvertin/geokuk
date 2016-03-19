@@ -69,7 +69,7 @@ public class KesoidImportBuilder implements IImportBuilder {
   private final GccomNick gccomNick;
   private final ProgressModel progressModel;
 
-  public KesoidImportBuilder(GccomNick gccomNick, ProgressModel progressModel) {
+  public KesoidImportBuilder(final GccomNick gccomNick, final ProgressModel progressModel) {
     this.gccomNick = gccomNick;
     this.progressModel = progressModel;
   }
@@ -78,7 +78,7 @@ public class KesoidImportBuilder implements IImportBuilder {
    * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#addGpxWpt(cz.geokuk.plugins.kesoid.importek.GpxWpt)
    */
   @Override
-  public void addGpxWpt(GpxWpt gpxwpt) {
+  public void addGpxWpt(final GpxWpt gpxwpt) {
     if (gpxwpt.wgs == null || gpxwpt.wgs.lat < 8 || gpxwpt.wgs.lat > 80 || gpxwpt.wgs.lon < 1 || gpxwpt.wgs.lon > 30) {
       log.debug("Souradnice jsou mimo povoleny rozsah: {} - {}", gpxwpt.wgs, gpxwpt);
       return;
@@ -91,7 +91,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
 
     // Přeplácnout nějaký, který tam už je
-    GpxWpt old = gpxwpts.put(gpxwpt.name, gpxwpt);
+    final GpxWpt old = gpxwpts.put(gpxwpt.name, gpxwpt);
 
     // A pokud byl původní nalezen a tento ne, tak je tento už také nalezen.
     // ale až po výstupu do keše samozřejmě, aby při smazání souboru se z keše nebraly nesmysly
@@ -117,19 +117,19 @@ public class KesoidImportBuilder implements IImportBuilder {
   /* (non-Javadoc)
    * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#done(cz.geokuk.plugins.kesoid.mapicon.Genom)
    */
-  public void done(Genom genom) {
+  public void done(final Genom genom) {
     this.genom = genom;
-    InformaceOZdrojich informaceOZdrojich = informaceOZdrojichBuilder.done();
-    int delkaTasku = gpxwpts.size();
+    final InformaceOZdrojich informaceOZdrojich = informaceOZdrojichBuilder.done();
+    final int delkaTasku = gpxwpts.size();
     Progressor progressor = progressModel.start(delkaTasku, "Vytvářím waypointy");
 
     // přesypeme do seznamu
-    List<GpxWpt> list = new LinkedList<>(gpxwpts.values());
-    Map<String, Kesoid> resultKesoidsByName = new HashMap<>();
+    final List<GpxWpt> list = new LinkedList<>(gpxwpts.values());
+    final Map<String, Kesoid> resultKesoidsByName = new HashMap<>();
 
     // Process Czech Geodetic Points.
     // TODO : mapaPredTeckou shouldn't leak outside CGP processing - it's tied to it
-    Map<String, CzechGeodeticPoint> mapaPredTeckou =
+    final Map<String, CzechGeodeticPoint> mapaPredTeckou =
         processCzechGeodeticPoints(list, resultKesoidsByName);
     progressor.setProgress(delkaTasku - list.size());
 
@@ -148,20 +148,20 @@ public class KesoidImportBuilder implements IImportBuilder {
     processPhotos(list, resultKesoidsByName);
 
     // Teď znovu procházíme a hledáme dodatečné waypointy kešoidů
-    for (ListIterator<GpxWpt> it = list.listIterator(); it.hasNext(); ) {
-      GpxWpt gpxwpt = it.next();
+    for (final ListIterator<GpxWpt> it = list.listIterator(); it.hasNext(); ) {
+      final GpxWpt gpxwpt = it.next();
       if (gpxwpt.name.length() < 2) {
         continue;
       }
-      String potentialGcCode = "GC" + gpxwpt.name.substring(2);
+      final String potentialGcCode = "GC" + gpxwpt.name.substring(2);
       //TODO dodatečné waypointy též pro waymarky
-      Kesoid kesoid = resultKesoidsByName.get(potentialGcCode);
+      final Kesoid kesoid = resultKesoidsByName.get(potentialGcCode);
       if (kesoid != null) {
-        Wpt wpt = createAditionalWpt(gpxwpt);
+        final Wpt wpt = createAditionalWpt(gpxwpt);
         if (wpt.getType() == EKesWptType.FINAL_LOCATION) {
           wpt.setZorder(EZOrder.FINAL);
           if (kesoid instanceof Kes) {
-            Kes kes = (Kes) kesoid;
+            final Kes kes = (Kes) kesoid;
             if (Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())
                 && Math.abs(kes.getFirstWpt().lat - wpt.lat) < 0.001
                 && Math.abs(kes.getFirstWpt().lon - wpt.lon) < 0.001
@@ -186,9 +186,9 @@ public class KesoidImportBuilder implements IImportBuilder {
     progressor.setProgress(delkaTasku - list.size());
 
     // A všechno, co zbylo jsou obyčejné jednoduché waypointy
-    for (ListIterator<GpxWpt> it = list.listIterator(); it.hasNext(); ) {
-      GpxWpt gpxwpt = it.next();
-      SimpleWaypoint simpleWaypoint = createSimpleWaypoint(gpxwpt);
+    for (final ListIterator<GpxWpt> it = list.listIterator(); it.hasNext(); ) {
+      final GpxWpt gpxwpt = it.next();
+      final SimpleWaypoint simpleWaypoint = createSimpleWaypoint(gpxwpt);
       resultKesoidsByName.put(gpxwpt.name, simpleWaypoint);
       it.remove();
     }
@@ -202,8 +202,8 @@ public class KesoidImportBuilder implements IImportBuilder {
     progressor = progressModel.start(resultKesoidsByName.size(), "Indexování");
     int citac = 0;
     try {
-      for (Kesoid kesoid : resultKesoidsByName.values()) {
-        for (Wpt wpt : kesoid.getWpts()) {
+      for (final Kesoid kesoid : resultKesoidsByName.values()) {
+        for (final Wpt wpt : kesoid.getWpts()) {
           kesBag.add(wpt, null);
         }
         if (citac++ % 1000 == 0) {
@@ -218,15 +218,15 @@ public class KesoidImportBuilder implements IImportBuilder {
     log.debug("Konec zpracování: " + delkaTasku);
   }
 
-  private EKesType decodePseudoKesType(GpxWpt gpxwpt) {
+  private EKesType decodePseudoKesType(final GpxWpt gpxwpt) {
     return gpxwpt.groundspeak.type != null
         ? EKesType.decode(gpxwpt.groundspeak.type)
-        : EKesType.decode(gpxwpt.type.substring(9));
+            : EKesType.decode(gpxwpt.type.substring(9));
   }
 
-  private void processPhotos(List<GpxWpt> gpxWpts, Map<String, Kesoid> resultMap) {
-    for (ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
-      GpxWpt gpxWpt = it.next();
+  private void processPhotos(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
+    for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
+      final GpxWpt gpxWpt = it.next();
       if (isPhoto(gpxWpt)) {
         resultMap.put(gpxWpt.name, createPhoto(gpxWpt));
         it.remove();
@@ -234,13 +234,13 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
   }
 
-  private boolean isPhoto(GpxWpt gpxWpt) {
+  private boolean isPhoto(final GpxWpt gpxWpt) {
     return PIC.equals(gpxWpt.type);
   }
 
-  private void processGeocaches(List<GpxWpt> gpxWpts, Map<String, Kesoid> resultMap) {
-    for (ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
-      GpxWpt gpxWpt = it.next();
+  private void processGeocaches(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
+    for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
+      final GpxWpt gpxWpt = it.next();
       if (isGeocache(gpxWpt)) {
         resultMap.put(gpxWpt.name, createKes(gpxWpt));
         it.remove();
@@ -248,20 +248,20 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
   }
 
-  private boolean isGeocache(GpxWpt gpxWpt) {
+  private boolean isGeocache(final GpxWpt gpxWpt) {
     return (GEOCACHE.equals(gpxWpt.sym) || GEOCACHE_FOUND.equals(gpxWpt.sym))
         && gpxWpt.groundspeak != null
         && gpxWpt.name.startsWith(GC);
   }
 
   private void processWaymarks(
-      List<GpxWpt> gpxWpts,
-      Map<String, Kesoid> resultsMap,
-      Map<String, CzechGeodeticPoint> mapaPredTeckou) {
+      final List<GpxWpt> gpxWpts,
+      final Map<String, Kesoid> resultsMap,
+      final Map<String, CzechGeodeticPoint> mapaPredTeckou) {
 
     // Pokusíme se najít ostatní waymarky, to znamená ty, které nebyly speciální
-    for (ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
-      GpxWpt gpxwpt = it.next();
+    for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
+      final GpxWpt gpxwpt = it.next();
 
       Waymark wm;
 
@@ -273,7 +273,7 @@ public class KesoidImportBuilder implements IImportBuilder {
         continue;
       }
 
-      boolean pripojeno = zkusPripojitKCgp(wm, mapaPredTeckou);
+      final boolean pripojeno = zkusPripojitKCgp(wm, mapaPredTeckou);
       if (!pripojeno) {
         resultsMap.put(gpxwpt.name, wm);
       }
@@ -281,18 +281,18 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
   }
 
-  private boolean isWaymark(GpxWpt gpxWpt) {
+  private boolean isWaymark(final GpxWpt gpxWpt) {
     return WAYMARK.equals(gpxWpt.sym) && gpxWpt.name.startsWith(WM);
   }
 
-  private boolean isWaymarkGeoget(GpxWpt gpxWpt) {
+  private boolean isWaymarkGeoget(final GpxWpt gpxWpt) {
     return gpxWpt.name.startsWith(WM)
         && (GEOCACHE.equals(gpxWpt.sym) || GEOCACHE_FOUND.equals(gpxWpt.sym));
   }
 
-  private void processMunzees(List<GpxWpt> gpxWpts, Map<String, Kesoid> resultMap) {
-    for (ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
-      GpxWpt gpxWpt = it.next();
+  private void processMunzees(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
+    for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
+      final GpxWpt gpxWpt = it.next();
       if (isMunzee(gpxWpt)) {
         resultMap.put(gpxWpt.name, createMunzee(gpxWpt));
         it.remove();
@@ -300,53 +300,53 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
   }
 
-  private boolean isMunzee(GpxWpt gpxWpt) {
+  private boolean isMunzee(final GpxWpt gpxWpt) {
     return (gpxWpt.name.startsWith(MZ) || gpxWpt.name.startsWith(MU))
         && (GEOCACHE.equals(gpxWpt.sym) || GEOCACHE_FOUND.equals(gpxWpt.sym));
   }
 
   private Map<String, CzechGeodeticPoint>
-      processCzechGeodeticPoints(List<GpxWpt> gpxWpts, Map<String, Kesoid> resultMap) {
-    List<GpxWpt> listCgpPridruzene = new ArrayList<>();
-    Map<String, CzechGeodeticPoint> mapaPredTeckou = new HashMap<>();
+  processCzechGeodeticPoints(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
+    final List<GpxWpt> listCgpPridruzene = new ArrayList<>();
+    final Map<String, CzechGeodeticPoint> mapaPredTeckou = new HashMap<>();
 
     // Procházíme a hledáme české geodetické body, ony jsou tam jako speciální keše,
     // tak je nejdříve vyzobeme
-    for (ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
-      GpxWpt gpxWpt = it.next();
+    for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext(); ) {
+      final GpxWpt gpxWpt = it.next();
 
       if (isCzechGeodeticPoint(gpxWpt)) {
-        EKesType kesType = decodePseudoKesType(gpxWpt);
+        final EKesType kesType = decodePseudoKesType(gpxWpt);
         switch (kesType) {
-          case TRADITIONAL:
-          case MULTI:
-          case EARTHCACHE:
-          case WHERIGO:
-            CzechGeodeticPoint cgp = createCgp(gpxWpt);
-            resultMap.put(gpxWpt.name, cgp);
-            mapaPredTeckou.put(extrahujPrefixPredTeckou(gpxWpt), cgp);
-            break;
-          case EVENT:
-          case CACHE_IN_TRASH_OUT_EVENT:
-          case MEGA_EVENT:
-            cgp = createCgp(gpxWpt);
-            resultMap.put(gpxWpt.name, cgp);
-            break;
-          case LETTERBOX_HYBRID:
-          case UNKNOWN:
-            listCgpPridruzene.add(gpxWpt);
-            break;
-          default:
-            SimpleWaypoint simpleWaypoint = createSimpleWaypoint(gpxWpt);
-            resultMap.put(gpxWpt.name, simpleWaypoint);
+        case TRADITIONAL:
+        case MULTI:
+        case EARTHCACHE:
+        case WHERIGO:
+          CzechGeodeticPoint cgp = createCgp(gpxWpt);
+          resultMap.put(gpxWpt.name, cgp);
+          mapaPredTeckou.put(extrahujPrefixPredTeckou(gpxWpt), cgp);
+          break;
+        case EVENT:
+        case CACHE_IN_TRASH_OUT_EVENT:
+        case MEGA_EVENT:
+          cgp = createCgp(gpxWpt);
+          resultMap.put(gpxWpt.name, cgp);
+          break;
+        case LETTERBOX_HYBRID:
+        case UNKNOWN:
+          listCgpPridruzene.add(gpxWpt);
+          break;
+        default:
+          final SimpleWaypoint simpleWaypoint = createSimpleWaypoint(gpxWpt);
+          resultMap.put(gpxWpt.name, simpleWaypoint);
         }
         it.remove();
       }
     }
 
     // procházíme přidružeňáky a přidružujeme
-    for (GpxWpt gpxwpt : listCgpPridruzene) {
-      CzechGeodeticPoint cgp = mapaPredTeckou.get(extrahujPrefixPredTeckou(gpxwpt));
+    for (final GpxWpt gpxwpt : listCgpPridruzene) {
+      final CzechGeodeticPoint cgp = mapaPredTeckou.get(extrahujPrefixPredTeckou(gpxwpt));
       if (cgp != null) {
         pridruz(cgp, gpxwpt);
       } else {
@@ -357,22 +357,22 @@ public class KesoidImportBuilder implements IImportBuilder {
     return mapaPredTeckou;
   }
 
-  private boolean isCzechGeodeticPoint(GpxWpt gpxWpt) {
+  private boolean isCzechGeodeticPoint(final GpxWpt gpxWpt) {
     return gpxWpt.groundspeak != null && (
-        (gpxWpt.name.startsWith(GC) && gpxWpt.name.length() == 8)
+        gpxWpt.name.startsWith(GC) && gpxWpt.name.length() == 8
         || gpxWpt.name.matches("^(TrB_|ZhB_|BTP_|ZGS_).*$")
         || "DATAZ".equals(gpxWpt.groundspeak.owner));
   }
 
-  private boolean zkusPripojitKCgp(Waymark wm, Map<String, CzechGeodeticPoint> mapaPredTeckou) {
+  private boolean zkusPripojitKCgp(final Waymark wm, final Map<String, CzechGeodeticPoint> mapaPredTeckou) {
     if (!wm.getMainWpt().getSym().equals("Czech Geodetic Points")) {
       return false;  // není to ani ta správná kategorie
     }
-    String oznaceniBodu = extractOznaceniBodu(wm.getNazev());
+    final String oznaceniBodu = extractOznaceniBodu(wm.getNazev());
     if (oznaceniBodu == null) {
       return false; // tak ve jméně není označení, zobrazíme jako normální waymark
     }
-    CzechGeodeticPoint cgp = mapaPredTeckou.get(oznaceniBodu);
+    final CzechGeodeticPoint cgp = mapaPredTeckou.get(oznaceniBodu);
     if (cgp == null) {
       return false; // nenašli jsme již existující
     }
@@ -385,11 +385,11 @@ public class KesoidImportBuilder implements IImportBuilder {
     return true;
   }
 
-  private SimpleWaypoint createSimpleWaypoint(GpxWpt gpxwpt) {
-    Wpt wpt = createWpt(gpxwpt);
+  private SimpleWaypoint createSimpleWaypoint(final GpxWpt gpxwpt) {
+    final Wpt wpt = createWpt(gpxwpt);
     wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
 
-    SimpleWaypoint simpleWaypoint = new SimpleWaypoint();
+    final SimpleWaypoint simpleWaypoint = new SimpleWaypoint();
     simpleWaypoint.setIdentifier(gpxwpt.name);
     simpleWaypoint.setUrl(gpxwpt.link.href);
     simpleWaypoint.addWpt(wpt);
@@ -397,21 +397,21 @@ public class KesoidImportBuilder implements IImportBuilder {
     return simpleWaypoint;
   }
 
-  private Photo createPhoto(GpxWpt gpxwpt) {
-    Wpt wpt = createWpt(gpxwpt);
+  private Photo createPhoto(final GpxWpt gpxwpt) {
+    final Wpt wpt = createWpt(gpxwpt);
     wpt.setSym(gpxwpt.sym);
 
-    Photo photo = new Photo();
+    final Photo photo = new Photo();
     photo.setIdentifier(gpxwpt.link.href);
 
     photo.addWpt(wpt);
-    log.info(photo.getFirstWpt());
+    log.debug("photo: " + photo.getFirstWpt());
     photo.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
     return photo;
   }
 
-  private String extrahujPrefixPredTeckou(GpxWpt gpxwpt) {
-    String jmeno = gpxwpt.groundspeak.name;
+  private String extrahujPrefixPredTeckou(final GpxWpt gpxwpt) {
+    final String jmeno = gpxwpt.groundspeak.name;
     int poz = jmeno.indexOf('.');
     if (poz < 0) {
       poz = jmeno.length();
@@ -424,8 +424,8 @@ public class KesoidImportBuilder implements IImportBuilder {
    * @param aCgp
    * @param aGpxwpt
    */
-  private void pridruz(CzechGeodeticPoint cgp, GpxWpt gpxwpt) {
-    Wpt wpt = createWpt(gpxwpt);
+  private void pridruz(final CzechGeodeticPoint cgp, final GpxWpt gpxwpt) {
+    final Wpt wpt = createWpt(gpxwpt);
     wpt.setName(gpxwpt.groundspeak.name);
     urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
     wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));
@@ -436,9 +436,9 @@ public class KesoidImportBuilder implements IImportBuilder {
    * @param aGpxwpt
    * @return
    */
-  private CzechGeodeticPoint createCgp(GpxWpt gpxwpt) {
-    CzechGeodeticPoint cgp = new CzechGeodeticPoint();
-    String suroveCisloBodu = gpxwpt.groundspeak.name;
+  private CzechGeodeticPoint createCgp(final GpxWpt gpxwpt) {
+    final CzechGeodeticPoint cgp = new CzechGeodeticPoint();
+    final String suroveCisloBodu = gpxwpt.groundspeak.name;
     String cisloBodu = suroveCisloBodu;
     if (cisloBodu.endsWith(" (ETRS)")) {
       cisloBodu = cisloBodu.substring(0, cisloBodu.length() - 7);
@@ -454,7 +454,7 @@ public class KesoidImportBuilder implements IImportBuilder {
       }
     }
 
-    Wpt wpt = createWpt(gpxwpt);
+    final Wpt wpt = createWpt(gpxwpt);
     wpt.setName(cisloBodu);
     urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
     wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));
@@ -465,8 +465,8 @@ public class KesoidImportBuilder implements IImportBuilder {
     return cgp;
   }
 
-  private Waymark createWaymarkGeoget(GpxWpt gpxwpt) {
-    Waymark wm = new Waymark();
+  private Waymark createWaymarkGeoget(final GpxWpt gpxwpt) {
+    final Waymark wm = new Waymark();
     wm.setIdentifier(gpxwpt.name);
     if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
       wm.setVztahx(EKesVztah.OWN);
@@ -478,7 +478,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     wm.setHidden(gpxwpt.time);
 
 
-    Wpt wpt = createWpt(gpxwpt);
+    final Wpt wpt = createWpt(gpxwpt);
     wpt.setNazev(gpxwpt.groundspeak.name);
     wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
 
@@ -488,8 +488,8 @@ public class KesoidImportBuilder implements IImportBuilder {
   }
 
 
-  private Waymark createWaymarkNormal(GpxWpt gpxwpt) {
-    Waymark wm = new Waymark();
+  private Waymark createWaymarkNormal(final GpxWpt gpxwpt) {
+    final Waymark wm = new Waymark();
     wm.setIdentifier(gpxwpt.name);
     if (gpxwpt.groundspeak != null) {
       if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
@@ -503,7 +503,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
     wm.setUrl(gpxwpt.link.href);
 
-    Wpt wpt = createWpt(gpxwpt);
+    final Wpt wpt = createWpt(gpxwpt);
     wpt.setNazev(gpxwpt.link.text);
     wpt.setSym(odstranNadbytecneMezery(gpxwpt.type));
 
@@ -513,8 +513,8 @@ public class KesoidImportBuilder implements IImportBuilder {
     return wm;
   }
 
-  private Munzee createMunzee(GpxWpt gpxwpt) {
-    Munzee mz = new Munzee();
+  private Munzee createMunzee(final GpxWpt gpxwpt) {
+    final Munzee mz = new Munzee();
     mz.setIdentifier(gpxwpt.name);
     if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
       mz.setVztahx(EKesVztah.OWN);
@@ -528,7 +528,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     mz.setHidden(gpxwpt.time);
 
 
-    Wpt wpt = createWpt(gpxwpt);
+    final Wpt wpt = createWpt(gpxwpt);
     wpt.setNazev(gpxwpt.groundspeak.name);
     if (gpxwpt.name.startsWith(MZ)) {
       wpt.setSym("MZ " + odstranNadbytecneMezery(gpxwpt.groundspeak.type));
@@ -545,7 +545,7 @@ public class KesoidImportBuilder implements IImportBuilder {
    * @param aType
    * @return
    */
-  private String odstranNadbytecneMezery(String s) {
+  private String odstranNadbytecneMezery(final String s) {
     return s == null ? null : s.replaceAll(" +", " ");
   }
 
@@ -553,55 +553,72 @@ public class KesoidImportBuilder implements IImportBuilder {
    * @param aGpxwpt
    * @return
    */
-  private String urciSymCgpZPseudoKese(GpxWpt gpxwpt) {
-    EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
-    if (pseudoKesType == EKesType.TRADITIONAL)
-      return (gpxwpt.groundspeak.name.contains("ETRS")) ? "TrB (ETRS)" : "TrB";
-    if (pseudoKesType == EKesType.LETTERBOX_HYBRID) return "TrB-p";
-    if (pseudoKesType == EKesType.MULTI) return "ZhB";
-    if (pseudoKesType == EKesType.UNKNOWN) return "ZhB-p";
-    if (pseudoKesType == EKesType.EARTHCACHE) return "BTP";
-    if (pseudoKesType == EKesType.WHERIGO) return "ZGS";
+  private String urciSymCgpZPseudoKese(final GpxWpt gpxwpt) {
+    final EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
+    if (pseudoKesType == EKesType.TRADITIONAL) {
+      return gpxwpt.groundspeak.name.contains("ETRS") ? "TrB (ETRS)" : "TrB";
+    }
+    if (pseudoKesType == EKesType.LETTERBOX_HYBRID) {
+      return "TrB-p";
+    }
+    if (pseudoKesType == EKesType.MULTI) {
+      return "ZhB";
+    }
+    if (pseudoKesType == EKesType.UNKNOWN) {
+      return "ZhB-p";
+    }
+    if (pseudoKesType == EKesType.EARTHCACHE) {
+      return "BTP";
+    }
+    if (pseudoKesType == EKesType.WHERIGO) {
+      return "ZGS";
+    }
 
-    if (pseudoKesType == EKesType.EVENT) return "ZVBP";
-    if (pseudoKesType == EKesType.CACHE_IN_TRASH_OUT_EVENT) return "PVBP";
-    if (pseudoKesType == EKesType.MEGA_EVENT) return "ZNB";
+    if (pseudoKesType == EKesType.EVENT) {
+      return "ZVBP";
+    }
+    if (pseudoKesType == EKesType.CACHE_IN_TRASH_OUT_EVENT) {
+      return "PVBP";
+    }
+    if (pseudoKesType == EKesType.MEGA_EVENT) {
+      return "ZNB";
+    }
 
     return "Unknown Cgp";
   }
 
-  private void urciNazevCgpZPseudoKese(CzechGeodeticPoint cgp, Wpt wpt, GpxWpt gpxwpt) {
+  private void urciNazevCgpZPseudoKese(final CzechGeodeticPoint cgp, final Wpt wpt, final GpxWpt gpxwpt) {
     String name = firstNonNull(gpxwpt.groundspeak.name, "Unknown CGP");
 
-    EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
+    final EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
 
-    String nameCandidate = null;
+    final String nameCandidate = null;
 
     switch (pseudoKesType) {
-      case TRADITIONAL:
-      case LETTERBOX_HYBRID:
-      case MULTI:
-      case UNKNOWN:
-      case CACHE_IN_TRASH_OUT_EVENT:
-      case EVENT:
-      case MEGA_EVENT:
-        name = firstNonNull(gpxwpt.groundspeak.encodedHints, name);
-        break;
-      case EARTHCACHE:
-      case WHERIGO:
-        name = firstNonNull(gpxwpt.groundspeak.shortDescription, name);
-        break;
-      default:
-        // Just fall through.
+    case TRADITIONAL:
+    case LETTERBOX_HYBRID:
+    case MULTI:
+    case UNKNOWN:
+    case CACHE_IN_TRASH_OUT_EVENT:
+    case EVENT:
+    case MEGA_EVENT:
+      name = firstNonNull(gpxwpt.groundspeak.encodedHints, name);
+      break;
+    case EARTHCACHE:
+    case WHERIGO:
+      name = firstNonNull(gpxwpt.groundspeak.shortDescription, name);
+      break;
+    default:
+      // Just fall through.
     }
 
     name = firstNonNull(nameCandidate, name);
 
-    int poz = name.indexOf("http://");
+    final int poz = name.indexOf("http://");
     if (poz >= 0) {
       name = name.substring(0, poz);
     }
-    JtskSouradnice jtsk = extrahujJtsk(name);
+    final JtskSouradnice jtsk = extrahujJtsk(name);
     if (jtsk != null) {
       name = jtsk.pred + jtsk.po;
       cgp.setXjtsk(jtsk.x);
@@ -615,13 +632,13 @@ public class KesoidImportBuilder implements IImportBuilder {
     wpt.setNazev(name);
   }
 
-  private JtskSouradnice extrahujJtsk(String celyretez) {
+  private JtskSouradnice extrahujJtsk(final String celyretez) {
     if (patExtrakceSouradnicJtsk == null) {
       patExtrakceSouradnicJtsk = Pattern.compile("(.*?)(\\d+)'(\\d+.\\d+) +(\\d+)'(\\d+\\.\\d+) (\\d+\\.\\d+)(.*)");
     }
-    Matcher mat = patExtrakceSouradnicJtsk.matcher(celyretez);
+    final Matcher mat = patExtrakceSouradnicJtsk.matcher(celyretez);
     if (mat.matches()) {
-      JtskSouradnice sou = new JtskSouradnice();
+      final JtskSouradnice sou = new JtskSouradnice();
       sou.pred = mat.group(1);
       sou.y = Double.parseDouble(mat.group(2) + mat.group(3));
       sou.x = Double.parseDouble(mat.group(4) + mat.group(5));
@@ -633,8 +650,8 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
   }
 
-  private Kesoid createKes(GpxWpt gpxwpt) {
-    Kes kes = new Kes();
+  private Kesoid createKes(final GpxWpt gpxwpt) {
+    final Kes kes = new Kes();
     kes.setIdentifier(gpxwpt.name);
     kes.setAuthor(gpxwpt.groundspeak.placedBy);
     //    kes.setState(gpxwpt.groundspeak.state);
@@ -659,7 +676,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     kes.setFavorit(gpxwpt.gpxg.favorites);
     kes.setFoundTime(gpxwpt.gpxg.found);
 
-    Wpt wpt = createWpt(gpxwpt);
+    final Wpt wpt = createWpt(gpxwpt);
     wpt.setSym(gpxwpt.groundspeak.type);
     wpt.setNazev(gpxwpt.groundspeak.name);  // název hlavního waypointu shodný s názvem keše
     wpt.setZorder(EZOrder.FIRST);
@@ -671,17 +688,17 @@ public class KesoidImportBuilder implements IImportBuilder {
     return kes;
   }
 
-  private Wpt createAditionalWpt(GpxWpt gpxwpt) {
-    Wpt wpt = createWpt(gpxwpt);
+  private Wpt createAditionalWpt(final GpxWpt gpxwpt) {
+    final Wpt wpt = createWpt(gpxwpt);
     wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
-    boolean rucnePridany = (gpxwpt.gpxg.flag & 1) == 0;
+    final boolean rucnePridany = (gpxwpt.gpxg.flag & 1) == 0;
     wpt.setRucnePridany(rucnePridany);
     wpt.setZorder(EZOrder.KESWPT);
     return wpt;
   }
 
 
-  private EKesVztah urciVztah(GpxWpt gpxwpt) {
+  private EKesVztah urciVztah(final GpxWpt gpxwpt) {
     if (gpxwpt.explicitneUrcenoVlastnictvi) {
       return EKesVztah.OWN;
     }
@@ -700,7 +717,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
   }
 
-  protected EKesStatus urciStatus(boolean archived, boolean availaible) {
+  protected EKesStatus urciStatus(final boolean archived, final boolean availaible) {
     if (archived) {
       return EKesStatus.ARCHIVED;
     } else if (!availaible) {
@@ -710,7 +727,7 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
   }
 
-  private String vytvorNazev(GpxWpt gpxwpt) {
+  private String vytvorNazev(final GpxWpt gpxwpt) {
     String s;
     if (gpxwpt.desc == null) {
       if (gpxwpt.cmt == null) {
@@ -732,12 +749,14 @@ public class KesoidImportBuilder implements IImportBuilder {
     return s;
   }
 
-  private String extractOznaceniBodu(String celeJmeno) {
-    if (celeJmeno == null) return null;
+  private String extractOznaceniBodu(final String celeJmeno) {
+    if (celeJmeno == null) {
+      return null;
+    }
     if (patExtrakceCislaCgp == null) {
       patExtrakceCislaCgp = Pattern.compile(".*?([0-9]+-[0-9]+).*");
     }
-    Matcher mat = patExtrakceCislaCgp.matcher(celeJmeno);
+    final Matcher mat = patExtrakceCislaCgp.matcher(celeJmeno);
     if (mat.matches()) {
       return mat.group(1);
     } else {
@@ -745,10 +764,10 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
   }
 
-  private int urciElevation(GpxWpt gpxwpt) {
-    if (gpxwpt.ele != 0)
+  private int urciElevation(final GpxWpt gpxwpt) {
+    if (gpxwpt.ele != 0) {
       return (int) gpxwpt.ele;
-    else {
+    } else {
       if (gpxwpt.gpxg != null) {
         return gpxwpt.gpxg.elevation;
       } else {
@@ -757,8 +776,8 @@ public class KesoidImportBuilder implements IImportBuilder {
     }
   }
 
-  private Wpt createWpt(GpxWpt gpxwpt) {
-    Wpt wpt = new Wpt();
+  private Wpt createWpt(final GpxWpt gpxwpt) {
+    final Wpt wpt = new Wpt();
     wpt.setWgs(gpxwpt.wgs);
     wpt.setElevation(urciElevation(gpxwpt));
     wpt.setName(gpxwpt.name);
@@ -774,13 +793,13 @@ public class KesoidImportBuilder implements IImportBuilder {
   }
 
 
-  private Set<Alela> definujUzivatslskeAlely(GpxWpt gpxwpt) {
-    Set<Alela> alely = new HashSet<>();
+  private Set<Alela> definujUzivatslskeAlely(final GpxWpt gpxwpt) {
+    final Set<Alela> alely = new HashSet<>();
 
-    for (Map.Entry<String, String> entry : gpxwpt.gpxg.userTags.entrySet()) {
-      String alelaName = entry.getValue();
-      String genName = entry.getKey();
-      Alela alela = genom.alela(alelaName, genName);
+    for (final Map.Entry<String, String> entry : gpxwpt.gpxg.userTags.entrySet()) {
+      final String alelaName = entry.getValue();
+      final String genName = entry.getKey();
+      final Alela alela = genom.alela(alelaName, genName);
       if (alela == null) {
         continue;
       }
@@ -790,12 +809,12 @@ public class KesoidImportBuilder implements IImportBuilder {
     return alely;
   }
 
-  public synchronized void setCurrentlyLoading(KeFile aJmenoZdroje, boolean nacteno) {
+  public synchronized void setCurrentlyLoading(final KeFile aJmenoZdroje, final boolean nacteno) {
     infoOCurrentnimZdroji = informaceOZdrojichBuilder.add(aJmenoZdroje, nacteno);
   }
 
   @Override
-  public void addTrackWpt(GpxWpt wpt) {
+  public void addTrackWpt(final GpxWpt wpt) {
   }
 
   @Override
@@ -815,11 +834,11 @@ public class KesoidImportBuilder implements IImportBuilder {
   }
 
   @Override
-  public void setTrackName(String aTrackName) {
+  public void setTrackName(final String aTrackName) {
   }
 
   @Override
-  public GpxWpt get(String aName) {
+  public GpxWpt get(final String aName) {
     return gpxwpts.get(aName);
   }
 }

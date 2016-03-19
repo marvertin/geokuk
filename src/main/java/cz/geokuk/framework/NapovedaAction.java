@@ -12,18 +12,18 @@ public class NapovedaAction extends AbstractAction {
   private NapovedaModel napovedaModel;
   private final String tema;
 
-  public NapovedaAction(String tema) {
+  public NapovedaAction(final String tema) {
     super("Nápověda");
     this.tema = tema;
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F1"));
 
   }
   @Override
-  public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(final ActionEvent e) {
     napovedaModel.zobrazNapovedu(tema);
   }
 
-  public void inject(NapovedaModel napovedaModel) {
+  public void inject(final NapovedaModel napovedaModel) {
     this.napovedaModel = napovedaModel;
   }
 }

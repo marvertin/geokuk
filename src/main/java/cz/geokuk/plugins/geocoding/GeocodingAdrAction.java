@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
-import cz.geokuk.core.napoveda.NapovedaModelChangedEvent;
+import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
 
@@ -31,11 +31,9 @@ public class GeocodingAdrAction extends DialogOpeningAction0 {
     return new JAdrDialog();
   }
 
-  public void onEvent(NapovedaModelChangedEvent event) {
-    setEnabled(event.getModel().isOnlineMode());
+  public void onEvent(final OnofflineModelChangeEvent event) {
+    setEnabled(event.isOnlineMOde());
   }
-
-
 
 
 }

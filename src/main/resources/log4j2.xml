@@ -11,11 +11,18 @@
         </File>
     </Appenders>
     <Loggers>
-        <Root level="info">
+        <Root level="warn">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="FileLog"/>
         </Root>
         <Logger name="JKachlovnik" level="INFO"/>
+        <Logger name="KachleZiskavac_diskWrite" level="INFO"/>
+        <Logger name="KachleZiskavac_online" level="INFO"/>
+        <Logger name="KachleZiskavac_batch" level="INFO"/>
         <Logger name="KachloDownloader" level="INFO"/>
+        <Logger name="DlazebniKombiner" level="INFO"/>
+        <Logger name="JKachleOflinerDialog" level="INFO"/>
+        
+        
     </Loggers>
 </Configuration>

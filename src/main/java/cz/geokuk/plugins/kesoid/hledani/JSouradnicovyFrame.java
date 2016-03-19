@@ -68,7 +68,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
   private static final long serialVersionUID = 7087453419069194768L;
 
 
-  // FIXME skutečnou hodnotu maximální šířky sem dát
+  // TODO skutečnou hodnotu maximální šířky sem dát
   private static final double SIRKA_MAX = 80;
   private static final double SIRKA_MIN = -80;
 

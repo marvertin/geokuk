@@ -129,7 +129,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   protected void initComponents() {
     // Napřed registrovat, aby při inicializaci už byl výsledek tady
     getRootPane().setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    Box box = Box.createVerticalBox();
+    final Box box = Box.createVerticalBox();
     add(box);
 
     //    jUvod = new JTextPane();
@@ -146,13 +146,13 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     jTerenniRozmerField.setEditable(false);
 
 
-    JPanel jPanMeritko = new JPanel(new BorderLayout());
+    final JPanel jPanMeritko = new JPanel(new BorderLayout());
     jPanMeritko.setBorder(createBorder("Měřítko"));
 
     jPanMeritko.setName("Měřítko");
     jPanMeritko.add(createMoumerNahled());
 
-    JPanel meritkoveNastavovace = new JPanel();
+    final JPanel meritkoveNastavovace = new JPanel();
     meritkoveNastavovace.add(jSrovnatDoSeveru);
     meritkoveNastavovace.add(new JLabel("Měřítko:"));
     meritkoveNastavovace.add(jNastavovecMeritka);
@@ -165,7 +165,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     box.add(jPanMeritko);
 
 
-    Box jNastaTypu = Box.createHorizontalBox();
+    final Box jNastaTypu = Box.createHorizontalBox();
 
     //box.add(Box.createVerticalStrut(10));
     createrWhatRender();
@@ -190,7 +190,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     box.add(Box.createVerticalGlue());
 
-    Box jVystup = Box.createVerticalBox();
+    final Box jVystup = Box.createVerticalBox();
     jVystup.setBorder(createBorder("Výstup"));
 
 
@@ -219,10 +219,10 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   }
 
   private JPanel initVystupComponents () {
-    JPanel pan = new JPanel(new GridBagLayout());
+    final JPanel pan = new JPanel(new GridBagLayout());
     jOutputFolderLabel = new JLabel();
     //jOutputFolder.setEditable(false);
-    Dimension dm1 = getMinimumSize();
+    final Dimension dm1 = getMinimumSize();
     dm1.width = 300;
     //jOutputFolder.setColumns(50);
     //jOutputFolder.setMinimumSize(dm1);
@@ -234,12 +234,12 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     jJakouHustotuLabel = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     //jJakouHustotuNaPadesatku.setEditable(false);
     //jJakouHustotuNaPadesatku.setAlignmentX(CENTER_ALIGNMENT);
-    Box box1 = Box.createHorizontalBox();
+    final Box box1 = Box.createHorizontalBox();
     box1.add(jPapirMeritkoComboBox);
     box1.add(Box.createHorizontalStrut(5));
     box1.add(jJakouHustotuLabel);
 
-    Box box2 = Box.createHorizontalBox();
+    final Box box2 = Box.createHorizontalBox();
     box2.add(jOutputFolderLabel);
     box2.add(Box.createRigidArea(new Dimension(5, 0)));
     box2.add(jChangeOutputFolderButton);
@@ -327,8 +327,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jSpustitButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
-        RenderSettings ss = renderModel.getRenderSettings().copy();
+      public void actionPerformed(final ActionEvent e) {
+        final RenderSettings ss = renderModel.getRenderSettings().copy();
         ss.setKmzFolderDescription(jKmzFolderDescription.getText());
         renderModel.setRenderSettings(ss);
         renderModel.spustRendrovani();
@@ -337,7 +337,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jPrerusitButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         renderModel.prerusRendrovani();
       }
     });
@@ -345,12 +345,12 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     addWindowListener(new WindowAdapter() {
 
       @Override
-      public void windowClosing(WindowEvent e) {
+      public void windowClosing(final WindowEvent e) {
         renderModel.finishRenderingProcess();
       }
 
       @Override
-      public void windowClosed(WindowEvent e) {
+      public void windowClosed(final WindowEvent e) {
         renderModel.finishRenderingProcess();
       }
     });
@@ -358,7 +358,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     jNastaveniAktualnihoMeritkaButton.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         //int renderedMoumer = renderModel.getRenderedMoumer();
         renderModel.uschovejAktualniMeritko();
         //jRendrovaneMeritko.setText(renderedMoumer + "");
@@ -368,9 +368,9 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jWhatRenderRadioPanel.getSelectionModel().addListener(new SelectionListener<EWhatRender>() {
       @Override
-      public void selectionChanged(SelectionEvent<EWhatRender> event) {
+      public void selectionChanged(final SelectionEvent<EWhatRender> event) {
         System.out.println("Vybrano: " + event.getSelected());
-        RenderSettings ss = renderModel.getRenderSettings().copy();
+        final RenderSettings ss = renderModel.getRenderSettings().copy();
         ss.setWhatRender(event.getSelected());
         renderModel.setRenderSettings(ss);
       }
@@ -379,9 +379,9 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jImgTypeRadioPanel.getSelectionModel().addListener(new SelectionListener<EImageType>() {
       @Override
-      public void selectionChanged(SelectionEvent<EImageType> event) {
+      public void selectionChanged(final SelectionEvent<EImageType> event) {
         System.out.println("Vybrano: " + event.getSelected());
-        RenderSettings ss = renderModel.getRenderSettings().copy();
+        final RenderSettings ss = renderModel.getRenderSettings().copy();
         ss.setImageType(event.getSelected());
         renderModel.setRenderSettings(ss);
       }
@@ -390,8 +390,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jKmzFolderNazevCombo.addListener(new Listener() {
       @Override
-      public void patternChanged(Patterned patterned) {
-        RenderSettings rs = renderModel.getRenderSettings();
+      public void patternChanged(final Patterned patterned) {
+        final RenderSettings rs = renderModel.getRenderSettings();
         System.out.println("pattern 1: " + rs.getKmzFolder());
         System.out.println("pattern 2: " + patterned);
         rs.setKmzFolder(patterned);
@@ -401,9 +401,9 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jPureJmenoSouboruCombo.addListener(new Listener() {
       @Override
-      public void patternChanged(Patterned patterned) {
-        RenderSettings rs = renderModel.getRenderSettings();
-        String vycisteneJmeno = FUtil.vycistiJmenoSouboru(patterned.getText());
+      public void patternChanged(final Patterned patterned) {
+        final RenderSettings rs = renderModel.getRenderSettings();
+        final String vycisteneJmeno = FUtil.vycistiJmenoSouboru(patterned.getText());
         if (! patterned.getText().equals(vycisteneJmeno)) {
           patterned.setText(vycisteneJmeno);
           jPureJmenoSouboruCombo.setSelectedItem(vycisteneJmeno);
@@ -415,8 +415,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jNastavovacVelikostiDlazdicX.addChangeListener(new ChangeListener() {
       @Override
-      public void stateChanged(ChangeEvent e) {
-        RenderSettings settings = renderModel.getRenderSettings();
+      public void stateChanged(final ChangeEvent e) {
+        final RenderSettings settings = renderModel.getRenderSettings();
         settings.setKmzMaxDlazdiceX(jNastavovacVelikostiDlazdicX.getMaximalniVelikost());
         renderModel.setRenderSettings(settings);
       }
@@ -424,8 +424,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jNastavovacVelikostiDlazdicY.addChangeListener(new ChangeListener() {
       @Override
-      public void stateChanged(ChangeEvent e) {
-        RenderSettings settings = renderModel.getRenderSettings();
+      public void stateChanged(final ChangeEvent e) {
+        final RenderSettings settings = renderModel.getRenderSettings();
         settings.setKmzMaxDlazdiceY(jNastavovacVelikostiDlazdicY.getMaximalniVelikost());
         renderModel.setRenderSettings(settings);
       }
@@ -433,8 +433,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jSrovnatDoSeveru.addChangeListener(new ChangeListener() {
       @Override
-      public void stateChanged(ChangeEvent e) {
-        RenderSettings settings = renderModel.getRenderSettings();
+      public void stateChanged(final ChangeEvent e) {
+        final RenderSettings settings = renderModel.getRenderSettings();
         settings.setSrovnatDoSeveru(jSrovnatDoSeveru.isSelected());
         renderModel.setRenderSettings(settings);
       }
@@ -451,8 +451,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jKmzDrawOrder.addChangeListener(new ChangeListener() {
       @Override
-      public void stateChanged(ChangeEvent e) {
-        RenderSettings settings = renderModel.getRenderSettings();
+      public void stateChanged(final ChangeEvent e) {
+        final RenderSettings settings = renderModel.getRenderSettings();
         settings.setKmzDrawOrder((Integer) jKmzDrawOrder.getValue());
         renderModel.setRenderSettings(settings);
       }
@@ -461,8 +461,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     jPapirMeritkoComboBox.addItemListener(new ItemListener() {
 
       @Override
-      public void itemStateChanged(ItemEvent e) {
-        RenderSettings settings = renderModel.getRenderSettings();
+      public void itemStateChanged(final ItemEvent e) {
+        final RenderSettings settings = renderModel.getRenderSettings();
         settings.setPapiroveMeritko(jPapirMeritkoComboBox.getMeritko());
         renderModel.setRenderSettings(settings);
       }
@@ -470,8 +470,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jKalibrBodu.addChangeListener(new ChangeListener() {
       @Override
-      public void stateChanged(ChangeEvent e) {
-        RenderSettings settings = renderModel.getRenderSettings();
+      public void stateChanged(final ChangeEvent e) {
+        final RenderSettings settings = renderModel.getRenderSettings();
         settings.setKalibrBodu((Integer) jKalibrBodu.getValue());
         renderModel.setRenderSettings(settings);
       }
@@ -481,26 +481,26 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   }
 
 
-  public void onEvent(PripravaRendrovaniEvent event) {
-    boolean maBytEnablovano = event.getStavRendrovani() == EStavRendrovani.PRIPRAVA;
+  public void onEvent(final PripravaRendrovaniEvent event) {
+    final boolean maBytEnablovano = event.getStavRendrovani() == EStavRendrovani.PRIPRAVA;
 
     FComponent.setEnabledChildren(this, maBytEnablovano);
-    RenderSettings renderSettings = event.getRenderSettings();
+    final RenderSettings renderSettings = event.getRenderSettings();
 
     jWhatRenderRadioPanel.getSelectionModel().setSelected(renderSettings.getWhatRender());
     jImgTypeRadioPanel.getSelectionModel().setSelected(renderSettings.getImageType());
-    EStavRendrovani stavRendrovani = event.getStavRendrovani();
+    final EStavRendrovani stavRendrovani = event.getStavRendrovani();
     jPrerusitButton.setVisible(stavRendrovani == EStavRendrovani.BEH);
     jPrerusitButton.setEnabled(stavRendrovani == EStavRendrovani.BEH);
     jProgressBar.setVisible(stavRendrovani == EStavRendrovani.BEH || stavRendrovani == EStavRendrovani.PRERUSOVANO);
     jSpustitButton.setVisible(stavRendrovani == EStavRendrovani.PRIPRAVA);
 
-    long pametMiB = renderModel.odhadniMnozstviZabranePameti() / 1024  / 1024 + 1;
+    final long pametMiB = renderModel.odhadniMnozstviZabranePameti() / 1024  / 1024 + 1;
     //jSpustit.setEnabled(true);
     jSpustitButton.setText(String.format("<html>%s <b>%d * %d px</b> - (%d MiB)",
-        (renderSettings.getWhatRender() != EWhatRender.TISK ? "Rendrovat " : "Tisknout"),
-        renderModel.getDim().width, renderModel.getDim().height, pametMiB));
-    jPrerusitButton.setText((renderSettings.getWhatRender() != EWhatRender.TISK ? "Přerušit rendrování" : "Přerušit tisk"));
+        renderSettings.getWhatRender() != EWhatRender.TISK ? "Rendrovat " : "Tisknout",
+            renderModel.getDim().width, renderModel.getDim().height, pametMiB));
+    jPrerusitButton.setText(renderSettings.getWhatRender() != EWhatRender.TISK ? "Přerušit rendrování" : "Přerušit tisk");
     //jRendrovaneMeritko.setText(renderModel.getRenderedMoumer() + "");
     jNastaveniAktualnihoMeritkaButton.setText("Nastav na meritko: " + renderModel.getCurrentMoumer());
     jNastaveniAktualnihoMeritkaButton.setEnabled(maBytEnablovano && renderModel.getCurrentMoumer() != renderModel.getRenderedMoumer());
@@ -510,16 +510,16 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
     jNastavovacVelikostiDlazdicX.setMaximalniVelikost(renderSettings.getKmzMaxDlazdiceX());
     jNastavovacVelikostiDlazdicY.setMaximalniVelikost(renderSettings.getKmzMaxDlazdiceY());
-    DlazdicovaMetrikaXY dlazdicovaMetrika = renderModel.spoctiDlazdicovouMetriku();
+    final DlazdicovaMetrikaXY dlazdicovaMetrika = renderModel.spoctiDlazdicovouMetriku();
     jNastavovacVelikostiDlazdicX.setMetrika(dlazdicovaMetrika.xx);
     jNastavovacVelikostiDlazdicY.setMetrika(dlazdicovaMetrika.yy);
 
-    Coord roord = event.getModel().getRoord();
-    double pixluNaMetr = roord.getPixluNaMetr();
-    double pixluNaMilimetrMapy = pixluNaMetr / 1000 * renderSettings.getPapiroveMeritko();
-    double dpi = pixluNaMilimetrMapy * 25.4;
-    double vzdalenostBodu = 1000 / pixluNaMilimetrMapy;
-    PapirovaMetrika papirovaMetrika = renderModel.getPapirovaMetrika();
+    final Coord roord = event.getModel().getRoord();
+    final double pixluNaMetr = roord.getPixluNaMetr();
+    final double pixluNaMilimetrMapy = pixluNaMetr / 1000 * renderSettings.getPapiroveMeritko();
+    final double dpi = pixluNaMilimetrMapy * 25.4;
+    final double vzdalenostBodu = 1000 / pixluNaMilimetrMapy;
+    final PapirovaMetrika papirovaMetrika = renderModel.getPapirovaMetrika();
     jJakouHustotuLabel.setText(String.format("<html>%.0f * %.0f mm - %.0f DPI = %.2f px/mm = %.1f \u03BCm/px",
         papirovaMetrika.xsize * 1000,
         papirovaMetrika.ysize * 1000,
@@ -538,13 +538,13 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     nastavZakladyDoComboboxu(false);
     nastavViditelnost(renderSettings.getWhatRender());
 
-    File outputFolder = renderModel.getOutputFolder();
+    final File outputFolder = renderModel.getOutputFolder();
     jOutputFolderLabel.setText(outputFolder == null ? "" : outputFolder.toString());
     jChangeOutputFolderButton.setAction(factory.init(new UmisteniSouboruAction(urciFokusovanouSlozku(renderSettings))));
     jChangeOutputFolderButton.setText("Změň...");
   }
 
-  private String urciPriponuSouboru(RenderSettings renderSettings) {
+  private String urciPriponuSouboru(final RenderSettings renderSettings) {
     switch (renderSettings.getWhatRender()) {
     case GOOGLE_EARTH: return "kmz";
     case OZI_EXPLORER: return "map";
@@ -554,7 +554,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     }
   }
 
-  private ESouborPanelName urciFokusovanouSlozku(RenderSettings renderSettings) {
+  private ESouborPanelName urciFokusovanouSlozku(final RenderSettings renderSettings) {
     switch (renderSettings.getWhatRender()) {
     case GOOGLE_EARTH: return ESouborPanelName.KMZ;
     case OZI_EXPLORER: return ESouborPanelName.OZI;
@@ -564,7 +564,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     }
   }
 
-  public void onEvent(ReferencniBodSeZmenilEvent event) {
+  public void onEvent(final ReferencniBodSeZmenilEvent event) {
     referecniBod = event.wgs;
     nastavZakladyDoComboboxu(true);
     geocodingModel.spustHledani(event.wgs, new RefreshorVysledkuHledani<Nalezenec>() {
@@ -573,12 +573,12 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
       private SortedMap<String, String> patsFolderName;
 
       @Override
-      public void refreshVysledekHledani(VysledekHledani<Nalezenec> vysledekHledani) {
+      public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {
         patsPureFileName = new TreeMap<>();
         patsFolderName = new TreeMap<>();
         if (vysledekHledani.nalezenci != null) {
           int poradi=0;
-          for (Nalezenec nalezenec : vysledekHledani.nalezenci) {
+          for (final Nalezenec nalezenec : vysledekHledani.nalezenci) {
             polozkuDoObou(poradi, "A20-geocoding", spoj(nalezenec.administrativeArea, nalezenec.subAdministrativeArea, nalezenec.locality, nalezenec.thoroughfare));
             polozkuDoObou(poradi, "A22-geocoding", spoj(nalezenec.administrativeArea, nalezenec.subAdministrativeArea, nalezenec.locality));
             polozkuDoObou(poradi, "A26-geocoding", spoj(nalezenec.administrativeArea, nalezenec.subAdministrativeArea));
@@ -594,15 +594,15 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
         }
       }
 
-      private void polozkuDoObou(int poradi, String klicek, String textik) {
+      private void polozkuDoObou(final int poradi, final String klicek, final String textik) {
         patsPureFileName.put(klicek + poradi, FUtil.vycistiJmenoSouboru(textik));
         patsFolderName.put(klicek + poradi,  textik);
       }
 
-      private String spoj(String... jmena) {
-        StringBuilder sb = new StringBuilder();
+      private String spoj(final String... jmena) {
+        final StringBuilder sb = new StringBuilder();
         boolean prvni = true;
-        for (String jmeno : jmena) {
+        for (final String jmeno : jmena) {
           if (jmeno == null || jmeno.isEmpty()) {
             continue;
           }
@@ -618,8 +618,8 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   }
 
 
-  public void onEvent(ProgressEvent event) {
-    // FIXME vyřešit problém, kdy se třeba během rendrování načtou kešule
+  public void onEvent(final ProgressEvent event) {
+    // TODO vyřešit problém, kdy se třeba během rendrování načtou kešule
     jProgressBar.setIndeterminate(! event.isVisible());
     jProgressBar.setValue(event.getProgress());
     jProgressBar.setMaximum(event.getMax());
@@ -630,10 +630,10 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   }
 
 
-  private void nastavViditelnost(EWhatRender whatRender) {
-    boolean jenOzi = whatRender == EWhatRender.OZI_EXPLORER;
-    boolean jenKmz = whatRender == EWhatRender.GOOGLE_EARTH;
-    boolean netiskneSe = whatRender != EWhatRender.TISK;
+  private void nastavViditelnost(final EWhatRender whatRender) {
+    final boolean jenOzi = whatRender == EWhatRender.OZI_EXPLORER;
+    final boolean jenKmz = whatRender == EWhatRender.GOOGLE_EARTH;
+    final boolean netiskneSe = whatRender != EWhatRender.TISK;
     jKmzFolderNazevCombo.setVisible(jenKmz);
     jNastavovacVelikostiDlazdicX.setVisible(jenKmz);
     jNastavovacVelikostiDlazdicY.setVisible(jenKmz);
@@ -658,19 +658,21 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
    * @param event
    * @return
    */
-  private void nastavZakladyDoComboboxu(boolean smazatGeocodingPatterns) {
-    if (referecniBod == null) return;
-    Wgs wgs = referecniBod;
-    int moumer = renderModel.getRenderedMoumer();
+  private void nastavZakladyDoComboboxu(final boolean smazatGeocodingPatterns) {
+    if (referecniBod == null) {
+      return;
+    }
+    final Wgs wgs = referecniBod;
+    final int moumer = renderModel.getRenderedMoumer();
     {
-      SortedMap<String, String> pats = new TreeMap<>();
+      final SortedMap<String, String> pats = new TreeMap<>();
       pats.put("C1-wgs",  wgs + " z" + moumer);
       pats.put("C2-utm",  wgs.toUtm().toString() + " z" + moumer);
       pats.put("C3-vter",  "N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer);
       jKmzFolderNazevCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
     }
     {
-      SortedMap<String, String> pats = new TreeMap<>();
+      final SortedMap<String, String> pats = new TreeMap<>();
       pats.put("C0-compact", String.format(Locale.ENGLISH, "n%7fe%7fz%d", wgs.lat, wgs.lon, moumer).replace(".", ""));
       pats.put("C1-wgs", wgs  + " z" + moumer);
       pats.put("C2-utm",  wgs.toUtm().toString());
@@ -680,7 +682,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   }
 
   private void createImgType() {
-    SelectionModel<EImageType> whrm = new SelectionModel<>();
+    final SelectionModel<EImageType> whrm = new SelectionModel<>();
     whrm.add(EImageType.bmp, "<html><i>BMP</i> - nekomprimovaný obrázek (pro volný OziExplorer");
     whrm.add(EImageType.jpg, "<html><i>JPG</i> - ztrátová komprimace, vhodné pro fotky, nutné pro Garmin.");
     whrm.add(EImageType.png, "<html><i>PNG</i> - bezeztrátová komprimace, umožňuje průhlednost.");
@@ -691,7 +693,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
   }
 
   private void createrWhatRender() {
-    SelectionModel<EWhatRender> whrm = new SelectionModel<>();
+    final SelectionModel<EWhatRender> whrm = new SelectionModel<>();
     whrm.add(EWhatRender.TISK, "<html><i>Tisk</i> - přímý tisk na tiskárnu (beta)");
     whrm.add(EWhatRender.JEN_OBRAZEK, "<html><i>Obrázek mapy</i> - pro tisk nebo prohlížení");
     whrm.add(EWhatRender.OZI_EXPLORER, "<html><i>OziExplorer</i> - obrázek a kalibrační map soubor.");
@@ -713,7 +715,7 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     nahled.setMaximumSize(new Dimension(300,300));
 
 
-    JKachlovnik nahledKachlovnik = new JRenderNahledKachlovnik();
+    final JKachlovnik nahledKachlovnik = new JRenderNahledKachlovnik();
     nahled.add(nahledKachlovnik);
     factory.init(nahledKachlovnik);
     nahled.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
@@ -729,12 +731,12 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     return "Render";
   }
 
-  public void inject(RenderModel renderModel) {
+  public void inject(final RenderModel renderModel) {
     this.renderModel = renderModel;
   }
 
 
-  public void inject(GeocodingModel geocodingModel) {
+  public void inject(final GeocodingModel geocodingModel) {
     this.geocodingModel = geocodingModel;
   }
 
@@ -756,11 +758,11 @@ implements AfterInjectInit, AfterEventReceiverRegistrationInit {
     //prepocitat();
   }
 
-  static Border createBorder(String titleText) {
-    TitledBorder border = BorderFactory.createTitledBorder(titleText);
-    Font titleFont = border.getTitleFont();
+  static Border createBorder(final String titleText) {
+    final TitledBorder border = BorderFactory.createTitledBorder(titleText);
+    final Font titleFont = border.getTitleFont();
     if (titleFont != null) {
-    	border.setTitleFont(titleFont.deriveFont(Font.BOLD | Font.ITALIC));
+      border.setTitleFont(titleFont.deriveFont(Font.BOLD | Font.ITALIC));
     }
     return border;
 

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.program;
 
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -58,11 +59,11 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
     // Zastavit počítání při uzavení okna
     addWindowListener(new WindowAdapter() {
       @Override
-      public void windowClosing(WindowEvent e) {
+      public void windowClosing(final WindowEvent e) {
         Pocitadlo.callback = null;
       }
       @Override
-      public void windowClosed(WindowEvent e) {
+      public void windowClosed(final WindowEvent e) {
         Pocitadlo.callback = null;
       }
     });
@@ -71,7 +72,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
   @Override
   public void onChange() {
     SystemovaPocitadla.spustPocitani();
-    List<Pocitadlo> pocitadla = new ArrayList<>(SpravcePocitadel.getPocitadla());
+    final List<Pocitadlo> pocitadla = new ArrayList<>(SpravcePocitadel.getPocitadla());
     //    initComponents();
     //    pack();
     if (hodmap == null || pocitadla.size() != hodmap.size()) {
@@ -79,8 +80,8 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
       initComponents(pocitadla);
       pack();
     }
-    for (Pocitadlo pocitadlo : pocitadla) {
-      JLabel jLabel = hodmap.get(pocitadlo);
+    for (final Pocitadlo pocitadlo : pocitadla) {
+      final JLabel jLabel = hodmap.get(pocitadlo);
       if (jLabel != null) {
         jLabel.setText(pocitadlo.get() + "");
       }
@@ -88,23 +89,23 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
   }
 
 
-  protected void initComponents(List<Pocitadlo> pocitadla) {
-    Box b = createtComponents(pocitadla);
+  protected void initComponents(final List<Pocitadlo> pocitadla) {
+    final Box b = createtComponents(pocitadla);
     getContentPane().removeAll();
     getContentPane().add(b);
   }
 
 
-  private Box createtComponents(List<Pocitadlo> pocitadla) {
+  private Box createtComponents(final List<Pocitadlo> pocitadla) {
     Box b;
     //System.out.println("INICOMP");
     hodmap.clear();
     b = Box.createVerticalBox();
-    JPanel jGcPanel = createGcButton();
+    final JPanel jGcPanel = createGcButton();
     b.add(jGcPanel);
-    for (String typ : seznamTypu(pocitadla)) {
+    for (final String typ : seznamTypu(pocitadla)) {
       b.add(nadpis(typ));
-      JPanel panel = initJedenPanel(typ, pocitadla);
+      final JPanel panel = initJedenPanel(typ, pocitadla);
       b.add(panel);
       b.add(Box.createVerticalStrut(10));
     }
@@ -121,11 +122,11 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
       private long minulePouzitaPamet;
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         System.out.println("Garbage collector spuštěn");
         System.gc();
-        long pouzitaPamet = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        long narustPameti = pouzitaPamet - minulePouzitaPamet;
+        final long pouzitaPamet = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        final long narustPameti = pouzitaPamet - minulePouzitaPamet;
         minulePouzitaPamet = pouzitaPamet;
         jMemoryPoGc.setText(pouzitaPamet/1000 + " KiB  |  rozdil=" + narustPameti/1000 + " KiB");
         System.out.println("Garbage collector ukončen");
@@ -135,17 +136,17 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
   }
 
 
-  private JTextField nadpis(String typ) {
-    JTextField lbl = new JTextField(typ);
+  private JTextField nadpis(final String typ) {
+    final JTextField lbl = new JTextField(typ);
     lbl.setEditable(false);
     return lbl;
   }
 
   /**
-   * 
+   *
    */
-  private  JPanel initJedenPanel(String typPocitadla, List<Pocitadlo> pocitadla) {
-    JPanel pan = new JPanel();
+  private  JPanel initJedenPanel(final String typPocitadla, final List<Pocitadlo> pocitadla) {
+    final JPanel pan = new JPanel();
     pan.setBorder(BorderFactory.createEtchedBorder());
     pan.setLayout(new GridBagLayout());
     pan.removeAll();
@@ -153,16 +154,15 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
       pan.add(new JLabel("Nejsou pocitadla"));
       return pan;
     }
-    GridBagConstraints c = new GridBagConstraints();
+    final GridBagConstraints c = new GridBagConstraints();
     int i = 0;
     //hodnoty.clear();
-    for (Pocitadlo p : pocitadla) {
-      if (!p.getTextovyPopisTypu().equals(typPocitadla)) {
-        continue;
-      }
-      JLabel label = new JLabel(p.getName()+ ": ");
+    final List<Pocitadlo> pocitadlaFiltrovanaSerazena = pocitadla.stream().filter(p -> p.getTextovyPopisTypu().equals(typPocitadla))
+        .sorted((p1,p2) -> p1.getName().compareTo(p2.getName())).collect(Collectors.toList());
+    for (final Pocitadlo p : pocitadlaFiltrovanaSerazena) {
+      final JLabel label = new JLabel(p.getName()+ ": ");
       label.setToolTipText(p.getDescription());
-      JLabel value = new JLabel(p.get() + "");
+      final JLabel value = new JLabel(p.get() + "");
       value.setToolTipText(p.getDescription());
       hodmap.put(p, value);
       c.fill = GridBagConstraints.HORIZONTAL;
@@ -179,9 +179,9 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
     return pan;
   }
 
-  Set<String> seznamTypu(List<Pocitadlo> pocitadla) {
-    Set<String> types = new HashSet<>();
-    for (Pocitadlo p : pocitadla) {
+  Set<String> seznamTypu(final List<Pocitadlo> pocitadla) {
+    final Set<String> types = new HashSet<>();
+    for (final Pocitadlo p : pocitadla) {
       types.add(p.getTextovyPopisTypu());
     }
     //System.out.println(types);
@@ -189,8 +189,8 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
   }
 
 
-  public static void main(String[] args) {
-    JServiceFrame serviceFrame = new JServiceFrame();
+  public static void main(final String[] args) {
+    final JServiceFrame serviceFrame = new JServiceFrame();
     serviceFrame.setVisible(true);
 
     for (int i = 0; i < 12; i++) {
@@ -206,7 +206,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
       }
       final Pocitadlo po = poc;
       final int ii = i;
-      Thread thr = new Thread() {
+      final Thread thr = new Thread() {
         @Override
         public void run() {
           try {
@@ -215,7 +215,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
               po.add(ii);
               Thread.sleep((ii + 5) * 100);
             }
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             throw new RuntimeException(e);
           }
         }

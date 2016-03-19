@@ -10,12 +10,11 @@ abstract class Ka0Req  {
       "Počítá, kolik existuje instancí " + Ka0Req.class.getName() + ".");
 
   private final Ka0 ka;
-  private int vzdalenostOdStredu;
 
   private final Priority priorita;
 
 
-  protected Ka0Req(Ka0 ka, Priority priorita) {
+  protected Ka0Req(final Ka0 ka, final Priority priorita) {
     super();
     this.ka = ka;
     this.priorita = priorita;
@@ -33,18 +32,47 @@ abstract class Ka0Req  {
     return ka;
   }
 
-  public abstract boolean jesteToChceme();
-
-  public int getVzdalenostOdStredu() {
-    return vzdalenostOdStredu;
-  }
-
-  public void setVzdalenostOdStredu(int vzdalenostOdStredu) {
-    this.vzdalenostOdStredu = vzdalenostOdStredu;
-  }
-
   public Priority getPriorita() {
     return priorita;
+  }
+
+  @Override
+  public String toString() {
+    return ka.toString();
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + (ka == null ? 0 : ka.hashCode());
+    result = prime * result + (priorita == null ? 0 : priorita.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Ka0Req other = (Ka0Req) obj;
+    if (ka == null) {
+      if (other.ka != null) {
+        return false;
+      }
+    } else if (!ka.equals(other.ka)) {
+      return false;
+    }
+    if (priorita != other.priorita) {
+      return false;
+    }
+    return true;
   }
 
 }

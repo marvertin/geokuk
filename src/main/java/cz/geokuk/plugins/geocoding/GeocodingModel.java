@@ -1,12 +1,12 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.geocoding;
 
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.core.hledani.HledaciSluzba;
 import cz.geokuk.core.hledani.RefreshorVysledkuHledani;
-import cz.geokuk.core.napoveda.NapovedaModelChangedEvent;
+import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
@@ -21,14 +21,16 @@ public class GeocodingModel extends Model0  {
   private boolean onlineMode;
   private Wgs referencniBod;
 
-  public synchronized void spustHledani(Wgs wgs, RefreshorVysledkuHledani<Nalezenec> refreshor) {
+  public synchronized void spustHledani(final Wgs wgs, final RefreshorVysledkuHledani<Nalezenec> refreshor) {
     spustHledani(wgs.lat + "," + wgs.lon, refreshor);
   }
 
-  public synchronized void spustHledani(String coHledat, RefreshorVysledkuHledani<Nalezenec> refreshor) {
+  public synchronized void spustHledani(final String coHledat, final RefreshorVysledkuHledani<Nalezenec> refreshor) {
     if (onlineMode) {
-      HledaciPodminka hledaciPodminka = new HledaciPodminka();
-      if (referencniBod == null) return;
+      final HledaciPodminka hledaciPodminka = new HledaciPodminka();
+      if (referencniBod == null) {
+        return;
+      }
       hledaciPodminka.setStredHledani(referencniBod);
       hledaciPodminka.setVzorek(coHledat);
       hledaciSluzba.spustHledani(hledac, hledaciPodminka, refreshor);
@@ -44,15 +46,15 @@ public class GeocodingModel extends Model0  {
   }
 
 
-  public void onEvent(NapovedaModelChangedEvent event) {
-    onlineMode = event.getModel().isOnlineMode();
+  public void onEvent(final OnofflineModelChangeEvent event) {
+    onlineMode = event.isOnlineMOde();
   }
 
-  public void inject(HledaciSluzba hledaciSluzba) {
+  public void inject(final HledaciSluzba hledaciSluzba) {
     this.hledaciSluzba = hledaciSluzba;
   }
 
-  public void onEvent(ReferencniBodSeZmenilEvent event) {
+  public void onEvent(final ReferencniBodSeZmenilEvent event) {
     referencniBod = event.wgs;
   }
 }
