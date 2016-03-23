@@ -7,7 +7,7 @@ import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.Event0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class DomaciSouradniceSeZmenilyEvent extends Event0<RefbodyModel> {

@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * Stream drží veškerá data, která se načetla a dokáže je pak vydat jako bytové pole.
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 class DataHoldingInputStream extends FilterInputStream {

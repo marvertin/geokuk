@@ -7,7 +7,7 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.framework.ToggleAction0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class UlozitNastaveniKProgramuAction extends ToggleAction0 {

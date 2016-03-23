@@ -3,7 +3,7 @@ package cz.geokuk.core.coordinates;
 /**
  * Viditelná masa v mou souřadnicích.
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class MouFrame {

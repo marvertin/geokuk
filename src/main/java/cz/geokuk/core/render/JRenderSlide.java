@@ -11,7 +11,7 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.core.render.RenderModel.Dvoj;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JRenderSlide extends JSingleSlide0 {

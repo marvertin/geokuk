@@ -18,7 +18,7 @@ import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.pocitadla.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class EventManager implements EventFirer {

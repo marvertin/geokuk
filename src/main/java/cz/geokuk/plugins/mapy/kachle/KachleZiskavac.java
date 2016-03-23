@@ -24,7 +24,7 @@ import cz.geokuk.util.pocitadla.*;
 /**
  * V novém pojetí zodpovídá za získávání kachlí z disku, paměti i downloadování.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KachleZiskavac {
@@ -32,7 +32,7 @@ public class KachleZiskavac {
 	/**
 	 * Řízení ukládání achlí na disk po čancích
 	 *
-	 * @author veverka
+	 * @author Martin Veverka
 	 *
 	 */
 	public class KachleUkladac {

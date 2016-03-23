@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Kontejner, který drží objekty a injektuje je.
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class BeanBag implements Factory {

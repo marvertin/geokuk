@@ -6,7 +6,7 @@ package cz.geokuk.plugins.mapy.kachle;
 import cz.geokuk.util.file.Filex;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KachleCacheFolderHolder {

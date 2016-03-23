@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Definice ikony.
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class IconDef {

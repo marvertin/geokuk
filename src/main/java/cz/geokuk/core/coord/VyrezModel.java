@@ -16,7 +16,7 @@ import cz.geokuk.plugins.mapy.kachle.EKaType;
 import cz.geokuk.util.lang.FMath;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  */
 public class VyrezModel extends Model0 {
 

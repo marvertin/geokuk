@@ -8,7 +8,7 @@ import java.awt.image.ColorConvertOp;
 import java.util.Deque;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class GrayDrawer extends Drawer0 {

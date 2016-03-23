@@ -227,7 +227,7 @@ public final class FThrowable {
 	/**
 	 * Třída, která umí poskládat řetěz výjimek a to dost dobře, jede reflektem, takže nevynechá žádnou metodu, umí se tedy přizpůsobit i starším třídám.
 	 *
-	 * @author veverka
+	 * @author Martin Veverka
 	 */
 	private static class ThrowableChainPicker {
 		private final Set<Throwable> iJizZarazeneVyjimkyx = new HashSet<>();
@@ -246,7 +246,7 @@ public final class FThrowable {
 		 *
 		 * @param thr
 		 * @return
-		 * @author veverka
+		 * @author Martin Veverka
 		 * @since 31.10.2006 11:04:27
 		 */
 		private static ThrowableAndSourceMethod[] pickoutNestedThrowable(final Throwable thr) {

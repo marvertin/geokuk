@@ -7,7 +7,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class JMrizkaWgs extends JMrizka0 {

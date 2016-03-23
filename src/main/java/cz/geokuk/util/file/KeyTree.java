@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Jménovací uzel podle vzoru composite.
  *
- * @author veverka
+ * @author Martin Veverka
  */
 public class KeyTree<K, D> {
 

@@ -9,7 +9,7 @@ package cz.geokuk.util.file;
 import java.io.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  *         Writer umožňující nějak dekorovat řádky. Vždy na začátku a na konci řádku vyvolá metodu, která může něco udělat.
  */

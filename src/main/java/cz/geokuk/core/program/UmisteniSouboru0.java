@@ -4,7 +4,7 @@
 package cz.geokuk.core.program;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class UmisteniSouboru0 {

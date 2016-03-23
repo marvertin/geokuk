@@ -24,7 +24,7 @@ import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.vylety.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JStatusBar extends JPanel {

@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Main extends JFrame {

@@ -3,7 +3,7 @@ package cz.geokuk.plugins.mapy.kachle;
 /**
  * Sbírá postupně diagnostická data, je možné přibalovat. Ni nevyhodnocuje, tkže je rychlé, vyhonocuje až toString při vypisování.
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class DiagnosticsData {

@@ -4,7 +4,7 @@
 package cz.geokuk.core.coord;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public interface SoordProvider {

@@ -17,7 +17,7 @@ import cz.geokuk.core.coordinates.Wgs;
  */
 
 /**
- * @author veverka
+ * @author Martin Veverka
  */
 public class NacitacGpx extends NacitacInputStream0 {
 

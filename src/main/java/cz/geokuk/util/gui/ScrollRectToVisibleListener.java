@@ -7,7 +7,7 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JComponent;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 final class ScrollRectToVisibleListener extends MouseMotionAdapter {

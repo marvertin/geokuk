@@ -8,7 +8,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import javax.swing.JOptionPane;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class MyExceptionHandler implements UncaughtExceptionHandler {

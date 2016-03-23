@@ -6,7 +6,7 @@ package cz.geokuk.core.coord;
 import cz.geokuk.core.coordinates.Mou;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZmenaPoupravenychSouradnicMysiEvent {

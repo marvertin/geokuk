@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import cz.geokuk.framework.MySwingWorker0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  */
 public class VyletSaveSwingWorker extends MySwingWorker0<Vylet, Void> {
 

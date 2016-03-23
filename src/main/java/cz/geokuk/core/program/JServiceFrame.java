@@ -15,7 +15,7 @@ import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.util.pocitadla.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {

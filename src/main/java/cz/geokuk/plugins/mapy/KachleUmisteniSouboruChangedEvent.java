@@ -7,7 +7,7 @@ import cz.geokuk.framework.Event0;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KachleUmisteniSouboruChangedEvent extends Event0<KesoidModel> {

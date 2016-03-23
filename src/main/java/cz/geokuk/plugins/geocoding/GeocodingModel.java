@@ -11,7 +11,7 @@ import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class GeocodingModel extends Model0 {

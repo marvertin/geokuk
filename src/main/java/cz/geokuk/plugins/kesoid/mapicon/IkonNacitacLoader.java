@@ -19,7 +19,7 @@ import cz.geokuk.util.file.*;
  */
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class IkonNacitacLoader {

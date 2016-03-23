@@ -19,7 +19,7 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 
 	// g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 	/**
-	 * @author veverka
+	 * @author Martin Veverka
 	 *
 	 */
 	private final class ChangeListenerImplementation implements ChangeListener {

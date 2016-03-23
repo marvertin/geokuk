@@ -5,7 +5,7 @@ import static java.lang.Math.*;
 /**
  * Konvertor geografických souřadnic
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class FGeoKonvertor {

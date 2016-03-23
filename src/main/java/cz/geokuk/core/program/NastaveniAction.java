@@ -10,7 +10,7 @@ import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.Dlg;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class NastaveniAction extends Action0 {

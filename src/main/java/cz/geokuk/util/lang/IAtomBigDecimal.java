@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 /**
  * Rozhraní označující atomické typy převeditelné na BigDecimal.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public interface IAtomBigDecimal extends IAtom {

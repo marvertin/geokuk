@@ -9,7 +9,7 @@ import java.util.Iterator;
 import cz.geokuk.core.render.DlazdicovaMetrikaXY.Dlazdice;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class DlazdicovaMetrikaXY implements Iterable<Dlazdice> {

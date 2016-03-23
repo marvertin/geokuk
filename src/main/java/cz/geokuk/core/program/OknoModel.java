@@ -8,7 +8,7 @@ import java.awt.Frame;
 import cz.geokuk.framework.Model0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class OknoModel extends Model0 {

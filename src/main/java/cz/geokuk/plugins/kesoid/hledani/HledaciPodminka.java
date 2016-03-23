@@ -6,7 +6,7 @@ package cz.geokuk.plugins.kesoid.hledani;
 import cz.geokuk.core.hledani.HledaciPodminka0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class HledaciPodminka extends HledaciPodminka0 {

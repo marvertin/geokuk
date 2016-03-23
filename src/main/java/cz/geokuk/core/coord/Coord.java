@@ -10,7 +10,7 @@ import cz.geokuk.util.index2d.BoundingRect;
 /**
  * Objekt je immuitable.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Coord {

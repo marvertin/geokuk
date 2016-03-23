@@ -10,7 +10,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.plugins.cesty.PridavaniBoduEvent;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JDetailPrekryvnik extends JCoordPrekryvnik0 {

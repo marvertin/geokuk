@@ -81,7 +81,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *
 	 * @param date
 	 * @return
-	 * @author veverka
+	 * @author Martin Veverka
 	 */
 	public static ADate fromSqlDateInDefaultTimezone(final java.sql.Date date) {
 		if (date == null) {
@@ -104,7 +104,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *
 	 * @param date
 	 * @return
-	 * @author veverka
+	 * @author Martin Veverka
 	 */
 	public static ADate fromSqlDateInUtc(final java.sql.Date date) {
 		if (date == null) {
@@ -530,7 +530,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *
 	 * @param aZone
 	 * @return
-	 * @author veverka
+	 * @author Martin Veverka
 	 * @since 16.9.2006 17:20:19
 	 */
 	public ATimestamp getMidnightEnding(final TimeZone aZone) {
@@ -542,7 +542,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *
 	 * @param aZone
 	 * @return
-	 * @author veverka
+	 * @author Martin Veverka
 	 * @since 16.9.2006 17:20:06
 	 */
 	public ATimestamp getMidnightStarting(final TimeZone aZone) {
@@ -592,7 +592,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * Vrátí java.sql.Date obsahující časový okamžik, který je o půlnoci, kdy začíná den v defaultní časové zuóně..
 	 *
 	 * @return
-	 * @author veverka
+	 * @author Martin Veverka
 	 * @since 16.9.2006 17:22:22
 	 */
 	public java.sql.Date getSqlDateInDefaultTimezone() {
@@ -603,7 +603,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * Vrátí java.sql.Date obsahující časový okamžik, který je o půlnoci, kdy začíná den na nultém poledníku.
 	 *
 	 * @return
-	 * @author veverka
+	 * @author Martin Veverka
 	 * @since 16.9.2006 17:22:22
 	 */
 	public java.sql.Date getSqlDateInUtc() {

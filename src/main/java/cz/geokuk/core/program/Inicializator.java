@@ -26,7 +26,7 @@ import cz.geokuk.plugins.refbody.RefbodyModel;
 import cz.geokuk.plugins.vylety.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Inicializator {

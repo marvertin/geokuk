@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * Časová známka
  *
- * @author Veverka Martin
+ * @author Martin Veverka Martin
  * @version 0.00.00
  */
 public final class ATimestamp extends Object0 implements IElement, IElementLong, Comparable<ATimestamp>, Ordinable<ATimestamp> {

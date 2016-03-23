@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Gpxg {

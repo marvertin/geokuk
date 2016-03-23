@@ -7,7 +7,7 @@ import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZobrazServisniOknoAction extends DialogOpeningAction0 {

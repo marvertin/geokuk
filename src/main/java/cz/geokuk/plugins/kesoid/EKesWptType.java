@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Typy waypoint. N2které předdefinované jsou zde. Není to ale výčet typů, protože mohou být nahrávány adhok typy.
  *
- * @author tatinek
+ * @author Martin Veverka
  */
 public enum EKesWptType {
     // CACHE,

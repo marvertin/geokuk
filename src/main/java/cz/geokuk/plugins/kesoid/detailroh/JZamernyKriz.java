@@ -8,7 +8,7 @@ import java.awt.*;
 import cz.geokuk.core.coord.JSingleSlide0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JZamernyKriz extends JSingleSlide0 {

@@ -11,7 +11,7 @@ import cz.geokuk.util.index2d.Ctverecnik.DuplikHlidac;
 /**
  * Drží celý index všech objektů na mapě, tedy se dají přes něj dostat i ty objekty.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Indexator<T> {

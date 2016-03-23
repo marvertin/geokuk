@@ -10,7 +10,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JBarvovyDvojSlider extends JPanel {

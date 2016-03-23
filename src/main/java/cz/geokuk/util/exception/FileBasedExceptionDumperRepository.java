@@ -13,7 +13,7 @@ import cz.geokuk.util.file.FileManager;
 /**
  * Repositoř výjime realizovaná na filesystému.
  *
- * @author veverka
+ * @author Martin Veverka
  */
 public class FileBasedExceptionDumperRepository implements ExceptionDumperRepositorySpi {
 

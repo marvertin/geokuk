@@ -27,7 +27,7 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.lang.FUtil;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class CestyModel extends Model0 {

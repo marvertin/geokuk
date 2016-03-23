@@ -9,7 +9,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JRenderNahledPrekryvnik extends JCoordPrekryvnik0 {

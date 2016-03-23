@@ -10,7 +10,7 @@ import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZpravyUzivatelumAction extends DialogOpeningAction0 {

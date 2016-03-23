@@ -11,7 +11,7 @@ import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class CenterWaypointAction extends Action0 implements AfterEventReceiverRegistrationInit {

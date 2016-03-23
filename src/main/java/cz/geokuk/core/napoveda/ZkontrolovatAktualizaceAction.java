@@ -10,7 +10,7 @@ import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.Action0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZkontrolovatAktualizaceAction extends Action0 {

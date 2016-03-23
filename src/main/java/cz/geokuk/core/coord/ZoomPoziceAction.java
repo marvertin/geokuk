@@ -9,7 +9,7 @@ import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.Action0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZoomPoziceAction extends Action0 {

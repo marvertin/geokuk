@@ -14,7 +14,7 @@ import cz.geokuk.framework.MyPreferences;
 import cz.geokuk.util.exception.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class GeokukMain {

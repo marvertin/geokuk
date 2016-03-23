@@ -9,7 +9,7 @@ import java.awt.event.ComponentEvent;
 import cz.geokuk.core.coord.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JPresCelePrekryvnik extends JCoordPrekryvnik0 implements AfterEventReceiverRegistrationInit {

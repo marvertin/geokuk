@@ -10,7 +10,7 @@ import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class FilterDefinitionChangedEvent extends Event0<KesoidModel> {

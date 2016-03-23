@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  */
 public interface ExceptionDumperRepositorySpi {
 

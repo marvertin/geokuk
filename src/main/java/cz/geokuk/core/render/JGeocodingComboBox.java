@@ -10,7 +10,7 @@ import java.util.*;
 import javax.swing.JComboBox;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JGeocodingComboBox extends JComboBox<String> {

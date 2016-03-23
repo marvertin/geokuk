@@ -10,7 +10,7 @@ import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.framework.Event0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZmenaSouradnicMysiEvent extends Event0<PoziceModel> {

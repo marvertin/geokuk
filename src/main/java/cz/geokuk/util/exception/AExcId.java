@@ -5,7 +5,7 @@ import cz.geokuk.util.lang.AString0;
 /**
  * Identifiakce výjimky. Jen obaluje řetězec, kvůli typovým kontrolám.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class AExcId extends AString0 {

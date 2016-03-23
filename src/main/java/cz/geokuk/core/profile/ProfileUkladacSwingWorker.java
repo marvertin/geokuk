@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import cz.geokuk.framework.MySwingWorker0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ProfileUkladacSwingWorker extends MySwingWorker0<File, Void> {

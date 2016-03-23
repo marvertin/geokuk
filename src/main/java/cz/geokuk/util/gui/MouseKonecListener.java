@@ -15,7 +15,7 @@ import cz.geokuk.framework.MySlideListener;
 import cz.geokuk.plugins.kesoid.Wpt;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public final class MouseKonecListener implements MySlideListener {

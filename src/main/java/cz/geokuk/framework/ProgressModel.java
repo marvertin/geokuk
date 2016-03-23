@@ -6,7 +6,7 @@ package cz.geokuk.framework;
 import javax.swing.SwingUtilities;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ProgressModel extends Model0 {

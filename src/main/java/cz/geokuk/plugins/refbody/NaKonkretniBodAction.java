@@ -12,7 +12,7 @@ import cz.geokuk.framework.Action0;
 
 /**
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class NaKonkretniBodAction extends Action0 {

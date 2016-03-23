@@ -8,7 +8,7 @@ import cz.geokuk.plugins.kesoid.mapicon.ASada;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class IkonyNactenyEvent extends Event0<KesoidModel> {

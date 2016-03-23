@@ -10,7 +10,7 @@ import cz.geokuk.core.coordinates.Mou;
  *
  * Statické metody obsahují, co lez dělat přímo. Instanční, to co souvisí s navázaností na Coord.
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class Kaputer {

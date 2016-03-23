@@ -14,7 +14,7 @@ import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Kes extends Kesoid {

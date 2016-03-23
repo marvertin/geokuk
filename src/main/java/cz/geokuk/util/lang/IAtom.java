@@ -6,7 +6,7 @@ package cz.geokuk.util.lang;
 /**
  * Předek všech rozhraní implementovaných atomickými typy.
  *
- * @author veverka
+ * @author Martin Veverka
  */
 public interface IAtom {
 

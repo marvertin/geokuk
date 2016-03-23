@@ -11,7 +11,7 @@ import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 /**
  * Třída, která sestavuje popisky. Její stvoření může trvat, ale její provádění nikoli
  *
- * @author veverka
+ * @author Martin Veverka
  *
  *
  *
@@ -72,7 +72,7 @@ public class SestavovacPopisku {
 	/**
 	 * Oddělovač řádků. Lze ho najít
 	 *
-	 * @author veverka
+	 * @author Martin Veverka
 	 *
 	 */
 	private static class NahrBr implements Nahrazovac {

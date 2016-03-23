@@ -4,7 +4,7 @@
 package cz.geokuk.util.index2d;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class SloucenyVisitor<T> implements Visitor<T> {

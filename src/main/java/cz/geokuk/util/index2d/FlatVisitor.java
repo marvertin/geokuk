@@ -6,7 +6,7 @@ package cz.geokuk.util.index2d;
 /**
  * Visitne všechny cílové objekty.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class FlatVisitor<T> implements Visitor<T> {

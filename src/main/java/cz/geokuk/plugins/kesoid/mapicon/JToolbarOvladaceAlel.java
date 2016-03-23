@@ -14,7 +14,7 @@ import cz.geokuk.plugins.kesoid.mvc.SwitchKesoidUrciteAlelyAction;
 import cz.geokuk.util.gui.JIconCheckBox;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JToolbarOvladaceAlel extends JPanel {

@@ -6,7 +6,7 @@ package cz.geokuk.util.pocitadla;
 import java.util.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class SpravcePocitadel {

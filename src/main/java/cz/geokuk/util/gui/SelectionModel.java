@@ -8,7 +8,7 @@ import cz.geokuk.util.lang.FObject;
 /**
  * GUI model pro výáběr nějakých objektů.
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  * @param <T>
  */

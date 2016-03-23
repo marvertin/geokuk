@@ -4,7 +4,7 @@
 package cz.geokuk.plugins.kesoid.importek;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class GpxLink {

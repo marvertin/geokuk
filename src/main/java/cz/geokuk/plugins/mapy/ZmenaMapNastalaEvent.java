@@ -7,7 +7,7 @@ import cz.geokuk.framework.Event0;
 import cz.geokuk.plugins.mapy.kachle.KaSet;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZmenaMapNastalaEvent extends Event0<MapyModel> {

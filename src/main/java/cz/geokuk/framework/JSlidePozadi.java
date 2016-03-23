@@ -11,7 +11,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JSlidePozadi extends JSlide0 {

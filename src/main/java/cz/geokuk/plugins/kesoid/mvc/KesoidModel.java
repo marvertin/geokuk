@@ -20,7 +20,7 @@ import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.KeFile;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KesoidModel extends Model0 {

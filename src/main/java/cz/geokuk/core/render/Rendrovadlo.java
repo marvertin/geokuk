@@ -14,7 +14,7 @@ import cz.geokuk.framework.*;
 import cz.geokuk.plugins.mapy.kachle.JKachlovnikRendrovaci;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Rendrovadlo {

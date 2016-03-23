@@ -20,7 +20,7 @@ import cz.geokuk.core.hledani.Hledac0;
 import cz.geokuk.core.hledani.HledaciPodminka0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Hledac extends Hledac0<Nalezenec> {

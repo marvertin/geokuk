@@ -4,7 +4,7 @@
 package cz.geokuk.core.render;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public enum EWhatRender {

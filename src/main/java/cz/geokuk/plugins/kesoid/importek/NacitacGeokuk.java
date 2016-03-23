@@ -10,7 +10,7 @@ import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class NacitacGeokuk extends NacitacInputStream0 {

@@ -17,7 +17,7 @@ import cz.geokuk.plugins.cesty.data.Doc;
 import cz.geokuk.plugins.kesoid.KesBag;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {

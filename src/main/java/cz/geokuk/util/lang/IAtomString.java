@@ -6,7 +6,7 @@ package cz.geokuk.util.lang;
 /**
  * Rozhraní označuje atomické typy převeditelné na String, což jsou všechny.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public interface IAtomString extends IAtom {

@@ -10,7 +10,7 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.framework.MyPreferences;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public final class FPreferencesInNearFile {

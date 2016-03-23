@@ -11,7 +11,7 @@ import cz.geokuk.plugins.kesoid.Repaintanger;
 /**
  * Obrázek i s offsetem.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Imagant {

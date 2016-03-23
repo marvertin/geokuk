@@ -7,7 +7,7 @@ import cz.geokuk.framework.Copyable;
 import cz.geokuk.framework.Preferenceble;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 @Preferenceble

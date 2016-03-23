@@ -7,7 +7,7 @@ import javax.swing.AbstractAction;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class NastavAktualniSaduAction extends AbstractAction {

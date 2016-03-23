@@ -7,7 +7,7 @@ import cz.geokuk.framework.Event0;
 import cz.geokuk.plugins.kesoid.KesBag;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KeskyNactenyEvent extends Event0<KesoidModel> {

@@ -12,7 +12,7 @@ import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.kesoid.KesBag;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  */
 public class VyletLoadSwingWorker extends MySwingWorker0<Vylet, Void> {
 

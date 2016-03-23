@@ -15,7 +15,7 @@ import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.Kesoid;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class VyletModel extends Model0 {

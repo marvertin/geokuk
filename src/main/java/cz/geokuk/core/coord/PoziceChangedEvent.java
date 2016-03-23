@@ -6,7 +6,7 @@ package cz.geokuk.core.coord;
 import cz.geokuk.framework.Event0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class PoziceChangedEvent extends Event0<PoziceModel> {

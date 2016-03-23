@@ -11,7 +11,7 @@ import cz.geokuk.framework.Factory;
 import cz.geokuk.plugins.kesoid.mapicon.JToolbarOvladaceAlel;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JGeokukToolbar extends JToolBar {

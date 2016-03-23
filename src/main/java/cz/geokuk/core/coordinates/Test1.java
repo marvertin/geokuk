@@ -4,7 +4,7 @@
 package cz.geokuk.core.coordinates;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Test1 {

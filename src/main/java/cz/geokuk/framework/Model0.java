@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import cz.geokuk.core.program.MainFrameHolder;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class Model0 implements AfterInjectInit {

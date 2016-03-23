@@ -6,7 +6,7 @@ package cz.geokuk.api.mapicon;
 import java.awt.Graphics2D;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class RectDrawer extends ShapeDrawer {

@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JMeritko extends JPanel {

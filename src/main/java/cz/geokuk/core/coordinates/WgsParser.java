@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * Parsruje souřadnice ze stringu zadané v libovolném formátu
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class WgsParser {

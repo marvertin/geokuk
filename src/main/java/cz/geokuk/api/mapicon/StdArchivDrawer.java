@@ -8,7 +8,7 @@ import java.awt.image.*;
 import java.util.Deque;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class StdArchivDrawer extends Drawer0 {

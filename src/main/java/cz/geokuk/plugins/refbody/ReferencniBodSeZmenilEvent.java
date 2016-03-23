@@ -10,7 +10,7 @@ import cz.geokuk.framework.Event0;
 /**
  * Pokud se změní bod, od kterého se cosi odvozuje. Buď je to aktuální pozice nebo střed mapy.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ReferencniBodSeZmenilEvent extends Event0<RefbodyModel> {

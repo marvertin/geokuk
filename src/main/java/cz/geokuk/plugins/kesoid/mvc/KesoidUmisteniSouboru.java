@@ -13,7 +13,7 @@ import cz.geokuk.core.program.UmisteniSouboru0;
 import cz.geokuk.util.file.Filex;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KesoidUmisteniSouboru extends UmisteniSouboru0 {

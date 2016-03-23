@@ -11,7 +11,7 @@ import cz.geokuk.plugins.mapy.KachleUmisteniSouboru;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboruChangedEvent;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KachleModel extends Model0 {

@@ -11,7 +11,7 @@ import cz.geokuk.framework.Action0;
 import cz.geokuk.plugins.cesty.akce.soubor.UlozAction;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class CloseAction extends Action0 {

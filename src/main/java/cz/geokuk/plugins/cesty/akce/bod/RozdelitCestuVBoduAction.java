@@ -8,7 +8,7 @@ import cz.geokuk.plugins.cesty.data.Bod;
 /**
  * Jde na vybranou pozici
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class RozdelitCestuVBoduAction extends BodAction0 {

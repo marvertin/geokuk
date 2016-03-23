@@ -17,7 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KmzWriter {

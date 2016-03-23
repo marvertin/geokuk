@@ -15,7 +15,7 @@ import cz.geokuk.core.coord.VyrezModel;
 import cz.geokuk.core.program.MainFrameHolder;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class Action0 extends AbstractAction {

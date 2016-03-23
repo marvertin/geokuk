@@ -3,7 +3,7 @@ package cz.geokuk.util.exception;
 /**
  * Výjimka přerušující řetězec výjimek
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class XChainRupture extends RuntimeException {

@@ -6,7 +6,7 @@ package cz.geokuk.util.lang;
 /**
  * Rozhraní označující atomické typy převeditelné na int.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public interface IAtomInt extends IAtom {

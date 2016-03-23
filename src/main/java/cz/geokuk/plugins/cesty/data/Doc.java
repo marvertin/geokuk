@@ -11,7 +11,7 @@ import cz.geokuk.plugins.kesoid.Wpt;
 /**
  * Dokument GPX se vším, co budeme podporovat
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class Doc implements Iterable<Cesta> {

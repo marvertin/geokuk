@@ -11,7 +11,7 @@ import cz.geokuk.api.mapicon.Imagant;
 /**
  * Sklivec obsahuje všechny obrázku pro definovaná sklad.
  *
- * @author veverka
+ * @author Martin Veverka
  */
 public class Sklivec {
 

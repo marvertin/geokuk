@@ -7,7 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

@@ -13,7 +13,7 @@ import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.lang.FString;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class Nacitac0 {

@@ -13,7 +13,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Utm;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JMrizkaUtm extends JMrizka0 {

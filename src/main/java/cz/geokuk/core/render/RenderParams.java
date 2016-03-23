@@ -6,7 +6,7 @@ package cz.geokuk.core.render;
 import cz.geokuk.core.coord.Coord;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class RenderParams {

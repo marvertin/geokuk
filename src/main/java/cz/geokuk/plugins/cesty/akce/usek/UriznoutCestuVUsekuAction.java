@@ -9,7 +9,7 @@ import cz.geokuk.plugins.cesty.data.Usek;
 /**
  * Jde na vybranou pozici
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class UriznoutCestuVUsekuAction extends UsekAction0 {

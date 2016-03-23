@@ -4,7 +4,7 @@
 package cz.geokuk.util.gui;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public enum ERoh {

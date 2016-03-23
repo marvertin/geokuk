@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
  *
  * Předpokládá se, že to budou singletony ve statických proměnných
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class Pocitadlo {

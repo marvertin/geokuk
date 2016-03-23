@@ -8,7 +8,7 @@ import java.math.BigInteger;
 /**
  * Rozhraní označující atomické typy převeditelné na BigInteger.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public interface IAtomBigInteger extends IAtom {

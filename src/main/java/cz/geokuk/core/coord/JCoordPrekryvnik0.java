@@ -9,7 +9,7 @@ import java.util.List;
 import cz.geokuk.framework.JPrekryvnik;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JCoordPrekryvnik0 extends JPrekryvnik {

@@ -6,7 +6,7 @@ package cz.geokuk.core.program;
 import cz.geokuk.framework.Event0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class OknoStatusChangedEvent extends Event0<OknoModel> {

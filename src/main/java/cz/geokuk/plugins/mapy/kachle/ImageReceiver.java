@@ -4,7 +4,7 @@
 package cz.geokuk.plugins.mapy.kachle;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public interface ImageReceiver {

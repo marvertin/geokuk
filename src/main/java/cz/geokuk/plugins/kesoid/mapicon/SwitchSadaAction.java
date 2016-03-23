@@ -10,7 +10,7 @@ import cz.geokuk.framework.ToggleAction0;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class SwitchSadaAction extends ToggleAction0 {

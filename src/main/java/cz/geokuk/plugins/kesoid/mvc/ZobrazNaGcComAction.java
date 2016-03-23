@@ -11,7 +11,7 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.util.process.BrowserOpener;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZobrazNaGcComAction extends Action0 {

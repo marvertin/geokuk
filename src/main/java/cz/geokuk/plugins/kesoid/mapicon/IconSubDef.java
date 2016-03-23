@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * Definice ikony.
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class IconSubDef {

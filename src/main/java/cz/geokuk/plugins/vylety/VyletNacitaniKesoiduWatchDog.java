@@ -6,7 +6,7 @@ package cz.geokuk.plugins.vylety;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class VyletNacitaniKesoiduWatchDog {

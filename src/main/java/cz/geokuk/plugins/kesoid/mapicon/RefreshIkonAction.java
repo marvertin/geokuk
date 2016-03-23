@@ -8,7 +8,7 @@ import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class RefreshIkonAction extends Action0 {

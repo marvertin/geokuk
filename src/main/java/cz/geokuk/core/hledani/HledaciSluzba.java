@@ -7,7 +7,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class HledaciSluzba {

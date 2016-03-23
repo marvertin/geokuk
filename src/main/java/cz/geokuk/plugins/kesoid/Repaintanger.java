@@ -8,7 +8,7 @@ import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
 /**
  * Ovjekt držící, co se bude repaintovat
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 public class Repaintanger {

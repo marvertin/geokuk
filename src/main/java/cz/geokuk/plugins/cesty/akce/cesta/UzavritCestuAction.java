@@ -8,7 +8,7 @@ import cz.geokuk.plugins.cesty.data.Cesta;
 /**
  * Jde na vybranou pozici
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class UzavritCestuAction extends CestaAction0 {

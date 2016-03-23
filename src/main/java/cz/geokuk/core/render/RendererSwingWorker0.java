@@ -6,7 +6,7 @@ package cz.geokuk.core.render;
 import cz.geokuk.framework.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, Void>implements AfterInjectInit {

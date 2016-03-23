@@ -12,7 +12,7 @@ import com.google.common.base.Objects;
 /**
  * Swingovitý model (nikoli geokuí) vtýkající se vlastností písma, jenž se objevuje někde na mpapě.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class VlastnostiPismaModel {

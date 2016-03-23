@@ -8,7 +8,7 @@ import cz.geokuk.util.lang.StringUtils;
 /**
  * Dumpuje výjimky na standardní chybový výstup. Použije se, pokud se nepodaří inicializovat skutečnou repozitoř.
  *
- * @author veverka
+ * @author Martin Veverka
  */
 public class StdErrExceptionDumperRepository implements ExceptionDumperRepositorySpi {
 

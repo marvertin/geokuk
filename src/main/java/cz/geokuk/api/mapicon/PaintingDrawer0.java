@@ -10,7 +10,7 @@ import java.util.Deque;
 /**
  * Předek vykreslujívcí obrázky.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class PaintingDrawer0 extends Drawer0 {

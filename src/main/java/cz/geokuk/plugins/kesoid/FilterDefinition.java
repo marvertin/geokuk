@@ -7,7 +7,7 @@ import cz.geokuk.framework.*;
 import cz.geokuk.plugins.vylety.EVylet;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 @Preferenceble

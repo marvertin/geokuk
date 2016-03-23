@@ -3,7 +3,7 @@ package cz.geokuk.framework;
 /**
  * Poskytovatel preferenci.
  *
- * @author tatinek
+ * @author Martin Veverka
  */
 public class Prefe {
 

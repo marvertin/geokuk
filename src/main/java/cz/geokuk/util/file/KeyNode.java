@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Jménovací uzel podle vzoru composite.
  *
- * @author veverka
+ * @author Martin Veverka
  */
 public class KeyNode<K, D> {
 

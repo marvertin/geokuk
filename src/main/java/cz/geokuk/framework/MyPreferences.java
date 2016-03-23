@@ -22,7 +22,7 @@ import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.Filex;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class MyPreferences extends Preferences {

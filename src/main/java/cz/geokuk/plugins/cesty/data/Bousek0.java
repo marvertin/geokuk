@@ -8,7 +8,7 @@ import cz.geokuk.plugins.cesty.FBarvy;
 /**
  * Předek úseku a cesty
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class Bousek0 {

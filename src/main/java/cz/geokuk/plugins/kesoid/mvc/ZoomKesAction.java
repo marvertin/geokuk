@@ -11,7 +11,7 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZoomKesAction extends Action0 {

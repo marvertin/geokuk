@@ -6,7 +6,7 @@ package cz.geokuk.framework;
 import java.awt.event.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class DialogOpeningAction0 extends Action0 {

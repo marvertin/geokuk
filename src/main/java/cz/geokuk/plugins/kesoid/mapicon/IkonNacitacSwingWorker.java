@@ -6,7 +6,7 @@ import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {

@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * Nese informace z několika složek, ať resourcových nebo normálních. Informace se překrývají.
  *
- * @author veverka
+ * @author Martin Veverka
  */
 public class MultiFolder {
 	private static final String REMOVE_SUFFIX = ".remove";

@@ -10,7 +10,7 @@ import cz.geokuk.framework.Preferenceble;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 @Preferenceble

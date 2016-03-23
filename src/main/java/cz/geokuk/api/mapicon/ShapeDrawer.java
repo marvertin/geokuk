@@ -6,7 +6,7 @@ package cz.geokuk.api.mapicon;
 import java.awt.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class ShapeDrawer extends PaintingDrawer0 {

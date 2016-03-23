@@ -6,7 +6,7 @@ package cz.geokuk.framework;
 import javax.swing.SwingWorker;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class MySwingWorker0<T, V> extends SwingWorker<T, V> {

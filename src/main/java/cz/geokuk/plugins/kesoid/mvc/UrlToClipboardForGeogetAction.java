@@ -14,7 +14,7 @@ import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Kesoid;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class UrlToClipboardForGeogetAction extends Action0 {

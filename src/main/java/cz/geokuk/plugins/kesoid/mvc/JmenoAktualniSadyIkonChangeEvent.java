@@ -6,7 +6,7 @@ package cz.geokuk.plugins.kesoid.mvc;
 import cz.geokuk.plugins.kesoid.mapicon.ASada;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class JmenoAktualniSadyIkonChangeEvent extends KesoidModelEvent0 {

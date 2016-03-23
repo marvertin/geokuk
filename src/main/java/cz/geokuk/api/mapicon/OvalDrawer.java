@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 /**
  * Vykreslí elipsu.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class OvalDrawer extends ShapeDrawer {

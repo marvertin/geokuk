@@ -4,7 +4,7 @@
 package cz.geokuk.framework;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public interface Factory {

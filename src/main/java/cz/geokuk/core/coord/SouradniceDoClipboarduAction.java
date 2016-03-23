@@ -9,7 +9,7 @@ import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.framework.Action0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class SouradniceDoClipboarduAction extends Action0 {

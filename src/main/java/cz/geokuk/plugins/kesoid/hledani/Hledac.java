@@ -15,7 +15,7 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.util.lang.FUtil;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class Hledac extends Hledac0<Nalezenec> {

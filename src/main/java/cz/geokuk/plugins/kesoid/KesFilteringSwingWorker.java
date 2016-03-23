@@ -16,7 +16,7 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.index2d.BoundingRect;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  */
 public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 

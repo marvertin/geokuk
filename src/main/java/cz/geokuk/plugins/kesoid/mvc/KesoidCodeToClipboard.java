@@ -11,7 +11,7 @@ import cz.geokuk.framework.Action0;
 import cz.geokuk.plugins.kesoid.Kesoid;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KesoidCodeToClipboard extends Action0 {

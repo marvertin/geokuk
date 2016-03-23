@@ -4,7 +4,7 @@
 package cz.geokuk.framework;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public abstract class OnoffEvent0<T extends Model0> extends Event0<T> {

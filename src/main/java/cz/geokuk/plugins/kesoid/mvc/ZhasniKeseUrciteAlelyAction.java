@@ -16,7 +16,7 @@ import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventReceiverRegistrationInit {

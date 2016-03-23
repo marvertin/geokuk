@@ -3,7 +3,7 @@ package cz.geokuk.util.exception;
 /**
  * Závažnost chyby. Určuje kam bude chyba dumpována.
  *
- * @author veverka
+ * @author Martin Veverka
  */
 public enum EExceptionSeverity {
     /**

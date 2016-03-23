@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import cz.geokuk.framework.Action0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class OdstranKrizAction extends Action0 {

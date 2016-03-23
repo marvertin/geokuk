@@ -4,7 +4,7 @@
 package cz.geokuk.util.lang;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class StringUtils {

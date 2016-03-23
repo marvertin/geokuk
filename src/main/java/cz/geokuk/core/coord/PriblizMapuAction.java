@@ -11,7 +11,7 @@ import javax.swing.KeyStroke;
 import cz.geokuk.framework.Action0;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class PriblizMapuAction extends Action0 {

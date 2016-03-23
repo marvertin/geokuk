@@ -10,7 +10,7 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidUmisteniSouboru;
 import cz.geokuk.util.file.Filex;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class KachleUmisteniSouboru extends UmisteniSouboru0 {

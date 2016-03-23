@@ -11,7 +11,7 @@ import cz.geokuk.framework.Action0;
 /**
  * Jde na vybranou pozici
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class BezNaPoziciAction extends Action0 {

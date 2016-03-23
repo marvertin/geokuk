@@ -10,7 +10,7 @@ import cz.geokuk.framework.EventFirer;
 /**
  * Mění událost změny sředu mapy a změnu pozice na událost jedinou, podle které se rohodují referenceři.
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class HlidacReferencnihoBodu {

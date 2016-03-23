@@ -9,7 +9,7 @@ import java.awt.Container;
 import javax.swing.JComponent;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public final class FComponent {

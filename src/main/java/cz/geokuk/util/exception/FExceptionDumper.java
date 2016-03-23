@@ -10,7 +10,7 @@ import cz.geokuk.util.lang.StringUtils;
 /**
  * Pomocná třída pro dumpování výjimek. Volání metod na této třídě je ekvivalentní s voláním metod na ExcpetionDumper.getInstance(). Jsou zde jen nejčastěji používané a to jen dumpovací metody. Pro všechny ostatní metody si získejte isntanci exception dumperu.
  *
- * @author veverka
+ * @author Martin Veverka
  * @since 15.9.2006 8:18:58
  */
 public final class FExceptionDumper {

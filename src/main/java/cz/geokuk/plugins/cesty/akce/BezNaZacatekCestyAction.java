@@ -10,7 +10,7 @@ import javax.swing.KeyStroke;
 /**
  * Jde na vybranou pozici
  *
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class BezNaZacatekCestyAction extends CestyAction0 {

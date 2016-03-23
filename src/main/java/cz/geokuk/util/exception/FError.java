@@ -6,7 +6,7 @@ package cz.geokuk.util.exception;
 import javax.swing.SwingUtilities;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class FError {

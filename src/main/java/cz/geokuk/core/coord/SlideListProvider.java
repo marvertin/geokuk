@@ -6,7 +6,7 @@ package cz.geokuk.core.coord;
 import java.util.List;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public interface SlideListProvider {

@@ -6,7 +6,7 @@ package cz.geokuk.util.gui;
 import java.awt.*;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class CornerLayoutManager implements LayoutManager2 {

@@ -15,7 +15,7 @@ import cz.geokuk.util.pocitadla.PocitadloMalo;
 /**
  * Kombinuje do sebe různé dlaždice, aby se to nemusel dělat draze v paintu. Není nijak aktivní ve smyslu, že by něco provolával, když je hotov.
  *
- * @author tatinek
+ * @author Martin Veverka
  *
  */
 class DlazebniKombiner {

@@ -13,7 +13,7 @@ import cz.geokuk.framework.Action0;
 import cz.geokuk.util.process.BrowserOpener;
 
 /**
- * @author veverka
+ * @author Martin Veverka
  *
  */
 public class WebovaStrankaAction extends Action0 {
