@@ -280,9 +280,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
       //    }
     }
 
-    // JE to zde proto, aby se zabyly warningy.
-    final double iscale = scale;
-    if (iscale == 1) {
+    // getScale() vrací vždy 1, ale tento kód zde chceme, protože se někdy zřejmě hodil
+    if (getScale() == 1) {
       final int x = p.x + imagant.getXpos();
       final int y = p.y + imagant.getYpos();
       g.drawImage(imagant.getImage(), x, y, null);
@@ -293,11 +292,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
       g.translate(imagant.getXpos(), imagant.getYpos());
       g.drawImage(imagant.getImage(), 0, 0, null);
     }
-    //    BufferedImage bi = new BufferedImage(imagant.getImage().getWidth(), imagant.getImage().getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-    //    bi.getGraphics().drawImage(imagant.getImage(), 0, 0, null);
-    //    //g.drawImage(imagant.getImage(), x, y, null);
-    //    g.drawImage(bi, x, y, null);
-    //    //g.fillRect(x, y, 50, 50);
   }
 
   private void zaplanujNaplneniSklivce(final Wpt wpt, final Mou mou) {
@@ -633,7 +627,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
             }
             mouRect.add(wpr.mou);
             wpr = jKesoidy.frontaWaypointu.poll();
-            jKesoidy.pocitVelikostFrontyWaypointu.set(jKesoidy.frontaWaypointu.size());
+            pocitVelikostFrontyWaypointu.set(jKesoidy.frontaWaypointu.size());
           }
           vyvolejVykresleni(mouRect, jKesoidy);
         } catch (final InterruptedException e) {
@@ -734,6 +728,11 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
   public void inject(final VyletModel vyletModel) {
     this.vyletModel = vyletModel;
+  }
+
+
+  public static double getScale() {
+    return scale;
   }
 
 }
