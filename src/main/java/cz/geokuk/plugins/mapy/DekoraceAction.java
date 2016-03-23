@@ -12,6 +12,12 @@ public class DekoraceAction extends MapyAction0 {
 		super(aKatype);
 	}
 
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		final EnumSet<EKaType> dekoraces = getMapyModel().getDekorace();
+		final boolean nastaveno = dekoraces.contains(getDekorace());
+		setSelected(nastaveno);
+	}
+
 	protected EKaType getDekorace() {
 		return super.getKaType();
 	}
@@ -29,12 +35,6 @@ public class DekoraceAction extends MapyAction0 {
 	@Override
 	protected void onSlectedChange(final boolean nastaveno) {
 		nastavDekoraci(nastaveno);
-	}
-
-	public void onEvent(final ZmenaMapNastalaEvent event) {
-		final EnumSet<EKaType> dekoraces = getMapyModel().getDekorace();
-		final boolean nastaveno = dekoraces.contains(getDekorace());
-		setSelected(nastaveno);
 	}
 
 }

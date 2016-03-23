@@ -5,55 +5,21 @@ import org.apache.logging.log4j.Logger;
 
 public class Ctverecnik<T> extends Node0<T> {
 
-	private static final Logger	log	= LogManager.getLogger(Ctverecnik.class.getSimpleName());
+	static class DuplikHlidac {
+		boolean duplicita = false;
+	}
 
+	private static final Logger	log	= LogManager.getLogger(Ctverecnik.class.getSimpleName());
 	private Node0<T>			jz;
 	private Node0<T>			jv;
 	private Node0<T>			sz;
-	private Node0<T>			sv;
 
+	private Node0<T>			sv;
 	private final int			xx1;
 	private final int			yy1;
 	private final int			xx2;
+
 	private final int			yy2;
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Ctverecnik [xx1=" + xx1 + ", yy1=" + yy1 + ", xx2=" + xx2 + ", yy2=" + yy2 + "]";
-	}
-
-	/**
-	 * @return the xx1
-	 */
-	public int getXx1() {
-		return xx1;
-	}
-
-	/**
-	 * @return the yy1
-	 */
-	public int getYy1() {
-		return yy1;
-	}
-
-	/**
-	 * @return the xx2
-	 */
-	public int getXx2() {
-		return xx2;
-	}
-
-	/**
-	 * @return the yy2
-	 */
-	public int getYy2() {
-		return yy2;
-	}
 
 	/**
 	 * @param aXx1
@@ -66,6 +32,44 @@ public class Ctverecnik<T> extends Node0<T> {
 		yy1 = aYy1;
 		xx2 = aXx2;
 		yy2 = aYy2;
+	}
+
+	/**
+	 * @return the xx1
+	 */
+	public int getXx1() {
+		return xx1;
+	}
+
+	/**
+	 * @return the xx2
+	 */
+	public int getXx2() {
+		return xx2;
+	}
+
+	/**
+	 * @return the yy1
+	 */
+	public int getYy1() {
+		return yy1;
+	}
+
+	/**
+	 * @return the yy2
+	 */
+	public int getYy2() {
+		return yy2;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Ctverecnik [xx1=" + xx1 + ", yy1=" + yy1 + ", xx2=" + xx2 + ", yy2=" + yy2 + "]";
 	}
 
 	@Override
@@ -86,25 +90,6 @@ public class Ctverecnik<T> extends Node0<T> {
 		} else { // nemáme zadaný obdélník, takže je nekonečný,
 			// takže to nemůže být mimo ani kompletně uvnitř
 			visitPodrizene(rect, visitor);
-		}
-	}
-
-	/**
-	 * @param rect
-	 * @param visitor
-	 */
-	private void visitPodrizene(final BoundingRect rect, final Visitor<T> visitor) {
-		if (jz != null) {
-			jz.visit(rect, visitor);
-		}
-		if (jv != null) {
-			jv.visit(rect, visitor);
-		}
-		if (sz != null) {
-			sz.visit(rect, visitor);
-		}
-		if (sv != null) {
-			sv.visit(rect, visitor);
 		}
 	}
 
@@ -133,29 +118,6 @@ public class Ctverecnik<T> extends Node0<T> {
 
 	}
 
-	private Node0<T> vlozDoPodctverce(final Node0<T> node, final Sheet<T> aSheet, final int xx1, final int yy1, final int xx2, final int yy2, final DuplikHlidac dh) {
-		// System.out.printf("xx1=%d xx2=%d yy1=%d yy2=%d\n", xx1, xx2, yy1, yy2);
-		if (node == null) { // vlozit se tam
-			return aSheet;
-		} else if (node instanceof Ctverecnik) {
-			final Ctverecnik<T> ctver = (Ctverecnik<T>) node;
-			ctver.vloz(aSheet, dh);
-			return node;
-		} else if (node instanceof Sheet) {
-			final Sheet<T> sheet = (Sheet<T>) node;
-			if (sheet.xx == aSheet.xx && sheet.yy == aSheet.yy) {
-				dh.duplicita = true; // takovy uz tam mame
-				return node; // beze zmeny
-			}
-			final Ctverecnik<T> ctver = new Ctverecnik<>(xx1, yy1, xx2, yy2);
-			ctver.vloz(sheet, dh);
-			ctver.vloz(aSheet, dh);
-			return ctver;
-		} else { // item je objektakem
-			throw new RuntimeException("Podivny node: " + node.getClass().getName());
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -164,10 +126,6 @@ public class Ctverecnik<T> extends Node0<T> {
 	@Override
 	boolean isSheet() {
 		return false;
-	}
-
-	static class DuplikHlidac {
-		boolean duplicita = false;
 	}
 
 	/*
@@ -198,5 +156,47 @@ public class Ctverecnik<T> extends Node0<T> {
 			aNode.vypis(aPrefix, aLevel);
 		}
 
+	}
+
+	/**
+	 * @param rect
+	 * @param visitor
+	 */
+	private void visitPodrizene(final BoundingRect rect, final Visitor<T> visitor) {
+		if (jz != null) {
+			jz.visit(rect, visitor);
+		}
+		if (jv != null) {
+			jv.visit(rect, visitor);
+		}
+		if (sz != null) {
+			sz.visit(rect, visitor);
+		}
+		if (sv != null) {
+			sv.visit(rect, visitor);
+		}
+	}
+
+	private Node0<T> vlozDoPodctverce(final Node0<T> node, final Sheet<T> aSheet, final int xx1, final int yy1, final int xx2, final int yy2, final DuplikHlidac dh) {
+		// System.out.printf("xx1=%d xx2=%d yy1=%d yy2=%d\n", xx1, xx2, yy1, yy2);
+		if (node == null) { // vlozit se tam
+			return aSheet;
+		} else if (node instanceof Ctverecnik) {
+			final Ctverecnik<T> ctver = (Ctverecnik<T>) node;
+			ctver.vloz(aSheet, dh);
+			return node;
+		} else if (node instanceof Sheet) {
+			final Sheet<T> sheet = (Sheet<T>) node;
+			if (sheet.xx == aSheet.xx && sheet.yy == aSheet.yy) {
+				dh.duplicita = true; // takovy uz tam mame
+				return node; // beze zmeny
+			}
+			final Ctverecnik<T> ctver = new Ctverecnik<>(xx1, yy1, xx2, yy2);
+			ctver.vloz(sheet, dh);
+			ctver.vloz(aSheet, dh);
+			return ctver;
+		} else { // item je objektakem
+			throw new RuntimeException("Podivny node: " + node.getClass().getName());
+		}
 	}
 }

@@ -27,22 +27,17 @@ public class RefbodyModel extends Model0 {
 
 	private KesoidModel			kesoidModel;
 
-	public void setHc(final Wgs hc) {
-		if (hc.equals(this.hc)) {
-			return;
-		}
-		this.hc = hc;
-		currPrefe().node(FPref.DOMACI_SOURADNICE_node).putWgs(FPref.HC_value, hc);
-		fire(new DomaciSouradniceSeZmenilyEvent(hc));
-	}
-
 	public Wgs getHc() {
 		return hc;
 	}
 
 	@Override
-	protected void initAndFire() {
-		setHc(currPrefe().node(FPref.DOMACI_SOURADNICE_node).getWgs(FPref.HC_value, DEFAULTNI_DOMACI_SOURADNICE));
+	public void inject(final Factory factory) {
+		this.factory = factory;
+	}
+
+	public void inject(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
 	}
 
 	public List<NaKonkretniBodAction> nacti() {
@@ -81,13 +76,18 @@ public class RefbodyModel extends Model0 {
 		}
 	}
 
-	@Override
-	public void inject(final Factory factory) {
-		this.factory = factory;
+	public void setHc(final Wgs hc) {
+		if (hc.equals(this.hc)) {
+			return;
+		}
+		this.hc = hc;
+		currPrefe().node(FPref.DOMACI_SOURADNICE_node).putWgs(FPref.HC_value, hc);
+		fire(new DomaciSouradniceSeZmenilyEvent(hc));
 	}
 
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
+	@Override
+	protected void initAndFire() {
+		setHc(currPrefe().node(FPref.DOMACI_SOURADNICE_node).getWgs(FPref.HC_value, DEFAULTNI_DOMACI_SOURADNICE));
 	}
 
 }

@@ -16,11 +16,6 @@ public class JPresCelePrekryvnik extends JCoordPrekryvnik0 implements AfterEvent
 	private static final long	serialVersionUID	= -5996655830197513951L;
 	private VyrezModel			vyrezModel;
 
-	public void onEvent(final VyrezChangedEvent event) {
-		// V hlavním překryvníku sledujeme pohyb výřezu a podle toho posouváme pohled
-		setSoord(event.getMoord());
-	}
-
 	@Override
 	public void initAfterEventReceiverRegistration() {
 		// Listener zajístí, že se změna šířky a výšky pošle všem zájemcům
@@ -34,6 +29,11 @@ public class JPresCelePrekryvnik extends JCoordPrekryvnik0 implements AfterEvent
 
 	public void inject(final VyrezModel vyrezModel) {
 		this.vyrezModel = vyrezModel;
+	}
+
+	public void onEvent(final VyrezChangedEvent event) {
+		// V hlavním překryvníku sledujeme pohyb výřezu a podle toho posouváme pohled
+		setSoord(event.getMoord());
 	}
 
 }

@@ -8,6 +8,10 @@ import cz.geokuk.plugins.kesoid.mapicon.*;
 
 public class Wpt extends Weikoid0 implements Uchopenec {
 
+	public static enum EZOrder {
+		OTHER, KESWPT, FIRST, FINAL,
+	}
+
 	public static final String			TRADITIONAL_CACHE	= "Traditional Cache";
 
 	private static Map<String, String>	wptMapping			= new HashMap<>();
@@ -16,6 +20,8 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		wptMapping.put("Virtual Stage", "Question to Answer");
 		wptMapping.put("Physical Stage", "Stages of a Multicache");
 	}
+
+	private static int	currentSklivecValidityCode;
 
 	/**
 	 * Jmené vejpointu, z GPS tag name
@@ -32,28 +38,30 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	 */
 	private int			elevation;
 
-	private boolean		rucnePridany;
+	// private String prefix;
 
+	private boolean		rucnePridany;
 	/**
 	 * Název waypointu, je to nějaký delší název z GPS to bud <cmt> nebo <desc>, podle toho, co tam je
 	 */
 	private String		nazev;
 
-	// private String prefix;
-
 	// Podpora vykreslování
 	private Sklivec		sklivec;
+
 	private int			sklivecValidityCode;
-
-	private static int	currentSklivecValidityCode;
-
 	public double		lat;
-	public double		lon;
 
+	public double		lon;
 	private int			xx		= -1;
+
 	private int			yy		= -1;
 
 	private EZOrder		zorder	= EZOrder.OTHER;
+
+	public static void invalidateAllSklivec() {
+		currentSklivecValidityCode++;
+	}
 
 	/**
 	 *
@@ -62,10 +70,36 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	}
 
 	/**
-	 * @return the wgs
+	 * @return the elevation
 	 */
-	public Wgs getWgs() {
-		return new Wgs(lat, lon);
+	public int getElevation() {
+		return elevation;
+	}
+
+	// public void setPrefix(String prefix) {
+	// this.prefix = prefix.intern();
+	// }
+
+	public Genotyp getGenotyp(final Genom genom) {
+		// if (__ != null) return __;
+		//
+		final Genotyp g = genom.getGenotypVychozi();
+		buildGenotyp(genom, g);
+		getKesoid().doBuildGenotyp(genom, g);
+		// __ = g;
+		return g;
+	}
+
+	// public String getPrefix() {
+	// return prefix;
+	// }
+
+	public Kesoid getKesoid() {
+		for (Weikoid0 weik = next;; weik = weik.next) {
+			if (weik instanceof Kesoid) {
+				return (Kesoid) weik;
+			}
+		}
 	}
 
 	@Override
@@ -81,42 +115,65 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		}
 	}
 
-	/**
-	 * @param aWgs
-	 *            the wgs to set
-	 */
-	public void setWgs(final Wgs aWgs) {
-		lat = aWgs.lat;
-		lon = aWgs.lon;
-	}
-
-	// public void setPrefix(String prefix) {
-	// this.prefix = prefix.intern();
-	// }
-
-	public void setNazev(final String aNazev) {
-		// Je tam strašne moc krátkých názvů jako TrB nebo ZhB
-		nazev = aNazev.length() >= 5 ? aNazev : aNazev.intern();
-	}
-
-	// public String getPrefix() {
-	// return prefix;
-	// }
-
-	public EKesWptType getType() {
-		return EKesWptType.decode(sym);
+	public String getName() {
+		return name;
 	}
 
 	public String getNazev() {
 		return nazev;
 	}
 
-	public Kesoid getKesoid() {
-		for (Weikoid0 weik = next;; weik = weik.next) {
-			if (weik instanceof Kesoid) {
-				return (Kesoid) weik;
-			}
+	public Sklivec getSklivec() {
+		if (sklivecValidityCode != currentSklivecValidityCode) {
+			sklivec = null;
 		}
+		return sklivec;
+	}
+
+	public String getSym() {
+		return sym;
+	}
+
+	// private Genotyp __;
+
+	public EKesWptType getType() {
+		return EKesWptType.decode(sym);
+	}
+
+	/**
+	 * @return the wgs
+	 */
+	public Wgs getWgs() {
+		return new Wgs(lat, lon);
+	}
+
+	/**
+	 * @return the zorder
+	 */
+	public EZOrder getZorder() {
+		return zorder;
+	}
+
+	/**
+	 *
+	 */
+	public void invalidate() {
+		setSklivec(null);
+	}
+
+	public boolean isMainWpt() {
+		return getKesoid().getMainWpt() == this;
+	}
+
+	/**
+	 * @return the rucnePridany
+	 */
+	public boolean isRucnePridany() {
+		return rucnePridany;
+	}
+
+	public boolean nutnyKLusteni() {
+		return isMainWpt() || getType() == EKesWptType.QUESTION_TO_ANSWER || getType() == EKesWptType.STAGES_OF_A_MULTICACHE;
 	}
 
 	public boolean obsazujeOblast() {
@@ -127,46 +184,29 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE || TRADITIONAL_CACHE.equals(sym);
 	}
 
-	public boolean nutnyKLusteni() {
-		return isMainWpt() || getType() == EKesWptType.QUESTION_TO_ANSWER || getType() == EKesWptType.STAGES_OF_A_MULTICACHE;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
+	/**
+	 * @param aElevation
+	 *            the elevation to set
 	 */
-	@Override
-	public String toString() {
-		return "Wpt [name=" + nazev + ", type=" + getType() + ", wgs=" + getWgs() + "] " + (getKesoid() == null ? "" : getKesoid().getIdentifier());
+	public void setElevation(final int aElevation) {
+		elevation = aElevation;
 	}
 
-	// private Genotyp __;
-
-	public Genotyp getGenotyp(final Genom genom) {
-		// if (__ != null) return __;
-		//
-		final Genotyp g = genom.getGenotypVychozi();
-		buildGenotyp(genom, g);
-		getKesoid().doBuildGenotyp(genom, g);
-		// __ = g;
-		return g;
+	public void setName(final String name) {
+		this.name = name;
 	}
 
-	private void buildGenotyp(final Genom genom, final Genotyp g) {
-		final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom, g);
-		genotypBuilder.build(this);
+	public void setNazev(final String aNazev) {
+		// Je tam strašne moc krátkých názvů jako TrB nebo ZhB
+		nazev = aNazev.length() >= 5 ? aNazev : aNazev.intern();
 	}
 
-	public String getSym() {
-		return sym;
-	}
-
-	public Sklivec getSklivec() {
-		if (sklivecValidityCode != currentSklivecValidityCode) {
-			sklivec = null;
-		}
-		return sklivec;
+	/**
+	 * @param aRucnePridany
+	 *            the rucnePridany to set
+	 */
+	public void setRucnePridany(final boolean aRucnePridany) {
+		rucnePridany = aRucnePridany;
 	}
 
 	public void setSklivec(final Sklivec sklivec) {
@@ -174,15 +214,29 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		sklivecValidityCode = currentSklivecValidityCode;
 	}
 
-	/**
-	 *
-	 */
-	public void invalidate() {
-		setSklivec(null);
+	public void setSym(final String sym) {
+		String adjustedSym = wptMapping.get(sym);
+		if (adjustedSym == null) {
+			adjustedSym = sym;
+		}
+		this.sym = adjustedSym == null ? "unknown_sym" : adjustedSym.intern();
 	}
 
-	public static void invalidateAllSklivec() {
-		currentSklivecValidityCode++;
+	/**
+	 * @param aWgs
+	 *            the wgs to set
+	 */
+	public void setWgs(final Wgs aWgs) {
+		lat = aWgs.lat;
+		lon = aWgs.lon;
+	}
+
+	/**
+	 * @param zorder
+	 *            the zorder to set
+	 */
+	public void setZorder(final EZOrder zorder) {
+		this.zorder = zorder;
 	}
 
 	public String textToolTipu() {
@@ -219,73 +273,19 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return sb.toString();
 	}
 
-	public boolean isMainWpt() {
-		return getKesoid().getMainWpt() == this;
-	}
-
-	public void setSym(final String sym) {
-		String adjustedSym = wptMapping.get(sym);
-		if (adjustedSym == null) {
-			adjustedSym = sym;
-		}
-		this.sym = adjustedSym == null ? "unknown_sym" : adjustedSym.intern();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the elevation
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
 	 */
-	public int getElevation() {
-		return elevation;
+	@Override
+	public String toString() {
+		return "Wpt [name=" + nazev + ", type=" + getType() + ", wgs=" + getWgs() + "] " + (getKesoid() == null ? "" : getKesoid().getIdentifier());
 	}
 
-	/**
-	 * @param aElevation
-	 *            the elevation to set
-	 */
-	public void setElevation(final int aElevation) {
-		elevation = aElevation;
-	}
-
-	/**
-	 * @return the rucnePridany
-	 */
-	public boolean isRucnePridany() {
-		return rucnePridany;
-	}
-
-	/**
-	 * @param aRucnePridany
-	 *            the rucnePridany to set
-	 */
-	public void setRucnePridany(final boolean aRucnePridany) {
-		rucnePridany = aRucnePridany;
-	}
-
-	/**
-	 * @param zorder
-	 *            the zorder to set
-	 */
-	public void setZorder(final EZOrder zorder) {
-		this.zorder = zorder;
-	}
-
-	/**
-	 * @return the zorder
-	 */
-	public EZOrder getZorder() {
-		return zorder;
-	}
-
-	public static enum EZOrder {
-		OTHER, KESWPT, FIRST, FINAL,
+	private void buildGenotyp(final Genom genom, final Genotyp g) {
+		final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom, g);
+		genotypBuilder.build(this);
 	}
 
 }

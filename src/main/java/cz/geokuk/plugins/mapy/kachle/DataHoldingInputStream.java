@@ -16,6 +16,10 @@ class DataHoldingInputStream extends FilterInputStream {
 		super(in);
 	}
 
+	public byte[] getData() {
+		return baos.toByteArray();
+	}
+
 	@Override
 	public int read() throws IOException {
 		final int c = super.read();
@@ -30,10 +34,6 @@ class DataHoldingInputStream extends FilterInputStream {
 			baos.write(b, off, delka);
 		}
 		return delka;
-	}
-
-	public byte[] getData() {
-		return baos.toByteArray();
 	}
 
 }

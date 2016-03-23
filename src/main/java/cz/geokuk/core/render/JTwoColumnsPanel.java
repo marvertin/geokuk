@@ -22,18 +22,6 @@ public class JTwoColumnsPanel extends JPanel {
 		createNewConstraint();
 	}
 
-	private void createNewConstraint() {
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = radek;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(4, 10, 0, 10);
-		gbc.weightx = 1;
-		if (radek == 0) {
-			gbc.insets.top = 0;
-		}
-	}
-
 	public void addx(final String label, final JComponent jComp) {
 		final JLabel jLabel = new JLabel(label);
 		jLabel.setLabelFor(jComp);
@@ -52,5 +40,17 @@ public class JTwoColumnsPanel extends JPanel {
 		radek++;
 		createNewConstraint();
 
+	}
+
+	private void createNewConstraint() {
+		gbc = new GridBagConstraints();
+		gbc.gridx = 1;
+		gbc.gridy = radek;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(4, 10, 0, 10);
+		gbc.weightx = 1;
+		if (radek == 0) {
+			gbc.insets.top = 0;
+		}
 	}
 }

@@ -8,8 +8,6 @@ public abstract class JKesoidDetail0 extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public abstract void napln(Wpt wpt);
-
 	public static String formatujDatum(String s) {
 		if (s == null) {
 			return s;
@@ -25,5 +23,7 @@ public abstract class JKesoidDetail0 extends JPanel {
 		final String x = s.substring(8, 10) + "." + s.substring(5, 7) + "." + s.substring(0, 4);
 		return x;
 	}
+
+	public abstract void napln(Wpt wpt);
 
 }

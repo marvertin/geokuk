@@ -9,19 +9,29 @@ public class Vylet {
 	private final Set<Kesoid>	ano	= new HashSet<>();
 	private final Set<Kesoid>	ne	= new HashSet<>();
 
-	void removeAll(final EVylet evyl) {
+	public Set<Kesoid> get(final EVylet evyl) {
+		Set<Kesoid> set;
 		switch (evyl) {
 		case ANO:
-			ano.clear();
+			set = ano;
 			break;
 		case NE:
-			ne.clear();
-			break;
-		case NEVIM:
+			set = ne;
 			break;
 		default:
-			assert false;
+			throw new RuntimeException("Neznáme keše, které nevíme, zda jsou ve výletu");
 		}
+		return Collections.unmodifiableSet(set);
+	}
+
+	public EVylet get(final Kesoid kes) {
+		if (ano.contains(kes)) {
+			return EVylet.ANO;
+		}
+		if (ne.contains(kes)) {
+			return EVylet.NE;
+		}
+		return EVylet.NEVIM;
 	}
 
 	EVylet add(final EVylet evyl, final Kesoid kes) {
@@ -45,29 +55,19 @@ public class Vylet {
 		return evylPuvodni;
 	}
 
-	public EVylet get(final Kesoid kes) {
-		if (ano.contains(kes)) {
-			return EVylet.ANO;
-		}
-		if (ne.contains(kes)) {
-			return EVylet.NE;
-		}
-		return EVylet.NEVIM;
-	}
-
-	public Set<Kesoid> get(final EVylet evyl) {
-		Set<Kesoid> set;
+	void removeAll(final EVylet evyl) {
 		switch (evyl) {
 		case ANO:
-			set = ano;
+			ano.clear();
 			break;
 		case NE:
-			set = ne;
+			ne.clear();
+			break;
+		case NEVIM:
 			break;
 		default:
-			throw new RuntimeException("Neznáme keše, které nevíme, zda jsou ve výletu");
+			assert false;
 		}
-		return Collections.unmodifiableSet(set);
 	}
 
 }

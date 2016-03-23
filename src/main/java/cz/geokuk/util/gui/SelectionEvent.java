@@ -10,12 +10,12 @@ public class SelectionEvent<T> {
 		this.item = item;
 	}
 
-	public T getSelected() {
-		return item.value;
-	}
-
 	public SelectionModel<T> getModel() {
 		return model;
+	}
+
+	public T getSelected() {
+		return item.value;
 	}
 
 }

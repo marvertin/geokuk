@@ -25,10 +25,8 @@ public abstract class MenuStrujce {
 		return menuBar;
 	}
 
-	protected void menu(final String name, final String aTooltip) {
-		menu = new JMenu(name);
-		menu.setToolTipText(aTooltip);
-		menuBar.add(menu);
+	public void inject(final Factory factory) {
+		this.factory = factory;
 	}
 
 	protected void item(final Action action) {
@@ -50,13 +48,15 @@ public abstract class MenuStrujce {
 		bg.add(item);
 	}
 
+	protected abstract void makeMenu();
+
+	protected void menu(final String name, final String aTooltip) {
+		menu = new JMenu(name);
+		menu.setToolTipText(aTooltip);
+		menuBar.add(menu);
+	}
+
 	protected void separator() {
 		menu.addSeparator();
 	}
-
-	public void inject(final Factory factory) {
-		this.factory = factory;
-	}
-
-	protected abstract void makeMenu();
 }

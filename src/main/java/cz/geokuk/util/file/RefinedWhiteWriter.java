@@ -36,21 +36,24 @@ public class RefinedWhiteWriter extends Writer {
 	private boolean				iLfNeukoncuje			= false;
 	private boolean				iPotrebaUkoncitRadek	= false;
 
+	public static void main(final String[] args) throws IOException {
+		final PrintWriter pwr = new PrintWriter(new RefinedWhiteWriter(new FileWriter("test_RefineWhiteWriter.txt")));
+		// PrintWriter pwr = new PrintWriter(new FileWriter("test_RefineWhiteWriter.txt"));
+		pwr.print("Nenimezera\r");
+		pwr.print("                         jedna dva  tri   ctyri  a nic\n");
+		pwr.println();
+		pwr.println("                                             ");
+		pwr.print("jedna dva  tri   ctyri  pet     \r\n");
+		pwr.println("                                             ");
+		pwr.println("                                             ");
+		pwr.println("                                             ");
+		pwr.print("a poslenacek\n");
+		pwr.print("                                             ");
+		pwr.close();
+	}
+
 	public RefinedWhiteWriter(final Writer aWriter) {
 		iWriter = aWriter;
-	}
-
-	@Override
-	public void write(final char[] aZnaky, final int aOd, final int aPocet) throws IOException {
-		final int xxdo = aOd + aPocet;
-		for (int i = aOd; i < xxdo; i++) { // všechny znaky po jednom zpracovat
-			zpracujZnak(aZnaky[i]);
-		}
-	}
-
-	@Override
-	public void flush() throws IOException {
-		iWriter.flush(); // jednoduchýž přenos
 	}
 
 	@Override
@@ -60,6 +63,19 @@ public class RefinedWhiteWriter extends Writer {
 		}
 		iWriter.flush();
 		iWriter.close(); // a uzavři stream
+	}
+
+	@Override
+	public void flush() throws IOException {
+		iWriter.flush(); // jednoduchýž přenos
+	}
+
+	@Override
+	public void write(final char[] aZnaky, final int aOd, final int aPocet) throws IOException {
+		final int xxdo = aOd + aPocet;
+		for (int i = aOd; i < xxdo; i++) { // všechny znaky po jednom zpracovat
+			zpracujZnak(aZnaky[i]);
+		}
 	}
 
 	private void ukonciRadek() throws IOException {
@@ -93,22 +109,6 @@ public class RefinedWhiteWriter extends Writer {
 			iCitacMezer = 0;
 			iWriter.write(c); // a zapsat ten přišlý znak
 		}
-	}
-
-	public static void main(final String[] args) throws IOException {
-		final PrintWriter pwr = new PrintWriter(new RefinedWhiteWriter(new FileWriter("test_RefineWhiteWriter.txt")));
-		// PrintWriter pwr = new PrintWriter(new FileWriter("test_RefineWhiteWriter.txt"));
-		pwr.print("Nenimezera\r");
-		pwr.print("                         jedna dva  tri   ctyri  a nic\n");
-		pwr.println();
-		pwr.println("                                             ");
-		pwr.print("jedna dva  tri   ctyri  pet     \r\n");
-		pwr.println("                                             ");
-		pwr.println("                                             ");
-		pwr.println("                                             ");
-		pwr.print("a poslenacek\n");
-		pwr.print("                                             ");
-		pwr.close();
 	}
 
 }

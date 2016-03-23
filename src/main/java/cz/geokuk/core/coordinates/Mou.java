@@ -33,19 +33,6 @@ public class Mou extends Misto0 {
 		return new Mou(xx + moud.dxx, yy + moud.dyy);
 	}
 
-	public Mou sub(final Moud moud) {
-		return new Mou(xx - moud.dxx, yy - moud.dyy);
-	}
-
-	public Moud sub(final Mou mou) {
-		return new Moud(xx - mou.xx, yy - mou.yy);
-	}
-
-	@Override
-	public int hashCode() {
-		return xx ^ yy;
-	}
-
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == this) {
@@ -58,11 +45,6 @@ public class Mou extends Misto0 {
 		return xx == m.xx && yy == m.yy;
 	}
 
-	@Override
-	public String toString() {
-		return "[" + Integer.toHexString(xx) + "," + Integer.toHexString(yy) + "]";
-	}
-
 	public long getKvadratVzdalenosti(final Mou mou) {
 		if (mou == null) {
 			return Long.MAX_VALUE; // nevlastní bod je nekonečně daleko
@@ -71,8 +53,16 @@ public class Mou extends Misto0 {
 	}
 
 	@Override
-	public Wgs toWgs() {
-		return FGeoKonvertor.toWgs(this);
+	public int hashCode() {
+		return xx ^ yy;
+	}
+
+	public Moud sub(final Mou mou) {
+		return new Moud(xx - mou.xx, yy - mou.yy);
+	}
+
+	public Mou sub(final Moud moud) {
+		return new Mou(xx - moud.dxx, yy - moud.dyy);
 	}
 
 	@Override
@@ -86,8 +76,18 @@ public class Mou extends Misto0 {
 	}
 
 	@Override
+	public String toString() {
+		return "[" + Integer.toHexString(xx) + "," + Integer.toHexString(yy) + "]";
+	}
+
+	@Override
 	public Utm toUtm() {
 		return FGeoKonvertor.toUtm(this);
+	}
+
+	@Override
+	public Wgs toWgs() {
+		return FGeoKonvertor.toWgs(this);
 	}
 
 }

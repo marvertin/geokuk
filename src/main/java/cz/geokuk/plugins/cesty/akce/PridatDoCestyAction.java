@@ -33,19 +33,30 @@ public class PridatDoCestyAction extends CestyAction0 {
 		cestyModel.addToVylet(effectiveMouable());
 	}
 
-	protected void enablujPokudMaSmysl() {
-		setEnabled(effectiveMouable() != null && !cestyModel.isOnVylet(effectiveMouable()));
-	}
-
 	public void onEvent(final PoziceChangedEvent aEvent) {
 		poziceq = aEvent.poziceq;
 		enablujPokudMaSmysl();
+	}
+
+	protected void enablujPokudMaSmysl() {
+		setEnabled(effectiveMouable() != null && !cestyModel.isOnVylet(effectiveMouable()));
 	}
 
 	@Override
 	protected final void vyletChanged() {
 		super.vyletChanged();
 		enablujPokudMaSmysl();
+	}
+
+	private Mouable effectiveMouable() {
+		if (kontextoveMouable != null) {
+			return proPridaniDoVyletu(kontextoveMouable);
+		}
+		// jinak se musíme spolehnout na pozici
+		if (!poziceq.isNoPosition()) {
+			return proPridaniDoVyletu(poziceq.getPoziceMouable());
+		}
+		return null;
 	}
 
 	/**
@@ -62,17 +73,6 @@ public class PridatDoCestyAction extends CestyAction0 {
 			return null; // připojovat na bod se nebudeme
 		}
 		return mouable.getMou(); // a ke všemu ostatnímu se připojíme, což je zřejmě notmální bod
-	}
-
-	private Mouable effectiveMouable() {
-		if (kontextoveMouable != null) {
-			return proPridaniDoVyletu(kontextoveMouable);
-		}
-		// jinak se musíme spolehnout na pozici
-		if (!poziceq.isNoPosition()) {
-			return proPridaniDoVyletu(poziceq.getPoziceMouable());
-		}
-		return null;
 	}
 
 }

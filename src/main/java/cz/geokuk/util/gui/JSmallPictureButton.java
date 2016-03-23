@@ -17,14 +17,14 @@ public class JSmallPictureButton extends JButton {
 		nastav();
 	}
 
-	public JSmallPictureButton(final Icon icon) {
-		super(icon);
-		nastav();
-	}
-
 	public JSmallPictureButton(final Action a, final Icon icon) {
 		super(a);
 		setIcon(icon);
+		nastav();
+	}
+
+	public JSmallPictureButton(final Icon icon) {
+		super(icon);
 		nastav();
 	}
 

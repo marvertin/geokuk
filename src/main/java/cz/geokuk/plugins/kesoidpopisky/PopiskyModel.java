@@ -28,21 +28,21 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#visiblexxx()
-	 */
-	@Override
-	protected Onoff<PopiskyModel> visiblexxx() {
-		return visible;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#getOnoffEventClass()
 	 */
 	@Override
 	protected Class<? extends OnoffEvent0<PopiskyModel>> getOnoffEventClass() {
 		return PopiskyOnoffEvent.class;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#getVisibleFromPreferences(boolean)
+	 */
+	@Override
+	protected boolean getVisibleFromPreferences(final boolean defaultOnoff) {
+		return currPrefe().node(FPref.VSEOBECNE_node).getBoolean(FPref.ZOBRAZ_POPISY_KESI_value, defaultOnoff);
 	}
 
 	/*
@@ -68,11 +68,11 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#getVisibleFromPreferences(boolean)
+	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#visiblexxx()
 	 */
 	@Override
-	protected boolean getVisibleFromPreferences(final boolean defaultOnoff) {
-		return currPrefe().node(FPref.VSEOBECNE_node).getBoolean(FPref.ZOBRAZ_POPISY_KESI_value, defaultOnoff);
+	protected Onoff<PopiskyModel> visiblexxx() {
+		return visible;
 	}
 
 }

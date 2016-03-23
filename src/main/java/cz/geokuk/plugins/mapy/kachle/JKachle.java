@@ -32,20 +32,35 @@ public class JKachle extends JComponent {
 
 	private static final long			serialVersionUID								= -5445121736003161730L;
 
+	private static final PocitadloMalo	pocitJKAchle									= new PocitadloMalo("#JKachle",
+			"Počet kompomnent JKachle přes hlavní okno, okno v rohu, rendry, stahování, prostě všude.");
 	private final JKachlovnik			jKachlovnik;
 	// private static int cictac;
 	private final KaAll					kaall;
+
 	private Kanceler					kanceler;
-
 	private Image						image;
-	private boolean						jeTamUzCelyObrazek;
 
+	private boolean						jeTamUzCelyObrazek;
 	private final Set<DiagnosticsData>	diagnosticsDatas								= Collections.synchronizedSet(new LinkedHashSet<>());
+
 	private String						diagnosticesFazeStr;
 	// Point mou = new Point(); // souřadnice roho
 
-	private static final PocitadloMalo	pocitJKAchle									= new PocitadloMalo("#JKachle",
-			"Počet kompomnent JKachle přes hlavní okno, okno v rohu, rendry, stahování, prostě všude.");
+	private static int ordinalIndexOf(final String str, final char c, int n) {
+		int pos = str.indexOf(c, 0);
+		while (n-- > 0 && pos != -1) {
+			pos = str.indexOf(c, pos + 1);
+		}
+		return pos;
+	}
+
+	private static String toHex(final int cc) {
+		String s = Integer.toHexString(cc);
+		s = "00000000".substring(0, 8 - s.length()) + s;
+		s = s.substring(0, 4) + " " + s.substring(4);
+		return s;
+	}
 
 	public JKachle(final JKachlovnik jKachlovnik, final KaAll kaall) {
 		this.jKachlovnik = jKachlovnik;
@@ -53,6 +68,64 @@ public class JKachle extends JComponent {
 		setSize(KACHLE_WIDTH, KACHLE_HEIGHT);
 		pocitJKAchle.inc();
 
+	}
+
+	public KaLoc getKaLoc() {
+		return kaall.getLoc();
+	}
+
+	public boolean jeTamUzCelyObrazek() {
+		return jeTamUzCelyObrazek;
+	}
+
+	/**
+	 * Už nebudu výsledek potřebovat, tak všechnoi můžeme stornovat
+	 */
+	public void uzTeNepotrebuju() {
+		if (kanceler != null) {
+			kanceler.cancel();
+		}
+	}
+
+	public synchronized void waitNaDotazeniDlazdice() throws InterruptedException {
+		while (!jeTamUzCelyObrazek()) {
+			wait();
+		}
+	}
+
+	/**
+	 * Získá obsah
+	 *
+	 * @param kachleModel
+	 * @param priorita
+	 */
+	public void ziskejObsah(final KachleModel kachleModel, final Priority priorita) {
+		final KaAllReq req = new KaAllReq(kaall, kastat -> {
+
+			synchronized (JKachle.this) { // paintování spoléhá na stálost údajů
+				if (kastat.img != null) {
+					image = kastat.img; // přepíšeme, jen když jde něco lepšího
+				}
+				if (kastat.faze == EFaze.RESULT_ALL_POSLEDNI) {
+					jeTamUzCelyObrazek = true;
+					ziskanPlnyObrazek(image);
+					if (jKachlovnik != null) {
+						jKachlovnik.kachleZpracovana(this);
+					}
+					JKachle.this.notifyAll();
+				}
+			}
+			repaint(); // prý můžeme volat z libovolného vlákna
+		} , priorita);
+
+		final DiagnosticsData.Listener diagListener = (diagnosticsData, diagnosticesFazeStr) -> {
+			JKachle.this.diagnosticesFazeStr = diagnosticesFazeStr;
+			for (DiagnosticsData dd = diagnosticsData; dd != null; dd = dd.getParent()) {
+				diagnosticsDatas.add(dd);
+			}
+		};
+		final String nazevKachlovniku = jKachlovnik == null ? null : jKachlovnik.nazevKachlovniku;
+		kanceler = kachleModel.getZiskavac().ziskejObsah(req, DiagnosticsData.create(null, nazevKachlovniku, diagListener).with("kaAllReq", req));
 	}
 
 	@Override
@@ -110,6 +183,27 @@ public class JKachle extends JComponent {
 		super.paintComponent(aG);
 	}
 
+	/*
+	 * Rendrovací kachlovník může použít pro dopaintování.
+	 */
+	protected void ziskanPlnyObrazek(final Image img) {
+
+	}
+
+	private void drawPsanicko(final Graphics2D g) {
+		final int kraj = 3;
+		final int x1 = kraj;
+		final int y1 = kraj;
+		final int x2 = getSize().width - 1 - kraj;
+		final int y2 = getSize().height - 1 - kraj;
+		g.drawLine(x1, y1, x1, y2);
+		g.drawLine(x1, y1, x2, y1);
+		g.drawLine(x1, y2, x2, y2);
+		g.drawLine(x2, y1, x2, y2);
+		g.drawLine(x1, y1, x2, y2);
+		g.drawLine(x1, y2, x2, y1);
+	}
+
 	private void vypisPozici(final Graphics2D g) {
 		final KaLoc p = kaall.getLoc();
 		if (p != null) {
@@ -128,100 +222,6 @@ public class JKachle extends JComponent {
 			g.drawString("[" + p.getSignedX() + "," + p.getSignedY() + "]", 140, 50);
 			g.drawString("[" + p.getFromSzUnsignedX() + "," + p.getFromSzUnsignedY() + "]", 140, 65);
 
-		}
-	}
-
-	private void drawPsanicko(final Graphics2D g) {
-		final int kraj = 3;
-		final int x1 = kraj;
-		final int y1 = kraj;
-		final int x2 = getSize().width - 1 - kraj;
-		final int y2 = getSize().height - 1 - kraj;
-		g.drawLine(x1, y1, x1, y2);
-		g.drawLine(x1, y1, x2, y1);
-		g.drawLine(x1, y2, x2, y2);
-		g.drawLine(x2, y1, x2, y2);
-		g.drawLine(x1, y1, x2, y2);
-		g.drawLine(x1, y2, x2, y1);
-	}
-
-	private static String toHex(final int cc) {
-		String s = Integer.toHexString(cc);
-		s = "00000000".substring(0, 8 - s.length()) + s;
-		s = s.substring(0, 4) + " " + s.substring(4);
-		return s;
-	}
-
-	private static int ordinalIndexOf(final String str, final char c, int n) {
-		int pos = str.indexOf(c, 0);
-		while (n-- > 0 && pos != -1) {
-			pos = str.indexOf(c, pos + 1);
-		}
-		return pos;
-	}
-
-	public KaLoc getKaLoc() {
-		return kaall.getLoc();
-	}
-
-	/**
-	 * Získá obsah
-	 *
-	 * @param kachleModel
-	 * @param priorita
-	 */
-	public void ziskejObsah(final KachleModel kachleModel, final Priority priorita) {
-		final KaAllReq req = new KaAllReq(kaall, kastat -> {
-
-			synchronized (JKachle.this) { // paintování spoléhá na stálost údajů
-				if (kastat.img != null) {
-					image = kastat.img; // přepíšeme, jen když jde něco lepšího
-				}
-				if (kastat.faze == EFaze.RESULT_ALL_POSLEDNI) {
-					jeTamUzCelyObrazek = true;
-					ziskanPlnyObrazek(image);
-					if (jKachlovnik != null) {
-						jKachlovnik.kachleZpracovana(this);
-					}
-					JKachle.this.notifyAll();
-				}
-			}
-			repaint(); // prý můžeme volat z libovolného vlákna
-		} , priorita);
-
-		final DiagnosticsData.Listener diagListener = (diagnosticsData, diagnosticesFazeStr) -> {
-			JKachle.this.diagnosticesFazeStr = diagnosticesFazeStr;
-			for (DiagnosticsData dd = diagnosticsData; dd != null; dd = dd.getParent()) {
-				diagnosticsDatas.add(dd);
-			}
-		};
-		final String nazevKachlovniku = jKachlovnik == null ? null : jKachlovnik.nazevKachlovniku;
-		kanceler = kachleModel.getZiskavac().ziskejObsah(req, DiagnosticsData.create(null, nazevKachlovniku, diagListener).with("kaAllReq", req));
-	}
-
-	public boolean jeTamUzCelyObrazek() {
-		return jeTamUzCelyObrazek;
-	}
-
-	public synchronized void waitNaDotazeniDlazdice() throws InterruptedException {
-		while (!jeTamUzCelyObrazek()) {
-			wait();
-		}
-	}
-
-	/*
-	 * Rendrovací kachlovník může použít pro dopaintování.
-	 */
-	protected void ziskanPlnyObrazek(final Image img) {
-
-	}
-
-	/**
-	 * Už nebudu výsledek potřebovat, tak všechnoi můžeme stornovat
-	 */
-	public void uzTeNepotrebuju() {
-		if (kanceler != null) {
-			kanceler.cancel();
 		}
 	}
 

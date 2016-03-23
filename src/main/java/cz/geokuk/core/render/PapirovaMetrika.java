@@ -17,16 +17,6 @@ public class PapirovaMetrika {
 	final boolean	naSirku;
 	final boolean	naVysku;
 
-	public double getKratsiStrana() {
-		final double result = A0v / Math.pow(odmocnina2, format);
-		return result;
-	}
-
-	public double getDelsiStrana() {
-		final double result = A0u / Math.pow(odmocnina2, format);
-		return result;
-	}
-
 	public PapirovaMetrika(final double xsize, final double ysize, final double okraj) {
 		this.xsize = xsize;
 		this.ysize = ysize;
@@ -41,6 +31,16 @@ public class PapirovaMetrika {
 		naVysku = format == foVyska;
 		// System.out.printf("sirka:%.0f vyska:%.0f foSirka:%d foVyska:%d\n", xsize *1000, ysize *1000, foSirka, foVyska);
 
+	}
+
+	public double getDelsiStrana() {
+		final double result = A0u / Math.pow(odmocnina2, format);
+		return result;
+	}
+
+	public double getKratsiStrana() {
+		final double result = A0v / Math.pow(odmocnina2, format);
+		return result;
 	}
 
 }

@@ -10,15 +10,15 @@ public abstract class HledaciPodminka0 {
 		return stredHledani;
 	}
 
-	public void setStredHledani(final Wgs stredHledani) {
-		this.stredHledani = stredHledani;
-	}
-
 	/**
 	 * @return the vzorek
 	 */
 	public String getVzorek() {
 		return vzorek;
+	}
+
+	public void setStredHledani(final Wgs stredHledani) {
+		this.stredHledani = stredHledani;
 	}
 
 	/**

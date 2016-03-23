@@ -29,6 +29,35 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
 	private Set<Alela>		userDefinedAlelas;
 
+	public void addWpt(final Wpt wpt) {
+		if (wpt == null) {
+			return;
+		}
+		// najít konec
+		Weikoid0 weik = this;
+		while (weik.next instanceof Wpt) {
+			weik = weik.next;
+		}
+		wpt.next = weik.next;
+		weik.next = wpt;
+	}
+
+	public abstract void buildGenotyp(Genom genom, Genotyp g);
+
+	public final void doBuildGenotyp(final Genom genom, final Genotyp g) {
+		buildGenotyp(genom, g);
+		if (userDefinedAlelas != null) {
+			for (final Alela alela : userDefinedAlelas) {
+				assert alela != null;
+				g.put(alela);
+			}
+		}
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
 	/**
 	 * @return the firstWpt
 	 */
@@ -40,8 +69,34 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		}
 	}
 
+	public String getHidden() {
+		return hidden;
+	}
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public abstract EKesoidKind getKesoidKind();
+
 	public Wpt getMainWpt() {
 		return getFirstWpt();
+	}
+
+	public String getNazev() {
+		return getFirstWpt().getNazev();
+	}
+
+	public String[] getProhledavanci() {
+		return new String[] { getNazev(), getIdentifier() };
+	}
+
+	public File getSourceFile() {
+		return null;
+	}
+
+	public EKesStatus getStatus() {
+		return status;
 	}
 
 	/**
@@ -59,6 +114,12 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		return urlPrefixes[index] + zbytekUrl.substring(1);
 	}
 
+	public abstract Icon getUrlIcon();
+
+	public URL getUrlPrint() {
+		return null;
+	}
+
 	public URL getUrlShow() {
 		try {
 			final String url = getUrl();
@@ -68,34 +129,8 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		}
 	}
 
-	public File getSourceFile() {
-		return null;
-	}
-
-	public URL getUrlPrint() {
-		return null;
-	}
-
-	/**
-	 * @param aUrl
-	 *            the url to set
-	 */
-	public void setUrl(final String aUrl) {
-		if (aUrl == null) {
-			zbytekUrl = null;
-			return;
-		}
-		// Řetězcová konkatenace zde provedená vytvoří nový řetězec, takže se nemusíme bát,
-		// že podstringy všechno nesou
-		char index = '0';
-		for (final String prefix : urlPrefixes) {
-			if (aUrl.startsWith(prefix)) {
-				zbytekUrl = index + aUrl.substring(prefix.length());
-				return;
-			}
-			index++;
-		}
-		zbytekUrl = '-' + aUrl; // nemá žádný prefix
+	public EKesVztah getVztah() {
+		return vztah;
 	}
 
 	//////////////////////////////////////////////////////////////////
@@ -133,13 +168,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
 	}
 
-	public EKesVztah getVztah() {
-		return vztah;
-	}
-
-	public void setVztahx(final EKesVztah vztah) {
-		this.vztah = vztah;
-	}
+	public abstract void prispejDoTooltipu(StringBuilder sb, Wpt wpt);
 
 	public void promoteVztah(final EKesVztah vztah) {
 		if (this.vztah == null) {
@@ -150,79 +179,50 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		}
 	}
 
-	public String getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(final String identifier) {
-		this.identifier = identifier;
-	}
-
-	public void addWpt(final Wpt wpt) {
-		if (wpt == null) {
-			return;
-		}
-		// najít konec
-		Weikoid0 weik = this;
-		while (weik.next instanceof Wpt) {
-			weik = weik.next;
-		}
-		wpt.next = weik.next;
-		weik.next = wpt;
-	}
-
-	public abstract void buildGenotyp(Genom genom, Genotyp g);
-
-	public String getNazev() {
-		return getFirstWpt().getNazev();
-	}
-
-	public String[] getProhledavanci() {
-		return new String[] { getNazev(), getIdentifier() };
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
 	public void setAuthor(final String author) {
 		this.author = author.intern();
-	}
-
-	public String getHidden() {
-		return hidden;
 	}
 
 	public void setHidden(final String hidden) {
 		this.hidden = hidden;
 	}
 
-	public EKesStatus getStatus() {
-		return status;
+	public void setIdentifier(final String identifier) {
+		this.identifier = identifier;
 	}
 
 	public void setStatus(final EKesStatus status) {
 		this.status = status;
 	}
 
-	public abstract EKesoidKind getKesoidKind();
-
-	public abstract void prispejDoTooltipu(StringBuilder sb, Wpt wpt);
-
-	public abstract Icon getUrlIcon();
-
-	public final void doBuildGenotyp(final Genom genom, final Genotyp g) {
-		buildGenotyp(genom, g);
-		if (userDefinedAlelas != null) {
-			for (final Alela alela : userDefinedAlelas) {
-				assert alela != null;
-				g.put(alela);
-			}
+	/**
+	 * @param aUrl
+	 *            the url to set
+	 */
+	public void setUrl(final String aUrl) {
+		if (aUrl == null) {
+			zbytekUrl = null;
+			return;
 		}
+		// Řetězcová konkatenace zde provedená vytvoří nový řetězec, takže se nemusíme bát,
+		// že podstringy všechno nesou
+		char index = '0';
+		for (final String prefix : urlPrefixes) {
+			if (aUrl.startsWith(prefix)) {
+				zbytekUrl = index + aUrl.substring(prefix.length());
+				return;
+			}
+			index++;
+		}
+		zbytekUrl = '-' + aUrl; // nemá žádný prefix
 	}
 
 	public void setUserDefinedAlelas(final Set<Alela> userDefinedAlelas) {
 		this.userDefinedAlelas = userDefinedAlelas;
+	}
+
+	public void setVztahx(final EKesVztah vztah) {
+		this.vztah = vztah;
 	}
 
 }

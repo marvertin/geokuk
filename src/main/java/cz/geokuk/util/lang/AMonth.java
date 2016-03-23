@@ -27,51 +27,137 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	private final int			iRokMes;
 
 	/**
-	 * Vrací se jako long.
+	 * Otestuje, zda je možné vytvořit instanci z roku a měsíce.
 	 *
-	 * @return Hodnota udávající počet měsíců, které uplynuly od začátku našeho letopočtu. Přitom Leden hypotetického roku 0 má hodnotu 0, čili leden roku 1 má hodnotu 12.
+	 * @param aRokMes
+	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
 	 */
-	@Override
-	public int asInt() {
-		return iRokMes;
+	public static boolean canFrom(final int aRokMes) {
+		try {
+			from(aRokMes);
+			return true;
+		} catch (final XCreateElement e) {
+			return false;
+		}
 	}
 
 	/**
-	 * Vrací se jako string.
+	 * Otestuje, zda je možné vytvořit instanci ze zadaného roku a měsíce.
 	 *
-	 * @return Měsíc jako řetězec vždy na 7 znaků ve tvaru RRRR-MM.
+	 * @param aRok
+	 *            Hodntoa roku..
+	 * @param aMes
+	 *            Měsíc v intervalu 1..12
+	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
 	 */
-	@Override
-	public String asString() {
-		return MessageFormat.format("{0,number,0000}-{1,number,00}", iRokMes / MINY, iRokMes % MINY + 1);
+	public static boolean canFrom(final int aRok, final int aMes) {
+		try {
+			from(aRok, aMes);
+			return true;
+		} catch (final XCreateElement e) {
+			return false;
+		}
 	}
 
 	/**
-	 * Převede se do stringu v nějakém čitelném formátu.
+	 * Otestuje, zda je možné vytvořit instanci ze řetězece.
 	 *
-	 * @return Rok a měsíc v čitelném formátu.
+	 * @param aRokMes
+	 *            V řetězcovém tvaru rok a měsíc.
+	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
 	 */
-	@Override
-	public String toString() {
-		return asString();
+	public static boolean canFrom(final String aRokMes) {
+		try {
+			from(aRokMes);
+			return true;
+		} catch (final XCreateElement e) {
+			return false;
+		}
 	}
 
 	/**
-	 * Vrací měsíc
+	 * Zkosntruuje objekt ze ztadaného roku a měsíce.
 	 *
-	 * @return Číslo měsíce z intervalu 1..12
+	 * @param aRokMes
+	 *            Pořadové číslo měsíce. Blíže viz {@link #asInt())
+	 * @return Zkosntruovaný objekt AMonth
 	 */
-	public int getMonthNumber() {
-		return iRokMes % MINY + 1;
+	public static AMonth from(final int aRokMes) {
+		return new AMonth(aRokMes);
 	}
 
 	/**
-	 * Vrací rok.
+	 * Vytvoří AMonth ze zadaných hodnot
 	 *
-	 * @return Číslo roku.
+	 * @param aRok
+	 *            Čtyřmístný rok
+	 * @param aMes
+	 *            Měsíc 1..12
+	 * @return Zkosntruovaný objekt AMonth
 	 */
-	public int getYearNumber() {
-		return iRokMes / MINY;
+	public static AMonth from(final int aRok, final int aMes) {
+		return new AMonth(fromItems(aRok, aMes));
+	}
+
+	/**
+	 * Vytvoří hodnotu ze zadaného řetězce
+	 *
+	 * @param aRokMes
+	 *            Rok a měsíc ve tvaru RRRR-MM.
+	 * @return odpovídající hodnota
+	 */
+	public static AMonth from(final String aRokMes) {
+		return aRokMes == null ? null : new AMonth(parseMonth(aRokMes));
+	}
+
+	/**
+	 * Returns maximal acceptable value of <code>AMonth</code>. You can't create an instance of <code>AMonth</code> with any greater value.
+	 *
+	 * @author kalendov
+	 */
+	public static AMonth getMaxValue() {
+		return AMonth.from(MAXVALUE);
+	}
+
+	/**
+	 * Returns minimal acceptable value of <code>AMonth</code>. You can't create an instance of <code>AMonth</code> with any less value.
+	 *
+	 * @author kalendov
+	 */
+	public static AMonth getMinValue() {
+		return AMonth.from(MINVALUE);
+	}
+
+	private static int fromItems(final int aRok, final int aMes) {
+		if (aRok < 1000 || aRok > 9999) {
+			throw new XCreateElement("Rok " + aRok + " neni ctyrmistny");
+		}
+		if (aMes < 1 || aMes > 12) {
+			throw new XCreateElement("Mesic " + aMes + " neni v intervalu 1..12");
+		}
+		return aRok * MINY + aMes - 1; // aby uvnitř měsíce byly od nuly
+	}
+
+	////////////////////////////////////////////
+	private static int parseMonth(final String aString) {
+		if (sPattern == null) {
+			sPattern = Pattern.compile("\\s*(\\d{4})[ -./]?(\\d\\d?)\\s*");
+		}
+		final Matcher mat = sPattern.matcher(aString);
+		if (mat.matches()) {
+			final int rok = Integer.parseInt(mat.group(1));
+			final int mes = Integer.parseInt(mat.group(2));
+			return fromItems(rok, mes);
+		} else {
+			throw new XCreateElement("Syntakticka chyba v roku a mesici '" + aString + "'");
+		}
+
+	}
+
+	// Kontrola rozsahu.
+	private AMonth(final int aRokMes) {
+		iRokMes = aRokMes;
+		checkRange();
 	}
 
 	/**
@@ -97,21 +183,35 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	}
 
 	/**
-	 * Vrátí následující měsíc.
+	 * Vrací se jako long.
 	 *
-	 * @return Následující měsíc po aktuálním měsíci.
+	 * @return Hodnota udávající počet měsíců, které uplynuly od začátku našeho letopočtu. Přitom Leden hypotetického roku 0 má hodnotu 0, čili leden roku 1 má hodnotu 12.
 	 */
-	public AMonth next() {
-		return add(1);
+	@Override
+	public int asInt() {
+		return iRokMes;
 	}
 
 	/**
-	 * Vrátí předcházející měsíc.
+	 * Vrací se jako string.
 	 *
-	 * @return Předcházející měsíc před aktuíálním měsícem.
+	 * @return Měsíc jako řetězec vždy na 7 znaků ve tvaru RRRR-MM.
 	 */
-	public AMonth prev() {
-		return add(-1);
+	@Override
+	public String asString() {
+		return MessageFormat.format("{0,number,0000}-{1,number,00}", iRokMes / MINY, iRokMes % MINY + 1);
+	}
+
+	/**
+	 * Porovná dva objekty typu AMonth. Vyhodí výjimku, pokud se porovnává s null nebo s jiným typem než AMonth.
+	 *
+	 * @param aObj
+	 *            Objekt se, kterým porovnávat.
+	 * @return -1, pokud je menší než argument, 0, při rovnosti, 1, pokud je větší než argument
+	 */
+	@Override
+	public int compareTo(final AMonth aObj) {
+		return iRokMes == aObj.iRokMes ? 0 : iRokMes < aObj.iRokMes ? -1 : 1;
 	}
 
 	/**
@@ -123,35 +223,6 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 */
 	public ADate dateOf(final int aDay) {
 		return ADate.from(getYearNumber(), getMonthNumber(), aDay);
-	}
-
-	/**
-	 * @param aDay
-	 *            je dceprekovaný, nemá význbam.
-	 * @return tOTÉŽ CO FUNKCE BEZ PARAMETRŮ.
-	 * @deprecated Použij metodu bez parametru, stejně parametr nemá na nic vliv, je to chyba.
-	 */
-	@Deprecated
-	public ADate firstDate(final int aDay) {
-		return dateOf(1);
-	}
-
-	/**
-	 * Vrátí první den v měsíci
-	 *
-	 * @return první den v měsíci.
-	 */
-	public ADate firstDate() {
-		return dateOf(1);
-	}
-
-	/**
-	 * Vrátí poslední den v měsíci.
-	 *
-	 * @return Poslední den v měsíci.
-	 */
-	public ADate lastDate() {
-		return dateOf(daysIn());
 	}
 
 	/**
@@ -186,42 +257,6 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 		return iRokMes - aMonth.iRokMes;
 	}
 
-	public boolean isLess(final AMonth b) {
-		return compareTo(b) < 0;
-	}
-
-	public boolean isLessOrEqual(final AMonth b) {
-		return compareTo(b) <= 0;
-	}
-
-	public boolean isGreater(final AMonth b) {
-		return compareTo(b) > 0;
-	}
-
-	public boolean isGreaterOrEqual(final AMonth b) {
-		return compareTo(b) >= 0;
-	}
-
-	public boolean isEqual(final AMonth b) {
-		return compareTo(b) == 0;
-	}
-
-	public boolean isNotEqual(final AMonth b) {
-		return compareTo(b) != 0;
-	}
-
-	/**
-	 * Porovná dva objekty typu AMonth. Vyhodí výjimku, pokud se porovnává s null nebo s jiným typem než AMonth.
-	 *
-	 * @param aObj
-	 *            Objekt se, kterým porovnávat.
-	 * @return -1, pokud je menší než argument, 0, při rovnosti, 1, pokud je větší než argument
-	 */
-	@Override
-	public int compareTo(final AMonth aObj) {
-		return iRokMes == aObj.iRokMes ? 0 : iRokMes < aObj.iRokMes ? -1 : 1;
-	}
-
 	/**
 	 * Porovnání dvou měsíců.
 	 *
@@ -239,97 +274,23 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	}
 
 	/**
-	 * Heš kód
+	 * Vrátí první den v měsíci
 	 *
-	 * @return heškód odvozený z roku a měsíce.
+	 * @return první den v měsíci.
 	 */
-	@Override
-	public int hashCode() {
-		return Integer.valueOf(iRokMes).hashCode();
+	public ADate firstDate() {
+		return dateOf(1);
 	}
 
 	/**
-	 * Zkosntruuje objekt ze ztadaného roku a měsíce.
-	 *
-	 * @param aRokMes
-	 *            Pořadové číslo měsíce. Blíže viz {@link #asInt())
-	 * @return Zkosntruovaný objekt AMonth
+	 * @param aDay
+	 *            je dceprekovaný, nemá význbam.
+	 * @return tOTÉŽ CO FUNKCE BEZ PARAMETRŮ.
+	 * @deprecated Použij metodu bez parametru, stejně parametr nemá na nic vliv, je to chyba.
 	 */
-	public static AMonth from(final int aRokMes) {
-		return new AMonth(aRokMes);
-	}
-
-	/**
-	 * Vytvoří hodnotu ze zadaného řetězce
-	 *
-	 * @param aRokMes
-	 *            Rok a měsíc ve tvaru RRRR-MM.
-	 * @return odpovídající hodnota
-	 */
-	public static AMonth from(final String aRokMes) {
-		return aRokMes == null ? null : new AMonth(parseMonth(aRokMes));
-	}
-
-	/**
-	 * Vytvoří AMonth ze zadaných hodnot
-	 *
-	 * @param aRok
-	 *            Čtyřmístný rok
-	 * @param aMes
-	 *            Měsíc 1..12
-	 * @return Zkosntruovaný objekt AMonth
-	 */
-	public static AMonth from(final int aRok, final int aMes) {
-		return new AMonth(fromItems(aRok, aMes));
-	}
-
-	/**
-	 * Otestuje, zda je možné vytvořit instanci z roku a měsíce.
-	 *
-	 * @param aRokMes
-	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
-	 */
-	public static boolean canFrom(final int aRokMes) {
-		try {
-			from(aRokMes);
-			return true;
-		} catch (final XCreateElement e) {
-			return false;
-		}
-	}
-
-	/**
-	 * Otestuje, zda je možné vytvořit instanci ze řetězece.
-	 *
-	 * @param aRokMes
-	 *            V řetězcovém tvaru rok a měsíc.
-	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
-	 */
-	public static boolean canFrom(final String aRokMes) {
-		try {
-			from(aRokMes);
-			return true;
-		} catch (final XCreateElement e) {
-			return false;
-		}
-	}
-
-	/**
-	 * Otestuje, zda je možné vytvořit instanci ze zadaného roku a měsíce.
-	 *
-	 * @param aRok
-	 *            Hodntoa roku..
-	 * @param aMes
-	 *            Měsíc v intervalu 1..12
-	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
-	 */
-	public static boolean canFrom(final int aRok, final int aMes) {
-		try {
-			from(aRok, aMes);
-			return true;
-		} catch (final XCreateElement e) {
-			return false;
-		}
+	@Deprecated
+	public ADate firstDate(final int aDay) {
+		return dateOf(1);
 	}
 
 	/**
@@ -362,36 +323,93 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 		return diff(aObject);
 	}
 
-	////////////////////////////////////////////
-	private static int parseMonth(final String aString) {
-		if (sPattern == null) {
-			sPattern = Pattern.compile("\\s*(\\d{4})[ -./]?(\\d\\d?)\\s*");
-		}
-		final Matcher mat = sPattern.matcher(aString);
-		if (mat.matches()) {
-			final int rok = Integer.parseInt(mat.group(1));
-			final int mes = Integer.parseInt(mat.group(2));
-			return fromItems(rok, mes);
-		} else {
-			throw new XCreateElement("Syntakticka chyba v roku a mesici '" + aString + "'");
-		}
-
+	/**
+	 * Vrací měsíc
+	 *
+	 * @return Číslo měsíce z intervalu 1..12
+	 */
+	public int getMonthNumber() {
+		return iRokMes % MINY + 1;
 	}
 
-	private static int fromItems(final int aRok, final int aMes) {
-		if (aRok < 1000 || aRok > 9999) {
-			throw new XCreateElement("Rok " + aRok + " neni ctyrmistny");
-		}
-		if (aMes < 1 || aMes > 12) {
-			throw new XCreateElement("Mesic " + aMes + " neni v intervalu 1..12");
-		}
-		return aRok * MINY + aMes - 1; // aby uvnitř měsíce byly od nuly
+	/**
+	 * Vrací rok.
+	 *
+	 * @return Číslo roku.
+	 */
+	public int getYearNumber() {
+		return iRokMes / MINY;
 	}
 
-	// Kontrola rozsahu.
-	private AMonth(final int aRokMes) {
-		iRokMes = aRokMes;
-		checkRange();
+	/**
+	 * Heš kód
+	 *
+	 * @return heškód odvozený z roku a měsíce.
+	 */
+	@Override
+	public int hashCode() {
+		return Integer.valueOf(iRokMes).hashCode();
+	}
+
+	public boolean isEqual(final AMonth b) {
+		return compareTo(b) == 0;
+	}
+
+	public boolean isGreater(final AMonth b) {
+		return compareTo(b) > 0;
+	}
+
+	public boolean isGreaterOrEqual(final AMonth b) {
+		return compareTo(b) >= 0;
+	}
+
+	public boolean isLess(final AMonth b) {
+		return compareTo(b) < 0;
+	}
+
+	public boolean isLessOrEqual(final AMonth b) {
+		return compareTo(b) <= 0;
+	}
+
+	public boolean isNotEqual(final AMonth b) {
+		return compareTo(b) != 0;
+	}
+
+	/**
+	 * Vrátí poslední den v měsíci.
+	 *
+	 * @return Poslední den v měsíci.
+	 */
+	public ADate lastDate() {
+		return dateOf(daysIn());
+	}
+
+	/**
+	 * Vrátí následující měsíc.
+	 *
+	 * @return Následující měsíc po aktuálním měsíci.
+	 */
+	public AMonth next() {
+		return add(1);
+	}
+
+	/**
+	 * Vrátí předcházející měsíc.
+	 *
+	 * @return Předcházející měsíc před aktuíálním měsícem.
+	 */
+	public AMonth prev() {
+		return add(-1);
+	}
+
+	/**
+	 * Převede se do stringu v nějakém čitelném formátu.
+	 *
+	 * @return Rok a měsíc v čitelném formátu.
+	 */
+	@Override
+	public String toString() {
+		return asString();
 	}
 
 	/**
@@ -401,24 +419,6 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 		if (!(MINVALUE <= iRokMes && iRokMes <= MAXVALUE)) {
 			throw new XCreateElement("Hodnota " + iRokMes + " není v požadovaném intervalu <" + MINVALUE + "," + MAXVALUE + ">");
 		}
-	}
-
-	/**
-	 * Returns minimal acceptable value of <code>AMonth</code>. You can't create an instance of <code>AMonth</code> with any less value.
-	 *
-	 * @author kalendov
-	 */
-	public static AMonth getMinValue() {
-		return AMonth.from(MINVALUE);
-	}
-
-	/**
-	 * Returns maximal acceptable value of <code>AMonth</code>. You can't create an instance of <code>AMonth</code> with any greater value.
-	 *
-	 * @author kalendov
-	 */
-	public static AMonth getMaxValue() {
-		return AMonth.from(MAXVALUE);
 	}
 
 }

@@ -16,10 +16,50 @@ import cz.geokuk.util.lang.FThrowable.ThrowableAndSourceMethod;
  */
 public class ExceptionDumper {
 
+	private class AditionalInfoEntry {
+		private AditionalInfoProvider	iProvider;
+		private String					iDescription;
+		private Class<?>				iPushingClass;
+		private int						iNumber;
+
+		/**
+		 * @param pwrt
+		 */
+		private void callPrintAditionalInfo(final PrintWriter pwrt) {
+			try {
+				if (iProvider == null) {
+					pwrt.println("Aditional infor provider is NULL");
+				} else {
+					iProvider.printAditionalInfo(pwrt);
+				}
+			} catch (final ThreadDeath td) {
+				throw td;
+			} catch (final Throwable t) {
+				pwrt.println("Exception while addint aditional context by addAditionalContext of " + getClass());
+				pwrt.println();
+				FThrowable.printStackTrace(t, pwrt, "printAditionalInfo");
+				pwrt.println();
+			}
+		}
+
+		private void dump(final PrintWriter pwrt) {
+			pwrt.println("<hr><h2>Additional info (" + iNumber + "/" + iStackx.size() + ") - " + iDescription + "</h2>");
+			pwrt.println("AditionalIfnfo provider class <tt>" + (iProvider == null ? "NULL" : iProvider.getClass().getName()) + "</tt> was pushed by <tt>" + iPushingClass.getName() + "</tt>");
+			pwrt.println("<br/>");
+			pwrt.println("<br/>");
+			// pwrt.println("<pre>");
+			callPrintAditionalInfo(pwrt);
+			// pwrt.println("</pre>");
+			pwrt.println("<br/>");
+
+		}
+	}
+
 	private static final Logger				log		= LogManager.getLogger(ExceptionDumper.class.getSimpleName());
 	/** Signleton proměnná pri implicitní repozitoř */
 
 	private final List<AditionalInfoEntry>	iStackx	= new ArrayList<>();
+
 	private int								iStackSize;
 
 	/**
@@ -199,6 +239,35 @@ public class ExceptionDumper {
 
 	}
 
+	public synchronized void popAditionalInfoProvider() {
+		if (iStackSize > 0) {
+			iStackSize--;
+		}
+	}
+
+	public synchronized void pushAditionalInfoProvider(final AditionalInfoProvider aAditionalInfoProvider, final String aDescription, final Class<?> aPushingClass) {
+		final AditionalInfoEntry entry = new AditionalInfoEntry();
+		entry.iProvider = aAditionalInfoProvider;
+		entry.iDescription = aDescription;
+		entry.iPushingClass = aPushingClass;
+		entry.iNumber = iStackSize + 1; // aby se číslovalo od jedné
+		if (iStackSize < iStackx.size()) {
+			iStackx.subList(iStackSize, iStackx.size()).clear();
+		}
+		iStackx.add(entry);
+		iStackSize = iStackx.size();
+	}
+
+	private synchronized void dumpAdditionaEntries(final PrintWriter pwrt, final Throwable[] aThrowables) {
+		// Prevence proti java.util.ConcurrentModificationException
+		// Zřejmě občas docházelo k tomu, že v průběhu tady tohoto výpisu
+		// někdo (nějaký zaregistrovaný AditionalInfoProvider) vrtnul do iStackx
+		final List<AditionalInfoEntry> copiedStackx = new ArrayList<>(iStackx);
+		for (final AditionalInfoEntry entry : copiedStackx) {
+			entry.dump(pwrt);
+		}
+	}
+
 	/**
 	 * @param aExceptionSeverity
 	 * @param id
@@ -207,6 +276,15 @@ public class ExceptionDumper {
 	private void logZeVyjimkaBylaVypsana(final EExceptionSeverity aExceptionSeverity, final AExcId id, final ExceptionDumperRepositorySpi aRepository) {
 		final String logMsg = "!!! DUMPED EXCEPTION '" + id + "' into \"" + aRepository.getUrl(id) + "\" !!!";
 		log.error(logMsg); // nechci, aby se dalo zabránit tomuto výpisu, tak přímo na standardní výstup
+	}
+
+	private void printShortExceptionList(final PrintStream pwrt, final Throwable aThrowable) {
+		final ThrowableAndSourceMethod[] throwableChain = FThrowable.getThrowableChain(aThrowable);
+		for (int i = 0; i < throwableChain.length; i++) {
+			final FThrowable.ThrowableAndSourceMethod method = throwableChain[i];
+			final String prefix = "EXC-" + FThrowable.getExceptionNumber(aThrowable) + ": ";
+			pwrt.println("!!!!! " + prefix + (i + 1) + "/" + throwableChain.length + " " + method.getThrowable().getClass().getName() + ": " + method.getThrowable().getMessage());
+		}
 	}
 
 	/**
@@ -222,15 +300,6 @@ public class ExceptionDumper {
 			pwrt.println("    " + prefix + "<span style='color: green'>" + (i + 1) + "/" + throwableChain.length + "</span> "
 					+ (method.getSourceMethod() == null ? "" : "<span style='color: darkmagenta'>" + method.getSourceMethod().getName() + "()" + "</span>: ") + "<span style='color: blue'>"
 					+ method.getThrowable().getClass().getName() + "</span> : <span style='color: red'>" + method.getThrowable().getMessage() + "</span>");
-		}
-	}
-
-	private void printShortExceptionList(final PrintStream pwrt, final Throwable aThrowable) {
-		final ThrowableAndSourceMethod[] throwableChain = FThrowable.getThrowableChain(aThrowable);
-		for (int i = 0; i < throwableChain.length; i++) {
-			final FThrowable.ThrowableAndSourceMethod method = throwableChain[i];
-			final String prefix = "EXC-" + FThrowable.getExceptionNumber(aThrowable) + ": ";
-			pwrt.println("!!!!! " + prefix + (i + 1) + "/" + throwableChain.length + " " + method.getThrowable().getClass().getName() + ": " + method.getThrowable().getMessage());
 		}
 	}
 
@@ -257,74 +326,6 @@ public class ExceptionDumper {
 				}
 			} else {
 				pwrt.println(key + " = " + value);
-			}
-		}
-	}
-
-	private synchronized void dumpAdditionaEntries(final PrintWriter pwrt, final Throwable[] aThrowables) {
-		// Prevence proti java.util.ConcurrentModificationException
-		// Zřejmě občas docházelo k tomu, že v průběhu tady tohoto výpisu
-		// někdo (nějaký zaregistrovaný AditionalInfoProvider) vrtnul do iStackx
-		final List<AditionalInfoEntry> copiedStackx = new ArrayList<>(iStackx);
-		for (final AditionalInfoEntry entry : copiedStackx) {
-			entry.dump(pwrt);
-		}
-	}
-
-	public synchronized void pushAditionalInfoProvider(final AditionalInfoProvider aAditionalInfoProvider, final String aDescription, final Class<?> aPushingClass) {
-		final AditionalInfoEntry entry = new AditionalInfoEntry();
-		entry.iProvider = aAditionalInfoProvider;
-		entry.iDescription = aDescription;
-		entry.iPushingClass = aPushingClass;
-		entry.iNumber = iStackSize + 1; // aby se číslovalo od jedné
-		if (iStackSize < iStackx.size()) {
-			iStackx.subList(iStackSize, iStackx.size()).clear();
-		}
-		iStackx.add(entry);
-		iStackSize = iStackx.size();
-	}
-
-	public synchronized void popAditionalInfoProvider() {
-		if (iStackSize > 0) {
-			iStackSize--;
-		}
-	}
-
-	private class AditionalInfoEntry {
-		private AditionalInfoProvider	iProvider;
-		private String					iDescription;
-		private Class<?>				iPushingClass;
-		private int						iNumber;
-
-		private void dump(final PrintWriter pwrt) {
-			pwrt.println("<hr><h2>Additional info (" + iNumber + "/" + iStackx.size() + ") - " + iDescription + "</h2>");
-			pwrt.println("AditionalIfnfo provider class <tt>" + (iProvider == null ? "NULL" : iProvider.getClass().getName()) + "</tt> was pushed by <tt>" + iPushingClass.getName() + "</tt>");
-			pwrt.println("<br/>");
-			pwrt.println("<br/>");
-			// pwrt.println("<pre>");
-			callPrintAditionalInfo(pwrt);
-			// pwrt.println("</pre>");
-			pwrt.println("<br/>");
-
-		}
-
-		/**
-		 * @param pwrt
-		 */
-		private void callPrintAditionalInfo(final PrintWriter pwrt) {
-			try {
-				if (iProvider == null) {
-					pwrt.println("Aditional infor provider is NULL");
-				} else {
-					iProvider.printAditionalInfo(pwrt);
-				}
-			} catch (final ThreadDeath td) {
-				throw td;
-			} catch (final Throwable t) {
-				pwrt.println("Exception while addint aditional context by addAditionalContext of " + getClass());
-				pwrt.println();
-				FThrowable.printStackTrace(t, pwrt, "printAditionalInfo");
-				pwrt.println();
 			}
 		}
 	}

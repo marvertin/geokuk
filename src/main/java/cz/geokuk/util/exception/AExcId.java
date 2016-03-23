@@ -12,12 +12,12 @@ public class AExcId extends AString0 {
 
 	static final long serialVersionUID = -248904485707733102L;
 
-	protected AExcId(final String aValue) {
-		super(aValue);
-	}
-
 	public static AExcId from(final String s) {
 		return s == null ? null : new AExcId(s);
+	}
+
+	protected AExcId(final String aValue) {
+		super(aValue);
 	}
 
 }

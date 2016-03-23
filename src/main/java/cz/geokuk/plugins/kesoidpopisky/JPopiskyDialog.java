@@ -68,6 +68,20 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 		init();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
+	 */
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		registerEvents();
+	}
+
+	public void inject(final PopiskyModel popiskyModel) {
+		this.popiskyModel = popiskyModel;
+	}
+
 	public void onEvent(final PopiskyPreferencesChangeEvent event) {
 		final PopiskySettings pose = event.pose;
 
@@ -84,11 +98,9 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 		setPattern(jSimplewaypontPatternEdit, pose.getPatterns().getSimplewaypointPattern());
 	}
 
-	private void setPattern(final JTextField jField, final String pattern) {
-		if (!jField.getText().equals(pattern)) {
-			jField.setText(pattern);
-		}
-
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "PopiskyKesoidu";
 	}
 
 	/**
@@ -161,7 +173,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 
 		jKesPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
-			public void removeUpdate(final DocumentEvent e) {
+			public void changedUpdate(final DocumentEvent e) {
 				zmena();
 			}
 
@@ -171,7 +183,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 			}
 
 			@Override
-			public void changedUpdate(final DocumentEvent e) {
+			public void removeUpdate(final DocumentEvent e) {
 				zmena();
 			}
 
@@ -184,7 +196,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 
 		jWaymarkPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
-			public void removeUpdate(final DocumentEvent e) {
+			public void changedUpdate(final DocumentEvent e) {
 				zmena();
 			}
 
@@ -194,7 +206,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 			}
 
 			@Override
-			public void changedUpdate(final DocumentEvent e) {
+			public void removeUpdate(final DocumentEvent e) {
 				zmena();
 			}
 
@@ -207,7 +219,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 
 		jCgpPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
-			public void removeUpdate(final DocumentEvent e) {
+			public void changedUpdate(final DocumentEvent e) {
 				zmena();
 			}
 
@@ -217,7 +229,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 			}
 
 			@Override
-			public void changedUpdate(final DocumentEvent e) {
+			public void removeUpdate(final DocumentEvent e) {
 				zmena();
 			}
 
@@ -230,7 +242,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 
 		jSimplewaypontPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
-			public void removeUpdate(final DocumentEvent e) {
+			public void changedUpdate(final DocumentEvent e) {
 				zmena();
 			}
 
@@ -240,7 +252,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 			}
 
 			@Override
-			public void changedUpdate(final DocumentEvent e) {
+			public void removeUpdate(final DocumentEvent e) {
 				zmena();
 			}
 
@@ -253,23 +265,11 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 
 	}
 
-	public void inject(final PopiskyModel popiskyModel) {
-		this.popiskyModel = popiskyModel;
-	}
+	private void setPattern(final JTextField jField, final String pattern) {
+		if (!jField.getText().equals(pattern)) {
+			jField.setText(pattern);
+		}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
-	 */
-	@Override
-	public void initAfterEventReceiverRegistration() {
-		registerEvents();
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "PopiskyKesoidu";
 	}
 
 }

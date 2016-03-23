@@ -23,6 +23,19 @@ public class CzechGeodeticPoint extends Kesoid {
 		return EKesoidKind.CGP;
 	}
 
+	@Override
+	public Icon getUrlIcon() {
+		return ImageLoader.seekResIcon("dataz.png");
+	}
+
+	public double getXjtsk() {
+		return xjtsk;
+	}
+
+	public double getYjtsk() {
+		return yjtsk;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -42,25 +55,12 @@ public class CzechGeodeticPoint extends Kesoid {
 		}
 	}
 
-	public double getXjtsk() {
-		return xjtsk;
-	}
-
 	public void setXjtsk(final double xjtsk) {
 		this.xjtsk = xjtsk;
 	}
 
-	public double getYjtsk() {
-		return yjtsk;
-	}
-
 	public void setYjtsk(final double yjtsk) {
 		this.yjtsk = yjtsk;
-	}
-
-	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("dataz.png");
 	}
 
 }

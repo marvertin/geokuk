@@ -17,6 +17,8 @@ public abstract class NacitacInputStream0 extends Nacitac0 {
 		nacti(wrapByProgressor(new FileInputStream(file), file.toString(), progressModel), file.toString(), builder, future);
 	}
 
+	protected abstract void nacti(InputStream aIstm, String name, IImportBuilder builder, Future<?> future) throws IOException;
+
 	@Override
 	protected final void nacti(final ZipFile zipFile, final ZipEntry zipEntry, final IImportBuilder builder, final Future<?> future, final ProgressModel progressModel) throws IOException {
 		if (!umiNacist(zipEntry)) {
@@ -25,7 +27,5 @@ public abstract class NacitacInputStream0 extends Nacitac0 {
 		final String name = zipFile.getName() + "/" + zipEntry.getName();
 		nacti(wrapByProgressor(zipFile.getInputStream(zipEntry), name, progressModel), name, builder, future);
 	}
-
-	protected abstract void nacti(InputStream aIstm, String name, IImportBuilder builder, Future<?> future) throws IOException;
 
 }

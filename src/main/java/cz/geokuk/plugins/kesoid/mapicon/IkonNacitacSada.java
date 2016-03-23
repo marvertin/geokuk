@@ -60,6 +60,14 @@ public class IkonNacitacSada {
 		return sada;
 	}
 
+	String getGroupDisplayName(final String groupName) {
+		return groupName == null ? null : groupDisplayNames.getProperty(groupName);
+	}
+
+	private void error(final String errstr) {
+		System.err.println(errstr);
+	}
+
 	/**
 	 * @param nodeSada
 	 * @throws IOException
@@ -90,14 +98,6 @@ public class IkonNacitacSada {
 			vrstva.add(iconDef);
 		}
 		return vrstva;
-	}
-
-	private void error(final String errstr) {
-		System.err.println(errstr);
-	}
-
-	String getGroupDisplayName(final String groupName) {
-		return groupName == null ? null : groupDisplayNames.getProperty(groupName);
 	}
 
 }

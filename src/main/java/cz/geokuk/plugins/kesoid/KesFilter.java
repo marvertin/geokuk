@@ -44,6 +44,20 @@ public class KesFilter {
 	//
 
 	/**
+	 *
+	 */
+	public void done() {
+		nechteneAlely = null;
+	}
+
+	/**
+	 * @return the filterDefinition
+	 */
+	public FilterDefinition getFilterDefinition() {
+		return filterDefinition;
+	}
+
+	/**
 	 * @return the jmenaNechtenychAlel
 	 */
 	public Set<String> getJmenaNechtenychAlel() {
@@ -51,12 +65,14 @@ public class KesFilter {
 	}
 
 	/**
-	 * @param jmenaNechtenychAlel
-	 *            the jmenaNechtenychAlel to set
+	 *
 	 */
-	public void setJmenaNechtenychAlel(final Set<String> jmenaNechtenychAlel) {
-		this.jmenaNechtenychAlel = jmenaNechtenychAlel;
+	public void init() {
 		nechteneAlely = null;
+	}
+
+	public void inject(final VyletModel vyletModel) {
+		this.vyletModel = vyletModel;
 	}
 
 	public boolean isFiltered(final Wpt aWpt, final Genom genom, Genotyp genotyp) {
@@ -134,27 +150,6 @@ public class KesFilter {
 	}
 
 	/**
-	 *
-	 */
-	public void init() {
-		nechteneAlely = null;
-	}
-
-	/**
-	 *
-	 */
-	public void done() {
-		nechteneAlely = null;
-	}
-
-	/**
-	 * @return the filterDefinition
-	 */
-	public FilterDefinition getFilterDefinition() {
-		return filterDefinition;
-	}
-
-	/**
 	 * @param filterDefinition
 	 *            the filterDefinition to set
 	 */
@@ -162,8 +157,13 @@ public class KesFilter {
 		this.filterDefinition = filterDefinition;
 	}
 
-	public void inject(final VyletModel vyletModel) {
-		this.vyletModel = vyletModel;
+	/**
+	 * @param jmenaNechtenychAlel
+	 *            the jmenaNechtenychAlel to set
+	 */
+	public void setJmenaNechtenychAlel(final Set<String> jmenaNechtenychAlel) {
+		this.jmenaNechtenychAlel = jmenaNechtenychAlel;
+		nechteneAlely = null;
 	}
 
 }

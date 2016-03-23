@@ -34,15 +34,6 @@ public class TadyJsemDomaAction extends Action0 {
 
 	}
 
-	public void onEvent(final PoziceChangedEvent aEvent) {
-		if (aEvent.poziceq.isNoPosition()) {
-			setEnabled(false);
-		} else {
-			setEnabled(true);
-			hc = aEvent.poziceq.getWgs();
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -63,6 +54,15 @@ public class TadyJsemDomaAction extends Action0 {
 
 	public void inject(final RefbodyModel refbodyModel) {
 		this.refbodyModel = refbodyModel;
+	}
+
+	public void onEvent(final PoziceChangedEvent aEvent) {
+		if (aEvent.poziceq.isNoPosition()) {
+			setEnabled(false);
+		} else {
+			setEnabled(true);
+			hc = aEvent.poziceq.getWgs();
+		}
 	}
 
 }

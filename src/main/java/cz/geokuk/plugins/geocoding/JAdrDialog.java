@@ -53,17 +53,28 @@ import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
 public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<Nalezenec>, DocumentListener {
 
+	class CancelAction extends AbstractAction {
+		private static final long serialVersionUID = -480129891208539096L;
+
+		@Override
+		public void actionPerformed(final ActionEvent ev) {
+			// hilit.removeAllHighlights();
+			entry.setText("");
+			entry.setBackground(entryBg);
+		}
+	}
+
 	private static final long	serialVersionUID	= 7087453419069194768L;
-
-	private JTextField			entry;
-	private JLabel				jLabel1;
-	private JButton				jButtonCentruj;
-	private JAdrTable			jAdrTabulka;
-	private JLabel				status;
-
 	final static Color			HILIT_COLOR			= Color.LIGHT_GRAY;
 	final static Color			ERROR_COLOR			= Color.PINK;
 	final static String			CANCEL_ACTION		= "cancel-adr-hled";
+	private JTextField			entry;
+
+	private JLabel				jLabel1;
+	private JButton				jButtonCentruj;
+	private JAdrTable			jAdrTabulka;
+
+	private JLabel				status;
 
 	final Color					entryBg;
 	// final Highlighter hilit;
@@ -84,21 +95,25 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		registerEvents();
 	}
 
-	private void registerEvents() {
-		jButtonCentruj.addActionListener(e -> {
+	@Override
+	public void changedUpdate(final DocumentEvent ev) {
+	}
 
-			final Nalezenec nalezenec = jAdrTabulka.getCurrent();
-			if (nalezenec != null) {
-				poziceModel.setPozice(nalezenec.wgs);
-				vyrezModel.vystredovatNaPozici();
-				// Board.eveman.fire(new PoziceChangedEvent(nalezenec.wgs, true) );
-			}
-		});
+	public void inject(final GeocodingModel geocodingModel) {
+		this.geocodingModel = geocodingModel;
+	}
 
-		// Board.eveman.registerWeakly(this);
+	public void inject(final PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
+	}
 
-		// jKeskovaciTabulka.getMod
-		jAdrTabulka.addListSelectionListener(aE -> jButtonCentruj.setEnabled(jAdrTabulka.getCurrent() != null));
+	public void inject(final VyrezModel vyrezModel) {
+		this.vyrezModel = vyrezModel;
+	}
+
+	@Override
+	public void insertUpdate(final DocumentEvent ev) {
+		search();
 	}
 
 	public void onEvent(final ReferencniBodSeZmenilEvent aEvent) {
@@ -109,15 +124,44 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		setReferencniBod(aEvent.wgs);
 	}
 
-	private boolean naVstupuJsouSouradkyNeboNic() {
-		final String text = entry.getText();
-		if (text.trim().length() == 0) {
-			return true;
+	// DocumentListener methods
+
+	@Override
+	public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {
+		// if (nalezenci.size() == 0) {
+		// jButtonCentruj.setEnabled(false);
+		// } else {
+		// jButtonCentruj.setEnabled(true);
+		// }
+		if (vysledekHledani.nalezenci != null) {
+			jAdrTabulka.setNalezenci(vysledekHledani.nalezenci);
+			if (vysledekHledani.nalezenci.size() > 0) { // match found
+				entry.setBackground(entryBg);
+				message("Nalezeno " + vysledekHledani.nalezenci.size() + " možných adres.");
+			} else {
+				entry.setBackground(ERROR_COLOR);
+				message("Žádná shoda, stiskni ESC k výmazu hledacího pole.");
+			}
 		}
-		if (text.matches("-?\\d+(\\.\\d+),-?\\d+(\\.\\d+)")) {
-			return true;
+	}
+
+	@Override
+	public void removeUpdate(final DocumentEvent ev) {
+		search();
+	}
+
+	public void search() {
+		if (referencniBod == null) {
+			return;
 		}
-		return false;
+		message("Hleda se ...");
+		final String s = entry.getText();
+		geocodingModel.spustHledani(s, this);
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "HledatAdresu";
 	}
 
 	/**
@@ -173,79 +217,35 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		search();
 	}
 
-	public void search() {
-		if (referencniBod == null) {
-			return;
-		}
-		message("Hleda se ...");
-		final String s = entry.getText();
-		geocodingModel.spustHledani(s, this);
-	}
-
 	void message(final String msg) {
 		status.setText(msg);
 	}
 
-	// DocumentListener methods
-
-	@Override
-	public void insertUpdate(final DocumentEvent ev) {
-		search();
-	}
-
-	@Override
-	public void removeUpdate(final DocumentEvent ev) {
-		search();
-	}
-
-	@Override
-	public void changedUpdate(final DocumentEvent ev) {
-	}
-
-	class CancelAction extends AbstractAction {
-		private static final long serialVersionUID = -480129891208539096L;
-
-		@Override
-		public void actionPerformed(final ActionEvent ev) {
-			// hilit.removeAllHighlights();
-			entry.setText("");
-			entry.setBackground(entryBg);
+	private boolean naVstupuJsouSouradkyNeboNic() {
+		final String text = entry.getText();
+		if (text.trim().length() == 0) {
+			return true;
 		}
+		if (text.matches("-?\\d+(\\.\\d+),-?\\d+(\\.\\d+)")) {
+			return true;
+		}
+		return false;
 	}
 
-	@Override
-	public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {
-		// if (nalezenci.size() == 0) {
-		// jButtonCentruj.setEnabled(false);
-		// } else {
-		// jButtonCentruj.setEnabled(true);
-		// }
-		if (vysledekHledani.nalezenci != null) {
-			jAdrTabulka.setNalezenci(vysledekHledani.nalezenci);
-			if (vysledekHledani.nalezenci.size() > 0) { // match found
-				entry.setBackground(entryBg);
-				message("Nalezeno " + vysledekHledani.nalezenci.size() + " možných adres.");
-			} else {
-				entry.setBackground(ERROR_COLOR);
-				message("Žádná shoda, stiskni ESC k výmazu hledacího pole.");
+	private void registerEvents() {
+		jButtonCentruj.addActionListener(e -> {
+
+			final Nalezenec nalezenec = jAdrTabulka.getCurrent();
+			if (nalezenec != null) {
+				poziceModel.setPozice(nalezenec.wgs);
+				vyrezModel.vystredovatNaPozici();
+				// Board.eveman.fire(new PoziceChangedEvent(nalezenec.wgs, true) );
 			}
-		}
-	}
+		});
 
-	public void inject(final PoziceModel poziceModel) {
-		this.poziceModel = poziceModel;
-	}
+		// Board.eveman.registerWeakly(this);
 
-	public void inject(final VyrezModel vyrezModel) {
-		this.vyrezModel = vyrezModel;
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "HledatAdresu";
-	}
-
-	public void inject(final GeocodingModel geocodingModel) {
-		this.geocodingModel = geocodingModel;
+		// jKeskovaciTabulka.getMod
+		jAdrTabulka.addListSelectionListener(aE -> jButtonCentruj.setEnabled(jAdrTabulka.getCurrent() != null));
 	}
 }

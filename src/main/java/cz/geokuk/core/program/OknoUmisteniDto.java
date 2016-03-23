@@ -19,33 +19,13 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 	private Point		pozice		= new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
 	private Dimension	velikost	= new Dimension(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
-	/**
-	 * @return the velikost
-	 */
-	public Dimension getVelikost() {
-		return velikost;
-	}
-
-	/**
-	 * @param velikost
-	 *            the velikost to set
-	 */
-	public void setVelikost(final Dimension velikost) {
-		this.velikost = velikost;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (pozice == null ? 0 : pozice.hashCode());
-		result = prime * result + (velikost == null ? 0 : velikost.hashCode());
-		return result;
+	public OknoUmisteniDto copy() {
+		try {
+			return (OknoUmisteniDto) super.clone();
+		} catch (final CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/*
@@ -82,24 +62,6 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "OknoStatusDto [pozice=" + pozice + ", velikost=" + velikost + "]";
-	}
-
-	/**
-	 * @param pozice
-	 *            the pozice to set
-	 */
-	public void setPozice(final Point pozice) {
-		this.pozice = pozice;
-	}
-
 	/**
 	 * @return the pozice
 	 */
@@ -112,13 +74,51 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 	 * @see cz.geokuk.framework.Copyable#copy()
 	 */
 
+	/**
+	 * @return the velikost
+	 */
+	public Dimension getVelikost() {
+		return velikost;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
-	public OknoUmisteniDto copy() {
-		try {
-			return (OknoUmisteniDto) super.clone();
-		} catch (final CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (pozice == null ? 0 : pozice.hashCode());
+		result = prime * result + (velikost == null ? 0 : velikost.hashCode());
+		return result;
+	}
+
+	/**
+	 * @param pozice
+	 *            the pozice to set
+	 */
+	public void setPozice(final Point pozice) {
+		this.pozice = pozice;
+	}
+
+	/**
+	 * @param velikost
+	 *            the velikost to set
+	 */
+	public void setVelikost(final Dimension velikost) {
+		this.velikost = velikost;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "OknoStatusDto [pozice=" + pozice + ", velikost=" + velikost + "]";
 	}
 
 }

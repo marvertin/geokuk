@@ -58,37 +58,6 @@ public enum EKaType {
 	private final KeyStroke		keyStroke;
 	private KachleUrlBuilder	urlBuilder;
 
-	public boolean isPodklad() {
-		return podklad;
-	}
-
-	/**
-	 *
-	 * @param podklad
-	 *            true, pokud se jedná o neprůhledný podlad, false jinak.
-	 * @param nazev
-	 *            Název mapy, tak se objeví v menu.
-	 * @param popis
-	 *            Bližší popis mapy, objeví se jako tooltip v menu.
-	 * @param klavesa
-	 *            Hot-key, která mapu vyvolá.
-	 * @param keyStroke
-	 *            Písmeno z nazev, které lze použít pro výběr při rozbaleném menu.
-	 * @param urlBuilder
-	 *            Implementace třídy, která sestaví URL pro zobrazení mapy.
-	 */
-	private EKaType(final boolean podklad, final String nazev, final String popis, final int klavesa, final KeyStroke keyStroke, final KachleUrlBuilder urlBuilder) {
-		this.podklad = podklad;
-		this.urlBuilder = urlBuilder;
-		minMoumer = 3;
-		maxMoumer = 18;
-		maxAutoMoumer = 17;
-		this.nazev = nazev;
-		this.popis = popis;
-		this.klavesa = klavesa;
-		this.keyStroke = keyStroke;
-	}
-
 	/**
 	 * @param podklad
 	 *            true, pokud se jedná o neprůhledný podlad, false jinak.
@@ -125,12 +94,31 @@ public enum EKaType {
 
 	}
 
-	public int getMinMoumer() {
-		return minMoumer;
-	}
-
-	public int getMaxMoumer() {
-		return maxMoumer;
+	/**
+	 *
+	 * @param podklad
+	 *            true, pokud se jedná o neprůhledný podlad, false jinak.
+	 * @param nazev
+	 *            Název mapy, tak se objeví v menu.
+	 * @param popis
+	 *            Bližší popis mapy, objeví se jako tooltip v menu.
+	 * @param klavesa
+	 *            Hot-key, která mapu vyvolá.
+	 * @param keyStroke
+	 *            Písmeno z nazev, které lze použít pro výběr při rozbaleném menu.
+	 * @param urlBuilder
+	 *            Implementace třídy, která sestaví URL pro zobrazení mapy.
+	 */
+	private EKaType(final boolean podklad, final String nazev, final String popis, final int klavesa, final KeyStroke keyStroke, final KachleUrlBuilder urlBuilder) {
+		this.podklad = podklad;
+		this.urlBuilder = urlBuilder;
+		minMoumer = 3;
+		maxMoumer = 18;
+		maxAutoMoumer = 17;
+		this.nazev = nazev;
+		this.popis = popis;
+		this.klavesa = klavesa;
+		this.keyStroke = keyStroke;
 	}
 
 	public int fitMoumer(int moumer) {
@@ -143,8 +131,24 @@ public enum EKaType {
 		return moumer;
 	}
 
+	public KeyStroke getKeyStroke() {
+		return keyStroke;
+	}
+
+	public int getKlavesa() {
+		return klavesa;
+	}
+
 	public int getMaxAutoMoumer() {
 		return maxAutoMoumer;
+	}
+
+	public int getMaxMoumer() {
+		return maxMoumer;
+	}
+
+	public int getMinMoumer() {
+		return minMoumer;
 	}
 
 	public String getNazev() {
@@ -155,15 +159,11 @@ public enum EKaType {
 		return popis;
 	}
 
-	public int getKlavesa() {
-		return klavesa;
-	}
-
-	public KeyStroke getKeyStroke() {
-		return keyStroke;
-	}
-
 	public KachleUrlBuilder getUrlBuilder() {
 		return urlBuilder;
+	}
+
+	public boolean isPodklad() {
+		return podklad;
 	}
 }

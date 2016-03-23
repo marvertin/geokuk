@@ -19,12 +19,16 @@ import cz.geokuk.util.gui.JIconCheckBox;
  */
 public class JToolbarOvladaceAlel extends JPanel {
 
-	private static final long			serialVersionUID	= 2858792073950044988L;
+	private static final long					serialVersionUID	= 2858792073950044988L;
 
-	private Genom						genom;
-	protected Factory					factory;
+	private Genom								genom;
+	protected Factory							factory;
 
-	private final JToolbarOvladaceAlel	tb;
+	private final JToolbarOvladaceAlel			tb;
+
+	//////////////////////////////////////////
+	// TODO Celkově nějak refactorovat
+	private final Map<String, JIconCheckBox>	mapka				= new HashMap<>();
 
 	/**
 	 *
@@ -34,23 +38,15 @@ public class JToolbarOvladaceAlel extends JPanel {
 		this.tb = this;
 	}
 
-	//////////////////////////////////////////
-	// TODO Celkově nějak refactorovat
-	private final Map<String, JIconCheckBox> mapka = new HashMap<>();
+	/**
+	 * @return
+	 */
+	public Set<String> getAlely() {
+		return mapka.keySet();
+	}
 
-	private void ovladac(final KesBag vsechny, final Alela alela) {
-		JIconCheckBox cb = mapka.get(alela.toString());
-		if (cb == null) {
-			final SwitchKesoidUrciteAlelyAction action = factory.init(new SwitchKesoidUrciteAlelyAction(alela));
-			cb = new JIconCheckBox();
-			action.join(cb);
-			tb.add(cb);
-			cb.setText(null);
-			mapka.put(alela.toString(), cb);
-		}
-		final boolean jetam = vsechny.getPouziteAlely().contains(alela);
-		cb.setVisible(jetam);
-
+	public void inject(final Factory factory) {
+		this.factory = factory;
 	}
 
 	public void onEvent(final KeskyNactenyEvent event) {
@@ -112,15 +108,19 @@ public class JToolbarOvladaceAlel extends JPanel {
 		mapka.clear();
 	}
 
-	/**
-	 * @return
-	 */
-	public Set<String> getAlely() {
-		return mapka.keySet();
-	}
+	private void ovladac(final KesBag vsechny, final Alela alela) {
+		JIconCheckBox cb = mapka.get(alela.toString());
+		if (cb == null) {
+			final SwitchKesoidUrciteAlelyAction action = factory.init(new SwitchKesoidUrciteAlelyAction(alela));
+			cb = new JIconCheckBox();
+			action.join(cb);
+			tb.add(cb);
+			cb.setText(null);
+			mapka.put(alela.toString(), cb);
+		}
+		final boolean jetam = vsechny.getPouziteAlely().contains(alela);
+		cb.setVisible(jetam);
 
-	public void inject(final Factory factory) {
-		this.factory = factory;
 	}
 
 }

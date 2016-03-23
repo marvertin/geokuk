@@ -8,20 +8,6 @@ abstract class Ka0 {
 		this.loc = loc;
 	}
 
-	public abstract String typToString();
-
-	public KaLoc getLoc() {
-		return loc;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (loc == null ? 0 : loc.hashCode());
-		return result;
-	}
-
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -44,8 +30,22 @@ abstract class Ka0 {
 		return true;
 	}
 
+	public KaLoc getLoc() {
+		return loc;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (loc == null ? 0 : loc.hashCode());
+		return result;
+	}
+
 	@Override
 	public String toString() {
 		return loc.toString();
 	}
+
+	public abstract String typToString();
 }

@@ -14,6 +14,23 @@ public class Onoff<T extends Model0> {
 
 	private Boolean									onoff;
 
+	/**
+	 * @param model
+	 * @param clazz
+	 */
+	public Onoff(final T model, final Class<? extends OnoffEvent0<T>> clazz) {
+		super();
+		this.model = model;
+		this.clazz = clazz;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isOnoff() {
+		return onoff;
+	}
+
 	public void setOnoff(final boolean onoff) {
 		try {
 			if (this.onoff != null && this.onoff == onoff) {
@@ -33,25 +50,8 @@ public class Onoff<T extends Model0> {
 
 	}
 
-	/**
-	 * @param model
-	 * @param clazz
-	 */
-	public Onoff(final T model, final Class<? extends OnoffEvent0<T>> clazz) {
-		super();
-		this.model = model;
-		this.clazz = clazz;
-	}
-
 	protected void onSetOnOff(final boolean onoff) {
 
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isOnoff() {
-		return onoff;
 	}
 
 }

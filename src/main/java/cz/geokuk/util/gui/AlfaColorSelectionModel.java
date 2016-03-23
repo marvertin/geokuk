@@ -17,10 +17,16 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 	private int					alfa;
 
 	@Override
-	public void setSelectedColor(final Color color) {
-		// musíme pžidávat alfu zevnitř, protože takto nám volá model bez alfy
-		// color chooser
-		super.setSelectedColor(new Color(color.getRGB() & 0xFFFFFF | alfa << 24, true));
+	public void fireStateChanged() {
+		super.fireStateChanged();
+	}
+
+	/**
+	 * @return the alfa
+	 */
+	public int getAlfa() {
+		log.debug("MODEL-getAlfa: " + alfa);
+		return alfa;
 	}
 
 	/*
@@ -36,31 +42,11 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 		return color;
 	}
 
-	public void setSelectedColorWithAlfa(final Color color) {
-		final int alfaOld = alfa;
-		alfa = color.getAlpha();
-		log.debug("MODEL-setSelectedColorWithAlfa: " + alfa);
-		final Color colorBezAlfy = new Color(color.getRGB() & 0xFFFFFF);
-		final boolean barvaBezAlfyZustava = super.getSelectedColor().equals(colorBezAlfy);
-		super.setSelectedColor(colorBezAlfy); // nastavit bez alfy, čímže jsou notifikovány lsitenery, pokud změna
-		if (barvaBezAlfyZustava && alfaOld != alfa) {
-			fireStateChanged();
-		}
-	}
-
 	public Color getSelectedColorWithAlfa() {
 		log.debug("MODEL-getSelectedColorWithAlfa1: " + alfa);
 		final Color color = new Color(super.getSelectedColor().getRGB() & 0xFFFFFF | alfa << 24, true);
 		log.debug("MODEL-getSelectedColorWithAlfa2: " + color + color.getAlpha() + " " + alfa);
 		return color;
-	}
-
-	/**
-	 * @return the alfa
-	 */
-	public int getAlfa() {
-		log.debug("MODEL-getAlfa: " + alfa);
-		return alfa;
 	}
 
 	public void setAlfa(final int aAlfa) {
@@ -73,8 +59,22 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 	}
 
 	@Override
-	public void fireStateChanged() {
-		super.fireStateChanged();
+	public void setSelectedColor(final Color color) {
+		// musíme pžidávat alfu zevnitř, protože takto nám volá model bez alfy
+		// color chooser
+		super.setSelectedColor(new Color(color.getRGB() & 0xFFFFFF | alfa << 24, true));
+	}
+
+	public void setSelectedColorWithAlfa(final Color color) {
+		final int alfaOld = alfa;
+		alfa = color.getAlpha();
+		log.debug("MODEL-setSelectedColorWithAlfa: " + alfa);
+		final Color colorBezAlfy = new Color(color.getRGB() & 0xFFFFFF);
+		final boolean barvaBezAlfyZustava = super.getSelectedColor().equals(colorBezAlfy);
+		super.setSelectedColor(colorBezAlfy); // nastavit bez alfy, čímže jsou notifikovány lsitenery, pokud změna
+		if (barvaBezAlfyZustava && alfaOld != alfa) {
+			fireStateChanged();
+		}
 	}
 
 }

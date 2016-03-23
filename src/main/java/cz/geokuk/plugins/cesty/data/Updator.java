@@ -5,13 +5,25 @@ import cz.geokuk.core.coordinates.Mouable;
 
 public class Updator {
 
-	public void remove(final Cesta cesta) {
-		cesta.remove();
+	public void odeberBod(final Bod bod) {
+		bod.remove();
 	}
 
-	public void xadd(final Doc doc, final Cesta cesta) {
-		doc.setChanged();
-		doc.xadd(cesta);
+	public void pipojitCestuPred(final Cesta cesta1, final Cesta cesta2) {
+		cesta1.pripojitPred(cesta2);
+	}
+
+	public void pipojitCestuZa(final Cesta cesta1, final Cesta cesta2) {
+		assert cesta1.getDoc() == cesta2.getDoc();
+		assert cesta1.getStart() != null;
+		assert cesta1.getCil() != null;
+		cesta1.pripojitZa(cesta2);
+		assert cesta1.getStart() != null;
+		assert cesta1.getCil() != null;
+	}
+
+	public void pospojujVzdusneUseky(final Cesta cesta) {
+		cesta.pospojujVzdusneUseky();
 	}
 
 	public Bod pridejNaKonec(final Cesta cesta, final Mouable mouable) {
@@ -19,42 +31,23 @@ public class Updator {
 		return cesta.pridejNaKonec(mouable);
 	}
 
-	public Bod pridejNaMisto(final Cesta cesta, final Mouable mouable) {
-		cesta.setChanged();
-		return cesta.pridejNaMisto(mouable);
-	}
-
-	public void odeberBod(final Bod bod) {
-		bod.remove();
-	}
-
 	// public void odeberBod(Cesta cesta, Mouable mouable) {
 	// cesta.setChanged();
 	// cesta.odeberBod(mouable);
 	// }
 
-	public Bod rozdelUsekNaDvaNove(final Usek usek, final Mou mouNovy) {
-		usek.setChanged();
-		return usek.rozdelAZanikni(mouNovy);
+	public Bod pridejNaMisto(final Cesta cesta, final Mouable mouable) {
+		cesta.setChanged();
+		return cesta.pridejNaMisto(mouable);
 	}
 
-	public void setVzdusny(final Usek usek, final boolean vzdusny) {
-		usek.setChanged();
-		usek.setVzdusny(vzdusny);
+	public void remove(final Cesta cesta) {
+		cesta.remove();
 	}
 
 	public Usek removeBod(final Bod bod) {
 		bod.setChanged();
 		return bod.remove();
-	}
-
-	public void setMouable(final Bod bod, final Mouable mouable) {
-		bod.setChanged();
-		bod.setMouable(mouable);
-	}
-
-	public void setMouableButNoChange(final Bod bod, final Mouable mouable) {
-		bod.setMouable(mouable);
 	}
 
 	public void reverse(final Cesta cesta) {
@@ -72,21 +65,27 @@ public class Updator {
 		return bod.rozdelCestu();
 	}
 
-	public void pipojitCestuZa(final Cesta cesta1, final Cesta cesta2) {
-		assert cesta1.getDoc() == cesta2.getDoc();
-		assert cesta1.getStart() != null;
-		assert cesta1.getCil() != null;
-		cesta1.pripojitZa(cesta2);
-		assert cesta1.getStart() != null;
-		assert cesta1.getCil() != null;
+	public Bod rozdelUsekNaDvaNove(final Usek usek, final Mou mouNovy) {
+		usek.setChanged();
+		return usek.rozdelAZanikni(mouNovy);
 	}
 
-	public void pipojitCestuPred(final Cesta cesta1, final Cesta cesta2) {
-		cesta1.pripojitPred(cesta2);
+	public void setMouable(final Bod bod, final Mouable mouable) {
+		bod.setChanged();
+		bod.setMouable(mouable);
 	}
 
-	public void pospojujVzdusneUseky(final Cesta cesta) {
-		cesta.pospojujVzdusneUseky();
+	public void setMouableButNoChange(final Bod bod, final Mouable mouable) {
+		bod.setMouable(mouable);
+	}
+
+	public void setNazev(final Cesta cesta, final String aTrackName) {
+		cesta.setNazev(aTrackName);
+	}
+
+	public void setVzdusny(final Usek usek, final boolean vzdusny) {
+		usek.setChanged();
+		usek.setVzdusny(vzdusny);
 	}
 
 	public void smazatUsekAOtevritNeboRozdelitCestu(final Usek usek) {
@@ -99,8 +98,9 @@ public class Updator {
 		}
 	}
 
-	public void setNazev(final Cesta cesta, final String aTrackName) {
-		cesta.setNazev(aTrackName);
+	public void xadd(final Doc doc, final Cesta cesta) {
+		doc.setChanged();
+		doc.xadd(cesta);
 	}
 
 }

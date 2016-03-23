@@ -40,10 +40,38 @@ public class JMeritko extends JPanel {
 		// setBorder(BorderFactory.createLoweredBevelBorder());
 	}
 
+	public double getMaximalniSirkaMeritka() {
+		return maximalniSirkaMeritka;
+	}
+
+	public double getPixluNaMetr() {
+		return pixluNaMetr;
+	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		final Insets insets = getInsets();
 		return new Dimension(sirka + insets.left + insets.right, vyska + insets.top + insets.bottom);
+	}
+
+	public void setMaximalniSirkaMeritka(final double maximalniSirkaMeritka) {
+		if (this.maximalniSirkaMeritka == maximalniSirkaMeritka) {
+			return;
+		}
+		this.maximalniSirkaMeritka = maximalniSirkaMeritka;
+		spocitejMetriky();
+		revalidate();
+		repaint();
+	}
+
+	public void setPixluNaMetr(final double pixluNaMetr) {
+		if (pixluNaMetr == this.pixluNaMetr) {
+			return;
+		}
+		this.pixluNaMetr = pixluNaMetr;
+		spocitejMetriky();
+		revalidate();
+		repaint();
 	}
 
 	@Override
@@ -83,6 +111,21 @@ public class JMeritko extends JPanel {
 		g.drawString(jednotka(metruNaDilek), pixluOdZacatku, pocatekY - vyskaCarky - ODSTUP_POPISKU_OD_CARKY);
 	}
 
+	private String jednotka(final double d) {
+		if (d >= 1000) {
+			return "km";
+		} else {
+			return "m";
+		}
+	}
+
+	private String popisek(double d) {
+		if (d >= 1000) {
+			d = d / 1000;
+		}
+		return Math.round(d) + "";
+	}
+
 	private void spocitejMetriky() {
 		metruNaDilek = 1;
 		pixluNaDilek = 0;
@@ -103,49 +146,6 @@ public class JMeritko extends JPanel {
 
 		sirka = pixluNaDilek * pocetDilku + naJednotkuNaKonci;
 		vyska = vyskaCarky + tloustka + ODSTUP_POPISKU_OD_CARKY + fontMetrics.getHeight();
-	}
-
-	private String popisek(double d) {
-		if (d >= 1000) {
-			d = d / 1000;
-		}
-		return Math.round(d) + "";
-	}
-
-	private String jednotka(final double d) {
-		if (d >= 1000) {
-			return "km";
-		} else {
-			return "m";
-		}
-	}
-
-	public void setPixluNaMetr(final double pixluNaMetr) {
-		if (pixluNaMetr == this.pixluNaMetr) {
-			return;
-		}
-		this.pixluNaMetr = pixluNaMetr;
-		spocitejMetriky();
-		revalidate();
-		repaint();
-	}
-
-	public void setMaximalniSirkaMeritka(final double maximalniSirkaMeritka) {
-		if (this.maximalniSirkaMeritka == maximalniSirkaMeritka) {
-			return;
-		}
-		this.maximalniSirkaMeritka = maximalniSirkaMeritka;
-		spocitejMetriky();
-		revalidate();
-		repaint();
-	}
-
-	public double getPixluNaMetr() {
-		return pixluNaMetr;
-	}
-
-	public double getMaximalniSirkaMeritka() {
-		return maximalniSirkaMeritka;
 	}
 
 }

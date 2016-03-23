@@ -17,20 +17,32 @@ import cz.geokuk.util.file.Filex;
 
 public class JPrehledSouboru extends JPanel {
 
-	private static final long									serialVersionUID	= -2491414463002815835L;
+	public static class YNejdeTo extends Exception {
 
+		private static final long serialVersionUID = -4020543178329529443L;
+
+		/**
+		 * @param aMessage
+		 */
+		public YNejdeTo(final String aMessage) {
+			super(aMessage);
+		}
+	}
+
+	private static final long									serialVersionUID	= -2491414463002815835L;
 	private JJedenSouborPanel									jKesDir;
 	private JJedenSouborPanel									jCestyDir;
 	private JJedenSouborPanel									jNeGgtFile;
 	private JJedenSouborPanel									jAnoGgtFile;
-	private JJedenSouborPanel									jKachleCacheDir;
 
+	private JJedenSouborPanel									jKachleCacheDir;
 	private JJedenSouborPanel									jGeogetDataDir;
 	private JJedenSouborPanel									jImage3rdPartyDir;
-	private JJedenSouborPanel									jImageMyDir;
 
+	private JJedenSouborPanel									jImageMyDir;
 	private JJedenSouborPanel									jOziDir;
 	private JJedenSouborPanel									jKmzDir;
+
 	private JJedenSouborPanel									jPictureDir;
 
 	private KesoidModel											kesoidModel;
@@ -45,6 +57,50 @@ public class JPrehledSouboru extends JPanel {
 
 	public JPrehledSouboru(final Void v) {
 		initComponents();
+	}
+
+	public void fokusni(final ESouborPanelName panelName) {
+		final JJedenSouborPanel panel = mapaProFokusovani.get(panelName);
+		if (panel == null) {
+			return;
+		}
+		panel.fokusniSe();
+	}
+
+	public void inject(final KachleModel kachleModel) {
+		this.kachleModel = kachleModel;
+	}
+
+	public void inject(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+	}
+
+	public void inject(final RenderModel renderModel) {
+		this.renderModel = renderModel;
+	}
+
+	public void onEvent(final KachleUmisteniSouboruChangedEvent event) {
+		final KachleUmisteniSouboru u = event.getUmisteniSouboru();
+		jKachleCacheDir.setFilex(u.getKachleCacheDir());
+	}
+
+	public void onEvent(final KesoidUmisteniSouboruChangedEvent event) {
+		final KesoidUmisteniSouboru u = event.getUmisteniSouboru();
+		jKesDir.setFilex(u.getKesDir());
+		jCestyDir.setFilex(u.getCestyDir());
+		jGeogetDataDir.setFilex(u.getGeogetDataDir());
+
+		jNeGgtFile.setFilex(u.getNeGgtFile());
+		jAnoGgtFile.setFilex(u.getAnoGgtFile());
+		jImage3rdPartyDir.setFilex(u.getImage3rdPartyDir());
+		jImageMyDir.setFilex(u.getImageMyDir());
+	}
+
+	public void onEvent(final RenderUmisteniSouboruChangedEvent event) {
+		final RenderUmisteniSouboru u = event.getUmisteniSouboru();
+		jPictureDir.setFilex(u.getPictureDir());
+		jKmzDir.setFilex(u.getKmzDir());
+		jOziDir.setFilex(u.getOziDir());
 	}
 
 	private JComponent createTab() {
@@ -115,9 +171,29 @@ public class JPrehledSouboru extends JPanel {
 		registerEvents(ulozit);
 	}
 
-	private void ukonciPanel(final JComponent tab) {
-		tab.remove(tab.getComponentCount() - 1); // odstranit mezeru za poslední podtovoru
-		tab.add(Box.createVerticalGlue());
+	private JJedenSouborPanel pridejJednuPolozkuProCteni(final ESouborPanelName souborPanelName, final JComponent tab, final String label, final Filex hodnota, final boolean jenAdresare) {
+		final JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, false, false);
+		panel.setFilex(hodnota);
+		tab.add(panel);
+		tab.add(Box.createRigidArea(new Dimension(0, 20)));
+		panel.setMaximumSize(new Dimension(1000, 40));
+		if (souborPanelName != null) {
+			mapaProFokusovani.put(souborPanelName, panel);
+		}
+		return panel;
+	}
+
+	private JJedenSouborPanel pridejJednuPolozkuproEdit(final ESouborPanelName souborPanelName, final JComponent tab, final String label, final boolean jenAdresare, final boolean lzeDeaktivovat) {
+		final JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, true, lzeDeaktivovat);
+		tab.add(panel);
+		tab.add(Box.createRigidArea(new Dimension(0, 20)));
+		// Zjištěno, že to funguje, pokud je tam i lepidlo
+		// panel.setMaximumSize(new Dimension(1000, 40));
+		panel.setMaximumSize(new Dimension(panel.getMaximumSize().width, panel.getPreferredSize().height));
+		if (souborPanelName != null) {
+			mapaProFokusovani.put(souborPanelName, panel);
+		}
+		return panel;
 	}
 
 	private void registerEvents(final JButton ulozit) {
@@ -157,84 +233,8 @@ public class JPrehledSouboru extends JPanel {
 		});
 	}
 
-	private JJedenSouborPanel pridejJednuPolozkuProCteni(final ESouborPanelName souborPanelName, final JComponent tab, final String label, final Filex hodnota, final boolean jenAdresare) {
-		final JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, false, false);
-		panel.setFilex(hodnota);
-		tab.add(panel);
-		tab.add(Box.createRigidArea(new Dimension(0, 20)));
-		panel.setMaximumSize(new Dimension(1000, 40));
-		if (souborPanelName != null) {
-			mapaProFokusovani.put(souborPanelName, panel);
-		}
-		return panel;
-	}
-
-	private JJedenSouborPanel pridejJednuPolozkuproEdit(final ESouborPanelName souborPanelName, final JComponent tab, final String label, final boolean jenAdresare, final boolean lzeDeaktivovat) {
-		final JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, true, lzeDeaktivovat);
-		tab.add(panel);
-		tab.add(Box.createRigidArea(new Dimension(0, 20)));
-		// Zjištěno, že to funguje, pokud je tam i lepidlo
-		// panel.setMaximumSize(new Dimension(1000, 40));
-		panel.setMaximumSize(new Dimension(panel.getMaximumSize().width, panel.getPreferredSize().height));
-		if (souborPanelName != null) {
-			mapaProFokusovani.put(souborPanelName, panel);
-		}
-		return panel;
-	}
-
-	public void onEvent(final RenderUmisteniSouboruChangedEvent event) {
-		final RenderUmisteniSouboru u = event.getUmisteniSouboru();
-		jPictureDir.setFilex(u.getPictureDir());
-		jKmzDir.setFilex(u.getKmzDir());
-		jOziDir.setFilex(u.getOziDir());
-	}
-
-	public void onEvent(final KachleUmisteniSouboruChangedEvent event) {
-		final KachleUmisteniSouboru u = event.getUmisteniSouboru();
-		jKachleCacheDir.setFilex(u.getKachleCacheDir());
-	}
-
-	public void onEvent(final KesoidUmisteniSouboruChangedEvent event) {
-		final KesoidUmisteniSouboru u = event.getUmisteniSouboru();
-		jKesDir.setFilex(u.getKesDir());
-		jCestyDir.setFilex(u.getCestyDir());
-		jGeogetDataDir.setFilex(u.getGeogetDataDir());
-
-		jNeGgtFile.setFilex(u.getNeGgtFile());
-		jAnoGgtFile.setFilex(u.getAnoGgtFile());
-		jImage3rdPartyDir.setFilex(u.getImage3rdPartyDir());
-		jImageMyDir.setFilex(u.getImageMyDir());
-	}
-
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
-	}
-
-	public void inject(final RenderModel renderModel) {
-		this.renderModel = renderModel;
-	}
-
-	public void inject(final KachleModel kachleModel) {
-		this.kachleModel = kachleModel;
-	}
-
-	public void fokusni(final ESouborPanelName panelName) {
-		final JJedenSouborPanel panel = mapaProFokusovani.get(panelName);
-		if (panel == null) {
-			return;
-		}
-		panel.fokusniSe();
-	}
-
-	public static class YNejdeTo extends Exception {
-
-		private static final long serialVersionUID = -4020543178329529443L;
-
-		/**
-		 * @param aMessage
-		 */
-		public YNejdeTo(final String aMessage) {
-			super(aMessage);
-		}
+	private void ukonciPanel(final JComponent tab) {
+		tab.remove(tab.getComponentCount() - 1); // odstranit mezeru za poslední podtovoru
+		tab.add(Box.createVerticalGlue());
 	}
 }

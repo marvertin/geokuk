@@ -10,6 +10,17 @@ import java.util.Collection;
  */
 public interface KachleManager {
 
+	public static class ItemToSave {
+		public final Ka0	key;
+		public final byte[]	imageData;
+
+		public ItemToSave(final Ka0 key, final byte[] imageData) {
+			super();
+			this.key = key;
+			this.imageData = imageData;
+		}
+	}
+
 	/**
 	 * Checks whether the requested tile exists in the storage.
 	 *
@@ -36,15 +47,4 @@ public interface KachleManager {
 	 * @return true if the saving of ALL items was successful, false otherwise
 	 */
 	public boolean save(Collection<ItemToSave> itemsToSave);
-
-	public static class ItemToSave {
-		public final Ka0	key;
-		public final byte[]	imageData;
-
-		public ItemToSave(final Ka0 key, final byte[] imageData) {
-			super();
-			this.key = key;
-			this.imageData = imageData;
-		}
-	}
 }

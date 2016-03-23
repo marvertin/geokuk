@@ -19,8 +19,13 @@ public abstract class JSingleSlide0 extends JSlide0 {
 
 	protected Factory			factory;
 
-	protected boolean isSoordInitialized() {
-		return soord != null;
+	/**
+	 * Potomek musí vytvořit novou instanci slidu, který bude rendrovatelný. Obvykle postačí, když vytvoří prázdnou instanci své vlastní třídy. Pokud vrátí null, nic se rendrovat nebude
+	 *
+	 * @return
+	 */
+	public JSingleSlide0 createRenderableSlide() {
+		return null;
 	}
 
 	/**
@@ -29,6 +34,22 @@ public abstract class JSingleSlide0 extends JSlide0 {
 	public Coord getSoord() {
 		assert soord != null;
 		return soord;
+	}
+
+	public void inject(final Factory factory) {
+		this.factory = factory;
+	}
+
+	public EJakOtacetPriRendrovani jakOtacetProRendrovani() {
+		return EJakOtacetPriRendrovani.GRAPH2D;
+	}
+
+	// protected final void onEvent(VyrezChangedEvent0 event ) {
+	//
+	// }
+
+	public void render(final Graphics g) throws InterruptedException {
+		paintComponent(g);
 	}
 
 	/**
@@ -40,32 +61,11 @@ public abstract class JSingleSlide0 extends JSlide0 {
 		this.soord = soord;
 	}
 
+	protected boolean isSoordInitialized() {
+		return soord != null;
+	}
+
 	protected void onVyrezChanged() {
-	}
-
-	// protected final void onEvent(VyrezChangedEvent0 event ) {
-	//
-	// }
-
-	public void inject(final Factory factory) {
-		this.factory = factory;
-	}
-
-	public void render(final Graphics g) throws InterruptedException {
-		paintComponent(g);
-	}
-
-	/**
-	 * Potomek musí vytvořit novou instanci slidu, který bude rendrovatelný. Obvykle postačí, když vytvoří prázdnou instanci své vlastní třídy. Pokud vrátí null, nic se rendrovat nebude
-	 *
-	 * @return
-	 */
-	public JSingleSlide0 createRenderableSlide() {
-		return null;
-	}
-
-	public EJakOtacetPriRendrovani jakOtacetProRendrovani() {
-		return EJakOtacetPriRendrovani.GRAPH2D;
 	}
 
 }

@@ -30,26 +30,41 @@ public abstract class Bousek0 {
 	/** Spočítá velikost úsek, velikost boduje 0 */
 	public abstract double dalka();
 
-	public abstract double dalkaCestaVpred(Mou aMou);
+	public String dalkaCestaRozdelenoHtml(final Mou aMou) {
+		return dalkaCestaVzadHtml(aMou) + " + " + dalkaCestaVpredHtml(aMou);
 
-	public abstract double dalkaCestaVzad(Mou aMou);
-
-	public String dalkaHtml() {
-		return Cesta.dalkaHtml(dalka(), Color.BLACK);
 	}
+
+	public abstract double dalkaCestaVpred(Mou aMou);
 
 	public String dalkaCestaVpredHtml(final Mou aMou) {
 		return Cesta.dalkaHtml(dalkaCestaVpred(aMou), FBarvy.CURTA_ZA_KURZOREM);
 	}
 
+	public abstract double dalkaCestaVzad(Mou aMou);
+
 	public String dalkaCestaVzadHtml(final Mou aMou) {
 		return Cesta.dalkaHtml(dalkaCestaVzad(aMou), FBarvy.CURTA_PRED_KURZOREM);
 	}
 
-	public String dalkaCestaRozdelenoHtml(final Mou aMou) {
-		return dalkaCestaVzadHtml(aMou) + " + " + dalkaCestaVpredHtml(aMou);
-
+	public String dalkaHtml() {
+		return Cesta.dalkaHtml(dalka(), Color.BLACK);
 	}
+
+	public abstract Bousek0 getBousekVpred();
+
+	public abstract Bousek0 getBousekVzad();
+
+	public Cesta getCesta() {
+		return cesta;
+	}
+
+	/**
+	 * Pokud tendo bousek představuje krajový bod nekruhové cesty, a pod tímto bodem leží opačný krajový bod jiné cesty, vrátí tento jiný bod.
+	 *
+	 * @return
+	 */
+	public abstract Bod getKoncovyBodDruheCestyVhodnyProSpojeni();
 
 	public String getNazevADalkaHtml(final Mou aMou) {
 		return cesta.getNazevHtml() + " " + dalkaCestaRozdelenoHtml(aMou);
@@ -61,27 +76,12 @@ public abstract class Bousek0 {
 
 	}
 
-	abstract boolean jeVOpsanemObdelniku(Mou mou);
+	protected abstract void kontrolaKonzistence();
 
-	public Cesta getCesta() {
-		return cesta;
-	}
+	abstract boolean jeVOpsanemObdelniku(Mou mou);
 
 	void setChanged() {
 		cesta.setChanged();
 	}
-
-	public abstract Bousek0 getBousekVpred();
-
-	public abstract Bousek0 getBousekVzad();
-
-	protected abstract void kontrolaKonzistence();
-
-	/**
-	 * Pokud tendo bousek představuje krajový bod nekruhové cesty, a pod tímto bodem leží opačný krajový bod jiné cesty, vrátí tento jiný bod.
-	 *
-	 * @return
-	 */
-	public abstract Bod getKoncovyBodDruheCestyVhodnyProSpojeni();
 
 }

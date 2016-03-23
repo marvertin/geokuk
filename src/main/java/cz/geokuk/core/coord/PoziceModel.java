@@ -44,6 +44,38 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
 	// fire(new PoziceChangedEvent(poziceq));
 	// }
 
+	public void clearPozice() {
+		setPozice(null);
+	}
+
+	public Poziceq getPoziceq() {
+		return poziceq;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.program.AfterInjectInit#initAfterInject()
+	 */
+	@Override
+	public void initAndFire() {
+		clearPozice();
+	}
+
+	public void onEvent(final PoziceChangedEvent event) {
+		poziceq = event.poziceq;
+	}
+
+	public void refreshPozice() {
+		if (!poziceq.isNoPosition()) {
+			novaPozice(poziceq.getPoziceMou().getMou());
+		}
+	}
+
+	public void setMys(final Point cur, final Mou mouCur, final Mouable mouable) {
+		fire(new ZmenaSouradnicMysiEvent(cur, mouCur, mouable));
+	}
+
 	/**
 	 * @param pozice
 	 *            the pozice to set
@@ -54,6 +86,20 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
 			fire(new PoziceChangedEvent(poziceq));
 		} else { // jdeme na nějakou pozici
 			novaPozice(mouable.getMou());
+		}
+	}
+
+	public void souradniceDoClipboardu(final Mouable mouable) {
+		if (mouable == null) {
+			return;
+		}
+		final Clipboard scl = getSystemClipboard();
+		final Wgs wgs = mouable.getMou().toWgs();
+		final StringSelection ss = new StringSelection(wgs.toString());
+		try {
+			scl.setContents(ss, null);
+		} catch (final IllegalStateException e2) {
+			FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
 		}
 	}
 
@@ -73,52 +119,6 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
 			poziceq = new Poziceq(mouable);
 			fire(new PoziceChangedEvent(poziceq));
 		}
-	}
-
-	public void souradniceDoClipboardu(final Mouable mouable) {
-		if (mouable == null) {
-			return;
-		}
-		final Clipboard scl = getSystemClipboard();
-		final Wgs wgs = mouable.getMou().toWgs();
-		final StringSelection ss = new StringSelection(wgs.toString());
-		try {
-			scl.setContents(ss, null);
-		} catch (final IllegalStateException e2) {
-			FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
-		}
-	}
-
-	public void refreshPozice() {
-		if (!poziceq.isNoPosition()) {
-			novaPozice(poziceq.getPoziceMou().getMou());
-		}
-	}
-
-	public void clearPozice() {
-		setPozice(null);
-	}
-
-	public void onEvent(final PoziceChangedEvent event) {
-		poziceq = event.poziceq;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.program.AfterInjectInit#initAfterInject()
-	 */
-	@Override
-	public void initAndFire() {
-		clearPozice();
-	}
-
-	public void setMys(final Point cur, final Mou mouCur, final Mouable mouable) {
-		fire(new ZmenaSouradnicMysiEvent(cur, mouCur, mouable));
-	}
-
-	public Poziceq getPoziceq() {
-		return poziceq;
 	}
 
 }

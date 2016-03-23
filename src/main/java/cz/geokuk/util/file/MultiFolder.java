@@ -19,48 +19,18 @@ public class MultiFolder {
 
 	private final KeyTree<String, LamUrl>	tree			= new KeyTree<>();
 
-	public KeyNode<String, LamUrl> getNode(final String key) {
-		final String[] ss = key.split("/");
-		return tree.locate(Arrays.asList(ss));
+	public static void main(final String[] args) {
+
+		final MultiFolder mf = new MultiFolder();
+		mf.addResourceTree("geokuk/image");
+		mf.addFolderTree(new File("img2"));
+		mf.addFolderTree(new File("img3"));
+		mf.print();
 	}
 
 	public void addFolderTree(final File dir) {
 		final List<String> emptyList = Collections.emptyList();
 		addOneFord(dir, emptyList);
-	}
-
-	private void addOneFord(final File ford, final List<String> names) {
-		final LamUrl lamUrl = new LamUrl();
-		lamUrl.url = fileToUrl(ford);
-		lamUrl.lastModified = ford.lastModified();
-		lamUrl.name = ford.getName();
-		tree.add(lamUrl, names);
-		if (ford.isDirectory()) {
-			for (final String s : ford.list()) {
-				final List<String> list = new ArrayList<>(names.size() + 1);
-				list.addAll(names);
-				if (s.endsWith(REMOVE_SUFFIX)) {
-					list.add(s.substring(0, s.length() - REMOVE_SUFFIX.length()));
-					tree.remove(list);
-				} else {
-					list.add(s);
-					addOneFord(new File(ford, s), list);
-				}
-			}
-		}
-	}
-
-	/**
-	 * @param ford
-	 * @return
-	 * @throws MalformedURLException
-	 */
-	private URL fileToUrl(final File ford) {
-		try {
-			return ford.toURI().toURL();
-		} catch (final MalformedURLException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	/**
@@ -103,19 +73,6 @@ public class MultiFolder {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (tree == null ? 0 : tree.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -140,16 +97,59 @@ public class MultiFolder {
 		return true;
 	}
 
-	public static void main(final String[] args) {
+	public KeyNode<String, LamUrl> getNode(final String key) {
+		final String[] ss = key.split("/");
+		return tree.locate(Arrays.asList(ss));
+	}
 
-		final MultiFolder mf = new MultiFolder();
-		mf.addResourceTree("geokuk/image");
-		mf.addFolderTree(new File("img2"));
-		mf.addFolderTree(new File("img3"));
-		mf.print();
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (tree == null ? 0 : tree.hashCode());
+		return result;
 	}
 
 	public void print() {
 		tree.print();
+	}
+
+	private void addOneFord(final File ford, final List<String> names) {
+		final LamUrl lamUrl = new LamUrl();
+		lamUrl.url = fileToUrl(ford);
+		lamUrl.lastModified = ford.lastModified();
+		lamUrl.name = ford.getName();
+		tree.add(lamUrl, names);
+		if (ford.isDirectory()) {
+			for (final String s : ford.list()) {
+				final List<String> list = new ArrayList<>(names.size() + 1);
+				list.addAll(names);
+				if (s.endsWith(REMOVE_SUFFIX)) {
+					list.add(s.substring(0, s.length() - REMOVE_SUFFIX.length()));
+					tree.remove(list);
+				} else {
+					list.add(s);
+					addOneFord(new File(ford, s), list);
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param ford
+	 * @return
+	 * @throws MalformedURLException
+	 */
+	private URL fileToUrl(final File ford) {
+		try {
+			return ford.toURI().toURL();
+		} catch (final MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

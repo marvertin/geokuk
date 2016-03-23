@@ -57,16 +57,57 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 		setOpaque(false);
 	}
 
+	/**
+	 * @return the kachloTypes
+	 */
+	public KaSet getKachloTypes() {
+		return kachloTypesSet;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
+	 */
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		registerEvents();
+	}
+
+	public void inject(final KachleModel kachleModel) {
+		this.kachleModel = kachleModel;
+	}
+
+	public void onEvent(final OnofflineModelChangeEvent event) {
+		if (event.isOnlineMOde()) {
+			// Při zapnutí online módu e musí překlreslit. To se stane i když není online mód právě zapínán, ale to nevadí.
+			init(false);
+		}
+	}
+
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		setKachloTypes(event.getKaSet());
+	}
+
 	@Override
 	public void onVyrezChanged() {
 		init(true);
 	}
 
-	private void registerEvents() {
+	/**
+	 * @param aKachloTypes
+	 *            the kachloTypes to set
+	 */
+	public void setKachloTypes(final KaSet aKachloSet) {
+		if (kachloTypesSet.equals(aKachloSet)) {
+			return;
+		}
+		kachloTypesSet = aKachloSet;
+		init(false);
 	}
 
-	public void onEvent(final ZmenaMapNastalaEvent event) {
-		setKachloTypes(event.getKaSet());
+	protected JKachle createJKachle(final KaAll kaall) {
+		return new JKachle(this, kaall);
 	}
 
 	protected void init(final boolean smimZnovuPouzitKachle) {
@@ -139,51 +180,10 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 		log.trace("Počet komponent (nejspíš kachlí) v kachlovníku: {}", getComponentCount());
 	}
 
-	protected JKachle createJKachle(final KaAll kaall) {
-		return new JKachle(this, kaall);
-	}
-
-	/**
-	 * @return the kachloTypes
-	 */
-	public KaSet getKachloTypes() {
-		return kachloTypesSet;
-	}
-
-	public void onEvent(final OnofflineModelChangeEvent event) {
-		if (event.isOnlineMOde()) {
-			// Při zapnutí online módu e musí překlreslit. To se stane i když není online mód právě zapínán, ale to nevadí.
-			init(false);
-		}
-	}
-
-	/**
-	 * @param aKachloTypes
-	 *            the kachloTypes to set
-	 */
-	public void setKachloTypes(final KaSet aKachloSet) {
-		if (kachloTypesSet.equals(aKachloSet)) {
-			return;
-		}
-		kachloTypesSet = aKachloSet;
-		init(false);
-	}
-
-	public void inject(final KachleModel kachleModel) {
-		this.kachleModel = kachleModel;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
-	 */
-	@Override
-	public void initAfterEventReceiverRegistration() {
-		registerEvents();
-	}
-
 	void kachleZpracovana(final JKachle jKachle) {
+	}
+
+	private void registerEvents() {
 	}
 
 	// @Override

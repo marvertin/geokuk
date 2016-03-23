@@ -32,6 +32,16 @@ public class JRenderSlide extends JSingleSlide0 {
 		}
 	}
 
+	public void onEvent(final PripravaRendrovaniEvent event) {
+		renderModel = event.getModel();
+		setVisible(event.getStavRendrovani() != EStavRendrovani.NIC);
+		repaint();
+	}
+
+	public void onEvent(final VyrezChangedEvent event) {
+		moord = event.getMoord();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -100,15 +110,23 @@ public class JRenderSlide extends JSingleSlide0 {
 		}
 	}
 
-	private void drawKalibody(final Graphics aG) {
-		final Graphics g = aG.create();
-		g.setColor(Color.MAGENTA);
-		for (final Wgs wgs : renderModel.spocitejKalibracniBody()) {
-			final Point p = moord.transform(wgs.toMou());
-			g.fillOval(p.x - 15, p.y - 15, 30, 30);
-		}
-
-	}
+	// /**
+	// * @param g
+	// * @param sZ
+	// */
+	// private void paintRožek(Graphics2D gg, Mou mou) {
+	// if (mou == null) return;
+	// Graphics2D g = (Graphics2D) gg.create();
+	// g.setStroke(new BasicStroke(3));
+	// g.setColor(Color.GREEN);
+	//
+	// Point p = getSoord().transform(mou);
+	// // g.translate(p.x, p.y);
+	// g.drawLine(p.x-20, p.y-20, p.x+20, p.y+20);
+	// g.drawLine(p.x-20, p.y+20, p.x+20, p.y-20);
+	// //g.fillOval(p.x-20, p.y-20, 40, 40);
+	//
+	// }
 
 	/**
 	 * @param g
@@ -146,32 +164,14 @@ public class JRenderSlide extends JSingleSlide0 {
 
 	}
 
-	// /**
-	// * @param g
-	// * @param sZ
-	// */
-	// private void paintRožek(Graphics2D gg, Mou mou) {
-	// if (mou == null) return;
-	// Graphics2D g = (Graphics2D) gg.create();
-	// g.setStroke(new BasicStroke(3));
-	// g.setColor(Color.GREEN);
-	//
-	// Point p = getSoord().transform(mou);
-	// // g.translate(p.x, p.y);
-	// g.drawLine(p.x-20, p.y-20, p.x+20, p.y+20);
-	// g.drawLine(p.x-20, p.y+20, p.x+20, p.y-20);
-	// //g.fillOval(p.x-20, p.y-20, 40, 40);
-	//
-	// }
+	private void drawKalibody(final Graphics aG) {
+		final Graphics g = aG.create();
+		g.setColor(Color.MAGENTA);
+		for (final Wgs wgs : renderModel.spocitejKalibracniBody()) {
+			final Point p = moord.transform(wgs.toMou());
+			g.fillOval(p.x - 15, p.y - 15, 30, 30);
+		}
 
-	public void onEvent(final PripravaRendrovaniEvent event) {
-		renderModel = event.getModel();
-		setVisible(event.getStavRendrovani() != EStavRendrovani.NIC);
-		repaint();
-	}
-
-	public void onEvent(final VyrezChangedEvent event) {
-		moord = event.getMoord();
 	}
 
 	// public void inject(RenderModel stahovaciModel) {

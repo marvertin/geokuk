@@ -15,6 +15,11 @@ public class MultiNacitacLoaderManager {
 
 	private final KesoidModel		kesoidModel;
 
+	public MultiNacitacLoaderManager(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+		multiNacitac = new MultiNacitac(kesoidModel);
+	}
+
 	public void startLoad(final boolean prenacti, final Genom genom) {
 		if (iTimer != null) {
 			iTimer.stop();
@@ -25,11 +30,6 @@ public class MultiNacitacLoaderManager {
 			klsw.execute();
 		}
 		startTimer(genom);
-	}
-
-	public MultiNacitacLoaderManager(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
-		multiNacitac = new MultiNacitac(kesoidModel);
 	}
 
 	private void startTimer(final Genom genom) {

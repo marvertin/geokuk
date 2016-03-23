@@ -4,42 +4,35 @@ import java.util.*;
 
 public class Genotyp {
 
+	public class Otisk {
+		@Override
+		public boolean equals(final Object obj) {
+			if (obj == null) {
+				return false;
+			}
+			if (obj == this) {
+				return true;
+			}
+			if (!(obj instanceof Otisk)) {
+				return false;
+			}
+			final Otisk otisk = (Otisk) obj;
+			return gege().equals(otisk.gege());
+		}
+
+		@Override
+		public int hashCode() {
+			return Genotyp.this.hashCode();
+		}
+
+		Genotyp gege() {
+			return Genotyp.this;
+		}
+	}
+
 	private final Set<Alela>	alely	= new HashSet<>();
+
 	private final Genom			genom;
-
-	/**
-	 * @return the alely
-	 */
-	public Set<Alela> getAlely() {
-		return Collections.unmodifiableSet(alely);
-	}
-
-	public void put(final Alela alela) {
-		if (alela == null) {
-			return;
-		}
-		alely.removeAll(alela.getGen().getAlely());
-		alely.add(alela);
-	}
-
-	public void remove(final Alela alela) {
-		if (!alely.contains(alela)) {
-			return;
-		}
-		if (alela.getGen().getVychoziAlela() == alela) {
-			return; // vychozo neodstranujeme
-		}
-		put(alela.getGen().getVychoziAlela()); // a prdneme tam vyhozi
-	}
-
-	public void removeAll(final Set<Alela> alely) {
-		if (alely == null) {
-			return;
-		}
-		for (final Alela alela : alely) {
-			remove(alela);
-		}
-	}
 
 	/**
 	 * @param aAlely
@@ -48,26 +41,6 @@ public class Genotyp {
 		assert !aAlely.contains(null);
 		this.genom = genom;
 		alely.addAll(aAlely);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Genotyp [alely=" + alely + "]";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return alely.hashCode();
 	}
 
 	/*
@@ -97,6 +70,13 @@ public class Genotyp {
 		return true;
 	}
 
+	/**
+	 * @return the alely
+	 */
+	public Set<Alela> getAlely() {
+		return Collections.unmodifiableSet(alely);
+	}
+
 	public Genom getGenom() {
 		return genom;
 	}
@@ -105,30 +85,51 @@ public class Genotyp {
 		return new Otisk();
 	}
 
-	public class Otisk {
-		@Override
-		public int hashCode() {
-			return Genotyp.this.hashCode();
-		}
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return alely.hashCode();
+	}
 
-		@Override
-		public boolean equals(final Object obj) {
-			if (obj == null) {
-				return false;
-			}
-			if (obj == this) {
-				return true;
-			}
-			if (!(obj instanceof Otisk)) {
-				return false;
-			}
-			final Otisk otisk = (Otisk) obj;
-			return gege().equals(otisk.gege());
+	public void put(final Alela alela) {
+		if (alela == null) {
+			return;
 		}
+		alely.removeAll(alela.getGen().getAlely());
+		alely.add(alela);
+	}
 
-		Genotyp gege() {
-			return Genotyp.this;
+	public void remove(final Alela alela) {
+		if (!alely.contains(alela)) {
+			return;
 		}
+		if (alela.getGen().getVychoziAlela() == alela) {
+			return; // vychozo neodstranujeme
+		}
+		put(alela.getGen().getVychoziAlela()); // a prdneme tam vyhozi
+	}
+
+	public void removeAll(final Set<Alela> alely) {
+		if (alely == null) {
+			return;
+		}
+		for (final Alela alela : alely) {
+			remove(alela);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Genotyp [alely=" + alely + "]";
 	}
 
 	// najde alelu, která odpovídá symbolu, pokud tam nějaká taková je

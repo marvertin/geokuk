@@ -10,14 +10,24 @@ public class JMrizkaDdMmMmm extends JMrizkaWgs {
 	 */
 	private static final long serialVersionUID = -4045265652174560904L;
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
+	 */
 	@Override
-	public String getTextY(final double y) {
-		return Wgs.toGeoFormat(y);
+	public JSingleSlide0 createRenderableSlide() {
+		return new JMrizkaDdMmMmm();
 	}
 
 	@Override
 	public String getTextX(final double x) {
 		return Wgs.toGeoFormat(x);
+	}
+
+	@Override
+	public String getTextY(final double y) {
+		return Wgs.toGeoFormat(y);
 	}
 
 	/*
@@ -49,16 +59,6 @@ public class JMrizkaDdMmMmm extends JMrizkaWgs {
 		v.rastr(90, 1);
 		v.rastr(180, 1);
 		v.rastr(360, 1);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
-	 */
-	@Override
-	public JSingleSlide0 createRenderableSlide() {
-		return new JMrizkaDdMmMmm();
 	}
 
 	@Override

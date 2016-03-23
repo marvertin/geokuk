@@ -9,19 +9,6 @@ import org.apache.logging.log4j.Logger;
 import cz.geokuk.util.file.*;
 
 public class InformaceOZdrojich {
-	private static final Logger		log		= LogManager.getLogger(GeogetLoader.class.getSimpleName());
-
-	private final Map<Root, Strom>	stromy	= new LinkedHashMap<>();
-
-	private InformaceOZdroji		root;
-
-	private InformaceOZdrojich() {
-	}
-
-	public static Builder builder() {
-		return new InformaceOZdrojich().new Builder();
-	}
-
 	public class Builder {
 		/**
 		 * Tady postupně budujeme stromy načítaných zdrojů.
@@ -66,18 +53,6 @@ public class InformaceOZdrojich {
 			return ioz;
 		}
 
-		private void setřepáníNevětvenýchCest(final InformaceOZdroji aIoz) {
-			if (aIoz.getChildren().size() == 1 && aIoz.parent != null) {
-				final InformaceOZdroji jedinacek = aIoz.getChildren().get(0);
-				aIoz.parent.remplaceChild(aIoz, jedinacek);
-				jedinacek.parent = aIoz.parent;
-			}
-			// po sesypání nebo bez sesypání, děti sesypeme
-			for (final InformaceOZdroji ioz : aIoz.getChildren()) {
-				setřepáníNevětvenýchCest(ioz); // pro 0 se nedělá nic a pro více než 1 se nesetřepává
-			}
-		}
-
 		/** Objekt je hotov */
 		public InformaceOZdrojich done() {
 			// našvindlený root
@@ -94,44 +69,41 @@ public class InformaceOZdrojich {
 
 		}
 
-	}
-
-	public int getSourceCount(final boolean loaded) {
-		int loadedCount = 0;
-		int notLoadedCount = 0;
-		for (final InformaceOZdroji ioz : getSetInformaciOZdrojich()) {
-			if (ioz.getChildren().isEmpty()) {
-				if (ioz.nacteno) {
-					++loadedCount;
-				} else {
-					++notLoadedCount;
-				}
+		private void setřepáníNevětvenýchCest(final InformaceOZdroji aIoz) {
+			if (aIoz.getChildren().size() == 1 && aIoz.parent != null) {
+				final InformaceOZdroji jedinacek = aIoz.getChildren().get(0);
+				aIoz.parent.remplaceChild(aIoz, jedinacek);
+				jedinacek.parent = aIoz.parent;
+			}
+			// po sesypání nebo bez sesypání, děti sesypeme
+			for (final InformaceOZdroji ioz : aIoz.getChildren()) {
+				setřepáníNevětvenýchCest(ioz); // pro 0 se nedělá nic a pro více než 1 se nesetřepává
 			}
 		}
-		return loaded ? loadedCount : notLoadedCount;
+
 	}
 
-	public InformaceOZdroji getRoot() {
-		return root;
+	private static class Strom {
+		InformaceOZdroji				root;
+		Map<KeFile, InformaceOZdroji>	map	= new LinkedHashMap<>();
+	}
+
+	private static final Logger		log		= LogManager.getLogger(GeogetLoader.class.getSimpleName());
+
+	private final Map<Root, Strom>	stromy	= new LinkedHashMap<>();
+
+	private InformaceOZdroji		root;
+
+	public static Builder builder() {
+		return new InformaceOZdrojich().new Builder();
+	}
+
+	private InformaceOZdrojich() {
 	}
 
 	public InformaceOZdroji get(final KeFile key) {
 		final InformaceOZdroji informaceOZdroji = stromy.get(key.root).map.get(key);
 		return informaceOZdroji;
-	}
-
-	public Collection<InformaceOZdroji> getSubtree(final KeFile subTreeRoot) {
-		final List<InformaceOZdroji> toReturn = new ArrayList<>();
-		return getSubtree(get(subTreeRoot), toReturn);
-	}
-
-	private Collection<InformaceOZdroji> getSubtree(final InformaceOZdroji subTreeRoot, final Collection<InformaceOZdroji> buffer) {
-		final List<InformaceOZdroji> children = subTreeRoot.getChildren();
-		buffer.add(subTreeRoot);
-		for (final InformaceOZdroji child : children) {
-			getSubtree(child, buffer);
-		}
-		return buffer;
 	}
 
 	public Set<File> getJmenaZdroju() {
@@ -150,6 +122,10 @@ public class InformaceOZdrojich {
 		return files;
 	}
 
+	public InformaceOZdroji getRoot() {
+		return root;
+	}
+
 	public Set<InformaceOZdroji> getSetInformaciOZdrojich() {
 		final Set<InformaceOZdroji> infas = new LinkedHashSet<>();
 		for (final Strom strom : stromy.values()) {
@@ -158,9 +134,24 @@ public class InformaceOZdrojich {
 		return infas;
 	}
 
-	private static class Strom {
-		InformaceOZdroji				root;
-		Map<KeFile, InformaceOZdroji>	map	= new LinkedHashMap<>();
+	public int getSourceCount(final boolean loaded) {
+		int loadedCount = 0;
+		int notLoadedCount = 0;
+		for (final InformaceOZdroji ioz : getSetInformaciOZdrojich()) {
+			if (ioz.getChildren().isEmpty()) {
+				if (ioz.nacteno) {
+					++loadedCount;
+				} else {
+					++notLoadedCount;
+				}
+			}
+		}
+		return loaded ? loadedCount : notLoadedCount;
+	}
+
+	public Collection<InformaceOZdroji> getSubtree(final KeFile subTreeRoot) {
+		final List<InformaceOZdroji> toReturn = new ArrayList<>();
+		return getSubtree(get(subTreeRoot), toReturn);
 	}
 
 	public long getYungest() {
@@ -180,5 +171,14 @@ public class InformaceOZdrojich {
 			root.print(":: ", null);
 			System.out.println("================= prin strom - END");
 		}
+	}
+
+	private Collection<InformaceOZdroji> getSubtree(final InformaceOZdroji subTreeRoot, final Collection<InformaceOZdroji> buffer) {
+		final List<InformaceOZdroji> children = subTreeRoot.getChildren();
+		buffer.add(subTreeRoot);
+		for (final InformaceOZdroji child : children) {
+			getSubtree(child, buffer);
+		}
+		return buffer;
 	}
 }

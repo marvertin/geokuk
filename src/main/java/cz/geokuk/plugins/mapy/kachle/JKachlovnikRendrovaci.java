@@ -8,8 +8,8 @@ import org.apache.logging.log4j.Logger;
 
 public class JKachlovnikRendrovaci extends JKachlovnik {
 
-	public JKachlovnikRendrovaci() {
-		super("Renderovací kachlovník", Priority.STAHOVANI);
+	public interface Progressor {
+		void setProgress(int value, int maxlue);
 	}
 
 	private static final Logger	log					= LogManager.getLogger(JKachlovnikRendrovaci.class.getSimpleName());
@@ -18,6 +18,10 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
 	private Progressor			progressor;
 	private int					citacZpracovanychKachli;
 	private int					celkovyPocetKachliKtereRendruejeme;
+
+	public JKachlovnikRendrovaci() {
+		super("Renderovací kachlovník", Priority.STAHOVANI);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -60,17 +64,6 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
 		this.progressor = progressor;
 	}
 
-	public interface Progressor {
-		void setProgress(int value, int maxlue);
-	}
-
-	@Override
-	void kachleZpracovana(final JKachle jKachle) {
-		if (progressor != null) {
-			progressor.setProgress(++citacZpracovanychKachli, celkovyPocetKachliKtereRendruejeme);
-		}
-	}
-
 	@Override
 	protected JKachle createJKachle(final KaAll kaall) {
 		return new JKachleRendrovaci(this, kaall);
@@ -81,5 +74,12 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
 	// jkachle.setKachle(new KachleRendrovaci(plny, kachleModel, vykreslovatOkamzite, jkachle));
 	// return jkachle;
 	// }
+
+	@Override
+	void kachleZpracovana(final JKachle jKachle) {
+		if (progressor != null) {
+			progressor.setProgress(++citacZpracovanychKachli, celkovyPocetKachliKtereRendruejeme);
+		}
+	}
 
 }

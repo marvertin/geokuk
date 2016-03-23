@@ -24,15 +24,15 @@ public abstract class VyletAction0 extends Action0 {
 		setEnabled(false);
 	}
 
+	public void inject(final VyletModel vyletModel) {
+		this.vyletModel = vyletModel;
+
+	}
+
 	public final void onEvent(final VyletChangeEvent aEvent) {
 		vyletChanged();
 	}
 
 	protected void vyletChanged() {
-	}
-
-	public void inject(final VyletModel vyletModel) {
-		this.vyletModel = vyletModel;
-
 	}
 }

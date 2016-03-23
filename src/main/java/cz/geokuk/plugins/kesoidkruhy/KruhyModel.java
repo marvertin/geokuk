@@ -29,11 +29,11 @@ public class KruhyModel extends PodkladMapSpecificModel0<KruhyModel, KruhySettin
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#visiblexxx()
+	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#getVisibleFromPreferences(boolean)
 	 */
 	@Override
-	protected Onoff<KruhyModel> visiblexxx() {
-		return visible;
+	protected boolean getVisibleFromPreferences(final boolean defaultOnoff) {
+		return false;
 	}
 
 	/*
@@ -58,20 +58,20 @@ public class KruhyModel extends PodkladMapSpecificModel0<KruhyModel, KruhySettin
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#getVisibleFromPreferences(boolean)
-	 */
-	@Override
-	protected boolean getVisibleFromPreferences(final boolean defaultOnoff) {
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#reloadPreferences()
 	 */
 	@Override
 	protected void reloadPreferences() {
 		super.reloadPreferences();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#visiblexxx()
+	 */
+	@Override
+	protected Onoff<KruhyModel> visiblexxx() {
+		return visible;
 	}
 }

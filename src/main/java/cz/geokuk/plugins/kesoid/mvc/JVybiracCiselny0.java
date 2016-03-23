@@ -36,17 +36,23 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 		lejaut();
 	}
 
-	private void lejaut() {
-		final GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		iModel.addChangeListener(e -> {
+			final FilterDefinition definition = kesoidModel.getDefinition();
+			final Integer prah = (Integer) iModel.getNumber();
+			setPrah(definition, prah);
+			kesoidModel.setDefinition(definition);
+		});
+	}
 
-		layout.setAutoCreateGaps(false);
-		layout.setAutoCreateContainerGaps(false);
-		layout.setHorizontalGroup(layout.createSequentialGroup() // hroup
-				.addGap(3).addComponent(jLabel).addGap(3).addComponent(jSpinner).addGap(3));
-		layout.setVerticalGroup(layout.createParallelGroup() // hroup
-				.addComponent(jLabel, GroupLayout.Alignment.CENTER).addComponent(jSpinner, GroupLayout.Alignment.CENTER));
+	public void inject(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+	}
 
+	public void onEvent(final FilterDefinitionChangedEvent event) {
+		final FilterDefinition filterDefinition = event.getFilterDefinition();
+		iModel.setValue(getPrah(filterDefinition));
 	}
 
 	public void onEvent(final KeskyNactenyEvent aEvent) {
@@ -58,29 +64,23 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 		setVisible(!iModel.getMinimum().equals(iModel.getMaximum()));
 	}
 
-	public void onEvent(final FilterDefinitionChangedEvent event) {
-		final FilterDefinition filterDefinition = event.getFilterDefinition();
-		iModel.setValue(getPrah(filterDefinition));
-	}
-
-	@Override
-	public void initAfterEventReceiverRegistration() {
-		iModel.addChangeListener(e -> {
-			final FilterDefinition definition = kesoidModel.getDefinition();
-			final Integer prah = (Integer) iModel.getNumber();
-			setPrah(definition, prah);
-			kesoidModel.setDefinition(definition);
-		});
-	}
-
-	protected abstract void setPrah(FilterDefinition filterDefinition, int prah);
+	protected abstract int getMaximum(KesBag vsechny);
 
 	protected abstract int getPrah(FilterDefinition filterDefinition);
 
-	protected abstract int getMaximum(KesBag vsechny);
+	protected abstract void setPrah(FilterDefinition filterDefinition, int prah);
 
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
+	private void lejaut() {
+		final GroupLayout layout = new GroupLayout(this);
+		setLayout(layout);
+
+		layout.setAutoCreateGaps(false);
+		layout.setAutoCreateContainerGaps(false);
+		layout.setHorizontalGroup(layout.createSequentialGroup() // hroup
+				.addGap(3).addComponent(jLabel).addGap(3).addComponent(jSpinner).addGap(3));
+		layout.setVerticalGroup(layout.createParallelGroup() // hroup
+				.addComponent(jLabel, GroupLayout.Alignment.CENTER).addComponent(jSpinner, GroupLayout.Alignment.CENTER));
+
 	}
 
 }

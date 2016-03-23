@@ -9,25 +9,24 @@ import cz.geokuk.plugins.mapy.kachle.KaSet;
 
 public class MapyModel extends Model0 {
 
-	private EKaType podklad;
+	private EKaType				podklad;
 
-	public EKaType getPodklad() {
-		return podklad;
-	}
+	private EnumSet<EKaType>	dekorace;
 
 	public EnumSet<EKaType> getDekorace() {
 		return dekorace.clone();
 	}
 
-	private EnumSet<EKaType> dekorace;
+	public KaSet getKaSet() {
+		final EnumSet<EKaType> kts = EnumSet.of(podklad);
+		kts.addAll(dekorace);
+		assert kts != null;
+		final KaSet kaSet = new KaSet(kts);
+		return kaSet;
+	}
 
-	public void setPodklad(final EKaType podklad) {
-		if (podklad == this.podklad) {
-			return;
-		}
-		this.podklad = podklad;
-		currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnum(FPref.VALUE_MAPOVE_PODKLADY_value, podklad);
-		fajruj();
+	public EKaType getPodklad() {
+		return podklad;
 	}
 
 	public void setDekorace(final EnumSet<EKaType> dekorace) {
@@ -39,18 +38,13 @@ public class MapyModel extends Model0 {
 		fajruj();
 	}
 
-	public KaSet getKaSet() {
-		final EnumSet<EKaType> kts = EnumSet.of(podklad);
-		kts.addAll(dekorace);
-		assert kts != null;
-		final KaSet kaSet = new KaSet(kts);
-		return kaSet;
-	}
-
-	private void fajruj() {
-		if (podklad != null && dekorace != null) {
-			fire(new ZmenaMapNastalaEvent(getKaSet()));
+	public void setPodklad(final EKaType podklad) {
+		if (podklad == this.podklad) {
+			return;
 		}
+		this.podklad = podklad;
+		currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnum(FPref.VALUE_MAPOVE_PODKLADY_value, podklad);
+		fajruj();
 	}
 
 	@Override
@@ -59,6 +53,12 @@ public class MapyModel extends Model0 {
 		final EnumSet<EKaType> dekorace = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, EnumSet.of(EKaType.TTUR_M), EKaType.class);
 		setPodklad(podklad);
 		setDekorace(dekorace);
+	}
+
+	private void fajruj() {
+		if (podklad != null && dekorace != null) {
+			fire(new ZmenaMapNastalaEvent(getKaSet()));
+		}
 	}
 
 }

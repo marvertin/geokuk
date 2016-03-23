@@ -46,6 +46,16 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		Dlg.natavMainFrameProMaleDialogy(this);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.core.coord.SlidListProvider#getSlides()
+	 */
+	@Override
+	public List<JSingleSlide0> getSlides() {
+		return slideList;
+	}
+
 	public void init() {
 		// umistitOkno();
 		setTitle("GeoKuk");
@@ -172,6 +182,26 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		SwingUtilities.invokeLater(() -> mysovani.requestFocus());
 	}
 
+	public void inject(final CloseAction closeAction) {
+		this.closeAction = closeAction;
+	}
+
+	public void inject(final Factory factory) {
+		this.factory = factory;
+	}
+
+	public void inject(final FullScreenAction fullScreenAction) {
+		this.fullScreenAction = fullScreenAction;
+	}
+
+	public void inject(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+	}
+
+	public void inject(final OknoModel oknoModel) {
+		this.oknoModel = oknoModel;
+	}
+
 	public void onEvent(final OknoStatusChangedEvent event) {
 		final OknoUmisteniDto oknoStatus = event.getOknoStatus();
 		if (!jeRozumneNaObrazovce(oknoStatus)) {
@@ -186,6 +216,146 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			setSize(oknoStatus.getVelikost());
 		}
 		setExtendedState(event.getStavOkna());
+	}
+
+	public void setFullScreen(final boolean fs) {
+		// JMenuBar menubar = getJMenuBar();
+		// if (fs) {
+		// menubar.setVisible(false);
+		// menubar.setPreferredSize(new Dimension(0, 0));
+		// menubar.setVisible(true);
+		// statusbar.setVisible(false);
+		// toolBar.setVisible(false);
+		// //setUndecorated(true);
+		// } else {
+		// menubar.setVisible(false);
+		// menubar.setPreferredSize(null);
+		// menubar.setVisible(true);
+		// statusbar.setVisible(true);
+		// toolBar.setVisible(true);
+		// //setUndecorated(false);
+		// }
+
+	}
+
+	private void addWindowListener() {
+		addComponentListener(new ComponentListener() {
+
+			@Override
+			public void componentHidden(final ComponentEvent e) {
+				ulozeStav();
+			}
+
+			@Override
+			public void componentMoved(final ComponentEvent e) {
+				ulozeStav();
+			}
+
+			@Override
+			public void componentResized(final ComponentEvent e) {
+				ulozeStav();
+			}
+
+			@Override
+			public void componentShown(final ComponentEvent e) {
+				ulozeStav();
+			}
+		});
+		addWindowFocusListener(new WindowFocusListener() {
+
+			@Override
+			public void windowGainedFocus(final WindowEvent e) {
+				ulozeStav();
+			}
+
+			@Override
+			public void windowLostFocus(final WindowEvent e) {
+				ulozeStav();
+			}
+		});
+
+		addWindowStateListener(e -> ulozeStav());
+
+		addWindowListener(new WindowListener() {
+			@Override
+			public void windowActivated(final WindowEvent aE) {
+				ulozeStav();
+				zkontrolujALoadni();
+			}
+
+			@Override
+			public void windowClosed(final WindowEvent aE) {
+				ulozeStav();
+				System.exit(0);
+			}
+
+			@Override
+			public void windowClosing(final WindowEvent aE) {
+				// System.out.println(aE);
+				ulozeStav();
+				closeAction.actionPerformed(null);
+			}
+
+			@Override
+			public void windowDeactivated(final WindowEvent aE) {
+				ulozeStav();
+				// ulozeStav();
+				// System.out.println(aE);
+			}
+
+			@Override
+			public void windowDeiconified(final WindowEvent aE) {
+				ulozeStav();
+				zkontrolujALoadni();
+				// System.out.println(aE);
+			}
+
+			@Override
+			public void windowIconified(final WindowEvent aE) {
+				ulozeStav();
+				// System.out.println(aE);
+			}
+
+			@Override
+			public void windowOpened(final WindowEvent aE) {
+				zkontrolujALoadni();
+				// System.out.println(aE);
+			}
+		});
+	}
+
+	private JComponent createDetailRoh() {
+		JComponent detailRoh;
+		// JComponent sv = new JPrekryvnik();
+		detailRoh = factory.init(new JDetailPrekryvnik());
+		// detailRoh.setBackground(new Color(0,255,120));
+		detailRoh.setMinimumSize(new Dimension(100, 100));
+		detailRoh.setPreferredSize(new Dimension(200, 200));
+		detailRoh.setMaximumSize(new Dimension(300, 300));
+
+		final JDetailMysovani mysovani = new JDetailMysovani();
+		detailRoh.add(mysovani);
+		detailRoh.add(new JZamernyKriz());
+		final JKachlovnik detailKachlovnik = new JKachlovnikDoRohu();
+		detailRoh.add(detailKachlovnik);
+		factory.init(detailKachlovnik);
+		factory.init(mysovani);
+		detailKachlovnik.setKachloTypes(new KaSet(EnumSet.of(EKaType.OPHOTO_M)));
+		detailRoh.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		return detailRoh;
+	}
+
+	private JComponent createKesInfoRoh() {
+		JComponent detailRoh;
+		// JComponent sv = new JPrekryvnik();
+		detailRoh = new JPanel();
+		detailRoh.setLayout(new BorderLayout());
+
+		JComponent kesDatail;
+		kesDatail = factory.init(new JKesoidDetailContainer());
+		detailRoh.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		detailRoh.add(kesDatail);
+		return detailRoh;
 	}
 
 	private boolean jeRozumneNaObrazovce(final OknoUmisteniDto u) {
@@ -230,178 +400,8 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		oknoModel.setStavOkna(extendedState);
 	}
 
-	private void addWindowListener() {
-		addComponentListener(new ComponentListener() {
-
-			@Override
-			public void componentShown(final ComponentEvent e) {
-				ulozeStav();
-			}
-
-			@Override
-			public void componentResized(final ComponentEvent e) {
-				ulozeStav();
-			}
-
-			@Override
-			public void componentMoved(final ComponentEvent e) {
-				ulozeStav();
-			}
-
-			@Override
-			public void componentHidden(final ComponentEvent e) {
-				ulozeStav();
-			}
-		});
-		addWindowFocusListener(new WindowFocusListener() {
-
-			@Override
-			public void windowLostFocus(final WindowEvent e) {
-				ulozeStav();
-			}
-
-			@Override
-			public void windowGainedFocus(final WindowEvent e) {
-				ulozeStav();
-			}
-		});
-
-		addWindowStateListener(e -> ulozeStav());
-
-		addWindowListener(new WindowListener() {
-			@Override
-			public void windowOpened(final WindowEvent aE) {
-				zkontrolujALoadni();
-				// System.out.println(aE);
-			}
-
-			@Override
-			public void windowIconified(final WindowEvent aE) {
-				ulozeStav();
-				// System.out.println(aE);
-			}
-
-			@Override
-			public void windowDeiconified(final WindowEvent aE) {
-				ulozeStav();
-				zkontrolujALoadni();
-				// System.out.println(aE);
-			}
-
-			@Override
-			public void windowDeactivated(final WindowEvent aE) {
-				ulozeStav();
-				// ulozeStav();
-				// System.out.println(aE);
-			}
-
-			@Override
-			public void windowClosing(final WindowEvent aE) {
-				// System.out.println(aE);
-				ulozeStav();
-				closeAction.actionPerformed(null);
-			}
-
-			@Override
-			public void windowClosed(final WindowEvent aE) {
-				ulozeStav();
-				System.exit(0);
-			}
-
-			@Override
-			public void windowActivated(final WindowEvent aE) {
-				ulozeStav();
-				zkontrolujALoadni();
-			}
-		});
-	}
-
-	private JComponent createKesInfoRoh() {
-		JComponent detailRoh;
-		// JComponent sv = new JPrekryvnik();
-		detailRoh = new JPanel();
-		detailRoh.setLayout(new BorderLayout());
-
-		JComponent kesDatail;
-		kesDatail = factory.init(new JKesoidDetailContainer());
-		detailRoh.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		detailRoh.add(kesDatail);
-		return detailRoh;
-	}
-
-	private JComponent createDetailRoh() {
-		JComponent detailRoh;
-		// JComponent sv = new JPrekryvnik();
-		detailRoh = factory.init(new JDetailPrekryvnik());
-		// detailRoh.setBackground(new Color(0,255,120));
-		detailRoh.setMinimumSize(new Dimension(100, 100));
-		detailRoh.setPreferredSize(new Dimension(200, 200));
-		detailRoh.setMaximumSize(new Dimension(300, 300));
-
-		final JDetailMysovani mysovani = new JDetailMysovani();
-		detailRoh.add(mysovani);
-		detailRoh.add(new JZamernyKriz());
-		final JKachlovnik detailKachlovnik = new JKachlovnikDoRohu();
-		detailRoh.add(detailKachlovnik);
-		factory.init(detailKachlovnik);
-		factory.init(mysovani);
-		detailKachlovnik.setKachloTypes(new KaSet(EnumSet.of(EKaType.OPHOTO_M)));
-		detailRoh.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		return detailRoh;
-	}
-
 	private void zkontrolujALoadni() {
 		kesoidModel.startIkonLoad(false);
-	}
-
-	public void setFullScreen(final boolean fs) {
-		// JMenuBar menubar = getJMenuBar();
-		// if (fs) {
-		// menubar.setVisible(false);
-		// menubar.setPreferredSize(new Dimension(0, 0));
-		// menubar.setVisible(true);
-		// statusbar.setVisible(false);
-		// toolBar.setVisible(false);
-		// //setUndecorated(true);
-		// } else {
-		// menubar.setVisible(false);
-		// menubar.setPreferredSize(null);
-		// menubar.setVisible(true);
-		// statusbar.setVisible(true);
-		// toolBar.setVisible(true);
-		// //setUndecorated(false);
-		// }
-
-	}
-
-	public void inject(final Factory factory) {
-		this.factory = factory;
-	}
-
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
-	}
-
-	public void inject(final FullScreenAction fullScreenAction) {
-		this.fullScreenAction = fullScreenAction;
-	}
-
-	public void inject(final OknoModel oknoModel) {
-		this.oknoModel = oknoModel;
-	}
-
-	public void inject(final CloseAction closeAction) {
-		this.closeAction = closeAction;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.core.coord.SlidListProvider#getSlides()
-	 */
-	@Override
-	public List<JSingleSlide0> getSlides() {
-		return slideList;
 	}
 
 }

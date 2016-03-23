@@ -23,8 +23,8 @@ public abstract class MultiIterable<T, M> implements Iterable<T> {
 			}
 
 			@Override
-			public void remove() {
-				throw new RuntimeException("Not implemented");
+			public boolean hasNext() {
+				return boit.hasNext();
 			}
 
 			@Override
@@ -34,16 +34,16 @@ public abstract class MultiIterable<T, M> implements Iterable<T> {
 				return bod;
 			}
 
+			@Override
+			public void remove() {
+				throw new RuntimeException("Not implemented");
+			}
+
 			private void najezd() {
 				while (!boit.hasNext() && ceit.hasNext()) {
 					final M cesta = ceit.next();
 					boit = prepareIterable(cesta).iterator();
 				}
-			}
-
-			@Override
-			public boolean hasNext() {
-				return boit.hasNext();
 			}
 		};
 	}

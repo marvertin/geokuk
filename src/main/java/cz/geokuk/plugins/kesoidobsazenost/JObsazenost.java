@@ -17,6 +17,20 @@ import cz.geokuk.util.index2d.*;
 
 public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
 
+	// g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+	/**
+	 * @author veverka
+	 *
+	 */
+	private final class ChangeListenerImplementation implements ChangeListener {
+		@Override
+		public void stateChanged(final ChangeEvent aArg0) {
+			final ObsazenostSettings data = obsazenostModel.getData();
+			data.setColor(iSlidovnik.getColor());
+			obsazenostModel.setData(data);
+		}
+	}
+
 	private static final int	POLOMER_OBSAZENOSTI	= 161;
 
 	private static final long	serialVersionUID	= -5858146658366237217L;
@@ -35,22 +49,24 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		initComponents();
 	}
 
-	/**
-	 *
-	 */
-	private void initComponents() {
-		setLayout(new BorderLayout());
-		iSlidovnik = new JBarvovyDvojSlider();
-		add(iSlidovnik, BorderLayout.EAST);
-		iSlidovnik.getBarvovnik().setToolTipText("Nastavení stupně šedi kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");
-		iSlidovnik.getPruhlednik().setToolTipText("Nastavení průhlednosti kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");
+	@Override
+	public JSingleSlide0 createRenderableSlide() {
+		return new JObsazenost();
 	}
 
-	/**
-	 *
-	 */
-	private void registerEvents() {
-		iSlidovnik.addChangeListener(new ChangeListenerImplementation());
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		registerEvents();
+	}
+
+	public void inject(final ObsazenostModel obsazenostModel) {
+		this.obsazenostModel = obsazenostModel;
+	}
+
+	@Override
+	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
+		// ctx.setMouseCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		super.mouseDragged(e, ctx);
 	}
 
 	public void onEvent(final KeskyNactenyEvent event) {
@@ -58,14 +74,14 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		repaint();
 	}
 
-	public void onEvent(final ObsazenostPreferencesChangeEvent event) {
-		obsazenost = event.obsazenost;
-		iSlidovnik.setColor(obsazenost.getColor());
+	public void onEvent(final ObsazenostOnoffEvent event) {
+		setVisible(event.isOnoff());
 		repaint();
 	}
 
-	public void onEvent(final ObsazenostOnoffEvent event) {
-		setVisible(event.isOnoff());
+	public void onEvent(final ObsazenostPreferencesChangeEvent event) {
+		obsazenost = event.obsazenost;
+		iSlidovnik.setColor(obsazenost.getColor());
 		repaint();
 	}
 
@@ -106,43 +122,27 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 	}
 
 	/**
+	 *
+	 */
+	private void initComponents() {
+		setLayout(new BorderLayout());
+		iSlidovnik = new JBarvovyDvojSlider();
+		add(iSlidovnik, BorderLayout.EAST);
+		iSlidovnik.getBarvovnik().setToolTipText("Nastavení stupně šedi kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");
+		iSlidovnik.getPruhlednik().setToolTipText("Nastavení průhlednosti kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");
+	}
+
+	/**
 	 * @return
 	 */
 	private int polomerObsazenosti() {
 		return (int) (getSoord().getPixluNaMetr() * POLOMER_OBSAZENOSTI);
 	}
 
-	// g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 	/**
-	 * @author veverka
 	 *
 	 */
-	private final class ChangeListenerImplementation implements ChangeListener {
-		@Override
-		public void stateChanged(final ChangeEvent aArg0) {
-			final ObsazenostSettings data = obsazenostModel.getData();
-			data.setColor(iSlidovnik.getColor());
-			obsazenostModel.setData(data);
-		}
-	}
-
-	@Override
-	public void initAfterEventReceiverRegistration() {
-		registerEvents();
-	}
-
-	public void inject(final ObsazenostModel obsazenostModel) {
-		this.obsazenostModel = obsazenostModel;
-	}
-
-	@Override
-	public JSingleSlide0 createRenderableSlide() {
-		return new JObsazenost();
-	}
-
-	@Override
-	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
-		// ctx.setMouseCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-		super.mouseDragged(e, ctx);
+	private void registerEvents() {
+		iSlidovnik.addChangeListener(new ChangeListenerImplementation());
 	}
 }

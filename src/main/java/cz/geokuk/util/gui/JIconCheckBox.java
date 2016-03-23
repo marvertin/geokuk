@@ -8,30 +8,6 @@ import javax.swing.JCheckBox;
 import cz.geokuk.framework.Action0;
 
 public class JIconCheckBox extends JCheckBox {
-	private static final long	serialVersionUID	= 1L;
-	private Icon				icon;
-
-	public JIconCheckBox(final Icon icon) {
-		super(icon);
-	}
-
-	public JIconCheckBox(final Action0 action) {
-		super(action);
-		setIcon(action.getIcon());
-	}
-
-	public JIconCheckBox() {
-	}
-
-	@Override
-	public void setIcon(final Icon defaultIcon) {
-		super.setIcon(defaultIcon);
-		icon = defaultIcon;
-		setRolloverIcon(new RolloverIcon());
-		setSelectedIcon(new SelectedIcon());
-		setRolloverSelectedIcon(new RollOverSelectedIcon());
-	}
-
 	private abstract class Icon0 implements Icon {
 		@Override
 		public int getIconHeight() {
@@ -61,6 +37,15 @@ public class JIconCheckBox extends JCheckBox {
 
 	}
 
+	private class RollOverSelectedIcon extends Icon0 {
+		@Override
+		public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
+			new SelectedIcon().paintIcon(c, g, x, y);
+			new RolloverIcon().paintIcon(c, g, x, y);
+		}
+
+	}
+
 	private class SelectedIcon extends Icon0 {
 		@Override
 		public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
@@ -71,13 +56,29 @@ public class JIconCheckBox extends JCheckBox {
 
 	}
 
-	private class RollOverSelectedIcon extends Icon0 {
-		@Override
-		public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
-			new SelectedIcon().paintIcon(c, g, x, y);
-			new RolloverIcon().paintIcon(c, g, x, y);
-		}
+	private static final long	serialVersionUID	= 1L;
 
+	private Icon				icon;
+
+	public JIconCheckBox() {
+	}
+
+	public JIconCheckBox(final Action0 action) {
+		super(action);
+		setIcon(action.getIcon());
+	}
+
+	public JIconCheckBox(final Icon icon) {
+		super(icon);
+	}
+
+	@Override
+	public void setIcon(final Icon defaultIcon) {
+		super.setIcon(defaultIcon);
+		icon = defaultIcon;
+		setRolloverIcon(new RolloverIcon());
+		setSelectedIcon(new SelectedIcon());
+		setRolloverSelectedIcon(new RollOverSelectedIcon());
 	}
 
 }

@@ -18,16 +18,8 @@ public class Wgsd {
 		lon = wgs.lon;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(lat);
-		result = prime * result + (int) (temp ^ temp >>> 32);
-		temp = Double.doubleToLongBits(lon);
-		result = prime * result + (int) (temp ^ temp >>> 32);
-		return result;
+	public Wgsd add(final double dlat, final double dlon) {
+		return new Wgsd(lat + dlat, lon + dlon);
 	}
 
 	@Override
@@ -51,8 +43,16 @@ public class Wgsd {
 		return true;
 	}
 
-	public Wgsd add(final double dlat, final double dlon) {
-		return new Wgsd(lat + dlat, lon + dlon);
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(lat);
+		result = prime * result + (int) (temp ^ temp >>> 32);
+		temp = Double.doubleToLongBits(lon);
+		result = prime * result + (int) (temp ^ temp >>> 32);
+		return result;
 	}
 
 	public Wgsd sub(final double dlat, final double dlon) {

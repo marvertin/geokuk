@@ -5,6 +5,10 @@ import java.nio.charset.Charset;
 
 public class FileWatchDog<R> {
 
+	public static interface ReaderCallback<R> {
+		R load(BufferedReader reader) throws IOException;
+	}
+
 	private final File		file;
 
 	private long			lastmodified;
@@ -16,30 +20,16 @@ public class FileWatchDog<R> {
 		this.file = file;
 	}
 
-	public File getFile() {
-		return file;
-	}
-
 	public void forceLoad() {
 		lastmodified = 0;
 	}
 
-	public void nastavPrecteno() {
-		lastmodified = wasModified();
+	public File getFile() {
+		return file;
 	}
 
-	private BufferedReader open() {
-		try {
-			Reader r;
-			if (file.canRead()) {
-				r = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF8"));
-			} else {
-				r = new StringReader("");
-			}
-			return new BufferedReader(r);
-		} catch (final FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+	public void nastavPrecteno() {
+		lastmodified = wasModified();
 	}
 
 	public synchronized R readIfModified(final ReaderCallback<R> callback) throws IOException {
@@ -66,6 +56,14 @@ public class FileWatchDog<R> {
 		}
 	}
 
+	public void setGroup(final WatchDogGroup watchDogGroup) {
+		if (this.watchDogGroup == watchDogGroup) {
+			return;
+		}
+		this.watchDogGroup = watchDogGroup;
+		watchDogGroup.add(this);
+	}
+
 	/**
 	 * Vrátí čas modifikace souboru pokud byl modifikován a -1 když nebyl
 	 *
@@ -84,15 +82,17 @@ public class FileWatchDog<R> {
 		return lm;
 	}
 
-	public static interface ReaderCallback<R> {
-		R load(BufferedReader reader) throws IOException;
-	}
-
-	public void setGroup(final WatchDogGroup watchDogGroup) {
-		if (this.watchDogGroup == watchDogGroup) {
-			return;
+	private BufferedReader open() {
+		try {
+			Reader r;
+			if (file.canRead()) {
+				r = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF8"));
+			} else {
+				r = new StringReader("");
+			}
+			return new BufferedReader(r);
+		} catch (final FileNotFoundException e) {
+			throw new RuntimeException(e);
 		}
-		this.watchDogGroup = watchDogGroup;
-		watchDogGroup.add(this);
 	}
 }

@@ -8,10 +8,15 @@ public class BeanType {
 	private final String	subType;
 	private final boolean	multinInjectionSupported;
 
-	private BeanType(final Class<?> cls, final String subType, final boolean multiInjection) {
-		this.cls = cls;
-		this.subType = subType;
-		multinInjectionSupported = multiInjection;
+	public static BeanType createForInjectedBean(final Object injectedBean) {
+		String subType;
+		if (injectedBean instanceof BeanSubtypable) {
+			final BeanSubtypable beanSubtypable = (BeanSubtypable) injectedBean;
+			subType = beanSubtypable.getSubType();
+		} else {
+			subType = null;
+		}
+		return new BeanType(injectedBean.getClass(), subType, false);
 	}
 
 	/**
@@ -45,31 +50,10 @@ public class BeanType {
 		return bt;
 	}
 
-	public static BeanType createForInjectedBean(final Object injectedBean) {
-		String subType;
-		if (injectedBean instanceof BeanSubtypable) {
-			final BeanSubtypable beanSubtypable = (BeanSubtypable) injectedBean;
-			subType = beanSubtypable.getSubType();
-		} else {
-			subType = null;
-		}
-		return new BeanType(injectedBean.getClass(), subType, false);
-	}
-
-	public boolean hasSubtype() {
-		return subType != null;
-	}
-
-	public BeanType cloneWithotSubtype() {
-		final BeanType result = new BeanType(cls, null, multinInjectionSupported);
-		return result;
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isMultiInjectionSupported() {
-		return multinInjectionSupported;
+	private BeanType(final Class<?> cls, final String subType, final boolean multiInjection) {
+		this.cls = cls;
+		this.subType = subType;
+		multinInjectionSupported = multiInjection;
 	}
 
 	public boolean canInjectFrom(final BeanType injectedBeanType) {
@@ -87,12 +71,8 @@ public class BeanType {
 		return false; // tak to ono není nic pro injektování
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (cls == null ? 0 : cls.hashCode());
-		result = prime * result + (subType == null ? 0 : subType.hashCode());
+	public BeanType cloneWithotSubtype() {
+		final BeanType result = new BeanType(cls, null, multinInjectionSupported);
 		return result;
 	}
 
@@ -123,6 +103,26 @@ public class BeanType {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (cls == null ? 0 : cls.hashCode());
+		result = prime * result + (subType == null ? 0 : subType.hashCode());
+		return result;
+	}
+
+	public boolean hasSubtype() {
+		return subType != null;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isMultiInjectionSupported() {
+		return multinInjectionSupported;
 	}
 
 	@Override

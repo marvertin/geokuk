@@ -25,20 +25,38 @@ public class JSlide0 extends JComponent implements MySlideListener {
 
 	private JSlide0							nextChained;
 
-	void addChained(final JSlide0 slide) {
-		JSlide0 ch;
-		for (ch = this; ch.nextChained != null; ch = ch.nextChained) {
-		}
-		ch.nextChained = slide;
+	@Override
+	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
+		chain().addPopouItems(popupMenu, ctx);
 	}
 
-	protected MySlideListener chain() {
-		for (JSlide0 ch = nextChained; ch != null; ch = ch.nextChained) {
-			if (ch.isVisible()) {
-				return ch; // na tomto voláme
-			}
-		}
-		return KONEC; // už není nic v řetězu
+	@Override
+	public void ctrlKeyPressed(final MouseGestureContext ctx) {
+		chain().ctrlKeyPressed(ctx);
+	}
+
+	@Override
+	public void ctrlKeyReleased(final MouseGestureContext ctx) {
+		chain().ctrlKeyReleased(ctx);
+	}
+
+	@Override
+	public Cursor getMouseCursor(final boolean pressed) {
+		return chain().getMouseCursor(pressed);
+	}
+
+	@Override
+	public Mouable getUpravenaMys() {
+		final Mouable upravenaMys = chain().getUpravenaMys();
+		// if (upravenaMys == null) {
+		// new Throwable().printStackTrace();
+		// }
+		return upravenaMys;
+	}
+
+	@Override
+	public Wpt getWptPodMysi() {
+		return chain().getWptPodMysi();
 	}
 
 	/*
@@ -49,6 +67,16 @@ public class JSlide0 extends JComponent implements MySlideListener {
 	@Override
 	public void mouseClicked(final MouseEvent e, final MouseGestureContext ctx) {
 		chain().mouseClicked(e, ctx);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
+		chain().mouseDragged(e, ctx);
 	}
 
 	/*
@@ -74,6 +102,16 @@ public class JSlide0 extends JComponent implements MySlideListener {
 	/*
 	 * (non-Javadoc)
 	 *
+	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseMoved(final MouseEvent e, final MouseGestureContext ctx) {
+		chain().mouseMoved(e, ctx);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -91,68 +129,30 @@ public class JSlide0 extends JComponent implements MySlideListener {
 		chain().mouseReleased(e, ctx);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
-		chain().mouseDragged(e, ctx);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseMoved(final MouseEvent e, final MouseGestureContext ctx) {
-		chain().mouseMoved(e, ctx);
-	}
-
 	@Override
 	public void mouseWheelMoved(final MouseWheelEvent e, final MouseGestureContext ctx) {
 		chain().mouseWheelMoved(e, ctx);
 	}
 
 	@Override
-	public void ctrlKeyPressed(final MouseGestureContext ctx) {
-		chain().ctrlKeyPressed(ctx);
-	}
-
-	@Override
-	public void ctrlKeyReleased(final MouseGestureContext ctx) {
-		chain().ctrlKeyReleased(ctx);
-	}
-
-	@Override
-	public Mouable getUpravenaMys() {
-		final Mouable upravenaMys = chain().getUpravenaMys();
-		// if (upravenaMys == null) {
-		// new Throwable().printStackTrace();
-		// }
-		return upravenaMys;
-	}
-
-	@Override
-	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
-		chain().addPopouItems(popupMenu, ctx);
-	}
-
-	@Override
-	public Wpt getWptPodMysi() {
-		return chain().getWptPodMysi();
-	}
-
-	@Override
-	public Cursor getMouseCursor(final boolean pressed) {
-		return chain().getMouseCursor(pressed);
-	}
-
-	@Override
 	public void zjistiBlizkost(final MouseGestureContext ctx) {
 		chain().zjistiBlizkost(ctx);
+	}
+
+	protected MySlideListener chain() {
+		for (JSlide0 ch = nextChained; ch != null; ch = ch.nextChained) {
+			if (ch.isVisible()) {
+				return ch; // na tomto voláme
+			}
+		}
+		return KONEC; // už není nic v řetězu
+	}
+
+	void addChained(final JSlide0 slide) {
+		JSlide0 ch;
+		for (ch = this; ch.nextChained != null; ch = ch.nextChained) {
+		}
+		ch.nextChained = slide;
 	}
 
 }

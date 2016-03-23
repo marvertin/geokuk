@@ -10,24 +10,10 @@ public class MouFrame {
 	public Mou	moujz;
 	public Mou	mousv;
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (moujz == null ? 0 : moujz.hashCode());
-		result = prime * result + (mousv == null ? 0 : mousv.hashCode());
-		return result;
-	}
-
 	public MouFrame(final Mou moujz, final Mou mousv) {
 		super();
 		this.moujz = moujz;
 		this.mousv = mousv;
-	}
-
-	@Override
-	public String toString() {
-		return "MouFrame [moujz=" + moujz + ", mousv=" + mousv + "]";
 	}
 
 	@Override
@@ -57,6 +43,20 @@ public class MouFrame {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (moujz == null ? 0 : moujz.hashCode());
+		result = prime * result + (mousv == null ? 0 : mousv.hashCode());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "MouFrame [moujz=" + moujz + ", mousv=" + mousv + "]";
 	}
 
 }

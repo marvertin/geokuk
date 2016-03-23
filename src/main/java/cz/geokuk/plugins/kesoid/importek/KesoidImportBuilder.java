@@ -89,12 +89,16 @@ public class KesoidImportBuilder implements IImportBuilder {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#init()
-	 */
-	public void init() {
+	@Override
+	public void addTrackWpt(final GpxWpt wpt) {
+	}
+
+	@Override
+	public void begTrack() {
+	}
+
+	@Override
+	public void begTrackSegment() {
 	}
 
 	/*
@@ -198,60 +202,316 @@ public class KesoidImportBuilder implements IImportBuilder {
 		log.debug("Konec zpracování: " + delkaTasku);
 	}
 
+	@Override
+	public void endTrack() {
+	}
+
+	@Override
+	public void endTrackSegment() {
+	}
+
+	@Override
+	public GpxWpt get(final String aName) {
+		return gpxwpts.get(aName);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#getKesBag()
+	 */
+	public KesBag getKesBag() {
+		return kesBag;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#init()
+	 */
+	public void init() {
+	}
+
+	public synchronized void setCurrentlyLoading(final KeFile aJmenoZdroje, final boolean nacteno) {
+		infoOCurrentnimZdroji = informaceOZdrojichBuilder.add(aJmenoZdroje, nacteno);
+	}
+
+	@Override
+	public void setTrackName(final String aTrackName) {
+	}
+
+	protected EKesStatus urciStatus(final boolean archived, final boolean availaible) {
+		if (archived) {
+			return EKesStatus.ARCHIVED;
+		} else if (!availaible) {
+			return EKesStatus.DISABLED;
+		} else {
+			return EKesStatus.ACTIVE;
+		}
+	}
+
+	private Wpt createAditionalWpt(final GpxWpt gpxwpt) {
+		final Wpt wpt = createWpt(gpxwpt);
+		wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
+		final boolean rucnePridany = (gpxwpt.gpxg.flag & 1) == 0;
+		wpt.setRucnePridany(rucnePridany);
+		wpt.setZorder(EZOrder.KESWPT);
+		return wpt;
+	}
+
+	/**
+	 * @param aGpxwpt
+	 * @return
+	 */
+	private CzechGeodeticPoint createCgp(final GpxWpt gpxwpt) {
+		final CzechGeodeticPoint cgp = new CzechGeodeticPoint();
+		final String suroveCisloBodu = gpxwpt.groundspeak.name;
+		String cisloBodu = suroveCisloBodu;
+		if (cisloBodu.endsWith(" (ETRS)")) {
+			cisloBodu = cisloBodu.substring(0, cisloBodu.length() - 7);
+		}
+		cgp.setIdentifier(cisloBodu);
+		cgp.setVztahx(EKesVztah.NOT);
+
+		// System.out.println(gpxwpt.groundspeak.name);
+		// System.out.println(gpxwpt.groundspeak.shortDescription);
+		if (gpxwpt.groundspeak.shortDescription != null) {
+			if (gpxwpt.groundspeak.shortDescription.startsWith("http")) {
+				cgp.setUrl(gpxwpt.groundspeak.shortDescription);
+			}
+		}
+
+		final Wpt wpt = createWpt(gpxwpt);
+		wpt.setName(cisloBodu);
+		urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
+		wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));
+
+		cgp.addWpt(wpt);
+		cgp.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+
+		return cgp;
+	}
+
+	private Kesoid createKes(final GpxWpt gpxwpt) {
+		final Kes kes = new Kes();
+		kes.setIdentifier(gpxwpt.name);
+		kes.setAuthor(gpxwpt.groundspeak.placedBy);
+		// kes.setState(gpxwpt.groundspeak.state);
+		// kes.setCountry(gpxwpt.groundspeak.country);
+		kes.setHidden(gpxwpt.time);
+		kes.setHint(gpxwpt.groundspeak.encodedHints);
+
+		kes.setTerrain(EKesDiffTerRating.parse(gpxwpt.groundspeak.terrain));
+		kes.setDifficulty(EKesDiffTerRating.parse(gpxwpt.groundspeak.difficulty));
+		kes.setSize(EKesSize.decode(gpxwpt.groundspeak.container));
+		// kes.set(gpxwpt.groundspeak.);
+		// kes.set(gpxwpt.groundspeak.);
+		kes.setStatus(urciStatus(gpxwpt.groundspeak.archived, gpxwpt.groundspeak.availaible));
+		kes.setVztahx(urciVztah(gpxwpt));
+		kes.setUrl(gpxwpt.link.href);
+
+		kes.setHodnoceni(gpxwpt.gpxg.hodnoceni);
+		kes.setHodnoceniPocet(gpxwpt.gpxg.hodnoceniPocet);
+		kes.setZnamka(gpxwpt.gpxg.znamka);
+		kes.setBestOf(gpxwpt.gpxg.bestOf);
+		kes.setFavorit(gpxwpt.gpxg.favorites);
+		kes.setFoundTime(gpxwpt.gpxg.found);
+
+		final Wpt wpt = createWpt(gpxwpt);
+		wpt.setSym(gpxwpt.groundspeak.type);
+		wpt.setNazev(gpxwpt.groundspeak.name); // název hlavního waypointu shodný s názvem keše
+		wpt.setZorder(EZOrder.FIRST);
+
+		kes.addWpt(wpt);
+		kes.setMainWpt(wpt);
+
+		kes.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+		return kes;
+	}
+
+	private Munzee createMunzee(final GpxWpt gpxwpt) {
+		final Munzee mz = new Munzee();
+		mz.setIdentifier(gpxwpt.name);
+		if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
+			mz.setVztahx(EKesVztah.OWN);
+		} else if (GEOCACHE_FOUND.equals(gpxwpt.sym)) {
+			mz.setVztahx(EKesVztah.FOUND);
+		} else {
+			mz.setVztahx(EKesVztah.NORMAL);
+		}
+		mz.setUrl(gpxwpt.link.href);
+		mz.setAuthor(gpxwpt.groundspeak.placedBy);
+		mz.setHidden(gpxwpt.time);
+
+		final Wpt wpt = createWpt(gpxwpt);
+		wpt.setNazev(gpxwpt.groundspeak.name);
+		if (gpxwpt.name.startsWith(MZ)) {
+			wpt.setSym("MZ " + odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+		} else {
+			wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+		}
+
+		mz.addWpt(wpt);
+		mz.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+		return mz;
+	}
+
+	private Photo createPhoto(final GpxWpt gpxwpt) {
+		final Wpt wpt = createWpt(gpxwpt);
+		wpt.setSym(gpxwpt.sym);
+
+		final Photo photo = new Photo();
+		photo.setIdentifier(gpxwpt.link.href);
+
+		photo.addWpt(wpt);
+		log.debug("photo: " + photo.getFirstWpt());
+		photo.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+		return photo;
+	}
+
+	private SimpleWaypoint createSimpleWaypoint(final GpxWpt gpxwpt) {
+		final Wpt wpt = createWpt(gpxwpt);
+		wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
+
+		final SimpleWaypoint simpleWaypoint = new SimpleWaypoint();
+		simpleWaypoint.setIdentifier(gpxwpt.name);
+		simpleWaypoint.setUrl(gpxwpt.link.href);
+		simpleWaypoint.addWpt(wpt);
+		simpleWaypoint.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+		return simpleWaypoint;
+	}
+
+	private Waymark createWaymarkGeoget(final GpxWpt gpxwpt) {
+		final Waymark wm = new Waymark();
+		wm.setIdentifier(gpxwpt.name);
+		if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
+			wm.setVztahx(EKesVztah.OWN);
+		} else {
+			wm.setVztahx(EKesVztah.NORMAL);
+		}
+		wm.setUrl(gpxwpt.link.href);
+		wm.setAuthor(gpxwpt.groundspeak.placedBy);
+		wm.setHidden(gpxwpt.time);
+
+		final Wpt wpt = createWpt(gpxwpt);
+		wpt.setNazev(gpxwpt.groundspeak.name);
+		wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+
+		wm.addWpt(wpt);
+		wm.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+		return wm;
+	}
+
+	private Waymark createWaymarkNormal(final GpxWpt gpxwpt) {
+		final Waymark wm = new Waymark();
+		wm.setIdentifier(gpxwpt.name);
+		if (gpxwpt.groundspeak != null) {
+			if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
+				wm.setVztahx(EKesVztah.OWN);
+			} else {
+				wm.setVztahx(EKesVztah.NORMAL);
+			}
+			wm.setAuthor(gpxwpt.groundspeak.placedBy);
+		} else {
+			wm.setVztahx(EKesVztah.NORMAL);
+		}
+		wm.setUrl(gpxwpt.link.href);
+
+		final Wpt wpt = createWpt(gpxwpt);
+		wpt.setNazev(gpxwpt.link.text);
+		wpt.setSym(odstranNadbytecneMezery(gpxwpt.type));
+
+		wm.addWpt(wpt);
+		wm.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
+
+		return wm;
+	}
+
+	private Wpt createWpt(final GpxWpt gpxwpt) {
+		final Wpt wpt = new Wpt();
+		wpt.setWgs(gpxwpt.wgs);
+		wpt.setElevation(urciElevation(gpxwpt));
+		wpt.setName(gpxwpt.name);
+		wpt.setNazev(vytvorNazev(gpxwpt));
+		return wpt;
+	}
+
 	private EKesType decodePseudoKesType(final GpxWpt gpxwpt) {
 		return gpxwpt.groundspeak.type != null ? EKesType.decode(gpxwpt.groundspeak.type) : EKesType.decode(gpxwpt.type.substring(9));
 	}
 
-	private void processPhotos(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
-		for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext();) {
-			final GpxWpt gpxWpt = it.next();
-			if (isPhoto(gpxWpt)) {
-				resultMap.put(gpxWpt.name, createPhoto(gpxWpt));
-				it.remove();
+	private Set<Alela> definujUzivatslskeAlely(final GpxWpt gpxwpt) {
+		final Set<Alela> alely = new HashSet<>();
+
+		for (final Map.Entry<String, String> entry : gpxwpt.gpxg.userTags.entrySet()) {
+			final String alelaName = entry.getValue();
+			final String genName = entry.getKey();
+			final Alela alela = genom.alela(alelaName, genName);
+			if (alela == null) {
+				continue;
 			}
+			alely.add(alela);
+		}
+
+		return alely;
+	}
+
+	private String extractOznaceniBodu(final String celeJmeno) {
+		if (celeJmeno == null) {
+			return null;
+		}
+		if (patExtrakceCislaCgp == null) {
+			patExtrakceCislaCgp = Pattern.compile(".*?([0-9]+-[0-9]+).*");
+		}
+		final Matcher mat = patExtrakceCislaCgp.matcher(celeJmeno);
+		if (mat.matches()) {
+			return mat.group(1);
+		} else {
+			return null;
 		}
 	}
 
-	private boolean isPhoto(final GpxWpt gpxWpt) {
-		return PIC.equals(gpxWpt.type);
+	private JtskSouradnice extrahujJtsk(final String celyretez) {
+		if (patExtrakceSouradnicJtsk == null) {
+			patExtrakceSouradnicJtsk = Pattern.compile("(.*?)(\\d+)'(\\d+.\\d+) +(\\d+)'(\\d+\\.\\d+) (\\d+\\.\\d+)(.*)");
+		}
+		final Matcher mat = patExtrakceSouradnicJtsk.matcher(celyretez);
+		if (mat.matches()) {
+			final JtskSouradnice sou = new JtskSouradnice();
+			sou.pred = mat.group(1);
+			sou.y = Double.parseDouble(mat.group(2) + mat.group(3));
+			sou.x = Double.parseDouble(mat.group(4) + mat.group(5));
+			sou.z = Double.parseDouble(mat.group(6));
+			sou.po = mat.group(7);
+			return sou;
+		} else {
+			return null;
+		}
 	}
 
-	private void processGeocaches(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
-		for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext();) {
-			final GpxWpt gpxWpt = it.next();
-			if (isGeocache(gpxWpt)) {
-				resultMap.put(gpxWpt.name, createKes(gpxWpt));
-				it.remove();
-			}
+	private String extrahujPrefixPredTeckou(final GpxWpt gpxwpt) {
+		final String jmeno = gpxwpt.groundspeak.name;
+		int poz = jmeno.indexOf('.');
+		if (poz < 0) {
+			poz = jmeno.length();
 		}
+		return jmeno.substring(0, poz);
+	}
+
+	private boolean isCzechGeodeticPoint(final GpxWpt gpxWpt) {
+		return gpxWpt.groundspeak != null && (gpxWpt.name.startsWith(GC) && gpxWpt.name.length() == 8 || gpxWpt.name.matches("^(TrB_|ZhB_|BTP_|ZGS_).*$") || "DATAZ".equals(gpxWpt.groundspeak.owner));
 	}
 
 	private boolean isGeocache(final GpxWpt gpxWpt) {
 		return (GEOCACHE.equals(gpxWpt.sym) || GEOCACHE_FOUND.equals(gpxWpt.sym)) && gpxWpt.groundspeak != null && gpxWpt.name.startsWith(GC);
 	}
 
-	private void processWaymarks(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultsMap, final Map<String, CzechGeodeticPoint> mapaPredTeckou) {
+	private boolean isMunzee(final GpxWpt gpxWpt) {
+		return (gpxWpt.name.startsWith(MZ) || gpxWpt.name.startsWith(MU)) && (GEOCACHE.equals(gpxWpt.sym) || GEOCACHE_FOUND.equals(gpxWpt.sym));
+	}
 
-		// Pokusíme se najít ostatní waymarky, to znamená ty, které nebyly speciální
-		for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext();) {
-			final GpxWpt gpxwpt = it.next();
-
-			Waymark wm;
-
-			if (isWaymark(gpxwpt)) {
-				wm = createWaymarkNormal(gpxwpt);
-			} else if (isWaymarkGeoget(gpxwpt)) {
-				wm = createWaymarkGeoget(gpxwpt);
-			} else {
-				continue;
-			}
-
-			final boolean pripojeno = zkusPripojitKCgp(wm, mapaPredTeckou);
-			if (!pripojeno) {
-				resultsMap.put(gpxwpt.name, wm);
-			}
-			it.remove();
-		}
+	private boolean isPhoto(final GpxWpt gpxWpt) {
+		return PIC.equals(gpxWpt.type);
 	}
 
 	private boolean isWaymark(final GpxWpt gpxWpt) {
@@ -262,18 +522,24 @@ public class KesoidImportBuilder implements IImportBuilder {
 		return gpxWpt.name.startsWith(WM) && (GEOCACHE.equals(gpxWpt.sym) || GEOCACHE_FOUND.equals(gpxWpt.sym));
 	}
 
-	private void processMunzees(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
-		for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext();) {
-			final GpxWpt gpxWpt = it.next();
-			if (isMunzee(gpxWpt)) {
-				resultMap.put(gpxWpt.name, createMunzee(gpxWpt));
-				it.remove();
-			}
-		}
+	/**
+	 * @param aType
+	 * @return
+	 */
+	private String odstranNadbytecneMezery(final String s) {
+		return s == null ? null : s.replaceAll(" +", " ");
 	}
 
-	private boolean isMunzee(final GpxWpt gpxWpt) {
-		return (gpxWpt.name.startsWith(MZ) || gpxWpt.name.startsWith(MU)) && (GEOCACHE.equals(gpxWpt.sym) || GEOCACHE_FOUND.equals(gpxWpt.sym));
+	/**
+	 * @param aCgp
+	 * @param aGpxwpt
+	 */
+	private void pridruz(final CzechGeodeticPoint cgp, final GpxWpt gpxwpt) {
+		final Wpt wpt = createWpt(gpxwpt);
+		wpt.setName(gpxwpt.groundspeak.name);
+		urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
+		wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));
+		cgp.addWpt(wpt);
 	}
 
 	private Map<String, CzechGeodeticPoint> processCzechGeodeticPoints(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
@@ -327,227 +593,70 @@ public class KesoidImportBuilder implements IImportBuilder {
 		return mapaPredTeckou;
 	}
 
-	private boolean isCzechGeodeticPoint(final GpxWpt gpxWpt) {
-		return gpxWpt.groundspeak != null && (gpxWpt.name.startsWith(GC) && gpxWpt.name.length() == 8 || gpxWpt.name.matches("^(TrB_|ZhB_|BTP_|ZGS_).*$") || "DATAZ".equals(gpxWpt.groundspeak.owner));
-	}
-
-	private boolean zkusPripojitKCgp(final Waymark wm, final Map<String, CzechGeodeticPoint> mapaPredTeckou) {
-		if (!wm.getMainWpt().getSym().equals("Czech Geodetic Points")) {
-			return false; // není to ani ta správná kategorie
-		}
-		final String oznaceniBodu = extractOznaceniBodu(wm.getNazev());
-		if (oznaceniBodu == null) {
-			return false; // tak ve jméně není označení, zobrazíme jako normální waymark
-		}
-		final CzechGeodeticPoint cgp = mapaPredTeckou.get(oznaceniBodu);
-		if (cgp == null) {
-			return false; // nenašli jsme již existující
-		}
-		// tak a tady musíme do cgp narvat vše, co víme
-		cgp.setVztahx(wm.getVztah());
-		cgp.getFirstWpt().setNazev(wm.getNazev());
-		cgp.setUrl(wm.getUrl());
-		cgp.setAuthor(wm.getAuthor());
-		cgp.setHidden(wm.getHidden());
-		return true;
-	}
-
-	private SimpleWaypoint createSimpleWaypoint(final GpxWpt gpxwpt) {
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
-
-		final SimpleWaypoint simpleWaypoint = new SimpleWaypoint();
-		simpleWaypoint.setIdentifier(gpxwpt.name);
-		simpleWaypoint.setUrl(gpxwpt.link.href);
-		simpleWaypoint.addWpt(wpt);
-		simpleWaypoint.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
-		return simpleWaypoint;
-	}
-
-	private Photo createPhoto(final GpxWpt gpxwpt) {
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setSym(gpxwpt.sym);
-
-		final Photo photo = new Photo();
-		photo.setIdentifier(gpxwpt.link.href);
-
-		photo.addWpt(wpt);
-		log.debug("photo: " + photo.getFirstWpt());
-		photo.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
-		return photo;
-	}
-
-	private String extrahujPrefixPredTeckou(final GpxWpt gpxwpt) {
-		final String jmeno = gpxwpt.groundspeak.name;
-		int poz = jmeno.indexOf('.');
-		if (poz < 0) {
-			poz = jmeno.length();
-		}
-		return jmeno.substring(0, poz);
-	}
-
-	/**
-	 * @param aCgp
-	 * @param aGpxwpt
-	 */
-	private void pridruz(final CzechGeodeticPoint cgp, final GpxWpt gpxwpt) {
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setName(gpxwpt.groundspeak.name);
-		urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
-		wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));
-		cgp.addWpt(wpt);
-	}
-
-	/**
-	 * @param aGpxwpt
-	 * @return
-	 */
-	private CzechGeodeticPoint createCgp(final GpxWpt gpxwpt) {
-		final CzechGeodeticPoint cgp = new CzechGeodeticPoint();
-		final String suroveCisloBodu = gpxwpt.groundspeak.name;
-		String cisloBodu = suroveCisloBodu;
-		if (cisloBodu.endsWith(" (ETRS)")) {
-			cisloBodu = cisloBodu.substring(0, cisloBodu.length() - 7);
-		}
-		cgp.setIdentifier(cisloBodu);
-		cgp.setVztahx(EKesVztah.NOT);
-
-		// System.out.println(gpxwpt.groundspeak.name);
-		// System.out.println(gpxwpt.groundspeak.shortDescription);
-		if (gpxwpt.groundspeak.shortDescription != null) {
-			if (gpxwpt.groundspeak.shortDescription.startsWith("http")) {
-				cgp.setUrl(gpxwpt.groundspeak.shortDescription);
+	private void processGeocaches(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
+		for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext();) {
+			final GpxWpt gpxWpt = it.next();
+			if (isGeocache(gpxWpt)) {
+				resultMap.put(gpxWpt.name, createKes(gpxWpt));
+				it.remove();
 			}
 		}
-
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setName(cisloBodu);
-		urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
-		wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));
-
-		cgp.addWpt(wpt);
-		cgp.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
-
-		return cgp;
 	}
 
-	private Waymark createWaymarkGeoget(final GpxWpt gpxwpt) {
-		final Waymark wm = new Waymark();
-		wm.setIdentifier(gpxwpt.name);
-		if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
-			wm.setVztahx(EKesVztah.OWN);
-		} else {
-			wm.setVztahx(EKesVztah.NORMAL);
+	private void processMunzees(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
+		for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext();) {
+			final GpxWpt gpxWpt = it.next();
+			if (isMunzee(gpxWpt)) {
+				resultMap.put(gpxWpt.name, createMunzee(gpxWpt));
+				it.remove();
+			}
 		}
-		wm.setUrl(gpxwpt.link.href);
-		wm.setAuthor(gpxwpt.groundspeak.placedBy);
-		wm.setHidden(gpxwpt.time);
-
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setNazev(gpxwpt.groundspeak.name);
-		wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
-
-		wm.addWpt(wpt);
-		wm.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
-		return wm;
 	}
 
-	private Waymark createWaymarkNormal(final GpxWpt gpxwpt) {
-		final Waymark wm = new Waymark();
-		wm.setIdentifier(gpxwpt.name);
-		if (gpxwpt.groundspeak != null) {
-			if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
-				wm.setVztahx(EKesVztah.OWN);
+	private void processPhotos(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultMap) {
+		for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext();) {
+			final GpxWpt gpxWpt = it.next();
+			if (isPhoto(gpxWpt)) {
+				resultMap.put(gpxWpt.name, createPhoto(gpxWpt));
+				it.remove();
+			}
+		}
+	}
+
+	private void processWaymarks(final List<GpxWpt> gpxWpts, final Map<String, Kesoid> resultsMap, final Map<String, CzechGeodeticPoint> mapaPredTeckou) {
+
+		// Pokusíme se najít ostatní waymarky, to znamená ty, které nebyly speciální
+		for (final ListIterator<GpxWpt> it = gpxWpts.listIterator(); it.hasNext();) {
+			final GpxWpt gpxwpt = it.next();
+
+			Waymark wm;
+
+			if (isWaymark(gpxwpt)) {
+				wm = createWaymarkNormal(gpxwpt);
+			} else if (isWaymarkGeoget(gpxwpt)) {
+				wm = createWaymarkGeoget(gpxwpt);
 			} else {
-				wm.setVztahx(EKesVztah.NORMAL);
+				continue;
 			}
-			wm.setAuthor(gpxwpt.groundspeak.placedBy);
-		} else {
-			wm.setVztahx(EKesVztah.NORMAL);
+
+			final boolean pripojeno = zkusPripojitKCgp(wm, mapaPredTeckou);
+			if (!pripojeno) {
+				resultsMap.put(gpxwpt.name, wm);
+			}
+			it.remove();
 		}
-		wm.setUrl(gpxwpt.link.href);
-
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setNazev(gpxwpt.link.text);
-		wpt.setSym(odstranNadbytecneMezery(gpxwpt.type));
-
-		wm.addWpt(wpt);
-		wm.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
-
-		return wm;
 	}
 
-	private Munzee createMunzee(final GpxWpt gpxwpt) {
-		final Munzee mz = new Munzee();
-		mz.setIdentifier(gpxwpt.name);
-		if (gccomNick.name.equals(gpxwpt.groundspeak.placedBy)) {
-			mz.setVztahx(EKesVztah.OWN);
-		} else if (GEOCACHE_FOUND.equals(gpxwpt.sym)) {
-			mz.setVztahx(EKesVztah.FOUND);
+	private int urciElevation(final GpxWpt gpxwpt) {
+		if (gpxwpt.ele != 0) {
+			return (int) gpxwpt.ele;
 		} else {
-			mz.setVztahx(EKesVztah.NORMAL);
+			if (gpxwpt.gpxg != null) {
+				return gpxwpt.gpxg.elevation;
+			} else {
+				return 0;
+			}
 		}
-		mz.setUrl(gpxwpt.link.href);
-		mz.setAuthor(gpxwpt.groundspeak.placedBy);
-		mz.setHidden(gpxwpt.time);
-
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setNazev(gpxwpt.groundspeak.name);
-		if (gpxwpt.name.startsWith(MZ)) {
-			wpt.setSym("MZ " + odstranNadbytecneMezery(gpxwpt.groundspeak.type));
-		} else {
-			wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
-		}
-
-		mz.addWpt(wpt);
-		mz.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
-		return mz;
-	}
-
-	/**
-	 * @param aType
-	 * @return
-	 */
-	private String odstranNadbytecneMezery(final String s) {
-		return s == null ? null : s.replaceAll(" +", " ");
-	}
-
-	/**
-	 * @param aGpxwpt
-	 * @return
-	 */
-	private String urciSymCgpZPseudoKese(final GpxWpt gpxwpt) {
-		final EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
-		if (pseudoKesType == EKesType.TRADITIONAL) {
-			return gpxwpt.groundspeak.name.contains("ETRS") ? "TrB (ETRS)" : "TrB";
-		}
-		if (pseudoKesType == EKesType.LETTERBOX_HYBRID) {
-			return "TrB-p";
-		}
-		if (pseudoKesType == EKesType.MULTI) {
-			return "ZhB";
-		}
-		if (pseudoKesType == EKesType.UNKNOWN) {
-			return "ZhB-p";
-		}
-		if (pseudoKesType == EKesType.EARTHCACHE) {
-			return "BTP";
-		}
-		if (pseudoKesType == EKesType.WHERIGO) {
-			return "ZGS";
-		}
-
-		if (pseudoKesType == EKesType.EVENT) {
-			return "ZVBP";
-		}
-		if (pseudoKesType == EKesType.CACHE_IN_TRASH_OUT_EVENT) {
-			return "PVBP";
-		}
-		if (pseudoKesType == EKesType.MEGA_EVENT) {
-			return "ZNB";
-		}
-
-		return "Unknown Cgp";
 	}
 
 	private void urciNazevCgpZPseudoKese(final CzechGeodeticPoint cgp, final Wpt wpt, final GpxWpt gpxwpt) {
@@ -595,68 +704,42 @@ public class KesoidImportBuilder implements IImportBuilder {
 		wpt.setNazev(name);
 	}
 
-	private JtskSouradnice extrahujJtsk(final String celyretez) {
-		if (patExtrakceSouradnicJtsk == null) {
-			patExtrakceSouradnicJtsk = Pattern.compile("(.*?)(\\d+)'(\\d+.\\d+) +(\\d+)'(\\d+\\.\\d+) (\\d+\\.\\d+)(.*)");
+	/**
+	 * @param aGpxwpt
+	 * @return
+	 */
+	private String urciSymCgpZPseudoKese(final GpxWpt gpxwpt) {
+		final EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
+		if (pseudoKesType == EKesType.TRADITIONAL) {
+			return gpxwpt.groundspeak.name.contains("ETRS") ? "TrB (ETRS)" : "TrB";
 		}
-		final Matcher mat = patExtrakceSouradnicJtsk.matcher(celyretez);
-		if (mat.matches()) {
-			final JtskSouradnice sou = new JtskSouradnice();
-			sou.pred = mat.group(1);
-			sou.y = Double.parseDouble(mat.group(2) + mat.group(3));
-			sou.x = Double.parseDouble(mat.group(4) + mat.group(5));
-			sou.z = Double.parseDouble(mat.group(6));
-			sou.po = mat.group(7);
-			return sou;
-		} else {
-			return null;
+		if (pseudoKesType == EKesType.LETTERBOX_HYBRID) {
+			return "TrB-p";
 		}
-	}
+		if (pseudoKesType == EKesType.MULTI) {
+			return "ZhB";
+		}
+		if (pseudoKesType == EKesType.UNKNOWN) {
+			return "ZhB-p";
+		}
+		if (pseudoKesType == EKesType.EARTHCACHE) {
+			return "BTP";
+		}
+		if (pseudoKesType == EKesType.WHERIGO) {
+			return "ZGS";
+		}
 
-	private Kesoid createKes(final GpxWpt gpxwpt) {
-		final Kes kes = new Kes();
-		kes.setIdentifier(gpxwpt.name);
-		kes.setAuthor(gpxwpt.groundspeak.placedBy);
-		// kes.setState(gpxwpt.groundspeak.state);
-		// kes.setCountry(gpxwpt.groundspeak.country);
-		kes.setHidden(gpxwpt.time);
-		kes.setHint(gpxwpt.groundspeak.encodedHints);
+		if (pseudoKesType == EKesType.EVENT) {
+			return "ZVBP";
+		}
+		if (pseudoKesType == EKesType.CACHE_IN_TRASH_OUT_EVENT) {
+			return "PVBP";
+		}
+		if (pseudoKesType == EKesType.MEGA_EVENT) {
+			return "ZNB";
+		}
 
-		kes.setTerrain(EKesDiffTerRating.parse(gpxwpt.groundspeak.terrain));
-		kes.setDifficulty(EKesDiffTerRating.parse(gpxwpt.groundspeak.difficulty));
-		kes.setSize(EKesSize.decode(gpxwpt.groundspeak.container));
-		// kes.set(gpxwpt.groundspeak.);
-		// kes.set(gpxwpt.groundspeak.);
-		kes.setStatus(urciStatus(gpxwpt.groundspeak.archived, gpxwpt.groundspeak.availaible));
-		kes.setVztahx(urciVztah(gpxwpt));
-		kes.setUrl(gpxwpt.link.href);
-
-		kes.setHodnoceni(gpxwpt.gpxg.hodnoceni);
-		kes.setHodnoceniPocet(gpxwpt.gpxg.hodnoceniPocet);
-		kes.setZnamka(gpxwpt.gpxg.znamka);
-		kes.setBestOf(gpxwpt.gpxg.bestOf);
-		kes.setFavorit(gpxwpt.gpxg.favorites);
-		kes.setFoundTime(gpxwpt.gpxg.found);
-
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setSym(gpxwpt.groundspeak.type);
-		wpt.setNazev(gpxwpt.groundspeak.name); // název hlavního waypointu shodný s názvem keše
-		wpt.setZorder(EZOrder.FIRST);
-
-		kes.addWpt(wpt);
-		kes.setMainWpt(wpt);
-
-		kes.setUserDefinedAlelas(definujUzivatslskeAlely(gpxwpt));
-		return kes;
-	}
-
-	private Wpt createAditionalWpt(final GpxWpt gpxwpt) {
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
-		final boolean rucnePridany = (gpxwpt.gpxg.flag & 1) == 0;
-		wpt.setRucnePridany(rucnePridany);
-		wpt.setZorder(EZOrder.KESWPT);
-		return wpt;
+		return "Unknown Cgp";
 	}
 
 	private EKesVztah urciVztah(final GpxWpt gpxwpt) {
@@ -675,16 +758,6 @@ public class KesoidImportBuilder implements IImportBuilder {
 			return EKesVztah.FOUND;
 		} else {
 			return EKesVztah.NORMAL;
-		}
-	}
-
-	protected EKesStatus urciStatus(final boolean archived, final boolean availaible) {
-		if (archived) {
-			return EKesStatus.ARCHIVED;
-		} else if (!availaible) {
-			return EKesStatus.DISABLED;
-		} else {
-			return EKesStatus.ACTIVE;
 		}
 	}
 
@@ -710,97 +783,24 @@ public class KesoidImportBuilder implements IImportBuilder {
 		return s;
 	}
 
-	private String extractOznaceniBodu(final String celeJmeno) {
-		if (celeJmeno == null) {
-			return null;
+	private boolean zkusPripojitKCgp(final Waymark wm, final Map<String, CzechGeodeticPoint> mapaPredTeckou) {
+		if (!wm.getMainWpt().getSym().equals("Czech Geodetic Points")) {
+			return false; // není to ani ta správná kategorie
 		}
-		if (patExtrakceCislaCgp == null) {
-			patExtrakceCislaCgp = Pattern.compile(".*?([0-9]+-[0-9]+).*");
+		final String oznaceniBodu = extractOznaceniBodu(wm.getNazev());
+		if (oznaceniBodu == null) {
+			return false; // tak ve jméně není označení, zobrazíme jako normální waymark
 		}
-		final Matcher mat = patExtrakceCislaCgp.matcher(celeJmeno);
-		if (mat.matches()) {
-			return mat.group(1);
-		} else {
-			return null;
+		final CzechGeodeticPoint cgp = mapaPredTeckou.get(oznaceniBodu);
+		if (cgp == null) {
+			return false; // nenašli jsme již existující
 		}
-	}
-
-	private int urciElevation(final GpxWpt gpxwpt) {
-		if (gpxwpt.ele != 0) {
-			return (int) gpxwpt.ele;
-		} else {
-			if (gpxwpt.gpxg != null) {
-				return gpxwpt.gpxg.elevation;
-			} else {
-				return 0;
-			}
-		}
-	}
-
-	private Wpt createWpt(final GpxWpt gpxwpt) {
-		final Wpt wpt = new Wpt();
-		wpt.setWgs(gpxwpt.wgs);
-		wpt.setElevation(urciElevation(gpxwpt));
-		wpt.setName(gpxwpt.name);
-		wpt.setNazev(vytvorNazev(gpxwpt));
-		return wpt;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#getKesBag()
-	 */
-	public KesBag getKesBag() {
-		return kesBag;
-	}
-
-	private Set<Alela> definujUzivatslskeAlely(final GpxWpt gpxwpt) {
-		final Set<Alela> alely = new HashSet<>();
-
-		for (final Map.Entry<String, String> entry : gpxwpt.gpxg.userTags.entrySet()) {
-			final String alelaName = entry.getValue();
-			final String genName = entry.getKey();
-			final Alela alela = genom.alela(alelaName, genName);
-			if (alela == null) {
-				continue;
-			}
-			alely.add(alela);
-		}
-
-		return alely;
-	}
-
-	public synchronized void setCurrentlyLoading(final KeFile aJmenoZdroje, final boolean nacteno) {
-		infoOCurrentnimZdroji = informaceOZdrojichBuilder.add(aJmenoZdroje, nacteno);
-	}
-
-	@Override
-	public void addTrackWpt(final GpxWpt wpt) {
-	}
-
-	@Override
-	public void begTrackSegment() {
-	}
-
-	@Override
-	public void endTrackSegment() {
-	}
-
-	@Override
-	public void begTrack() {
-	}
-
-	@Override
-	public void endTrack() {
-	}
-
-	@Override
-	public void setTrackName(final String aTrackName) {
-	}
-
-	@Override
-	public GpxWpt get(final String aName) {
-		return gpxwpts.get(aName);
+		// tak a tady musíme do cgp narvat vše, co víme
+		cgp.setVztahx(wm.getVztah());
+		cgp.getFirstWpt().setNazev(wm.getNazev());
+		cgp.setUrl(wm.getUrl());
+		cgp.setAuthor(wm.getAuthor());
+		cgp.setHidden(wm.getHidden());
+		return true;
 	}
 }

@@ -17,19 +17,12 @@ public class Alela {
 	private Grupa			grupa;
 	private final int		celkovePoradi;
 
-	/**
-	 * @return the grupa
-	 */
-	public Grupa getGrupa() {
-		return grupa;
-	}
-
-	/**
-	 * @param aGrupa
-	 *            the grupa to set
-	 */
-	public void setGrupa(final Grupa aGrupa) {
-		grupa = aGrupa;
+	public static Set<String> alelyToNames(final Set<Alela> alely) {
+		final Set<String> jmenaAlel = new HashSet<>(alely.size());
+		for (final Alela alela : alely) {
+			jmenaAlel.add(alela.name());
+		}
+		return jmenaAlel;
 	}
 
 	public Alela(final String alelaName, final int celkovePoradi) {
@@ -38,16 +31,12 @@ public class Alela {
 		this.celkovePoradi = celkovePoradi;
 	}
 
+	public int getCelkovePoradi() {
+		return celkovePoradi;
+	}
+
 	public String getDisplayName() {
 		return displayName;
-	}
-
-	public void setDisplayName(final String displayName) {
-		this.displayName = displayName == null ? alelaName : displayName;
-	}
-
-	public boolean hasGen() {
-		return gen != null;
 	}
 
 	public Gen getGen() {
@@ -57,13 +46,23 @@ public class Alela {
 		return gen;
 	}
 
-	public void setGen(final Gen gen) {
-		this.gen = gen;
+	public Genom getGenom() {
+		return getGen().getGenom();
 	}
 
-	@Override
-	public String toString() {
-		return alelaName;
+	/**
+	 * @return the grupa
+	 */
+	public Grupa getGrupa() {
+		return grupa;
+	}
+
+	public boolean hasGen() {
+		return gen != null;
+	}
+
+	public boolean isSym() {
+		return getGenom().isAlelaSym(this);
 	}
 
 	public boolean isVychozi() {
@@ -74,23 +73,24 @@ public class Alela {
 		return alelaName;
 	}
 
-	public static Set<String> alelyToNames(final Set<Alela> alely) {
-		final Set<String> jmenaAlel = new HashSet<>(alely.size());
-		for (final Alela alela : alely) {
-			jmenaAlel.add(alela.name());
-		}
-		return jmenaAlel;
+	public void setDisplayName(final String displayName) {
+		this.displayName = displayName == null ? alelaName : displayName;
 	}
 
-	public int getCelkovePoradi() {
-		return celkovePoradi;
+	public void setGen(final Gen gen) {
+		this.gen = gen;
 	}
 
-	public Genom getGenom() {
-		return getGen().getGenom();
+	/**
+	 * @param aGrupa
+	 *            the grupa to set
+	 */
+	public void setGrupa(final Grupa aGrupa) {
+		grupa = aGrupa;
 	}
 
-	public boolean isSym() {
-		return getGenom().isAlelaSym(this);
+	@Override
+	public String toString() {
+		return alelaName;
 	}
 }

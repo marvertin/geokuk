@@ -7,74 +7,25 @@ package cz.geokuk.plugins.mapy.kachle;
  *
  */
 public class DiagnosticsData {
+	public interface Listener {
+		public void send(DiagnosticsData data, String faze);
+	}
+
 	private final DiagnosticsData	parent;
 	private final String			nazev;
 	private final Object			dato;
+
 	private final Listener			listener;
+
+	public static DiagnosticsData create(final String nazev, final Object dato, final Listener listener) {
+		return new DiagnosticsData(null, nazev, dato, listener);
+	}
 
 	private DiagnosticsData(final DiagnosticsData parent, final String nazev, final Object dato, final Listener listener) {
 		this.parent = parent;
 		this.nazev = nazev;
 		this.dato = dato;
 		this.listener = listener;
-	}
-
-	public static DiagnosticsData create(final String nazev, final Object dato, final Listener listener) {
-		return new DiagnosticsData(null, nazev, dato, listener);
-	}
-
-	/**
-	 * Přidá další položku do diagnostickýc dat.
-	 *
-	 * @param nazev
-	 * @param dato
-	 * @return
-	 */
-	public DiagnosticsData with(final String nazev, final Object dato) {
-		return new DiagnosticsData(this, nazev, dato, listener);
-	}
-
-	private void addToString(final StringBuilder sb) {
-		if (parent != null) {
-			parent.addToString(sb);
-			sb.append("; ");
-		}
-		if (nazev != null || dato != null) {
-			if (nazev != null) {
-				sb.append(nazev);
-				sb.append("=");
-			}
-			sb.append(dato);
-		}
-	}
-
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("{");
-		addToString(sb);
-		sb.append("}");
-		return sb.toString();
-	}
-
-	public DiagnosticsData getParent() {
-		return parent;
-	}
-
-	public String getNazev() {
-		return nazev;
-	}
-
-	public Object getDato() {
-		return dato;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (dato == null ? 0 : dato.hashCode());
-		result = prime * result + (nazev == null ? 0 : nazev.hashCode());
-		return result;
 	}
 
 	@Override
@@ -106,6 +57,27 @@ public class DiagnosticsData {
 		return true;
 	}
 
+	public Object getDato() {
+		return dato;
+	}
+
+	public String getNazev() {
+		return nazev;
+	}
+
+	public DiagnosticsData getParent() {
+		return parent;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (dato == null ? 0 : dato.hashCode());
+		result = prime * result + (nazev == null ? 0 : nazev.hashCode());
+		return result;
+	}
+
 	/**
 	 * Pošle diagnostiku do listenera
 	 *
@@ -117,7 +89,36 @@ public class DiagnosticsData {
 		}
 	}
 
-	public interface Listener {
-		public void send(DiagnosticsData data, String faze);
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("{");
+		addToString(sb);
+		sb.append("}");
+		return sb.toString();
+	}
+
+	/**
+	 * Přidá další položku do diagnostickýc dat.
+	 *
+	 * @param nazev
+	 * @param dato
+	 * @return
+	 */
+	public DiagnosticsData with(final String nazev, final Object dato) {
+		return new DiagnosticsData(this, nazev, dato, listener);
+	}
+
+	private void addToString(final StringBuilder sb) {
+		if (parent != null) {
+			parent.addToString(sb);
+			sb.append("; ");
+		}
+		if (nazev != null || dato != null) {
+			if (nazev != null) {
+				sb.append(nazev);
+				sb.append("=");
+			}
+			sb.append(dato);
+		}
 	}
 }

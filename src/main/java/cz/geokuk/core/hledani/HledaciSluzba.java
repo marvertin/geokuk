@@ -12,6 +12,25 @@ import java.util.Map;
  */
 public class HledaciSluzba {
 
+	class Finishor<T extends Nalezenec0> {
+		private final RefreshorVysledkuHledani<T> refreshor;
+
+		/**
+		 * @param refreshor
+		 */
+		public Finishor(final RefreshorVysledkuHledani<T> refreshor) {
+			this.refreshor = refreshor;
+		}
+
+		void finish(final VysledekHledani<T> vysledekHledani) {
+			map.remove(refreshor);
+			if (vysledekHledani != null) { // poslat dál, jen když nebyl kancel
+				refreshor.refreshVysledekHledani(vysledekHledani);
+			}
+		}
+
+	}
+
 	private final Map<RefreshorVysledkuHledani<? extends Nalezenec0>, HledaciRunnableSwingWorker<? extends Nalezenec0>> map = new IdentityHashMap<>();
 
 	/**
@@ -34,25 +53,6 @@ public class HledaciSluzba {
 		map.put(refreshor, hledaciRunnable);
 		// System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnable) + ": EXECUTE");
 		hledaciRunnable.execute();
-	}
-
-	class Finishor<T extends Nalezenec0> {
-		private final RefreshorVysledkuHledani<T> refreshor;
-
-		/**
-		 * @param refreshor
-		 */
-		public Finishor(final RefreshorVysledkuHledani<T> refreshor) {
-			this.refreshor = refreshor;
-		}
-
-		void finish(final VysledekHledani<T> vysledekHledani) {
-			map.remove(refreshor);
-			if (vysledekHledani != null) { // poslat dál, jen když nebyl kancel
-				refreshor.refreshVysledekHledani(vysledekHledani);
-			}
-		}
-
 	}
 
 }

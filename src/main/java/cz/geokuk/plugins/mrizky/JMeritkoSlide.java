@@ -21,33 +21,9 @@ public class JMeritkoSlide extends JSingleSlide0 implements AfterInjectInit {
 		initComponents();
 	}
 
-	/**
-	 *
-	 */
-	private void initComponents() {
-		setLayout(new BorderLayout());
-		meritko = new JMeritko();
-		meritko.setBorder(BorderFactory.createEmptyBorder(0, 0, 25, 0));
-		add(meritko, BorderLayout.SOUTH);
-		// //add(new JMeritko(), BorderLayout.SOUTH);
-		// add(new JMeritko(), BorderLayout.WEST);
-		// add(new JMeritko(), BorderLayout.EAST);
-		// add(new JMeritko(), BorderLayout.NORTH);
-		// add(new JMeritko());
-
-	}
-
-	@SuppressWarnings("unused")
-	private void drawLine(final Graphics g, final int xx1, final int yy1, final int xx2, final int yy2) {
-		final Point p1 = getSoord().transform(new Mou(xx1, yy1));
-		final Point p2 = getSoord().transform(new Mou(xx2, yy2));
-		g.drawLine(p1.x, p1.y, p2.x, p2.y);
-
-	}
-
-	@BeanSubtype("Meritkovnik")
-	public void onEvent(final MrizkaEvent event) {
-		setVisible(event.onoff);
+	@Override
+	public JSingleSlide0 createRenderableSlide() {
+		return new JMeritkoSlide();
 	}
 
 	@Override
@@ -59,9 +35,9 @@ public class JMeritkoSlide extends JSingleSlide0 implements AfterInjectInit {
 		// }
 	}
 
-	@Override
-	public JSingleSlide0 createRenderableSlide() {
-		return new JMeritkoSlide();
+	@BeanSubtype("Meritkovnik")
+	public void onEvent(final MrizkaEvent event) {
+		setVisible(event.onoff);
 	}
 
 	@Override
@@ -84,6 +60,30 @@ public class JMeritkoSlide extends JSingleSlide0 implements AfterInjectInit {
 	protected void onVyrezChanged() {
 		meritko.setMaximalniSirkaMeritka(getSoord().getWidth() * 3 / 4);
 		meritko.setPixluNaMetr(getSoord().getPixluNaMetr());
+	}
+
+	@SuppressWarnings("unused")
+	private void drawLine(final Graphics g, final int xx1, final int yy1, final int xx2, final int yy2) {
+		final Point p1 = getSoord().transform(new Mou(xx1, yy1));
+		final Point p2 = getSoord().transform(new Mou(xx2, yy2));
+		g.drawLine(p1.x, p1.y, p2.x, p2.y);
+
+	}
+
+	/**
+	 *
+	 */
+	private void initComponents() {
+		setLayout(new BorderLayout());
+		meritko = new JMeritko();
+		meritko.setBorder(BorderFactory.createEmptyBorder(0, 0, 25, 0));
+		add(meritko, BorderLayout.SOUTH);
+		// //add(new JMeritko(), BorderLayout.SOUTH);
+		// add(new JMeritko(), BorderLayout.WEST);
+		// add(new JMeritko(), BorderLayout.EAST);
+		// add(new JMeritko(), BorderLayout.NORTH);
+		// add(new JMeritko());
+
 	}
 
 }

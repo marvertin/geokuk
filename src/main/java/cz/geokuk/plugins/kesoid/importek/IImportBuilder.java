@@ -6,15 +6,15 @@ public interface IImportBuilder {
 
 	void addTrackWpt(GpxWpt wpt);
 
-	void begTrackSegment();
-
-	void endTrackSegment();
-
 	void begTrack();
+
+	void begTrackSegment();
 
 	void endTrack();
 
-	void setTrackName(String aTrackName);
+	void endTrackSegment();
 
 	GpxWpt get(String name);
+
+	void setTrackName(String aTrackName);
 }

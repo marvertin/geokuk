@@ -94,6 +94,15 @@ public class OziExplorerRenderSwingWorker extends RendererSwingWorker0 {
 		}
 	}
 
+	private void printOziKalibracniBod(final PrintWriter p, final int cisloBodu, final int x, final int y, final Wgs wgs) {
+		final int latStup = (int) Math.floor(wgs.lat);
+		final int lonStup = (int) Math.floor(wgs.lon);
+		final double latMinut = (wgs.lat - latStup) * 60;
+		final double lonMinut = (wgs.lon - lonStup) * 60;
+		p.printf(Locale.ENGLISH, "Point%02d,xy,%d,%d,in, deg,%d,%10.3f,N,%d, %10.3f,E, grid,,,,N%n", cisloBodu, x, y, latStup, latMinut, lonStup, lonMinut);
+
+	}
+
 	private void printOziMetafile(final PrintWriter p, final String fileName, final int width, final int height, final Coord cocox, final int kalibrBodu, final List<Wgs> kalibody) {
 		final Wgs sz = cocox.transform(new Point(0, 0)).toWgs();
 		final Wgs sv = cocox.transform(new Point(width, 0)).toWgs();
@@ -131,15 +140,6 @@ public class OziExplorerRenderSwingWorker extends RendererSwingWorker0 {
 		p.printf(Locale.ENGLISH, "MMPLL,2,  %f,%f%n", sv.lon, sv.lat);
 		p.printf(Locale.ENGLISH, "MMPLL,3,  %f,%f%n", jv.lon, jv.lat);
 		p.printf(Locale.ENGLISH, "MMPLL,4,  %f,%f%n", jz.lon, jz.lat);
-
-	}
-
-	private void printOziKalibracniBod(final PrintWriter p, final int cisloBodu, final int x, final int y, final Wgs wgs) {
-		final int latStup = (int) Math.floor(wgs.lat);
-		final int lonStup = (int) Math.floor(wgs.lon);
-		final double latMinut = (wgs.lat - latStup) * 60;
-		final double lonMinut = (wgs.lon - lonStup) * 60;
-		p.printf(Locale.ENGLISH, "Point%02d,xy,%d,%d,in, deg,%d,%10.3f,N,%d, %10.3f,E, grid,,,,N%n", cisloBodu, x, y, latStup, latMinut, lonStup, lonMinut);
 
 	}
 

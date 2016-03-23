@@ -57,24 +57,50 @@ import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
 public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit, RefreshorVysledkuHledani<Nalezenec>, DocumentListener {
 
+	class CancelAction extends AbstractAction {
+		private static final long serialVersionUID = -480129891208539096L;
+
+		@Override
+		public void actionPerformed(final ActionEvent ev) {
+			// hilit.removeAllHighlights();
+			entry.setText("");
+			entry.setBackground(entryBg);
+		}
+	}
+
+	private final class SpousteniVyhledavace implements ChangeListener {
+
+		private boolean bylVybran;
+
+		@Override
+		public void stateChanged(final ChangeEvent e) {
+			final JCheckBox chb = (JCheckBox) e.getSource();
+			if (bylVybran != chb.isSelected()) {
+				bylVybran = chb.isSelected();
+				search();
+			}
+		}
+	}
+
 	private static final long	serialVersionUID	= 7087453419069194768L;
-
-	private JTextField			entry;
-	private JLabel				jLabel1;
-	private JButton				jButtonCentruj;
-	private JKesTable			jKeskovaciTabulka;
-	private JLabel				status;
-	private JCheckBox			jRegularniVyrazy;
-	private JCheckBox			jJenVZobrazenych;
-
 	final static Color			HILIT_COLOR			= Color.LIGHT_GRAY;
 	final static Color			ERROR_COLOR			= Color.PINK;
 	final static String			CANCEL_ACTION		= "cancel-search";
+	private JTextField			entry;
+	private JLabel				jLabel1;
 
+	private JButton				jButtonCentruj;
+	private JKesTable			jKeskovaciTabulka;
+	private JLabel				status;
+
+	private JCheckBox			jRegularniVyrazy;
+	private JCheckBox			jJenVZobrazenych;
 	final Color					entryBg;
+
 	// final Highlighter hilit;
 	// final Highlighter.HighlightPainter painter;
 	private KesBag				vsechny;
+
 	private KesBag				filtrovane;
 
 	private Wgs					referencniBod;
@@ -95,38 +121,109 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 
 	}
 
-	private void registerEvents() {
-		jRegularniVyrazy.addChangeListener(new SpousteniVyhledavace());
-		jJenVZobrazenych.addChangeListener(new SpousteniVyhledavace());
-
-		jButtonCentruj.addActionListener(e -> {
-
-			final Nalezenec nalezenec = jKeskovaciTabulka.getCurrent();
-			if (nalezenec != null) {
-				final Kesoid kes = nalezenec.getKes();
-				poziceModel.setPozice(kes.getMainWpt());
-				vyrezModel.vystredovatNaPozici();
-				// Board.eveman.fire(new PoziceChangedEvent(kes.getMainWpt(), true) );
-			}
-			// System.out.println("NEJBLIZSI KES: " + nejblizsiKes);
-		});
-
-		// Board.eveman.registerWeakly(this);
-
-		// jKeskovaciTabulka.getMod
-		jKeskovaciTabulka.addListSelectionListener(aE -> jButtonCentruj.setEnabled(jKeskovaciTabulka.getCurrent() != null));
+	@Override
+	public void changedUpdate(final DocumentEvent ev) {
 	}
 
-	public void onEvent(final KeskyVyfiltrovanyEvent aEvent) {
-		setFiltrovane(aEvent.getFiltrovane());
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
+	 */
+	@Override
+	public void initAfterInject() {
+		factory.init(jKeskovaciTabulka);
+	}
+
+	public void inject(final HledaciSluzba hledaciSluzba) {
+		this.hledaciSluzba = hledaciSluzba;
+	}
+
+	public void inject(final PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
+	}
+
+	public void inject(final VyrezModel vyrezModel) {
+		this.vyrezModel = vyrezModel;
+	}
+
+	@Override
+	public void insertUpdate(final DocumentEvent ev) {
+		search();
 	}
 
 	public void onEvent(final KeskyNactenyEvent aEvent) {
 		setVsechny(aEvent.getVsechny());
 	}
 
+	public void onEvent(final KeskyVyfiltrovanyEvent aEvent) {
+		setFiltrovane(aEvent.getFiltrovane());
+	}
+
+	// DocumentListener methods
+
 	public void onEvent(final ReferencniBodSeZmenilEvent aEvent) {
 		setReferencniBod(aEvent.wgs);
+	}
+
+	@Override
+	public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {
+		// if (nalezenci.size() == 0) {
+		// jButtonCentruj.setEnabled(false);
+		// } else {
+		// jButtonCentruj.setEnabled(true);
+		// }
+		if (vysledekHledani.nalezenci != null) {
+			jKeskovaciTabulka.setKeslist(vysledekHledani.nalezenci);
+			if (vysledekHledani.nalezenci.size() > 0) { // match found
+				entry.setBackground(entryBg);
+				message("Nalezeno " + vysledekHledani.nalezenci.size() + " keší.");
+			} else {
+				entry.setBackground(ERROR_COLOR);
+				message("Žádná shoda, stiskni ESC k výmazu hledacího pole.");
+			}
+		}
+		final Exception xexception = vysledekHledani.exception;
+		if (xexception instanceof PatternSyntaxException) {
+			final PatternSyntaxException exception = (PatternSyntaxException) xexception;
+			entry.setBackground(entryBg);
+			message(exception.getDescription() + " na pozici " + exception.getIndex());
+		}
+	}
+
+	@Override
+	public void removeUpdate(final DocumentEvent ev) {
+		search();
+	}
+
+	public void search() {
+		if (vsechny == null || filtrovane == null || referencniBod == null) {
+			return;
+		}
+		message("Hleda se ...");
+		final String s = entry.getText();
+		final HledaciPodminka podm = new HledaciPodminka();
+		podm.setStredHledani(referencniBod);
+		podm.setVzorek(s);
+		podm.setRegularniVyraz(jRegularniVyrazy.isSelected());
+		podm.setJenVZobrazenych(jJenVZobrazenych.isSelected());
+		final KesBag kde = jJenVZobrazenych.isSelected() ? filtrovane : vsechny;
+		hledaciSluzba.spustHledani(new Hledac(kde), podm, this);
+	}
+
+	public void setFiltrovane(final KesBag filtrovane) {
+		this.filtrovane = filtrovane;
+		search();
+	}
+
+	public void setVsechny(final KesBag vsechny) {
+		this.vsechny = vsechny;
+		search();
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "HledatVKesoidech";
 	}
 
 	/**
@@ -180,16 +277,6 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		pack();
 	}
 
-	public void setVsechny(final KesBag vsechny) {
-		this.vsechny = vsechny;
-		search();
-	}
-
-	public void setFiltrovane(final KesBag filtrovane) {
-		this.filtrovane = filtrovane;
-		search();
-	}
-
 	protected void setReferencniBod(final Wgs wgs) {
 		if (wgs.equals(referencniBod)) {
 			return;
@@ -198,116 +285,30 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		search();
 	}
 
-	public void search() {
-		if (vsechny == null || filtrovane == null || referencniBod == null) {
-			return;
-		}
-		message("Hleda se ...");
-		final String s = entry.getText();
-		final HledaciPodminka podm = new HledaciPodminka();
-		podm.setStredHledani(referencniBod);
-		podm.setVzorek(s);
-		podm.setRegularniVyraz(jRegularniVyrazy.isSelected());
-		podm.setJenVZobrazenych(jJenVZobrazenych.isSelected());
-		final KesBag kde = jJenVZobrazenych.isSelected() ? filtrovane : vsechny;
-		hledaciSluzba.spustHledani(new Hledac(kde), podm, this);
-	}
-
 	void message(final String msg) {
 		status.setText(msg);
 	}
 
-	// DocumentListener methods
+	private void registerEvents() {
+		jRegularniVyrazy.addChangeListener(new SpousteniVyhledavace());
+		jJenVZobrazenych.addChangeListener(new SpousteniVyhledavace());
 
-	@Override
-	public void insertUpdate(final DocumentEvent ev) {
-		search();
-	}
+		jButtonCentruj.addActionListener(e -> {
 
-	@Override
-	public void removeUpdate(final DocumentEvent ev) {
-		search();
-	}
-
-	@Override
-	public void changedUpdate(final DocumentEvent ev) {
-	}
-
-	private final class SpousteniVyhledavace implements ChangeListener {
-
-		private boolean bylVybran;
-
-		@Override
-		public void stateChanged(final ChangeEvent e) {
-			final JCheckBox chb = (JCheckBox) e.getSource();
-			if (bylVybran != chb.isSelected()) {
-				bylVybran = chb.isSelected();
-				search();
+			final Nalezenec nalezenec = jKeskovaciTabulka.getCurrent();
+			if (nalezenec != null) {
+				final Kesoid kes = nalezenec.getKes();
+				poziceModel.setPozice(kes.getMainWpt());
+				vyrezModel.vystredovatNaPozici();
+				// Board.eveman.fire(new PoziceChangedEvent(kes.getMainWpt(), true) );
 			}
-		}
-	}
+			// System.out.println("NEJBLIZSI KES: " + nejblizsiKes);
+		});
 
-	class CancelAction extends AbstractAction {
-		private static final long serialVersionUID = -480129891208539096L;
+		// Board.eveman.registerWeakly(this);
 
-		@Override
-		public void actionPerformed(final ActionEvent ev) {
-			// hilit.removeAllHighlights();
-			entry.setText("");
-			entry.setBackground(entryBg);
-		}
-	}
-
-	@Override
-	public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {
-		// if (nalezenci.size() == 0) {
-		// jButtonCentruj.setEnabled(false);
-		// } else {
-		// jButtonCentruj.setEnabled(true);
-		// }
-		if (vysledekHledani.nalezenci != null) {
-			jKeskovaciTabulka.setKeslist(vysledekHledani.nalezenci);
-			if (vysledekHledani.nalezenci.size() > 0) { // match found
-				entry.setBackground(entryBg);
-				message("Nalezeno " + vysledekHledani.nalezenci.size() + " keší.");
-			} else {
-				entry.setBackground(ERROR_COLOR);
-				message("Žádná shoda, stiskni ESC k výmazu hledacího pole.");
-			}
-		}
-		final Exception xexception = vysledekHledani.exception;
-		if (xexception instanceof PatternSyntaxException) {
-			final PatternSyntaxException exception = (PatternSyntaxException) xexception;
-			entry.setBackground(entryBg);
-			message(exception.getDescription() + " na pozici " + exception.getIndex());
-		}
-	}
-
-	public void inject(final PoziceModel poziceModel) {
-		this.poziceModel = poziceModel;
-	}
-
-	public void inject(final VyrezModel vyrezModel) {
-		this.vyrezModel = vyrezModel;
-	}
-
-	public void inject(final HledaciSluzba hledaciSluzba) {
-		this.hledaciSluzba = hledaciSluzba;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
-	 */
-	@Override
-	public void initAfterInject() {
-		factory.init(jKeskovaciTabulka);
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "HledatVKesoidech";
+		// jKeskovaciTabulka.getMod
+		jKeskovaciTabulka.addListSelectionListener(aE -> jButtonCentruj.setEnabled(jKeskovaciTabulka.getCurrent() != null));
 	}
 
 }

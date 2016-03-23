@@ -13,11 +13,11 @@ package cz.geokuk.util.lang;
  */
 public interface ADateComparable {
 
-	boolean isLess(ADate b);
-
-	boolean isLessOrEqual(ADate b);
-
 	boolean isGreater(ADate b);
 
 	boolean isGreaterOrEqual(ADate b);
+
+	boolean isLess(ADate b);
+
+	boolean isLessOrEqual(ADate b);
 }

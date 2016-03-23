@@ -38,12 +38,12 @@ public abstract class DialogOpeningAction0 extends Action0 {
 			mydialog = dialog;
 			dialog.addWindowListener(new WindowAdapter() {
 				@Override
-				public void windowClosing(final WindowEvent e) {
+				public void windowClosed(final WindowEvent e) {
 					mydialog = null;
 				}
 
 				@Override
-				public void windowClosed(final WindowEvent e) {
+				public void windowClosing(final WindowEvent e) {
 					mydialog = null;
 				}
 			});

@@ -11,32 +11,6 @@ public enum EKesDiffTerRating {
 
 	private static final Logger log = LogManager.getLogger(EKesDiffTerRating.class.getSimpleName());
 
-	public String toNumberString() {
-		if (this == UNKNOWN) {
-			return "0";
-		} else {
-			return String.valueOf(ordinal() / 2. + 1);
-		}
-	}
-
-	public String to2DigitNumberString() {
-		if (this == UNKNOWN) {
-			return "0";
-		} else {
-			return Integer.toString(ordinal() * 5 + 10);
-		}
-	}
-
-	public char toSingleChar() {
-		if (this == EKesDiffTerRating.UNKNOWN) {
-			return '?';
-		} else {
-			final int ordHalf = ordinal() / 2;
-			final char base = (ordinal() & 1) == 0 ? '1' : 'A';
-			return (char) (base + ordHalf);
-		}
-	}
-
 	public static EKesDiffTerRating parse(final String toParse) {
 		if (toParse == null) {
 			log.warn("Null passed as parameter to EKesDiffTerRating parser!");
@@ -55,6 +29,32 @@ public enum EKesDiffTerRating {
 		} catch (final NumberFormatException e) {
 			log.error("Unable to parse {} as float!", toParse);
 			return UNKNOWN;
+		}
+	}
+
+	public String to2DigitNumberString() {
+		if (this == UNKNOWN) {
+			return "0";
+		} else {
+			return Integer.toString(ordinal() * 5 + 10);
+		}
+	}
+
+	public String toNumberString() {
+		if (this == UNKNOWN) {
+			return "0";
+		} else {
+			return String.valueOf(ordinal() / 2. + 1);
+		}
+	}
+
+	public char toSingleChar() {
+		if (this == EKesDiffTerRating.UNKNOWN) {
+			return '?';
+		} else {
+			final int ordHalf = ordinal() / 2;
+			final char base = (ordinal() & 1) == 0 ? '1' : 'A';
+			return (char) (base + ordHalf);
 		}
 	}
 }

@@ -15,11 +15,15 @@ import javax.swing.SwingUtilities;
  */
 public abstract class Pocitadlo {
 
-	public static Callback	callback;
+	public static interface Callback {
+		public void onChange();
+	}
 
+	public static Callback	callback;
 	private int				val;
 	private final String	name;
 	private final String	description;
+
 	private final String	textovyPopisTypu;
 
 	/**
@@ -34,11 +38,16 @@ public abstract class Pocitadlo {
 		SpravcePocitadel.register(this);
 	}
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
+	public synchronized void add(final int diff) {
+		set(val + diff);
+	}
+
+	public synchronized void dec() {
+		sub(1);
+	}
+
+	public synchronized int get() {
+		return val;
 	}
 
 	/**
@@ -48,8 +57,19 @@ public abstract class Pocitadlo {
 		return description;
 	}
 
-	public synchronized int get() {
-		return val;
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	public String getTextovyPopisTypu() {
+		return textovyPopisTypu;
+	}
+
+	public synchronized void inc() {
+		add(1);
 	}
 
 	public synchronized void set(final int val) {
@@ -71,33 +91,13 @@ public abstract class Pocitadlo {
 		}
 	}
 
-	public synchronized void add(final int diff) {
-		set(val + diff);
-	}
-
 	public synchronized void sub(final int diff) {
 		set(val - diff);
-	}
-
-	public synchronized void inc() {
-		add(1);
-	}
-
-	public synchronized void dec() {
-		sub(1);
-	}
-
-	public String getTextovyPopisTypu() {
-		return textovyPopisTypu;
 	}
 
 	@Override
 	public String toString() {
 		return "Pocitadlo [val=" + val + ", name=" + name + "]";
-	}
-
-	public static interface Callback {
-		public void onChange();
 	}
 
 	// @Override

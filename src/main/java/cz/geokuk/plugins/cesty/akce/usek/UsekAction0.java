@@ -19,6 +19,11 @@ public abstract class UsekAction0 extends BousekAction0 implements AfterInjectIn
 		mou = usek.getNejblizsiBodKPrimce(mouMysi);
 	}
 
+	@Override
+	public final void actionPerformed(final ActionEvent aE) {
+		provedProUsek(usek, mou);
+	}
+
 	protected abstract boolean mamPovolitProUsek(Usek usek, Mou mou);
 
 	protected abstract void nastavJmenoAkce(Usek usek, Mou mou);
@@ -37,11 +42,6 @@ public abstract class UsekAction0 extends BousekAction0 implements AfterInjectIn
 		} else {
 			setEnabled(false);
 		}
-	}
-
-	@Override
-	public final void actionPerformed(final ActionEvent aE) {
-		provedProUsek(usek, mou);
 	}
 
 }

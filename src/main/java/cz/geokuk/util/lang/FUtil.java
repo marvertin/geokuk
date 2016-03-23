@@ -5,35 +5,13 @@ import java.util.Collection;
 
 public final class FUtil {
 
-	private FUtil() {
-	}
-
-	public static String cestinuPryc(final String s) {
-		int i;
-		final int n = s.length();
-		for (i = 0; i < n; i++) {
-			final char c = s.charAt(i);
-			if (c < 128) {
-				continue;
-			}
-			final char cc = FUtil.cestinuPryc(c);
-			if (cc != c) {
-				break;
-			}
+	public static <T> boolean addAll(final Collection<? super T> col, final Iterable<? extends T> iterable) {
+		boolean celkovaZmena = false;
+		for (final T tt : iterable) {
+			final boolean zmena = col.add(tt);
+			celkovaZmena = celkovaZmena || zmena;
 		}
-		if (i == n) {
-			return s; // není čeština
-		}
-		final StringBuilder sb = new StringBuilder(n);
-		sb.append(s.substring(0, i));
-		for (; i < n; i++) {
-			char c = s.charAt(i);
-			if (c >= 128) {
-				c = FUtil.cestinuPryc(c);
-			}
-			sb.append(c);
-		}
-		return sb.toString();
+		return celkovaZmena;
 	}
 
 	public static char cestinuPryc(final char c) {
@@ -114,6 +92,49 @@ public final class FUtil {
 
 	}
 
+	public static String cestinuPryc(final String s) {
+		int i;
+		final int n = s.length();
+		for (i = 0; i < n; i++) {
+			final char c = s.charAt(i);
+			if (c < 128) {
+				continue;
+			}
+			final char cc = FUtil.cestinuPryc(c);
+			if (cc != c) {
+				break;
+			}
+		}
+		if (i == n) {
+			return s; // není čeština
+		}
+		final StringBuilder sb = new StringBuilder(n);
+		sb.append(s.substring(0, i));
+		for (; i < n; i++) {
+			char c = s.charAt(i);
+			if (c >= 128) {
+				c = FUtil.cestinuPryc(c);
+			}
+			sb.append(c);
+		}
+		return sb.toString();
+	}
+
+	public static <T> boolean equalsa(final T o1, final T o2) {
+		return o1 == null && o2 == null || o1 != null && o1.equals(o2);
+	}
+
+	public static String getHtmlColor(final Color color) {
+		return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+	}
+
+	public static long soucetKvadratu(final int dx, final int dy) {
+		final long ldx = dx;
+		final long ldy = dy;
+		final long result = ldx * ldx + ldy * ldy;
+		return result;
+	}
+
 	public static String vycistiJmenoSouboru(final String s) {
 		if (s == null) {
 			return null;
@@ -165,28 +186,7 @@ public final class FUtil {
 
 	}
 
-	public static String getHtmlColor(final Color color) {
-		return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
-	}
-
-	public static <T> boolean equalsa(final T o1, final T o2) {
-		return o1 == null && o2 == null || o1 != null && o1.equals(o2);
-	}
-
-	public static <T> boolean addAll(final Collection<? super T> col, final Iterable<? extends T> iterable) {
-		boolean celkovaZmena = false;
-		for (final T tt : iterable) {
-			final boolean zmena = col.add(tt);
-			celkovaZmena = celkovaZmena || zmena;
-		}
-		return celkovaZmena;
-	}
-
-	public static long soucetKvadratu(final int dx, final int dy) {
-		final long ldx = dx;
-		final long ldy = dy;
-		final long result = ldx * ldx + ldy * ldy;
-		return result;
+	private FUtil() {
 	}
 
 }

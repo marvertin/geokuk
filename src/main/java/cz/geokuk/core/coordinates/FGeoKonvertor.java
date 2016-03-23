@@ -21,100 +21,8 @@ public class FGeoKonvertor {
 
 	private static UtmMgrsWgsConvertor	utmWgsConvertor				= new UtmMgrsWgsConvertor();
 
-	public static double normalizujUhel(double uhel) {
-		// TODO optimálněji, ale možná to v praxi stačí
-		if (Math.abs(uhel) > 10000) {
-			throw new RuntimeException("Proč se má normalizovat takový obludný úhel: " + uhel + " stupňů");
-		}
-		while (uhel >= 180) {
-			uhel -= 360;
-		}
-		while (uhel < -180) {
-			uhel += 360;
-		}
-		return uhel;
-	}
-
-	public static Mercator toMercator(final Wgs w) {
-		final double mx = w.lon * STUPEN_NA_ROVNIKU_V_METRECH;
-		final double my = log(tan(w.lat * (PI / 180) / 2 + PI / 4)) * RZ;
-		return new Mercator(mx, my);
-	}
-
-	public static Wgs toWgs(final Mercator w) {
-		final double lon = w.mx / STUPEN_NA_ROVNIKU_V_METRECH;
-		final double lat = (atan(exp(w.my / RZ)) - PI / 4) * (180 / PI) * 2;
-		return new Wgs(lat, lon);
-	}
-
-	public static Utm toUtm(final Wgs wgs) {
-		// String s = "33 U " + ux + " " + uy;
-		final String s = utmWgsConvertor.latLon2UTM(wgs.lat, wgs.lon);
-		final String[] utm = s.split(" ");
-		// zone = Integer.parseInt(utm[0]);
-		// String latBand = utm[1];
-		final double easting = Double.parseDouble(utm[2]);
-		final double northing = Double.parseDouble(utm[3]);
-		final int polednikovaZona = Integer.parseInt(utm[0]);
-		final char rovnobezkovaZona = utm[3].charAt(0);
-		return new Utm(easting, northing, polednikovaZona, rovnobezkovaZona);
-	}
-
-	public static Mercator toMercator(final Mou mou) {
-		final Mercator mer = new Mercator(mou.xx * Q_METRY_NA_MOU, mou.yy * Q_METRY_NA_MOU);
-		return mer;
-	}
-
-	public static Mou toMou(final Mercator mer) {
-		final double xxd = mer.mx / Q_METRY_NA_MOU;
-		final double yyd = mer.my / Q_METRY_NA_MOU;
-		final Mou mou = new Mou((int) xxd, (int) yyd);
-		return mou;
-
-	}
-
-	public static Wgs toWgs(final Utm utm) {
-		try {
-			final double[] utm2LatLon = utmWgsConvertor.utm2LatLon(utm.toString());
-			return new Wgs(utm2LatLon[0], utm2LatLon[1]);
-		} catch (final Exception e) {
-			throw new RuntimeException("Nelze převést na WGS: " + utm, e);
-		}
-	}
-
-	public static Mou toMou(final Wgs w) {
-		return toMou(toMercator(w));
-	}
-
-	public static Wgs toWgs(final Mou mou) {
-		return toWgs(toMercator(mou));
-	}
-
-	public static Utm toUtm(final Mercator mercator) {
-		return toUtm(toWgs(mercator));
-	}
-
-	public static Mercator toMercator(final Utm utm) {
-		return toMercator(toWgs(utm));
-	}
-
-	public static Utm toUtm(final Mou mou) {
-		return toUtm(toWgs(mou));
-	}
-
-	public static Mou toMou(final Utm utm) {
-		return toMou(toWgs(utm));
-	}
-
-	/**
-	 * Kolik metrůpřipadá na jeden krok mou, na dané šířce
-	 *
-	 * @param lat
-	 * @return
-	 */
-	public static double metryNaMou(final double lat) {
-		return Q_METRY_NA_MOU * Math.cos(lat / 180 * PI);
-
+	public static double dalka(final Mouable mouable1, final Mouable mouable2) {
+		return FGeoKonvertor.dalka(mouable1.getMou().toWgs(), mouable2.getMou().toWgs());
 	}
 
 	public static double dalka(final Wgs w1, final Wgs w2) {
@@ -141,12 +49,104 @@ public class FGeoKonvertor {
 		return dalka;
 	}
 
-	public static double dalka(final Mouable mouable1, final Mouable mouable2) {
-		return FGeoKonvertor.dalka(mouable1.getMou().toWgs(), mouable2.getMou().toWgs());
-	}
-
 	public static void main(final String[] args) {
 		System.out.println(-3.25 % 1);
+	}
+
+	/**
+	 * Kolik metrůpřipadá na jeden krok mou, na dané šířce
+	 *
+	 * @param lat
+	 * @return
+	 */
+	public static double metryNaMou(final double lat) {
+		return Q_METRY_NA_MOU * Math.cos(lat / 180 * PI);
+
+	}
+
+	public static double normalizujUhel(double uhel) {
+		// TODO optimálněji, ale možná to v praxi stačí
+		if (Math.abs(uhel) > 10000) {
+			throw new RuntimeException("Proč se má normalizovat takový obludný úhel: " + uhel + " stupňů");
+		}
+		while (uhel >= 180) {
+			uhel -= 360;
+		}
+		while (uhel < -180) {
+			uhel += 360;
+		}
+		return uhel;
+	}
+
+	public static Mercator toMercator(final Mou mou) {
+		final Mercator mer = new Mercator(mou.xx * Q_METRY_NA_MOU, mou.yy * Q_METRY_NA_MOU);
+		return mer;
+	}
+
+	public static Mercator toMercator(final Utm utm) {
+		return toMercator(toWgs(utm));
+	}
+
+	public static Mercator toMercator(final Wgs w) {
+		final double mx = w.lon * STUPEN_NA_ROVNIKU_V_METRECH;
+		final double my = log(tan(w.lat * (PI / 180) / 2 + PI / 4)) * RZ;
+		return new Mercator(mx, my);
+	}
+
+	public static Mou toMou(final Mercator mer) {
+		final double xxd = mer.mx / Q_METRY_NA_MOU;
+		final double yyd = mer.my / Q_METRY_NA_MOU;
+		final Mou mou = new Mou((int) xxd, (int) yyd);
+		return mou;
+
+	}
+
+	public static Mou toMou(final Utm utm) {
+		return toMou(toWgs(utm));
+	}
+
+	public static Mou toMou(final Wgs w) {
+		return toMou(toMercator(w));
+	}
+
+	public static Utm toUtm(final Mercator mercator) {
+		return toUtm(toWgs(mercator));
+	}
+
+	public static Utm toUtm(final Mou mou) {
+		return toUtm(toWgs(mou));
+	}
+
+	public static Utm toUtm(final Wgs wgs) {
+		// String s = "33 U " + ux + " " + uy;
+		final String s = utmWgsConvertor.latLon2UTM(wgs.lat, wgs.lon);
+		final String[] utm = s.split(" ");
+		// zone = Integer.parseInt(utm[0]);
+		// String latBand = utm[1];
+		final double easting = Double.parseDouble(utm[2]);
+		final double northing = Double.parseDouble(utm[3]);
+		final int polednikovaZona = Integer.parseInt(utm[0]);
+		final char rovnobezkovaZona = utm[3].charAt(0);
+		return new Utm(easting, northing, polednikovaZona, rovnobezkovaZona);
+	}
+
+	public static Wgs toWgs(final Mercator w) {
+		final double lon = w.mx / STUPEN_NA_ROVNIKU_V_METRECH;
+		final double lat = (atan(exp(w.my / RZ)) - PI / 4) * (180 / PI) * 2;
+		return new Wgs(lat, lon);
+	}
+
+	public static Wgs toWgs(final Mou mou) {
+		return toWgs(toMercator(mou));
+	}
+
+	public static Wgs toWgs(final Utm utm) {
+		try {
+			final double[] utm2LatLon = utmWgsConvertor.utm2LatLon(utm.toString());
+			return new Wgs(utm2LatLon[0], utm2LatLon[1]);
+		} catch (final Exception e) {
+			throw new RuntimeException("Nelze převést na WGS: " + utm, e);
+		}
 	}
 
 }

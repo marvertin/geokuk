@@ -17,6 +17,16 @@ public class MissingIcon implements Icon {
 	private final BasicStroke	stroke	= new BasicStroke(4);
 
 	@Override
+	public int getIconHeight() {
+		return height;
+	}
+
+	@Override
+	public int getIconWidth() {
+		return width;
+	}
+
+	@Override
 	public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
 		final Graphics2D g2d = (Graphics2D) g.create();
 
@@ -33,15 +43,5 @@ public class MissingIcon implements Icon {
 		g2d.drawLine(x + 10, y + height - 10, x + width - 10, y + 10);
 
 		g2d.dispose();
-	}
-
-	@Override
-	public int getIconWidth() {
-		return width;
-	}
-
-	@Override
-	public int getIconHeight() {
-		return height;
 	}
 }

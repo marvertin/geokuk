@@ -30,8 +30,8 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
 	public JDetailPrekryvnik() {
 	}
 
-	public void onEvent(final ZmenaSouradnicMysiEvent aEvent) {
-		moucur = aEvent.upravenaMys == null ? aEvent.moucur : aEvent.upravenaMys.getMou();
+	public void onEvent(final PoziceChangedEvent aEvent) {
+		poziceq = aEvent.poziceq;
 		nastav();
 	}
 
@@ -40,8 +40,8 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
 		nastav();
 	}
 
-	public void onEvent(final PoziceChangedEvent aEvent) {
-		poziceq = aEvent.poziceq;
+	public void onEvent(final ZmenaSouradnicMysiEvent aEvent) {
+		moucur = aEvent.upravenaMys == null ? aEvent.moucur : aEvent.upravenaMys.getMou();
 		nastav();
 	}
 
@@ -60,6 +60,16 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
 
 	}
 
+	private void nastavNaPozici() {
+		if (poziceq == null || poziceq.isNoPosition()) {
+			setVisible(false);
+		} else {
+			setSoord(getSoord().derive(DETAIL_MOUMER, poziceq.getWgs().toMou()));
+			repaint(); // musíme překreslit při změně středu
+			setVisible(true);
+		}
+	}
+
 	private void nastavSeSpozdenim() {
 		if (zpozdovaciTimer != null) {
 			zpozdovaciTimer.stop();
@@ -72,15 +82,5 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
 		});
 		zpozdovaciTimer.setRepeats(false);
 		zpozdovaciTimer.start();
-	}
-
-	private void nastavNaPozici() {
-		if (poziceq == null || poziceq.isNoPosition()) {
-			setVisible(false);
-		} else {
-			setSoord(getSoord().derive(DETAIL_MOUMER, poziceq.getWgs().toMou()));
-			repaint(); // musíme překreslit při změně středu
-			setVisible(true);
-		}
 	}
 }

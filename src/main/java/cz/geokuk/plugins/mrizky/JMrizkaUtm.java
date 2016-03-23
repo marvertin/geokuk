@@ -36,10 +36,6 @@ public class JMrizkaUtm extends JMrizka0 {
 		return mou;
 	}
 
-	private Utm getUtmStredu() {
-		return super.getSoord().getMoustred().toWgs().toUtm();
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -66,14 +62,24 @@ public class JMrizkaUtm extends JMrizka0 {
 		return uy;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
+	 */
 	@Override
-	public String getTextY(final double y) {
-		return (long) y + "";
+	public JSingleSlide0 createRenderableSlide() {
+		return new JMrizkaUtm();
 	}
 
 	@Override
 	public String getTextX(final double x) {
 		return (long) x + "";
+	}
+
+	@Override
+	public String getTextY(final double y) {
+		return (long) y + "";
 	}
 
 	/*
@@ -91,16 +97,6 @@ public class JMrizkaUtm extends JMrizka0 {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
-	 */
-	@Override
-	public JSingleSlide0 createRenderableSlide() {
-		return new JMrizkaUtm();
-	}
-
 	@Override
 	public boolean smimVykreslovat() {
 		final int polednikovaZonaVychod = getSoord().getMouV().toWgs().toUtm().polednikovaZona;
@@ -113,6 +109,10 @@ public class JMrizkaUtm extends JMrizka0 {
 		}
 		// JE to moc daleko od sebe, tak nevykreslujeme
 		return false;
+	}
+
+	private Utm getUtmStredu() {
+		return super.getSoord().getMoustred().toWgs().toUtm();
 	}
 
 }

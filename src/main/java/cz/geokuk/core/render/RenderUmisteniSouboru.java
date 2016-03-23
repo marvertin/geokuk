@@ -27,34 +27,6 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 
 	private Filex				pictureDir;
 
-	/**
-	 * @return the kmzDir
-	 */
-	public Filex getKmzDir() {
-		return kmzDir;
-	}
-
-	/**
-	 * @return the oziDir
-	 */
-	public Filex getOziDir() {
-		return oziDir;
-	}
-
-	public Filex getPictureDir() {
-		return pictureDir;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (kmzDir == null ? 0 : kmzDir.hashCode());
-		result = prime * result + (oziDir == null ? 0 : oziDir.hashCode());
-		result = prime * result + (pictureDir == null ? 0 : pictureDir.hashCode());
-		return result;
-	}
-
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -92,12 +64,31 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 	}
 
 	/**
-	 * @param aKesDir
+	 * @return the kmzDir
 	 */
-	private void check(final Filex file) {
-		if (file == null) {
-			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
-		}
+	public Filex getKmzDir() {
+		return kmzDir;
+	}
+
+	/**
+	 * @return the oziDir
+	 */
+	public Filex getOziDir() {
+		return oziDir;
+	}
+
+	public Filex getPictureDir() {
+		return pictureDir;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (kmzDir == null ? 0 : kmzDir.hashCode());
+		result = prime * result + (oziDir == null ? 0 : oziDir.hashCode());
+		result = prime * result + (pictureDir == null ? 0 : pictureDir.hashCode());
+		return result;
 	}
 
 	/**
@@ -121,6 +112,15 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 	public void setPictureDir(final Filex pictureDir) {
 		check(pictureDir);
 		this.pictureDir = pictureDir;
+	}
+
+	/**
+	 * @param aKesDir
+	 */
+	private void check(final Filex file) {
+		if (file == null) {
+			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
+		}
 	}
 
 }

@@ -28,6 +28,13 @@ public class OknoStatusChangedEvent extends Event0<OknoModel> {
 		return oknoUmisteni;
 	}
 
+	/**
+	 * @return the stavOkna
+	 */
+	public int getStavOkna() {
+		return stavOkna;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -36,13 +43,6 @@ public class OknoStatusChangedEvent extends Event0<OknoModel> {
 	@Override
 	public String toString() {
 		return "OknoStatusChangedEvent [oknoUmisteni=" + oknoUmisteni + ", stavOkna=" + stavOkna + "]";
-	}
-
-	/**
-	 * @return the stavOkna
-	 */
-	public int getStavOkna() {
-		return stavOkna;
 	}
 
 }

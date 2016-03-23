@@ -50,12 +50,12 @@ public class KesoidCodeToClipboard extends Action0 {
 		kesoidModel.pridejKodKesoiduDoClipboardu(kes);
 	}
 
+	public void inject(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+	}
+
 	public void onEvent(final PoziceChangedEvent event) {
 		poziceq = event.poziceq;
 		setEnabled(kesoid != null || poziceq.getWpt() != null);
-	}
-
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
 	}
 }

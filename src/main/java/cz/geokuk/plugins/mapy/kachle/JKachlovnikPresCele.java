@@ -4,16 +4,16 @@ import cz.geokuk.core.coord.JSingleSlide0;
 
 public class JKachlovnikPresCele extends JKachlovnik {
 
-	public JKachlovnikPresCele() {
-		super("Hlavní kachlovník", Priority.KACHLE);
-	}
-
 	private static final long serialVersionUID = -3170605712662727739L;
 	/*
 	 * (non-Javadoc)
 	 *
 	 * @see cz.geokuk.core.coord.JSingleSlide0#render(java.awt.Graphics)
 	 */
+
+	public JKachlovnikPresCele() {
+		super("Hlavní kachlovník", Priority.KACHLE);
+	}
 
 	/*
 	 * (non-Javadoc)

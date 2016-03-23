@@ -40,16 +40,16 @@ public class VlastnostiPismaModel {
 		listenerList.add(ChangeListener.class, l);
 	}
 
-	/**
-	 * Removes a ChangeListener from the model's listener list.
-	 *
-	 * @param l
-	 *            the ChangeListener to remove
-	 * @see #addChangeListener
-	 * @see SpinnerModel#removeChangeListener
-	 */
-	public void removeChangeListener(final ChangeListener l) {
-		listenerList.remove(ChangeListener.class, l);
+	public Color getBackground() {
+		return background;
+	}
+
+	public Font getFont() {
+		return font;
+	}
+
+	public Color getForeground() {
+		return foreground;
 	}
 
 	/**
@@ -77,6 +77,61 @@ public class VlastnostiPismaModel {
 		return listenerList.getListeners(listenerType);
 	}
 
+	public int getPosuX() {
+		return posuX;
+	}
+
+	public int getPosuY() {
+		return posuY;
+	}
+
+	/**
+	 * Removes a ChangeListener from the model's listener list.
+	 *
+	 * @param l
+	 *            the ChangeListener to remove
+	 * @see #addChangeListener
+	 * @see SpinnerModel#removeChangeListener
+	 */
+	public void removeChangeListener(final ChangeListener l) {
+		listenerList.remove(ChangeListener.class, l);
+	}
+
+	public void setBackground(final Color background) {
+		if (!Objects.equal(this.background, background)) {
+			this.background = background;
+			fireStateChanged();
+		}
+	}
+
+	public void setFont(final Font font) {
+		if (!Objects.equal(this.font, font)) {
+			this.font = font;
+			fireStateChanged();
+		}
+	}
+
+	public void setForeground(final Color foreground) {
+		if (!Objects.equal(this.foreground, foreground)) {
+			this.foreground = foreground;
+			fireStateChanged();
+		}
+	}
+
+	public void setPosuX(final int posuX) {
+		if (posuX != this.posuX) {
+			this.posuX = posuX;
+			fireStateChanged();
+		}
+	}
+
+	public void setPosuY(final int posuY) {
+		if (posuY != this.posuY) {
+			this.posuY = posuY;
+			fireStateChanged();
+		}
+	}
+
 	/**
 	 * Run each ChangeListeners stateChanged() method.
 	 *
@@ -89,61 +144,6 @@ public class VlastnostiPismaModel {
 			if (listeners[i] == ChangeListener.class) {
 				((ChangeListener) listeners[i + 1]).stateChanged(new ChangeEvent(this));
 			}
-		}
-	}
-
-	public Font getFont() {
-		return font;
-	}
-
-	public void setFont(final Font font) {
-		if (!Objects.equal(this.font, font)) {
-			this.font = font;
-			fireStateChanged();
-		}
-	}
-
-	public Color getForeground() {
-		return foreground;
-	}
-
-	public void setForeground(final Color foreground) {
-		if (!Objects.equal(this.foreground, foreground)) {
-			this.foreground = foreground;
-			fireStateChanged();
-		}
-	}
-
-	public Color getBackground() {
-		return background;
-	}
-
-	public void setBackground(final Color background) {
-		if (!Objects.equal(this.background, background)) {
-			this.background = background;
-			fireStateChanged();
-		}
-	}
-
-	public int getPosuX() {
-		return posuX;
-	}
-
-	public void setPosuX(final int posuX) {
-		if (posuX != this.posuX) {
-			this.posuX = posuX;
-			fireStateChanged();
-		}
-	}
-
-	public int getPosuY() {
-		return posuY;
-	}
-
-	public void setPosuY(final int posuY) {
-		if (posuY != this.posuY) {
-			this.posuY = posuY;
-			fireStateChanged();
 		}
 	}
 

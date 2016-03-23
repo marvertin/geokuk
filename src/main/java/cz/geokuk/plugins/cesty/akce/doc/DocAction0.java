@@ -18,8 +18,53 @@ public abstract class DocAction0 extends PositionedAction0 {
 	}
 
 	@Override
+	public final void actionPerformed(final ActionEvent aE) {
+		final Doc doc = getDoc();
+		if (doc != null) {
+			provedProDoc(doc);
+		}
+	}
+
+	/**
+	 * Zda se pro dany Cesta ma akce povolit.
+	 *
+	 * @param Cesta
+	 *            Nikdy nebude predano null
+	 * @return
+	 */
+	protected abstract boolean mamPovolitProDoc(Doc doc);
+
+	/**
+	 * Pokud je daný Cesta, tak se nechá natavit jméno. Natavovací metoda také ví, zda je akce z kontexotvého menu nebo z hlavního
+	 *
+	 * @param Cesta
+	 * @param aZKontextovehoMenu
+	 */
+	protected abstract void nastavJmenoAkce(Doc doc, boolean aZKontextovehoMenu);
+
+	/**
+	 * Provedení akce pro daný Cesta.
+	 *
+	 * @param Cesta
+	 */
+	protected abstract void provedProDoc(Doc doc);
+
+	@Override
 	protected final void vyletChanged() {
 		vyhodnotitPovolenost();
+	}
+
+	private Doc getDoc() {
+		if (curdoc() != null) {
+			curdoc().kontrolaKonzistence();
+		}
+		if (kontextovyDoc != null) {
+			// System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-getClass " + getClass());
+			// kontextovaCesta.kontrolaKonzistence();
+			return kontextovyDoc;
+		} else {
+			return curdoc();
+		}
 	}
 
 	private void vyhodnotitPovolenost() {
@@ -33,51 +78,6 @@ public abstract class DocAction0 extends PositionedAction0 {
 			} else {
 				setEnabled(false);
 			}
-		}
-	}
-
-	@Override
-	public final void actionPerformed(final ActionEvent aE) {
-		final Doc doc = getDoc();
-		if (doc != null) {
-			provedProDoc(doc);
-		}
-	}
-
-	/**
-	 * Pokud je daný Cesta, tak se nechá natavit jméno. Natavovací metoda také ví, zda je akce z kontexotvého menu nebo z hlavního
-	 *
-	 * @param Cesta
-	 * @param aZKontextovehoMenu
-	 */
-	protected abstract void nastavJmenoAkce(Doc doc, boolean aZKontextovehoMenu);
-
-	/**
-	 * Zda se pro dany Cesta ma akce povolit.
-	 *
-	 * @param Cesta
-	 *            Nikdy nebude predano null
-	 * @return
-	 */
-	protected abstract boolean mamPovolitProDoc(Doc doc);
-
-	/**
-	 * Provedení akce pro daný Cesta.
-	 *
-	 * @param Cesta
-	 */
-	protected abstract void provedProDoc(Doc doc);
-
-	private Doc getDoc() {
-		if (curdoc() != null) {
-			curdoc().kontrolaKonzistence();
-		}
-		if (kontextovyDoc != null) {
-			// System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-getClass " + getClass());
-			// kontextovaCesta.kontrolaKonzistence();
-			return kontextovyDoc;
-		} else {
-			return curdoc();
 		}
 	}
 

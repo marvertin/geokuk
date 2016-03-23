@@ -16,9 +16,23 @@ import cz.geokuk.util.pocitadla.PocitadloRoste;
 
 public class KachloDownloader {
 
-	private final Pocitadlo							pocitDownloadleDlazdice	= new PocitadloRoste("Downloadlé dlaždice", "Počet dlaždic, které byly downloadovány.");
+	/**
+	 * Nepřejmenovávat hodnoty, odvozuje se z něj název resourcu
+	 */
+	public static enum EPraznyObrazek {
+		OFFLINE, ERROR, BEZ_PODKLADU;
+
+		/**
+		 * @return
+		 */
+		public String getRecourceName() {
+			return name() + ".png";
+		}
+	}
 
 	private static final Logger						log						= LogManager.getLogger(KachloDownloader.class.getSimpleName());
+
+	private final Pocitadlo							pocitDownloadleDlazdice	= new PocitadloRoste("Downloadlé dlaždice", "Počet dlaždic, které byly downloadovány.");
 
 	private final EnumMap<EPraznyObrazek, Image>	prazdneObrazky			= new EnumMap<>(EPraznyObrazek.class);
 
@@ -90,19 +104,5 @@ public class KachloDownloader {
 			prazdneObrazky.put(typPrazdnehoObrazku, image);
 		}
 		return image;
-	}
-
-	/**
-	 * Nepřejmenovávat hodnoty, odvozuje se z něj název resourcu
-	 */
-	public static enum EPraznyObrazek {
-		OFFLINE, ERROR, BEZ_PODKLADU;
-
-		/**
-		 * @return
-		 */
-		public String getRecourceName() {
-			return name() + ".png";
-		}
 	}
 }

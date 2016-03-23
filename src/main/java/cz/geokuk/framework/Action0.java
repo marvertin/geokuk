@@ -28,16 +28,16 @@ public abstract class Action0 extends AbstractAction {
 	private MainFrameHolder		mainFrameHolder;
 
 	/**
+	 *
+	 */
+	public Action0() {
+	}
+
+	/**
 	 * @param string
 	 */
 	public Action0(final String string) {
 		super(string);
-	}
-
-	/**
-	 *
-	 */
-	public Action0() {
 	}
 
 	/**
@@ -46,10 +46,6 @@ public abstract class Action0 extends AbstractAction {
 	 */
 	public Action0(final String aString, final Icon aIcon) {
 		super(aString, aIcon);
-	}
-
-	public Icon getIcon() {
-		return (Icon) getValue(Action.SMALL_ICON);
 	}
 
 	/**
@@ -69,15 +65,16 @@ public abstract class Action0 extends AbstractAction {
 		actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand(), EventQueue.getMostRecentEventTime(), modifiers));
 	}
 
-	/**
-	 * @return
-	 */
-	protected String getActionCommand() {
-		return null;
+	public Icon getIcon() {
+		return (Icon) getValue(Action.SMALL_ICON);
 	}
 
 	public void inject(final Factory factory) {
 		this.factory = factory;
+	}
+
+	public void inject(final MainFrameHolder mainFrameHolder) {
+		this.mainFrameHolder = mainFrameHolder;
 	}
 
 	public void inject(final PoziceModel poziceModel) {
@@ -89,16 +86,19 @@ public abstract class Action0 extends AbstractAction {
 	}
 
 	/**
+	 * @return
+	 */
+	protected String getActionCommand() {
+		return null;
+	}
+
+	/**
 	 * Výhradně za účelem definování parenta dialogům.
 	 *
 	 * @return
 	 */
 	protected JFrame getMainFrame() {
 		return mainFrameHolder.getMainFrame();
-	}
-
-	public void inject(final MainFrameHolder mainFrameHolder) {
-		this.mainFrameHolder = mainFrameHolder;
 	}
 
 }

@@ -20,6 +20,11 @@ public class Waymark extends Kesoid {
 		return EKesoidKind.WAYMARK;
 	}
 
+	@Override
+	public Icon getUrlIcon() {
+		return ImageLoader.seekResIcon("waymarking.png");
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -52,11 +57,6 @@ public class Waymark extends Kesoid {
 			sb.append("  (").append(wpt.getName()).append(")");
 			sb.append("</small>");
 		}
-	}
-
-	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("waymarking.png");
 	}
 
 }

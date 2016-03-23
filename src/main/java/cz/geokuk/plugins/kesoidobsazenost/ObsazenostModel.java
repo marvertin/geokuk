@@ -28,21 +28,21 @@ public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, O
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#visiblexxx()
-	 */
-	@Override
-	protected Onoff<ObsazenostModel> visiblexxx() {
-		return visible;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#getOnoffEventClass()
 	 */
 	@Override
 	protected Class<? extends OnoffEvent0<ObsazenostModel>> getOnoffEventClass() {
 		return ObsazenostOnoffEvent.class;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#getVisibleFromPreferences(boolean)
+	 */
+	@Override
+	protected boolean getVisibleFromPreferences(final boolean defaultOnoff) {
+		return currPrefe().node(FPref.MRIZKA_node).getBoolean(FPref.ZOBRAZ_OBSAZENOST_value, defaultOnoff);
 	}
 
 	/*
@@ -68,11 +68,11 @@ public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, O
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#getVisibleFromPreferences(boolean)
+	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#visiblexxx()
 	 */
 	@Override
-	protected boolean getVisibleFromPreferences(final boolean defaultOnoff) {
-		return currPrefe().node(FPref.MRIZKA_node).getBoolean(FPref.ZOBRAZ_OBSAZENOST_value, defaultOnoff);
+	protected Onoff<ObsazenostModel> visiblexxx() {
+		return visible;
 	}
 
 }

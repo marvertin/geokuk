@@ -22,15 +22,18 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
 		super(false, true);
 	}
 
+	public void inject(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+	}
+
 	public void resetBag(final IkonBag bag, final KesBag kesBag, final Set<String> aJmenaVybranychAlel) {
 		this.kesBag = kesBag;
 		refresh(bag, aJmenaVybranychAlel, kesBag.getPoctyAlel());
 	}
 
 	@Override
-	protected void zmenaVyberu(final Set<Alela> aAlely) {
-		System.out.println("Vyber alel, které se Filtrují pryč: " + aAlely);
-		kesoidModel.setJmenaNechtenychAlel(Alela.alelyToNames(aAlely));
+	protected boolean shouldEnable(final Alela alela) {
+		return true;
 	}
 
 	/*
@@ -56,12 +59,9 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
 	}
 
 	@Override
-	protected boolean shouldEnable(final Alela alela) {
-		return true;
-	}
-
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
+	protected void zmenaVyberu(final Set<Alela> aAlely) {
+		System.out.println("Vyber alel, které se Filtrují pryč: " + aAlely);
+		kesoidModel.setJmenaNechtenychAlel(Alela.alelyToNames(aAlely));
 	}
 
 }

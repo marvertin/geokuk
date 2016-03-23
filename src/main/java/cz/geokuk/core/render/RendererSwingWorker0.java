@@ -16,19 +16,6 @@ public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, 
 	protected Factory		factory;
 	protected Progressor	progressor;
 
-	public void inject(final RenderModel renderModel) {
-		this.renderModel = renderModel;
-	}
-
-	public void inject(final ProgressModel progressModel) {
-		this.progressModel = progressModel;
-	}
-
-	public void inject(final Factory factory) {
-		this.factory = factory;
-
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -37,6 +24,19 @@ public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, 
 	@Override
 	public void initAfterInject() {
 		progressor = progressModel.start(0, "xxx");
+	}
+
+	public void inject(final Factory factory) {
+		this.factory = factory;
+
+	}
+
+	public void inject(final ProgressModel progressModel) {
+		this.progressModel = progressModel;
+	}
+
+	public void inject(final RenderModel renderModel) {
+		this.renderModel = renderModel;
 	}
 
 	/*

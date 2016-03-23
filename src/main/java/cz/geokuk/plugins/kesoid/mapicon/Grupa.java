@@ -12,11 +12,9 @@ public class Grupa {
 
 	private final Set<Alela>	alely					= new LinkedHashSet<>();
 
-	/**
-	 * @return the alely
-	 */
-	public Set<Alela> getAlely() {
-		return Collections.unmodifiableSet(alely);
+	public Grupa(final String grupaName) {
+		this.grupaName = grupaName;
+		displayName = grupaName;
 	}
 
 	public synchronized void add(final Alela alela) {
@@ -32,9 +30,11 @@ public class Grupa {
 		}
 	}
 
-	public Grupa(final String grupaName) {
-		this.grupaName = grupaName;
-		displayName = grupaName;
+	/**
+	 * @return the alely
+	 */
+	public Set<Alela> getAlely() {
+		return Collections.unmodifiableSet(alely);
 	}
 
 	public String getDisplayName() {
@@ -45,16 +45,16 @@ public class Grupa {
 		return IMPLICITNI_GRUPA_NAME.equals(grupaName);
 	}
 
+	public String name() {
+		return grupaName;
+	}
+
 	public void setDisplayName(final String displayName) {
 		this.displayName = displayName;
 	}
 
 	@Override
 	public String toString() {
-		return grupaName;
-	}
-
-	public String name() {
 		return grupaName;
 	}
 

@@ -26,34 +26,17 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 		validate();
 	}
 
-	/**
-	 * Minimální délka Stringu. Následník může přepsat, pokud má být minimální hodnota jiná. Předefinovaná metoda by měla pokud možno vracet konstantu.
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	protected int minLength() {
-		return 0;
-	}
-
-	/**
-	 * Maximální délka Stringu. Následník může přepsat, pokud má být maximální hodnota jiná. Předefinovaná metoda by měla pokud možno vracet konstantu.
-	 */
-	protected int maxLength() {
-		return Integer.MAX_VALUE;
-	}
-
-	/**
-	 * Kontrola rozsahu. Metoda se volá z konstruktoru a kontroluje rozsah.
-	 */
-	protected final void checkRange() {
-		if (!(minLength() <= iValue.length() && iValue.length() <= maxLength())) {
-			throw new XCreateElement("Hodnota \"" + iValue + "\" není v požadovaném intervalu <" + minLength() + "," + maxLength() + ">");
+	@Override
+	public int compareTo(final AString0 aObject) {
+		if (aObject == null) {
+			throw new IllegalArgumentException("Cannot compare with null");
 		}
-	}
-
-	/**
-	 * Kontrola platnosti typu. Metoda je volána z kosntruktoru poté, co byla provedena validace rozsahu dély řetězce. V okamžiku volání je zřejmé, že hodnota iValue není null, neobsahuje koncové mezery a je ve stanoveném rozsahu. Metoda v případě nevalidity vyhazuje nečekovanou výjimku. Neplést s
-	 * metodou isValid(), to je jiná validita (menší váha).
-	 */
-	protected void validate() {
+		return iValue.compareTo(aObject.iValue);
 	}
 
 	/**
@@ -87,17 +70,34 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 		return iValue;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	/**
+	 * Kontrola rozsahu. Metoda se volá z konstruktoru a kontroluje rozsah.
 	 */
-	@Override
-	public int compareTo(final AString0 aObject) {
-		if (aObject == null) {
-			throw new IllegalArgumentException("Cannot compare with null");
+	protected final void checkRange() {
+		if (!(minLength() <= iValue.length() && iValue.length() <= maxLength())) {
+			throw new XCreateElement("Hodnota \"" + iValue + "\" není v požadovaném intervalu <" + minLength() + "," + maxLength() + ">");
 		}
-		return iValue.compareTo(aObject.iValue);
+	}
+
+	/**
+	 * Maximální délka Stringu. Následník může přepsat, pokud má být maximální hodnota jiná. Předefinovaná metoda by měla pokud možno vracet konstantu.
+	 */
+	protected int maxLength() {
+		return Integer.MAX_VALUE;
+	}
+
+	/**
+	 * Minimální délka Stringu. Následník může přepsat, pokud má být minimální hodnota jiná. Předefinovaná metoda by měla pokud možno vracet konstantu.
+	 */
+	protected int minLength() {
+		return 0;
+	}
+
+	/**
+	 * Kontrola platnosti typu. Metoda je volána z kosntruktoru poté, co byla provedena validace rozsahu dély řetězce. V okamžiku volání je zřejmé, že hodnota iValue není null, neobsahuje koncové mezery a je ve stanoveném rozsahu. Metoda v případě nevalidity vyhazuje nečekovanou výjimku. Neplést s
+	 * metodou isValid(), to je jiná validita (menší váha).
+	 */
+	protected void validate() {
 	}
 
 }

@@ -30,6 +30,21 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
 		init();
 	}
 
+	public void inject(final NapovedaModel napovedaModel) {
+		this.napovedaModel = napovedaModel;
+		for (final ZpravaUzivateli zprava : zpravyUzivatelum) {
+			if (zprava.msgnum >= napovedaModel.getLastViewedMsgNum()) { // rovnost raději ne, ale procházíme postupně
+				ukazatel = zpravyUzivatelum.indexOf(zprava);
+			}
+		}
+		ukazatel = 0; // když nenalezeno nic tak na začátek
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "ZpravyUzivatelum";
+	}
+
 	@Override
 	protected void initComponents() {
 
@@ -73,13 +88,6 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
 
 	}
 
-	private void naplndaty() {
-		ukazatel = Math.min(Math.max(0, ukazatel), zpravyUzivatelum.size() - 1);
-		editorPane.setText("<html>" + zpravyUzivatelum.get(ukazatel).text);
-		jDalsi.setEnabled(ukazatel < zpravyUzivatelum.size() - 1);
-		jPredchozi.setEnabled(ukazatel > 0);
-	}
-
 	private void grlay(final JPanel panel) {
 		final GroupLayout layout = new GroupLayout(panel);
 		// panel.setBorder(BorderFactory.createTitledBorder("Nastvit nickVzorky popisků: " + SestavovacPopisku.getNahrazovaceDisplay()));
@@ -98,19 +106,11 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
 				.addComponent(jZpravy).addGroup(layout.createParallelGroup().addComponent(jDalsi).addComponent(jPredchozi).addComponent(jPrecteno)));
 	}
 
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "ZpravyUzivatelum";
-	}
-
-	public void inject(final NapovedaModel napovedaModel) {
-		this.napovedaModel = napovedaModel;
-		for (final ZpravaUzivateli zprava : zpravyUzivatelum) {
-			if (zprava.msgnum >= napovedaModel.getLastViewedMsgNum()) { // rovnost raději ne, ale procházíme postupně
-				ukazatel = zpravyUzivatelum.indexOf(zprava);
-			}
-		}
-		ukazatel = 0; // když nenalezeno nic tak na začátek
+	private void naplndaty() {
+		ukazatel = Math.min(Math.max(0, ukazatel), zpravyUzivatelum.size() - 1);
+		editorPane.setText("<html>" + zpravyUzivatelum.get(ukazatel).text);
+		jDalsi.setEnabled(ukazatel < zpravyUzivatelum.size() - 1);
+		jPredchozi.setEnabled(ukazatel > 0);
 	}
 
 }

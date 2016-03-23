@@ -13,13 +13,6 @@ public enum EImageType {
 	private final boolean umoznujePruhlednost;
 
 	/**
-	 * @return the umoznujePruhlednost
-	 */
-	public boolean isUmoznujePruhlednost() {
-		return umoznujePruhlednost;
-	}
-
-	/**
 	 *
 	 */
 	private EImageType(final boolean umoznujePruhlednost) {
@@ -29,5 +22,12 @@ public enum EImageType {
 	public String getType() {
 		return name().toLowerCase();
 
+	}
+
+	/**
+	 * @return the umoznujePruhlednost
+	 */
+	public boolean isUmoznujePruhlednost() {
+		return umoznujePruhlednost;
 	}
 }

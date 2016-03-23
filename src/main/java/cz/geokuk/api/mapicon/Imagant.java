@@ -43,6 +43,18 @@ public class Imagant {
 		return imagant;
 	}
 
+	public void computeInsets(final Repaintanger repaintanger) {
+		final Insets insets = new Insets(-getYpos(), -getXpos(), getYpos() + image.getHeight(), getXpos() + image.getWidth());
+		repaintanger.include(insets);
+	}
+
+	/**
+	 * @return the image
+	 */
+	public BufferedImage getImage() {
+		return image;
+	}
+
 	/**
 	 * @return the xpos
 	 */
@@ -55,13 +67,6 @@ public class Imagant {
 	 */
 	public int getYpos() {
 		return y0 + yoffset;
-	}
-
-	/**
-	 * @return the image
-	 */
-	public BufferedImage getImage() {
-		return image;
 	}
 
 	/**
@@ -78,11 +83,6 @@ public class Imagant {
 	 */
 	public void setYoffset(final int aYoffset) {
 		yoffset = aYoffset;
-	}
-
-	public void computeInsets(final Repaintanger repaintanger) {
-		final Insets insets = new Insets(-getYpos(), -getXpos(), getYpos() + image.getHeight(), getXpos() + image.getWidth());
-		repaintanger.include(insets);
 	}
 
 }

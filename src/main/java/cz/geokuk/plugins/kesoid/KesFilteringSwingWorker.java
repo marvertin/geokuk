@@ -20,17 +20,22 @@ import cz.geokuk.util.index2d.BoundingRect;
  */
 public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
+	private static class Dvojka {
+		Wpt		wpt;
+		Genotyp	genotyp;
+	}
+
 	private static final Logger	log		= LogManager.getLogger(KesFilteringSwingWorker.class.getSimpleName());
-
 	private static final Dvojka	ZARAZKA	= new Dvojka();
-	private static int			citac;
 
+	private static int			citac;
 	private final KesBag		vsechny;
 	private final Genom			iGenom;
 	private final int			cisloFiltrovani;
 	private long				startTime;
 	private final KesFilter		kesfilter;
 	private final ProgressModel	progresModel;
+
 	private final KesoidModel	kesoidModel;
 
 	/**
@@ -126,10 +131,5 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 		kesoidModel.fire(new KeskyVyfiltrovanyEvent(result, vsechny));
 		log.debug("FILTERING {} - finished, filtered {} caches, {}={} waypoints, {} ms.\n", cisloFiltrovani, result.getKesoidy().size(), result.getWpts().size(),
 				result.getIndexator().count(BoundingRect.ALL), System.currentTimeMillis() - startTime);
-	}
-
-	private static class Dvojka {
-		Wpt		wpt;
-		Genotyp	genotyp;
 	}
 }

@@ -53,6 +53,33 @@ public class JErrorDialog extends JMyDialog0 {
 	private JButton				jOtviracVyjimky;
 	private AExcId				currentExcId;
 
+	public static void main(final String args[]) {
+
+		// Schedule a job for the event dispatch thread:
+		// creating and showing this application's GUI.
+
+		final JFrame frm = new JFrame();
+		frm.setVisible(true);
+
+		new Timer(1000, aE -> {
+			System.out.println("LOPU");
+			FError.report("To je teda texytik " + System.currentTimeMillis());
+		}).start();
+
+		// SwingUtilities.invokeLater(new Runnable() {
+		// public void run() {
+		// //Turn off metal's use of bold fonts
+		// // UIManager.put("swing.boldMetal", Boolean.FALSE);
+		// JErrorDialog jErrorDialog = new JErrorDialog(null);
+		// jErrorDialog.setVisible(true);
+		// for (int i = 0; i < 100; i++) {
+		// AExcId excid = FExceptionDumper.dump(new RuntimeException("Jen takova pokusna"), EExceptionSeverity.DISPLAY, "Pokusnik.");
+		// jErrorDialog.addProblem("Problem: " + i, excid);
+		// }
+		// }
+		// });
+	}
+
 	public JErrorDialog() {
 		setTitle("Přehled problémů");
 		init();
@@ -61,8 +88,14 @@ public class JErrorDialog extends JMyDialog0 {
 
 	}
 
-	private void registerEvents() {
-		// Board.eveman.registerWeakly(this);
+	public void addProblem(final String problem, final AExcId excid) {
+		jErrorTable.addProblem(problem, excid);
+		jErrorTable.repaint(50);
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "ErrorList";
 	}
 
 	/**
@@ -124,41 +157,8 @@ public class JErrorDialog extends JMyDialog0 {
 		pack();
 	}
 
-	public void addProblem(final String problem, final AExcId excid) {
-		jErrorTable.addProblem(problem, excid);
-		jErrorTable.repaint(50);
-	}
-
-	public static void main(final String args[]) {
-
-		// Schedule a job for the event dispatch thread:
-		// creating and showing this application's GUI.
-
-		final JFrame frm = new JFrame();
-		frm.setVisible(true);
-
-		new Timer(1000, aE -> {
-			System.out.println("LOPU");
-			FError.report("To je teda texytik " + System.currentTimeMillis());
-		}).start();
-
-		// SwingUtilities.invokeLater(new Runnable() {
-		// public void run() {
-		// //Turn off metal's use of bold fonts
-		// // UIManager.put("swing.boldMetal", Boolean.FALSE);
-		// JErrorDialog jErrorDialog = new JErrorDialog(null);
-		// jErrorDialog.setVisible(true);
-		// for (int i = 0; i < 100; i++) {
-		// AExcId excid = FExceptionDumper.dump(new RuntimeException("Jen takova pokusna"), EExceptionSeverity.DISPLAY, "Pokusnik.");
-		// jErrorDialog.addProblem("Problem: " + i, excid);
-		// }
-		// }
-		// });
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "ErrorList";
+	private void registerEvents() {
+		// Board.eveman.registerWeakly(this);
 	}
 
 }

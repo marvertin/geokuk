@@ -25,15 +25,9 @@ public class JNastavovecMeritka extends JSpinner implements AfterEventReceiverRe
 		// setMaximumSize(new Dimension(35, 22));
 	}
 
-	public void onEvent(final ZmenaMapNastalaEvent event) {
-		final EKaType podklad = event.getKaSet().getPodklad();
-		iModel.setMinimum(podklad.getMinMoumer());
-		iModel.setMaximum(podklad.getMaxMoumer());
-		iModel.setValue(podklad.fitMoumer((Integer) iModel.getValue()));
-	}
-
-	public void onEvent(final PripravaRendrovaniEvent event) {
-		iModel.setValue(event.getRenderSettings().getRenderedMoumer());
+	@Override
+	public Dimension getMaximumSize() {
+		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
 	}
 
 	@Override
@@ -50,9 +44,15 @@ public class JNastavovecMeritka extends JSpinner implements AfterEventReceiverRe
 
 	}
 
-	@Override
-	public Dimension getMaximumSize() {
-		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	public void onEvent(final PripravaRendrovaniEvent event) {
+		iModel.setValue(event.getRenderSettings().getRenderedMoumer());
+	}
+
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		final EKaType podklad = event.getKaSet().getPodklad();
+		iModel.setMinimum(podklad.getMinMoumer());
+		iModel.setMaximum(podklad.getMaxMoumer());
+		iModel.setValue(podklad.fitMoumer((Integer) iModel.getValue()));
 	}
 
 }

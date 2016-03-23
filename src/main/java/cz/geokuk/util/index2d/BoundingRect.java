@@ -33,6 +33,14 @@ public class BoundingRect {
 		}
 	}
 
+	public boolean isPoint() {
+		return xx1 == xx2 && yy1 == yy2;
+	}
+
+	public BoundingRect rozsir(final int okolik) {
+		return new BoundingRect(xx1 - okolik, yy1 - okolik, xx2 + okolik, yy2 + okolik);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -41,14 +49,6 @@ public class BoundingRect {
 	@Override
 	public String toString() {
 		return "BoundingRect [xx1=" + xx1 + ", xx2=" + xx2 + ", yy1=" + yy1 + ", yy2=" + yy2 + "]";
-	}
-
-	public BoundingRect rozsir(final int okolik) {
-		return new BoundingRect(xx1 - okolik, yy1 - okolik, xx2 + okolik, yy2 + okolik);
-	}
-
-	public boolean isPoint() {
-		return xx1 == xx2 && yy1 == yy2;
 	}
 
 }

@@ -25,6 +25,19 @@ public final class MouseKonecListener implements MySlideListener {
 	}
 
 	@Override
+	public void ctrlKeyPressed(final MouseGestureContext ctx) {
+	}
+
+	@Override
+	public void ctrlKeyReleased(final MouseGestureContext ctx) {
+	}
+
+	@Override
+	public Cursor getMouseCursor(final boolean pressed) {
+		return null;
+	}
+
+	@Override
 	public Mouable getUpravenaMys() {
 		return null;
 	}
@@ -64,19 +77,6 @@ public final class MouseKonecListener implements MySlideListener {
 
 	@Override
 	public void mouseWheelMoved(final MouseWheelEvent e, final MouseGestureContext ctx) {
-	}
-
-	@Override
-	public Cursor getMouseCursor(final boolean pressed) {
-		return null;
-	}
-
-	@Override
-	public void ctrlKeyPressed(final MouseGestureContext ctx) {
-	}
-
-	@Override
-	public void ctrlKeyReleased(final MouseGestureContext ctx) {
 	}
 
 	@Override

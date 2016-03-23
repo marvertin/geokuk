@@ -10,12 +10,12 @@ public class PodkladAction extends MapyAction0 {
 		super(katype);
 	}
 
-	public void onEvent(final ZmenaMapNastalaEvent event) {
-		setSelected(getMapyModel().getPodklad() == getPodklad());
-	}
-
 	public EKaType getPodklad() {
 		return super.getKaType();
+	}
+
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		setSelected(getMapyModel().getPodklad() == getPodklad());
 	}
 
 	@Override

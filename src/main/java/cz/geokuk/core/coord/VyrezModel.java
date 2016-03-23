@@ -39,11 +39,8 @@ public class VyrezModel extends Model0 {
 		return moord;
 	}
 
-	public void vystredovatNaPozici() {
-		final Mou mou = poziceModel.getPoziceq().getPoziceMou();
-		if (mou != null) {
-			presunMapuNaMoustred(mou);
-		}
+	public void inject(final PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
 	}
 
 	public boolean isPoziceUprostred() {
@@ -54,6 +51,79 @@ public class VyrezModel extends Model0 {
 		log.debug(mouPozice);
 		log.debug(mouStred);
 		return b;
+	}
+
+	public boolean jeNejblizsiMeritko() {
+		return nastavitelneMeritkoZChteneho(moord.getMoumer() + 1, false) == moord.getMoumer();
+	}
+
+	public boolean jeNejvzdaLenejsiMeritko() {
+		return nastavitelneMeritkoZChteneho(moord.getMoumer() - 1, false) == moord.getMoumer();
+	}
+
+	public int nejblizsiMeritko() {
+		return podkladMap.getMaxMoumer();
+	}
+
+	public int nejvzdalenejsiMeritko() {
+		return podkladMap.getMinMoumer();
+	}
+
+	public int omezMeritko(final int moumer) {
+		return nastavitelneMeritkoZChteneho(moumer, false);
+	}
+
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		podkladMap = event.getKaSet().getPodklad();
+		setMoumer(FMath.fit(moord.getMoumer(), podkladMap.getMinMoumer(), podkladMap.getMaxMoumer()));
+	}
+
+	public void presunMapuNaMoustred(final Mou moustred) {
+		setMoord(moord.derive(moustred));
+	}
+
+	public void setMeritkoMapy(final int moumer) {
+		setMoumer(nastavitelneMeritkoZChteneho(moumer, false));
+	}
+
+	/**
+	 * Jen nedovolí turistické mapě úplné přiblížení
+	 *
+	 * @param moumer
+	 */
+	public void setMeritkoMapyAutomaticky(final int moumer) {
+		setMoumer(nastavitelneMeritkoZChteneho(moumer, true));
+	}
+
+	public void setMoord(final Coord moord) {
+		if (moord.equals(this.moord)) {
+			return;
+		}
+		this.moord = moord;
+		currPrefe().node(FPref.UVODNI_SOURADNICE_node).putInt(FPref.MOUMER_value, moord.getMoumer());
+		currPrefe().node(FPref.UVODNI_SOURADNICE_node).putMou(FPref.MOUSTRED_value, moord.getMoustred());
+
+		fire(new VyrezChangedEvent(moord));
+	}
+
+	public void setMoumer(final int moumer) {
+		setMoord(moord.derive(moumer));
+	}
+
+	public void setVelikost(final int width, final int height) {
+		setMoord(moord.derive(new Dimension(width, height)));
+	}
+
+	public void vystredovatNaPozici() {
+		final Mou mou = poziceModel.getPoziceq().getPoziceMou();
+		if (mou != null) {
+			presunMapuNaMoustred(mou);
+		}
+	}
+
+	public void zoomByGivenPoint(final int moumer, final Mou zoomMouStred) {
+		final int skutecnyMoumer = nastavitelneMeritkoZChteneho(moumer, false);
+		setMoord(moord.derive(skutecnyMoumer, moord.computeZoom(skutecnyMoumer, zoomMouStred)));
 	}
 
 	public void zoomTo(final MouRect mourect) {
@@ -73,53 +143,6 @@ public class VyrezModel extends Model0 {
 		setMeritkoMapyAutomaticky(mer);
 	}
 
-	public void setMeritkoMapy(final int moumer) {
-		setMoumer(nastavitelneMeritkoZChteneho(moumer, false));
-	}
-
-	public void zoomByGivenPoint(final int moumer, final Mou zoomMouStred) {
-		final int skutecnyMoumer = nastavitelneMeritkoZChteneho(moumer, false);
-		setMoord(moord.derive(skutecnyMoumer, moord.computeZoom(skutecnyMoumer, zoomMouStred)));
-	}
-
-	/**
-	 * Jen nedovolí turistické mapě úplné přiblížení
-	 *
-	 * @param moumer
-	 */
-	public void setMeritkoMapyAutomaticky(final int moumer) {
-		setMoumer(nastavitelneMeritkoZChteneho(moumer, true));
-	}
-
-	public int omezMeritko(final int moumer) {
-		return nastavitelneMeritkoZChteneho(moumer, false);
-	}
-
-	private int nastavitelneMeritkoZChteneho(int moumer, final boolean autoMeritko) {
-		moumer = FMath.fit(moumer, podkladMap.getMinMoumer(), autoMeritko ? podkladMap.getMaxAutoMoumer() : podkladMap.getMaxMoumer());
-		return moumer;
-	}
-
-	public int nejblizsiMeritko() {
-		return podkladMap.getMaxMoumer();
-	}
-
-	public int nejvzdalenejsiMeritko() {
-		return podkladMap.getMinMoumer();
-	}
-
-	public boolean jeNejblizsiMeritko() {
-		return nastavitelneMeritkoZChteneho(moord.getMoumer() + 1, false) == moord.getMoumer();
-	}
-
-	public boolean jeNejvzdaLenejsiMeritko() {
-		return nastavitelneMeritkoZChteneho(moord.getMoumer() - 1, false) == moord.getMoumer();
-	}
-
-	public void inject(final PoziceModel poziceModel) {
-		this.poziceModel = poziceModel;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -132,31 +155,8 @@ public class VyrezModel extends Model0 {
 		setMoord(moord.derive(moumer, moustred));
 	}
 
-	public void setMoumer(final int moumer) {
-		setMoord(moord.derive(moumer));
-	}
-
-	public void presunMapuNaMoustred(final Mou moustred) {
-		setMoord(moord.derive(moustred));
-	}
-
-	public void onEvent(final ZmenaMapNastalaEvent event) {
-		podkladMap = event.getKaSet().getPodklad();
-		setMoumer(FMath.fit(moord.getMoumer(), podkladMap.getMinMoumer(), podkladMap.getMaxMoumer()));
-	}
-
-	public void setVelikost(final int width, final int height) {
-		setMoord(moord.derive(new Dimension(width, height)));
-	}
-
-	public void setMoord(final Coord moord) {
-		if (moord.equals(this.moord)) {
-			return;
-		}
-		this.moord = moord;
-		currPrefe().node(FPref.UVODNI_SOURADNICE_node).putInt(FPref.MOUMER_value, moord.getMoumer());
-		currPrefe().node(FPref.UVODNI_SOURADNICE_node).putMou(FPref.MOUSTRED_value, moord.getMoustred());
-
-		fire(new VyrezChangedEvent(moord));
+	private int nastavitelneMeritkoZChteneho(int moumer, final boolean autoMeritko) {
+		moumer = FMath.fit(moumer, podkladMap.getMinMoumer(), autoMeritko ? podkladMap.getMaxAutoMoumer() : podkladMap.getMaxMoumer());
+		return moumer;
 	}
 }

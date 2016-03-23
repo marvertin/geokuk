@@ -16,6 +16,10 @@ public class UkladatMapyNaDiskAction extends ToggleAction0 {
 
 	}
 
+	public void inject(final KachleModel kachleModel) {
+		this.kachleModel = kachleModel;
+	}
+
 	public void onEvent(final KachleModelChangeEvent event) {
 		setSelected(kachleModel.isUkladatMapyNaDisk());
 	}
@@ -23,10 +27,6 @@ public class UkladatMapyNaDiskAction extends ToggleAction0 {
 	@Override
 	protected void onSlectedChange(final boolean nastaveno) {
 		kachleModel.setUkladatMapyNaDisk(nastaveno);
-	}
-
-	public void inject(final KachleModel kachleModel) {
-		this.kachleModel = kachleModel;
 	}
 
 }

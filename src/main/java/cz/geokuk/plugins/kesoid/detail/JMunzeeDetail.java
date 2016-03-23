@@ -25,6 +25,18 @@ public class JMunzeeDetail extends JKesoidDetail0 {
 		initComponents();
 	}
 
+	@Override
+	public void napln(final Wpt wpt) {
+		munzee = (Munzee) wpt.getKesoid();
+		napln();
+	}
+
+	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
+		if (isVisible() && munzee != null) {
+			napln();
+		}
+	}
+
 	private void initComponents() {
 
 		final Box hlav = Box.createVerticalBox();
@@ -45,18 +57,6 @@ public class JMunzeeDetail extends JKesoidDetail0 {
 		box3.add(Box.createGlue());
 		hlav.add(box3);
 
-	}
-
-	@Override
-	public void napln(final Wpt wpt) {
-		munzee = (Munzee) wpt.getKesoid();
-		napln();
-	}
-
-	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
-		if (isVisible() && munzee != null) {
-			napln();
-		}
 	}
 
 	private void napln() {

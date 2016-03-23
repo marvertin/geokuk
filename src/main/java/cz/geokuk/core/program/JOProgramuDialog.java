@@ -20,6 +20,11 @@ public class JOProgramuDialog extends JMyDialog0 {
 	}
 
 	@Override
+	protected String getTemaNapovedyDialogu() {
+		return null;
+	}
+
+	@Override
 	protected void initComponents() {
 		final Box box = Box.createVerticalBox();
 		add(box);
@@ -69,11 +74,6 @@ public class JOProgramuDialog extends JMyDialog0 {
 		box.add(zdarma2);
 		box.add(Box.createVerticalStrut(20));
 		box.add(Box.createGlue());
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return null;
 	}
 
 }

@@ -21,6 +21,13 @@ public class Main extends JFrame {
 	private final JLabel		ukazovyText			= new JLabel("tak toto fontujeme");
 
 	/**
+	 * @param args
+	 */
+	public static void main(final String[] args) {
+		new Main().setVisible(true);
+	}
+
+	/**
 	 *
 	 */
 	public Main() {
@@ -30,13 +37,6 @@ public class Main extends JFrame {
 		add(ukazovyText, BorderLayout.SOUTH);
 		pack();
 
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(final String[] args) {
-		new Main().setVisible(true);
 	}
 
 }

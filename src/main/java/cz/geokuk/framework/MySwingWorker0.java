@@ -11,9 +11,6 @@ import javax.swing.SwingWorker;
  */
 public abstract class MySwingWorker0<T, V> extends SwingWorker<T, V> {
 
-	protected void donex() throws Exception {
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -26,5 +23,8 @@ public abstract class MySwingWorker0<T, V> extends SwingWorker<T, V> {
 		} catch (final Exception e) {
 			throw new RuntimeException("Vyjimka pri zpracovani na pozadi.", e);
 		}
+	}
+
+	protected void donex() throws Exception {
 	}
 }

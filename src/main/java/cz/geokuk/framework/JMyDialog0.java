@@ -7,11 +7,25 @@ import javax.swing.*;
 
 public abstract class JMyDialog0 extends JDialog {
 
+	private class CancelAction extends AbstractAction {
+		private static final long serialVersionUID = -4843379055570361691L;
+
+		public CancelAction() {
+			super("Zavřít");
+		}
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			dispose();
+		}
+	}
+
 	private static final long		serialVersionUID	= 1L;
 	private static final Object		CANCEL_ACTION		= "kanclujToVsecko";
 	protected Factory				factory;
 	private EventManager			eventManager;
 	private final JFrame			frame;
+
 	private final NapovedaAction	napovedaAction		= new NapovedaAction("Dialog/" + getTemaNapovedyDialogu());
 
 	public JMyDialog0() {
@@ -19,6 +33,22 @@ public abstract class JMyDialog0 extends JDialog {
 		frame = Dlg.parentFrame();
 		assert frame != null;
 	}
+
+	public void inject(final EventManager eventManager) {
+		this.eventManager = eventManager;
+	}
+
+	public void inject(final Factory factory) {
+		this.factory = factory;
+		factory.init(napovedaAction);
+	}
+
+	public void odregistrujUdalosti() {
+		odregistrujUdalosti(this);
+
+	}
+
+	protected abstract String getTemaNapovedyDialogu();
 
 	protected final void init() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -72,10 +102,7 @@ public abstract class JMyDialog0 extends JDialog {
 
 	}
 
-	public void odregistrujUdalosti() {
-		odregistrujUdalosti(this);
-
-	}
+	protected abstract void initComponents();
 
 	private void odregistrujUdalosti(final Component comp) {
 		eventManager.unregister(this);
@@ -86,30 +113,4 @@ public abstract class JMyDialog0 extends JDialog {
 			}
 		}
 	}
-
-	protected abstract void initComponents();
-
-	private class CancelAction extends AbstractAction {
-		private static final long serialVersionUID = -4843379055570361691L;
-
-		public CancelAction() {
-			super("Zavřít");
-		}
-
-		@Override
-		public void actionPerformed(final ActionEvent e) {
-			dispose();
-		}
-	}
-
-	public void inject(final Factory factory) {
-		this.factory = factory;
-		factory.init(napovedaAction);
-	}
-
-	public void inject(final EventManager eventManager) {
-		this.eventManager = eventManager;
-	}
-
-	protected abstract String getTemaNapovedyDialogu();
 }

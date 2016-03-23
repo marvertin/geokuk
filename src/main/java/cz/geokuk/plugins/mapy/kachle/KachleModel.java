@@ -35,12 +35,39 @@ public class KachleModel extends Model0 {
 	}
 
 	/**
+	 * @return the kachleCacheFolderHolder
+	 */
+	public KachleCacheFolderHolder getKachleCacheFolderHolder() {
+		assert kachleCacheFolderHolder != null;
+		return kachleCacheFolderHolder;
+	}
+
+	public KachleZiskavac getZiskavac() {
+		return ziskavac;
+	}
+
+	public void inject(final KachleZiskavac kachleZiskavac) {
+		ziskavac = kachleZiskavac;
+		ziskavac.setKachleManager(kachleManager);
+	}
+
+	public void inject(final KachloDownloader kachloDownloader) {
+		this.kachloDownloader = kachloDownloader;
+	}
+
+	/**
 	 * @return the ukladatMapyNaDisk
 	 */
 	public boolean isUkladatMapyNaDisk() {
 		// return Settings.vseobecne.ukladatMapyNaDisk.isSelected();
 		final boolean b = currPrefe().getBoolean("ukladatMapyNaDisk", true);
 		return b;
+	}
+
+	public void onEvent(final OnofflineModelChangeEvent eve) {
+		if (eve.isOnlineMOde()) {
+			ziskavac.clearMemoryCache();
+		}
 	}
 
 	/**
@@ -53,22 +80,6 @@ public class KachleModel extends Model0 {
 		}
 		currPrefe().putBoolean("ukladatMapyNaDisk", ukladatMapyNaDisk);
 		fire(new KachleModelChangeEvent());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.Model0#initAndFire()
-	 */
-	@Override
-	protected void initAndFire() {
-		setUmisteniSouboru(loadUmisteniSouboru());
-		fire(new KachleModelChangeEvent());
-	}
-
-	public void inject(final KachleZiskavac kachleZiskavac) {
-		ziskavac = kachleZiskavac;
-		ziskavac.setKachleManager(kachleManager);
 	}
 
 	/**
@@ -87,32 +98,21 @@ public class KachleModel extends Model0 {
 		fire(new KachleUmisteniSouboruChangedEvent(umisteniSouboru));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.Model0#initAndFire()
+	 */
+	@Override
+	protected void initAndFire() {
+		setUmisteniSouboru(loadUmisteniSouboru());
+		fire(new KachleModelChangeEvent());
+	}
+
 	private KachleUmisteniSouboru loadUmisteniSouboru() {
 		final KachleUmisteniSouboru u = new KachleUmisteniSouboru();
 		final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
 		u.setKachleCacheDir(pref.getFilex("kachleCacheDir", KachleUmisteniSouboru.KACHLE_CACHE_DIR));
 		return u;
-	}
-
-	/**
-	 * @return the kachleCacheFolderHolder
-	 */
-	public KachleCacheFolderHolder getKachleCacheFolderHolder() {
-		assert kachleCacheFolderHolder != null;
-		return kachleCacheFolderHolder;
-	}
-
-	public void inject(final KachloDownloader kachloDownloader) {
-		this.kachloDownloader = kachloDownloader;
-	}
-
-	public void onEvent(final OnofflineModelChangeEvent eve) {
-		if (eve.isOnlineMOde()) {
-			ziskavac.clearMemoryCache();
-		}
-	}
-
-	public KachleZiskavac getZiskavac() {
-		return ziskavac;
 	}
 }

@@ -21,13 +21,13 @@ public abstract class Nacitac0 {
 	protected static final String	PREFIX_USERDEFINOANYCH_GENU	= "geokuk_";
 	static Pattern					osetriCislo					= Pattern.compile("[^0-9]");
 
+	protected String intern(final String aString) {
+		return FString.intern(aString);
+	}
+
 	protected abstract void nacti(File file, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) throws IOException;
 
 	protected abstract void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) throws IOException;
-
-	abstract boolean umiNacist(ZipEntry zipEntry);
-
-	abstract boolean umiNacist(File file);
 
 	protected final void nactiBezVyjimky(final File file, final IImportBuilder builder, final Future<?> future, final ProgressModel aProgressModel) {
 		try {
@@ -74,7 +74,7 @@ public abstract class Nacitac0 {
 		return new BufferedInputStream(new ProgressorInputStream(aProgressModel, "Loading: " + sourceName, istm));
 	}
 
-	protected String intern(final String aString) {
-		return FString.intern(aString);
-	}
+	abstract boolean umiNacist(File file);
+
+	abstract boolean umiNacist(ZipEntry zipEntry);
 }

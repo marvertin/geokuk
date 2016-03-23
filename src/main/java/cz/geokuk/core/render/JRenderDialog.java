@@ -27,35 +27,37 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 
 	private static final long			serialVersionUID	= 7180968190465321695L;
 
-	private RenderModel					renderModel;
+	static int							citacUlozeni;
 
+	private RenderModel					renderModel;
 	private JButton						jSpustitButton;
+
 	private JButton						jPrerusitButton;
 
 	private JProgressBar				jProgressBar;
-
 	private JMvRadioPanel<EWhatRender>	jWhatRenderRadioPanel;
-	private JMvRadioPanel<EImageType>	jImgTypeRadioPanel;
 
 	// private JTextField jRendrovaneMeritko;
+
+	private JMvRadioPanel<EImageType>	jImgTypeRadioPanel;
 
 	private JButton						jNastaveniAktualnihoMeritkaButton;
 
 	private JNastavovecMeritka			jNastavovecMeritka;
-
 	private JGeocodingComboBox			jPureJmenoSouboruCombo;
 	private JGeocodingComboBox			jKmzFolderNazevCombo;
+
 	private JNastavovacVelikostiDlazdic	jNastavovacVelikostiDlazdicX;
 
 	private JNastavovacVelikostiDlazdic	jNastavovacVelikostiDlazdicY;
 
 	private JLabel						jJakouHustotuLabel;
-
 	private JSpinner					jKmzDrawOrder;
 	private JCheckBox					jSrovnatDoSeveru;
-	private JTextField					jKmzFolderDescription;
 
+	private JTextField					jKmzFolderDescription;
 	private JPapirMeritkoComboBox		jPapirMeritkoComboBox;
+
 	private JKalibrBoduSpinner			jKalibrBodu;
 
 	private JLabel						jPriponaSouboruLabel;
@@ -63,8 +65,6 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 	private GeocodingModel				geocodingModel;
 
 	protected SortedMap<String, String>	geotagingPatterns;
-
-	static int							citacUlozeni;
 
 	private Wgs							referecniBod;
 
@@ -83,8 +83,173 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 
 	private JLabel						jVystupniSlozkaLabel;
 
+	static Border createBorder(final String titleText) {
+		final TitledBorder border = BorderFactory.createTitledBorder(titleText);
+		final Font titleFont = border.getTitleFont();
+		if (titleFont != null) {
+			border.setTitleFont(titleFont.deriveFont(Font.BOLD | Font.ITALIC));
+		}
+		return border;
+
+	}
+
 	public JRenderDialog() {
 		setTitle("Rendrování / tisk");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
+	 */
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		renderModel.startRenderingProcess();
+		factory.init(jNastavovecMeritka);
+		registerEvents();
+		// prepocitat();
+	}
+
+	@Override
+	public void initAfterInject() {
+		init();
+	}
+
+	public void inject(final GeocodingModel geocodingModel) {
+		this.geocodingModel = geocodingModel;
+	}
+
+	public void inject(final RenderModel renderModel) {
+		this.renderModel = renderModel;
+	}
+
+	public void onEvent(final PripravaRendrovaniEvent event) {
+		final boolean maBytEnablovano = event.getStavRendrovani() == EStavRendrovani.PRIPRAVA;
+
+		FComponent.setEnabledChildren(this, maBytEnablovano);
+		final RenderSettings renderSettings = event.getRenderSettings();
+
+		jWhatRenderRadioPanel.getSelectionModel().setSelected(renderSettings.getWhatRender());
+		jImgTypeRadioPanel.getSelectionModel().setSelected(renderSettings.getImageType());
+		final EStavRendrovani stavRendrovani = event.getStavRendrovani();
+		jPrerusitButton.setVisible(stavRendrovani == EStavRendrovani.BEH);
+		jPrerusitButton.setEnabled(stavRendrovani == EStavRendrovani.BEH);
+		jProgressBar.setVisible(stavRendrovani == EStavRendrovani.BEH || stavRendrovani == EStavRendrovani.PRERUSOVANO);
+		jSpustitButton.setVisible(stavRendrovani == EStavRendrovani.PRIPRAVA);
+
+		final long pametMiB = renderModel.odhadniMnozstviZabranePameti() / 1024 / 1024 + 1;
+		// jSpustit.setEnabled(true);
+		jSpustitButton.setText(String.format("<html>%s <b>%d * %d px</b> - (%d MiB)", renderSettings.getWhatRender() != EWhatRender.TISK ? "Rendrovat " : "Tisknout", renderModel.getDim().width,
+				renderModel.getDim().height, pametMiB));
+		jPrerusitButton.setText(renderSettings.getWhatRender() != EWhatRender.TISK ? "Přerušit rendrování" : "Přerušit tisk");
+		// jRendrovaneMeritko.setText(renderModel.getRenderedMoumer() + "");
+		jNastaveniAktualnihoMeritkaButton.setText("Nastav na meritko: " + renderModel.getCurrentMoumer());
+		jNastaveniAktualnihoMeritkaButton.setEnabled(maBytEnablovano && renderModel.getCurrentMoumer() != renderModel.getRenderedMoumer());
+
+		jPureJmenoSouboruCombo.setPatterned(renderSettings.getPureFileName());
+		jKmzFolderNazevCombo.setPatterned(renderSettings.getKmzFolder());
+
+		jNastavovacVelikostiDlazdicX.setMaximalniVelikost(renderSettings.getKmzMaxDlazdiceX());
+		jNastavovacVelikostiDlazdicY.setMaximalniVelikost(renderSettings.getKmzMaxDlazdiceY());
+		final DlazdicovaMetrikaXY dlazdicovaMetrika = renderModel.spoctiDlazdicovouMetriku();
+		jNastavovacVelikostiDlazdicX.setMetrika(dlazdicovaMetrika.xx);
+		jNastavovacVelikostiDlazdicY.setMetrika(dlazdicovaMetrika.yy);
+
+		final Coord roord = event.getModel().getRoord();
+		final double pixluNaMetr = roord.getPixluNaMetr();
+		final double pixluNaMilimetrMapy = pixluNaMetr / 1000 * renderSettings.getPapiroveMeritko();
+		final double dpi = pixluNaMilimetrMapy * 25.4;
+		final double vzdalenostBodu = 1000 / pixluNaMilimetrMapy;
+		final PapirovaMetrika papirovaMetrika = renderModel.getPapirovaMetrika();
+		jJakouHustotuLabel.setText(
+				String.format("<html>%.0f * %.0f mm - %.0f DPI = %.2f px/mm = %.1f \u03BCm/px", papirovaMetrika.xsize * 1000, papirovaMetrika.ysize * 1000, dpi, pixluNaMilimetrMapy, vzdalenostBodu));
+
+		jTerenniRozmerField.setText(String.format("%.1f * %.1f km", roord.getWidth() / pixluNaMetr / 100, roord.getHeight() / pixluNaMetr / 100));
+
+		jIkonkaPapiru.setMetrikia(papirovaMetrika);
+
+		jKmzDrawOrder.setValue(renderSettings.getKmzDrawOrder());
+		jSrovnatDoSeveru.setSelected(renderSettings.isSrovnatDoSeveru());
+		jPapirMeritkoComboBox.setMeritko(renderSettings.getPapiroveMeritko());
+		jKalibrBodu.setValue(renderSettings.getKalibrBodu());
+
+		jPriponaSouboruLabel.setText("." + urciPriponuSouboru(renderSettings));
+		nastavZakladyDoComboboxu(false);
+		nastavViditelnost(renderSettings.getWhatRender());
+
+		final File outputFolder = renderModel.getOutputFolder();
+		jOutputFolderLabel.setText(outputFolder == null ? "" : outputFolder.toString());
+		jChangeOutputFolderButton.setAction(factory.init(new UmisteniSouboruAction(urciFokusovanouSlozku(renderSettings))));
+		jChangeOutputFolderButton.setText("Změň...");
+	}
+
+	public void onEvent(final ProgressEvent event) {
+		// TODO vyřešit problém, kdy se třeba během rendrování načtou kešule
+		jProgressBar.setIndeterminate(!event.isVisible());
+		jProgressBar.setValue(event.getProgress());
+		jProgressBar.setMaximum(event.getMax());
+		jProgressBar.setStringPainted(true);
+		jProgressBar.setString(event.getText());
+		jProgressBar.setToolTipText(event.getTooltip());
+
+	}
+
+	public void onEvent(final ReferencniBodSeZmenilEvent event) {
+		referecniBod = event.wgs;
+		nastavZakladyDoComboboxu(true);
+		geocodingModel.spustHledani(event.wgs, new RefreshorVysledkuHledani<Nalezenec>() {
+
+			private SortedMap<String, String>	patsPureFileName;
+			private SortedMap<String, String>	patsFolderName;
+
+			@Override
+			public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {
+				patsPureFileName = new TreeMap<>();
+				patsFolderName = new TreeMap<>();
+				if (vysledekHledani.nalezenci != null) {
+					int poradi = 0;
+					for (final Nalezenec nalezenec : vysledekHledani.nalezenci) {
+						polozkuDoObou(poradi, "A20-geocoding", spoj(nalezenec.administrativeArea, nalezenec.subAdministrativeArea, nalezenec.locality, nalezenec.thoroughfare));
+						polozkuDoObou(poradi, "A22-geocoding", spoj(nalezenec.administrativeArea, nalezenec.subAdministrativeArea, nalezenec.locality));
+						polozkuDoObou(poradi, "A26-geocoding", spoj(nalezenec.administrativeArea, nalezenec.subAdministrativeArea));
+						polozkuDoObou(poradi, "A28-geocoding", spoj(nalezenec.administrativeArea));
+						polozkuDoObou(poradi, "A30-geocoding", spoj(nalezenec.subAdministrativeArea, nalezenec.locality, nalezenec.thoroughfare));
+						polozkuDoObou(poradi, "A32-geocoding", spoj(nalezenec.subAdministrativeArea, nalezenec.locality));
+						polozkuDoObou(poradi, "A36-geocoding", spoj(nalezenec.subAdministrativeArea));
+						polozkuDoObou(poradi, "A88-geocoding", nalezenec.adresa);
+						poradi++;
+					}
+					jKmzFolderNazevCombo.addPatterns(null, patsFolderName);
+					jPureJmenoSouboruCombo.addPatterns(null, patsPureFileName);
+				}
+			}
+
+			private void polozkuDoObou(final int poradi, final String klicek, final String textik) {
+				patsPureFileName.put(klicek + poradi, FUtil.vycistiJmenoSouboru(textik));
+				patsFolderName.put(klicek + poradi, textik);
+			}
+
+			private String spoj(final String... jmena) {
+				final StringBuilder sb = new StringBuilder();
+				boolean prvni = true;
+				for (final String jmeno : jmena) {
+					if (jmeno == null || jmeno.isEmpty()) {
+						continue;
+					}
+					if (!prvni) {
+						sb.append(", ");
+					}
+					sb.append(jmeno);
+					prvni = false;
+				}
+				return sb.toString();
+			}
+		});
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "Render";
 	}
 
 	@Override
@@ -172,6 +337,52 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 
 	}
 
+	private void createImgType() {
+		final SelectionModel<EImageType> whrm = new SelectionModel<>();
+		whrm.add(EImageType.bmp, "<html><i>BMP</i> - nekomprimovaný obrázek (pro volný OziExplorer");
+		whrm.add(EImageType.jpg, "<html><i>JPG</i> - ztrátová komprimace, vhodné pro fotky, nutné pro Garmin.");
+		whrm.add(EImageType.png, "<html><i>PNG</i> - bezeztrátová komprimace, umožňuje průhlednost.");
+		jImgTypeRadioPanel = new JMvRadioPanel<>("Typ obrázku");
+		jImgTypeRadioPanel.setBorder(createBorder("Typ obrázku"));
+		jImgTypeRadioPanel.setSelectionModel(whrm);
+		jImgTypeRadioPanel.setAlignmentX(0.5f);
+	}
+
+	private JComponent createMoumerNahled() {
+		JComponent nahled;
+		// JComponent sv = new JPrekryvnik();
+		nahled = factory.init(new JRenderNahledPrekryvnik());
+		// detailRoh.setBackground(new Color(0,255,120));
+		nahled.setMinimumSize(new Dimension(100, 100));
+		nahled.setPreferredSize(new Dimension(200, 200));
+		nahled.setMaximumSize(new Dimension(300, 300));
+
+		final JKachlovnik nahledKachlovnik = new JRenderNahledKachlovnik();
+		nahled.add(nahledKachlovnik);
+		factory.init(nahledKachlovnik);
+		nahled.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		nahled.setAlignmentX(0.5f);
+		return nahled;
+	}
+
+	private void createrWhatRender() {
+		final SelectionModel<EWhatRender> whrm = new SelectionModel<>();
+		whrm.add(EWhatRender.TISK, "<html><i>Tisk</i> - přímý tisk na tiskárnu (beta)");
+		whrm.add(EWhatRender.JEN_OBRAZEK, "<html><i>Obrázek mapy</i> - pro tisk nebo prohlížení");
+		whrm.add(EWhatRender.OZI_EXPLORER, "<html><i>OziExplorer</i> - obrázek a kalibrační map soubor.");
+		whrm.add(EWhatRender.GOOGLE_EARTH, "<html><i>KMZ</i> soubor pro Google Earth nebo Garmin Oregon.");
+		jWhatRenderRadioPanel = new JMvRadioPanel<>("Co rendrovat");
+		jWhatRenderRadioPanel.setBorder(createBorder("Co rendrovat"));
+		jWhatRenderRadioPanel.setSelectionModel(whrm);
+		jWhatRenderRadioPanel.setAlignmentX(0.5f);
+	}
+
+	private void initOziComponents() {
+		jOziPanel = new JTwoColumnsPanel("OZI Explorer");
+		jKalibrBodu = new JKalibrBoduSpinner();
+		jOziPanel.addx("Počet kalibračních bodů", jKalibrBodu);
+	}
+
 	private JPanel initVystupComponents() {
 		final JPanel pan = new JPanel(new GridBagLayout());
 		jOutputFolderLabel = new JLabel();
@@ -251,12 +462,6 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 
 	}
 
-	private void initOziComponents() {
-		jOziPanel = new JTwoColumnsPanel("OZI Explorer");
-		jKalibrBodu = new JKalibrBoduSpinner();
-		jOziPanel.addx("Počet kalibračních bodů", jKalibrBodu);
-	}
-
 	private void intKmzComponents() {
 		jKmzPanel = new JTwoColumnsPanel("KMZx (GoogleEarth či Oregon)");
 		jKmzPanel.setFont(getFont().deriveFont(Font.BOLD));
@@ -279,6 +484,56 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 		jKmzPanel.addx("Dlaždice Y:", jNastavovacVelikostiDlazdicY);
 	}
 
+	private void nastavViditelnost(final EWhatRender whatRender) {
+		final boolean jenOzi = whatRender == EWhatRender.OZI_EXPLORER;
+		final boolean jenKmz = whatRender == EWhatRender.GOOGLE_EARTH;
+		final boolean netiskneSe = whatRender != EWhatRender.TISK;
+		jKmzFolderNazevCombo.setVisible(jenKmz);
+		jNastavovacVelikostiDlazdicX.setVisible(jenKmz);
+		jNastavovacVelikostiDlazdicY.setVisible(jenKmz);
+		jKmzDrawOrder.setVisible(jenKmz);
+		jKmzFolderDescription.setVisible(jenKmz);
+
+		jKalibrBodu.setVisible(jenOzi);
+		jKmzPanel.setVisible(jenKmz);
+		jOziPanel.setVisible(jenOzi);
+
+		jPureJmenoSouboruCombo.setVisible(netiskneSe);
+		jOutputFolderLabel.setVisible(netiskneSe);
+		jVystupniSlozkaLabel.setVisible(netiskneSe);
+		jPriponaSouboruLabel.setVisible(netiskneSe);
+		jChangeOutputFolderButton.setVisible(netiskneSe);
+		jVystupniSouborLabel.setVisible(netiskneSe);
+		jImgTypeRadioPanel.setVisible(netiskneSe);
+	}
+
+	/**
+	 * @param event
+	 * @return
+	 */
+	private void nastavZakladyDoComboboxu(final boolean smazatGeocodingPatterns) {
+		if (referecniBod == null) {
+			return;
+		}
+		final Wgs wgs = referecniBod;
+		final int moumer = renderModel.getRenderedMoumer();
+		{
+			final SortedMap<String, String> pats = new TreeMap<>();
+			pats.put("C1-wgs", wgs + " z" + moumer);
+			pats.put("C2-utm", wgs.toUtm().toString() + " z" + moumer);
+			pats.put("C3-vter", "N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer);
+			jKmzFolderNazevCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
+		}
+		{
+			final SortedMap<String, String> pats = new TreeMap<>();
+			pats.put("C0-compact", String.format(Locale.ENGLISH, "n%7fe%7fz%d", wgs.lat, wgs.lon, moumer).replace(".", ""));
+			pats.put("C1-wgs", wgs + " z" + moumer);
+			pats.put("C2-utm", wgs.toUtm().toString());
+			pats.put("C3-vter", FUtil.vycistiJmenoSouboru("N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer));
+			jPureJmenoSouboruCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
+		}
+	}
+
 	private void registerEvents() {
 
 		jSpustitButton.addActionListener(e -> {
@@ -293,12 +548,12 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 		addWindowListener(new WindowAdapter() {
 
 			@Override
-			public void windowClosing(final WindowEvent e) {
+			public void windowClosed(final WindowEvent e) {
 				renderModel.finishRenderingProcess();
 			}
 
 			@Override
-			public void windowClosed(final WindowEvent e) {
+			public void windowClosing(final WindowEvent e) {
 				renderModel.finishRenderingProcess();
 			}
 		});
@@ -385,79 +640,6 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 
 	}
 
-	public void onEvent(final PripravaRendrovaniEvent event) {
-		final boolean maBytEnablovano = event.getStavRendrovani() == EStavRendrovani.PRIPRAVA;
-
-		FComponent.setEnabledChildren(this, maBytEnablovano);
-		final RenderSettings renderSettings = event.getRenderSettings();
-
-		jWhatRenderRadioPanel.getSelectionModel().setSelected(renderSettings.getWhatRender());
-		jImgTypeRadioPanel.getSelectionModel().setSelected(renderSettings.getImageType());
-		final EStavRendrovani stavRendrovani = event.getStavRendrovani();
-		jPrerusitButton.setVisible(stavRendrovani == EStavRendrovani.BEH);
-		jPrerusitButton.setEnabled(stavRendrovani == EStavRendrovani.BEH);
-		jProgressBar.setVisible(stavRendrovani == EStavRendrovani.BEH || stavRendrovani == EStavRendrovani.PRERUSOVANO);
-		jSpustitButton.setVisible(stavRendrovani == EStavRendrovani.PRIPRAVA);
-
-		final long pametMiB = renderModel.odhadniMnozstviZabranePameti() / 1024 / 1024 + 1;
-		// jSpustit.setEnabled(true);
-		jSpustitButton.setText(String.format("<html>%s <b>%d * %d px</b> - (%d MiB)", renderSettings.getWhatRender() != EWhatRender.TISK ? "Rendrovat " : "Tisknout", renderModel.getDim().width,
-				renderModel.getDim().height, pametMiB));
-		jPrerusitButton.setText(renderSettings.getWhatRender() != EWhatRender.TISK ? "Přerušit rendrování" : "Přerušit tisk");
-		// jRendrovaneMeritko.setText(renderModel.getRenderedMoumer() + "");
-		jNastaveniAktualnihoMeritkaButton.setText("Nastav na meritko: " + renderModel.getCurrentMoumer());
-		jNastaveniAktualnihoMeritkaButton.setEnabled(maBytEnablovano && renderModel.getCurrentMoumer() != renderModel.getRenderedMoumer());
-
-		jPureJmenoSouboruCombo.setPatterned(renderSettings.getPureFileName());
-		jKmzFolderNazevCombo.setPatterned(renderSettings.getKmzFolder());
-
-		jNastavovacVelikostiDlazdicX.setMaximalniVelikost(renderSettings.getKmzMaxDlazdiceX());
-		jNastavovacVelikostiDlazdicY.setMaximalniVelikost(renderSettings.getKmzMaxDlazdiceY());
-		final DlazdicovaMetrikaXY dlazdicovaMetrika = renderModel.spoctiDlazdicovouMetriku();
-		jNastavovacVelikostiDlazdicX.setMetrika(dlazdicovaMetrika.xx);
-		jNastavovacVelikostiDlazdicY.setMetrika(dlazdicovaMetrika.yy);
-
-		final Coord roord = event.getModel().getRoord();
-		final double pixluNaMetr = roord.getPixluNaMetr();
-		final double pixluNaMilimetrMapy = pixluNaMetr / 1000 * renderSettings.getPapiroveMeritko();
-		final double dpi = pixluNaMilimetrMapy * 25.4;
-		final double vzdalenostBodu = 1000 / pixluNaMilimetrMapy;
-		final PapirovaMetrika papirovaMetrika = renderModel.getPapirovaMetrika();
-		jJakouHustotuLabel.setText(
-				String.format("<html>%.0f * %.0f mm - %.0f DPI = %.2f px/mm = %.1f \u03BCm/px", papirovaMetrika.xsize * 1000, papirovaMetrika.ysize * 1000, dpi, pixluNaMilimetrMapy, vzdalenostBodu));
-
-		jTerenniRozmerField.setText(String.format("%.1f * %.1f km", roord.getWidth() / pixluNaMetr / 100, roord.getHeight() / pixluNaMetr / 100));
-
-		jIkonkaPapiru.setMetrikia(papirovaMetrika);
-
-		jKmzDrawOrder.setValue(renderSettings.getKmzDrawOrder());
-		jSrovnatDoSeveru.setSelected(renderSettings.isSrovnatDoSeveru());
-		jPapirMeritkoComboBox.setMeritko(renderSettings.getPapiroveMeritko());
-		jKalibrBodu.setValue(renderSettings.getKalibrBodu());
-
-		jPriponaSouboruLabel.setText("." + urciPriponuSouboru(renderSettings));
-		nastavZakladyDoComboboxu(false);
-		nastavViditelnost(renderSettings.getWhatRender());
-
-		final File outputFolder = renderModel.getOutputFolder();
-		jOutputFolderLabel.setText(outputFolder == null ? "" : outputFolder.toString());
-		jChangeOutputFolderButton.setAction(factory.init(new UmisteniSouboruAction(urciFokusovanouSlozku(renderSettings))));
-		jChangeOutputFolderButton.setText("Změň...");
-	}
-
-	private String urciPriponuSouboru(final RenderSettings renderSettings) {
-		switch (renderSettings.getWhatRender()) {
-		case GOOGLE_EARTH:
-			return "kmz";
-		case OZI_EXPLORER:
-			return "map";
-		case JEN_OBRAZEK:
-			return renderSettings.getImageType().getType();
-		default:
-			return "???";
-		}
-	}
-
 	private ESouborPanelName urciFokusovanouSlozku(final RenderSettings renderSettings) {
 		switch (renderSettings.getWhatRender()) {
 		case GOOGLE_EARTH:
@@ -471,198 +653,16 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 		}
 	}
 
-	public void onEvent(final ReferencniBodSeZmenilEvent event) {
-		referecniBod = event.wgs;
-		nastavZakladyDoComboboxu(true);
-		geocodingModel.spustHledani(event.wgs, new RefreshorVysledkuHledani<Nalezenec>() {
-
-			private SortedMap<String, String>	patsPureFileName;
-			private SortedMap<String, String>	patsFolderName;
-
-			@Override
-			public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {
-				patsPureFileName = new TreeMap<>();
-				patsFolderName = new TreeMap<>();
-				if (vysledekHledani.nalezenci != null) {
-					int poradi = 0;
-					for (final Nalezenec nalezenec : vysledekHledani.nalezenci) {
-						polozkuDoObou(poradi, "A20-geocoding", spoj(nalezenec.administrativeArea, nalezenec.subAdministrativeArea, nalezenec.locality, nalezenec.thoroughfare));
-						polozkuDoObou(poradi, "A22-geocoding", spoj(nalezenec.administrativeArea, nalezenec.subAdministrativeArea, nalezenec.locality));
-						polozkuDoObou(poradi, "A26-geocoding", spoj(nalezenec.administrativeArea, nalezenec.subAdministrativeArea));
-						polozkuDoObou(poradi, "A28-geocoding", spoj(nalezenec.administrativeArea));
-						polozkuDoObou(poradi, "A30-geocoding", spoj(nalezenec.subAdministrativeArea, nalezenec.locality, nalezenec.thoroughfare));
-						polozkuDoObou(poradi, "A32-geocoding", spoj(nalezenec.subAdministrativeArea, nalezenec.locality));
-						polozkuDoObou(poradi, "A36-geocoding", spoj(nalezenec.subAdministrativeArea));
-						polozkuDoObou(poradi, "A88-geocoding", nalezenec.adresa);
-						poradi++;
-					}
-					jKmzFolderNazevCombo.addPatterns(null, patsFolderName);
-					jPureJmenoSouboruCombo.addPatterns(null, patsPureFileName);
-				}
-			}
-
-			private void polozkuDoObou(final int poradi, final String klicek, final String textik) {
-				patsPureFileName.put(klicek + poradi, FUtil.vycistiJmenoSouboru(textik));
-				patsFolderName.put(klicek + poradi, textik);
-			}
-
-			private String spoj(final String... jmena) {
-				final StringBuilder sb = new StringBuilder();
-				boolean prvni = true;
-				for (final String jmeno : jmena) {
-					if (jmeno == null || jmeno.isEmpty()) {
-						continue;
-					}
-					if (!prvni) {
-						sb.append(", ");
-					}
-					sb.append(jmeno);
-					prvni = false;
-				}
-				return sb.toString();
-			}
-		});
-	}
-
-	public void onEvent(final ProgressEvent event) {
-		// TODO vyřešit problém, kdy se třeba během rendrování načtou kešule
-		jProgressBar.setIndeterminate(!event.isVisible());
-		jProgressBar.setValue(event.getProgress());
-		jProgressBar.setMaximum(event.getMax());
-		jProgressBar.setStringPainted(true);
-		jProgressBar.setString(event.getText());
-		jProgressBar.setToolTipText(event.getTooltip());
-
-	}
-
-	private void nastavViditelnost(final EWhatRender whatRender) {
-		final boolean jenOzi = whatRender == EWhatRender.OZI_EXPLORER;
-		final boolean jenKmz = whatRender == EWhatRender.GOOGLE_EARTH;
-		final boolean netiskneSe = whatRender != EWhatRender.TISK;
-		jKmzFolderNazevCombo.setVisible(jenKmz);
-		jNastavovacVelikostiDlazdicX.setVisible(jenKmz);
-		jNastavovacVelikostiDlazdicY.setVisible(jenKmz);
-		jKmzDrawOrder.setVisible(jenKmz);
-		jKmzFolderDescription.setVisible(jenKmz);
-
-		jKalibrBodu.setVisible(jenOzi);
-		jKmzPanel.setVisible(jenKmz);
-		jOziPanel.setVisible(jenOzi);
-
-		jPureJmenoSouboruCombo.setVisible(netiskneSe);
-		jOutputFolderLabel.setVisible(netiskneSe);
-		jVystupniSlozkaLabel.setVisible(netiskneSe);
-		jPriponaSouboruLabel.setVisible(netiskneSe);
-		jChangeOutputFolderButton.setVisible(netiskneSe);
-		jVystupniSouborLabel.setVisible(netiskneSe);
-		jImgTypeRadioPanel.setVisible(netiskneSe);
-	}
-
-	/**
-	 * @param event
-	 * @return
-	 */
-	private void nastavZakladyDoComboboxu(final boolean smazatGeocodingPatterns) {
-		if (referecniBod == null) {
-			return;
+	private String urciPriponuSouboru(final RenderSettings renderSettings) {
+		switch (renderSettings.getWhatRender()) {
+		case GOOGLE_EARTH:
+			return "kmz";
+		case OZI_EXPLORER:
+			return "map";
+		case JEN_OBRAZEK:
+			return renderSettings.getImageType().getType();
+		default:
+			return "???";
 		}
-		final Wgs wgs = referecniBod;
-		final int moumer = renderModel.getRenderedMoumer();
-		{
-			final SortedMap<String, String> pats = new TreeMap<>();
-			pats.put("C1-wgs", wgs + " z" + moumer);
-			pats.put("C2-utm", wgs.toUtm().toString() + " z" + moumer);
-			pats.put("C3-vter", "N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer);
-			jKmzFolderNazevCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
-		}
-		{
-			final SortedMap<String, String> pats = new TreeMap<>();
-			pats.put("C0-compact", String.format(Locale.ENGLISH, "n%7fe%7fz%d", wgs.lat, wgs.lon, moumer).replace(".", ""));
-			pats.put("C1-wgs", wgs + " z" + moumer);
-			pats.put("C2-utm", wgs.toUtm().toString());
-			pats.put("C3-vter", FUtil.vycistiJmenoSouboru("N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer));
-			jPureJmenoSouboruCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
-		}
-	}
-
-	private void createImgType() {
-		final SelectionModel<EImageType> whrm = new SelectionModel<>();
-		whrm.add(EImageType.bmp, "<html><i>BMP</i> - nekomprimovaný obrázek (pro volný OziExplorer");
-		whrm.add(EImageType.jpg, "<html><i>JPG</i> - ztrátová komprimace, vhodné pro fotky, nutné pro Garmin.");
-		whrm.add(EImageType.png, "<html><i>PNG</i> - bezeztrátová komprimace, umožňuje průhlednost.");
-		jImgTypeRadioPanel = new JMvRadioPanel<>("Typ obrázku");
-		jImgTypeRadioPanel.setBorder(createBorder("Typ obrázku"));
-		jImgTypeRadioPanel.setSelectionModel(whrm);
-		jImgTypeRadioPanel.setAlignmentX(0.5f);
-	}
-
-	private void createrWhatRender() {
-		final SelectionModel<EWhatRender> whrm = new SelectionModel<>();
-		whrm.add(EWhatRender.TISK, "<html><i>Tisk</i> - přímý tisk na tiskárnu (beta)");
-		whrm.add(EWhatRender.JEN_OBRAZEK, "<html><i>Obrázek mapy</i> - pro tisk nebo prohlížení");
-		whrm.add(EWhatRender.OZI_EXPLORER, "<html><i>OziExplorer</i> - obrázek a kalibrační map soubor.");
-		whrm.add(EWhatRender.GOOGLE_EARTH, "<html><i>KMZ</i> soubor pro Google Earth nebo Garmin Oregon.");
-		jWhatRenderRadioPanel = new JMvRadioPanel<>("Co rendrovat");
-		jWhatRenderRadioPanel.setBorder(createBorder("Co rendrovat"));
-		jWhatRenderRadioPanel.setSelectionModel(whrm);
-		jWhatRenderRadioPanel.setAlignmentX(0.5f);
-	}
-
-	private JComponent createMoumerNahled() {
-		JComponent nahled;
-		// JComponent sv = new JPrekryvnik();
-		nahled = factory.init(new JRenderNahledPrekryvnik());
-		// detailRoh.setBackground(new Color(0,255,120));
-		nahled.setMinimumSize(new Dimension(100, 100));
-		nahled.setPreferredSize(new Dimension(200, 200));
-		nahled.setMaximumSize(new Dimension(300, 300));
-
-		final JKachlovnik nahledKachlovnik = new JRenderNahledKachlovnik();
-		nahled.add(nahledKachlovnik);
-		factory.init(nahledKachlovnik);
-		nahled.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		nahled.setAlignmentX(0.5f);
-		return nahled;
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "Render";
-	}
-
-	public void inject(final RenderModel renderModel) {
-		this.renderModel = renderModel;
-	}
-
-	public void inject(final GeocodingModel geocodingModel) {
-		this.geocodingModel = geocodingModel;
-	}
-
-	@Override
-	public void initAfterInject() {
-		init();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
-	 */
-	@Override
-	public void initAfterEventReceiverRegistration() {
-		renderModel.startRenderingProcess();
-		factory.init(jNastavovecMeritka);
-		registerEvents();
-		// prepocitat();
-	}
-
-	static Border createBorder(final String titleText) {
-		final TitledBorder border = BorderFactory.createTitledBorder(titleText);
-		final Font titleFont = border.getTitleFont();
-		if (titleFont != null) {
-			border.setTitleFont(titleFont.deriveFont(Font.BOLD | Font.ITALIC));
-		}
-		return border;
-
 	}
 }

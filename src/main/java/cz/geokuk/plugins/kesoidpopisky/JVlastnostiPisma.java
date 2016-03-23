@@ -32,6 +32,26 @@ public class JVlastnostiPisma extends JPanel {
 		registerEvents();
 	}
 
+	/**
+	 * Sets the model containing the selected color.
+	 *
+	 * @param newModel
+	 *            the new <code>ColorSelectionModel</code> object
+	 *
+	 * @beaninfo bound: true hidden: true description: The model which contains the currently selected color.
+	 */
+	// Nedáváme, museli bychom pak testovat, zda se správně mění model asprávně reagovat na lsitenery.
+
+	// private void setVlastnostiPismaModel(final VlastnostiPismaModel newModel ) {
+	// final VlastnostiPismaModel oldModel = vlastnostiPismaModel;
+	// vlastnostiPismaModel = newModel;
+	// firePropertyChange(VLASTNOSI_PISMA_MODEL_PROPERTY, oldModel, newModel);
+	// }
+
+	public VlastnostiPismaModel getVlastnostiPismaModel() {
+		return vlastnostiPismaModel;
+	}
+
 	protected void initComponents() {
 		xspinner = new JSpinner();
 		yspinner = new JSpinner();
@@ -89,26 +109,6 @@ public class JVlastnostiPisma extends JPanel {
 
 		getVlastnostiPismaModel().addChangeListener(chlistenerModel2Gui);
 
-	}
-
-	/**
-	 * Sets the model containing the selected color.
-	 *
-	 * @param newModel
-	 *            the new <code>ColorSelectionModel</code> object
-	 *
-	 * @beaninfo bound: true hidden: true description: The model which contains the currently selected color.
-	 */
-	// Nedáváme, museli bychom pak testovat, zda se správně mění model asprávně reagovat na lsitenery.
-
-	// private void setVlastnostiPismaModel(final VlastnostiPismaModel newModel ) {
-	// final VlastnostiPismaModel oldModel = vlastnostiPismaModel;
-	// vlastnostiPismaModel = newModel;
-	// firePropertyChange(VLASTNOSI_PISMA_MODEL_PROPERTY, oldModel, newModel);
-	// }
-
-	public VlastnostiPismaModel getVlastnostiPismaModel() {
-		return vlastnostiPismaModel;
 	}
 
 }

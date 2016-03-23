@@ -63,18 +63,6 @@ public class Mercator extends Misto0 {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(mx);
-		result = prime * result + (int) (temp ^ temp >>> 32);
-		temp = Double.doubleToLongBits(my);
-		result = prime * result + (int) (temp ^ temp >>> 32);
-		return result;
-	}
-
-	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
@@ -96,13 +84,15 @@ public class Mercator extends Misto0 {
 	}
 
 	@Override
-	public String toString() {
-		return String.format("Mercator[%f ; %f]", mx, my);
-	}
-
-	@Override
-	public Wgs toWgs() {
-		return FGeoKonvertor.toWgs(this);
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(mx);
+		result = prime * result + (int) (temp ^ temp >>> 32);
+		temp = Double.doubleToLongBits(my);
+		result = prime * result + (int) (temp ^ temp >>> 32);
+		return result;
 	}
 
 	@Override
@@ -116,8 +106,18 @@ public class Mercator extends Misto0 {
 	}
 
 	@Override
+	public String toString() {
+		return String.format("Mercator[%f ; %f]", mx, my);
+	}
+
+	@Override
 	public Utm toUtm() {
 		return FGeoKonvertor.toUtm(this);
+	}
+
+	@Override
+	public Wgs toWgs() {
+		return FGeoKonvertor.toWgs(this);
 	}
 
 }

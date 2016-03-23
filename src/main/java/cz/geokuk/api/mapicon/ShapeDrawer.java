@@ -11,6 +11,8 @@ import java.awt.*;
  */
 public abstract class ShapeDrawer extends PaintingDrawer0 {
 
+	protected abstract void draw(Graphics2D g);
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -28,9 +30,7 @@ public abstract class ShapeDrawer extends PaintingDrawer0 {
 		}
 	}
 
-	private Color getDrawColor() {
-		return getColor("draw", Color.BLACK);
-	}
+	protected abstract void fill(Graphics2D g);
 
 	protected final Color getFillColor() {
 		return getColor("fill", Color.GRAY);
@@ -40,8 +40,8 @@ public abstract class ShapeDrawer extends PaintingDrawer0 {
 		return getInt("lineWidth", 1);
 	}
 
-	protected abstract void fill(Graphics2D g);
-
-	protected abstract void draw(Graphics2D g);
+	private Color getDrawColor() {
+		return getColor("draw", Color.BLACK);
+	}
 
 }

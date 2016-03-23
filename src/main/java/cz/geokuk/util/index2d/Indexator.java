@@ -21,33 +21,12 @@ public class Indexator<T> {
 	 */
 	Ctverecnik<T> root;
 
-	public Indexator(final BoundingRect br) {
-		root = new Ctverecnik<>(br.xx1, br.yy1, br.xx2, br.yy2);
-	}
-
 	public Indexator() {
 		this(new BoundingRect(0, 0, Integer.MAX_VALUE / 2, Integer.MAX_VALUE / 2));
 	}
 
-	public void vloz(final int xx, final int yy, final T mapobj) {
-		if (!checkRozsah(xx, yy)) {
-			throw new RuntimeException("Hodnoty " + xx + " " + yy + " jsou mimo rozsah " + root);
-		}
-
-		Sheet<T> sheet = new Sheet<>(xx, yy, mapobj);
-		DuplikHlidac duplikHlidac = new Ctverecnik.DuplikHlidac();
-		root.vloz(sheet, duplikHlidac);
-		while (duplikHlidac.duplicita) {
-			// throw new RuntimeException("Duplicita");
-			sheet = new Sheet<>(sheet.xx + 3, sheet.yy + 7, mapobj);
-			duplikHlidac = new Ctverecnik.DuplikHlidac();
-			root.vloz(sheet, duplikHlidac);
-			// System.out.println("Duplicita resena " + mapobj);
-		}
-	}
-
-	public boolean checkRozsah(final int xx, final int yy) {
-		return !(xx < root.getXx1() || xx >= root.getXx2() || yy < root.getYy1() || yy >= root.getYy2());
+	public Indexator(final BoundingRect br) {
+		root = new Ctverecnik<>(br.xx1, br.yy1, br.xx2, br.yy2);
 	}
 
 	public int count(final BoundingRect boundingRect) {
@@ -61,17 +40,6 @@ public class Indexator<T> {
 		return counta[0];
 	}
 
-	public List<Node0<T>> shallowList(final BoundingRect boundingRect) {
-		final List<Node0<T>> list = new ArrayList<>(100);
-		root.visit(boundingRect, new SloucenyVisitor<T>() {
-			@Override
-			protected void visitNod(final Node0<T> aNode) {
-				list.add(aNode);
-			}
-		});
-		return list;
-	}
-
 	public List<Sheet<T>> deepList(final BoundingRect boundingRect) {
 		final List<Sheet<T>> list = new ArrayList<>(100);
 		root.visit(boundingRect, new FlatVisitor<T>() {
@@ -83,12 +51,8 @@ public class Indexator<T> {
 		return list;
 	}
 
-	public void visit(final BoundingRect boundingRect, final Visitor<T> visitor) {
-		root.visit(boundingRect, visitor);
-	}
-
-	public void vypis() {
-		root.vypis("root", 1);
+	public boolean checkRozsah(final int xx, final int yy) {
+		return !(xx < root.getXx1() || xx >= root.getXx2() || yy < root.getYy1() || yy >= root.getYy2());
 	}
 
 	public Sheet<T> locateAnyOne(final BoundingRect br) {
@@ -128,6 +92,42 @@ public class Indexator<T> {
 		});
 		return drzak.tt;
 
+	}
+
+	public List<Node0<T>> shallowList(final BoundingRect boundingRect) {
+		final List<Node0<T>> list = new ArrayList<>(100);
+		root.visit(boundingRect, new SloucenyVisitor<T>() {
+			@Override
+			protected void visitNod(final Node0<T> aNode) {
+				list.add(aNode);
+			}
+		});
+		return list;
+	}
+
+	public void visit(final BoundingRect boundingRect, final Visitor<T> visitor) {
+		root.visit(boundingRect, visitor);
+	}
+
+	public void vloz(final int xx, final int yy, final T mapobj) {
+		if (!checkRozsah(xx, yy)) {
+			throw new RuntimeException("Hodnoty " + xx + " " + yy + " jsou mimo rozsah " + root);
+		}
+
+		Sheet<T> sheet = new Sheet<>(xx, yy, mapobj);
+		DuplikHlidac duplikHlidac = new Ctverecnik.DuplikHlidac();
+		root.vloz(sheet, duplikHlidac);
+		while (duplikHlidac.duplicita) {
+			// throw new RuntimeException("Duplicita");
+			sheet = new Sheet<>(sheet.xx + 3, sheet.yy + 7, mapobj);
+			duplikHlidac = new Ctverecnik.DuplikHlidac();
+			root.vloz(sheet, duplikHlidac);
+			// System.out.println("Duplicita resena " + mapobj);
+		}
+	}
+
+	public void vypis() {
+		root.vypis("root", 1);
 	}
 
 }

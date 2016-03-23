@@ -18,14 +18,6 @@ public class Ikonizer {
 	// return ImageLoader.seekResIcon("x16/smery/" + smer + ".gif");
 	// }
 
-	public Icon seekIcon(final String path) {
-		final Image bi = ImageLoader.locateResImage(path);
-		if (bi != null) {
-			return new ImageIcon(bi);
-		}
-		return new MissingIcon();
-	}
-
 	public static Icon findSmerIcon(final double smer) {
 		final BufferedImage sm = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 		final Graphics2D g = (Graphics2D) sm.getGraphics();
@@ -37,5 +29,13 @@ public class Ikonizer {
 		return new ImageIcon(sm);
 		// int index = ((int)smer + 45) % 360 / 45;
 		// return smery[index];
+	}
+
+	public Icon seekIcon(final String path) {
+		final Image bi = ImageLoader.locateResImage(path);
+		if (bi != null) {
+			return new ImageIcon(bi);
+		}
+		return new MissingIcon();
 	}
 }

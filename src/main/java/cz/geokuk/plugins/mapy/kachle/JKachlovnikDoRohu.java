@@ -4,11 +4,11 @@ import java.util.EnumSet;
 
 public class JKachlovnikDoRohu extends JKachlovnik {
 
+	private static final long serialVersionUID = -7897332661428146095L;
+
 	public JKachlovnikDoRohu() {
 		super("Levý dolní roh - kachlovník", Priority.KACHLE);
 	}
-
-	private static final long serialVersionUID = -7897332661428146095L;
 
 	@Override
 	public void setKachloTypes(final KaSet aKachloSet) {

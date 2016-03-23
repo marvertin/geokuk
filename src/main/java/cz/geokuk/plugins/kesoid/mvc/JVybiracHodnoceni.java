@@ -17,8 +17,8 @@ public class JVybiracHodnoceni extends JVybiracCiselny0 {
 	}
 
 	@Override
-	protected void setPrah(final FilterDefinition filterDefinition, final int prah) {
-		filterDefinition.setPrahHodnoceni(prah);
+	protected int getMaximum(final KesBag vsechny) {
+		return vsechny.getMaximalniHodnoceni();
 	}
 
 	@Override
@@ -27,8 +27,8 @@ public class JVybiracHodnoceni extends JVybiracCiselny0 {
 	}
 
 	@Override
-	protected int getMaximum(final KesBag vsechny) {
-		return vsechny.getMaximalniHodnoceni();
+	protected void setPrah(final FilterDefinition filterDefinition, final int prah) {
+		filterDefinition.setPrahHodnoceni(prah);
 	}
 
 }

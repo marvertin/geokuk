@@ -28,14 +28,16 @@ public class JFenotypIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 	}
 
 	@Override
-	protected void initComponents() {
-		jvse = Box.createHorizontalBox();
-		jvse.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		add(jvse);
+	public void initAfterInject() {
+		factory.init(fenotypVyberIkon);
+	}
 
-		fenotypVyberIkon = new JFenotypVyberIkon();
-		jvse.add(fenotypVyberIkon);
-		jvse.setPreferredSize(new Dimension(500, 600));
+	public void onEvent(final FenotypPreferencesChangedEvent event) {
+		if (event.getJmenaNefenotypovanychAlel().equals(jmenaVybranychAlel)) {
+			return;
+		}
+		jmenaVybranychAlel = event.getJmenaNefenotypovanychAlel();
+		resetIfVse();
 	}
 
 	public void onEvent(final IkonyNactenyEvent event) {
@@ -48,12 +50,20 @@ public class JFenotypIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 		resetIfVse();
 	}
 
-	public void onEvent(final FenotypPreferencesChangedEvent event) {
-		if (event.getJmenaNefenotypovanychAlel().equals(jmenaVybranychAlel)) {
-			return;
-		}
-		jmenaVybranychAlel = event.getJmenaNefenotypovanychAlel();
-		resetIfVse();
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "VyberFenotypu";
+	}
+
+	@Override
+	protected void initComponents() {
+		jvse = Box.createHorizontalBox();
+		jvse.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		add(jvse);
+
+		fenotypVyberIkon = new JFenotypVyberIkon();
+		jvse.add(fenotypVyberIkon);
+		jvse.setPreferredSize(new Dimension(500, 600));
 	}
 
 	private void resetIfVse() {
@@ -68,16 +78,6 @@ public class JFenotypIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 		}
 		fenotypVyberIkon.resetBag(ikonBag, filtrovaneKesBag, jmenaVybranychAlel);
 		jvse.revalidate();
-	}
-
-	@Override
-	public void initAfterInject() {
-		factory.init(fenotypVyberIkon);
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "VyberFenotypu";
 	}
 
 }

@@ -15,20 +15,28 @@ public class IkonBag {
 	private final Genom			genom	= new Genom();
 	private Map<ASada, Icon>	iJmenaAIkonySad;
 
-	public Set<String> getSadyNames() {
-		return jmenaSad;
+	public Genom getGenom() {
+		return genom;
 	}
 
-	public void setJmenaSad(final Set<String> jmenaSad) {
-		this.jmenaSad = jmenaSad;
-	}
-
-	public void setSada(final Sada sada) {
-		this.sada = sada;
+	/**
+	 * @return the jmenaAIkonySad
+	 */
+	public Map<ASada, Icon> getJmenaAIkonySad() {
+		return iJmenaAIkonySad;
 	}
 
 	public Sada getSada() {
 		return sada;
+	}
+
+	public Set<String> getSadyNames() {
+		return jmenaSad;
+	}
+
+	public Sklivec getSklivec(final Genotyp genotyp) {
+		return sada.getSklivec(genotyp);
+
 	}
 
 	public void print() {
@@ -42,15 +50,6 @@ public class IkonBag {
 			// }
 			// }
 		}
-	}
-
-	public Genom getGenom() {
-		return genom;
-	}
-
-	public Sklivec getSklivec(final Genotyp genotyp) {
-		return sada.getSklivec(genotyp);
-
 	}
 
 	public Icon seekIkon(final Genotyp genotyp) {
@@ -69,11 +68,12 @@ public class IkonBag {
 		iJmenaAIkonySad = aJmenaAIkonySad;
 	}
 
-	/**
-	 * @return the jmenaAIkonySad
-	 */
-	public Map<ASada, Icon> getJmenaAIkonySad() {
-		return iJmenaAIkonySad;
+	public void setJmenaSad(final Set<String> jmenaSad) {
+		this.jmenaSad = jmenaSad;
+	}
+
+	public void setSada(final Sada sada) {
+		this.sada = sada;
 	}
 
 }

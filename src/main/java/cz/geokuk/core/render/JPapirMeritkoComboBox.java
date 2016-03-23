@@ -9,9 +9,9 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 
 	private static final long	serialVersionUID	= -3121505662505169240L;
 
-	private int					naposledZadana;
-
 	private static final int[]	MERITKA				= { 10000, 15000, 20000, 25000, 50000, 100000 };
+
+	private int					naposledZadana;
 
 	public JPapirMeritkoComboBox() {
 		setEditable(true);
@@ -28,16 +28,21 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 		});
 	}
 
+	@Override
+	public Dimension getMaximumSize() {
+		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	}
+
+	public int getMeritko() {
+		return parser((String) getSelectedItem());
+	}
+
 	public void setMeritko(final int mer) {
 		if (mer == 0) {
 			return;
 		}
 		naposledZadana = mer;
 		setSelectedItem(formatuj(mer));
-	}
-
-	public int getMeritko() {
-		return parser((String) getSelectedItem());
 	}
 
 	private String formatuj(final int mer) {
@@ -62,10 +67,5 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 			setMeritko(naposledZadana);
 			return naposledZadana;
 		}
-	}
-
-	@Override
-	public Dimension getMaximumSize() {
-		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
 	}
 }

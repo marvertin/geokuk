@@ -51,6 +51,84 @@ import cz.geokuk.plugins.kesoid.Ikonizer;
  * TableDemo is just like SimpleTableDemo, except that it uses a custom TableModel.
  */
 public class JAdrTable extends JPanel {
+	class MyTableModel extends AbstractTableModel {
+		private static final long	serialVersionUID	= -1777521413836209700L;
+
+		private List<Nalezenec>		adressList			= new ArrayList<>();
+
+		private final String[]		columnNames			= { "Přesnost", "Vzdálenost", "Azimut", "Adresa" };
+
+		/**
+		 * @return the keslist
+		 */
+		public List<Nalezenec> getAdressList() {
+			return adressList;
+		}
+
+		/*
+		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
+		 */
+		@Override
+		public Class<?> getColumnClass(final int c) {
+			return getValueAt(0, c).getClass();
+		}
+
+		@Override
+		public int getColumnCount() {
+			return columnNames.length;
+		}
+
+		@Override
+		public String getColumnName(final int col) {
+			return columnNames[col];
+		}
+
+		@Override
+		public int getRowCount() {
+			return adressList.size();
+		}
+
+		@Override
+		public Object getValueAt(final int row, final int col) {
+			final Nalezenec nalezenec = adressList.get(row);
+
+			Object s = null;
+			switch (col) {
+			case 0:
+				s = nalezenec.locationType;
+				break;
+			case 1:
+				s = Math.round(nalezenec.getVzdalenost() / 100) / 10.0;
+				break;
+			case 2:
+				s = Ikonizer.findSmerIcon(nalezenec.getAzimut());
+				break;
+			case 3:
+				s = nalezenec.adresa;
+				break;
+			}
+			return s;
+		}
+
+		/*
+		 * Don't need to implement this method unless your table's editable.
+		 */
+		@Override
+		public boolean isCellEditable(final int row, final int col) {
+			return false;
+		}
+
+		/**
+		 * @param aKeslist
+		 *            the keslist to set
+		 */
+		public void setAdressList(final List<Nalezenec> aKeslist) {
+			adressList = aKeslist;
+			fireTableStructureChanged();
+		}
+
+	}
+
 	private static final long	serialVersionUID	= 7687619215661046034L;
 
 	private final MyTableModel	tableModel;
@@ -76,6 +154,15 @@ public class JAdrTable extends JPanel {
 
 	public void addListSelectionListener(final ListSelectionListener listener) {
 		table.getSelectionModel().addListSelectionListener(listener);
+	}
+
+	public Nalezenec getCurrent() {
+		final int selectedRow = table.getSelectedRow();
+		if (selectedRow < 0 || selectedRow >= tableModel.getAdressList().size()) {
+			return null;
+		}
+		final Nalezenec nalezenec = tableModel.getAdressList().get(selectedRow);
+		return nalezenec;
 	}
 
 	/**
@@ -129,93 +216,6 @@ public class JAdrTable extends JPanel {
 		column = table.getColumnModel().getColumn(3);
 		column.setPreferredWidth(700);
 		column.setResizable(true);
-
-	}
-
-	public Nalezenec getCurrent() {
-		final int selectedRow = table.getSelectedRow();
-		if (selectedRow < 0 || selectedRow >= tableModel.getAdressList().size()) {
-			return null;
-		}
-		final Nalezenec nalezenec = tableModel.getAdressList().get(selectedRow);
-		return nalezenec;
-	}
-
-	class MyTableModel extends AbstractTableModel {
-		private static final long	serialVersionUID	= -1777521413836209700L;
-
-		private List<Nalezenec>		adressList			= new ArrayList<>();
-
-		private final String[]		columnNames			= { "Přesnost", "Vzdálenost", "Azimut", "Adresa" };
-
-		/**
-		 * @return the keslist
-		 */
-		public List<Nalezenec> getAdressList() {
-			return adressList;
-		}
-
-		/**
-		 * @param aKeslist
-		 *            the keslist to set
-		 */
-		public void setAdressList(final List<Nalezenec> aKeslist) {
-			adressList = aKeslist;
-			fireTableStructureChanged();
-		}
-
-		@Override
-		public int getColumnCount() {
-			return columnNames.length;
-		}
-
-		@Override
-		public int getRowCount() {
-			return adressList.size();
-		}
-
-		@Override
-		public String getColumnName(final int col) {
-			return columnNames[col];
-		}
-
-		@Override
-		public Object getValueAt(final int row, final int col) {
-			final Nalezenec nalezenec = adressList.get(row);
-
-			Object s = null;
-			switch (col) {
-			case 0:
-				s = nalezenec.locationType;
-				break;
-			case 1:
-				s = Math.round(nalezenec.getVzdalenost() / 100) / 10.0;
-				break;
-			case 2:
-				s = Ikonizer.findSmerIcon(nalezenec.getAzimut());
-				break;
-			case 3:
-				s = nalezenec.adresa;
-				break;
-			}
-			return s;
-		}
-
-		/*
-		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
-		 */
-		@Override
-		public Class<?> getColumnClass(final int c) {
-			return getValueAt(0, c).getClass();
-		}
-
-		/*
-		 * Don't need to implement this method unless your table's editable.
-		 */
-		@Override
-		public boolean isCellEditable(final int row, final int col) {
-			return false;
-		}
 
 	}
 

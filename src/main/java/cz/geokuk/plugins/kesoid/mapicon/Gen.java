@@ -23,21 +23,10 @@ public class Gen {
 	private final Grupa					IMPLICITNI_GRUPA	= grupa(Grupa.IMPLICITNI_GRUPA_NAME);
 	private final boolean				vypsatelnyVeZhasinaci;
 
-	/**
-	 * @return the grupy
-	 */
-	public Map<String, Grupa> getGrupy() {
-		return grupy;
-	}
-
 	public Gen(final String displayName, final Genom genom, final boolean vypsatelnyVeZhasinaci) {
 		this.displayName = displayName;
 		this.genom = genom;
 		this.vypsatelnyVeZhasinaci = vypsatelnyVeZhasinaci;
-	}
-
-	public String getDisplayName() {
-		return displayName;
 	}
 
 	public synchronized void add(final Alela alela, final String jmenoGrupy) {
@@ -65,6 +54,21 @@ public class Gen {
 		return alely;
 	}
 
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public Genom getGenom() {
+		return genom;
+	}
+
+	/**
+	 * @return the grupy
+	 */
+	public Map<String, Grupa> getGrupy() {
+		return grupy;
+	}
+
 	public Alela getVychoziAlela() {
 		assert vychoziAlela != null : "Na genu: " + displayName;
 		return vychoziAlela;
@@ -88,6 +92,10 @@ public class Gen {
 		return grupa;
 	}
 
+	public boolean isVypsatelnyVeZhasinaci() {
+		return vypsatelnyVeZhasinaci;
+	}
+
 	/**
 	 *
 	 */
@@ -95,16 +103,8 @@ public class Gen {
 		locked = true;
 	}
 
-	public Genom getGenom() {
-		return genom;
-	}
-
 	@Override
 	public String toString() {
 		return "Gen [displayName=" + displayName + ", alely=" + alely + ", vychoziAlela=" + vychoziAlela + "]";
-	}
-
-	public boolean isVypsatelnyVeZhasinaci() {
-		return vypsatelnyVeZhasinaci;
 	}
 }

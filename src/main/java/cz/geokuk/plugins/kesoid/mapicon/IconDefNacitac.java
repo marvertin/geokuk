@@ -22,12 +22,12 @@ public class IconDefNacitac {
 
 	private static final Logger		log	= LogManager.getLogger(IconDefNacitac.class.getSimpleName());
 
-	private final String			jmenoSPriponou;
-	// private IconDef iconDef;
-
-	IkonDrawingProperties			idp;
 	// TODO : The alelas should have a more generic name
 	private static Pattern			pat	= Pattern.compile("([a-z0-9]+!)*([^_]*)((?:_[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮa-zA-z -]+)*)(_x-?[0-9]+)*(_y-?[0-9]+)*(_p[0-9])*\\.([a-z]+)");
+
+	private final String			jmenoSPriponou;
+	// private IconDef iconDef;
+	IkonDrawingProperties			idp;
 	private final URL				url;
 
 	private final Genom				genom;
@@ -48,6 +48,10 @@ public class IconDefNacitac {
 			log.error("Selhalo čtení obrázku ikony, tak obrázek nemůžeme použít", e);
 			return null;
 		}
+	}
+
+	private boolean isProperties(final String sufix) {
+		return sufix.equals("properties");
 	}
 
 	private IconDef load(final ImagantCache imagantCache) throws IOException {
@@ -91,22 +95,6 @@ public class IconDefNacitac {
 		return iconDef;
 	}
 
-	/**
-	 * @param aGroup
-	 * @return
-	 */
-	private String odstranZazavorkovaneNesouboroviteZnaky(String s) {
-		if (s.indexOf('[') < 0) {
-			return s;
-		}
-		s = s.replace("[lomitko]", "/");
-		s = s.replace("[hvezdicka]", "*");
-		s = s.replace("[uvozovky]", "*");
-		s = s.replace("[otaznik]", "*");
-		s = s.replace("[dvojtecka]", "*");
-		return s;
-	}
-
 	private Set<Alela> nactiAlely(final String alelygroup) {
 		final Set<Alela> alely = new HashSet<>();
 		for (final String s : alelygroup.split("_")) {
@@ -130,21 +118,6 @@ public class IconDefNacitac {
 		return alely;
 	}
 
-	private int zpracujNaPrioritu(final String zadano) {
-		if (zadano == null) {
-			return 5;
-		}
-		return Integer.parseInt(zadano.substring(2));
-	}
-
-	private int zpracujNaOffsete(final String zadano) {
-		if (zadano == null) {
-			return 0;
-		}
-		final int zadanapozice = Integer.parseInt(zadano.substring(2));
-		return zadanapozice;
-	}
-
 	private void nactiObrazekDefinovanyVPropertach() throws IOException {
 		final Properties prop = new Properties();
 		prop.load(new BufferedInputStream(idp.url.openStream()));
@@ -160,6 +133,29 @@ public class IconDefNacitac {
 		}
 	}
 
+	/**
+	 * @param aVykreslovac
+	 */
+	private void naplnVykreslovac(final Drawer0 vykreslovac) {
+		vykreslovac.setIdp(idp);
+	}
+
+	/**
+	 * @param aGroup
+	 * @return
+	 */
+	private String odstranZazavorkovaneNesouboroviteZnaky(String s) {
+		if (s.indexOf('[') < 0) {
+			return s;
+		}
+		s = s.replace("[lomitko]", "/");
+		s = s.replace("[hvezdicka]", "*");
+		s = s.replace("[uvozovky]", "*");
+		s = s.replace("[otaznik]", "*");
+		s = s.replace("[dvojtecka]", "*");
+		return s;
+	}
+
 	private void otestujAVydefinujSkutecnyObrazek(final ImagantCache imagantCache) throws IOException {
 		// @SuppressWarnings("unused") // jen pro kontrolu
 		// BufferedImage bi = ImageIO.read(idp.url);
@@ -170,15 +166,19 @@ public class IconDefNacitac {
 		naplnVykreslovac(idp.vykreslovac);
 	}
 
-	/**
-	 * @param aVykreslovac
-	 */
-	private void naplnVykreslovac(final Drawer0 vykreslovac) {
-		vykreslovac.setIdp(idp);
+	private int zpracujNaOffsete(final String zadano) {
+		if (zadano == null) {
+			return 0;
+		}
+		final int zadanapozice = Integer.parseInt(zadano.substring(2));
+		return zadanapozice;
 	}
 
-	private boolean isProperties(final String sufix) {
-		return sufix.equals("properties");
+	private int zpracujNaPrioritu(final String zadano) {
+		if (zadano == null) {
+			return 5;
+		}
+		return Integer.parseInt(zadano.substring(2));
 	}
 
 }

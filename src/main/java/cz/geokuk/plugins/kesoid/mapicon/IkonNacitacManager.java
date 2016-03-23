@@ -17,6 +17,13 @@ public class IkonNacitacManager {
 	private Filex					lastThirdParty;
 	private Filex					lastMyOwn;
 
+	public IkonNacitacManager(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+		ikonNacitacLoader = new IkonNacitacLoader();
+
+		new Timer(10000, e -> startLoad(false)).start();
+	}
+
 	public void startLoad(final boolean prenacti) {
 		final KesoidUmisteniSouboru umisteniSouboru = kesoidModel.getUmisteniSouboru();
 		final Filex thirdParty = umisteniSouboru.getImage3rdPartyDir();
@@ -32,13 +39,6 @@ public class IkonNacitacManager {
 				sw.execute();
 			}
 		}
-	}
-
-	public IkonNacitacManager(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
-		ikonNacitacLoader = new IkonNacitacLoader();
-
-		new Timer(10000, e -> startLoad(false)).start();
 	}
 
 }

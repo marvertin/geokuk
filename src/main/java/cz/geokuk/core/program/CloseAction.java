@@ -45,12 +45,12 @@ public class CloseAction extends Action0 {
 		}
 	}
 
-	public void inject(final UlozAction ulozAction) {
-		this.ulozAction = ulozAction;
-	}
-
 	public void inject(final ProfileModel profileModel) {
 		this.profileModel = profileModel;
+	}
+
+	public void inject(final UlozAction ulozAction) {
+		this.ulozAction = ulozAction;
 	}
 
 }

@@ -17,11 +17,6 @@ public abstract class JPrekryvnik extends JSlide0 {
 		setLayout(new MyOverlayManager());
 	}
 
-	@Override
-	public boolean isOptimizedDrawingEnabled() {
-		return false;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -39,5 +34,10 @@ public abstract class JPrekryvnik extends JSlide0 {
 		} else {
 			throw new RuntimeException("Kopmonenta " + aComp.getClass().getName() + " musí implementovat JSlide0");
 		}
+	}
+
+	@Override
+	public boolean isOptimizedDrawingEnabled() {
+		return false;
 	}
 }

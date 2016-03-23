@@ -53,21 +53,6 @@ public class KmzWriter {
 		eFolder.appendChild(eName);
 	}
 
-	public void finish() throws ParserConfigurationException, TransformerException, IOException {
-		// appendGroudOverlay(xmldoc, eFolder);
-		zos.putNextEntry(new ZipEntry("doc.kml"));
-
-		final DOMSource domSource = new DOMSource(xmldoc);
-		final StreamResult streamResult = new StreamResult(zos);
-		final TransformerFactory tf = TransformerFactory.newInstance();
-		final Transformer serializer = tf.newTransformer();
-		serializer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-		// serializer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,"users.dtd");
-		serializer.setOutputProperty(OutputKeys.INDENT, "yes");
-		serializer.transform(domSource, streamResult);
-		zos.close();
-	}
-
 	public void appendDlazdici(final BufferedImage image, final KmzParams p) throws IOException {
 		final String soubor = "files/dlazdice" + ++citacSouboru + "." + p.imageType;
 		zos.putNextEntry(new ZipEntry(soubor));
@@ -91,6 +76,21 @@ public class KmzWriter {
 		if (p.rotation != 0.0) {
 			eLatLonBox.appendChild(xmldoc.createElement("rotation")).appendChild(xmldoc.createTextNode(p.rotation + ""));
 		}
+	}
+
+	public void finish() throws ParserConfigurationException, TransformerException, IOException {
+		// appendGroudOverlay(xmldoc, eFolder);
+		zos.putNextEntry(new ZipEntry("doc.kml"));
+
+		final DOMSource domSource = new DOMSource(xmldoc);
+		final StreamResult streamResult = new StreamResult(zos);
+		final TransformerFactory tf = TransformerFactory.newInstance();
+		final Transformer serializer = tf.newTransformer();
+		serializer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+		// serializer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,"users.dtd");
+		serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+		serializer.transform(domSource, streamResult);
+		zos.close();
 	}
 
 }

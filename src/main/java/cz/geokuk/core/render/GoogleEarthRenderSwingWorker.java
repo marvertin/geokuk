@@ -64,6 +64,17 @@ public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 		}
 	}
 
+	private File computeFileName() throws IOException {
+		File file;
+		{
+			final File kmzDir = renderModel.getOutputFolder();
+			final String pureName = renderModel.getRenderSettings().getPureFileName().getText();
+			kmzDir.mkdirs();
+			file = new File(kmzDir, pureName + ".kmz").getCanonicalFile();
+		}
+		return file;
+	}
+
 	private void renderDlazdice(final KmzWriter kmzwrt, final RenderParams p, final int xDlazdice, final int yDlazdice, final Progressor progressor)
 			throws InterruptedException, IOException, ParserConfigurationException, TransformerException {
 		final KmzParams kmzpar = new KmzParams();
@@ -90,17 +101,6 @@ public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 		kmzpar.drawOrder = p.drawOrder;
 		kmzwrt.appendDlazdici(image, kmzpar);
 
-	}
-
-	private File computeFileName() throws IOException {
-		File file;
-		{
-			final File kmzDir = renderModel.getOutputFolder();
-			final String pureName = renderModel.getRenderSettings().getPureFileName().getText();
-			kmzDir.mkdirs();
-			file = new File(kmzDir, pureName + ".kmz").getCanonicalFile();
-		}
-		return file;
 	}
 
 }

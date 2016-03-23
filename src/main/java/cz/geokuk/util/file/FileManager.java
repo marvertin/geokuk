@@ -41,9 +41,6 @@ public class FileManager {
 
 	private int					iBufferSize;
 
-	private FileManager() {
-	}
-
 	/**
 	 * Vytvoří isntanci file manageru. Parametrem je velikost bufferu, který bude použit při kopírování. Nutno vhodně zvolit podle velikosti kopírovaných souborů, jejich počtu, množství paměti, požadované odezvy.
 	 *
@@ -56,21 +53,7 @@ public class FileManager {
 		return fm;
 	}
 
-	/**
-	 * Binárně zkopíruje soubor na jiné místo. Čas vytvoření se zkopíruje také.
-	 *
-	 * @param aFrom
-	 *            Zdrojový soubor
-	 * @param aTo
-	 *            Cílový soubor, pokud je to adresář, je hlášena chyba.
-	 * @throws IOException
-	 *             Při chybě
-	 */
-	public void copyFileToFile(final File aFrom, final File aTo) throws IOException {
-		if (aTo.isDirectory()) {
-			throw new IOException("Path " + aTo + " is directory");
-		}
-		_copy(aFrom, aTo);
+	private FileManager() {
 	}
 
 	/**
@@ -92,7 +75,7 @@ public class FileManager {
 	}
 
 	/**
-	 * Binárně přesune soubor na jiné místo. Čas vytvoření se přesune také. Tato implementace využívá kopie a následného smazání, nespoléhejte však na to, třeba pozdější implementace budou využívat služeb filesystému a přesouvat přímo.
+	 * Binárně zkopíruje soubor na jiné místo. Čas vytvoření se zkopíruje také.
 	 *
 	 * @param aFrom
 	 *            Zdrojový soubor
@@ -101,12 +84,49 @@ public class FileManager {
 	 * @throws IOException
 	 *             Při chybě
 	 */
-	public void moveFileToFile(final File aFrom, final File aTo) throws IOException {
+	public void copyFileToFile(final File aFrom, final File aTo) throws IOException {
 		if (aTo.isDirectory()) {
 			throw new IOException("Path " + aTo + " is directory");
 		}
 		_copy(aFrom, aTo);
-		aFrom.delete();
+	}
+
+	/**
+	 * Kopíruje vstupní proud do souboru co možná nejefektivnějším způsobem.
+	 *
+	 * @param aIs
+	 *            Vstupní proud, po zkopírování bude uzavřen.
+	 * @param aOut
+	 *            Soubor do něhož se kopíruje. Může, ale nemusí existovat, pokud neexistuje, musí existovat adresářová cesta k němu.
+	 * @throws IOException
+	 */
+	public void copyInputStreamToFile(final InputStream aIs, final File aOut) throws IOException {
+		final FileOutputStream out = new FileOutputStream(aOut);
+		final FileChannel outc = out.getChannel();
+		final ByteBuffer buffer = ByteBuffer.allocate(iBufferSize);
+		final byte[] bb = new byte[iBufferSize];
+		while (true) {
+			final int len = aIs.read(bb);
+			if (len <= 0) {
+				break;
+			}
+			buffer.put(bb, 0, len);
+			buffer.flip();
+			outc.write(buffer);
+			buffer.clear(); // Make room for the next read
+		}
+		outc.close();
+		out.close();
+		aIs.close();
+	}
+
+	/**
+	 * Vrátí nastavenou velikost bufferu, která se používá pro kopírování.
+	 *
+	 * @return
+	 */
+	public int getBufferSize() {
+		return iBufferSize;
 	}
 
 	/**
@@ -129,29 +149,21 @@ public class FileManager {
 	}
 
 	/**
-	 * Vrátí nastavenou velikost bufferu, která se používá pro kopírování.
+	 * Binárně přesune soubor na jiné místo. Čas vytvoření se přesune také. Tato implementace využívá kopie a následného smazání, nespoléhejte však na to, třeba pozdější implementace budou využívat služeb filesystému a přesouvat přímo.
 	 *
-	 * @return
+	 * @param aFrom
+	 *            Zdrojový soubor
+	 * @param aTo
+	 *            Cílový soubor, pokud je to adresář, je hlášena chyba.
+	 * @throws IOException
+	 *             Při chybě
 	 */
-	public int getBufferSize() {
-		return iBufferSize;
-	}
-
-	/**
-	 * Nastaví velikost bufferu pro kopírování souborů. Pro jedno běžící kopírování bude vytvořen jeden buffer.
-	 *
-	 * @param aBufferSize
-	 *            Velikost naastavovaného bufferu. Nejdříve bude upravena na rozumnou velikost, ani velké ani malé. A také zaokrouhlí na nějaký rozumný celý násobek.
-	 */
-	public void setBufferSize(int aBufferSize) {
-		aBufferSize = (aBufferSize + MIN_BUFFER_SIZE - 1) / MIN_BUFFER_SIZE * MIN_BUFFER_SIZE;
-		if (aBufferSize < MIN_BUFFER_SIZE) {
-			aBufferSize = MIN_BUFFER_SIZE;
+	public void moveFileToFile(final File aFrom, final File aTo) throws IOException {
+		if (aTo.isDirectory()) {
+			throw new IOException("Path " + aTo + " is directory");
 		}
-		if (aBufferSize > MAX_BUFFER_SIZE) {
-			aBufferSize = MAX_BUFFER_SIZE;
-		}
-		iBufferSize = aBufferSize;
+		_copy(aFrom, aTo);
+		aFrom.delete();
 	}
 
 	/**
@@ -192,9 +204,9 @@ public class FileManager {
 	 *            Kódování, pokud je null, nečte nic.
 	 * @return Obsah souborui vrácený jako řetězec.
 	 */
-	public String readWholeFileAsString(final File aFile, final String aCharSetName) throws IOException {
+	public String readWholeFileAsString(final File aFile) throws IOException {
 		final byte[] bb = readWholeFileAsBytes(aFile);
-		return new String(bb, aCharSetName);
+		return new String(bb);
 	}
 
 	/**
@@ -206,27 +218,26 @@ public class FileManager {
 	 *            Kódování, pokud je null, nečte nic.
 	 * @return Obsah souborui vrácený jako řetězec.
 	 */
-	public String readWholeFileAsString(final File aFile) throws IOException {
+	public String readWholeFileAsString(final File aFile, final String aCharSetName) throws IOException {
 		final byte[] bb = readWholeFileAsBytes(aFile);
-		return new String(bb);
+		return new String(bb, aCharSetName);
 	}
 
 	/**
-	 * Zapíše řetězec do zadaného souboru. Soubor přepíše.
+	 * Nastaví velikost bufferu pro kopírování souborů. Pro jedno běžící kopírování bude vytvořen jeden buffer.
 	 *
-	 * @param aFile
-	 *            Soubor, do kterého se zapisuje.
-	 * @param aString
-	 *            Zapisovaný řetězec.
-	 * @param aEncoding
-	 *            Požadované kódování, null pokud defaultní.
-	 * @throws IOException
+	 * @param aBufferSize
+	 *            Velikost naastavovaného bufferu. Nejdříve bude upravena na rozumnou velikost, ani velké ani malé. A také zaokrouhlí na nějaký rozumný celý násobek.
 	 */
-	public void writeStringToFile(final File aFile, final String aString, final String aEncoding) throws IOException {
-		final Writer wrt = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(aFile), aEncoding));
-		// System.out.p rintln(">>>>>>>>"+aString+"<<<<<<<<");
-		wrt.write(aString);
-		wrt.close();
+	public void setBufferSize(int aBufferSize) {
+		aBufferSize = (aBufferSize + MIN_BUFFER_SIZE - 1) / MIN_BUFFER_SIZE * MIN_BUFFER_SIZE;
+		if (aBufferSize < MIN_BUFFER_SIZE) {
+			aBufferSize = MIN_BUFFER_SIZE;
+		}
+		if (aBufferSize > MAX_BUFFER_SIZE) {
+			aBufferSize = MAX_BUFFER_SIZE;
+		}
+		iBufferSize = aBufferSize;
 	}
 
 	/**
@@ -247,32 +258,21 @@ public class FileManager {
 	}
 
 	/**
-	 * Kopíruje vstupní proud do souboru co možná nejefektivnějším způsobem.
+	 * Zapíše řetězec do zadaného souboru. Soubor přepíše.
 	 *
-	 * @param aIs
-	 *            Vstupní proud, po zkopírování bude uzavřen.
-	 * @param aOut
-	 *            Soubor do něhož se kopíruje. Může, ale nemusí existovat, pokud neexistuje, musí existovat adresářová cesta k němu.
+	 * @param aFile
+	 *            Soubor, do kterého se zapisuje.
+	 * @param aString
+	 *            Zapisovaný řetězec.
+	 * @param aEncoding
+	 *            Požadované kódování, null pokud defaultní.
 	 * @throws IOException
 	 */
-	public void copyInputStreamToFile(final InputStream aIs, final File aOut) throws IOException {
-		final FileOutputStream out = new FileOutputStream(aOut);
-		final FileChannel outc = out.getChannel();
-		final ByteBuffer buffer = ByteBuffer.allocate(iBufferSize);
-		final byte[] bb = new byte[iBufferSize];
-		while (true) {
-			final int len = aIs.read(bb);
-			if (len <= 0) {
-				break;
-			}
-			buffer.put(bb, 0, len);
-			buffer.flip();
-			outc.write(buffer);
-			buffer.clear(); // Make room for the next read
-		}
-		outc.close();
-		out.close();
-		aIs.close();
+	public void writeStringToFile(final File aFile, final String aString, final String aEncoding) throws IOException {
+		final Writer wrt = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(aFile), aEncoding));
+		// System.out.p rintln(">>>>>>>>"+aString+"<<<<<<<<");
+		wrt.write(aString);
+		wrt.close();
 	}
 
 	///////////////////////////////////// privátní metody /////////////

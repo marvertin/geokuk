@@ -17,11 +17,6 @@ public class XChainRupture extends RuntimeException {
 		iCircumstance = aCircumstance;
 	}
 
-	@Override
-	public String getMessage() {
-		return "Exception '" + iExceptionId + "' catched and duped at \"" + iCircumstance + "\"";
-	}
-
 	/**
 	 * Identifikace výjimky, jak je uložena v servrovské repozitoři.
 	 *
@@ -29,6 +24,11 @@ public class XChainRupture extends RuntimeException {
 	 */
 	public AExcId getExceptionId() {
 		return iExceptionId;
+	}
+
+	@Override
+	public String getMessage() {
+		return "Exception '" + iExceptionId + "' catched and duped at \"" + iCircumstance + "\"";
 	}
 
 }

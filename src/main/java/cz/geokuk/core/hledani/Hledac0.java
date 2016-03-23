@@ -15,10 +15,6 @@ public abstract class Hledac0<T extends Nalezenec0> {
 		return future;
 	}
 
-	public void setFuture(final Future<?> future) {
-		this.future = future;
-	}
-
 	public abstract List<T> hledej(HledaciPodminka0 podm);
 
 	public List<T> najdiASerad(final HledaciPodminka0 podm) {
@@ -37,6 +33,10 @@ public abstract class Hledac0<T extends Nalezenec0> {
 		}
 		return list;
 
+	}
+
+	public void setFuture(final Future<?> future) {
+		this.future = future;
 	}
 
 	/**

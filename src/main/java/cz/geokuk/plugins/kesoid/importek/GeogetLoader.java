@@ -78,15 +78,33 @@ public class GeogetLoader extends Nacitac0 {
 		}
 	}
 
+	@Override
+	protected void nacti(final ZipFile zipFile, final ZipEntry zipEntry, final IImportBuilder builder, final Future<?> f, final ProgressModel aProgressModel) throws IOException {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	boolean umiNacist(final File file) {
+		return SUPPORTED_FILE_EXTENSIONS.contains(Files.getFileExtension(file.getAbsolutePath().toLowerCase()));
+	}
+
+	@Override
+	boolean umiNacist(final ZipEntry zipEntry) {
+		// JDBC can't access zipped files.
+		return false;
+	}
+
 	private int count(final Statement statement, final String countQuery) throws SQLException {
 		try (ResultSet rs = statement.executeQuery(countQuery)) {
 			return rs.getInt(1);
 		}
 	}
 
-	private void logResult(final String nazev, final ATimestamp startTime, final int pocet) {
-		final double trvani = ATimestamp.now().diff(startTime);
-		log.info("{} {} loaded in {} s, it is {} items/s. ", pocet, nazev, trvani / 1000.0, pocet * 1000 / trvani);
+	private String formatDateTime(final int yyyymmddDate) {
+		final int day = yyyymmddDate % 100;
+		final int month = yyyymmddDate / 100 % 100;
+		final int year = yyyymmddDate / 10000;
+		return String.format(DATE_FORMAT_TEMPLATE, year, month, day);
 	}
 
 	private void loadCaches(final Statement statement, final IImportBuilder builder, final Future<?> future, final Progressor progressor) throws SQLException, IOException {
@@ -169,33 +187,6 @@ public class GeogetLoader extends Nacitac0 {
 		}
 	}
 
-	private void loadWaypoints(final Statement statement, final IImportBuilder builder, final Future<?> future, final Progressor progressor) throws SQLException {
-		final ATimestamp startTime = ATimestamp.now();
-		int citac = 0;
-		try (ResultSet rs = statement.executeQuery(GEOGET_WAYPOINTS_QUERY)) {
-			while (rs.next()) {
-				if (future != null && future.isCancelled()) {
-					return;
-				}
-				progressor.addProgress(PROGRESS_VAHA_WAYPOINTS);
-				final GpxWpt gpxWpt = new GpxWpt();
-				gpxWpt.wgs = new Wgs(rs.getDouble("lat"), rs.getDouble("lon"));
-				final String parentId = rs.getString("id");
-				if (parentId != null && parentId.length() > 1) {
-					final String suffix = parentId.substring(2);
-					gpxWpt.name = rs.getString("prefixid") + suffix;
-				}
-				gpxWpt.sym = rs.getString("wpttype");
-				gpxWpt.desc = rs.getString("name");
-				builder.addGpxWpt(gpxWpt);
-				citac++;
-			}
-		} finally {
-			progressor.finish();
-			logResult("Waypoints", startTime, citac);
-		}
-	}
-
 	private void loadTags(final Statement statement, final IImportBuilder builder, final Future<?> future, final Progressor progressor) throws SQLException {
 		final ATimestamp startTime = ATimestamp.now();
 		int citac = 0;
@@ -257,26 +248,35 @@ public class GeogetLoader extends Nacitac0 {
 		}
 	}
 
-	private String formatDateTime(final int yyyymmddDate) {
-		final int day = yyyymmddDate % 100;
-		final int month = yyyymmddDate / 100 % 100;
-		final int year = yyyymmddDate / 10000;
-		return String.format(DATE_FORMAT_TEMPLATE, year, month, day);
+	private void loadWaypoints(final Statement statement, final IImportBuilder builder, final Future<?> future, final Progressor progressor) throws SQLException {
+		final ATimestamp startTime = ATimestamp.now();
+		int citac = 0;
+		try (ResultSet rs = statement.executeQuery(GEOGET_WAYPOINTS_QUERY)) {
+			while (rs.next()) {
+				if (future != null && future.isCancelled()) {
+					return;
+				}
+				progressor.addProgress(PROGRESS_VAHA_WAYPOINTS);
+				final GpxWpt gpxWpt = new GpxWpt();
+				gpxWpt.wgs = new Wgs(rs.getDouble("lat"), rs.getDouble("lon"));
+				final String parentId = rs.getString("id");
+				if (parentId != null && parentId.length() > 1) {
+					final String suffix = parentId.substring(2);
+					gpxWpt.name = rs.getString("prefixid") + suffix;
+				}
+				gpxWpt.sym = rs.getString("wpttype");
+				gpxWpt.desc = rs.getString("name");
+				builder.addGpxWpt(gpxWpt);
+				citac++;
+			}
+		} finally {
+			progressor.finish();
+			logResult("Waypoints", startTime, citac);
+		}
 	}
 
-	@Override
-	protected void nacti(final ZipFile zipFile, final ZipEntry zipEntry, final IImportBuilder builder, final Future<?> f, final ProgressModel aProgressModel) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	boolean umiNacist(final ZipEntry zipEntry) {
-		// JDBC can't access zipped files.
-		return false;
-	}
-
-	@Override
-	boolean umiNacist(final File file) {
-		return SUPPORTED_FILE_EXTENSIONS.contains(Files.getFileExtension(file.getAbsolutePath().toLowerCase()));
+	private void logResult(final String nazev, final ATimestamp startTime, final int pocet) {
+		final double trvani = ATimestamp.now().diff(startTime);
+		log.info("{} {} loaded in {} s, it is {} items/s. ", pocet, nazev, trvani / 1000.0, pocet * 1000 / trvani);
 	}
 }

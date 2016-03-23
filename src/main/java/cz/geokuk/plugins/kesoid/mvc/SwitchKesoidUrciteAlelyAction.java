@@ -37,14 +37,6 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
-	public void onEvent(final IkonyNactenyEvent event) {
-		ikonBag = event.getBag();
-	}
-
-	public void onEvent(final KeskyNactenyEvent event) {
-		vsechny = event.getVsechny();
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -57,12 +49,16 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 		super.putValue(SHORT_DESCRIPTION, sestavJmeno());
 	}
 
-	private String sestavJmeno() {
-		return String.format("<html>%s: <b>%s</b> <i>(%d)</i>", alela.getGen().getDisplayName(), alela.getDisplayName(), vsechny.getPoctyAlel().count(alela));
-	}
-
 	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
+	}
+
+	public void onEvent(final IkonyNactenyEvent event) {
+		ikonBag = event.getBag();
+	}
+
+	public void onEvent(final KeskyNactenyEvent event) {
+		vsechny = event.getVsechny();
 	}
 
 	public void onEvent(final KeskyVyfiltrovanyEvent event) {
@@ -75,6 +71,10 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 	@Override
 	protected void onSlectedChange(final boolean nastaveno) {
 		kesoidModel.filtrujDleAlely(alela.toString(), nastaveno);
+	}
+
+	private String sestavJmeno() {
+		return String.format("<html>%s: <b>%s</b> <i>(%d)</i>", alela.getGen().getDisplayName(), alela.getDisplayName(), vsechny.getPoctyAlel().count(alela));
 	}
 
 }

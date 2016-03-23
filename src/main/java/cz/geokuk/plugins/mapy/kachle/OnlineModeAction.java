@@ -18,6 +18,10 @@ public class OnlineModeAction extends ToggleAction0 {
 
 	}
 
+	public void inject(final OnofflineModel onofflineModel) {
+		this.onofflineModel = onofflineModel;
+	}
+
 	public void onEvent(final OnofflineModelChangeEvent event) {
 		setSelected(event.isOnlineMOde());
 	}
@@ -25,10 +29,6 @@ public class OnlineModeAction extends ToggleAction0 {
 	@Override
 	protected void onSlectedChange(final boolean nastaveno) {
 		onofflineModel.setOnlineMode(nastaveno);
-	}
-
-	public void inject(final OnofflineModel onofflineModel) {
-		this.onofflineModel = onofflineModel;
 	}
 
 }

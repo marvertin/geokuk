@@ -29,28 +29,52 @@ public class NacitacGpx extends NacitacInputStream0 {
 	private static String		GROUNSPEAK_NAMESPACE_1_0_1	= "http://www.groundspeak.com/cache/1/0/1";
 	private static String		GPXG_NAMESPACE				= "http://geoget.ararat.cz/GpxExtensions/v2";
 
+	private static QName		URL							= new QName(TOPOGRAFIC_NAMESPACE_1_0, "url");
+
+	private static QName		LINK						= new QName(TOPOGRAFIC_NAMESPACE_1_1, "link");
+	private static QName		LINK_TEXT					= new QName(TOPOGRAFIC_NAMESPACE_1_1, "text");
+	private static QName		LINK_TYPE					= new QName(TOPOGRAFIC_NAMESPACE_1_1, "type");
+	// <gpxg:GeogetExtension xmlns:gpxg="http://geoget.ararat.cz/GpxExtensions/v2">
+	private static QName		GPXG_GEOGET_EXTENSION		= new QName(GPXG_NAMESPACE, "GeogetExtension");
+	// <gpxg:Found>2009-10-30T16:16:00.000</gpxg:Found>
+	private static QName		GPXG_FOUND					= new QName(GPXG_NAMESPACE, "Found");
+	// <gpxg:Tag Category="attribute"><![CDATA[quads-no]]></gpxg:Tag>
+	private static QName		GPXG_TAG					= new QName(GPXG_NAMESPACE, "Tag");
+	// <gpxg:Flag>1</gpxg:Flag>
+	private static QName		GPXG_FLAG					= new QName(GPXG_NAMESPACE, "Flag");
+	// pro cesty
+	private static QName		TRK;
+
+	private static QName		TRKSEG;
+
+	private static QName		TRKPT;
+
 	private QName				WPT;
 
 	private QName				TYPE;
+
 	private QName				TIME;
+
 	private QName				NAME;
+
 	private QName				DESC;
+
 	private QName				CMT;
+
 	private QName				URLNAME;
+
 	private QName				SYM;
+
 	private QName				ELE;
 
 	private QName				GS_CACHE;
 
 	// <groundspeak:name>Vyroba vapna</groundspeak:name>
 	private QName				GS_NAME;
-
 	// <groundspeak:placed_by>rodinka veverek</groundspeak:placed_by>
 	private QName				GS_PLACED_BY;
-
 	// <groundspeak:owner id;
 	private QName				GS_OWNER;
-
 	// <groundspeak:type>Unknown Cache</groundspeak:type>
 	private QName				GS_TYPE;
 
@@ -62,32 +86,6 @@ public class NacitacGpx extends NacitacInputStream0 {
 
 	// <groundspeak:terrain>4</groundspeak:terrain>
 	private QName				GS_TERREAIN;
-
-	// <groundspeak:country>Czech Republic</groundspeak:country>
-	private QName				GS_COUNTRY;
-
-	// <groundspeak:state>Jihomoravsky kraj</groundspeak:state>
-	private QName				GS_STATE;
-
-	// <groundspeak:encoded_hints>U balvanu. Hluboko zastrcit levou ruku a doprava.</groundspeak:encoded_hints>
-	private QName				GS_ENCODED_HINTS;
-
-	// <groundspeak:short_description html;
-	private QName				GS_SHORT_DESCRIPTION;
-
-	private static QName		URL							= new QName(TOPOGRAFIC_NAMESPACE_1_0, "url");
-	private static QName		LINK						= new QName(TOPOGRAFIC_NAMESPACE_1_1, "link");
-	private static QName		LINK_TEXT					= new QName(TOPOGRAFIC_NAMESPACE_1_1, "text");
-	private static QName		LINK_TYPE					= new QName(TOPOGRAFIC_NAMESPACE_1_1, "type");
-
-	// <gpxg:GeogetExtension xmlns:gpxg="http://geoget.ararat.cz/GpxExtensions/v2">
-	private static QName		GPXG_GEOGET_EXTENSION		= new QName(GPXG_NAMESPACE, "GeogetExtension");
-
-	// <gpxg:Found>2009-10-30T16:16:00.000</gpxg:Found>
-	private static QName		GPXG_FOUND					= new QName(GPXG_NAMESPACE, "Found");
-
-	// <gpxg:Tag Category="attribute"><![CDATA[quads-no]]></gpxg:Tag>
-	private static QName		GPXG_TAG					= new QName(GPXG_NAMESPACE, "Tag");
 
 	// <gpxg:Tag Category="attribute"><![CDATA[available-yes]]></gpxg:Tag>
 	// <gpxg:Tag Category="attribute"><![CDATA[bicycles-yes]]></gpxg:Tag>
@@ -107,79 +105,15 @@ public class NacitacGpx extends NacitacInputStream0 {
 	// </gpxg:Tags>
 	// </gpxg:GeogetExtension>
 
-	// <gpxg:Flag>1</gpxg:Flag>
-	private static QName		GPXG_FLAG					= new QName(GPXG_NAMESPACE, "Flag");
+	// <groundspeak:country>Czech Republic</groundspeak:country>
+	private QName				GS_COUNTRY;
 
-	// pro cesty
-	private static QName		TRK;
-	private static QName		TRKSEG;
-	private static QName		TRKPT;
-
-	private void initNamesTopografic(final String topograficNamespaceUri) {
-		WPT = new QName(topograficNamespaceUri, "wpt");
-		TYPE = new QName(topograficNamespaceUri, "type");
-		TIME = new QName(topograficNamespaceUri, "time");
-		NAME = new QName(topograficNamespaceUri, "name");
-		DESC = new QName(topograficNamespaceUri, "desc");
-		CMT = new QName(topograficNamespaceUri, "cmt");
-		URL = new QName(topograficNamespaceUri, "url");
-		URLNAME = new QName(topograficNamespaceUri, "urlname");
-		SYM = new QName(topograficNamespaceUri, "sym");
-		ELE = new QName(topograficNamespaceUri, "ele");
-
-		TRK = new QName(topograficNamespaceUri, "trk");
-		TRKSEG = new QName(topograficNamespaceUri, "trkseg");
-		TRKPT = new QName(topograficNamespaceUri, "trkpt");
-	}
-
-	private void initNamesGroundspeak(final String groundspeakNameSpaceUri) {
-		GS_CACHE = new QName(groundspeakNameSpaceUri, "cache");
-
-		// <groundspeak:name>Vyroba vapna</groundspeak:name>
-		GS_NAME = new QName(groundspeakNameSpaceUri, "name");
-
-		// <groundspeak:placed_by>rodinka veverek</groundspeak:placed_by>
-		GS_PLACED_BY = new QName(groundspeakNameSpaceUri, "placed_by");
-
-		// <groundspeak:owner id="1487776">rodinka veverek</groundspeak:owner>
-		GS_OWNER = new QName(groundspeakNameSpaceUri, "owner");
-
-		// <groundspeak:type>Unknown Cache</groundspeak:type>
-		GS_TYPE = new QName(groundspeakNameSpaceUri, "type");
-
-		// <groundspeak:container>Regular</groundspeak:container>
-		GS_CONTAINER = new QName(groundspeakNameSpaceUri, "container");
-
-		// <groundspeak:difficulty>2.5</groundspeak:difficulty>
-		GS_DIFFICULTY = new QName(groundspeakNameSpaceUri, "difficulty");
-
-		// <groundspeak:terrain>4</groundspeak:terrain>
-		GS_TERREAIN = new QName(groundspeakNameSpaceUri, "terrain");
-
-		// <groundspeak:country>Czech Republic</groundspeak:country>
-		GS_COUNTRY = new QName(groundspeakNameSpaceUri, "country");
-
-		// <groundspeak:state>Jihomoravsky kraj</groundspeak:state>
-		GS_STATE = new QName(groundspeakNameSpaceUri, "state");
-
-		// <groundspeak:encoded_hints>U balvanu. Hluboko zastrcit levou ruku a doprava.</groundspeak:encoded_hints>
-		GS_ENCODED_HINTS = new QName(groundspeakNameSpaceUri, "encoded_hints");
-
-		// <groundspeak:short_description html="True"><![CDATA[http://dataz.cuzk.cz/gu/ztl_01/tl_0114/0114002a.gif]]></groundspeak:short_description>
-		GS_SHORT_DESCRIPTION = new QName(groundspeakNameSpaceUri, "short_description");
-	}
-
-	@Override
-	public void nacti(final InputStream istm, final String name, final IImportBuilder builder, final Future<?> future) throws FactoryConfigurationError, IOException {
-		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		XMLStreamReader reader;
-		try {
-			reader = inputFactory.createXMLStreamReader(istm);
-			load(reader, builder, future);
-		} catch (final XMLStreamException e) {
-			throw new IOException(e);
-		}
-	}
+	// <groundspeak:state>Jihomoravsky kraj</groundspeak:state>
+	private QName				GS_STATE;
+	// <groundspeak:encoded_hints>U balvanu. Hluboko zastrcit levou ruku a doprava.</groundspeak:encoded_hints>
+	private QName				GS_ENCODED_HINTS;
+	// <groundspeak:short_description html;
+	private QName				GS_SHORT_DESCRIPTION;
 
 	// priloudne do waypointu
 	public void load(final XMLStreamReader rdr, final IImportBuilder builder, final Future<?> future) throws XMLStreamException {
@@ -226,6 +160,187 @@ public class NacitacGpx extends NacitacInputStream0 {
 				}
 			}
 			rdr.next();
+		}
+	}
+
+	@Override
+	public void nacti(final InputStream istm, final String name, final IImportBuilder builder, final Future<?> future) throws FactoryConfigurationError, IOException {
+		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+		XMLStreamReader reader;
+		try {
+			reader = inputFactory.createXMLStreamReader(istm);
+			load(reader, builder, future);
+		} catch (final XMLStreamException e) {
+			throw new IOException(e);
+		}
+	}
+
+	@Override
+	boolean umiNacist(final File file) {
+		return umiNacist(file.getName());
+	}
+
+	@Override
+	boolean umiNacist(final ZipEntry zipEntry) {
+		return umiNacist(zipEntry.getName());
+	}
+
+	private void initNamesGroundspeak(final String groundspeakNameSpaceUri) {
+		GS_CACHE = new QName(groundspeakNameSpaceUri, "cache");
+
+		// <groundspeak:name>Vyroba vapna</groundspeak:name>
+		GS_NAME = new QName(groundspeakNameSpaceUri, "name");
+
+		// <groundspeak:placed_by>rodinka veverek</groundspeak:placed_by>
+		GS_PLACED_BY = new QName(groundspeakNameSpaceUri, "placed_by");
+
+		// <groundspeak:owner id="1487776">rodinka veverek</groundspeak:owner>
+		GS_OWNER = new QName(groundspeakNameSpaceUri, "owner");
+
+		// <groundspeak:type>Unknown Cache</groundspeak:type>
+		GS_TYPE = new QName(groundspeakNameSpaceUri, "type");
+
+		// <groundspeak:container>Regular</groundspeak:container>
+		GS_CONTAINER = new QName(groundspeakNameSpaceUri, "container");
+
+		// <groundspeak:difficulty>2.5</groundspeak:difficulty>
+		GS_DIFFICULTY = new QName(groundspeakNameSpaceUri, "difficulty");
+
+		// <groundspeak:terrain>4</groundspeak:terrain>
+		GS_TERREAIN = new QName(groundspeakNameSpaceUri, "terrain");
+
+		// <groundspeak:country>Czech Republic</groundspeak:country>
+		GS_COUNTRY = new QName(groundspeakNameSpaceUri, "country");
+
+		// <groundspeak:state>Jihomoravsky kraj</groundspeak:state>
+		GS_STATE = new QName(groundspeakNameSpaceUri, "state");
+
+		// <groundspeak:encoded_hints>U balvanu. Hluboko zastrcit levou ruku a doprava.</groundspeak:encoded_hints>
+		GS_ENCODED_HINTS = new QName(groundspeakNameSpaceUri, "encoded_hints");
+
+		// <groundspeak:short_description html="True"><![CDATA[http://dataz.cuzk.cz/gu/ztl_01/tl_0114/0114002a.gif]]></groundspeak:short_description>
+		GS_SHORT_DESCRIPTION = new QName(groundspeakNameSpaceUri, "short_description");
+	}
+
+	private void initNamesTopografic(final String topograficNamespaceUri) {
+		WPT = new QName(topograficNamespaceUri, "wpt");
+		TYPE = new QName(topograficNamespaceUri, "type");
+		TIME = new QName(topograficNamespaceUri, "time");
+		NAME = new QName(topograficNamespaceUri, "name");
+		DESC = new QName(topograficNamespaceUri, "desc");
+		CMT = new QName(topograficNamespaceUri, "cmt");
+		URL = new QName(topograficNamespaceUri, "url");
+		URLNAME = new QName(topograficNamespaceUri, "urlname");
+		SYM = new QName(topograficNamespaceUri, "sym");
+		ELE = new QName(topograficNamespaceUri, "ele");
+
+		TRK = new QName(topograficNamespaceUri, "trk");
+		TRKSEG = new QName(topograficNamespaceUri, "trkseg");
+		TRKPT = new QName(topograficNamespaceUri, "trkpt");
+	}
+
+	private void readGeogetExtension(final XMLStreamReader rdr, final GpxWpt wpt) throws XMLStreamException {
+		for (; !(rdr.isEndElement() && rdr.getName().equals(GPXG_GEOGET_EXTENSION)); rdr.next()) {
+			if (!rdr.isStartElement()) {
+				continue;
+			}
+			final QName jmeno4 = rdr.getName();
+			if (jmeno4.equals(GPXG_FOUND)) {
+				wpt.gpxg.found = rdr.getElementText();
+			}
+			if (jmeno4.equals(GPXG_TAG)) {
+				final String category = rdr.getAttributeValue(null, "Category");
+				final String value = rdr.getElementText();
+				if ("Hodnoceni".equals(category)) {
+					wpt.gpxg.hodnoceni = parseCislo(value);
+				}
+				if ("Hodnoceni-Pocet".equals(category)) {
+					wpt.gpxg.hodnoceniPocet = parseCislo(value);
+				}
+				if ("BestOf".equals(category)) {
+					wpt.gpxg.bestOf = parseCislo(value);
+				}
+				if ("favorites".equals(category)) {
+					wpt.gpxg.favorites = parseCislo(value);
+				}
+				if ("Znamka".equals(category)) {
+					wpt.gpxg.znamka = parseCislo(value);
+				}
+				if ("Elevation".equals(category)) {
+					wpt.gpxg.elevation = parseCislo(value);
+				}
+				if ("CZ kraj".equals(category)) {
+					wpt.gpxg.czkraj = value;
+				}
+				if ("CZ okres".equals(category)) {
+					wpt.gpxg.czokres = value;
+				}
+				if (category != null && category.startsWith(PREFIX_USERDEFINOANYCH_GENU)) {
+					wpt.gpxg.putUserTag(category.substring(PREFIX_USERDEFINOANYCH_GENU.length()), value);
+				}
+			}
+			if (jmeno4.equals(GPXG_FLAG)) {
+				wpt.gpxg.flag = parseCislo(rdr.getElementText());
+			}
+		}
+	}
+
+	private void readGroudspeak(final XMLStreamReader rdr, final GpxWpt wpt) throws XMLStreamException {
+		wpt.groundspeak = new Groundspeak();
+		wpt.groundspeak.availaible = Boolean.valueOf(rdr.getAttributeValue(null, "available"));
+		wpt.groundspeak.archived = Boolean.valueOf(rdr.getAttributeValue(null, "archived"));
+		for (; !(rdr.isEndElement() && rdr.getName().equals(GS_CACHE)); rdr.next()) {
+			if (!rdr.isStartElement()) {
+				continue;
+			}
+			final QName jmeno2 = rdr.getName();
+			if (jmeno2.equals(GS_NAME)) {
+				wpt.groundspeak.name = rdr.getElementText();
+			}
+			if (jmeno2.equals(GS_PLACED_BY)) {
+				wpt.groundspeak.placedBy = rdr.getElementText();
+			}
+			if (jmeno2.equals(GS_OWNER)) {
+				final String ownerIdStr = rdr.getAttributeValue(null, "id");
+				if (ownerIdStr != null && ownerIdStr.length() > 0) {
+					try {
+						wpt.groundspeak.ownerid = Integer.parseInt(ownerIdStr);
+					} catch (final NumberFormatException e) {
+						System.err.println("Nenumerické číslo vlastníka: \"" + ownerIdStr + "\" " + wpt);
+						wpt.groundspeak.ownerid = -999;
+					}
+				}
+				wpt.groundspeak.owner = rdr.getElementText();
+			}
+			if (jmeno2.equals(GS_TYPE)) {
+				wpt.groundspeak.type = rdr.getElementText();
+			}
+			if (jmeno2.equals(GS_CONTAINER)) {
+				wpt.groundspeak.container = rdr.getElementText().intern();
+			}
+			if (jmeno2.equals(GS_DIFFICULTY)) {
+				wpt.groundspeak.difficulty = rdr.getElementText().intern();
+			}
+			if (jmeno2.equals(GS_TERREAIN)) {
+				wpt.groundspeak.terrain = rdr.getElementText().intern();
+			}
+			if (jmeno2.equals(GS_COUNTRY)) {
+				wpt.groundspeak.country = rdr.getElementText().intern();
+			}
+			if (jmeno2.equals(GS_STATE)) {
+				wpt.groundspeak.state = rdr.getElementText().intern();
+			}
+			if (jmeno2.equals(GS_SHORT_DESCRIPTION)) {
+				final String shortDescription = rdr.getElementText();
+				// if (shortDescription.startsWith("http")
+				// || (wpt.name.length() == 8 && wpt.name.startsWith("GC")) ) { // Tent test je výkonnostní optimalizace, protože víme, že krátké popisky potřebujeme jen pro České Geodetické Body a je zde URL
+				wpt.groundspeak.shortDescription = shortDescription;
+				// }
+			}
+			if (jmeno2.equals(GS_ENCODED_HINTS)) {
+				wpt.groundspeak.encodedHints = rdr.getElementText();
+				break; // už mě ten cyklus kolem groundspeak:cache nezajímá
+			}
 		}
 	}
 
@@ -304,121 +419,6 @@ public class NacitacGpx extends NacitacInputStream0 {
 				} // konec GPXG
 			} // start element
 		} // konec wpt cyklu
-	}
-
-	private void readGroudspeak(final XMLStreamReader rdr, final GpxWpt wpt) throws XMLStreamException {
-		wpt.groundspeak = new Groundspeak();
-		wpt.groundspeak.availaible = Boolean.valueOf(rdr.getAttributeValue(null, "available"));
-		wpt.groundspeak.archived = Boolean.valueOf(rdr.getAttributeValue(null, "archived"));
-		for (; !(rdr.isEndElement() && rdr.getName().equals(GS_CACHE)); rdr.next()) {
-			if (!rdr.isStartElement()) {
-				continue;
-			}
-			final QName jmeno2 = rdr.getName();
-			if (jmeno2.equals(GS_NAME)) {
-				wpt.groundspeak.name = rdr.getElementText();
-			}
-			if (jmeno2.equals(GS_PLACED_BY)) {
-				wpt.groundspeak.placedBy = rdr.getElementText();
-			}
-			if (jmeno2.equals(GS_OWNER)) {
-				final String ownerIdStr = rdr.getAttributeValue(null, "id");
-				if (ownerIdStr != null && ownerIdStr.length() > 0) {
-					try {
-						wpt.groundspeak.ownerid = Integer.parseInt(ownerIdStr);
-					} catch (final NumberFormatException e) {
-						System.err.println("Nenumerické číslo vlastníka: \"" + ownerIdStr + "\" " + wpt);
-						wpt.groundspeak.ownerid = -999;
-					}
-				}
-				wpt.groundspeak.owner = rdr.getElementText();
-			}
-			if (jmeno2.equals(GS_TYPE)) {
-				wpt.groundspeak.type = rdr.getElementText();
-			}
-			if (jmeno2.equals(GS_CONTAINER)) {
-				wpt.groundspeak.container = rdr.getElementText().intern();
-			}
-			if (jmeno2.equals(GS_DIFFICULTY)) {
-				wpt.groundspeak.difficulty = rdr.getElementText().intern();
-			}
-			if (jmeno2.equals(GS_TERREAIN)) {
-				wpt.groundspeak.terrain = rdr.getElementText().intern();
-			}
-			if (jmeno2.equals(GS_COUNTRY)) {
-				wpt.groundspeak.country = rdr.getElementText().intern();
-			}
-			if (jmeno2.equals(GS_STATE)) {
-				wpt.groundspeak.state = rdr.getElementText().intern();
-			}
-			if (jmeno2.equals(GS_SHORT_DESCRIPTION)) {
-				final String shortDescription = rdr.getElementText();
-				// if (shortDescription.startsWith("http")
-				// || (wpt.name.length() == 8 && wpt.name.startsWith("GC")) ) { // Tent test je výkonnostní optimalizace, protože víme, že krátké popisky potřebujeme jen pro České Geodetické Body a je zde URL
-				wpt.groundspeak.shortDescription = shortDescription;
-				// }
-			}
-			if (jmeno2.equals(GS_ENCODED_HINTS)) {
-				wpt.groundspeak.encodedHints = rdr.getElementText();
-				break; // už mě ten cyklus kolem groundspeak:cache nezajímá
-			}
-		}
-	}
-
-	private void readGeogetExtension(final XMLStreamReader rdr, final GpxWpt wpt) throws XMLStreamException {
-		for (; !(rdr.isEndElement() && rdr.getName().equals(GPXG_GEOGET_EXTENSION)); rdr.next()) {
-			if (!rdr.isStartElement()) {
-				continue;
-			}
-			final QName jmeno4 = rdr.getName();
-			if (jmeno4.equals(GPXG_FOUND)) {
-				wpt.gpxg.found = rdr.getElementText();
-			}
-			if (jmeno4.equals(GPXG_TAG)) {
-				final String category = rdr.getAttributeValue(null, "Category");
-				final String value = rdr.getElementText();
-				if ("Hodnoceni".equals(category)) {
-					wpt.gpxg.hodnoceni = parseCislo(value);
-				}
-				if ("Hodnoceni-Pocet".equals(category)) {
-					wpt.gpxg.hodnoceniPocet = parseCislo(value);
-				}
-				if ("BestOf".equals(category)) {
-					wpt.gpxg.bestOf = parseCislo(value);
-				}
-				if ("favorites".equals(category)) {
-					wpt.gpxg.favorites = parseCislo(value);
-				}
-				if ("Znamka".equals(category)) {
-					wpt.gpxg.znamka = parseCislo(value);
-				}
-				if ("Elevation".equals(category)) {
-					wpt.gpxg.elevation = parseCislo(value);
-				}
-				if ("CZ kraj".equals(category)) {
-					wpt.gpxg.czkraj = value;
-				}
-				if ("CZ okres".equals(category)) {
-					wpt.gpxg.czokres = value;
-				}
-				if (category != null && category.startsWith(PREFIX_USERDEFINOANYCH_GENU)) {
-					wpt.gpxg.putUserTag(category.substring(PREFIX_USERDEFINOANYCH_GENU.length()), value);
-				}
-			}
-			if (jmeno4.equals(GPXG_FLAG)) {
-				wpt.gpxg.flag = parseCislo(rdr.getElementText());
-			}
-		}
-	}
-
-	@Override
-	boolean umiNacist(final ZipEntry zipEntry) {
-		return umiNacist(zipEntry.getName());
-	}
-
-	@Override
-	boolean umiNacist(final File file) {
-		return umiNacist(file.getName());
 	}
 
 	private boolean umiNacist(final String resourceName) {

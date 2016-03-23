@@ -21,16 +21,16 @@ public abstract class MapyAction0 extends ToggleAction0 {
 		}
 	}
 
+	public MapyModel getMapyModel() {
+		return mapyModel;
+	}
+
 	public void inject(final MapyModel mapyModel) {
 		this.mapyModel = mapyModel;
 	}
 
 	protected EKaType getKaType() {
 		return katype;
-	}
-
-	public MapyModel getMapyModel() {
-		return mapyModel;
 	}
 
 }

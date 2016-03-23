@@ -14,13 +14,13 @@ import java.awt.Graphics2D;
 public class OvalDrawer extends ShapeDrawer {
 
 	@Override
-	protected void fill(final Graphics2D g) {
-		g.fillOval(0, 0, getWidth(), getHeight());
+	protected void draw(final Graphics2D g) {
+		g.drawOval((getLineWidth() - 1) / 2, (getLineWidth() - 1) / 2, getWidth() - getLineWidth(), getHeight() - getLineWidth());
 	}
 
 	@Override
-	protected void draw(final Graphics2D g) {
-		g.drawOval((getLineWidth() - 1) / 2, (getLineWidth() - 1) / 2, getWidth() - getLineWidth(), getHeight() - getLineWidth());
+	protected void fill(final Graphics2D g) {
+		g.fillOval(0, 0, getWidth(), getHeight());
 	}
 
 }

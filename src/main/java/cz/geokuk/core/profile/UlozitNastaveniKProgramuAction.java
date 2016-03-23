@@ -24,9 +24,8 @@ public class UlozitNastaveniKProgramuAction extends ToggleAction0 {
 				+ ", při příštím spuštění budou těmito nastaveními nahrazeny nastavení v Java preferences, pokud budou nastavení v souboru novější");
 	}
 
-	public void onEvent(final NastaveniUkladatDoSouboruEvent event) {
-		setSelected(event.getModel().isUkladatDoSouboru());
-		setEnabled(event.getModel().isUkladaniDoSouboruMozne());
+	public void inject(final ProfileModel profileModel) {
+		this.profileModel = profileModel;
 	}
 
 	// /* (non-Javadoc)
@@ -42,6 +41,11 @@ public class UlozitNastaveniKProgramuAction extends ToggleAction0 {
 	// "pokud budou nastavení v souboru novější a naopak bude soubor automaticky aktualizován, pokud budou novější data v Java preferences", "Oznámení");
 	// }
 	// }
+
+	public void onEvent(final NastaveniUkladatDoSouboruEvent event) {
+		setSelected(event.getModel().isUkladatDoSouboru());
+		setEnabled(event.getModel().isUkladaniDoSouboruMozne());
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -59,10 +63,6 @@ public class UlozitNastaveniKProgramuAction extends ToggleAction0 {
 		} else {
 			profileModel.zrusUkladaciSouborAVypniUkladani();
 		}
-	}
-
-	public void inject(final ProfileModel profileModel) {
-		this.profileModel = profileModel;
 	}
 
 }

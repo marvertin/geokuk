@@ -23,6 +23,20 @@ public class JNickEditDialog extends JMyDialog0 {
 		init();
 	}
 
+	public void inject(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+	}
+
+	public void onEvent(final GccomNickChangedEvent event) {
+		jNickName.setText(event.getGccomNick().name);
+		jNickId.setText(event.getGccomNick().id + "");
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "InformaceOSobe";
+	}
+
 	@Override
 	protected void initComponents() {
 		// Box box = Box.createVerticalBox();
@@ -85,20 +99,6 @@ public class JNickEditDialog extends JMyDialog0 {
 						.addComponent(jNickIdLabel).addComponent(jNickId))
 				.addGroup(layout.createParallelGroup() // h1
 						.addComponent(jUlozit)));
-	}
-
-	public void onEvent(final GccomNickChangedEvent event) {
-		jNickName.setText(event.getGccomNick().name);
-		jNickId.setText(event.getGccomNick().id + "");
-	}
-
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "InformaceOSobe";
 	}
 
 }

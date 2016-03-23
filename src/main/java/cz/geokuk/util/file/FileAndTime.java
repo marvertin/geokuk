@@ -19,15 +19,18 @@ public class FileAndTime implements Comparable<FileAndTime> {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see java.lang.Object#hashCode()
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (file == null ? 0 : file.hashCode());
-		result = prime * result + (int) (lastmodify ^ lastmodify >>> 32);
-		return result;
+	public int compareTo(final FileAndTime fat) {
+		if (lastmodify == fat.lastmodify) {
+			return 0;
+		}
+		if (lastmodify < fat.lastmodify) {
+			return -1;
+		} else {
+			return 1;
+		}
 	}
 
 	/*
@@ -63,27 +66,24 @@ public class FileAndTime implements Comparable<FileAndTime> {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see java.lang.Object#toString()
+	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
-	public String toString() {
-		return "FileAndTime [file=" + file + ", lastmodify=" + lastmodify + "]";
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (file == null ? 0 : file.hashCode());
+		result = prime * result + (int) (lastmodify ^ lastmodify >>> 32);
+		return result;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public int compareTo(final FileAndTime fat) {
-		if (lastmodify == fat.lastmodify) {
-			return 0;
-		}
-		if (lastmodify < fat.lastmodify) {
-			return -1;
-		} else {
-			return 1;
-		}
+	public String toString() {
+		return "FileAndTime [file=" + file + ", lastmodify=" + lastmodify + "]";
 	}
 }

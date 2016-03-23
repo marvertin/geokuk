@@ -31,11 +31,18 @@ public class JPopiskySlide extends JSingleSlide0 {
 		initComponents();
 	}
 
-	private void initComponents() {
-		setLayout(new BorderLayout());
-		final Box box = Box.createVerticalBox();
+	@Override
+	public JSingleSlide0 createRenderableSlide() {
+		return new JPopiskySlide();
+	}
 
-		add(box, BorderLayout.WEST);
+	public void inject(final PopiskyModel popiskyModel) {
+		this.popiskyModel = popiskyModel;
+	}
+
+	@Override
+	public EJakOtacetPriRendrovani jakOtacetProRendrovani() {
+		return EJakOtacetPriRendrovani.COORD;
 	}
 
 	public void onEvent(final KeskyVyfiltrovanyEvent event) {
@@ -43,13 +50,13 @@ public class JPopiskySlide extends JSingleSlide0 {
 		repaint();
 	}
 
-	public void onEvent(final PopiskyPreferencesChangeEvent event) {
-		pose = event.pose;
+	public void onEvent(final PopiskyOnoffEvent event) {
+		setVisible(event.isOnoff());
 		repaint();
 	}
 
-	public void onEvent(final PopiskyOnoffEvent event) {
-		setVisible(event.isOnoff());
+	public void onEvent(final PopiskyPreferencesChangeEvent event) {
+		pose = event.pose;
 		repaint();
 	}
 
@@ -116,17 +123,10 @@ public class JPopiskySlide extends JSingleSlide0 {
 
 	}
 
-	@Override
-	public JSingleSlide0 createRenderableSlide() {
-		return new JPopiskySlide();
-	}
+	private void initComponents() {
+		setLayout(new BorderLayout());
+		final Box box = Box.createVerticalBox();
 
-	@Override
-	public EJakOtacetPriRendrovani jakOtacetProRendrovani() {
-		return EJakOtacetPriRendrovani.COORD;
-	}
-
-	public void inject(final PopiskyModel popiskyModel) {
-		this.popiskyModel = popiskyModel;
+		add(box, BorderLayout.WEST);
 	}
 }

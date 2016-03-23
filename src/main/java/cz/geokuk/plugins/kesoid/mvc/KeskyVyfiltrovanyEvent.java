@@ -15,10 +15,6 @@ public class KeskyVyfiltrovanyEvent extends Event0<KesoidModel> {
 	private final KesBag	vsechny;
 	// private final Set<Kes> filtrovaneKese;
 
-	public KesBag getVsechny() {
-		return vsechny;
-	}
-
 	public KeskyVyfiltrovanyEvent(final KesBag filtrovane, final KesBag vsechny) {
 		this.filtrovane = filtrovane;
 		this.vsechny = vsechny;
@@ -26,6 +22,10 @@ public class KeskyVyfiltrovanyEvent extends Event0<KesoidModel> {
 
 	public KesBag getFiltrovane() {
 		return filtrovane;
+	}
+
+	public KesBag getVsechny() {
+		return vsechny;
 	}
 
 }

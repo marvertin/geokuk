@@ -20,50 +20,12 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 public class JCestySlide extends JSingleSlide0 {
 
-	private static final long			serialVersionUID				= -5858146658366237217L;
-
-	private static final int			MIRA_VZDALENOSTI_PRO_ZVYRAZNENI	= 7;
-
-	private Doc							doc;
-
-	private Mou							moucur;
-	private boolean						dragujeme;
-
-	/** Nejbližší bod nebo śek cesty ke kurozru myši, pokud nějaký vůbec blízko je */
-	private Bousek0						blizkyBousek;
-
-	private CestyModel					cestyModel;
-
-	private final JCestaTooltip			cestaToolTip					= new JCestaTooltip();
-
-	/** Pokud je stisknut CTRL tak přidáváme body, to také znamená, že kreslíme čáru od posledního bodu cesty k aktuálnímu */
-	private Mouable						pridavanyBod1;
-	private Mouable						pridavanyBod2;
-
-	private PoziceModel					poziceModel;
-
-	private Poziceq						poziceq							= new Poziceq();
-
-	private final PropojovaciAutomat	propojovaciAutmomat				= new PropojovaciAutomat();
-
 	private class PropojovaciAutomat {
 
 		/**
 		 * Stav v jakém je propojování cest. 0 ... nic zajimavého (posunuta myš nebo nesplněny podmínky pro drag 1 ... byla stisknuta myš nebo dragnuto a blizkyBousek NEma schopnost spojovani 2 ... bylo dragnuto a blizkyBousek ma schponost spojovani, tak při uvolnění spojujeme
 		 */
 		private int stavPropojovaniCest;
-
-		private boolean jeMoznostSpojovani() {
-			final boolean jeMoznostSpojeni = blizkyBousek != null && blizkyBousek.getKoncovyBodDruheCestyVhodnyProSpojeni() != null;
-			if (jeMoznostSpojeni) {
-				// System.out.println("MOZNOST SPOJENI JE ");
-			}
-			return jeMoznostSpojeni;
-		}
-
-		void mouseMoved() {
-			stavPropojovaniCest = 0;
-		}
 
 		void mouseDragged() {
 			if (!jeMoznostSpojovani()) {
@@ -73,6 +35,10 @@ public class JCestySlide extends JSingleSlide0 {
 					stavPropojovaniCest = 2;
 				}
 			}
+		}
+
+		void mouseMoved() {
+			stavPropojovaniCest = 0;
 		}
 
 		void mousePressed() {
@@ -88,7 +54,41 @@ public class JCestySlide extends JSingleSlide0 {
 			}
 			stavPropojovaniCest = 0;
 		}
+
+		private boolean jeMoznostSpojovani() {
+			final boolean jeMoznostSpojeni = blizkyBousek != null && blizkyBousek.getKoncovyBodDruheCestyVhodnyProSpojeni() != null;
+			if (jeMoznostSpojeni) {
+				// System.out.println("MOZNOST SPOJENI JE ");
+			}
+			return jeMoznostSpojeni;
+		}
 	}
+
+	private static final long			serialVersionUID				= -5858146658366237217L;
+
+	private static final int			MIRA_VZDALENOSTI_PRO_ZVYRAZNENI	= 7;
+
+	private Doc							doc;
+	private Mou							moucur;
+
+	private boolean						dragujeme;
+
+	/** Nejbližší bod nebo śek cesty ke kurozru myši, pokud nějaký vůbec blízko je */
+	private Bousek0						blizkyBousek;
+
+	private CestyModel					cestyModel;
+
+	private final JCestaTooltip			cestaToolTip					= new JCestaTooltip();
+	/** Pokud je stisknut CTRL tak přidáváme body, to také znamená, že kreslíme čáru od posledního bodu cesty k aktuálnímu */
+	private Mouable						pridavanyBod1;
+
+	private Mouable						pridavanyBod2;
+
+	private PoziceModel					poziceModel;
+
+	private Poziceq						poziceq							= new Poziceq();
+
+	private final PropojovaciAutomat	propojovaciAutmomat				= new PropojovaciAutomat();
 
 	public JCestySlide() {
 		setOpaque(false);
@@ -96,77 +96,37 @@ public class JCestySlide extends JSingleSlide0 {
 		initComponents();
 	}
 
-	/**
-	 *
-	 */
-	private void initComponents() {
-		cestaToolTip.setVisible(false);
-		add(cestaToolTip);
+	@Override
+	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
 
-	}
-
-	public void onEvent(final CestyChangedEvent event) {
-		doc = event.getDoc();
-		// TODO repaintovat jen to, co je potřeba
-		repaint();
-	}
-
-	public void onEvent(final ZmenaSouradnicMysiEvent event) {
-		moucur = event.moucur;
-		prepocitatBlizkehoBouska();
-		zobrazeniDalky();
-		// LATER-vylet repaintovat jen to, co je potřeba
-		repaint();
-	}
-
-	public void onEvent(final PoziceChangedEvent event) {
-		poziceq = event.poziceq;
-
-	}
-
-	private void prepocitatBlizkehoBouska() {
-		if (!dragujeme) {// při dragování nechceme měnit bouska
-			if (pridavanyBod1 != null) {
-				blizkyBousek = null;
-			} else {
-				if (doc != null) {
-					blizkyBousek = doc.locateNejblizsiDoKvadratuVzdalenosi(moucur, getKvadratMaximalniVzdalenosti(), cestyModel.getCurta(), true);
-				} else {
-					blizkyBousek = null;
-				}
-			}
+		if (blizkyBousek instanceof Usek) {
+			final Usek usek = (Usek) blizkyBousek;
+			addPopupItems(popupMenu, usek);
 		}
+		if (blizkyBousek instanceof Bod) {
+			final Bod bod = (Bod) blizkyBousek;
+			addPopupItems(popupMenu, bod);
+		}
+		if (blizkyBousek != null) {
+			addPopupItems(popupMenu, blizkyBousek.getCesta());
+		}
+
+		super.addPopouItems(popupMenu, ctx);
 	}
 
-	private void zobrazeniDalky() {
-		// Mouable mouable = getUpravenaMys();
-		// Mou mou = mouable == null ? moucur : mouable.getMou();
-		// LATER Takto nebude vzdálenost přesná v blízkosti uchopovanců, asi by to chtělo
-		// uchopenou myš
-		if (moucur == null) {
-			return; // nemůžeme zobrazovat dálkoviny, když tam nemáme myš
-		}
-		final Cesta curta = cestyModel.getCurta();
-		if (pridavanyBod1 != null && curta != null) {
-			cestaToolTip.setPridavaciDalkoviny(curta, moucur);
-			napozicujCestaTolltip();
-		} else if (blizkyBousek != null) {
-			cestaToolTip.setDalkoviny(blizkyBousek, moucur);
-			napozicujCestaTolltip();
-		} else {
-			cestaToolTip.setVisible(false);
-		}
+	@Override
+	public JSingleSlide0 createRenderableSlide() {
+		return new JCestySlide();
 	}
 
-	private void napozicujCestaTolltip() {
-		cestaToolTip.setOpaque(true);
-		cestaToolTip.setBackground(Color.WHITE);
-		cestaToolTip.setSize(cestaToolTip.getPreferredSize());
-		final Point p = getSoord().transform(moucur);
-		p.y -= cestaToolTip.getHeight() + 10;
-		p.x -= cestaToolTip.getWidth() + 10;
-		cestaToolTip.setLocation(p);
-		cestaToolTip.setVisible(true);
+	@Override
+	public void ctrlKeyPressed(final MouseGestureContext ctx) {
+		zahajPridavaniBodux();
+	}
+
+	@Override
+	public void ctrlKeyReleased(final MouseGestureContext ctx) {
+		zrusPridavaniBodu();
 	}
 
 	@Override
@@ -198,48 +158,37 @@ public class JCestySlide extends JSingleSlide0 {
 	}
 
 	@Override
-	public void paintComponent(final Graphics aG) {
-		final Graphics2D g = (Graphics2D) aG;
-		// drawBodForDebug(g, pridavanyBod1, Color.BLACK);
-		// drawBodForDebug(g, pridavanyBod2, Color.WHITE);
+	public Mouable getUpravenaMys() {
 		if (doc == null) {
-			return;
+			return super.getUpravenaMys();
 		}
-		final MalovadloParams params = new MalovadloParams();
-		params.doc = doc;
-		params.curta = cestyModel.getCurta();
-		params.blizkyBousek = blizkyBousek;
-		params.soord = getSoord();
-		params.mouPridavanyBod1 = pridavanyBod1 == null ? null : pridavanyBod1.getMou();
-		params.mouPridavanyBod2 = pridavanyBod2 == null ? null : pridavanyBod2.getMou();
-		params.mouDeliciNaBlizkemBousku = moucur;
-		params.poziceMouable = poziceq.getPoziceMouable();
-		final Malovadlo malovadlo = new Malovadlo(g, params);
-		malovadlo.paint();
-	}
 
-	@SuppressWarnings("unused")
-	private void drawBodForDebug(final Graphics2D g, final Mouable mouable, final Color color) {
-		if (mouable == null) {
-			return;
+		// Ošetřit, že dosedne do nějaké cesty
+		final long kvadratMaximalniVzdalenosti = getKvadratMaximalniVzdalenosti();
+		for (final Cesta cesta : doc.getCesty()) {
+			if (cesta == cestyModel.getCurta()) {
+				// continue;
+			}
+			if (cesta.getStart() == null || cesta.getCil() == null) {
+				continue;
+			}
+			// TODO -vylet hledat nejbližší cestu a ne libovolnou cestu splňuící podmínky
+			if (cesta.getStart() != blizkyBousek && cesta.getStart().jeDoKvadratuVzdalenosti(moucur, kvadratMaximalniVzdalenosti)) {
+				return cesta.getStart();
+			}
+			if (cesta.getCil() != blizkyBousek && cesta.getCil().jeDoKvadratuVzdalenosti(moucur, kvadratMaximalniVzdalenosti)) {
+				return cesta.getCil();
+			}
 		}
-		final Mou mou = mouable.getMou();
-		final Point p = getSoord().transform(mou);
-		final Graphics gg = g.create();
-		gg.setColor(color);
-		gg.fillOval(p.x - 15, p.y - 15, 30, 30);
+		return super.getUpravenaMys();
 	}
 
-	private long getKvadratMaximalniVzdalenosti() {
-		// Využíváme transformace v jednom směru, možná by to chtělo speciální funkci.
-		final long maximalniVzdalenost = getSoord().transformPoindDiff(MIRA_VZDALENOSTI_PRO_ZVYRAZNENI);
-		final long kvadratMaximalniVzdalenosti = maximalniVzdalenost * maximalniVzdalenost;
-		return kvadratMaximalniVzdalenosti;
+	public void inject(final CestyModel cestyModel) {
+		this.cestyModel = cestyModel;
 	}
 
-	@Override
-	public JSingleSlide0 createRenderableSlide() {
-		return new JCestySlide();
+	public void inject(final PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
 	}
 
 	/**
@@ -292,51 +241,6 @@ public class JCestySlide extends JSingleSlide0 {
 		}
 	}
 
-	/**
-	 * Invoked when a mouse button has been pressed on a component.
-	 */
-	@Override
-	public void mousePressed(final MouseEvent e, final MouseGestureContext ctx) {
-		zahajCiZrsuPridavaniBoduNaZakladeMyssihoEventu(e.getModifiers());
-		dragujeme = blizkyBousek != null;
-		if (SwingUtilities.isLeftMouseButton(e)) {
-			if (blizkyBousek != null) {
-				cestyModel.setCurta(blizkyBousek.getCesta());
-			}
-		}
-		chain().mousePressed(e, ctx);
-		if (dragujeme) {
-			e.consume();
-		}
-		propojovaciAutmomat.mousePressed();
-	}
-
-	@Override
-	public void mouseMoved(final MouseEvent e, final MouseGestureContext ctx) {
-		zahajCiZrsuPridavaniBoduNaZakladeMyssihoEventu(e.getModifiers());
-		propojovaciAutmomat.mouseMoved();
-		super.mouseMoved(e, ctx);
-	}
-
-	@Override
-	public void mouseReleased(final MouseEvent e, final MouseGestureContext ctx) {
-		dragujeme = false;
-		propojovaciAutmomat.mouseReleased();
-		chain().mouseReleased(e, ctx);
-	}
-
-	@Override
-	public void mouseEntered(final MouseEvent e, final MouseGestureContext ctx) {
-		zrusPridavaniBoduKdyzKdyNeniCtrl(e.getModifiers());
-		super.mouseEntered(e, ctx);
-	}
-
-	@Override
-	public void mouseExited(final MouseEvent e, final MouseGestureContext ctx) {
-		zrusPridavaniBoduKdyzKdyNeniCtrl(e.getModifiers());
-		super.mouseExited(e, ctx);
-	}
-
 	@Override
 	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
 		zrusPridavaniBoduKdyzKdyNeniCtrl(e.getModifiers());
@@ -378,47 +282,96 @@ public class JCestySlide extends JSingleSlide0 {
 	}
 
 	@Override
-	public Mouable getUpravenaMys() {
-		if (doc == null) {
-			return super.getUpravenaMys();
-		}
-
-		// Ošetřit, že dosedne do nějaké cesty
-		final long kvadratMaximalniVzdalenosti = getKvadratMaximalniVzdalenosti();
-		for (final Cesta cesta : doc.getCesty()) {
-			if (cesta == cestyModel.getCurta()) {
-				// continue;
-			}
-			if (cesta.getStart() == null || cesta.getCil() == null) {
-				continue;
-			}
-			// TODO -vylet hledat nejbližší cestu a ne libovolnou cestu splňuící podmínky
-			if (cesta.getStart() != blizkyBousek && cesta.getStart().jeDoKvadratuVzdalenosti(moucur, kvadratMaximalniVzdalenosti)) {
-				return cesta.getStart();
-			}
-			if (cesta.getCil() != blizkyBousek && cesta.getCil().jeDoKvadratuVzdalenosti(moucur, kvadratMaximalniVzdalenosti)) {
-				return cesta.getCil();
-			}
-		}
-		return super.getUpravenaMys();
+	public void mouseEntered(final MouseEvent e, final MouseGestureContext ctx) {
+		zrusPridavaniBoduKdyzKdyNeniCtrl(e.getModifiers());
+		super.mouseEntered(e, ctx);
 	}
 
 	@Override
-	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
+	public void mouseExited(final MouseEvent e, final MouseGestureContext ctx) {
+		zrusPridavaniBoduKdyzKdyNeniCtrl(e.getModifiers());
+		super.mouseExited(e, ctx);
+	}
 
-		if (blizkyBousek instanceof Usek) {
-			final Usek usek = (Usek) blizkyBousek;
-			addPopupItems(popupMenu, usek);
-		}
-		if (blizkyBousek instanceof Bod) {
-			final Bod bod = (Bod) blizkyBousek;
-			addPopupItems(popupMenu, bod);
-		}
-		if (blizkyBousek != null) {
-			addPopupItems(popupMenu, blizkyBousek.getCesta());
-		}
+	@Override
+	public void mouseMoved(final MouseEvent e, final MouseGestureContext ctx) {
+		zahajCiZrsuPridavaniBoduNaZakladeMyssihoEventu(e.getModifiers());
+		propojovaciAutmomat.mouseMoved();
+		super.mouseMoved(e, ctx);
+	}
 
-		super.addPopouItems(popupMenu, ctx);
+	/**
+	 * Invoked when a mouse button has been pressed on a component.
+	 */
+	@Override
+	public void mousePressed(final MouseEvent e, final MouseGestureContext ctx) {
+		zahajCiZrsuPridavaniBoduNaZakladeMyssihoEventu(e.getModifiers());
+		dragujeme = blizkyBousek != null;
+		if (SwingUtilities.isLeftMouseButton(e)) {
+			if (blizkyBousek != null) {
+				cestyModel.setCurta(blizkyBousek.getCesta());
+			}
+		}
+		chain().mousePressed(e, ctx);
+		if (dragujeme) {
+			e.consume();
+		}
+		propojovaciAutmomat.mousePressed();
+	}
+
+	@Override
+	public void mouseReleased(final MouseEvent e, final MouseGestureContext ctx) {
+		dragujeme = false;
+		propojovaciAutmomat.mouseReleased();
+		chain().mouseReleased(e, ctx);
+	}
+
+	public void onEvent(final CestyChangedEvent event) {
+		doc = event.getDoc();
+		// TODO repaintovat jen to, co je potřeba
+		repaint();
+	}
+
+	public void onEvent(final PoziceChangedEvent event) {
+		poziceq = event.poziceq;
+
+	}
+
+	public void onEvent(final ZmenaSouradnicMysiEvent event) {
+		moucur = event.moucur;
+		prepocitatBlizkehoBouska();
+		zobrazeniDalky();
+		// LATER-vylet repaintovat jen to, co je potřeba
+		repaint();
+	}
+
+	@Override
+	public void paintComponent(final Graphics aG) {
+		final Graphics2D g = (Graphics2D) aG;
+		// drawBodForDebug(g, pridavanyBod1, Color.BLACK);
+		// drawBodForDebug(g, pridavanyBod2, Color.WHITE);
+		if (doc == null) {
+			return;
+		}
+		final MalovadloParams params = new MalovadloParams();
+		params.doc = doc;
+		params.curta = cestyModel.getCurta();
+		params.blizkyBousek = blizkyBousek;
+		params.soord = getSoord();
+		params.mouPridavanyBod1 = pridavanyBod1 == null ? null : pridavanyBod1.getMou();
+		params.mouPridavanyBod2 = pridavanyBod2 == null ? null : pridavanyBod2.getMou();
+		params.mouDeliciNaBlizkemBousku = moucur;
+		params.poziceMouable = poziceq.getPoziceMouable();
+		final Malovadlo malovadlo = new Malovadlo(g, params);
+		malovadlo.paint();
+	}
+
+	private void addPopupItems(final JPopupMenu popupMenu, final Bod bod) {
+		popupMenu.add(factory.initNow(new OdebratZCestyAction(bod)));
+		popupMenu.add(factory.initNow(new RozdelitCestuVBoduAction(bod)));
+		popupMenu.add(factory.initNow(new UriznoutCestuVBoduAction(bod)));
+		popupMenu.add(factory.initNow(new ZnovuSpojitCestyAction(bod)));
+		popupMenu.add(factory.initNow(new PresunoutSemVychoziBodUzavreneCesty(bod)));
 	}
 
 	private void addPopupItems(final JPopupMenu popupMenu, final Cesta cesta) {
@@ -432,14 +385,6 @@ public class JCestySlide extends JSingleSlide0 {
 
 	}
 
-	private void addPopupItems(final JPopupMenu popupMenu, final Bod bod) {
-		popupMenu.add(factory.initNow(new OdebratZCestyAction(bod)));
-		popupMenu.add(factory.initNow(new RozdelitCestuVBoduAction(bod)));
-		popupMenu.add(factory.initNow(new UriznoutCestuVBoduAction(bod)));
-		popupMenu.add(factory.initNow(new ZnovuSpojitCestyAction(bod)));
-		popupMenu.add(factory.initNow(new PresunoutSemVychoziBodUzavreneCesty(bod)));
-	}
-
 	private void addPopupItems(final JPopupMenu popupMenu, final Usek usek) {
 		popupMenu.add(factory.initNow(new PrepniVzdusnostUseku(usek, moucur)));
 		popupMenu.add(factory.initNow(new RozdelitCestuVUsekuAction(usek, moucur)));
@@ -447,13 +392,65 @@ public class JCestySlide extends JSingleSlide0 {
 		popupMenu.add(factory.initNow(new SmazatUsekAOtevritNeboRozdelitCestu(usek, moucur)));
 	}
 
-	public void inject(final CestyModel cestyModel) {
-		this.cestyModel = cestyModel;
+	@SuppressWarnings("unused")
+	private void drawBodForDebug(final Graphics2D g, final Mouable mouable, final Color color) {
+		if (mouable == null) {
+			return;
+		}
+		final Mou mou = mouable.getMou();
+		final Point p = getSoord().transform(mou);
+		final Graphics gg = g.create();
+		gg.setColor(color);
+		gg.fillOval(p.x - 15, p.y - 15, 30, 30);
 	}
 
-	@Override
-	public void ctrlKeyPressed(final MouseGestureContext ctx) {
-		zahajPridavaniBodux();
+	private long getKvadratMaximalniVzdalenosti() {
+		// Využíváme transformace v jednom směru, možná by to chtělo speciální funkci.
+		final long maximalniVzdalenost = getSoord().transformPoindDiff(MIRA_VZDALENOSTI_PRO_ZVYRAZNENI);
+		final long kvadratMaximalniVzdalenosti = maximalniVzdalenost * maximalniVzdalenost;
+		return kvadratMaximalniVzdalenosti;
+	}
+
+	/**
+	 *
+	 */
+	private void initComponents() {
+		cestaToolTip.setVisible(false);
+		add(cestaToolTip);
+
+	}
+
+	private void napozicujCestaTolltip() {
+		cestaToolTip.setOpaque(true);
+		cestaToolTip.setBackground(Color.WHITE);
+		cestaToolTip.setSize(cestaToolTip.getPreferredSize());
+		final Point p = getSoord().transform(moucur);
+		p.y -= cestaToolTip.getHeight() + 10;
+		p.x -= cestaToolTip.getWidth() + 10;
+		cestaToolTip.setLocation(p);
+		cestaToolTip.setVisible(true);
+	}
+
+	private void prepocitatBlizkehoBouska() {
+		if (!dragujeme) {// při dragování nechceme měnit bouska
+			if (pridavanyBod1 != null) {
+				blizkyBousek = null;
+			} else {
+				if (doc != null) {
+					blizkyBousek = doc.locateNejblizsiDoKvadratuVzdalenosi(moucur, getKvadratMaximalniVzdalenosti(), cestyModel.getCurta(), true);
+				} else {
+					blizkyBousek = null;
+				}
+			}
+		}
+	}
+
+	private void zahajCiZrsuPridavaniBoduNaZakladeMyssihoEventu(final int modifiers) {
+		if ((modifiers & Event.CTRL_MASK) != 0) {
+			zahajPridavaniBodux();
+		} else {
+			zrusPridavaniBodu();
+		}
 	}
 
 	private void zahajPridavaniBodux() {
@@ -475,6 +472,26 @@ public class JCestySlide extends JSingleSlide0 {
 		cestyModel.setPridavaniBodu(true);
 	}
 
+	private void zobrazeniDalky() {
+		// Mouable mouable = getUpravenaMys();
+		// Mou mou = mouable == null ? moucur : mouable.getMou();
+		// LATER Takto nebude vzdálenost přesná v blízkosti uchopovanců, asi by to chtělo
+		// uchopenou myš
+		if (moucur == null) {
+			return; // nemůžeme zobrazovat dálkoviny, když tam nemáme myš
+		}
+		final Cesta curta = cestyModel.getCurta();
+		if (pridavanyBod1 != null && curta != null) {
+			cestaToolTip.setPridavaciDalkoviny(curta, moucur);
+			napozicujCestaTolltip();
+		} else if (blizkyBousek != null) {
+			cestaToolTip.setDalkoviny(blizkyBousek, moucur);
+			napozicujCestaTolltip();
+		} else {
+			cestaToolTip.setVisible(false);
+		}
+	}
+
 	private void zrusPridavaniBodu() {
 		if (pridavanyBod1 != null) {
 			prepocitatBlizkehoBouska();
@@ -490,23 +507,6 @@ public class JCestySlide extends JSingleSlide0 {
 		if ((modifiers & Event.CTRL_MASK) == 0) {
 			zrusPridavaniBodu();
 		}
-	}
-
-	private void zahajCiZrsuPridavaniBoduNaZakladeMyssihoEventu(final int modifiers) {
-		if ((modifiers & Event.CTRL_MASK) != 0) {
-			zahajPridavaniBodux();
-		} else {
-			zrusPridavaniBodu();
-		}
-	}
-
-	@Override
-	public void ctrlKeyReleased(final MouseGestureContext ctx) {
-		zrusPridavaniBodu();
-	}
-
-	public void inject(final PoziceModel poziceModel) {
-		this.poziceModel = poziceModel;
 	}
 
 }

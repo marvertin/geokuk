@@ -41,11 +41,6 @@ public class CenterWaypointAction extends Action0 implements AfterEventReceiverR
 		vyrezModel.vystredovatNaPozici();
 	}
 
-	public void onEvent(final IkonyNactenyEvent event) {
-		ikonBag = event.getBag();
-
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -57,6 +52,11 @@ public class CenterWaypointAction extends Action0 implements AfterEventReceiverR
 		// super.putValue(SMALL_ICON, Board.ikonizer.findIcon(wpt, "x16", true));
 		super.putValue(SMALL_ICON, ikonBag.seekIkon(wpt.getGenotyp(ikonBag.getGenom())));
 		super.putValue(SHORT_DESCRIPTION, "Vycentruje daný waypoint keše.");
+
+	}
+
+	public void onEvent(final IkonyNactenyEvent event) {
+		ikonBag = event.getBag();
 
 	}
 }

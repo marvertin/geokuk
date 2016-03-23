@@ -24,16 +24,34 @@ public class MultiNacitac {
 
 	private static final Logger		log							= LogManager.getLogger(MultiNacitac.class.getSimpleName());
 
+	private static final Root.Def	FILE_NAME_REGEX_GEOKUK_DIR	= new Root.Def(Integer.MAX_VALUE, Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"), null);
+
+	private static final Root.Def	FILE_NAME_REGEX_GEOGET_DIR	= new Root.Def(1, Pattern.compile("(?i).*\\.db3"), Pattern.compile("(?i).*\\.[0-9]{8}\\.db3"));
+
 	private final DirScanner		ds;
 
 	private final List<Nacitac0>	nacitace					= new ArrayList<>();
-
 	private final KesoidModel		kesoidModel;
 
-	private static final Root.Def	FILE_NAME_REGEX_GEOKUK_DIR	= new Root.Def(Integer.MAX_VALUE, Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"), null);
-	private static final Root.Def	FILE_NAME_REGEX_GEOGET_DIR	= new Root.Def(1, Pattern.compile("(?i).*\\.db3"), Pattern.compile("(?i).*\\.[0-9]{8}\\.db3"));
-
 	// private static final String CACHE_SUFFIX = ".cache.serialized";
+
+	/**
+	 * Checks whether the given file is a ZIP file. Copied from http://www.java2s.com/Code/Java/File-Input-Output/DeterminewhetherafileisaZIPFile.htm
+	 */
+	private static boolean isZipFile(final File fileToTest) {
+		if (fileToTest.isDirectory()) {
+			return false;
+		}
+		if (fileToTest.length() < 4) {
+			return false;
+		}
+		try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(fileToTest)))) {
+			final int test = in.readInt();
+			return test == 0x504b0304;
+		} catch (final IOException e) {
+			throw new IllegalArgumentException("The file " + fileToTest + " cannot be checked!", e);
+		}
+	}
 
 	public MultiNacitac(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
@@ -42,21 +60,6 @@ public class MultiNacitac {
 		nacitace.add(new NacitacGpx());
 		nacitace.add(new NacitacImageMetadata());
 		nacitace.add(new GeogetLoader());
-	}
-
-	public void setRootDirs(final boolean prenacti, final File kesDir, final File geogetDir) {
-		final List<Root> roots = new ArrayList<>();
-		if (kesDir != null) {
-			roots.add(new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR));
-		}
-		if (geogetDir != null) {
-			roots.add(new Root(geogetDir, FILE_NAME_REGEX_GEOGET_DIR));
-		}
-		ds.seRootDirs(prenacti, roots.toArray(new Root[roots.size()]));
-	}
-
-	public void setGeogetDataDir(final File aEffectiveFile, final boolean aPrenacti) {
-		// TODO Auto-generated method stub
 	}
 
 	public KesBag nacti(final Future<?> future, final Genom genom) throws IOException {
@@ -79,6 +82,21 @@ public class MultiNacitac {
 		builder.done(genom);
 
 		return builder.getKesBag();
+	}
+
+	public void setGeogetDataDir(final File aEffectiveFile, final boolean aPrenacti) {
+		// TODO Auto-generated method stub
+	}
+
+	public void setRootDirs(final boolean prenacti, final File kesDir, final File geogetDir) {
+		final List<Root> roots = new ArrayList<>();
+		if (kesDir != null) {
+			roots.add(new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR));
+		}
+		if (geogetDir != null) {
+			roots.add(new Root(geogetDir, FILE_NAME_REGEX_GEOGET_DIR));
+		}
+		ds.seRootDirs(prenacti, roots.toArray(new Root[roots.size()]));
 	}
 
 	/**
@@ -110,24 +128,6 @@ public class MultiNacitac {
 					nacitac.nactiBezVyjimky(file, builder, future, kesoidModel.getProgressModel());
 				}
 			}
-		}
-	}
-
-	/**
-	 * Checks whether the given file is a ZIP file. Copied from http://www.java2s.com/Code/Java/File-Input-Output/DeterminewhetherafileisaZIPFile.htm
-	 */
-	private static boolean isZipFile(final File fileToTest) {
-		if (fileToTest.isDirectory()) {
-			return false;
-		}
-		if (fileToTest.length() < 4) {
-			return false;
-		}
-		try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(fileToTest)))) {
-			final int test = in.readInt();
-			return test == 0x504b0304;
-		} catch (final IOException e) {
-			throw new IllegalArgumentException("The file " + fileToTest + " cannot be checked!", e);
 		}
 	}
 

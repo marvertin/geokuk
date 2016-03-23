@@ -28,62 +28,6 @@ public class MouRect {
 		// assert roh2.yy == yy2;
 	}
 
-	public Mou getStred() {
-		return new Mou((xx1 + xx2) / 2, (yy1 + yy2) / 2);
-	}
-
-	public Mou getJz() {
-		return new Mou(xx1, yy1);
-	}
-
-	public Mou getSv() {
-		return new Mou(xx2, yy2);
-	}
-
-	public Mou getJv() {
-		return new Mou(xx2, yy1);
-	}
-
-	public Mou getSz() {
-		return new Mou(xx1, yy2);
-	}
-
-	public boolean isRecangle() {
-		return xx1 < xx2 && yy1 < yy2;
-	}
-
-	public boolean isVerticalLine() {
-		return xx1 == xx2 && yy1 < yy2;
-	}
-
-	public boolean isHorizontalLine() {
-		return yy1 == yy2 && xx1 < xx2;
-	}
-
-	public int getMouWidth() {
-		return xx2 - xx1;
-	}
-
-	public int getMouHeight() {
-		return yy2 - yy1;
-	}
-
-	public boolean isLine() {
-		return isVerticalLine() || isHorizontalLine();
-	}
-
-	public boolean isPoint() {
-		return !isEmpty() && xx1 == xx2 && yy1 == yy2;
-	}
-
-	public boolean isEmpty() {
-		return xx1 == 0 && xx2 == 0 & yy1 == 0 & yy2 == 0;
-	}
-
-	public BoundingRect getBoundingRect() {
-		return new BoundingRect(xx1, yy1, xx2, yy2);
-	}
-
 	public void add(final Mou mou) {
 		if (isEmpty()) { // tak jsou všechny nulové
 			xx1 = mou.xx;
@@ -105,17 +49,6 @@ public class MouRect {
 			}
 		}
 
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + xx1;
-		result = prime * result + xx2;
-		result = prime * result + yy1;
-		result = prime * result + yy2;
-		return result;
 	}
 
 	@Override
@@ -145,9 +78,71 @@ public class MouRect {
 		return true;
 	}
 
+	public BoundingRect getBoundingRect() {
+		return new BoundingRect(xx1, yy1, xx2, yy2);
+	}
+
+	public Mou getJv() {
+		return new Mou(xx2, yy1);
+	}
+
+	public Mou getJz() {
+		return new Mou(xx1, yy1);
+	}
+
+	public int getMouHeight() {
+		return yy2 - yy1;
+	}
+
+	public int getMouWidth() {
+		return xx2 - xx1;
+	}
+
+	public Mou getStred() {
+		return new Mou((xx1 + xx2) / 2, (yy1 + yy2) / 2);
+	}
+
+	public Mou getSv() {
+		return new Mou(xx2, yy2);
+	}
+
+	public Mou getSz() {
+		return new Mou(xx1, yy2);
+	}
+
 	@Override
-	public String toString() {
-		return "MouRect [xx1=" + xx1 + ", xx2=" + xx2 + ", yy1=" + yy1 + ", yy2=" + yy2 + "]";
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + xx1;
+		result = prime * result + xx2;
+		result = prime * result + yy1;
+		result = prime * result + yy2;
+		return result;
+	}
+
+	public boolean isEmpty() {
+		return xx1 == 0 && xx2 == 0 & yy1 == 0 & yy2 == 0;
+	}
+
+	public boolean isHorizontalLine() {
+		return yy1 == yy2 && xx1 < xx2;
+	}
+
+	public boolean isLine() {
+		return isVerticalLine() || isHorizontalLine();
+	}
+
+	public boolean isPoint() {
+		return !isEmpty() && xx1 == xx2 && yy1 == yy2;
+	}
+
+	public boolean isRecangle() {
+		return xx1 < xx2 && yy1 < yy2;
+	}
+
+	public boolean isVerticalLine() {
+		return xx1 == xx2 && yy1 < yy2;
 	}
 
 	/**
@@ -160,6 +155,11 @@ public class MouRect {
 		xx2 += dx;
 		yy1 -= dy;
 		yy2 += dy;
+	}
+
+	@Override
+	public String toString() {
+		return "MouRect [xx1=" + xx1 + ", xx2=" + xx2 + ", yy1=" + yy1 + ", yy2=" + yy2 + "]";
 	}
 
 }

@@ -27,31 +27,6 @@ public class Poziceq {
 		assert originalMou != null;
 	}
 
-	public boolean isNoPosition() {
-		return mouable == null;
-	}
-
-	public Mouable getPoziceMouable() {
-		if (isNoPosition()) {
-			return null;
-		}
-		return mouable.getMou().equals(originalMou) ? mouable : originalMou;
-	}
-
-	public Mou getPoziceMou() {
-		final Mouable poziceMouable = getPoziceMouable();
-		return poziceMouable == null ? null : poziceMouable.getMou();
-	}
-
-	public Wpt getWpt() {
-		final Mouable mouable = getPoziceMouable();
-		if (mouable instanceof Wpt) {
-			final Wpt wpt = (Wpt) mouable;
-			return wpt;
-		}
-		return null;
-	}
-
 	public Bod getBod() {
 		final Mouable mouable = getPoziceMouable();
 		if (mouable instanceof Bod) {
@@ -69,6 +44,18 @@ public class Poziceq {
 		return wpt.getKesoid();
 	}
 
+	public Mou getPoziceMou() {
+		final Mouable poziceMouable = getPoziceMouable();
+		return poziceMouable == null ? null : poziceMouable.getMou();
+	}
+
+	public Mouable getPoziceMouable() {
+		if (isNoPosition()) {
+			return null;
+		}
+		return mouable.getMou().equals(originalMou) ? mouable : originalMou;
+	}
+
 	public Wgs getWgs() {
 		// Here, if the underlying mouable has latitude and longitude, simply return its Wgs, because it's more accurate
 		// than converting the coordinates many times. At the moment, only waypoints satisfy this condition, but if other
@@ -81,6 +68,19 @@ public class Poziceq {
 		// if not, just do it the old way
 		final Mou mou = getPoziceMou();
 		return mou == null ? null : mou.toWgs();
+	}
+
+	public Wpt getWpt() {
+		final Mouable mouable = getPoziceMouable();
+		if (mouable instanceof Wpt) {
+			final Wpt wpt = (Wpt) mouable;
+			return wpt;
+		}
+		return null;
+	}
+
+	public boolean isNoPosition() {
+		return mouable == null;
 	}
 
 	// public Utm getUtm() {

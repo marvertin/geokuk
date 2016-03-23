@@ -13,13 +13,18 @@ public class JMrizkaDdMmSs extends JMrizkaWgs {
 	private static final long serialVersionUID = -4045265652174560904L;
 
 	@Override
-	public String getTextY(final double y) {
-		return Wgs.toDdMmSsFormat(y);
+	public JSingleSlide0 createRenderableSlide() {
+		return new JMrizkaDdMmSs();
 	}
 
 	@Override
 	public String getTextX(final double x) {
 		return Wgs.toDdMmSsFormat(x);
+	}
+
+	@Override
+	public String getTextY(final double y) {
+		return Wgs.toDdMmSsFormat(y);
 	}
 
 	/*
@@ -52,11 +57,6 @@ public class JMrizkaDdMmSs extends JMrizkaWgs {
 		v.rastr(90, 1);
 		v.rastr(180, 1);
 		v.rastr(360, 1);
-	}
-
-	@Override
-	public JSingleSlide0 createRenderableSlide() {
-		return new JMrizkaDdMmSs();
 	}
 
 	@Override

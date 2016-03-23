@@ -26,17 +26,65 @@ import cz.geokuk.plugins.kesoid.mapicon.ASada;
 @RunWith(JUnit4.class)
 public class MyPreferencesTest {
 
+	class MockPreferences extends AbstractPreferences {
+
+		private final Map<String, String> storage = new HashMap<>();
+
+		protected MockPreferences(final AbstractPreferences parent, final String name) {
+			super(parent, name);
+		}
+
+		@Override
+		protected void flushSpi() throws BackingStoreException {
+
+		}
+
+		@Override
+		protected String getSpi(final String key) {
+			return storage.get(key);
+		}
+
+		@Override
+		protected String[] childrenNamesSpi() throws BackingStoreException {
+			return new String[0];
+		}
+
+		@Override
+		protected AbstractPreferences childSpi(final String name) {
+			return null;
+		}
+
+		@Override
+		protected String[] keysSpi() throws BackingStoreException {
+			return new String[0];
+		}
+
+		@Override
+		protected void putSpi(final String key, final String value) {
+			storage.put(key, value);
+		}
+
+		@Override
+		protected void removeNodeSpi() throws BackingStoreException {
+
+		}
+
+		@Override
+		protected void removeSpi(final String key) {
+			storage.remove(key);
+		}
+
+		@Override
+		protected void syncSpi() throws BackingStoreException {
+
+		}
+	}
+
 	private MyPreferences preferences;
 
 	@Before
 	public void setUp() {
 		preferences = new MyPreferences(new MockPreferences(null, ""));
-	}
-
-	@Test
-	public void test_shortStringStorage() {
-		preferences.put("@jhka", "FOOBAR@;\"");
-		assertThat(preferences.get("@jhka", null)).isEqualTo("FOOBAR@;\"");
 	}
 
 	@Test
@@ -47,17 +95,17 @@ public class MyPreferencesTest {
 	}
 
 	@Test
-	public void test_putFile() {
-		final File toStore = new File("/tmp/foobar");
-		preferences.putFile("jhka", toStore);
-		assertThat(preferences.getFile("jhka", null)).isEqualTo(toStore);
-	}
-
-	@Test
 	public void test_putAtom() {
 		final Atom toStore = Atom.valueOf(ASada.class, "Standard");
 		preferences.putAtom("jhka", toStore);
 		assertThat(preferences.getAtom("jhka", null, ASada.class)).isEqualTo(toStore);
+	}
+
+	@Test
+	public void test_putFile() {
+		final File toStore = new File("/tmp/foobar");
+		preferences.putFile("jhka", toStore);
+		assertThat(preferences.getFile("jhka", null)).isEqualTo(toStore);
 	}
 
 	@Test
@@ -74,57 +122,9 @@ public class MyPreferencesTest {
 		assertThat((Iterable<String>) preferences.getStringSet("jhka", null)).isEqualTo(toStore);
 	}
 
-	class MockPreferences extends AbstractPreferences {
-
-		private final Map<String, String> storage = new HashMap<>();
-
-		protected MockPreferences(final AbstractPreferences parent, final String name) {
-			super(parent, name);
-		}
-
-		@Override
-		protected void putSpi(final String key, final String value) {
-			storage.put(key, value);
-		}
-
-		@Override
-		protected String getSpi(final String key) {
-			return storage.get(key);
-		}
-
-		@Override
-		protected void removeSpi(final String key) {
-			storage.remove(key);
-		}
-
-		@Override
-		protected void removeNodeSpi() throws BackingStoreException {
-
-		}
-
-		@Override
-		protected String[] keysSpi() throws BackingStoreException {
-			return new String[0];
-		}
-
-		@Override
-		protected String[] childrenNamesSpi() throws BackingStoreException {
-			return new String[0];
-		}
-
-		@Override
-		protected AbstractPreferences childSpi(final String name) {
-			return null;
-		}
-
-		@Override
-		protected void syncSpi() throws BackingStoreException {
-
-		}
-
-		@Override
-		protected void flushSpi() throws BackingStoreException {
-
-		}
+	@Test
+	public void test_shortStringStorage() {
+		preferences.put("@jhka", "FOOBAR@;\"");
+		assertThat(preferences.get("@jhka", null)).isEqualTo("FOOBAR@;\"");
 	}
 }

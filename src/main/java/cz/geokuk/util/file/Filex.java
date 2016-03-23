@@ -11,43 +11,6 @@ public class Filex {
 	private final boolean	relativeToProgram;
 	private final boolean	active;
 
-	public Filex(final File file, final boolean relativeToProgram, final boolean active) {
-		super();
-		this.file = file;
-		this.relativeToProgram = relativeToProgram;
-		this.active = active;
-	}
-
-	public File getFile() {
-		return file;
-	}
-
-	public boolean isRelativeToProgram() {
-		return relativeToProgram;
-	}
-
-	/**
-	 * Pokud je nastaven adresář jako aktivní, tak bere efektivní soubor, jinak null.
-	 *
-	 * @return
-	 */
-	public File getEffectiveFileIfActive() {
-		return isActive() ? getEffectiveFile() : null;
-	}
-
-	public File getEffectiveFile() {
-		File f = file;
-		if (!file.isAbsolute()) {
-			if (relativeToProgram) {
-				f = new File(FConst.JAR_DIR, file.getPath());
-			} else {
-				f = new File(new File("").getAbsoluteFile(), file.getPath());
-			}
-		}
-		f = canonize(f);
-		return f;
-	}
-
 	/**
 	 * Kanonizuj danou cestu. Pokud je cesta relativní, nejdříve ji zabsolutni.
 	 *
@@ -151,18 +114,11 @@ public class Filex {
 		return new File(path);
 	}
 
-	@Override
-	public String toString() {
-		return getEffectiveFile().toString();
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (file == null ? 0 : file.hashCode());
-		result = prime * result + (relativeToProgram ? 1231 : 1237);
-		return result;
+	public Filex(final File file, final boolean relativeToProgram, final boolean active) {
+		super();
+		this.file = file;
+		this.relativeToProgram = relativeToProgram;
+		this.active = active;
 	}
 
 	@Override
@@ -190,8 +146,52 @@ public class Filex {
 		return true;
 	}
 
+	public File getEffectiveFile() {
+		File f = file;
+		if (!file.isAbsolute()) {
+			if (relativeToProgram) {
+				f = new File(FConst.JAR_DIR, file.getPath());
+			} else {
+				f = new File(new File("").getAbsoluteFile(), file.getPath());
+			}
+		}
+		f = canonize(f);
+		return f;
+	}
+
+	/**
+	 * Pokud je nastaven adresář jako aktivní, tak bere efektivní soubor, jinak null.
+	 *
+	 * @return
+	 */
+	public File getEffectiveFileIfActive() {
+		return isActive() ? getEffectiveFile() : null;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (file == null ? 0 : file.hashCode());
+		result = prime * result + (relativeToProgram ? 1231 : 1237);
+		return result;
+	}
+
 	public boolean isActive() {
 		return active;
+	}
+
+	public boolean isRelativeToProgram() {
+		return relativeToProgram;
+	}
+
+	@Override
+	public String toString() {
+		return getEffectiveFile().toString();
 	}
 
 }

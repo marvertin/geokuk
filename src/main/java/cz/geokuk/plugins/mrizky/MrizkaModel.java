@@ -16,6 +16,11 @@ public class MrizkaModel extends Model0 implements BeanSubtypable {
 		this.defaultZobrazeni = defaultZobrazeni;
 	}
 
+	@Override
+	public String getSubType() {
+		return kteraMrizka;
+	}
+
 	public boolean isOnoff() {
 		return onoff;
 	}
@@ -38,10 +43,5 @@ public class MrizkaModel extends Model0 implements BeanSubtypable {
 	protected void reloadPreferences() {
 		setOnoff(currPrefe().node(FPref.MRIZKA_node).getBoolean(FPref.ZOBRAZIT_MMRIZKU_valuePrefix + kteraMrizka, defaultZobrazeni));
 		currPrefe().node(FPref.MRIZKA_node).remove("zobrazitMeritko");
-	}
-
-	@Override
-	public String getSubType() {
-		return kteraMrizka;
 	}
 }

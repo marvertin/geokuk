@@ -23,13 +23,24 @@ public abstract class CestyActionIndividual0 extends CestyAction0 {
 		enablujPokudMaSmysl();
 	}
 
+	protected Mouable effectiveMouable() {
+		if (kontextoveMouable != null) {
+			return proOdstraneniZVyletu(kontextoveMouable);
+		}
+		// jinak se musíme spolehnout na pozici
+		if (!poziceq.isNoPosition()) {
+			return proOdstraneniZVyletu(poziceq.getPoziceMouable());
+		}
+		return null;
+	}
+
+	protected abstract void enablujPokudMaSmysl();
+
 	@Override
 	protected final void vyletChanged() {
 		super.vyletChanged();
 		enablujPokudMaSmysl();
 	}
-
-	protected abstract void enablujPokudMaSmysl();
 
 	/**
 	 * Do vyýletu se dá přidat jen WPT, ale ne Bod, ale také volná pozice.
@@ -45,17 +56,6 @@ public abstract class CestyActionIndividual0 extends CestyAction0 {
 			return mouable; // připojovat na bod se nebudeme
 		}
 		return null; // a nic jiného nelze odstranit
-	}
-
-	protected Mouable effectiveMouable() {
-		if (kontextoveMouable != null) {
-			return proOdstraneniZVyletu(kontextoveMouable);
-		}
-		// jinak se musíme spolehnout na pozici
-		if (!poziceq.isNoPosition()) {
-			return proOdstraneniZVyletu(poziceq.getPoziceMouable());
-		}
-		return null;
 	}
 
 	// protected Mouable effectiveMouable() {

@@ -36,12 +36,12 @@ public class Photo extends Kesoid {
 	}
 
 	@Override
-	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
-		sb.append("<b>").append(wpt.getName()).append("<b>");
+	public Icon getUrlIcon() {
+		return ImageLoader.seekResIcon("gccom.png");
 	}
 
 	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("gccom.png");
+	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
+		sb.append("<b>").append(wpt.getName()).append("<b>");
 	}
 }

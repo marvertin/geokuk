@@ -65,13 +65,13 @@ public class NacitacImageMetadata extends NacitacInputStream0 {
 	}
 
 	@Override
-	boolean umiNacist(final ZipEntry zipEntry) {
-		return umiNacist(zipEntry.getName());
+	boolean umiNacist(final File file) {
+		return umiNacist(file.getName());
 	}
 
 	@Override
-	boolean umiNacist(final File file) {
-		return umiNacist(file.getName());
+	boolean umiNacist(final ZipEntry zipEntry) {
+		return umiNacist(zipEntry.getName());
 	}
 
 	private boolean umiNacist(final String resourceName) {

@@ -19,30 +19,6 @@ public class LamUrl {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "LamUrl [lastModified=" + lastModified + ", url=" + url + "]";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (lastModified ^ lastModified >>> 32);
-		result = prime * result + (url == null ? 0 : url.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -68,6 +44,30 @@ public class LamUrl {
 			return false;
 		}
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (lastModified ^ lastModified >>> 32);
+		result = prime * result + (url == null ? 0 : url.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "LamUrl [lastModified=" + lastModified + ", url=" + url + "]";
 	}
 
 }

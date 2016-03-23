@@ -28,9 +28,6 @@ public final class FExceptionDumper {
 																			}
 																		};
 
-	private FExceptionDumper() {
-		/* No instancies. */}
-
 	/**
 	 * Vydampuje výjimku do repozitoře a vrátí její identifikaci. Dumpuje do implicitní repozitoře.
 	 *
@@ -59,38 +56,6 @@ public final class FExceptionDumper {
 	}
 
 	/**
-	 * Přeruší řetěz výjimek. Aktuální výjimku vydumpuje a míso ní vyhodí výjimku jinou, která se nezřetězuje s původní výjimkou, ale obsahuje pouze její identifikaci. Toto je vhodné pro případ, kdy výjimka prochází serializovaně přes vzálené volání do úplně jiného prostředí, ve kterým by třídy
-	 * výjimek nemusely být k dispozoci. Navíc toto řešení zajištťuje bezpečnost v tom smyslu, že se na vzdálenou stranu nedostanou nechtěná data.
-	 *
-	 * @param aThrowable
-	 * @param aExceptionSeverity
-	 * @param aCircumstance
-	 * @return
-	 */
-	public static XChainRupture ruptureChain(final Throwable aThrowable, final EExceptionSeverity aExceptionSeverity, final String aCircumstance) {
-		final AExcId excid = getExceptionDumper().dump(aThrowable, aExceptionSeverity, aCircumstance, getDefaultRepository());
-		return new XChainRupture(excid, aCircumstance);
-	}
-
-	/**
-	 * Vrátí dumpera pro dané vlákno nebo pro danou aplikaci.
-	 *
-	 * @return
-	 */
-	public static ExceptionDumper getExceptionDumper() {
-		return tExceptinDumper.get(); // Vrátit exception dumper pro příslušné vlákno.
-	}
-
-	/**
-	 * Vrátí dumpera pro dané vlákno nebo pro danou aplikaci.
-	 *
-	 * @return
-	 */
-	public static void setExceptionDumper(final ExceptionDumper aExceptionDumper) {
-		tExceptinDumper.set(aExceptionDumper == null ? new ExceptionDumper() : aExceptionDumper);
-	}
-
-	/**
 	 * Vrátí implicíitní repositry. Adresář s repository je určen systémovou property {@value #TC_EXCREP_DIR_PROPERTY}. Pokud property není nastavena, je repozitoř v adresáři $HOME/excrep.
 	 *
 	 * @return
@@ -107,29 +72,6 @@ public final class FExceptionDumper {
 			}
 		}
 		return sDefaultRepository;
-	}
-
-	/**
-	 * Zjistí umístění složky z několikati zdrojů.
-	 *
-	 * @since [2009-04-30 12:58, roztocil]
-	 */
-	private static File getExcrepFolder() {
-		File result;
-		// Nejprve zkusíme Systenm.properties - dá se změnit zvnějšku, nejlepší kandidát na ad hoc změnu.
-		final String path = getExcrepPathViaSystemProperty();
-		if (StringUtils.isBlank(path)) {
-			// Poslední, co zkusíme, je umístění v home adresáři. Bude fungovat vždycky.
-			result = EXCEPTION_DIR;
-		} else {
-			result = new File(path);
-		}
-		return result;
-	}
-
-	private static String getExcrepPathViaSystemProperty() {
-		final String result = System.getProperty(TC_EXCREP_DIR_PROPERTY);
-		return result;
 	}
 
 	/**
@@ -159,6 +101,15 @@ public final class FExceptionDumper {
 			FThrowable.printStackTrace(e, System.err, "errorEceptionDumping");
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Vrátí dumpera pro dané vlákno nebo pro danou aplikaci.
+	 *
+	 * @return
+	 */
+	public static ExceptionDumper getExceptionDumper() {
+		return tExceptinDumper.get(); // Vrátit exception dumper pro příslušné vlákno.
 	}
 
 	public static URL getExceptionUrl(final AExcId aCode) {
@@ -197,4 +148,53 @@ public final class FExceptionDumper {
 		final String textVyjimkyNeni = getDumpedException(AExcId.from(excid.toString() + "AA"));
 		System.out.println("Tato vyjimka neni: " + textVyjimkyNeni);
 	}
+
+	/**
+	 * Přeruší řetěz výjimek. Aktuální výjimku vydumpuje a míso ní vyhodí výjimku jinou, která se nezřetězuje s původní výjimkou, ale obsahuje pouze její identifikaci. Toto je vhodné pro případ, kdy výjimka prochází serializovaně přes vzálené volání do úplně jiného prostředí, ve kterým by třídy
+	 * výjimek nemusely být k dispozoci. Navíc toto řešení zajištťuje bezpečnost v tom smyslu, že se na vzdálenou stranu nedostanou nechtěná data.
+	 *
+	 * @param aThrowable
+	 * @param aExceptionSeverity
+	 * @param aCircumstance
+	 * @return
+	 */
+	public static XChainRupture ruptureChain(final Throwable aThrowable, final EExceptionSeverity aExceptionSeverity, final String aCircumstance) {
+		final AExcId excid = getExceptionDumper().dump(aThrowable, aExceptionSeverity, aCircumstance, getDefaultRepository());
+		return new XChainRupture(excid, aCircumstance);
+	}
+
+	/**
+	 * Vrátí dumpera pro dané vlákno nebo pro danou aplikaci.
+	 *
+	 * @return
+	 */
+	public static void setExceptionDumper(final ExceptionDumper aExceptionDumper) {
+		tExceptinDumper.set(aExceptionDumper == null ? new ExceptionDumper() : aExceptionDumper);
+	}
+
+	/**
+	 * Zjistí umístění složky z několikati zdrojů.
+	 *
+	 * @since [2009-04-30 12:58, roztocil]
+	 */
+	private static File getExcrepFolder() {
+		File result;
+		// Nejprve zkusíme Systenm.properties - dá se změnit zvnějšku, nejlepší kandidát na ad hoc změnu.
+		final String path = getExcrepPathViaSystemProperty();
+		if (StringUtils.isBlank(path)) {
+			// Poslední, co zkusíme, je umístění v home adresáři. Bude fungovat vždycky.
+			result = EXCEPTION_DIR;
+		} else {
+			result = new File(path);
+		}
+		return result;
+	}
+
+	private static String getExcrepPathViaSystemProperty() {
+		final String result = System.getProperty(TC_EXCREP_DIR_PROPERTY);
+		return result;
+	}
+
+	private FExceptionDumper() {
+		/* No instancies. */}
 }

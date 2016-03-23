@@ -20,6 +20,10 @@ public class JMvRadioPanel<T> extends JPanel {
 		setBorder(BorderFactory.createTitledBorder(title));
 	}
 
+	public SelectionModel<T> getSelectionModel() {
+		return model;
+	}
+
 	public void setSelectionModel(final SelectionModel<T> model) {
 		this.model = model;
 		final List<Item<T>> items = model.items;
@@ -37,10 +41,6 @@ public class JMvRadioPanel<T> extends JPanel {
 		}
 		model.addListener(event -> buttons.get(event.item.poradi).setSelected(true));
 
-	}
-
-	public SelectionModel<T> getSelectionModel() {
-		return model;
 	}
 
 }

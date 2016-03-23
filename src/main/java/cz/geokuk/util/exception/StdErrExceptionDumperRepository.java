@@ -15,16 +15,6 @@ public class StdErrExceptionDumperRepository implements ExceptionDumperRepositor
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see cz.tconsult.tw.util.exception.ExceptionDumperRepositorySpi#write(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void write(final AExcId aCode, final String aExceptionData) throws IOException {
-		System.err.println(aCode + StringUtils.LINE_SEPARATOR + aExceptionData);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see cz.tconsult.tw.util.exception.ExceptionDumperRepositorySpi#getRunNumber()
 	 */
 	@Override
@@ -51,6 +41,16 @@ public class StdErrExceptionDumperRepository implements ExceptionDumperRepositor
 	@Override
 	public boolean isReadable() {
 		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.tconsult.tw.util.exception.ExceptionDumperRepositorySpi#write(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void write(final AExcId aCode, final String aExceptionData) throws IOException {
+		System.err.println(aCode + StringUtils.LINE_SEPARATOR + aExceptionData);
 	}
 
 }

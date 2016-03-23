@@ -49,62 +49,28 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 		// Board.eveman.registerWeakly(this);
 	}
 
-	public void onEvent(final PoziceChangedEvent aEvent) {
-		if (FUtil.equalsa(poziceq, aEvent.poziceq)) {
-			return;
-		}
-		poziceq = aEvent.poziceq;
-		prepocitatBlizkostKrize();
-		repaint();
-	}
-
-	public void onEvent(final ZmenaSouradnicMysiEvent aEvent) {
-		pointcur = aEvent.pointcur;
-		prepocitatBlizkostKrize();
-	}
-
-	private void prepocitatBlizkostKrize() {
-		if (!poziceq.isNoPosition() && pointcur != null) {
-			final double dalka = getSoord().pixleDalka(getSoord().transform(pointcur), poziceq.getWgs().toMou());
-			final boolean pobliz = dalka < 20;
-			if (pobliz != mysJePoblizKrize) {
-				mysJePoblizKrize = pobliz;
-				repaintKriz();
-			}
-		}
-	}
-
-	/**
-	 *
-	 */
-	private void repaintKriz() {
-		if (poziceq.isNoPosition()) {
-			return; // není co kreslit
-		}
-		final Mou mou = poziceq.getPoziceMou();
-		final Point p = getSoord().transform(mou);
-		repaint(p.x - R_KRIZE, p.y - R_KRIZE, R_KRIZE * 2, R_KRIZE * 2);
-	}
-
 	@Override
-	public void paintComponent(final Graphics aG) {
+	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
+		if (mysJePoblizKrize) {
+			final Wgs wgs = poziceq.getWgs();
+			// add(new ZoomKesAction(kesoid));
+			if (wgs != null) {
+				final JMenuItem item = new JMenuItem(factory.init(new CenterPoziceAction()));
+				// item.setText("Centruj");
+				// TODO Dát ikonu středování
+				// item.setIcon(null);
 
-		if (poziceq.isNoPosition()) {
-			return; // není co kreslit
+				add(item);
+			}
+
+			popupMenu.add(new JMenuItem(factory.init(new ZoomPoziceAction(wgs))));
+			popupMenu.add(new JMenuItem(factory.init(new OdstranKrizAction())));
+			popupMenu.add(new JMenuItem(factory.init(new PridatDoCestyAction(poziceq.getPoziceMouable()))));
+			popupMenu.add(new JMenuItem(factory.init(new GeocodingBorowserXmlAction(wgs))));
+			popupMenu.add(new JMenuItem(factory.init(new SouradniceDoClipboarduAction(wgs))));
+			popupMenu.add(new JMenuItem(factory.init(new OpenStreetViewAction(wgs))));
 		}
-		final Mou mou = poziceq.getPoziceMou();
-		final Point p = getSoord().transform(mou);
-		final int ra = R_VNITRNI_KRUZNICE;
-		final int rb = R_VNEJSI_KRUZNICE;
-		final int rk = R_KRIZE;
-
-		final Graphics2D g = (Graphics2D) aG;
-		g.setStroke(new BasicStroke(mysJePoblizKrize ? 3 : 1));
-		g.setColor(Color.RED);
-		g.drawLine(p.x - rk, p.y, p.x + rk, p.y);
-		g.drawLine(p.x, p.y - rk, p.x, p.y + rk);
-		g.drawOval(p.x - ra, p.y - ra, 2 * ra, 2 * ra);
-		g.drawOval(p.x - rb, p.y - rb, 2 * rb, 2 * rb);
+		chain().addPopouItems(popupMenu, ctx);
 	}
 
 	/**
@@ -119,6 +85,19 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 		} else {
 			return chain().getUpravenaMys();
 		}
+	}
+
+	@Override
+	public void inject(final Factory factory) {
+		this.factory = factory;
+	}
+
+	public void inject(final PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
+	}
+
+	public void inject(final VyrezModel vyrezModel) {
+		this.vyrezModel = vyrezModel;
 	}
 
 	/**
@@ -144,41 +123,62 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 		chain().mouseClicked(e, ctx);
 	}
 
-	@Override
-	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
-		if (mysJePoblizKrize) {
-			final Wgs wgs = poziceq.getWgs();
-			// add(new ZoomKesAction(kesoid));
-			if (wgs != null) {
-				final JMenuItem item = new JMenuItem(factory.init(new CenterPoziceAction()));
-				// item.setText("Centruj");
-				// TODO Dát ikonu středování
-				// item.setIcon(null);
-
-				add(item);
-			}
-
-			popupMenu.add(new JMenuItem(factory.init(new ZoomPoziceAction(wgs))));
-			popupMenu.add(new JMenuItem(factory.init(new OdstranKrizAction())));
-			popupMenu.add(new JMenuItem(factory.init(new PridatDoCestyAction(poziceq.getPoziceMouable()))));
-			popupMenu.add(new JMenuItem(factory.init(new GeocodingBorowserXmlAction(wgs))));
-			popupMenu.add(new JMenuItem(factory.init(new SouradniceDoClipboarduAction(wgs))));
-			popupMenu.add(new JMenuItem(factory.init(new OpenStreetViewAction(wgs))));
+	public void onEvent(final PoziceChangedEvent aEvent) {
+		if (FUtil.equalsa(poziceq, aEvent.poziceq)) {
+			return;
 		}
-		chain().addPopouItems(popupMenu, ctx);
+		poziceq = aEvent.poziceq;
+		prepocitatBlizkostKrize();
+		repaint();
 	}
 
-	public void inject(final PoziceModel poziceModel) {
-		this.poziceModel = poziceModel;
-	}
-
-	public void inject(final VyrezModel vyrezModel) {
-		this.vyrezModel = vyrezModel;
+	public void onEvent(final ZmenaSouradnicMysiEvent aEvent) {
+		pointcur = aEvent.pointcur;
+		prepocitatBlizkostKrize();
 	}
 
 	@Override
-	public void inject(final Factory factory) {
-		this.factory = factory;
+	public void paintComponent(final Graphics aG) {
+
+		if (poziceq.isNoPosition()) {
+			return; // není co kreslit
+		}
+		final Mou mou = poziceq.getPoziceMou();
+		final Point p = getSoord().transform(mou);
+		final int ra = R_VNITRNI_KRUZNICE;
+		final int rb = R_VNEJSI_KRUZNICE;
+		final int rk = R_KRIZE;
+
+		final Graphics2D g = (Graphics2D) aG;
+		g.setStroke(new BasicStroke(mysJePoblizKrize ? 3 : 1));
+		g.setColor(Color.RED);
+		g.drawLine(p.x - rk, p.y, p.x + rk, p.y);
+		g.drawLine(p.x, p.y - rk, p.x, p.y + rk);
+		g.drawOval(p.x - ra, p.y - ra, 2 * ra, 2 * ra);
+		g.drawOval(p.x - rb, p.y - rb, 2 * rb, 2 * rb);
+	}
+
+	private void prepocitatBlizkostKrize() {
+		if (!poziceq.isNoPosition() && pointcur != null) {
+			final double dalka = getSoord().pixleDalka(getSoord().transform(pointcur), poziceq.getWgs().toMou());
+			final boolean pobliz = dalka < 20;
+			if (pobliz != mysJePoblizKrize) {
+				mysJePoblizKrize = pobliz;
+				repaintKriz();
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	private void repaintKriz() {
+		if (poziceq.isNoPosition()) {
+			return; // není co kreslit
+		}
+		final Mou mou = poziceq.getPoziceMou();
+		final Point p = getSoord().transform(mou);
+		repaint(p.x - R_KRIZE, p.y - R_KRIZE, R_KRIZE * 2, R_KRIZE * 2);
 	}
 
 }

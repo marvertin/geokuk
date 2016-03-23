@@ -72,6 +72,46 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 
 	private RefbodyModel								refbodyModel;
 
+	private static String formatuj(final String s, final EKesStatus status) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<html>");
+		if (status != EKesStatus.ACTIVE) {
+			sb.append("<strike>");
+		}
+		if (status == EKesStatus.DISABLED) {
+			sb.append("<font color=\"darkgray\">");
+		}
+		if (status == EKesStatus.ARCHIVED) {
+			sb.append("<font color=\"red\">");
+		}
+		sb.append(s);
+		if (status == EKesStatus.ARCHIVED) {
+			sb.append("</font");
+		}
+		if (status == EKesStatus.DISABLED) {
+			sb.append("</font");
+		}
+		if (status != EKesStatus.ACTIVE) {
+			sb.append("</strike>");
+		}
+		return sb.toString();
+	}
+
+	private static Icon vztah(final EKesVztah vztah) {
+		switch (vztah) {
+		case FOUND:
+			return ImageLoader.seekResIcon("kesvztah/found.gif");
+		case OWN:
+			return ImageLoader.seekResIcon("kesvztah/own.gif");
+		case NORMAL:
+			return null;
+		case NOT:
+			return null;
+		default:
+			return null;
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -80,6 +120,94 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	@Override
 	public void initAfterInject() {
 		initComponents();
+	}
+
+	public void inject(final Akce akce) {
+		this.akce = akce;
+	}
+
+	public void inject(final Factory factory) {
+		this.factory = factory;
+	}
+
+	public void inject(final RefbodyModel refbodyModel) {
+		this.refbodyModel = refbodyModel;
+	}
+
+	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
+		if (isVisible() && kesoid != null) {
+			napln();
+		}
+	}
+
+	public void onEvent(final IkonyNactenyEvent event) {
+		ikonBag = event.getBag();
+
+	}
+
+	public void onEvent(final PoziceChangedEvent aEvent) {
+		if (aEvent.poziceq.isNoPosition()) {
+			setVisible(false);
+		} else {
+			wpt = aEvent.poziceq.getWpt();
+			if (wpt == null) {
+				setVisible(false);
+			} else {
+				final Kesoid k = wpt.getKesoid();
+				if (kesoid == null || k.getKesoidKind() != kesoid.getKesoidKind()) {
+					if (kesoid != null) {
+						jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(false);
+					}
+					kesoid = wpt.getKesoid();
+					jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(true);
+				} else {
+					kesoid = k;
+				}
+				jDetailyKesoidu.get(kesoid.getKesoidKind()).napln(wpt);
+
+				if (kesoid.getUrlShow() != null) {
+					jOtevriUrl.setAction(new ZobrazNaGcComAction(kesoid));
+					jOtevriUrl.setVisible(true);
+				} else {
+					jOtevriUrl.setVisible(false);
+				}
+				jOtevriUrl.setText(null);
+				napln();
+				// boolean mameHint = kes.getHint() != null && ! kes.getHint().trim().isEmpty();
+				// zobrazHint.setEnabled(mameHint);
+				setVisible(true);
+			}
+		}
+	}
+
+	protected void napln() {
+		jKesoidCode.setText(kesoid.getKesoidKind() == EKesoidKind.CGP ? wpt.getName() : kesoid.getIdentifier());
+		jKesoidNazev.setText(formatuj(kesoid.getNazev(), kesoid.getStatus()));
+		jKesoidSym.setText(kesoid.getFirstWpt().getSym());
+
+		jWptName.setText(wpt.getName());
+		jWptNazev.setText(formatuj(wpt.getNazev(), kesoid.getStatus()));
+		jWptSym.setText(wpt.getSym());
+		jRucnePridany.setText(wpt.isRucnePridany() ? "+" : "*");
+		jRucnePridany.setToolTipText(wpt.isRucnePridany() ? "Waypoint byl ručně přidán v Geogetu nebo podobném programu." : "Waypoint byl obsažen v PQ");
+		final int elevation = wpt.getElevation();
+		jElevation.setText(elevation == 0 ? null : elevation + " m n. m.");
+		jAuthor.setText(kesoid.getAuthor());
+		jHiddenTime.setText(JKesoidDetail0.formatujDatum(kesoid.getHidden()));
+		jVztah.setIcon(vztah(kesoid.getVztah()));
+		if (ikonBag != null) {
+			jType.setIcon(ikonBag.seekIkon(kesoid.getMainWpt().getGenotyp(ikonBag.getGenom())));
+		}
+		jAzimut.setIcon(azimut(kesoid.getMainWpt()));
+		jVzdalenost.setText(vzdalenost(kesoid.getMainWpt()));
+
+		// jNoFirstWpt.setVisible(wpt != kesoid.getFirstWpt());
+		// kesoid.getKesoidKind().getDetail().setVisible(true);
+
+	}
+
+	private Icon azimut(final Wpt wpt) {
+		return Ikonizer.findSmerIcon(refbodyModel.getHc().azimut(wpt.getWgs()));
 	}
 
 	private void initComponents() {
@@ -198,136 +326,8 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		}
 	}
 
-	public void onEvent(final PoziceChangedEvent aEvent) {
-		if (aEvent.poziceq.isNoPosition()) {
-			setVisible(false);
-		} else {
-			wpt = aEvent.poziceq.getWpt();
-			if (wpt == null) {
-				setVisible(false);
-			} else {
-				final Kesoid k = wpt.getKesoid();
-				if (kesoid == null || k.getKesoidKind() != kesoid.getKesoidKind()) {
-					if (kesoid != null) {
-						jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(false);
-					}
-					kesoid = wpt.getKesoid();
-					jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(true);
-				} else {
-					kesoid = k;
-				}
-				jDetailyKesoidu.get(kesoid.getKesoidKind()).napln(wpt);
-
-				if (kesoid.getUrlShow() != null) {
-					jOtevriUrl.setAction(new ZobrazNaGcComAction(kesoid));
-					jOtevriUrl.setVisible(true);
-				} else {
-					jOtevriUrl.setVisible(false);
-				}
-				jOtevriUrl.setText(null);
-				napln();
-				// boolean mameHint = kes.getHint() != null && ! kes.getHint().trim().isEmpty();
-				// zobrazHint.setEnabled(mameHint);
-				setVisible(true);
-			}
-		}
-	}
-
-	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
-		if (isVisible() && kesoid != null) {
-			napln();
-		}
-	}
-
-	public void onEvent(final IkonyNactenyEvent event) {
-		ikonBag = event.getBag();
-
-	}
-
-	protected void napln() {
-		jKesoidCode.setText(kesoid.getKesoidKind() == EKesoidKind.CGP ? wpt.getName() : kesoid.getIdentifier());
-		jKesoidNazev.setText(formatuj(kesoid.getNazev(), kesoid.getStatus()));
-		jKesoidSym.setText(kesoid.getFirstWpt().getSym());
-
-		jWptName.setText(wpt.getName());
-		jWptNazev.setText(formatuj(wpt.getNazev(), kesoid.getStatus()));
-		jWptSym.setText(wpt.getSym());
-		jRucnePridany.setText(wpt.isRucnePridany() ? "+" : "*");
-		jRucnePridany.setToolTipText(wpt.isRucnePridany() ? "Waypoint byl ručně přidán v Geogetu nebo podobném programu." : "Waypoint byl obsažen v PQ");
-		final int elevation = wpt.getElevation();
-		jElevation.setText(elevation == 0 ? null : elevation + " m n. m.");
-		jAuthor.setText(kesoid.getAuthor());
-		jHiddenTime.setText(JKesoidDetail0.formatujDatum(kesoid.getHidden()));
-		jVztah.setIcon(vztah(kesoid.getVztah()));
-		if (ikonBag != null) {
-			jType.setIcon(ikonBag.seekIkon(kesoid.getMainWpt().getGenotyp(ikonBag.getGenom())));
-		}
-		jAzimut.setIcon(azimut(kesoid.getMainWpt()));
-		jVzdalenost.setText(vzdalenost(kesoid.getMainWpt()));
-
-		// jNoFirstWpt.setVisible(wpt != kesoid.getFirstWpt());
-		// kesoid.getKesoidKind().getDetail().setVisible(true);
-
-	}
-
 	private String vzdalenost(final Wpt wpt) {
 		return refbodyModel.getHc().vzdalenostStr(wpt.getWgs());
-	}
-
-	private Icon azimut(final Wpt wpt) {
-		return Ikonizer.findSmerIcon(refbodyModel.getHc().azimut(wpt.getWgs()));
-	}
-
-	private static String formatuj(final String s, final EKesStatus status) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("<html>");
-		if (status != EKesStatus.ACTIVE) {
-			sb.append("<strike>");
-		}
-		if (status == EKesStatus.DISABLED) {
-			sb.append("<font color=\"darkgray\">");
-		}
-		if (status == EKesStatus.ARCHIVED) {
-			sb.append("<font color=\"red\">");
-		}
-		sb.append(s);
-		if (status == EKesStatus.ARCHIVED) {
-			sb.append("</font");
-		}
-		if (status == EKesStatus.DISABLED) {
-			sb.append("</font");
-		}
-		if (status != EKesStatus.ACTIVE) {
-			sb.append("</strike>");
-		}
-		return sb.toString();
-	}
-
-	private static Icon vztah(final EKesVztah vztah) {
-		switch (vztah) {
-		case FOUND:
-			return ImageLoader.seekResIcon("kesvztah/found.gif");
-		case OWN:
-			return ImageLoader.seekResIcon("kesvztah/own.gif");
-		case NORMAL:
-			return null;
-		case NOT:
-			return null;
-		default:
-			return null;
-		}
-	}
-
-	public void inject(final Akce akce) {
-		this.akce = akce;
-	}
-
-	public void inject(final Factory factory) {
-		this.factory = factory;
-	}
-
-	public void inject(final RefbodyModel refbodyModel) {
-		this.refbodyModel = refbodyModel;
 	}
 
 }

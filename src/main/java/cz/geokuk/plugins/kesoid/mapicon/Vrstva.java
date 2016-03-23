@@ -4,36 +4,21 @@ import java.util.*;
 
 public class Vrstva {
 
+	private class Seznamec {
+		Seznamec	next;	// další položka. "Seznam má mnoho vrcholů v mapě dle symbolové alely a nakonec vždy jede dolů do seznamu spolčných icondefů.
+		IconDef		iconDef;
+
+	}
+
 	private final Map<Alela, Seznamec>	icondefsProSymbol	= new HashMap<>();
 	private final Seznamec				hlavickaObecnych	= new Seznamec();
+
 	private final Set<Alela>			pouziteAlely		= new HashSet<>();
 
 	private int							pocet;
 
-	void add(final IconDef iconDef) {
-		if (iconDef != null) {
-			final Alela alelaSym = iconDef.getAlelaSym();
-			final Seznamec seznamecPredNeho = new Seznamec();
-			seznamecPredNeho.iconDef = iconDef;
-			if (alelaSym == null) {
-				seznamecPredNeho.next = hlavickaObecnych.next;
-				hlavickaObecnych.next = seznamecPredNeho;
-				pocet++;
-			} else {
-				Seznamec seznamec = icondefsProSymbol.get(alelaSym);
-				if (seznamec == null) {
-					seznamec = hlavickaObecnych;
-				}
-				seznamecPredNeho.next = seznamec;
-				icondefsProSymbol.put(alelaSym, seznamecPredNeho);
-				pocet++;
-			}
-			// A Ještě schovat použité alely
-			for (final IconSubDef subDef : iconDef.getSubdefs()) {
-				pouziteAlely.addAll(subDef.alely);
-			}
-		}
-
+	public Set<Alela> getPouziteAlely() {
+		return pouziteAlely;
 	}
 
 	/**
@@ -92,17 +77,30 @@ public class Vrstva {
 		return vybrane.get(0); // a ten první vátit
 	}
 
-	private Seznamec najdiPocatek(final Genotyp genotyp) {
-		final Alela alelaSym = genotyp.getAlelaSym();
-		Seznamec pocatek;
-		if (alelaSym == null) {
-			return hlavickaObecnych;
+	void add(final IconDef iconDef) {
+		if (iconDef != null) {
+			final Alela alelaSym = iconDef.getAlelaSym();
+			final Seznamec seznamecPredNeho = new Seznamec();
+			seznamecPredNeho.iconDef = iconDef;
+			if (alelaSym == null) {
+				seznamecPredNeho.next = hlavickaObecnych.next;
+				hlavickaObecnych.next = seznamecPredNeho;
+				pocet++;
+			} else {
+				Seznamec seznamec = icondefsProSymbol.get(alelaSym);
+				if (seznamec == null) {
+					seznamec = hlavickaObecnych;
+				}
+				seznamecPredNeho.next = seznamec;
+				icondefsProSymbol.put(alelaSym, seznamecPredNeho);
+				pocet++;
+			}
+			// A Ještě schovat použité alely
+			for (final IconSubDef subDef : iconDef.getSubdefs()) {
+				pouziteAlely.addAll(subDef.alely);
+			}
 		}
-		pocatek = icondefsProSymbol.get(alelaSym);
-		if (pocatek != null) {
-			return pocatek;
-		}
-		return hlavickaObecnych;
+
 	}
 
 	/**
@@ -117,14 +115,17 @@ public class Vrstva {
 		}
 	}
 
-	private class Seznamec {
-		Seznamec	next;	// další položka. "Seznam má mnoho vrcholů v mapě dle symbolové alely a nakonec vždy jede dolů do seznamu spolčných icondefů.
-		IconDef		iconDef;
-
-	}
-
-	public Set<Alela> getPouziteAlely() {
-		return pouziteAlely;
+	private Seznamec najdiPocatek(final Genotyp genotyp) {
+		final Alela alelaSym = genotyp.getAlelaSym();
+		Seznamec pocatek;
+		if (alelaSym == null) {
+			return hlavickaObecnych;
+		}
+		pocatek = icondefsProSymbol.get(alelaSym);
+		if (pocatek != null) {
+			return pocatek;
+		}
+		return hlavickaObecnych;
 	}
 
 }

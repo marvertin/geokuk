@@ -27,6 +27,50 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 
 	}
 
+	public void addChangeListener(final ChangeListener listener) {
+		jMaximalniVelikost.addChangeListener(listener);
+	}
+
+	/**
+	 * @return
+	 */
+	public Integer getMaximalniVelikost() {
+		return (Integer) iModel.getValue();
+	}
+
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		registerEvents();
+	}
+
+	public void inject(final RenderModel renderModel) {
+		this.renderModel = renderModel;
+
+	}
+
+	public void onEvent(final PripravaRendrovaniEvent event) {
+		iModel.setValue(event.getRenderSettings().getRenderedMoumer());
+	}
+
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		final EKaType podklad = event.getKaSet().getPodklad();
+		iModel.setMinimum(podklad.getMinMoumer());
+		iModel.setMaximum(podklad.getMaxMoumer());
+		iModel.setValue(podklad.fitMoumer((Integer) iModel.getValue()));
+	}
+
+	/**
+	 * @param kmzMaxDlazdiceX
+	 */
+	public void setMaximalniVelikost(final int kmzMaxDlazdice) {
+		iModel.setValue(kmzMaxDlazdice);
+	}
+
+	public void setMetrika(final DlazdicovaMetrika metrika) {
+		jSkutecnaVelikost.setText(metrika.dlaSize + "");
+		jPocetDlazdic.setText(metrika.dlaPocet + "");
+	}
+
 	/**
 	 *
 	 */
@@ -55,31 +99,6 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 
 	}
 
-	public void setMetrika(final DlazdicovaMetrika metrika) {
-		jSkutecnaVelikost.setText(metrika.dlaSize + "");
-		jPocetDlazdic.setText(metrika.dlaPocet + "");
-	}
-
-	public void onEvent(final ZmenaMapNastalaEvent event) {
-		final EKaType podklad = event.getKaSet().getPodklad();
-		iModel.setMinimum(podklad.getMinMoumer());
-		iModel.setMaximum(podklad.getMaxMoumer());
-		iModel.setValue(podklad.fitMoumer((Integer) iModel.getValue()));
-	}
-
-	public void onEvent(final PripravaRendrovaniEvent event) {
-		iModel.setValue(event.getRenderSettings().getRenderedMoumer());
-	}
-
-	@Override
-	public void initAfterEventReceiverRegistration() {
-		registerEvents();
-	}
-
-	public void addChangeListener(final ChangeListener listener) {
-		jMaximalniVelikost.addChangeListener(listener);
-	}
-
 	/**
 	 *
 	 */
@@ -89,25 +108,6 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 			settings.setKmzMaxDlazdiceX((Integer) iModel.getNumber());
 			renderModel.setRenderSettings(settings);
 		});
-	}
-
-	public void inject(final RenderModel renderModel) {
-		this.renderModel = renderModel;
-
-	}
-
-	/**
-	 * @return
-	 */
-	public Integer getMaximalniVelikost() {
-		return (Integer) iModel.getValue();
-	}
-
-	/**
-	 * @param kmzMaxDlazdiceX
-	 */
-	public void setMaximalniVelikost(final int kmzMaxDlazdice) {
-		iModel.setValue(kmzMaxDlazdice);
 	}
 
 }

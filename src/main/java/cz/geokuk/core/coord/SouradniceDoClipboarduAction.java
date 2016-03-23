@@ -48,13 +48,13 @@ public class SouradniceDoClipboarduAction extends Action0 {
 		poziceModel.souradniceDoClipboardu(m.getMou());
 	}
 
-	public void onEvent(final PoziceChangedEvent event) {
-		poziceq = event.poziceq;
-		setEnabled(mouable != null || !poziceq.isNoPosition());
-	}
-
 	@Override
 	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
+	}
+
+	public void onEvent(final PoziceChangedEvent event) {
+		poziceq = event.poziceq;
+		setEnabled(mouable != null || !poziceq.isNoPosition());
 	}
 }

@@ -4,7 +4,17 @@ import java.io.File;
 import java.nio.file.Path;
 
 public class KeFile {
+	public static class XRelativizeDubleDot extends RuntimeException {
+		private static final long serialVersionUID = 7735880115004590777L;
+
+		private XRelativizeDubleDot(final String aMessage) {
+			super(aMessage);
+		}
+
+	}
+
 	public final Root			root;
+
 	public final FileAndTime	fat;
 
 	public KeFile(final FileAndTime aFat, final Root aRoot) {
@@ -12,6 +22,21 @@ public class KeFile {
 		fat = aFat;
 		root = aRoot;
 		getRelativePath(); // jen kvůli vyhození výjimky, aby nešel stvořit obje,kt, který lze relativizovat
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final KeFile other = (KeFile) obj;
+		return getFile().equals(other.getFile()) && root.dir.equals(other.root.dir);
 	}
 
 	public File getFile() {
@@ -40,33 +65,9 @@ public class KeFile {
 		return relativeFile;
 	}
 
-	public static class XRelativizeDubleDot extends RuntimeException {
-		private static final long serialVersionUID = 7735880115004590777L;
-
-		private XRelativizeDubleDot(final String aMessage) {
-			super(aMessage);
-		}
-
-	}
-
 	@Override
 	public int hashCode() {
 		return getFile().hashCode() + root.dir.hashCode();
-	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final KeFile other = (KeFile) obj;
-		return getFile().equals(other.getFile()) && root.dir.equals(other.root.dir);
 	}
 
 	@Override

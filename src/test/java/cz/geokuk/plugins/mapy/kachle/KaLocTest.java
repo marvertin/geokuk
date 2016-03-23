@@ -8,6 +8,17 @@ import cz.geokuk.core.coordinates.Mou;
 public class KaLocTest {
 
 	@Test
+	public void test0() {
+
+		final Mou mou1 = new Mou(0, 0);
+		final KaLoc kaloc = KaLoc.ofJZ(mou1, 4);
+		Assert.assertEquals(0, kaloc.getSignedX());
+		Assert.assertEquals(0, kaloc.getSignedY());
+		Assert.assertEquals(8, kaloc.getFromSzUnsignedX());
+		Assert.assertEquals(7, kaloc.getFromSzUnsignedY());
+	}
+
+	@Test
 	public void testJZroh() {
 
 		final Mou mou1 = new Mou(0xFEA00000, 0x05200000);
@@ -24,17 +35,6 @@ public class KaLocTest {
 		final Mou mou2 = kaloc.getMouSZ();
 		Assert.assertEquals(mou1, mou2);
 
-	}
-
-	@Test
-	public void test0() {
-
-		final Mou mou1 = new Mou(0, 0);
-		final KaLoc kaloc = KaLoc.ofJZ(mou1, 4);
-		Assert.assertEquals(0, kaloc.getSignedX());
-		Assert.assertEquals(0, kaloc.getSignedY());
-		Assert.assertEquals(8, kaloc.getFromSzUnsignedX());
-		Assert.assertEquals(7, kaloc.getFromSzUnsignedY());
 	}
 
 }

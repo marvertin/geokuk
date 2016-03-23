@@ -22,6 +22,18 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
 		initComponents();
 	}
 
+	@Override
+	public void napln(final Wpt wpt) {
+		simwpt = (SimpleWaypoint) wpt.getKesoid();
+		napln();
+	}
+
+	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
+		if (isVisible() && simwpt != null) {
+			napln();
+		}
+	}
+
 	private void initComponents() {
 
 		final Box hlav = Box.createVerticalBox();
@@ -41,18 +53,6 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
 		final Box box3 = Box.createHorizontalBox();
 		box3.add(Box.createGlue());
 		hlav.add(box3);
-	}
-
-	@Override
-	public void napln(final Wpt wpt) {
-		simwpt = (SimpleWaypoint) wpt.getKesoid();
-		napln();
-	}
-
-	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
-		if (isVisible() && simwpt != null) {
-			napln();
-		}
 	}
 
 	private void napln() {

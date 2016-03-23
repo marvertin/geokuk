@@ -10,46 +10,75 @@ import cz.geokuk.util.lang.CounterMap;
 
 public class Genom {
 
-	private static final Logger			log					= LogManager.getLogger(Genom.class.getSimpleName());
+	public class CitacAlel {
+
+		private int[] pocty;
+
+		public CitacAlel() {
+			pocty = new int[1000];
+		}
+
+		public void add(final Alela alela) {
+			assert alela != null;
+			final int poradi = alela.getCelkovePoradi();
+			if (poradi >= pocty.length) {
+				final int[] p = pocty;
+				pocty = new int[poradi + 1000];
+				System.arraycopy(p, 0, pocty, 0, p.length);
+
+			}
+			pocty[poradi]++;
+		}
+
+		public CounterMap<Alela> getCounterMap() {
+			final CounterMap<Alela> cm = new CCounterMap<>();
+			for (final Alela alela : alely.values()) {
+				final int celkovePoradi = alela.getCelkovePoradi();
+				cm.set(alela, celkovePoradi >= pocty.length ? 0 : pocty[celkovePoradi]);
+			}
+			return cm;
+		}
+	}
 
 	// public static Genom G = new Genom();
 
+	private static final Logger			log					= LogManager.getLogger(Genom.class.getSimpleName());
 	public static final String			NEZARAZENY_GEN		= "<Nezařazení>";
 	private final Map<String, Alela>	alely				= new LinkedHashMap<>();
 	private final Map<String, Gen>		geny				= new LinkedHashMap<>();
+
 	private final List<Gen>				genyList			= new ArrayList<>();
 
 	private Gen							symGen;
 
-	private Gen							currentGen;
-
 	// TODO : refactor this so the alelas are loaded from an external file (-> possibility of user addition of new alelas
 	// easily).
 
+	private Gen							currentGen;
+
 	public Alela						ALELA_Waypoint		= coale("Waypoint", "Obecný waypoint");
-
 	public Alela						ALELA_h				= coale("h", "Hlavní waypoint");
-	public Alela						ALELA_v				= coale("v", "Vedlejší waypoint");
 
+	public Alela						ALELA_v				= coale("v", "Vedlejší waypoint");
 	public Alela						ALELA_00			= coale("00", "Neznámý");
 	public Alela						ALELA_gc			= coale("gc", "Keš");
 	public Alela						ALELA_wm			= coale("wm", "Waymark");
 	public Alela						ALELA_gb			= coale("gb", "Český geodetický bod");
 	public Alela						ALELA_wp			= coale("wp", "Obecný waypoint");
 	public Alela						ALELA_mz			= coale("mz", "Munzee");
-	public Alela						ALELA_pic			= coale("pic", "Obrázek");
 
+	public Alela						ALELA_pic			= coale("pic", "Obrázek");
 	public Alela						ALELA_hnf			= coale("hnf", "Nehledané");
 	public Alela						ALELA_fnd			= coale("fnd", "Nalezené");
 	public Alela						ALELA_own			= coale("own", "Moje vlastní");
 	public Alela						ALELA_not			= coale("not", "Neexistující");
 	public Alela						ALELA_cpt			= coale("cpt", "Captured");
-	public Alela						ALELA_dpl			= coale("dpl", "Deployed");
 
+	public Alela						ALELA_dpl			= coale("dpl", "Deployed");
 	public Alela						ALELA_actv			= coale("actv", "Aktivmí");
 	public Alela						ALELA_dsbl			= coale("dsbl", "Disablovaná");
-	public Alela						ALELA_arch			= coale("arch", "Archivovaný");
 
+	public Alela						ALELA_arch			= coale("arch", "Archivovaný");
 	public Alela						ALELA_00000			= coale("00000", "Neznámá");
 	public Alela						ALELA_nlist			= coale("nlist", "Not listed");
 	public Alela						ALELA_micro			= coale("micro", "Micro");
@@ -58,28 +87,28 @@ public class Genom {
 	public Alela						ALELA_large			= coale("large", "Large");
 	public Alela						ALELA_hugex			= coale("hugex", "Huge");
 	public Alela						ALELA_virtu			= coale("virtu", "Virtual");
-	public Alela						ALELA_other			= coale("other", "Other");
 
+	public Alela						ALELA_other			= coale("other", "Other");
 	public Alela						ALELA_nevime		= coale("nevime", "Nerozhodnuto");
 	public Alela						ALELA_lovime		= coale("lovime", "Jdeme lovit");
-	public Alela						ALELA_ignoru		= coale("ignoru", "Budeme ignorovat");
 
+	public Alela						ALELA_ignoru		= coale("ignoru", "Budeme ignorovat");
 	public Alela						ALELA_nomouse		= coale("nomouse", "Žádná myš");
 	public Alela						ALELA_mousean		= coale("mousean", "Myš nad jiným wpt kešoidu");
+
 	public Alela						ALELA_mouseon		= coale("mouseon", "Myš nad tímto wpt");
-
 	public Alela						ALELA_noselect		= coale("noselect", "Nevybraný");
+
 	public Alela						ALELA_selected		= coale("selected", "Vybraný");
-
 	public Alela						ALELA_nevyluste		= coale("nevyluste", "Není vyluštěno");
+
 	public Alela						ALELA_vylusteno		= coale("vylusteno", "Je vyluštěno");
-
 	public Alela						ALELA_pqimported	= coale("pqimported", "Imporotvané z PQ");
+
 	public Alela						ALELA_handedited	= coale("handedited", "Ručně přidané");
-
 	public Alela						ALELA_mimocesticu	= coale("mimocesticu", "Mimo cestu");
-	public Alela						ALELA_nacestejsou	= coale("nacestejsou", "Na cestě");
 
+	public Alela						ALELA_nacestejsou	= coale("nacestejsou", "Na cestě");
 	public Alela						ALELA_ter0			= coale("ter0", "Nespecifikovaný");
 	public Alela						ALELA_ter10			= coale("ter10", "1");
 	public Alela						ALELA_ter15			= coale("ter15", "1,5");
@@ -89,8 +118,8 @@ public class Genom {
 	public Alela						ALELA_ter35			= coale("ter35", "3,5");
 	public Alela						ALELA_ter40			= coale("ter40", "4");
 	public Alela						ALELA_ter45			= coale("ter45", "4,5");
-	public Alela						ALELA_ter50			= coale("ter50", "5");
 
+	public Alela						ALELA_ter50			= coale("ter50", "5");
 	public Alela						ALELA_def0			= coale("dif0", "Nespecifikovaná");
 	public Alela						ALELA_dif10			= coale("dif10", "1");
 	public Alela						ALELA_dif15			= coale("dif15", "1,5");
@@ -102,74 +131,8 @@ public class Genom {
 	public Alela						ALELA_dif45			= coale("dif45", "4,5");
 	public Alela						ALELA_dif50			= coale("dif50", "5");
 	public Grupa						GRUPA_gcawp;
+
 	public Grupa						GRUPA_gc;
-
-	private Alela coale(final String alelaName, final String displayName) {
-		final Alela alela = makeAlela(alelaName);
-		alela.setDisplayName(displayName);
-		return alela;
-	}
-
-	private synchronized Alela makeAlela(final String alelaName) {
-		Alela alela = alely.get(alelaName);
-		if (alela == null) {
-			alela = new Alela(alelaName, alely.size());
-			alely.put(alelaName, alela);
-		}
-		return alela;
-	}
-
-	private synchronized Alela alela(final String alelaName, final Gen gen, final String jmenoGrupy) {
-		final Alela alela = makeAlela(alelaName);
-		gen.add(alela, jmenoGrupy);
-		return alela;
-	}
-
-	public Alela seekAlela(final String alelaName) {
-		Alela alela = alely.get(alelaName);
-		if (alela == null) {
-			log.warn("Alela [{}] neni definovana!", alelaName);
-			alela = makeAlela(alelaName);
-		}
-
-		return alela;
-	}
-
-	public Alela locateAlela(final String alelaName) {
-		return alely.get(alelaName);
-	}
-
-	private synchronized Gen gen(final String displayName, final boolean vypsatelnyVeZhasinaci) {
-		Gen gen = geny.get(displayName);
-		if (gen == null) {
-			gen = new Gen(displayName, this, vypsatelnyVeZhasinaci);
-			genyList.add(gen);
-			geny.put(displayName, gen);
-		}
-		currentGen = gen;
-		return gen;
-	}
-
-	public Genotyp getGenotypProAlelu(final Alela alela) {
-		final Set<Alela> alely = new HashSet<>();
-		for (final Gen gen : genyList) {
-			if (gen.getAlely().contains(alela)) {
-				alely.add(alela);
-			} else {
-				alely.add(gen.getVychoziAlela());
-			}
-		}
-		return new Genotyp(alely, this);
-	}
-
-	public Genotyp getGenotypVychozi() {
-		final Set<Alela> alely = new HashSet<>();
-		for (final Gen gen : genyList) {
-			assert gen != null;
-			alely.add(gen.getVychoziAlela());
-		}
-		return new Genotyp(alely, this);
-	}
 
 	{
 		symGen = gen("Typ waypointu", true);
@@ -266,10 +229,6 @@ public class Genom {
 		currentGen = null;
 	}
 
-	private void ale(final Alela alela) {
-		currentGen.add(alela, null);
-	}
-
 	/**
 	 * Určeno pro defince genů a alel externích. Pro každý nový gen se musí vytvořit též implicitní alela.
 	 *
@@ -300,6 +259,47 @@ public class Genom {
 		return alela(wptsym, symGen, jmenoGrupy);
 	}
 
+	public CitacAlel createCitacAlel() {
+		return new CitacAlel();
+	}
+
+	public boolean existsGen(final String displayName) {
+		return geny.containsKey(displayName);
+	}
+
+	public Genotyp getGenotypProAlelu(final Alela alela) {
+		final Set<Alela> alely = new HashSet<>();
+		for (final Gen gen : genyList) {
+			if (gen.getAlely().contains(alela)) {
+				alely.add(alela);
+			} else {
+				alely.add(gen.getVychoziAlela());
+			}
+		}
+		return new Genotyp(alely, this);
+	}
+
+	public Genotyp getGenotypVychozi() {
+		final Set<Alela> alely = new HashSet<>();
+		for (final Gen gen : genyList) {
+			assert gen != null;
+			alely.add(gen.getVychoziAlela());
+		}
+		return new Genotyp(alely, this);
+	}
+
+	public List<Gen> getGeny() {
+		return genyList;
+	}
+
+	public Gen getSymGen() {
+		return symGen;
+	}
+
+	public Alela locateAlela(final String alelaName) {
+		return alely.get(alelaName);
+	}
+
 	public Set<Alela> namesToAlely(final Set<String> jmenaAlel) {
 		final Set<Alela> alely = new HashSet<>();
 		for (final String jmeno : jmenaAlel) {
@@ -324,53 +324,53 @@ public class Genom {
 		return alely;
 	}
 
-	public List<Gen> getGeny() {
-		return genyList;
-	}
+	public Alela seekAlela(final String alelaName) {
+		Alela alela = alely.get(alelaName);
+		if (alela == null) {
+			log.warn("Alela [{}] neni definovana!", alelaName);
+			alela = makeAlela(alelaName);
+		}
 
-	public boolean existsGen(final String displayName) {
-		return geny.containsKey(displayName);
-	}
-
-	public Gen getSymGen() {
-		return symGen;
+		return alela;
 	}
 
 	boolean isAlelaSym(final Alela alela) {
 		return alela.getGen() == symGen;
 	}
 
-	public CitacAlel createCitacAlel() {
-		return new CitacAlel();
+	private void ale(final Alela alela) {
+		currentGen.add(alela, null);
 	}
 
-	public class CitacAlel {
+	private synchronized Alela alela(final String alelaName, final Gen gen, final String jmenoGrupy) {
+		final Alela alela = makeAlela(alelaName);
+		gen.add(alela, jmenoGrupy);
+		return alela;
+	}
 
-		private int[] pocty;
+	private Alela coale(final String alelaName, final String displayName) {
+		final Alela alela = makeAlela(alelaName);
+		alela.setDisplayName(displayName);
+		return alela;
+	}
 
-		public CitacAlel() {
-			pocty = new int[1000];
+	private synchronized Gen gen(final String displayName, final boolean vypsatelnyVeZhasinaci) {
+		Gen gen = geny.get(displayName);
+		if (gen == null) {
+			gen = new Gen(displayName, this, vypsatelnyVeZhasinaci);
+			genyList.add(gen);
+			geny.put(displayName, gen);
 		}
+		currentGen = gen;
+		return gen;
+	}
 
-		public void add(final Alela alela) {
-			assert alela != null;
-			final int poradi = alela.getCelkovePoradi();
-			if (poradi >= pocty.length) {
-				final int[] p = pocty;
-				pocty = new int[poradi + 1000];
-				System.arraycopy(p, 0, pocty, 0, p.length);
-
-			}
-			pocty[poradi]++;
+	private synchronized Alela makeAlela(final String alelaName) {
+		Alela alela = alely.get(alelaName);
+		if (alela == null) {
+			alela = new Alela(alelaName, alely.size());
+			alely.put(alelaName, alela);
 		}
-
-		public CounterMap<Alela> getCounterMap() {
-			final CounterMap<Alela> cm = new CCounterMap<>();
-			for (final Alela alela : alely.values()) {
-				final int celkovePoradi = alela.getCelkovePoradi();
-				cm.set(alela, celkovePoradi >= pocty.length ? 0 : pocty[celkovePoradi]);
-			}
-			return cm;
-		}
+		return alela;
 	}
 }

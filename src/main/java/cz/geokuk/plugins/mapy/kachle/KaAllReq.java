@@ -17,6 +17,10 @@ public class KaAllReq extends Ka0Req {
 		this.imageReceiver = imageReceiver;
 	}
 
+	public ImageReceiver getImageReceiver() {
+		return imageReceiver;
+	}
+
 	@Override
 	public KaAll getKa() {
 		return (KaAll) super.getKa();
@@ -27,10 +31,6 @@ public class KaAllReq extends Ka0Req {
 	 */
 	public void uzToZahod() {
 		imageReceiver = null;
-	}
-
-	public ImageReceiver getImageReceiver() {
-		return imageReceiver;
 	}
 
 }

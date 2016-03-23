@@ -22,15 +22,6 @@ public class Moud {
 		return new Moud(this.dxx + dxx, this.dyy + dyy);
 	}
 
-	public Moud sub(final int dxx, final int dyy) {
-		return new Moud(this.dxx - dxx, this.dyy - dyy);
-	}
-
-	@Override
-	public int hashCode() {
-		return dxx ^ dyy;
-	}
-
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == this) {
@@ -43,18 +34,27 @@ public class Moud {
 		return dxx == m.dxx && dyy == m.dyy;
 	}
 
+	public long getKvadratVzdalenosti() {
+		final long lxx = dxx;
+		final long lyy = dyy;
+		return lxx * lxx + lyy * lyy;
+	}
+
 	@Override
-	public String toString() {
-		return "[" + Integer.toHexString(dxx) + "," + Integer.toHexString(dyy) + "]";
+	public int hashCode() {
+		return dxx ^ dyy;
 	}
 
 	public boolean isAnyRozmerEmpty() {
 		return dxx <= 0 || dyy <= 0;
 	}
 
-	public long getKvadratVzdalenosti() {
-		final long lxx = dxx;
-		final long lyy = dyy;
-		return lxx * lxx + lyy * lyy;
+	public Moud sub(final int dxx, final int dyy) {
+		return new Moud(this.dxx - dxx, this.dyy - dyy);
+	}
+
+	@Override
+	public String toString() {
+		return "[" + Integer.toHexString(dxx) + "," + Integer.toHexString(dyy) + "]";
 	}
 }

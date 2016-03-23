@@ -8,26 +8,20 @@ public abstract class Nalezenec0 {
 	protected double	azimut;
 
 	/**
+	 * @return the azimut
+	 */
+	public double getAzimut() {
+		return azimut;
+	}
+
+	/**
 	 * @return the vzdalenost
 	 */
 	public double getVzdalenost() {
 		return vzdalenost;
 	}
 
-	/**
-	 * @param aVzdalenost
-	 *            the vzdalenost to set
-	 */
-	public void setVzdalenost(final double aVzdalenost) {
-		vzdalenost = aVzdalenost;
-	}
-
-	/**
-	 * @return the azimut
-	 */
-	public double getAzimut() {
-		return azimut;
-	}
+	public abstract Wgs getWgs();
 
 	/**
 	 * @param aAzimut
@@ -37,6 +31,12 @@ public abstract class Nalezenec0 {
 		azimut = aAzimut;
 	}
 
-	public abstract Wgs getWgs();
+	/**
+	 * @param aVzdalenost
+	 *            the vzdalenost to set
+	 */
+	public void setVzdalenost(final double aVzdalenost) {
+		vzdalenost = aVzdalenost;
+	}
 
 }

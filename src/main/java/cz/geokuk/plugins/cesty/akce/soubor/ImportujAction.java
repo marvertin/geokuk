@@ -14,8 +14,32 @@ import cz.geokuk.plugins.cesty.CestyModel;
 
 public class ImportujAction extends Action0 {
 
+	private class AllAkceptableFilter extends FileFilter {
+
+		@Override
+		public boolean accept(final File pathname) {
+			if (pathname.isDirectory()) {
+				return true;
+			}
+			if (pathname.getName().toLowerCase().endsWith(".gpx")) {
+				return true;
+			}
+			if (pathname.getName().toLowerCase().endsWith(".ggt")) {
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public String getDescription() {
+			return "Vše co umíme načíst (*.gpx, *.ggt)";
+		}
+
+	}
+
 	private static final long	serialVersionUID	= 1L;
 	private CestyModel			cestyModel;
+
 	private JFileChooser		fc;
 
 	public ImportujAction() {
@@ -48,29 +72,6 @@ public class ImportujAction extends Action0 {
 
 	public void inject(final CestyModel cestyModel) {
 		this.cestyModel = cestyModel;
-	}
-
-	private class AllAkceptableFilter extends FileFilter {
-
-		@Override
-		public boolean accept(final File pathname) {
-			if (pathname.isDirectory()) {
-				return true;
-			}
-			if (pathname.getName().toLowerCase().endsWith(".gpx")) {
-				return true;
-			}
-			if (pathname.getName().toLowerCase().endsWith(".ggt")) {
-				return true;
-			}
-			return false;
-		}
-
-		@Override
-		public String getDescription() {
-			return "Vše co umíme načíst (*.gpx, *.ggt)";
-		}
-
 	}
 
 }

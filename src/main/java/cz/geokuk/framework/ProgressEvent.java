@@ -27,10 +27,10 @@ public class ProgressEvent extends Event0<ProgressModel> {
 	}
 
 	/**
-	 * @return the visible
+	 * @return the max
 	 */
-	public boolean isVisible() {
-		return visible;
+	public int getMax() {
+		return max;
 	}
 
 	/**
@@ -41,10 +41,10 @@ public class ProgressEvent extends Event0<ProgressModel> {
 	}
 
 	/**
-	 * @return the max
+	 * @return the progressor
 	 */
-	public int getMax() {
-		return max;
+	public Progressor getProgressor() {
+		return progressor;
 	}
 
 	/**
@@ -61,16 +61,16 @@ public class ProgressEvent extends Event0<ProgressModel> {
 		return tooltip;
 	}
 
+	/**
+	 * @return the visible
+	 */
+	public boolean isVisible() {
+		return visible;
+	}
+
 	@Override
 	public String toString() {
 		return "ProgressEvent " + System.identityHashCode(progressor) + "[visible=" + visible + ", progress=" + progress + ", max=" + max + ", text=" + text + ", tooltip=" + tooltip + "]";
-	}
-
-	/**
-	 * @return the progressor
-	 */
-	public Progressor getProgressor() {
-		return progressor;
 	}
 
 }

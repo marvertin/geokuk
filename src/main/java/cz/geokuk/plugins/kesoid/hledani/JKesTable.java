@@ -54,6 +54,125 @@ import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
  * TableDemo is just like SimpleTableDemo, except that it uses a custom TableModel.
  */
 public class JKesTable extends JPanel {
+	class MyTableModel extends AbstractTableModel {
+		private static final long	serialVersionUID	= -1777521413836209700L;
+
+		private List<Nalezenec>		keslist				= new ArrayList<>();
+
+		private final String[]		columnNames			= { "Typ", "Vzdálenost", "Azimut", "Id", "Jméno", "Autor" };
+														// private Object[][] data = {
+														// {"Mary", "Campione",
+														// "Snowboarding", new Integer(5), new Boolean(false)},
+														// {"Alison", "Huml",
+														// "Rowing", new Integer(3), new Boolean(true)},
+														// {"Kathy", "Walrath",
+														// "Knitting", new Integer(2), new Boolean(false)},
+														// {"Sharon", "Zakhour",
+														// "Speed reading", new Integer(20), new Boolean(true)},
+														// {"Philip", "Milne",
+														// "Pool", new Integer(10), new Boolean(false)},
+														// };
+
+		/*
+		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
+		 */
+		@Override
+		public Class<?> getColumnClass(final int c) {
+			return getValueAt(0, c).getClass();
+		}
+
+		@Override
+		public int getColumnCount() {
+			return columnNames.length;
+		}
+
+		@Override
+		public String getColumnName(final int col) {
+			return columnNames[col];
+		}
+
+		/**
+		 * @return the keslist
+		 */
+		public List<Nalezenec> getKeslist() {
+			return keslist;
+		}
+
+		@Override
+		public int getRowCount() {
+			return keslist.size();
+		}
+
+		@Override
+		public Object getValueAt(final int row, final int col) {
+			final Nalezenec nalezenec = keslist.get(row);
+			final Kesoid kesoid = nalezenec.getKes();
+
+			Object s = null;
+			switch (col) {
+			case 0:
+				s = kesIkona(kesoid);
+				break;
+			case 1:
+				s = Math.round(nalezenec.getVzdalenost() / 100) / 10.0;
+				break;
+			case 2:
+				s = Ikonizer.findSmerIcon(nalezenec.getAzimut());
+				break;
+			case 3:
+				s = formatuj(nalezenec, kesoid.getIdentifier());
+				break;
+			case 4:
+				s = formatuj(nalezenec, kesoid.getNazev());
+				break;
+			case 5:
+				s = formatuj(nalezenec, computeAutora(kesoid));
+				break;
+			// case 6: s = kes.getStatus() == EKesStatus.DISABLED; break;
+			}
+			return s;
+		}
+
+		/*
+		 * Don't need to implement this method unless your table's editable.
+		 */
+		@Override
+		public boolean isCellEditable(final int row, final int col) {
+			return false;
+		}
+
+		/**
+		 * @param aKeslist
+		 *            the keslist to set
+		 */
+		public void setKeslist(final List<Nalezenec> aKeslist) {
+			keslist = aKeslist;
+			fireTableStructureChanged();
+		}
+
+		private String computeAutora(final Kesoid kesoid) {
+			final String author = kesoid.getAuthor();
+			return author == null ? "" : author;
+		}
+
+		private Object formatuj(final Nalezenec nal, final String s) {
+			// TODO : ??
+			// Zde je správně použito porovnání referencí, protože řetězec zde jen identifikuje, kde přesně došlo k nálezu
+			if (nal.getKdeNalezeno() != s) {
+				return s;
+			}
+			return "<html>" + s.substring(0, nal.getPoc()) + "<b bgcolor='yellow'>" + s.substring(nal.getPoc(), nal.getKon()) + "</b>" + s.substring(nal.getKon()) + "</html>";
+		}
+
+		private Icon kesIkona(final Kesoid kes) {
+			if (ikonBag == null) {
+				return null;
+			}
+			return ikonBag.seekIkon(kes.getMainWpt().getGenotyp(ikonBag.getGenom()));
+		}
+
+	}
+
 	private static final long	serialVersionUID	= 7687619215661046034L;
 
 	private final MyTableModel	tableModel;
@@ -79,12 +198,17 @@ public class JKesTable extends JPanel {
 		nastavVlastnostiSLoupcu();
 	}
 
-	public void onEvent(final IkonyNactenyEvent event) {
-		ikonBag = event.getBag();
-	}
-
 	public void addListSelectionListener(final ListSelectionListener listener) {
 		table.getSelectionModel().addListSelectionListener(listener);
+	}
+
+	public Nalezenec getCurrent() {
+		final int selectedRow = table.getSelectedRow();
+		if (selectedRow < 0 || selectedRow >= tableModel.getKeslist().size()) {
+			return null;
+		}
+		final Nalezenec nalezenec = tableModel.getKeslist().get(selectedRow);
+		return nalezenec;
 	}
 
 	/**
@@ -92,6 +216,10 @@ public class JKesTable extends JPanel {
 	 */
 	public List<Nalezenec> getKeslist() {
 		return tableModel.getKeslist();
+	}
+
+	public void onEvent(final IkonyNactenyEvent event) {
+		ikonBag = event.getBag();
 	}
 
 	/**
@@ -142,134 +270,6 @@ public class JKesTable extends JPanel {
 
 		column = table.getColumnModel().getColumn(5);
 		column.setPreferredWidth(100);
-	}
-
-	public Nalezenec getCurrent() {
-		final int selectedRow = table.getSelectedRow();
-		if (selectedRow < 0 || selectedRow >= tableModel.getKeslist().size()) {
-			return null;
-		}
-		final Nalezenec nalezenec = tableModel.getKeslist().get(selectedRow);
-		return nalezenec;
-	}
-
-	class MyTableModel extends AbstractTableModel {
-		private static final long	serialVersionUID	= -1777521413836209700L;
-
-		private List<Nalezenec>		keslist				= new ArrayList<>();
-
-		private final String[]		columnNames			= { "Typ", "Vzdálenost", "Azimut", "Id", "Jméno", "Autor" };
-		// private Object[][] data = {
-		// {"Mary", "Campione",
-		// "Snowboarding", new Integer(5), new Boolean(false)},
-		// {"Alison", "Huml",
-		// "Rowing", new Integer(3), new Boolean(true)},
-		// {"Kathy", "Walrath",
-		// "Knitting", new Integer(2), new Boolean(false)},
-		// {"Sharon", "Zakhour",
-		// "Speed reading", new Integer(20), new Boolean(true)},
-		// {"Philip", "Milne",
-		// "Pool", new Integer(10), new Boolean(false)},
-		// };
-
-		/**
-		 * @return the keslist
-		 */
-		public List<Nalezenec> getKeslist() {
-			return keslist;
-		}
-
-		/**
-		 * @param aKeslist
-		 *            the keslist to set
-		 */
-		public void setKeslist(final List<Nalezenec> aKeslist) {
-			keslist = aKeslist;
-			fireTableStructureChanged();
-		}
-
-		@Override
-		public int getColumnCount() {
-			return columnNames.length;
-		}
-
-		@Override
-		public int getRowCount() {
-			return keslist.size();
-		}
-
-		@Override
-		public String getColumnName(final int col) {
-			return columnNames[col];
-		}
-
-		@Override
-		public Object getValueAt(final int row, final int col) {
-			final Nalezenec nalezenec = keslist.get(row);
-			final Kesoid kesoid = nalezenec.getKes();
-
-			Object s = null;
-			switch (col) {
-			case 0:
-				s = kesIkona(kesoid);
-				break;
-			case 1:
-				s = Math.round(nalezenec.getVzdalenost() / 100) / 10.0;
-				break;
-			case 2:
-				s = Ikonizer.findSmerIcon(nalezenec.getAzimut());
-				break;
-			case 3:
-				s = formatuj(nalezenec, kesoid.getIdentifier());
-				break;
-			case 4:
-				s = formatuj(nalezenec, kesoid.getNazev());
-				break;
-			case 5:
-				s = formatuj(nalezenec, computeAutora(kesoid));
-				break;
-			// case 6: s = kes.getStatus() == EKesStatus.DISABLED; break;
-			}
-			return s;
-		}
-
-		private String computeAutora(final Kesoid kesoid) {
-			final String author = kesoid.getAuthor();
-			return author == null ? "" : author;
-		}
-
-		private Object formatuj(final Nalezenec nal, final String s) {
-			// TODO : ??
-			// Zde je správně použito porovnání referencí, protože řetězec zde jen identifikuje, kde přesně došlo k nálezu
-			if (nal.getKdeNalezeno() != s) {
-				return s;
-			}
-			return "<html>" + s.substring(0, nal.getPoc()) + "<b bgcolor='yellow'>" + s.substring(nal.getPoc(), nal.getKon()) + "</b>" + s.substring(nal.getKon()) + "</html>";
-		}
-
-		private Icon kesIkona(final Kesoid kes) {
-			if (ikonBag == null) {
-				return null;
-			}
-			return ikonBag.seekIkon(kes.getMainWpt().getGenotyp(ikonBag.getGenom()));
-		}
-
-		/*
-		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
-		 */
-		@Override
-		public Class<?> getColumnClass(final int c) {
-			return getValueAt(0, c).getClass();
-		}
-
-		/*
-		 * Don't need to implement this method unless your table's editable.
-		 */
-		@Override
-		public boolean isCellEditable(final int row, final int col) {
-			return false;
-		}
-
 	}
 
 }

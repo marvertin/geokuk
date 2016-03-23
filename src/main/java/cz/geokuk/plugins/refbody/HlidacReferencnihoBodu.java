@@ -20,19 +20,15 @@ public class HlidacReferencnihoBodu {
 	private Object	minulyStredHledani;
 	private Coord	moord;
 
-	public void onEvent(final VyrezChangedEvent aEvent) {
-		moord = aEvent.getMoord();
-		setStredMapy(aEvent.getMoord().getMoustred().toWgs());
-		fairujSpolecnou(aEvent.getEventFirer());
-	}
-
 	public void onEvent(final PoziceChangedEvent aEvent) {
 		poziceq = aEvent.poziceq;
 		fairujSpolecnou(aEvent.getEventFirer());
 	}
 
-	private void setStredMapy(final Wgs wgs) {
-		stredMapy = wgs;
+	public void onEvent(final VyrezChangedEvent aEvent) {
+		moord = aEvent.getMoord();
+		setStredMapy(aEvent.getMoord().getMoustred().toWgs());
+		fairujSpolecnou(aEvent.getEventFirer());
 	}
 
 	private void fairujSpolecnou(final EventFirer eventFirer) {
@@ -50,6 +46,10 @@ public class HlidacReferencnihoBodu {
 		} else {
 			return poziceq.getWgs();
 		}
+	}
+
+	private void setStredMapy(final Wgs wgs) {
+		stredMapy = wgs;
 	}
 
 }

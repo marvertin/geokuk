@@ -15,29 +15,6 @@ public class KaAll extends Ka0 {
 	}
 
 	@Override
-	public String typToString() {
-		final StringBuilder sb = new StringBuilder();
-		for (final EKaType kt : kaSet.getKts()) {
-			sb.append(kt.name());
-			sb.append('_');
-		}
-		return sb.toString();
-	}
-
-	@Override
-	public String toString() {
-		return super.getLoc().toString() + "*" + kaSet;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + (kaSet == null ? 0 : kaSet.hashCode());
-		return result;
-	}
-
-	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
@@ -59,14 +36,6 @@ public class KaAll extends Ka0 {
 		return true;
 	}
 
-	public EKaType getPodkladType() {
-		return kaSet.getPodklad();
-	}
-
-	public KaOne getPodklad() {
-		return new KaOne(getLoc(), getPodkladType());
-	}
-
 	/**
 	 * Rozpad na jednotlivé rekvesty
 	 *
@@ -74,6 +43,37 @@ public class KaAll extends Ka0 {
 	 */
 	public Set<KaOne> getKaOnes() {
 		return kaSet.getKts().stream().map(kaa -> new KaOne(super.getLoc(), kaa)).collect(Collectors.toSet());
+	}
+
+	public KaOne getPodklad() {
+		return new KaOne(getLoc(), getPodkladType());
+	}
+
+	public EKaType getPodkladType() {
+		return kaSet.getPodklad();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + (kaSet == null ? 0 : kaSet.hashCode());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return super.getLoc().toString() + "*" + kaSet;
+	}
+
+	@Override
+	public String typToString() {
+		final StringBuilder sb = new StringBuilder();
+		for (final EKaType kt : kaSet.getKts()) {
+			sb.append(kt.name());
+			sb.append('_');
+		}
+		return sb.toString();
 	}
 
 }

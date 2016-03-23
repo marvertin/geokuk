@@ -18,27 +18,6 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
 		setEnabled(false);
 	}
 
-	public void onEvent(final PoziceChangedEvent aEvent) {
-		final Wpt wpt = aEvent.poziceq.getWpt();
-		if (wpt != null) {
-			kesdocasna = wpt.getKesoid();
-			enablujPokudMaSmysl();
-		} else {
-			kesdocasna = null;
-			setEnabled(false);
-		}
-	}
-
-	@Override
-	protected void vyletChanged() {
-		super.vyletChanged();
-		if (kesoid() != null) {
-			enablujPokudMaSmysl();
-		}
-	}
-
-	protected abstract void enablujPokudMaSmysl();
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -51,10 +30,31 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
 		}
 	}
 
+	public void onEvent(final PoziceChangedEvent aEvent) {
+		final Wpt wpt = aEvent.poziceq.getWpt();
+		if (wpt != null) {
+			kesdocasna = wpt.getKesoid();
+			enablujPokudMaSmysl();
+		} else {
+			kesdocasna = null;
+			setEnabled(false);
+		}
+	}
+
+	protected abstract void enablujPokudMaSmysl();
+
 	protected Kesoid kesoid() {
 		if (kespevna != null) {
 			return kespevna;
 		}
 		return kesdocasna;
+	}
+
+	@Override
+	protected void vyletChanged() {
+		super.vyletChanged();
+		if (kesoid() != null) {
+			enablujPokudMaSmysl();
+		}
 	}
 }

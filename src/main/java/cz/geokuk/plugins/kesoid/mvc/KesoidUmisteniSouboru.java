@@ -45,115 +45,6 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	private Filex				neGgtFile;
 	private Filex				anoGgtFile;
 
-	/**
-	 * @param aKesDir
-	 */
-	private void check(final Filex file) {
-		if (file == null) {
-			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
-		}
-	}
-
-	/**
-	 * @param kesDir
-	 *            the kesDir to set
-	 */
-	public void setKesDir(final Filex kesDir) {
-		this.kesDir = kesDir;
-	}
-
-	public void setCestyDir(final Filex cestyDir) {
-		this.cestyDir = cestyDir;
-	}
-
-	/**
-	 * @return the kesDir
-	 */
-	public Filex getKesDir() {
-		check(kesDir);
-		return kesDir;
-	}
-
-	public Filex getCestyDir() {
-		check(cestyDir);
-		return cestyDir;
-	}
-
-	/**
-	 * @param neGgtFile
-	 *            the neGgtFile to set
-	 */
-	public void setNeGgtFile(final Filex neGgtFile) {
-		this.neGgtFile = neGgtFile;
-	}
-
-	/**
-	 * @param neGgtFile
-	 *            the neGgtFile to set
-	 */
-	public void setAnoGgtFile(final Filex anoGgtFile) {
-		this.anoGgtFile = anoGgtFile;
-	}
-
-	/**
-	 * @return the neGgtFile
-	 */
-	public Filex getNeGgtFile() {
-		check(neGgtFile);
-		return neGgtFile;
-	}
-
-	/**
-	 * @return the neGgtFile
-	 */
-	public Filex getAnoGgtFile() {
-		check(anoGgtFile);
-		return anoGgtFile;
-	}
-
-	public Filex getGeogetDataDir() {
-		return geogetDataDir;
-	}
-
-	public void setGeogetDataDir(final Filex geogetDir) {
-		geogetDataDir = geogetDir;
-	}
-
-	public Filex getImage3rdPartyDir() {
-		return image3rdPartyDir;
-	}
-
-	public void setImage3rdPartyDir(final Filex image3rdPartyDir) {
-		this.image3rdPartyDir = image3rdPartyDir;
-	}
-
-	public Filex getImageMyDir() {
-		return imageMyDir;
-	}
-
-	public void setImageMyDir(final Filex imageMyDir) {
-		this.imageMyDir = imageMyDir;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (geogetDataDir == null ? 0 : geogetDataDir.hashCode());
-		result = prime * result + (image3rdPartyDir == null ? 0 : image3rdPartyDir.hashCode());
-		result = prime * result + (imageMyDir == null ? 0 : imageMyDir.hashCode());
-		result = prime * result + (kesDir == null ? 0 : kesDir.hashCode());
-		result = prime * result + (cestyDir == null ? 0 : cestyDir.hashCode());
-		result = prime * result + (neGgtFile == null ? 0 : neGgtFile.hashCode());
-		result = prime * result + (anoGgtFile == null ? 0 : anoGgtFile.hashCode());
-		return result;
-	}
-
 	@Override
 	public boolean equals(final Object o) {
 		if (this == o) {
@@ -188,5 +79,114 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 		}
 
 		return true;
+	}
+
+	/**
+	 * @return the neGgtFile
+	 */
+	public Filex getAnoGgtFile() {
+		check(anoGgtFile);
+		return anoGgtFile;
+	}
+
+	public Filex getCestyDir() {
+		check(cestyDir);
+		return cestyDir;
+	}
+
+	public Filex getGeogetDataDir() {
+		return geogetDataDir;
+	}
+
+	public Filex getImage3rdPartyDir() {
+		return image3rdPartyDir;
+	}
+
+	public Filex getImageMyDir() {
+		return imageMyDir;
+	}
+
+	/**
+	 * @return the kesDir
+	 */
+	public Filex getKesDir() {
+		check(kesDir);
+		return kesDir;
+	}
+
+	/**
+	 * @return the neGgtFile
+	 */
+	public Filex getNeGgtFile() {
+		check(neGgtFile);
+		return neGgtFile;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (geogetDataDir == null ? 0 : geogetDataDir.hashCode());
+		result = prime * result + (image3rdPartyDir == null ? 0 : image3rdPartyDir.hashCode());
+		result = prime * result + (imageMyDir == null ? 0 : imageMyDir.hashCode());
+		result = prime * result + (kesDir == null ? 0 : kesDir.hashCode());
+		result = prime * result + (cestyDir == null ? 0 : cestyDir.hashCode());
+		result = prime * result + (neGgtFile == null ? 0 : neGgtFile.hashCode());
+		result = prime * result + (anoGgtFile == null ? 0 : anoGgtFile.hashCode());
+		return result;
+	}
+
+	/**
+	 * @param neGgtFile
+	 *            the neGgtFile to set
+	 */
+	public void setAnoGgtFile(final Filex anoGgtFile) {
+		this.anoGgtFile = anoGgtFile;
+	}
+
+	public void setCestyDir(final Filex cestyDir) {
+		this.cestyDir = cestyDir;
+	}
+
+	public void setGeogetDataDir(final Filex geogetDir) {
+		geogetDataDir = geogetDir;
+	}
+
+	public void setImage3rdPartyDir(final Filex image3rdPartyDir) {
+		this.image3rdPartyDir = image3rdPartyDir;
+	}
+
+	public void setImageMyDir(final Filex imageMyDir) {
+		this.imageMyDir = imageMyDir;
+	}
+
+	/**
+	 * @param kesDir
+	 *            the kesDir to set
+	 */
+	public void setKesDir(final Filex kesDir) {
+		this.kesDir = kesDir;
+	}
+
+	/**
+	 * @param neGgtFile
+	 *            the neGgtFile to set
+	 */
+	public void setNeGgtFile(final Filex neGgtFile) {
+		this.neGgtFile = neGgtFile;
+	}
+
+	/**
+	 * @param aKesDir
+	 */
+	private void check(final Filex file) {
+		if (file == null) {
+			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
+		}
 	}
 }

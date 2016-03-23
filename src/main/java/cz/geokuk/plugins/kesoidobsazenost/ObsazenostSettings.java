@@ -10,20 +10,13 @@ public class ObsazenostSettings implements Copyable<ObsazenostSettings> {
 
 	private Color color = new Color(128, 128, 128, 50);
 
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(final Color color) {
-		this.color = color;
-	}
-
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (color == null ? 0 : color.hashCode());
-		return result;
+	public ObsazenostSettings copy() {
+		try {
+			return (ObsazenostSettings) super.clone();
+		} catch (final CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -48,18 +41,25 @@ public class ObsazenostSettings implements Copyable<ObsazenostSettings> {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "ObsazenostSettings [color=" + color + "alfa=" + color.getAlpha() + "]";
+	public Color getColor() {
+		return color;
 	}
 
 	@Override
-	public ObsazenostSettings copy() {
-		try {
-			return (ObsazenostSettings) super.clone();
-		} catch (final CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (color == null ? 0 : color.hashCode());
+		return result;
+	}
+
+	public void setColor(final Color color) {
+		this.color = color;
+	}
+
+	@Override
+	public String toString() {
+		return "ObsazenostSettings [color=" + color + "alfa=" + color.getAlpha() + "]";
 	}
 
 }

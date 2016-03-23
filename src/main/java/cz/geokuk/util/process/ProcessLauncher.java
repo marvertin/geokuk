@@ -13,6 +13,89 @@ import java.util.List;
  */
 public class ProcessLauncher {
 
+	/**
+	 * Výsledek spuštění.
+	 *
+	 * @author polakm
+	 */
+	public static class Result {
+
+		private final String			executedCommand;
+		private final List<ResultItem>	error;
+		private final List<ResultItem>	output;
+		private final int				exitValue;
+
+		Result(final String aExecutedCommand, final int aExitValue, final List<ResultItem> aError, final List<ResultItem> aOutput) {
+
+			executedCommand = aExecutedCommand;
+			exitValue = aExitValue;
+			error = aError;
+			output = aOutput;
+		}
+
+		public List<String> getError() {
+			return _textFromResItem(error);
+		}
+
+		public List<ResultItem> getErrorWithTimestamps() {
+			return error;
+		}
+
+		public String getExecutedCommand() {
+			return executedCommand;
+		}
+
+		public int getExitValue() {
+			return exitValue;
+		}
+
+		public List<String> getOutput() {
+			return _textFromResItem(output);
+		}
+
+		public List<ResultItem> getOutputWithTimestamps() {
+			return output;
+		}
+
+		private List<String> _textFromResItem(final List<ResultItem> aData) {
+
+			final List<String> result = new ArrayList<>();
+			if (aData != null) {
+				for (final ResultItem item : aData) {
+
+					result.add(item.getText());
+				}
+			}
+			return result;
+		}
+
+	}
+
+	/**
+	 * Dvojice časová známka, řádek textu
+	 *
+	 * @author polakm
+	 */
+	public static class ResultItem {
+
+		private final long		timeStamp;
+		private final String	text;
+
+		ResultItem(final long aTs, final String aText) {
+
+			timeStamp = aTs;
+			text = aText;
+		}
+
+		public String getText() {
+			return text;
+		}
+
+		public long getTimeStamp() {
+			return timeStamp;
+		}
+	}
+
 	private static class StreamGobbler extends Thread {
 		private final InputStream		is;
 		private final List<ResultItem>	content;
@@ -38,89 +121,6 @@ public class ProcessLauncher {
 		private List<ResultItem> getContent() {
 			return content;
 		}
-	}
-
-	/**
-	 * Dvojice časová známka, řádek textu
-	 *
-	 * @author polakm
-	 */
-	public static class ResultItem {
-
-		private final long		timeStamp;
-		private final String	text;
-
-		ResultItem(final long aTs, final String aText) {
-
-			timeStamp = aTs;
-			text = aText;
-		}
-
-		public long getTimeStamp() {
-			return timeStamp;
-		}
-
-		public String getText() {
-			return text;
-		}
-	}
-
-	/**
-	 * Výsledek spuštění.
-	 *
-	 * @author polakm
-	 */
-	public static class Result {
-
-		private final String			executedCommand;
-		private final List<ResultItem>	error;
-		private final List<ResultItem>	output;
-		private final int				exitValue;
-
-		Result(final String aExecutedCommand, final int aExitValue, final List<ResultItem> aError, final List<ResultItem> aOutput) {
-
-			executedCommand = aExecutedCommand;
-			exitValue = aExitValue;
-			error = aError;
-			output = aOutput;
-		}
-
-		private List<String> _textFromResItem(final List<ResultItem> aData) {
-
-			final List<String> result = new ArrayList<>();
-			if (aData != null) {
-				for (final ResultItem item : aData) {
-
-					result.add(item.getText());
-				}
-			}
-			return result;
-		}
-
-		public List<ResultItem> getErrorWithTimestamps() {
-			return error;
-		}
-
-		public List<ResultItem> getOutputWithTimestamps() {
-			return output;
-		}
-
-		public List<String> getError() {
-			return _textFromResItem(error);
-		}
-
-		public List<String> getOutput() {
-			return _textFromResItem(output);
-		}
-
-		public int getExitValue() {
-			return exitValue;
-		}
-
-		public String getExecutedCommand() {
-			return executedCommand;
-		}
-
 	}
 
 	/**

@@ -10,49 +10,6 @@ public class ProfileModel extends Model0 {
 
 	// TODO Naplnit profile model
 
-	private ProfileUkladacSwingWorker profileUkladacSwingWorker;
-
-	/**
-	 * @return
-	 */
-	public boolean isUkladatDoSouboru() {
-		return FPreferencesInNearFile.isUkladatDoSouboru();
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isUkladaniDoSouboruMozne() {
-		return FConst.JAR_DIR_EXISTUJE;
-	}
-
-	/**
-	 *
-	 */
-	public void zrusUkladaciSouborAVypniUkladani() {
-		FPreferencesInNearFile.deleteAndSwitchOff();
-		fire(new NastaveniUkladatDoSouboruEvent());
-	}
-
-	@Override
-	protected void initAndFire() {
-		// Není potřeba nic dělat, neboť unačítání ze souborů se musí provést už při startu apliakce, takže pouze event
-		fire(new NastaveniUkladatDoSouboruEvent());
-	}
-
-	public void ulozJenKdyzJeulozPreferenceDoSouboruJenKdyzSeUklaatMaji() {
-		FPreferencesInNearFile.saveNearToProgramIfShould();
-
-	}
-
-	public void spustUlozeniDoSouboru() {
-		if (profileUkladacSwingWorker == null) {
-			profileUkladacSwingWorker = new ProfileUkladacSwingWorker();
-			profileUkladacSwingWorker.execute();
-		}
-
-	}
-
 	private class ProfileUkladacSwingWorker extends MySwingWorker0<File, Void> {
 
 		/*
@@ -83,5 +40,48 @@ public class ProfileModel extends Model0 {
 					+ "pokud budou nastavení v souboru novější a naopak bude soubor automaticky aktualizován,\n" + "pokud budou novější data v Java preferences", "Oznámení");
 		}
 
+	}
+
+	private ProfileUkladacSwingWorker profileUkladacSwingWorker;
+
+	/**
+	 * @return
+	 */
+	public boolean isUkladaniDoSouboruMozne() {
+		return FConst.JAR_DIR_EXISTUJE;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isUkladatDoSouboru() {
+		return FPreferencesInNearFile.isUkladatDoSouboru();
+	}
+
+	public void spustUlozeniDoSouboru() {
+		if (profileUkladacSwingWorker == null) {
+			profileUkladacSwingWorker = new ProfileUkladacSwingWorker();
+			profileUkladacSwingWorker.execute();
+		}
+
+	}
+
+	public void ulozJenKdyzJeulozPreferenceDoSouboruJenKdyzSeUklaatMaji() {
+		FPreferencesInNearFile.saveNearToProgramIfShould();
+
+	}
+
+	/**
+	 *
+	 */
+	public void zrusUkladaciSouborAVypniUkladani() {
+		FPreferencesInNearFile.deleteAndSwitchOff();
+		fire(new NastaveniUkladatDoSouboruEvent());
+	}
+
+	@Override
+	protected void initAndFire() {
+		// Není potřeba nic dělat, neboť unačítání ze souborů se musí provést už při startu apliakce, takže pouze event
+		fire(new NastaveniUkladatDoSouboruEvent());
 	}
 }

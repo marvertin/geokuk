@@ -19,25 +19,20 @@ public class VyletChangeEvent extends Event0<VyletModel> {
 		this.evylPuvodni = evylPuvodni;
 	}
 
-	/**
-	 * Zda se změnil celý výlet, pokud ano, tak se nsmí brát jednotlivé změny Většinout to bude znamenat načtení výletu.
-	 *
-	 * @return
-	 */
-	public boolean isVelkaZmena() {
-		return evyl == null || kes == null;
+	public Kesoid getAno() {
+		return evyl == EVylet.ANO ? kes : null;
 	}
 
 	public EVylet getEvyl() {
 		return evyl;
 	}
 
-	public Kesoid getKes() {
-		return kes;
+	public EVylet getEvylPuvodni() {
+		return evylPuvodni;
 	}
 
-	public Kesoid getAno() {
-		return evyl == EVylet.ANO ? kes : null;
+	public Kesoid getKes() {
+		return kes;
 	}
 
 	public Kesoid getNe() {
@@ -48,8 +43,13 @@ public class VyletChangeEvent extends Event0<VyletModel> {
 		return vyletModel;
 	}
 
-	public EVylet getEvylPuvodni() {
-		return evylPuvodni;
+	/**
+	 * Zda se změnil celý výlet, pokud ano, tak se nsmí brát jednotlivé změny Většinout to bude znamenat načtení výletu.
+	 *
+	 * @return
+	 */
+	public boolean isVelkaZmena() {
+		return evyl == null || kes == null;
 	}
 
 }

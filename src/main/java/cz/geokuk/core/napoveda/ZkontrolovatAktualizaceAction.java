@@ -37,12 +37,12 @@ public class ZkontrolovatAktualizaceAction extends Action0 {
 		napovedaModel.zkontrolujNoveAktualizace(true);
 	}
 
-	public void onEvent(final OnofflineModelChangeEvent event) {
-		setEnabled(event.isOnlineMOde());
-	}
-
 	public void inject(final NapovedaModel napovedaModel) {
 		this.napovedaModel = napovedaModel;
+	}
+
+	public void onEvent(final OnofflineModelChangeEvent event) {
+		setEnabled(event.isOnlineMOde());
 	}
 
 }

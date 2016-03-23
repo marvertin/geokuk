@@ -34,17 +34,13 @@ public class DocImportBuilder implements IImportBuilder {
 	}
 
 	@Override
-	public void begTrackSegment() {
-		zacatekSegmentu = true;
-	}
-
-	@Override
-	public void endTrackSegment() {
-	}
-
-	@Override
 	public void begTrack() {
 		cesta = Cesta.create();
+	}
+
+	@Override
+	public void begTrackSegment() {
+		zacatekSegmentu = true;
 	}
 
 	@Override
@@ -53,12 +49,13 @@ public class DocImportBuilder implements IImportBuilder {
 		cesta = null;
 	}
 
-	List<Cesta> getCesty() {
-		return cesty;
+	@Override
+	public void endTrackSegment() {
 	}
 
-	void setCesty(final List<Cesta> cesty) {
-		this.cesty = cesty;
+	@Override
+	public GpxWpt get(final String aName) {
+		throw new RuntimeException("Neimplementovano");
 	}
 
 	@Override
@@ -66,9 +63,12 @@ public class DocImportBuilder implements IImportBuilder {
 		updator.setNazev(cesta, aTrackName);
 	}
 
-	@Override
-	public GpxWpt get(final String aName) {
-		throw new RuntimeException("Neimplementovano");
+	List<Cesta> getCesty() {
+		return cesty;
+	}
+
+	void setCesty(final List<Cesta> cesty) {
+		this.cesty = cesty;
 	}
 
 }

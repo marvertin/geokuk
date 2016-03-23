@@ -20,6 +20,20 @@ public class JKachleOflinerPocetStazenychDialog extends JMyDialog0 implements Af
 	}
 
 	@Override
+	public void initAfterEventReceiverRegistration() {
+
+	}
+
+	public void setPocetStazenych(final int pocet) {
+		pocetStazenychKachli.setText("Požadováno ke stažení jž " + pocet + " dlaždic");
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "StahovaniMapovychDlazdic";
+	}
+
+	@Override
 	protected void initComponents() {
 		// Napřed registrovat, aby při inicializaci už byl výsledek tady
 		final Box box = Box.createVerticalBox();
@@ -31,20 +45,6 @@ public class JKachleOflinerPocetStazenychDialog extends JMyDialog0 implements Af
 		box.add(Box.createVerticalStrut(20));
 		pack();
 		add(box);
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "StahovaniMapovychDlazdic";
-	}
-
-	@Override
-	public void initAfterEventReceiverRegistration() {
-
-	}
-
-	public void setPocetStazenych(final int pocet) {
-		pocetStazenychKachli.setText("Požadováno ke stažení jž " + pocet + " dlaždic");
 	}
 
 }

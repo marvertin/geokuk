@@ -21,8 +21,16 @@ public class GeocodingModel extends Model0 {
 	private boolean			onlineMode;
 	private Wgs				referencniBod;
 
-	public synchronized void spustHledani(final Wgs wgs, final RefreshorVysledkuHledani<Nalezenec> refreshor) {
-		spustHledani(wgs.lat + "," + wgs.lon, refreshor);
+	public void inject(final HledaciSluzba hledaciSluzba) {
+		this.hledaciSluzba = hledaciSluzba;
+	}
+
+	public void onEvent(final OnofflineModelChangeEvent event) {
+		onlineMode = event.isOnlineMOde();
+	}
+
+	public void onEvent(final ReferencniBodSeZmenilEvent event) {
+		referencniBod = event.wgs;
 	}
 
 	public synchronized void spustHledani(final String coHledat, final RefreshorVysledkuHledani<Nalezenec> refreshor) {
@@ -37,6 +45,10 @@ public class GeocodingModel extends Model0 {
 		}
 	}
 
+	public synchronized void spustHledani(final Wgs wgs, final RefreshorVysledkuHledani<Nalezenec> refreshor) {
+		spustHledani(wgs.lat + "," + wgs.lon, refreshor);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -45,17 +57,5 @@ public class GeocodingModel extends Model0 {
 	@Override
 	protected void initAndFire() {
 		// asi není co dělat
-	}
-
-	public void onEvent(final OnofflineModelChangeEvent event) {
-		onlineMode = event.isOnlineMOde();
-	}
-
-	public void inject(final HledaciSluzba hledaciSluzba) {
-		this.hledaciSluzba = hledaciSluzba;
-	}
-
-	public void onEvent(final ReferencniBodSeZmenilEvent event) {
-		referencniBod = event.wgs;
 	}
 }

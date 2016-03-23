@@ -22,34 +22,46 @@ public class CestyZperzistentnovac {
 
 	private final Updator		updator	= new Updator();
 
-	private Ggt loadGgt(final File file) throws IOException {
-		FileReader filere = null;
-		try {
-			filere = new FileReader(file);
-			final BufferedReader br = new BufferedReader(filere);
-			return loadGgt(br);
-		} catch (final FileNotFoundException e) {
-			// FExceptionDumper.dump(e, EExceptionSeverity.CATCHE, "Nacitani vyletu.");
-			return new Ggt(new HashSet<String>());
-		} finally {
-			if (filere != null) {
-				filere.close();
-			}
-		}
+	public boolean smimCist() {
+		return smimCist == 0;
 	}
 
-	private Ggt loadGgt(final BufferedReader reader) throws IOException {
-		String line;
-		final Set<String> set = new HashSet<>();
-		while ((line = reader.readLine()) != null) {
-			line = line.trim();
-			if (line.length() == 0) {
-				continue;
+	List<Cesta> nacti(final List<File> files, final KesBag kesBag) {
+		final List<Cesta> cesty = new ArrayList<>();
+		for (final File file : files) {
+			try {
+				log.debug("Nacitam z: " + file);
+				final String pureName = file.getName().toLowerCase();
+				if (pureName.endsWith(".ggt")) {
+					final Ggt ggt = loadGgt(file);
+					final Cesta cesta = zbuildujCestuZGgt(ggt, kesBag);
+					cesty.add(cesta);
+				} else if (pureName.endsWith(".gpx")) {
+					final DocImportBuilder builder = new DocImportBuilder();
+					final InputStream istm = new BufferedInputStream(new FileInputStream(file));
+					final NacitacGpx nacitac = new NacitacGpx();
+					nacitac.nacti(istm, file.toString(), builder, null);
+					cesty.addAll(builder.getCesty());
+				}
+			} catch (final Exception e) {
+				throw new RuntimeException("Problém se souborem: \"" + file + "\"", e);
 			}
-			set.add(line);
 		}
-		final Ggt vyletPul = new Ggt(set);
-		return vyletPul;
+		pripniNaWayponty(cesty, kesBag);
+		return cesty;
+	}
+
+	void pripniNaWayponty(final Iterable<Cesta> cesty, final KesBag kesBag) {
+		for (final Cesta cesta : cesty) {
+			for (final Bod bod : cesta.getBody()) {
+				final Mou mou = bod.getMou();
+				final Wpt wpt = najdiExtremneBlizouckyWpt(mou, kesBag);
+				updator.setMouableButNoChange(bod, wpt != null ? wpt : mou);
+				if (wpt != null) {
+					wpt.invalidate();
+				}
+			}
+		}
 	}
 
 	void zapisGgt(final Doc doc, final File file) {
@@ -83,63 +95,32 @@ public class CestyZperzistentnovac {
 		}
 	}
 
-	private void zapisKdyzNeni(final BufferedWriter wrt, final String kod, final Set<String> exportovano) throws IOException {
-		if (kod == null) {
-			return;
-		}
-		if (exportovano.add(kod)) {
-			wrt.write(String.format("%s%s", kod, FConst.NL));
-			// } else {
-			// wrt.write(String.format("NEBERU %s%s", kod, FConst.NL));
-		}
-	}
-
-	List<Cesta> nacti(final List<File> files, final KesBag kesBag) {
-		final List<Cesta> cesty = new ArrayList<>();
-		for (final File file : files) {
-			try {
-				log.debug("Nacitam z: " + file);
-				final String pureName = file.getName().toLowerCase();
-				if (pureName.endsWith(".ggt")) {
-					final Ggt ggt = loadGgt(file);
-					final Cesta cesta = zbuildujCestuZGgt(ggt, kesBag);
-					cesty.add(cesta);
-				} else if (pureName.endsWith(".gpx")) {
-					final DocImportBuilder builder = new DocImportBuilder();
-					final InputStream istm = new BufferedInputStream(new FileInputStream(file));
-					final NacitacGpx nacitac = new NacitacGpx();
-					nacitac.nacti(istm, file.toString(), builder, null);
-					cesty.addAll(builder.getCesty());
-				}
-			} catch (final Exception e) {
-				throw new RuntimeException("Problém se souborem: \"" + file + "\"", e);
+	private Ggt loadGgt(final BufferedReader reader) throws IOException {
+		String line;
+		final Set<String> set = new HashSet<>();
+		while ((line = reader.readLine()) != null) {
+			line = line.trim();
+			if (line.length() == 0) {
+				continue;
 			}
+			set.add(line);
 		}
-		pripniNaWayponty(cesty, kesBag);
-		return cesty;
+		final Ggt vyletPul = new Ggt(set);
+		return vyletPul;
 	}
 
-	private Cesta zbuildujCestuZGgt(final Ggt ggt, final KesBag kesBag) {
-		final Cesta cesta = Cesta.create();
-		if (kesBag != null) {
-			for (final Kesoid kesoid : kesBag.getKesoidy()) {
-				if (ggt.kesides.contains(kesoid.getIdentifier())) {
-					updator.pridejNaMisto(cesta, kesoid.getMainWpt());
-				}
-			}
-		}
-		return cesta;
-	}
-
-	void pripniNaWayponty(final Iterable<Cesta> cesty, final KesBag kesBag) {
-		for (final Cesta cesta : cesty) {
-			for (final Bod bod : cesta.getBody()) {
-				final Mou mou = bod.getMou();
-				final Wpt wpt = najdiExtremneBlizouckyWpt(mou, kesBag);
-				updator.setMouableButNoChange(bod, wpt != null ? wpt : mou);
-				if (wpt != null) {
-					wpt.invalidate();
-				}
+	private Ggt loadGgt(final File file) throws IOException {
+		FileReader filere = null;
+		try {
+			filere = new FileReader(file);
+			final BufferedReader br = new BufferedReader(filere);
+			return loadGgt(br);
+		} catch (final FileNotFoundException e) {
+			// FExceptionDumper.dump(e, EExceptionSeverity.CATCHE, "Nacitani vyletu.");
+			return new Ggt(new HashSet<String>());
+		} finally {
+			if (filere != null) {
+				filere.close();
 			}
 		}
 	}
@@ -157,7 +138,26 @@ public class CestyZperzistentnovac {
 		return sheet.get();
 	}
 
-	public boolean smimCist() {
-		return smimCist == 0;
+	private void zapisKdyzNeni(final BufferedWriter wrt, final String kod, final Set<String> exportovano) throws IOException {
+		if (kod == null) {
+			return;
+		}
+		if (exportovano.add(kod)) {
+			wrt.write(String.format("%s%s", kod, FConst.NL));
+			// } else {
+			// wrt.write(String.format("NEBERU %s%s", kod, FConst.NL));
+		}
+	}
+
+	private Cesta zbuildujCestuZGgt(final Ggt ggt, final KesBag kesBag) {
+		final Cesta cesta = Cesta.create();
+		if (kesBag != null) {
+			for (final Kesoid kesoid : kesBag.getKesoidy()) {
+				if (ggt.kesides.contains(kesoid.getIdentifier())) {
+					updator.pridejNaMisto(cesta, kesoid.getMainWpt());
+				}
+			}
+		}
+		return cesta;
 	}
 }

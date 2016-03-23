@@ -21,44 +21,6 @@ public class KachleUmisteniSouboru extends UmisteniSouboru0 {
 
 	private Filex				kachleCacheDir;
 
-	/**
-	 * @return the kachleCacheDir
-	 */
-	public Filex getKachleCacheDir() {
-		return kachleCacheDir;
-	}
-
-	/**
-	 * @param aKesDir
-	 */
-	private void check(final Filex file) {
-		if (file == null) {
-			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
-		}
-	}
-
-	/**
-	 * @param kachleCacheDir
-	 *            the kachleCacheDir to set
-	 */
-	public void setKachleCacheDir(final Filex kachleCacheDir) {
-		check(kachleCacheDir);
-		this.kachleCacheDir = kachleCacheDir;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (kachleCacheDir == null ? 0 : kachleCacheDir.hashCode());
-		return result;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -84,6 +46,44 @@ public class KachleUmisteniSouboru extends UmisteniSouboru0 {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return the kachleCacheDir
+	 */
+	public Filex getKachleCacheDir() {
+		return kachleCacheDir;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (kachleCacheDir == null ? 0 : kachleCacheDir.hashCode());
+		return result;
+	}
+
+	/**
+	 * @param kachleCacheDir
+	 *            the kachleCacheDir to set
+	 */
+	public void setKachleCacheDir(final Filex kachleCacheDir) {
+		check(kachleCacheDir);
+		this.kachleCacheDir = kachleCacheDir;
+	}
+
+	/**
+	 * @param aKesDir
+	 */
+	private void check(final Filex file) {
+		if (file == null) {
+			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
+		}
 	}
 
 }

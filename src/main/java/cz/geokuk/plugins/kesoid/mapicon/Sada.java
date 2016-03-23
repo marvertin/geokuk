@@ -12,8 +12,8 @@ import cz.geokuk.util.pocitadla.*;
 
 public class Sada {
 
-	private final Pocitadlo		pocitSklivcu		= new PocitadloMalo("Sklivce - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
 	private static Pocitadlo	pocitSklivcuZasah	= new PocitadloRoste("Sklivce - zásah cache", "");
+	private final Pocitadlo		pocitSklivcu		= new PocitadloMalo("Sklivce - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
 
 	List<SkloAplikant>			skloAplikanti		= new ArrayList<>();
 
@@ -31,61 +31,15 @@ public class Sada {
 		this.name = name;
 	}
 
-	/**
-	 * @return the skloAplikanti
-	 */
-	public List<SkloAplikant> getSkloAplikanti() {
-		return Collections.unmodifiableList(skloAplikanti);
-	}
-
-	/**
-	 * Vrací sklivec pro daný genotyp s tím, že se hrabe v keši, aby se jednak zvýšila rychnlost, druhak, aby se šetřila paměť
-	 *
-	 * @param genotyp
-	 * @return
-	 */
-	public synchronized Sklivec getSklivec(final Genotyp genotyp) {
-		zuzNaObrazkove(genotyp); // aby se nekešovalo pro alely, ke kterým nic nemáme
-		final Otisk otisk = genotyp.getOtisk();
-		Sklivec sklivec = cache.get(otisk);
-		if (sklivec == null) {
-			sklivec = new Sklivec();
-			for (final SkloAplikant skloAplikant : skloAplikanti) {
-				sklivec.imaganti.add(getRenderedImage(genotyp, skloAplikant));
-			}
-			cache.put(otisk, sklivec);
-			repaintanger.include(sklivec);
-			pocitSklivcu.set(cache.size());
-			// System.out.println("REPREPA: " + repaintanger);
-		} else {
-			pocitSklivcuZasah.inc();
-		}
-		return sklivec;
-	}
-
-	private void zuzNaObrazkove(final Genotyp genotyp) {
-		final Set<Alela> pouziteAlely2 = getPouziteAlely();
-		for (final Alela alela : new ArrayList<>(genotyp.getAlely())) {
-			if (!pouziteAlely2.contains(alela)) {
-				if (!pouziteAlely2.contains(alela.getGen().getVychoziAlela())) {
-					genotyp.remove(alela);
-				}
-			}
-		}
-	}
-
 	public Insets getBigiestIconInsets() {
 		return repaintanger.getInsets();
 	}
 
 	/**
-	 * @param genotyp
-	 * @param skloAplikant
-	 * @return
+	 * @return the icon
 	 */
-	private Imagant getRenderedImage(final Genotyp genotyp, final SkloAplikant skloAplikant) {
-		final Imagant imagant = skloAplikant.sklo.getRenderedImage(genotyp);
-		return imagant;
+	public Icon getIcon() {
+		return icon;
 	}
 
 	public String getName() {
@@ -121,6 +75,38 @@ public class Sada {
 	}
 
 	/**
+	 * Vrací sklivec pro daný genotyp s tím, že se hrabe v keši, aby se jednak zvýšila rychnlost, druhak, aby se šetřila paměť
+	 *
+	 * @param genotyp
+	 * @return
+	 */
+	public synchronized Sklivec getSklivec(final Genotyp genotyp) {
+		zuzNaObrazkove(genotyp); // aby se nekešovalo pro alely, ke kterým nic nemáme
+		final Otisk otisk = genotyp.getOtisk();
+		Sklivec sklivec = cache.get(otisk);
+		if (sklivec == null) {
+			sklivec = new Sklivec();
+			for (final SkloAplikant skloAplikant : skloAplikanti) {
+				sklivec.imaganti.add(getRenderedImage(genotyp, skloAplikant));
+			}
+			cache.put(otisk, sklivec);
+			repaintanger.include(sklivec);
+			pocitSklivcu.set(cache.size());
+			// System.out.println("REPREPA: " + repaintanger);
+		} else {
+			pocitSklivcuZasah.inc();
+		}
+		return sklivec;
+	}
+
+	/**
+	 * @return the skloAplikanti
+	 */
+	public List<SkloAplikant> getSkloAplikanti() {
+		return Collections.unmodifiableList(skloAplikanti);
+	}
+
+	/**
 	 * @param aImageIcon
 	 */
 	public void setIcon(final Icon icon) {
@@ -128,10 +114,24 @@ public class Sada {
 	}
 
 	/**
-	 * @return the icon
+	 * @param genotyp
+	 * @param skloAplikant
+	 * @return
 	 */
-	public Icon getIcon() {
-		return icon;
+	private Imagant getRenderedImage(final Genotyp genotyp, final SkloAplikant skloAplikant) {
+		final Imagant imagant = skloAplikant.sklo.getRenderedImage(genotyp);
+		return imagant;
+	}
+
+	private void zuzNaObrazkove(final Genotyp genotyp) {
+		final Set<Alela> pouziteAlely2 = getPouziteAlely();
+		for (final Alela alela : new ArrayList<>(genotyp.getAlely())) {
+			if (!pouziteAlely2.contains(alela)) {
+				if (!pouziteAlely2.contains(alela.getGen().getVychoziAlela())) {
+					genotyp.remove(alela);
+				}
+			}
+		}
 	}
 
 }

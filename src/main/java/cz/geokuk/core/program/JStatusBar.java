@@ -29,20 +29,84 @@ import cz.geokuk.plugins.vylety.*;
  */
 public class JStatusBar extends JPanel {
 
+	private class JSkrtnutaValue extends JValue {
+
+		private static final long	serialVersionUID	= 4571833579561872745L;
+
+		private boolean				skrtnuto			= true;
+
+		public void setSkrtnuto(final boolean skrtnuto) {
+			if (this.skrtnuto == skrtnuto) {
+				return;
+			}
+			this.skrtnuto = skrtnuto;
+			repaint();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+		 */
+		@Override
+		protected void paintComponent(final Graphics g) {
+			super.paintComponent(g);
+			if (skrtnuto) {
+				g.setColor(Color.RED);
+				g.drawLine(0, getHeight(), getWidth(), 0);
+			}
+		}
+
+	}
+
+	private class JValue extends JTextField {
+		private static final long serialVersionUID = 870515243956856500L;
+
+		public JValue() {
+			// setFocusable(false);
+			setEditable(false);
+			setCursor(FKurzory.TEXTOVY_KURZOR);
+			// System.out.println("INPUTOVA MAPA: " + getInputMap().keys() );
+			setMargin(new Insets(0, 5, 0, 0));
+		}
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see javax.swing.JTextField#getPreferredSize()
+		 */
+		@Override
+		public Dimension getPreferredSize() {
+			Dimension preferredSize = super.getPreferredSize();
+			preferredSize = new Dimension(preferredSize.width + 1, preferredSize.height);
+			return preferredSize;
+		}
+
+		// @Override
+		// public void setText(String s) {
+		// super.setText(s);
+		// //super.setColumns(s.length());
+		// Dimension preferredSize = super.getPreferredSize();
+		// preferredSize.width +=3;
+		// setPreferredSize(preferredSize);
+		// System.out.println(preferredSize);
+		// }
+
+	}
+
 	private static final long					serialVersionUID				= -6267502844907253041L;
 
 	private Mou									cur								= new Mou(0, 0);
 
 	private Poziceq								poziceq							= new Poziceq();
-
 	private final JValue						souradnice						= new JValue();
-
 	private final JValue						celkovePoctyVsude				= new JValue();
 	private final JValue						filtrovanePocetyVsude			= new JValue();
+
 	private final JSkrtnutaValue				celkovePoctyVyrez				= new JSkrtnutaValue();
 	private final JSkrtnutaValue				filtrovanePocetyVyrez			= new JSkrtnutaValue();
-
 	private final JValue						vzdalenost						= new JValue();
+
 	private final JLabel						azimutSmer						= new JLabel();
 	private final JValue						azimutCislo						= new JValue();
 
@@ -50,16 +114,16 @@ public class JStatusBar extends JPanel {
 	private final JValue						vyletNe							= new JValue();
 
 	private final JValue						souradnicePozice				= new JValue();
+
 	private final JValue						meritkoMapy						= new JValue();
 
 	private final JLabel						varovaniPoctuPrekrocenych		= new JLabel();
-
 	private JPanel								odPozice;
 
 	private final Map<Progressor, JProgressBar>	jFilterProgressMap				= new HashMap<>();
 	private JPanel								jFilterProgressPanel;
-
 	private final JValue						jZdrojeKesoiduPocetNactenych	= new JValue();
+
 	private final JSkrtnutaValue				jZdrojeKesoiduPocetNenactenych	= new JSkrtnutaValue();
 	private final JValue						jZdrojeKesoiduCas				= new JValue();
 
@@ -67,6 +131,7 @@ public class JStatusBar extends JPanel {
 	private final JLabel						jSouborSVyletemPotrebujeUlozit	= new JLabel();
 
 	private KesBag								filtrovane;
+
 	private KesBag								vsechny;
 
 	private Coord								moord;
@@ -77,6 +142,158 @@ public class JStatusBar extends JPanel {
 
 	public JStatusBar() {
 		initComponents();
+	}
+
+	public void inject(final Akce akce) {
+		this.akce = akce;
+	}
+
+	public void onEvent(final CestyChangedEvent aEvent) {
+		final Doc doc = aEvent.getModel().getDoc();
+		// vyletAno.setText(doc.getPocetWaypointu() + "");
+		if (doc.isEmpty()) {
+			jSouborSVyletem.setText(".");
+			jSouborSVyletem.setToolTipText("Výlet není vůbec definován.");
+			jSouborSVyletemPotrebujeUlozit.setText("");
+		} else {
+			if (doc.getFile() != null) {
+				jSouborSVyletem.setText(doc.getFile().getName());
+				jSouborSVyletem.setToolTipText(doc.getFile().toString());
+				jSouborSVyletemPotrebujeUlozit.setText(doc.isChanged() ? "*" : "");
+			} else {
+				jSouborSVyletem.setText("-");
+				jSouborSVyletem.setToolTipText("S výletem není spojen žádný soubor.");
+				jSouborSVyletemPotrebujeUlozit.setText("");
+			}
+		}
+		jPocetKesiVCestach.setText(doc.getPocetWaypointu() + "/" + doc.getPocetCest());
+		// vyletNe.setText(cestyModel.get(EVylet.NE).size()+"");
+	}
+
+	public void onEvent(final KeskyNactenyEvent aEvent) {
+		vsechny = aEvent.getVsechny();
+		celkovePoctyVsude.setText(celkove(vsechny));
+		celkovePoctyVyrez.setText(veVyrezu(vsechny));
+
+		final InformaceOZdrojich informaceOZdrojich = aEvent.getVsechny().getInformaceOZdrojich();
+		// TODO : reenable
+		jZdrojeKesoiduPocetNactenych.setText(informaceOZdrojich.getSourceCount(true) + "");
+		final int pocetNenactenych = informaceOZdrojich.getSourceCount(false);
+		jZdrojeKesoiduPocetNenactenych.setText(pocetNenactenych + "");
+		jZdrojeKesoiduPocetNenactenych.setVisible(pocetNenactenych > 0);
+
+		final String formatedCas = String.format("%tF %<tR", informaceOZdrojich.getYungest());
+		jZdrojeKesoiduCas.setText(formatedCas);
+		revalidate();
+	}
+
+	public void onEvent(final KeskyVyfiltrovanyEvent aEvent) {
+		filtrovane = aEvent.getFiltrovane();
+		filtrovanePocetyVsude.setText(celkove(filtrovane));
+		filtrovanePocetyVyrez.setText(veVyrezu(filtrovane));
+		revalidate();
+	}
+
+	public void onEvent(final KesoidOnoffEvent event) {
+		celkovePoctyVyrez.setSkrtnuto(!event.isOnoff());
+		filtrovanePocetyVyrez.setSkrtnuto(!event.isOnoff());
+	}
+
+	public void onEvent(final PoziceChangedEvent event) {
+		poziceq = event.poziceq;
+		prepocitejVzdalenostAAzimut();
+		// vzdalenost.setText("");
+		// azimutCislo.setText("");
+		// azimutSmer.setText("");
+		// azimutSmer.setIcon(null);
+		// System.out.println("VELIKOST STAVOVEHO RADKU: " + JStatusBar.this.getSize());
+
+		if (poziceq.isNoPosition()) {
+			// souradnicePozice.setVisible(false);
+			souradnicePozice.setText("N/A");
+		} else {
+			souradnicePozice.setText(poziceq.getWgs().toString());
+			// souradnicePozice.setVisible(true);
+		}
+	}
+
+	// public void onEvent(IgnoreListChangedEvent aEvent) {
+	// CestyModel cestyModel = aEvent.getModel();
+	// //vyletAno.setText(cestyModel.get(EVylet.ANO).size()+"");
+	// vyletNe.setText(cestyModel.getPocetIgnorovanychKesoidu()+"");
+	// }
+
+	public void onEvent(final PrekrocenLimitWaypointuVeVyrezuEvent event) {
+		setVarujPrekroceni(event.isPrekrocen());
+	}
+
+	public void onEvent(final ProgressEvent event) {
+		final Progressor progressor = event.getProgressor();
+		// progressor = null;
+		JProgressBar jProgressBar = jFilterProgressMap.get(progressor);
+		// System.out.println(event);
+		final boolean pridavat = event.isVisible();
+		// pridavat = true;
+		if (pridavat) {
+			if (jProgressBar == null) {
+				jProgressBar = new JProgressBar();
+				jProgressBar.setStringPainted(true);
+				jProgressBar.setVisible(true);
+				jFilterProgressMap.put(progressor, jProgressBar);
+				jFilterProgressPanel.add(jProgressBar);
+				revalidate();
+			}
+			jProgressBar.setVisible(event.isVisible());
+			jProgressBar.setValue(event.getProgress());
+			jProgressBar.setMaximum(event.getMax());
+			jProgressBar.setString(event.getText());
+			jProgressBar.setToolTipText(event.getTooltip());
+		} else {
+			if (jProgressBar != null) {
+				jFilterProgressMap.remove(progressor);
+				jFilterProgressPanel.remove(jProgressBar);
+				revalidate();
+			}
+		}
+	}
+
+	public void onEvent(final VyletChangeEvent aEvent) {
+		final VyletModel vyletModel = aEvent.getVyletModel();
+		vyletAno.setText(vyletModel.get(EVylet.ANO).size() + "");
+		vyletNe.setText(vyletModel.get(EVylet.NE).size() + "");
+	}
+
+	public void onEvent(final VyrezChangedEvent event) {
+		moord = event.getMoord();
+		filtrovanePocetyVyrez.setText(veVyrezu(filtrovane));
+		celkovePoctyVyrez.setText(veVyrezu(vsechny));
+		meritkoMapy.setText(String.valueOf(moord.getMoumer()));
+
+	}
+
+	public void onEvent(final ZmenaSouradnicMysiEvent event) {
+		if (cur != null && cur.equals(event.moucur)) {
+			return;
+		}
+		cur = event.moucur;
+		souradnice.setText(cur == null ? "?" : cur.toWgs().toString());
+		prepocitejVzdalenostAAzimut();
+	}
+
+	JPanel createPanel() {
+		final JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
+		panel.setBorder(BorderFactory.createEtchedBorder());
+		return panel;
+	}
+
+	private double azimutPoziceAMysi() {
+		return poziceq.getWgs().azimut(cur.toWgs());
+	}
+
+	private String celkove(final KesBag bag) {
+		final String s = bag.getWpts().size() + "/" + bag.getKesoidy().size();
+		return s;
 	}
 
 	private void initComponents() {
@@ -192,136 +409,6 @@ public class JStatusBar extends JPanel {
 		});
 	}
 
-	JPanel createPanel() {
-		final JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
-		panel.setBorder(BorderFactory.createEtchedBorder());
-		return panel;
-	}
-
-	public void onEvent(final VyrezChangedEvent event) {
-		moord = event.getMoord();
-		filtrovanePocetyVyrez.setText(veVyrezu(filtrovane));
-		celkovePoctyVyrez.setText(veVyrezu(vsechny));
-		meritkoMapy.setText(String.valueOf(moord.getMoumer()));
-
-	}
-
-	public void onEvent(final ZmenaSouradnicMysiEvent event) {
-		if (cur != null && cur.equals(event.moucur)) {
-			return;
-		}
-		cur = event.moucur;
-		souradnice.setText(cur == null ? "?" : cur.toWgs().toString());
-		prepocitejVzdalenostAAzimut();
-	}
-
-	public void onEvent(final KeskyVyfiltrovanyEvent aEvent) {
-		filtrovane = aEvent.getFiltrovane();
-		filtrovanePocetyVsude.setText(celkove(filtrovane));
-		filtrovanePocetyVyrez.setText(veVyrezu(filtrovane));
-		revalidate();
-	}
-
-	public void onEvent(final KeskyNactenyEvent aEvent) {
-		vsechny = aEvent.getVsechny();
-		celkovePoctyVsude.setText(celkove(vsechny));
-		celkovePoctyVyrez.setText(veVyrezu(vsechny));
-
-		final InformaceOZdrojich informaceOZdrojich = aEvent.getVsechny().getInformaceOZdrojich();
-		// TODO : reenable
-		jZdrojeKesoiduPocetNactenych.setText(informaceOZdrojich.getSourceCount(true) + "");
-		final int pocetNenactenych = informaceOZdrojich.getSourceCount(false);
-		jZdrojeKesoiduPocetNenactenych.setText(pocetNenactenych + "");
-		jZdrojeKesoiduPocetNenactenych.setVisible(pocetNenactenych > 0);
-
-		final String formatedCas = String.format("%tF %<tR", informaceOZdrojich.getYungest());
-		jZdrojeKesoiduCas.setText(formatedCas);
-		revalidate();
-	}
-
-	public void onEvent(final ProgressEvent event) {
-		final Progressor progressor = event.getProgressor();
-		// progressor = null;
-		JProgressBar jProgressBar = jFilterProgressMap.get(progressor);
-		// System.out.println(event);
-		final boolean pridavat = event.isVisible();
-		// pridavat = true;
-		if (pridavat) {
-			if (jProgressBar == null) {
-				jProgressBar = new JProgressBar();
-				jProgressBar.setStringPainted(true);
-				jProgressBar.setVisible(true);
-				jFilterProgressMap.put(progressor, jProgressBar);
-				jFilterProgressPanel.add(jProgressBar);
-				revalidate();
-			}
-			jProgressBar.setVisible(event.isVisible());
-			jProgressBar.setValue(event.getProgress());
-			jProgressBar.setMaximum(event.getMax());
-			jProgressBar.setString(event.getText());
-			jProgressBar.setToolTipText(event.getTooltip());
-		} else {
-			if (jProgressBar != null) {
-				jFilterProgressMap.remove(progressor);
-				jFilterProgressPanel.remove(jProgressBar);
-				revalidate();
-			}
-		}
-	}
-
-	public void onEvent(final PoziceChangedEvent event) {
-		poziceq = event.poziceq;
-		prepocitejVzdalenostAAzimut();
-		// vzdalenost.setText("");
-		// azimutCislo.setText("");
-		// azimutSmer.setText("");
-		// azimutSmer.setIcon(null);
-		// System.out.println("VELIKOST STAVOVEHO RADKU: " + JStatusBar.this.getSize());
-
-		if (poziceq.isNoPosition()) {
-			// souradnicePozice.setVisible(false);
-			souradnicePozice.setText("N/A");
-		} else {
-			souradnicePozice.setText(poziceq.getWgs().toString());
-			// souradnicePozice.setVisible(true);
-		}
-	}
-
-	// public void onEvent(IgnoreListChangedEvent aEvent) {
-	// CestyModel cestyModel = aEvent.getModel();
-	// //vyletAno.setText(cestyModel.get(EVylet.ANO).size()+"");
-	// vyletNe.setText(cestyModel.getPocetIgnorovanychKesoidu()+"");
-	// }
-
-	public void onEvent(final CestyChangedEvent aEvent) {
-		final Doc doc = aEvent.getModel().getDoc();
-		// vyletAno.setText(doc.getPocetWaypointu() + "");
-		if (doc.isEmpty()) {
-			jSouborSVyletem.setText(".");
-			jSouborSVyletem.setToolTipText("Výlet není vůbec definován.");
-			jSouborSVyletemPotrebujeUlozit.setText("");
-		} else {
-			if (doc.getFile() != null) {
-				jSouborSVyletem.setText(doc.getFile().getName());
-				jSouborSVyletem.setToolTipText(doc.getFile().toString());
-				jSouborSVyletemPotrebujeUlozit.setText(doc.isChanged() ? "*" : "");
-			} else {
-				jSouborSVyletem.setText("-");
-				jSouborSVyletem.setToolTipText("S výletem není spojen žádný soubor.");
-				jSouborSVyletemPotrebujeUlozit.setText("");
-			}
-		}
-		jPocetKesiVCestach.setText(doc.getPocetWaypointu() + "/" + doc.getPocetCest());
-		// vyletNe.setText(cestyModel.get(EVylet.NE).size()+"");
-	}
-
-	public void onEvent(final VyletChangeEvent aEvent) {
-		final VyletModel vyletModel = aEvent.getVyletModel();
-		vyletAno.setText(vyletModel.get(EVylet.ANO).size() + "");
-		vyletNe.setText(vyletModel.get(EVylet.NE).size() + "");
-	}
-
 	private void prepocitejVzdalenostAAzimut() {
 		if (!poziceq.isNoPosition() && cur != null) {
 			vzdalenost.setText(vzdalenostPoziceAMysia());
@@ -336,9 +423,16 @@ public class JStatusBar extends JPanel {
 		// meritkoMapy.setText(coord.getMoumer() + "");
 	}
 
-	private String celkove(final KesBag bag) {
-		final String s = bag.getWpts().size() + "/" + bag.getKesoidy().size();
-		return s;
+	private void setVarujPrekroceni(final boolean b) {
+		if (b) {
+			varovaniPoctuPrekrocenych.setText("Překročen limit " + FConst.MAX_POC_WPT_NA_MAPE + " waypointů");
+			varovaniPoctuPrekrocenych.setToolTipText("Přibližte mapu nebo vyfiltrujte zbytečné waypointy.");
+			varovaniPoctuPrekrocenych.setForeground(Color.RED);
+			varovaniPoctuPrekrocenych.setVisible(true);
+		} else {
+			varovaniPoctuPrekrocenych.setVisible(false);
+		}
+		revalidate();
 	}
 
 	private String veVyrezu(final KesBag bag) {
@@ -352,99 +446,5 @@ public class JStatusBar extends JPanel {
 
 	private String vzdalenostPoziceAMysia() {
 		return Wgs.vzdalenostStr(cur.toWgs(), poziceq.getWgs());
-	}
-
-	private double azimutPoziceAMysi() {
-		return poziceq.getWgs().azimut(cur.toWgs());
-	}
-
-	public void onEvent(final PrekrocenLimitWaypointuVeVyrezuEvent event) {
-		setVarujPrekroceni(event.isPrekrocen());
-	}
-
-	public void onEvent(final KesoidOnoffEvent event) {
-		celkovePoctyVyrez.setSkrtnuto(!event.isOnoff());
-		filtrovanePocetyVyrez.setSkrtnuto(!event.isOnoff());
-	}
-
-	private void setVarujPrekroceni(final boolean b) {
-		if (b) {
-			varovaniPoctuPrekrocenych.setText("Překročen limit " + FConst.MAX_POC_WPT_NA_MAPE + " waypointů");
-			varovaniPoctuPrekrocenych.setToolTipText("Přibližte mapu nebo vyfiltrujte zbytečné waypointy.");
-			varovaniPoctuPrekrocenych.setForeground(Color.RED);
-			varovaniPoctuPrekrocenych.setVisible(true);
-		} else {
-			varovaniPoctuPrekrocenych.setVisible(false);
-		}
-		revalidate();
-	}
-
-	private class JValue extends JTextField {
-		private static final long serialVersionUID = 870515243956856500L;
-
-		public JValue() {
-			// setFocusable(false);
-			setEditable(false);
-			setCursor(FKurzory.TEXTOVY_KURZOR);
-			// System.out.println("INPUTOVA MAPA: " + getInputMap().keys() );
-			setMargin(new Insets(0, 5, 0, 0));
-		}
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see javax.swing.JTextField#getPreferredSize()
-		 */
-		@Override
-		public Dimension getPreferredSize() {
-			Dimension preferredSize = super.getPreferredSize();
-			preferredSize = new Dimension(preferredSize.width + 1, preferredSize.height);
-			return preferredSize;
-		}
-
-		// @Override
-		// public void setText(String s) {
-		// super.setText(s);
-		// //super.setColumns(s.length());
-		// Dimension preferredSize = super.getPreferredSize();
-		// preferredSize.width +=3;
-		// setPreferredSize(preferredSize);
-		// System.out.println(preferredSize);
-		// }
-
-	}
-
-	private class JSkrtnutaValue extends JValue {
-
-		private static final long	serialVersionUID	= 4571833579561872745L;
-
-		private boolean				skrtnuto			= true;
-
-		public void setSkrtnuto(final boolean skrtnuto) {
-			if (this.skrtnuto == skrtnuto) {
-				return;
-			}
-			this.skrtnuto = skrtnuto;
-			repaint();
-		}
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
-		 */
-		@Override
-		protected void paintComponent(final Graphics g) {
-			super.paintComponent(g);
-			if (skrtnuto) {
-				g.setColor(Color.RED);
-				g.drawLine(0, getHeight(), getWidth(), 0);
-			}
-		}
-
-	}
-
-	public void inject(final Akce akce) {
-		this.akce = akce;
 	}
 }

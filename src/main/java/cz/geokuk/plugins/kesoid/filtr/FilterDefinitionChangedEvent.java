@@ -19,6 +19,12 @@ public class FilterDefinitionChangedEvent extends Event0<KesoidModel> {
 	private final Set<String>		jmenaNechtenychAlel;
 	private final Set<String>		jmenaAlelNaToolbaru;
 
+	public FilterDefinitionChangedEvent(final FilterDefinition filterDefinition, final Set<String> jmenaNechtenychAlel, final Set<String> jmenaAlelNaToolbaru) {
+		this.filterDefinition = filterDefinition;
+		this.jmenaNechtenychAlel = jmenaNechtenychAlel;
+		this.jmenaAlelNaToolbaru = jmenaAlelNaToolbaru;
+	}
+
 	/**
 	 * @return the filterDefinition
 	 */
@@ -41,12 +47,6 @@ public class FilterDefinitionChangedEvent extends Event0<KesoidModel> {
 	 */
 	public Set<String> getJmenaNechtenychAlel() {
 		return jmenaNechtenychAlel;
-	}
-
-	public FilterDefinitionChangedEvent(final FilterDefinition filterDefinition, final Set<String> jmenaNechtenychAlel, final Set<String> jmenaAlelNaToolbaru) {
-		this.filterDefinition = filterDefinition;
-		this.jmenaNechtenychAlel = jmenaNechtenychAlel;
-		this.jmenaAlelNaToolbaru = jmenaAlelNaToolbaru;
 	}
 
 }

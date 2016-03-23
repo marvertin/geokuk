@@ -20,9 +20,21 @@ public class IconDef {
 	// Alela symbolu. Je to redundantní informace, pomůže však pro zkrácení vykreslovací fronty.
 	private Alela			alelaSym;
 
+	public Alela getAlelaSym() {
+		return alelaSym;
+	}
+
+	public void setAlelaSym(final Alela alelaSym) {
+		this.alelaSym = alelaSym;
+	}
+
 	@Override
 	public String toString() {
 		return idp.url.toString();
+	}
+
+	Set<Alela> getAlelyx() {
+		return alelyx;
 	}
 
 	synchronized Set<IconSubDef> getSubdefs() {
@@ -32,6 +44,10 @@ public class IconDef {
 			alelyx = null;
 		}
 		return subdefs;
+	}
+
+	void setAlelyx(final Set<Alela> alelyx) {
+		this.alelyx = alelyx;
 	}
 
 	/**
@@ -62,21 +78,5 @@ public class IconDef {
 		// Nebyly zjištěny žádné duplicity
 		sese.add(new IconSubDef(set));
 
-	}
-
-	void setAlelyx(final Set<Alela> alelyx) {
-		this.alelyx = alelyx;
-	}
-
-	Set<Alela> getAlelyx() {
-		return alelyx;
-	}
-
-	public void setAlelaSym(final Alela alelaSym) {
-		this.alelaSym = alelaSym;
-	}
-
-	public Alela getAlelaSym() {
-		return alelaSym;
 	}
 }

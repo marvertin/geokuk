@@ -26,11 +26,9 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		initComponents();
 	}
 
-	/**
-	 *
-	 */
-	private void initComponents() {
-		provazModely();
+	@Override
+	public JSingleSlide0 createRenderableSlide() {
+		return new JZvyraznovaciKruhySlide();
 	}
 
 	public void onEvent(final KeskyVyfiltrovanyEvent event) {
@@ -47,12 +45,6 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 	public void onEvent(final ZmenaMapNastalaEvent event) {
 		podklad = event.getKaSet().getPodklad();
 		provazModely();
-	}
-
-	private void provazModely() {
-		if (podklad != null) {
-			// barvaAVElikostKruhuModel = Settings.barvyAVelikostiKruhu.get(podklad);
-		}
 	}
 
 	@Override
@@ -96,6 +88,19 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 
 	}
 
+	/**
+	 *
+	 */
+	private void initComponents() {
+		provazModely();
+	}
+
+	private void provazModely() {
+		if (podklad != null) {
+			// barvaAVElikostKruhuModel = Settings.barvyAVelikostiKruhu.get(podklad);
+		}
+	}
+
 	private int vypoctiJednotkovyPolomer() {
 		final double pixluNaMetr = getSoord().getPixluNaMetr();
 		int metru = 1;
@@ -105,11 +110,6 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 			pixlu = (int) (metru * pixluNaMetr);
 		} while (pixlu < MINIMALNI_JEDNOTKOVY_KRUH);
 		return pixlu;
-	}
-
-	@Override
-	public JSingleSlide0 createRenderableSlide() {
-		return new JZvyraznovaciKruhySlide();
 	}
 
 }

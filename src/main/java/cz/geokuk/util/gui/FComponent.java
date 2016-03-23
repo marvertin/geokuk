@@ -13,9 +13,6 @@ import javax.swing.JComponent;
  *
  */
 public final class FComponent {
-	private FComponent() {
-	}
-
 	public static void enableMouseSroll(final JComponent component) {
 		component.addMouseMotionListener(new ScrollRectToVisibleListener());
 		component.setAutoscrolls(true);
@@ -38,6 +35,9 @@ public final class FComponent {
 				setEnabled(c, enabled);
 			}
 		}
+	}
+
+	private FComponent() {
 	}
 
 }

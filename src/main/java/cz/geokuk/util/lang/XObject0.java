@@ -24,28 +24,6 @@ public abstract class XObject0 extends RuntimeException {
 	private static final long serialVersionUID = -3973117135262826574L;
 
 	/**
-	 * Vytvoří výjimku se zadano zprávou
-	 *
-	 * @param s
-	 *            Technicky orientovaná zpráva. Obsahuje informace o chybě určené technicky a systémově znalé osobě.
-	 */
-	public XObject0(final String s) {
-		super(s);
-	}
-
-	/**
-	 * Vytvoří výjimku a naváže ji na zadanou výjimku. Používá se v bloku catch v případě potřeby přehodit výjimku.
-	 *
-	 * @param s
-	 *            Technicky orientovaná zpráva. Obsahuje informace o chybě určené technicky a systémově znalé osobě.
-	 * @param e
-	 *            Přehazovaná výjimka.
-	 */
-	public XObject0(final String s, final Exception e) {
-		super(s, e);
-	}
-
-	/**
 	 * Vyhodí výjimku s tím, že přidá jméno třídy, ze které je vyhozena.
 	 *
 	 * @param trida
@@ -69,6 +47,28 @@ public abstract class XObject0 extends RuntimeException {
 	 */
 	public XObject0(final Object trida, final String s, final Exception e) {
 		this(FThrowable._constructClassString(trida, s), e);
+	}
+
+	/**
+	 * Vytvoří výjimku se zadano zprávou
+	 *
+	 * @param s
+	 *            Technicky orientovaná zpráva. Obsahuje informace o chybě určené technicky a systémově znalé osobě.
+	 */
+	public XObject0(final String s) {
+		super(s);
+	}
+
+	/**
+	 * Vytvoří výjimku a naváže ji na zadanou výjimku. Používá se v bloku catch v případě potřeby přehodit výjimku.
+	 *
+	 * @param s
+	 *            Technicky orientovaná zpráva. Obsahuje informace o chybě určené technicky a systémově znalé osobě.
+	 * @param e
+	 *            Přehazovaná výjimka.
+	 */
+	public XObject0(final String s, final Exception e) {
+		super(s, e);
 	}
 
 	/**

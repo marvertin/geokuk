@@ -26,6 +26,13 @@ public abstract class LineDecorationWriter extends FilterWriter {
 		super(out);
 	}
 
+	/**
+	 * @return True, pokud právě zpracovávaný řádek v metodě {@link #onLineBeg()} nebo {@link #onLineEnd()} je prázdný, to znamená, že neobsahuje vůbec žádný znak, a to ani mezeru ani nic jiného.
+	 */
+	public boolean isEmptyLine() {
+		return iEmptyLine;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -58,17 +65,6 @@ public abstract class LineDecorationWriter extends FilterWriter {
 		out.write(cbuf, lastWrited, off + len - lastWrited); // zapsat nezapsaný zbytek
 	}
 
-	protected abstract void onLineBeg() throws IOException;
-
-	protected abstract void onLineEnd() throws IOException;
-
-	/**
-	 * @return True, pokud právě zpracovávaný řádek v metodě {@link #onLineBeg()} nebo {@link #onLineEnd()} je prázdný, to znamená, že neobsahuje vůbec žádný znak, a to ani mezeru ani nic jiného.
-	 */
-	public boolean isEmptyLine() {
-		return iEmptyLine;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -78,5 +74,9 @@ public abstract class LineDecorationWriter extends FilterWriter {
 	public void write(final String str, final int off, final int len) throws IOException {
 		write(str.toCharArray(), off, len);
 	}
+
+	protected abstract void onLineBeg() throws IOException;
+
+	protected abstract void onLineEnd() throws IOException;
 
 }

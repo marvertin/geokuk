@@ -17,22 +17,17 @@ public class OknoModel extends Model0 {
 	private int				stavOkna;
 
 	/**
+	 * @return the oknoStatus
+	 */
+	public OknoUmisteniDto getOknoStatus() {
+		return oknoUmisteni;
+	}
+
+	/**
 	 * @return the stavOkna
 	 */
 	public int getStavOkna() {
 		return stavOkna;
-	}
-
-	/**
-	 * @param stavOkna
-	 *            the stavOkna to set
-	 */
-	public void setStavOkna(final int stavOkna) {
-		if (stavOkna == this.stavOkna) {
-			return;
-		}
-		this.stavOkna = stavOkna;
-		currPrefe().node(FPref.OKNO_structure_node).putInt(FPref.STAV_OKNA_value, stavOkna);
 	}
 
 	/**
@@ -48,10 +43,15 @@ public class OknoModel extends Model0 {
 	}
 
 	/**
-	 * @return the oknoStatus
+	 * @param stavOkna
+	 *            the stavOkna to set
 	 */
-	public OknoUmisteniDto getOknoStatus() {
-		return oknoUmisteni;
+	public void setStavOkna(final int stavOkna) {
+		if (stavOkna == this.stavOkna) {
+			return;
+		}
+		this.stavOkna = stavOkna;
+		currPrefe().node(FPref.OKNO_structure_node).putInt(FPref.STAV_OKNA_value, stavOkna);
 	}
 
 	/*

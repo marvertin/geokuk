@@ -29,6 +29,39 @@ public class JFiltrIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 		init();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
+	 */
+	@Override
+	public void initAfterInject() {
+		factory.init(filtrVyberIkon);
+	}
+
+	public void onEvent(final FilterDefinitionChangedEvent event) {
+		if (event.getJmenaNechtenychAlel().equals(jmenaAlelFiltr)) {
+			return;
+		}
+		jmenaAlelFiltr = event.getJmenaNechtenychAlel();
+		resetIfVse();
+	}
+
+	public void onEvent(final IkonyNactenyEvent event) {
+		bag = event.getBag();
+		resetIfVse();
+	}
+
+	public void onEvent(final KeskyNactenyEvent event) {
+		kesBag = event.getVsechny();
+		resetIfVse();
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "FiltrKesoidu";
+	}
+
 	@Override
 	protected void initComponents() {
 		jvse = Box.createHorizontalBox();
@@ -38,24 +71,6 @@ public class JFiltrIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 		filtrVyberIkon = new JFiltrVyberIkon();
 		jvse.add(filtrVyberIkon);
 		jvse.setPreferredSize(new Dimension(500, 600));
-	}
-
-	public void onEvent(final KeskyNactenyEvent event) {
-		kesBag = event.getVsechny();
-		resetIfVse();
-	}
-
-	public void onEvent(final IkonyNactenyEvent event) {
-		bag = event.getBag();
-		resetIfVse();
-	}
-
-	public void onEvent(final FilterDefinitionChangedEvent event) {
-		if (event.getJmenaNechtenychAlel().equals(jmenaAlelFiltr)) {
-			return;
-		}
-		jmenaAlelFiltr = event.getJmenaNechtenychAlel();
-		resetIfVse();
 	}
 
 	private void resetIfVse() {
@@ -70,21 +85,6 @@ public class JFiltrIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 		}
 		filtrVyberIkon.resetBag(bag, kesBag, jmenaAlelFiltr);
 		jvse.revalidate();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
-	 */
-	@Override
-	public void initAfterInject() {
-		factory.init(filtrVyberIkon);
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "FiltrKesoidu";
 	}
 
 }

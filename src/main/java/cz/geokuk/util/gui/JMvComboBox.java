@@ -16,6 +16,15 @@ public class JMvComboBox<T> extends JComboBox<Item<T>> {
 
 	private SelectionModel<T>	model				= new SelectionModel<>();
 
+	@Override
+	public Dimension getMaximumSize() {
+		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	}
+
+	public SelectionModel<T> getSelectionModel() {
+		return model;
+	}
+
 	public void setSelectionModel(final SelectionModel<T> model) {
 		this.model = model;
 		final DefaultComboBoxModel<Item<T>> defmod = new DefaultComboBoxModel<>();
@@ -27,7 +36,7 @@ public class JMvComboBox<T> extends JComboBox<Item<T>> {
 		defmod.addListDataListener(new ListDataListener() {
 
 			@Override
-			public void intervalRemoved(final ListDataEvent e) {
+			public void contentsChanged(final ListDataEvent e) {
 				nastavto();
 			}
 
@@ -37,7 +46,7 @@ public class JMvComboBox<T> extends JComboBox<Item<T>> {
 			}
 
 			@Override
-			public void contentsChanged(final ListDataEvent e) {
+			public void intervalRemoved(final ListDataEvent e) {
 				nastavto();
 			}
 
@@ -49,14 +58,5 @@ public class JMvComboBox<T> extends JComboBox<Item<T>> {
 		});
 		model.addListener(event -> defmod.setSelectedItem(event.item));
 
-	}
-
-	public SelectionModel<T> getSelectionModel() {
-		return model;
-	}
-
-	@Override
-	public Dimension getMaximumSize() {
-		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
 	}
 }

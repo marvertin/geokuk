@@ -27,6 +27,16 @@ public class JCestaTooltip extends JComponent {
 		jNazevCesty.setForeground(Color.WHITE);
 	}
 
+	public void setDalkoviny(final Bousek0 blizkyBousek, final Mou aMou) {
+		jVpred.setText("<html>" + blizkyBousek.dalkaCestaVpredHtml(aMou));
+		jVzad.setText("<html>" + blizkyBousek.dalkaCestaVzadHtml(aMou));
+		jVpred.setVisible(true);
+		jVzad.setVisible(true);
+		jNazevCesty.setText(blizkyBousek.getCesta().getNazev());
+		jNazevCesty.setVisible(blizkyBousek.getCesta().getNazev() != null);
+
+	}
+
 	public void setPridavaciDalkoviny(final Cesta cesta, final Mou mou) {
 
 		final double dalkaPuvodni = cesta == null ? 0 : cesta.dalka();
@@ -36,16 +46,6 @@ public class JCestaTooltip extends JComponent {
 		jVpred.setVisible(false);
 		jNazevCesty.setText(cesta.getNazev());
 		jNazevCesty.setVisible(cesta.getNazev() != null);
-
-	}
-
-	public void setDalkoviny(final Bousek0 blizkyBousek, final Mou aMou) {
-		jVpred.setText("<html>" + blizkyBousek.dalkaCestaVpredHtml(aMou));
-		jVzad.setText("<html>" + blizkyBousek.dalkaCestaVzadHtml(aMou));
-		jVpred.setVisible(true);
-		jVzad.setVisible(true);
-		jNazevCesty.setText(blizkyBousek.getCesta().getNazev());
-		jNazevCesty.setVisible(blizkyBousek.getCesta().getNazev() != null);
 
 	}
 

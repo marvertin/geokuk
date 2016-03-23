@@ -21,17 +21,17 @@ public class Repaintanger {
 		return insets;
 	}
 
-	public void include(final Insets in) {
-		insets = new Insets(Math.max(insets.top, in.top), Math.max(insets.left, in.left), Math.max(insets.bottom, in.bottom), Math.max(insets.right, in.right));
-
-	}
-
 	public void include(final Imagant imagant) {
 		if (imagant == null) {
 			return;
 		}
 		final Insets insets = new Insets(-imagant.getYpos(), -imagant.getXpos(), imagant.getYpos() + imagant.getImage().getHeight(), imagant.getXpos() + imagant.getImage().getWidth());
 		include(insets);
+	}
+
+	public void include(final Insets in) {
+		insets = new Insets(Math.max(insets.top, in.top), Math.max(insets.left, in.left), Math.max(insets.bottom, in.bottom), Math.max(insets.right, in.right));
+
 	}
 
 	public void include(final Sklivec sklivec) {

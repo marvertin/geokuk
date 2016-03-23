@@ -52,6 +52,65 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		initComponents();
 	}
 
+	public void fokusniSe() {
+		Container panel = null;
+		for (Container comp = this; comp != null; comp = comp.getParent()) {
+			if (comp instanceof JTabbedPane) {
+				final JTabbedPane tabpane = (JTabbedPane) comp;
+				tabpane.setSelectedComponent(panel);
+				break;
+			}
+			panel = comp;
+		}
+		jtext.requestFocus();
+	}
+
+	/**
+	 * @return the souborPanelName
+	 */
+	public ESouborPanelName getSouborPanelName() {
+		return souborPanelName;
+	}
+
+	@Override
+	public void changedUpdate(final DocumentEvent e) {
+		zmemniliNamTo();
+	}
+
+	@Override
+	public void insertUpdate(final DocumentEvent e) {
+		zmemniliNamTo();
+	}
+
+	@Override
+	public void removeUpdate(final DocumentEvent e) {
+		zmemniliNamTo();
+	}
+
+	public void setFilex(final Filex filex) {
+		jtext.setText(filex.getFile().getPath());
+		jRelativneKProgramu.setSelected(filex.isRelativeToProgram());
+		jActive.setSelected(filex.isActive() || !lzeDeaktivovat);
+		prepocitej();
+	}
+
+	public Filex vezmiSouborAProver() throws YNejdeTo {
+		prepocitej();
+		File dir = filex.getEffectiveFile();
+		log.debug("Prověřuji soubor: " + dir);
+		if (!jenAdresare) {
+			dir = dir.getParentFile();
+		}
+		if (dir.isDirectory() && dir.canRead()) {
+			return filex;
+		}
+		final boolean vysl = dir.mkdirs();
+		if (!vysl) {
+			throw new JPrehledSouboru.YNejdeTo("Složku \"" + dir + "\" se nepodařilo stvořit pro \"" + label + "\"");
+		}
+		return filex;
+	}
+
 	private void initComponents() {
 		final TitledBorder border = BorderFactory.createTitledBorder(label);
 		final Font titleFont = border.getTitleFont();
@@ -122,34 +181,6 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		jActive.addActionListener(e -> prepocitej());
 	}
 
-	public Filex vezmiSouborAProver() throws YNejdeTo {
-		prepocitej();
-		File dir = filex.getEffectiveFile();
-		log.debug("Prověřuji soubor: " + dir);
-		if (!jenAdresare) {
-			dir = dir.getParentFile();
-		}
-		if (dir.isDirectory() && dir.canRead()) {
-			return filex;
-		}
-		final boolean vysl = dir.mkdirs();
-		if (!vysl) {
-			throw new JPrehledSouboru.YNejdeTo("Složku \"" + dir + "\" se nepodařilo stvořit pro \"" + label + "\"");
-		}
-		return filex;
-	}
-
-	private void zmemniliNamTo() {
-		prepocitej();
-	}
-
-	public void setFilex(final Filex filex) {
-		jtext.setText(filex.getFile().getPath());
-		jRelativneKProgramu.setSelected(filex.isRelativeToProgram());
-		jActive.setSelected(filex.isActive() || !lzeDeaktivovat);
-		prepocitej();
-	}
-
 	private void prepocitej() {
 		filex = new Filex(new File(jtext.getText()), jRelativneKProgramu.isSelected(), jActive.isSelected());
 		jCurrVal.setText(filex.getEffectiveFile().getPath());
@@ -157,39 +188,8 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		jRelativneKProgramu.setEnabled(jActive.isSelected());
 	}
 
-	@Override
-	public void changedUpdate(final DocumentEvent e) {
-		zmemniliNamTo();
-	}
-
-	@Override
-	public void insertUpdate(final DocumentEvent e) {
-		zmemniliNamTo();
-	}
-
-	@Override
-	public void removeUpdate(final DocumentEvent e) {
-		zmemniliNamTo();
-	}
-
-	public void fokusniSe() {
-		Container panel = null;
-		for (Container comp = this; comp != null; comp = comp.getParent()) {
-			if (comp instanceof JTabbedPane) {
-				final JTabbedPane tabpane = (JTabbedPane) comp;
-				tabpane.setSelectedComponent(panel);
-				break;
-			}
-			panel = comp;
-		}
-		jtext.requestFocus();
-	}
-
-	/**
-	 * @return the souborPanelName
-	 */
-	public ESouborPanelName getSouborPanelName() {
-		return souborPanelName;
+	private void zmemniliNamTo() {
+		prepocitej();
 	}
 
 	// @Override

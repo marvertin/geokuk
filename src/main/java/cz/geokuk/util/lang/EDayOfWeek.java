@@ -17,14 +17,6 @@ public enum EDayOfWeek {
 
 	private final int			iDayOfWeakAsCalendar;
 
-	EDayOfWeek(final int aDayOfWeakAsCalendar) {
-		iDayOfWeakAsCalendar = aDayOfWeakAsCalendar;
-	}
-
-	public int getDayOfWeakAsCalendar() {
-		return iDayOfWeakAsCalendar;
-	}
-
 	/**
 	 * Vrátí honodu dne v týdnu na základě kalendáře.
 	 *
@@ -41,5 +33,13 @@ public enum EDayOfWeek {
 			}
 		}
 		return sCalendarNaNas[aCalendarValue];
+	}
+
+	EDayOfWeek(final int aDayOfWeakAsCalendar) {
+		iDayOfWeakAsCalendar = aDayOfWeakAsCalendar;
+	}
+
+	public int getDayOfWeakAsCalendar() {
+		return iDayOfWeakAsCalendar;
 	}
 }

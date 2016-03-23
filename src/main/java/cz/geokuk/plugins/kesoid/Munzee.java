@@ -25,6 +25,11 @@ public class Munzee extends Kesoid {
 		return EKesoidKind.MUNZEE;
 	}
 
+	@Override
+	public Icon getUrlIcon() {
+		return ImageLoader.seekResIcon("munzee.png");
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -57,11 +62,6 @@ public class Munzee extends Kesoid {
 			sb.append("  (").append(wpt.getName()).append(")");
 			sb.append("</small>");
 		}
-	}
-
-	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("munzee.png");
 	}
 
 }

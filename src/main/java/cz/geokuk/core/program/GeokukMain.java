@@ -21,6 +21,10 @@ public class GeokukMain {
 
 	private static final Logger log = LogManager.getLogger(GeokukMain.class.getSimpleName());
 
+	public static void main(final String[] args) {
+		new GeokukMain().execute(args);
+	}
+
 	public void execute(final String[] args) {
 		FConst.logInit();
 		log.info("Default character encoding: {}", Charset.defaultCharset());
@@ -58,10 +62,6 @@ public class GeokukMain {
 				}
 			}
 		}
-	}
-
-	public static void main(final String[] args) {
-		new GeokukMain().execute(args);
 	}
 
 }

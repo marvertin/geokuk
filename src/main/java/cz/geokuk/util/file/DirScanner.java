@@ -16,19 +16,6 @@ public class DirScanner {
 	private List<Root>		roots;
 	private List<KeFile>	lastScaned	= null;
 
-	public void seRootDirs(final boolean prenacti, final Root... roots) {
-		final List<Root> newRoots = Arrays.asList(roots);
-		if (!prenacti && newRoots.equals(this.roots)) {
-			return;
-		}
-		this.roots = newRoots;
-		nulujLastScaned();
-	}
-
-	public synchronized void nulujLastScaned() {
-		lastScaned = null;
-	}
-
 	/**
 	 * Vrátí null, pokud není co načítat, protože nedošlo ke změně. Prázdný seznam je něco jiného, to ke změně došlo takové, že zmizely všechny soubory. Když se změní byť jediný soubor, je to změna a načítá se.
 	 *
@@ -46,6 +33,19 @@ public class DirScanner {
 		}
 		lastScaned = list;
 		return list;
+	}
+
+	public synchronized void nulujLastScaned() {
+		lastScaned = null;
+	}
+
+	public void seRootDirs(final boolean prenacti, final Root... roots) {
+		final List<Root> newRoots = Arrays.asList(roots);
+		if (!prenacti && newRoots.equals(this.roots)) {
+			return;
+		}
+		this.roots = newRoots;
+		nulujLastScaned();
 	}
 
 	private boolean matches(final String fileName, final Root.Def def) {

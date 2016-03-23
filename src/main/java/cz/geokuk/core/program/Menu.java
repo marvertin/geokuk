@@ -24,6 +24,35 @@ public class Menu extends MenuStrujce {
 		this.jMainFrame = jMainFrame;
 	}
 
+	public JToolBar getToolBar() {
+		return tb;
+	}
+
+	public void inject(final Akce akce) {
+		this.akce = akce;
+	}
+
+	public void inject(final RefbodyModel refbodyModel) {
+		this.refbodyModel = refbodyModel;
+	}
+
+	public void makeMapSubmenuPart(final Akce akce) {
+		final ButtonGroup mapPodkladButtonGroup = new ButtonGroup();
+		for (final MapyAction0 mapoakce1 : akce.mapoakce) {
+			if (mapoakce1 instanceof PodkladAction) {
+				item(mapoakce1, mapPodkladButtonGroup);
+			}
+		}
+
+		separator();
+
+		for (final MapyAction0 mapoakce1 : akce.mapoakce) {
+			if (mapoakce1 instanceof DekoraceAction) {
+				item(mapoakce1);
+			}
+		}
+	}
+
 	@Override
 	protected void makeMenu() {
 
@@ -228,35 +257,6 @@ public class Menu extends MenuStrujce {
 		tb.addOvladaceAlel();
 		tb.add(Box.createHorizontalGlue());
 
-	}
-
-	public void makeMapSubmenuPart(final Akce akce) {
-		final ButtonGroup mapPodkladButtonGroup = new ButtonGroup();
-		for (final MapyAction0 mapoakce1 : akce.mapoakce) {
-			if (mapoakce1 instanceof PodkladAction) {
-				item(mapoakce1, mapPodkladButtonGroup);
-			}
-		}
-
-		separator();
-
-		for (final MapyAction0 mapoakce1 : akce.mapoakce) {
-			if (mapoakce1 instanceof DekoraceAction) {
-				item(mapoakce1);
-			}
-		}
-	}
-
-	public JToolBar getToolBar() {
-		return tb;
-	}
-
-	public void inject(final Akce akce) {
-		this.akce = akce;
-	}
-
-	public void inject(final RefbodyModel refbodyModel) {
-		this.refbodyModel = refbodyModel;
 	}
 
 }

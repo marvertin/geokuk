@@ -25,6 +25,11 @@ public class SimpleWaypoint extends Kesoid {
 		return EKesoidKind.SIMPLEWAYPOINT;
 	}
 
+	@Override
+	public Icon getUrlIcon() {
+		return ImageLoader.seekResIcon("internet.png");
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -57,11 +62,6 @@ public class SimpleWaypoint extends Kesoid {
 			sb.append("  (").append(wpt.getName()).append(")");
 			sb.append("</small>");
 		}
-	}
-
-	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("internet.png");
 	}
 
 }

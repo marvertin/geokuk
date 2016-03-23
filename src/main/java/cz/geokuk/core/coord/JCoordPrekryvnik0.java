@@ -20,28 +20,8 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 
 	private final List<JSingleSlide0>	slides				= new ArrayList<>();
 
-	/**
-	 * @return the coord
-	 */
-	protected Coord getSoord() {
-		return soord;
-	}
-
 	public JCoordPrekryvnik0() {
 		registerEvents();
-	}
-
-	/**
-	 *
-	 */
-	private void registerEvents() {
-		// Listener zajístí, že za zapíše šířka i výška do použitého souřadničníku
-		addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(final ComponentEvent e) {
-				setSoord(soord.derive(getSize()));
-			}
-		});
 	}
 
 	/*
@@ -60,6 +40,13 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 	}
 
 	/**
+	 * @return the coord
+	 */
+	protected Coord getSoord() {
+		return soord;
+	}
+
+	/**
 	 * @param newSoord
 	 */
 	protected void setSoord(final Coord newSoord) {
@@ -68,6 +55,19 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 		}
 		soord = newSoord;
 		reinicializujVyrezy();
+	}
+
+	/**
+	 *
+	 */
+	private void registerEvents() {
+		// Listener zajístí, že za zapíše šířka i výška do použitého souřadničníku
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(final ComponentEvent e) {
+				setSoord(soord.derive(getSize()));
+			}
+		});
 	}
 
 	/**

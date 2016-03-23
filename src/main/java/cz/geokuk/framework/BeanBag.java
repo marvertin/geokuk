@@ -44,6 +44,23 @@ public class BeanBag implements Factory {
 
 	}
 
+	public void init() {
+
+		for (final Object bean : beans) {
+			inject(bean);
+		}
+		for (final Object bean : beans) {
+			callAfterInjectInit(bean);
+		}
+		for (final Object bean : beans) {
+			registerEventReceiver(bean, false);
+		}
+		for (final Object bean : beans) {
+			callAfterEventReceiverRegistrationInit(bean);
+		}
+		initialized = true;
+	}
+
 	/**
 	 * @param <T>
 	 * @param obj
@@ -68,6 +85,10 @@ public class BeanBag implements Factory {
 		registerEventReceiver(obj, true);
 		callAfterEventReceiverRegistrationInit(obj);
 		return obj;
+	}
+
+	public void inject(final EventManager eveman) {
+		this.eveman = eveman;
 	}
 
 	public <T> T registerSigleton(final T object) {
@@ -95,23 +116,6 @@ public class BeanBag implements Factory {
 		}
 	}
 
-	public void init() {
-
-		for (final Object bean : beans) {
-			inject(bean);
-		}
-		for (final Object bean : beans) {
-			callAfterInjectInit(bean);
-		}
-		for (final Object bean : beans) {
-			registerEventReceiver(bean, false);
-		}
-		for (final Object bean : beans) {
-			callAfterEventReceiverRegistrationInit(bean);
-		}
-		initialized = true;
-	}
-
 	/**
 	 * @param bean
 	 */
@@ -131,10 +135,18 @@ public class BeanBag implements Factory {
 	}
 
 	/**
-	 * @param bean
+	 * @param method
+	 * @param targetBean
+	 * @param injectedBean
 	 */
-	private void registerEventReceiver(final Object bean, final boolean aOnlyInvoke) {
-		eveman.registerWeakly(bean, aOnlyInvoke);
+	private void callInjection(final Method method, final Object targetBean, final Object injectedBean) {
+		try {
+			// System.out.println("INJEKTUJI:: " + targetBean.getClass() + " <== " + injectedBean.getClass() + " ... " + method);
+			// System.out.println(m);
+			method.invoke(targetBean, injectedBean);
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -173,21 +185,9 @@ public class BeanBag implements Factory {
 	}
 
 	/**
-	 * @param method
-	 * @param targetBean
-	 * @param injectedBean
+	 * @param bean
 	 */
-	private void callInjection(final Method method, final Object targetBean, final Object injectedBean) {
-		try {
-			// System.out.println("INJEKTUJI:: " + targetBean.getClass() + " <== " + injectedBean.getClass() + " ... " + method);
-			// System.out.println(m);
-			method.invoke(targetBean, injectedBean);
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public void inject(final EventManager eveman) {
-		this.eveman = eveman;
+	private void registerEventReceiver(final Object bean, final boolean aOnlyInvoke) {
+		eveman.registerWeakly(bean, aOnlyInvoke);
 	}
 }

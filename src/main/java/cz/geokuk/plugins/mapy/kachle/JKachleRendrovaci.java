@@ -17,14 +17,6 @@ public class JKachleRendrovaci extends JKachle {
 	}
 
 	@Override
-	protected void ziskanPlnyObrazek(final Image img) {
-		if (grf != null) {
-			super.paintComponent(grf);
-			uzTeNepotrebuju();
-		}
-	}
-
-	@Override
 	protected synchronized void paintComponent(final Graphics aG) {
 		super.paintComponent(aG);
 
@@ -34,6 +26,14 @@ public class JKachleRendrovaci extends JKachle {
 			grf = null;
 		} else {
 			grf = aG.create();
+		}
+	}
+
+	@Override
+	protected void ziskanPlnyObrazek(final Image img) {
+		if (grf != null) {
+			super.paintComponent(grf);
+			uzTeNepotrebuju();
 		}
 	}
 }

@@ -10,39 +10,6 @@ public class KaSet {
 		this.kts = kts;
 	}
 
-	public EnumSet<EKaType> getKts() {
-		return kts.clone();
-	}
-
-	public EKaType getPodklad() {
-		if (kts == null) {
-			return null;
-		}
-		for (final EKaType kt : kts) {
-			if (kt.isPodklad()) {
-				return kt;
-			}
-		}
-		return null;
-	}
-
-	// public boolean isExaclyOnePodklad() {
-	// if (kts == null) return false;
-	// int n = 0;
-	// for (EKachloType kt : kts) {
-	// if (kt.isPodklad()) n++;
-	// }
-	// return n == 1;
-	// }
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (kts == null ? 0 : kts.hashCode());
-		return result;
-	}
-
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -63,6 +30,39 @@ public class KaSet {
 			return false;
 		}
 		return true;
+	}
+
+	public EnumSet<EKaType> getKts() {
+		return kts.clone();
+	}
+
+	// public boolean isExaclyOnePodklad() {
+	// if (kts == null) return false;
+	// int n = 0;
+	// for (EKachloType kt : kts) {
+	// if (kt.isPodklad()) n++;
+	// }
+	// return n == 1;
+	// }
+
+	public EKaType getPodklad() {
+		if (kts == null) {
+			return null;
+		}
+		for (final EKaType kt : kts) {
+			if (kt.isPodklad()) {
+				return kt;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (kts == null ? 0 : kts.hashCode());
+		return result;
 	}
 
 	@Override

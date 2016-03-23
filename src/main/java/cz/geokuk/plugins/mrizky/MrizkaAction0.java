@@ -13,6 +13,16 @@ public abstract class MrizkaAction0 extends ToggleAction0 implements BeanSubtypa
 	}
 
 	@Override
+	public String getSubType() {
+		return kterouMamMrizku();
+	}
+
+	@BeanSubtype
+	public void onEvent(final MrizkaEvent event) {
+		setSelected(event.onoff);
+	}
+
+	@Override
 	protected void onSlectedChange(final boolean nastaveno) {
 		mrizkaModel.setOnoff(nastaveno);
 	}
@@ -23,16 +33,6 @@ public abstract class MrizkaAction0 extends ToggleAction0 implements BeanSubtypa
 		final int poz2 = kn.indexOf("Action");
 		final String result = kn.substring(poz1 + ".Mrizka".length(), poz2);
 		return result;
-	}
-
-	@BeanSubtype
-	public void onEvent(final MrizkaEvent event) {
-		setSelected(event.onoff);
-	}
-
-	@Override
-	public String getSubType() {
-		return kterouMamMrizku();
 	}
 
 }

@@ -60,26 +60,35 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 		init();
 	}
 
-	/**
+	/*
+	 * (non-Javadoc)
 	 *
+	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
-	private void registerEvents() {
-		final ChangeListener chlist = e -> {
-			// Board.mainFrame.parametryZvyraznovaceKruhuSeZmenily();
-			final KruhySettings kruhy = new KruhySettings();
-			final Color barva = alfaColorChooser.getSelectionModel().getSelectedColor();
-			System.out.println("KRUHY1: " + barva + barva.getAlpha());
-			kruhy.setBarva(barva);
-			System.out.println("KRUHY2: " + barva + barva.getAlpha());
-			kruhy.setVelikost(velikostSlider.getValue());
-			kruhy.setJednotkovaVelikost(jJednotkoveKruhy.isSelected());
-			System.out.println("KRUHY3: " + barva + barva.getAlpha());
-			kruhyModel.setData(kruhy);
-		};
-		velikostSlider.getModel().addChangeListener(chlist);
-		alfaColorChooser.getSelectionModel().addChangeListener(chlist);
-		jJednotkoveKruhy.getModel().addChangeListener(chlist);
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		registerEvents();
+	}
 
+	public void inject(final KruhyModel kruhyModel) {
+		this.kruhyModel = kruhyModel;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
+	 */
+	public void onEvent(final KruhyPreferencesChangeEvent event) {
+		jJednotkoveKruhy.getModel().setSelected(event.kruhy.isJednotkovaVelikost());
+		velikostSlider.getModel().setValue(event.kruhy.getVelikost());
+		final Color barva = event.kruhy.getBarva();
+		alfaColorChooser.getSelectionModel().setSelectedColor(barva);
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "ZvyraznovaciKruhy";
 	}
 
 	/**
@@ -106,35 +115,26 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 		box.add(alfaColorChooser);
 	}
 
-	public void inject(final KruhyModel kruhyModel) {
-		this.kruhyModel = kruhyModel;
-	}
-
-	/*
-	 * (non-Javadoc)
+	/**
 	 *
-	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
 	 */
-	public void onEvent(final KruhyPreferencesChangeEvent event) {
-		jJednotkoveKruhy.getModel().setSelected(event.kruhy.isJednotkovaVelikost());
-		velikostSlider.getModel().setValue(event.kruhy.getVelikost());
-		final Color barva = event.kruhy.getBarva();
-		alfaColorChooser.getSelectionModel().setSelectedColor(barva);
-	}
+	private void registerEvents() {
+		final ChangeListener chlist = e -> {
+			// Board.mainFrame.parametryZvyraznovaceKruhuSeZmenily();
+			final KruhySettings kruhy = new KruhySettings();
+			final Color barva = alfaColorChooser.getSelectionModel().getSelectedColor();
+			System.out.println("KRUHY1: " + barva + barva.getAlpha());
+			kruhy.setBarva(barva);
+			System.out.println("KRUHY2: " + barva + barva.getAlpha());
+			kruhy.setVelikost(velikostSlider.getValue());
+			kruhy.setJednotkovaVelikost(jJednotkoveKruhy.isSelected());
+			System.out.println("KRUHY3: " + barva + barva.getAlpha());
+			kruhyModel.setData(kruhy);
+		};
+		velikostSlider.getModel().addChangeListener(chlist);
+		alfaColorChooser.getSelectionModel().addChangeListener(chlist);
+		jJednotkoveKruhy.getModel().addChangeListener(chlist);
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
-	 */
-	@Override
-	public void initAfterEventReceiverRegistration() {
-		registerEvents();
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "ZvyraznovaciKruhy";
 	}
 
 }

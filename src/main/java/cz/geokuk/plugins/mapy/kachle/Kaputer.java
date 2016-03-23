@@ -69,19 +69,46 @@ public class Kaputer {
 		return soord;
 	}
 
+	/**
+	 * Mouřadnice levého horního rohu kachle, které má být umístěna na daném indexu.
+	 *
+	 * @param xi
+	 *            index kachle ve vřezu 0 .. pocetKachliX-1
+	 * @param yi
+	 *            index kachle ve vřezu 0 .. pocetKachliY-1
+	 * @return
+	 */
+	public Mou getKachleMou(final int xi, final int yi) {
+		return soord.transform(getKachlePoint(xi, yi));
+	}
+
+	/**
+	 * Bod, na který se má vykreslit levý horní roh kachle pro zadané indexy uvnitř výřezu. Kachle [0,0] vždy postihne levý horní roh výřezu. Kachle [pocetKachliX - 1, pocetKachliY -1 ] vždy postihne pravý dolní roh výřezu.
+	 *
+	 * @param xi
+	 *            index kachle ve vřezu 0 .. pocetKachliX-1
+	 * @param yi
+	 *            index kachle ve vřezu 0 .. pocetKachliY-1
+	 */
+	public Point getKachlePoint(final int xi, final int yi) {
+		return new Point(p0.x + xi * KACHLE_PIXELS, p0.y + yi * KACHLE_PIXELS);
+	}
+
+	/**
+	 * Lokace kachle, která má být zobrazena na daném indexu ve výřezu.
+	 *
+	 * @param xi
+	 *            index kachle ve vřezu 0 .. pocetKachliX-1
+	 * @param yi
+	 *            index kachle ve vřezu 0 .. pocetKachliY-1
+	 * @return
+	 */
+	public KaLoc getKaloc(final int xi, final int yi) {
+		return KaLoc.ofSZ(getKachleMou(xi, yi), soord.getMoumer());
+	}
+
 	public int getMoukrok() {
 		return soord.getMoumer() == 0 ? 0 : 1 << Coord.MOU_BITS - soord.getMoumer(); // o kolik mou je to od kachle ke kachli (pro moumer=0 je to 2^32, tedy v integeru 0, což odpovídá, že se stále zobrazuje stejná kachle)
-	}
-
-	public int getVzdalenostKachleOdStredu(final Mou moupoc) {
-		final int mouHranaPul = getMoukrok() / 2;
-		final Mou moustredx = soord.getMoustred();
-		final double hypot = Math.hypot(moupoc.xx + mouHranaPul - moustredx.xx, moupoc.yy + mouHranaPul - moustredx.yy);
-		return (int) hypot;
-	}
-
-	public void pocitani() {
-
 	}
 
 	/**
@@ -102,42 +129,15 @@ public class Kaputer {
 		return pocetKachliY;
 	}
 
-	/**
-	 * Bod, na který se má vykreslit levý horní roh kachle pro zadané indexy uvnitř výřezu. Kachle [0,0] vždy postihne levý horní roh výřezu. Kachle [pocetKachliX - 1, pocetKachliY -1 ] vždy postihne pravý dolní roh výřezu.
-	 *
-	 * @param xi
-	 *            index kachle ve vřezu 0 .. pocetKachliX-1
-	 * @param yi
-	 *            index kachle ve vřezu 0 .. pocetKachliY-1
-	 */
-	public Point getKachlePoint(final int xi, final int yi) {
-		return new Point(p0.x + xi * KACHLE_PIXELS, p0.y + yi * KACHLE_PIXELS);
+	public int getVzdalenostKachleOdStredu(final Mou moupoc) {
+		final int mouHranaPul = getMoukrok() / 2;
+		final Mou moustredx = soord.getMoustred();
+		final double hypot = Math.hypot(moupoc.xx + mouHranaPul - moustredx.xx, moupoc.yy + mouHranaPul - moustredx.yy);
+		return (int) hypot;
 	}
 
-	/**
-	 * Mouřadnice levého horního rohu kachle, které má být umístěna na daném indexu.
-	 *
-	 * @param xi
-	 *            index kachle ve vřezu 0 .. pocetKachliX-1
-	 * @param yi
-	 *            index kachle ve vřezu 0 .. pocetKachliY-1
-	 * @return
-	 */
-	public Mou getKachleMou(final int xi, final int yi) {
-		return soord.transform(getKachlePoint(xi, yi));
-	}
+	public void pocitani() {
 
-	/**
-	 * Lokace kachle, která má být zobrazena na daném indexu ve výřezu.
-	 *
-	 * @param xi
-	 *            index kachle ve vřezu 0 .. pocetKachliX-1
-	 * @param yi
-	 *            index kachle ve vřezu 0 .. pocetKachliY-1
-	 * @return
-	 */
-	public KaLoc getKaloc(final int xi, final int yi) {
-		return KaLoc.ofSZ(getKachleMou(xi, yi), soord.getMoumer());
 	}
 
 	@Override

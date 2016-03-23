@@ -24,6 +24,44 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 
 	private final Map<Pocitadlo, JLabel>	hodmap				= new WeakHashMap<>();
 
+	public static void main(final String[] args) {
+		final JServiceFrame serviceFrame = new JServiceFrame();
+		serviceFrame.setVisible(true);
+
+		for (int i = 0; i < 12; i++) {
+			Pocitadlo poc = null;
+			if (i % 3 == 0) {
+				poc = new PocitadloRoste("pociA " + i, "Popis počítadla " + i);
+			}
+			if (i % 3 == 1) {
+				poc = new PocitadloMalo("pociB " + i, "Popis počítadla " + i);
+			}
+			if (i % 3 == 2) {
+				poc = new PocitadloNula("pociC " + i, "Popis počítadla " + i);
+			}
+			final Pocitadlo po = poc;
+			final int ii = i;
+			final Thread thr = new Thread() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(ii * 1000);
+						for (;;) {
+							po.add(ii);
+							Thread.sleep((ii + 5) * 100);
+						}
+					} catch (final InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+				}
+			};
+			thr.setDaemon(true);
+			thr.start();
+
+		}
+
+	}
+
 	public JServiceFrame() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		initComponents();
@@ -32,21 +70,6 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 		registerEvents();
 
 		// TODO při zavírání JServiceFramese musí zlikvidovat také odkaz v počítadlech
-	}
-
-	private void registerEvents() {
-		// Zastavit počítání při uzavení okna
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(final WindowEvent e) {
-				Pocitadlo.callback = null;
-			}
-
-			@Override
-			public void windowClosed(final WindowEvent e) {
-				Pocitadlo.callback = null;
-			}
-		});
 	}
 
 	@Override
@@ -68,26 +91,28 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 		}
 	}
 
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "Service";
+	}
+
+	@Override
+	protected void initComponents() {
+	}
+
 	protected void initComponents(final List<Pocitadlo> pocitadla) {
 		final Box b = createtComponents(pocitadla);
 		getContentPane().removeAll();
 		getContentPane().add(b);
 	}
 
-	private Box createtComponents(final List<Pocitadlo> pocitadla) {
-		Box b;
-		// System.out.println("INICOMP");
-		hodmap.clear();
-		b = Box.createVerticalBox();
-		final JPanel jGcPanel = createGcButton();
-		b.add(jGcPanel);
-		for (final String typ : seznamTypu(pocitadla)) {
-			b.add(nadpis(typ));
-			final JPanel panel = initJedenPanel(typ, pocitadla);
-			b.add(panel);
-			b.add(Box.createVerticalStrut(10));
+	Set<String> seznamTypu(final List<Pocitadlo> pocitadla) {
+		final Set<String> types = new HashSet<>();
+		for (final Pocitadlo p : pocitadla) {
+			types.add(p.getTextovyPopisTypu());
 		}
-		return b;
+		// System.out.println(types);
+		return types;
 	}
 
 	private JPanel createGcButton() {
@@ -113,10 +138,20 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 		return jGcPanel;
 	}
 
-	private JTextField nadpis(final String typ) {
-		final JTextField lbl = new JTextField(typ);
-		lbl.setEditable(false);
-		return lbl;
+	private Box createtComponents(final List<Pocitadlo> pocitadla) {
+		Box b;
+		// System.out.println("INICOMP");
+		hodmap.clear();
+		b = Box.createVerticalBox();
+		final JPanel jGcPanel = createGcButton();
+		b.add(jGcPanel);
+		for (final String typ : seznamTypu(pocitadla)) {
+			b.add(nadpis(typ));
+			final JPanel panel = initJedenPanel(typ, pocitadla);
+			b.add(panel);
+			b.add(Box.createVerticalStrut(10));
+		}
+		return b;
 	}
 
 	/**
@@ -156,60 +191,25 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 		return pan;
 	}
 
-	Set<String> seznamTypu(final List<Pocitadlo> pocitadla) {
-		final Set<String> types = new HashSet<>();
-		for (final Pocitadlo p : pocitadla) {
-			types.add(p.getTextovyPopisTypu());
-		}
-		// System.out.println(types);
-		return types;
+	private JTextField nadpis(final String typ) {
+		final JTextField lbl = new JTextField(typ);
+		lbl.setEditable(false);
+		return lbl;
 	}
 
-	public static void main(final String[] args) {
-		final JServiceFrame serviceFrame = new JServiceFrame();
-		serviceFrame.setVisible(true);
-
-		for (int i = 0; i < 12; i++) {
-			Pocitadlo poc = null;
-			if (i % 3 == 0) {
-				poc = new PocitadloRoste("pociA " + i, "Popis počítadla " + i);
+	private void registerEvents() {
+		// Zastavit počítání při uzavení okna
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(final WindowEvent e) {
+				Pocitadlo.callback = null;
 			}
-			if (i % 3 == 1) {
-				poc = new PocitadloMalo("pociB " + i, "Popis počítadla " + i);
+
+			@Override
+			public void windowClosing(final WindowEvent e) {
+				Pocitadlo.callback = null;
 			}
-			if (i % 3 == 2) {
-				poc = new PocitadloNula("pociC " + i, "Popis počítadla " + i);
-			}
-			final Pocitadlo po = poc;
-			final int ii = i;
-			final Thread thr = new Thread() {
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(ii * 1000);
-						for (;;) {
-							po.add(ii);
-							Thread.sleep((ii + 5) * 100);
-						}
-					} catch (final InterruptedException e) {
-						throw new RuntimeException(e);
-					}
-				}
-			};
-			thr.setDaemon(true);
-			thr.start();
-
-		}
-
-	}
-
-	@Override
-	protected void initComponents() {
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "Service";
+		});
 	}
 
 }

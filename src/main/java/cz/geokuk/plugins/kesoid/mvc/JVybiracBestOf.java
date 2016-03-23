@@ -16,9 +16,8 @@ public class JVybiracBestOf extends JVybiracCiselny0 implements AfterEventReceiv
 	}
 
 	@Override
-	protected void setPrah(final FilterDefinition filterDefinition, final int prah) {
-		filterDefinition.setPrahBestOf(prah);
-
+	protected int getMaximum(final KesBag vsechny) {
+		return vsechny.getMaximalniBestOf();
 	}
 
 	@Override
@@ -27,8 +26,9 @@ public class JVybiracBestOf extends JVybiracCiselny0 implements AfterEventReceiv
 	}
 
 	@Override
-	protected int getMaximum(final KesBag vsechny) {
-		return vsechny.getMaximalniBestOf();
+	protected void setPrah(final FilterDefinition filterDefinition, final int prah) {
+		filterDefinition.setPrahBestOf(prah);
+
 	}
 
 }

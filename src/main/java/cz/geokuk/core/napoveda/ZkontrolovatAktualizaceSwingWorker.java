@@ -53,46 +53,6 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
 		}
 	}
 
-	private String readVersion(final BufferedReader br) throws IOException {
-		final Pattern pat = Pattern.compile("<h1>\\[\\[(.*)\\]\\]</h1>");
-		String line;
-		while ((line = br.readLine()) != null) {
-			final Matcher matcher = pat.matcher(line);
-			if (matcher.matches()) {
-				return matcher.group(1);
-			}
-		}
-		return null;
-	}
-
-	private List<ZpravaUzivateli> nactiSeznamZprav(final BufferedReader br) throws IOException {
-		String line;
-		final Pattern pat = Pattern.compile("<h1>==(.*)==</h1>");
-		StringBuilder sb = null;
-		int msgnum = 0;
-		final List<ZpravaUzivateli> list = new ArrayList<>();
-		while ((line = br.readLine()) != null) {
-			final Matcher matcher = pat.matcher(line);
-			if (matcher.matches()) {
-				if (sb != null && sb.length() > 0) {
-					list.add(new ZpravaUzivateli(msgnum, sb.toString()));
-				}
-				sb = new StringBuilder();
-				msgnum = Integer.parseInt(matcher.group(1));
-			} else {
-				if (sb != null) {
-					sb.append(line);
-					sb.append("\n");
-				}
-			}
-
-		}
-		if (sb != null && sb.length() > 0) {
-			list.add(new ZpravaUzivateli(msgnum, sb.toString()));
-		}
-		return list;
-	}
-
 	@Override
 	protected void donex() throws Exception {
 		final ZpravyAVerze vysledek = get();
@@ -126,9 +86,54 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
 		super.donex();
 	}
 
-	private void zobrazitWeb() {
+	private List<ZpravaUzivateli> nactiSeznamZprav(final BufferedReader br) throws IOException {
+		String line;
+		final Pattern pat = Pattern.compile("<h1>==(.*)==</h1>");
+		StringBuilder sb = null;
+		int msgnum = 0;
+		final List<ZpravaUzivateli> list = new ArrayList<>();
+		while ((line = br.readLine()) != null) {
+			final Matcher matcher = pat.matcher(line);
+			if (matcher.matches()) {
+				if (sb != null && sb.length() > 0) {
+					list.add(new ZpravaUzivateli(msgnum, sb.toString()));
+				}
+				sb = new StringBuilder();
+				msgnum = Integer.parseInt(matcher.group(1));
+			} else {
+				if (sb != null) {
+					sb.append(line);
+					sb.append("\n");
+				}
+			}
+
+		}
+		if (sb != null && sb.length() > 0) {
+			list.add(new ZpravaUzivateli(msgnum, sb.toString()));
+		}
+		return list;
+	}
+
+	private String readVersion(final BufferedReader br) throws IOException {
+		final Pattern pat = Pattern.compile("<h1>\\[\\[(.*)\\]\\]</h1>");
+		String line;
+		while ((line = br.readLine()) != null) {
+			final Matcher matcher = pat.matcher(line);
+			if (matcher.matches()) {
+				return matcher.group(1);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Dočasně zablokováno.
+	 */
+	@SuppressWarnings("unused")
+	private void spustitJavaWebStart() {
 		try {
-			BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL));
+			BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "geokuk.jnlp"));
+			System.exit(0);
 		} catch (final MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
@@ -142,14 +147,9 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
 		}
 	}
 
-	/**
-	 * Dočasně zablokováno.
-	 */
-	@SuppressWarnings("unused")
-	private void spustitJavaWebStart() {
+	private void zobrazitWeb() {
 		try {
-			BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL + "geokuk.jnlp"));
-			System.exit(0);
+			BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL));
 		} catch (final MalformedURLException e) {
 			throw new RuntimeException(e);
 		}

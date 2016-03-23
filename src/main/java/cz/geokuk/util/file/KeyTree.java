@@ -15,47 +15,6 @@ public class KeyTree<K, D> {
 
 	private final KeyNode<K, D> root = new KeyNode<>();
 
-	public KeyNode<K, D> locate(final List<K> keys) {
-		return root.locate(keys);
-	}
-
-	void add(final D data, final List<K> keys) {
-		root.add(data, keys);
-	}
-
-	void add(final D data, @SuppressWarnings("unchecked") final K... keys) {
-		add(data, Arrays.asList(keys));
-	}
-
-	void remove(final List<K> keys) {
-		root.remove(keys);
-	}
-
-	void remove(@SuppressWarnings("unchecked") final K... keys) {
-		remove(Arrays.asList(keys));
-	}
-
-	public KeyNode<K, D> getRoot() {
-		return root;
-	}
-
-	public void print() {
-		root.print("");
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (root == null ? 0 : root.hashCode());
-		return result;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -82,6 +41,47 @@ public class KeyTree<K, D> {
 			return false;
 		}
 		return true;
+	}
+
+	public KeyNode<K, D> getRoot() {
+		return root;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (root == null ? 0 : root.hashCode());
+		return result;
+	}
+
+	public KeyNode<K, D> locate(final List<K> keys) {
+		return root.locate(keys);
+	}
+
+	public void print() {
+		root.print("");
+	}
+
+	void add(final D data, @SuppressWarnings("unchecked") final K... keys) {
+		add(data, Arrays.asList(keys));
+	}
+
+	void add(final D data, final List<K> keys) {
+		root.add(data, keys);
+	}
+
+	void remove(@SuppressWarnings("unchecked") final K... keys) {
+		remove(Arrays.asList(keys));
+	}
+
+	void remove(final List<K> keys) {
+		root.remove(keys);
 	}
 
 }

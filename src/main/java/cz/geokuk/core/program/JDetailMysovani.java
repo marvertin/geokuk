@@ -14,7 +14,9 @@ import cz.geokuk.core.coord.PoziceModel;
  */
 public final class JDetailMysovani extends JSingleSlide0 implements MouseInputListener, MouseWheelListener {
 
-	private static final long serialVersionUID = 4979888007463850390L;
+	private static final long	serialVersionUID	= 4979888007463850390L;
+
+	private PoziceModel			poziceModel;
 
 	/**
 	 * @param jKachlovnik
@@ -25,8 +27,6 @@ public final class JDetailMysovani extends JSingleSlide0 implements MouseInputLi
 		addMouseWheelListener(this);
 	}
 
-	private PoziceModel poziceModel;
-
 	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
@@ -34,6 +34,37 @@ public final class JDetailMysovani extends JSingleSlide0 implements MouseInputLi
 	@Override
 	public void mouseClicked(final MouseEvent e) {
 		poziceModel.setPozice(getSoord().transform(e.getPoint()).toWgs());
+	}
+
+	@Override
+	public void mouseDragged(final MouseEvent e) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.MouseWheelEvent)
+	 */
+
+	@Override
+	public void mouseEntered(final MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(final MouseEvent e) {
+	}
+
+	@Override
+	public void mouseMoved(final MouseEvent e) {
+		poziceModel.setMys(e.getPoint(), getSoord().transform(e.getPoint()), getUpravenaMys());
+	}
+
+	@Override
+	public void mousePressed(final MouseEvent e) {
+	}
+
+	@Override
+	public void mouseReleased(final MouseEvent e) {
 	}
 
 	@Override
@@ -54,36 +85,5 @@ public final class JDetailMysovani extends JSingleSlide0 implements MouseInputLi
 		c.setPreferredSize(d);
 		c.revalidate();
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.MouseWheelEvent)
-	 */
-
-	@Override
-	public void mouseMoved(final MouseEvent e) {
-		poziceModel.setMys(e.getPoint(), getSoord().transform(e.getPoint()), getUpravenaMys());
-	}
-
-	@Override
-	public void mouseEntered(final MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(final MouseEvent e) {
-	}
-
-	@Override
-	public void mousePressed(final MouseEvent e) {
-	}
-
-	@Override
-	public void mouseReleased(final MouseEvent e) {
-	}
-
-	@Override
-	public void mouseDragged(final MouseEvent e) {
 	}
 }

@@ -23,21 +23,24 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 										}
 									};
 
-	protected abstract Onoff<T> visiblexxx();
-
-	protected abstract S createDefaults();
-
-	protected abstract Event0<?> createEvent(S structure);
-
-	protected Class<? extends OnoffEvent0<T>> getOnoffEventClass() {
-		return null;
+	public S getData() {
+		final S result = structure.copy();
+		return result;
 	}
 
-	protected abstract void putVisibleToPreferences(boolean onoff);
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		final EKaType podklad = event.getKaSet().getPodklad();
+		setPodkladMap(podklad);
+	}
 
-	protected abstract boolean getVisibleFromPreferences(boolean defaultOnoff);
-
-	protected abstract String preferenceNodeName();
+	public void setData(final S structure) {
+		if (structure.equals(this.structure)) {
+			return;
+		}
+		this.structure = structure;
+		save(podkladMap, structure);
+		fire(createEvent(structure));
+	}
 
 	/**
 	 * @param podklad
@@ -51,18 +54,49 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 		setData(p);
 	}
 
-	public S getData() {
-		final S result = structure.copy();
-		return result;
+	protected abstract S createDefaults();
+
+	protected abstract Event0<?> createEvent(S structure);
+
+	protected Class<? extends OnoffEvent0<T>> getOnoffEventClass() {
+		return null;
 	}
 
-	public void setData(final S structure) {
-		if (structure.equals(this.structure)) {
-			return;
-		}
-		this.structure = structure;
-		save(podkladMap, structure);
-		fire(createEvent(structure));
+	protected abstract boolean getVisibleFromPreferences(boolean defaultOnoff);
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.program.Model0#initAndFire()
+	 */
+	@Override
+	protected void initAndFire() {
+		reloadPreferences();
+	}
+
+	protected abstract String preferenceNodeName();
+
+	protected abstract void putVisibleToPreferences(boolean onoff);
+
+	/**
+	 *
+	 */
+	@Override
+	protected void reloadPreferences() {
+		prefNode = currPrefe().node(preferenceNodeName());
+		visiblexxx().setOnoff(getVisibleFromPreferences(true));
+		final S p = load(podkladMap);
+		setData(p);
+	}
+
+	protected abstract Onoff<T> visiblexxx();
+
+	/**
+	 * @param podklad
+	 * @return
+	 */
+	private String jmenoPodkladu(final EKaType podklad) {
+		return podklad == null ? "bezmap" : podklad.name();
 	}
 
 	/**
@@ -78,40 +112,6 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	 */
 	private void save(final EKaType podklad, final S p) {
 		prefNode.putStructure(jmenoPodkladu(podklad), p);
-	}
-
-	/**
-	 * @param podklad
-	 * @return
-	 */
-	private String jmenoPodkladu(final EKaType podklad) {
-		return podklad == null ? "bezmap" : podklad.name();
-	}
-
-	public void onEvent(final ZmenaMapNastalaEvent event) {
-		final EKaType podklad = event.getKaSet().getPodklad();
-		setPodkladMap(podklad);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.program.Model0#initAndFire()
-	 */
-	@Override
-	protected void initAndFire() {
-		reloadPreferences();
-	}
-
-	/**
-	 *
-	 */
-	@Override
-	protected void reloadPreferences() {
-		prefNode = currPrefe().node(preferenceNodeName());
-		visiblexxx().setOnoff(getVisibleFromPreferences(true));
-		final S p = load(podkladMap);
-		setData(p);
 	}
 
 }

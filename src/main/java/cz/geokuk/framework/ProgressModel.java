@@ -11,38 +11,22 @@ import javax.swing.SwingUtilities;
  */
 public class ProgressModel extends Model0 {
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.Model0#initAndFire()
-	 */
-	@Override
-	protected void initAndFire() {
-	}
-
-	public Progressor start(final int max, final String text) {
-		final SimpleNotParalelProgressor progressor = new SimpleNotParalelProgressor();
-		progressor.max = max;
-		progressor.text = text;
-		return progressor;
-	}
-
 	private class SimpleNotParalelProgressor implements Progressor {
-
-		private int					progress;
-		private int					max;
-		private String				text										= "";
-		private String				tooltip										= "";
-		private boolean				visible;
-		private final long			startTime									= System.currentTimeMillis();
 
 		private static final long	millisToDecideToPopup						= 500;
 		private static final long	millisToPopup								= 2000;
-
 		/**
 		 *
 		 */
 		private static final int	MINIMALNI_DOBA_MEZI_DVEVA_POSUNY_PROGRESORU	= 101;
+		private int					progress;
+		private int					max;
+		private String				text										= "";
+
+		private String				tooltip										= "";
+		private boolean				visible;
+
+		private final long			startTime									= System.currentTimeMillis();
 		private long				lastFireTime;
 
 		/*
@@ -53,6 +37,29 @@ public class ProgressModel extends Model0 {
 		@Override
 		public void addProgress(final int aProgress) {
 			setProgress(progress + aProgress);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see nove.Progressor#finish()
+		 */
+		@Override
+		public void finish() {
+			progress = 0;
+			visible = false;
+			lastFireTime = 0; // při ukončení musíme vždy poslat
+			firex(true);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see cz.geokuk.framework.Progressor#getProgress()
+		 */
+		@Override
+		public int getProgress() {
+			return progress;
 		}
 
 		/*
@@ -114,19 +121,6 @@ public class ProgressModel extends Model0 {
 		/*
 		 * (non-Javadoc)
 		 *
-		 * @see nove.Progressor#finish()
-		 */
-		@Override
-		public void finish() {
-			progress = 0;
-			visible = false;
-			lastFireTime = 0; // při ukončení musíme vždy poslat
-			firex(true);
-		}
-
-		/*
-		 * (non-Javadoc)
-		 *
 		 * @see nove.Progressor#setText(java.lang.String)
 		 */
 		@Override
@@ -164,16 +158,22 @@ public class ProgressModel extends Model0 {
 			}
 		}
 
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see cz.geokuk.framework.Progressor#getProgress()
-		 */
-		@Override
-		public int getProgress() {
-			return progress;
-		}
+	}
 
+	public Progressor start(final int max, final String text) {
+		final SimpleNotParalelProgressor progressor = new SimpleNotParalelProgressor();
+		progressor.max = max;
+		progressor.text = text;
+		return progressor;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.Model0#initAndFire()
+	 */
+	@Override
+	protected void initAndFire() {
 	}
 
 }

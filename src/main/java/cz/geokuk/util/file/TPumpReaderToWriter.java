@@ -36,6 +36,30 @@ public class TPumpReaderToWriter extends Thread {
 		iWrt = aWrt;
 	}
 
+	public int getBufferSize() {
+		return iBufferSize;
+	}
+
+	public synchronized IOException getException() {
+		return iException;
+	}
+
+	public Object getNotificationReceiver() {
+		return iNotificationReceiver;
+	}
+
+	public boolean isCloseReader() {
+		return iCloseReader;
+	}
+
+	public boolean isCloseWriter() {
+		return iCloseWriter;
+	}
+
+	public synchronized boolean isFinished() {
+		return iIsFinished;
+	}
+
 	@Override
 	public void run() {
 		try {
@@ -73,30 +97,6 @@ public class TPumpReaderToWriter extends Thread {
 		}
 	}
 
-	public synchronized IOException getException() {
-		return iException;
-	}
-
-	public synchronized boolean isFinished() {
-		return iIsFinished;
-	}
-
-	public boolean isCloseWriter() {
-		return iCloseWriter;
-	}
-
-	public void setCloseWriter(final boolean closeWriter) {
-		iCloseWriter = closeWriter;
-	}
-
-	public void setCloseReader(final boolean closeReader) {
-		iCloseReader = closeReader;
-	}
-
-	public boolean isCloseReader() {
-		return iCloseReader;
-	}
-
 	public void setBufferSize(int bufferSize) {
 		if (bufferSize < 1) {
 			bufferSize = 1;
@@ -104,16 +104,16 @@ public class TPumpReaderToWriter extends Thread {
 		iBufferSize = bufferSize;
 	}
 
-	public int getBufferSize() {
-		return iBufferSize;
+	public void setCloseReader(final boolean closeReader) {
+		iCloseReader = closeReader;
+	}
+
+	public void setCloseWriter(final boolean closeWriter) {
+		iCloseWriter = closeWriter;
 	}
 
 	public void setNotificationReceiver(final Object notificationReceiver) {
 		iNotificationReceiver = notificationReceiver;
-	}
-
-	public Object getNotificationReceiver() {
-		return iNotificationReceiver;
 	}
 
 }

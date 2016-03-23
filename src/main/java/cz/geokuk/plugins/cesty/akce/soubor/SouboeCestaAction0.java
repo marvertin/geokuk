@@ -25,6 +25,23 @@ public abstract class SouboeCestaAction0 extends Action0 {
 
 	}
 
+	public boolean ulozitSDotazem() {
+		if (!cestyModel.getDoc().isChanged()) {
+			return true; // nezměna znamená uloženo
+		}
+		final Object[] options = { "Uložit změny", "Zahodit změny", "Zrušit" };
+		final String hlaska = cestyModel.getDoc().getFile() != null ? "<html>Soubor s výletem byl změněn <b>" + cestyModel.getDoc().getFile() + "</b> "
+				: "Byl vytvořen nový výlet, ale nebyl doposud uložen do souboru." + ".";
+		final int n = JOptionPane.showOptionDialog(Dlg.parentFrame(), hlaska, "Uložení změn ve výletu", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+		System.out.println(n);
+		if (n == 0) {
+			return ulozit();
+		} else {
+			return n == 1;
+		}
+
+	}
+
 	protected boolean ulozit() {
 		final Doc xdoc = cestyModel.getDoc();
 		if (xdoc.getFile() == null) { // ještě nebyl určen soubor, musíme se zeptat
@@ -51,21 +68,14 @@ public abstract class SouboeCestaAction0 extends Action0 {
 		return true;
 	}
 
-	public boolean ulozitSDotazem() {
-		if (!cestyModel.getDoc().isChanged()) {
-			return true; // nezměna znamená uloženo
+	File doplnGgtPriponuProUkladani(final File file) {
+		if (file == null) {
+			return null;
 		}
-		final Object[] options = { "Uložit změny", "Zahodit změny", "Zrušit" };
-		final String hlaska = cestyModel.getDoc().getFile() != null ? "<html>Soubor s výletem byl změněn <b>" + cestyModel.getDoc().getFile() + "</b> "
-				: "Byl vytvořen nový výlet, ale nebyl doposud uložen do souboru." + ".";
-		final int n = JOptionPane.showOptionDialog(Dlg.parentFrame(), hlaska, "Uložení změn ve výletu", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
-		System.out.println(n);
-		if (n == 0) {
-			return ulozit();
-		} else {
-			return n == 1;
+		if (file.getName().toLowerCase().endsWith(".ggt")) {
+			return file;
 		}
-
+		return new File(file.getPath() + ".ggt");
 	}
 
 	File doplnGpxPriponuProUkladani(final File file) {
@@ -76,16 +86,6 @@ public abstract class SouboeCestaAction0 extends Action0 {
 			return file;
 		}
 		return new File(file.getPath() + ".gpx");
-	}
-
-	File doplnGgtPriponuProUkladani(final File file) {
-		if (file == null) {
-			return null;
-		}
-		if (file.getName().toLowerCase().endsWith(".ggt")) {
-			return file;
-		}
-		return new File(file.getPath() + ".ggt");
 	}
 
 }

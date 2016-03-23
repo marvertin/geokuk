@@ -15,15 +15,19 @@ import javax.swing.JComboBox;
  */
 public class JGeocodingComboBox extends JComboBox<String> {
 
+	public static interface Listener {
+		public void patternChanged(RenderSettings.Patterned patterned);
+	}
+
 	private static final long						serialVersionUID				= 8614892946049285548L;
 
 	public static final SortedMap<String, String>	PRAZDNE_GEOTAGGINGG_PATTERNS	= new TreeMap<>();
 
 	private RenderSettings.Patterned				patterned						= new RenderSettings.Patterned();
-
 	private final SortedMap<String, String>			allPatterns						= new TreeMap<>();
 	private final SortedMap<String, String>			souradnicovePatterns			= new TreeMap<>();
 	private final SortedMap<String, String>			geotaggingPatterns				= new TreeMap<>();
+
 	private final List<String>						keys							= new ArrayList<>();
 
 	private final List<Listener>					listeners						= new ArrayList<>();
@@ -40,29 +44,8 @@ public class JGeocodingComboBox extends JComboBox<String> {
 		registerEvents();
 	}
 
-	/**
-	 * @param patterned
-	 *            the patterned to set
-	 */
-	public void setPatterned(final RenderSettings.Patterned patterned) {
-		if (patterned.equals(this.patterned)) {
-			return;
-		}
-		this.patterned = patterned.copy();
-		if (getSelectedIndex() >= 0) { // něco bylo vybráno, ne text, tak to novu vybrat, ale ponovu
-			final int index = urciCoMabytVybrano();
-			setSelectedIndex(index);
-		}
-		for (final Listener listener : listeners) {
-			listener.patternChanged(patterned);
-		}
-	}
-
-	/**
-	 * @return the patterned
-	 */
-	public RenderSettings.Patterned getPatterned() {
-		return patterned.copy();
+	public void addListener(final Listener listener) {
+		listeners.add(listener);
 	}
 
 	/**
@@ -87,46 +70,34 @@ public class JGeocodingComboBox extends JComboBox<String> {
 		vyskladejCheckBox();
 	}
 
+	@Override
+	public Dimension getMaximumSize() {
+		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	}
+
 	/**
-	 *
+	 * @return the patterned
 	 */
-	private void vyskladejCheckBox() {
-		final int selectedIndex = getSelectedIndex();
-		blokujEventy = true;
-		final int puvodniPocetItemu = getItemCount();
-		for (final String s : allPatterns.values()) {
-			addItem(s.trim());
+	public RenderSettings.Patterned getPatterned() {
+		return patterned.copy();
+	}
+
+	/**
+	 * @param patterned
+	 *            the patterned to set
+	 */
+	public void setPatterned(final RenderSettings.Patterned patterned) {
+		if (patterned.equals(this.patterned)) {
+			return;
 		}
-		for (int i = 0; i < puvodniPocetItemu; i++) {
-			removeItemAt(0);
-		}
-		blokujEventy = false;
-		if (selectedIndex >= 0 || puvodniPocetItemu == 0) { // něco bylo vybráno, ne text, tak to novu vybrat, ale ponovu
+		this.patterned = patterned.copy();
+		if (getSelectedIndex() >= 0) { // něco bylo vybráno, ne text, tak to novu vybrat, ale ponovu
 			final int index = urciCoMabytVybrano();
-			setSelectedIndex(-1);
 			setSelectedIndex(index);
 		}
-	}
-
-	private int urciCoMabytVybrano() {
-		final String klic = urciVybranyKlic();
-		return keys.indexOf(klic);
-	}
-
-	private String urciVybranyKlic() {
-		if (allPatterns.size() == 0) {
-			return null;
+		for (final Listener listener : listeners) {
+			listener.patternChanged(patterned);
 		}
-		if (patterned.getPatternNumberCilovy() != null && allPatterns.containsKey(patterned.getPatternNumberCilovy())) {
-			return patterned.getPatternNumberCilovy();
-		}
-		if (patterned.getPatternNumberCilovy() == null && implicitnGeotaggingKey != null) {
-			return implicitnGeotaggingKey;
-		}
-		if (patterned.getPatternNumberPredbezny() != null && allPatterns.containsKey(patterned.getPatternNumberPredbezny())) {
-			return patterned.getPatternNumberPredbezny();
-		}
-		return allPatterns.firstKey();
 	}
 
 	private void nastavPatterned() {
@@ -166,17 +137,46 @@ public class JGeocodingComboBox extends JComboBox<String> {
 
 	}
 
-	public void addListener(final Listener listener) {
-		listeners.add(listener);
+	private int urciCoMabytVybrano() {
+		final String klic = urciVybranyKlic();
+		return keys.indexOf(klic);
 	}
 
-	public static interface Listener {
-		public void patternChanged(RenderSettings.Patterned patterned);
+	private String urciVybranyKlic() {
+		if (allPatterns.size() == 0) {
+			return null;
+		}
+		if (patterned.getPatternNumberCilovy() != null && allPatterns.containsKey(patterned.getPatternNumberCilovy())) {
+			return patterned.getPatternNumberCilovy();
+		}
+		if (patterned.getPatternNumberCilovy() == null && implicitnGeotaggingKey != null) {
+			return implicitnGeotaggingKey;
+		}
+		if (patterned.getPatternNumberPredbezny() != null && allPatterns.containsKey(patterned.getPatternNumberPredbezny())) {
+			return patterned.getPatternNumberPredbezny();
+		}
+		return allPatterns.firstKey();
 	}
 
-	@Override
-	public Dimension getMaximumSize() {
-		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	/**
+	 *
+	 */
+	private void vyskladejCheckBox() {
+		final int selectedIndex = getSelectedIndex();
+		blokujEventy = true;
+		final int puvodniPocetItemu = getItemCount();
+		for (final String s : allPatterns.values()) {
+			addItem(s.trim());
+		}
+		for (int i = 0; i < puvodniPocetItemu; i++) {
+			removeItemAt(0);
+		}
+		blokujEventy = false;
+		if (selectedIndex >= 0 || puvodniPocetItemu == 0) { // něco bylo vybráno, ne text, tak to novu vybrat, ale ponovu
+			final int index = urciCoMabytVybrano();
+			setSelectedIndex(-1);
+			setSelectedIndex(index);
+		}
 	}
 
 }

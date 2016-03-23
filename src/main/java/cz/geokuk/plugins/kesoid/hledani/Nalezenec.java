@@ -12,40 +12,40 @@ public class Nalezenec extends Nalezenec0 {
 	private int		poc;
 	private int		kon;
 
-	public Kesoid getKes() {
-		return kesoid;
-	}
-
 	public String getKdeNalezeno() {
 		return kdeNalezeno;
 	}
 
-	public void setKdeNalezeno(final String kdeNalezeno) {
-		this.kdeNalezeno = kdeNalezeno;
-	}
-
-	public int getPoc() {
-		return poc;
-	}
-
-	public void setPoc(final int poc) {
-		this.poc = poc;
+	public Kesoid getKes() {
+		return kesoid;
 	}
 
 	public int getKon() {
 		return kon;
 	}
 
-	public void setKon(final int kon) {
-		this.kon = kon;
+	public int getPoc() {
+		return poc;
+	}
+
+	@Override
+	public Wgs getWgs() {
+		return kesoid.getMainWpt().getWgs();
+	}
+
+	public void setKdeNalezeno(final String kdeNalezeno) {
+		this.kdeNalezeno = kdeNalezeno;
 	}
 
 	public void setKes(final Kesoid kes) {
 		kesoid = kes;
 	}
 
-	@Override
-	public Wgs getWgs() {
-		return kesoid.getMainWpt().getWgs();
+	public void setKon(final int kon) {
+		this.kon = kon;
+	}
+
+	public void setPoc(final int poc) {
+		this.poc = poc;
 	}
 }

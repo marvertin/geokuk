@@ -20,28 +20,70 @@ import cz.geokuk.util.gui.JSmallPictureButton;
  */
 public class JKesDetail extends JKesoidDetail0 {
 
+	private class Popisek extends JLabel {
+		private static final long serialVersionUID = -79636254895417957L;
+
+		public Popisek(final String text) {
+			super(text);
+			final Font font = getFont().deriveFont(0);
+			setFont(font);
+
+		}
+
+	}
+
 	/**
 	 *
 	 */
 	private static final long	serialVersionUID	= -3323887260932949747L;
 
 	private Kes					kes;
-
 	private JLabel				size;
 	private JLabel				difficulty;
-	private JLabel				terrain;
 
+	private JLabel				terrain;
 	private final JLabel		bestOf				= new JLabel();
 	private final JLabel		hodnoceni			= new JLabel();
 	private final JLabel		hodnoceniPocet		= new JLabel();
 	private final JLabel		znamka				= new JLabel();
 	private JFavorit			jFavorit;
+
 	private JLabel				jFoundTime;
 
 	private JSmallPictureButton	zobrazHint;
 
+	private static Icon hvezdicky(final String kolik) {
+		// TODO : revisit this...
+		final String kolikAdjusted = kolik.replaceAll("\\.(0+|$)", "");
+		final String path = "gccom/stars/stars" + kolikAdjusted.replace('.', '_') + ".gif";
+		final BufferedImage image = ImageLoader.seekResImage(path, 61, 13);
+		final Icon icon = new ImageIcon(image);
+		return icon;
+	}
+
+	private static Icon velikost(final EKesSize size) {
+		final String path = "gccom/container/" + size.name().toLowerCase() + ".gif";
+		final BufferedImage image = ImageLoader.seekResImage(path, 45, 12);
+		final Icon icon = new ImageIcon(image);
+		return icon;
+	}
+
 	public JKesDetail() {
 		initComponents();
+	}
+
+	@Override
+	public void napln(final Wpt wpt) {
+		kes = (Kes) wpt.getKesoid();
+		napln();
+		final boolean mameHint = kes.getHint() != null && !kes.getHint().trim().isEmpty();
+		zobrazHint.setEnabled(mameHint);
+	}
+
+	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
+		if (isVisible() && kes != null) {
+			napln();
+		}
 	}
 
 	private void initComponents() {
@@ -118,20 +160,6 @@ public class JKesDetail extends JKesoidDetail0 {
 		zobrazHint.addActionListener(e -> Dlg.info(kes.getHint(), "Hint"));
 	}
 
-	@Override
-	public void napln(final Wpt wpt) {
-		kes = (Kes) wpt.getKesoid();
-		napln();
-		final boolean mameHint = kes.getHint() != null && !kes.getHint().trim().isEmpty();
-		zobrazHint.setEnabled(mameHint);
-	}
-
-	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
-		if (isVisible() && kes != null) {
-			napln();
-		}
-	}
-
 	private void napln() {
 		size.setIcon(velikost(kes.getSize()));
 		difficulty.setIcon(hvezdicky(kes.getDifficulty().toNumberString()));
@@ -144,33 +172,5 @@ public class JKesDetail extends JKesoidDetail0 {
 		znamka.setText(kes.getZnamka() == Kes.NENI_HODNOCENI ? "?" : kes.getZnamka() + "%");
 		jFavorit.setKolik(kes.getFavorit());
 		jFavorit.setVisible(kes.getFavorit() > 0);
-	}
-
-	private static Icon hvezdicky(final String kolik) {
-		// TODO : revisit this...
-		final String kolikAdjusted = kolik.replaceAll("\\.(0+|$)", "");
-		final String path = "gccom/stars/stars" + kolikAdjusted.replace('.', '_') + ".gif";
-		final BufferedImage image = ImageLoader.seekResImage(path, 61, 13);
-		final Icon icon = new ImageIcon(image);
-		return icon;
-	}
-
-	private static Icon velikost(final EKesSize size) {
-		final String path = "gccom/container/" + size.name().toLowerCase() + ".gif";
-		final BufferedImage image = ImageLoader.seekResImage(path, 45, 12);
-		final Icon icon = new ImageIcon(image);
-		return icon;
-	}
-
-	private class Popisek extends JLabel {
-		private static final long serialVersionUID = -79636254895417957L;
-
-		public Popisek(final String text) {
-			super(text);
-			final Font font = getFont().deriveFont(0);
-			setFont(font);
-
-		}
-
 	}
 }

@@ -23,6 +23,21 @@ public class JDebugIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 	}
 
 	@Override
+	public void initAfterInject() {
+		factory.init(debugVyberIkon);
+	}
+
+	public void onEvent(final IkonyNactenyEvent event) {
+		debugVyberIkon.resetBag(event.getBag());
+		jvse.revalidate();
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "DebugIkon";
+	}
+
+	@Override
 	protected void initComponents() {
 		jvse = Box.createHorizontalBox();
 		jvse.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -37,21 +52,6 @@ public class JDebugIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 		jvse.add(Box.createHorizontalStrut(5));
 		jvse.add(jskelneikony);
 		jvse.setPreferredSize(new Dimension(700, 600));
-	}
-
-	public void onEvent(final IkonyNactenyEvent event) {
-		debugVyberIkon.resetBag(event.getBag());
-		jvse.revalidate();
-	}
-
-	@Override
-	public void initAfterInject() {
-		factory.init(debugVyberIkon);
-	}
-
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "DebugIkon";
 	}
 
 }

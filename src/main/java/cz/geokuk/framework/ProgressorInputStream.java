@@ -58,6 +58,15 @@ public class ProgressorInputStream extends FilterInputStream {
 	}
 
 	/**
+	 * Overrides <code>FilterInputStream.close</code> to close the progress monitor as well as the stream.
+	 */
+	@Override
+	public void close() throws IOException {
+		in.close();
+		progressor.finish();
+	}
+
+	/**
 	 * Overrides <code>FilterInputStream.read</code> to update the progress monitor after the read.
 	 */
 	@Override
@@ -94,6 +103,16 @@ public class ProgressorInputStream extends FilterInputStream {
 	}
 
 	/**
+	 * Overrides <code>FilterInputStream.reset</code> to reset the progress monitor as well as the stream.
+	 */
+	@Override
+	public synchronized void reset() throws IOException {
+		in.reset();
+		nread = size - in.available();
+		progressor.setProgress(nread);
+	}
+
+	/**
 	 * Overrides <code>FilterInputStream.skip</code> to update the progress monitor after the skip.
 	 */
 	@Override
@@ -103,24 +122,5 @@ public class ProgressorInputStream extends FilterInputStream {
 			progressor.setProgress(nread += nr);
 		}
 		return nr;
-	}
-
-	/**
-	 * Overrides <code>FilterInputStream.close</code> to close the progress monitor as well as the stream.
-	 */
-	@Override
-	public void close() throws IOException {
-		in.close();
-		progressor.finish();
-	}
-
-	/**
-	 * Overrides <code>FilterInputStream.reset</code> to reset the progress monitor as well as the stream.
-	 */
-	@Override
-	public synchronized void reset() throws IOException {
-		in.reset();
-		nread = size - in.available();
-		progressor.setProgress(nread);
 	}
 }

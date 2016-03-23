@@ -20,46 +20,6 @@ import cz.geokuk.util.lang.FUtil;
  */
 public class Hledac extends Hledac0<Nalezenec> {
 
-	private final KesBag kesBag;
-
-	/**
-	 * @param aKl
-	 */
-	public Hledac(final KesBag kesBag) {
-		super();
-		this.kesBag = kesBag;
-	}
-
-	@Override
-	public List<Nalezenec> hledej(final HledaciPodminka0 podm) {
-		System.out.println("Hledy, hledy, hledy: " + kesBag.getKesoidy().size() + " " + podm.getVzorek());
-		final Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());
-		final List<Nalezenec> list = new ArrayList<>();
-		for (final Kesoid kesoid : kesBag.getKesoidy()) {
-			if (getFuture() != null && getFuture().isCancelled()) {
-				return null;
-			}
-			final String[] prohledavanci = kesoid.getProhledavanci();
-			Nalezenec nal = null;
-			for (final String prohledavanec : prohledavanci) {
-				if (prohledavanec != null) {
-					nal = poro.porovnej(prohledavanec);
-					if (nal != null) {
-						break;
-					}
-				}
-			}
-			if (nal != null) {
-				nal.setKes(kesoid);
-				if (nal.getPoc() == nal.getKon()) {
-					nal.setKdeNalezeno(null);
-				}
-				list.add(nal);
-			}
-		}
-		return list;
-	}
-
 	private class Porovnavac {
 		private final String	vzorek;
 		private final boolean	regularniVyraz;
@@ -104,6 +64,46 @@ public class Hledac extends Hledac0<Nalezenec> {
 			}
 		}
 
+	}
+
+	private final KesBag kesBag;
+
+	/**
+	 * @param aKl
+	 */
+	public Hledac(final KesBag kesBag) {
+		super();
+		this.kesBag = kesBag;
+	}
+
+	@Override
+	public List<Nalezenec> hledej(final HledaciPodminka0 podm) {
+		System.out.println("Hledy, hledy, hledy: " + kesBag.getKesoidy().size() + " " + podm.getVzorek());
+		final Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());
+		final List<Nalezenec> list = new ArrayList<>();
+		for (final Kesoid kesoid : kesBag.getKesoidy()) {
+			if (getFuture() != null && getFuture().isCancelled()) {
+				return null;
+			}
+			final String[] prohledavanci = kesoid.getProhledavanci();
+			Nalezenec nal = null;
+			for (final String prohledavanec : prohledavanci) {
+				if (prohledavanec != null) {
+					nal = poro.porovnej(prohledavanec);
+					if (nal != null) {
+						break;
+					}
+				}
+			}
+			if (nal != null) {
+				nal.setKes(kesoid);
+				if (nal.getPoc() == nal.getKon()) {
+					nal.setKdeNalezeno(null);
+				}
+				list.add(nal);
+			}
+		}
+		return list;
 	}
 
 	// public static void main(String[] args) {

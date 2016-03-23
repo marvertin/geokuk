@@ -140,12 +140,7 @@ public abstract class JVyberIkon0 extends Box {
 	// /** PRovede s po refreshi, aby se mohlo uklidit */
 	// public abstract void onDoneRefreshing();
 
-	/**
-	 * @return
-	 */
-	private JToggleButton createToggleButton() {
-		return iRadioButton ? new JRadioButton() : new JCheckBox();
-	}
+	protected abstract boolean shouldEnable(Alela alela);
 
 	/**
 	 * @param aAlelax
@@ -159,9 +154,14 @@ public abstract class JVyberIkon0 extends Box {
 	 */
 	protected abstract boolean shouldRender(Gen aGen);
 
-	protected abstract boolean shouldEnable(Alela alela);
-
 	protected abstract void zmenaVyberu(Set<Alela> aVybraneAlely);
+
+	/**
+	 * @return
+	 */
+	private JToggleButton createToggleButton() {
+		return iRadioButton ? new JRadioButton() : new JCheckBox();
+	}
 
 	private Icon najdiIkonu(final Alela alela, final IkonBag bag) {
 		final Genotyp genotypProAlelu = bag.getGenom().getGenotypProAlelu(alela);

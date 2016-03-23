@@ -9,22 +9,15 @@ public class Event0<T extends Model0> implements BeanSubtypable {
 
 	private boolean		locked;
 
+	public EventFirer getEventFirer() {
+		return eventFirer;
+	}
+
 	/**
 	 * @return the model
 	 */
 	public T getModel() {
 		return model;
-	}
-
-	/**
-	 * @param model
-	 *            the model to set
-	 */
-	public void setModel(final Model0 model) {
-		checkLocked();
-		@SuppressWarnings("unchecked")
-		final T m = (T) model;
-		this.model = m;
 	}
 
 	@Override
@@ -40,8 +33,15 @@ public class Event0<T extends Model0> implements BeanSubtypable {
 		this.eventFirer = eventFirer;
 	}
 
-	public EventFirer getEventFirer() {
-		return eventFirer;
+	/**
+	 * @param model
+	 *            the model to set
+	 */
+	public void setModel(final Model0 model) {
+		checkLocked();
+		@SuppressWarnings("unchecked")
+		final T m = (T) model;
+		this.model = m;
 	}
 
 	/** Zamkne událost, že nelze nic měnit */

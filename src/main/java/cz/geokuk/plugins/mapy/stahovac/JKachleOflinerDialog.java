@@ -16,121 +16,6 @@ import cz.geokuk.plugins.mapy.kachle.*;
 
 public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long					serialVersionUID	= 7180968190465321695L;
-
-	private static final Logger					log					= LogManager.getLogger(JKachleOflinerDialog.class.getSimpleName());
-
-	private static final int					LIMIT_DLAZDIC		= 100000;
-
-	private JTextPane							uvod;
-	private JButton								spustit;
-
-	private Coord								moord;
-
-	private TotoSeTaha							totoSeTaha;
-
-	private KachleOflinerSwingWorker			kosw;
-
-	private KachleModel							kachleModel;
-
-	private KaSet								xkaSet;
-
-	private int									xminmoumer;
-
-	private ZobrazServisniOknoAction			zobrazServisniOknoAction;
-
-	private JKachleOflinerPocetStazenychDialog	jVysledek;
-
-	public JKachleOflinerDialog() {
-		setTitle("Hromadné dotažení mapových dlaždic");
-		init();
-	}
-
-	private void registerEvents() {
-
-		spustit.addActionListener(e -> {
-			if (kosw != null) {
-				kosw.cancel(true);
-			}
-			zobrazServisniOknoAction.actionPerformed(null);
-			dispose();
-			jVysledek = factory.init(new JKachleOflinerPocetStazenychDialog());
-			jVysledek.setVisible(true);
-			kosw = new KachleOflinerSwingWorker(true);
-			kosw.execute();
-		});
-
-	}
-
-	public void onEvent(final VyrezChangedEvent event) {
-		moord = event.getMoord();
-		prepocetKachli();
-	}
-
-	private void prepocetKachli() {
-		if (totoSeTaha != null) {
-			if (kosw != null) {
-				kosw.cancel(true);
-			}
-			kosw = new KachleOflinerSwingWorker(false);
-			nastavCudl(0);
-			kosw.execute();
-		}
-	}
-
-	@Override
-	protected void initComponents() {
-		// Napřed registrovat, aby při inicializaci už byl výsledek tady
-		final Box box = Box.createVerticalBox();
-		add(box);
-
-		uvod = new JTextPane();
-		uvod.setContentType("text/html");
-		uvod.setText("Tady bude kecání");
-		uvod.setPreferredSize(new Dimension(400, 200));
-		uvod.setAlignmentX(CENTER_ALIGNMENT);
-
-		spustit = new JButton("Vyberte nějaký výřez");
-		spustit.setEnabled(false);
-		spustit.setAlignmentX(CENTER_ALIGNMENT);
-
-		box.add(uvod);
-		box.add(Box.createVerticalStrut(10));
-		box.add(spustit);
-
-	}
-
-	/**
-	 * @return
-	 */
-	private String pokecani() {
-		return String.format("<html>Budou stahovány dlaždice mapových pokladů <b>%s</b> v rozmění měřítek " + " <b>&lt;%d,%d&gt;</b>"
-				+ " nyní natavte v hlavním okně výřez mapy který chcete stáhnout. Výřez můžete" + " nastavit v libovolném měřítku a v na libovolném mapovém podkladu. "
-				+ " Pak spusťte stahování tlačítkem. Stahování poběží na pozadí. V servisním okně lze sledovat," + " jak se zkracují frony. Stahování nelze zastavit jinak než ukončením programu.",
-				totoSeTaha.kaSet.getKts(), totoSeTaha.minmoumer, totoSeTaha.maxmoumer);
-	}
-
-	private void nastavCudl(final int pocetDlazdic) {
-		final boolean b = pocetDlazdic > 0 && pocetDlazdic <= LIMIT_DLAZDIC;
-		spustit.setEnabled(b);
-		if (b) {
-			spustit.setText(String.format("Stáhnout %d dlaždic do cache", pocetDlazdic));
-		} else {
-			if (pocetDlazdic == 0) {
-				spustit.setText("Počítáme dlaždice");
-			} else {
-				spustit.setText("Spočítáno " + pocetDlazdic + ", limit je " + LIMIT_DLAZDIC);
-			}
-
-		}
-	}
-
-	public void onEvent(final ZmenaMapNastalaEvent event) {
-		xkaSet = event.getKaSet();
-		xminmoumer = xkaSet.getPodklad().getMinMoumer();
-		prepocetKachli();
-	}
-
 	public class KachleOflinerSwingWorker extends MySwingWorker0<Integer, JKachle> {
 
 		private final boolean zafrontovati;
@@ -150,6 +35,14 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 				return postahovatNeboSpocitat(false);
 			}
 
+		}
+
+		@Override
+		protected void donex() throws Exception {
+			if (!isCancelled()) {
+				final Integer pocet = get();
+				nastavCudl(pocet);
+			}
 		}
 
 		private Integer postahovatNeboSpocitat(final boolean zafrontovat) {
@@ -205,24 +98,42 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 			return pocetKachli;
 		}
 
-		@Override
-		protected void donex() throws Exception {
-			if (!isCancelled()) {
-				final Integer pocet = get();
-				nastavCudl(pocet);
-			}
-		}
-
-	}
-
-	public void inject(final KachleModel kachleModel) {
-		this.kachleModel = kachleModel;
 	}
 
 	private class TotoSeTaha {
 		private int		minmoumer;
 		private int		maxmoumer;
 		private KaSet	kaSet;
+	}
+
+	private static final long					serialVersionUID	= 7180968190465321695L;
+
+	private static final Logger					log					= LogManager.getLogger(JKachleOflinerDialog.class.getSimpleName());
+	private static final int					LIMIT_DLAZDIC		= 100000;
+
+	private JTextPane							uvod;
+
+	private JButton								spustit;
+
+	private Coord								moord;
+
+	private TotoSeTaha							totoSeTaha;
+
+	private KachleOflinerSwingWorker			kosw;
+
+	private KachleModel							kachleModel;
+
+	private KaSet								xkaSet;
+
+	private int									xminmoumer;
+
+	private ZobrazServisniOknoAction			zobrazServisniOknoAction;
+
+	private JKachleOflinerPocetStazenychDialog	jVysledek;
+
+	public JKachleOflinerDialog() {
+		setTitle("Hromadné dotažení mapových dlaždic");
+		init();
 	}
 
 	/*
@@ -241,13 +152,102 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 		uvod.setText(pokecani());
 	}
 
+	public void inject(final KachleModel kachleModel) {
+		this.kachleModel = kachleModel;
+	}
+
 	public void inject(final ZobrazServisniOknoAction zobrazServisniOknoAction) {
 		this.zobrazServisniOknoAction = zobrazServisniOknoAction;
+	}
+
+	public void onEvent(final VyrezChangedEvent event) {
+		moord = event.getMoord();
+		prepocetKachli();
+	}
+
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		xkaSet = event.getKaSet();
+		xminmoumer = xkaSet.getPodklad().getMinMoumer();
+		prepocetKachli();
 	}
 
 	@Override
 	protected String getTemaNapovedyDialogu() {
 		return "StahovaniMapovychDlazdic";
+	}
+
+	@Override
+	protected void initComponents() {
+		// Napřed registrovat, aby při inicializaci už byl výsledek tady
+		final Box box = Box.createVerticalBox();
+		add(box);
+
+		uvod = new JTextPane();
+		uvod.setContentType("text/html");
+		uvod.setText("Tady bude kecání");
+		uvod.setPreferredSize(new Dimension(400, 200));
+		uvod.setAlignmentX(CENTER_ALIGNMENT);
+
+		spustit = new JButton("Vyberte nějaký výřez");
+		spustit.setEnabled(false);
+		spustit.setAlignmentX(CENTER_ALIGNMENT);
+
+		box.add(uvod);
+		box.add(Box.createVerticalStrut(10));
+		box.add(spustit);
+
+	}
+
+	private void nastavCudl(final int pocetDlazdic) {
+		final boolean b = pocetDlazdic > 0 && pocetDlazdic <= LIMIT_DLAZDIC;
+		spustit.setEnabled(b);
+		if (b) {
+			spustit.setText(String.format("Stáhnout %d dlaždic do cache", pocetDlazdic));
+		} else {
+			if (pocetDlazdic == 0) {
+				spustit.setText("Počítáme dlaždice");
+			} else {
+				spustit.setText("Spočítáno " + pocetDlazdic + ", limit je " + LIMIT_DLAZDIC);
+			}
+
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	private String pokecani() {
+		return String.format("<html>Budou stahovány dlaždice mapových pokladů <b>%s</b> v rozmění měřítek " + " <b>&lt;%d,%d&gt;</b>"
+				+ " nyní natavte v hlavním okně výřez mapy který chcete stáhnout. Výřez můžete" + " nastavit v libovolném měřítku a v na libovolném mapovém podkladu. "
+				+ " Pak spusťte stahování tlačítkem. Stahování poběží na pozadí. V servisním okně lze sledovat," + " jak se zkracují frony. Stahování nelze zastavit jinak než ukončením programu.",
+				totoSeTaha.kaSet.getKts(), totoSeTaha.minmoumer, totoSeTaha.maxmoumer);
+	}
+
+	private void prepocetKachli() {
+		if (totoSeTaha != null) {
+			if (kosw != null) {
+				kosw.cancel(true);
+			}
+			kosw = new KachleOflinerSwingWorker(false);
+			nastavCudl(0);
+			kosw.execute();
+		}
+	}
+
+	private void registerEvents() {
+
+		spustit.addActionListener(e -> {
+			if (kosw != null) {
+				kosw.cancel(true);
+			}
+			zobrazServisniOknoAction.actionPerformed(null);
+			dispose();
+			jVysledek = factory.init(new JKachleOflinerPocetStazenychDialog());
+			jVysledek.setVisible(true);
+			kosw = new KachleOflinerSwingWorker(true);
+			kosw.execute();
+		});
+
 	}
 
 }

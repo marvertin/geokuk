@@ -24,6 +24,15 @@ public class NapovedaModel extends Model0 {
 		return zpravyUzivatelum;
 	}
 
+	public void onEvent(final OnofflineModelChangeEvent event) {
+		onlineMode = event.isOnlineMOde();
+	}
+
+	public void setLastViewedMsgNum(final int aLastViewedMsgNum) {
+		lastViewedMsgNum = aLastViewedMsgNum;
+		currPrefe().node(FPref.VSEOBECNE_node).putInt(FPref.LAST_VIEWED_MSG_NUM_value, lastViewedMsgNum);
+	}
+
 	public void setZpravyUzivatelum(final List<ZpravaUzivateli> zpravyUzivatelum) {
 		this.zpravyUzivatelum = zpravyUzivatelum;
 		fire(new NapovedaModelChangedEvent());
@@ -33,27 +42,11 @@ public class NapovedaModel extends Model0 {
 		}
 	}
 
-	@Override
-	protected void initAndFire() {
-		lastViewedMsgNum = currPrefe().node(FPref.VSEOBECNE_node).getInt(FPref.LAST_VIEWED_MSG_NUM_value, 0);
-
-		fire(new NapovedaModelChangedEvent());
-	}
-
-	public void setLastViewedMsgNum(final int aLastViewedMsgNum) {
-		lastViewedMsgNum = aLastViewedMsgNum;
-		currPrefe().node(FPref.VSEOBECNE_node).putInt(FPref.LAST_VIEWED_MSG_NUM_value, lastViewedMsgNum);
-	}
-
 	public void zkontrolujNoveAktualizace(final boolean zobrazovatInfoPriSpravneVerzi) {
 		if (onlineMode) {
 			new ZkontrolovatAktualizaceSwingWorker(zobrazovatInfoPriSpravneVerzi, this).execute();
 		}
 
-	}
-
-	public void onEvent(final OnofflineModelChangeEvent event) {
-		onlineMode = event.isOnlineMOde();
 	}
 
 	public void zobrazNapovedu(final String tema) {
@@ -63,6 +56,13 @@ public class NapovedaModel extends Model0 {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	@Override
+	protected void initAndFire() {
+		lastViewedMsgNum = currPrefe().node(FPref.VSEOBECNE_node).getInt(FPref.LAST_VIEWED_MSG_NUM_value, 0);
+
+		fire(new NapovedaModelChangedEvent());
 	}
 
 }

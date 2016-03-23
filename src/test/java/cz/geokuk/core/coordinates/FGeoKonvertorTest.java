@@ -11,44 +11,6 @@ public class FGeoKonvertorTest {
 	private static double		RZ					= 6378137;
 	private static double		OZ					= 2 * Math.PI * RZ;
 
-	private void assertEquals(final Wgs wgs1, final Wgs wgs2) {
-		Assert.assertEquals(wgs1.lat, wgs2.lat, PRESNOST_WGS);
-		Assert.assertEquals(wgs1.lon, wgs2.lon, PRESNOST_WGS);
-	}
-
-	private void assertEquals(final Mercator mer1, final Mercator mer2) {
-		Assert.assertEquals(mer1.mx, mer2.mx, PRESNOST_MERKATOR);
-		Assert.assertEquals(mer1.my, mer2.my, PRESNOST_MERKATOR);
-	}
-
-	private void testBijekce(final Wgs w) {
-		assertEquals(w, w.toMercator().toWgs());
-	}
-
-	private void testMouWgs(final double lat, final double lon, final int xx, final int yy) {
-		final Wgs w = new Wgs(lat, lon);
-		final Mou m = new Mou(xx, yy);
-		assertEquals(w, m.toWgs());
-		// assertEquals(m, w.toMou());
-	}
-
-	private void testWgs2Mou(final double lat, final double lon, final int xx, final int yy) {
-		final Wgs w = new Wgs(lat, lon);
-		final Mou m1 = new Mou(xx, yy);
-		final Mou m2 = w.toMou();
-		System.out.println(w + " = " + m2 + " ... (" + m1 + ")");
-		Assert.assertEquals((double) m1.xx, (double) m2.xx, 1);
-		Assert.assertEquals((double) m1.yy, (double) m2.yy, 1);
-		assertEquals(w, m2.toWgs());
-	}
-
-	private void testWgs2Mercator(final double lat, final double lon, final double mx, final double my) {
-		final Wgs w = new Wgs(lat, lon);
-		final Mercator m = new Mercator(mx, my);
-		System.out.println(w + " = " + w.toMercator() + " ... (" + m + ")");
-		assertEquals(m, w.toMercator());
-	}
-
 	@Test
 	public void t0a() {
 		assertEquals(new Wgs(0, 0), new Mercator(0, 0).toWgs());
@@ -65,23 +27,23 @@ public class FGeoKonvertorTest {
 	}
 
 	@Test
-	public void tbijekce2a() {
-		testBijekce(new Wgs(40.32, 0));
-	}
-
-	@Test
-	public void tbijekce3a() {
-		testBijekce(new Wgs(60.32, 170));
-	}
-
-	@Test
 	public void tbijekce1am() {
 		testBijekce(new Wgs(0, -40.32));
 	}
 
 	@Test
+	public void tbijekce2a() {
+		testBijekce(new Wgs(40.32, 0));
+	}
+
+	@Test
 	public void tbijekce2am() {
 		testBijekce(new Wgs(-40.32, 0));
+	}
+
+	@Test
+	public void tbijekce3a() {
+		testBijekce(new Wgs(60.32, 170));
 	}
 
 	@Test
@@ -115,38 +77,8 @@ public class FGeoKonvertorTest {
 	}
 
 	@Test
-	public void test1rovnik() {
-		testWgs2Mou(0, 1, 11930465, 0);
-	}
-
-	@Test
-	public void test90rovnik() {
-		testWgs2Mou(0, 90, 0x4000_0000, 0);
-	}
-
-	@Test
-	public void test180rovnik() {
-		testWgs2Mou(0, 180, 0x8000_0000, 0);
-	}
-
-	@Test
-	public void test270rovnik() {
-		testWgs2Mou(0, 270, 0xc000_0000, 0);
-	}
-
-	@Test
-	public void testWgs2Mou5() {
-		testWgs2Mou(80, 80, 954437177, 1665333205);
-	}
-
-	@Test
 	public void test0am() {
 		testWgs2Mercator(0, 0, 0, 0);
-	}
-
-	@Test
-	public void test1rovnikm() {
-		testWgs2Mercator(0, 1, OZ / 360, 0);
 	}
 
 	@Test
@@ -155,8 +87,8 @@ public class FGeoKonvertorTest {
 	}
 
 	@Test
-	public void test90rovnikm() {
-		testWgs2Mercator(0, 90, OZ / 4, 0);
+	public void test180rovnik() {
+		testWgs2Mou(0, 180, 0x8000_0000, 0);
 	}
 
 	@Test
@@ -165,8 +97,18 @@ public class FGeoKonvertorTest {
 	}
 
 	@Test
-	public void testm180rovnikm() {
-		testWgs2Mercator(0, -180, -OZ / 2, 0);
+	public void test1rovnik() {
+		testWgs2Mou(0, 1, 11930465, 0);
+	}
+
+	@Test
+	public void test1rovnikm() {
+		testWgs2Mercator(0, 1, OZ / 360, 0);
+	}
+
+	@Test
+	public void test270rovnik() {
+		testWgs2Mou(0, 270, 0xc000_0000, 0);
 	}
 
 	@Test
@@ -175,48 +117,18 @@ public class FGeoKonvertorTest {
 	}
 
 	@Test
-	public void testMinus90rovnikm() {
-		testWgs2Mercator(0, -90, -OZ / 4, 0);
+	public void test90rovnik() {
+		testWgs2Mou(0, 90, 0x4000_0000, 0);
 	}
 
 	@Test
-	public void testWgsToMerk5() {
-		testWgs2Mercator(4.5, 0, 0, 501453.51);
+	public void test90rovnikm() {
+		testWgs2Mercator(0, 90, OZ / 4, 0);
 	}
 
 	@Test
-	public void testWgsToMerk6() {
-		testWgs2Mercator(50, 0, 0, 6446275.841);
-	}
-
-	@Test
-	public void testWgsToMerk7() {
-		testWgs2Mercator(45, 0, 0, 5621521.486);
-	}
-
-	@Test
-	public void testWgsToMerk8() {
-		testWgs2Mercator(80, 0, 0, 15538711.1);
-	}
-
-	@Test
-	public void testWgsToMerk8a() {
-		testWgs2Mercator(80, 15.6, OZ / 360 * 15.6, 15538711.1);
-	}
-
-	@Test
-	public void testWgsToMerk5m() {
-		testWgs2Mercator(-4.5, 0, 0, -501453.51);
-	}
-
-	@Test
-	public void testWgsToMerk6m() {
-		testWgs2Mercator(-50, 0, 0, -6446275.841);
-	}
-
-	@Test
-	public void testWgsToMerk7m() {
-		testWgs2Mercator(-45, 0, 0, -5621521.486);
+	public void testm180rovnikm() {
+		testWgs2Mercator(0, -180, -OZ / 2, 0);
 	}
 
 	@Test
@@ -232,6 +144,94 @@ public class FGeoKonvertorTest {
 		System.out.println(OZ / 4 + " " + mou);
 		Assert.assertEquals(0x4000_0000, mou.xx);
 		Assert.assertEquals(0x2000_0000, mou.yy);
+	}
+
+	@Test
+	public void testMinus90rovnikm() {
+		testWgs2Mercator(0, -90, -OZ / 4, 0);
+	}
+
+	@Test
+	public void testWgs2Mou5() {
+		testWgs2Mou(80, 80, 954437177, 1665333205);
+	}
+
+	@Test
+	public void testWgsToMerk5() {
+		testWgs2Mercator(4.5, 0, 0, 501453.51);
+	}
+
+	@Test
+	public void testWgsToMerk5m() {
+		testWgs2Mercator(-4.5, 0, 0, -501453.51);
+	}
+
+	@Test
+	public void testWgsToMerk6() {
+		testWgs2Mercator(50, 0, 0, 6446275.841);
+	}
+
+	@Test
+	public void testWgsToMerk6m() {
+		testWgs2Mercator(-50, 0, 0, -6446275.841);
+	}
+
+	@Test
+	public void testWgsToMerk7() {
+		testWgs2Mercator(45, 0, 0, 5621521.486);
+	}
+
+	@Test
+	public void testWgsToMerk7m() {
+		testWgs2Mercator(-45, 0, 0, -5621521.486);
+	}
+
+	@Test
+	public void testWgsToMerk8() {
+		testWgs2Mercator(80, 0, 0, 15538711.1);
+	}
+
+	@Test
+	public void testWgsToMerk8a() {
+		testWgs2Mercator(80, 15.6, OZ / 360 * 15.6, 15538711.1);
+	}
+
+	private void assertEquals(final Mercator mer1, final Mercator mer2) {
+		Assert.assertEquals(mer1.mx, mer2.mx, PRESNOST_MERKATOR);
+		Assert.assertEquals(mer1.my, mer2.my, PRESNOST_MERKATOR);
+	}
+
+	private void assertEquals(final Wgs wgs1, final Wgs wgs2) {
+		Assert.assertEquals(wgs1.lat, wgs2.lat, PRESNOST_WGS);
+		Assert.assertEquals(wgs1.lon, wgs2.lon, PRESNOST_WGS);
+	}
+
+	private void testBijekce(final Wgs w) {
+		assertEquals(w, w.toMercator().toWgs());
+	}
+
+	private void testMouWgs(final double lat, final double lon, final int xx, final int yy) {
+		final Wgs w = new Wgs(lat, lon);
+		final Mou m = new Mou(xx, yy);
+		assertEquals(w, m.toWgs());
+		// assertEquals(m, w.toMou());
+	}
+
+	private void testWgs2Mercator(final double lat, final double lon, final double mx, final double my) {
+		final Wgs w = new Wgs(lat, lon);
+		final Mercator m = new Mercator(mx, my);
+		System.out.println(w + " = " + w.toMercator() + " ... (" + m + ")");
+		assertEquals(m, w.toMercator());
+	}
+
+	private void testWgs2Mou(final double lat, final double lon, final int xx, final int yy) {
+		final Wgs w = new Wgs(lat, lon);
+		final Mou m1 = new Mou(xx, yy);
+		final Mou m2 = w.toMou();
+		System.out.println(w + " = " + m2 + " ... (" + m1 + ")");
+		Assert.assertEquals((double) m1.xx, (double) m2.xx, 1);
+		Assert.assertEquals((double) m1.yy, (double) m2.yy, 1);
+		assertEquals(w, m2.toWgs());
 	}
 
 }

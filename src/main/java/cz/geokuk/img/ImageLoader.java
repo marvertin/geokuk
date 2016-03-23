@@ -18,6 +18,16 @@ public class ImageLoader {
 
 	private static Map<String, BufferedImage> imagesCache = new HashMap<>();
 
+	/** Returns an ImageIcon, or null if the path was invalid. */
+	public static Icon locateResIcon(final String path) {
+		final BufferedImage bi = locateResImageNoCache(path);
+		if (bi == null) {
+			return null;
+		} else {
+			return new ImageIcon(bi);
+		}
+	}
+
 	/**
 	 * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky
 	 *
@@ -57,16 +67,6 @@ public class ImageLoader {
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
-	public static Icon locateResIcon(final String path) {
-		final BufferedImage bi = locateResImageNoCache(path);
-		if (bi == null) {
-			return null;
-		} else {
-			return new ImageIcon(bi);
-		}
-	}
-
-	/** Returns an ImageIcon, or null if the path was invalid. */
 	public static Icon seekResIcon(final String path) {
 		Icon icon = locateResIcon(path);
 		if (icon == null) {
@@ -75,18 +75,18 @@ public class ImageLoader {
 		return icon;
 	}
 
-	public static BufferedImage seekResImage(final String path, final int xn, final int yn) {
-		BufferedImage img = locateResImageNoCache(path);
-		if (img == null) {
-			img = createMissingImage(xn, yn);
-		}
-		return img;
-	}
-
 	public static BufferedImage seekResImage(final String path) {
 		final BufferedImage img = locateResImageNoCache(path);
 		if (img == null) {
 			throw new RuntimeException("cannot find image: " + path);
+		}
+		return img;
+	}
+
+	public static BufferedImage seekResImage(final String path, final int xn, final int yn) {
+		BufferedImage img = locateResImageNoCache(path);
+		if (img == null) {
+			img = createMissingImage(xn, yn);
 		}
 		return img;
 	}

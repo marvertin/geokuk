@@ -17,37 +17,16 @@ public final class FPreferencesInNearFile {
 
 	private static boolean ukladatDoSouboru = false;
 
-	private FPreferencesInNearFile() {
-	}
-
-	public static void saveNearToProgramIfShould() {
-		if (ukladatDoSouboru) {
-			saveNearToProgram();
-		}
-	}
-
 	public static void deleteAndSwitchOff() {
 		FConst.PREFERENCES_FILE.delete();
 		ukladatDoSouboru = false;
 	}
 
-	public static File saveNearToProgramAndSwitchOn() {
-		final File file = saveNearToProgram();
-		ukladatDoSouboru = true;
-		return file;
-	}
-
-	private static File saveNearToProgram() {
-		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(FConst.PREFERENCES_FILE))) {
-			MyPreferences.root().exportSubtree(bos);
-			bos.close();
-			updateLastModified();
-			ukladatDoSouboru = true;
-			System.out.printf("FPreferencesInNearFile: Ulozena vesera nastaveni do souboru \"%s\"\n", FConst.PREFERENCES_FILE);
-		} catch (final Exception e) {
-			throw new RuntimeException("Problem while saving preferences to \"" + FConst.PREFERENCES_FILE + "\"", e);
-		}
-		return FConst.PREFERENCES_FILE;
+	/**
+	 * @return the ukladatDoSouboru
+	 */
+	public static boolean isUkladatDoSouboru() {
+		return ukladatDoSouboru;
 	}
 
 	/**
@@ -64,6 +43,18 @@ public final class FPreferencesInNearFile {
 		}
 	}
 
+	public static File saveNearToProgramAndSwitchOn() {
+		final File file = saveNearToProgram();
+		ukladatDoSouboru = true;
+		return file;
+	}
+
+	public static void saveNearToProgramIfShould() {
+		if (ukladatDoSouboru) {
+			saveNearToProgram();
+		}
+	}
+
 	private static void loadNearToProgram() {
 		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(FConst.PREFERENCES_FILE))) {
 			Preferences.importPreferences(bis);
@@ -75,16 +66,25 @@ public final class FPreferencesInNearFile {
 		}
 	}
 
+	private static File saveNearToProgram() {
+		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(FConst.PREFERENCES_FILE))) {
+			MyPreferences.root().exportSubtree(bos);
+			bos.close();
+			updateLastModified();
+			ukladatDoSouboru = true;
+			System.out.printf("FPreferencesInNearFile: Ulozena vesera nastaveni do souboru \"%s\"\n", FConst.PREFERENCES_FILE);
+		} catch (final Exception e) {
+			throw new RuntimeException("Problem while saving preferences to \"" + FConst.PREFERENCES_FILE + "\"", e);
+		}
+		return FConst.PREFERENCES_FILE;
+	}
+
 	private static void updateLastModified() {
 		final long lastModified = FConst.PREFERENCES_FILE.lastModified();
 		MyPreferences.root().putLong("lastModified", lastModified);
 	}
 
-	/**
-	 * @return the ukladatDoSouboru
-	 */
-	public static boolean isUkladatDoSouboru() {
-		return ukladatDoSouboru;
+	private FPreferencesInNearFile() {
 	}
 
 }

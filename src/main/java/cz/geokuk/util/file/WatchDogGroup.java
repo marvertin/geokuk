@@ -7,6 +7,11 @@ public class WatchDogGroup {
 
 	private final List<FileWatchDog<?>> list = new ArrayList<>();
 
+	void add(final FileWatchDog<?> fwd) {
+		list.add(fwd);
+		fwd.setGroup(this);
+	}
+
 	void forceIfAnyModified() {
 		boolean zmena = false;
 		for (final FileWatchDog<?> fwd : list) {
@@ -19,11 +24,6 @@ public class WatchDogGroup {
 				fwd.forceLoad();
 			}
 		}
-	}
-
-	void add(final FileWatchDog<?> fwd) {
-		list.add(fwd);
-		fwd.setGroup(this);
 	}
 
 }

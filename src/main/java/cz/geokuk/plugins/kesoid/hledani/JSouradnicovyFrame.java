@@ -51,31 +51,42 @@ import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
 public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiverRegistrationInit, DocumentListener {
 
+	class CancelAction extends AbstractAction {
+		private static final long serialVersionUID = -480129891208539096L;
+
+		@Override
+		public void actionPerformed(final ActionEvent ev) {
+			// hilit.removeAllHighlights();
+			jSouEdit.setText("");
+			jSouEdit.setBackground(entryBg);
+		}
+	}
+
 	private static final Double	SPATNY_FORMAT		= Double.NEGATIVE_INFINITY;
 
 	private static final long	serialVersionUID	= 7087453419069194768L;
-
 	// TODO skutečnou hodnotu maximální šířky sem dát
 	private static final double	SIRKA_MAX			= 80;
+
 	private static final double	SIRKA_MIN			= -80;
-
 	private static final double	DELKA_MIN			= -180;
+
 	private static final double	DELKA_MAX			= 180;
-
-	private JTextField			jSouEdit;
-	private JLabel				jSouEditLabel;
-	private JButton				jButtonCentruj;
-	private JLabel				jHotovaSirka;
-	private JLabel				jHotovaDelka;
-	private JLabel				jUtm;
-
 	final static Color			HILIT_COLOR			= Color.LIGHT_GRAY;
 	final static Color			ERROR_COLOR			= Color.PINK;
 	final static String			CANCEL_ACTION		= "cancel-search";
+	private JTextField			jSouEdit;
+	private JLabel				jSouEditLabel;
+
+	private JButton				jButtonCentruj;
+	private JLabel				jHotovaSirka;
+	private JLabel				jHotovaDelka;
+
+	private JLabel				jUtm;
 
 	private Color				entryBg;
-
 	private Wgs					souradniceEditovane;
+
 	private Wgs					souradniceReferencni;
 
 	private PoziceModel			poziceModel;
@@ -93,12 +104,34 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
 	}
 
-	private void registerEvents() {
+	@Override
+	public void changedUpdate(final DocumentEvent ev) {
+		souradniceNastavenyRukama = true;
+		edituj();
+	}
 
-		jButtonCentruj.addActionListener(e -> {
-			poziceModel.setPozice(souradniceEditovane);
-			vyrezModel.vystredovatNaPozici();
-		});
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
+	 */
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		// super.ini
+	}
+
+	public void inject(final PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
+	}
+
+	public void inject(final VyrezModel vyrezModel) {
+		this.vyrezModel = vyrezModel;
+	}
+
+	@Override
+	public void insertUpdate(final DocumentEvent ev) {
+		souradniceNastavenyRukama = true;
+		edituj();
 	}
 
 	public void onEvent(final ReferencniBodSeZmenilEvent aEvent) {
@@ -108,6 +141,19 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
 	public void onEvent(final VyrezChangedEvent aEvent) {
 		vyhodnotEnableCentrovacihoTlacitka();
+	}
+
+	@Override
+	public void removeUpdate(final DocumentEvent ev) {
+		souradniceNastavenyRukama = true;
+		edituj();
+	}
+
+	// DocumentListener methods
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "JintNaSouradnice";
 	}
 
 	/**
@@ -174,58 +220,6 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
 	}
 
-	private void setSouradniceReferencni(final Wgs wgs) {
-		if (wgs.equals(souradniceReferencni)) {
-			return;
-		}
-		souradniceReferencni = wgs;
-		if (!souradniceNastavenyRukama) {
-			jSouEdit.setText(Wgs.toGeoFormat(wgs.lat) + " ; " + Wgs.toGeoFormat(wgs.lon));
-			jSouEdit.selectAll();
-			souradniceNastavenyRukama = false; // toto se může zdát zbytečné, ale řádky před tím to změní
-		}
-		edituj();
-	}
-
-	private void edituj() {
-		// if (souradnice == null) return;
-		boolean ok;
-		final Wgs wgs = new WgsParser().parsruj(jSouEdit.getText());
-		if (wgs == null) { // prizpusobeni puvodni verzi
-			// wgs = new Wgs(SPATNY_FORMAT, SPATNY_FORMAT);
-		}
-		final double lat = wgs == null ? SPATNY_FORMAT : wgs.lat;
-		final double lon = wgs == null ? SPATNY_FORMAT : wgs.lon;
-		final boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, lat, SIRKA_MIN, SIRKA_MAX);
-		final boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, lon, DELKA_MIN, DELKA_MAX);
-		ok = okSirka && okDelka;
-		if (ok) {
-			souradniceEditovane = wgs;
-			jUtm.setText(wgs.toUtm().toString());
-		} else {
-			jUtm.setText("UTM = ?");
-		}
-		vyhodnotEnableCentrovacihoTlacitka();
-	}
-
-	/**
-	 *
-	 */
-	private void vyhodnotEnableCentrovacihoTlacitka() {
-		final boolean jsmeNaMiste = jsmeVycentrovaniSeZadanouPozici();
-
-		// jsmeNaMiste = vyrezModel.isPoziceUprostred();
-		jButtonCentruj.setEnabled(!jsmeNaMiste);
-	}
-
-	/**
-	 * @return
-	 */
-	private boolean jsmeVycentrovaniSeZadanouPozici() {
-		final boolean jsmeNaMiste = souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni) && vyrezModel.isPoziceUprostred();
-		return jsmeNaMiste;
-	}
-
 	private boolean aplikuj(final JLabel jHotova, final JTextField editacni, final double val, final double min, final double max) {
 		boolean ok;
 		if (val == SPATNY_FORMAT) {
@@ -255,26 +249,6 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		return ok;
 	}
 
-	// DocumentListener methods
-
-	@Override
-	public void insertUpdate(final DocumentEvent ev) {
-		souradniceNastavenyRukama = true;
-		edituj();
-	}
-
-	@Override
-	public void removeUpdate(final DocumentEvent ev) {
-		souradniceNastavenyRukama = true;
-		edituj();
-	}
-
-	@Override
-	public void changedUpdate(final DocumentEvent ev) {
-		souradniceNastavenyRukama = true;
-		edituj();
-	}
-
 	// private final class SpousteniVyhledavace implements ChangeListener {
 	// @Override
 	// public void stateChanged(ChangeEvent e) {
@@ -282,15 +256,25 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 	// }
 	// }
 
-	class CancelAction extends AbstractAction {
-		private static final long serialVersionUID = -480129891208539096L;
-
-		@Override
-		public void actionPerformed(final ActionEvent ev) {
-			// hilit.removeAllHighlights();
-			jSouEdit.setText("");
-			jSouEdit.setBackground(entryBg);
+	private void edituj() {
+		// if (souradnice == null) return;
+		boolean ok;
+		final Wgs wgs = new WgsParser().parsruj(jSouEdit.getText());
+		if (wgs == null) { // prizpusobeni puvodni verzi
+			// wgs = new Wgs(SPATNY_FORMAT, SPATNY_FORMAT);
 		}
+		final double lat = wgs == null ? SPATNY_FORMAT : wgs.lat;
+		final double lon = wgs == null ? SPATNY_FORMAT : wgs.lon;
+		final boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, lat, SIRKA_MIN, SIRKA_MAX);
+		final boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, lon, DELKA_MIN, DELKA_MAX);
+		ok = okSirka && okDelka;
+		if (ok) {
+			souradniceEditovane = wgs;
+			jUtm.setText(wgs.toUtm().toString());
+		} else {
+			jUtm.setText("UTM = ?");
+		}
+		vyhodnotEnableCentrovacihoTlacitka();
 	}
 
 	// public static void main(String args[]) {
@@ -306,26 +290,42 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 	// });
 	// }
 
-	public void inject(final PoziceModel poziceModel) {
-		this.poziceModel = poziceModel;
-	}
-
-	public void inject(final VyrezModel vyrezModel) {
-		this.vyrezModel = vyrezModel;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
+	/**
+	 * @return
 	 */
-	@Override
-	public void initAfterEventReceiverRegistration() {
-		// super.ini
+	private boolean jsmeVycentrovaniSeZadanouPozici() {
+		final boolean jsmeNaMiste = souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni) && vyrezModel.isPoziceUprostred();
+		return jsmeNaMiste;
 	}
 
-	@Override
-	protected String getTemaNapovedyDialogu() {
-		return "JintNaSouradnice";
+	private void registerEvents() {
+
+		jButtonCentruj.addActionListener(e -> {
+			poziceModel.setPozice(souradniceEditovane);
+			vyrezModel.vystredovatNaPozici();
+		});
+	}
+
+	private void setSouradniceReferencni(final Wgs wgs) {
+		if (wgs.equals(souradniceReferencni)) {
+			return;
+		}
+		souradniceReferencni = wgs;
+		if (!souradniceNastavenyRukama) {
+			jSouEdit.setText(Wgs.toGeoFormat(wgs.lat) + " ; " + Wgs.toGeoFormat(wgs.lon));
+			jSouEdit.selectAll();
+			souradniceNastavenyRukama = false; // toto se může zdát zbytečné, ale řádky před tím to změní
+		}
+		edituj();
+	}
+
+	/**
+	 *
+	 */
+	private void vyhodnotEnableCentrovacihoTlacitka() {
+		final boolean jsmeNaMiste = jsmeVycentrovaniSeZadanouPozici();
+
+		// jsmeNaMiste = vyrezModel.isPoziceUprostred();
+		jButtonCentruj.setEnabled(!jsmeNaMiste);
 	}
 }

@@ -13,17 +13,8 @@ public class MainFrameHolder implements SlideListProvider {
 	private JMainFrame	mainFrame;
 	private Factory		factory;
 
-	public void setMainFrame(final JMainFrame mainFrame) {
-		this.mainFrame = mainFrame;
-		factory.init(this.mainFrame);
-	}
-
 	public JFrame getMainFrame() {
 		return mainFrame;
-	}
-
-	public void inject(final Factory factory) {
-		this.factory = factory;
 	}
 
 	/*
@@ -34,5 +25,14 @@ public class MainFrameHolder implements SlideListProvider {
 	@Override
 	public List<JSingleSlide0> getSlides() {
 		return mainFrame.getSlides();
+	}
+
+	public void inject(final Factory factory) {
+		this.factory = factory;
+	}
+
+	public void setMainFrame(final JMainFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		factory.init(this.mainFrame);
 	}
 }

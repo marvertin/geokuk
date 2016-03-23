@@ -12,23 +12,6 @@ class KaOne extends Ka0 {
 	}
 
 	@Override
-	public String typToString() {
-		return type.name();
-	}
-
-	public EKaType getType() {
-		return type;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + (type == null ? 0 : type.hashCode());
-		return result;
-	}
-
-	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
@@ -50,9 +33,26 @@ class KaOne extends Ka0 {
 		return true;
 	}
 
+	public EKaType getType() {
+		return type;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + (type == null ? 0 : type.hashCode());
+		return result;
+	}
+
 	@Override
 	public String toString() {
 		return super.getLoc().toString() + "*" + type;
+	}
+
+	@Override
+	public String typToString() {
+		return type.name();
 	}
 
 }

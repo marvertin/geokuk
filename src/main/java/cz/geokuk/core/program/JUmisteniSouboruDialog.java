@@ -13,11 +13,8 @@ public class JUmisteniSouboruDialog extends JMyDialog0 implements AfterInjectIni
 		init();
 	}
 
-	@Override
-	protected void initComponents() {
-		jPrehledSoubor = new JPrehledSouboru(null);
-		// add(new JScrollPane(jPrehledSoubor));
-		add(jPrehledSoubor);
+	public void fokusni(final ESouborPanelName panelName) {
+		jPrehledSoubor.fokusni(panelName);
 	}
 
 	/*
@@ -35,8 +32,11 @@ public class JUmisteniSouboruDialog extends JMyDialog0 implements AfterInjectIni
 		return "UmisteniSouboru";
 	}
 
-	public void fokusni(final ESouborPanelName panelName) {
-		jPrehledSoubor.fokusni(panelName);
+	@Override
+	protected void initComponents() {
+		jPrehledSoubor = new JPrehledSouboru(null);
+		// add(new JScrollPane(jPrehledSoubor));
+		add(jPrehledSoubor);
 	}
 
 }

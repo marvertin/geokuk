@@ -86,25 +86,10 @@ public class KesBag {
 	}
 
 	/**
-	 * @return the maximalniBestOf
+	 * @return the informaceOZdrojich
 	 */
-	public int getMaximalniBestOf() {
-		return maximalniBestOf;
-	}
-
-	public int getMaximalniHodnoceni() {
-		return maximalniHodnoceni;
-	}
-
-	public int getMaximalniFavorit() {
-		return maximalniFavorit;
-	}
-
-	public List<Wpt> getWpts() {
-		if (kesoidy == null) {
-			throw new RuntimeException("Jeste neni kesBag vytvoren");
-		}
-		return wpts;
+	public InformaceOZdrojich getInformaceOZdrojich() {
+		return iInformaceOZdrojich;
 	}
 
 	public List<Kesoid> getKesoidy() {
@@ -112,6 +97,21 @@ public class KesBag {
 			throw new RuntimeException("Jeste neni kesBag vytvoren");
 		}
 		return kesoidy;
+	}
+
+	/**
+	 * @return the maximalniBestOf
+	 */
+	public int getMaximalniBestOf() {
+		return maximalniBestOf;
+	}
+
+	public int getMaximalniFavorit() {
+		return maximalniFavorit;
+	}
+
+	public int getMaximalniHodnoceni() {
+		return maximalniHodnoceni;
 	}
 
 	/**
@@ -126,18 +126,18 @@ public class KesBag {
 		return poctyAlel.getMap().keySet();
 	}
 
+	public List<Wpt> getWpts() {
+		if (kesoidy == null) {
+			throw new RuntimeException("Jeste neni kesBag vytvoren");
+		}
+		return wpts;
+	}
+
 	/**
 	 * @param informaceOZdrojich
 	 *            the informaceOZdrojich to set
 	 */
 	public void setInformaceOZdrojich(final InformaceOZdrojich informaceOZdrojich) {
 		iInformaceOZdrojich = informaceOZdrojich;
-	}
-
-	/**
-	 * @return the informaceOZdrojich
-	 */
-	public InformaceOZdrojich getInformaceOZdrojich() {
-		return iInformaceOZdrojich;
 	}
 }

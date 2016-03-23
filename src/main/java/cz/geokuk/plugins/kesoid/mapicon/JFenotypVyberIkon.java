@@ -22,6 +22,10 @@ public class JFenotypVyberIkon extends JVyberIkon0 {
 		super(false, true);
 	}
 
+	public void inject(final KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+	}
+
 	public void resetBag(final IkonBag bag, final KesBag kesBag, final Set<String> aJmenaVybranychAlel) {
 		this.bag = bag;
 		pouziteAlely = kesBag.getPouziteAlely();
@@ -29,9 +33,8 @@ public class JFenotypVyberIkon extends JVyberIkon0 {
 	}
 
 	@Override
-	protected void zmenaVyberu(final Set<Alela> aAlely) {
-		System.out.println("Vyber alel, které se nefenotypují: " + aAlely);
-		kesoidModel.setJmenaNefenotypovanychAlel(Alela.alelyToNames(aAlely));
+	protected boolean shouldEnable(final Alela alela) {
+		return true;
 	}
 
 	/*
@@ -55,12 +58,9 @@ public class JFenotypVyberIkon extends JVyberIkon0 {
 	}
 
 	@Override
-	protected boolean shouldEnable(final Alela alela) {
-		return true;
-	}
-
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
+	protected void zmenaVyberu(final Set<Alela> aAlely) {
+		System.out.println("Vyber alel, které se nefenotypují: " + aAlely);
+		kesoidModel.setJmenaNefenotypovanychAlel(Alela.alelyToNames(aAlely));
 	}
 
 }

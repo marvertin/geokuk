@@ -34,90 +34,13 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 		return map;
 	}
 
-	/**
-	 * @return the kesPattern
-	 */
-	public String getKesPattern() {
-		return kesPattern;
-	}
-
-	/**
-	 * @param kesPattern
-	 *            the kesPattern to set
-	 */
-	public void setKesPattern(final String kesPattern) {
-		this.kesPattern = kesPattern;
-	}
-
-	/**
-	 * @return the waymarkPattern
-	 */
-	public String getWaymarkPattern() {
-		return waymarkPattern;
-	}
-
-	/**
-	 * @param waymarkPattern
-	 *            the waymarkPattern to set
-	 */
-	public void setWaymarkPattern(final String waymarkPattern) {
-		this.waymarkPattern = waymarkPattern;
-	}
-
-	/**
-	 * @return the cgpPattern
-	 */
-	public String getCgpPattern() {
-		return cgpPattern;
-	}
-
-	/**
-	 * @param cgpPattern
-	 *            the cgpPattern to set
-	 */
-	public void setCgpPattern(final String cgpPattern) {
-		this.cgpPattern = cgpPattern;
-	}
-
-	/**
-	 * @return the simplewaypointPattern
-	 */
-	public String getSimplewaypointPattern() {
-		return simplewaypointPattern;
-	}
-
-	/**
-	 * @param simplewaypointPattern
-	 *            the simplewaypointPattern to set
-	 */
-	public void setSimplewaypointPattern(final String simplewaypointPattern) {
-		this.simplewaypointPattern = simplewaypointPattern;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
-	public String toString() {
-		return "PopiskyPatterns [kesPattern=" + kesPattern + ", waymarkPattern=" + waymarkPattern + ", cgpPattern=" + cgpPattern + ", simplewaypointPattern=" + simplewaypointPattern + "]";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (cgpPattern == null ? 0 : cgpPattern.hashCode());
-		result = prime * result + (kesPattern == null ? 0 : kesPattern.hashCode());
-		result = prime * result + (simplewaypointPattern == null ? 0 : simplewaypointPattern.hashCode());
-		result = prime * result + (waymarkPattern == null ? 0 : waymarkPattern.hashCode());
-		return result;
+	public PopiskyPatterns copy() {
+		try {
+			return (PopiskyPatterns) super.clone();
+		} catch (final CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/*
@@ -168,13 +91,90 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 		return true;
 	}
 
+	/**
+	 * @return the cgpPattern
+	 */
+	public String getCgpPattern() {
+		return cgpPattern;
+	}
+
+	/**
+	 * @return the kesPattern
+	 */
+	public String getKesPattern() {
+		return kesPattern;
+	}
+
+	/**
+	 * @return the simplewaypointPattern
+	 */
+	public String getSimplewaypointPattern() {
+		return simplewaypointPattern;
+	}
+
+	/**
+	 * @return the waymarkPattern
+	 */
+	public String getWaymarkPattern() {
+		return waymarkPattern;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
-	public PopiskyPatterns copy() {
-		try {
-			return (PopiskyPatterns) super.clone();
-		} catch (final CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (cgpPattern == null ? 0 : cgpPattern.hashCode());
+		result = prime * result + (kesPattern == null ? 0 : kesPattern.hashCode());
+		result = prime * result + (simplewaypointPattern == null ? 0 : simplewaypointPattern.hashCode());
+		result = prime * result + (waymarkPattern == null ? 0 : waymarkPattern.hashCode());
+		return result;
+	}
+
+	/**
+	 * @param cgpPattern
+	 *            the cgpPattern to set
+	 */
+	public void setCgpPattern(final String cgpPattern) {
+		this.cgpPattern = cgpPattern;
+	}
+
+	/**
+	 * @param kesPattern
+	 *            the kesPattern to set
+	 */
+	public void setKesPattern(final String kesPattern) {
+		this.kesPattern = kesPattern;
+	}
+
+	/**
+	 * @param simplewaypointPattern
+	 *            the simplewaypointPattern to set
+	 */
+	public void setSimplewaypointPattern(final String simplewaypointPattern) {
+		this.simplewaypointPattern = simplewaypointPattern;
+	}
+
+	/**
+	 * @param waymarkPattern
+	 *            the waymarkPattern to set
+	 */
+	public void setWaymarkPattern(final String waymarkPattern) {
+		this.waymarkPattern = waymarkPattern;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "PopiskyPatterns [kesPattern=" + kesPattern + ", waymarkPattern=" + waymarkPattern + ", cgpPattern=" + cgpPattern + ", simplewaypointPattern=" + simplewaypointPattern + "]";
 	}
 
 }

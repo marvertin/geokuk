@@ -35,12 +35,12 @@ public abstract class PaintingDrawer0 extends Drawer0 {
 
 	protected abstract void drawImage(Graphics2D g);
 
-	protected final int getWidth() {
-		return getInt("width", 32);
-	}
-
 	protected final int getHeight() {
 		return getInt("height", 32);
+	}
+
+	protected final int getWidth() {
+		return getInt("width", 32);
 	}
 
 }

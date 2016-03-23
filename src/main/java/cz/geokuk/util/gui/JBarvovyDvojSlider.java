@@ -20,11 +20,29 @@ public class JBarvovyDvojSlider extends JPanel {
 	private JSlider				iBarvovnik;
 	private JSlider				iPruhlednik;
 
+	public JBarvovyDvojSlider() {
+		initComponents();
+	}
+
+	/**
+	 * @param aChangeListener
+	 */
+	public void addChangeListener(final ChangeListener aChangeListener) {
+		iBarvovnik.addChangeListener(aChangeListener);
+		iPruhlednik.addChangeListener(aChangeListener);
+	}
+
 	/**
 	 * @return the barvovnik
 	 */
 	public JSlider getBarvovnik() {
 		return iBarvovnik;
+	}
+
+	public Color getColor() {
+		final int barva = iBarvovnik.getModel().getValue();
+		final int pruhlednost = iPruhlednik.getModel().getValue();
+		return new Color(barva, barva, barva, pruhlednost);
 	}
 
 	/**
@@ -34,8 +52,11 @@ public class JBarvovyDvojSlider extends JPanel {
 		return iPruhlednik;
 	}
 
-	public JBarvovyDvojSlider() {
-		initComponents();
+	public void setColor(final Color color) {
+		final int barva = (color.getBlue() + color.getRed() + color.getGreen()) / 3;
+		final int pruhlednost = color.getAlpha();
+		iBarvovnik.getModel().setValue(barva);
+		iPruhlednik.getModel().setValue(pruhlednost);
 	}
 
 	/**
@@ -67,27 +88,6 @@ public class JBarvovyDvojSlider extends JPanel {
 		add(Box.createRigidArea(new Dimension(0, 20)));
 		add(iPruhlednik);
 		add(Box.createRigidArea(new Dimension(0, 20)));
-	}
-
-	public Color getColor() {
-		final int barva = iBarvovnik.getModel().getValue();
-		final int pruhlednost = iPruhlednik.getModel().getValue();
-		return new Color(barva, barva, barva, pruhlednost);
-	}
-
-	public void setColor(final Color color) {
-		final int barva = (color.getBlue() + color.getRed() + color.getGreen()) / 3;
-		final int pruhlednost = color.getAlpha();
-		iBarvovnik.getModel().setValue(barva);
-		iPruhlednik.getModel().setValue(pruhlednost);
-	}
-
-	/**
-	 * @param aChangeListener
-	 */
-	public void addChangeListener(final ChangeListener aChangeListener) {
-		iBarvovnik.addChangeListener(aChangeListener);
-		iPruhlednik.addChangeListener(aChangeListener);
 	}
 
 	// public void setModel(BarvovyDvojSliderModel model) {

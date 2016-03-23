@@ -18,81 +18,6 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 
 	public PopiskyPatterns	patterns	= new PopiskyPatterns();
 
-	/**
-	 * @return the font
-	 */
-	public Font getFont() {
-		return font;
-	}
-
-	/**
-	 * @param font
-	 *            the font to set
-	 */
-	public void setFont(final Font font) {
-		this.font = font;
-	}
-
-	/**
-	 * @return the foreground
-	 */
-	public Color getForeground() {
-		return foreground;
-	}
-
-	/**
-	 * @param foreground
-	 *            the foreground to set
-	 */
-	public void setForeground(final Color foreground) {
-		this.foreground = foreground;
-	}
-
-	/**
-	 * @return the background
-	 */
-	public Color getBackground() {
-		return background;
-	}
-
-	/**
-	 * @param background
-	 *            the background to set
-	 */
-	public void setBackground(final Color background) {
-		this.background = background;
-	}
-
-	/**
-	 * @return the posuX
-	 */
-	public int getPosuX() {
-		return posuX;
-	}
-
-	/**
-	 * @param posuX
-	 *            the posuX to set
-	 */
-	public void setPosuX(final int posuX) {
-		this.posuX = posuX;
-	}
-
-	/**
-	 * @return the posuY
-	 */
-	public int getPosuY() {
-		return posuY;
-	}
-
-	/**
-	 * @param posuY
-	 *            the posuY to set
-	 */
-	public void setPosuY(final int posuY) {
-		this.posuY = posuY;
-	}
-
 	@Override
 	public PopiskySettings copy() {
 		try {
@@ -102,39 +27,6 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 		} catch (final CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * @return the patterns
-	 */
-	public PopiskyPatterns getPatterns() {
-		return patterns;
-	}
-
-	/**
-	 * @param patterns
-	 *            the patterns to set
-	 */
-	public void setPatterns(final PopiskyPatterns patterns) {
-		this.patterns = patterns;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (background == null ? 0 : background.hashCode());
-		result = prime * result + (font == null ? 0 : font.hashCode());
-		result = prime * result + (foreground == null ? 0 : foreground.hashCode());
-		result = prime * result + (patterns == null ? 0 : patterns.hashCode());
-		result = prime * result + posuX;
-		result = prime * result + posuY;
-		return result;
 	}
 
 	/*
@@ -189,6 +81,114 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return the background
+	 */
+	public Color getBackground() {
+		return background;
+	}
+
+	/**
+	 * @return the font
+	 */
+	public Font getFont() {
+		return font;
+	}
+
+	/**
+	 * @return the foreground
+	 */
+	public Color getForeground() {
+		return foreground;
+	}
+
+	/**
+	 * @return the patterns
+	 */
+	public PopiskyPatterns getPatterns() {
+		return patterns;
+	}
+
+	/**
+	 * @return the posuX
+	 */
+	public int getPosuX() {
+		return posuX;
+	}
+
+	/**
+	 * @return the posuY
+	 */
+	public int getPosuY() {
+		return posuY;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (background == null ? 0 : background.hashCode());
+		result = prime * result + (font == null ? 0 : font.hashCode());
+		result = prime * result + (foreground == null ? 0 : foreground.hashCode());
+		result = prime * result + (patterns == null ? 0 : patterns.hashCode());
+		result = prime * result + posuX;
+		result = prime * result + posuY;
+		return result;
+	}
+
+	/**
+	 * @param background
+	 *            the background to set
+	 */
+	public void setBackground(final Color background) {
+		this.background = background;
+	}
+
+	/**
+	 * @param font
+	 *            the font to set
+	 */
+	public void setFont(final Font font) {
+		this.font = font;
+	}
+
+	/**
+	 * @param foreground
+	 *            the foreground to set
+	 */
+	public void setForeground(final Color foreground) {
+		this.foreground = foreground;
+	}
+
+	/**
+	 * @param patterns
+	 *            the patterns to set
+	 */
+	public void setPatterns(final PopiskyPatterns patterns) {
+		this.patterns = patterns;
+	}
+
+	/**
+	 * @param posuX
+	 *            the posuX to set
+	 */
+	public void setPosuX(final int posuX) {
+		this.posuX = posuX;
+	}
+
+	/**
+	 * @param posuY
+	 *            the posuY to set
+	 */
+	public void setPosuY(final int posuY) {
+		this.posuY = posuY;
 	}
 
 	/*

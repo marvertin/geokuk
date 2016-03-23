@@ -24,32 +24,6 @@ public class OpenStreetViewAction extends Action0 {
 	private Poziceq				poziceq					= new Poziceq();
 	private final Mouable		mouable;
 
-	public OpenStreetViewAction(final Mouable mouable) {
-		super(null);
-		this.mouable = mouable;
-		putValue(NAME, "Otevřít StreetView");
-		putValue(SHORT_DESCRIPTION, "Otevře defaultní prohlížeč se StreetView v daném místě.");
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-
-	@Override
-	public void actionPerformed(final ActionEvent e) {
-		Mouable m = mouable;
-		if (m == null) {
-			m = poziceq.getPoziceMouable();
-			if (m == null) {
-				return;
-			}
-		}
-		final Wgs wgs = mouable.getMou().toWgs();
-		openBrowserWithStreetView(wgs);
-	}
-
 	private static URI getStreetViewUri(final Wgs wgs) {
 		try {
 			return new URI(String.format(Locale.US, STREET_VIEW_TEMPLATE, wgs.lat, wgs.lon));
@@ -57,6 +31,12 @@ public class OpenStreetViewAction extends Action0 {
 			throw new AssertionError("Someone has messed up the URI!", e);
 		}
 	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 
 	private static void openBrowserWithStreetView(final Wgs coordinates) {
 		if (Desktop.isDesktopSupported()) {
@@ -73,6 +53,26 @@ public class OpenStreetViewAction extends Action0 {
 		} else {
 			log.error("Desktop environment isn't supported!");
 		}
+	}
+
+	public OpenStreetViewAction(final Mouable mouable) {
+		super(null);
+		this.mouable = mouable;
+		putValue(NAME, "Otevřít StreetView");
+		putValue(SHORT_DESCRIPTION, "Otevře defaultní prohlížeč se StreetView v daném místě.");
+	}
+
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		Mouable m = mouable;
+		if (m == null) {
+			m = poziceq.getPoziceMouable();
+			if (m == null) {
+				return;
+			}
+		}
+		final Wgs wgs = mouable.getMou().toWgs();
+		openBrowserWithStreetView(wgs);
 	}
 
 	public void onEvent(final PoziceChangedEvent event) {

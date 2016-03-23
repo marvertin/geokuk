@@ -4,21 +4,6 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public class Root {
-	public final File	dir;
-	public final Def	def;
-
-	public Root(final File aRoot, final Def aDef) {
-		super();
-		dir = aRoot;
-		def = aDef;
-		if (def == null) {
-			throw new NullPointerException();
-		}
-		if (dir == null) {
-			throw new NullPointerException();
-		}
-	}
-
 	public static class Def {
 		final int		maxDepth;
 		final Pattern	patternIncludes;
@@ -38,12 +23,20 @@ public class Root {
 
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (dir == null ? 0 : dir.hashCode());
-		return result;
+	public final File	dir;
+
+	public final Def	def;
+
+	public Root(final File aRoot, final Def aDef) {
+		super();
+		dir = aRoot;
+		def = aDef;
+		if (def == null) {
+			throw new NullPointerException();
+		}
+		if (dir == null) {
+			throw new NullPointerException();
+		}
 	}
 
 	@Override
@@ -66,6 +59,14 @@ public class Root {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (dir == null ? 0 : dir.hashCode());
+		return result;
 	}
 
 	@Override

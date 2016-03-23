@@ -20,10 +20,6 @@ public class RenderAction extends DialogOpeningAction0 {
 
 	}
 
-	public void onEvent(final OnofflineModelChangeEvent event) {
-		// setEnabled(event.getModel().isOnlineMode());
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -32,5 +28,9 @@ public class RenderAction extends DialogOpeningAction0 {
 	@Override
 	public JMyDialog0 createDialog() {
 		return new JRenderDialog();
+	}
+
+	public void onEvent(final OnofflineModelChangeEvent event) {
+		// setEnabled(event.getModel().isOnlineMode());
 	}
 }

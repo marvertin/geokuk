@@ -28,6 +28,13 @@ public class JCgpDetail extends JKesoidDetail0 {
 		initComponents();
 	}
 
+	@Override
+	public void napln(final Wpt wpt) {
+		cgp = (CzechGeodeticPoint) wpt.getKesoid();
+		jXjtsk.setText(cgp.getXjtsk() + "");
+		jYjtsk.setText(cgp.getYjtsk() + "");
+	}
+
 	private void initComponents() {
 		jXjtsk = new JLabel();
 		jYjtsk = new JLabel();
@@ -58,13 +65,6 @@ public class JCgpDetail extends JKesoidDetail0 {
 		// Box box3 = Box.createHorizontalBox();
 		// box3.add(Box.createGlue());
 		// hlav.add(box3);
-	}
-
-	@Override
-	public void napln(final Wpt wpt) {
-		cgp = (CzechGeodeticPoint) wpt.getKesoid();
-		jXjtsk.setText(cgp.getXjtsk() + "");
-		jYjtsk.setText(cgp.getYjtsk() + "");
 	}
 
 }

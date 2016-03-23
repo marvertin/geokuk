@@ -19,11 +19,44 @@ import cz.geokuk.util.pocitadla.PocitadloMalo;
  *
  */
 class DlazebniKombiner {
+	/**
+	 * Jen kvůli úpravě statistik.
+	 */
+	// public synchronized void uzTeNepotrebuju() {
+	// pocitadloRozpracovanychObrazkuVKombinerech.sub(imgs == null ? 0 : imgs.size());
+	// imgs = null;
+	// if (hotovo) {
+	// pocitadloInstanciSHotovymObrazkem.dec();
+	// hotovo = false;
+	// }
+	// if (kombinedImage != null) {
+	// pocitadloRozpracovanychObrazkuVKombinerech.dec();
+	// kombinedImage = null;
+	// mameTadyObrazek = false;
+	// }
+	// }
+
+	private static class ImageOrException {
+		final Image		image;
+		final Throwable	throwable;
+
+		ImageOrException(final Image image) {
+			this.image = image;
+			throwable = null;
+		}
+
+		ImageOrException(final Throwable throwable) {
+			this.throwable = throwable;
+			image = null;
+		}
+
+	}
+
 	private static final Logger					log					= LogManager.getLogger(DlazebniKombiner.class.getSimpleName());
 
 	private static Pocitadlo					pocitadloInstanci	= new PocitadloMalo("Počet dlažebních kombinérů.", "Počítá, kolik máme instancí " + DlazebniKombiner.class.getName() + ".");
-
 	private EnumSet<EKaType>					coCekam;																																		// co čekám, že nakombinuju
+
 	private final EnumSet<EKaType>				coMam				= EnumSet.noneOf(EKaType.class);																							// co už mám nakombinováno
 
 	private BufferedImage						kombinedImage;
@@ -67,6 +100,48 @@ class DlazebniKombiner {
 		add(type, new ImageOrException(thr));
 	}
 
+	@Override
+	public void finalize() {
+		pocitadloInstanci.dec();
+	}
+
+	/**
+	 * Vrátí co mám.
+	 *
+	 * @return Pokud nic nemám, je set prázdný.
+	 */
+	public EnumSet<EKaType> getCoMam() {
+		return coMam.clone();
+	}
+
+	/**
+	 * Vrací první výjimku, která byla zjiětěna. To znamená na první dlaždici, která se stahovala.
+	 *
+	 * @return
+	 */
+	public synchronized Throwable getFirstException() {
+		return firstException;
+	}
+
+	/**
+	 * Vrátí nakombinovaný image. Může být částečně nakombinovaný, pokdu nedošlo vše. Ale nikdy se vrstvy nepřekračují. Když už došla 1. a 2. a 4. vrstva, vrací image nakombinovaný jen z prvních dvou vrstev. Když mám jen vrstvy 2. a 3., vrací null. Nemůže tedy vrátit jen vrstvu turistických tras bez
+	 * podkladu.
+	 *
+	 * @return Pokud nic nemám, vracéí se null.
+	 */
+	public BufferedImage getKombinedImage() {
+		return kombinedImage;
+	}
+
+	/**
+	 * Pokud je už vše nakombinováno, co má být.
+	 *
+	 * @return
+	 */
+	public boolean isHotovo() {
+		return hotovo;
+	}
+
 	private synchronized void add(final EKaType type, final ImageOrException imageOrException) {
 		if (hotovo) {
 			return;
@@ -79,6 +154,28 @@ class DlazebniKombiner {
 		}
 		imgs.put(type, imageOrException);
 		rekombinuj();
+	}
+
+	private void prikresli(final ImageOrException imageOrException) {
+		prikresliImage(imageOrException.image);
+		prikresliRxception(imageOrException.throwable);
+	}
+
+	private void prikresliImage(final Image image) {
+		if (image == null) {
+			return;
+		}
+		if (kombinedImage == null) {
+			kombinedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		}
+		final Graphics2D g = kombinedImage.createGraphics();
+		g.drawImage(image, 0, 0, null);
+	}
+
+	private void prikresliRxception(final Throwable thr) {
+		if (firstException == null && thr != null) {
+			firstException = thr;
+		}
 	}
 
 	private void rekombinuj() {
@@ -108,102 +205,5 @@ class DlazebniKombiner {
 		imgs = null;
 		coCekam = null;
 		hotovo = true;
-	}
-
-	/**
-	 * Vrací první výjimku, která byla zjiětěna. To znamená na první dlaždici, která se stahovala.
-	 *
-	 * @return
-	 */
-	public synchronized Throwable getFirstException() {
-		return firstException;
-	}
-
-	private void prikresli(final ImageOrException imageOrException) {
-		prikresliImage(imageOrException.image);
-		prikresliRxception(imageOrException.throwable);
-	}
-
-	private void prikresliRxception(final Throwable thr) {
-		if (firstException == null && thr != null) {
-			firstException = thr;
-		}
-	}
-
-	private void prikresliImage(final Image image) {
-		if (image == null) {
-			return;
-		}
-		if (kombinedImage == null) {
-			kombinedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-		}
-		final Graphics2D g = kombinedImage.createGraphics();
-		g.drawImage(image, 0, 0, null);
-	}
-
-	/**
-	 * Vrátí co mám.
-	 *
-	 * @return Pokud nic nemám, je set prázdný.
-	 */
-	public EnumSet<EKaType> getCoMam() {
-		return coMam.clone();
-	}
-
-	/**
-	 * Vrátí nakombinovaný image. Může být částečně nakombinovaný, pokdu nedošlo vše. Ale nikdy se vrstvy nepřekračují. Když už došla 1. a 2. a 4. vrstva, vrací image nakombinovaný jen z prvních dvou vrstev. Když mám jen vrstvy 2. a 3., vrací null. Nemůže tedy vrátit jen vrstvu turistických tras bez
-	 * podkladu.
-	 *
-	 * @return Pokud nic nemám, vracéí se null.
-	 */
-	public BufferedImage getKombinedImage() {
-		return kombinedImage;
-	}
-
-	/**
-	 * Pokud je už vše nakombinováno, co má být.
-	 *
-	 * @return
-	 */
-	public boolean isHotovo() {
-		return hotovo;
-	}
-
-	@Override
-	public void finalize() {
-		pocitadloInstanci.dec();
-	}
-
-	/**
-	 * Jen kvůli úpravě statistik.
-	 */
-	// public synchronized void uzTeNepotrebuju() {
-	// pocitadloRozpracovanychObrazkuVKombinerech.sub(imgs == null ? 0 : imgs.size());
-	// imgs = null;
-	// if (hotovo) {
-	// pocitadloInstanciSHotovymObrazkem.dec();
-	// hotovo = false;
-	// }
-	// if (kombinedImage != null) {
-	// pocitadloRozpracovanychObrazkuVKombinerech.dec();
-	// kombinedImage = null;
-	// mameTadyObrazek = false;
-	// }
-	// }
-
-	private static class ImageOrException {
-		final Image		image;
-		final Throwable	throwable;
-
-		ImageOrException(final Image image) {
-			this.image = image;
-			throwable = null;
-		}
-
-		ImageOrException(final Throwable throwable) {
-			this.throwable = throwable;
-			image = null;
-		}
-
 	}
 }

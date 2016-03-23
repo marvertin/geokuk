@@ -27,10 +27,9 @@ public class Ukladac {
 		pwrt.close();
 	}
 
-	private void uloz(final Doc doc) {
-		for (final Cesta cesta : doc.getCesty()) {
-			uloz(cesta);
-		}
+	private void p(final String format, final Object... p) {
+		pwrt.printf(Locale.US, format, p);
+		pwrt.println();
 	}
 
 	private void uloz(final Cesta cesta) {
@@ -51,13 +50,14 @@ public class Ukladac {
 
 	}
 
+	private void uloz(final Doc doc) {
+		for (final Cesta cesta : doc.getCesty()) {
+			uloz(cesta);
+		}
+	}
+
 	private void uloz(final Mou mou) {
 		final Wgs wgs = mou.toWgs();
 		p("    <trkpt lat=\"%f\" lon=\"%f\" />", wgs.lat, wgs.lon);
-	}
-
-	private void p(final String format, final Object... p) {
-		pwrt.printf(Locale.US, format, p);
-		pwrt.println();
 	}
 }

@@ -23,6 +23,16 @@ public class MyOverlayManager implements LayoutManager2 {
 	/*
 	 * (non-Javadoc)
 	 *
+	 * @see java.awt.LayoutManager#addLayoutComponent(java.lang.String, java.awt.Component)
+	 */
+	@Override
+	public void addLayoutComponent(final String s, final Component c) {
+		addLayoutComponent(c, s);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.awt.LayoutManager2#getLayoutAlignmentX(java.awt.Container)
 	 */
 	@Override
@@ -52,6 +62,21 @@ public class MyOverlayManager implements LayoutManager2 {
 	/*
 	 * (non-Javadoc)
 	 *
+	 * @see java.awt.LayoutManager#layoutContainer(java.awt.Container)
+	 */
+	@Override
+	public void layoutContainer(final Container c) {
+		final Insets in = c.getInsets();
+		final int width = c.getWidth() - in.right - in.left;
+		final int height = c.getHeight() - in.bottom - in.top;
+		for (final Component cc : c.getComponents()) {
+			cc.setBounds(in.left, in.top, width, height);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.awt.LayoutManager2#maximumLayoutSize(java.awt.Container)
 	 */
 	@Override
@@ -68,31 +93,6 @@ public class MyOverlayManager implements LayoutManager2 {
 		}
 		pridejInsets(dim, c);
 		return dim;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.awt.LayoutManager#addLayoutComponent(java.lang.String, java.awt.Component)
-	 */
-	@Override
-	public void addLayoutComponent(final String s, final Component c) {
-		addLayoutComponent(c, s);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.awt.LayoutManager#layoutContainer(java.awt.Container)
-	 */
-	@Override
-	public void layoutContainer(final Container c) {
-		final Insets in = c.getInsets();
-		final int width = c.getWidth() - in.right - in.left;
-		final int height = c.getHeight() - in.bottom - in.top;
-		for (final Component cc : c.getComponents()) {
-			cc.setBounds(in.left, in.top, width, height);
-		}
 	}
 
 	/*
@@ -137,12 +137,6 @@ public class MyOverlayManager implements LayoutManager2 {
 		return dim;
 	}
 
-	private void pridejInsets(final Dimension dim, final Container c) {
-		final Insets in = c.getInsets();
-		dim.height += in.top + in.bottom;
-		dim.width += in.left + in.right;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -150,6 +144,12 @@ public class MyOverlayManager implements LayoutManager2 {
 	 */
 	@Override
 	public void removeLayoutComponent(final Component c) {
+	}
+
+	private void pridejInsets(final Dimension dim, final Container c) {
+		final Insets in = c.getInsets();
+		dim.height += in.top + in.bottom;
+		dim.width += in.left + in.right;
 	}
 
 }

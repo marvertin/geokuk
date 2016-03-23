@@ -16,6 +16,10 @@ public class Sheet<T> extends Node0<T> {
 		obj = aMapobj;
 	}
 
+	public T get() {
+		return obj;
+	}
+
 	/**
 	 * @return the xx
 	 */
@@ -43,17 +47,6 @@ public class Sheet<T> extends Node0<T> {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see objekty.Node0#vypis(java.lang.String, int)
-	 */
-	@Override
-	void vypis(final String aPrefix, final int aLevel) {
-		final String mezery = String.format("%" + aLevel * 2 + "s", " ");
-		System.out.printf("%s%s: [%d,%d] %s\n", mezery, aPrefix, xx, yy, obj);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see objekty.Node0#visit(objekty.BoundingRect, objekty.Visitor)
 	 */
 	@Override
@@ -64,8 +57,15 @@ public class Sheet<T> extends Node0<T> {
 		}
 	}
 
-	public T get() {
-		return obj;
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see objekty.Node0#vypis(java.lang.String, int)
+	 */
+	@Override
+	void vypis(final String aPrefix, final int aLevel) {
+		final String mezery = String.format("%" + aLevel * 2 + "s", " ");
+		System.out.printf("%s%s: [%d,%d] %s\n", mezery, aPrefix, xx, yy, obj);
 	}
 
 }

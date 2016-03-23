@@ -11,28 +11,6 @@ public final class XRuntime extends XObject0 {
 	static final long serialVersionUID = 2772768580961243187L;
 
 	/**
-	 * Vytvoří výjimku se zadano zprávou
-	 *
-	 * @param s
-	 *            Technicky orientovaná zpráva. Obsahuje informace o chybě určené technicky a systémově znalé osobě.
-	 */
-	public XRuntime(final String s) {
-		super(s);
-	}
-
-	/**
-	 * Vytvoří výjimku a naváže ji na zadanou výjimku. Používá se v bloku catch v případě potřeby přehodit výjimku.
-	 *
-	 * @param s
-	 *            Technicky orientovaná zpráva. Obsahuje informace o chybě určené technicky a systémově znalé osobě.
-	 * @param e
-	 *            Přehazovaná výjimka.
-	 */
-	public XRuntime(final String s, final Exception e) {
-		super(s, e);
-	}
-
-	/**
 	 * Vyhodí výjimku s tím, že přidá jméno třídy, ze které je vyhozena.
 	 *
 	 * @param trida
@@ -56,6 +34,28 @@ public final class XRuntime extends XObject0 {
 	 */
 	public XRuntime(final Object trida, final String s, final Exception e) {
 		super(trida, s, e);
+	}
+
+	/**
+	 * Vytvoří výjimku se zadano zprávou
+	 *
+	 * @param s
+	 *            Technicky orientovaná zpráva. Obsahuje informace o chybě určené technicky a systémově znalé osobě.
+	 */
+	public XRuntime(final String s) {
+		super(s);
+	}
+
+	/**
+	 * Vytvoří výjimku a naváže ji na zadanou výjimku. Používá se v bloku catch v případě potřeby přehodit výjimku.
+	 *
+	 * @param s
+	 *            Technicky orientovaná zpráva. Obsahuje informace o chybě určené technicky a systémově znalé osobě.
+	 * @param e
+	 *            Přehazovaná výjimka.
+	 */
+	public XRuntime(final String s, final Exception e) {
+		super(s, e);
 	}
 
 }

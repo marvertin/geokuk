@@ -35,6 +35,14 @@ public class Rendrovadlo {
 		this.future = future;
 	}
 
+	public void inject(final Factory factory) {
+		this.factory = factory;
+	}
+
+	public void inject(final SlideListProvider slideListProvider) {
+		slides = slideListProvider.getSlides();
+	}
+
 	public synchronized BufferedImage rendruj(final RenderParams p, final Progressor progressor) throws InterruptedException {
 
 		System.out.printf("Vytvarim obrazek [%d,%d]\n", p.roord.getWidth(), p.roord.getHeight());
@@ -104,6 +112,18 @@ public class Rendrovadlo {
 		}
 	}
 
+	BufferedImage createImage(final RenderParams p) throws InterruptedException {
+		try {
+			final BufferedImage result = new BufferedImage(p.roord.getWidth(), p.roord.getHeight(), p.pruhledne ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_3BYTE_BGR);
+			return result;
+		} catch (final OutOfMemoryError e) {
+			Dlg.error("Nedostatek operační paměti pro rendrování. Zmenši obrázek nebo přidej paměť pro Java Heap");
+			future.cancel(true);
+			return null;
+			// throw new InterruptedException("Není paměť: " + e.toString());
+		}
+	}
+
 	private void nastavProgressorKachlovniku(final JSingleSlide0 slide, final Progressor progressor) {
 
 		final int progressPocatek = progressor.getProgress();
@@ -122,30 +142,6 @@ public class Rendrovadlo {
 				// progressor.setText("Mapiska " + citac);
 			});
 
-		}
-	}
-
-	public void inject(final Factory factory) {
-		this.factory = factory;
-	}
-
-	public void inject(final SlideListProvider slideListProvider) {
-		slides = slideListProvider.getSlides();
-	}
-
-	BufferedImage createImage(final RenderParams p) throws InterruptedException {
-		@SuppressWarnings("unused") // opravdu není potřeba ten objekt použít, jen se zruší, aby byla paměť
-		Object ucpavka = new byte[1024 * 1024 * 20]; // na ucpani pameti, aby po naalokovani obrazku ještě neco bylo
-		try {
-			final BufferedImage result = new BufferedImage(p.roord.getWidth(), p.roord.getHeight(), p.pruhledne ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_3BYTE_BGR);
-			ucpavka = null;
-			return result;
-		} catch (final OutOfMemoryError e) {
-			ucpavka = null;
-			Dlg.error("Nedostatek operační paměti pro rendrování. Zmenši obrázek nebo přidej paměť pro Java Heap");
-			future.cancel(true);
-			return null;
-			// throw new InterruptedException("Není paměť: " + e.toString());
 		}
 	}
 

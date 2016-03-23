@@ -18,6 +18,11 @@ public class JIkonkaPapiru extends JComponent {
 		setBorder(BorderFactory.createEtchedBorder());
 	}
 
+	public void setMetrikia(final PapirovaMetrika metrika) {
+		this.metrika = metrika;
+		repaint();
+	}
+
 	@Override
 	protected void paintComponent(final Graphics aG) {
 		if (metrika == null) {
@@ -56,10 +61,5 @@ public class JIkonkaPapiru extends JComponent {
 		final double sirka = metrika.xsize * kvoc;
 		final double vyska = metrika.ysize * kvoc;
 		g.drawRect((int) (-sirka / 2), (int) -vyska / 2, (int) sirka, (int) vyska);
-	}
-
-	public void setMetrikia(final PapirovaMetrika metrika) {
-		this.metrika = metrika;
-		repaint();
 	}
 }

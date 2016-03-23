@@ -77,6 +77,8 @@ public class FConst {
 
 	}
 
+	public static final String NL = System.getProperty("line.separator");
+
 	public static void logInit() {
 		log.info("GEOKUK " + VERSION);
 		log.info("JAR_DIR = " + JAR_DIR);
@@ -84,7 +86,5 @@ public class FConst {
 		log.info("HOME_DIR = " + HOME_DIR);
 		log.info("WEB_PAGE_URL = " + WEB_PAGE_URL);
 	}
-
-	public static final String NL = System.getProperty("line.separator");
 
 }

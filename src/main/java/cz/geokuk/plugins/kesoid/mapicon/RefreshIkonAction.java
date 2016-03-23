@@ -36,12 +36,12 @@ public class RefreshIkonAction extends Action0 {
 		kesoidModel.startIkonLoad(true);
 	}
 
-	public void onEvent(final IkonyNactenyEvent event) {
-		setEnabled(true);
-	}
-
 	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
+	}
+
+	public void onEvent(final IkonyNactenyEvent event) {
+		setEnabled(true);
 	}
 
 }

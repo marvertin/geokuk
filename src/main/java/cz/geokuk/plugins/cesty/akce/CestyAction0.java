@@ -20,21 +20,6 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 		setEnabled(false);
 	}
 
-	@Override
-	public final void initAfterInject() {
-		puvodniJednoducheJmeno = (String) getValue(NAME);
-	}
-
-	@Override
-	public void setEnabled(final boolean newValue) {
-		super.setEnabled(newValue);
-		if (!newValue) {
-			if (puvodniJednoducheJmeno != null) {
-				putValue(NAME, puvodniJednoducheJmeno);
-			}
-		}
-	}
-
 	public CestyAction0(final String string) {
 		super(string);
 		setEnabled(false);
@@ -49,13 +34,9 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 		setEnabled(false);
 	}
 
-	public final void onEvent(final CestyChangedEvent aEvent) {
-		// System.out.println("********* dorucen event na: " + System.identityHashCode(this) + ": " + getClass().getName());
-		aEvent.getDoc().kontrolaKonzistence();
-		vyletChanged();
-	}
-
-	protected void vyletChanged() {
+	@Override
+	public final void initAfterInject() {
+		puvodniJednoducheJmeno = (String) getValue(NAME);
 	}
 
 	public final void inject(final CestyModel cestyModel) {
@@ -63,12 +44,31 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 
 	}
 
-	protected final Cesta curta() {
-		return cestyModel.getCurta();
+	public final void onEvent(final CestyChangedEvent aEvent) {
+		// System.out.println("********* dorucen event na: " + System.identityHashCode(this) + ": " + getClass().getName());
+		aEvent.getDoc().kontrolaKonzistence();
+		vyletChanged();
+	}
+
+	@Override
+	public void setEnabled(final boolean newValue) {
+		super.setEnabled(newValue);
+		if (!newValue) {
+			if (puvodniJednoducheJmeno != null) {
+				putValue(NAME, puvodniJednoducheJmeno);
+			}
+		}
 	}
 
 	protected final Doc curdoc() {
 		return cestyModel.getDoc();
+	}
+
+	protected final Cesta curta() {
+		return cestyModel.getCurta();
+	}
+
+	protected void vyletChanged() {
 	}
 
 }

@@ -15,30 +15,13 @@ import java.util.Map;
 
 public interface CounterMap<T> {
 	/**
-	 * Inkrtementuje o jedničku čítač specifikovaný zadaným klíčem
+	 * Přičte odpovídající hodnoty čítačů ze zadané mapy.
 	 *
-	 * @param aKey
-	 *            Objekt, který má být počítán.
-	 * @return Hodnota čítače před provedením operace.
+	 * @param aMap
+	 *            mapa, která se má přičíst.
+	 * @return Celková suma čítačů teéto mapy před přičtěním.
 	 */
-	public int inc(T aKey);
-
-	/**
-	 * Dekrementuje o jedničku čítač specifikovaný zadaným klíčem
-	 *
-	 * @param aKey
-	 *            Objekt, který má být počítán.
-	 * @return Hodnota čítače před provedením operace.
-	 */
-	public int dec(T aKey);
-
-	/**
-	 * Vrátí hodnotu čítače pro daný objekt.
-	 *
-	 * @parame aKey(Object aKey)
-	 * @return Hodnota čítače pro daný objekt. Vrací nulu, pokud objekt není v mapě evidován. Nikdy nevrátí zápornou hodnotu. Je to vlastně také hodnota před provedením operace.
-	 */
-	public int count(T aKey);
+	public int add(CounterMap<T> aMap);
 
 	/**
 	 * Přičte zadanou hodnotu k čítači pro daný objekt.
@@ -52,15 +35,47 @@ public interface CounterMap<T> {
 	public int add(T aKey, int aOKolik);
 
 	/**
-	 * Přičte zadanou hodnotu k čítači pro daný objekt.
+	 * Vrátí sumu všech čítačů
+	 */
+	public int count();
+
+	/**
+	 * Vrátí hodnotu čítače pro daný objekt.
+	 *
+	 * @parame aKey(Object aKey)
+	 * @return Hodnota čítače pro daný objekt. Vrací nulu, pokud objekt není v mapě evidován. Nikdy nevrátí zápornou hodnotu. Je to vlastně také hodnota před provedením operace.
+	 */
+	public int count(T aKey);
+
+	/**
+	 * Dekrementuje o jedničku čítač specifikovaný zadaným klíčem
 	 *
 	 * @param aKey
-	 *            Objekt, který má být čítán.
-	 * @param aOKolik
-	 *            O jkolik má být čítač změněn. Může být kladné, záporné nebo 0. Pokud je hodnota záporná a snížení čítače by vedlo k záporným hodnotám, je čítač nastaven na nulu.
+	 *            Objekt, který má být počítán.
 	 * @return Hodnota čítače před provedením operace.
 	 */
-	public int set(T aKey, int aNaKolik);
+	public int dec(T aKey);
+
+	/**
+	 * Vrátí nemodifikovatelnou mapu objektů na objekty Integer
+	 *
+	 * @return Naplněný objekt implementující rozhraní Map jako mapa na čítače. Objekt není
+	 */
+	public Map<T, Integer> getMap();
+
+	/**
+	 * Inkrtementuje o jedničku čítač specifikovaný zadaným klíčem
+	 *
+	 * @param aKey
+	 *            Objekt, který má být počítán.
+	 * @return Hodnota čítače před provedením operace.
+	 */
+	public int inc(T aKey);
+
+	/**
+	 * Vynuluje všechny čítače
+	 */
+	public int reset();
 
 	/**
 	 * Resetuje čítač daného objektu
@@ -72,30 +87,15 @@ public interface CounterMap<T> {
 	public int reset(T aKey);
 
 	/**
-	 * Vrátí nemodifikovatelnou mapu objektů na objekty Integer
+	 * Přičte zadanou hodnotu k čítači pro daný objekt.
 	 *
-	 * @return Naplněný objekt implementující rozhraní Map jako mapa na čítače. Objekt není
+	 * @param aKey
+	 *            Objekt, který má být čítán.
+	 * @param aOKolik
+	 *            O jkolik má být čítač změněn. Může být kladné, záporné nebo 0. Pokud je hodnota záporná a snížení čítače by vedlo k záporným hodnotám, je čítač nastaven na nulu.
+	 * @return Hodnota čítače před provedením operace.
 	 */
-	public Map<T, Integer> getMap();
-
-	/**
-	 * Vrátí sumu všech čítačů
-	 */
-	public int count();
-
-	/**
-	 * Vynuluje všechny čítače
-	 */
-	public int reset();
-
-	/**
-	 * Přičte odpovídající hodnoty čítačů ze zadané mapy.
-	 *
-	 * @param aMap
-	 *            mapa, která se má přičíst.
-	 * @return Celková suma čítačů teéto mapy před přičtěním.
-	 */
-	public int add(CounterMap<T> aMap);
+	public int set(T aKey, int aNaKolik);
 
 	/**
 	 * Odečte odpovídající hodnoty čítačů ze zadané mapy.

@@ -19,34 +19,6 @@ abstract class Ka0Req {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		pocitadloInstanci.dec();
-	}
-
-	public Ka0 getKa() {
-		return ka;
-	}
-
-	public Priority getPriorita() {
-		return priorita;
-	}
-
-	@Override
-	public String toString() {
-		return ka.toString();
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (ka == null ? 0 : ka.hashCode());
-		result = prime * result + (priorita == null ? 0 : priorita.hashCode());
-		return result;
-	}
-
-	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
@@ -69,6 +41,34 @@ abstract class Ka0Req {
 			return false;
 		}
 		return true;
+	}
+
+	public Ka0 getKa() {
+		return ka;
+	}
+
+	public Priority getPriorita() {
+		return priorita;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (ka == null ? 0 : ka.hashCode());
+		result = prime * result + (priorita == null ? 0 : priorita.hashCode());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return ka.toString();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		pocitadloInstanci.dec();
 	}
 
 }

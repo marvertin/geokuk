@@ -49,6 +49,117 @@ import javax.swing.table.TableColumn;
  * TableDemo is just like SimpleTableDemo, except that it uses a custom TableModel.
  */
 public class JErrorTable extends JPanel {
+	class MyTableModel extends AbstractTableModel {
+		private static final long	serialVersionUID	= -1777521413836209700L;
+
+		private final List<Problem>	problemlist			= new ArrayList<>();
+
+		private final String[]		columnNames			= { "Závažnost", "Výjimka", "Popis",
+
+															};
+
+		/*
+		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
+		 */
+		@Override
+		public Class<?> getColumnClass(final int col) {
+			Class<?> cls = null;
+			switch (col) {
+			case 0:
+				cls = String.class;
+				break;
+			case 1:
+				cls = Integer.class;
+				break;
+			case 2:
+				cls = String.class;
+				break;
+			}
+			return cls;
+		}
+
+		@Override
+		public int getColumnCount() {
+			return columnNames.length;
+		}
+
+		@Override
+		public String getColumnName(final int col) {
+			return columnNames[col];
+		}
+
+		/**
+		 * @return the keslist
+		 */
+		public List<Problem> getProblemlist() {
+			return problemlist;
+		}
+
+		@Override
+		public int getRowCount() {
+			return problemlist.size();
+		}
+
+		@Override
+		public Object getValueAt(final int row, final int col) {
+			final Problem nalezenec = problemlist.get(row);
+			Object s = null;
+			switch (col) {
+			case 0:
+				s = row + 1;
+				break;
+			// case 0: s = nalezenec.getZavaznost(); break;
+			case 1:
+				s = nalezenec.getExcId();
+				break;
+			case 2:
+				s = nalezenec.getPopis();
+				break;
+			}
+			return s;
+		}
+
+		/*
+		 * Don't need to implement this method unless your table's editable.
+		 */
+		@Override
+		public boolean isCellEditable(final int row, final int col) {
+			return false;
+		}
+
+	}
+
+	static class Problem {
+		String	zavaznost;
+		String	popis;
+		AExcId	excId;
+
+		public AExcId getExcId() {
+			return excId;
+		}
+
+		public String getPopis() {
+			return popis;
+		}
+
+		public String getZavaznost() {
+			return zavaznost;
+		}
+
+		public void setExcId(final AExcId excId) {
+			this.excId = excId;
+		}
+
+		public void setPopis(final String popis) {
+			this.popis = popis;
+		}
+
+		public void setZavaznost(final String zavaznost) {
+			this.zavaznost = zavaznost;
+		}
+
+	}
+
 	private static final long	serialVersionUID	= 7687619215661046034L;
 
 	MyTableModel				tableModel;
@@ -94,6 +205,23 @@ public class JErrorTable extends JPanel {
 		table.getSelectionModel().addListSelectionListener(listener);
 	}
 
+	public void addProblem(final String problem, final AExcId excId) {
+		final Problem pbm = new Problem();
+		pbm.setPopis(problem);
+		pbm.setExcId(excId);
+		tableModel.getProblemlist().add(pbm);
+
+	}
+
+	public Problem getCurrent() {
+		final int selectedRow = table.getSelectedRow();
+		if (selectedRow < 0 || selectedRow >= tableModel.getProblemlist().size()) {
+			return null;
+		}
+		final Problem nalezenec = tableModel.getProblemlist().get(selectedRow);
+		return nalezenec;
+	}
+
 	/**
 	 * @return the keslist
 	 */
@@ -123,133 +251,5 @@ public class JErrorTable extends JPanel {
 		//
 		// column = table.getColumnModel().getColumn(5);
 		// column.setPreferredWidth(100);
-	}
-
-	public Problem getCurrent() {
-		final int selectedRow = table.getSelectedRow();
-		if (selectedRow < 0 || selectedRow >= tableModel.getProblemlist().size()) {
-			return null;
-		}
-		final Problem nalezenec = tableModel.getProblemlist().get(selectedRow);
-		return nalezenec;
-	}
-
-	class MyTableModel extends AbstractTableModel {
-		private static final long	serialVersionUID	= -1777521413836209700L;
-
-		private final List<Problem>	problemlist			= new ArrayList<>();
-
-		private final String[]		columnNames			= { "Závažnost", "Výjimka", "Popis",
-
-															};
-
-		/**
-		 * @return the keslist
-		 */
-		public List<Problem> getProblemlist() {
-			return problemlist;
-		}
-
-		@Override
-		public int getColumnCount() {
-			return columnNames.length;
-		}
-
-		@Override
-		public int getRowCount() {
-			return problemlist.size();
-		}
-
-		@Override
-		public String getColumnName(final int col) {
-			return columnNames[col];
-		}
-
-		@Override
-		public Object getValueAt(final int row, final int col) {
-			final Problem nalezenec = problemlist.get(row);
-			Object s = null;
-			switch (col) {
-			case 0:
-				s = row + 1;
-				break;
-			// case 0: s = nalezenec.getZavaznost(); break;
-			case 1:
-				s = nalezenec.getExcId();
-				break;
-			case 2:
-				s = nalezenec.getPopis();
-				break;
-			}
-			return s;
-		}
-
-		/*
-		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
-		 */
-		@Override
-		public Class<?> getColumnClass(final int col) {
-			Class<?> cls = null;
-			switch (col) {
-			case 0:
-				cls = String.class;
-				break;
-			case 1:
-				cls = Integer.class;
-				break;
-			case 2:
-				cls = String.class;
-				break;
-			}
-			return cls;
-		}
-
-		/*
-		 * Don't need to implement this method unless your table's editable.
-		 */
-		@Override
-		public boolean isCellEditable(final int row, final int col) {
-			return false;
-		}
-
-	}
-
-	static class Problem {
-		String	zavaznost;
-		String	popis;
-		AExcId	excId;
-
-		public String getZavaznost() {
-			return zavaznost;
-		}
-
-		public void setZavaznost(final String zavaznost) {
-			this.zavaznost = zavaznost;
-		}
-
-		public String getPopis() {
-			return popis;
-		}
-
-		public void setPopis(final String popis) {
-			this.popis = popis;
-		}
-
-		public AExcId getExcId() {
-			return excId;
-		}
-
-		public void setExcId(final AExcId excId) {
-			this.excId = excId;
-		}
-
-	}
-
-	public void addProblem(final String problem, final AExcId excId) {
-		final Problem pbm = new Problem();
-		pbm.setPopis(problem);
-		pbm.setExcId(excId);
-		tableModel.getProblemlist().add(pbm);
-
 	}
 }

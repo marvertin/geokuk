@@ -26,6 +26,10 @@ public class JMenuIkony extends JMenu {
 		menu = this;
 	}
 
+	public void inject(final Factory factory) {
+		this.factory = factory;
+	}
+
 	public void onEvent(final IkonyNactenyEvent event) {
 		final IkonBag bag = event.getBag();
 		while (pocetSad > 0) {
@@ -57,10 +61,6 @@ public class JMenuIkony extends JMenu {
 			standard.setSelected(true);
 		}
 
-	}
-
-	public void inject(final Factory factory) {
-		this.factory = factory;
 	}
 
 }

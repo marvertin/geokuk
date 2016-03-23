@@ -28,6 +28,19 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		jskelneikony = aJskelneikony;
 	}
 
+	public void onEvent(final PoziceChangedEvent event) {
+		final Wpt wpt = event.poziceq.getWpt();
+		if (wpt == null) {
+			return;
+		}
+		if (bag == null) {
+			return;
+		}
+		jmenaVybranychAlel = Alela.alelyToNames(wpt.getGenotyp(bag.getGenom()).getAlely());
+		zobrazovatVse = true;
+		refresh(bag, jmenaVybranychAlel, null);
+	}
+
 	public void resetBag(final IkonBag aBag) {
 		bag = aBag;
 		if (jmenaVybranychAlel == null) {
@@ -35,6 +48,31 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 			jmenaVybranychAlel = Alela.alelyToNames(genotypVychozi.getAlely());
 		}
 		refresh(aBag, jmenaVybranychAlel, null);
+	}
+
+	@Override
+	protected boolean shouldEnable(final Alela alela) {
+		return alela.isVychozi() || bag.getSada().getPouziteAlely().contains(alela);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Alela)
+	 */
+	@Override
+	protected boolean shouldRender(final Alela alela) {
+		return alela.isVychozi() || bag.getSada().getPouziteAlely().contains(alela) || zobrazovatVse;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Gen)
+	 */
+	@Override
+	protected boolean shouldRender(final Gen gen) {
+		return bag.getSada().getPouziteGeny().contains(gen) || zobrazovatVse;
 	}
 
 	@Override
@@ -101,44 +139,6 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		System.out.println(genotyp);
 		jskelneikony.revalidate();
 		// pack();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Alela)
-	 */
-	@Override
-	protected boolean shouldRender(final Alela alela) {
-		return alela.isVychozi() || bag.getSada().getPouziteAlely().contains(alela) || zobrazovatVse;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Gen)
-	 */
-	@Override
-	protected boolean shouldRender(final Gen gen) {
-		return bag.getSada().getPouziteGeny().contains(gen) || zobrazovatVse;
-	}
-
-	@Override
-	protected boolean shouldEnable(final Alela alela) {
-		return alela.isVychozi() || bag.getSada().getPouziteAlely().contains(alela);
-	}
-
-	public void onEvent(final PoziceChangedEvent event) {
-		final Wpt wpt = event.poziceq.getWpt();
-		if (wpt == null) {
-			return;
-		}
-		if (bag == null) {
-			return;
-		}
-		jmenaVybranychAlel = Alela.alelyToNames(wpt.getGenotyp(bag.getGenom()).getAlely());
-		zobrazovatVse = true;
-		refresh(bag, jmenaVybranychAlel, null);
 	}
 
 }
