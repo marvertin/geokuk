@@ -22,6 +22,8 @@
         <Logger name="KachloDownloader" level="INFO"/>
         <Logger name="DlazebniKombiner" level="INFO"/>
         <Logger name="JKachleOflinerDialog" level="INFO"/>
+        <Logger name="JMrizkaUtm" level="INFO"/>
+        <Logger name="JMrizka0" level="INFO"/>
         
         
     </Loggers>

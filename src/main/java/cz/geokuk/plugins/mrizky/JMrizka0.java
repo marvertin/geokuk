@@ -10,6 +10,9 @@ import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.framework.BeanSubtypable;
@@ -18,6 +21,8 @@ import cz.geokuk.framework.BeanSubtype;
 
 
 public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
+
+  private static final Logger log = LogManager.getLogger(JMrizka0.class.getSimpleName());
 
 
   private static final long serialVersionUID = -5858146658366237217L;
@@ -47,7 +52,7 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
       final Point result = getSoord().transform(convertToMou(x, y));
       //System.out.printf("Mřížkování: %s (%f,%f) -> (%d,%d)%n",  getClass().getSimpleName(), x, y, result.x, result.y);
       return result;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new RuntimeException( x + " " + y,e);
     }
   }
@@ -95,8 +100,10 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
       //      if (true) return;
 
       korigujZnamenkaKroku();
-      boolean vlezeSeDoOkna = posunX0Y0ZaKonec();
-      if (!vlezeSeDoOkna) return;
+      final boolean vlezeSeDoOkna = posunX0Y0ZaKonec();
+      if (!vlezeSeDoOkna) {
+        return;
+      }
       // příprava prvního řádku
       List<Point> a = new ArrayList<>();
       //Point p = convert(x0, y0);
@@ -207,24 +214,32 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
      * Vrací true, pokud se podařilo nastavit a má smysl vykreslovat
      */
     private boolean posunX0Y0ZaKonec() {
+      log.debug("posunX0Y0ZaKonec: width={}, height={}", getWidth(), getHeight());
       // Tady je problé, že mapy malého měřítka se vejdou na obrazovku vícekrát,
       // a pak se nikdy nemůžeme dostat mimo obrazovky, tak utneme
       final int width = getWidth();
       int px, py, lastPx = Integer.MIN_VALUE, lastPy = Integer.MIN_VALUE;
-      while((px = convert(x0, y0).x) < width && Math.abs(x0) < 1000) {
-        if (px <= lastPx) return false;
+      while((px = convert(x0, y0).x) < width) {
+        log.debug("  ... posunX0Y0ZaKonec-X: px={}, lastPx={}, xkrok={}, width={}, x0={}", px, lastPx, xkrok, width, x0);
+        if (px <= lastPx) {
+          return false; // kvůli přetíkání, když se na obrazovce opakují kachle
+        }
         lastPx = px;
         x0 += xkrok;
         //System.out.println("Zase se zvětšuje: " + x0 + " --- " + xkrok + " //// " + convert(x0, y0).x + "  ---- " + convertToMou(x0,  y0));
       }
       x0 += xkrok * 2; // a ještě jeden pro jistotu
       final int height = getHeight();
-      while((py = convert(x0, y0).y) < height && Math.abs(y0) < 1000) {
-        if (py <= lastPy) return false;
+      while((py = convert(x0, y0).y) < height) {
+        log.debug("  ... posunX0Y0ZaKonec-Y: py={}, lastPy={}, ykrok={}, height={}, y0 ={}", py, lastPy, ykrok, height, y0);
+        if (py <= lastPy) {
+          return false; // kvůli přetíkání, když se na obrazovce opakují kachle
+        }
         lastPy = py;
         y0 += ykrok;
       }
-      y0 += ykrok * 2; // a ještě jeden pro jistotu
+      //y0 += ykrok * 2; // a ještě jeden pro jistotu
+      log.debug("posunX0Y0ZaKonec: resultXY0 = [{},{}]", x0, y0);
       return true;
     }
 

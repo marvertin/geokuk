@@ -6,6 +6,9 @@ package cz.geokuk.plugins.mrizky;
 
 import java.awt.Color;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Utm;
@@ -18,6 +21,10 @@ import cz.geokuk.core.coordinates.Utm;
  */
 public class JMrizkaUtm extends JMrizka0 {
 
+
+  private static final Logger log = LogManager.getLogger(JMrizkaUtm.class.getSimpleName());
+
+
   protected static final double MINUTA = 1.0 / 60;
 
   private static final long serialVersionUID = 4558815639199835559L;
@@ -28,6 +35,7 @@ public class JMrizkaUtm extends JMrizka0 {
   @Override
   public Mou convertToMou(final double aX, final double aY) {
     final Mou mou =  getUtmStredu().toUtmInTheSameZone(aX, aY).toMou();
+    log.debug("convertToMou xy=[{},{}] => {}", aX, aY, mou);
     return mou;
   }
 
@@ -39,18 +47,22 @@ public class JMrizkaUtm extends JMrizka0 {
    * @see mrizka.JMrizka0#convertToX(coordinates.Mou)
    */
   @Override
-  public double convertToX(final Mou aMou) {
+  public double convertToX(final Mou mou) {
     final Utm utmStredu = getUtmStredu();
-    return aMou.toWgs().toUtm().toSampePlaceInAnotherZone(utmStredu.polednikovaZona, utmStredu.rovnobezkovaZona).ux;
+    final double ux = mou.toWgs().toUtm().toSampePlaceInAnotherZone(utmStredu.polednikovaZona, utmStredu.rovnobezkovaZona).ux;
+    log.debug("convertToX {}", mou, ux);
+    return ux;
   }
 
   /* (non-Javadoc)
    * @see mrizka.JMrizka0#convertToY(coordinates.Mou)
    */
   @Override
-  public double convertToY(final Mou aMou) {
+  public double convertToY(final Mou mou) {
     final Utm utmStredu = getUtmStredu();
-    return aMou.toWgs().toUtm().toSampePlaceInAnotherZone(utmStredu.polednikovaZona, utmStredu.rovnobezkovaZona).uy;
+    final double uy = mou.toWgs().toUtm().toSampePlaceInAnotherZone(utmStredu.polednikovaZona, utmStredu.rovnobezkovaZona).uy;
+    log.debug("convertToY {}", mou, uy);
+    return uy;
   }
 
 
