@@ -64,17 +64,17 @@ import javax.swing.event.ListSelectionListener;
 public class JFontChooser extends JComponent {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3412974969117820342L;
 
 	/** The list of possible font sizes. */
 	private static final Integer[] SIZES =
-	{8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 24, 26, 28, 32, 36, 40, 48, 56, 64, 72};
+		{8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 24, 26, 28, 32, 36, 40, 48, 56, 64, 72};
 
 	/** The list of possible fonts. */
 	private static final String[] FONTS = GraphicsEnvironment.getLocalGraphicsEnvironment()
-	.getAvailableFontFamilyNames();
+			.getAvailableFontFamilyNames();
 
 
 	private FontSelectionModel selectionModel;
@@ -384,7 +384,7 @@ public class JFontChooser extends JComponent {
  */
 class FontChooserDialog extends JDialog {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -7376253355818496076L;
 	private Font initialFont;

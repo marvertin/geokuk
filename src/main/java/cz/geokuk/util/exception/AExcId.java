@@ -9,14 +9,14 @@ import cz.geokuk.util.lang.AString0;
  */
 public class AExcId extends AString0 {
 
-  static final long serialVersionUID = -248904485707733102L;
+	static final long serialVersionUID = -248904485707733102L;
 
-  protected AExcId(String aValue) {
-    super(aValue);
-  }
-  
-  public static AExcId from(String s) {
-    return s == null ? null : new AExcId(s);
-  }
+	protected AExcId(String aValue) {
+		super(aValue);
+	}
+
+	public static AExcId from(String s) {
+		return s == null ? null : new AExcId(s);
+	}
 
 }

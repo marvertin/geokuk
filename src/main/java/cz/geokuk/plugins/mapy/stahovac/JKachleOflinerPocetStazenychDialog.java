@@ -11,42 +11,42 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JKachleOflinerPocetStazenychDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-  private static final long serialVersionUID = 7180968190465321695L;
+	private static final long serialVersionUID = 7180968190465321695L;
 
-  private JLabel pocetStazenychKachli;
+	private JLabel pocetStazenychKachli;
 
-  public JKachleOflinerPocetStazenychDialog() {
-    setTitle("Průběh hrromadného dotažení mapových dlaždic");
-    init();
-  }
+	public JKachleOflinerPocetStazenychDialog() {
+		setTitle("Průběh hrromadného dotažení mapových dlaždic");
+		init();
+	}
 
-  @Override
-  protected void initComponents() {
-    // Napřed registrovat, aby při inicializaci už byl výsledek tady
-    final Box box = Box.createVerticalBox();
-    pocetStazenychKachli = new JLabel();
-    box.add(Box.createVerticalStrut(20));
-    pocetStazenychKachli.setAlignmentX(CENTER_ALIGNMENT);
-    pocetStazenychKachli.setPreferredSize(new Dimension(400, 30));
-    box.add(pocetStazenychKachli);
-    box.add(Box.createVerticalStrut(20));
-    pack();
-    add(box);
-  }
+	@Override
+	protected void initComponents() {
+		// Napřed registrovat, aby při inicializaci už byl výsledek tady
+		final Box box = Box.createVerticalBox();
+		pocetStazenychKachli = new JLabel();
+		box.add(Box.createVerticalStrut(20));
+		pocetStazenychKachli.setAlignmentX(CENTER_ALIGNMENT);
+		pocetStazenychKachli.setPreferredSize(new Dimension(400, 30));
+		box.add(pocetStazenychKachli);
+		box.add(Box.createVerticalStrut(20));
+		pack();
+		add(box);
+	}
 
-  @Override
-  protected String getTemaNapovedyDialogu() {
-    return "StahovaniMapovychDlazdic";
-  }
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "StahovaniMapovychDlazdic";
+	}
 
-  @Override
-  public void initAfterEventReceiverRegistration() {
+	@Override
+	public void initAfterEventReceiverRegistration() {
 
-  }
+	}
 
-  public void setPocetStazenych(final int pocet) {
-    pocetStazenychKachli.setText("Požadováno ke stažení jž " + pocet + " dlaždic");
-  }
+	public void setPocetStazenych(final int pocet) {
+		pocetStazenychKachli.setText("Požadováno ke stažení jž " + pocet + " dlaždic");
+	}
 
 
 }

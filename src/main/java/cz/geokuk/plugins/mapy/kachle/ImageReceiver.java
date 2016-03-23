@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.mapy.kachle;
 
@@ -9,12 +9,12 @@ package cz.geokuk.plugins.mapy.kachle;
  */
 public interface ImageReceiver {
 
-  /**
-   * @param kachloStav TODO
-   * @param aTyp
-   * @param aImg
-   */
-  public void send(KachloStav kachloStav);
+	/**
+	 * @param kachloStav TODO
+	 * @param aTyp
+	 * @param aImg
+	 */
+	public void send(KachloStav kachloStav);
 
 
 }

@@ -10,13 +10,13 @@ import java.util.Set;
 
 public class Vrstva {
 
-	
+
 	private Map<Alela, Seznamec> icondefsProSymbol = new HashMap<>();
 	private Seznamec hlavickaObecnych = new Seznamec();
 	private Set<Alela> pouziteAlely = new HashSet<>();
 
 	private int pocet;
-	
+
 	void add(IconDef iconDef) {
 		if (iconDef != null) {
 			Alela alelaSym = iconDef.getAlelaSym();
@@ -34,11 +34,11 @@ public class Vrstva {
 				pocet ++;
 			}
 			// A Ještě schovat použité alely
-	  	for (IconSubDef subDef : iconDef.getSubdefs()) {
-	  		pouziteAlely.addAll(subDef.alely);
-	  	}
+			for (IconSubDef subDef : iconDef.getSubdefs()) {
+				pouziteAlely.addAll(subDef.alely);
+			}
 		}
-		
+
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class Vrstva {
 		Set<Alela> hledaneAlely = genotyp.getAlely();
 		List<IconDef> vybrane = new ArrayList<>(pocet);
 		int maxPriorita = -1;
-		
+
 		for (Seznamec seznamec =  najdiPocatek(genotyp); seznamec != null; seznamec = seznamec.next) {
 			IconDef iconDef = seznamec.iconDef;
 			if (iconDef == null) continue; // to bude určtitě v hlavičce obecných
@@ -61,7 +61,7 @@ public class Vrstva {
 						vybrane.clear();
 						vybrane.add(iconDef);
 						maxPriorita = iconDef.priorita;
-					} else if (iconDef.priorita < maxPriorita) { 
+					} else if (iconDef.priorita < maxPriorita) {
 						// ignorujeme toto, protože už máme s vyšší prioritou
 					} else { // máme nejvyšší prioritu, musíme tedy zjistit, které jsou méně obecné
 						boolean pridat = true;
@@ -93,7 +93,7 @@ public class Vrstva {
 	}
 
 	private Seznamec najdiPocatek(Genotyp genotyp) {
-	  Alela alelaSym = genotyp.getAlelaSym();
+		Alela alelaSym = genotyp.getAlelaSym();
 		Seznamec pocatek;
 		if (alelaSym == null) {
 			return hlavickaObecnych;
@@ -103,13 +103,13 @@ public class Vrstva {
 			return pocatek;
 		}
 		return hlavickaObecnych;
-  }
+	}
 
 
 	/**
 	 * @param aString
-	 * @param genotyp 
-	 * @param vybrane 
+	 * @param genotyp
+	 * @param vybrane
 	 */
 	private void error(String aString, Genotyp genotyp, List<IconDef> vybrane) {
 		System.err.println("Našlo se toho moc na zobrazení pro: " + genotyp);
@@ -117,15 +117,15 @@ public class Vrstva {
 			System.err.println("    " + iconDef.getSubdefs() + "  -  " + iconDef.idp.url);
 		}
 	}
-	
+
 	private class  Seznamec {
 		Seznamec next; // další položka. "Seznam má mnoho vrcholů v mapě dle symbolové alely a nakonec vždy jede dolů do seznamu spolčných icondefů.
 		IconDef iconDef;
-		
+
 	}
 
 	public Set<Alela> getPouziteAlely() {
-  	return pouziteAlely;
-  }
+		return pouziteAlely;
+	}
 
 }

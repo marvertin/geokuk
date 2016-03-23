@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.kesoid.importek;
 
@@ -9,17 +9,17 @@ package cz.geokuk.plugins.kesoid.importek;
  */
 public class GpxLink {
 
-  public String href;
-  public String text;
-  public String type;
-  
-  /* (non-Javadoc)
-   * @see java.lang.Object#toString()
-   */
-  @Override
-  public String toString() {
-    return "GpxLink [href=" + href + ", text=" + text + ", type=" + type + "]";
-  }
+	public String href;
+	public String text;
+	public String type;
 
-  
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "GpxLink [href=" + href + ", text=" + text + ", type=" + type + "]";
+	}
+
+
 }

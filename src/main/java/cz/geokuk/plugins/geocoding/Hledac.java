@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.geocoding;
 
@@ -24,7 +24,7 @@ import cz.geokuk.core.hledani.HledaciPodminka0;
 
 /**
  * @author veverka
- * 
+ *
  */
 public class Hledac extends Hledac0<Nalezenec> {
 
@@ -52,13 +52,13 @@ public class Hledac extends Hledac0<Nalezenec> {
 			for (int i = 0; i < adressList.getLength(); i++) {
 				Node item = adressList.item(i);
 				//System.out.println("xpath    " + item.getTextContent());
-				
+
 				String formatovanaAdresa = xpath.evaluate("formatted_address", item);
 				//System.out.println("xpath    " + formatovanaAdresa);
 				Nalezenec nalezenec = new Nalezenec();
 				nalezenec.adresa = formatovanaAdresa;
-				nalezenec.wgs = new Wgs(Double.parseDouble(xpath.evaluate("geometry/location/lat", item)), 
-						                Double.parseDouble(xpath.evaluate("geometry/location/lng", item)));
+				nalezenec.wgs = new Wgs(Double.parseDouble(xpath.evaluate("geometry/location/lat", item)),
+						Double.parseDouble(xpath.evaluate("geometry/location/lng", item)));
 				nalezenec.locationType = xpath.evaluate("geometry/location_type", item);
 				list.add(nalezenec);
 			}

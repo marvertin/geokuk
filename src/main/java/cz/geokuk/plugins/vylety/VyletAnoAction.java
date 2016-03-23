@@ -11,24 +11,24 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 
 public class VyletAnoAction extends VyletActionIndividual0 {
 
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  public VyletAnoAction(Kesoid kes) {
-    super("Lovím", kes);
+	public VyletAnoAction(Kesoid kes) {
+		super("Lovím", kes);
 
-    putValue(SHORT_DESCRIPTION, "Zařadí keš mezi favority, které chci lovit.");
-    putValue(MNEMONIC_KEY, KeyEvent.VK_L);
-    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('+'));
-    putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
-  }
+		putValue(SHORT_DESCRIPTION, "Zařadí keš mezi favority, které chci lovit.");
+		putValue(MNEMONIC_KEY, KeyEvent.VK_L);
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('+'));
+		putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
+	}
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    vyletModel.add(EVylet.ANO, kesoid());
-  }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		vyletModel.add(EVylet.ANO, kesoid());
+	}
 
-  @Override
-  protected void enablujPokudMaSmysl() {
-    setEnabled(vyletModel.get(kesoid()) != EVylet.ANO);
-  }
+	@Override
+	protected void enablujPokudMaSmysl() {
+		setEnabled(vyletModel.get(kesoid()) != EVylet.ANO);
+	}
 }

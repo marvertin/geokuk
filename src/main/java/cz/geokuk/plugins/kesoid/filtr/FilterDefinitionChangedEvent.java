@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.kesoid.filtr;
 
@@ -15,39 +15,39 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
  */
 public class FilterDefinitionChangedEvent extends Event0<KesoidModel> {
 
-  private final FilterDefinition filterDefinition;
-  private final Set<String> jmenaNechtenychAlel;
-  private final Set<String> jmenaAlelNaToolbaru;
+	private final FilterDefinition filterDefinition;
+	private final Set<String> jmenaNechtenychAlel;
+	private final Set<String> jmenaAlelNaToolbaru;
+
+	/**
+	 * @return the filterDefinition
+	 */
+	public FilterDefinition getFilterDefinition() {
+		return filterDefinition;
+	}
+
+	/**
 
   /**
-   * @return the filterDefinition
-   */
-  public FilterDefinition getFilterDefinition() {
-    return filterDefinition;
-  }
+	 * @return the jmenaAlelNaToolbaru
+	 */
+	public Set<String> getJmenaAlelNaToolbaru() {
+		return jmenaAlelNaToolbaru;
+	}
 
-  /**
+	/**
+	 * @return the jmenaNechtenychAlel
+	 */
+	public Set<String> getJmenaNechtenychAlel() {
+		return jmenaNechtenychAlel;
+	}
 
-  /**
-   * @return the jmenaAlelNaToolbaru
-   */
-  public Set<String> getJmenaAlelNaToolbaru() {
-    return jmenaAlelNaToolbaru;
-  }
+	public FilterDefinitionChangedEvent(FilterDefinition filterDefinition, Set<String> jmenaNechtenychAlel, Set<String> jmenaAlelNaToolbaru) {
+		this.filterDefinition = filterDefinition;
+		this.jmenaNechtenychAlel = jmenaNechtenychAlel;
+		this.jmenaAlelNaToolbaru = jmenaAlelNaToolbaru;
+	}
 
-  /**
-   * @return the jmenaNechtenychAlel
-   */
-  public Set<String> getJmenaNechtenychAlel() {
-    return jmenaNechtenychAlel;
-  }
 
-  public FilterDefinitionChangedEvent(FilterDefinition filterDefinition, Set<String> jmenaNechtenychAlel, Set<String> jmenaAlelNaToolbaru) {
-    this.filterDefinition = filterDefinition;
-    this.jmenaNechtenychAlel = jmenaNechtenychAlel;
-    this.jmenaAlelNaToolbaru = jmenaAlelNaToolbaru;
-  }
 
-  
-  
 }

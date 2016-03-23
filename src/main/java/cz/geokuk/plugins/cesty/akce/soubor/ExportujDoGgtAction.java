@@ -15,43 +15,43 @@ import org.apache.logging.log4j.Logger;
 
 public class ExportujDoGgtAction extends SouboeCestaAction0 {
 
-    private static final Logger log =
-            LogManager.getLogger(ExportujDoGgtAction.class.getSimpleName());
+	private static final Logger log =
+			LogManager.getLogger(ExportujDoGgtAction.class.getSimpleName());
 
-  private static final long serialVersionUID = 1L;
-  private Doc doc;
+	private static final long serialVersionUID = 1L;
+	private Doc doc;
 
 
-  public ExportujDoGgtAction() {
-    super("Exportovat cesty do GGT ...");
-    putValue(SHORT_DESCRIPTION, "Uloží zadaný výlet do GGT soubor, vhodné pro Geoget");
-    putValue(MNEMONIC_KEY, KeyEvent.VK_E);
-    //putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
-  }
+	public ExportujDoGgtAction() {
+		super("Exportovat cesty do GGT ...");
+		putValue(SHORT_DESCRIPTION, "Uloží zadaný výlet do GGT soubor, vhodné pro Geoget");
+		putValue(MNEMONIC_KEY, KeyEvent.VK_E);
+		//putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
+	}
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
+	@Override
+	public void actionPerformed(ActionEvent e) {
 
-    JFileChooser fc = new JFileChooser();
-    fc.addChoosableFileFilter(new GgtFilter());
-    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    fc.setSelectedFile(cestyModel.defaultExportuDoGgt());
-    int result = fc.showDialog(Dlg.parentFrame(), "Exportovat GGT");
-    if (result == JFileChooser.APPROVE_OPTION) {
-      File selectedFile = doplnGgtPriponuProUkladani(fc.getSelectedFile());
-      if (selectedFile.exists()) { // dtaz na přepsání
-        if (! Dlg.prepsatSoubor(selectedFile)) return;
-      }
-      cestyModel.exportujDoGgt(selectedFile, doc);
-      log.info("Uložena cesta do: " + doc.getFile());
-    }
-    // TODO ukládat na pozadí
-  }
+		JFileChooser fc = new JFileChooser();
+		fc.addChoosableFileFilter(new GgtFilter());
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.setSelectedFile(cestyModel.defaultExportuDoGgt());
+		int result = fc.showDialog(Dlg.parentFrame(), "Exportovat GGT");
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = doplnGgtPriponuProUkladani(fc.getSelectedFile());
+			if (selectedFile.exists()) { // dtaz na přepsání
+				if (! Dlg.prepsatSoubor(selectedFile)) return;
+			}
+			cestyModel.exportujDoGgt(selectedFile, doc);
+			log.info("Uložena cesta do: " + doc.getFile());
+		}
+		// TODO ukládat na pozadí
+	}
 
-  public void onEvent(CestyChangedEvent event) {
-    doc = event.getDoc();
-    setEnabled(doc != null && (! doc.isEmpty()));
-  }
+	public void onEvent(CestyChangedEvent event) {
+		doc = event.getDoc();
+		setEnabled(doc != null && (! doc.isEmpty()));
+	}
 
 
 }

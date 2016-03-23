@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.util.lang;
 
@@ -10,11 +10,11 @@ package cz.geokuk.util.lang;
  *
  */
 public interface IAtomString extends IAtom {
-  
-  /**
-   * Převede atomický typ na řetězec v kanonickém tvaru.
-   * @return
-   */
-  public String toString();
+
+	/**
+	 * Převede atomický typ na řetězec v kanonickém tvaru.
+	 * @return
+	 */
+	public String toString();
 
 }

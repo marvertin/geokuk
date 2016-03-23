@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.render;
 
@@ -8,29 +8,29 @@ package cz.geokuk.core.render;
  *
  */
 public enum EImageType {
-  bmp(false),
-  png(true),
-  jpg(false),
-  ;
+	bmp(false),
+	png(true),
+	jpg(false),
+	;
 
-  private final boolean umoznujePruhlednost;
+	private final boolean umoznujePruhlednost;
 
-  /**
-   * @return the umoznujePruhlednost
-   */
-  public boolean isUmoznujePruhlednost() {
-    return umoznujePruhlednost;
-  }
+	/**
+	 * @return the umoznujePruhlednost
+	 */
+	public boolean isUmoznujePruhlednost() {
+		return umoznujePruhlednost;
+	}
 
-  /**
-   * 
-   */
-  private EImageType(boolean umoznujePruhlednost) {
-    this.umoznujePruhlednost = umoznujePruhlednost;
-  }
+	/**
+	 *
+	 */
+	private EImageType(boolean umoznujePruhlednost) {
+		this.umoznujePruhlednost = umoznujePruhlednost;
+	}
 
-  public String getType() {
-    return name().toLowerCase();
+	public String getType() {
+		return name().toLowerCase();
 
-  }
+	}
 }

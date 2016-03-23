@@ -11,19 +11,19 @@ import java.io.Serializable;
  * @version 1.0
  */
 
-public abstract class AObject0 implements Serializable, IAtomString 
+public abstract class AObject0 implements Serializable, IAtomString
 {
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 1096188445300191688L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1096188445300191688L;
 
-  /**
-   * Určuje, zda je hodnota atomického typu z jistého pohledu validní.
-   * @return Předek vrací true, potomek musí případně přepsat.
-   */
-  public boolean isValid() {
-    return true;
-  }
+	/**
+	 * Určuje, zda je hodnota atomického typu z jistého pohledu validní.
+	 * @return Předek vrací true, potomek musí případně přepsat.
+	 */
+	public boolean isValid() {
+		return true;
+	}
 
 }

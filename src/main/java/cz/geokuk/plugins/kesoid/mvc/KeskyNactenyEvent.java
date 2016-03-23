@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.kesoid.mvc;
 
@@ -11,17 +11,17 @@ import cz.geokuk.plugins.kesoid.KesBag;
  *
  */
 public class KeskyNactenyEvent extends Event0<KesoidModel> {
-  private final KesBag vsechny;
+	private final KesBag vsechny;
 
-  /**
-   * @return the informaceOZdrojich
-   */
-  public KeskyNactenyEvent(KesBag vsechny) {
-    super();
-    this.vsechny = vsechny;
-  }
+	/**
+	 * @return the informaceOZdrojich
+	 */
+	public KeskyNactenyEvent(KesBag vsechny) {
+		super();
+		this.vsechny = vsechny;
+	}
 
-  public KesBag getVsechny() {
-    return vsechny;
-  }
+	public KesBag getVsechny() {
+		return vsechny;
+	}
 }

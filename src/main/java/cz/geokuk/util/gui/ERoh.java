@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.util.gui;
 
@@ -8,5 +8,5 @@ package cz.geokuk.util.gui;
  *
  */
 public enum ERoh {
-  JZ, JV, SZ, SV
+	JZ, JV, SZ, SV
 }

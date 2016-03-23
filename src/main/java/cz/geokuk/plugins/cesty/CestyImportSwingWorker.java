@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.cesty;
 
@@ -21,42 +21,42 @@ import org.apache.logging.log4j.Logger;
  */
 public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 
-    private static final Logger log =
-            LogManager.getLogger(CestyImportSwingWorker.class.getSimpleName());
+	private static final Logger log =
+			LogManager.getLogger(CestyImportSwingWorker.class.getSimpleName());
 
-  private final CestyZperzistentnovac cestyZperzistentnovac;
-  private final KesBag kesBag;
-  private final CestyModel cestyModel;
-  private final List<File> files;
-
-
-  public CestyImportSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, KesBag vsechny, CestyModel cestyModel, List<File> files) {
-    this.cestyZperzistentnovac = cestyZperzistentnovac;
-    kesBag = vsechny;
-    this.cestyModel = cestyModel;
-    this.files = files;
-  }
+	private final CestyZperzistentnovac cestyZperzistentnovac;
+	private final KesBag kesBag;
+	private final CestyModel cestyModel;
+	private final List<File> files;
 
 
-  /* (non-Javadoc)
-   * @see javax.swing.SwingWorker#doInBackground()
-   */
-  @Override
-  public List<Cesta> doInBackground() throws Exception {
-    List<Cesta> cesty = cestyZperzistentnovac.nacti(files, kesBag);
-    return cesty;
-  }
+	public CestyImportSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, KesBag vsechny, CestyModel cestyModel, List<File> files) {
+		this.cestyZperzistentnovac = cestyZperzistentnovac;
+		kesBag = vsechny;
+		this.cestyModel = cestyModel;
+		this.files = files;
+	}
 
-  /* (non-Javadoc)
-   * @see javax.swing.SwingWorker#done()
-   */
-  @Override
-  protected void donex() throws InterruptedException, ExecutionException {
-    List<Cesta> cesty = get();
-    if (cesty == null) return; // asi zkanclváno
-    log.info("Načteny cesty %d: \n",  cesty.size());
-    cestyModel.prevezmiImportovaneCesty(cesty);
-  }
+
+	/* (non-Javadoc)
+	 * @see javax.swing.SwingWorker#doInBackground()
+	 */
+	@Override
+	public List<Cesta> doInBackground() throws Exception {
+		List<Cesta> cesty = cestyZperzistentnovac.nacti(files, kesBag);
+		return cesty;
+	}
+
+	/* (non-Javadoc)
+	 * @see javax.swing.SwingWorker#done()
+	 */
+	@Override
+	protected void donex() throws InterruptedException, ExecutionException {
+		List<Cesta> cesty = get();
+		if (cesty == null) return; // asi zkanclváno
+		log.info("Načteny cesty %d: \n",  cesty.size());
+		cestyModel.prevezmiImportovaneCesty(cesty);
+	}
 
 
 }

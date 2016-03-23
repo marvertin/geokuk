@@ -54,243 +54,243 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-  private static final long serialVersionUID = 7087453419069194768L;
+	private static final long serialVersionUID = 7087453419069194768L;
 
 
-  private JTextField jKesPatternEdit;
-  private JTextField jWaymarkPatternEdit;
-  private JTextField jCgpPatternEdit;
-  private JTextField jSimplewaypontPatternEdit;
+	private JTextField jKesPatternEdit;
+	private JTextField jWaymarkPatternEdit;
+	private JTextField jCgpPatternEdit;
+	private JTextField jSimplewaypontPatternEdit;
 
-  private final JLabel jKesPatternLabel = new JLabel("Keš:");
-  private final JLabel jWaymarkPatternLabel = new JLabel("Waymark:");
-  private final JLabel jCgpPatternLabel = new JLabel("Czech geodetic point:");
-  private final JLabel jSimplewaypontPatternLabel = new JLabel("Simple waypoint:");
+	private final JLabel jKesPatternLabel = new JLabel("Keš:");
+	private final JLabel jWaymarkPatternLabel = new JLabel("Waymark:");
+	private final JLabel jCgpPatternLabel = new JLabel("Czech geodetic point:");
+	private final JLabel jSimplewaypontPatternLabel = new JLabel("Simple waypoint:");
 
-  private PopiskyModel popiskyModel;
-
-
-  private JVlastnostiPisma jVlastnostiPisma = new JVlastnostiPisma();
-
-  public JPopiskyDialog() {
-    setTitle("Nastavení paramtrů popisek keší na mapě");
-    init();
-  }
-
-  public void onEvent(final PopiskyPreferencesChangeEvent event) {
-    final PopiskySettings pose = event.pose;
-
-    final VlastnostiPismaModel vlastnostiPismaModel = jVlastnostiPisma.getVlastnostiPismaModel();
-    vlastnostiPismaModel.setBackground(pose.background);
-    vlastnostiPismaModel.setForeground(pose.foreground);
-    vlastnostiPismaModel.setPosuX(pose.getPosuX());
-    vlastnostiPismaModel.setPosuY(pose.getPosuY());
-    vlastnostiPismaModel.setFont(pose.getFont());
-
-    setPattern(jKesPatternEdit, pose.getPatterns().getKesPattern());
-    setPattern(jWaymarkPatternEdit, pose.getPatterns().getWaymarkPattern());
-    setPattern(jCgpPatternEdit, pose.getPatterns().getCgpPattern());
-    setPattern(jSimplewaypontPatternEdit, pose.getPatterns().getSimplewaypointPattern());
-  }
-
-  private void setPattern(final JTextField jField, final String pattern) {
-    if (! jField.getText().equals(pattern)) {
-      jField.setText(pattern);
-    }
-
-  }
-
-  /** This method is called from within the constructor to
-   * initialize the form.
-   */
-  @Override
-  protected void initComponents() {
-    jKesPatternEdit = new JTextField();
-    jWaymarkPatternEdit = new JTextField();
-    jCgpPatternEdit = new JTextField();
-    jSimplewaypontPatternEdit = new JTextField();
+	private PopiskyModel popiskyModel;
 
 
-    jVlastnostiPisma = new JVlastnostiPisma();
+	private JVlastnostiPisma jVlastnostiPisma = new JVlastnostiPisma();
 
-    final JPanel pan = new JPanel(new BorderLayout());
-    pan.add(jVlastnostiPisma);
-    final JPanel patternPan = new JPanel();
-    grlay(patternPan);
-    pan.add(patternPan, BorderLayout.NORTH);
+	public JPopiskyDialog() {
+		setTitle("Nastavení paramtrů popisek keší na mapě");
+		init();
+	}
 
-    add(pan);
-    pack();
-  }
+	public void onEvent(final PopiskyPreferencesChangeEvent event) {
+		final PopiskySettings pose = event.pose;
 
+		final VlastnostiPismaModel vlastnostiPismaModel = jVlastnostiPisma.getVlastnostiPismaModel();
+		vlastnostiPismaModel.setBackground(pose.background);
+		vlastnostiPismaModel.setForeground(pose.foreground);
+		vlastnostiPismaModel.setPosuX(pose.getPosuX());
+		vlastnostiPismaModel.setPosuY(pose.getPosuY());
+		vlastnostiPismaModel.setFont(pose.getFont());
 
-  private void grlay(final JPanel panel) {
-    final GroupLayout layout = new GroupLayout(panel);
-    panel.setBorder(BorderFactory.createTitledBorder("Vzorky popisků: " + SestavovacPopisku.getNahrazovaceDisplay()));
-    panel.setLayout(layout);
-    layout.setAutoCreateGaps(true);
-    layout.setAutoCreateContainerGaps(true);
+		setPattern(jKesPatternEdit, pose.getPatterns().getKesPattern());
+		setPattern(jWaymarkPatternEdit, pose.getPatterns().getWaymarkPattern());
+		setPattern(jCgpPatternEdit, pose.getPatterns().getCgpPattern());
+		setPattern(jSimplewaypontPatternEdit, pose.getPatterns().getSimplewaypointPattern());
+	}
 
-    //    panel.add(jKesPatternEdit);
-    //    panel.add(jWaymarkPatternEdit);
-    //    panel.add(jCgpPatternEdit);
-    //    panel.add(jSimplewaypontPatternEdit);
+	private void setPattern(final JTextField jField, final String pattern) {
+		if (! jField.getText().equals(pattern)) {
+			jField.setText(pattern);
+		}
 
-    layout.setHorizontalGroup(layout.createSequentialGroup()       //hroup
-        .addGroup(layout.createParallelGroup()  //h1
-            .addComponent(jKesPatternLabel)
-            .addComponent(jWaymarkPatternLabel)
-            .addComponent(jCgpPatternLabel)
-            .addComponent(jSimplewaypontPatternLabel)
-            )
-        .addGroup(layout.createParallelGroup()  //h1
-            .addComponent(jKesPatternEdit)
-            .addComponent(jWaymarkPatternEdit)
-            .addComponent(jCgpPatternEdit)
-            .addComponent(jSimplewaypontPatternEdit)
-            )
-        );
-    layout.setVerticalGroup(layout.createSequentialGroup()       //hroup
-        .addGroup(layout.createParallelGroup()  //h1
-            .addComponent(jKesPatternLabel)
-            .addComponent(jKesPatternEdit)
-            )
-        .addGroup(layout.createParallelGroup()  //h1
-            .addComponent(jWaymarkPatternLabel)
-            .addComponent(jWaymarkPatternEdit)
-            )
-        .addGroup(layout.createParallelGroup()  //h1
-            .addComponent(jCgpPatternLabel)
-            .addComponent(jCgpPatternEdit)
-            )
-        .addGroup(layout.createParallelGroup()  //h1
-            .addComponent(jSimplewaypontPatternLabel)
-            .addComponent(jSimplewaypontPatternEdit)
-            )
-        );
-  }
+	}
 
-  //  private JPanel obalRameckem(JComponent com, String title) {
-  //  }
-  /**
-   *
-   */
-  private void registerEvents() {
-
-    jVlastnostiPisma.getVlastnostiPismaModel().addChangeListener(new ChangeListener() {
-
-      @Override
-      public void stateChanged(final ChangeEvent e) {
-        final VlastnostiPismaModel vlastnostiPismaModel = jVlastnostiPisma.getVlastnostiPismaModel();
-        final PopiskySettings data = popiskyModel.getData();
-        data.background = vlastnostiPismaModel.getBackground();
-        data.foreground = vlastnostiPismaModel.getForeground();
-        data.font = vlastnostiPismaModel.getFont();
-        data.posuX = vlastnostiPismaModel.getPosuX();
-        data.posuY = vlastnostiPismaModel.getPosuY();
-        popiskyModel.setData(data);
-      }
-    });
-
-    jKesPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
-      @Override
-      public void removeUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      @Override
-      public void insertUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      @Override
-      public void changedUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      private void zmena() {
-        final PopiskySettings data = popiskyModel.getData();
-        data.patterns.setKesPattern(jKesPatternEdit.getText());
-        popiskyModel.setData(data);
-      }
-    });
-
-    jWaymarkPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
-      @Override
-      public void removeUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      @Override
-      public void insertUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      @Override
-      public void changedUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      private void zmena() {
-        final PopiskySettings data = popiskyModel.getData();
-        data.patterns.setWaymarkPattern(jWaymarkPatternEdit.getText());
-        popiskyModel.setData(data);
-      }
-    });
-
-    jCgpPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
-      @Override
-      public void removeUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      @Override
-      public void insertUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      @Override
-      public void changedUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      private void zmena() {
-        final PopiskySettings data = popiskyModel.getData();
-        data.patterns.setCgpPattern(jCgpPatternEdit.getText());
-        popiskyModel.setData(data);
-      }
-    });
-
-    jSimplewaypontPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
-      @Override
-      public void removeUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      @Override
-      public void insertUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      @Override
-      public void changedUpdate(final DocumentEvent e) {
-        zmena();
-      }
-      private void zmena() {
-        final PopiskySettings data = popiskyModel.getData();
-        data.patterns.setSimplewaypointPattern(jSimplewaypontPatternEdit.getText());
-        popiskyModel.setData(data);
-      }
-    });
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 */
+	@Override
+	protected void initComponents() {
+		jKesPatternEdit = new JTextField();
+		jWaymarkPatternEdit = new JTextField();
+		jCgpPatternEdit = new JTextField();
+		jSimplewaypontPatternEdit = new JTextField();
 
 
-  }
+		jVlastnostiPisma = new JVlastnostiPisma();
 
-  public void inject (final PopiskyModel popiskyModel) {
-    this.popiskyModel = popiskyModel;
-  }
+		final JPanel pan = new JPanel(new BorderLayout());
+		pan.add(jVlastnostiPisma);
+		final JPanel patternPan = new JPanel();
+		grlay(patternPan);
+		pan.add(patternPan, BorderLayout.NORTH);
 
-  /* (non-Javadoc)
-   * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
-   */
-  @Override
-  public void initAfterEventReceiverRegistration() {
-    registerEvents();
-  }
+		add(pan);
+		pack();
+	}
 
-  @Override
-  protected String getTemaNapovedyDialogu() {
-    return "PopiskyKesoidu";
-  }
+
+	private void grlay(final JPanel panel) {
+		final GroupLayout layout = new GroupLayout(panel);
+		panel.setBorder(BorderFactory.createTitledBorder("Vzorky popisků: " + SestavovacPopisku.getNahrazovaceDisplay()));
+		panel.setLayout(layout);
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
+
+		//    panel.add(jKesPatternEdit);
+		//    panel.add(jWaymarkPatternEdit);
+		//    panel.add(jCgpPatternEdit);
+		//    panel.add(jSimplewaypontPatternEdit);
+
+		layout.setHorizontalGroup(layout.createSequentialGroup()       //hroup
+				.addGroup(layout.createParallelGroup()  //h1
+						.addComponent(jKesPatternLabel)
+						.addComponent(jWaymarkPatternLabel)
+						.addComponent(jCgpPatternLabel)
+						.addComponent(jSimplewaypontPatternLabel)
+						)
+				.addGroup(layout.createParallelGroup()  //h1
+						.addComponent(jKesPatternEdit)
+						.addComponent(jWaymarkPatternEdit)
+						.addComponent(jCgpPatternEdit)
+						.addComponent(jSimplewaypontPatternEdit)
+						)
+				);
+		layout.setVerticalGroup(layout.createSequentialGroup()       //hroup
+				.addGroup(layout.createParallelGroup()  //h1
+						.addComponent(jKesPatternLabel)
+						.addComponent(jKesPatternEdit)
+						)
+				.addGroup(layout.createParallelGroup()  //h1
+						.addComponent(jWaymarkPatternLabel)
+						.addComponent(jWaymarkPatternEdit)
+						)
+				.addGroup(layout.createParallelGroup()  //h1
+						.addComponent(jCgpPatternLabel)
+						.addComponent(jCgpPatternEdit)
+						)
+				.addGroup(layout.createParallelGroup()  //h1
+						.addComponent(jSimplewaypontPatternLabel)
+						.addComponent(jSimplewaypontPatternEdit)
+						)
+				);
+	}
+
+	//  private JPanel obalRameckem(JComponent com, String title) {
+	//  }
+	/**
+	 *
+	 */
+	private void registerEvents() {
+
+		jVlastnostiPisma.getVlastnostiPismaModel().addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(final ChangeEvent e) {
+				final VlastnostiPismaModel vlastnostiPismaModel = jVlastnostiPisma.getVlastnostiPismaModel();
+				final PopiskySettings data = popiskyModel.getData();
+				data.background = vlastnostiPismaModel.getBackground();
+				data.foreground = vlastnostiPismaModel.getForeground();
+				data.font = vlastnostiPismaModel.getFont();
+				data.posuX = vlastnostiPismaModel.getPosuX();
+				data.posuY = vlastnostiPismaModel.getPosuY();
+				popiskyModel.setData(data);
+			}
+		});
+
+		jKesPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			@Override
+			public void insertUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			@Override
+			public void changedUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			private void zmena() {
+				final PopiskySettings data = popiskyModel.getData();
+				data.patterns.setKesPattern(jKesPatternEdit.getText());
+				popiskyModel.setData(data);
+			}
+		});
+
+		jWaymarkPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			@Override
+			public void insertUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			@Override
+			public void changedUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			private void zmena() {
+				final PopiskySettings data = popiskyModel.getData();
+				data.patterns.setWaymarkPattern(jWaymarkPatternEdit.getText());
+				popiskyModel.setData(data);
+			}
+		});
+
+		jCgpPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			@Override
+			public void insertUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			@Override
+			public void changedUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			private void zmena() {
+				final PopiskySettings data = popiskyModel.getData();
+				data.patterns.setCgpPattern(jCgpPatternEdit.getText());
+				popiskyModel.setData(data);
+			}
+		});
+
+		jSimplewaypontPatternEdit.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			@Override
+			public void insertUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			@Override
+			public void changedUpdate(final DocumentEvent e) {
+				zmena();
+			}
+			private void zmena() {
+				final PopiskySettings data = popiskyModel.getData();
+				data.patterns.setSimplewaypointPattern(jSimplewaypontPatternEdit.getText());
+				popiskyModel.setData(data);
+			}
+		});
+
+
+	}
+
+	public void inject (final PopiskyModel popiskyModel) {
+		this.popiskyModel = popiskyModel;
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
+	 */
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		registerEvents();
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "PopiskyKesoidu";
+	}
 
 }
 

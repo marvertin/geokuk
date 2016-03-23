@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.util.gui;
 
@@ -16,27 +16,27 @@ import javax.swing.JComponent;
 public final class FComponent {  private FComponent() {}
 
 public static void enableMouseSroll(JComponent component) {
-  component.addMouseMotionListener(new ScrollRectToVisibleListener());
-  component.setAutoscrolls(true);
+	component.addMouseMotionListener(new ScrollRectToVisibleListener());
+	component.setAutoscrolls(true);
 }
 
 public static void setEnabled(Component component, boolean enabled) {
-  component.setEnabled(enabled);
-  if (component instanceof Container) {
-      Container container = (Container) component;
-      for (Component c : container.getComponents()) {
-          setEnabled(c, enabled);
-      }
-  }
+	component.setEnabled(enabled);
+	if (component instanceof Container) {
+		Container container = (Container) component;
+		for (Component c : container.getComponents()) {
+			setEnabled(c, enabled);
+		}
+	}
 }
 
 public static void setEnabledChildren(Component component, boolean enabled) {
-  if (component instanceof Container) {
-    Container container = (Container) component;
-    for (Component c : container.getComponents()) {
-        setEnabled(c, enabled);
-    }
-  }
+	if (component instanceof Container) {
+		Container container = (Container) component;
+		for (Component c : container.getComponents()) {
+			setEnabled(c, enabled);
+		}
+	}
 }
 
 

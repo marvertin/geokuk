@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.program;
 

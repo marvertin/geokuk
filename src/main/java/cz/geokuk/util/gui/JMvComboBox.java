@@ -12,58 +12,58 @@ import cz.geokuk.util.gui.SelectionModel.Item;
 
 public class JMvComboBox<T> extends JComboBox<Item<T>> {
 
-  private static final long serialVersionUID = 3831515220850009660L;
+	private static final long serialVersionUID = 3831515220850009660L;
 
-  private SelectionModel<T> model = new SelectionModel<>();
+	private SelectionModel<T> model = new SelectionModel<>();
 
-  public void setSelectionModel(final SelectionModel<T> model) {
-    this.model = model;
-    final DefaultComboBoxModel<Item<T>> defmod = new DefaultComboBoxModel<>();
-    setModel(defmod);
-    List<Item<T>> items = model.items;
-    for (Item<T> item : items) {
-      defmod.addElement(item);
-    }
-    defmod.addListDataListener(new ListDataListener() {
+	public void setSelectionModel(final SelectionModel<T> model) {
+		this.model = model;
+		final DefaultComboBoxModel<Item<T>> defmod = new DefaultComboBoxModel<>();
+		setModel(defmod);
+		List<Item<T>> items = model.items;
+		for (Item<T> item : items) {
+			defmod.addElement(item);
+		}
+		defmod.addListDataListener(new ListDataListener() {
 
-      @Override
-      public void intervalRemoved(ListDataEvent e) {
-        nastavto();
-      }
+			@Override
+			public void intervalRemoved(ListDataEvent e) {
+				nastavto();
+			}
 
-      @Override
-      public void intervalAdded(ListDataEvent e) {
-        nastavto();
-      }
+			@Override
+			public void intervalAdded(ListDataEvent e) {
+				nastavto();
+			}
 
-      @Override
-      public void contentsChanged(ListDataEvent e) {
-        nastavto();
-      }
+			@Override
+			public void contentsChanged(ListDataEvent e) {
+				nastavto();
+			}
 
-      private void nastavto() {
-        @SuppressWarnings("unchecked")
-        Item<T> item =((Item<T>) defmod.getSelectedItem());
-        model.setSelectedItem(item);
-      }
-    });
-    model.addListener(new SelectionListener<T>() {
-      @Override
-      public void selectionChanged(SelectionEvent<T> event) {
-        defmod.setSelectedItem(event.item);
-      }
-    });
+			private void nastavto() {
+				@SuppressWarnings("unchecked")
+				Item<T> item =((Item<T>) defmod.getSelectedItem());
+				model.setSelectedItem(item);
+			}
+		});
+		model.addListener(new SelectionListener<T>() {
+			@Override
+			public void selectionChanged(SelectionEvent<T> event) {
+				defmod.setSelectedItem(event.item);
+			}
+		});
 
-  }
-
-
-  public SelectionModel<T> getSelectionModel() {
-    return model;
-  }
+	}
 
 
-  @Override
-  public Dimension getMaximumSize() {
-    return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
-  }
+	public SelectionModel<T> getSelectionModel() {
+		return model;
+	}
+
+
+	@Override
+	public Dimension getMaximumSize() {
+		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	}
 }

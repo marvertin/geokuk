@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Stream drží veškerá data, která se načetla a dokáže je pak vydat jako 
+ * Stream drží veškerá data, která se načetla a dokáže je pak vydat jako
  * bytové pole.
  * @author tatinek
  *
@@ -14,7 +14,7 @@ import java.io.InputStream;
 class DataHoldingInputStream extends FilterInputStream{
 
 	private ByteArrayOutputStream baos = new ByteArrayOutputStream(256*256);
-	
+
 	protected DataHoldingInputStream(InputStream in) {
 		super(in);
 	}

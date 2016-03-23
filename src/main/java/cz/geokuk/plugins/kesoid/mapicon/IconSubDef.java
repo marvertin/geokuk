@@ -9,15 +9,15 @@ import java.util.Set;
  */
 public class IconSubDef {
 	final Set<Alela> alely;
-	
+
 	public IconSubDef(Set<Alela> alely) {
 		this.alely = alely;
-  }
+	}
 
 	@Override
 	public String toString() {
-	  return alely.toString();
+		return alely.toString();
 	}
-	
-	
+
+
 }

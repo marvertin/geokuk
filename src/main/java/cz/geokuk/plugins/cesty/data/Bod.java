@@ -7,313 +7,313 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 public class Bod extends Bousek0 implements Uchopenec {
 
-  Mouable mouable;
+	Mouable mouable;
 
-  private Usek uvpred;
-  private Usek uvzad;
-
-
-
-  Bod(Cesta cesta, Mouable mouable) {
-    super(cesta);
-    this.mouable = mouable;
-  }
+	private Usek uvpred;
+	private Usek uvzad;
 
 
-  @Override
-  public Mou getMou() {
-    return mouable.getMou();
-  }
+
+	Bod(Cesta cesta, Mouable mouable) {
+		super(cesta);
+		this.mouable = mouable;
+	}
 
 
-  @Override
-  boolean jeVOpsanemObdelniku(Mou mou) {
-    return false;
-  }
+	@Override
+	public Mou getMou() {
+		return mouable.getMou();
+	}
 
 
-  @Override
-  public long computeKvadratVzdalenosti(Mou mou) {
-    if (mou == null) return Long.MAX_VALUE;
-    Mou m = getMou();
-    long dx = m.xx - mou.xx;
-    long dy = m.yy - mou.yy;
-    long kvadrat = dx * dx + dy * dy;
-    return kvadrat;
-  }
-
-  /**
-   * Určuje jak je bod daleko kolmo k úsečce,
-   * která spojuje druhé strany úseků vedoucí z tohoto bodu.
-   * Pokud je tento bod krajový nebo pokud kolmice spuštěná z tohoto
-   * bodu ke zmíněné úsečce na úsečce neleží, vrací MAC_VALUE, takže je to moc daleko.
-   * @return
-   */
-  public long computeKvadratOdklonu() {
-    if (uvpred == null || uvzad == null) return Long.MAX_VALUE; // moc odkloneno, kdyz neurcime
-    Bod b1 = uvzad.getBvzad();
-    Bod b2 = uvpred.getBvpred();
-    Usek pomUsek = getCesta().createUsek();
-    pomUsek.setBvzad(b1);
-    pomUsek.setBvpred(b2);
-    long odklon = pomUsek.computeKvadratVzdalenostiBoduKUsecce(getMou());
-    return odklon;
-  }
-
-  /**
-   * Odstraní bod z cesty včetně přilehlých úseků a zbylé body spojí novým úsekem.
-   * Vrací nově vytvořený úsek
-   */
-  Usek remove() {
-    setChanged();
-    if (isKrajovy()) {
-      if (isStart()) {
-        getCesta().setStart(getBvpred());
-      }
-      if (isCil()) {
-        getCesta().setCil(getBvzad());
-      }
-      if (cesta.isEmpty()) { // prázdné cesty nechceme
-        getCesta().remove();
-      }
-      return null;
-    } else {
-      Usek usek = getCesta().createUsek();
-      usek.setVzdusny(uvzad.isVzdusny() && uvpred.isVzdusny());
-      usek.spoj(uvzad.getBvzad(), uvpred.getBvpred());
-      return usek;
-    }
-  }
-
-  public boolean isStart() {
-    return uvzad == null;
-  }
-
-  public boolean isCil() {
-    return uvpred == null;
-  }
-
-  public boolean isKrajovy() {
-    return uvpred == null || uvzad == null;
-  }
-
-  public boolean isVnitrni() {
-    return uvpred != null && uvzad != null;
-  }
-
-  public boolean isSamostatny() {
-    return uvpred == null && uvzad == null;
-  }
+	@Override
+	boolean jeVOpsanemObdelniku(Mou mou) {
+		return false;
+	}
 
 
-  /**
-   * Pokud je bod bodem krajovým, vrací krajový úsek, pokud je vnitřní nebo samsotatný,
-   * vrací null.
-   * @return
-   */
-  public Usek getKrajovyUsek() {
-    if (!isKrajovy()) return null;
-    if (uvzad != null) return uvzad;
-    return uvpred;
-  }
+	@Override
+	public long computeKvadratVzdalenosti(Mou mou) {
+		if (mou == null) return Long.MAX_VALUE;
+		Mou m = getMou();
+		long dx = m.xx - mou.xx;
+		long dy = m.yy - mou.yy;
+		long kvadrat = dx * dx + dy * dy;
+		return kvadrat;
+	}
 
-  /**
-   * Vrátí bližší úsek z obou úseků, kpokud jsou oba.
-   * Pokud je jediný úsek, vrátí ho jen tehdy, kdy je ten ůsek blíž než tento bod,
-   * jinak vrací null.
-   * @param mou
-   * @return
-   */
-  public Usek getBlizsiUsek(Mou mou) {
-    if (isVnitrni()) {
-      long kvadrat1 = uvzad.computeKvadratVzdalenostiKPrimce(mou);
-      long kvadrat2 = uvpred.computeKvadratVzdalenostiKPrimce(mou);
-      Usek usek = kvadrat1 > kvadrat2 ? uvzad : uvpred; // ano, pravdu maximum, protože díky křížení je to blíž
-      return usek;
-    }
-    Usek usek = getKrajovyUsek();
-    if (usek == null) return null; // tak uz to muze byt jen samsotatny bod
-    if (usek.getNejblizsiBodKolmoKUsecce(mou) != null) return usek; // kdyz je kolmo k úsečce, je to ten úsek
-    return null; // jinak null, protože to není bližší úsek
+	/**
+	 * Určuje jak je bod daleko kolmo k úsečce,
+	 * která spojuje druhé strany úseků vedoucí z tohoto bodu.
+	 * Pokud je tento bod krajový nebo pokud kolmice spuštěná z tohoto
+	 * bodu ke zmíněné úsečce na úsečce neleží, vrací MAC_VALUE, takže je to moc daleko.
+	 * @return
+	 */
+	public long computeKvadratOdklonu() {
+		if (uvpred == null || uvzad == null) return Long.MAX_VALUE; // moc odkloneno, kdyz neurcime
+		Bod b1 = uvzad.getBvzad();
+		Bod b2 = uvpred.getBvpred();
+		Usek pomUsek = getCesta().createUsek();
+		pomUsek.setBvzad(b1);
+		pomUsek.setBvpred(b2);
+		long odklon = pomUsek.computeKvadratVzdalenostiBoduKUsecce(getMou());
+		return odklon;
+	}
 
+	/**
+	 * Odstraní bod z cesty včetně přilehlých úseků a zbylé body spojí novým úsekem.
+	 * Vrací nově vytvořený úsek
+	 */
+	Usek remove() {
+		setChanged();
+		if (isKrajovy()) {
+			if (isStart()) {
+				getCesta().setStart(getBvpred());
+			}
+			if (isCil()) {
+				getCesta().setCil(getBvzad());
+			}
+			if (cesta.isEmpty()) { // prázdné cesty nechceme
+				getCesta().remove();
+			}
+			return null;
+		} else {
+			Usek usek = getCesta().createUsek();
+			usek.setVzdusny(uvzad.isVzdusny() && uvpred.isVzdusny());
+			usek.spoj(uvzad.getBvzad(), uvpred.getBvpred());
+			return usek;
+		}
+	}
 
-  }
+	public boolean isStart() {
+		return uvzad == null;
+	}
 
+	public boolean isCil() {
+		return uvpred == null;
+	}
 
-  public Mouable getMouable() {
-    return mouable;
-  }
+	public boolean isKrajovy() {
+		return uvpred == null || uvzad == null;
+	}
 
+	public boolean isVnitrni() {
+		return uvpred != null && uvzad != null;
+	}
 
-  void setMouable(Mouable mouable) {
-    this.mouable = mouable;
-    zneschopniDelkuPrilehlychUseku();
-  }
-
-
-  void setUvpred(Usek vpred) {
-    uvpred = vpred;
-    zneschopniDelkuPrilehlychUseku();
-  }
-
-  void setUvzad(Usek vzad) {
-    uvzad = vzad;
-    zneschopniDelkuPrilehlychUseku();
-  }
-
-
-  public Usek getUvpred() {
-    return uvpred;
-  }
-
-  public Bod getBvpred() {
-    return uvpred == null ? null : uvpred.getBvpred();
-  }
-
-  public Bod getBvzad() {
-    return uvzad == null ? null : uvzad.getBvzad();
-  }
-
-  public Usek getUvzad() {
-    return uvzad;
-  }
-
-
-  public boolean isNaHraniciSegmentu() {
-    if (isKrajovy()) return true;
-    boolean result = getUvzad().isVzdusny() || getUvpred().isVzdusny();
-    return result;
-  }
-
-  /**
-   * U kruhových cest je startocil startovní a cílový bod. U nekruhových není startocil.
-   * @return
-   */
-  public boolean isStartocil() {
-    return isKrajovy() && cesta.isKruh();
-  }
+	public boolean isSamostatny() {
+		return uvpred == null && uvzad == null;
+	}
 
 
-  public boolean isWpt() {
-    return mouable instanceof Wpt;
-  }
+	/**
+	 * Pokud je bod bodem krajovým, vrací krajový úsek, pokud je vnitřní nebo samsotatný,
+	 * vrací null.
+	 * @return
+	 */
+	public Usek getKrajovyUsek() {
+		if (!isKrajovy()) return null;
+		if (uvzad != null) return uvzad;
+		return uvpred;
+	}
+
+	/**
+	 * Vrátí bližší úsek z obou úseků, kpokud jsou oba.
+	 * Pokud je jediný úsek, vrátí ho jen tehdy, kdy je ten ůsek blíž než tento bod,
+	 * jinak vrací null.
+	 * @param mou
+	 * @return
+	 */
+	public Usek getBlizsiUsek(Mou mou) {
+		if (isVnitrni()) {
+			long kvadrat1 = uvzad.computeKvadratVzdalenostiKPrimce(mou);
+			long kvadrat2 = uvpred.computeKvadratVzdalenostiKPrimce(mou);
+			Usek usek = kvadrat1 > kvadrat2 ? uvzad : uvpred; // ano, pravdu maximum, protože díky křížení je to blíž
+			return usek;
+		}
+		Usek usek = getKrajovyUsek();
+		if (usek == null) return null; // tak uz to muze byt jen samsotatny bod
+		if (usek.getNejblizsiBodKolmoKUsecce(mou) != null) return usek; // kdyz je kolmo k úsečce, je to ten úsek
+		return null; // jinak null, protože to není bližší úsek
 
 
-  @Override
-  public double dalka() {
-    return 0;
-  }
-
-  @Override
-  public double dalkaCestaVpred(Mou aMou) {
-    double delka = 0;
-    for (Bod bod = this; ! bod.isCil(); bod = bod.getBvpred()) {
-      delka += bod.getUvpred().dalka();
-    }
-    return delka;
-  }
-
-  @Override
-  public double dalkaCestaVzad(Mou aMou) {
-    double delka = 0;
-    for (Bod bod = this; ! bod.isStart(); bod = bod.getBvzad()) {
-      delka += bod.getUvzad().dalka();
-    }
-    return delka;
-  }
-
-  private void zneschopniDelkuPrilehlychUseku() {
-    if (uvpred != null) {
-      uvpred.zneschopniDalku();
-    }
-    if (uvzad != null) {
-      uvzad.zneschopniDalku();
-    }
-  }
+	}
 
 
-  /** Rozdělí cestu v bodě a vrátí novou cestu.
-   * Tento bod zůstane v cestě původní */
-  public Cesta rozdelCestu() {
-    Cesta novaCesta = Cesta.create();
-    Bod novyBod = novaCesta.pridejNaKonec(mouable); // přidám první nový bod nad tímto mouablem
-    if (!isCil()) { // pokud je to cílový bod, tak je vytvořením jednobodové cesty rozdělení dokončeno
-      novaCesta.setCil(cesta.getCil()); // cíl nové cesty je stejný jako cíl této cesty
-      novyBod.uvpred = uvpred; // tam, kam šel tento bod teď půjde nový bod
-      novyBod.uvpred.setBvzad(novyBod); // a ten úsek co jde dál, ten nepůjde nikam
-      cesta.setCil(this); // nastavením cílu odřízneme zbytek cesty
-    }
-    novaCesta.napojBouskyNaTutoCestu();
-    cesta.getDoc().xadd(novaCesta);
-    return novaCesta;
-  }
-
-  @Override
-  public Bousek0 getBousekVpred() {
-    return getUvpred();
-  }
-
-  @Override
-  public Bousek0 getBousekVzad() {
-    return getUvzad();
-  }
-
-  private void kon(boolean podm) {
-    if (!podm)
-      throw new RuntimeException("Selhala kontrola konzistence bodu");
-  }
-
-  @Override
-  protected void kontrolaKonzistence() {
-    boolean assertsEnabled = false;
-    assert assertsEnabled = true;
-    if (!assertsEnabled) return;
-    if (uvpred == null) {
-      kon (cesta.getCil() == this);
-    } else {
-      kon (uvpred.getBvzad() == this);
-    }
-    if (uvzad == null) {
-      kon (cesta.getStart() == this);
-    } else {
-      kon (uvzad.getBvpred() == this);
-    }
-  }
+	public Mouable getMouable() {
+		return mouable;
+	}
 
 
-  @Override
-  public Bod getKoncovyBodDruheCestyVhodnyProSpojeni() {
-    if (cesta.isKruh()) return null;
-    if (! isKrajovy()) return null;
-    Mou myMou = getMou();
-    //System.out.println("MOZNOST SPOJENI proverujeme ");
+	void setMouable(Mouable mouable) {
+		this.mouable = mouable;
+		zneschopniDelkuPrilehlychUseku();
+	}
 
-    for (Cesta c : cesta.getDoc()) {
-      if (c == cesta) {
-        continue; // ne na sebe
-      }
-      if (c.isKruh()) {
-        continue; // na kruhové cesty nenapojujeme
-      }
-      Bod tenDruhy = null;
-      if (isStart()) {
-        tenDruhy = c.getCil();
-      }
-      if (isCil()) {
-        tenDruhy = c.getStart();
-      }
-      if (tenDruhy == null) {
-        continue;
-      }
-      //System.out.println("   MOUKY: " + tenDruhy.getMou() + " - " + myMou);
-      if (tenDruhy.getMou().equals(myMou))
-        return tenDruhy;
 
-    }
-    return null;
-  }
+	void setUvpred(Usek vpred) {
+		uvpred = vpred;
+		zneschopniDelkuPrilehlychUseku();
+	}
 
-  public boolean isMeziVzdusnymiUseky() {
-    return !isKrajovy() && uvpred.isVzdusny() && uvzad.isVzdusny();
-  }
+	void setUvzad(Usek vzad) {
+		uvzad = vzad;
+		zneschopniDelkuPrilehlychUseku();
+	}
+
+
+	public Usek getUvpred() {
+		return uvpred;
+	}
+
+	public Bod getBvpred() {
+		return uvpred == null ? null : uvpred.getBvpred();
+	}
+
+	public Bod getBvzad() {
+		return uvzad == null ? null : uvzad.getBvzad();
+	}
+
+	public Usek getUvzad() {
+		return uvzad;
+	}
+
+
+	public boolean isNaHraniciSegmentu() {
+		if (isKrajovy()) return true;
+		boolean result = getUvzad().isVzdusny() || getUvpred().isVzdusny();
+		return result;
+	}
+
+	/**
+	 * U kruhových cest je startocil startovní a cílový bod. U nekruhových není startocil.
+	 * @return
+	 */
+	public boolean isStartocil() {
+		return isKrajovy() && cesta.isKruh();
+	}
+
+
+	public boolean isWpt() {
+		return mouable instanceof Wpt;
+	}
+
+
+	@Override
+	public double dalka() {
+		return 0;
+	}
+
+	@Override
+	public double dalkaCestaVpred(Mou aMou) {
+		double delka = 0;
+		for (Bod bod = this; ! bod.isCil(); bod = bod.getBvpred()) {
+			delka += bod.getUvpred().dalka();
+		}
+		return delka;
+	}
+
+	@Override
+	public double dalkaCestaVzad(Mou aMou) {
+		double delka = 0;
+		for (Bod bod = this; ! bod.isStart(); bod = bod.getBvzad()) {
+			delka += bod.getUvzad().dalka();
+		}
+		return delka;
+	}
+
+	private void zneschopniDelkuPrilehlychUseku() {
+		if (uvpred != null) {
+			uvpred.zneschopniDalku();
+		}
+		if (uvzad != null) {
+			uvzad.zneschopniDalku();
+		}
+	}
+
+
+	/** Rozdělí cestu v bodě a vrátí novou cestu.
+	 * Tento bod zůstane v cestě původní */
+	public Cesta rozdelCestu() {
+		Cesta novaCesta = Cesta.create();
+		Bod novyBod = novaCesta.pridejNaKonec(mouable); // přidám první nový bod nad tímto mouablem
+		if (!isCil()) { // pokud je to cílový bod, tak je vytvořením jednobodové cesty rozdělení dokončeno
+			novaCesta.setCil(cesta.getCil()); // cíl nové cesty je stejný jako cíl této cesty
+			novyBod.uvpred = uvpred; // tam, kam šel tento bod teď půjde nový bod
+			novyBod.uvpred.setBvzad(novyBod); // a ten úsek co jde dál, ten nepůjde nikam
+			cesta.setCil(this); // nastavením cílu odřízneme zbytek cesty
+		}
+		novaCesta.napojBouskyNaTutoCestu();
+		cesta.getDoc().xadd(novaCesta);
+		return novaCesta;
+	}
+
+	@Override
+	public Bousek0 getBousekVpred() {
+		return getUvpred();
+	}
+
+	@Override
+	public Bousek0 getBousekVzad() {
+		return getUvzad();
+	}
+
+	private void kon(boolean podm) {
+		if (!podm)
+			throw new RuntimeException("Selhala kontrola konzistence bodu");
+	}
+
+	@Override
+	protected void kontrolaKonzistence() {
+		boolean assertsEnabled = false;
+		assert assertsEnabled = true;
+		if (!assertsEnabled) return;
+		if (uvpred == null) {
+			kon (cesta.getCil() == this);
+		} else {
+			kon (uvpred.getBvzad() == this);
+		}
+		if (uvzad == null) {
+			kon (cesta.getStart() == this);
+		} else {
+			kon (uvzad.getBvpred() == this);
+		}
+	}
+
+
+	@Override
+	public Bod getKoncovyBodDruheCestyVhodnyProSpojeni() {
+		if (cesta.isKruh()) return null;
+		if (! isKrajovy()) return null;
+		Mou myMou = getMou();
+		//System.out.println("MOZNOST SPOJENI proverujeme ");
+
+		for (Cesta c : cesta.getDoc()) {
+			if (c == cesta) {
+				continue; // ne na sebe
+			}
+			if (c.isKruh()) {
+				continue; // na kruhové cesty nenapojujeme
+			}
+			Bod tenDruhy = null;
+			if (isStart()) {
+				tenDruhy = c.getCil();
+			}
+			if (isCil()) {
+				tenDruhy = c.getStart();
+			}
+			if (tenDruhy == null) {
+				continue;
+			}
+			//System.out.println("   MOUKY: " + tenDruhy.getMou() + " - " + myMou);
+			if (tenDruhy.getMou().equals(myMou))
+				return tenDruhy;
+
+		}
+		return null;
+	}
+
+	public boolean isMeziVzdusnymiUseky() {
+		return !isKrajovy() && uvpred.isVzdusny() && uvzad.isVzdusny();
+	}
 }

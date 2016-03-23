@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.refbody;
 
@@ -12,31 +12,31 @@ import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.Action0;
 
 /**
- * 
+ *
  * @author veverka
  *
  */
 public class NaKonkretniBodAction extends Action0 {
 
-  private static int citac;
-  private static final long serialVersionUID = -2882817111560336824L;
-  private final Wgs wgs;
-  /**
-   * @param aBoard
-   */
-  public NaKonkretniBodAction(String kam, Wgs wgs) {
-    super(kam);
-    this.wgs = wgs;
-    putValue(SHORT_DESCRIPTION, "Přesune mapu na referenční bod: \" " + kam +	"\"");
-    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("alt " + ++citac));
-  }
-  /* (non-Javadoc)
-   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-   */
-  @Override
-  public void actionPerformed(ActionEvent aE) {
-    poziceModel.setPozice(wgs);
-    vyrezModel.vystredovatNaPozici();
-  }
+	private static int citac;
+	private static final long serialVersionUID = -2882817111560336824L;
+	private final Wgs wgs;
+	/**
+	 * @param aBoard
+	 */
+	public NaKonkretniBodAction(String kam, Wgs wgs) {
+		super(kam);
+		this.wgs = wgs;
+		putValue(SHORT_DESCRIPTION, "Přesune mapu na referenční bod: \" " + kam +	"\"");
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("alt " + ++citac));
+	}
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent aE) {
+		poziceModel.setPozice(wgs);
+		vyrezModel.vystredovatNaPozici();
+	}
 
 }

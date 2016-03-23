@@ -4,7 +4,7 @@ package cz.geokuk.core.coordinates;
  * Merkátorové souřadnice jsou v metrech.
  * Střed souřadnic [0,0] je na průsečíku rovníku a nultého poledníku.
  * Osa X směřuje k východu, osa Y k severu.
- * 
+ *
  *
      TMS Global Mercator Profile
     ---------------------------
@@ -15,20 +15,20 @@ package cz.geokuk.core.coordinates;
     Such tiles are compatible with Google Maps, Microsoft Virtual Earth, Yahoo Maps,
     UK Ordnance Survey OpenSpace API, ...
     and you can overlay them on top of base maps of those web mapping applications.
-    
+
     Pixel and tile coordinates are in TMS notation (origin [0,0] in bottom-left).
 
     What coordinate conversions do we need for TMS Global Mercator tiles::
 
-         LatLon      <->       Meters      <->     Pixels    <->       Tile     
+         LatLon      <->       Meters      <->     Pixels    <->       Tile
 
      WGS84 coordinates   Spherical Mercator  Pixels in pyramid  Tiles in pyramid
-         lat/lon            XY in metres     XY pixels Z zoom      XYZ from TMS 
-        EPSG:4326           EPSG:900913                                         
-         .----.              ---------               --                TMS      
-        /      \     <->     |       |     <->     /----/    <->      Google    
-        \      /             |       |           /--------/          QuadTree   
-         -----               ---------         /------------/                   
+         lat/lon            XY in metres     XY pixels Z zoom      XYZ from TMS
+        EPSG:4326           EPSG:900913
+         .----.              ---------               --                TMS
+        /      \     <->     |       |     <->     /----/    <->      Google
+        \      /             |       |           /--------/          QuadTree
+         -----               ---------         /------------/
        KML, public         WebMapService         Web Clients      TileMapService
 
     What is the coordinate extent of Earth in EPSG:900913?
@@ -61,7 +61,7 @@ package cz.geokuk.core.coordinates;
       Well, the web clients like Google Maps are projecting those coordinates by
       Spherical Mercator, so in fact lat/lon coordinates on sphere are treated as if
       the were on the WGS84 ellipsoid.
-     
+
       From MSDN documentation:
       To simplify the calculations, we use the spherical form of projection, not
       the ellipsoidal form. Since the projection is used only for map display,
@@ -102,76 +102,76 @@ package cz.geokuk.core.coordinates;
                  AUTHORITY["EPSG","9001"]]]*
  */
 public class Mercator extends Misto0 {
-  
-  /** Poloměr země v metrech */
-  public final double mx;
-  public final double my;
-  
-  
-  public Mercator(double aMx, double aMy) {
-    mx = aMx;
-    my = aMy;
-  }
 
-  
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    long temp;
-    temp = Double.doubleToLongBits(mx);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(my);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    return result;
-  }
+	/** Poloměr země v metrech */
+	public final double mx;
+	public final double my;
 
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Mercator other = (Mercator) obj;
-    if (Double.doubleToLongBits(mx) != Double.doubleToLongBits(other.mx))
-      return false;
-    if (Double.doubleToLongBits(my) != Double.doubleToLongBits(other.my))
-      return false;
-    return true;
-  }
+	public Mercator(double aMx, double aMy) {
+		mx = aMx;
+		my = aMy;
+	}
 
 
-  @Override
-  public String toString() {
-    return String.format("Mercator[%f ; %f]", mx, my);
-  }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(mx);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(my);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Mercator other = (Mercator) obj;
+		if (Double.doubleToLongBits(mx) != Double.doubleToLongBits(other.mx))
+			return false;
+		if (Double.doubleToLongBits(my) != Double.doubleToLongBits(other.my))
+			return false;
+		return true;
+	}
+
+
+	@Override
+	public String toString() {
+		return String.format("Mercator[%f ; %f]", mx, my);
+	}
 
 
 
-  public Wgs toWgs() {
-    return FGeoKonvertor.toWgs(this);
-  }
+	public Wgs toWgs() {
+		return FGeoKonvertor.toWgs(this);
+	}
 
 
-  @Override
-  public Mercator toMercator() {
-    return this;
-  }
+	@Override
+	public Mercator toMercator() {
+		return this;
+	}
 
 
-  @Override
-  public Mou toMou() {
-    return FGeoKonvertor.toMou(this);
-  }
+	@Override
+	public Mou toMou() {
+		return FGeoKonvertor.toMou(this);
+	}
 
 
-  @Override
-  public Utm toUtm() {
-    return FGeoKonvertor.toUtm(this);
-  }
-  
+	@Override
+	public Utm toUtm() {
+		return FGeoKonvertor.toUtm(this);
+	}
+
 
 }

@@ -6,18 +6,18 @@ public class Wgsd {
 	public double lon;
 
 	public Wgsd() {}
-	
+
 	public Wgsd(double dlat, double dlon) {
 		this.lat = dlat;
 		this.lon = dlon;
 	}
-	
-    public Wgsd(Wgsd wgs) {
-    	lat = wgs.lat;
-    	lon = wgs.lon;
+
+	public Wgsd(Wgsd wgs) {
+		lat = wgs.lat;
+		lon = wgs.lon;
 	}
-    
-    @Override
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -46,17 +46,17 @@ public class Wgsd {
 	}
 
 	public Wgsd add(double dlat, double dlon) {
-    	return new Wgsd(this.lat + dlat, this.lon + dlon);
-    }
+		return new Wgsd(this.lat + dlat, this.lon + dlon);
+	}
 
-    public Wgsd sub(double dlat, double dlon) {
-    	return new Wgsd(this.lat - dlat, this.lon - dlon);
-    }
-    
-    
-    @Override
-    public String toString() {
-    	return "WHS-D[" + lon + "," + lat  + "]";
-    }
-	
+	public Wgsd sub(double dlat, double dlon) {
+		return new Wgsd(this.lat - dlat, this.lon - dlon);
+	}
+
+
+	@Override
+	public String toString() {
+		return "WHS-D[" + lon + "," + lat  + "]";
+	}
+
 }

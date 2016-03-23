@@ -5,11 +5,11 @@ import java.net.URL;
 
 public interface KachleUrlBuilder {
 
-  /**
-   * Vytvoří URL pro sgtažení dané dlaždice.
-   * @param kaOne
-   * @return
-   * @throws MalformedURLException 
-   */
-  public URL buildUrl(KaOne kaOne) throws MalformedURLException; 
+	/**
+	 * Vytvoří URL pro sgtažení dané dlaždice.
+	 * @param kaOne
+	 * @return
+	 * @throws MalformedURLException
+	 */
+	public URL buildUrl(KaOne kaOne) throws MalformedURLException;
 }

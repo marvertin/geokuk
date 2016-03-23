@@ -10,39 +10,39 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public class PromazatJednobodoveAPrazdneCesty extends DocAction0 {
 
-  private static final long serialVersionUID = -7547868179813232769L;
+	private static final long serialVersionUID = -7547868179813232769L;
 
 
-  public PromazatJednobodoveAPrazdneCesty(Doc doc) {
-    super(doc);
-    putValue(NAME, "Promazat jednobodové cesty");
-    putValue(SHORT_DESCRIPTION, "Promaže bšechny jednobodové a prázdné vesty, pokud však nejsou nad waypointy.");
-    //putValue(MNEMONIC_KEY, KeyEvent.VK_Z);
-  }
+	public PromazatJednobodoveAPrazdneCesty(Doc doc) {
+		super(doc);
+		putValue(NAME, "Promazat jednobodové cesty");
+		putValue(SHORT_DESCRIPTION, "Promaže bšechny jednobodové a prázdné vesty, pokud však nejsou nad waypointy.");
+		//putValue(MNEMONIC_KEY, KeyEvent.VK_Z);
+	}
 
 
-  @Override
-  protected boolean mamPovolitProDoc(Doc doc) {
-    return doc.getPocetJednobodovychCest() + doc.getPocetPrazdnychCest() > 0;
-  }
+	@Override
+	protected boolean mamPovolitProDoc(Doc doc) {
+		return doc.getPocetJednobodovychCest() + doc.getPocetPrazdnychCest() > 0;
+	}
 
-  @Override
-  protected void nastavJmenoAkce(Doc doc, boolean aZKontextovehoMenu) {
-    putValue(NAME, "Promazat jednobodové cesty (" + (doc.getPocetJednobodovychCest() + doc.getPocetPrazdnychCest()) + ")");
-  }
+	@Override
+	protected void nastavJmenoAkce(Doc doc, boolean aZKontextovehoMenu) {
+		putValue(NAME, "Promazat jednobodové cesty (" + (doc.getPocetJednobodovychCest() + doc.getPocetPrazdnychCest()) + ")");
+	}
 
-  @Override
-  protected void provedProDoc(Doc doc) {
-    final List<Cesta> cesty = new ArrayList<>();
-    for (Cesta cesta : doc) {
-      if (cesta.isEmpty() || cesta.isJednobodova()) {
-        cesty.add(cesta);
-      }
-    }
-    for (Cesta cesta : cesty) {
-      cestyModel.removeCestu(cesta);
-    }
-  }
+	@Override
+	protected void provedProDoc(Doc doc) {
+		final List<Cesta> cesty = new ArrayList<>();
+		for (Cesta cesta : doc) {
+			if (cesta.isEmpty() || cesta.isJednobodova()) {
+				cesty.add(cesta);
+			}
+		}
+		for (Cesta cesta : cesty) {
+			cestyModel.removeCestu(cesta);
+		}
+	}
 
 
 

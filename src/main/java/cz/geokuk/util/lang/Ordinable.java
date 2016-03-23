@@ -20,11 +20,11 @@ package cz.geokuk.util.lang;
  */
 public interface Ordinable<T> {
 
-  /** Get another ordinal object of me.
-   */
-  public T getAnother(long aNthObject);
+	/** Get another ordinal object of me.
+	 */
+	public T getAnother(long aNthObject);
 
-  /** Get distance from me to given object.<BR>
-   */
-  public long getDistance (T aObject);
+	/** Get distance from me to given object.<BR>
+	 */
+	public long getDistance (T aObject);
 }

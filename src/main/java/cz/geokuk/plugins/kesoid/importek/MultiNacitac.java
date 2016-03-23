@@ -30,127 +30,127 @@ import cz.geokuk.util.file.Root;
  */
 public class MultiNacitac {
 
-  private static final Logger log = LogManager.getLogger(MultiNacitac.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(MultiNacitac.class.getSimpleName());
 
-  private final DirScanner ds;
+	private final DirScanner ds;
 
-  private final List<Nacitac0> nacitace = new ArrayList<>();
+	private final List<Nacitac0> nacitace = new ArrayList<>();
 
-  private final KesoidModel kesoidModel;
-  
-  private static final Root.Def FILE_NAME_REGEX_GEOKUK_DIR = new Root.Def(
-      Integer.MAX_VALUE,
-      Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"),
-      null
-      );
-  private static final Root.Def FILE_NAME_REGEX_GEOGET_DIR  = new Root.Def(
-      1,
-      Pattern.compile("(?i).*\\.db3"),
-      Pattern.compile("(?i).*\\.[0-9]{8}\\.db3")
-      );
-      
+	private final KesoidModel kesoidModel;
+
+	private static final Root.Def FILE_NAME_REGEX_GEOKUK_DIR = new Root.Def(
+			Integer.MAX_VALUE,
+			Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"),
+			null
+			);
+	private static final Root.Def FILE_NAME_REGEX_GEOGET_DIR  = new Root.Def(
+			1,
+			Pattern.compile("(?i).*\\.db3"),
+			Pattern.compile("(?i).*\\.[0-9]{8}\\.db3")
+			);
 
 
-  //private static final String CACHE_SUFFIX = ".cache.serialized";
 
-  public MultiNacitac(KesoidModel kesoidModel) {
-    this.kesoidModel = kesoidModel;
-    ds = new DirScanner();
-    nacitace.add(new NacitacGeokuk());
-    nacitace.add(new NacitacGpx());
-    nacitace.add(new NacitacImageMetadata());
-    nacitace.add(new GeogetLoader());
-  }
+	//private static final String CACHE_SUFFIX = ".cache.serialized";
 
-  public void setRootDirs(boolean prenacti, File kesDir, File geogetDir) {
-    List<Root> roots = new ArrayList<>();
-    if (kesDir != null) {
-      roots.add(new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR));
-    }
-    if (geogetDir != null) {
-      roots.add(new Root(geogetDir, FILE_NAME_REGEX_GEOGET_DIR));
-    }
-    ds.seRootDirs(prenacti, roots.toArray(new Root[roots.size()]));
-  }
+	public MultiNacitac(KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+		ds = new DirScanner();
+		nacitace.add(new NacitacGeokuk());
+		nacitace.add(new NacitacGpx());
+		nacitace.add(new NacitacImageMetadata());
+		nacitace.add(new GeogetLoader());
+	}
 
-  public void setGeogetDataDir(File aEffectiveFile, boolean aPrenacti) {
-    // TODO Auto-generated method stub
-  }
+	public void setRootDirs(boolean prenacti, File kesDir, File geogetDir) {
+		List<Root> roots = new ArrayList<>();
+		if (kesDir != null) {
+			roots.add(new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR));
+		}
+		if (geogetDir != null) {
+			roots.add(new Root(geogetDir, FILE_NAME_REGEX_GEOGET_DIR));
+		}
+		ds.seRootDirs(prenacti, roots.toArray(new Root[roots.size()]));
+	}
 
-  public KesBag nacti(Future<?> future, Genom genom) throws IOException {
-    List<KeFile> list = ds.coMamNacist();
-    if (list == null) {
-      return null;
-    }
-    KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
-    builder.init();
-    for (KeFile file : list) {
-      log.debug("Nacitam: " + file);
-      try {
-        zpracujJedenFile(file, builder, future);
-      } catch (Exception e) {
-        FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Problem pri cteni souboru " + file);
-        ds.nulujLastScaned(); // ať se načte znovu
-      }
-    }
+	public void setGeogetDataDir(File aEffectiveFile, boolean aPrenacti) {
+		// TODO Auto-generated method stub
+	}
 
-    builder.done(genom);
+	public KesBag nacti(Future<?> future, Genom genom) throws IOException {
+		List<KeFile> list = ds.coMamNacist();
+		if (list == null) {
+			return null;
+		}
+		KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
+		builder.init();
+		for (KeFile file : list) {
+			log.debug("Nacitam: " + file);
+			try {
+				zpracujJedenFile(file, builder, future);
+			} catch (Exception e) {
+				FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Problem pri cteni souboru " + file);
+				ds.nulujLastScaned(); // ať se načte znovu
+			}
+		}
 
-    return builder.getKesBag();
-  }
+		builder.done(genom);
 
-  /**
-   * @param kefile
-   * @param builder
-   * @param future
-   * @throws IOException
-   */
-  private void zpracujJedenFile(KeFile kefile, KesoidImportBuilder builder, Future<?> future) throws IOException {
-    File file = kefile.getFile();
-    if (isZipFile(file)) {
-      try (ZipFile zipFile = new ZipFile(file)) {
-        boolean nacitat = kesoidModel.maSeNacist(kefile);
-        for (Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements(); ) {
-          ZipEntry entry = en.nextElement();
-          for (Nacitac0 nacitac : nacitace) {
-            builder.setCurrentlyLoading(kefile, nacitat);
-            if (nacitat && nacitac.umiNacist(entry)) {
-              nacitac.nactiBezVyjimky(zipFile, entry, builder, future, kesoidModel.getProgressModel());
-            }
-          }
-        }
-      }
-    } else {
-      for (Nacitac0 nacitac : nacitace) {
-        boolean nacitat = kesoidModel.maSeNacist(kefile);
-        builder.setCurrentlyLoading(kefile, nacitat);
-        if (nacitat && nacitac.umiNacist(file)) {
-          nacitac.nactiBezVyjimky(file, builder, future, kesoidModel.getProgressModel());
-        }
-      }
-    }
-  }
+		return builder.getKesBag();
+	}
 
-  /**
-   * Checks whether the given file is a ZIP file.
-   * Copied from
-   * http://www.java2s.com/Code/Java/File-Input-Output/DeterminewhetherafileisaZIPFile.htm
-   */
-  private static boolean isZipFile(File fileToTest) {
-    if (fileToTest.isDirectory()) {
-      return false;
-    }
-    if (fileToTest.length() < 4) {
-      return false;
-    }
-    try (DataInputStream in = new DataInputStream(new BufferedInputStream(
-        new FileInputStream(fileToTest)))) {
-      int test = in.readInt();
-      return test == 0x504b0304;
-    } catch (IOException e) {
-      throw new IllegalArgumentException("The file " + fileToTest + " cannot be checked!",
-          e);
-    }
-  }
+	/**
+	 * @param kefile
+	 * @param builder
+	 * @param future
+	 * @throws IOException
+	 */
+	private void zpracujJedenFile(KeFile kefile, KesoidImportBuilder builder, Future<?> future) throws IOException {
+		File file = kefile.getFile();
+		if (isZipFile(file)) {
+			try (ZipFile zipFile = new ZipFile(file)) {
+				boolean nacitat = kesoidModel.maSeNacist(kefile);
+				for (Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements(); ) {
+					ZipEntry entry = en.nextElement();
+					for (Nacitac0 nacitac : nacitace) {
+						builder.setCurrentlyLoading(kefile, nacitat);
+						if (nacitat && nacitac.umiNacist(entry)) {
+							nacitac.nactiBezVyjimky(zipFile, entry, builder, future, kesoidModel.getProgressModel());
+						}
+					}
+				}
+			}
+		} else {
+			for (Nacitac0 nacitac : nacitace) {
+				boolean nacitat = kesoidModel.maSeNacist(kefile);
+				builder.setCurrentlyLoading(kefile, nacitat);
+				if (nacitat && nacitac.umiNacist(file)) {
+					nacitac.nactiBezVyjimky(file, builder, future, kesoidModel.getProgressModel());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Checks whether the given file is a ZIP file.
+	 * Copied from
+	 * http://www.java2s.com/Code/Java/File-Input-Output/DeterminewhetherafileisaZIPFile.htm
+	 */
+	private static boolean isZipFile(File fileToTest) {
+		if (fileToTest.isDirectory()) {
+			return false;
+		}
+		if (fileToTest.length() < 4) {
+			return false;
+		}
+		try (DataInputStream in = new DataInputStream(new BufferedInputStream(
+				new FileInputStream(fileToTest)))) {
+			int test = in.readInt();
+			return test == 0x504b0304;
+		} catch (IOException e) {
+			throw new IllegalArgumentException("The file " + fileToTest + " cannot be checked!",
+					e);
+		}
+	}
 
 }

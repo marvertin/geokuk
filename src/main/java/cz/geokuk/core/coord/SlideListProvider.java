@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.coord;
 
@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface SlideListProvider {
 
-  List<JSingleSlide0> getSlides();
+	List<JSingleSlide0> getSlides();
 
 }

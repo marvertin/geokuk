@@ -5,9 +5,9 @@ import java.util.Set;
 
 public class Ggt {
 
-  public Set<String> kesides = new HashSet<>();
+	public Set<String> kesides = new HashSet<>();
 
-  public Ggt(Set<String> kesides) {
-    this.kesides = kesides;
-  }
+	public Ggt(Set<String> kesides) {
+		this.kesides = kesides;
+	}
 }

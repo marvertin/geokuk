@@ -16,65 +16,65 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 
 public class JFenotypIkonyDialog extends JMyDialog0 implements AfterInjectInit  {
 
-  private static final long serialVersionUID = -6496737194139718970L;
-  private JComponent jvse;
+	private static final long serialVersionUID = -6496737194139718970L;
+	private JComponent jvse;
 
-  private JFenotypVyberIkon fenotypVyberIkon;
+	private JFenotypVyberIkon fenotypVyberIkon;
 
-  private IkonBag ikonBag;
-  private Set<String> jmenaVybranychAlel;
-  private KesBag filtrovaneKesBag;
+	private IkonBag ikonBag;
+	private Set<String> jmenaVybranychAlel;
+	private KesBag filtrovaneKesBag;
 
-  public JFenotypIkonyDialog() {
-    setTitle("Výběr fenotypu");
-    init();
-  }
+	public JFenotypIkonyDialog() {
+		setTitle("Výběr fenotypu");
+		init();
+	}
 
-  @Override
-  protected void initComponents() {
-    jvse = Box.createHorizontalBox();
-    jvse.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    add(jvse);
-
-
-    fenotypVyberIkon = new JFenotypVyberIkon();
-    jvse.add(fenotypVyberIkon);
-    jvse.setPreferredSize(new Dimension(500 ,600));
-  }
+	@Override
+	protected void initComponents() {
+		jvse = Box.createHorizontalBox();
+		jvse.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		add(jvse);
 
 
-  public void onEvent(IkonyNactenyEvent event) {
-    ikonBag = event.getBag();
-    resetIfVse();
-  }
+		fenotypVyberIkon = new JFenotypVyberIkon();
+		jvse.add(fenotypVyberIkon);
+		jvse.setPreferredSize(new Dimension(500 ,600));
+	}
 
-  public void onEvent(KeskyVyfiltrovanyEvent event) {
-    filtrovaneKesBag = event.getFiltrovane();
-    resetIfVse();
-  }
 
-  public void onEvent(FenotypPreferencesChangedEvent event) {
-    if (event.getJmenaNefenotypovanychAlel().equals(jmenaVybranychAlel)) return;
-    jmenaVybranychAlel = event.getJmenaNefenotypovanychAlel();
-    resetIfVse();
-  }
+	public void onEvent(IkonyNactenyEvent event) {
+		ikonBag = event.getBag();
+		resetIfVse();
+	}
 
-  private void resetIfVse() {
-    if (jmenaVybranychAlel == null) return;
-    if (ikonBag == null) return;
-    if (filtrovaneKesBag == null) return;
-    fenotypVyberIkon.resetBag(ikonBag,  filtrovaneKesBag, jmenaVybranychAlel);
-    jvse.revalidate();
-  }
+	public void onEvent(KeskyVyfiltrovanyEvent event) {
+		filtrovaneKesBag = event.getFiltrovane();
+		resetIfVse();
+	}
 
-  @Override
-  public void initAfterInject() {
-    factory.init(fenotypVyberIkon);
-  }
+	public void onEvent(FenotypPreferencesChangedEvent event) {
+		if (event.getJmenaNefenotypovanychAlel().equals(jmenaVybranychAlel)) return;
+		jmenaVybranychAlel = event.getJmenaNefenotypovanychAlel();
+		resetIfVse();
+	}
 
-  @Override
-  protected String getTemaNapovedyDialogu() {
-    return "VyberFenotypu";
-  }
+	private void resetIfVse() {
+		if (jmenaVybranychAlel == null) return;
+		if (ikonBag == null) return;
+		if (filtrovaneKesBag == null) return;
+		fenotypVyberIkon.resetBag(ikonBag,  filtrovaneKesBag, jmenaVybranychAlel);
+		jvse.revalidate();
+	}
+
+	@Override
+	public void initAfterInject() {
+		factory.init(fenotypVyberIkon);
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "VyberFenotypu";
+	}
 
 }

@@ -10,27 +10,27 @@ import cz.geokuk.framework.Factory;
 
 public class MainFrameHolder implements SlideListProvider {
 
-  private JMainFrame mainFrame;
-  private Factory factory;
+	private JMainFrame mainFrame;
+	private Factory factory;
 
-  public void setMainFrame(JMainFrame mainFrame) {
-    this.mainFrame = mainFrame;
-    factory.init(this.mainFrame);
-  }
+	public void setMainFrame(JMainFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		factory.init(this.mainFrame);
+	}
 
-  public JFrame getMainFrame() {
-    return mainFrame;
-  }
+	public JFrame getMainFrame() {
+		return mainFrame;
+	}
 
-  public void inject(Factory factory) {
-    this.factory = factory;
-  }
+	public void inject(Factory factory) {
+		this.factory = factory;
+	}
 
-  /* (non-Javadoc)
-   * @see cz.geokuk.core.coord.SlideListProvider#getSlides()
-   */
-  @Override
-  public List<JSingleSlide0> getSlides() {
-    return mainFrame.getSlides();
-  }
+	/* (non-Javadoc)
+	 * @see cz.geokuk.core.coord.SlideListProvider#getSlides()
+	 */
+	@Override
+	public List<JSingleSlide0> getSlides() {
+		return mainFrame.getSlides();
+	}
 }

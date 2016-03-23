@@ -26,110 +26,110 @@ import cz.geokuk.util.index2d.Sheet;
 
 public class JPopiskySlide extends JSingleSlide0 {
 
-  private static final long serialVersionUID = -5858146658366237217L;
+	private static final long serialVersionUID = -5858146658366237217L;
 
-  private Indexator<Wpt> iIndexator;
+	private Indexator<Wpt> iIndexator;
 
-  private PopiskySettings pose;
+	private PopiskySettings pose;
 
-  private PopiskyModel popiskyModel;
-
-
-  public JPopiskySlide() {
-    setOpaque(false);
-    setCursor(null);
-    initComponents();
-  }
-
-  private void initComponents() {
-    setLayout(new BorderLayout());
-    Box box = Box.createVerticalBox();
-
-    add(box, BorderLayout.WEST);
-  }
+	private PopiskyModel popiskyModel;
 
 
-  public void onEvent(KeskyVyfiltrovanyEvent event) {
-    iIndexator = event.getFiltrovane().getIndexator();
-    repaint();
-  }
+	public JPopiskySlide() {
+		setOpaque(false);
+		setCursor(null);
+		initComponents();
+	}
 
-  public void onEvent(PopiskyPreferencesChangeEvent event) {
-    pose = event.pose;
-    repaint();
-  }
+	private void initComponents() {
+		setLayout(new BorderLayout());
+		Box box = Box.createVerticalBox();
 
-  public void onEvent(PopiskyOnoffEvent event) {
-    setVisible(event.isOnoff());
-    repaint();
-  }
+		add(box, BorderLayout.WEST);
+	}
 
-  @Override
-  public void paintComponent(Graphics aG) {
-    if (iIndexator == null) return;
-    if (pose == null) return;
-    final boolean prekrocenLimit = iIndexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
-    if (prekrocenLimit) return;
 
-    final Graphics2D g = (Graphics2D) aG;
-    //    final Color barvaTextu = iSlidovnikText.getColor();
-    //    final Color barvaPodkladu = iSlidovnikPodklad.getColor();
-    //    g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+	public void onEvent(KeskyVyfiltrovanyEvent event) {
+		iIndexator = event.getFiltrovane().getIndexator();
+		repaint();
+	}
 
-    g.setFont(pose.font);
-    final Color barvaTextu = pose.foreground;
-    final Color barvaPodkladu = pose.background;
-    final FontMetrics fontMetrics = g.getFontMetrics();
-    final int height2 = fontMetrics.getHeight();
-    final int posuny = fontMetrics.getDescent() - height2;
-    final EnumMap<EKesoidKind, SestavovacPopisku> sestavmapa = new EnumMap<>(EKesoidKind.class);
-    for (Map.Entry<EKesoidKind, String> entry : popiskyModel.getData().getPatterns().asMap().entrySet()) {
-      sestavmapa.put(entry.getKey(),  new SestavovacPopisku(entry.getValue()));
-    }
+	public void onEvent(PopiskyPreferencesChangeEvent event) {
+		pose = event.pose;
+		repaint();
+	}
 
-    iIndexator.visit(getSoord().getBoundingRect(), new FlatVisitor<Wpt>() {
+	public void onEvent(PopiskyOnoffEvent event) {
+		setVisible(event.isOnoff());
+		repaint();
+	}
 
-      @Override
-      public void visit(Sheet<Wpt> aSheet) {
-        Wpt wpt = aSheet.get();
-        if (!wpt.isMainWpt()) return;
-        Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
-        Point p = getSoord().transform(mou);
-        p.x -= 10;
-        p.y += 25;
-        g.setColor(barvaPodkladu);
-        String[] popisky = sestavmapa.get(wpt.getKesoid().getKesoidKind()).sestavPopisek(wpt);
-        int stringWidth = 0;
-        for (String popisek : popisky) {
-          stringWidth = Math.max(fontMetrics.stringWidth(popisek), stringWidth);
-        }
-        g.fillRect(p.x + pose.posuX, p.y + posuny + pose.posuY, stringWidth, height2 * popisky.length);
+	@Override
+	public void paintComponent(Graphics aG) {
+		if (iIndexator == null) return;
+		if (pose == null) return;
+		final boolean prekrocenLimit = iIndexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
+		if (prekrocenLimit) return;
 
-        //g.drawString(str, x, y)
-        g.setBackground(Color.YELLOW);
-        g.setColor(barvaTextu);
-        int yOffset = pose.posuY;
-        for (String popisek : popisky) {
-          g.drawString(popisek , p.x + pose.posuX, p.y + yOffset );
-          yOffset += height2;
-        }
-        //g.fillOval(p.x -r, p.y - r, d, d);
-      }
-    });
+		final Graphics2D g = (Graphics2D) aG;
+		//    final Color barvaTextu = iSlidovnikText.getColor();
+		//    final Color barvaPodkladu = iSlidovnikPodklad.getColor();
+		//    g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
 
-  }
+		g.setFont(pose.font);
+		final Color barvaTextu = pose.foreground;
+		final Color barvaPodkladu = pose.background;
+		final FontMetrics fontMetrics = g.getFontMetrics();
+		final int height2 = fontMetrics.getHeight();
+		final int posuny = fontMetrics.getDescent() - height2;
+		final EnumMap<EKesoidKind, SestavovacPopisku> sestavmapa = new EnumMap<>(EKesoidKind.class);
+		for (Map.Entry<EKesoidKind, String> entry : popiskyModel.getData().getPatterns().asMap().entrySet()) {
+			sestavmapa.put(entry.getKey(),  new SestavovacPopisku(entry.getValue()));
+		}
 
-  @Override
-  public JSingleSlide0 createRenderableSlide() {
-    return new JPopiskySlide();
-  }
+		iIndexator.visit(getSoord().getBoundingRect(), new FlatVisitor<Wpt>() {
 
-  @Override
-  public EJakOtacetPriRendrovani jakOtacetProRendrovani() {
-    return EJakOtacetPriRendrovani.COORD;
-  }
+			@Override
+			public void visit(Sheet<Wpt> aSheet) {
+				Wpt wpt = aSheet.get();
+				if (!wpt.isMainWpt()) return;
+				Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
+				Point p = getSoord().transform(mou);
+				p.x -= 10;
+				p.y += 25;
+				g.setColor(barvaPodkladu);
+				String[] popisky = sestavmapa.get(wpt.getKesoid().getKesoidKind()).sestavPopisek(wpt);
+				int stringWidth = 0;
+				for (String popisek : popisky) {
+					stringWidth = Math.max(fontMetrics.stringWidth(popisek), stringWidth);
+				}
+				g.fillRect(p.x + pose.posuX, p.y + posuny + pose.posuY, stringWidth, height2 * popisky.length);
 
-  public void inject (PopiskyModel popiskyModel) {
-    this.popiskyModel = popiskyModel;
-  }
+				//g.drawString(str, x, y)
+				g.setBackground(Color.YELLOW);
+				g.setColor(barvaTextu);
+				int yOffset = pose.posuY;
+				for (String popisek : popisky) {
+					g.drawString(popisek , p.x + pose.posuX, p.y + yOffset );
+					yOffset += height2;
+				}
+				//g.fillOval(p.x -r, p.y - r, d, d);
+			}
+		});
+
+	}
+
+	@Override
+	public JSingleSlide0 createRenderableSlide() {
+		return new JPopiskySlide();
+	}
+
+	@Override
+	public EJakOtacetPriRendrovani jakOtacetProRendrovani() {
+		return EJakOtacetPriRendrovani.COORD;
+	}
+
+	public void inject (PopiskyModel popiskyModel) {
+		this.popiskyModel = popiskyModel;
+	}
 }

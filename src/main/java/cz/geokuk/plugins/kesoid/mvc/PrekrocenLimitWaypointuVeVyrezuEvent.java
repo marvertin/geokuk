@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.kesoid.mvc;
 
@@ -10,17 +10,17 @@ import cz.geokuk.framework.Event0;
  *
  */
 public class PrekrocenLimitWaypointuVeVyrezuEvent extends Event0<KesoidModel> {
-  private final boolean prekrocen;
+	private final boolean prekrocen;
 
-  PrekrocenLimitWaypointuVeVyrezuEvent(boolean prekrocen) {
-    this.prekrocen = prekrocen;
-  }
+	PrekrocenLimitWaypointuVeVyrezuEvent(boolean prekrocen) {
+		this.prekrocen = prekrocen;
+	}
 
-  /**
-   * @return the prekrocen
-   */
-  public boolean isPrekrocen() {
-    return prekrocen;
-  }
+	/**
+	 * @return the prekrocen
+	 */
+	public boolean isPrekrocen() {
+		return prekrocen;
+	}
 
 }

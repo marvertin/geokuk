@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.mapy;
 
@@ -12,19 +12,19 @@ import cz.geokuk.plugins.mapy.kachle.KaSet;
  */
 public class ZmenaMapNastalaEvent extends Event0<MapyModel> {
 
-  private final KaSet kaSet;
+	private final KaSet kaSet;
 
-  /**
-   * @param aKaSet
-   */
-  public ZmenaMapNastalaEvent(KaSet aKaSet) {
-    kaSet = aKaSet;
-  }
+	/**
+	 * @param aKaSet
+	 */
+	public ZmenaMapNastalaEvent(KaSet aKaSet) {
+		kaSet = aKaSet;
+	}
 
-  /**
-   * @return the kaSet
-   */
-  public KaSet getKaSet() {
-    return kaSet;
-  }
+	/**
+	 * @return the kaSet
+	 */
+	public KaSet getKaSet() {
+		return kaSet;
+	}
 }

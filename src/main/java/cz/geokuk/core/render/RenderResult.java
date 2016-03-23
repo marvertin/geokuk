@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.render;
 
@@ -11,5 +11,5 @@ import java.io.File;
  */
 public class RenderResult {
 
-  File file;
+	File file;
 }

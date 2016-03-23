@@ -8,13 +8,13 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 public class FenotypPreferencesChangedEvent extends Event0<KesoidModel> {
 
-  private final Set<String> jmenaNefenotypovanychAlel;
+	private final Set<String> jmenaNefenotypovanychAlel;
 
-  public FenotypPreferencesChangedEvent(Set<String> jmenaNefenotypovanychAlel) {
-    this.jmenaNefenotypovanychAlel = jmenaNefenotypovanychAlel;
-  }
+	public FenotypPreferencesChangedEvent(Set<String> jmenaNefenotypovanychAlel) {
+		this.jmenaNefenotypovanychAlel = jmenaNefenotypovanychAlel;
+	}
 
-  public Set<String> getJmenaNefenotypovanychAlel() {
-    return new HashSet<>(jmenaNefenotypovanychAlel);
-  }
+	public Set<String> getJmenaNefenotypovanychAlel() {
+		return new HashSet<>(jmenaNefenotypovanychAlel);
+	}
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.render;
 
@@ -8,9 +8,9 @@ package cz.geokuk.core.render;
  *
  */
 public enum EStavRendrovani {
-  NIC,
-  PRIPRAVA,
-  BEH,
-  PRERUSOVANO,
-  ;
+	NIC,
+	PRIPRAVA,
+	BEH,
+	PRERUSOVANO,
+	;
 }

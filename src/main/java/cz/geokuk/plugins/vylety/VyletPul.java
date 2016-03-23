@@ -5,9 +5,9 @@ import java.util.Set;
 
 public class VyletPul {
 
-  public Set<String> kesides = new HashSet<>();
+	public Set<String> kesides = new HashSet<>();
 
-  public VyletPul(Set<String> kesides) {
-    this.kesides = kesides;
-  }
+	public VyletPul(Set<String> kesides) {
+		this.kesides = kesides;
+	}
 }

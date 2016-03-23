@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.render;
 
@@ -9,13 +9,13 @@ package cz.geokuk.core.render;
  */
 public class YNeniPamet extends Exception {
 
-  /**
-   * @param e
-   */
-  public YNeniPamet(OutOfMemoryError e) {
-    super(e);
-  }
+	/**
+	 * @param e
+	 */
+	public YNeniPamet(OutOfMemoryError e) {
+		super(e);
+	}
 
-  private static final long serialVersionUID = 1682619442288080458L;
+	private static final long serialVersionUID = 1682619442288080458L;
 
 }

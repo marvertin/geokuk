@@ -13,41 +13,41 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public class UlozJakoAction extends SouboeCestaAction0 {
 
-  private static final long serialVersionUID = 1L;
-  private Doc doc;
+	private static final long serialVersionUID = 1L;
+	private Doc doc;
 
 
-  public UlozJakoAction() {
-    super("Uložit cesty (gpx) jako ...");
-    putValue(SHORT_DESCRIPTION, "Uloží zadaný výlet do jiného souboru GPX");
-    putValue(MNEMONIC_KEY, KeyEvent.VK_V);
-    //putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
-  }
+	public UlozJakoAction() {
+		super("Uložit cesty (gpx) jako ...");
+		putValue(SHORT_DESCRIPTION, "Uloží zadaný výlet do jiného souboru GPX");
+		putValue(MNEMONIC_KEY, KeyEvent.VK_V);
+		//putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
+	}
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
+	@Override
+	public void actionPerformed(ActionEvent e) {
 
-    JFileChooser fc = new JFileChooser();
-    fc.addChoosableFileFilter(new GpxFilter());
-    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    fc.setSelectedFile(cestyModel.getImplicitniVyletSaveAsNovyFile());
-    int result = fc.showDialog(Dlg.parentFrame(), "Uložit jako");
-    if (result == JFileChooser.APPROVE_OPTION) {
-      File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
-      if (selectedFile.exists()) { // dtaz na přepsání
-        if (! Dlg.prepsatSoubor(selectedFile)) return;
-      }
-      doc.setFile(selectedFile);
-      cestyModel.uloz(doc.getFile(), doc, true);
-      System.out.println("Uložena cesta do: " + doc.getFile());
-    }
-    // TODO ukládat na pozadí
-  }
+		JFileChooser fc = new JFileChooser();
+		fc.addChoosableFileFilter(new GpxFilter());
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.setSelectedFile(cestyModel.getImplicitniVyletSaveAsNovyFile());
+		int result = fc.showDialog(Dlg.parentFrame(), "Uložit jako");
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
+			if (selectedFile.exists()) { // dtaz na přepsání
+				if (! Dlg.prepsatSoubor(selectedFile)) return;
+			}
+			doc.setFile(selectedFile);
+			cestyModel.uloz(doc.getFile(), doc, true);
+			System.out.println("Uložena cesta do: " + doc.getFile());
+		}
+		// TODO ukládat na pozadí
+	}
 
-  public void onEvent(CestyChangedEvent event) {
-    doc = event.getDoc();
-    setEnabled(doc != null && (! doc.isEmpty()));
-  }
+	public void onEvent(CestyChangedEvent event) {
+		doc = event.getDoc();
+		setEnabled(doc != null && (! doc.isEmpty()));
+	}
 
 
 }

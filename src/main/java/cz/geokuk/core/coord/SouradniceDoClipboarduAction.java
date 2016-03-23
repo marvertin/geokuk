@@ -15,45 +15,45 @@ import cz.geokuk.framework.Action0;
  */
 public class SouradniceDoClipboarduAction extends Action0 {
 
-  private static final long serialVersionUID = -8054017274338240706L;
-  private Poziceq poziceq = new Poziceq();
-  private final Mouable mouable;
-  private PoziceModel poziceModel;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private Poziceq poziceq = new Poziceq();
+	private final Mouable mouable;
+	private PoziceModel poziceModel;
 
-  /**
-   * 
-   */
-  public SouradniceDoClipboarduAction(Mouable mouable) {
-    super(null);
-    this.mouable = mouable;
-    putValue(NAME, "Souřadnice do clipboardu");
-    putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží souřadnice záměrného kříže.");
-    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('C', InputEvent.CTRL_DOWN_MASK));
-  }
+	/**
+	 *
+	 */
+	public SouradniceDoClipboarduAction(Mouable mouable) {
+		super(null);
+		this.mouable = mouable;
+		putValue(NAME, "Souřadnice do clipboardu");
+		putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží souřadnice záměrného kříže.");
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('C', InputEvent.CTRL_DOWN_MASK));
+	}
 
-  /* (non-Javadoc)
-   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-   */
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    Mouable m = mouable;
-    if (m == null) {
-      m = poziceq.getPoziceMouable();
-      if (m == null) return;
-    }
-    poziceModel.souradniceDoClipboardu(m.getMou());
-  }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Mouable m = mouable;
+		if (m == null) {
+			m = poziceq.getPoziceMouable();
+			if (m == null) return;
+		}
+		poziceModel.souradniceDoClipboardu(m.getMou());
+	}
 
-  public void onEvent(PoziceChangedEvent event) {
-    poziceq = event.poziceq;
-    setEnabled(mouable != null || ! poziceq.isNoPosition());
-  }
+	public void onEvent(PoziceChangedEvent event) {
+		poziceq = event.poziceq;
+		setEnabled(mouable != null || ! poziceq.isNoPosition());
+	}
 
-  @Override
-  public void inject(PoziceModel poziceModel) {
-    this.poziceModel = poziceModel;
-  }
+	@Override
+	public void inject(PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
+	}
 }
 
 

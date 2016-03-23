@@ -9,57 +9,57 @@ import cz.geokuk.plugins.mapy.kachle.KaSet;
 
 public class MapyModel extends Model0 {
 
-  
-  private EKaType podklad;
-  
-  public EKaType getPodklad() {
-    return podklad;
-  }
 
-  public EnumSet<EKaType> getDekorace() {
-    return dekorace.clone();
-  }
+	private EKaType podklad;
 
-  private EnumSet<EKaType> dekorace;
+	public EKaType getPodklad() {
+		return podklad;
+	}
 
-  public void setPodklad(EKaType podklad) {
-    if (podklad == this.podklad) return;
-    this.podklad = podklad;
-    currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnum(FPref.VALUE_MAPOVE_PODKLADY_value, podklad);
-    fajruj();
-  }
-  
-  public void setDekorace(EnumSet<EKaType> dekorace) {
-    if (dekorace.equals(this.dekorace)) return;
-    this.dekorace = dekorace.clone(); 
-    currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, dekorace);
-    fajruj();
-  }
+	public EnumSet<EKaType> getDekorace() {
+		return dekorace.clone();
+	}
 
-  public KaSet getKaSet() {
-    EnumSet<EKaType> kts = EnumSet.of(podklad);
-    kts.addAll(dekorace);
-    assert kts != null;
-    KaSet kaSet = new KaSet(kts);
-    return kaSet;
-  }
-  
-  private void fajruj() {
-    if (podklad != null && dekorace != null) {
-      fire(new ZmenaMapNastalaEvent(getKaSet()));
-    }
-  }
+	private EnumSet<EKaType> dekorace;
 
-  @Override
-  protected void initAndFire() {
-    EKaType podklad = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnum(FPref.VALUE_MAPOVE_PODKLADY_value, EKaType.TURIST_M, EKaType.class);
-    EnumSet<EKaType> dekorace = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, EnumSet.of(EKaType.TTUR_M), EKaType.class);
-    setPodklad(podklad);
-    setDekorace(dekorace);
-  }
-  
-  
-  
-  
-  
+	public void setPodklad(EKaType podklad) {
+		if (podklad == this.podklad) return;
+		this.podklad = podklad;
+		currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnum(FPref.VALUE_MAPOVE_PODKLADY_value, podklad);
+		fajruj();
+	}
+
+	public void setDekorace(EnumSet<EKaType> dekorace) {
+		if (dekorace.equals(this.dekorace)) return;
+		this.dekorace = dekorace.clone();
+		currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, dekorace);
+		fajruj();
+	}
+
+	public KaSet getKaSet() {
+		EnumSet<EKaType> kts = EnumSet.of(podklad);
+		kts.addAll(dekorace);
+		assert kts != null;
+		KaSet kaSet = new KaSet(kts);
+		return kaSet;
+	}
+
+	private void fajruj() {
+		if (podklad != null && dekorace != null) {
+			fire(new ZmenaMapNastalaEvent(getKaSet()));
+		}
+	}
+
+	@Override
+	protected void initAndFire() {
+		EKaType podklad = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnum(FPref.VALUE_MAPOVE_PODKLADY_value, EKaType.TURIST_M, EKaType.class);
+		EnumSet<EKaType> dekorace = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, EnumSet.of(EKaType.TTUR_M), EKaType.class);
+		setPodklad(podklad);
+		setDekorace(dekorace);
+	}
+
+
+
+
+
 }

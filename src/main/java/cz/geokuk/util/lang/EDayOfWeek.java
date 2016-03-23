@@ -11,42 +11,42 @@ import java.util.Calendar;
  */
 public enum EDayOfWeek
 {
-  MONDAY  (Calendar.MONDAY),
-  TUESDAY (Calendar.TUESDAY),
-  WEDNESDAY (Calendar.WEDNESDAY),
-  THURSDAY (Calendar.THURSDAY),
-  FRIDAY (Calendar.FRIDAY),
-  SATURDAY (Calendar.SATURDAY),
-  SUNDAY (Calendar.SUNDAY);
+	MONDAY  (Calendar.MONDAY),
+	TUESDAY (Calendar.TUESDAY),
+	WEDNESDAY (Calendar.WEDNESDAY),
+	THURSDAY (Calendar.THURSDAY),
+	FRIDAY (Calendar.FRIDAY),
+	SATURDAY (Calendar.SATURDAY),
+	SUNDAY (Calendar.SUNDAY);
 
-  private static EDayOfWeek[] sCalendarNaNas;
-  
-  private final int iDayOfWeakAsCalendar;
+	private static EDayOfWeek[] sCalendarNaNas;
 
-  EDayOfWeek(int aDayOfWeakAsCalendar) {
-    iDayOfWeakAsCalendar = aDayOfWeakAsCalendar;
-  }
-  
-  
-  public int getDayOfWeakAsCalendar() {
-	return iDayOfWeakAsCalendar;
-}
+	private final int iDayOfWeakAsCalendar;
+
+	EDayOfWeek(int aDayOfWeakAsCalendar) {
+		iDayOfWeakAsCalendar = aDayOfWeakAsCalendar;
+	}
 
 
-/**
-   * Vrátí honodu dne v týdnu na základě kalendáře.
-   * @param aCalendarValue
-   * @return
-   */
-  public static EDayOfWeek fromCalendarValue(int aCalendarValue) {
-    if (sCalendarNaNas == null) {
-     // Zde se spoléháme trochu nesprávně na to, jak jsou konstanty
-     // ve tříde Calendar implementovány.
-     sCalendarNaNas = new EDayOfWeek[8];
-     for (EDayOfWeek dayOfWeek : EDayOfWeek.values()) {
-       sCalendarNaNas[dayOfWeek.iDayOfWeakAsCalendar] = dayOfWeek;
-     }
-    }
-    return sCalendarNaNas[aCalendarValue];
-  }
+	public int getDayOfWeakAsCalendar() {
+		return iDayOfWeakAsCalendar;
+	}
+
+
+	/**
+	 * Vrátí honodu dne v týdnu na základě kalendáře.
+	 * @param aCalendarValue
+	 * @return
+	 */
+	public static EDayOfWeek fromCalendarValue(int aCalendarValue) {
+		if (sCalendarNaNas == null) {
+			// Zde se spoléháme trochu nesprávně na to, jak jsou konstanty
+			// ve tříde Calendar implementovány.
+			sCalendarNaNas = new EDayOfWeek[8];
+			for (EDayOfWeek dayOfWeek : EDayOfWeek.values()) {
+				sCalendarNaNas[dayOfWeek.iDayOfWeakAsCalendar] = dayOfWeek;
+			}
+		}
+		return sCalendarNaNas[aCalendarValue];
+	}
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.render;
 
@@ -9,19 +9,19 @@ package cz.geokuk.core.render;
  */
 public class KmzParams {
 
-  double sever;
-  double jih;
-  double vychod;
-  double zapad;
+	double sever;
+	double jih;
+	double vychod;
+	double zapad;
 
-  double rotation;
+	double rotation;
 
-  int xDlazdice;
-  int yDlazdice;
+	int xDlazdice;
+	int yDlazdice;
 
 
 
-  EImageType imageType = EImageType.png;
-  public int drawOrder;
+	EImageType imageType = EImageType.png;
+	public int drawOrder;
 
 }

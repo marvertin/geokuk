@@ -11,30 +11,30 @@ import org.apache.logging.log4j.Logger;
  * @author tatinek
  */
 public enum EKesWptType {
-    //CACHE,
-    FINAL_LOCATION,
-    STAGES_OF_A_MULTICACHE,
-    QUESTION_TO_ANSWER,
-    REFERENCE_POINT,
-    PARKING_AREA,
-    TRAILHEAD;
+	//CACHE,
+	FINAL_LOCATION,
+	STAGES_OF_A_MULTICACHE,
+	QUESTION_TO_ANSWER,
+	REFERENCE_POINT,
+	PARKING_AREA,
+	TRAILHEAD;
 
-    @SuppressWarnings("unused")
-    private static final Logger log =
-            LogManager.getLogger(EKesWptType.class.getSimpleName());
+	@SuppressWarnings("unused")
+	private static final Logger log =
+	LogManager.getLogger(EKesWptType.class.getSimpleName());
 
-    public static EKesWptType decode(String aKesWptTpeStr) {
-        try {
-            return EKesWptType.valueOf(upravNaVyctovec(aKesWptTpeStr));
-        } catch (IllegalArgumentException e) {
-            // log.warn("Unknown waypoint type : {}", aKesWptTpeStr);
-            return null;
-        }
-    }
+	public static EKesWptType decode(String aKesWptTpeStr) {
+		try {
+			return EKesWptType.valueOf(upravNaVyctovec(aKesWptTpeStr));
+		} catch (IllegalArgumentException e) {
+			// log.warn("Unknown waypoint type : {}", aKesWptTpeStr);
+			return null;
+		}
+	}
 
-    private static String upravNaVyctovec(String pp) {
-        if (pp == null) return null;
-        return pp.replace(' ', '_').replace('-', '_').toUpperCase();
-    }
+	private static String upravNaVyctovec(String pp) {
+		if (pp == null) return null;
+		return pp.replace(' ', '_').replace('-', '_').toUpperCase();
+	}
 
 }

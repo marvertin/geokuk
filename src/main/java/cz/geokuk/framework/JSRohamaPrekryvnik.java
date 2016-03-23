@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.framework;
 
@@ -10,7 +10,7 @@ package cz.geokuk.framework;
  *
  */
 public class JSRohamaPrekryvnik extends JPrekryvnik {
-  private static final long serialVersionUID = -5996655830197513951L;
+	private static final long serialVersionUID = -5996655830197513951L;
 
-  
+
 }

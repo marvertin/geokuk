@@ -10,80 +10,80 @@ import java.util.Set;
  */
 public class Alela {
 
-  private final String alelaName;
-  private String displayName;
-  private Gen gen;
-  private Grupa grupa;
+	private final String alelaName;
+	private String displayName;
+	private Gen gen;
+	private Grupa grupa;
 	private final int celkovePoradi;
 
-  /**
-   * @return the grupa
-   */
-  public Grupa getGrupa() {
-    return grupa;
-  }
+	/**
+	 * @return the grupa
+	 */
+	public Grupa getGrupa() {
+		return grupa;
+	}
 
-  /**
-   * @param aGrupa the grupa to set
-   */
-  public void setGrupa(Grupa aGrupa) {
-    grupa = aGrupa;
-  }
+	/**
+	 * @param aGrupa the grupa to set
+	 */
+	public void setGrupa(Grupa aGrupa) {
+		grupa = aGrupa;
+	}
 
-  public Alela(String alelaName, int celkovePoradi) {
-    this.alelaName = alelaName;
-    this.displayName = alelaName;
+	public Alela(String alelaName, int celkovePoradi) {
+		this.alelaName = alelaName;
+		this.displayName = alelaName;
 		this.celkovePoradi = celkovePoradi;
-  }
+	}
 
-  public String getDisplayName() {
-    return displayName;
-  }
+	public String getDisplayName() {
+		return displayName;
+	}
 
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName == null ? alelaName : displayName;
-  }
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName == null ? alelaName : displayName;
+	}
 
-  public boolean hasGen() {
-  	return gen != null;
-  }
-  
-  public Gen getGen() {
-  	if (gen == null) {
-  		throw new RuntimeException("Alela " + alelaName + " nemá gen!");
-  	}
-    return gen;
-  }
+	public boolean hasGen() {
+		return gen != null;
+	}
 
-  public void setGen(Gen gen) {
-    this.gen = gen;
-  }
+	public Gen getGen() {
+		if (gen == null) {
+			throw new RuntimeException("Alela " + alelaName + " nemá gen!");
+		}
+		return gen;
+	}
 
-  @Override
-  public String toString() {
-    return alelaName;
-  }
+	public void setGen(Gen gen) {
+		this.gen = gen;
+	}
 
-  public boolean isVychozi() {
-    return gen.getVychoziAlela() == this;
-  }
+	@Override
+	public String toString() {
+		return alelaName;
+	}
 
-  public String name() {
-    return alelaName;
-  }
+	public boolean isVychozi() {
+		return gen.getVychoziAlela() == this;
+	}
 
-  public static Set<String> alelyToNames(Set<Alela> alely) {
-    Set<String> jmenaAlel = new HashSet<>(alely.size());
-    for (Alela alela : alely) {
-      jmenaAlel.add(alela.name());
-    }
-    return jmenaAlel;
-  }
+	public String name() {
+		return alelaName;
+	}
+
+	public static Set<String> alelyToNames(Set<Alela> alely) {
+		Set<String> jmenaAlel = new HashSet<>(alely.size());
+		for (Alela alela : alely) {
+			jmenaAlel.add(alela.name());
+		}
+		return jmenaAlel;
+	}
 
 	public int getCelkovePoradi() {
-  	return celkovePoradi;
-  }
-	
+		return celkovePoradi;
+	}
+
 	public Genom getGenom() {
 		return getGen().getGenom();
 	}

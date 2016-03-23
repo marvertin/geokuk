@@ -63,316 +63,316 @@ import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
 public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiverRegistrationInit, DocumentListener {
 
-  private static final Double SPATNY_FORMAT = Double.NEGATIVE_INFINITY;
+	private static final Double SPATNY_FORMAT = Double.NEGATIVE_INFINITY;
 
-  private static final long serialVersionUID = 7087453419069194768L;
-
-
-  // TODO skutečnou hodnotu maximální šířky sem dát
-  private static final double SIRKA_MAX = 80;
-  private static final double SIRKA_MIN = -80;
-
-  private static final double DELKA_MIN =  -180;
-  private static final double DELKA_MAX = 180;
+	private static final long serialVersionUID = 7087453419069194768L;
 
 
-  private JTextField jSouEdit;
-  private JLabel jSouEditLabel;
-  private JButton jButtonCentruj;
-  private JLabel jHotovaSirka;
-  private JLabel jHotovaDelka;
-  private JLabel jUtm;
+	// TODO skutečnou hodnotu maximální šířky sem dát
+	private static final double SIRKA_MAX = 80;
+	private static final double SIRKA_MIN = -80;
 
-  final static Color  HILIT_COLOR = Color.LIGHT_GRAY;
-  final static Color  ERROR_COLOR = Color.PINK;
-  final static String CANCEL_ACTION = "cancel-search";
-
-  private Color entryBg;
-
-  private Wgs souradniceEditovane;
-  private Wgs souradniceReferencni;
-
-  private PoziceModel poziceModel;
-
-  private VyrezModel vyrezModel;
-
-  private boolean souradniceNastavenyRukama;
+	private static final double DELKA_MIN =  -180;
+	private static final double DELKA_MAX = 180;
 
 
-  public JSouradnicovyFrame() {
-    setTitle("Zadání souřadnic");
-    init();
-    jSouEdit.getDocument().addDocumentListener(this);
+	private JTextField jSouEdit;
+	private JLabel jSouEditLabel;
+	private JButton jButtonCentruj;
+	private JLabel jHotovaSirka;
+	private JLabel jHotovaDelka;
+	private JLabel jUtm;
 
-    registerEvents();
+	final static Color  HILIT_COLOR = Color.LIGHT_GRAY;
+	final static Color  ERROR_COLOR = Color.PINK;
+	final static String CANCEL_ACTION = "cancel-search";
 
+	private Color entryBg;
 
-  }
+	private Wgs souradniceEditovane;
+	private Wgs souradniceReferencni;
 
-  private void registerEvents() {
+	private PoziceModel poziceModel;
 
-    jButtonCentruj.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        poziceModel.setPozice(souradniceEditovane);
-        vyrezModel.vystredovatNaPozici();
-      }
-    });
-  }
+	private VyrezModel vyrezModel;
 
-  public void onEvent(final ReferencniBodSeZmenilEvent aEvent) {
-    setSouradniceReferencni(aEvent.wgs);
-    vyhodnotEnableCentrovacihoTlacitka();
-  }
-
-  public void onEvent(final VyrezChangedEvent aEvent) {
-    vyhodnotEnableCentrovacihoTlacitka();
-  }
+	private boolean souradniceNastavenyRukama;
 
 
-  /** This method is called from within the constructor to
-   * initialize the form.
-   */
+	public JSouradnicovyFrame() {
+		setTitle("Zadání souřadnic");
+		init();
+		jSouEdit.getDocument().addDocumentListener(this);
 
-  @Override
-  protected void initComponents() {
-    final String tooltip = "Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny)," +
-        " jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. " +
-        " Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
-    jSouEdit = new JTextField();
-    jSouEdit.setToolTipText(tooltip);
-
-    jSouEditLabel = new JLabel("Souřadnice: ");
-    jSouEditLabel.setLabelFor(jSouEdit);
-
-    jButtonCentruj = new JButton("Centruj");
-    jButtonCentruj.setToolTipText("Centruje mapu na zadaných souřadnicích.");
-    getRootPane().setDefaultButton(jButtonCentruj);
-
-    final Font hotovoFont = new Font("Monospaced", Font.BOLD, 20);
-    jHotovaSirka = new JLabel();
-    jHotovaSirka.setFont(hotovoFont);
-    jHotovaSirka.setOpaque(true);
-    jHotovaDelka = new JLabel();
-    jHotovaDelka.setFont(hotovoFont);
-    jHotovaDelka.setOpaque(true);
-    jUtm = new JLabel();
-
-    setTitle("Zadání souřadnic");
-
-    final JPanel panel = new JPanel();
-    final GroupLayout layout = new GroupLayout(panel);
-    panel.setLayout(layout);
-    add(panel);
-
-    jButtonCentruj.setAlignmentY(CENTER_ALIGNMENT);
-    jUtm.setText("?");
-    //    panel.add(jSirka);
-    //    panel.add(jDelka);
-    //    panel.add(jButtonCentruj);
-
-    layout.setAutoCreateGaps(true);
-    layout.setAutoCreateContainerGaps(true);
-    layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(jSouEditLabel)
-                )
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(jSouEdit)
-                )
-            )
-        .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(jHotovaSirka)
-                .addComponent(jHotovaDelka)
-                )
-            .addComponent(jButtonCentruj)
-            )
-        .addComponent(jUtm)
-        );
-
-    layout.setVerticalGroup(layout.createSequentialGroup()
-        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup()
-                    .addComponent(jSouEditLabel)
-                    .addComponent(jSouEdit)
-                    )
-                )
-            )
-        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jHotovaSirka)
-                .addComponent(jHotovaDelka)
-                )
-            .addComponent(jButtonCentruj)
-            )
-        .addComponent(jUtm)
-        );
-    jSouEdit.setPreferredSize(new Dimension(150, jSouEdit.getPreferredSize().height));
-    jSouEdit.setText("");
-    entryBg = jSouEdit.getBackground();
-    edituj();
-
-  }
-
-  private void setSouradniceReferencni(final Wgs wgs) {
-    if (wgs.equals(souradniceReferencni)) {
-      return;
-    }
-    souradniceReferencni = wgs;
-    if (!souradniceNastavenyRukama) {
-      jSouEdit.setText(Wgs.toGeoFormat(wgs.lat) + " ; " + Wgs.toGeoFormat(wgs.lon));
-      jSouEdit.selectAll();
-      souradniceNastavenyRukama = false; // toto se může zdát zbytečné, ale řádky před tím to změní
-    }
-    edituj();
-  }
-
-  private void edituj() {
-    //if (souradnice == null) return;
-    boolean ok;
-    final Wgs wgs = new WgsParser().parsruj(jSouEdit.getText());
-    if (wgs == null) { // prizpusobeni puvodni verzi
-      //  wgs = new Wgs(SPATNY_FORMAT, SPATNY_FORMAT);
-    }
-    final double lat = wgs == null ? SPATNY_FORMAT : wgs.lat;
-    final double lon = wgs == null ? SPATNY_FORMAT : wgs.lon;
-    final boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, lat, SIRKA_MIN, SIRKA_MAX);
-    final boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, lon, DELKA_MIN, DELKA_MAX);
-    ok = okSirka && okDelka;
-    if (ok) {
-      souradniceEditovane = wgs;
-      jUtm.setText(wgs.toUtm().toString());
-    } else {
-      jUtm.setText("UTM = ?");
-    }
-    vyhodnotEnableCentrovacihoTlacitka();
-  }
-
-  /**
-   *
-   */
-  private void vyhodnotEnableCentrovacihoTlacitka() {
-    final boolean jsmeNaMiste = jsmeVycentrovaniSeZadanouPozici();
-
-    //jsmeNaMiste = vyrezModel.isPoziceUprostred();
-    jButtonCentruj.setEnabled(!jsmeNaMiste);
-  }
-
-  /**
-   * @return
-   */
-  private boolean jsmeVycentrovaniSeZadanouPozici() {
-    final boolean jsmeNaMiste =
-        souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni)
-        && vyrezModel.isPoziceUprostred();
-    return jsmeNaMiste;
-  }
+		registerEvents();
 
 
-  private boolean aplikuj(final JLabel jHotova, final JTextField editacni,  final double val, final double min, final double max) {
-    boolean ok;
-    if (val == SPATNY_FORMAT) {
-      jHotova.setText("Grrrr!");
-      jHotova.setBackground(Color.RED);
-      editacni.setBackground(ERROR_COLOR);
-      ok = false;
-    } else {
-      jHotova.setText(Wgs.toGeoFormat(val));
-      if (val >= min && val <= max) {
-        jHotova.setBackground(Color.GREEN);
-        editacni.setBackground(Color.WHITE);
-        ok = true;
-      } else {
-        if (val < 10 && val == (long)val) {
-          jHotova.setBackground(Color.GRAY);
-          jHotova.setText(jHotova.getText().replaceAll("\\d", "?"));
-          editacni.setBackground(Color.WHITE);
-          ok = false;
-        } else {
-          jHotova.setBackground(Color.RED);
-          editacni.setBackground(ERROR_COLOR);
-          ok = false;
-        }
-      }
-    }
-    return ok;
-  }
+	}
 
-  // DocumentListener methods
+	private void registerEvents() {
 
-  @Override
-  public void insertUpdate(final DocumentEvent ev) {
-    souradniceNastavenyRukama = true;
-    edituj();
-  }
+		jButtonCentruj.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				poziceModel.setPozice(souradniceEditovane);
+				vyrezModel.vystredovatNaPozici();
+			}
+		});
+	}
 
-  @Override
-  public void removeUpdate(final DocumentEvent ev) {
-    souradniceNastavenyRukama = true;
-    edituj();
-  }
+	public void onEvent(final ReferencniBodSeZmenilEvent aEvent) {
+		setSouradniceReferencni(aEvent.wgs);
+		vyhodnotEnableCentrovacihoTlacitka();
+	}
 
-  @Override
-  public void changedUpdate(final DocumentEvent ev) {
-    souradniceNastavenyRukama = true;
-    edituj();
-  }
-
-  //  private final class SpousteniVyhledavace implements ChangeListener {
-  //    @Override
-  //    public void stateChanged(ChangeEvent e) {
-  //      search();
-  //    }
-  //  }
-
-  class CancelAction extends AbstractAction {
-    private static final long serialVersionUID = -480129891208539096L;
-
-    @Override
-    public void actionPerformed(final ActionEvent ev) {
-      //      hilit.removeAllHighlights();
-      jSouEdit.setText("");
-      jSouEdit.setBackground(entryBg);
-    }
-  }
+	public void onEvent(final VyrezChangedEvent aEvent) {
+		vyhodnotEnableCentrovacihoTlacitka();
+	}
 
 
-  //  public static void main(String args[]) {
-  //    //Schedule a job for the event dispatch thread:
-  //    //creating and showing this application's GUI.
-  //
-  //    SwingUtilities.invokeLater(new Runnable() {
-  //      public void run() {
-  //        //Turn off metal's use of bold fonts
-  ////        UIManager.put("swing.boldMetal", Boolean.FALSE);
-  //        new JSouradnicovyFrame(null).setVisible(true);
-  //      }
-  //    });
-  //  }
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 */
+
+	@Override
+	protected void initComponents() {
+		final String tooltip = "Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny)," +
+				" jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. " +
+				" Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
+		jSouEdit = new JTextField();
+		jSouEdit.setToolTipText(tooltip);
+
+		jSouEditLabel = new JLabel("Souřadnice: ");
+		jSouEditLabel.setLabelFor(jSouEdit);
+
+		jButtonCentruj = new JButton("Centruj");
+		jButtonCentruj.setToolTipText("Centruje mapu na zadaných souřadnicích.");
+		getRootPane().setDefaultButton(jButtonCentruj);
+
+		final Font hotovoFont = new Font("Monospaced", Font.BOLD, 20);
+		jHotovaSirka = new JLabel();
+		jHotovaSirka.setFont(hotovoFont);
+		jHotovaSirka.setOpaque(true);
+		jHotovaDelka = new JLabel();
+		jHotovaDelka.setFont(hotovoFont);
+		jHotovaDelka.setOpaque(true);
+		jUtm = new JLabel();
+
+		setTitle("Zadání souřadnic");
+
+		final JPanel panel = new JPanel();
+		final GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+		add(panel);
+
+		jButtonCentruj.setAlignmentY(CENTER_ALIGNMENT);
+		jUtm.setText("?");
+		//    panel.add(jSirka);
+		//    panel.add(jDelka);
+		//    panel.add(jButtonCentruj);
+
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(jSouEditLabel)
+								)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(jSouEdit)
+								)
+						)
+				.addGroup(layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(jHotovaSirka)
+								.addComponent(jHotovaDelka)
+								)
+						.addComponent(jButtonCentruj)
+						)
+				.addComponent(jUtm)
+				);
+
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup()
+										.addComponent(jSouEditLabel)
+										.addComponent(jSouEdit)
+										)
+								)
+						)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(jHotovaSirka)
+								.addComponent(jHotovaDelka)
+								)
+						.addComponent(jButtonCentruj)
+						)
+				.addComponent(jUtm)
+				);
+		jSouEdit.setPreferredSize(new Dimension(150, jSouEdit.getPreferredSize().height));
+		jSouEdit.setText("");
+		entryBg = jSouEdit.getBackground();
+		edituj();
+
+	}
+
+	private void setSouradniceReferencni(final Wgs wgs) {
+		if (wgs.equals(souradniceReferencni)) {
+			return;
+		}
+		souradniceReferencni = wgs;
+		if (!souradniceNastavenyRukama) {
+			jSouEdit.setText(Wgs.toGeoFormat(wgs.lat) + " ; " + Wgs.toGeoFormat(wgs.lon));
+			jSouEdit.selectAll();
+			souradniceNastavenyRukama = false; // toto se může zdát zbytečné, ale řádky před tím to změní
+		}
+		edituj();
+	}
+
+	private void edituj() {
+		//if (souradnice == null) return;
+		boolean ok;
+		final Wgs wgs = new WgsParser().parsruj(jSouEdit.getText());
+		if (wgs == null) { // prizpusobeni puvodni verzi
+			//  wgs = new Wgs(SPATNY_FORMAT, SPATNY_FORMAT);
+		}
+		final double lat = wgs == null ? SPATNY_FORMAT : wgs.lat;
+		final double lon = wgs == null ? SPATNY_FORMAT : wgs.lon;
+		final boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, lat, SIRKA_MIN, SIRKA_MAX);
+		final boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, lon, DELKA_MIN, DELKA_MAX);
+		ok = okSirka && okDelka;
+		if (ok) {
+			souradniceEditovane = wgs;
+			jUtm.setText(wgs.toUtm().toString());
+		} else {
+			jUtm.setText("UTM = ?");
+		}
+		vyhodnotEnableCentrovacihoTlacitka();
+	}
+
+	/**
+	 *
+	 */
+	private void vyhodnotEnableCentrovacihoTlacitka() {
+		final boolean jsmeNaMiste = jsmeVycentrovaniSeZadanouPozici();
+
+		//jsmeNaMiste = vyrezModel.isPoziceUprostred();
+		jButtonCentruj.setEnabled(!jsmeNaMiste);
+	}
+
+	/**
+	 * @return
+	 */
+	private boolean jsmeVycentrovaniSeZadanouPozici() {
+		final boolean jsmeNaMiste =
+				souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni)
+				&& vyrezModel.isPoziceUprostred();
+		return jsmeNaMiste;
+	}
 
 
-  public void inject(final PoziceModel poziceModel) {
-    this.poziceModel = poziceModel;
-  }
+	private boolean aplikuj(final JLabel jHotova, final JTextField editacni,  final double val, final double min, final double max) {
+		boolean ok;
+		if (val == SPATNY_FORMAT) {
+			jHotova.setText("Grrrr!");
+			jHotova.setBackground(Color.RED);
+			editacni.setBackground(ERROR_COLOR);
+			ok = false;
+		} else {
+			jHotova.setText(Wgs.toGeoFormat(val));
+			if (val >= min && val <= max) {
+				jHotova.setBackground(Color.GREEN);
+				editacni.setBackground(Color.WHITE);
+				ok = true;
+			} else {
+				if (val < 10 && val == (long)val) {
+					jHotova.setBackground(Color.GRAY);
+					jHotova.setText(jHotova.getText().replaceAll("\\d", "?"));
+					editacni.setBackground(Color.WHITE);
+					ok = false;
+				} else {
+					jHotova.setBackground(Color.RED);
+					editacni.setBackground(ERROR_COLOR);
+					ok = false;
+				}
+			}
+		}
+		return ok;
+	}
 
-  public void inject(final VyrezModel vyrezModel) {
-    this.vyrezModel = vyrezModel;
-  }
+	// DocumentListener methods
 
-  /* (non-Javadoc)
-   * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
-   */
-  @Override
-  public void initAfterEventReceiverRegistration() {
-    //super.ini
-  }
+	@Override
+	public void insertUpdate(final DocumentEvent ev) {
+		souradniceNastavenyRukama = true;
+		edituj();
+	}
 
-  @Override
-  protected String getTemaNapovedyDialogu() {
-    return "JintNaSouradnice";
-  }
+	@Override
+	public void removeUpdate(final DocumentEvent ev) {
+		souradniceNastavenyRukama = true;
+		edituj();
+	}
+
+	@Override
+	public void changedUpdate(final DocumentEvent ev) {
+		souradniceNastavenyRukama = true;
+		edituj();
+	}
+
+	//  private final class SpousteniVyhledavace implements ChangeListener {
+	//    @Override
+	//    public void stateChanged(ChangeEvent e) {
+	//      search();
+	//    }
+	//  }
+
+	class CancelAction extends AbstractAction {
+		private static final long serialVersionUID = -480129891208539096L;
+
+		@Override
+		public void actionPerformed(final ActionEvent ev) {
+			//      hilit.removeAllHighlights();
+			jSouEdit.setText("");
+			jSouEdit.setBackground(entryBg);
+		}
+	}
+
+
+	//  public static void main(String args[]) {
+	//    //Schedule a job for the event dispatch thread:
+	//    //creating and showing this application's GUI.
+	//
+	//    SwingUtilities.invokeLater(new Runnable() {
+	//      public void run() {
+	//        //Turn off metal's use of bold fonts
+	////        UIManager.put("swing.boldMetal", Boolean.FALSE);
+	//        new JSouradnicovyFrame(null).setVisible(true);
+	//      }
+	//    });
+	//  }
+
+
+	public void inject(final PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
+	}
+
+	public void inject(final VyrezModel vyrezModel) {
+		this.vyrezModel = vyrezModel;
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
+	 */
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		//super.ini
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "JintNaSouradnice";
+	}
 }
 

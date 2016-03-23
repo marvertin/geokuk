@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.mapy.kachle;
 
@@ -11,16 +11,16 @@ import cz.geokuk.util.file.Filex;
  */
 public class KachleCacheFolderHolder {
 
-  private Filex kachleCacheDir;
+	private Filex kachleCacheDir;
 
-  public Filex getKachleCacheFolder() {
-    return kachleCacheDir;
-  }
+	public Filex getKachleCacheFolder() {
+		return kachleCacheDir;
+	}
 
-  /**
-   * @param kachleCacheDir
-   */
-  public void setKachleCacheDir(Filex kachleCacheDir) {
-    this.kachleCacheDir = kachleCacheDir;
-  }
+	/**
+	 * @param kachleCacheDir
+	 */
+	public void setKachleCacheDir(Filex kachleCacheDir) {
+		this.kachleCacheDir = kachleCacheDir;
+	}
 }

@@ -16,155 +16,155 @@ import java.util.List;
  */
 public class ProcessLauncher {
 
-  private static class StreamGobbler extends Thread {
-    private final InputStream is;
-    private final List<ResultItem> content;
+	private static class StreamGobbler extends Thread {
+		private final InputStream is;
+		private final List<ResultItem> content;
 
-    StreamGobbler(InputStream aIs) {
-      is = aIs;
-      content = new ArrayList<>();
-    }
+		StreamGobbler(InputStream aIs) {
+			is = aIs;
+			content = new ArrayList<>();
+		}
 
-    @Override
-    public void run() {
-      try {
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        String line = null;
-        while ((line = br.readLine()) != null) {
-          content.add(new ResultItem( System.currentTimeMillis(),line));
-        }
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    }
+		@Override
+		public void run() {
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(is));
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					content.add(new ResultItem( System.currentTimeMillis(),line));
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 
-    private List<ResultItem> getContent() {
-      return content;
-    }
-  }
+		private List<ResultItem> getContent() {
+			return content;
+		}
+	}
 
-  /**
-   * Dvojice časová známka, řádek textu
-   * @author polakm
-   */
-  public static class ResultItem {
-    
-    private final long timeStamp;
-    private final String text;
-    ResultItem(long aTs, String aText) {
-      
-      timeStamp = aTs;
-      text = aText;
-    }
-    public long getTimeStamp() {
-      return timeStamp;
-    }
-    public String getText() {
-      return text;
-    }
-  }
-  
-  /**
-   * Výsledek spuštění.
-   * @author polakm
-   */
-  public static class Result {
+	/**
+	 * Dvojice časová známka, řádek textu
+	 * @author polakm
+	 */
+	public static class ResultItem {
 
-    private final String executedCommand;
-    private final List<ResultItem> error;
-    private final List<ResultItem> output;
-    private final int exitValue;
+		private final long timeStamp;
+		private final String text;
+		ResultItem(long aTs, String aText) {
 
-    Result(String aExecutedCommand, int aExitValue, List<ResultItem> aError, List<ResultItem> aOutput) {
+			timeStamp = aTs;
+			text = aText;
+		}
+		public long getTimeStamp() {
+			return timeStamp;
+		}
+		public String getText() {
+			return text;
+		}
+	}
 
-      executedCommand = aExecutedCommand;
-      exitValue = aExitValue;
-      error = aError;
-      output = aOutput;
-    }
+	/**
+	 * Výsledek spuštění.
+	 * @author polakm
+	 */
+	public static class Result {
 
-    private List<String> _textFromResItem(List<ResultItem> aData) {
-      
-      List<String> result = new ArrayList<>();
-      if (aData != null) {
-        for (ResultItem item : aData) {
-          
-          result.add(item.getText());
-        }
-      }
-      return result;
-    }
+		private final String executedCommand;
+		private final List<ResultItem> error;
+		private final List<ResultItem> output;
+		private final int exitValue;
 
-    public List<ResultItem> getErrorWithTimestamps() {
-      return error;
-    }
+		Result(String aExecutedCommand, int aExitValue, List<ResultItem> aError, List<ResultItem> aOutput) {
 
-    public List<ResultItem> getOutputWithTimestamps() {
-      return output;
-    }
+			executedCommand = aExecutedCommand;
+			exitValue = aExitValue;
+			error = aError;
+			output = aOutput;
+		}
 
-    public List<String> getError() {
-      return _textFromResItem(error);
-    }
+		private List<String> _textFromResItem(List<ResultItem> aData) {
 
-    public List<String> getOutput() {
-      return _textFromResItem(output);
-    }
+			List<String> result = new ArrayList<>();
+			if (aData != null) {
+				for (ResultItem item : aData) {
 
-    public int getExitValue() {
-      return exitValue;
-    }
+					result.add(item.getText());
+				}
+			}
+			return result;
+		}
 
-    public String getExecutedCommand() {
-      return executedCommand;
-    }
+		public List<ResultItem> getErrorWithTimestamps() {
+			return error;
+		}
 
-  }
+		public List<ResultItem> getOutputWithTimestamps() {
+			return output;
+		}
 
-  /**
-   * Spustí daný program s parametry
-   * @param aPrgFileName
-   * @param aParams
-   * @return
-   * @exception RuntimeException při libovolné chybě
-   */
-  public static Result exec(String aPrgFileName, String... aParams) {
+		public List<String> getError() {
+			return _textFromResItem(error);
+		}
 
-    StringBuilder cmd = new StringBuilder();
-    cmd.append(aPrgFileName.trim());
-    String delimiter = " ";
-    for (String s : aParams) {
+		public List<String> getOutput() {
+			return _textFromResItem(output);
+		}
 
-      if (s == null) {
-        continue;
-      }
-      String arg = s.trim();
-      if (arg.equals("")) {
-        continue;
-      }
-      cmd.append(delimiter);
-      cmd.append(arg);
-    }
-    try {
-      Runtime rt = Runtime.getRuntime();
+		public int getExitValue() {
+			return exitValue;
+		}
 
-      String command = cmd.toString();
-      Process proc = rt.exec(command);
-      
-      StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream());
-      StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream());
+		public String getExecutedCommand() {
+			return executedCommand;
+		}
 
-      errorGobbler.start();
-      outputGobbler.start();
+	}
 
-      int exitVal = proc.waitFor();
+	/**
+	 * Spustí daný program s parametry
+	 * @param aPrgFileName
+	 * @param aParams
+	 * @return
+	 * @exception RuntimeException při libovolné chybě
+	 */
+	public static Result exec(String aPrgFileName, String... aParams) {
 
-      Result r = new Result(command, exitVal, errorGobbler.getContent(), outputGobbler.getContent());
-      return r;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+		StringBuilder cmd = new StringBuilder();
+		cmd.append(aPrgFileName.trim());
+		String delimiter = " ";
+		for (String s : aParams) {
 
-  }
+			if (s == null) {
+				continue;
+			}
+			String arg = s.trim();
+			if (arg.equals("")) {
+				continue;
+			}
+			cmd.append(delimiter);
+			cmd.append(arg);
+		}
+		try {
+			Runtime rt = Runtime.getRuntime();
+
+			String command = cmd.toString();
+			Process proc = rt.exec(command);
+
+			StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream());
+			StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream());
+
+			errorGobbler.start();
+			outputGobbler.start();
+
+			int exitVal = proc.waitFor();
+
+			Result r = new Result(command, exitVal, errorGobbler.getContent(), outputGobbler.getContent());
+			return r;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+	}
 
 }

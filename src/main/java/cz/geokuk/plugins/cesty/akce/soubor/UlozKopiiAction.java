@@ -13,39 +13,39 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public class UlozKopiiAction extends SouboeCestaAction0 {
 
-  private static final long serialVersionUID = 1L;
-  private Doc doc;
+	private static final long serialVersionUID = 1L;
+	private Doc doc;
 
 
-  public UlozKopiiAction() {
-    super("Uložit kopii cest (gpx) ...");
-    putValue(SHORT_DESCRIPTION, "Uloží zadaný výlet jako kopii do jiného souboru GPX, dále se pak bude pracovat na původním souboru");
-    putValue(MNEMONIC_KEY, KeyEvent.VK_K);
-    //putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
-  }
+	public UlozKopiiAction() {
+		super("Uložit kopii cest (gpx) ...");
+		putValue(SHORT_DESCRIPTION, "Uloží zadaný výlet jako kopii do jiného souboru GPX, dále se pak bude pracovat na původním souboru");
+		putValue(MNEMONIC_KEY, KeyEvent.VK_K);
+		//putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
+	}
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
+	@Override
+	public void actionPerformed(ActionEvent e) {
 
-    JFileChooser fc = new JFileChooser();
-    fc.addChoosableFileFilter(new GpxFilter());
-    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    fc.setSelectedFile(cestyModel.getImplicitniVyletSaveCopyNovyFile());
-    int result = fc.showDialog(Dlg.parentFrame(), "Uložit kopii");
-    if (result == JFileChooser.APPROVE_OPTION) {
-      File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
-      if (selectedFile.exists()) { // dtaz na přepsání
-        if (! Dlg.prepsatSoubor(selectedFile)) return;
-      }
-      cestyModel.uloz(selectedFile, doc, false);
-      System.out.println("Uložena cesta do: " + doc.getFile());
-    }
-  }
+		JFileChooser fc = new JFileChooser();
+		fc.addChoosableFileFilter(new GpxFilter());
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.setSelectedFile(cestyModel.getImplicitniVyletSaveCopyNovyFile());
+		int result = fc.showDialog(Dlg.parentFrame(), "Uložit kopii");
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
+			if (selectedFile.exists()) { // dtaz na přepsání
+				if (! Dlg.prepsatSoubor(selectedFile)) return;
+			}
+			cestyModel.uloz(selectedFile, doc, false);
+			System.out.println("Uložena cesta do: " + doc.getFile());
+		}
+	}
 
-  public void onEvent(CestyChangedEvent event) {
-    doc = event.getDoc();
-    setEnabled(doc != null && (! doc.isEmpty() || doc.isChanged()));
-  }
+	public void onEvent(CestyChangedEvent event) {
+		doc = event.getDoc();
+		setEnabled(doc != null && (! doc.isEmpty() || doc.isChanged()));
+	}
 
 
 }

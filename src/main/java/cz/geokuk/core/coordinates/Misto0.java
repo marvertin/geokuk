@@ -7,17 +7,17 @@ package cz.geokuk.core.coordinates;
  */
 public abstract class Misto0 implements Mouable {
 
-  public abstract Wgs toWgs();
+	public abstract Wgs toWgs();
 
-  public abstract Mercator toMercator();
-  
-  public abstract Mou toMou();
-  
-  public abstract Utm toUtm();
-  
-  @Override
-  public final Mou getMou() {
-    return toMou();
-  }
+	public abstract Mercator toMercator();
+
+	public abstract Mou toMou();
+
+	public abstract Utm toUtm();
+
+	@Override
+	public final Mou getMou() {
+		return toMou();
+	}
 
 }

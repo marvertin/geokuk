@@ -6,21 +6,21 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 public abstract class JKesoidDetail0 extends JPanel {
 
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	public abstract void napln(Wpt wpt);
 
-	
-  public static String formatujDatum(String s) {
-    if (s == null) return s;
-    s = s.trim();
-    if (s.length() == 8) {
-      String cc = s.substring(6, 8) + "." + s.substring(4, 6) + "." + s.substring(0, 4);
-      return cc;
-    }
-    if (s.length() < 10) return s;
-    String x = s.substring(8, 10) + "." + s.substring(5, 7) + "." + s.substring(0, 4);
-    return x;
-  }
-	
+
+	public static String formatujDatum(String s) {
+		if (s == null) return s;
+		s = s.trim();
+		if (s.length() == 8) {
+			String cc = s.substring(6, 8) + "." + s.substring(4, 6) + "." + s.substring(0, 4);
+			return cc;
+		}
+		if (s.length() < 10) return s;
+		String x = s.substring(8, 10) + "." + s.substring(5, 7) + "." + s.substring(0, 4);
+		return x;
+	}
+
 }

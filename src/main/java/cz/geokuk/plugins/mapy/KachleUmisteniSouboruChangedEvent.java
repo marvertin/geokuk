@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.mapy;
 
@@ -12,22 +12,22 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
  */
 public class KachleUmisteniSouboruChangedEvent extends Event0<KesoidModel> {
 
-  private final KachleUmisteniSouboru umisteniSouboru;
+	private final KachleUmisteniSouboru umisteniSouboru;
 
-  /**
-   * @param umisteniSouboru
-   */
-  public KachleUmisteniSouboruChangedEvent(KachleUmisteniSouboru umisteniSouboru) {
-    super();
-    this.umisteniSouboru = umisteniSouboru;
-  }
+	/**
+	 * @param umisteniSouboru
+	 */
+	public KachleUmisteniSouboruChangedEvent(KachleUmisteniSouboru umisteniSouboru) {
+		super();
+		this.umisteniSouboru = umisteniSouboru;
+	}
 
-  /**
-   * @return the umisteniSouboru
-   */
-  public KachleUmisteniSouboru getUmisteniSouboru() {
-    return umisteniSouboru;
-  }
+	/**
+	 * @return the umisteniSouboru
+	 */
+	public KachleUmisteniSouboru getUmisteniSouboru() {
+		return umisteniSouboru;
+	}
 
 
 }

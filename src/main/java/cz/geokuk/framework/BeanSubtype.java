@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.framework;
 
@@ -13,5 +13,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 
 public @interface BeanSubtype {
-  String value() default "_use_interface_BeanSubtypable_"; 
+	String value() default "_use_interface_BeanSubtypable_";
 }

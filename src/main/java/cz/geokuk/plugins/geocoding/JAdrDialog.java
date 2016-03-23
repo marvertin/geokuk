@@ -65,218 +65,218 @@ public class JAdrDialog extends JMyDialog0
 implements RefreshorVysledkuHledani<Nalezenec>
 ,DocumentListener {
 
-  private static final long serialVersionUID = 7087453419069194768L;
+	private static final long serialVersionUID = 7087453419069194768L;
 
-  private JTextField entry;
-  private JLabel jLabel1;
-  private JButton jButtonCentruj;
-  private JAdrTable jAdrTabulka;
-  private JLabel status;
+	private JTextField entry;
+	private JLabel jLabel1;
+	private JButton jButtonCentruj;
+	private JAdrTable jAdrTabulka;
+	private JLabel status;
 
-  final static Color  HILIT_COLOR = Color.LIGHT_GRAY;
-  final static Color  ERROR_COLOR = Color.PINK;
-  final static String CANCEL_ACTION = "cancel-adr-hled";
+	final static Color  HILIT_COLOR = Color.LIGHT_GRAY;
+	final static Color  ERROR_COLOR = Color.PINK;
+	final static String CANCEL_ACTION = "cancel-adr-hled";
 
-  final Color entryBg;
-  //  final Highlighter hilit;
-  //  final Highlighter.HighlightPainter painter;
+	final Color entryBg;
+	//  final Highlighter hilit;
+	//  final Highlighter.HighlightPainter painter;
 
-  private Wgs referencniBod;
+	private Wgs referencniBod;
 
-  private PoziceModel poziceModel;
+	private PoziceModel poziceModel;
 
-  private VyrezModel vyrezModel;
+	private VyrezModel vyrezModel;
 
-  private GeocodingModel geocodingModel;
-
-
-  public JAdrDialog() {
-    init();
-    entryBg = entry.getBackground();
-    entry.getDocument().addDocumentListener(this);
-    registerEvents();
-  }
-
-  private void registerEvents() {
-    jButtonCentruj.addActionListener(new ActionListener() {
-
-      @Override
-      public void actionPerformed(ActionEvent e) {
-
-        Nalezenec nalezenec = jAdrTabulka.getCurrent();
-        if (nalezenec != null) {
-          poziceModel.setPozice(nalezenec.wgs);
-          vyrezModel.vystredovatNaPozici();
-          //Board.eveman.fire(new PoziceChangedEvent(nalezenec.wgs, true) );
-        }
-      }
-    });
-
-    //    Board.eveman.registerWeakly(this);
-
-    //jKeskovaciTabulka.getMod
-    jAdrTabulka.addListSelectionListener(new ListSelectionListener() {
-
-      @Override
-      public void valueChanged(ListSelectionEvent aE) {
-        jButtonCentruj.setEnabled(jAdrTabulka.getCurrent() != null);
-      }
-    });
-  }
-
-  public void onEvent(ReferencniBodSeZmenilEvent aEvent) {
-    if (naVstupuJsouSouradkyNeboNic()) {
-      entry.setText(aEvent.wgs.lat + "," + aEvent.wgs.lon);
-      entry.selectAll();
-    }
-    setReferencniBod(aEvent.wgs);
-  }
-
-  private boolean naVstupuJsouSouradkyNeboNic() {
-    String text = entry.getText();
-    if (text.trim().length() == 0) return true;
-    if (text.matches("-?\\d+(\\.\\d+),-?\\d+(\\.\\d+)")) return true;
-    return false;
-  }
-
-  /** This method is called from within the constructor to
-   * initialize the form.
-   */
-
-  @Override
-  protected void initComponents() {
-    entry = new JTextField();
-    status = new JLabel();
-    jLabel1 = new JLabel();
-    jButtonCentruj = new JButton("Centruj");
-    getRootPane().setDefaultButton(jButtonCentruj);
-
-    setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    setTitle("Najdi místo dle adresy");
-
-    JAdrTable kesTable = new JAdrTable();
-    //    jKeskovaciTabulka = new JScrollPane(textArea);
-    jAdrTabulka = kesTable;
-
-    jLabel1.setText("Hledat: ");
-
-    JPanel panel = new JPanel();
-    GroupLayout layout = new GroupLayout(panel);
-    panel.setLayout(layout);
-    add(panel);
-
-    layout.setAutoCreateGaps(true);
-    layout.setAutoCreateContainerGaps(true);
-    layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)       //hroup
-        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()  //h1
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)                  //h2
-                .addComponent(jAdrTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-                .addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-                .addGroup(layout.createSequentialGroup()        // h3
-                    .addComponent(jLabel1)
-                    .addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                    .addComponent(jButtonCentruj)
-                )
-            )
-        )
-    );
+	private GeocodingModel geocodingModel;
 
 
-    layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)  // vGrou
-        .addGroup(layout.createSequentialGroup()                                       //v1
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)        //v2
-                .addComponent(jLabel1)
-                .addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButtonCentruj)
-            )
-            .addComponent(status)
-            .addComponent(jAdrTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-        )
-    );
+	public JAdrDialog() {
+		init();
+		entryBg = entry.getBackground();
+		entry.getDocument().addDocumentListener(this);
+		registerEvents();
+	}
 
-    pack();
-  }
+	private void registerEvents() {
+		jButtonCentruj.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				Nalezenec nalezenec = jAdrTabulka.getCurrent();
+				if (nalezenec != null) {
+					poziceModel.setPozice(nalezenec.wgs);
+					vyrezModel.vystredovatNaPozici();
+					//Board.eveman.fire(new PoziceChangedEvent(nalezenec.wgs, true) );
+				}
+			}
+		});
+
+		//    Board.eveman.registerWeakly(this);
+
+		//jKeskovaciTabulka.getMod
+		jAdrTabulka.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent aE) {
+				jButtonCentruj.setEnabled(jAdrTabulka.getCurrent() != null);
+			}
+		});
+	}
+
+	public void onEvent(ReferencniBodSeZmenilEvent aEvent) {
+		if (naVstupuJsouSouradkyNeboNic()) {
+			entry.setText(aEvent.wgs.lat + "," + aEvent.wgs.lon);
+			entry.selectAll();
+		}
+		setReferencniBod(aEvent.wgs);
+	}
+
+	private boolean naVstupuJsouSouradkyNeboNic() {
+		String text = entry.getText();
+		if (text.trim().length() == 0) return true;
+		if (text.matches("-?\\d+(\\.\\d+),-?\\d+(\\.\\d+)")) return true;
+		return false;
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 */
+
+	@Override
+	protected void initComponents() {
+		entry = new JTextField();
+		status = new JLabel();
+		jLabel1 = new JLabel();
+		jButtonCentruj = new JButton("Centruj");
+		getRootPane().setDefaultButton(jButtonCentruj);
+
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setTitle("Najdi místo dle adresy");
+
+		JAdrTable kesTable = new JAdrTable();
+		//    jKeskovaciTabulka = new JScrollPane(textArea);
+		jAdrTabulka = kesTable;
+
+		jLabel1.setText("Hledat: ");
+
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+		add(panel);
+
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)       //hroup
+				.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()  //h1
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)                  //h2
+								.addComponent(jAdrTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+								.addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+								.addGroup(layout.createSequentialGroup()        // h3
+										.addComponent(jLabel1)
+										.addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+										.addComponent(jButtonCentruj)
+										)
+								)
+						)
+				);
 
 
-  protected void setReferencniBod(Wgs wgs) {
-    if (wgs.equals(referencniBod)) return;
-    referencniBod = wgs;
-    search();
-  }
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)  // vGrou
+				.addGroup(layout.createSequentialGroup()                                       //v1
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)        //v2
+								.addComponent(jLabel1)
+								.addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonCentruj)
+								)
+						.addComponent(status)
+						.addComponent(jAdrTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+						)
+				);
 
-  public void search() {
-    if (referencniBod == null) return;
-    message("Hleda se ...");
-    String s = entry.getText();
-    geocodingModel.spustHledani(s, this);
-  }
-
-  void message(String msg) {
-    status.setText(msg);
-  }
-
-  // DocumentListener methods
-
-  @Override
-  public void insertUpdate(DocumentEvent ev) {
-    search();
-  }
-
-  @Override
-  public void removeUpdate(DocumentEvent ev) {
-    search();
-  }
-
-  @Override
-  public void changedUpdate(DocumentEvent ev) {
-  }
-
-  class CancelAction extends AbstractAction  {
-    private static final long serialVersionUID = -480129891208539096L;
-
-    @Override
-    public void actionPerformed(ActionEvent ev) {
-      //      hilit.removeAllHighlights();
-      entry.setText("");
-      entry.setBackground(entryBg);
-    }
-  }
+		pack();
+	}
 
 
-  @Override
-  public void refreshVysledekHledani(VysledekHledani<Nalezenec> vysledekHledani) {
-    //    if (nalezenci.size() == 0) {
-    //      jButtonCentruj.setEnabled(false);
-    //    } else {
-    //      jButtonCentruj.setEnabled(true);
-    //    }
-    if (vysledekHledani.nalezenci != null) {
-      jAdrTabulka.setNalezenci(vysledekHledani.nalezenci);
-      if (vysledekHledani.nalezenci.size() > 0) {   // match found
-        entry.setBackground(entryBg);
-        message("Nalezeno " + vysledekHledani.nalezenci.size() + " možných adres.");
-      } else {
-        entry.setBackground(ERROR_COLOR);
-        message("Žádná shoda, stiskni ESC k výmazu hledacího pole.");
-      }
-    }
-  }
+	protected void setReferencniBod(Wgs wgs) {
+		if (wgs.equals(referencniBod)) return;
+		referencniBod = wgs;
+		search();
+	}
 
-  public void inject(PoziceModel poziceModel) {
-    this.poziceModel = poziceModel;
-  }
+	public void search() {
+		if (referencniBod == null) return;
+		message("Hleda se ...");
+		String s = entry.getText();
+		geocodingModel.spustHledani(s, this);
+	}
 
-  public void inject(VyrezModel vyrezModel) {
-    this.vyrezModel = vyrezModel;
-  }
+	void message(String msg) {
+		status.setText(msg);
+	}
 
-  @Override
-  protected String getTemaNapovedyDialogu() {
-    return "HledatAdresu";
-  }
+	// DocumentListener methods
 
-  public void inject(GeocodingModel geocodingModel) {
-    this.geocodingModel = geocodingModel;
-  }
+	@Override
+	public void insertUpdate(DocumentEvent ev) {
+		search();
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent ev) {
+		search();
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent ev) {
+	}
+
+	class CancelAction extends AbstractAction  {
+		private static final long serialVersionUID = -480129891208539096L;
+
+		@Override
+		public void actionPerformed(ActionEvent ev) {
+			//      hilit.removeAllHighlights();
+			entry.setText("");
+			entry.setBackground(entryBg);
+		}
+	}
+
+
+	@Override
+	public void refreshVysledekHledani(VysledekHledani<Nalezenec> vysledekHledani) {
+		//    if (nalezenci.size() == 0) {
+		//      jButtonCentruj.setEnabled(false);
+		//    } else {
+		//      jButtonCentruj.setEnabled(true);
+		//    }
+		if (vysledekHledani.nalezenci != null) {
+			jAdrTabulka.setNalezenci(vysledekHledani.nalezenci);
+			if (vysledekHledani.nalezenci.size() > 0) {   // match found
+				entry.setBackground(entryBg);
+				message("Nalezeno " + vysledekHledani.nalezenci.size() + " možných adres.");
+			} else {
+				entry.setBackground(ERROR_COLOR);
+				message("Žádná shoda, stiskni ESC k výmazu hledacího pole.");
+			}
+		}
+	}
+
+	public void inject(PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
+	}
+
+	public void inject(VyrezModel vyrezModel) {
+		this.vyrezModel = vyrezModel;
+	}
+
+	@Override
+	protected String getTemaNapovedyDialogu() {
+		return "HledatAdresu";
+	}
+
+	public void inject(GeocodingModel geocodingModel) {
+		this.geocodingModel = geocodingModel;
+	}
 }
 

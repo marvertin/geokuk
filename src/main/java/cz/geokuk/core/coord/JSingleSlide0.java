@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.coord;
 
@@ -13,64 +13,64 @@ import cz.geokuk.framework.JSlide0;
  */
 public abstract class JSingleSlide0 extends JSlide0 {
 
-  private static final long serialVersionUID = 8758817189971703053L;
+	private static final long serialVersionUID = 8758817189971703053L;
 
-  private Coord soord;
-
-
-  protected Factory factory;
-
-  protected boolean isSoordInitialized() {
-    return soord != null;
-  }
-
-  /**
-   * @return the coord
-   */
-  public Coord getSoord() {
-    assert soord != null;
-    return soord;
-  }
-
-  /**
-   * @param coord the coord to set
-   */
-  public void setSoord(Coord soord) {
-    assert soord != null;
-    this.soord = soord;
-  }
+	private Coord soord;
 
 
-  protected void onVyrezChanged() {
-  }
+	protected Factory factory;
 
-  //  protected final void onEvent(VyrezChangedEvent0 event ) {
-  //
-  //  }
+	protected boolean isSoordInitialized() {
+		return soord != null;
+	}
+
+	/**
+	 * @return the coord
+	 */
+	public Coord getSoord() {
+		assert soord != null;
+		return soord;
+	}
+
+	/**
+	 * @param coord the coord to set
+	 */
+	public void setSoord(Coord soord) {
+		assert soord != null;
+		this.soord = soord;
+	}
+
+
+	protected void onVyrezChanged() {
+	}
+
+	//  protected final void onEvent(VyrezChangedEvent0 event ) {
+	//
+	//  }
 
 
 
-  public void inject(Factory factory) {
-    this.factory = factory;
-  }
+	public void inject(Factory factory) {
+		this.factory = factory;
+	}
 
 
-  public void render(Graphics g) throws InterruptedException {
-    paintComponent(g);
-  }
+	public void render(Graphics g) throws InterruptedException {
+		paintComponent(g);
+	}
 
-  /**
-   * Potomek musí vytvořit novou instanci slidu, který bude rendrovatelný.
-   * Obvykle postačí, když vytvoří prázdnou instanci své vlastní třídy.
-   * Pokud vrátí null, nic se rendrovat nebude
-   * @return
-   */
-  public JSingleSlide0 createRenderableSlide() {
-    return null;
-  }
+	/**
+	 * Potomek musí vytvořit novou instanci slidu, který bude rendrovatelný.
+	 * Obvykle postačí, když vytvoří prázdnou instanci své vlastní třídy.
+	 * Pokud vrátí null, nic se rendrovat nebude
+	 * @return
+	 */
+	public JSingleSlide0 createRenderableSlide() {
+		return null;
+	}
 
-  public EJakOtacetPriRendrovani jakOtacetProRendrovani() {
-    return EJakOtacetPriRendrovani.GRAPH2D;
-  }
+	public EJakOtacetPriRendrovani jakOtacetProRendrovani() {
+		return EJakOtacetPriRendrovani.GRAPH2D;
+	}
 
 }

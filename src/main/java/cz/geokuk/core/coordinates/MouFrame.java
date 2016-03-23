@@ -18,7 +18,7 @@ public class MouFrame {
 		result = prime * result + ((mousv == null) ? 0 : mousv.hashCode());
 		return result;
 	}
-	
+
 	public MouFrame(Mou moujz, Mou mousv) {
 		super();
 		this.moujz = moujz;
@@ -51,8 +51,8 @@ public class MouFrame {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+
+
 
 }

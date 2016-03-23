@@ -20,52 +20,52 @@ import org.apache.logging.log4j.Logger;
  */
 public class GeokukMain  {
 
-  private static final Logger log = LogManager.getLogger(GeokukMain.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(GeokukMain.class.getSimpleName());
 
-  public void execute(String[] args) {
-    FConst.logInit();
-    log.info("Default character encoding: {}", Charset.defaultCharset());
-    nastavSkin();
-    Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler());
-    promazPreferencePokudJeToPrikazano(args);
-    FPreferencesInNearFile.loadNearToProgramIfNewer(); // Načíst ze souboru preferencový sobor, pokud došlo k jeho změně od minula
+	public void execute(String[] args) {
+		FConst.logInit();
+		log.info("Default character encoding: {}", Charset.defaultCharset());
+		nastavSkin();
+		Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler());
+		promazPreferencePokudJeToPrikazano(args);
+		FPreferencesInNearFile.loadNearToProgramIfNewer(); // Načíst ze souboru preferencový sobor, pokud došlo k jeho změně od minula
 
-    SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        Inicializator inicializator = new Inicializator();
-        inicializator.inicializace();
-        JMainFrame mainFrame = new JMainFrame();
-        inicializator.setMainFrame(mainFrame);
-        mainFrame.init();
-        mainFrame.setVisible(true);
-        inicializator.zkontrolovatAktualizace();
-      }
-    });
-  }
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				Inicializator inicializator = new Inicializator();
+				inicializator.inicializace();
+				JMainFrame mainFrame = new JMainFrame();
+				inicializator.setMainFrame(mainFrame);
+				mainFrame.init();
+				mainFrame.setVisible(true);
+				inicializator.zkontrolovatAktualizace();
+			}
+		});
+	}
 
-  private void nastavSkin() {
-    try {
-      LafSupport.updateLookAndFeel();
-    } catch (Throwable t) {
-      FExceptionDumper.dump(t, EExceptionSeverity.WORKARROUND, "Nastavení skinu");
-    }
-  }
+	private void nastavSkin() {
+		try {
+			LafSupport.updateLookAndFeel();
+		} catch (Throwable t) {
+			FExceptionDumper.dump(t, EExceptionSeverity.WORKARROUND, "Nastavení skinu");
+		}
+	}
 
-  private void promazPreferencePokudJeToPrikazano(String[] args) {
-    for (String s : args) {
-      if (s.trim().equalsIgnoreCase("--reset")) {
-        try {
-          MyPreferences.root().removeNode();
-        } catch (BackingStoreException e) {
-          FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Problém s promazáváním preferencí");
-        }
-      }
-    }
-  }
+	private void promazPreferencePokudJeToPrikazano(String[] args) {
+		for (String s : args) {
+			if (s.trim().equalsIgnoreCase("--reset")) {
+				try {
+					MyPreferences.root().removeNode();
+				} catch (BackingStoreException e) {
+					FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Problém s promazáváním preferencí");
+				}
+			}
+		}
+	}
 
-  public static void main(String[] args)  {
-    new GeokukMain().execute(args);
-  }
+	public static void main(String[] args)  {
+		new GeokukMain().execute(args);
+	}
 
 }

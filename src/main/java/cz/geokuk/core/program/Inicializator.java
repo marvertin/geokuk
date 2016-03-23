@@ -44,88 +44,88 @@ import cz.geokuk.plugins.vylety.VyletovyZperzistentnovac;
  */
 public class Inicializator {
 
-  private final MainFrameHolder mainFrameHolder = new MainFrameHolder();
-  private NapovedaModel napovedaModel;
+	private final MainFrameHolder mainFrameHolder = new MainFrameHolder();
+	private NapovedaModel napovedaModel;
 
-  public void inicializace() {
-    final BeanBag bb = new BeanBag();
-    bb.registerSigleton(bb);
-    bb.registerSigleton(new EventManager());
-    bb.registerSigleton(new Prefe());
-
-
-    bb.registerSigleton(new CestyZperzistentnovac());
-    bb.registerSigleton(new VyletovyZperzistentnovac());
+	public void inicializace() {
+		final BeanBag bb = new BeanBag();
+		bb.registerSigleton(bb);
+		bb.registerSigleton(new EventManager());
+		bb.registerSigleton(new Prefe());
 
 
-    // modely
-    bb.registerSigleton(new PoziceModel());
-    bb.registerSigleton(new VyrezModel());
-    bb.registerSigleton(new CestyModel());
-    bb.registerSigleton(new VyletModel());
-    bb.registerSigleton(new CestyNacitaniKesoiduWatchDog());
-    bb.registerSigleton(new VyletNacitaniKesoiduWatchDog());
-    bb.registerSigleton(new KesFilter());
-    bb.registerSigleton(new PopiskyModel());
-    bb.registerSigleton(new KruhyModel());
-    bb.registerSigleton(new ObsazenostModel());
+		bb.registerSigleton(new CestyZperzistentnovac());
+		bb.registerSigleton(new VyletovyZperzistentnovac());
 
-    bb.registerSigleton(new MrizkaModel("DdMmMmm", true));
-    bb.registerSigleton(new MrizkaModel("DdMmSs", false));
-    bb.registerSigleton(new MrizkaModel("Utm", false));
-    bb.registerSigleton(new MrizkaModel("S42", false));
-    bb.registerSigleton(new MrizkaModel("JTSK", false));
-    bb.registerSigleton(new MrizkaModel("Meritkovnik", true));
 
-    bb.registerSigleton(new RefbodyModel());
-    bb.registerSigleton(new KachleModel());
-    bb.registerSigleton(new KachloDownloader());
+		// modely
+		bb.registerSigleton(new PoziceModel());
+		bb.registerSigleton(new VyrezModel());
+		bb.registerSigleton(new CestyModel());
+		bb.registerSigleton(new VyletModel());
+		bb.registerSigleton(new CestyNacitaniKesoiduWatchDog());
+		bb.registerSigleton(new VyletNacitaniKesoiduWatchDog());
+		bb.registerSigleton(new KesFilter());
+		bb.registerSigleton(new PopiskyModel());
+		bb.registerSigleton(new KruhyModel());
+		bb.registerSigleton(new ObsazenostModel());
 
-    bb.registerSigleton(new MapyModel());
-    bb.registerSigleton(new KesoidModel());
+		bb.registerSigleton(new MrizkaModel("DdMmMmm", true));
+		bb.registerSigleton(new MrizkaModel("DdMmSs", false));
+		bb.registerSigleton(new MrizkaModel("Utm", false));
+		bb.registerSigleton(new MrizkaModel("S42", false));
+		bb.registerSigleton(new MrizkaModel("JTSK", false));
+		bb.registerSigleton(new MrizkaModel("Meritkovnik", true));
 
-    bb.registerSigleton(new HlidacReferencnihoBodu());
-    bb.registerSigleton(new ProfileModel());
-    bb.registerSigleton(new ProgressModel());
-    bb.registerSigleton(new OknoModel());
-    bb.registerSigleton(new RenderModel());
-    napovedaModel = bb.registerSigleton(new NapovedaModel());
-    bb.registerSigleton(new OnofflineModel());
-    bb.registerSigleton(new GeocodingModel());
+		bb.registerSigleton(new RefbodyModel());
+		bb.registerSigleton(new KachleModel());
+		bb.registerSigleton(new KachloDownloader());
 
-    bb.registerSigleton(new HledaciSluzba());
+		bb.registerSigleton(new MapyModel());
+		bb.registerSigleton(new KesoidModel());
 
-    bb.registerSigleton(new KachleZiskavac());
+		bb.registerSigleton(new HlidacReferencnihoBodu());
+		bb.registerSigleton(new ProfileModel());
+		bb.registerSigleton(new ProgressModel());
+		bb.registerSigleton(new OknoModel());
+		bb.registerSigleton(new RenderModel());
+		napovedaModel = bb.registerSigleton(new NapovedaModel());
+		bb.registerSigleton(new OnofflineModel());
+		bb.registerSigleton(new GeocodingModel());
 
-    // akce
-    final Akce akce = new Akce();
-    bb.registerSigleton(akce);
-    bb.registrFieldsAsSingleton(akce);
+		bb.registerSigleton(new HledaciSluzba());
 
-    intMapAkce(bb, akce);
-    //
-    bb.registerSigleton(mainFrameHolder);
-    bb.init();
-    //Board.eveman = eveman;
-  }
+		bb.registerSigleton(new KachleZiskavac());
 
-  public void intMapAkce(final BeanBag bb, final Akce akce) {
-    for (final EKaType ka : EKaType.values()) {
-      final MapyAction0 jednamapoakce =
-          ka.isPodklad() ?
-              new PodkladAction(ka) :
-                new DekoraceAction(ka);
-              akce.mapoakce.add(jednamapoakce);
-              bb.registerSigleton(jednamapoakce);
+		// akce
+		final Akce akce = new Akce();
+		bb.registerSigleton(akce);
+		bb.registrFieldsAsSingleton(akce);
 
-    }
-  }
+		intMapAkce(bb, akce);
+		//
+		bb.registerSigleton(mainFrameHolder);
+		bb.init();
+		//Board.eveman = eveman;
+	}
 
-  public void setMainFrame(final JMainFrame frame) {
-    mainFrameHolder.setMainFrame(frame);
-  }
+	public void intMapAkce(final BeanBag bb, final Akce akce) {
+		for (final EKaType ka : EKaType.values()) {
+			final MapyAction0 jednamapoakce =
+					ka.isPodklad() ?
+							new PodkladAction(ka) :
+								new DekoraceAction(ka);
+							akce.mapoakce.add(jednamapoakce);
+							bb.registerSigleton(jednamapoakce);
 
-  public void zkontrolovatAktualizace() {
-    napovedaModel.zkontrolujNoveAktualizace(false);
-  }
+		}
+	}
+
+	public void setMainFrame(final JMainFrame frame) {
+		mainFrameHolder.setMainFrame(frame);
+	}
+
+	public void zkontrolovatAktualizace() {
+		napovedaModel.zkontrolujNoveAktualizace(false);
+	}
 }

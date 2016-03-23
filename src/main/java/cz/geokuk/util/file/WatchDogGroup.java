@@ -6,25 +6,25 @@ import java.util.List;
 
 public class WatchDogGroup {
 
-  private final List<FileWatchDog<?>> list = new ArrayList<>();
+	private final List<FileWatchDog<?>> list = new ArrayList<>();
 
-  void forceIfAnyModified() {
-    boolean zmena = false;
-    for (FileWatchDog<?> fwd : list) {
-      if (fwd.wasModified() > 0) {
-        zmena = true;
-      }
-    }
-    if (zmena) {
-      for (FileWatchDog<?> fwd : list) {
-        fwd.forceLoad();
-      }
-    }
-  }
+	void forceIfAnyModified() {
+		boolean zmena = false;
+		for (FileWatchDog<?> fwd : list) {
+			if (fwd.wasModified() > 0) {
+				zmena = true;
+			}
+		}
+		if (zmena) {
+			for (FileWatchDog<?> fwd : list) {
+				fwd.forceLoad();
+			}
+		}
+	}
 
-  void add(FileWatchDog<?> fwd) {
-    list.add(fwd);
-    fwd.setGroup(this);
-  }
+	void add(FileWatchDog<?> fwd) {
+		list.add(fwd);
+		fwd.setGroup(this);
+	}
 
 }

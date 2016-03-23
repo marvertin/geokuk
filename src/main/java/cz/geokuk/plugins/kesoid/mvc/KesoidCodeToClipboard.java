@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.kesoid.mvc;
 
@@ -16,44 +16,44 @@ import cz.geokuk.plugins.kesoid.Kesoid;
  */
 public class KesoidCodeToClipboard extends Action0 {
 
-  private static final long serialVersionUID = -8054017274338240706L;
-  private final Kesoid kesoid;
-  private Poziceq poziceq = new Poziceq();
-  private KesoidModel kesoidModel;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private final Kesoid kesoid;
+	private Poziceq poziceq = new Poziceq();
+	private KesoidModel kesoidModel;
 
-  /**
-   * 
-   */
-  public KesoidCodeToClipboard(Kesoid aKesoid) {
-    super("<html>Identifikátor <i>" + aKesoid.getIdentifier() + "</i> do schráky");
-    kesoid = aKesoid;
-    putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží kód kešoidu.");
-    //putValue(MNEMONIC_KEY, InputEvent.)
-    //putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F7"));
-  }
+	/**
+	 *
+	 */
+	public KesoidCodeToClipboard(Kesoid aKesoid) {
+		super("<html>Identifikátor <i>" + aKesoid.getIdentifier() + "</i> do schráky");
+		kesoid = aKesoid;
+		putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží kód kešoidu.");
+		//putValue(MNEMONIC_KEY, InputEvent.)
+		//putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F7"));
+	}
 
-  /* (non-Javadoc)
-   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-   */
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    Kesoid kes = kesoid;
-    if (kes == null) {
-      kes = poziceq.getKesoid();
-      if (kes == null) return;
-    }
-    kesoidModel.pridejKodKesoiduDoClipboardu(kes);
-  }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Kesoid kes = kesoid;
+		if (kes == null) {
+			kes = poziceq.getKesoid();
+			if (kes == null) return;
+		}
+		kesoidModel.pridejKodKesoiduDoClipboardu(kes);
+	}
 
-  public void onEvent(PoziceChangedEvent event) {
-    poziceq = event.poziceq;
-    setEnabled(kesoid != null || poziceq.getWpt() != null);
-  }
+	public void onEvent(PoziceChangedEvent event) {
+		poziceq = event.poziceq;
+		setEnabled(kesoid != null || poziceq.getWpt() != null);
+	}
 
-  public void inject(KesoidModel kesoidModel) {
-    this.kesoidModel = kesoidModel;
-  }
+	public void inject(KesoidModel kesoidModel) {
+		this.kesoidModel = kesoidModel;
+	}
 }
 
 

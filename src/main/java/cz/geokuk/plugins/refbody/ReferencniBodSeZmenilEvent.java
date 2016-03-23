@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.refbody;
 
@@ -15,21 +15,21 @@ import cz.geokuk.framework.Event0;
  */
 public class ReferencniBodSeZmenilEvent extends Event0<RefbodyModel> {
 
-  public final Wgs wgs;
-  private final Coord moord;
+	public final Wgs wgs;
+	private final Coord moord;
 
 
-  /**
-   * @param aWgs
-   */
-  public ReferencniBodSeZmenilEvent(Wgs aWgs, Coord moord) {
-    wgs = aWgs;
-    this.moord = moord;
-  }
+	/**
+	 * @param aWgs
+	 */
+	public ReferencniBodSeZmenilEvent(Wgs aWgs, Coord moord) {
+		wgs = aWgs;
+		this.moord = moord;
+	}
 
 
-  public Coord getMoord() {
-    return moord;
-  }
+	public Coord getMoord() {
+		return moord;
+	}
 
 }

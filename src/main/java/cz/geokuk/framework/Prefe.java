@@ -6,9 +6,9 @@ package cz.geokuk.framework;
  * @author tatinek
  */
 public class Prefe {
-  
-  MyPreferences curr() {
-    return MyPreferences.current();
-  }
+
+	MyPreferences curr() {
+		return MyPreferences.current();
+	}
 
 }

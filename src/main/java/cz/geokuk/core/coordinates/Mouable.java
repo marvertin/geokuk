@@ -6,5 +6,5 @@ package cz.geokuk.core.coordinates;
  *
  */
 public interface Mouable {
-  public Mou getMou();
+	public Mou getMou();
 }

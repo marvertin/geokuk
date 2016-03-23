@@ -18,68 +18,68 @@ package cz.geokuk.util.lang;
  */
 public abstract class XObject0 extends RuntimeException
 {
-    /** Odkaz na příští výjimku.
-     * @serial
-     */
-    //Exception next;
+	/** Odkaz na příští výjimku.
+	 * @serial
+	 */
+	//Exception next;
 
 
-    /**
-   * 
-   */
-  private static final long serialVersionUID = -3973117135262826574L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -3973117135262826574L;
 
-    /** Vytvoří výjimku se zadano zprávou
-     * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
-     * technicky a systémově znalé osobě.
-     */
-    public XObject0(String s)
-    {
-        super(s);
-    }
+	/** Vytvoří výjimku se zadano zprávou
+	 * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
+	 * technicky a systémově znalé osobě.
+	 */
+	public XObject0(String s)
+	{
+		super(s);
+	}
 
-    /** Vytvoří výjimku a naváže ji na zadanou výjimku.
-     * Používá se v bloku catch v případě potřeby přehodit výjimku.
-     * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
-     * technicky a systémově znalé osobě.
-     * @param e Přehazovaná výjimka.
-     */
-    public XObject0(String s, Exception e)
-    {
-        super(s, e);
-    }
-
-
-    /**Vyhodí výjimku s tím, že přidá jméno třídy, ze které je vyhozena.
-     * @param trida Třída, ze které je výjimka vyhazována. Volající metoda
-     * bezmyšlenkovitě uvádí vždy getClass(). Je to velmi užitečná informace v
-     * případě, že používáme následníky.
-     * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
-     * technicky a systémově znalé osobě.
-     */
-    public XObject0(Object trida, String s)
-    {
-        this(FThrowable._constructClassString(trida,s));
-    }
-
-    /**Přehodí výjimku s tím, že přidá jméno třídy, ze které je přehozena.
-     * @param trida Třída, ze které je výjimka vyhazována. Volající metoda
-     * bezmyšlenkovitě uvádí vždy getClass(). Je to velmi užitečná informace v
-     * případě, že používáme následníky.
-     * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
-     * technicky a systémově znalé osobě.
-     * @param e Přehazovaná výjimka.
-     */
-    public XObject0(Object trida, String s, Exception e)
-    {
-        this(FThrowable._constructClassString(trida,s), e);
-    }
+	/** Vytvoří výjimku a naváže ji na zadanou výjimku.
+	 * Používá se v bloku catch v případě potřeby přehodit výjimku.
+	 * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
+	 * technicky a systémově znalé osobě.
+	 * @param e Přehazovaná výjimka.
+	 */
+	public XObject0(String s, Exception e)
+	{
+		super(s, e);
+	}
 
 
-    /** Dá výjimku jako čitelný řetězec. Pokud je výjimka zřetězena s dalšími,
-     * vrací znakem nového řádku oddělené popisy jednotlivých výjimek.
-     * @return Víceřádkový řetězec s informacemi o výjimce určeným pro programátora
-     * nebo správce systému.
+	/**Vyhodí výjimku s tím, že přidá jméno třídy, ze které je vyhozena.
+	 * @param trida Třída, ze které je výjimka vyhazována. Volající metoda
+	 * bezmyšlenkovitě uvádí vždy getClass(). Je to velmi užitečná informace v
+	 * případě, že používáme následníky.
+	 * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
+	 * technicky a systémově znalé osobě.
+	 */
+	public XObject0(Object trida, String s)
+	{
+		this(FThrowable._constructClassString(trida,s));
+	}
+
+	/**Přehodí výjimku s tím, že přidá jméno třídy, ze které je přehozena.
+	 * @param trida Třída, ze které je výjimka vyhazována. Volající metoda
+	 * bezmyšlenkovitě uvádí vždy getClass(). Je to velmi užitečná informace v
+	 * případě, že používáme následníky.
+	 * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
+	 * technicky a systémově znalé osobě.
+	 * @param e Přehazovaná výjimka.
+	 */
+	public XObject0(Object trida, String s, Exception e)
+	{
+		this(FThrowable._constructClassString(trida,s), e);
+	}
+
+
+	/** Dá výjimku jako čitelný řetězec. Pokud je výjimka zřetězena s dalšími,
+	 * vrací znakem nového řádku oddělené popisy jednotlivých výjimek.
+	 * @return Víceřádkový řetězec s informacemi o výjimce určeným pro programátora
+	 * nebo správce systému.
 
     public final String toString()
     {
@@ -89,19 +89,19 @@ public abstract class XObject0 extends RuntimeException
         else
             return super.toString() + "\n" + next.toString();;
     }
-*/
+	 */
 
-    /** Dá veškeré informace o výjimce jako řetězec.
-     * Vrací stack trace jako řetězec pro tuto výjimku a všechny výjimky seznamu,
-     * součástí stacku je i výpis zpráv obsažených ve výjimce, z čehož vyplývá,
-     * že getStackTrace vrací nejúplnější informaci o výjimce, která je k dispozici.
-     * @return Víceřádkový řetězec s informacemi o výjimce určeným pro programátora
-     * nebo správce systému.
+	/** Dá veškeré informace o výjimce jako řetězec.
+	 * Vrací stack trace jako řetězec pro tuto výjimku a všechny výjimky seznamu,
+	 * součástí stacku je i výpis zpráv obsažených ve výjimce, z čehož vyplývá,
+	 * že getStackTrace vrací nejúplnější informaci o výjimce, která je k dispozici.
+	 * @return Víceřádkový řetězec s informacemi o výjimce určeným pro programátora
+	 * nebo správce systému.
     private final String _getStackTrace()
     {
         return FThrowable.getStackTrace(this);
     }
-     */
+	 */
 
 }
 

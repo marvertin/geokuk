@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.coord;
 
@@ -13,7 +13,7 @@ public class ZmenaPoupravenychSouradnicMysiEvent {
 	public Mou cur;
 
 	public ZmenaPoupravenychSouradnicMysiEvent(Mou cur) {
-	  super();
-	  this.cur = cur;
-  }
+		super();
+		this.cur = cur;
+	}
 }

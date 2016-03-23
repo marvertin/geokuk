@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.util.lang;
 
@@ -10,12 +10,12 @@ package cz.geokuk.util.lang;
  *
  */
 public interface IAtomLong extends IAtom {
-  
-  /**
-   * Převede atomický typ na číslo typu long.
-   * Protože atomický typ nemůže obsahoivat null, je pouit primitivní typ a ne obálka.
-   * @return
-   */
-  public long toLong();
+
+	/**
+	 * Převede atomický typ na číslo typu long.
+	 * Protože atomický typ nemůže obsahoivat null, je pouit primitivní typ a ne obálka.
+	 * @return
+	 */
+	public long toLong();
 
 }

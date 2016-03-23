@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.kesoid.mvc;
 
@@ -19,28 +19,28 @@ import cz.geokuk.util.process.BrowserOpener;
  */
 public class ZobrazNaGcComAction extends Action0 {
 
-  private static final long serialVersionUID = -8054017274338240706L;
-  private final URL url;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private final URL url;
 
-  /**
-   * 
-   */
-  public ZobrazNaGcComAction(Kesoid kesoid) {
-    
-    super("Zobrazení na webu", kesoid.getUrlIcon());
-    url = kesoid.getUrlShow();
-    putValue(SHORT_DESCRIPTION, "Zobrazí listing keše na geocaching COM.");
-    //putValue(MNEMONIC_KEY, InputEvent.)
-    //   putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
+	/**
+	 *
+	 */
+	public ZobrazNaGcComAction(Kesoid kesoid) {
 
-  }
-  /* (non-Javadoc)
-   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-   */
+		super("Zobrazení na webu", kesoid.getUrlIcon());
+		url = kesoid.getUrlShow();
+		putValue(SHORT_DESCRIPTION, "Zobrazí listing keše na geocaching COM.");
+		//putValue(MNEMONIC_KEY, InputEvent.)
+		//   putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
 
-  public void actionPerformed(ActionEvent e) {
-    BrowserOpener.displayURL(url);
-  }
+	}
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+
+	public void actionPerformed(ActionEvent e) {
+		BrowserOpener.displayURL(url);
+	}
 
 }
 

@@ -8,7 +8,7 @@ package cz.geokuk.plugins.mapy.kachle;
  */
 public interface Kanceler {
 
-  public static Kanceler EMPTY = () -> {};
+	public static Kanceler EMPTY = () -> {};
 
-  public void cancel();
+	public void cancel();
 }

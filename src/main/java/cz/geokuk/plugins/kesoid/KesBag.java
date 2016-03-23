@@ -20,129 +20,129 @@ import org.apache.logging.log4j.Logger;
 
 
 public class KesBag {
-    private static final Logger log =
-            LogManager.getLogger(KesBag.class.getSimpleName());
+	private static final Logger log =
+			LogManager.getLogger(KesBag.class.getSimpleName());
 
-  private final List<Wpt> wpts = new ArrayList<>();
-  private Set<Kesoid> kesoidyset;
-  private List<Kesoid> kesoidy;
+	private final List<Wpt> wpts = new ArrayList<>();
+	private Set<Kesoid> kesoidyset;
+	private List<Kesoid> kesoidy;
 
-  private CounterMap<Alela> poctyAlel;
+	private CounterMap<Alela> poctyAlel;
 
-  private final Indexator<Wpt> indexator;
+	private final Indexator<Wpt> indexator;
 
-  private int maximalniBestOf = 0;
-  private int maximalniHodnoceni;
-  private int maximalniFavorit;
-  private final Genom genom;
+	private int maximalniBestOf = 0;
+	private int maximalniHodnoceni;
+	private int maximalniFavorit;
+	private final Genom genom;
 
-  private final CitacAlel citacAlel;
+	private final CitacAlel citacAlel;
 
-  private InformaceOZdrojich iInformaceOZdrojich;
+	private InformaceOZdrojich iInformaceOZdrojich;
 
-  public KesBag(final Genom genom) {
-    this.genom = genom;
-    indexator =new Indexator<>(BoundingRect.ALL);
-    kesoidyset = new HashSet<>();
-    citacAlel = genom.createCitacAlel();
-  }
+	public KesBag(final Genom genom) {
+		this.genom = genom;
+		indexator =new Indexator<>(BoundingRect.ALL);
+		kesoidyset = new HashSet<>();
+		citacAlel = genom.createCitacAlel();
+	}
 
-  public void add(Wpt wpt, Genotyp genotyp) {
-    if (genotyp == null) { // to je zde jen z důvodu optimalizace
-      genotyp = wpt.getGenotyp(genom);
-    }
-    Mou mou = wpt.getMou();
-    if (mou.xx < 0 || mou.yy < 0) {
-      //// TODO [veverka] Řešit rozsah [25.11.2009 9:45:59; veverka]
-      log.error("Nelze přidat takový waypoint: " + mou + " / " + mou.xx + ":" + mou.yy + " / " + wpt + " --- " +
-              wpt.getKesoid());
-      return;
-    }
-    indexator.vloz(mou.xx, mou.yy, wpt);
-    Kesoid kesoid = wpt.getKesoid();
-    kesoidyset.add(kesoid);
-    wpts.add(wpt);
-    if (kesoid instanceof Kes) {
-      Kes kes = (Kes) kesoid;
-      maximalniBestOf = Math.max(maximalniBestOf, kes.getBestOf());
-      maximalniHodnoceni = Math.max(maximalniHodnoceni, kes.getHodnoceni());
-      maximalniFavorit = Math.max(maximalniFavorit, kes.getFavorit());
-    }
-    for (Alela alela : genotyp.getAlely()) {
-      assert alela != null;
-      citacAlel.add(alela);
-    }
-  }
+	public void add(Wpt wpt, Genotyp genotyp) {
+		if (genotyp == null) { // to je zde jen z důvodu optimalizace
+			genotyp = wpt.getGenotyp(genom);
+		}
+		Mou mou = wpt.getMou();
+		if (mou.xx < 0 || mou.yy < 0) {
+			//// TODO [veverka] Řešit rozsah [25.11.2009 9:45:59; veverka]
+			log.error("Nelze přidat takový waypoint: " + mou + " / " + mou.xx + ":" + mou.yy + " / " + wpt + " --- " +
+					wpt.getKesoid());
+			return;
+		}
+		indexator.vloz(mou.xx, mou.yy, wpt);
+		Kesoid kesoid = wpt.getKesoid();
+		kesoidyset.add(kesoid);
+		wpts.add(wpt);
+		if (kesoid instanceof Kes) {
+			Kes kes = (Kes) kesoid;
+			maximalniBestOf = Math.max(maximalniBestOf, kes.getBestOf());
+			maximalniHodnoceni = Math.max(maximalniHodnoceni, kes.getHodnoceni());
+			maximalniFavorit = Math.max(maximalniFavorit, kes.getFavorit());
+		}
+		for (Alela alela : genotyp.getAlely()) {
+			assert alela != null;
+			citacAlel.add(alela);
+		}
+	}
 
-  public void done() {
-    kesoidy = new ArrayList<>(kesoidyset.size());
-    kesoidy.addAll(kesoidyset);
-    kesoidyset = null;
-    poctyAlel = citacAlel.getCounterMap();
-    //System.out.println(poctyAlel);
-  }
+	public void done() {
+		kesoidy = new ArrayList<>(kesoidyset.size());
+		kesoidy.addAll(kesoidyset);
+		kesoidyset = null;
+		poctyAlel = citacAlel.getCounterMap();
+		//System.out.println(poctyAlel);
+	}
 
-  /**
-   * @return the genom
-   */
-  public Genom getGenom() {
-    return genom;
-  }
+	/**
+	 * @return the genom
+	 */
+	public Genom getGenom() {
+		return genom;
+	}
 
-  public Indexator<Wpt> getIndexator() {
-    return indexator;
-  }
+	public Indexator<Wpt> getIndexator() {
+		return indexator;
+	}
 
-  /**
-   * @return the maximalniBestOf
-   */
-  public int getMaximalniBestOf() {
-    return maximalniBestOf;
-  }
+	/**
+	 * @return the maximalniBestOf
+	 */
+	public int getMaximalniBestOf() {
+		return maximalniBestOf;
+	}
 
-  public int getMaximalniHodnoceni() {
-    return maximalniHodnoceni;
-  }
+	public int getMaximalniHodnoceni() {
+		return maximalniHodnoceni;
+	}
 
-  public int getMaximalniFavorit() {
-    return maximalniFavorit;
-  }
+	public int getMaximalniFavorit() {
+		return maximalniFavorit;
+	}
 
-  public List<Wpt> getWpts() {
-    if (kesoidy == null)
-      throw new RuntimeException("Jeste neni kesBag vytvoren");
-    return wpts;
-  }
+	public List<Wpt> getWpts() {
+		if (kesoidy == null)
+			throw new RuntimeException("Jeste neni kesBag vytvoren");
+		return wpts;
+	}
 
-  public List<Kesoid> getKesoidy() {
-    if (kesoidy == null)
-      throw new RuntimeException("Jeste neni kesBag vytvoren");
-    return kesoidy;
-  }
+	public List<Kesoid> getKesoidy() {
+		if (kesoidy == null)
+			throw new RuntimeException("Jeste neni kesBag vytvoren");
+		return kesoidy;
+	}
 
-  /**
-   * @return the poctyAlel
-   */
-  public CounterMap<Alela> getPoctyAlel() {
-    return poctyAlel;
-  }
+	/**
+	 * @return the poctyAlel
+	 */
+	public CounterMap<Alela> getPoctyAlel() {
+		return poctyAlel;
+	}
 
-  public Set<Alela> getPouziteAlely() {
-    // TODO optimalizovat
-      return poctyAlel.getMap().keySet();
-  }
+	public Set<Alela> getPouziteAlely() {
+		// TODO optimalizovat
+		return poctyAlel.getMap().keySet();
+	}
 
-  /**
-   * @param informaceOZdrojich the informaceOZdrojich to set
-   */
-  public void setInformaceOZdrojich(InformaceOZdrojich informaceOZdrojich) {
-    iInformaceOZdrojich = informaceOZdrojich;
-  }
+	/**
+	 * @param informaceOZdrojich the informaceOZdrojich to set
+	 */
+	public void setInformaceOZdrojich(InformaceOZdrojich informaceOZdrojich) {
+		iInformaceOZdrojich = informaceOZdrojich;
+	}
 
-  /**
-   * @return the informaceOZdrojich
-   */
-  public InformaceOZdrojich getInformaceOZdrojich() {
-    return iInformaceOZdrojich;
-  }
+	/**
+	 * @return the informaceOZdrojich
+	 */
+	public InformaceOZdrojich getInformaceOZdrojich() {
+		return iInformaceOZdrojich;
+	}
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.framework;
 
@@ -8,5 +8,5 @@ package cz.geokuk.framework;
  *
  */
 public interface AfterEventReceiverRegistrationInit {
-  void initAfterEventReceiverRegistration();
+	void initAfterEventReceiverRegistration();
 }

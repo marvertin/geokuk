@@ -16,58 +16,58 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public class Ukladac {
 
-  private PrintWriter pwrt;
+	private PrintWriter pwrt;
 
-  public void uloz(File f, Doc doc) {
+	public void uloz(File f, Doc doc) {
 
-    try {
-      pwrt = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), "UTF-8")));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+		try {
+			pwrt = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), "UTF-8")));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 
-    p("<?xml version=\"1.0\" encoding=\"UTF-8\"  ?>");
-    p("<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" version=\"1.1\" creator=\"http://geokuk.cz\" >");
-    uloz(doc);
+		p("<?xml version=\"1.0\" encoding=\"UTF-8\"  ?>");
+		p("<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" version=\"1.1\" creator=\"http://geokuk.cz\" >");
+		uloz(doc);
 
-    p("</gpx>");
-    pwrt.close();
-  }
-
-
-  private void uloz(Doc doc) {
-    for (Cesta cesta : doc.getCesty()) {
-      uloz(cesta);
-    }
-  }
-
-  private void uloz(Cesta cesta) {
-    p("<trk>");
-    if (cesta.getNazev() != null) {
-      p("  <name>" + cesta.getNazev() + "</name>");
-    }
-    p("  <trkseg>");
-    for (Bod b : cesta.getBody()) {
-      uloz(b.getMouable().getMou());
-      if (b.getUvpred() != null && b.getUvpred().isVzdusny()) {
-        p("  </trkseg>");
-        p("  <trkseg>");
-      }
-    }
-    p("  </trkseg>");
-    p("</trk>");
-
-  }
+		p("</gpx>");
+		pwrt.close();
+	}
 
 
+	private void uloz(Doc doc) {
+		for (Cesta cesta : doc.getCesty()) {
+			uloz(cesta);
+		}
+	}
 
-  private void uloz(Mou mou) {
-    Wgs wgs = mou.toWgs();
-    p("    <trkpt lat=\"%f\" lon=\"%f\" />", wgs.lat, wgs.lon);
-  }
+	private void uloz(Cesta cesta) {
+		p("<trk>");
+		if (cesta.getNazev() != null) {
+			p("  <name>" + cesta.getNazev() + "</name>");
+		}
+		p("  <trkseg>");
+		for (Bod b : cesta.getBody()) {
+			uloz(b.getMouable().getMou());
+			if (b.getUvpred() != null && b.getUvpred().isVzdusny()) {
+				p("  </trkseg>");
+				p("  <trkseg>");
+			}
+		}
+		p("  </trkseg>");
+		p("</trk>");
 
-  private void p(String format, Object ... p) {
-    pwrt.printf(Locale.US, format, p);
-    pwrt.println();
-  }
+	}
+
+
+
+	private void uloz(Mou mou) {
+		Wgs wgs = mou.toWgs();
+		p("    <trkpt lat=\"%f\" lon=\"%f\" />", wgs.lat, wgs.lon);
+	}
+
+	private void p(String format, Object ... p) {
+		pwrt.printf(Locale.US, format, p);
+		pwrt.println();
+	}
 }

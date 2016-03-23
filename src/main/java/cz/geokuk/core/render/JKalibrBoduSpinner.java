@@ -7,15 +7,15 @@ import javax.swing.SpinnerNumberModel;
 
 public class JKalibrBoduSpinner extends JSpinner {
 
-  private static final long serialVersionUID = 2463788585820522859L;
+	private static final long serialVersionUID = 2463788585820522859L;
 
-  public JKalibrBoduSpinner() {
-    super(new SpinnerNumberModel(2, 2, 25, 1));
-  }
+	public JKalibrBoduSpinner() {
+		super(new SpinnerNumberModel(2, 2, 25, 1));
+	}
 
-  @Override
-  public Dimension getMaximumSize() {
-    return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
-  }
+	@Override
+	public Dimension getMaximumSize() {
+		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	}
 
 }

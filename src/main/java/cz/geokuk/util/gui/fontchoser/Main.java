@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.util.gui.fontchoser;
 
@@ -16,33 +16,33 @@ import javax.swing.event.ChangeListener;
  */
 public class Main extends JFrame {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 258357579389164969L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 258357579389164969L;
 	private JLabel ukazovyText = new JLabel("tak toto fontujeme");
-  /**
-   * 
-   */
-  public Main() {
-    final JFontChooser fc = new JFontChooser();
-    fc.getSelectionModel().addChangeListener(new ChangeListener() {
-      
-      @Override
-      public void stateChanged(ChangeEvent aE) {
-        ukazovyText.setFont(fc.getFont());
-      }
-    });
-    add(fc);
-    add(ukazovyText, BorderLayout.SOUTH);
-    pack();
-    
-  }
-  /**
-   * @param args
-   */
-  public static void main(String[] args) {
-    new Main().setVisible(true);
-  }
+	/**
+	 *
+	 */
+	public Main() {
+		final JFontChooser fc = new JFontChooser();
+		fc.getSelectionModel().addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent aE) {
+				ukazovyText.setFont(fc.getFont());
+			}
+		});
+		add(fc);
+		add(ukazovyText, BorderLayout.SOUTH);
+		pack();
+
+	}
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new Main().setVisible(true);
+	}
 
 }

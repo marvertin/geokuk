@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.framework;
 
@@ -22,88 +22,88 @@ import cz.geokuk.core.program.MainFrameHolder;
  *
  */
 public abstract class Action0 extends AbstractAction {
-  private static final long serialVersionUID = -8430830975286039793L;
+	private static final long serialVersionUID = -8430830975286039793L;
 
-  protected Factory factory;
-  protected PoziceModel poziceModel;
-  protected VyrezModel vyrezModel;
+	protected Factory factory;
+	protected PoziceModel poziceModel;
+	protected VyrezModel vyrezModel;
 
-  private MainFrameHolder mainFrameHolder;
+	private MainFrameHolder mainFrameHolder;
 
-  /**
-   * @param string
-   */
-  public Action0(String string) {
-    super(string);
-  }
+	/**
+	 * @param string
+	 */
+	public Action0(String string) {
+		super(string);
+	}
 
-  /**
-   * 
-   */
-  public Action0() {
-  }
+	/**
+	 *
+	 */
+	public Action0() {
+	}
 
-  /**
-   * @param aString
-   * @param aIcon
-   */
-  public Action0(String aString, Icon aIcon) {
-    super(aString, aIcon);
-  }
+	/**
+	 * @param aString
+	 * @param aIcon
+	 */
+	public Action0(String aString, Icon aIcon) {
+		super(aString, aIcon);
+	}
 
-  public Icon getIcon() {
-    return (Icon) getValue(Action.SMALL_ICON);
-  }
+	public Icon getIcon() {
+		return (Icon) getValue(Action.SMALL_ICON);
+	}
 
-  /**
-   * Spustí akci
-   */
-  public void fire() {
-    if (!isEnabled()) return; // žádná akce, pokud je zakázána
-    int modifiers = 0;
-    AWTEvent currentEvent = EventQueue.getCurrentEvent();
-    if (currentEvent instanceof InputEvent) {
-      modifiers = ((InputEvent)currentEvent).getModifiers();
-    } else if (currentEvent instanceof ActionEvent) {
-      modifiers = ((ActionEvent)currentEvent).getModifiers();
-    }
-    actionPerformed(
-        new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
-            getActionCommand(),
-            EventQueue.getMostRecentEventTime(),
-            modifiers));
-  }
+	/**
+	 * Spustí akci
+	 */
+	public void fire() {
+		if (!isEnabled()) return; // žádná akce, pokud je zakázána
+		int modifiers = 0;
+		AWTEvent currentEvent = EventQueue.getCurrentEvent();
+		if (currentEvent instanceof InputEvent) {
+			modifiers = ((InputEvent)currentEvent).getModifiers();
+		} else if (currentEvent instanceof ActionEvent) {
+			modifiers = ((ActionEvent)currentEvent).getModifiers();
+		}
+		actionPerformed(
+				new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
+						getActionCommand(),
+						EventQueue.getMostRecentEventTime(),
+						modifiers));
+	}
 
-  /**
-   * @return
-   */
-  protected String getActionCommand() {
-    return null;
-  }
+	/**
+	 * @return
+	 */
+	protected String getActionCommand() {
+		return null;
+	}
 
-  public void inject(Factory factory) {
-    this.factory = factory;
-  }
+	public void inject(Factory factory) {
+		this.factory = factory;
+	}
 
-  public void inject(PoziceModel poziceModel) {
-    this.poziceModel = poziceModel;
-  }
+	public void inject(PoziceModel poziceModel) {
+		this.poziceModel = poziceModel;
+	}
 
-  public void inject(VyrezModel vyrezModel) {
-    this.vyrezModel = vyrezModel;
-  }
+	public void inject(VyrezModel vyrezModel) {
+		this.vyrezModel = vyrezModel;
+	}
 
-  /**
-   * Výhradně za účelem definování parenta dialogům.
-   * @return
-   */
-  protected JFrame getMainFrame() {
-    return mainFrameHolder.getMainFrame();
-  }
+	/**
+	 * Výhradně za účelem definování parenta dialogům.
+	 * @return
+	 */
+	protected JFrame getMainFrame() {
+		return mainFrameHolder.getMainFrame();
+	}
 
-  public void inject(MainFrameHolder mainFrameHolder) {
-    this.mainFrameHolder = mainFrameHolder;
-  }
+	public void inject(MainFrameHolder mainFrameHolder) {
+		this.mainFrameHolder = mainFrameHolder;
+	}
 
 
 }

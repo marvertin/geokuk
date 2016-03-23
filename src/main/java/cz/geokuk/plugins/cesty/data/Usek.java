@@ -7,273 +7,273 @@ import cz.geokuk.core.coordinates.Moud;
 
 public class Usek extends Bousek0 {
 
-    private Bod bvpred;
-    private Bod bvzad;
-    private boolean vzdusny = false;
-    private double dalka = -1;
+	private Bod bvpred;
+	private Bod bvzad;
+	private boolean vzdusny = false;
+	private double dalka = -1;
 
-    Usek(Cesta cesta) {
-        super(cesta);
-    }
+	Usek(Cesta cesta) {
+		super(cesta);
+	}
 
-    void spoj(Bod b1, Bod b2) {
-        bvzad = b1;
-        bvpred = b2;
-        b1.setUvpred(this);
-        b2.setUvzad(this);
-    }
+	void spoj(Bod b1, Bod b2) {
+		bvzad = b1;
+		bvpred = b2;
+		b1.setUvpred(this);
+		b2.setUvzad(this);
+	}
 
-    /**
-     * V zorném poli bodu je úsek tehdy,
-     * když je v obdélníku "opsaném" nad úsekem.
-     * Opsaným obdélníkem rozumíme nejmenší možný obdélník,
-     * jehož strany jsou rovnoběžné se souřadnicovými osami a to takový,
-     * že celý úsek leží v tomto obdélníku.
-     */
-    @Override
-    boolean jeVOpsanemObdelniku(Mou mou) {
-        if (mou == null) return false;
-        Mou mou1 = bvzad.getMou();
-        Mou mou2 = bvpred.getMou();
-        boolean jex = mou1.xx <= mou.xx && mou.xx <= mou2.xx
-                || mou1.xx >= mou.xx && mou.xx >= mou2.xx;
-        boolean jey = mou1.yy <= mou.yy && mou.yy <= mou2.yy
-                || mou1.yy >= mou.yy && mou.yy >= mou2.yy;
-        return jex && jey;
-    }
+	/**
+	 * V zorném poli bodu je úsek tehdy,
+	 * když je v obdélníku "opsaném" nad úsekem.
+	 * Opsaným obdélníkem rozumíme nejmenší možný obdélník,
+	 * jehož strany jsou rovnoběžné se souřadnicovými osami a to takový,
+	 * že celý úsek leží v tomto obdélníku.
+	 */
+	@Override
+	boolean jeVOpsanemObdelniku(Mou mou) {
+		if (mou == null) return false;
+		Mou mou1 = bvzad.getMou();
+		Mou mou2 = bvpred.getMou();
+		boolean jex = mou1.xx <= mou.xx && mou.xx <= mou2.xx
+				|| mou1.xx >= mou.xx && mou.xx >= mou2.xx;
+				boolean jey = mou1.yy <= mou.yy && mou.yy <= mou2.yy
+						|| mou1.yy >= mou.yy && mou.yy >= mou2.yy;
+						return jex && jey;
+	}
 
-    /**
-     * Vrací nejbližší bod k danému úseku, ale jen
-     * když pata kolmice leží na úsečce, tedy může vrátit ve speciálním případě i krajní body,
-     * ale jen pokud pata kolmice padne přesně na krajní bod.
-     *
-     * @param mou
-     * @return null, když je pata kolmice mimo úsečku.
-     */
-    public Mou getNejblizsiBodKolmoKUsecce(Mou mou) {
-        if (mou == null) return null;
-        Mou m = prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
-        if (jeVOpsanemObdelniku(m)) {
-            return m;
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * Vrací nejbližší bod k danému úseku, ale jen
+	 * když pata kolmice leží na úsečce, tedy může vrátit ve speciálním případě i krajní body,
+	 * ale jen pokud pata kolmice padne přesně na krajní bod.
+	 *
+	 * @param mou
+	 * @return null, když je pata kolmice mimo úsečku.
+	 */
+	public Mou getNejblizsiBodKolmoKUsecce(Mou mou) {
+		if (mou == null) return null;
+		Mou m = prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
+		if (jeVOpsanemObdelniku(m)) {
+			return m;
+		} else {
+			return null;
+		}
+	}
 
-    /**
-     * Vrací nejbližší bod k přímce zdadané daným úsekem.
-     * nevrací tedy krajní body.
-     *
-     * @param mou
-     * @return
-     */
-    public Mou getNejblizsiBodKPrimce(Mou mou) {
-        if (mou == null) {
-            return null;
-        }
-        return prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
-    }
+	/**
+	 * Vrací nejbližší bod k přímce zdadané daným úsekem.
+	 * nevrací tedy krajní body.
+	 *
+	 * @param mou
+	 * @return
+	 */
+	public Mou getNejblizsiBodKPrimce(Mou mou) {
+		if (mou == null) {
+			return null;
+		}
+		return prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
+	}
 
-    public long computeKvadratVzdalenostiBoduKUsecce(Mou mou) {
-        Mou m = getNejblizsiBodKolmoKUsecce(mou);
-        if (m == null) return Long.MAX_VALUE;
-        long kvadrat = mou.getKvadratVzdalenosti(m);
-        return kvadrat;
-    }
-
-
-    /**
-     * Spočítá kvadrát vzdálenosti bodu k úsečce úseku,
-     * což může být i ke krajním bodům.
-     *
-     * @param mou
-     * @return
-     */
-    @Override
-    public long computeKvadratVzdalenosti(Mou mou) {
-        Mou m = getNejblizsiBodKolmoKUsecce(mou);
-        long kvadrat;
-        if (mou == null) { // je to jeden z krajnich bodul
-            kvadrat = Math.min(bvzad.getMou().getKvadratVzdalenosti(m), bvpred.getMou().getKvadratVzdalenosti(m));
-        } else {
-            // je to komo k usecce, takze to je bod na usecce
-            kvadrat = mou.getKvadratVzdalenosti(m);
-        }
-        return kvadrat;
-    }
-
-    /**
-     * Spočítá kvadrát vzdálenosti bodu k úsečce úseku,
-     * což může být i ke krajním bodům.
-     *
-     * @param mou
-     * @return
-     */
-    public long computeKvadratVzdalenostiKPrimce(Mou mou) {
-        Mou m = getNejblizsiBodKPrimce(mou);
-        long kvadrat = mou.getKvadratVzdalenosti(m);
-        return kvadrat;
-    }
+	public long computeKvadratVzdalenostiBoduKUsecce(Mou mou) {
+		Mou m = getNejblizsiBodKolmoKUsecce(mou);
+		if (m == null) return Long.MAX_VALUE;
+		long kvadrat = mou.getKvadratVzdalenosti(m);
+		return kvadrat;
+	}
 
 
-    /**
-     * Spočítá bod, který leží na přímce m1m2 a je nejblíže m3.
-     * To je průsečík kolmice.
-     *
-     * @param m1
-     * @param m2
-     * @param m3
-     * @return Průsečík kolmice, nikdy nevrací null.
-     */
-    private static Mou prusecikKolmice(Mou m1, Mou m2, Mou m3) {
-        // TODO : what to do if m1 == m2?
-        if (m1.equals(m2)) {
-            return new Mou(m3);
-        }
+	/**
+	 * Spočítá kvadrát vzdálenosti bodu k úsečce úseku,
+	 * což může být i ke krajním bodům.
+	 *
+	 * @param mou
+	 * @return
+	 */
+	@Override
+	public long computeKvadratVzdalenosti(Mou mou) {
+		Mou m = getNejblizsiBodKolmoKUsecce(mou);
+		long kvadrat;
+		if (mou == null) { // je to jeden z krajnich bodul
+			kvadrat = Math.min(bvzad.getMou().getKvadratVzdalenosti(m), bvpred.getMou().getKvadratVzdalenosti(m));
+		} else {
+			// je to komo k usecce, takze to je bod na usecce
+			kvadrat = mou.getKvadratVzdalenosti(m);
+		}
+		return kvadrat;
+	}
 
-        double x1 = m1.xx;
-        double y1 = m1.yy;
-        double x2 = m2.xx;
-        double y2 = m2.yy;
-        double x3 = m3.xx;
-        double y3 = m3.yy;
+	/**
+	 * Spočítá kvadrát vzdálenosti bodu k úsečce úseku,
+	 * což může být i ke krajním bodům.
+	 *
+	 * @param mou
+	 * @return
+	 */
+	public long computeKvadratVzdalenostiKPrimce(Mou mou) {
+		Mou m = getNejblizsiBodKPrimce(mou);
+		long kvadrat = mou.getKvadratVzdalenosti(m);
+		return kvadrat;
+	}
 
-        double a11 = x1 - x2;
-        double a12 = y1 - y2;
-        double a21 = a12;
-        double a22 = -a11;
-        double b1 = -((a22) * x3 + (-a12) * y3);
-        double b2 = -(x1 * y2 - x2 * y1);
 
-        double d = a11 * a22 - a12 * a21;
-        double d1 = b1 * a22 - a12 * b2;
-        double d2 = a11 * b2 - b1 * a21;
+	/**
+	 * Spočítá bod, který leží na přímce m1m2 a je nejblíže m3.
+	 * To je průsečík kolmice.
+	 *
+	 * @param m1
+	 * @param m2
+	 * @param m3
+	 * @return Průsečík kolmice, nikdy nevrací null.
+	 */
+	private static Mou prusecikKolmice(Mou m1, Mou m2, Mou m3) {
+		// TODO : what to do if m1 == m2?
+		if (m1.equals(m2)) {
+			return new Mou(m3);
+		}
 
-        double x = d1 / d;
-        double y = d2 / d;
+		double x1 = m1.xx;
+		double y1 = m1.yy;
+		double x2 = m2.xx;
+		double y2 = m2.yy;
+		double x3 = m3.xx;
+		double y3 = m3.yy;
 
-        Mou mou = new Mou((int) x, (int) y);
-        //System.out.printf("pruseCikk [%d,%d] --- [%d,%d]  | [%d,%d] = [%d,%d]%n", x1, y1, x2, y2, x3, y3, x, y);
-        //System.out.printf("pruseCikk (%d,%d) %n", a11, a12);
-        return mou;
+		double a11 = x1 - x2;
+		double a12 = y1 - y2;
+		double a21 = a12;
+		double a22 = -a11;
+		double b1 = -((a22) * x3 + (-a12) * y3);
+		double b2 = -(x1 * y2 - x2 * y1);
 
-    }
+		double d = a11 * a22 - a12 * a21;
+		double d1 = b1 * a22 - a12 * b2;
+		double d2 = a11 * b2 - b1 * a21;
 
-    Bod rozdelAZanikni(Mouable mouable) {
-        Bod bod = getCesta().createBod(mouable);
-        Usek u1 = getCesta().createUsek();
-        Usek u2 = getCesta().createUsek();
-        u1.spoj(bvzad, bod);
-        u2.spoj(bod, bvpred);
-        if (isVzdusny()) {
-            long kvadratDalkyVzad = getBvzad().computeKvadratVzdalenosti(bod.getMou());
-            long kvadratDalkyVpred = getBvpred().computeKvadratVzdalenosti(bod.getMou());
-            if (kvadratDalkyVpred > kvadratDalkyVzad) {
-                u2.setVzdusny(true);
-            } else {
-                u1.setVzdusny(true);
-            }
-        }
-        return bod;
+		double x = d1 / d;
+		double y = d2 / d;
 
-    }
+		Mou mou = new Mou((int) x, (int) y);
+		//System.out.printf("pruseCikk [%d,%d] --- [%d,%d]  | [%d,%d] = [%d,%d]%n", x1, y1, x2, y2, x3, y3, x, y);
+		//System.out.printf("pruseCikk (%d,%d) %n", a11, a12);
+		return mou;
 
-    void setBvpred(Bod vpred) {
-        bvpred = vpred;
-        zneschopniDalku();
-    }
+	}
 
-    public Bod getBvpred() {
-        return bvpred;
-    }
+	Bod rozdelAZanikni(Mouable mouable) {
+		Bod bod = getCesta().createBod(mouable);
+		Usek u1 = getCesta().createUsek();
+		Usek u2 = getCesta().createUsek();
+		u1.spoj(bvzad, bod);
+		u2.spoj(bod, bvpred);
+		if (isVzdusny()) {
+			long kvadratDalkyVzad = getBvzad().computeKvadratVzdalenosti(bod.getMou());
+			long kvadratDalkyVpred = getBvpred().computeKvadratVzdalenosti(bod.getMou());
+			if (kvadratDalkyVpred > kvadratDalkyVzad) {
+				u2.setVzdusny(true);
+			} else {
+				u1.setVzdusny(true);
+			}
+		}
+		return bod;
 
-    void setBvzad(Bod vzad) {
-        bvzad = vzad;
-        zneschopniDalku();
-    }
+	}
 
-    public Bod getBvzad() {
-        return bvzad;
-    }
+	void setBvpred(Bod vpred) {
+		bvpred = vpred;
+		zneschopniDalku();
+	}
 
-    public boolean isVzdusny() {
-        return vzdusny;
-    }
+	public Bod getBvpred() {
+		return bvpred;
+	}
 
-    void setVzdusny(boolean vzdusny) {
-        this.vzdusny = vzdusny;
-    }
+	void setBvzad(Bod vzad) {
+		bvzad = vzad;
+		zneschopniDalku();
+	}
 
-    public double getUhel() {
-        Moud moud = bvpred.mouable.getMou().sub(bvzad.mouable.getMou());
-        double uhel = Math.atan2(moud.dxx, moud.dyy);
-        return uhel;
-    }
+	public Bod getBvzad() {
+		return bvzad;
+	}
 
-    public double getMouDelkaVpred(Mou aMou) {
-        if (isVzdusny()) return 0;
-        Mou mou = getNejblizsiBodKPrimce(aMou);
-        return FGeoKonvertor.dalka(mou, bvpred);
-    }
+	public boolean isVzdusny() {
+		return vzdusny;
+	}
 
-    public double getMouDelkaVzad(Mou aMou) {
-        if (isVzdusny()) return 0;
-        Mou mou = getNejblizsiBodKPrimce(aMou);
-        return FGeoKonvertor.dalka(mou, bvzad);
-    }
+	void setVzdusny(boolean vzdusny) {
+		this.vzdusny = vzdusny;
+	}
 
-    @Override
-    public double dalkaCestaVpred(Mou aMou) {
-        double delka = getMouDelkaVpred(aMou) + bvpred.dalkaCestaVpred(aMou);
-        return delka;
-    }
+	public double getUhel() {
+		Moud moud = bvpred.mouable.getMou().sub(bvzad.mouable.getMou());
+		double uhel = Math.atan2(moud.dxx, moud.dyy);
+		return uhel;
+	}
 
-    @Override
-    public double dalkaCestaVzad(Mou aMou) {
-        double delka = getMouDelkaVzad(aMou) + bvzad.dalkaCestaVzad(aMou);
-        return delka;
-    }
+	public double getMouDelkaVpred(Mou aMou) {
+		if (isVzdusny()) return 0;
+		Mou mou = getNejblizsiBodKPrimce(aMou);
+		return FGeoKonvertor.dalka(mou, bvpred);
+	}
 
-    @Override
-    public double dalka() {
-        if (isVzdusny()) return 0;
-        if (dalka < 0) {
-            dalka = FGeoKonvertor.dalka(bvpred, bvzad);
-        }
-        return dalka;
-    }
+	public double getMouDelkaVzad(Mou aMou) {
+		if (isVzdusny()) return 0;
+		Mou mou = getNejblizsiBodKPrimce(aMou);
+		return FGeoKonvertor.dalka(mou, bvzad);
+	}
 
-    void zneschopniDalku() {
-        dalka = -1;
-    }
+	@Override
+	public double dalkaCestaVpred(Mou aMou) {
+		double delka = getMouDelkaVpred(aMou) + bvpred.dalkaCestaVpred(aMou);
+		return delka;
+	}
 
-    @Override
-    public Bousek0 getBousekVpred() {
-        return getBvpred();
-    }
+	@Override
+	public double dalkaCestaVzad(Mou aMou) {
+		double delka = getMouDelkaVzad(aMou) + bvzad.dalkaCestaVzad(aMou);
+		return delka;
+	}
 
-    @Override
-    public Bousek0 getBousekVzad() {
-        return getBvzad();
-    }
+	@Override
+	public double dalka() {
+		if (isVzdusny()) return 0;
+		if (dalka < 0) {
+			dalka = FGeoKonvertor.dalka(bvpred, bvzad);
+		}
+		return dalka;
+	}
 
-    private void kon(boolean podm) {
-        if (!podm)
-            throw new RuntimeException("Selhala kontrola konzistence useku");
-    }
+	void zneschopniDalku() {
+		dalka = -1;
+	}
 
-    @Override
-    protected void kontrolaKonzistence() {
-        kon(bvpred != null);
-        kon(bvzad != null);
-        kon(bvpred != bvzad);
-        kon(bvpred.getUvzad() == this);
-        kon(bvzad.getUvpred() == this);
-    }
+	@Override
+	public Bousek0 getBousekVpred() {
+		return getBvpred();
+	}
 
-    @Override
-    public Bod getKoncovyBodDruheCestyVhodnyProSpojeni() {
-        return null;
-    }
+	@Override
+	public Bousek0 getBousekVzad() {
+		return getBvzad();
+	}
+
+	private void kon(boolean podm) {
+		if (!podm)
+			throw new RuntimeException("Selhala kontrola konzistence useku");
+	}
+
+	@Override
+	protected void kontrolaKonzistence() {
+		kon(bvpred != null);
+		kon(bvzad != null);
+		kon(bvpred != bvzad);
+		kon(bvpred.getUvzad() == this);
+		kon(bvzad.getUvpred() == this);
+	}
+
+	@Override
+	public Bod getKoncovyBodDruheCestyVhodnyProSpojeni() {
+		return null;
+	}
 
 }

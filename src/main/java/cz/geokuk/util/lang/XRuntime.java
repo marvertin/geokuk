@@ -11,54 +11,54 @@ package cz.geokuk.util.lang;
 public final class XRuntime extends XObject0
 {
 
-    static final long serialVersionUID = 2772768580961243187L;
+	static final long serialVersionUID = 2772768580961243187L;
 
 
-    /** Vytvoří výjimku se zadano zprávou
-     * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
-     * technicky a systémově znalé osobě.
-     */
-    public XRuntime(String s)
-    {
-        super(s);
-    }
+	/** Vytvoří výjimku se zadano zprávou
+	 * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
+	 * technicky a systémově znalé osobě.
+	 */
+	public XRuntime(String s)
+	{
+		super(s);
+	}
 
-    /** Vytvoří výjimku a naváže ji na zadanou výjimku.
-     * Používá se v bloku catch v případě potřeby přehodit výjimku.
-     * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
-     * technicky a systémově znalé osobě.
-     * @param e Přehazovaná výjimka.
-     */
-    public XRuntime(String s, Exception e)
-    {
-        super(s,e);
-    }
+	/** Vytvoří výjimku a naváže ji na zadanou výjimku.
+	 * Používá se v bloku catch v případě potřeby přehodit výjimku.
+	 * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
+	 * technicky a systémově znalé osobě.
+	 * @param e Přehazovaná výjimka.
+	 */
+	public XRuntime(String s, Exception e)
+	{
+		super(s,e);
+	}
 
-    /**Vyhodí výjimku s tím, že přidá jméno třídy, ze které je vyhozena.
-     * @param trida Třída, ze které je výjimka vyhazována. Volající metoda
-     * bezmyšlenkovitě uvádí vždy getClass(). Je to velmi užitečná informace v
-     * případě, že používáme následníky.
-     * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
-     * technicky a systémově znalé osobě.
-     */
-    public XRuntime(Object trida, String s)
-    {
-        super(trida, s);
-    }
+	/**Vyhodí výjimku s tím, že přidá jméno třídy, ze které je vyhozena.
+	 * @param trida Třída, ze které je výjimka vyhazována. Volající metoda
+	 * bezmyšlenkovitě uvádí vždy getClass(). Je to velmi užitečná informace v
+	 * případě, že používáme následníky.
+	 * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
+	 * technicky a systémově znalé osobě.
+	 */
+	public XRuntime(Object trida, String s)
+	{
+		super(trida, s);
+	}
 
 
-    /**Přehodí výjimku s tím, že přidá jméno třídy, ze které je přehozena.
-     * @param trida Třída, ze které je výjimka vyhazována. Volající metoda
-     * bezmyšlenkovitě uvádí vždy getClass(). Je to velmi užitečná informace v
-     * případě, že používáme následníky.
-     * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
-     * technicky a systémově znalé osobě.
-     * @param e Přehazovaná výjimka.
-     */
-    public XRuntime(Object trida, String s, Exception e)
-    {
-        super(trida, s,e);
-    }
+	/**Přehodí výjimku s tím, že přidá jméno třídy, ze které je přehozena.
+	 * @param trida Třída, ze které je výjimka vyhazována. Volající metoda
+	 * bezmyšlenkovitě uvádí vždy getClass(). Je to velmi užitečná informace v
+	 * případě, že používáme následníky.
+	 * @param s Technicky orientovaná zpráva. Obsahuje informace o chybě určené
+	 * technicky a systémově znalé osobě.
+	 * @param e Přehazovaná výjimka.
+	 */
+	public XRuntime(Object trida, String s, Exception e)
+	{
+		super(trida, s,e);
+	}
 
 }
 

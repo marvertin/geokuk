@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.coord;
 
@@ -15,30 +15,30 @@ import cz.geokuk.framework.Event0;
  */
 public class PoziceSeMaMenitEvent extends Event0<PoziceModel> {
 
-  public final Mou mou;
-  //private final List<Uchopenec> uchopenci = new ArrayList<Uchopenec>();
-  private Uchopenec uchopenec;
-  private int priorita;
+	public final Mou mou;
+	//private final List<Uchopenec> uchopenci = new ArrayList<Uchopenec>();
+	private Uchopenec uchopenec;
+	private int priorita;
 
-  /**
-   * @param aPozice
-   * @param aMeloBySeCentrovat
-   */
-  PoziceSeMaMenitEvent(Mou mou) {
-    assert mou != null;
-    this.mou = mou;
-  }
+	/**
+	 * @param aPozice
+	 * @param aMeloBySeCentrovat
+	 */
+	PoziceSeMaMenitEvent(Mou mou) {
+		assert mou != null;
+		this.mou = mou;
+	}
 
-  public void add(Uchopenec uchopenec, int priorita) {
-    assert uchopenec.getMou().equals(mou);
-    if (priorita > this.priorita) {
-      this.uchopenec = uchopenec;
-      this.priorita = priorita;
-    }
-  }
+	public void add(Uchopenec uchopenec, int priorita) {
+		assert uchopenec.getMou().equals(mou);
+		if (priorita > this.priorita) {
+			this.uchopenec = uchopenec;
+			this.priorita = priorita;
+		}
+	}
 
-  Uchopenec getUchopenec() {
-    return uchopenec;
-  }
+	Uchopenec getUchopenec() {
+		return uchopenec;
+	}
 
 }

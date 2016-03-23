@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.api.mapicon;
 
@@ -15,16 +15,16 @@ public class OvalDrawer extends ShapeDrawer {
 
 
 	@Override
-  protected void fill(Graphics2D g) {
-	  g.fillOval(0, 0, getWidth(), getHeight());
-  }
+	protected void fill(Graphics2D g) {
+		g.fillOval(0, 0, getWidth(), getHeight());
+	}
 
-  
+
 	@Override
-  protected void draw(Graphics2D g) {
-	  g.drawOval((getLineWidth()-1) / 2, (getLineWidth()-1) / 2,	
-	  		getWidth() - getLineWidth(), getHeight() - getLineWidth());
-  }
+	protected void draw(Graphics2D g) {
+		g.drawOval((getLineWidth()-1) / 2, (getLineWidth()-1) / 2,
+				getWidth() - getLineWidth(), getHeight() - getLineWidth());
+	}
 
-  
+
 }

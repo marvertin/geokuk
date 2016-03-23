@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.framework;
 
@@ -15,27 +15,27 @@ import cz.geokuk.core.coord.VyrezModel;
  *
  */
 public class JPresCelePrekryvnik extends JCoordPrekryvnik0 implements AfterEventReceiverRegistrationInit {
-  private static final long serialVersionUID = -5996655830197513951L;
-  private VyrezModel vyrezModel;
+	private static final long serialVersionUID = -5996655830197513951L;
+	private VyrezModel vyrezModel;
 
-  public void onEvent(VyrezChangedEvent event) {
-    // V hlavním překryvníku sledujeme pohyb výřezu a podle toho posouváme pohled
-    setSoord(event.getMoord());
-  }
+	public void onEvent(VyrezChangedEvent event) {
+		// V hlavním překryvníku sledujeme pohyb výřezu a podle toho posouváme pohled
+		setSoord(event.getMoord());
+	}
 
-  @Override
-  public void initAfterEventReceiverRegistration() {
-    // Listener zajístí, že se změna šířky a výšky pošle všem zájemcům
-    addComponentListener(new ComponentAdapter() {
-      @Override
-      public void componentResized(ComponentEvent e) {
-        vyrezModel.setVelikost(getWidth(), getHeight());
-      }
-    });
-  }
+	@Override
+	public void initAfterEventReceiverRegistration() {
+		// Listener zajístí, že se změna šířky a výšky pošle všem zájemcům
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				vyrezModel.setVelikost(getWidth(), getHeight());
+			}
+		});
+	}
 
-  public void inject(VyrezModel vyrezModel) {
-    this.vyrezModel = vyrezModel;
-  }
+	public void inject(VyrezModel vyrezModel) {
+		this.vyrezModel = vyrezModel;
+	}
 
 }

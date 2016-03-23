@@ -10,32 +10,32 @@ import cz.geokuk.framework.ToggleAction0;
 
 public class PopiskyOnoffAction extends ToggleAction0  {
 
-  private static final long serialVersionUID = -7547868179813232769L;
-  private PopiskyModel popiskyModel;
-  
-  
-
-  public PopiskyOnoffAction() {
-    super("Popisky na mapě");
-    putValue(MNEMONIC_KEY, KeyEvent.VK_Y);
-    putValue(SHORT_DESCRIPTION, "Zobrazovat popisky keší na mapě.");
-    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
-  }
+	private static final long serialVersionUID = -7547868179813232769L;
+	private PopiskyModel popiskyModel;
 
 
-  public void inject (PopiskyModel popiskyModel) {
-    this.popiskyModel = popiskyModel;
-  }
 
-  public void onEvent(PopiskyOnoffEvent event) {
-    setSelected(event.isOnoff());
-  }
+	public PopiskyOnoffAction() {
+		super("Popisky na mapě");
+		putValue(MNEMONIC_KEY, KeyEvent.VK_Y);
+		putValue(SHORT_DESCRIPTION, "Zobrazovat popisky keší na mapě.");
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
+	}
 
-  @Override
-  protected void onSlectedChange(boolean nastaveno) {
-    popiskyModel.visible.setOnoff(nastaveno);
-  }
 
-  
-  
+	public void inject (PopiskyModel popiskyModel) {
+		this.popiskyModel = popiskyModel;
+	}
+
+	public void onEvent(PopiskyOnoffEvent event) {
+		setSelected(event.isOnoff());
+	}
+
+	@Override
+	protected void onSlectedChange(boolean nastaveno) {
+		popiskyModel.visible.setOnoff(nastaveno);
+	}
+
+
+
 }

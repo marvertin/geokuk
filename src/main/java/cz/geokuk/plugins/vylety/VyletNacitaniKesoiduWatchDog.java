@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.vylety;
 
@@ -11,15 +11,15 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
  */
 public class VyletNacitaniKesoiduWatchDog {
 
-  private VyletModel vyletModel;
+	private VyletModel vyletModel;
 
-  public void onEvent(KeskyNactenyEvent aEvent) {
-    vyletModel.startLoadingVylet(aEvent.getVsechny());
-  }
+	public void onEvent(KeskyNactenyEvent aEvent) {
+		vyletModel.startLoadingVylet(aEvent.getVsechny());
+	}
 
-  public void inject(VyletModel vyletModel) {
-    this.vyletModel = vyletModel;
-  }
+	public void inject(VyletModel vyletModel) {
+		this.vyletModel = vyletModel;
+	}
 
 
 }

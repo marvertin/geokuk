@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.framework;
 
@@ -8,15 +8,15 @@ package cz.geokuk.framework;
  *
  */
 public abstract class OnoffEvent0<T extends Model0>  extends Event0<T> {
-  //TODO divne
-  public boolean onoff;
+	//TODO divne
+	public boolean onoff;
 
-  /**
-   * @return the onoff
-   */
-  public boolean isOnoff() {
-    return onoff;
-  }
+	/**
+	 * @return the onoff
+	 */
+	public boolean isOnoff() {
+		return onoff;
+	}
 
 
 }

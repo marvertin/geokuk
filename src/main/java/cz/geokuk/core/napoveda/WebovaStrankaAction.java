@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.napoveda;
 
@@ -21,25 +21,25 @@ import cz.geokuk.util.process.BrowserOpener;
  */
 public class WebovaStrankaAction extends Action0 {
 
-  private static final long serialVersionUID = -2882817111560336824L;
-  /**
-   * @param aBoard
-   */
-  public WebovaStrankaAction() {
-    super("Webová stránka");
-    putValue(SHORT_DESCRIPTION, "Zobrazí webovou stránku programu s nápovědou a jinými infroamcemi.");
-    putValue(MNEMONIC_KEY, KeyEvent.VK_W);
-  }
-  /* (non-Javadoc)
-   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-   */
-  @Override
-  public void actionPerformed(ActionEvent aE) {
-    try {
-      BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL));
-    } catch (MalformedURLException e) {
-      throw new RuntimeException(e);
-    }
-  }
+	private static final long serialVersionUID = -2882817111560336824L;
+	/**
+	 * @param aBoard
+	 */
+	public WebovaStrankaAction() {
+		super("Webová stránka");
+		putValue(SHORT_DESCRIPTION, "Zobrazí webovou stránku programu s nápovědou a jinými infroamcemi.");
+		putValue(MNEMONIC_KEY, KeyEvent.VK_W);
+	}
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent aE) {
+		try {
+			BrowserOpener.displayURL(new URL(FConst.WEB_PAGE_URL));
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 }

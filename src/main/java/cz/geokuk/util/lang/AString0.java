@@ -22,85 +22,85 @@ public abstract class AString0
 extends AObject0
 implements Serializable, Comparable<AString0>
 {
-  private  static final long serialVersionUID = -3816615837981907372L;
-  protected final String iValue;
+	private  static final long serialVersionUID = -3816615837981907372L;
+	protected final String iValue;
 
-  protected AString0(String aValue)
-  {
-    iValue = aValue.trim();
-    if (iValue == null)
-      throw new NullPointerException("Cannot use null value as constructor parameter of tw elementary types " + getClass());
-    checkRange();
-    validate();
-  }
+	protected AString0(String aValue)
+	{
+		iValue = aValue.trim();
+		if (iValue == null)
+			throw new NullPointerException("Cannot use null value as constructor parameter of tw elementary types " + getClass());
+		checkRange();
+		validate();
+	}
 
-  /**Minimální délka Stringu. Následník může přepsat, pokud má být minimální hodnota jiná.
-   * Předefinovaná metoda by měla pokud možno vracet konstantu.
-   */
-  protected int minLength()
-  {
-    return 0;
-  }
+	/**Minimální délka Stringu. Následník může přepsat, pokud má být minimální hodnota jiná.
+	 * Předefinovaná metoda by měla pokud možno vracet konstantu.
+	 */
+	protected int minLength()
+	{
+		return 0;
+	}
 
-  /**Maximální délka Stringu. Následník může přepsat, pokud má být maximální hodnota jiná.
-   * Předefinovaná metoda by měla pokud možno vracet konstantu.
-   */
-  protected int maxLength()
-  {
-    return Integer.MAX_VALUE;
-  }
+	/**Maximální délka Stringu. Následník může přepsat, pokud má být maximální hodnota jiná.
+	 * Předefinovaná metoda by měla pokud možno vracet konstantu.
+	 */
+	protected int maxLength()
+	{
+		return Integer.MAX_VALUE;
+	}
 
 
-  /**Kontrola rozsahu. Metoda se volá z konstruktoru a kontroluje rozsah.
-   */
-  protected final void checkRange()
-  {
-    if (! (minLength() <= iValue.length() && iValue.length() <= maxLength()))
-      throw new XCreateElement("Hodnota \"" + iValue + "\" není v požadovaném intervalu <"
-          + minLength() + "," + maxLength() + ">");
-  }
+	/**Kontrola rozsahu. Metoda se volá z konstruktoru a kontroluje rozsah.
+	 */
+	protected final void checkRange()
+	{
+		if (! (minLength() <= iValue.length() && iValue.length() <= maxLength()))
+			throw new XCreateElement("Hodnota \"" + iValue + "\" není v požadovaném intervalu <"
+					+ minLength() + "," + maxLength() + ">");
+	}
 
-  /**
-   * Kontrola platnosti typu. Metoda je volána z kosntruktoru poté, co byla provedena validace rozsahu dély řetězce.
-   * V okamžiku volání je zřejmé, že hodnota iValue není null, neobsahuje koncové mezery a je ve stanoveném rozsahu.
-   * Metoda v případě nevalidity vyhazuje nečekovanou výjimku.
-   * Neplést s metodou isValid(), to je jiná validita (menší váha).
-   */
-  protected void validate() {
-  }
+	/**
+	 * Kontrola platnosti typu. Metoda je volána z kosntruktoru poté, co byla provedena validace rozsahu dély řetězce.
+	 * V okamžiku volání je zřejmé, že hodnota iValue není null, neobsahuje koncové mezery a je ve stanoveném rozsahu.
+	 * Metoda v případě nevalidity vyhazuje nečekovanou výjimku.
+	 * Neplést s metodou isValid(), to je jiná validita (menší váha).
+	 */
+	protected void validate() {
+	}
 
-  /**Porovnání dvou elementárních typů.
-   */
-  public boolean equals(Object aObject)
-  { 
-    if (aObject == this) return true; // pokud porovnávám se sebou, tak se rovnají
-    if (!(aObject instanceof AString0)) return false; // s jiným typem se nerovnají
-    AString0 obj = (AString0)aObject;
-    return iValue.equals(obj.iValue); // porovnat přímo řetězce
-  }
+	/**Porovnání dvou elementárních typů.
+	 */
+	public boolean equals(Object aObject)
+	{
+		if (aObject == this) return true; // pokud porovnávám se sebou, tak se rovnají
+		if (!(aObject instanceof AString0)) return false; // s jiným typem se nerovnají
+		AString0 obj = (AString0)aObject;
+		return iValue.equals(obj.iValue); // porovnat přímo řetězce
+	}
 
-  /**Heškód je vracen podle zastrčeného řetězce.
-   */
-  public int hashCode()
-  {
-    return iValue.hashCode();
-  }
+	/**Heškód je vracen podle zastrčeného řetězce.
+	 */
+	public int hashCode()
+	{
+		return iValue.hashCode();
+	}
 
-  /**Standardní toString je implementován voláním asString. Může být pochopitelně přepsán.
-   */
-  public String toString()
-  {
-    return iValue;
-  }
+	/**Standardní toString je implementován voláním asString. Může být pochopitelně přepsán.
+	 */
+	public String toString()
+	{
+		return iValue;
+	}
 
-  /* (non-Javadoc)
-   * @see java.lang.Comparable#compareTo(java.lang.Object)
-   */
-  public int compareTo(AString0 aObject) {
-    if (aObject == null) {
-        throw new IllegalArgumentException("Cannot compare with null");
-    }
-    return iValue.compareTo(aObject.iValue);
-  }
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(AString0 aObject) {
+		if (aObject == null) {
+			throw new IllegalArgumentException("Cannot compare with null");
+		}
+		return iValue.compareTo(aObject.iValue);
+	}
 
 }

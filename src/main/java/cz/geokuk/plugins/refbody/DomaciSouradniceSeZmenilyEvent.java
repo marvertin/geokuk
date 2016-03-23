@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.refbody;
 
@@ -12,13 +12,13 @@ import cz.geokuk.framework.Event0;
  */
 public class DomaciSouradniceSeZmenilyEvent extends Event0<RefbodyModel> {
 
-  public final Wgs hc;
+	public final Wgs hc;
 
-  /**
-   * @param aWgs
-   */
-  public DomaciSouradniceSeZmenilyEvent(Wgs hc) {
-  	this.hc = hc;
-  }
+	/**
+	 * @param aWgs
+	 */
+	public DomaciSouradniceSeZmenilyEvent(Wgs hc) {
+		this.hc = hc;
+	}
 
 }

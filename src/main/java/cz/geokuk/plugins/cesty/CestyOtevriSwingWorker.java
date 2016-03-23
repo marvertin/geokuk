@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.cesty;
 
@@ -23,47 +23,47 @@ import org.apache.logging.log4j.Logger;
  */
 public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
 
-    private static final Logger log = LogManager.getLogger(CestyOtevriSwingWorker.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(CestyOtevriSwingWorker.class.getSimpleName());
 
 
-  private final CestyZperzistentnovac cestyZperzistentnovac;
-  private final KesBag kesBag;
-  private final CestyModel cestyModel;
-  private final File file;
+	private final CestyZperzistentnovac cestyZperzistentnovac;
+	private final KesBag kesBag;
+	private final CestyModel cestyModel;
+	private final File file;
 
 
-  public CestyOtevriSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, KesBag vsechny, CestyModel cestyModel, File file) {
-    this.cestyZperzistentnovac = cestyZperzistentnovac;
-    kesBag = vsechny;
-    this.cestyModel = cestyModel;
-    this.file = file;
-  }
+	public CestyOtevriSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, KesBag vsechny, CestyModel cestyModel, File file) {
+		this.cestyZperzistentnovac = cestyZperzistentnovac;
+		kesBag = vsechny;
+		this.cestyModel = cestyModel;
+		this.file = file;
+	}
 
 
-  /* (non-Javadoc)
-   * @see javax.swing.SwingWorker#doInBackground()
-   */
-  @Override
-  public Doc doInBackground() throws Exception {
-    Doc doc = new Doc();
-    doc.setFile(file);
-    List<Cesta> cesty = cestyZperzistentnovac.nacti(Collections.singletonList(file), kesBag);
-    for (Cesta cesta : cesty) {
-      doc.xadd(cesta);
-    }
-    return doc;
-  }
+	/* (non-Javadoc)
+	 * @see javax.swing.SwingWorker#doInBackground()
+	 */
+	@Override
+	public Doc doInBackground() throws Exception {
+		Doc doc = new Doc();
+		doc.setFile(file);
+		List<Cesta> cesty = cestyZperzistentnovac.nacti(Collections.singletonList(file), kesBag);
+		for (Cesta cesta : cesty) {
+			doc.xadd(cesta);
+		}
+		return doc;
+	}
 
-  /* (non-Javadoc)
-   * @see javax.swing.SwingWorker#done()
-   */
-  @Override
-  protected void donex() throws InterruptedException, ExecutionException {
-    Doc doc = get();
-    if (doc == null) return; // asi zkanclváno
-    log.info("Načten dokument {}.",  doc.getFile());
-    cestyModel.prevezmiNoveOtevrenyDokument(doc);
-  }
+	/* (non-Javadoc)
+	 * @see javax.swing.SwingWorker#done()
+	 */
+	@Override
+	protected void donex() throws InterruptedException, ExecutionException {
+		Doc doc = get();
+		if (doc == null) return; // asi zkanclváno
+		log.info("Načten dokument {}.",  doc.getFile());
+		cestyModel.prevezmiNoveOtevrenyDokument(doc);
+	}
 
 
 }

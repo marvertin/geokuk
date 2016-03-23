@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.program;
 
@@ -9,10 +9,10 @@ package cz.geokuk.core.program;
  *
  */
 public enum ESouborPanelName  {
-  OZI,
-  KMZ,
-  PICTURE,
+	OZI,
+	KMZ,
+	PICTURE,
 
-  ;
+	;
 
 }

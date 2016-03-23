@@ -14,47 +14,47 @@ import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
  */
 public class JSimpleWaypointDetail extends JKesoidDetail0 {
 
-  private static final long serialVersionUID = -3323887260932949747L;
+	private static final long serialVersionUID = -3323887260932949747L;
 
-  private SimpleWaypoint simwpt;
-  
-  public JSimpleWaypointDetail() {
-    initComponents();
-  }
+	private SimpleWaypoint simwpt;
 
-  private void initComponents() {
+	public JSimpleWaypointDetail() {
+		initComponents();
+	}
 
-    Box hlav = Box.createVerticalBox();
-    add(hlav);
+	private void initComponents() {
 
-    Box box2 = Box.createHorizontalBox();
+		Box hlav = Box.createVerticalBox();
+		add(hlav);
 
-    Box pan4b = Box.createVerticalBox();
+		Box box2 = Box.createHorizontalBox();
 
-    box2.add(Box.createHorizontalGlue());
+		Box pan4b = Box.createVerticalBox();
 
-    //  pan4.setAlignmentX(RIGHT_ALIGNMENT);
-    box2.add(pan4b);
+		box2.add(Box.createHorizontalGlue());
 
-    hlav.add(box2);
+		//  pan4.setAlignmentX(RIGHT_ALIGNMENT);
+		box2.add(pan4b);
 
-    Box box3 = Box.createHorizontalBox();
-    box3.add(Box.createGlue());
-    hlav.add(box3);
-  }
+		hlav.add(box2);
 
-  @Override
-  public void napln(Wpt wpt) {
-		simwpt = (SimpleWaypoint)wpt.getKesoid(); 
-    napln();
-  }
-  
-  public void onEvent(DomaciSouradniceSeZmenilyEvent aEvent) {
-    if (isVisible() && simwpt != null) {
-      napln();
-    }
-  }
+		Box box3 = Box.createHorizontalBox();
+		box3.add(Box.createGlue());
+		hlav.add(box3);
+	}
 
-  private void napln() {
-  }
+	@Override
+	public void napln(Wpt wpt) {
+		simwpt = (SimpleWaypoint)wpt.getKesoid();
+		napln();
+	}
+
+	public void onEvent(DomaciSouradniceSeZmenilyEvent aEvent) {
+		if (isVisible() && simwpt != null) {
+			napln();
+		}
+	}
+
+	private void napln() {
+	}
 }

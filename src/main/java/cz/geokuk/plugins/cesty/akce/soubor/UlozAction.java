@@ -11,27 +11,27 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public class UlozAction extends SouboeCestaAction0 {
 
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 
-  public UlozAction() {
-    super("Uložit cesty (gpx)");
-    putValue(SHORT_DESCRIPTION, "Uloží zadaný výlet do GPX");
-    putValue(MNEMONIC_KEY, KeyEvent.VK_V);
-    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl S"));
-    //putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
-  }
+	public UlozAction() {
+		super("Uložit cesty (gpx)");
+		putValue(SHORT_DESCRIPTION, "Uloží zadaný výlet do GPX");
+		putValue(MNEMONIC_KEY, KeyEvent.VK_V);
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl S"));
+		//putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
+	}
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
+	@Override
+	public void actionPerformed(ActionEvent e) {
 
-    ulozit();
-  }
+		ulozit();
+	}
 
-  public void onEvent(CestyChangedEvent event) {
-    Doc doc = event.getDoc();
-    setEnabled(doc != null && doc.isChanged());
-  }
+	public void onEvent(CestyChangedEvent event) {
+		Doc doc = event.getDoc();
+		setEnabled(doc != null && doc.isChanged());
+	}
 
 
 }

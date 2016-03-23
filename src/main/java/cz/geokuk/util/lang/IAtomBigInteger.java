@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.util.lang;
 
@@ -12,12 +12,12 @@ import java.math.BigInteger;
  *
  */
 public interface IAtomBigInteger extends IAtom {
-  
-  /**
-   * Převede atomický typ na číslo typu BigInteger.
-   * Protože atomický typ nemůže obsahoivat null, je pouit primitivní typ a ne obálka.
-   * @return
-   */
-  public BigInteger toBigInteger();
+
+	/**
+	 * Převede atomický typ na číslo typu BigInteger.
+	 * Protože atomický typ nemůže obsahoivat null, je pouit primitivní typ a ne obálka.
+	 * @return
+	 */
+	public BigInteger toBigInteger();
 
 }

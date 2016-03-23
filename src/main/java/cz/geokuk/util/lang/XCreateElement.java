@@ -11,12 +11,12 @@ package cz.geokuk.util.lang;
  */
 
 public class XCreateElement
- extends XObject0
+extends XObject0
 {
-  /**
-   * 
-   */
-  private static final long serialVersionUID = -8528654444055934985L;
-  public XCreateElement(String s) { super(s); }
-  public XCreateElement(String s, Exception e) { super(s, e); }
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -8528654444055934985L;
+	public XCreateElement(String s) { super(s); }
+	public XCreateElement(String s, Exception e) { super(s, e); }
 }

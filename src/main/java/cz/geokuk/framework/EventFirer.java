@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.framework;
 
@@ -8,6 +8,6 @@ package cz.geokuk.framework;
  */
 public interface EventFirer {
 
-  public abstract void fire(Event0<?> event);
+	public abstract void fire(Event0<?> event);
 
 }

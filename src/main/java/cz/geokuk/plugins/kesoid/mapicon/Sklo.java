@@ -37,7 +37,7 @@ public class Sklo implements ImagantCache {
 	private final String iName;
 
 	/**
-	 * 
+	 *
 	 */
 	public Sklo(String name) {
 		iName = name;
@@ -51,8 +51,8 @@ public class Sklo implements ImagantCache {
 	}
 	/**
 	 * Vrací sklivec pro daný genotyp s tím, že se hrabe v keši,
-	 * aby se jednak zvýšila rychnlost, druhak, aby se šetřila paměť 
-	 * 
+	 * aby se jednak zvýšila rychnlost, druhak, aby se šetřila paměť
+	 *
 	 * @param genotyp
 	 * @return
 	 */
@@ -98,10 +98,10 @@ public class Sklo implements ImagantCache {
 		if (imaganti.isEmpty()) return null;
 		BoundingRect br = Sklo.sjednoceni(imaganti);
 
-        if (br == null) {
-            //TODO log.warn()
-            return null;
-        }
+		if (br == null) {
+			//TODO log.warn()
+			return null;
+		}
 
 		// vytvořit cílový brázek ve správné velikosti
 		int width = br.xx2 - br.xx1;

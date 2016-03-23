@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.cesty;
 
@@ -11,14 +11,14 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
  */
 public class CestyNacitaniKesoiduWatchDog {
 
-  private CestyModel cestyModel;
+	private CestyModel cestyModel;
 
-  public void onEvent(KeskyNactenyEvent aEvent) {
-    cestyModel.znovuVsechnoPripni();
-  }
+	public void onEvent(KeskyNactenyEvent aEvent) {
+		cestyModel.znovuVsechnoPripni();
+	}
 
-  public void inject(CestyModel cestyModel) {
-    this.cestyModel = cestyModel;
-  }
+	public void inject(CestyModel cestyModel) {
+		this.cestyModel = cestyModel;
+	}
 
 }

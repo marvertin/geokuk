@@ -12,7 +12,7 @@ import java.io.OutputStream;
  *
  */
 interface DiskSaveSpi {
-	
+
 	public void save(OutputStream ostm) throws IOException;
 
 }

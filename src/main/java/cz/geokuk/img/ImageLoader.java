@@ -19,103 +19,103 @@ import cz.geokuk.util.exception.FExceptionDumper;
 
 public class ImageLoader {
 
-  private static Map<String, BufferedImage> imagesCache = new HashMap<>();
+	private static Map<String, BufferedImage> imagesCache = new HashMap<>();
 
-  /**
-   * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky
-   * @param path
-   * @return
-   */
-  public static BufferedImage locateResImage(final String path) {
-    BufferedImage bi = imagesCache.get(path);
-    if (bi != null) {
-      return bi;
-    }
-    bi = locateResImageNoCache(path);
-    imagesCache.put(path, bi);
-    return bi;
-  }
+	/**
+	 * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky
+	 * @param path
+	 * @return
+	 */
+	public static BufferedImage locateResImage(final String path) {
+		BufferedImage bi = imagesCache.get(path);
+		if (bi != null) {
+			return bi;
+		}
+		bi = locateResImageNoCache(path);
+		imagesCache.put(path, bi);
+		return bi;
+	}
 
-  /**
-   * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky
-   * @param path
-   * @return
-   */
-  public static BufferedImage locateResImageNoCache(String path) {
-    // TODO hack
-    path = "/img/" + path;
-    try {
-      final URL imgURL = ImageLoader.class.getResource(path);
-      if (imgURL == null) {
-        throw new IOException("Cannot find resource \"" + path + "\" using " + ImageLoader.class.getName());
-      }
-      return ImageIO.read(imgURL);
-    } catch (final IOException e) {
-      FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Vyhledavani obrazku \""+ path + "\"");
-      // neexistující image
-      return null;
-    }
-  }
-
-
-  /** Returns an ImageIcon, or null if the path was invalid. */
-  public static Icon locateResIcon(final String path) {
-    final BufferedImage bi = locateResImageNoCache(path);
-    if (bi == null) {
-      return null;
-    } else {
-      return new ImageIcon(bi);
-    }
-  }
-
-  /** Returns an ImageIcon, or null if the path was invalid. */
-  public static Icon seekResIcon(final String path) {
-    Icon icon = locateResIcon(path);
-    if (icon == null) {
-      icon = new MissingIcon();
-    }
-    return icon;
-  }
-
-  public static BufferedImage seekResImage(final String path, final int xn, final int yn) {
-    BufferedImage img = locateResImageNoCache(path);
-    if (img == null) {
-      img = createMissingImage(xn, yn);
-    }
-    return img;
-  }
+	/**
+	 * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky
+	 * @param path
+	 * @return
+	 */
+	public static BufferedImage locateResImageNoCache(String path) {
+		// TODO hack
+		path = "/img/" + path;
+		try {
+			final URL imgURL = ImageLoader.class.getResource(path);
+			if (imgURL == null) {
+				throw new IOException("Cannot find resource \"" + path + "\" using " + ImageLoader.class.getName());
+			}
+			return ImageIO.read(imgURL);
+		} catch (final IOException e) {
+			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Vyhledavani obrazku \""+ path + "\"");
+			// neexistující image
+			return null;
+		}
+	}
 
 
-  public static BufferedImage seekResImage(final String path) {
-    final BufferedImage img = locateResImageNoCache(path);
-    if (img == null) {
-      throw new RuntimeException("cannot find image: " + path);
-    }
-    return img;
-  }
+	/** Returns an ImageIcon, or null if the path was invalid. */
+	public static Icon locateResIcon(final String path) {
+		final BufferedImage bi = locateResImageNoCache(path);
+		if (bi == null) {
+			return null;
+		} else {
+			return new ImageIcon(bi);
+		}
+	}
 
-  private static BufferedImage createMissingImage(final int width, final int height) {
-    final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-    final Graphics2D g2d = (Graphics2D) image.getGraphics();
-    final int x = 0;
-    final int y = 0;
+	/** Returns an ImageIcon, or null if the path was invalid. */
+	public static Icon seekResIcon(final String path) {
+		Icon icon = locateResIcon(path);
+		if (icon == null) {
+			icon = new MissingIcon();
+		}
+		return icon;
+	}
 
-    g2d.setColor(Color.WHITE);
-    g2d.fillRect(x +1 ,y + 1,width -2 ,height -2);
+	public static BufferedImage seekResImage(final String path, final int xn, final int yn) {
+		BufferedImage img = locateResImageNoCache(path);
+		if (img == null) {
+			img = createMissingImage(xn, yn);
+		}
+		return img;
+	}
 
-    g2d.setColor(Color.BLACK);
-    g2d.drawRect(x +1 ,y + 1,width -2 ,height -2);
 
-    g2d.setColor(Color.RED);
+	public static BufferedImage seekResImage(final String path) {
+		final BufferedImage img = locateResImageNoCache(path);
+		if (img == null) {
+			throw new RuntimeException("cannot find image: " + path);
+		}
+		return img;
+	}
 
-    final BasicStroke stroke = new BasicStroke(4);
-    g2d.setStroke(stroke);
-    g2d.drawLine(x +10, y + 10, x + width -10, y + height -10);
-    g2d.drawLine(x +10, y + height -10, x + width -10, y + 10);
+	private static BufferedImage createMissingImage(final int width, final int height) {
+		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+		final Graphics2D g2d = (Graphics2D) image.getGraphics();
+		final int x = 0;
+		final int y = 0;
 
-    g2d.dispose();
+		g2d.setColor(Color.WHITE);
+		g2d.fillRect(x +1 ,y + 1,width -2 ,height -2);
 
-    return image;
-  }
+		g2d.setColor(Color.BLACK);
+		g2d.drawRect(x +1 ,y + 1,width -2 ,height -2);
+
+		g2d.setColor(Color.RED);
+
+		final BasicStroke stroke = new BasicStroke(4);
+		g2d.setStroke(stroke);
+		g2d.drawLine(x +10, y + 10, x + width -10, y + height -10);
+		g2d.drawLine(x +10, y + height -10, x + width -10, y + 10);
+
+		g2d.dispose();
+
+		return image;
+	}
 
 }

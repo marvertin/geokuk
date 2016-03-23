@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.core.coord;
 
@@ -18,29 +18,29 @@ import cz.geokuk.framework.Action0;
  */
 public class PriblizMapuAction extends Action0  {
 
-  private static final long serialVersionUID = -8054017274338240706L;
+	private static final long serialVersionUID = -8054017274338240706L;
 
-  /**
-   * 
-   */
-  public PriblizMapuAction() {
-    super("Přibliž mapu");
-    putValue(SHORT_DESCRIPTION, "Změna měřítka mapy o jeden stupeň.");
-    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
+	/**
+	 *
+	 */
+	public PriblizMapuAction() {
+		super("Přibliž mapu");
+		putValue(SHORT_DESCRIPTION, "Změna měřítka mapy o jeden stupeň.");
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
 
-  }
-  /* (non-Javadoc)
-   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-   */
+	}
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    vyrezModel.setMeritkoMapy(vyrezModel.getMoord().getMoumer() + 1);
-  }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		vyrezModel.setMeritkoMapy(vyrezModel.getMoord().getMoumer() + 1);
+	}
 
-  public void onEvent(VyrezChangedEvent event) {
-    setEnabled (! event.getModel().jeNejblizsiMeritko());
-  }
+	public void onEvent(VyrezChangedEvent event) {
+		setEnabled (! event.getModel().jeNejblizsiMeritko());
+	}
 
 }
 

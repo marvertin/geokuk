@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cz.geokuk.plugins.kesoid.mvc;
 
@@ -11,22 +11,22 @@ import cz.geokuk.plugins.kesoid.KesBag;
  *
  */
 public class KeskyVyfiltrovanyEvent extends Event0<KesoidModel> {
-  private final KesBag filtrovane;
-  private KesBag vsechny;
-  //private final Set<Kes> filtrovaneKese;
+	private final KesBag filtrovane;
+	private KesBag vsechny;
+	//private final Set<Kes> filtrovaneKese;
 
-  public KesBag getVsechny() {
-	return vsechny;
-}
+	public KesBag getVsechny() {
+		return vsechny;
+	}
 
-public KeskyVyfiltrovanyEvent(KesBag filtrovane, KesBag vsechny) {
-    this.filtrovane = filtrovane;
-	this.vsechny = vsechny;
-  }
+	public KeskyVyfiltrovanyEvent(KesBag filtrovane, KesBag vsechny) {
+		this.filtrovane = filtrovane;
+		this.vsechny = vsechny;
+	}
 
-  public KesBag getFiltrovane() {
-    return filtrovane;
-  }
+	public KesBag getFiltrovane() {
+		return filtrovane;
+	}
 
 
 }
