@@ -3,10 +3,10 @@
  */
 package cz.geokuk.plugins.mapy.kachle;
 
-
-
 public class KaAllReq extends Ka0Req {
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 
@@ -16,7 +16,6 @@ public class KaAllReq extends Ka0Req {
 		super(ka, priorita);
 		this.imageReceiver = imageReceiver;
 	}
-
 
 	@Override
 	public KaAll getKa() {
@@ -30,12 +29,8 @@ public class KaAllReq extends Ka0Req {
 		imageReceiver = null;
 	}
 
-
 	public ImageReceiver getImageReceiver() {
 		return imageReceiver;
 	}
-
-
-
 
 }

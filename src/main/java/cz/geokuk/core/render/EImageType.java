@@ -8,10 +8,7 @@ package cz.geokuk.core.render;
  *
  */
 public enum EImageType {
-	bmp(false),
-	png(true),
-	jpg(false),
-	;
+	bmp(false), png(true), jpg(false),;
 
 	private final boolean umoznujePruhlednost;
 

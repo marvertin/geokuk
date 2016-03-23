@@ -3,7 +3,6 @@
  */
 package cz.geokuk.core.render;
 
-
 import java.io.File;
 
 import cz.geokuk.core.program.UmisteniSouboru0;
@@ -14,21 +13,19 @@ import cz.geokuk.util.file.Filex;
  * @author veverka
  *
  */
-public class RenderUmisteniSouboru extends UmisteniSouboru0  {
+public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 
-	public static final Filex KMZ_DIR = new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "kmz"), false, true);
+	public static final Filex	KMZ_DIR		= new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "kmz"), false, true);
 
-	public static final Filex OZI_DIR = new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "ozi"), false, true);
+	public static final Filex	OZI_DIR		= new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "ozi"), false, true);
 
-	public static final Filex PICURE_DIR = new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "picture"), false, true);
+	public static final Filex	PICURE_DIR	= new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "picture"), false, true);
 
-	private Filex kmzDir;
+	private Filex				kmzDir;
 
-	private Filex oziDir;
+	private Filex				oziDir;
 
-	private Filex pictureDir;
-
-
+	private Filex				pictureDir;
 
 	/**
 	 * @return the kmzDir
@@ -37,8 +34,6 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0  {
 		return kmzDir;
 	}
 
-
-
 	/**
 	 * @return the oziDir
 	 */
@@ -46,13 +41,9 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0  {
 		return oziDir;
 	}
 
-
-
 	public Filex getPictureDir() {
 		return pictureDir;
 	}
-
-
 
 	@Override
 	public int hashCode() {
@@ -60,12 +51,9 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0  {
 		int result = 1;
 		result = prime * result + ((kmzDir == null) ? 0 : kmzDir.hashCode());
 		result = prime * result + ((oziDir == null) ? 0 : oziDir.hashCode());
-		result = prime * result
-				+ ((pictureDir == null) ? 0 : pictureDir.hashCode());
+		result = prime * result + ((pictureDir == null) ? 0 : pictureDir.hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -94,44 +82,35 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0  {
 		return true;
 	}
 
-
-
 	/**
 	 * @param aKesDir
 	 */
 	private void check(Filex file) {
-		if (file == null) throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
+		if (file == null)
+			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
 	}
 
-
-
 	/**
-	 * @param kmzDir the kmzDir to set
+	 * @param kmzDir
+	 *            the kmzDir to set
 	 */
 	public void setKmzDir(Filex kmzDir) {
 		check(kmzDir);
 		this.kmzDir = kmzDir;
 	}
 
-
-
 	/**
-	 * @param oziDir the oziDir to set
+	 * @param oziDir
+	 *            the oziDir to set
 	 */
 	public void setOziDir(Filex oziDir) {
 		check(oziDir);
 		this.oziDir = oziDir;
 	}
 
-
-
 	public void setPictureDir(Filex pictureDir) {
 		check(pictureDir);
 		this.pictureDir = pictureDir;
 	}
-
-
-
-
 
 }

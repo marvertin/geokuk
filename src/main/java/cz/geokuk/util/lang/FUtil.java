@@ -3,11 +3,10 @@ package cz.geokuk.util.lang;
 import java.awt.Color;
 import java.util.Collection;
 
-
-
 public final class FUtil {
 
-	private FUtil() {}
+	private FUtil() {
+	}
 
 	public static String cestinuPryc(String s) {
 		int i;
@@ -22,7 +21,8 @@ public final class FUtil {
 				break;
 			}
 		}
-		if (i == n) return s; // není čeština
+		if (i == n)
+			return s; // není čeština
 		StringBuilder sb = new StringBuilder(n);
 		sb.append(s.substring(0, i));
 		for (; i < n; i++) {
@@ -37,63 +37,119 @@ public final class FUtil {
 
 	public static char cestinuPryc(char c) {
 		switch (c) {
-		case 'á': return 'a';
-		case 'é': return 'e';
-		case 'ě': return 'e';
-		case 'í': return 'i';
-		case 'ó': return 'o';
-		case 'ú': return 'u';
-		case 'ů': return 'u';
-		case 'ý': return 'y';
-		case 'Á': return 'A';
-		case 'É': return 'E';
-		case 'Ě': return 'E';
-		case 'Í': return 'I';
-		case 'Ó': return 'O';
-		case 'Ú': return 'U';
-		case 'Ů': return 'U';
-		case 'ž': return 'z';
-		case 'š': return 's';
-		case 'č': return 'c';
-		case 'ř': return 'r';
-		case 'ŕ': return 'r';
-		case 'ď': return 'd';
-		case 'ť': return 't';
-		case 'ň': return 'n';
-		case 'ĺ': return 'l';
-		case 'ľ': return 'l';
-		case 'Ž': return 'Z';
-		case 'Š': return 'S';
-		case 'Č': return 'C';
-		case 'Ř': return 'R';
-		case 'Ŕ': return 'R';
-		case 'Ď': return 'D';
-		case 'Ť': return 'T';
-		case 'Ň': return 'N';
-		case 'Ĺ': return 'L';
-		case 'Ľ': return 'L';
-		default: return c;
+		case 'á':
+			return 'a';
+		case 'é':
+			return 'e';
+		case 'ě':
+			return 'e';
+		case 'í':
+			return 'i';
+		case 'ó':
+			return 'o';
+		case 'ú':
+			return 'u';
+		case 'ů':
+			return 'u';
+		case 'ý':
+			return 'y';
+		case 'Á':
+			return 'A';
+		case 'É':
+			return 'E';
+		case 'Ě':
+			return 'E';
+		case 'Í':
+			return 'I';
+		case 'Ó':
+			return 'O';
+		case 'Ú':
+			return 'U';
+		case 'Ů':
+			return 'U';
+		case 'ž':
+			return 'z';
+		case 'š':
+			return 's';
+		case 'č':
+			return 'c';
+		case 'ř':
+			return 'r';
+		case 'ŕ':
+			return 'r';
+		case 'ď':
+			return 'd';
+		case 'ť':
+			return 't';
+		case 'ň':
+			return 'n';
+		case 'ĺ':
+			return 'l';
+		case 'ľ':
+			return 'l';
+		case 'Ž':
+			return 'Z';
+		case 'Š':
+			return 'S';
+		case 'Č':
+			return 'C';
+		case 'Ř':
+			return 'R';
+		case 'Ŕ':
+			return 'R';
+		case 'Ď':
+			return 'D';
+		case 'Ť':
+			return 'T';
+		case 'Ň':
+			return 'N';
+		case 'Ĺ':
+			return 'L';
+		case 'Ľ':
+			return 'L';
+		default:
+			return c;
 		}
 
 	}
 
 	public static String vycistiJmenoSouboru(String s) {
-		if (s == null) return null;
+		if (s == null)
+			return null;
 		StringBuilder sb = null;
-		for (int i=0; i< s.length(); i++) {
+		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			char x;
 			switch (c) {
-			case '"' : x = '\''; break;
-			case '*' : x = '+'; break;
-			case ':' : x = ';'; break;
-			case '<' : x = '['; break;
-			case '>' : x = ']'; break;
-			case '?' : x = '!'; break;
-			case '|' : x = '!'; break;
-			case '/' : x = '!'; break;
-			case '\\' : x = '!'; break;
-			default: x = c;
+			case '"':
+				x = '\'';
+				break;
+			case '*':
+				x = '+';
+				break;
+			case ':':
+				x = ';';
+				break;
+			case '<':
+				x = '[';
+				break;
+			case '>':
+				x = ']';
+				break;
+			case '?':
+				x = '!';
+				break;
+			case '|':
+				x = '!';
+				break;
+			case '/':
+				x = '!';
+				break;
+			case '\\':
+				x = '!';
+				break;
+			default:
+				x = c;
 			}
 			if (x != c && sb == null) {
 				sb = new StringBuilder(s.length());
@@ -115,7 +171,7 @@ public final class FUtil {
 		return ((o1 == null && o2 == null) || (o1 != null && o1.equals(o2)));
 	}
 
-	public static <T>  boolean addAll(Collection<? super T> col, Iterable<? extends T> iterable) {
+	public static <T> boolean addAll(Collection<? super T> col, Iterable<? extends T> iterable) {
 		boolean celkovaZmena = false;
 		for (T tt : iterable) {
 			boolean zmena = col.add(tt);

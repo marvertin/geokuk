@@ -9,16 +9,15 @@ import cz.geokuk.framework.Factory;
 import cz.geokuk.framework.JSlide0;
 
 /**
- *  Předek všech jednoduchých, tedy nesložených slidů
+ * Předek všech jednoduchých, tedy nesložených slidů
  */
 public abstract class JSingleSlide0 extends JSlide0 {
 
-	private static final long serialVersionUID = 8758817189971703053L;
+	private static final long	serialVersionUID	= 8758817189971703053L;
 
-	private Coord soord;
+	private Coord				soord;
 
-
-	protected Factory factory;
+	protected Factory			factory;
 
 	protected boolean isSoordInitialized() {
 		return soord != null;
@@ -33,36 +32,32 @@ public abstract class JSingleSlide0 extends JSlide0 {
 	}
 
 	/**
-	 * @param coord the coord to set
+	 * @param coord
+	 *            the coord to set
 	 */
 	public void setSoord(Coord soord) {
 		assert soord != null;
 		this.soord = soord;
 	}
 
-
 	protected void onVyrezChanged() {
 	}
 
-	//  protected final void onEvent(VyrezChangedEvent0 event ) {
+	// protected final void onEvent(VyrezChangedEvent0 event ) {
 	//
-	//  }
-
-
+	// }
 
 	public void inject(Factory factory) {
 		this.factory = factory;
 	}
-
 
 	public void render(Graphics g) throws InterruptedException {
 		paintComponent(g);
 	}
 
 	/**
-	 * Potomek musí vytvořit novou instanci slidu, který bude rendrovatelný.
-	 * Obvykle postačí, když vytvoří prázdnou instanci své vlastní třídy.
-	 * Pokud vrátí null, nic se rendrovat nebude
+	 * Potomek musí vytvořit novou instanci slidu, který bude rendrovatelný. Obvykle postačí, když vytvoří prázdnou instanci své vlastní třídy. Pokud vrátí null, nic se rendrovat nebude
+	 * 
 	 * @return
 	 */
 	public JSingleSlide0 createRenderableSlide() {

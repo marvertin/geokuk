@@ -9,13 +9,15 @@ package cz.geokuk.util.lang;
 /**
  * @author polakm
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ *         To change the template for this generated type comment go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public interface ADateComparable {
 
-	boolean isLess            (ADate b);
-	boolean isLessOrEqual     (ADate b);
-	boolean isGreater         (ADate b);
-	boolean isGreaterOrEqual  (ADate b);
+	boolean isLess(ADate b);
+
+	boolean isLessOrEqual(ADate b);
+
+	boolean isGreater(ADate b);
+
+	boolean isGreaterOrEqual(ADate b);
 }

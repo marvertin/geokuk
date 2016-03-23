@@ -3,19 +3,18 @@
  */
 package cz.geokuk.util.gui;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.awt.Color;
 
 import javax.swing.colorchooser.DefaultColorSelectionModel;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 
-	private static final Logger log =
-			LogManager.getLogger(AlfaColorSelectionModel.class.getSimpleName());
-	private static final long serialVersionUID = -1718047742587104573L;
-	private int alfa;
+	private static final Logger	log					= LogManager.getLogger(AlfaColorSelectionModel.class.getSimpleName());
+	private static final long	serialVersionUID	= -1718047742587104573L;
+	private int					alfa;
 
 	@Override
 	public void setSelectedColor(Color color) {
@@ -24,13 +23,15 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 		super.setSelectedColor(new Color((color.getRGB() & 0xFFFFFF) | (alfa << 24), true));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.colorchooser.DefaultColorSelectionModel#getSelectedColor()
 	 */
 	@Override
 	public Color getSelectedColor() {
-		//Color color = new Color(super.getSelectedColor().getRGB() & 0xFFFFFF | (alfa << 24));
-		//    //color = super.getSelectedColor();
+		// Color color = new Color(super.getSelectedColor().getRGB() & 0xFFFFFF | (alfa << 24));
+		// //color = super.getSelectedColor();
 		Color color = getSelectedColorWithAlfa();
 		return color;
 	}
@@ -63,19 +64,16 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 	}
 
 	public void setAlfa(int aAlfa) {
-		if (alfa == aAlfa) return;
+		if (alfa == aAlfa)
+			return;
 		alfa = aAlfa;
 		log.debug("MODEL-setAlfa: " + alfa);
 		fireStateChanged();
 	}
 
-
 	@Override
 	public void fireStateChanged() {
 		super.fireStateChanged();
 	}
-
-
-
 
 }

@@ -3,7 +3,6 @@
  */
 package cz.geokuk.plugins.cesty.akce.cesta;
 
-
 import java.awt.Color;
 
 import cz.geokuk.core.coordinates.FGeoKonvertor;
@@ -11,6 +10,7 @@ import cz.geokuk.plugins.cesty.data.Cesta;
 
 /**
  * Jde na vybranou pozici
+ * 
  * @author veverka
  *
  */
@@ -18,7 +18,7 @@ public class PredraditVybranouCestu extends CestaAction0 {
 
 	private static final long serialVersionUID = -2882817111560336824L;
 
-	//  private Pozice pozice;
+	// private Pozice pozice;
 	/**
 	 * @param aBoard
 	 */
@@ -26,8 +26,8 @@ public class PredraditVybranouCestu extends CestaAction0 {
 		super(cesta);
 		putValue(NAME, "Předřadit vybranou cestu");
 		putValue(SHORT_DESCRIPTION, "Před tuto cestu předřadí vybranou cestu spojením startovního bodu této cesty a cílového bodu vybrané cesty.");
-		//putValue(MNEMONIC_KEY, KeyEvent.VK_P);
-		//putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("RIGHT"));
+		// putValue(MNEMONIC_KEY, KeyEvent.VK_P);
+		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("RIGHT"));
 	}
 
 	@Override
@@ -37,8 +37,8 @@ public class PredraditVybranouCestu extends CestaAction0 {
 
 	@Override
 	protected void nastavJmenoAkce(Cesta cesta, boolean aZKontextovehoMenu) {
-		putValue(NAME, "<html>Předřadit před" + cesta.getNazevADalkaHtml() + " vybranou cestu" +
-				curta().getNazevADalkaHtml() + " usekem " + Cesta.dalkaHtml(FGeoKonvertor.dalka(cesta.getCil(), curta().getStart()), Color.BLACK));
+		putValue(NAME, "<html>Předřadit před" + cesta.getNazevADalkaHtml() + " vybranou cestu" + curta().getNazevADalkaHtml() + " usekem "
+				+ Cesta.dalkaHtml(FGeoKonvertor.dalka(cesta.getCil(), curta().getStart()), Color.BLACK));
 	}
 
 	@Override

@@ -9,15 +9,15 @@ import java.awt.event.KeyEvent;
 import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.Action0;
 
-
 /**
  * @author veverka
  *
  */
 public class ZkontrolovatAktualizaceAction extends Action0 {
 
-	private static final long serialVersionUID = -2882817111560336824L;
-	private NapovedaModel napovedaModel;
+	private static final long	serialVersionUID	= -2882817111560336824L;
+	private NapovedaModel		napovedaModel;
+
 	/**
 	 * @param aBoard
 	 */
@@ -26,7 +26,10 @@ public class ZkontrolovatAktualizaceAction extends Action0 {
 		putValue(SHORT_DESCRIPTION, "Připojením na WEB zkontroluje, zda nejsou k dispozici nové verze programu.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_A);
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
@@ -41,6 +44,5 @@ public class ZkontrolovatAktualizaceAction extends Action0 {
 	public void inject(final NapovedaModel napovedaModel) {
 		this.napovedaModel = napovedaModel;
 	}
-
 
 }

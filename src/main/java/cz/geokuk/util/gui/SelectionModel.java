@@ -7,22 +7,22 @@ import cz.geokuk.util.lang.FObject;
 
 /**
  * GUI model pro výáběr nějakých objektů.
+ * 
  * @author tatinek
  *
  * @param <T>
  */
 public class SelectionModel<T> {
 
-	final List<Item<T>> items = new ArrayList<>();
+	final List<Item<T>>							items		= new ArrayList<>();
 
-	private Item<T> selectedItem;
+	private Item<T>								selectedItem;
 
-	private final List<SelectionListener<T>> listeners = new ArrayList<>();
+	private final List<SelectionListener<T>>	listeners	= new ArrayList<>();
 
-
-	//  public void add(Map<? extends T, String> map) {
-	//    this.map.putAll(map);
-	//  }
+	// public void add(Map<? extends T, String> map) {
+	// this.map.putAll(map);
+	// }
 
 	public void add(T item, String displayText) {
 		items.add(new Item<>(item, displayText, items.size()));
@@ -50,7 +50,7 @@ public class SelectionModel<T> {
 	}
 
 	public void setSelectedFirst() {
-		if (! items.isEmpty()) {
+		if (!items.isEmpty()) {
 			setSelectedItem(items.get(0));
 		}
 	}
@@ -63,9 +63,9 @@ public class SelectionModel<T> {
 	}
 
 	static class Item<T> {
-		T value;
-		String displayText;
-		int poradi;
+		T		value;
+		String	displayText;
+		int		poradi;
 
 		public Item(T value, String displayText, int poradi) {
 			this.value = value;
@@ -77,7 +77,6 @@ public class SelectionModel<T> {
 		public String toString() {
 			return displayText;
 		}
-
 
 	}
 }

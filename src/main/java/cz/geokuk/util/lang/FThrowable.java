@@ -2,37 +2,27 @@ package cz.geokuk.util.lang;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
 
 import cz.geokuk.util.file.LineWrappingDecorationWriter;
 
-
 /**
- * Třída je pomocnou třídou pro {@link XRuntime}, {@link XObject0} a jejich následníky.
- * Obsahuje pouze statické metody, neinstanciuje se. Takle blbě je to uděláno proto,
- * že java neobsahuje vícenásobnou dědičnost a také proto, že v předkovi Throwable
- * není vše, co by tam mělo být. unkcionalita je podobná jako u com.ms.wfc.core.WFCException,
- * ale zahrnuje také errory a nemá tolik kosntruktorů, aby to nesvádělo ke zjednodušování
- * práce na úkor diagnistikovatelnosti.
+ * Třída je pomocnou třídou pro {@link XRuntime}, {@link XObject0} a jejich následníky. Obsahuje pouze statické metody, neinstanciuje se. Takle blbě je to uděláno proto, že java neobsahuje vícenásobnou dědičnost a také proto, že v předkovi Throwable není vše, co by tam mělo být. unkcionalita je
+ * podobná jako u com.ms.wfc.core.WFCException, ale zahrnuje také errory a nemá tolik kosntruktorů, aby to nesvádělo ke zjednodušování práce na úkor diagnistikovatelnosti.
  */
 public final class FThrowable {
-	private FThrowable() { /* Nikdo z venku nesmí tvořit instance. */ }
+	private FThrowable() {
+		/* Nikdo z venku nesmí tvořit instance. */ }
 
-	private static int sČítačVypisovačů = 0;
-	private static final Map<Throwable, Integer> sVýjimkaNaČíslo = new WeakHashMap<>();
+	private static int								sČítačVypisovačů	= 0;
+	private static final Map<Throwable, Integer>	sVýjimkaNaČíslo		= new WeakHashMap<>();
 
 	public static int getExceptionNumber(Throwable aTh) {
-		if (aTh == null) return 0;
+		if (aTh == null)
+			return 0;
 		// získat řetěz výjimek
 		ThrowableAndSourceMethod[] throwableChain = getThrowableChain(aTh);
 		assert throwableChain.length > 0; // protože nějakou výjimku máme, tak musí být i včejnu
@@ -51,21 +41,22 @@ public final class FThrowable {
 	/**
 	 * Vrací řetězec výjimek.
 	 *
-	 * @param thr Výjimka, od nějž se má řetězec odvíjet.
-	 * @return Pole obsahující řetězec výjimek a zdojových metod. Pod indexem nula
-	 * je nejvyšší výjimka, tedy výjimka předaná jako parameter a metoda
-	 * je null.
+	 * @param thr
+	 *            Výjimka, od nějž se má řetězec odvíjet.
+	 * @return Pole obsahující řetězec výjimek a zdojových metod. Pod indexem nula je nejvyšší výjimka, tedy výjimka předaná jako parameter a metoda je null.
 	 */
 	public static ThrowableAndSourceMethod[] getThrowableChain(Throwable thr) {
-		if (thr == null) return new ThrowableAndSourceMethod[0]; // prázdné pole, pokud žádná výjimka není.
+		if (thr == null)
+			return new ThrowableAndSourceMethod[0]; // prázdné pole, pokud žádná výjimka není.
 		ThrowableAndSourceMethod[] vazy = ThrowableChainPicker.from(thr).poskládejŘetězVýjimek();
 		return vazy;
 	}
 
-	/** Vrátí výjimku přehozenou přes zadanou výjimku,
-	 * typ výjimky vrátí co možná nejbližší nahoru k přehazované výjimce.
-	 * Pokud žádný rozumný typ nenalezne, přehazuje XRuntime.
-	 * @param s Technicky orientovaná zpráva. Řetězec se stane technickou zprávou nově vytvořené výjimky.
+	/**
+	 * Vrátí výjimku přehozenou přes zadanou výjimku, typ výjimky vrátí co možná nejbližší nahoru k přehazované výjimce. Pokud žádný rozumný typ nenalezne, přehazuje XRuntime.
+	 * 
+	 * @param s
+	 *            Technicky orientovaná zpráva. Řetězec se stane technickou zprávou nově vytvořené výjimky.
 	 * @parem exc Přehazovaná výjimka
 	 * @return Přehozená výjimka, přinejhorším XRuntime.
 	 */
@@ -99,9 +90,7 @@ public final class FThrowable {
 	}
 
 	/**
-	 * Vyhledání konkrétní výjimky v seznamu výjimek. Hledá první výjimku,
-	 * která je zadaná nebo její následník. Vrací null, pokud se taková výjimka nenajde.
-	 * Může vrátit i kořen výjimek, pokud je to již ona.
+	 * Vyhledání konkrétní výjimky v seznamu výjimek. Hledá první výjimku, která je zadaná nebo její následník. Vrací null, pokud se taková výjimka nenajde. Může vrátit i kořen výjimek, pokud je to již ona.
 	 */
 	public static Throwable findThrowableType(Throwable thr, Class<? extends Throwable> aExcType) {
 		if (!Throwable.class.isAssignableFrom(aExcType))
@@ -166,9 +155,9 @@ public final class FThrowable {
 
 	private static class ExceptionPrinter {
 		private void _printStackTrace(Throwable thr, PrintWriter wrt) {
-			//System.err.p rintln("======================ZZZZZZZZZZZZZZZZ=================");
-			//thr.printStackTrace();
-			//System.err.p rintln("======================KKKKKKKKKKKKK=================");
+			// System.err.p rintln("======================ZZZZZZZZZZZZZZZZ=================");
+			// thr.printStackTrace();
+			// System.err.p rintln("======================KKKKKKKKKKKKK=================");
 			boolean vypisujJmenoMetody = true;
 			synchronized (wrt) {
 				ThrowableAndSourceMethod[] vazy = ThrowableChainPicker.from(thr).poskládejŘetězVýjimek();
@@ -185,13 +174,13 @@ public final class FThrowable {
 						printExceptionClassName(wrt, vaz.iThrowable.getClass().getName() + " ");
 						printIdentityHashCode(wrt, System.identityHashCode(vaz.iThrowable));
 						printlnExceptionMessage(wrt, buildThrowableMessageWithoutExceptionName(vaz.iThrowable));
-					} else {  // je to rendrovací, tak musím zabýt výpis jména metody zjišťující výjimku dále ve steku
+					} else { // je to rendrovací, tak musím zabýt výpis jména metody zjišťující výjimku dále ve steku
 						vypisujJmenoMetody = false;
 					}
 
 					StackTraceElement[] trace = vaz.iThrowable.getStackTrace();
 					int shodnych;
-					if (i + 1 < vazy.length) {  // pokud není tento stek stekem posledním
+					if (i + 1 < vazy.length) { // pokud není tento stek stekem posledním
 						StackTraceElement[] nextTrace = vazy[i + 1].iThrowable.getStackTrace();
 						shodnych = compareStackTraces(trace, nextTrace);
 					} else {
@@ -202,16 +191,13 @@ public final class FThrowable {
 			}
 		}
 
-
 		protected void printlnExceptionMessage(PrintWriter wrt, String message) {
 			wrt.println(message);
 		}
 
-
 		protected void printExceptionNestingNumber(PrintWriter wrt, String nestingNumber) {
 			wrt.print(nestingNumber);
 		}
-
 
 		protected void printZdrojMetoda(PrintWriter wrt, Method zdroj) {
 			wrt.print(zdroj == null ? "<unknown method>" : (zdroj.getName() + "()"));
@@ -226,7 +212,6 @@ public final class FThrowable {
 			wrt.print(aIdentityHashCode);
 		}
 
-
 		public String printStackTrace(Throwable th, PrintWriter s, String aPrefix) {
 			try {
 				LineWrappingDecorationWriter wrt = new LineWrappingDecorationWriter(s);
@@ -234,10 +219,10 @@ public final class FThrowable {
 				String pfx = "EXC-" + getExceptionNumber(th) + "-" + (aPrefix == null ? "" : aPrefix);
 				wrt.setPrefix(pfx + ": ");
 				pwrt.println("Exception printed at " + ATimestamp.now().toIsoStringLocal());
-				//StackTraceElement trace = inferCaller(FThrowable.class);
-				//if (trace != null) {
-				//  pwrt.println("Exception printed at " + trace);
-				//}
+				// StackTraceElement trace = inferCaller(FThrowable.class);
+				// if (trace != null) {
+				// pwrt.println("Exception printed at " + trace);
+				// }
 				_printStackTrace(new XTopRenderingException(th), pwrt);
 				pwrt.flush();
 				return pfx;
@@ -252,7 +237,8 @@ public final class FThrowable {
 				System.err.println("!!!!!!!! ORIGINAL EXCEPTION IS !!!!!!!!!!!!!!");
 				th.printStackTrace();
 				System.err.println("!!!!!!!! EXCEPTION WHILE PRINTING EXCEPTION - END !!!!!!!!!!!!!!");
-				if (e instanceof ThreadDeath) throw (ThreadDeath) e;
+				if (e instanceof ThreadDeath)
+					throw (ThreadDeath) e;
 				return "?!?"; // opravdu nevím co vrátit, ale to je asi jedno
 			}
 		}
@@ -260,23 +246,25 @@ public final class FThrowable {
 		/**
 		 * Vypíše čistě kus zásobníku.
 		 *
-		 * @param pwrt             Kam vypisovat
-		 * @param trace            Zásobník na pypsání
-		 * @param aKolikNezobrazit Kolik řádků nemá být zobrazeno, pokud je nula, zobrazí se vše
-		 * @param aPoradoveCislo   Pořadové číslo řetězené výjimky, které se také vypíše.
+		 * @param pwrt
+		 *            Kam vypisovat
+		 * @param trace
+		 *            Zásobník na pypsání
+		 * @param aKolikNezobrazit
+		 *            Kolik řádků nemá být zobrazeno, pokud je nula, zobrazí se vše
+		 * @param aPoradoveCislo
+		 *            Pořadové číslo řetězené výjimky, které se také vypíše.
 		 */
 		private void printOnlyStackTrace(PrintWriter pwrt, StackTraceElement[] trace, int aKolikNezobrazit, int aPoradoveCislo, Set<String> aVypsanci) {
 			if (aKolikNezobrazit < 0)
 				aKolikNezobrazit = 0;
-			if (aKolikNezobrazit >= trace.length && trace.length > 0) aKolikNezobrazit = trace.length - 1;
+			if (aKolikNezobrazit >= trace.length && trace.length > 0)
+				aKolikNezobrazit = trace.length - 1;
 			if (trace == null || trace.length - aKolikNezobrazit <= 0)
 				return;
 			for (int i = 0; i < trace.length - aKolikNezobrazit; i++) {
 				String vypsanec = trace[i] == null ? "neznamy" : (trace[i].getClassName() + "." + trace[i].getMethodName() + "-" + (trace.length - i));
-				pwrt.println("    "
-						+ (aPoradoveCislo == 0 ? "render" : Integer.toString(aPoradoveCislo))
-						+ "." + (trace.length - i)
-						+ (aVypsanci.contains(vypsanec) ? " * " : " - ")
+				pwrt.println("    " + (aPoradoveCislo == 0 ? "render" : Integer.toString(aPoradoveCislo)) + "." + (trace.length - i) + (aVypsanci.contains(vypsanec) ? " * " : " - ")
 						+ (trace[i] + "").replace('\t', ' '));
 				aVypsanci.add(vypsanec);
 			}
@@ -321,15 +309,13 @@ public final class FThrowable {
 	}
 
 	/**
-	 * Třída, která umí poskládat řetěz výjimek a to dost dobře, jede reflektem,
-	 * takže nevynechá žádnou metodu, umí se tedy přizpůsobit i starším třídám.
+	 * Třída, která umí poskládat řetěz výjimek a to dost dobře, jede reflektem, takže nevynechá žádnou metodu, umí se tedy přizpůsobit i starším třídám.
 	 *
 	 * @author veverka
 	 */
 	private static class ThrowableChainPicker {
-		private final Set<Throwable> iJizZarazeneVyjimkyx = new HashSet<>();
-		private final Throwable iThr;
-
+		private final Set<Throwable>	iJizZarazeneVyjimkyx	= new HashSet<>();
+		private final Throwable			iThr;
 
 		/*
 		 * Sestrojí picker nad určitou výjimkou.
@@ -353,8 +339,10 @@ public final class FThrowable {
 		/**
 		 * Poslkládá řetěz výjimek rekurzivním přidáváním do předaného seznamu,
 		 *
-		 * @param aList Seznam, v němž skládáme řetěz.
-		 * @param th    Výjimka pro zařazení do řetězu.
+		 * @param aList
+		 *            Seznam, v němž skládáme řetěz.
+		 * @param th
+		 *            Výjimka pro zařazení do řetězu.
 		 */
 		private void poskládejŘetězVýjimek(List<ThrowableAndSourceMethod> aList, Throwable th, Method aZdrojMetoda) {
 			if (iJizZarazeneVyjimkyx.contains(th))
@@ -371,8 +359,7 @@ public final class FThrowable {
 		}
 
 		/**
-		 * Zjistí všechny vnořené výjimky, jenž jsou vnořeny v této výjimce přímo,
-		 * nejde do hlouby. Může klidně vracet v poli vícekrát stejnou výjimku, pokud je výjika vracena více způsoby.
+		 * Zjistí všechny vnořené výjimky, jenž jsou vnořeny v této výjimce přímo, nejde do hlouby. Může klidně vracet v poli vícekrát stejnou výjimku, pokud je výjika vracena více způsoby.
 		 *
 		 * @param thr
 		 * @return
@@ -401,12 +388,11 @@ public final class FThrowable {
 					continue;
 				if ("fillInStackTrace".equals(method.getName()))
 					continue; // nesmíme volat tuto metodu
-				if (!Throwable.class.isAssignableFrom(method.getReturnType())
-						&& !Throwable[].class.isAssignableFrom(method.getReturnType()))
+				if (!Throwable.class.isAssignableFrom(method.getReturnType()) && !Throwable[].class.isAssignableFrom(method.getReturnType()))
 					continue; // metoda nevrací throwable ani potomka
 				// tak teď víme, že metoda vrací buď přímo výjimku nebo pole výjimek
 				try {
-					//System.out.p rintln("Volam metodu " + method.getName() + " na " + thr);
+					// System.out.p rintln("Volam metodu " + method.getName() + " na " + thr);
 					Object vysledek = method.invoke(thr);
 					if (vysledek instanceof Throwable) {
 						ThrowableAndSourceMethod vaz = new ThrowableAndSourceMethod();
@@ -434,9 +420,9 @@ public final class FThrowable {
 
 	public static class ThrowableAndSourceMethod {
 		// Vnořená výjimka
-		Throwable iThrowable;
+		Throwable	iThrowable;
 		// Jméno metody, která nás pouští k vnořené výjimkce
-		Method iSourceMethod;
+		Method		iSourceMethod;
 
 		/**
 		 * @return Returns the sourceMethod. metoda, pomocí které se z výjimky získala tato podvýjimka.,
@@ -461,14 +447,14 @@ public final class FThrowable {
 		}
 	}
 
-	////////////////////////////////////////////////////////ú
+	//////////////////////////////////////////////////////// ú
 	/// Testování výpisu výjimek
 	private static class VyjimkovySimulovac {
 
 		void metoda1() {
 			prijmiZespoduAPrehod();
-			//Object o = null;
-			//o = o.getClass();  // vyhodí NullPointerException
+			// Object o = null;
+			// o = o.getClass(); // vyhodí NullPointerException
 		}
 
 		void metoda2() throws InvocationTargetException {
@@ -478,7 +464,6 @@ public final class FThrowable {
 				throw new InvocationTargetException(e, "Prvni prehozeni");
 			}
 		}
-
 
 		void metoda3a() {
 			try {
@@ -495,7 +480,6 @@ public final class FThrowable {
 		void metoda3c() {
 			metoda3b();
 		}
-
 
 		void metoda4() {
 			try {
@@ -524,7 +508,6 @@ public final class FThrowable {
 				throw new RuntimeException("Zespodu C", ee);
 			}
 		}
-
 
 		void dolu2(RuntimeException e) {
 			dolu1c(e);
@@ -578,8 +561,7 @@ public final class FThrowable {
 		}
 
 		void prijmiZespoduAPrehod() {
-			throw new RuntimeException("Prijata ze spodu v navratovce",
-					vyhodNedeDoleAPosliNahoru3());
+			throw new RuntimeException("Prijata ze spodu v navratovce", vyhodNedeDoleAPosliNahoru3());
 		}
 
 		void vyhodVyjimkuChytAVypis1() {
@@ -614,39 +596,16 @@ public final class FThrowable {
 	}
 
 	/*
-  EXC-1-xx: Exception printed at 2006-08-28T09:52:03.658+0200
-  EXC-1-xx:     render.9 - cz.tconsult.tw.lang.FThrowable$ExceptionPrinter.printStackTrace(FThrowable.java:386)
-  EXC-1-xx:     render.8 - cz.tconsult.tw.lang.FThrowable.printStackTrace(FThrowable.java:260)
-  EXC-1-xx:     render.7 - cz.tconsult.tw.lang.FThrowable.printStackTrace(FThrowable.java:254)
-  EXC-1-xx:     render.6 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.uzKonecneVypisVyjimku(FThrowable.java:613)
-  EXC-1-xx:     render.5 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis1(FThrowable.java:621)
-  EXC-1-xx:     render.4 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis2(FThrowable.java:626)
-  EXC-1-xx:     render.3 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis3(FThrowable.java:630)
-  EXC-1-xx:     render.2 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis5(FThrowable.java:638)
-  EXC-1-xx:     render.1 - cz.tconsult.tw.lang.FThrowable.main(FThrowable.java:644)
-  EXC-1-xx: 1/4 java.lang.IllegalStateException : Dole poprve
-  EXC-1-xx:     1.10 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.dolu1(FThrowable.java:589)
-  EXC-1-xx:     1.9 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.dolu2(FThrowable.java:593)
-  EXC-1-xx:     1.8 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.dolu3(FThrowable.java:597)
-  EXC-1-xx:     1.7 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.dolu4(FThrowable.java:601)
-  EXC-1-xx:     1.6 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAPosliDolu(FThrowable.java:608)
-  EXC-1-xx:     1.5 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis1(FThrowable.java:619)
-  EXC-1-xx:     1.4 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis2(FThrowable.java:626)
-  EXC-1-xx:        ... 3 more
-  EXC-1-xx: 2/4 getCause(): java.lang.RuntimeException : Prvni prehozeni
-  EXC-1-xx:     2.7 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda3(FThrowable.java:584)
-  EXC-1-xx:     2.6 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAPosliDolu(FThrowable.java:606)
-  EXC-1-xx:     2.5 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis1(FThrowable.java:619)
-  EXC-1-xx:        ... 4 more
-  EXC-1-xx: 3/4 getCause(): java.lang.RuntimeException : Prvni prehozeni
-  EXC-1-xx:     3.8 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda2(FThrowable.java:576)
-  EXC-1-xx:     3.7 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda3(FThrowable.java:582)
-  EXC-1-xx:     3.6 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAPosliDolu(FThrowable.java:606)
-  EXC-1-xx:        ... 5 more
-  EXC-1-xx: 4/4 getCause(): java.lang.NullPointerException
-  EXC-1-xx:     4.9 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda1(FThrowable.java:569)
-  EXC-1-xx:     4.8 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda2(FThrowable.java:574)
-  EXC-1-xx:     4.7 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda3(FThrowable.java:582)
-  EXC-1-xx:        ... 6 more
+	 * EXC-1-xx: Exception printed at 2006-08-28T09:52:03.658+0200 EXC-1-xx: render.9 - cz.tconsult.tw.lang.FThrowable$ExceptionPrinter.printStackTrace(FThrowable.java:386) EXC-1-xx: render.8 - cz.tconsult.tw.lang.FThrowable.printStackTrace(FThrowable.java:260) EXC-1-xx: render.7 -
+	 * cz.tconsult.tw.lang.FThrowable.printStackTrace(FThrowable.java:254) EXC-1-xx: render.6 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.uzKonecneVypisVyjimku(FThrowable.java:613) EXC-1-xx: render.5 -
+	 * cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis1(FThrowable.java:621) EXC-1-xx: render.4 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis2(FThrowable.java:626) EXC-1-xx: render.3 -
+	 * cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis3(FThrowable.java:630) EXC-1-xx: render.2 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis5(FThrowable.java:638) EXC-1-xx: render.1 - cz.tconsult.tw.lang.FThrowable.main(FThrowable.java:644)
+	 * EXC-1-xx: 1/4 java.lang.IllegalStateException : Dole poprve EXC-1-xx: 1.10 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.dolu1(FThrowable.java:589) EXC-1-xx: 1.9 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.dolu2(FThrowable.java:593) EXC-1-xx: 1.8 -
+	 * cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.dolu3(FThrowable.java:597) EXC-1-xx: 1.7 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.dolu4(FThrowable.java:601) EXC-1-xx: 1.6 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAPosliDolu(FThrowable.java:608) EXC-1-xx:
+	 * 1.5 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis1(FThrowable.java:619) EXC-1-xx: 1.4 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis2(FThrowable.java:626) EXC-1-xx: ... 3 more EXC-1-xx: 2/4 getCause(): java.lang.RuntimeException : Prvni
+	 * prehozeni EXC-1-xx: 2.7 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda3(FThrowable.java:584) EXC-1-xx: 2.6 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAPosliDolu(FThrowable.java:606) EXC-1-xx: 2.5 -
+	 * cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAVypis1(FThrowable.java:619) EXC-1-xx: ... 4 more EXC-1-xx: 3/4 getCause(): java.lang.RuntimeException : Prvni prehozeni EXC-1-xx: 3.8 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda2(FThrowable.java:576) EXC-1-xx:
+	 * 3.7 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda3(FThrowable.java:582) EXC-1-xx: 3.6 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.vyhodVyjimkuChytAPosliDolu(FThrowable.java:606) EXC-1-xx: ... 5 more EXC-1-xx: 4/4 getCause(): java.lang.NullPointerException EXC-1-xx: 4.9 -
+	 * cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda1(FThrowable.java:569) EXC-1-xx: 4.8 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda2(FThrowable.java:574) EXC-1-xx: 4.7 - cz.tconsult.tw.lang.FThrowable$VyjimkovySimulovac.metoda3(FThrowable.java:582) EXC-1-xx: ... 6 more
 	 */
 }

@@ -1,8 +1,8 @@
 package cz.geokuk.core.napoveda;
 
 class ZpravaUzivateli {
-	final int msgnum;
-	final String text;
+	final int		msgnum;
+	final String	text;
 
 	public ZpravaUzivateli(int msgnum, String text) {
 		this.msgnum = msgnum;

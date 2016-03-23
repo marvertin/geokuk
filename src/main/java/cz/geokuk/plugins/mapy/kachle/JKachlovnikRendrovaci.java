@@ -12,15 +12,16 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
 		super("Renderovací kachlovník", Priority.STAHOVANI);
 	}
 
-	private static final Logger log = LogManager.getLogger(JKachlovnikRendrovaci.class.getSimpleName());
+	private static final Logger	log					= LogManager.getLogger(JKachlovnikRendrovaci.class.getSimpleName());
 
-	private static final long serialVersionUID = -3170605712662727739L;
-	private Progressor progressor;
-	private int citacZpracovanychKachli;
-	private int celkovyPocetKachliKtereRendruejeme;
+	private static final long	serialVersionUID	= -3170605712662727739L;
+	private Progressor			progressor;
+	private int					citacZpracovanychKachli;
+	private int					celkovyPocetKachliKtereRendruejeme;
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.core.coord.JSingleSlide0#render(java.awt.Graphics)
 	 */
 	@Override
@@ -29,7 +30,7 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
 			celkovyPocetKachliKtereRendruejeme = 0;
 			citacZpracovanychKachli = 0;
 			paintComponent(g);
-			//if (true) return;
+			// if (true) return;
 			vykreslovatokamzite = true;
 			init(false);
 			paint(g);
@@ -52,7 +53,7 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
 			}
 			log.trace("Opoustim cekani");
 		}
-		//paint(g);
+		// paint(g);
 	}
 
 	public void setProgressor(final Progressor progressor) {
@@ -74,11 +75,11 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
 	protected JKachle createJKachle(final KaAll kaall) {
 		return new JKachleRendrovaci(this, kaall);
 	}
-	//    @Override
-	//    protected JKachle createKachle(KaAll plny, KachleModel kachleModel, boolean vykreslovatOkamzite, JKachlovnik jKachlovnik) {
-	//      JKachleRendrovaci jkachle = new JKachleRendrovaci(jKachlovnik);
-	//      jkachle.setKachle(new KachleRendrovaci(plny, kachleModel, vykreslovatOkamzite, jkachle));
-	//      return jkachle;
-	//    }
+	// @Override
+	// protected JKachle createKachle(KaAll plny, KachleModel kachleModel, boolean vykreslovatOkamzite, JKachlovnik jKachlovnik) {
+	// JKachleRendrovaci jkachle = new JKachleRendrovaci(jKachlovnik);
+	// jkachle.setKachle(new KachleRendrovaci(plny, kachleModel, vykreslovatOkamzite, jkachle));
+	// return jkachle;
+	// }
 
 }

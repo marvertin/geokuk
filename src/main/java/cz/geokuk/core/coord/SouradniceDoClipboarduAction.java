@@ -1,6 +1,5 @@
 package cz.geokuk.core.coord;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 
@@ -15,10 +14,10 @@ import cz.geokuk.framework.Action0;
  */
 public class SouradniceDoClipboarduAction extends Action0 {
 
-	private static final long serialVersionUID = -8054017274338240706L;
-	private Poziceq poziceq = new Poziceq();
-	private final Mouable mouable;
-	private PoziceModel poziceModel;
+	private static final long	serialVersionUID	= -8054017274338240706L;
+	private Poziceq				poziceq				= new Poziceq();
+	private final Mouable		mouable;
+	private PoziceModel			poziceModel;
 
 	/**
 	 *
@@ -31,7 +30,9 @@ public class SouradniceDoClipboarduAction extends Action0 {
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('C', InputEvent.CTRL_DOWN_MASK));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
@@ -40,14 +41,15 @@ public class SouradniceDoClipboarduAction extends Action0 {
 		Mouable m = mouable;
 		if (m == null) {
 			m = poziceq.getPoziceMouable();
-			if (m == null) return;
+			if (m == null)
+				return;
 		}
 		poziceModel.souradniceDoClipboardu(m.getMou());
 	}
 
 	public void onEvent(PoziceChangedEvent event) {
 		poziceq = event.poziceq;
-		setEnabled(mouable != null || ! poziceq.isNoPosition());
+		setEnabled(mouable != null || !poziceq.isNoPosition());
 	}
 
 	@Override
@@ -55,6 +57,3 @@ public class SouradniceDoClipboarduAction extends Action0 {
 		this.poziceModel = poziceModel;
 	}
 }
-
-
-

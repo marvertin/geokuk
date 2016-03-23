@@ -2,7 +2,6 @@ package cz.geokuk.plugins.kesoidkruhy;
 
 import cz.geokuk.framework.Event0;
 
-
 public class KruhyPreferencesChangeEvent extends Event0<KruhyModel> {
 	public final KruhySettings kruhy;
 
@@ -10,7 +9,9 @@ public class KruhyPreferencesChangeEvent extends Event0<KruhyModel> {
 		this.kruhy = kruhy;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

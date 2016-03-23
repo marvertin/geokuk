@@ -14,15 +14,15 @@ import cz.geokuk.plugins.kesoid.importek.InformaceOZdroji;
 
 public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long serialVersionUID = 5215923043342722378L;
+	private static final long	serialVersionUID	= 5215923043342722378L;
 
-	private JXTreeTable jTable;
+	private JXTreeTable			jTable;
 
-	//private final InformaceOZdrojich iInformaceOZdrojich;
+	// private final InformaceOZdrojich iInformaceOZdrojich;
 
-	private KesoidModel kesoidModel;
+	private KesoidModel			kesoidModel;
 
-	private KesBag vsechny;
+	private KesBag				vsechny;
 
 	public JInformaceOZdrojichDialog() {
 		setTitle("Přehled zdrojů kešoidů");
@@ -33,10 +33,10 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 		Box box = Box.createVerticalBox();
 
 		jTable = new JXTreeTable(new Model());
-		//jTable.setPreferredScrollableViewportSize(new Dimension(600, 70));
+		// jTable.setPreferredScrollableViewportSize(new Dimension(600, 70));
 		jTable.setFillsViewportHeight(true);
 
-		//Create the scroll pane and add the table to it.
+		// Create the scroll pane and add the table to it.
 		JScrollPane scrollPane = new JScrollPane(jTable);
 
 		nastavVlastnostiSloupcu();
@@ -53,7 +53,7 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 		column.setResizable(true);
 
 		column = jTable.getColumnModel().getColumn(1);
-		//column.setMaxWidth(200);
+		// column.setMaxWidth(200);
 		column.setMinWidth(20);
 		column.setPreferredWidth(50);
 		column.setResizable(true);
@@ -73,7 +73,6 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 
 	}
 
-
 	private class Model extends AbstractTreeTableModel {
 		public Model() {
 			super(vsechny.getInformaceOZdrojich().getRoot());
@@ -84,7 +83,9 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 			return column == 1;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.table.TableModel#getColumnCount()
 		 */
 		@Override
@@ -92,17 +93,27 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 			return 4;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.table.AbstractTableModel#getColumnName(int)
 		 */
 		@Override
 		public String getColumnName(int col) {
 			String r = "";
 			switch (col) {
-			case 0: r = "Zdroj"; break;
-			case 1: r = "Načíst"; break;
-			case 2: r = "WP braných"; break;
-			case 3: r = "WP celkem"; break;
+			case 0:
+				r = "Zdroj";
+				break;
+			case 1:
+				r = "Načíst";
+				break;
+			case 2:
+				r = "WP braných";
+				break;
+			case 3:
+				r = "WP celkem";
+				break;
 			}
 			return r;
 		}
@@ -112,12 +123,11 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 			if (o == null) {
 				return null;
 			}
-			InformaceOZdroji ioz = (InformaceOZdroji)o;
+			InformaceOZdroji ioz = (InformaceOZdroji) o;
 
-			switch(i) {
+			switch (i) {
 			case 0:
-				return  vsechny.getInformaceOZdrojich().getRoot() == ioz
-				? "1:" + ioz.jmenoZdroje.getFile().getAbsolutePath() : ioz.getDisplayName();
+				return vsechny.getInformaceOZdrojich().getRoot() == ioz ? "1:" + ioz.jmenoZdroje.getFile().getAbsolutePath() : ioz.getDisplayName();
 			case 1:
 				return kesoidModel.maSeNacist(ioz.jmenoZdroje);
 			case 2:
@@ -128,39 +138,49 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 			return null;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
 		 */
 		@Override
 		public Class<?> getColumnClass(int col) {
 			Class<?> r = String.class;
 			switch (col) {
-			case 1: r = Boolean.class; break;
-			case 2: r = String.class; break;
-			case 3: r = Integer.class; break;
-			case 4: r = Integer.class; break;
+			case 1:
+				r = Boolean.class;
+				break;
+			case 2:
+				r = String.class;
+				break;
+			case 3:
+				r = Integer.class;
+				break;
+			case 4:
+				r = Integer.class;
+				break;
 			}
 			return r;
 		}
 
 		@Override
 		public Object getChild(Object parent, int index) {
-			InformaceOZdroji p = (InformaceOZdroji)parent;
+			InformaceOZdroji p = (InformaceOZdroji) parent;
 			return p.getChildren().get(index);
 		}
 
 		@Override
 		public int getChildCount(Object parent) {
-			return ((InformaceOZdroji)parent).getChildren().size();
+			return ((InformaceOZdroji) parent).getChildren().size();
 		}
 
 		@Override
 		public int getIndexOfChild(Object parent, Object child) {
-			return ((InformaceOZdroji)parent).getChildren().indexOf(child);
+			return ((InformaceOZdroji) parent).getChildren().indexOf(child);
 		}
 
 		public void setValueAt(Object value, Object node, int col) {
-			InformaceOZdroji ioz = (InformaceOZdroji)node;
+			InformaceOZdroji ioz = (InformaceOZdroji) node;
 			kesoidModel.setNacitatSoubor(ioz.jmenoZdroje, (Boolean) value);
 		}
 	}
@@ -172,7 +192,8 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 	public void onEvent(KeskyNactenyEvent event) {
 		vsechny = event.getVsechny();
 		invalidate();
-		if (jTable != null) jTable.repaint();
+		if (jTable != null)
+			jTable.repaint();
 		pack();
 	}
 
@@ -181,8 +202,9 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 		// setTitle("Přehled zdrojů kešoidů: \""+event.getUmisteniSouboru().getKesDir().getEffectiveFile()+ "\"");
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override

@@ -7,19 +7,9 @@ import org.apache.logging.log4j.Logger;
  * Created by dan on 16.7.14.
  */
 public enum EKesDiffTerRating {
-	ONE,
-	ONE_HALF,
-	TWO,
-	TWO_HALF,
-	THREE,
-	THREE_HALF,
-	FOUR,
-	FOUR_HALF,
-	FIVE,
-	UNKNOWN;
+	ONE, ONE_HALF, TWO, TWO_HALF, THREE, THREE_HALF, FOUR, FOUR_HALF, FIVE, UNKNOWN;
 
-	private static final Logger log =
-			LogManager.getLogger(EKesDiffTerRating.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(EKesDiffTerRating.class.getSimpleName());
 
 	public String toNumberString() {
 		if (this == UNKNOWN) {
@@ -43,7 +33,7 @@ public enum EKesDiffTerRating {
 		} else {
 			int ordHalf = ordinal() / 2;
 			char base = (ordinal() & 1) == 0 ? '1' : 'A';
-			return (char)(base + ordHalf);
+			return (char) (base + ordHalf);
 		}
 	}
 
@@ -54,13 +44,12 @@ public enum EKesDiffTerRating {
 		}
 		try {
 			float f = Float.parseFloat(toParse);
-			int ordinal = (int)(f * 2 - 2);
+			int ordinal = (int) (f * 2 - 2);
 			EKesDiffTerRating[] values = values();
 			if (ordinal < values.length && ordinal >= 0) {
 				return values[ordinal];
 			} else {
-				log.error("Ordinal out of range for string {}! Was {}, expected less than {}.", toParse, ordinal,
-						values.length);
+				log.error("Ordinal out of range for string {}! Was {}, expected less than {}.", toParse, ordinal, values.length);
 				return UNKNOWN;
 			}
 		} catch (NumberFormatException e) {

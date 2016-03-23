@@ -4,7 +4,6 @@ import cz.geokuk.framework.Event0;
 
 public class VyrezChangedEvent extends Event0<VyrezModel> {
 
-
 	private final Coord moord;
 
 	public VyrezChangedEvent(Coord moord) {
@@ -18,21 +17,20 @@ public class VyrezChangedEvent extends Event0<VyrezModel> {
 		return moord;
 	}
 
-	//  public int getHeight() {
-	//    return getCoord().getHeight();
-	//  }
+	// public int getHeight() {
+	// return getCoord().getHeight();
+	// }
 	//
-	//  public int getWidth() {
-	//    return getCoord().getWidth();
-	//  }
+	// public int getWidth() {
+	// return getCoord().getWidth();
+	// }
 	//
-	//  public int getMoumer() {
-	//    return getCoord().getMoumer();
-	//  }
+	// public int getMoumer() {
+	// return getCoord().getMoumer();
+	// }
 	//
-	//  public Mou getMoustred() {
-	//    return getCoord().getMoustred();
-	//  }
-
+	// public Mou getMoustred() {
+	// return getCoord().getMoustred();
+	// }
 
 }

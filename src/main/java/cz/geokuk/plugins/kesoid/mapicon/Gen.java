@@ -1,29 +1,27 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import cz.geokuk.util.lang.FString;
 
 /**
  * Determines a property of a {@link cz.geokuk.plugins.kesoid.Kesoid}.
  *
- * <p>For example, gen can be {@code size of the cache} or {@code type of the waypoint}.
+ * <p>
+ * For example, gen can be {@code size of the cache} or {@code type of the waypoint}.
  */
 public class Gen {
 
-	private final String displayName;
-	private final Set<Alela> alely = new LinkedHashSet<>();
-	private final Map<String, Grupa> grupy = new HashMap<>();
+	private final String				displayName;
+	private final Set<Alela>			alely				= new LinkedHashSet<>();
+	private final Map<String, Grupa>	grupy				= new HashMap<>();
 
-	private Alela vychoziAlela;
-	private boolean locked;
-	private final Genom genom;
+	private Alela						vychoziAlela;
+	private boolean						locked;
+	private final Genom					genom;
 
-	private final Grupa IMPLICITNI_GRUPA = grupa(Grupa.IMPLICITNI_GRUPA_NAME);
-	private final boolean vypsatelnyVeZhasinaci;
+	private final Grupa					IMPLICITNI_GRUPA	= grupa(Grupa.IMPLICITNI_GRUPA_NAME);
+	private final boolean				vypsatelnyVeZhasinaci;
 
 	/**
 	 * @return the grupy
@@ -42,9 +40,9 @@ public class Gen {
 		return displayName;
 	}
 
-
 	public synchronized void add(Alela alela, String jmenoGrupy) {
-		if (locked) throw new RuntimeException("Nemozne pridavat alely " + alela + " k zamcenemu genu " + this);
+		if (locked)
+			throw new RuntimeException("Nemozne pridavat alely " + alela + " k zamcenemu genu " + this);
 		Gen puvodniGen = alela.hasGen() ? alela.getGen() : null;
 		if (puvodniGen != this) {
 			if (puvodniGen != null) {
@@ -72,7 +70,8 @@ public class Gen {
 	}
 
 	public synchronized Grupa grupa(String grupaName) {
-		if (FString.isEmpty(grupaName)) return IMPLICITNI_GRUPA;
+		if (FString.isEmpty(grupaName))
+			return IMPLICITNI_GRUPA;
 		Grupa grupa = grupy.get(grupaName);
 		if (grupa == null) {
 			grupa = new Grupa(grupaName);
@@ -87,7 +86,6 @@ public class Gen {
 		return grupa;
 	}
 
-
 	/**
 	 *
 	 */
@@ -101,8 +99,7 @@ public class Gen {
 
 	@Override
 	public String toString() {
-		return "Gen [displayName=" + displayName + ", alely=" + alely
-				+ ", vychoziAlela=" + vychoziAlela + "]";
+		return "Gen [displayName=" + displayName + ", alely=" + alely + ", vychoziAlela=" + vychoziAlela + "]";
 	}
 
 	public boolean isVypsatelnyVeZhasinaci() {

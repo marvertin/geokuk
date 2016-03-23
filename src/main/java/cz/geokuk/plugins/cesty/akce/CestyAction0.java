@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.cesty.akce;
 
-
 import javax.swing.Icon;
 
 import cz.geokuk.framework.Action0;
@@ -10,19 +9,16 @@ import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.cesty.data.Cesta;
 import cz.geokuk.plugins.cesty.data.Doc;
 
-
-
 public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 
-	private static final long serialVersionUID = -2637836928166450446L;
+	private static final long	serialVersionUID	= -2637836928166450446L;
 
-	protected CestyModel cestyModel;
-	private String puvodniJednoducheJmeno;
+	protected CestyModel		cestyModel;
+	private String				puvodniJednoducheJmeno;
 
 	public CestyAction0() {
 		setEnabled(false);
 	}
-
 
 	@Override
 	public final void initAfterInject() {
@@ -32,7 +28,7 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 	@Override
 	public void setEnabled(boolean newValue) {
 		super.setEnabled(newValue);
-		if (! newValue) {
+		if (!newValue) {
 			if (puvodniJednoducheJmeno != null) {
 				putValue(NAME, puvodniJednoducheJmeno);
 			}
@@ -54,15 +50,13 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 	}
 
 	public final void onEvent(CestyChangedEvent aEvent) {
-		//System.out.println("********* dorucen event na: " + System.identityHashCode(this) + ": " + getClass().getName());
+		// System.out.println("********* dorucen event na: " + System.identityHashCode(this) + ": " + getClass().getName());
 		aEvent.getDoc().kontrolaKonzistence();
 		vyletChanged();
 	}
 
-
 	protected void vyletChanged() {
 	}
-
 
 	public final void inject(CestyModel cestyModel) {
 		this.cestyModel = cestyModel;
@@ -78,5 +72,3 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 	}
 
 }
-
-

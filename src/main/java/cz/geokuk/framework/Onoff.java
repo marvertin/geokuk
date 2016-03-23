@@ -3,21 +3,21 @@
  */
 package cz.geokuk.framework;
 
-
 /**
  * @author veverka
  *
  */
 public class Onoff<T extends Model0> {
 
-	private final Class<? extends OnoffEvent0<T>> clazz;
-	private final T model;
+	private final Class<? extends OnoffEvent0<T>>	clazz;
+	private final T									model;
 
-	private Boolean onoff;
+	private Boolean									onoff;
 
 	public void setOnoff(boolean onoff) {
 		try {
-			if (this.onoff != null && this.onoff == onoff) return;
+			if (this.onoff != null && this.onoff == onoff)
+				return;
 			this.onoff = onoff;
 			onSetOnOff(onoff); // nastavit do modelu, pokud model toto požaduje, například za čelem zperzostentnění
 			if (clazz != null) {

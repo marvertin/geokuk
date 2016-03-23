@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.mapy.kachle;
 
-
 import java.util.EnumSet;
 
 public class JKachlovnikDoRohu extends JKachlovnik {

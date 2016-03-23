@@ -13,8 +13,8 @@ import cz.geokuk.framework.Model0;
  */
 public class OknoModel extends Model0 {
 
-	private OknoUmisteniDto oknoUmisteni;
-	private int stavOkna;
+	private OknoUmisteniDto	oknoUmisteni;
+	private int				stavOkna;
 
 	/**
 	 * @return the stavOkna
@@ -24,19 +24,23 @@ public class OknoModel extends Model0 {
 	}
 
 	/**
-	 * @param stavOkna the stavOkna to set
+	 * @param stavOkna
+	 *            the stavOkna to set
 	 */
 	public void setStavOkna(int stavOkna) {
-		if (stavOkna == this.stavOkna) return;
+		if (stavOkna == this.stavOkna)
+			return;
 		this.stavOkna = stavOkna;
 		currPrefe().node(FPref.OKNO_structure_node).putInt(FPref.STAV_OKNA_value, stavOkna);
 	}
 
 	/**
-	 * @param oknoUmisteni the oknoStatus to set
+	 * @param oknoUmisteni
+	 *            the oknoStatus to set
 	 */
 	public void setOknoUmisteni(OknoUmisteniDto oknoUmisteni) {
-		if (oknoUmisteni.equals(this.oknoUmisteni)) return;
+		if (oknoUmisteni.equals(this.oknoUmisteni))
+			return;
 		this.oknoUmisteni = oknoUmisteni;
 		currPrefe().putStructure(FPref.OKNO_structure_node, oknoUmisteni);
 	}
@@ -48,17 +52,19 @@ public class OknoModel extends Model0 {
 		return oknoUmisteni;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.Model0#initAndFire()
 	 */
 	@Override
 	protected void initAndFire() {
 		setOknoUmisteni(currPrefe().getStructure(FPref.OKNO_structure_node, new OknoUmisteniDto()));
 		int stav = currPrefe().node(FPref.OKNO_structure_node).getInt(FPref.STAV_OKNA_value, Frame.NORMAL);
-		if (stav == Frame.ICONIFIED) stav = Frame.NORMAL; // není moc dobré otvírat program ikonizovaně
+		if (stav == Frame.ICONIFIED)
+			stav = Frame.NORMAL; // není moc dobré otvírat program ikonizovaně
 		setStavOkna(stav);
 		fire(new OknoStatusChangedEvent(stavOkna, oknoUmisteni));
 	}
-
 
 }

@@ -3,22 +3,18 @@ package cz.geokuk.plugins.cesty;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.geokuk.plugins.cesty.data.Bod;
-import cz.geokuk.plugins.cesty.data.Cesta;
-import cz.geokuk.plugins.cesty.data.Updator;
-import cz.geokuk.plugins.cesty.data.Usek;
+import cz.geokuk.plugins.cesty.data.*;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.IImportBuilder;
 
 public class DocImportBuilder implements IImportBuilder {
 
+	private Cesta			cesta;
+	private List<Cesta>		cesty	= new ArrayList<>();
 
-	private Cesta cesta;
-	private List<Cesta> cesty = new ArrayList<>();
+	private boolean			zacatekSegmentu;
 
-	private boolean zacatekSegmentu;
-
-	private final Updator updator  = new Updator();
+	private final Updator	updator	= new Updator();
 
 	public DocImportBuilder() {
 	}

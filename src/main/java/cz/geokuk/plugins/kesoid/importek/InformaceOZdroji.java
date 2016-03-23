@@ -1,22 +1,19 @@
 package cz.geokuk.plugins.kesoid.importek;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import cz.geokuk.util.file.KeFile;
 
 public class InformaceOZdroji {
-	public final KeFile jmenoZdroje;
-	public int pocetWaypointuCelkem;
-	public int pocetWaypointuBranych;
-	public int pocetWaypointuCelkemChildren;
-	public int pocetWaypointuBranychChildren;
-	public final boolean nacteno;
-	private final List<InformaceOZdroji> children = new ArrayList<>();
-	public InformaceOZdroji parent;
+	public final KeFile						jmenoZdroje;
+	public int								pocetWaypointuCelkem;
+	public int								pocetWaypointuBranych;
+	public int								pocetWaypointuCelkemChildren;
+	public int								pocetWaypointuBranychChildren;
+	public final boolean					nacteno;
+	private final List<InformaceOZdroji>	children	= new ArrayList<>();
+	public InformaceOZdroji					parent;
 
 	public InformaceOZdroji(KeFile jmenoZdroje, boolean nacteno) {
 		this.jmenoZdroje = jmenoZdroje;
@@ -77,9 +74,9 @@ public class InformaceOZdroji {
 		}
 	}
 
-
 	/**
 	 * Rekuzivně vypíše intormace
+	 * 
 	 * @param maToBytParent
 	 */
 	public void print(String odsazovac, InformaceOZdroji maToBytParent) {

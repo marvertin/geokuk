@@ -2,6 +2,7 @@ package cz.geokuk.core.coordinates;
 
 /**
  * Objekt nesoucí mějaké místo na zemi, tedy souřadnice v nějakém formátu.
+ * 
  * @author tatinek
  *
  */

@@ -1,12 +1,6 @@
 package cz.geokuk.core.render;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -14,19 +8,17 @@ import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.plugins.mapy.kachle.EKaType;
 
-public class JNastavovacVelikostiDlazdic extends JPanel
-implements AfterEventReceiverRegistrationInit  {
+public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventReceiverRegistrationInit {
 
-	private static final long serialVersionUID = -484273090975902036L;
+	private static final long		serialVersionUID	= -484273090975902036L;
 
-	public final SpinnerNumberModel iModel = new SpinnerNumberModel(10, 10, 10000, 1);
+	public final SpinnerNumberModel	iModel				= new SpinnerNumberModel(10, 10, 10000, 1);
 
-	private RenderModel renderModel;
+	private RenderModel				renderModel;
 
-
-	private JSpinner jMaximalniVelikost;
-	private JTextField jSkutecnaVelikost;
-	private JTextField jPocetDlazdic;
+	private JSpinner				jMaximalniVelikost;
+	private JTextField				jSkutecnaVelikost;
+	private JTextField				jPocetDlazdic;
 
 	/**
 	 *
@@ -73,13 +65,12 @@ implements AfterEventReceiverRegistrationInit  {
 		EKaType podklad = event.getKaSet().getPodklad();
 		iModel.setMinimum(podklad.getMinMoumer());
 		iModel.setMaximum(podklad.getMaxMoumer());
-		iModel.setValue(podklad.fitMoumer((Integer)iModel.getValue()));
+		iModel.setValue(podklad.fitMoumer((Integer) iModel.getValue()));
 	}
 
 	public void onEvent(PripravaRendrovaniEvent event) {
 		iModel.setValue(event.getRenderSettings().getRenderedMoumer());
 	}
-
 
 	@Override
 	public void initAfterEventReceiverRegistration() {
@@ -122,6 +113,5 @@ implements AfterEventReceiverRegistrationInit  {
 	public void setMaximalniVelikost(int kmzMaxDlazdice) {
 		iModel.setValue(kmzMaxDlazdice);
 	}
-
 
 }

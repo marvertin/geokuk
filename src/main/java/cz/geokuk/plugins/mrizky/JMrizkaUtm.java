@@ -3,7 +3,6 @@
  */
 package cz.geokuk.plugins.mrizky;
 
-
 import java.awt.Color;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,28 +12,26 @@ import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Utm;
 
-
-
 /**
  * @author veverka
  *
  */
 public class JMrizkaUtm extends JMrizka0 {
 
+	private static final Logger		log					= LogManager.getLogger(JMrizkaUtm.class.getSimpleName());
 
-	private static final Logger log = LogManager.getLogger(JMrizkaUtm.class.getSimpleName());
+	protected static final double	MINUTA				= 1.0 / 60;
 
+	private static final long		serialVersionUID	= 4558815639199835559L;
 
-	protected static final double MINUTA = 1.0 / 60;
-
-	private static final long serialVersionUID = 4558815639199835559L;
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see mrizka.JMrizka0#convertToMou(double, double)
 	 */
 	@Override
 	public Mou convertToMou(final double aX, final double aY) {
-		final Mou mou =  getUtmStredu().toUtmInTheSameZone(aX, aY).toMou();
+		final Mou mou = getUtmStredu().toUtmInTheSameZone(aX, aY).toMou();
 		log.debug("convertToMou xy=[{},{}] => {}", aX, aY, mou);
 		return mou;
 	}
@@ -43,7 +40,9 @@ public class JMrizkaUtm extends JMrizka0 {
 		return super.getSoord().getMoustred().toWgs().toUtm();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see mrizka.JMrizka0#convertToX(coordinates.Mou)
 	 */
 	@Override
@@ -54,7 +53,9 @@ public class JMrizkaUtm extends JMrizka0 {
 		return ux;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see mrizka.JMrizka0#convertToY(coordinates.Mou)
 	 */
 	@Override
@@ -65,31 +66,34 @@ public class JMrizkaUtm extends JMrizka0 {
 		return uy;
 	}
 
-
 	@Override
 	public String getTextY(final double y) {
-		return (long)y + "";
+		return (long) y + "";
 	}
 
 	@Override
 	public String getTextX(final double x) {
-		return (long)x + "";
+		return (long) x + "";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see mrizka.JMrizka0#initPainting(mrizka.JMrizka0.Vykreslovac)
 	 */
 	@Override
 	public void initPainting(final Vykreslovac v) {
 		v.setColor(Color.BLUE);
-		for (int rad =1; rad < 100000000; rad = rad * 10) {
+		for (int rad = 1; rad < 100000000; rad = rad * 10) {
 			v.rastr(rad, 1);
 			v.rastr(rad * 2, 5);
 			v.rastr(rad * 5, 2);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
 	 */
 	@Override
@@ -110,7 +114,5 @@ public class JMrizkaUtm extends JMrizka0 {
 		// JE to moc daleko od sebe, tak nevykreslujeme
 		return false;
 	}
-
-
 
 }

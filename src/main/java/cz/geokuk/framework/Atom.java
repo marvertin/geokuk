@@ -1,19 +1,14 @@
 package cz.geokuk.framework;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public abstract class Atom implements Comparable<Atom> {
 
 	@SuppressWarnings("rawtypes")
-	private static Map<Class<? extends Atom>, TypAtomu> repo = new HashMap<>();
+	private static Map<Class<? extends Atom>, TypAtomu>	repo	= new HashMap<>();
 
-	String name;
-	int ordinal;
+	String												name;
+	int													ordinal;
 
 	@SafeVarargs
 	public static <E extends Atom> Set<E> of(E... types) {
@@ -26,7 +21,7 @@ public abstract class Atom implements Comparable<Atom> {
 			Class.forName(clazz.getName(), true, clazz.getClassLoader());
 		} catch (ClassNotFoundException e) { // to urcite uspeje
 		}
-		//AWptType fINALLOCATION = AWptType.FINAL_LOCATION;
+		// AWptType fINALLOCATION = AWptType.FINAL_LOCATION;
 		TypAtomu<E> ta = dejTyp(clazz);
 		E atom = ta.mapa.get(jmeno);
 		if (atom == null) {
@@ -37,7 +32,6 @@ public abstract class Atom implements Comparable<Atom> {
 		}
 		return atom;
 	}
-
 
 	public String name() {
 		return name;
@@ -77,7 +71,6 @@ public abstract class Atom implements Comparable<Atom> {
 		return typAtomu;
 	}
 
-
 	private static class TypAtomu<E extends Atom> {
 		Map<String, E> mapa = new LinkedHashMap<>();
 	}
@@ -87,7 +80,9 @@ public abstract class Atom implements Comparable<Atom> {
 		return name;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override

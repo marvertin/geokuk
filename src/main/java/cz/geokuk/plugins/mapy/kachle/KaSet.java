@@ -2,7 +2,6 @@ package cz.geokuk.plugins.mapy.kachle;
 
 import java.util.EnumSet;
 
-
 public class KaSet {
 
 	private final EnumSet<EKaType> kts;
@@ -19,7 +18,7 @@ public class KaSet {
 		if (kts == null) {
 			return null;
 		}
-		for (final EKaType  kt : kts) {
+		for (final EKaType kt : kts) {
 			if (kt.isPodklad()) {
 				return kt;
 			}
@@ -27,14 +26,14 @@ public class KaSet {
 		return null;
 	}
 
-	//  public boolean isExaclyOnePodklad() {
-	//    if (kts == null) return false;
-	//    int n = 0;
-	//    for (EKachloType  kt : kts) {
-	//      if (kt.isPodklad()) n++;
-	//    }
-	//    return n == 1;
-	//  }
+	// public boolean isExaclyOnePodklad() {
+	// if (kts == null) return false;
+	// int n = 0;
+	// for (EKachloType kt : kts) {
+	// if (kt.isPodklad()) n++;
+	// }
+	// return n == 1;
+	// }
 
 	@Override
 	public int hashCode() {
@@ -70,6 +69,5 @@ public class KaSet {
 	public String toString() {
 		return kts.toString();
 	}
-
 
 }

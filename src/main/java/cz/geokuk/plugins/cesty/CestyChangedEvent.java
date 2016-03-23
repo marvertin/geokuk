@@ -15,5 +15,4 @@ public class CestyChangedEvent extends Event0<CestyModel> {
 		return doc;
 	}
 
-
 }

@@ -3,11 +3,11 @@
  */
 package cz.geokuk.plugins.cesty.akce.bod;
 
-
 import cz.geokuk.plugins.cesty.data.Bod;
 
 /**
  * Jde na vybranou pozici
+ * 
  * @author veverka
  *
  */
@@ -15,7 +15,7 @@ public class PresunoutSemVychoziBodUzavreneCesty extends BodAction0 {
 
 	private static final long serialVersionUID = -2882817111560336824L;
 
-	//  private Pozice pozice;
+	// private Pozice pozice;
 	/**
 	 * @param aBoard
 	 */
@@ -23,13 +23,13 @@ public class PresunoutSemVychoziBodUzavreneCesty extends BodAction0 {
 		super(bod);
 		putValue(NAME, "Přesunout výchozí bod");
 		putValue(SHORT_DESCRIPTION, "Přesune sem výchozí bod uzavřené cesty.");
-		//putValue(MNEMONIC_KEY, KeyEvent.VK_P);
-		//putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("RIGHT"));
+		// putValue(MNEMONIC_KEY, KeyEvent.VK_P);
+		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("RIGHT"));
 	}
 
 	@Override
 	protected boolean mamPovolitProBod(Bod bod) {
-		return bod.getCesta().isKruh() && ! bod.isKrajovy();
+		return bod.getCesta().isKruh() && !bod.isKrajovy();
 	}
 
 	@Override

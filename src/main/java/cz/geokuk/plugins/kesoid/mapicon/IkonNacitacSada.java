@@ -1,23 +1,18 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.io.*;
+import java.util.*;
 
 import cz.geokuk.util.file.KeyNode;
 import cz.geokuk.util.file.LamUrl;
 
 public class IkonNacitacSada {
 
-	private static final String SKLA_TXT = "skla.txt";
-	private static final String GROUPS_PROPERTIES = "groups.properties";
+	private static final String	SKLA_TXT			= "skla.txt";
+	private static final String	GROUPS_PROPERTIES	= "groups.properties";
 
-	private final Genom genom;
-	private final Properties groupDisplayNames = new Properties();
+	private final Genom			genom;
+	private final Properties	groupDisplayNames	= new Properties();
 
 	public IkonNacitacSada(Genom genom) {
 		this.genom = genom;
@@ -25,7 +20,6 @@ public class IkonNacitacSada {
 
 	public Sada loadSada(KeyNode<String, LamUrl> nodeSada) throws IOException {
 		loadGroupDisplayNames(nodeSada);
-
 
 		KeyNode<String, LamUrl> sadyTxt = nodeSada.locate(SKLA_TXT);
 		Sada sada = new Sada(nodeSada.getData().name);
@@ -39,7 +33,8 @@ public class IkonNacitacSada {
 			Map<String, Sklo> nactenaSkla = new HashMap<>();
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
-				if (line.length() == 0) continue;
+				if (line.length() == 0)
+					continue;
 				String[] dvoj = line.split("\\.", 2);
 				String skloName = dvoj[0];
 				String aplikaceSklaName = dvoj[1];
@@ -103,6 +98,5 @@ public class IkonNacitacSada {
 	String getGroupDisplayName(String groupName) {
 		return groupName == null ? null : groupDisplayNames.getProperty(groupName);
 	}
-
 
 }

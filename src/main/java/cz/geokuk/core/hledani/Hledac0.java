@@ -38,16 +38,19 @@ public abstract class Hledac0<T extends Nalezenec0> {
 		return list;
 
 	}
+
 	/**
 	 * @param aNal
 	 * @param aStredHledani
 	 */
 	protected void dopicitejVzdalenostAAzimut(Nalezenec0 aNal, Wgs aStredHledani) {
 		double dalka = FGeoKonvertor.dalka(aNal.getWgs(), aStredHledani);
-		if (aStredHledani == null) return;
+		if (aStredHledani == null)
+			return;
 		double uhel = Wgs.azimut(aStredHledani, aNal.getWgs());
 		uhel = uhel * 180 / Math.PI;
-		if (uhel < 0) uhel += 360;
+		if (uhel < 0)
+			uhel += 360;
 		aNal.setVzdalenost(dalka);
 		aNal.setAzimut(uhel);
 	}

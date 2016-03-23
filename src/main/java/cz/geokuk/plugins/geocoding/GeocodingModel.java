@@ -14,12 +14,12 @@ import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
  * @author veverka
  *
  */
-public class GeocodingModel extends Model0  {
+public class GeocodingModel extends Model0 {
 
-	private final Hledac hledac = new Hledac();
-	private HledaciSluzba hledaciSluzba;
-	private boolean onlineMode;
-	private Wgs referencniBod;
+	private final Hledac	hledac	= new Hledac();
+	private HledaciSluzba	hledaciSluzba;
+	private boolean			onlineMode;
+	private Wgs				referencniBod;
 
 	public synchronized void spustHledani(final Wgs wgs, final RefreshorVysledkuHledani<Nalezenec> refreshor) {
 		spustHledani(wgs.lat + "," + wgs.lon, refreshor);
@@ -37,14 +37,15 @@ public class GeocodingModel extends Model0  {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.Model0#initAndFire()
 	 */
 	@Override
 	protected void initAndFire() {
-		//asi není co dělat
+		// asi není co dělat
 	}
-
 
 	public void onEvent(final OnofflineModelChangeEvent event) {
 		onlineMode = event.isOnlineMOde();

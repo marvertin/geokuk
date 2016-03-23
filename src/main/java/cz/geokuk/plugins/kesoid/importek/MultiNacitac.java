@@ -1,13 +1,7 @@
 package cz.geokuk.plugins.kesoid.importek;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -21,37 +15,25 @@ import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
-import cz.geokuk.util.file.DirScanner;
-import cz.geokuk.util.file.KeFile;
-import cz.geokuk.util.file.Root;
+import cz.geokuk.util.file.*;
 
 /**
  * @author veverka
  */
 public class MultiNacitac {
 
-	private static final Logger log = LogManager.getLogger(MultiNacitac.class.getSimpleName());
+	private static final Logger		log							= LogManager.getLogger(MultiNacitac.class.getSimpleName());
 
-	private final DirScanner ds;
+	private final DirScanner		ds;
 
-	private final List<Nacitac0> nacitace = new ArrayList<>();
+	private final List<Nacitac0>	nacitace					= new ArrayList<>();
 
-	private final KesoidModel kesoidModel;
+	private final KesoidModel		kesoidModel;
 
-	private static final Root.Def FILE_NAME_REGEX_GEOKUK_DIR = new Root.Def(
-			Integer.MAX_VALUE,
-			Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"),
-			null
-			);
-	private static final Root.Def FILE_NAME_REGEX_GEOGET_DIR  = new Root.Def(
-			1,
-			Pattern.compile("(?i).*\\.db3"),
-			Pattern.compile("(?i).*\\.[0-9]{8}\\.db3")
-			);
+	private static final Root.Def	FILE_NAME_REGEX_GEOKUK_DIR	= new Root.Def(Integer.MAX_VALUE, Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"), null);
+	private static final Root.Def	FILE_NAME_REGEX_GEOGET_DIR	= new Root.Def(1, Pattern.compile("(?i).*\\.db3"), Pattern.compile("(?i).*\\.[0-9]{8}\\.db3"));
 
-
-
-	//private static final String CACHE_SUFFIX = ".cache.serialized";
+	// private static final String CACHE_SUFFIX = ".cache.serialized";
 
 	public MultiNacitac(KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
@@ -110,7 +92,7 @@ public class MultiNacitac {
 		if (isZipFile(file)) {
 			try (ZipFile zipFile = new ZipFile(file)) {
 				boolean nacitat = kesoidModel.maSeNacist(kefile);
-				for (Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements(); ) {
+				for (Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements();) {
 					ZipEntry entry = en.nextElement();
 					for (Nacitac0 nacitac : nacitace) {
 						builder.setCurrentlyLoading(kefile, nacitat);
@@ -132,9 +114,7 @@ public class MultiNacitac {
 	}
 
 	/**
-	 * Checks whether the given file is a ZIP file.
-	 * Copied from
-	 * http://www.java2s.com/Code/Java/File-Input-Output/DeterminewhetherafileisaZIPFile.htm
+	 * Checks whether the given file is a ZIP file. Copied from http://www.java2s.com/Code/Java/File-Input-Output/DeterminewhetherafileisaZIPFile.htm
 	 */
 	private static boolean isZipFile(File fileToTest) {
 		if (fileToTest.isDirectory()) {
@@ -143,13 +123,11 @@ public class MultiNacitac {
 		if (fileToTest.length() < 4) {
 			return false;
 		}
-		try (DataInputStream in = new DataInputStream(new BufferedInputStream(
-				new FileInputStream(fileToTest)))) {
+		try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(fileToTest)))) {
 			int test = in.readInt();
 			return test == 0x504b0304;
 		} catch (IOException e) {
-			throw new IllegalArgumentException("The file " + fileToTest + " cannot be checked!",
-					e);
+			throw new IllegalArgumentException("The file " + fileToTest + " cannot be checked!", e);
 		}
 	}
 

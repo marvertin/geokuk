@@ -5,12 +5,11 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 
 public class VyletChangeEvent extends Event0<VyletModel> {
 
-	private final VyletModel vyletModel;
+	private final VyletModel	vyletModel;
 
-	private final Kesoid kes;
-	private final EVylet evyl;
-	private final EVylet evylPuvodni;
-
+	private final Kesoid		kes;
+	private final EVylet		evyl;
+	private final EVylet		evylPuvodni;
 
 	VyletChangeEvent(VyletModel vylet, Kesoid kes, EVylet evyl, EVylet evylPuvodni) {
 		super();
@@ -21,8 +20,8 @@ public class VyletChangeEvent extends Event0<VyletModel> {
 	}
 
 	/**
-	 * Zda se změnil celý výlet, pokud ano, tak se nsmí brát jednotlivé změny
-	 * Většinout to bude znamenat načtení výletu.
+	 * Zda se změnil celý výlet, pokud ano, tak se nsmí brát jednotlivé změny Většinout to bude znamenat načtení výletu.
+	 * 
 	 * @return
 	 */
 	public boolean isVelkaZmena() {

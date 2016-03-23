@@ -4,8 +4,8 @@ import cz.geokuk.core.coordinates.Wgs;
 
 public abstract class Nalezenec0 {
 
-	protected double vzdalenost;
-	protected double azimut;
+	protected double	vzdalenost;
+	protected double	azimut;
 
 	/**
 	 * @return the vzdalenost
@@ -15,7 +15,8 @@ public abstract class Nalezenec0 {
 	}
 
 	/**
-	 * @param aVzdalenost the vzdalenost to set
+	 * @param aVzdalenost
+	 *            the vzdalenost to set
 	 */
 	public void setVzdalenost(double aVzdalenost) {
 		vzdalenost = aVzdalenost;
@@ -29,12 +30,12 @@ public abstract class Nalezenec0 {
 	}
 
 	/**
-	 * @param aAzimut the azimut to set
+	 * @param aAzimut
+	 *            the azimut to set
 	 */
 	public void setAzimut(double aAzimut) {
 		azimut = aAzimut;
 	}
-
 
 	public abstract Wgs getWgs();
 

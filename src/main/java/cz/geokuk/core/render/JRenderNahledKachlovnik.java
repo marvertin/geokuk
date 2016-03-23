@@ -1,9 +1,6 @@
 package cz.geokuk.core.render;
 
-
-import cz.geokuk.plugins.mapy.kachle.JKachlovnik;
-import cz.geokuk.plugins.mapy.kachle.KaSet;
-import cz.geokuk.plugins.mapy.kachle.Priority;
+import cz.geokuk.plugins.mapy.kachle.*;
 
 public class JRenderNahledKachlovnik extends JKachlovnik {
 

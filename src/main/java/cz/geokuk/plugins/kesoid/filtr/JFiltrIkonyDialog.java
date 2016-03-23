@@ -1,12 +1,9 @@
 package cz.geokuk.plugins.kesoid.filtr;
 
-
 import java.awt.Dimension;
 import java.util.Set;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JComponent;
+import javax.swing.*;
 
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.framework.JMyDialog0;
@@ -17,14 +14,14 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 
 public class JFiltrIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 
-	private static final long serialVersionUID = -6496737194139718970L;
-	private JComponent jvse;
+	private static final long	serialVersionUID	= -6496737194139718970L;
+	private JComponent			jvse;
 
-	private JFiltrVyberIkon filtrVyberIkon;
+	private JFiltrVyberIkon		filtrVyberIkon;
 
-	private IkonBag bag;
-	private Set<String> jmenaAlelFiltr;
-	private KesBag kesBag;
+	private IkonBag				bag;
+	private Set<String>			jmenaAlelFiltr;
+	private KesBag				kesBag;
 
 	public JFiltrIkonyDialog() {
 		super();
@@ -38,12 +35,10 @@ public class JFiltrIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 		jvse.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		add(jvse);
 
-
 		filtrVyberIkon = new JFiltrVyberIkon();
 		jvse.add(filtrVyberIkon);
-		jvse.setPreferredSize(new Dimension(500 ,600));
+		jvse.setPreferredSize(new Dimension(500, 600));
 	}
-
 
 	public void onEvent(KeskyNactenyEvent event) {
 		kesBag = event.getVsechny();
@@ -56,20 +51,26 @@ public class JFiltrIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 	}
 
 	public void onEvent(FilterDefinitionChangedEvent event) {
-		if (event.getJmenaNechtenychAlel().equals(jmenaAlelFiltr)) return;
+		if (event.getJmenaNechtenychAlel().equals(jmenaAlelFiltr))
+			return;
 		jmenaAlelFiltr = event.getJmenaNechtenychAlel();
 		resetIfVse();
 	}
 
 	private void resetIfVse() {
-		if (jmenaAlelFiltr == null) return;
-		if (bag == null) return;
-		if (kesBag == null) return;
+		if (jmenaAlelFiltr == null)
+			return;
+		if (bag == null)
+			return;
+		if (kesBag == null)
+			return;
 		filtrVyberIkon.resetBag(bag, kesBag, jmenaAlelFiltr);
 		jvse.revalidate();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
 	 */
 	@Override

@@ -3,45 +3,28 @@
  */
 package cz.geokuk.plugins.kesoidpopisky;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
-import cz.geokuk.plugins.kesoid.Kes;
-import cz.geokuk.plugins.kesoid.Kesoid;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 
 /**
- * Třída, která sestavuje popisky.
- * Její stvoření může trvat, ale její provádění nikoli
+ * Třída, která sestavuje popisky. Její stvoření může trvat, ale její provádění nikoli
+ * 
  * @author veverka
  *
  *
  *
-{wpt} - waypoint
-{typ1} - označení typu (jedno písmeno)
-{velikost} - označení velikosti
-{velikost1} - označení velikosti (jedno písmeno)
-{obtiznost} - označení obtížnosti
-{obtiznost1} - označení obtížnosti (jedno písmeno)
-{teren} - označení terenu
-{teren1} - označení terenu (jedno písmeno)
-{autor} - autor kešky
-{nazev} - název kešky
-{zalozeno} - datum založení
-{nbsp} - mezera (neprovádí se na ní zalomení), jen popisek
-{br} - odřádkování, jen popisek
+ *         {wpt} - waypoint {typ1} - označení typu (jedno písmeno) {velikost} - označení velikosti {velikost1} - označení velikosti (jedno písmeno) {obtiznost} - označení obtížnosti {obtiznost1} - označení obtížnosti (jedno písmeno) {teren} - označení terenu {teren1} - označení terenu (jedno
+ *         písmeno) {autor} - autor kešky {nazev} - název kešky {zalozeno} - datum založení {nbsp} - mezera (neprovádí se na ní zalomení), jen popisek {br} - odřádkování, jen popisek
  */
 public class SestavovacPopisku {
 
+	private static Map<String, Nahrazovac>	sNahrazovace	= new TreeMap<>();
+	private final Nahrazovac[]				nahrazky;
+	private static final NahrBr				NAHRBR			= new NahrBr();
 
-	private static Map<String, Nahrazovac> sNahrazovace = new TreeMap<>();
-	private final Nahrazovac[] nahrazky;
-	private static final NahrBr NAHRBR = new NahrBr();
-
-	private final int pocetRadku;
+	private final int						pocetRadku;
 
 	/**
 	 *
@@ -59,8 +42,9 @@ public class SestavovacPopisku {
 		nahrazky = nahrazovace.toArray(new Nahrazovac[nahrazovace.size()]);
 	}
 
-	private void vytvorNahrazovace (List<Nahrazovac> nahrazovace, String vzorek) {
-		if (vzorek.length() == 0) return;
+	private void vytvorNahrazovace(List<Nahrazovac> nahrazovace, String vzorek) {
+		if (vzorek.length() == 0)
+			return;
 		for (Map.Entry<String, Nahrazovac> entry : sNahrazovace.entrySet()) {
 			int delka = entry.getKey().length();
 			int poz = vzorek.indexOf(entry.getKey());
@@ -116,6 +100,7 @@ public class SestavovacPopisku {
 
 	/**
 	 * Oddělovač řádků. Lze ho najít
+	 * 
 	 * @author veverka
 	 *
 	 */
@@ -205,7 +190,7 @@ public class SestavovacPopisku {
 			}
 		});
 
-		def("{nazev}",  new Nahrazovac() {
+		def("{nazev}", new Nahrazovac() {
 			@Override
 			public void pridej(StringBuilder sb, Context ctx) {
 				sb.append(ctx.wpt.getNazev());
@@ -222,17 +207,16 @@ public class SestavovacPopisku {
 
 		def("{br}", NAHRBR);
 
-		def("{puvodnipotvora}",  new Nahrazovac() {
+		def("{puvodnipotvora}", new Nahrazovac() {
 			@Override
 			public void pridej(StringBuilder sb, Context ctx) {
 				sb.append(computeByvalyPopisek(ctx.wpt));
 			}
 		});
 
-
 		// a nové, které nejsou na geocaching.cz
 
-		def("{info}",  new Nahrazovac() {
+		def("{info}", new Nahrazovac() {
 			@Override
 			public void pridej(StringBuilder sb, Context ctx) {
 				if (ctx.isKes()) {
@@ -244,12 +228,12 @@ public class SestavovacPopisku {
 	}
 
 	private static class Context {
-		private final Wpt wpt;
+		private final Wpt	wpt;
 
-		private boolean kesoidTypeResolved;
+		private boolean		kesoidTypeResolved;
 
-		public Kesoid kesoid;
-		private Kes kes;
+		public Kesoid		kesoid;
+		private Kes			kes;
 
 		Context(Wpt wpt) {
 			this.wpt = wpt;
@@ -275,7 +259,8 @@ public class SestavovacPopisku {
 		 *
 		 */
 		private void resolveKesoidType() {
-			if (kesoidTypeResolved) return;
+			if (kesoidTypeResolved)
+				return;
 			kesoid = wpt.getKesoid();
 			if (kesoid instanceof Kes) {
 				kes = (Kes) kesoid;
@@ -284,6 +269,7 @@ public class SestavovacPopisku {
 		}
 
 	}
+
 	/**
 	 * @param string
 	 * @param xXX2
@@ -294,10 +280,8 @@ public class SestavovacPopisku {
 
 	public static String computeByvalyPopisek(Wpt wpt) {
 		Kesoid kesoid = wpt.getKesoid();
-		String nazev = (kesoid.getKesoidKind() == EKesoidKind.CGP)
-				? kesoid.getIdentifier()
-						: kesoid.getNazev();
-				return nazev;
+		String nazev = (kesoid.getKesoidKind() == EKesoidKind.CGP) ? kesoid.getIdentifier() : kesoid.getNazev();
+		return nazev;
 
 	}
 

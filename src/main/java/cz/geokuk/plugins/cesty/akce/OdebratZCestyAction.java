@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.cesty.akce;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 

@@ -2,9 +2,7 @@ package cz.geokuk.util.gui;
 
 import java.awt.Insets;
 
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JButton;
+import javax.swing.*;
 
 public class JSmallPictureButton extends JButton {
 
@@ -30,7 +28,6 @@ public class JSmallPictureButton extends JButton {
 		nastav();
 	}
 
-
 	public JSmallPictureButton(String string) {
 		super(string);
 		nastav();
@@ -40,6 +37,5 @@ public class JSmallPictureButton extends JButton {
 		setMargin(new Insets(0, 0, 0, 0));
 
 	}
-
 
 }

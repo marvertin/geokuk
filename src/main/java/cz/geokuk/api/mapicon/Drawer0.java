@@ -1,6 +1,5 @@
 package cz.geokuk.api.mapicon;
 
-
 import java.awt.Color;
 import java.net.URL;
 import java.util.Deque;
@@ -13,15 +12,16 @@ public abstract class Drawer0 {
 	private IkonDrawingProperties idp;
 
 	/**
-	 * @param aIdp the idp to set
+	 * @param aIdp
+	 *            the idp to set
 	 */
 	public void setIdp(IkonDrawingProperties aIdp) {
 		idp = aIdp;
 	}
 
 	/**
-	 * Vykreslí zdrojový obrázek do dané vrstvy.
-	 * Obrázek přidá do seznamu,
+	 * Vykreslí zdrojový obrázek do dané vrstvy. Obrázek přidá do seznamu,
+	 * 
 	 * @param src
 	 * @param dest
 	 */
@@ -67,16 +67,18 @@ public abstract class Drawer0 {
 
 	protected final String[] getStrings(String propname, String[] def) {
 		String s = getString(propname, null);
-		if (s == null) return def;
+		if (s == null)
+			return def;
 		String[] ss = s.split(" *, *");
 		return ss;
 	}
 
 	protected final int[] getInts(String propname, int[] def) {
 		String[] ss = getStrings(propname, null);
-		if (ss == null) return def;
+		if (ss == null)
+			return def;
 		int[] ii = new int[ss.length];
-		for (int i=0; i<ss.length; i++) {
+		for (int i = 0; i < ss.length; i++) {
 			ii[i] = Integer.parseInt(ss[i]);
 		}
 		return ii;
@@ -84,9 +86,10 @@ public abstract class Drawer0 {
 
 	protected final float[] getFloats(String propname, float[] def) {
 		String[] ss = getStrings(propname, null);
-		if (ss == null) return def;
+		if (ss == null)
+			return def;
 		float[] ff = new float[ss.length];
-		for (int i=0; i<ss.length; i++) {
+		for (int i = 0; i < ss.length; i++) {
 			ff[i] = Float.parseFloat(ss[i]);
 		}
 		return ff;
@@ -94,7 +97,8 @@ public abstract class Drawer0 {
 
 	protected final Color getColor(String propname, Color def) {
 		int[] ii = getInts(propname, null);
-		if (ii == null || ii.length == 0) return def;
+		if (ii == null || ii.length == 0)
+			return def;
 		if (ii.length < 3) {
 			return new Color(ii[0], ii[0], ii[0]);
 		} else if (ii.length == 3) {
@@ -103,9 +107,5 @@ public abstract class Drawer0 {
 			return new Color(ii[0], ii[1], ii[2], ii[3]);
 		}
 	}
-
-
-
-
 
 }

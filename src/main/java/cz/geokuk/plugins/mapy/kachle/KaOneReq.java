@@ -3,8 +3,7 @@
  */
 package cz.geokuk.plugins.mapy.kachle;
 
-
-class KaOneReq extends Ka0Req  {
+class KaOneReq extends Ka0Req {
 
 	public KaOneReq(final KaOne ka, final Priority priorita) {
 		super(ka, priorita);
@@ -12,9 +11,7 @@ class KaOneReq extends Ka0Req  {
 
 	@Override
 	public KaOne getKa() {
-		return (KaOne)super.getKa();
+		return (KaOne) super.getKa();
 	}
-
-
 
 }

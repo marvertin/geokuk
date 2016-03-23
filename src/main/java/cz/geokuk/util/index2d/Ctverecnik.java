@@ -1,26 +1,25 @@
 package cz.geokuk.util.index2d;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Ctverecnik<T> extends Node0<T> {
 
-	private static final Logger log =
-			LogManager.getLogger(Ctverecnik.class.getSimpleName());
+	private static final Logger	log	= LogManager.getLogger(Ctverecnik.class.getSimpleName());
 
-	private Node0<T> jz;
-	private Node0<T> jv;
-	private Node0<T> sz;
-	private Node0<T> sv;
+	private Node0<T>			jz;
+	private Node0<T>			jv;
+	private Node0<T>			sz;
+	private Node0<T>			sv;
 
-	private final int xx1;
-	private final int yy1;
-	private final int xx2;
-	private final int yy2;
+	private final int			xx1;
+	private final int			yy1;
+	private final int			xx2;
+	private final int			yy2;
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -56,7 +55,6 @@ public class Ctverecnik<T> extends Node0<T> {
 		return yy2;
 	}
 
-
 	/**
 	 * @param aXx1
 	 * @param aXx2
@@ -73,25 +71,18 @@ public class Ctverecnik<T> extends Node0<T> {
 	@Override
 	public void visit(BoundingRect rect, Visitor<T> visitor) {
 		if (rect != null) {
-			boolean jeToMimo
-			=  xx1 >= rect.xx2
-			||  xx2 <= rect.xx1
-			||  yy1 >= rect.yy2
-			||  yy2 <= rect.yy1;
-			if (jeToMimo) return;
+			boolean jeToMimo = xx1 >= rect.xx2 || xx2 <= rect.xx1 || yy1 >= rect.yy2 || yy2 <= rect.yy1;
+			if (jeToMimo)
+				return;
 
-			boolean jeToKompletUvnitr
-			= xx1 >= rect.xx1
-			&& xx2 <= rect.xx2
-			&& yy1 >= rect.yy1
-			&& yy2 <= rect.yy2;
+			boolean jeToKompletUvnitr = xx1 >= rect.xx1 && xx2 <= rect.xx2 && yy1 >= rect.yy1 && yy2 <= rect.yy2;
 
 			if (jeToKompletUvnitr) {
 				visitor.visit(this);
 			} else {
 				visitPodrizene(rect, visitor);
 			}
-		} else {  // nemáme zadaný obdélník, takže je nekonečný,
+		} else { // nemáme zadaný obdélník, takže je nekonečný,
 			// takže to nemůže být mimo ani kompletně uvnitř
 			visitPodrizene(rect, visitor);
 		}
@@ -102,13 +93,17 @@ public class Ctverecnik<T> extends Node0<T> {
 	 * @param visitor
 	 */
 	private void visitPodrizene(BoundingRect rect, Visitor<T> visitor) {
-		if (jz != null) jz.visit(rect, visitor);
-		if (jv != null) jv.visit(rect, visitor);
-		if (sz != null) sz.visit(rect, visitor);
-		if (sv != null) sv.visit(rect, visitor);
+		if (jz != null)
+			jz.visit(rect, visitor);
+		if (jv != null)
+			jv.visit(rect, visitor);
+		if (sz != null)
+			sz.visit(rect, visitor);
+		if (sv != null)
+			sv.visit(rect, visitor);
 	}
 
-	public void vloz (Sheet<T> sheet, DuplikHlidac dh) {
+	public void vloz(Sheet<T> sheet, DuplikHlidac dh) {
 
 		int xxs = xx1 + (xx2 - xx1) / 2;
 		int yys = yy1 + (yy2 - yy1) / 2;
@@ -116,7 +111,7 @@ public class Ctverecnik<T> extends Node0<T> {
 		int xx = sheet.xx;
 		int yy = sheet.yy;
 
-		if        (xx < xxs && yy < yys) {
+		if (xx < xxs && yy < yys) {
 			jz = vlozDoPodctverce(jz, sheet, xx1, yy1, xxs, yys, dh);
 		} else if (xx >= xxs && yy < yys) {
 			jv = vlozDoPodctverce(jv, sheet, xxs, yy1, xx2, yys, dh);
@@ -127,14 +122,14 @@ public class Ctverecnik<T> extends Node0<T> {
 		} else {
 			throw new RuntimeException("Ani jedna podminka nezabrala, podivne: " + this);
 		}
-		if (! dh.duplicita) {
-			count++;  // pokud jsem opravdu vložil
+		if (!dh.duplicita) {
+			count++; // pokud jsem opravdu vložil
 		}
 
 	}
 
 	private Node0<T> vlozDoPodctverce(Node0<T> node, Sheet<T> aSheet, int xx1, int yy1, int xx2, int yy2, DuplikHlidac dh) {
-		//System.out.printf("xx1=%d xx2=%d yy1=%d yy2=%d\n", xx1, xx2, yy1, yy2);
+		// System.out.printf("xx1=%d xx2=%d yy1=%d yy2=%d\n", xx1, xx2, yy1, yy2);
 		if (node == null) { // vlozit se tam
 			return aSheet;
 		} else if (node instanceof Ctverecnik) {
@@ -156,7 +151,9 @@ public class Ctverecnik<T> extends Node0<T> {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see objekty.Node0#isSheet()
 	 */
 	@Override
@@ -168,17 +165,19 @@ public class Ctverecnik<T> extends Node0<T> {
 		boolean duplicita = false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see objekty.Node0#vypis(int)
 	 */
 	@Override
 	void vypis(String prefix, int aLevel) {
 		String mezery = String.format("%" + (aLevel * 2) + "s", " ");
 		log.debug("{}{}: ({}) [{},{}] - [{},{}]", mezery, prefix, count, xx1, yy1, xx2, yy2);
-		podvypis(jz, "jz", aLevel+1);
-		podvypis(jv, "jv", aLevel+1);
-		podvypis(sz, "sz", aLevel+1);
-		podvypis(sv, "sv", aLevel+1);
+		podvypis(jz, "jz", aLevel + 1);
+		podvypis(jv, "jv", aLevel + 1);
+		podvypis(sz, "sz", aLevel + 1);
+		podvypis(sv, "sv", aLevel + 1);
 	}
 
 	/**
@@ -193,7 +192,6 @@ public class Ctverecnik<T> extends Node0<T> {
 		} else {
 			aNode.vypis(aPrefix, aLevel);
 		}
-
 
 	}
 }

@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.kesoid.mvc;
 
-
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -9,8 +8,6 @@ import javax.swing.KeyStroke;
 import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.kesoid.hledani.JTextoveHledaniDialog;
-
-
 
 public class HledejKesAction extends DialogOpeningAction0 {
 
@@ -23,13 +20,14 @@ public class HledejKesAction extends DialogOpeningAction0 {
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.DialogOpeningAction0#createDialog()
 	 */
 	@Override
 	public JMyDialog0 createDialog() {
 		return new JTextoveHledaniDialog();
 	}
-
 
 }

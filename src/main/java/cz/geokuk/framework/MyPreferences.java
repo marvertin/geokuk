@@ -2,28 +2,14 @@ package cz.geokuk.framework;
 
 import static java.util.Locale.ENGLISH;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
+import java.awt.*;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.NodeChangeListener;
-import java.util.prefs.PreferenceChangeListener;
-import java.util.prefs.Preferences;
+import java.util.prefs.*;
 
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
@@ -41,15 +27,14 @@ import cz.geokuk.util.file.Filex;
  */
 public class MyPreferences extends Preferences {
 
-	private static final Map<Class<?>, Duo> sMetody = new HashMap<>();
+	private static final Map<Class<?>, Duo>	sMetody					= new HashMap<>();
 
-	private static final String NULL = "<{<[NULL]>}>";
-	private static final char LIST_DELIMITER_CHAR = ';';
-	private static final char ESCAPE_CHAR = '\\';
-	private static final String PART_PATTERN = ";cont";
-	private static final String NUMBERED_PART_PATTERN = PART_PATTERN + "%d";
-	private final Preferences pref;
-
+	private static final String				NULL					= "<{<[NULL]>}>";
+	private static final char				LIST_DELIMITER_CHAR		= ';';
+	private static final char				ESCAPE_CHAR				= '\\';
+	private static final String				PART_PATTERN			= ";cont";
+	private static final String				NUMBERED_PART_PATTERN	= PART_PATTERN + "%d";
+	private final Preferences				pref;
 
 	public void putFile(final String key, final File file) {
 		put(key, file.getPath());
@@ -61,7 +46,7 @@ public class MyPreferences extends Preferences {
 			final String fileStr = get(key, defalt == null ? null : defalt.getPath());
 			result = fileStr == null ? null : new File(fileStr);
 		} catch (final RuntimeException e) {
-			throw new RuntimeException("key=" + key  + ", defalt=" + defalt, e);
+			throw new RuntimeException("key=" + key + ", defalt=" + defalt, e);
 		}
 		return result;
 	}
@@ -77,10 +62,7 @@ public class MyPreferences extends Preferences {
 		if (defalt == null) {
 			defalt = new Filex(null, false, false);
 		}
-		final Filex result = new Filex(
-				getFile(key, defalt.getFile()),
-				getBoolean(key + "_relativeToProgram", defalt.isRelativeToProgram()),
-				getBoolean(key + "_active", defalt.isActive()));
+		final Filex result = new Filex(getFile(key, defalt.getFile()), getBoolean(key + "_relativeToProgram", defalt.isRelativeToProgram()), getBoolean(key + "_active", defalt.isActive()));
 		return result.getFile() == null ? null : result;
 	}
 
@@ -124,7 +106,7 @@ public class MyPreferences extends Preferences {
 		}
 	}
 
-	//Dimension
+	// Dimension
 	public void putDimension(final String key, final Dimension bod) {
 		put(key, pack(bod));
 	}
@@ -144,7 +126,7 @@ public class MyPreferences extends Preferences {
 		}
 	}
 
-	//Wgs
+	// Wgs
 	public void putWgs(final String key, final Wgs bod) {
 		put(key, pack(bod));
 	}
@@ -265,7 +247,7 @@ public class MyPreferences extends Preferences {
 	}
 
 	public <E extends Atom> Set<E> getAtomSet(final String key, final Set<E> def, final Class<E> cls) {
-		final String ss =  get(key, null);
+		final String ss = get(key, null);
 		if (ss == null) {
 			return def;
 		}
@@ -287,7 +269,7 @@ public class MyPreferences extends Preferences {
 	}
 
 	public <E extends Enum<E>> EnumSet<E> getEnumSet(final String key, final EnumSet<E> def, final Class<E> cls) {
-		final String ss =  get(key, null);
+		final String ss = get(key, null);
 		if (ss == null) {
 			return def;
 		}
@@ -348,10 +330,10 @@ public class MyPreferences extends Preferences {
 			return pack((Enum) o);
 		}
 		if (o instanceof Mou) {
-			return pack((Mou)o);
+			return pack((Mou) o);
 		}
 		if (o instanceof File) {
-			return pack((File)o);
+			return pack((File) o);
 		}
 		throw new IllegalArgumentException("Unknown object to pack : " + o.getClass() + " " + o);
 	}
@@ -570,8 +552,7 @@ public class MyPreferences extends Preferences {
 	@Override
 	public void put(final String key, final String value) {
 		if (key.matches(PART_PATTERN + "[0-9]+")) {
-			throw new IllegalArgumentException("Unable to insert a key with name " + key + "! This" +
-					"key name is reserved for multi-part values");
+			throw new IllegalArgumentException("Unable to insert a key with name " + key + "! This" + "key name is reserved for multi-part values");
 		}
 		if (value == null) {
 			put(key, NULL);
@@ -580,8 +561,7 @@ public class MyPreferences extends Preferences {
 				pref.put(key, value);
 			} else {
 				final String first = value.substring(0, Preferences.MAX_VALUE_LENGTH);
-				final Iterable<String> rest = Splitter.fixedLength(Preferences.MAX_VALUE_LENGTH).split(
-						value.substring(Preferences.MAX_VALUE_LENGTH));
+				final Iterable<String> rest = Splitter.fixedLength(Preferences.MAX_VALUE_LENGTH).split(value.substring(Preferences.MAX_VALUE_LENGTH));
 				pref.put(key, first);
 				int i = 0;
 				for (final String s : rest) {
@@ -683,25 +663,28 @@ public class MyPreferences extends Preferences {
 	}
 
 	private String fontToString(final Font font) {
-		return font.getFamily() + "-" + fontStyleToString(font.getStyle())
-		+ "-" + font.getSize();
+		return font.getFamily() + "-" + fontStyleToString(font.getStyle()) + "-" + font.getSize();
 
 	}
 
 	private String fontStyleToString(final int style) {
-		switch(style) {
-		case Font.PLAIN: return "PLAIN";
-		case Font.ITALIC: return "ITALIC";
-		case Font.BOLD: return "BOLD";
-		case Font.BOLD + Font.ITALIC: return "BOLDITALIC";
+		switch (style) {
+		case Font.PLAIN:
+			return "PLAIN";
+		case Font.ITALIC:
+			return "ITALIC";
+		case Font.BOLD:
+			return "BOLD";
+		case Font.BOLD + Font.ITALIC:
+			return "BOLDITALIC";
 		}
 		return "";
 	}
 
 	private static final class Duo {
-		Method get;
-		Method put;
-		Class<?> cls;
+		Method		get;
+		Method		put;
+		Class<?>	cls;
 	}
 
 	private static Duo duo(final Class<?> cls) {
@@ -719,8 +702,7 @@ public class MyPreferences extends Preferences {
 		if (cls.isEnum()) {
 			// Nedokázal jsem to jinak
 			@SuppressWarnings("rawtypes")
-			final
-			Enum<?> enumxx = getEnumxx(key, (Enum<?>) defx, (Class<Enum>) cls);
+			final Enum<?> enumxx = getEnumxx(key, (Enum<?>) defx, (Class<Enum>) cls);
 			final T result = (T) enumxx;
 			return result;
 		} else {
@@ -769,18 +751,16 @@ public class MyPreferences extends Preferences {
 	public <T> T getStructure(final String name, final T defautStructure) {
 		try {
 			@SuppressWarnings("unchecked")
-			final
-			Class<T> cls = (Class<T>) defautStructure.getClass();
+			final Class<T> cls = (Class<T>) defautStructure.getClass();
 			final T stucture = cls.newInstance();
-			if (! cls.isAnnotationPresent(Preferenceble.class)) {
+			if (!cls.isAnnotationPresent(Preferenceble.class)) {
 				throw new RuntimeException("Klasa " + cls + " postrada anotaci " + Preferenceble.class);
 			}
 			final MyPreferences node = node(name);
 			for (final Map.Entry<String, PropertyDescriptor> entry : findProperties(cls).entrySet()) {
 				final Object defaultValue = entry.getValue().getReadMethod().invoke(defautStructure);
 				@SuppressWarnings("unchecked")
-				final
-				Class<Object> valueType = (Class<Object>) entry.getValue().getPropertyType();
+				final Class<Object> valueType = (Class<Object>) entry.getValue().getPropertyType();
 				final Object newValue = node.getAnyElement(entry.getKey(), defaultValue, valueType);
 				entry.getValue().getWriteMethod().invoke(stucture, newValue);
 			}
@@ -793,15 +773,14 @@ public class MyPreferences extends Preferences {
 	public void putStructure(final String name, final Object structure) {
 		try {
 			final Class<?> cls = structure.getClass();
-			if (! cls.isAnnotationPresent(Preferenceble.class)) {
+			if (!cls.isAnnotationPresent(Preferenceble.class)) {
 				throw new RuntimeException("Klasa " + cls + " postrada anotaci " + Preferenceble.class);
 			}
 			final MyPreferences node = node(name);
 			for (final Map.Entry<String, PropertyDescriptor> entry : findProperties(cls).entrySet()) {
 				final Object value = entry.getValue().getReadMethod().invoke(structure);
 				@SuppressWarnings("unchecked")
-				final
-				Class<Object> valueType = (Class<Object>) entry.getValue().getPropertyType();
+				final Class<Object> valueType = (Class<Object>) entry.getValue().getPropertyType();
 				node.putAnyElement(entry.getKey(), value, valueType);
 			}
 		} catch (final Exception e) {

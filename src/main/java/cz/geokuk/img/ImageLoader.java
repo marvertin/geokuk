@@ -1,8 +1,6 @@
 package cz.geokuk.img;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -16,13 +14,13 @@ import javax.swing.ImageIcon;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 
-
 public class ImageLoader {
 
 	private static Map<String, BufferedImage> imagesCache = new HashMap<>();
 
 	/**
 	 * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -38,6 +36,7 @@ public class ImageLoader {
 
 	/**
 	 * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -51,12 +50,11 @@ public class ImageLoader {
 			}
 			return ImageIO.read(imgURL);
 		} catch (final IOException e) {
-			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Vyhledavani obrazku \""+ path + "\"");
+			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Vyhledavani obrazku \"" + path + "\"");
 			// neexistující image
 			return null;
 		}
 	}
-
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	public static Icon locateResIcon(final String path) {
@@ -85,7 +83,6 @@ public class ImageLoader {
 		return img;
 	}
 
-
 	public static BufferedImage seekResImage(final String path) {
 		final BufferedImage img = locateResImageNoCache(path);
 		if (img == null) {
@@ -101,17 +98,17 @@ public class ImageLoader {
 		final int y = 0;
 
 		g2d.setColor(Color.WHITE);
-		g2d.fillRect(x +1 ,y + 1,width -2 ,height -2);
+		g2d.fillRect(x + 1, y + 1, width - 2, height - 2);
 
 		g2d.setColor(Color.BLACK);
-		g2d.drawRect(x +1 ,y + 1,width -2 ,height -2);
+		g2d.drawRect(x + 1, y + 1, width - 2, height - 2);
 
 		g2d.setColor(Color.RED);
 
 		final BasicStroke stroke = new BasicStroke(4);
 		g2d.setStroke(stroke);
-		g2d.drawLine(x +10, y + 10, x + width -10, y + height -10);
-		g2d.drawLine(x +10, y + height -10, x + width -10, y + 10);
+		g2d.drawLine(x + 10, y + 10, x + width - 10, y + height - 10);
+		g2d.drawLine(x + 10, y + height - 10, x + width - 10, y + 10);
 
 		g2d.dispose();
 

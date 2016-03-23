@@ -1,8 +1,7 @@
 package cz.geokuk.util.lang;
 
 /**
- * Předek všech turbokonzultích objektů.
- * Jeho cílem je obejít některé těžko odhalitelné chyby.
+ * Předek všech turbokonzultích objektů. Jeho cílem je obejít některé těžko odhalitelné chyby.
  *
  * @author <a href="mailto:?????.?????@turboconsult.cz">????? ?????</a>
  * @version $Revision: 10 $
@@ -14,14 +13,11 @@ public class Object0 {
 	 * Metoda se použije v metodě equals následníka pro určení shodnosti typů
 	 */
 	protected final Object checkCompare(Object aObject) {
-		//S null lze porovnávat vše
+		// S null lze porovnávat vše
 		if (aObject == null) {
-			throw new IllegalArgumentException("Pokus o porovnávání '"
-					+ this.getClass() + "' s hodnotou null, to se nesmi!");
+			throw new IllegalArgumentException("Pokus o porovnávání '" + this.getClass() + "' s hodnotou null, to se nesmi!");
 		} else if (getClass() != aObject.getClass()) {
-			throw new ClassCastException("Pokus o porovnávání '"
-					+ this.getClass() + "' s '" + aObject.getClass().getName()
-					+ "', je povoleno porovnávat pouze instance stejné třídy");
+			throw new ClassCastException("Pokus o porovnávání '" + this.getClass() + "' s '" + aObject.getClass().getName() + "', je povoleno porovnávat pouze instance stejné třídy");
 		} else {
 			return aObject;
 		}
@@ -35,17 +31,8 @@ public class Object0 {
 	protected final Object checkEquals(Object aObject) {
 		return aObject;
 		/*
-                //S null lze porovnávat vše
-                if (aObject == null)
-                        return null;
-                else
-                        if (getClass() != aObject.getClass())
-                        {
-                                throw new ClassCastException("Pokus o porovnávání '"
-                                   + this.getClass() + "' s '" + aObject.getClass().getName()
-                                   + "', je povoleno porovnávat pouze instance stejné třídy");
-                        } else
-                                return aObject;
+		 * //S null lze porovnávat vše if (aObject == null) return null; else if (getClass() != aObject.getClass()) { throw new ClassCastException("Pokus o porovnávání '" + this.getClass() + "' s '" + aObject.getClass().getName() + "', je povoleno porovnávat pouze instance stejné třídy"); } else
+		 * return aObject;
 		 */
 	}
 
@@ -57,19 +44,9 @@ public class Object0 {
 	protected final Object checkEquals(Object aObject, Class<?> aStartFrom) {
 		return aObject;
 		/*
-                //S null lze porovnávat vše
-                if (aObject == null)
-                        return null;
-                else
-                        if (! (aStartFrom.isInstance(this) && aStartFrom.isInstance(aObject)))
-                        {
-                                throw new ClassCastException("Pokus o porovnávání '"
-                                   + this.getClass().getName() + "' s '" + aObject.getClass().getName()
-                                   + "', porovnávané třídy musí být následníkem '" + aStartFrom.getName() + "'");
-                        } else
-                                return aObject;
+		 * //S null lze porovnávat vše if (aObject == null) return null; else if (! (aStartFrom.isInstance(this) && aStartFrom.isInstance(aObject))) { throw new ClassCastException("Pokus o porovnávání '" + this.getClass().getName() + "' s '" + aObject.getClass().getName() +
+		 * "', porovnávané třídy musí být následníkem '" + aStartFrom.getName() + "'"); } else return aObject;
 		 */
 	}
-
 
 }

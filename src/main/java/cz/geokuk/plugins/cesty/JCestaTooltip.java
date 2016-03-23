@@ -1,8 +1,6 @@
 package cz.geokuk.plugins.cesty;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -14,12 +12,11 @@ import cz.geokuk.plugins.cesty.data.Cesta;
 
 public class JCestaTooltip extends JComponent {
 
+	private static final long	serialVersionUID	= -7455935457383912752L;
 
-	private static final long serialVersionUID = -7455935457383912752L;
-
-	private final JLabel jVpred = new JLabel("xxxxxxxx");
-	private final JLabel jVzad  = new JLabel("yyyyyyyy");
-	private final JLabel jNazevCesty  = new JLabel("yyyyyyyy");
+	private final JLabel		jVpred				= new JLabel("xxxxxxxx");
+	private final JLabel		jVzad				= new JLabel("yyyyyyyy");
+	private final JLabel		jNazevCesty			= new JLabel("yyyyyyyy");
 
 	public JCestaTooltip() {
 		setLayout(new FlowLayout());
@@ -33,13 +30,12 @@ public class JCestaTooltip extends JComponent {
 	public void setPridavaciDalkoviny(Cesta cesta, Mou mou) {
 
 		double dalkaPuvodni = cesta == null ? 0 : cesta.dalka();
-		double dalkaDodana =  cesta == null ? 0 : FGeoKonvertor.dalka(cesta.getCil(), mou);
-		jVzad.setText("<html>" + Cesta.dalkaHtml(dalkaPuvodni, FBarvy.CURTA_NORMALNE) + "<font color=white> +</font>" + Cesta.dalkaHtml(dalkaDodana, Color.WHITE) );
+		double dalkaDodana = cesta == null ? 0 : FGeoKonvertor.dalka(cesta.getCil(), mou);
+		jVzad.setText("<html>" + Cesta.dalkaHtml(dalkaPuvodni, FBarvy.CURTA_NORMALNE) + "<font color=white> +</font>" + Cesta.dalkaHtml(dalkaDodana, Color.WHITE));
 		jVzad.setVisible(true);
 		jVpred.setVisible(false);
 		jNazevCesty.setText(cesta.getNazev());
 		jNazevCesty.setVisible(cesta.getNazev() != null);
-
 
 	}
 

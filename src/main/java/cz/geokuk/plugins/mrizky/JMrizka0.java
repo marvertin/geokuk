@@ -1,12 +1,6 @@
 package cz.geokuk.plugins.mrizky;
 
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Stroke;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,20 +12,14 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.framework.BeanSubtypable;
 import cz.geokuk.framework.BeanSubtype;
 
-
-
 public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
-	private static final Logger log = LogManager.getLogger(JMrizka0.class.getSimpleName());
+	private static final Logger	log					= LogManager.getLogger(JMrizka0.class.getSimpleName());
 
+	private static final long	serialVersionUID	= -5858146658366237217L;
 
-	private static final long serialVersionUID = -5858146658366237217L;
-
-
-	private final Stroke slabe =  new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
-			new float[]{2.0f, 4.0f}  , 0.0f);
-	private final Stroke silne =  new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, null, 0.0f);
-
+	private final Stroke		slabe				= new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, new float[] { 2.0f, 4.0f }, 0.0f);
+	private final Stroke		silne				= new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, null, 0.0f);
 
 	public JMrizka0() {
 		setOpaque(false);
@@ -40,30 +28,32 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
 	public abstract void initPainting(Vykreslovac aVykreslovac);
 
-	public void donePainting() {}
+	public void donePainting() {
+	}
 
 	public abstract Mou convertToMou(double x, double y);
 
 	public abstract double convertToX(Mou mou);
+
 	public abstract double convertToY(Mou mou);
 
 	private Point convert(final double x, final double y) {
 		try {
 			final Point result = getSoord().transform(convertToMou(x, y));
-			//System.out.printf("Mřížkování: %s (%f,%f) -> (%d,%d)%n",  getClass().getSimpleName(), x, y, result.x, result.y);
+			// System.out.printf("Mřížkování: %s (%f,%f) -> (%d,%d)%n", getClass().getSimpleName(), x, y, result.x, result.y);
 			return result;
 		} catch (final Exception e) {
-			throw new RuntimeException( x + " " + y,e);
+			throw new RuntimeException(x + " " + y, e);
 		}
 	}
-
 
 	public abstract String getTextX(double x);
 
 	public abstract String getTextY(double x);
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	@Override
@@ -78,26 +68,25 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
 	protected class Vykreslovac {
 
-		private static final int PIXLMEZ = 50;
+		private static final int	PIXLMEZ	= 50;
 
-		private double x0;
-		private double y0;
-		private double xkrok;
-		private double ykrok;
+		private double				x0;
+		private double				y0;
+		private double				xkrok;
+		private double				ykrok;
 
-		private int tlustsiX;
-		private int tlustsiY;
+		private int					tlustsiX;
+		private int					tlustsiY;
 
-		private Color color = Color.BLACK;
+		private Color				color	= Color.BLACK;
 
 		void paint(final Graphics aG) {
-			if (ykrok == 0 || ykrok == 0)
-			{
+			if (ykrok == 0 || ykrok == 0) {
 				return; // at se nezacykli
 			}
 			final Graphics2D g = (Graphics2D) aG;
 			g.setColor(color);
-			//      if (true) return;
+			// if (true) return;
 
 			korigujZnamenkaKroku();
 			final boolean vlezeSeDoOkna = posunX0Y0ZaKonec();
@@ -106,7 +95,7 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 			}
 			// příprava prvního řádku
 			List<Point> a = new ArrayList<>();
-			//Point p = convert(x0, y0);
+			// Point p = convert(x0, y0);
 			{
 				double x = x0;
 				Point p;
@@ -115,7 +104,7 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 					a.add(p);
 					x -= xkrok;
 				} while (p.x >= 0 - 100); // přidáme něco ať při otočení nezmizí
-				a.add(convert(x, y0));  // a ještě jeden
+				a.add(convert(x, y0)); // a ještě jeden
 			}
 
 			double y = y0;
@@ -124,16 +113,16 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 				final List<Point> b = new ArrayList<>(a.size());
 				b.add(convert(x0, y));
 				double x = x0 - xkrok;
-				for (int i=1; i<a.size(); i++) {
+				for (int i = 1; i < a.size(); i++) {
 					final Point p = a.get(i);
-					final Point p1 = a.get(i-1);
+					final Point p1 = a.get(i - 1);
 					final Point p2 = convert(x, y);
 					g.setStroke(naSilneY(y + ykrok) ? silne : slabe);
-					g.drawLine(p.x, p.y , p1.x, p1.y);
+					g.drawLine(p.x, p.y, p1.x, p1.y);
 					g.setStroke(naSilneX(x) ? silne : slabe);
-					g.drawLine(p.x, p.y , p2.x, p2.y);
+					g.drawLine(p.x, p.y, p2.x, p2.y);
 					if (p2.y < 0 && p.y >= 0) { // dobrý čas zobrazit text
-						//g.transform(AffineTransform.getRotateInstance(Math.PI / 1,35));
+						// g.transform(AffineTransform.getRotateInstance(Math.PI / 1,35));
 						g.drawString(getTextX(x + xkrok), p.x + 3, 35);
 					}
 					if (p2.y < getHeight() && p.y >= getHeight()) { // dobrý čas zobrazit text
@@ -150,12 +139,14 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 				}
 				a = b; // tam ta se stává referenční
 				// vykreslení řádku
-			} while (convert(x0, y).y >= 0 - 100);  // přidáme něco, ať nezmizí při otočení
+			} while (convert(x0, y).y >= 0 - 100); // přidáme něco, ať nezmizí při otočení
 
 			// a teď texty
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see mrizka.JMrizka0#initPainting(coordinates.Mou)
 		 */
 		private int convertVzdalenostMensi(final double vzdalenost) {
@@ -170,8 +161,8 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 			final int dy = Math.abs(p1.x - p2.x);
 			final int d = Math.min(dx, dy);
 
-			//      lat = Math.round(lat / krok) * krok;
-			//      lon = Math.round(lon / krok) * krok;
+			// lat = Math.round(lat / krok) * krok;
+			// lon = Math.round(lon / krok) * krok;
 			return d;
 		}
 
@@ -180,13 +171,11 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 		}
 
 		protected final void rastr(final double krok, final int tlustsi) {
-			if (xkrok > 0)
-			{
+			if (xkrok > 0) {
 				return; // už bylo nastaveno
 			}
 			final int d = convertVzdalenostMensi(krok);
-			if (d < PIXLMEZ)
-			{
+			if (d < PIXLMEZ) {
 				return; // to je ještě málo;
 			}
 			this.xkrok = krok;
@@ -196,8 +185,8 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 			final Mou moustred = getSoord().getMoustred();
 			x0 = Math.round(convertToX(moustred) / krok) * krok;
 			y0 = Math.round(convertToY(moustred) / krok) * krok;
-			//System.out.println("KROK A SILA:  " +  tlustsi + " | " + krok);
-			//System.out.printf("x0y0: (%f;%f) ---- %f ------ (%f;%f)%n", convertToX(moustred), convertToY(moustred), krok, x0 , y0);
+			// System.out.println("KROK A SILA: " + tlustsi + " | " + krok);
+			// System.out.printf("x0y0: (%f;%f) ---- %f ------ (%f;%f)%n", convertToX(moustred), convertToY(moustred), krok, x0 , y0);
 		}
 
 		private boolean naSilneX(final double x) {
@@ -219,18 +208,18 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 			// a pak se nikdy nemůžeme dostat mimo obrazovky, tak utneme
 			final int width = getWidth();
 			int px, py, lastPx = Integer.MIN_VALUE, lastPy = Integer.MIN_VALUE;
-			while((px = convert(x0, y0).x) < width) {
+			while ((px = convert(x0, y0).x) < width) {
 				log.debug("  ... posunX0Y0ZaKonec-X: px={}, lastPx={}, xkrok={}, width={}, x0={}", px, lastPx, xkrok, width, x0);
 				if (px <= lastPx) {
 					return false; // kvůli přetíkání, když se na obrazovce opakují kachle
 				}
 				lastPx = px;
 				x0 += xkrok;
-				//System.out.println("Zase se zvětšuje: " + x0 + " --- " + xkrok + " //// " + convert(x0, y0).x + "  ---- " + convertToMou(x0,  y0));
+				// System.out.println("Zase se zvětšuje: " + x0 + " --- " + xkrok + " //// " + convert(x0, y0).x + " ---- " + convertToMou(x0, y0));
 			}
 			x0 += xkrok * 2; // a ještě jeden pro jistotu
 			final int height = getHeight();
-			while((py = convert(x0, y0).y) < height) {
+			while ((py = convert(x0, y0).y) < height) {
 				log.debug("  ... posunX0Y0ZaKonec-Y: py={}, lastPy={}, ykrok={}, height={}, y0 ={}", py, lastPy, ykrok, height, y0);
 				if (py <= lastPy) {
 					return false; // kvůli přetíkání, když se na obrazovce opakují kachle
@@ -238,7 +227,7 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 				lastPy = py;
 				y0 += ykrok;
 			}
-			//y0 += ykrok * 2; // a ještě jeden pro jistotu
+			// y0 += ykrok * 2; // a ještě jeden pro jistotu
 			log.debug("posunX0Y0ZaKonec: resultXY0 = [{},{}]", x0, y0);
 			return true;
 		}
@@ -250,15 +239,14 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 			final Point p = convert(x0, y0);
 			final Point r = convert(x0 + xkrok, y0 + ykrok);
 			if (r.x < p.x) {
-				xkrok = - xkrok;
+				xkrok = -xkrok;
 			}
 			if (r.y < p.y) {
-				ykrok = - ykrok;
+				ykrok = -ykrok;
 			}
 		}
 
 	}
-
 
 	private String kterouMamMrizku() {
 		final String kn = getClass().getName();
@@ -277,10 +265,10 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 		return kterouMamMrizku();
 	}
 
-	//  @Override
-	//  public void finalize() {
-	//    System.out.println("Mřížky finalizovány");
-	//  }
+	// @Override
+	// public void finalize() {
+	// System.out.println("Mřížky finalizovány");
+	// }
 
 	public abstract boolean smimVykreslovat();
 }

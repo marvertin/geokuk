@@ -6,23 +6,18 @@
  */
 package cz.geokuk.util.file;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
+import java.io.*;
 
 import cz.geokuk.util.lang.FThrowable;
 
-
-
 /**
  *
- *  Obalí řádek zadaným prefixem či suffixem.
+ * Obalí řádek zadaným prefixem či suffixem.
  */
 public class LineWrappingDecorationWriter extends LineDecorationWriter {
 
-	private String iPrefix;
-	private String iSuffix;
+	private String	iPrefix;
+	private String	iSuffix;
 
 	/**
 	 * @param out
@@ -31,7 +26,9 @@ public class LineWrappingDecorationWriter extends LineDecorationWriter {
 		super(out);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.tconsult.tw.util.LineDecorationWriter#onLineBeg()
 	 */
 	@Override
@@ -41,11 +38,13 @@ public class LineWrappingDecorationWriter extends LineDecorationWriter {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.tconsult.tw.util.LineDecorationWriter#onLineEnd()
 	 */
 	@Override
-	protected void onLineEnd()  throws IOException {
+	protected void onLineEnd() throws IOException {
 		if (iSuffix != null) {
 			super.out.write(iSuffix);
 		}
@@ -79,18 +78,16 @@ public class LineWrappingDecorationWriter extends LineDecorationWriter {
 		iSuffix = aString;
 	}
 
-
 	private static void vyja(final int pocet) {
-		if (pocet <= 0 ) {
+		if (pocet <= 0) {
 			throw new RuntimeException("yyyyyyyyyyyyyyyyy");
 		}
-		vyja (pocet -1);
+		vyja(pocet - 1);
 	}
 
 	public static void main(final String[] args) {
 		System.out.println("JEDU");
-		final LineWrappingDecorationWriter wrt =
-				new LineWrappingDecorationWriter(new OutputStreamWriter(System.out));
+		final LineWrappingDecorationWriter wrt = new LineWrappingDecorationWriter(new OutputStreamWriter(System.out));
 		wrt.setPrefix("[[[[[[[[");
 		wrt.setSuffix("]]]]]]]");
 

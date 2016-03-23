@@ -1,10 +1,8 @@
 package cz.geokuk.plugins.mapy.kachle;
 
-
-
 class KaOne extends Ka0 {
 
-	//private int DOPLNKOVAC = 1<<28;
+	// private int DOPLNKOVAC = 1<<28;
 
 	private final EKaType type;
 
@@ -12,8 +10,6 @@ class KaOne extends Ka0 {
 		super(loc);
 		this.type = type;
 	}
-
-
 
 	@Override
 	public String typToString() {
@@ -24,8 +20,6 @@ class KaOne extends Ka0 {
 		return type;
 	}
 
-
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -33,8 +27,6 @@ class KaOne extends Ka0 {
 		result = prime * result + (type == null ? 0 : type.hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(final Object obj) {
@@ -57,7 +49,6 @@ class KaOne extends Ka0 {
 		}
 		return true;
 	}
-
 
 	@Override
 	public String toString() {

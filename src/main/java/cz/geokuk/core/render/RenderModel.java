@@ -11,24 +11,20 @@ import cz.geokuk.core.coord.VyrezChangedEvent;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.core.program.FPref;
-import cz.geokuk.framework.Dlg;
-import cz.geokuk.framework.Model0;
-import cz.geokuk.framework.MyPreferences;
+import cz.geokuk.framework.*;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.plugins.mapy.kachle.EKaType;
 import cz.geokuk.util.file.Filex;
 
 public class RenderModel extends Model0 {
 
+	// private static final double OKRAJ_CENTIMETR = 0.01;
+	private static final double	OKRAJ_CENTIMETR	= 0;
 
-
-	//private static final double OKRAJ_CENTIMETR = 0.01;
-	private static final double OKRAJ_CENTIMETR = 0;
-
-	private double natoceni;
+	private double				natoceni;
 
 	// rendrované hodnoty, to jsou ty, jejichž obrázky se budou staovat a rendrovat
-	private Coord moord;
+	private Coord				moord;
 
 	/**
 	 * @return the coord
@@ -38,25 +34,24 @@ public class RenderModel extends Model0 {
 	}
 
 	// Nastavované během přípravy na rendrování
-	private Dimension dim;
+	private Dimension				dim;
 
-	private RenderUmisteniSouboru umisteniSouboru;
+	private RenderUmisteniSouboru	umisteniSouboru;
 
-	private RenderSettings renderSettings;
+	private RenderSettings			renderSettings;
 
-	private RendererSwingWorker0 koswx;
+	private RendererSwingWorker0	koswx;
 
 	// Je true, pokud jsme v dialogu, kde se nastavuje rendrování
-	private boolean jsmeVRendrovani;
+	private boolean					jsmeVRendrovani;
 
-
-	//  public Mou SZ;
+	// public Mou SZ;
 	//
-	//  public Mou SV;
+	// public Mou SV;
 	//
-	//  public Mou JZ;
+	// public Mou JZ;
 	//
-	//  public Mou JV;
+	// public Mou JV;
 
 	public RenderUmisteniSouboru getUmisteniSouboru() {
 		return umisteniSouboru;
@@ -65,23 +60,33 @@ public class RenderModel extends Model0 {
 	public File getOutputFolder() {
 		Filex fx = null;
 		switch (renderSettings.getWhatRender()) {
-		case JEN_OBRAZEK: fx = getUmisteniSouboru().getPictureDir(); break;
-		case GOOGLE_EARTH: fx = getUmisteniSouboru().getKmzDir(); break;
-		case OZI_EXPLORER: fx = getUmisteniSouboru().getOziDir(); break;
-		case TISK: fx = null; break;
-		default: assert false : "Nenene: " + renderSettings.getWhatRender();
+		case JEN_OBRAZEK:
+			fx = getUmisteniSouboru().getPictureDir();
+			break;
+		case GOOGLE_EARTH:
+			fx = getUmisteniSouboru().getKmzDir();
+			break;
+		case OZI_EXPLORER:
+			fx = getUmisteniSouboru().getOziDir();
+			break;
+		case TISK:
+			fx = null;
+			break;
+		default:
+			assert false : "Nenene: " + renderSettings.getWhatRender();
 		}
 		return fx == null ? null : fx.getEffectiveFile();
 	}
 
 	public double getOKolikNatacet() {
-		if (! getRenderSettings().isSrovnatDoSeveru()) return 0;
+		if (!getRenderSettings().isSrovnatDoSeveru())
+			return 0;
 		return -getNatoceni();
 	}
 
 	/**
-	 * Bere natočení mapy od severu na aktuálním středu.
-	 * Nebere v úvahu inforamci o tom, jak se má moc natáčet.
+	 * Bere natočení mapy od severu na aktuálním středu. Nebere v úvahu inforamci o tom, jak se má moc natáčet.
+	 * 
 	 * @return
 	 */
 	public double getNatoceni() {
@@ -102,11 +107,9 @@ public class RenderModel extends Model0 {
 		setRenderSettings(rs);
 	}
 
-
-
-	//  public void onEvent(ZmenaMapNastalaEvent event) {
-	//    kaSet = event.getKaSet();
-	//  }
+	// public void onEvent(ZmenaMapNastalaEvent event) {
+	// kaSet = event.getKaSet();
+	// }
 
 	public void uschovejAktualniMeritko() {
 		// TODO asi testovat
@@ -115,15 +118,13 @@ public class RenderModel extends Model0 {
 		setRenderSettings(rs);
 	}
 
-
 	private Dvoj spoctiOrezavaciOblednik(double a, double b) {
 		return spocti(-getOKolikNatacet(), a, b);
 	}
 
 	/**
-	 * Spočítá veliksot obdélníku tak, aby nový obdélník
-	 * vešel do obdélníku daném zadanými stranami, když je pootočen
-	 * o zadaný úhel.
+	 * Spočítá veliksot obdélníku tak, aby nový obdélník vešel do obdélníku daném zadanými stranami, když je pootočen o zadaný úhel.
+	 * 
 	 * @param uhel
 	 * @param a
 	 * @param b
@@ -153,8 +154,8 @@ public class RenderModel extends Model0 {
 	}
 
 	static class Dvoj {
-		double a;
-		double b;
+		double	a;
+		double	b;
 	}
 
 	@Override
@@ -168,34 +169,34 @@ public class RenderModel extends Model0 {
 		setRenderSettings(currPrefe().getStructure(FPref.RENDER_structure_node, new RenderSettings()));
 	}
 
-
-	//  /**
-	//   *
-	//   */
-	//  public void vypisChybySouradnic(double pixlunametr) {
-	//    Utm utmSZ = SZ.toUtm();
-	//    Utm utmSV = SV.toUtm();
-	//    Utm utmJZ = JZ.toUtm();
-	//    Utm utmJV = JV.toUtm();
+	// /**
+	// *
+	// */
+	// public void vypisChybySouradnic(double pixlunametr) {
+	// Utm utmSZ = SZ.toUtm();
+	// Utm utmSV = SV.toUtm();
+	// Utm utmJZ = JZ.toUtm();
+	// Utm utmJV = JV.toUtm();
 	//
 	//
 	//
-	//    double chybaMetruS = Math.abs(utmSZ.uy - utmSV.uy);
-	//    double chybaMetruJ = Math.abs(utmJZ.uy - utmJV.uy);
-	//    double chybaMetruZ = Math.abs(utmSZ.ux - utmJZ.ux);
-	//    double chybaMetruV = Math.abs(utmSV.ux - utmJV.ux);
-	//    System.out.println("SZ: " + SZ.toWgs() + " " + utmSZ + " " + SZ.toWgs().lat);
-	//    System.out.println("SV: " + SV.toWgs() + " " + utmSV);
-	//    System.out.println("JZ: " + JZ.toWgs() + " " + utmJZ);
-	//    System.out.println("JV: " + JV.toWgs() + " " + utmJV);
+	// double chybaMetruS = Math.abs(utmSZ.uy - utmSV.uy);
+	// double chybaMetruJ = Math.abs(utmJZ.uy - utmJV.uy);
+	// double chybaMetruZ = Math.abs(utmSZ.ux - utmJZ.ux);
+	// double chybaMetruV = Math.abs(utmSV.ux - utmJV.ux);
+	// System.out.println("SZ: " + SZ.toWgs() + " " + utmSZ + " " + SZ.toWgs().lat);
+	// System.out.println("SV: " + SV.toWgs() + " " + utmSV);
+	// System.out.println("JZ: " + JZ.toWgs() + " " + utmJZ);
+	// System.out.println("JV: " + JV.toWgs() + " " + utmJV);
 	//
-	//    System.out.printf("Chyby v metrech: S=%d, J=%d, V=%d, Z=%d\n", (int) chybaMetruS, (int)chybaMetruJ, (int)chybaMetruZ, (int)chybaMetruV);
-	//    //System.out.printf("Chyby v pixlech: S=%d, J=%d, V=%d, Z=%d\n", pixlunametr*chybaMetruS, pixlunametr*chybaMetruJ, pixlunametr*chybaMetruZ, pixlunametr*chybaMetruV);
+	// System.out.printf("Chyby v metrech: S=%d, J=%d, V=%d, Z=%d\n", (int) chybaMetruS, (int)chybaMetruJ, (int)chybaMetruZ, (int)chybaMetruV);
+	// //System.out.printf("Chyby v pixlech: S=%d, J=%d, V=%d, Z=%d\n", pixlunametr*chybaMetruS, pixlunametr*chybaMetruJ, pixlunametr*chybaMetruZ, pixlunametr*chybaMetruV);
 	//
-	//  }
+	// }
 
 	private void spocitejVelikost() {
-		if (moord == null) return;
+		if (moord == null)
+			return;
 		int moumera = moord.getMoumer(); // aktuální měřítko
 		int widthSurove = moord.getWidth();
 		int heightSurove = moord.getHeight();
@@ -212,8 +213,8 @@ public class RenderModel extends Model0 {
 			moumera--;
 		}
 		Dvoj dvoj = spoctiOrezavaciOblednik(widthSurove, heightSurove);
-		dim = new Dimension((int) dvoj.a, (int) dvoj.b );
-		//return new Dimension(width, height);
+		dim = new Dimension((int) dvoj.a, (int) dvoj.b);
+		// return new Dimension(width, height);
 	}
 
 	/**
@@ -252,12 +253,13 @@ public class RenderModel extends Model0 {
 		return dvoj;
 	}
 
-
 	/**
-	 * @param umisteniSouboru the umisteniSouboru to set
+	 * @param umisteniSouboru
+	 *            the umisteniSouboru to set
 	 */
 	public void setUmisteniSouboru(RenderUmisteniSouboru umisteniSouboru) {
-		if (umisteniSouboru.equals(this.umisteniSouboru)) return;
+		if (umisteniSouboru.equals(this.umisteniSouboru))
+			return;
 		this.umisteniSouboru = umisteniSouboru;
 		MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
 		pref.putFilex(FPref.RENDER_KMZ_DIR_value, umisteniSouboru.getKmzDir());
@@ -272,10 +274,12 @@ public class RenderModel extends Model0 {
 	}
 
 	/**
-	 * @param renderSettings the renderSettings to set
+	 * @param renderSettings
+	 *            the renderSettings to set
 	 */
 	public void setRenderSettings(RenderSettings renderSettings) {
-		if(renderSettings.equals(this.renderSettings)) return;
+		if (renderSettings.equals(this.renderSettings))
+			return;
 		this.renderSettings = renderSettings;
 		spocitejVelikost();
 		currPrefe().putStructure(FPref.RENDER_structure_node, renderSettings);
@@ -291,7 +295,7 @@ public class RenderModel extends Model0 {
 
 	private void fire() {
 		spocitejVelikost();
-		fire (new PripravaRendrovaniEvent(renderSettings, getStavRendrovani()));
+		fire(new PripravaRendrovaniEvent(renderSettings, getStavRendrovani()));
 	}
 
 	/**
@@ -301,20 +305,23 @@ public class RenderModel extends Model0 {
 		if (koswx != null) {
 			koswx.cancel(true);
 		}
-		//zobrazServisniOknoAction.actionPerformed(null);
+		// zobrazServisniOknoAction.actionPerformed(null);
 		EWhatRender whatRender = renderSettings.getWhatRender();
 		switch (whatRender) {
-		case GOOGLE_EARTH: koswx = new GoogleEarthRenderSwingWorker();
-		break;
-		case OZI_EXPLORER: koswx = new OziExplorerRenderSwingWorker(whatRender);
-		break;
-		case TISK: koswx = new PrintingSwingWorker();
-		break;
-		default: koswx = new OziExplorerRenderSwingWorker(whatRender);
-		break;
+		case GOOGLE_EARTH:
+			koswx = new GoogleEarthRenderSwingWorker();
+			break;
+		case OZI_EXPLORER:
+			koswx = new OziExplorerRenderSwingWorker(whatRender);
+			break;
+		case TISK:
+			koswx = new PrintingSwingWorker();
+			break;
+		default:
+			koswx = new OziExplorerRenderSwingWorker(whatRender);
+			break;
 		}
-		super.
-		factoryInit(koswx);
+		super.factoryInit(koswx);
 		koswx.execute();
 		fire();
 	}
@@ -323,7 +330,7 @@ public class RenderModel extends Model0 {
 		if (koswx != null) {
 			koswx.cancel(true);
 		}
-		//koswx = null;
+		// koswx = null;
 		fire();
 	}
 
@@ -334,7 +341,7 @@ public class RenderModel extends Model0 {
 			Dlg.error("Rendrování bylo přerušeno uživatelem.");
 		} else {
 			if (renderResult.file != null) {
-				Dlg.info("Byl vytvořen soubor \"" +  renderResult.file + "\"", "Výsledek rendrování");
+				Dlg.info("Byl vytvořen soubor \"" + renderResult.file + "\"", "Výsledek rendrování");
 			}
 		}
 	}
@@ -342,14 +349,13 @@ public class RenderModel extends Model0 {
 	public void startRenderingProcess() {
 		jsmeVRendrovani = true;
 		spocitejVelikost();
-		fire ();
+		fire();
 	}
 
 	public void finishRenderingProcess() {
 		jsmeVRendrovani = false;
-		fire ();
+		fire();
 	}
-
 
 	public EStavRendrovani getStavRendrovani() {
 		if (koswx != null) {
@@ -371,12 +377,10 @@ public class RenderModel extends Model0 {
 		Mou moustred = getMoord().getMoustred();
 		int width = getDim().width;
 		int height = getDim().height;
-		Coord roord = new Coord(getRenderedMoumer(),
-				moustred,
-				new Dimension(width,height),
-				getOKolikNatacet());
+		Coord roord = new Coord(getRenderedMoumer(), moustred, new Dimension(width, height), getOKolikNatacet());
 		return roord;
 	}
+
 	/**
 	 * @return the dim
 	 */
@@ -389,9 +393,9 @@ public class RenderModel extends Model0 {
 		long pamet;
 		if (getRenderSettings().getWhatRender() == EWhatRender.GOOGLE_EARTH) {
 			DlazdicovaMetrikaXY metrika = spoctiDlazdicovouMetriku();
-			pamet = (long)metrika.xx.dlaSize * metrika.yy.dlaSize * velikostPixlu;
+			pamet = (long) metrika.xx.dlaSize * metrika.yy.dlaSize * velikostPixlu;
 		} else {
-			pamet = (long)dim.height * dim.width * velikostPixlu;
+			pamet = (long) dim.height * dim.width * velikostPixlu;
 		}
 		return pamet;
 	}
@@ -399,18 +403,14 @@ public class RenderModel extends Model0 {
 	public DlazdicovaMetrikaXY spoctiDlazdicovouMetriku() {
 
 		Coord coord = createRenderedCoord();
-		return new DlazdicovaMetrikaXY(
-				new DlazdicovaMetrika(renderSettings.getKmzMaxDlazdiceX(), coord.getWidth()),
-				new DlazdicovaMetrika(renderSettings.getKmzMaxDlazdiceY(), coord.getHeight())
-				);
+		return new DlazdicovaMetrikaXY(new DlazdicovaMetrika(renderSettings.getKmzMaxDlazdiceX(), coord.getWidth()), new DlazdicovaMetrika(renderSettings.getKmzMaxDlazdiceY(), coord.getHeight()));
 
 	}
 
 	public PapirovaMetrika getPapirovaMetrika() {
 		Coord roord = getRoord();
 		int meritko = getRenderSettings().getPapiroveMeritko();
-		return new PapirovaMetrika(roord.getWidthMetru() / meritko,
-				roord.getHeightMetru() / meritko, OKRAJ_CENTIMETR);
+		return new PapirovaMetrika(roord.getWidthMetru() / meritko, roord.getHeightMetru() / meritko, OKRAJ_CENTIMETR);
 	}
 
 	public List<Wgs> spocitejKalibracniBody() {
@@ -421,21 +421,21 @@ public class RenderModel extends Model0 {
 		List<Wgs> wgss = new ArrayList<>();
 		int width = cocox.getDim().width;
 		int height = cocox.getDim().height;
-		int kalistrana = (int)(Math.ceil(Math.sqrt(kalibrBodu))); // počet kalibračních bodů rastru ve sloupci a řádku
-		double kalifaktor = (kalistrana * kalistrana - 1)  / ((double) kalibrBodu - 1);  // po jaké vzdálenosti kalibrační bod
+		int kalistrana = (int) (Math.ceil(Math.sqrt(kalibrBodu))); // počet kalibračních bodů rastru ve sloupci a řádku
+		double kalifaktor = (kalistrana * kalistrana - 1) / ((double) kalibrBodu - 1); // po jaké vzdálenosti kalibrační bod
 		System.out.println("kalistrana: " + kalistrana);
 		double kalicitac = 0;
 		int bodocitac = 0;
 		for (int x = 0; x < kalistrana; x++) {
 			for (int y = 0; y < kalistrana; y++) {
 				if (Math.round(kalicitac) == bodocitac) {
-					int xp = x * width / (kalistrana-1);
-					int yp = y * height / (kalistrana-1);
+					int xp = x * width / (kalistrana - 1);
+					int yp = y * height / (kalistrana - 1);
 					Wgs wgs = cocox.transform(new Point(xp, yp)).toWgs();
 					wgss.add(wgs);
 					kalicitac += kalifaktor;
 				}
-				bodocitac ++;
+				bodocitac++;
 			}
 		}
 		return wgss;

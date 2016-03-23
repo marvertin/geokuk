@@ -6,23 +6,18 @@ package cz.geokuk.util.file;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+import java.util.*;
 
 /**
- * Nese informace z několika složek,
- * ať resourcových nebo normálních. Informace se překrývají.
+ * Nese informace z několika složek, ať resourcových nebo normálních. Informace se překrývají.
  *
  * @author veverka
  */
 public class MultiFolder {
-	private static final String REMOVE_SUFFIX = ".remove";
-	private static final String CONTENT_TXT = "content.txt";
+	private static final String				REMOVE_SUFFIX	= ".remove";
+	private static final String				CONTENT_TXT		= "content.txt";
 
-	private final KeyTree<String, LamUrl> tree = new KeyTree<>();
+	private final KeyTree<String, LamUrl>	tree			= new KeyTree<>();
 
 	public KeyNode<String, LamUrl> getNode(String key) {
 		String[] ss = key.split("/");
@@ -105,8 +100,9 @@ public class MultiFolder {
 		}
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -117,7 +113,9 @@ public class MultiFolder {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

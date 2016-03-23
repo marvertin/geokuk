@@ -8,5 +8,5 @@ package cz.geokuk.core.coord;
  *
  */
 public interface SoordProvider {
-	//Coord getSoord;
+	// Coord getSoord;
 }

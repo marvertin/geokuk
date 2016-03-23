@@ -1,12 +1,6 @@
 package cz.geokuk.plugins.kesoidkruhy;
 
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Stroke;
+import java.awt.*;
 
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
@@ -15,21 +9,16 @@ import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.plugins.mapy.kachle.EKaType;
-import cz.geokuk.util.index2d.FlatVisitor;
-import cz.geokuk.util.index2d.Indexator;
-import cz.geokuk.util.index2d.Sheet;
-
+import cz.geokuk.util.index2d.*;
 
 public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
-	private static final long serialVersionUID = -5858146658366237217L;
-	private static final int MINIMALNI_JEDNOTKOVY_KRUH = 25;
+	private static final long	serialVersionUID			= -5858146658366237217L;
+	private static final int	MINIMALNI_JEDNOTKOVY_KRUH	= 25;
 
-	private Indexator<Wpt> iIndexator;
+	private Indexator<Wpt>		iIndexator;
 
-
-	private EKaType podklad;
-	private KruhySettings kruhy;
-
+	private EKaType				podklad;
+	private KruhySettings		kruhy;
 
 	public JZvyraznovaciKruhySlide() {
 		setOpaque(false);
@@ -43,7 +32,6 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 	private void initComponents() {
 		provazModely();
 	}
-
 
 	public void onEvent(KeskyVyfiltrovanyEvent event) {
 		iIndexator = event.getFiltrovane().getIndexator();
@@ -63,15 +51,17 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 
 	private void provazModely() {
 		if (podklad != null) {
-			//      barvaAVElikostKruhuModel = Settings.barvyAVelikostiKruhu.get(podklad);
+			// barvaAVElikostKruhuModel = Settings.barvyAVelikostiKruhu.get(podklad);
 		}
 	}
 
 	@Override
 	public void paintComponent(Graphics aG) {
-		if (iIndexator == null) return;
+		if (iIndexator == null)
+			return;
 		final boolean prekrocenLimit = iIndexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
-		if (prekrocenLimit) return;
+		if (prekrocenLimit)
+			return;
 
 		final Graphics2D g = (Graphics2D) aG;
 		final int r;
@@ -83,8 +73,7 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		}
 		final int d = 2 * r;
 		final Color barva = kruhy.getBarva();
-		final Stroke prerus = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1,
-				new float[]{5.0f,5.0f}, 0);
+		final Stroke prerus = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[] { 5.0f, 5.0f }, 0);
 		g.setColor(barva);
 		iIndexator.visit(getSoord().getBoundingRect(), new FlatVisitor<Wpt>() {
 
@@ -94,10 +83,10 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 				Point p = getSoord().transform(mou);
 				g.setStroke(prerus);
 				g.setColor(barva);
-				g.fillOval(p.x -r, p.y - r, d, d);
+				g.fillOval(p.x - r, p.y - r, d, d);
 				if (jednotkove) {
 					g.setColor(Color.WHITE);
-					g.drawOval(p.x -r, p.y - r, d, d);
+					g.drawOval(p.x - r, p.y - r, d, d);
 
 				}
 			}
@@ -116,11 +105,9 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		return pixlu;
 	}
 
-
 	@Override
 	public JSingleSlide0 createRenderableSlide() {
 		return new JZvyraznovaciKruhySlide();
 	}
-
 
 }

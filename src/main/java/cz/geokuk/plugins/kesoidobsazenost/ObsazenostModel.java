@@ -1,14 +1,13 @@
 package cz.geokuk.plugins.kesoidobsazenost;
 
-
 import cz.geokuk.core.program.FPref;
-import cz.geokuk.framework.Onoff;
-import cz.geokuk.framework.OnoffEvent0;
-import cz.geokuk.framework.PodkladMapSpecificModel0;
+import cz.geokuk.framework.*;
 
 public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, ObsazenostSettings> {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#createDefaults()
 	 */
 	@Override
@@ -16,7 +15,9 @@ public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, O
 		return new ObsazenostSettings();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#createEvent(java.lang.Object)
 	 */
 	@Override
@@ -24,7 +25,9 @@ public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, O
 		return new ObsazenostPreferencesChangeEvent(structure);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#visiblexxx()
 	 */
 	@Override
@@ -32,7 +35,9 @@ public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, O
 		return visible;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#getOnoffEventClass()
 	 */
 	@Override
@@ -40,7 +45,9 @@ public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, O
 		return ObsazenostOnoffEvent.class;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#preferenceNodeName()
 	 */
 	@Override
@@ -48,7 +55,9 @@ public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, O
 		return FPref.KESOID_OBSAZENOST_node;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#putVisibleToPreferences(boolean)
 	 */
 	@Override
@@ -56,15 +65,14 @@ public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, O
 		currPrefe().node(FPref.MRIZKA_node).putBoolean(FPref.ZOBRAZ_OBSAZENOST_value, onoff);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#getVisibleFromPreferences(boolean)
 	 */
 	@Override
 	protected boolean getVisibleFromPreferences(boolean defaultOnoff) {
 		return currPrefe().node(FPref.MRIZKA_node).getBoolean(FPref.ZOBRAZ_OBSAZENOST_value, defaultOnoff);
 	}
-
-
-
 
 }

@@ -5,22 +5,20 @@ import java.lang.reflect.Array;
 /**
  * Třída opbsahuje užitečnou práci s řetězci.
  *
- * @author	Michal Polák
+ * @author Michal Polák
  * @version $Revision: 35 $
- * @see     "TW0139Util.vjp"
- * @see     "$Header: /Zakazky/TWare/Distribuce/TW0139/Util/cz/tconsult/tw/util/TwString.java 35    22.04.01 14:54 Roztocil $"
+ * @see "TW0139Util.vjp"
+ * @see "$Header: /Zakazky/TWare/Distribuce/TW0139/Util/cz/tconsult/tw/util/TwString.java 35    22.04.01 14:54 Roztocil $"
  */
-public final class FString
-{
+public final class FString {
 	/** {@link TwString} je jen knihovna funkcí, nikoliv instanciovatelný objekt. */
-	private FString() { /* INTENDED: zabránění externí instanciace. */ }
-
-
+	private FString() {
+		/* INTENDED: zabránění externí instanciace. */ }
 
 	/** Pokud to lze, zařízne String na danou délku. */
 	public static String truncateRight(String s, int maxlen) {
 		if (s.length() > maxlen) {
-			return s.substring(0,maxlen);
+			return s.substring(0, maxlen);
 		}
 		return s;
 	}
@@ -38,17 +36,20 @@ public final class FString
 		return (s == null || s.length() == 0);
 	}
 
-	/** Vrací true, pokud je řetězec prázdný, to znamená null, nebo prázdný
-	 * nebo mezery.
+	/**
+	 * Vrací true, pokud je řetězec prázdný, to znamená null, nebo prázdný nebo mezery.
 	 */
 	public static boolean isEmpty(String s) {
 		return StringUtils.isBlank(s);
 	}
 
-	/** Pomocí oddělovače spojí prvky pole do Stringu.
+	/**
+	 * Pomocí oddělovače spojí prvky pole do Stringu.
 	 *
-	 * @param	aDelimiter	Oddělovač.
-	 * @param	aPole		Pole nějakých objektů, jejichž hodnoty .toString() budou spojeny do výsledku.
+	 * @param aDelimiter
+	 *            Oddělovač.
+	 * @param aPole
+	 *            Pole nějakých objektů, jejichž hodnoty .toString() budou spojeny do výsledku.
 	 */
 	public static String mergeArray(String aDelimiter, Object aPole) {
 		if (aPole == null) {
@@ -56,7 +57,8 @@ public final class FString
 		}
 
 		Class<?> c = aPole.getClass();
-		if (!c.isArray())       throw new IllegalArgumentException("Argument aPole typu " + c + " není pole.");
+		if (!c.isArray())
+			throw new IllegalArgumentException("Argument aPole typu " + c + " není pole.");
 
 		StringBuilder result = new StringBuilder(300);
 		int len = Array.getLength(aPole);
@@ -74,23 +76,28 @@ public final class FString
 	 * Zarovná řetězec na požadovanou délku.
 	 *
 	 * Pokud je řetězec příliš krátký,
-	 * @param	s		Zarovnávaný řetězec.
-	 * @param	len		Požadovaná délka řetězce po zarovnání.
-	 * @param	fill	Řetězec, kterým má být zarovnávaný řetězec doplněn na požadovanou délku.
-	 *                                      *					Je-li prázdný nebo null, použije se jedna mezera.
-	 * @return	Zadaný řetězec doplněný zprava na požadovanou délku určený vyplňovacím řetězcem.
+	 * 
+	 * @param s
+	 *            Zarovnávaný řetězec.
+	 * @param len
+	 *            Požadovaná délka řetězce po zarovnání.
+	 * @param fill
+	 *            Řetězec, kterým má být zarovnávaný řetězec doplněn na požadovanou délku. * Je-li prázdný nebo null, použije se jedna mezera.
+	 * @return Zadaný řetězec doplněný zprava na požadovanou délku určený vyplňovacím řetězcem.
 	 */
-	public static String alignRight(String s, int len, String fill)
-	{
-		if (s.length() == len) return s;
+	public static String alignRight(String s, int len, String fill) {
+		if (s.length() == len)
+			return s;
 		if (s.length() < len) {
-			if (isVoid(fill)) fill = " ";
+			if (isVoid(fill))
+				fill = " ";
 			StringBuilder sb = new StringBuilder(len);
 			sb.append(s);
 			while (sb.length() < len) {
 				sb.append(fill);
 			}
-			if (sb.length() == len) return sb.toString();
+			if (sb.length() == len)
+				return sb.toString();
 			return truncateRight(sb.toString(), len);
 		}
 		return truncateRight(s, len);
@@ -100,17 +107,21 @@ public final class FString
 	 * Zarovná řetězec na požadovanou délku.
 	 *
 	 * Pokud je řetězec příliš krátký,
-	 * @param	s		Zarovnávaný řetězec.
-	 * @param	len		Požadovaná délka řetězce po zarovnání.
-	 * @param	fill	Znak, kterým má být zarovnávaný řetězec doplněn na požadovanou délku.
-	 * @return	Zadaný řetězec doplněný zprava na požadovanou délku určený vyplňovacím znakem.
+	 * 
+	 * @param s
+	 *            Zarovnávaný řetězec.
+	 * @param len
+	 *            Požadovaná délka řetězce po zarovnání.
+	 * @param fill
+	 *            Znak, kterým má být zarovnávaný řetězec doplněn na požadovanou délku.
+	 * @return Zadaný řetězec doplněný zprava na požadovanou délku určený vyplňovacím znakem.
 	 */
-	public static String alignRight(String s, int len, char fill)
-	{
+	public static String alignRight(String s, int len, char fill) {
 		return alignRight(s, len, String.valueOf(fill));
 	}
 
-	/** Porovná dva řetězce, přičemž i shoda v <b>null</b> se považuje za rovnost.
+	/**
+	 * Porovná dva řetězce, přičemž i shoda v <b>null</b> se považuje za rovnost.
 	 *
 	 * @param s1
 	 * @param s2

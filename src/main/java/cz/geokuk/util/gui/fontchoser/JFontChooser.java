@@ -1,61 +1,20 @@
 package cz.geokuk.util.gui.fontchoser;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
-import java.awt.Insets;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.Serializable;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.EventListenerList;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
 /**
- * <code>JFontChooser</code> provides a pane of controls designed to allow
- * a user to manipulate and select a font.
+ * <code>JFontChooser</code> provides a pane of controls designed to allow a user to manipulate and select a font.
  *
  * This class provides three levels of API:
  * <ol>
- * <li>A static convenience method which shows a modal font-chooser
- * dialog and returns the font selected by the user.
- * <li>A static convenience method for creating a font-chooser dialog
- * where <code>ActionListeners</code> can be specified to be invoked when
- * the user presses one of the dialog buttons.
- * <li>The ability to create instances of <code>JFontChooser</code> panes
- * directly (within any container). <code>PropertyChange</code> listeners
- * can be added to detect when the current "font" property changes.
+ * <li>A static convenience method which shows a modal font-chooser dialog and returns the font selected by the user.
+ * <li>A static convenience method for creating a font-chooser dialog where <code>ActionListeners</code> can be specified to be invoked when the user presses one of the dialog buttons.
+ * <li>The ability to create instances of <code>JFontChooser</code> panes directly (within any container). <code>PropertyChange</code> listeners can be added to detect when the current "font" property changes.
  * </ol>
  * <p>
  *
@@ -66,44 +25,43 @@ public class JFontChooser extends JComponent {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -3412974969117820342L;
+	private static final long		serialVersionUID	= -3412974969117820342L;
 
 	/** The list of possible font sizes. */
-	private static final Integer[] SIZES =
-		{8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 24, 26, 28, 32, 36, 40, 48, 56, 64, 72};
+	private static final Integer[]	SIZES				= { 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 24, 26, 28, 32, 36, 40, 48, 56, 64, 72 };
 
 	/** The list of possible fonts. */
-	private static final String[] FONTS = GraphicsEnvironment.getLocalGraphicsEnvironment()
-			.getAvailableFontFamilyNames();
+	private static final String[]	FONTS				= GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
+	private FontSelectionModel		selectionModel;
 
-	private FontSelectionModel selectionModel;
+	private JList<String>			fontList;
 
-	private JList<String> fontList;
+	private JList<Integer>			sizeList;
 
-	private JList<Integer> sizeList;
+	private JCheckBox				boldCheckBox;
 
-	private JCheckBox boldCheckBox;
+	private JCheckBox				italicCheckBox;
 
-	private JCheckBox italicCheckBox;
-
-	private JLabel previewLabel;
+	private JLabel					previewLabel;
 
 	/** The preview text, if null the font name will be the preview text. */
-	private String previewText;
+	private String					previewText;
 
 	/** Listener used to update the font of the selection model. */
-	private SelectionUpdater selectionUpdater = new SelectionUpdater();
+	private SelectionUpdater		selectionUpdater	= new SelectionUpdater();
 
-	/** Listener used to update the font in the components. This should be registered
-	 * with the selection model. */
-	private LabelUpdater labelUpdater = new LabelUpdater();
+	/**
+	 * Listener used to update the font in the components. This should be registered with the selection model.
+	 */
+	private LabelUpdater			labelUpdater		= new LabelUpdater();
 
 	/** True if the components are being updated and no event should be generated. */
-	private boolean updatingComponents = false;
+	private boolean					updatingComponents	= false;
 
-	/** Listener class used to update the font in the components. This should be registered
-	 * with the selection model. */
+	/**
+	 * Listener class used to update the font in the components. This should be registered with the selection model.
+	 */
 	private class LabelUpdater implements ChangeListener {
 
 		public void stateChanged(ChangeEvent e) {
@@ -129,18 +87,16 @@ public class JFontChooser extends JComponent {
 	}
 
 	/**
-	 * Shows a modal font-chooser dialog and blocks until the
-	 * dialog is hidden.  If the user presses the "OK" button, then
-	 * this method hides/disposes the dialog and returns the selected color.
-	 * If the user presses the "Cancel" button or closes the dialog without
-	 * pressing "OK", then this method hides/disposes the dialog and returns
-	 * <code>null</code>.
+	 * Shows a modal font-chooser dialog and blocks until the dialog is hidden. If the user presses the "OK" button, then this method hides/disposes the dialog and returns the selected color. If the user presses the "Cancel" button or closes the dialog without pressing "OK", then this method
+	 * hides/disposes the dialog and returns <code>null</code>.
 	 *
-	 * @param component    the parent <code>Component</code> for the dialog
-	 * @param title        the String containing the dialog's title
+	 * @param component
+	 *            the parent <code>Component</code> for the dialog
+	 * @param title
+	 *            the String containing the dialog's title
 	 * @return the selected font or <code>null</code> if the user opted out
-	 * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-	 * returns true.
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
 	 * @see java.awt.GraphicsEnvironment#isHeadless
 	 */
 	public Font showDialog(Component component, String title) {
@@ -155,37 +111,32 @@ public class JFontChooser extends JComponent {
 		return ok.getFont();
 	}
 
-
 	/**
-	 * Creates and returns a new dialog containing the specified
-	 * <code>ColorChooser</code> pane along with "OK", "Cancel", and "Reset"
-	 * buttons. If the "OK" or "Cancel" buttons are pressed, the dialog is
-	 * automatically hidden (but not disposed).  If the "Reset"
-	 * button is pressed, the color-chooser's color will be reset to the
-	 * font which was set the last time <code>show</code> was invoked on the
-	 * dialog and the dialog will remain showing.
+	 * Creates and returns a new dialog containing the specified <code>ColorChooser</code> pane along with "OK", "Cancel", and "Reset" buttons. If the "OK" or "Cancel" buttons are pressed, the dialog is automatically hidden (but not disposed). If the "Reset" button is pressed, the color-chooser's
+	 * color will be reset to the font which was set the last time <code>show</code> was invoked on the dialog and the dialog will remain showing.
 	 *
-	 * @param c              the parent component for the dialog
-	 * @param title          the title for the dialog
-	 * @param modal          a boolean. When true, the remainder of the program
-	 *                       is inactive until the dialog is closed.
-	 * @param okListener     the ActionListener invoked when "OK" is pressed
-	 * @param cancelListener the ActionListener invoked when "Cancel" is pressed
+	 * @param c
+	 *            the parent component for the dialog
+	 * @param title
+	 *            the title for the dialog
+	 * @param modal
+	 *            a boolean. When true, the remainder of the program is inactive until the dialog is closed.
+	 * @param okListener
+	 *            the ActionListener invoked when "OK" is pressed
+	 * @param cancelListener
+	 *            the ActionListener invoked when "Cancel" is pressed
 	 * @return a new dialog containing the font-chooser pane
-	 * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-	 * returns true.
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
 	 * @see java.awt.GraphicsEnvironment#isHeadless
 	 */
-	public JDialog createDialog(Component c, String title, boolean modal,
-			ActionListener okListener, ActionListener cancelListener) {
+	public JDialog createDialog(Component c, String title, boolean modal, ActionListener okListener, ActionListener cancelListener) {
 
-		return new FontChooserDialog(c, title, modal, this,
-				okListener, cancelListener);
+		return new FontChooserDialog(c, title, modal, this, okListener, cancelListener);
 	}
 
 	/**
-	 * Creates a color chooser pane with an initial font which is the same font
-	 * as the default font for labels.
+	 * Creates a color chooser pane with an initial font which is the same font as the default font for labels.
 	 */
 	public JFontChooser() {
 		this(new DefaultFontSelectionModel());
@@ -194,17 +145,18 @@ public class JFontChooser extends JComponent {
 	/**
 	 * Creates a font chooser pane with the specified initial font.
 	 *
-	 * @param initialFont the initial font set in the chooser
+	 * @param initialFont
+	 *            the initial font set in the chooser
 	 */
 	public JFontChooser(Font initialFont) {
 		this(new DefaultFontSelectionModel(initialFont));
 	}
 
 	/**
-	 * Creates a font chooser pane with the specified
-	 * <code>FontSelectionModel</code>.
+	 * Creates a font chooser pane with the specified <code>FontSelectionModel</code>.
 	 *
-	 * @param model the font selection model used by this component
+	 * @param model
+	 *            the font selection model used by this component
 	 */
 	public JFontChooser(FontSelectionModel model) {
 		selectionModel = model;
@@ -220,34 +172,24 @@ public class JFontChooser extends JComponent {
 		fontList = new JList<>(FONTS);
 		fontList.setVisibleRowCount(10);
 		fontList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		add(new JScrollPane(fontList), new GridBagConstraints(0, 0, 1, 1, 2, 2,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				ins, 0, 0));
+		add(new JScrollPane(fontList), new GridBagConstraints(0, 0, 1, 1, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, ins, 0, 0));
 
 		sizeList = new JList<>(SIZES);
-		((JLabel)sizeList.getCellRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+		((JLabel) sizeList.getCellRenderer()).setHorizontalAlignment(JLabel.RIGHT);
 		sizeList.setVisibleRowCount(10);
 		sizeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		add(new JScrollPane(sizeList), new GridBagConstraints(1, 0, 1, 1, 1, 2,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				ins, 0, 0));
+		add(new JScrollPane(sizeList), new GridBagConstraints(1, 0, 1, 1, 1, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, ins, 0, 0));
 
 		boldCheckBox = new JCheckBox("Bold");
-		add(boldCheckBox, new GridBagConstraints(0, 1, 2, 1, 1, 0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE,
-				ins, 0, 0));
+		add(boldCheckBox, new GridBagConstraints(0, 1, 2, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, ins, 0, 0));
 
 		italicCheckBox = new JCheckBox("Italic");
-		add(italicCheckBox, new GridBagConstraints(0, 2, 2, 1, 1, 0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE,
-				ins, 0, 0));
+		add(italicCheckBox, new GridBagConstraints(0, 2, 2, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, ins, 0, 0));
 
 		previewLabel = new JLabel("");
 		previewLabel.setHorizontalAlignment(JLabel.CENTER);
 		previewLabel.setVerticalAlignment(JLabel.CENTER);
-		add(new JScrollPane(previewLabel), new GridBagConstraints(0, 3, 2, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				ins, 0, 0));
+		add(new JScrollPane(previewLabel), new GridBagConstraints(0, 3, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, ins, 0, 0));
 
 		setFont(font == null ? previewLabel.getFont() : font);
 
@@ -258,38 +200,35 @@ public class JFontChooser extends JComponent {
 	}
 
 	private Font buildFont() {
-		//        Font labelFont = previewLabel.getFont();
+		// Font labelFont = previewLabel.getFont();
 
-		String fontName = (String)fontList.getSelectedValue();
+		String fontName = (String) fontList.getSelectedValue();
 		if (fontName == null) {
 			return null;
-			//            fontName = labelFont.getName();
+			// fontName = labelFont.getName();
 		}
-		Integer sizeInt = (Integer)sizeList.getSelectedValue();
+		Integer sizeInt = (Integer) sizeList.getSelectedValue();
 		if (sizeInt == null) {
-			//            size = labelFont.getSize();
+			// size = labelFont.getSize();
 			return null;
 		}
 
 		// create the font
-		//        // first create the font attributes
-		//        HashMap map = new HashMap();
-		//        map.put(TextAttribute.BACKGROUND, Color.white);
-		//        map.put(TextAttribute.FAMILY, fontName);
-		//        map.put(TextAttribute.FOREGROUND, Color.black);
-		//        map.put(TextAttribute.SIZE , new Float(size));
-		//        map.put(TextAttribute.UNDERLINE, italicCheckBox.isSelected() ? TextAttribute.UNDERLINE_LOW_ONE_PIXEL : TextAttribute.UNDERLINE_LOW_TWO_PIXEL);
-		//        map.put(TextAttribute.STRIKETHROUGH, italicCheckBox.isSelected() ? TextAttribute.STRIKETHROUGH_ON : Boolean.FALSE);
-		//        map.put(TextAttribute.WEIGHT, boldCheckBox.isSelected() ? TextAttribute.WEIGHT_BOLD : TextAttribute.WEIGHT_REGULAR);
-		//        map.put(TextAttribute.POSTURE,
-		//                italicCheckBox.isSelected() ? TextAttribute.POSTURE_OBLIQUE : TextAttribute.POSTURE_REGULAR);
+		// // first create the font attributes
+		// HashMap map = new HashMap();
+		// map.put(TextAttribute.BACKGROUND, Color.white);
+		// map.put(TextAttribute.FAMILY, fontName);
+		// map.put(TextAttribute.FOREGROUND, Color.black);
+		// map.put(TextAttribute.SIZE , new Float(size));
+		// map.put(TextAttribute.UNDERLINE, italicCheckBox.isSelected() ? TextAttribute.UNDERLINE_LOW_ONE_PIXEL : TextAttribute.UNDERLINE_LOW_TWO_PIXEL);
+		// map.put(TextAttribute.STRIKETHROUGH, italicCheckBox.isSelected() ? TextAttribute.STRIKETHROUGH_ON : Boolean.FALSE);
+		// map.put(TextAttribute.WEIGHT, boldCheckBox.isSelected() ? TextAttribute.WEIGHT_BOLD : TextAttribute.WEIGHT_REGULAR);
+		// map.put(TextAttribute.POSTURE,
+		// italicCheckBox.isSelected() ? TextAttribute.POSTURE_OBLIQUE : TextAttribute.POSTURE_REGULAR);
 		//
-		//        return new Font(map);
+		// return new Font(map);
 
-		return new Font(fontName,
-				(italicCheckBox.isSelected() ? Font.ITALIC : Font.PLAIN)
-				| (boldCheckBox.isSelected() ? Font.BOLD : Font.PLAIN),
-				sizeInt);
+		return new Font(fontName, (italicCheckBox.isSelected() ? Font.ITALIC : Font.PLAIN) | (boldCheckBox.isSelected() ? Font.BOLD : Font.PLAIN), sizeInt);
 	}
 
 	/** Updates the font in the preview component according to the selected values. */
@@ -324,13 +263,13 @@ public class JFontChooser extends JComponent {
 		return selectionModel;
 	}
 
-
 	/**
 	 * Set the model containing the selected font.
 	 *
-	 * @param newModel   the new FontSelectionModel object
+	 * @param newModel
+	 *            the new FontSelectionModel object
 	 */
-	public void setSelectionModel(FontSelectionModel newModel ) {
+	public void setSelectionModel(FontSelectionModel newModel) {
 		FontSelectionModel oldModel = selectionModel;
 		selectionModel = newModel;
 		oldModel.removeChangeListener(labelUpdater);
@@ -348,24 +287,30 @@ public class JFontChooser extends JComponent {
 	}
 
 	/**
-	 * Sets the current font of the font chooser to the specified font.
-	 * The <code>ColorSelectionModel</code> will fire a <code>ChangeEvent</code>
-	 * @param font the font to be set in the font chooser
+	 * Sets the current font of the font chooser to the specified font. The <code>ColorSelectionModel</code> will fire a <code>ChangeEvent</code>
+	 * 
+	 * @param font
+	 *            the font to be set in the font chooser
 	 * @see JComponent#addPropertyChangeListener
 	 */
 	public void setFont(Font font) {
 		selectionModel.setSelectedFont(font);
 	}
 
-	/** Returns the preview text displayed in the preview component.
+	/**
+	 * Returns the preview text displayed in the preview component.
+	 * 
 	 * @return the preview text, if null the font name will be displayed
 	 */
 	public String getPreviewText() {
 		return previewText;
 	}
 
-	/** Sets the preview text displayed in the preview component.
-	 * @param previewText the preview text, if null the font name will be displayed
+	/**
+	 * Sets the preview text displayed in the preview component.
+	 * 
+	 * @param previewText
+	 *            the preview text, if null the font name will be displayed
 	 */
 	public void setPreviewText(String previewText) {
 		this.previewText = previewText;
@@ -375,10 +320,8 @@ public class JFontChooser extends JComponent {
 
 }
 
-
 /*
- * Class which builds a font chooser dialog consisting of
- * a JFontChooser with "Ok", "Cancel", and "Reset" buttons.
+ * Class which builds a font chooser dialog consisting of a JFontChooser with "Ok", "Cancel", and "Reset" buttons.
  *
  * Note: This needs to be fixed to deal with localization!
  */
@@ -386,15 +329,13 @@ class FontChooserDialog extends JDialog {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -7376253355818496076L;
-	private Font initialFont;
-	private JFontChooser chooserPane;
+	private static final long	serialVersionUID	= -7376253355818496076L;
+	private Font				initialFont;
+	private JFontChooser		chooserPane;
 
-	public FontChooserDialog(Component c, String title, boolean modal,
-			JFontChooser chooserPane,
-			ActionListener okListener, ActionListener cancelListener) {
+	public FontChooserDialog(Component c, String title, boolean modal, JFontChooser chooserPane, ActionListener okListener, ActionListener cancelListener) {
 		super(JOptionPane.getFrameForComponent(c), title, modal);
-		//setResizable(false);
+		// setResizable(false);
 
 		String okString = UIManager.getString("ColorChooser.okText");
 		String cancelString = UIManager.getString("ColorChooser.cancelText");
@@ -426,11 +367,11 @@ class FontChooserDialog extends JDialog {
 
 			public void actionPerformed(ActionEvent e) {
 				// todo make it in 1.3
-				//                ActionListener[] listeners
-				//                        = ((AbstractButton) e.getSource()).getActionListeners();
-				//                for (int i = 0; i < listeners.length; i++) {
-				//                    listeners[i].actionPerformed(e);
-				//                }
+				// ActionListener[] listeners
+				// = ((AbstractButton) e.getSource()).getActionListeners();
+				// for (int i = 0; i < listeners.length; i++) {
+				// listeners[i].actionPerformed(e);
+				// }
 			}
 		};
 		KeyStroke cancelKeyStroke = KeyStroke.getKeyStroke((char) KeyEvent.VK_ESCAPE);
@@ -464,7 +405,6 @@ class FontChooserDialog extends JDialog {
 			resetButton.setMnemonic(mnemonic);
 		}
 		buttonPane.add(resetButton);
-
 
 		// initialiase the content pane
 		this.chooserPane = chooserPane;
@@ -510,9 +450,9 @@ class FontChooserDialog extends JDialog {
 }
 
 class FontTracker implements ActionListener, Serializable {
-	private static final long serialVersionUID = -969244282397272192L;
-	JFontChooser chooser;
-	Font color;
+	private static final long	serialVersionUID	= -969244282397272192L;
+	JFontChooser				chooser;
+	Font						color;
 
 	public FontTracker(JFontChooser c) {
 		chooser = c;
@@ -527,8 +467,6 @@ class FontTracker implements ActionListener, Serializable {
 	}
 }
 
-
-
 /**
  * A generic implementation of <code>{@link FontSelectionModel}</code>.
  *
@@ -537,31 +475,26 @@ class FontTracker implements ActionListener, Serializable {
 class DefaultFontSelectionModel implements FontSelectionModel {
 
 	/** The default selected font. */
-	private static final Font DEFAULT_INITIAL_FONT = new Font("Dialog", Font.PLAIN, 12);
+	private static final Font	DEFAULT_INITIAL_FONT	= new Font("Dialog", Font.PLAIN, 12);
 
 	/** The selected font. */
-	private Font selectedFont;
+	private Font				selectedFont;
 
 	/** The change listeners notified by a change in this model. */
-	private EventListenerList listeners = new EventListenerList();
+	private EventListenerList	listeners				= new EventListenerList();
 
 	/**
-	 * Creates a <code>DefaultFontSelectionModel</code> with the
-	 * current font set to <code>Dialog, 12</code>.  This is
-	 * the default constructor.
+	 * Creates a <code>DefaultFontSelectionModel</code> with the current font set to <code>Dialog, 12</code>. This is the default constructor.
 	 */
 	public DefaultFontSelectionModel() {
 		this(DEFAULT_INITIAL_FONT);
 	}
 
 	/**
-	 * Creates a <code>DefaultFontSelectionModel</code> with the
-	 * current font set to <code>font</code>, which should be
-	 * non-<code>null</code>.  Note that setting the font to
-	 * <code>null</code> is undefined and may have unpredictable
-	 * results.
+	 * Creates a <code>DefaultFontSelectionModel</code> with the current font set to <code>font</code>, which should be non-<code>null</code>. Note that setting the font to <code>null</code> is undefined and may have unpredictable results.
 	 *
-	 * @param selectedFont the new <code>Font</code>
+	 * @param selectedFont
+	 *            the new <code>Font</code>
 	 */
 	public DefaultFontSelectionModel(Font selectedFont) {
 		if (selectedFont == null) {
@@ -598,6 +531,3 @@ class DefaultFontSelectionModel implements FontSelectionModel {
 		}
 	}
 }
-
-
-

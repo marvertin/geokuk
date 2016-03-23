@@ -29,5 +29,4 @@ public class KachleUmisteniSouboruChangedEvent extends Event0<KesoidModel> {
 		return umisteniSouboru;
 	}
 
-
 }

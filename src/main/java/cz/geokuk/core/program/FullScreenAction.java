@@ -10,16 +10,16 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
-import cz.geokuk.framework.Action0;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cz.geokuk.framework.Action0;
+
 public class FullScreenAction extends Action0 {
 
-	private static final Logger log =
-			LogManager.getLogger(FullScreenAction.class.getSimpleName());
+	private static final Logger	log					= LogManager.getLogger(FullScreenAction.class.getSimpleName());
 
-	private static final long serialVersionUID = 1948998108984785016L;
+	private static final long	serialVersionUID	= 1948998108984785016L;
 
 	/**
 	 *
@@ -32,23 +32,24 @@ public class FullScreenAction extends Action0 {
 		setEnabled(gs.isFullScreenSupported());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent aE) {
 
-		//    System.out.println("Stisknouto F11");
+		// System.out.println("Stisknouto F11");
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		final GraphicsDevice gs = ge.getDefaultScreenDevice();
 		boolean jsmeVeFulu = gs.getFullScreenWindow() != null;
 
-
-		//LATER Tady předpokládáme JMainFrame a nevím, zda je to úplně správně
+		// LATER Tady předpokládáme JMainFrame a nevím, zda je to úplně správně
 		JMainFrame mainFrame = (JMainFrame) getMainFrame();
 
-		//		mainFrame.setVisible(false);
-		//mainFrame.dispose();
+		// mainFrame.setVisible(false);
+		// mainFrame.dispose();
 		if (jsmeVeFulu) { // ta kdeme pryc
 			log.trace("DO OKNA");
 			gs.setFullScreenWindow(null);
@@ -61,7 +62,7 @@ public class FullScreenAction extends Action0 {
 			log.trace("DO FULU 3");
 		}
 		log.trace("DO FULU 4");
-		//    mainFrame.setVisible(true);
+		// mainFrame.setVisible(true);
 		log.trace("DO FULU 5");
 
 	}

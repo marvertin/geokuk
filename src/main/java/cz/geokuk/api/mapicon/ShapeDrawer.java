@@ -3,10 +3,7 @@
  */
 package cz.geokuk.api.mapicon;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-
+import java.awt.*;
 
 /**
  * @author veverka
@@ -14,8 +11,9 @@ import java.awt.Graphics2D;
  */
 public abstract class ShapeDrawer extends PaintingDrawer0 {
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see geokuk.mapicon.Vykreslovac#draw(geokuk.mapicon.VykreslovaciKontext, java.util.List)
 	 */
 	@Override

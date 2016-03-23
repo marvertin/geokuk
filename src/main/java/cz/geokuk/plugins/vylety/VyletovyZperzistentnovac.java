@@ -1,26 +1,21 @@
 package cz.geokuk.plugins.vylety;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class VyletovyZperzistentnovac {
 
-	private static final Logger log = LogManager.getLogger(VyletovyZperzistentnovac.class.getSimpleName());
+	private static final Logger	log	= LogManager.getLogger(VyletovyZperzistentnovac.class.getSimpleName());
 
-	private KesoidModel kesoidModel;
+	private KesoidModel			kesoidModel;
 
 	private VyletPul loadGgt(File file) throws IOException {
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -33,10 +28,8 @@ public class VyletovyZperzistentnovac {
 	public Vylet immediatlyNactiVylet(KesBag vsechny) {
 		try {
 			Vylet novyvylet = new Vylet();
-			aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getAnoGgtFile().getEffectiveFile()),
-					EVylet.ANO, vsechny);
-			aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getNeGgtFile().getEffectiveFile()),
-					EVylet.NE, vsechny);
+			aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getAnoGgtFile().getEffectiveFile()), EVylet.ANO, vsechny);
+			aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getNeGgtFile().getEffectiveFile()), EVylet.NE, vsechny);
 			return novyvylet;
 		} catch (IOException e) {
 			throw new RuntimeException(e);

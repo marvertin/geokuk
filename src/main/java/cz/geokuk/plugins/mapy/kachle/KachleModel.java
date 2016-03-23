@@ -3,7 +3,6 @@
  */
 package cz.geokuk.plugins.mapy.kachle;
 
-
 import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
@@ -17,18 +16,15 @@ import cz.geokuk.plugins.mapy.KachleUmisteniSouboruChangedEvent;
  */
 public class KachleModel extends Model0 {
 
-	private final KachleCacheFolderHolder kachleCacheFolderHolder = new KachleCacheFolderHolder();
+	private final KachleCacheFolderHolder	kachleCacheFolderHolder	= new KachleCacheFolderHolder();
 
-	public KachloDownloader kachloDownloader;
+	public KachloDownloader					kachloDownloader;
 
+	private Object							umisteniSouboru;
 
-	private Object umisteniSouboru;
+	private KachleZiskavac					ziskavac;
 
-
-	private KachleZiskavac ziskavac;
-
-	public final KachleManager kachleManager;
-
+	public final KachleManager				kachleManager;
 
 	/**
 	 * @param bb
@@ -42,14 +38,14 @@ public class KachleModel extends Model0 {
 	 * @return the ukladatMapyNaDisk
 	 */
 	public boolean isUkladatMapyNaDisk() {
-		//   return Settings.vseobecne.ukladatMapyNaDisk.isSelected();
+		// return Settings.vseobecne.ukladatMapyNaDisk.isSelected();
 		final boolean b = currPrefe().getBoolean("ukladatMapyNaDisk", true);
 		return b;
 	}
 
-
 	/**
-	 * @param ukladatMapyNaDisk the ukladatMapyNaDisk to set
+	 * @param ukladatMapyNaDisk
+	 *            the ukladatMapyNaDisk to set
 	 */
 	public void setUkladatMapyNaDisk(final boolean ukladatMapyNaDisk) {
 		if (ukladatMapyNaDisk == isUkladatMapyNaDisk()) {
@@ -59,7 +55,9 @@ public class KachleModel extends Model0 {
 		fire(new KachleModelChangeEvent());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.Model0#initAndFire()
 	 */
 	@Override
@@ -68,14 +66,14 @@ public class KachleModel extends Model0 {
 		fire(new KachleModelChangeEvent());
 	}
 
-
 	public void inject(final KachleZiskavac kachleZiskavac) {
 		ziskavac = kachleZiskavac;
 		ziskavac.setKachleManager(kachleManager);
 	}
 
 	/**
-	 * @param umisteniSouboru the umisteniSouboru to set
+	 * @param umisteniSouboru
+	 *            the umisteniSouboru to set
 	 */
 	public void setUmisteniSouboru(final KachleUmisteniSouboru umisteniSouboru) {
 		if (umisteniSouboru.equals(this.umisteniSouboru)) {
@@ -92,7 +90,7 @@ public class KachleModel extends Model0 {
 	private KachleUmisteniSouboru loadUmisteniSouboru() {
 		final KachleUmisteniSouboru u = new KachleUmisteniSouboru();
 		final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
-		u.setKachleCacheDir ( pref.getFilex("kachleCacheDir", KachleUmisteniSouboru.KACHLE_CACHE_DIR));
+		u.setKachleCacheDir(pref.getFilex("kachleCacheDir", KachleUmisteniSouboru.KACHLE_CACHE_DIR));
 		return u;
 	}
 

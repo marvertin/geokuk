@@ -3,11 +3,7 @@ package cz.geokuk.util.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -15,14 +11,14 @@ import cz.geokuk.util.gui.SelectionModel.Item;
 
 public class JMvRadioPanel<T> extends JPanel {
 
-	private static final long serialVersionUID = -4181105935856103641L;
+	private static final long			serialVersionUID	= -4181105935856103641L;
 
-	private SelectionModel<T> model = new SelectionModel<>();
-	private final List<JRadioButton> buttons = new ArrayList<>();
+	private SelectionModel<T>			model				= new SelectionModel<>();
+	private final List<JRadioButton>	buttons				= new ArrayList<>();
 
 	public JMvRadioPanel(String title) {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		//setBorder(BorderFactory.createRaisedBevelBorder());
+		// setBorder(BorderFactory.createRaisedBevelBorder());
 		setBorder(BorderFactory.createTitledBorder(title));
 	}
 
@@ -52,7 +48,6 @@ public class JMvRadioPanel<T> extends JPanel {
 		});
 
 	}
-
 
 	public SelectionModel<T> getSelectionModel() {
 		return model;

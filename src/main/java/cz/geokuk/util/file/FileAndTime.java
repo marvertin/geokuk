@@ -4,20 +4,21 @@ import java.io.File;
 
 public class FileAndTime implements Comparable<FileAndTime> {
 
-	final File file;
-	final long lastmodify;
+	final File	file;
+	final long	lastmodify;
 
 	public FileAndTime(File aFile) {
 		this(aFile, aFile.lastModified());
 	}
-
 
 	public FileAndTime(File aFile, long aLastmodify) {
 		file = aFile;
 		lastmodify = aLastmodify;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -28,7 +29,10 @@ public class FileAndTime implements Comparable<FileAndTime> {
 		result = prime * result + (int) (lastmodify ^ (lastmodify >>> 32));
 		return result;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -49,14 +53,20 @@ public class FileAndTime implements Comparable<FileAndTime> {
 			return false;
 		return true;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "FileAndTime [file=" + file + ", lastmodify=" + lastmodify + "]";
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override

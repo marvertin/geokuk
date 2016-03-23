@@ -36,19 +36,12 @@ package cz.geokuk.util.exception;
  * content.txt
  */
 
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -57,14 +50,12 @@ import cz.geokuk.util.process.BrowserOpener;
 
 public class JErrorDialog extends JMyDialog0 {
 
-	private static final long serialVersionUID = 7087453419069194768L;
+	private static final long	serialVersionUID	= 7087453419069194768L;
 
-	private JErrorTable jErrorTable;
-	private JButton jVymaz;
-	private JButton jOtviracVyjimky;
-	private AExcId currentExcId;
-
-
+	private JErrorTable			jErrorTable;
+	private JButton				jVymaz;
+	private JButton				jOtviracVyjimky;
+	private AExcId				currentExcId;
 
 	public JErrorDialog() {
 		setTitle("Přehled problémů");
@@ -75,11 +66,11 @@ public class JErrorDialog extends JMyDialog0 {
 	}
 
 	private void registerEvents() {
-		//    Board.eveman.registerWeakly(this);
+		// Board.eveman.registerWeakly(this);
 	}
 
-	/** This method is called from within the constructor to
-	 * initialize the form.
+	/**
+	 * This method is called from within the constructor to initialize the form.
 	 */
 
 	@Override
@@ -96,7 +87,6 @@ public class JErrorDialog extends JMyDialog0 {
 		Box box = Box.createHorizontalBox();
 		panel.add(box, BorderLayout.SOUTH);
 
-
 		jOtviracVyjimky = new JButton();
 		jOtviracVyjimky.setEnabled(false);
 		jOtviracVyjimky.setText("Není nic vybráno");
@@ -105,7 +95,6 @@ public class JErrorDialog extends JMyDialog0 {
 		box.add(jOtviracVyjimky);
 		box.add(Box.createHorizontalGlue());
 		box.add(jVymaz);
-
 
 		jVymaz.addActionListener(new ActionListener() {
 
@@ -119,15 +108,14 @@ public class JErrorDialog extends JMyDialog0 {
 			}
 		});
 
-
 		final ListSelectionModel lsm = jErrorTable.table.getSelectionModel();
 		lsm.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
-				if (! event.getValueIsAdjusting())  {
+				if (!event.getValueIsAdjusting()) {
 					int row = lsm.getLeadSelectionIndex();
-					currentExcId =  jErrorTable.tableModel.getProblemlist().get(row).excId;
+					currentExcId = jErrorTable.tableModel.getProblemlist().get(row).excId;
 					if (currentExcId != null) {
 						jOtviracVyjimky.setText("Zobraz " + currentExcId + "");
 						jOtviracVyjimky.setEnabled(true);
@@ -149,7 +137,6 @@ public class JErrorDialog extends JMyDialog0 {
 			}
 		});
 
-
 		pack();
 	}
 
@@ -160,9 +147,8 @@ public class JErrorDialog extends JMyDialog0 {
 
 	public static void main(String args[]) {
 
-		//Schedule a job for the event dispatch thread:
-		//creating and showing this application's GUI.
-
+		// Schedule a job for the event dispatch thread:
+		// creating and showing this application's GUI.
 
 		JFrame frm = new JFrame();
 		frm.setVisible(true);
@@ -172,25 +158,23 @@ public class JErrorDialog extends JMyDialog0 {
 			@Override
 			public void actionPerformed(ActionEvent aE) {
 				System.out.println("LOPU");
-				FError.report("To je teda texytik " + System.currentTimeMillis() );
+				FError.report("To je teda texytik " + System.currentTimeMillis());
 			}
 		}).start();
 
-
-		//  SwingUtilities.invokeLater(new Runnable() {
-		//    public void run() {
-		//      //Turn off metal's use of bold fonts
-		//  //    UIManager.put("swing.boldMetal", Boolean.FALSE);
-		//      JErrorDialog jErrorDialog = new JErrorDialog(null);
-		//      jErrorDialog.setVisible(true);
-		//      for (int i = 0; i < 100; i++) {
-		//        AExcId excid = FExceptionDumper.dump(new RuntimeException("Jen takova pokusna"), EExceptionSeverity.DISPLAY, "Pokusnik.");
-		//        jErrorDialog.addProblem("Problem: " + i, excid);
-		//      }
-		//    }
-		//  });
+		// SwingUtilities.invokeLater(new Runnable() {
+		// public void run() {
+		// //Turn off metal's use of bold fonts
+		// // UIManager.put("swing.boldMetal", Boolean.FALSE);
+		// JErrorDialog jErrorDialog = new JErrorDialog(null);
+		// jErrorDialog.setVisible(true);
+		// for (int i = 0; i < 100; i++) {
+		// AExcId excid = FExceptionDumper.dump(new RuntimeException("Jen takova pokusna"), EExceptionSeverity.DISPLAY, "Pokusnik.");
+		// jErrorDialog.addProblem("Problem: " + i, excid);
+		// }
+		// }
+		// });
 	}
-
 
 	@Override
 	protected String getTemaNapovedyDialogu() {
@@ -198,4 +182,3 @@ public class JErrorDialog extends JMyDialog0 {
 	}
 
 }
-

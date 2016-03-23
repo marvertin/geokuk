@@ -8,10 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import cz.geokuk.core.coord.JCoordPrekryvnik0;
-import cz.geokuk.core.coord.PoziceChangedEvent;
-import cz.geokuk.core.coord.Poziceq;
-import cz.geokuk.core.coord.ZmenaSouradnicMysiEvent;
+import cz.geokuk.core.coord.*;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.plugins.cesty.PridavaniBoduEvent;
 
@@ -20,15 +17,15 @@ import cz.geokuk.plugins.cesty.PridavaniBoduEvent;
  *
  */
 public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
-	private static final int SPOZDENI_ZOBRAZENI_DETAILU = 100;
-	private static final int DETAIL_MOUMER = 17;
-	private static final long serialVersionUID = -5996655830197513951L;
-	private Poziceq poziceq;
-	private boolean probihaPridavani;
-	private Mou moucur;
+	private static final int	SPOZDENI_ZOBRAZENI_DETAILU	= 100;
+	private static final int	DETAIL_MOUMER				= 17;
+	private static final long	serialVersionUID			= -5996655830197513951L;
+	private Poziceq				poziceq;
+	private boolean				probihaPridavani;
+	private Mou					moucur;
 
 	// Timer, který spožďuje vykreslení detailu,k dyž jen hejbeme myší se stisknutým controlem
-	private Timer zpozdovaciTimer;
+	private Timer				zpozdovaciTimer;
 
 	/**
 	 *

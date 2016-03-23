@@ -1,21 +1,14 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Vrstva {
 
+	private Map<Alela, Seznamec>	icondefsProSymbol	= new HashMap<>();
+	private Seznamec				hlavickaObecnych	= new Seznamec();
+	private Set<Alela>				pouziteAlely		= new HashSet<>();
 
-	private Map<Alela, Seznamec> icondefsProSymbol = new HashMap<>();
-	private Seznamec hlavickaObecnych = new Seznamec();
-	private Set<Alela> pouziteAlely = new HashSet<>();
-
-	private int pocet;
+	private int						pocet;
 
 	void add(IconDef iconDef) {
 		if (iconDef != null) {
@@ -25,13 +18,14 @@ public class Vrstva {
 			if (alelaSym == null) {
 				seznamecPredNeho.next = hlavickaObecnych.next;
 				hlavickaObecnych.next = seznamecPredNeho;
-				pocet ++;
+				pocet++;
 			} else {
 				Seznamec seznamec = icondefsProSymbol.get(alelaSym);
-				if (seznamec == null) seznamec = hlavickaObecnych;
+				if (seznamec == null)
+					seznamec = hlavickaObecnych;
 				seznamecPredNeho.next = seznamec;
 				icondefsProSymbol.put(alelaSym, seznamecPredNeho);
-				pocet ++;
+				pocet++;
 			}
 			// A Ještě schovat použité alely
 			for (IconSubDef subDef : iconDef.getSubdefs()) {
@@ -43,6 +37,7 @@ public class Vrstva {
 
 	/**
 	 * Nalezne jediný icondef vyhovující danému genotypu, nebo vrátí null, pokud nic nevyhovuje
+	 * 
 	 * @param genotyp
 	 * @return
 	 */
@@ -52,9 +47,10 @@ public class Vrstva {
 		List<IconDef> vybrane = new ArrayList<>(pocet);
 		int maxPriorita = -1;
 
-		for (Seznamec seznamec =  najdiPocatek(genotyp); seznamec != null; seznamec = seznamec.next) {
+		for (Seznamec seznamec = najdiPocatek(genotyp); seznamec != null; seznamec = seznamec.next) {
 			IconDef iconDef = seznamec.iconDef;
-			if (iconDef == null) continue; // to bude určtitě v hlavičce obecných
+			if (iconDef == null)
+				continue; // to bude určtitě v hlavičce obecných
 			for (IconSubDef subDef : iconDef.getSubdefs()) {
 				if (hledaneAlely.containsAll(subDef.alely)) { // je to kandidát
 					if (iconDef.priorita > maxPriorita) { // vysoka priorita, přebíjí všechny jiné
@@ -83,8 +79,9 @@ public class Vrstva {
 			}
 		}
 		// nyní máme vybrané podle jednoduchého kritéria, pokud je jich zde moc, nelze jednoduše určit
-		// vezmeme tedy  jeden z nich
-		if (vybrane.isEmpty()) return null; // nic jsme nenašli
+		// vezmeme tedy jeden z nich
+		if (vybrane.isEmpty())
+			return null; // nic jsme nenašli
 		if (vybrane.size() > 1) {
 			error("Naslo se toho moc", genotyp, vybrane);
 		}
@@ -105,7 +102,6 @@ public class Vrstva {
 		return hlavickaObecnych;
 	}
 
-
 	/**
 	 * @param aString
 	 * @param genotyp
@@ -118,9 +114,9 @@ public class Vrstva {
 		}
 	}
 
-	private class  Seznamec {
-		Seznamec next; // další položka. "Seznam má mnoho vrcholů v mapě dle symbolové alely a nakonec vždy jede dolů do seznamu spolčných icondefů.
-		IconDef iconDef;
+	private class Seznamec {
+		Seznamec	next;	// další položka. "Seznam má mnoho vrcholů v mapě dle symbolové alely a nakonec vždy jede dolů do seznamu spolčných icondefů.
+		IconDef		iconDef;
 
 	}
 

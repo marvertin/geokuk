@@ -3,12 +3,10 @@ package cz.geokuk.plugins.mapy.kachle;
 import java.awt.Image;
 
 public class KachloStav {
-	public final EFaze faze;
-	public final Image img;
-	public final Throwable thr;
-	public final byte[] imageData;
-
-
+	public final EFaze		faze;
+	public final Image		img;
+	public final Throwable	thr;
+	public final byte[]		imageData;
 
 	public KachloStav(final EFaze faze, final Image img) {
 		this(faze, img, null, null);
@@ -26,7 +24,6 @@ public class KachloStav {
 		this(faze, img, null, thr);
 	}
 
-
 	private KachloStav(final EFaze faze, final Image img, final byte[] imageData, final Throwable thr) {
 		this.faze = faze;
 		this.img = img;
@@ -34,17 +31,11 @@ public class KachloStav {
 		this.thr = thr;
 	}
 
-
-
 	public static enum EFaze {
 		RESULT_ONE,
 
-		RESULT_ALL_PRUBEH,
-		RESULT_ALL_POSLEDNI,
-		;
+		RESULT_ALL_PRUBEH, RESULT_ALL_POSLEDNI,;
 	}
-
-
 
 	@Override
 	public String toString() {

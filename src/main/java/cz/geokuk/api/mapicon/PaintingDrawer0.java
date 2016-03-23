@@ -7,16 +7,17 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Deque;
 
-
 /**
  * Předek vykreslujívcí obrázky.
+ * 
  * @author veverka
  *
  */
 public abstract class PaintingDrawer0 extends Drawer0 {
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see geokuk.mapicon.Vykreslovac#draw(geokuk.mapicon.VykreslovaciKontext, java.util.List)
 	 */
 	@Override

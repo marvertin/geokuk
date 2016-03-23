@@ -5,12 +5,12 @@ import cz.geokuk.core.hledani.Nalezenec0;
 import cz.geokuk.plugins.kesoid.Kesoid;
 
 public class Nalezenec extends Nalezenec0 {
-	private Kesoid kesoid;
+	private Kesoid	kesoid;
 
-	private String kdeNalezeno;
+	private String	kdeNalezeno;
 	// Indexy místa v řetězci, kde byl text nalezen
-	private int poc;
-	private int kon;
+	private int		poc;
+	private int		kon;
 
 	public Kesoid getKes() {
 		return kesoid;

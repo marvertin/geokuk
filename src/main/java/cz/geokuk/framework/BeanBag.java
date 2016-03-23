@@ -1,34 +1,34 @@
 package cz.geokuk.framework;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Kontejner, který drží objekty a injektuje je.
+ * 
  * @author tatinek
  *
  */
 public class BeanBag implements Factory {
 
-	private boolean initialized;
+	private boolean				initialized;
 
-	private final List<Object> beans = new ArrayList<>();
+	private final List<Object>	beans	= new ArrayList<>();
 
-	private EventManager eveman;
+	private EventManager		eveman;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.program.Factory#create(java.lang.Class, java.lang.Object)
 	 */
 	@Override
 	public <T> T create(Class<T> klasa, Object... params) {
-		if (! initialized) throw new RuntimeException("Kontejner jeste nebyl inicializovan");
+		if (!initialized)
+			throw new RuntimeException("Kontejner jeste nebyl inicializovan");
 		Class<?>[] types = new Class<?>[params.length];
-		for (int i =0; i < params.length; i++) {
+		for (int i = 0; i < params.length; i++) {
 			Object param = params[i];
 			types[i] = param == null ? null : param.getClass();
 		}
@@ -70,8 +70,10 @@ public class BeanBag implements Factory {
 	}
 
 	public <T> T registerSigleton(T object) {
-		if (initialized) throw new RuntimeException("Kontejner uz byl inicializovan");
-		if (object == null) throw new RuntimeException("Nelze inicializvat null objekt");
+		if (initialized)
+			throw new RuntimeException("Kontejner uz byl inicializovan");
+		if (object == null)
+			throw new RuntimeException("Nelze inicializvat null objekt");
 		beans.add(object);
 		return object;
 	}
@@ -89,7 +91,6 @@ public class BeanBag implements Factory {
 			throw new RuntimeException(e);
 		}
 	}
-
 
 	public void init() {
 
@@ -113,7 +114,7 @@ public class BeanBag implements Factory {
 	 */
 	private void callAfterEventReceiverRegistrationInit(Object bean) {
 		if ((bean instanceof AfterEventReceiverRegistrationInit)) {
-			((AfterEventReceiverRegistrationInit)bean).initAfterEventReceiverRegistration();
+			((AfterEventReceiverRegistrationInit) bean).initAfterEventReceiverRegistration();
 		}
 	}
 
@@ -122,7 +123,7 @@ public class BeanBag implements Factory {
 	 */
 	private void callAfterInjectInit(Object bean) {
 		if ((bean instanceof AfterInjectInit)) {
-			((AfterInjectInit)bean).initAfterInject();
+			((AfterInjectInit) bean).initAfterInject();
 		}
 	}
 
@@ -137,7 +138,7 @@ public class BeanBag implements Factory {
 	 * @param targetBean
 	 */
 	private void inject(Object targetBean) {
-		for (Method method: targetBean.getClass().getMethods()) {
+		for (Method method : targetBean.getClass().getMethods()) {
 			if (method.getName().equals("inject")) {
 				BeanType targetBeanType = BeanType.createForTargetMethod(targetBean, method);
 				boolean multiInjection = targetBeanType.isMultiInjectionSupported();
@@ -146,10 +147,11 @@ public class BeanBag implements Factory {
 				for (Object injectedBeanCandidate : beans) {
 					BeanType injectedBeanType = BeanType.createForInjectedBean(injectedBeanCandidate);
 					if (targetBeanType.canInjectFrom(injectedBeanType)) {
-						if (injectedBean != null) throw new RuntimeException("Prilis mnoho implementaci pro " + method + " v " + injectedBean.getClass() + " a " + injectedBeanCandidate.getClass());
+						if (injectedBean != null)
+							throw new RuntimeException("Prilis mnoho implementaci pro " + method + " v " + injectedBean.getClass() + " a " + injectedBeanCandidate.getClass());
 						if (multiInjection) {
 							callInjection(method, targetBean, injectedBeanCandidate);
-							pocetInjekci ++;
+							pocetInjekci++;
 						} else {
 							injectedBean = injectedBeanCandidate;
 						}
@@ -157,14 +159,13 @@ public class BeanBag implements Factory {
 				}
 				if (injectedBean != null) {
 					callInjection(method, targetBean, injectedBean);
-					pocetInjekci ++;
+					pocetInjekci++;
 				}
 				if (pocetInjekci == 0)
 					throw new RuntimeException(String.format("Nenalena injekce targetBean=%s ... targetBeanType=%s ... method=%s", targetBean, targetBeanType, method));
 			}
 		}
 	}
-
 
 	/**
 	 * @param method
@@ -173,8 +174,8 @@ public class BeanBag implements Factory {
 	 */
 	private void callInjection(Method method, Object targetBean, Object injectedBean) {
 		try {
-			//      System.out.println("INJEKTUJI:: " + targetBean.getClass() + " <==  " + injectedBean.getClass() + " ... " + method);
-			//          System.out.println(m);
+			// System.out.println("INJEKTUJI:: " + targetBean.getClass() + " <== " + injectedBean.getClass() + " ... " + method);
+			// System.out.println(m);
 			method.invoke(targetBean, injectedBean);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

@@ -3,11 +3,7 @@
  */
 package cz.geokuk.util.pocitadla;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
-
+import java.util.*;
 
 /**
  * @author veverka
@@ -19,7 +15,7 @@ public class SpravcePocitadel {
 
 	public static Collection<Pocitadlo> getPocitadla() {
 		return pocitadla.keySet();
-		//return new ArrayList<Pocitadlo>();
+		// return new ArrayList<Pocitadlo>();
 	}
 
 	public static void register(Pocitadlo pocitadlo) {

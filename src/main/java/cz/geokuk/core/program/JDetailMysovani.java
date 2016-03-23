@@ -1,9 +1,7 @@
 package cz.geokuk.core.program;
 
 import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 
 import javax.swing.JComponent;
 import javax.swing.event.MouseInputListener;
@@ -12,11 +10,9 @@ import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coord.PoziceModel;
 
 /**
- * Musí být úplně nahoře, je průhledná
- * a chytá události myši a případně je distribuuje.
- * Také zobrazuje myší kourzor.
+ * Musí být úplně nahoře, je průhledná a chytá události myši a případně je distribuuje. Také zobrazuje myší kourzor.
  */
-public final class JDetailMysovani extends JSingleSlide0  implements MouseInputListener, MouseWheelListener  {
+public final class JDetailMysovani extends JSingleSlide0 implements MouseInputListener, MouseWheelListener {
 
 	private static final long serialVersionUID = 4979888007463850390L;
 
@@ -30,7 +26,6 @@ public final class JDetailMysovani extends JSingleSlide0  implements MouseInputL
 	}
 
 	private PoziceModel poziceModel;
-
 
 	public void inject(PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
@@ -51,17 +46,19 @@ public final class JDetailMysovani extends JSingleSlide0  implements MouseInputL
 		Dimension mi = c.getMinimumSize();
 
 		d.height += krok;
-		d.width  += krok;
+		d.width += krok;
 
 		d.width = Math.max(Math.min(d.width, ma.width), mi.width);
 		d.height = Math.max(Math.min(d.height, ma.height), mi.height);
-		//System.out.println(krok + " " + d + " " +  ma + " " + mi);
+		// System.out.println(krok + " " + d + " " + ma + " " + mi);
 		c.setPreferredSize(d);
 		c.revalidate();
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.MouseWheelEvent)
 	 */
 

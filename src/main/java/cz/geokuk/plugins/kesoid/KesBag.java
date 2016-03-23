@@ -1,48 +1,41 @@
 package cz.geokuk.plugins.kesoid;
 
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
-import cz.geokuk.plugins.kesoid.mapicon.Alela;
-import cz.geokuk.plugins.kesoid.mapicon.Genom;
-import cz.geokuk.plugins.kesoid.mapicon.Genom.CitacAlel;
-import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
-import cz.geokuk.util.index2d.BoundingRect;
-import cz.geokuk.util.index2d.Indexator;
-import cz.geokuk.util.lang.CounterMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
+import cz.geokuk.plugins.kesoid.mapicon.*;
+import cz.geokuk.plugins.kesoid.mapicon.Genom.CitacAlel;
+import cz.geokuk.util.index2d.BoundingRect;
+import cz.geokuk.util.index2d.Indexator;
+import cz.geokuk.util.lang.CounterMap;
 
 public class KesBag {
-	private static final Logger log =
-			LogManager.getLogger(KesBag.class.getSimpleName());
+	private static final Logger		log				= LogManager.getLogger(KesBag.class.getSimpleName());
 
-	private final List<Wpt> wpts = new ArrayList<>();
-	private Set<Kesoid> kesoidyset;
-	private List<Kesoid> kesoidy;
+	private final List<Wpt>			wpts			= new ArrayList<>();
+	private Set<Kesoid>				kesoidyset;
+	private List<Kesoid>			kesoidy;
 
-	private CounterMap<Alela> poctyAlel;
+	private CounterMap<Alela>		poctyAlel;
 
-	private final Indexator<Wpt> indexator;
+	private final Indexator<Wpt>	indexator;
 
-	private int maximalniBestOf = 0;
-	private int maximalniHodnoceni;
-	private int maximalniFavorit;
-	private final Genom genom;
+	private int						maximalniBestOf	= 0;
+	private int						maximalniHodnoceni;
+	private int						maximalniFavorit;
+	private final Genom				genom;
 
-	private final CitacAlel citacAlel;
+	private final CitacAlel			citacAlel;
 
-	private InformaceOZdrojich iInformaceOZdrojich;
+	private InformaceOZdrojich		iInformaceOZdrojich;
 
 	public KesBag(final Genom genom) {
 		this.genom = genom;
-		indexator =new Indexator<>(BoundingRect.ALL);
+		indexator = new Indexator<>(BoundingRect.ALL);
 		kesoidyset = new HashSet<>();
 		citacAlel = genom.createCitacAlel();
 	}
@@ -54,8 +47,7 @@ public class KesBag {
 		Mou mou = wpt.getMou();
 		if (mou.xx < 0 || mou.yy < 0) {
 			//// TODO [veverka] Řešit rozsah [25.11.2009 9:45:59; veverka]
-			log.error("Nelze přidat takový waypoint: " + mou + " / " + mou.xx + ":" + mou.yy + " / " + wpt + " --- " +
-					wpt.getKesoid());
+			log.error("Nelze přidat takový waypoint: " + mou + " / " + mou.xx + ":" + mou.yy + " / " + wpt + " --- " + wpt.getKesoid());
 			return;
 		}
 		indexator.vloz(mou.xx, mou.yy, wpt);
@@ -79,7 +71,7 @@ public class KesBag {
 		kesoidy.addAll(kesoidyset);
 		kesoidyset = null;
 		poctyAlel = citacAlel.getCounterMap();
-		//System.out.println(poctyAlel);
+		// System.out.println(poctyAlel);
 	}
 
 	/**
@@ -133,7 +125,8 @@ public class KesBag {
 	}
 
 	/**
-	 * @param informaceOZdrojich the informaceOZdrojich to set
+	 * @param informaceOZdrojich
+	 *            the informaceOZdrojich to set
 	 */
 	public void setInformaceOZdrojich(InformaceOZdrojich informaceOZdrojich) {
 		iInformaceOZdrojich = informaceOZdrojich;

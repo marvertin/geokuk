@@ -1,12 +1,6 @@
 package cz.geokuk.util.gui;
 
-import javax.swing.Action;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
+import javax.swing.*;
 
 import cz.geokuk.core.program.JGeokukToolbar;
 import cz.geokuk.framework.Factory;
@@ -14,15 +8,13 @@ import cz.geokuk.framework.ToggleAction0;
 
 public abstract class MenuStrujce {
 
+	protected final JMenuBar		menuBar;
+	protected JMenu					menu;
+	protected JMenuItem				item;
 
-	protected final JMenuBar menuBar;
-	protected JMenu menu;
-	protected JMenuItem item;
+	protected final JGeokukToolbar	tb;
 
-	protected final JGeokukToolbar tb;
-
-	protected Factory factory;
-
+	protected Factory				factory;
 
 	public MenuStrujce(JMenuBar menuBar, JGeokukToolbar toolBar) {
 		this.menuBar = menuBar;
@@ -58,11 +50,9 @@ public abstract class MenuStrujce {
 		bg.add(item);
 	}
 
-
 	protected void separator() {
 		menu.addSeparator();
 	}
-
 
 	public void inject(Factory factory) {
 		this.factory = factory;

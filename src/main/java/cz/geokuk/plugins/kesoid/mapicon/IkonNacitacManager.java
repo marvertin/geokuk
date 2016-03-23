@@ -12,14 +12,14 @@ import cz.geokuk.util.file.Filex;
 
 public class IkonNacitacManager {
 
-	private final IkonNacitacLoader ikonNacitacLoader;
-	private IkonNacitacSwingWorker sw;
-	private final KesoidModel kesoidModel;
+	private final IkonNacitacLoader	ikonNacitacLoader;
+	private IkonNacitacSwingWorker	sw;
+	private final KesoidModel		kesoidModel;
 
-	private Filex lastThirdParty;
-	private Filex lastMyOwn;
+	private Filex					lastThirdParty;
+	private Filex					lastMyOwn;
 
-	public void startLoad( boolean prenacti) {
+	public void startLoad(boolean prenacti) {
 		KesoidUmisteniSouboru umisteniSouboru = kesoidModel.getUmisteniSouboru();
 		Filex thirdParty = umisteniSouboru.getImage3rdPartyDir();
 		Filex myDir = umisteniSouboru.getImageMyDir();

@@ -6,9 +6,7 @@ import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.img.ImageLoader;

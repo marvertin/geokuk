@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.cesty.akce.soubor;
 
-
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -11,13 +10,11 @@ import cz.geokuk.framework.Dlg;
 import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.cesty.data.Doc;
 
-
-
 public abstract class SouboeCestaAction0 extends Action0 {
 
-	private static final long serialVersionUID = -2637836928166450446L;
+	private static final long	serialVersionUID	= -2637836928166450446L;
 
-	protected CestyModel cestyModel;
+	protected CestyModel		cestyModel;
 
 	public SouboeCestaAction0(String string) {
 		super(string);
@@ -39,7 +36,8 @@ public abstract class SouboeCestaAction0 extends Action0 {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
 				if (selectedFile.exists()) { // dtaz na přepsání
-					if (! Dlg.prepsatSoubor(selectedFile)) return false;
+					if (!Dlg.prepsatSoubor(selectedFile))
+						return false;
 				}
 				xdoc.setFile(selectedFile);
 			} else {
@@ -53,23 +51,12 @@ public abstract class SouboeCestaAction0 extends Action0 {
 	}
 
 	public boolean ulozitSDotazem() {
-		if (! cestyModel.getDoc().isChanged()) return true; // nezměna znamená uloženo
-		Object[] options =
-			{"Uložit změny",
-					"Zahodit změny",
-			"Zrušit"};
-		String hlaska = cestyModel.getDoc().getFile() != null
-				? "<html>Soubor s výletem byl změněn <b>" + cestyModel.getDoc().getFile() + "</b> "
-						: "Byl vytvořen nový výlet, ale nebyl doposud uložen do souboru."
-						+ ".";
-		int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
-				hlaska,
-				"Uložení změn ve výletu",
-				JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE,
-				null,
-				options,
-				options[2]);
+		if (!cestyModel.getDoc().isChanged())
+			return true; // nezměna znamená uloženo
+		Object[] options = { "Uložit změny", "Zahodit změny", "Zrušit" };
+		String hlaska = cestyModel.getDoc().getFile() != null ? "<html>Soubor s výletem byl změněn <b>" + cestyModel.getDoc().getFile() + "</b> "
+				: "Byl vytvořen nový výlet, ale nebyl doposud uložen do souboru." + ".";
+		int n = JOptionPane.showOptionDialog(Dlg.parentFrame(), hlaska, "Uložení změn ve výletu", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 		System.out.println(n);
 		if (n == 0) {
 			return ulozit();
@@ -80,16 +67,19 @@ public abstract class SouboeCestaAction0 extends Action0 {
 	}
 
 	File doplnGpxPriponuProUkladani(File file) {
-		if (file == null) return null;
-		if (file.getName().toLowerCase().endsWith(".gpx")) return file;
+		if (file == null)
+			return null;
+		if (file.getName().toLowerCase().endsWith(".gpx"))
+			return file;
 		return new File(file.getPath() + ".gpx");
 	}
 
 	File doplnGgtPriponuProUkladani(File file) {
-		if (file == null) return null;
-		if (file.getName().toLowerCase().endsWith(".ggt")) return file;
+		if (file == null)
+			return null;
+		if (file.getName().toLowerCase().endsWith(".ggt"))
+			return file;
 		return new File(file.getPath() + ".ggt");
 	}
-
 
 }

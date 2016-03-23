@@ -6,10 +6,7 @@ package cz.geokuk.core.render;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import javax.swing.JComboBox;
 
@@ -19,22 +16,22 @@ import javax.swing.JComboBox;
  */
 public class JGeocodingComboBox extends JComboBox<String> {
 
-	private static final long serialVersionUID = 8614892946049285548L;
+	private static final long						serialVersionUID				= 8614892946049285548L;
 
-	public static final SortedMap<String, String> PRAZDNE_GEOTAGGINGG_PATTERNS = new TreeMap<>();
+	public static final SortedMap<String, String>	PRAZDNE_GEOTAGGINGG_PATTERNS	= new TreeMap<>();
 
-	private RenderSettings.Patterned patterned = new RenderSettings.Patterned();
+	private RenderSettings.Patterned				patterned						= new RenderSettings.Patterned();
 
-	private final SortedMap<String, String> allPatterns = new TreeMap<>();
-	private final SortedMap<String, String> souradnicovePatterns = new TreeMap<>();
-	private final SortedMap<String, String> geotaggingPatterns = new TreeMap<>();
-	private final List<String> keys = new ArrayList<>();
+	private final SortedMap<String, String>			allPatterns						= new TreeMap<>();
+	private final SortedMap<String, String>			souradnicovePatterns			= new TreeMap<>();
+	private final SortedMap<String, String>			geotaggingPatterns				= new TreeMap<>();
+	private final List<String>						keys							= new ArrayList<>();
 
-	private final List<Listener> listeners = new ArrayList<>();
+	private final List<Listener>					listeners						= new ArrayList<>();
 
-	private boolean blokujEventy;
+	private boolean									blokujEventy;
 
-	private String implicitnGeotaggingKey;
+	private String									implicitnGeotaggingKey;
 
 	/**
 	 *
@@ -43,11 +40,14 @@ public class JGeocodingComboBox extends JComboBox<String> {
 		setEditable(true);
 		registerEvents();
 	}
+
 	/**
-	 * @param patterned the patterned to set
+	 * @param patterned
+	 *            the patterned to set
 	 */
 	public void setPatterned(RenderSettings.Patterned patterned) {
-		if (patterned.equals(this.patterned)) return;
+		if (patterned.equals(this.patterned))
+			return;
 		this.patterned = patterned.copy();
 		if (getSelectedIndex() >= 0) { // něco bylo vybráno, ne text, tak to novu vybrat, ale ponovu
 			int index = urciCoMabytVybrano();
@@ -87,7 +87,6 @@ public class JGeocodingComboBox extends JComboBox<String> {
 		vyskladejCheckBox();
 	}
 
-
 	/**
 	 *
 	 */
@@ -115,21 +114,26 @@ public class JGeocodingComboBox extends JComboBox<String> {
 	}
 
 	private String urciVybranyKlic() {
-		if (allPatterns.size() == 0) return null;
-		if (patterned.getPatternNumberCilovy() != null && allPatterns.containsKey(patterned.getPatternNumberCilovy())) return patterned.getPatternNumberCilovy();
-		if (patterned.getPatternNumberCilovy() == null && implicitnGeotaggingKey != null) return implicitnGeotaggingKey;
-		if (patterned.getPatternNumberPredbezny() != null && allPatterns.containsKey(patterned.getPatternNumberPredbezny())) return patterned.getPatternNumberPredbezny();
+		if (allPatterns.size() == 0)
+			return null;
+		if (patterned.getPatternNumberCilovy() != null && allPatterns.containsKey(patterned.getPatternNumberCilovy()))
+			return patterned.getPatternNumberCilovy();
+		if (patterned.getPatternNumberCilovy() == null && implicitnGeotaggingKey != null)
+			return implicitnGeotaggingKey;
+		if (patterned.getPatternNumberPredbezny() != null && allPatterns.containsKey(patterned.getPatternNumberPredbezny()))
+			return patterned.getPatternNumberPredbezny();
 		return allPatterns.firstKey();
 	}
 
 	private void nastavPatterned() {
-		if (blokujEventy) return;
+		if (blokujEventy)
+			return;
 		RenderSettings.Patterned p = patterned.copy();
 		int index = getSelectedIndex();
 		// aby tam vůbec vešel
 		if (index >= 0) {
 			String key = keys.get(index);
-			if (! geotaggingPatterns.isEmpty()) {  // mame data geotaggingu
+			if (!geotaggingPatterns.isEmpty()) { // mame data geotaggingu
 				p.setPatternNumberCilovy(key);
 				if (souradnicovePatterns.containsKey(key)) {
 					p.setPatternNumberPredbezny(key);

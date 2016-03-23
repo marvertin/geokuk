@@ -13,40 +13,34 @@ import cz.geokuk.framework.Preferenceble;
 @Preferenceble
 public class RenderSettings implements Copyable<RenderSettings> {
 
-	private int renderedMoumer = 12;
-	private EImageType imageType = EImageType.png;
-	private EWhatRender whatRender = EWhatRender.GOOGLE_EARTH;
+	private int			renderedMoumer			= 12;
+	private EImageType	imageType				= EImageType.png;
+	private EWhatRender	whatRender				= EWhatRender.GOOGLE_EARTH;
 
-	private Patterned pureFileName;  // pure jméno souboru
-	private Patterned kmzFolder; // jméno foldru v KMZ souboru
+	private Patterned	pureFileName;										// pure jméno souboru
+	private Patterned	kmzFolder;											// jméno foldru v KMZ souboru
 
-	private String kmzFolderDescription;
-	private int kmzMaxDlazdiceX = 800; // maximální velikost dlaždice v pixlech
-	private int kmzMaxDlazdiceY = 800; // maximální velikost dlaždice v pixlech
-	private int kmzDrawOrder = 0; // pořadí rendrování
+	private String		kmzFolderDescription;
+	private int			kmzMaxDlazdiceX			= 800;						// maximální velikost dlaždice v pixlech
+	private int			kmzMaxDlazdiceY			= 800;						// maximální velikost dlaždice v pixlech
+	private int			kmzDrawOrder			= 0;						// pořadí rendrování
 
-	private int kalibrBodu = 2; // pro OI případně i jiné systémy
-	private boolean srovnatDoSeveru = true;
-	private int papiroveMeritko = 50000; // 50000 znamená 1:50000
-	private boolean kalibracniZnackyProTisk = false;
+	private int			kalibrBodu				= 2;						// pro OI případně i jiné systémy
+	private boolean		srovnatDoSeveru			= true;
+	private int			papiroveMeritko			= 50000;					// 50000 znamená 1:50000
+	private boolean		kalibracniZnackyProTisk	= false;
 
-
-
-
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "RenderSettings [renderedMoumer=" + renderedMoumer + ", imageType=" + imageType + ", whatRender=" + whatRender + ", pureFileName=" + pureFileName
-				+ ", kmzFolder=" + kmzFolder + ", kmzFolderDescription=" + kmzFolderDescription + ", kmzMaxDlazdiceX=" + kmzMaxDlazdiceX + ", kmzMaxDlazdiceY="
-				+ kmzMaxDlazdiceY + ", kmzDrawOrder=" + kmzDrawOrder + ", kalibrBodu=" + kalibrBodu + ", srovnatDoSeveru=" + srovnatDoSeveru + ", papiroveMeritko="
-				+ papiroveMeritko + ", kalibracniZnackyProTisk=" + kalibracniZnackyProTisk + "]";
+		return "RenderSettings [renderedMoumer=" + renderedMoumer + ", imageType=" + imageType + ", whatRender=" + whatRender + ", pureFileName=" + pureFileName + ", kmzFolder=" + kmzFolder
+				+ ", kmzFolderDescription=" + kmzFolderDescription + ", kmzMaxDlazdiceX=" + kmzMaxDlazdiceX + ", kmzMaxDlazdiceY=" + kmzMaxDlazdiceY + ", kmzDrawOrder=" + kmzDrawOrder
+				+ ", kalibrBodu=" + kalibrBodu + ", srovnatDoSeveru=" + srovnatDoSeveru + ", papiroveMeritko=" + papiroveMeritko + ", kalibracniZnackyProTisk=" + kalibracniZnackyProTisk + "]";
 	}
-
-
 
 	@Override
 	public int hashCode() {
@@ -57,22 +51,16 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		result = prime * result + (kalibracniZnackyProTisk ? 1231 : 1237);
 		result = prime * result + kmzDrawOrder;
 		result = prime * result + ((kmzFolder == null) ? 0 : kmzFolder.hashCode());
-		result = prime
-				* result
-				+ ((kmzFolderDescription == null) ? 0 : kmzFolderDescription.hashCode());
+		result = prime * result + ((kmzFolderDescription == null) ? 0 : kmzFolderDescription.hashCode());
 		result = prime * result + kmzMaxDlazdiceX;
 		result = prime * result + kmzMaxDlazdiceY;
 		result = prime * result + papiroveMeritko;
-		result = prime * result
-				+ ((pureFileName == null) ? 0 : pureFileName.hashCode());
+		result = prime * result + ((pureFileName == null) ? 0 : pureFileName.hashCode());
 		result = prime * result + renderedMoumer;
 		result = prime * result + (srovnatDoSeveru ? 1231 : 1237);
-		result = prime * result
-				+ ((whatRender == null) ? 0 : whatRender.hashCode());
+		result = prime * result + ((whatRender == null) ? 0 : whatRender.hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -121,24 +109,25 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		return true;
 	}
 
-
-
 	/**
-	 * @param renderedMoumer the renderedMoumer to set
+	 * @param renderedMoumer
+	 *            the renderedMoumer to set
 	 */
 	public void setRenderedMoumer(int renderedMoumer) {
 		this.renderedMoumer = renderedMoumer;
 	}
 
 	/**
-	 * @param imageType the imageType to set
+	 * @param imageType
+	 *            the imageType to set
 	 */
 	public void setImageType(EImageType imageType) {
 		this.imageType = imageType;
 	}
 
 	/**
-	 * @param whatRender the whatRender to set
+	 * @param whatRender
+	 *            the whatRender to set
 	 */
 	public void setWhatRender(EWhatRender whatRender) {
 		this.whatRender = whatRender;
@@ -152,7 +141,8 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	}
 
 	/**
-	 * @param pureFileName the pureFileName to set
+	 * @param pureFileName
+	 *            the pureFileName to set
 	 */
 	public void setPureFileName(Patterned pureFileName) {
 		this.pureFileName = pureFileName;
@@ -166,7 +156,8 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	}
 
 	/**
-	 * @param kmzFolder the kmzFolder to set
+	 * @param kmzFolder
+	 *            the kmzFolder to set
 	 */
 	public void setKmzFolder(Patterned kmzFolder) {
 		this.kmzFolder = kmzFolder;
@@ -180,12 +171,12 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	}
 
 	/**
-	 * @param kmzFolderDescription the kmzFolderDescription to set
+	 * @param kmzFolderDescription
+	 *            the kmzFolderDescription to set
 	 */
 	public void setKmzFolderDescription(String kmzFolderDescription) {
 		this.kmzFolderDescription = kmzFolderDescription;
 	}
-
 
 	/**
 	 * @return the kmzDrawOrder
@@ -195,7 +186,8 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	}
 
 	/**
-	 * @param kmzDrawOrder the kmzDrawOrder to set
+	 * @param kmzDrawOrder
+	 *            the kmzDrawOrder to set
 	 */
 	public void setKmzDrawOrder(int kmzDrawOrder) {
 		this.kmzDrawOrder = kmzDrawOrder;
@@ -209,7 +201,8 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	}
 
 	/**
-	 * @param kalibrBodu the kalibrBodu to set
+	 * @param kalibrBodu
+	 *            the kalibrBodu to set
 	 */
 	public void setKalibrBodu(int kalibrBodu) {
 		this.kalibrBodu = kalibrBodu;
@@ -223,7 +216,8 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	}
 
 	/**
-	 * @param srovnatDoSeveru the srovnatDoSeveru to set
+	 * @param srovnatDoSeveru
+	 *            the srovnatDoSeveru to set
 	 */
 	public void setSrovnatDoSeveru(boolean srovnatDoSeveru) {
 		this.srovnatDoSeveru = srovnatDoSeveru;
@@ -237,7 +231,8 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	}
 
 	/**
-	 * @param papiroveMeritko the papiroveMeritko to set
+	 * @param papiroveMeritko
+	 *            the papiroveMeritko to set
 	 */
 	public void setPapiroveMeritko(int papiroveMeritko) {
 		this.papiroveMeritko = papiroveMeritko;
@@ -251,7 +246,8 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	}
 
 	/**
-	 * @param kalibracniZnackyProTisk the kalibracniZnackyProTisk to set
+	 * @param kalibracniZnackyProTisk
+	 *            the kalibracniZnackyProTisk to set
 	 */
 	public void setKalibracniZnackyProTisk(boolean kalibracniZnackyProTisk) {
 		this.kalibracniZnackyProTisk = kalibracniZnackyProTisk;
@@ -292,12 +288,13 @@ public class RenderSettings implements Copyable<RenderSettings> {
 
 	@Preferenceble
 	public static class Patterned implements Copyable<Patterned> {
-		private String patternNumberCilovy; // číslo patteru ciloveho, kdyz je hotov geocoding
-		private String patternNumberPredbezny; // cislo patternu predbezneho, kdyz jedte neni hotov geocoding
-		private String text =""; // neukládá se do preferencí, musí uživatel zadat nebo se generuje
+		private String	patternNumberCilovy;	// číslo patteru ciloveho, kdyz je hotov geocoding
+		private String	patternNumberPredbezny;	// cislo patternu predbezneho, kdyz jedte neni hotov geocoding
+		private String	text	= "";			// neukládá se do preferencí, musí uživatel zadat nebo se generuje
 
-
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#toString()
 		 */
 		@Override
@@ -313,7 +310,8 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		}
 
 		/**
-		 * @param patternNumberCilovy the patternNumberCilovy to set
+		 * @param patternNumberCilovy
+		 *            the patternNumberCilovy to set
 		 */
 		public void setPatternNumberCilovy(String patternNumberCilovy) {
 			this.patternNumberCilovy = patternNumberCilovy;
@@ -327,7 +325,8 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		}
 
 		/**
-		 * @param patternNumberPredbezny the patternNumberPredbezny to set
+		 * @param patternNumberPredbezny
+		 *            the patternNumberPredbezny to set
 		 */
 		public void setPatternNumberPredbezny(String patternNumberPredbezny) {
 			this.patternNumberPredbezny = patternNumberPredbezny;
@@ -341,13 +340,16 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		}
 
 		/**
-		 * @param text the text to set
+		 * @param text
+		 *            the text to set
 		 */
 		public void setText(String text) {
 			this.text = text;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#hashCode()
 		 */
 		@Override
@@ -360,7 +362,9 @@ public class RenderSettings implements Copyable<RenderSettings> {
 			return result;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
 		@Override
@@ -409,8 +413,6 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		return kmzMaxDlazdiceX;
 	}
 
-
-
 	/**
 	 * @return the kmzMaxDlazdiceY
 	 */
@@ -418,19 +420,17 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		return kmzMaxDlazdiceY;
 	}
 
-
-
 	/**
-	 * @param kmzMaxDlazdiceX the kmzMaxDlazdiceX to set
+	 * @param kmzMaxDlazdiceX
+	 *            the kmzMaxDlazdiceX to set
 	 */
 	public void setKmzMaxDlazdiceX(int kmzMaxDlazdiceX) {
 		this.kmzMaxDlazdiceX = kmzMaxDlazdiceX;
 	}
 
-
-
 	/**
-	 * @param kmzMaxDlazdiceY the kmzMaxDlazdiceY to set
+	 * @param kmzMaxDlazdiceY
+	 *            the kmzMaxDlazdiceY to set
 	 */
 	public void setKmzMaxDlazdiceY(int kmzMaxDlazdiceY) {
 		this.kmzMaxDlazdiceY = kmzMaxDlazdiceY;

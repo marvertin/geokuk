@@ -1,46 +1,35 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
 import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.Icon;
 
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.plugins.kesoid.Repaintanger;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp.Otisk;
-import cz.geokuk.util.pocitadla.Pocitadlo;
-import cz.geokuk.util.pocitadla.PocitadloMalo;
-import cz.geokuk.util.pocitadla.PocitadloRoste;
+import cz.geokuk.util.pocitadla.*;
 
 public class Sada {
 
-	private Pocitadlo pocitSklivcu = new PocitadloMalo("Sklivce - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
-	private static Pocitadlo pocitSklivcuZasah = new PocitadloRoste("Sklivce - zásah cache", "");
+	private Pocitadlo			pocitSklivcu		= new PocitadloMalo("Sklivce - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
+	private static Pocitadlo	pocitSklivcuZasah	= new PocitadloRoste("Sklivce - zásah cache", "");
 
-	List<SkloAplikant> skloAplikanti = new ArrayList<>();
+	List<SkloAplikant>			skloAplikanti		= new ArrayList<>();
 
-	Map<Genotyp.Otisk, Sklivec> cache = new HashMap<>();
+	Map<Genotyp.Otisk, Sklivec>	cache				= new HashMap<>();
 
-	private final String name;
+	private final String		name;
 
-	private Repaintanger repaintanger = new Repaintanger();
+	private Repaintanger		repaintanger		= new Repaintanger();
 
-	private Set<Alela> pouziteAlely;
-	private Set<Gen> pouziteGeny;
-	private Icon icon;
-
-
+	private Set<Alela>			pouziteAlely;
+	private Set<Gen>			pouziteGeny;
+	private Icon				icon;
 
 	public Sada(String name) {
 		this.name = name;
 	}
-
 
 	/**
 	 * @return the skloAplikanti
@@ -49,15 +38,13 @@ public class Sada {
 		return Collections.unmodifiableList(skloAplikanti);
 	}
 
-
 	/**
-	 * Vrací sklivec pro daný genotyp s tím, že se hrabe v keši,
-	 * aby se jednak zvýšila rychnlost, druhak, aby se šetřila paměť
+	 * Vrací sklivec pro daný genotyp s tím, že se hrabe v keši, aby se jednak zvýšila rychnlost, druhak, aby se šetřila paměť
 	 *
 	 * @param genotyp
 	 * @return
 	 */
-	public synchronized Sklivec getSklivec (Genotyp genotyp) {
+	public synchronized Sklivec getSklivec(Genotyp genotyp) {
 		zuzNaObrazkove(genotyp); // aby se nekešovalo pro alely, ke kterým nic nemáme
 		Otisk otisk = genotyp.getOtisk();
 		Sklivec sklivec = cache.get(otisk);
@@ -69,7 +56,7 @@ public class Sada {
 			cache.put(otisk, sklivec);
 			repaintanger.include(sklivec);
 			pocitSklivcu.set(cache.size());
-			//System.out.println("REPREPA: " + repaintanger);
+			// System.out.println("REPREPA: " + repaintanger);
 		} else {
 			pocitSklivcuZasah.inc();
 		}
@@ -79,14 +66,13 @@ public class Sada {
 	private void zuzNaObrazkove(Genotyp genotyp) {
 		Set<Alela> pouziteAlely2 = getPouziteAlely();
 		for (Alela alela : new ArrayList<>(genotyp.getAlely())) {
-			if (! pouziteAlely2.contains(alela)) {
-				if (! pouziteAlely2.contains(alela.getGen().getVychoziAlela())) {
+			if (!pouziteAlely2.contains(alela)) {
+				if (!pouziteAlely2.contains(alela.getGen().getVychoziAlela())) {
 					genotyp.remove(alela);
 				}
 			}
 		}
 	}
-
 
 	public Insets getBigiestIconInsets() {
 		return repaintanger.getInsets();
@@ -101,7 +87,6 @@ public class Sada {
 		Imagant imagant = skloAplikant.sklo.getRenderedImage(genotyp);
 		return imagant;
 	}
-
 
 	public String getName() {
 		return name;
@@ -135,7 +120,6 @@ public class Sada {
 		return pouziteGeny;
 	}
 
-
 	/**
 	 * @param aImageIcon
 	 */
@@ -143,14 +127,11 @@ public class Sada {
 		this.icon = icon;
 	}
 
-
 	/**
 	 * @return the icon
 	 */
 	public Icon getIcon() {
 		return icon;
 	}
-
-
 
 }

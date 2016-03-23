@@ -1,16 +1,5 @@
 package cz.geokuk.plugins.kesoid.importek;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Files;
-import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.framework.ProgressModel;
-import cz.geokuk.framework.Progressor;
-import cz.geokuk.util.lang.ATimestamp;
-
 import java.io.*;
 import java.sql.*;
 import java.util.concurrent.Future;
@@ -19,97 +8,72 @@ import java.util.zip.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
+
+import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.framework.ProgressModel;
+import cz.geokuk.framework.Progressor;
+import cz.geokuk.util.lang.ATimestamp;
+
 /**
  * Loads data from a GeoGet database.
  *
- * <p>Information about GeoGet DB schema: http://geoget.ararat.cz/doku.php/user:databaze
+ * <p>
+ * Information about GeoGet DB schema: http://geoget.ararat.cz/doku.php/user:databaze
  */
 public class GeogetLoader extends Nacitac0 {
 
-	private static final Logger log = LogManager.getLogger(GeogetLoader.class.getSimpleName());
+	private static final Logger							log							= LogManager.getLogger(GeogetLoader.class.getSimpleName());
 
-	private static int PROGRESS_VAHA_CACHES = 1;
-	private static int PROGRESS_VAHA_WAYPOINTS = 16;
-	private static int PROGRESS_VAHA_TAGS = 18;
+	private static int									PROGRESS_VAHA_CACHES		= 1;
+	private static int									PROGRESS_VAHA_WAYPOINTS		= 16;
+	private static int									PROGRESS_VAHA_TAGS			= 18;
 
-	private static final String GEOGET_CACHES_QUERY =
-			Joiner.on('\n').join(
-					"SELECT",
-					"  geocache.id as id,",
-					"  geocache.x as lat,",
-					"  geocache.y as lon,",
-					"  geocache.name as name,",
-					"  geocache.author as author,",
-					"  geocache.cachetype as cachetype,",
-					"  geocache.cachesize as cachesize,",
-					"  geocache.difficulty as difficulty,",
-					"  geocache.terrain as terrain,",
-					"  geocache.cachestatus as cachestatus,",
-					"  geocache.gs_ownerid as gs_ownerid,",
-					"  geocache.dthidden as dthidden,",
-					"  geocache.country as country,",
-					"  geocache.state as state,",
-					"  geocache.dtfound as dtfound,",
-					"  geolist.shortdesc as shortdesc,",
-					"  geolist.hint as hint",
-					"FROM geocache",
-					"LEFT JOIN geolist",
-					"  ON geocache.id = geolist.id");
+	private static final String							GEOGET_CACHES_QUERY			= Joiner.on('\n').join("SELECT", "  geocache.id as id,", "  geocache.x as lat,", "  geocache.y as lon,",
+			"  geocache.name as name,", "  geocache.author as author,", "  geocache.cachetype as cachetype,", "  geocache.cachesize as cachesize,", "  geocache.difficulty as difficulty,",
+			"  geocache.terrain as terrain,", "  geocache.cachestatus as cachestatus,", "  geocache.gs_ownerid as gs_ownerid,", "  geocache.dthidden as dthidden,", "  geocache.country as country,",
+			"  geocache.state as state,", "  geocache.dtfound as dtfound,", "  geolist.shortdesc as shortdesc,", "  geolist.hint as hint", "FROM geocache", "LEFT JOIN geolist",
+			"  ON geocache.id = geolist.id");
 
-	private static final String GEOGET_CACHES_COUNT = "SELECT count(*) FROM geocache";
+	private static final String							GEOGET_CACHES_COUNT			= "SELECT count(*) FROM geocache";
 
-	private static final String GEOGET_WAYPOINTS_QUERY = "SELECT id, x as lat, y as lon, prefixid, wpttype, name" +
-			" FROM waypoint";
+	private static final String							GEOGET_WAYPOINTS_QUERY		= "SELECT id, x as lat, y as lon, prefixid, wpttype, name" + " FROM waypoint";
 
-	private static final String GEOGET_WAYPOINTS_COUNT = "SELECT count(*) FROM waypoint";
+	private static final String							GEOGET_WAYPOINTS_COUNT		= "SELECT count(*) FROM waypoint";
 
-	private static final String DATE_FORMAT_TEMPLATE = "%d-%02d-%02dT00:00:00.000";
+	private static final String							DATE_FORMAT_TEMPLATE		= "%d-%02d-%02dT00:00:00.000";
 
-	private static final ImmutableSet<String> SUPPORTED_FILE_EXTENSIONS = ImmutableSet.of("db3");
+	private static final ImmutableSet<String>			SUPPORTED_FILE_EXTENSIONS	= ImmutableSet.of("db3");
 
-	private static final ImmutableMap<String, String> ID_PREFIX_TO_SYM = ImmutableMap.of(
-			"GC", "Geocache",
-			"WM", "Waymark",
-			"MU", "Geocache");
+	private static final ImmutableMap<String, String>	ID_PREFIX_TO_SYM			= ImmutableMap.of("GC", "Geocache", "WM", "Waymark", "MU", "Geocache");
 
-	private static final String GEOGET_TAGS_QUERY_FRAGMENT =
-			Joiner.on('\n').join(
-					"FROM geotag t ",
-					"LEFT JOIN geotagcategory c ",
-					"  ON t.ptrkat = c.key ",
-					"LEFT JOIN geotagvalue v ",
-					"  ON t.ptrvalue = v.key ",
-					"WHERE (c.value IN ('favorites', 'Elevation', 'Hodnoceni-Pocet', 'Hodnoceni', 'BestOf', 'Znamka') or c.value like '"
-							+ PREFIX_USERDEFINOANYCH_GENU + "%')");
+	private static final String							GEOGET_TAGS_QUERY_FRAGMENT	= Joiner.on('\n').join("FROM geotag t ", "LEFT JOIN geotagcategory c ", "  ON t.ptrkat = c.key ",
+			"LEFT JOIN geotagvalue v ", "  ON t.ptrvalue = v.key ",
+			"WHERE (c.value IN ('favorites', 'Elevation', 'Hodnoceni-Pocet', 'Hodnoceni', 'BestOf', 'Znamka') or c.value like '" + PREFIX_USERDEFINOANYCH_GENU + "%')");
 
-	private static final String GEOGET_TAGS_COUNT =
-			"SELECT count(*) " + GEOGET_TAGS_QUERY_FRAGMENT;
-	private static final String GEOGET_TAGS_QUERY =
-			Joiner.on('\n').join(
-					"SELECT",
-					"  t.id as id,",
-					"  c.value as category,",
-					"  v.value as value "
-					) + GEOGET_TAGS_QUERY_FRAGMENT;
+	private static final String							GEOGET_TAGS_COUNT			= "SELECT count(*) " + GEOGET_TAGS_QUERY_FRAGMENT;
+	private static final String							GEOGET_TAGS_QUERY			= Joiner.on('\n').join("SELECT", "  t.id as id,", "  c.value as category,", "  v.value as value ")
+			+ GEOGET_TAGS_QUERY_FRAGMENT;
 
 	@Override
-	protected void nacti(File file, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel)
-			throws IOException {
+	protected void nacti(File file, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) throws IOException {
 		if (!umiNacist(file)) {
 			throw new IllegalArgumentException("Cannot load from file " + file);
 		}
-		try (Connection c = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
-				Statement statement = c.createStatement()) {
-			int pocet = count(statement, GEOGET_CACHES_COUNT) * PROGRESS_VAHA_CACHES
-					+ count(statement, GEOGET_WAYPOINTS_COUNT)  * PROGRESS_VAHA_WAYPOINTS
+		try (Connection c = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath()); Statement statement = c.createStatement()) {
+			int pocet = count(statement, GEOGET_CACHES_COUNT) * PROGRESS_VAHA_CACHES + count(statement, GEOGET_WAYPOINTS_COUNT) * PROGRESS_VAHA_WAYPOINTS
 					+ count(statement, GEOGET_TAGS_COUNT) * PROGRESS_VAHA_TAGS;
 			Progressor progressor = aProgressModel.start(pocet, "Loading " + file.toString());
 			loadCaches(statement, builder, future, progressor);
 			loadWaypoints(statement, builder, future, progressor);
 			loadTags(statement, builder, future, progressor);
 			progressor.finish();
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new IOException("Unable to load from " + file, e);
 		}
 	}
@@ -125,8 +89,7 @@ public class GeogetLoader extends Nacitac0 {
 		log.info("{} {} loaded in {} s, it is {} items/s. ", pocet, nazev, trvani / 1000.0, pocet * 1000 / trvani);
 	}
 
-	private void loadCaches(Statement statement, IImportBuilder builder, Future<?> future,
-			Progressor progressor) throws SQLException, IOException {
+	private void loadCaches(Statement statement, IImportBuilder builder, Future<?> future, Progressor progressor) throws SQLException, IOException {
 		ATimestamp startTime = ATimestamp.now();
 		int citac = 0;
 		try (ResultSet rs = statement.executeQuery(GEOGET_CACHES_QUERY)) {
@@ -185,9 +148,7 @@ public class GeogetLoader extends Nacitac0 {
 				}
 
 				gpxWpt.groundspeak = groundspeak;
-				gpxWpt.desc = String.format("%s by %s (%s / %s)",
-						gpxWpt.groundspeak.name, gpxWpt.groundspeak.placedBy,
-						gpxWpt.groundspeak.difficulty, gpxWpt.groundspeak.terrain);
+				gpxWpt.desc = String.format("%s by %s (%s / %s)", gpxWpt.groundspeak.name, gpxWpt.groundspeak.placedBy, gpxWpt.groundspeak.difficulty, gpxWpt.groundspeak.terrain);
 
 				gpxWpt.link.href = "http://coord.info/" + gpxWpt.name;
 				gpxWpt.link.text = String.format("%s by %s", gpxWpt.groundspeak.name, gpxWpt.groundspeak.placedBy);
@@ -208,8 +169,7 @@ public class GeogetLoader extends Nacitac0 {
 		}
 	}
 
-	private void loadWaypoints(Statement statement, IImportBuilder builder, Future<?> future,
-			Progressor progressor) throws SQLException {
+	private void loadWaypoints(Statement statement, IImportBuilder builder, Future<?> future, Progressor progressor) throws SQLException {
 		ATimestamp startTime = ATimestamp.now();
 		int citac = 0;
 		try (ResultSet rs = statement.executeQuery(GEOGET_WAYPOINTS_QUERY)) {
@@ -230,15 +190,13 @@ public class GeogetLoader extends Nacitac0 {
 				builder.addGpxWpt(gpxWpt);
 				citac++;
 			}
-		}
-		finally {
+		} finally {
 			progressor.finish();
 			logResult("Waypoints", startTime, citac);
 		}
 	}
 
-	private void loadTags(Statement statement, IImportBuilder builder, Future<?> future,
-			Progressor progressor) throws SQLException {
+	private void loadTags(Statement statement, IImportBuilder builder, Future<?> future, Progressor progressor) throws SQLException {
 		ATimestamp startTime = ATimestamp.now();
 		int citac = 0;
 		try (ResultSet rs = statement.executeQuery(GEOGET_TAGS_QUERY)) {
@@ -293,8 +251,7 @@ public class GeogetLoader extends Nacitac0 {
 				}
 				citac++;
 			}
-		}
-		finally {
+		} finally {
 			progressor.finish();
 			logResult("Tags", startTime, citac);
 		}
@@ -308,8 +265,7 @@ public class GeogetLoader extends Nacitac0 {
 	}
 
 	@Override
-	protected void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> f,
-			ProgressModel aProgressModel) throws IOException {
+	protected void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> f, ProgressModel aProgressModel) throws IOException {
 		throw new UnsupportedOperationException();
 	}
 

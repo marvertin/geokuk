@@ -10,15 +10,13 @@ import java.util.Map;
  * @author veverka
  *
  */
-public class HledaciSluzba  {
+public class HledaciSluzba {
 
-	private final Map<RefreshorVysledkuHledani<? extends Nalezenec0>, HledaciRunnableSwingWorker<? extends Nalezenec0>> map
-	= new IdentityHashMap<>();
+	private final Map<RefreshorVysledkuHledani<? extends Nalezenec0>, HledaciRunnableSwingWorker<? extends Nalezenec0>> map = new IdentityHashMap<>();
 
 	/**
-	 * Spustí vyhledávání zadaným hledačem, zaanou hledací podmínkou
-	 * a hledá se do zadaného refreshoru.
-	 * Pokud pro daný refreshoir již běží nějaké hledání, je nejdříve zkanclováno a pak zahájeno nové hledání.
+	 * Spustí vyhledávání zadaným hledačem, zaanou hledací podmínkou a hledá se do zadaného refreshoru. Pokud pro daný refreshoir již běží nějaké hledání, je nejdříve zkanclováno a pak zahájeno nové hledání.
+	 * 
 	 * @param hledac
 	 * @param podm
 	 * @param refreshor
@@ -27,15 +25,15 @@ public class HledaciSluzba  {
 
 		{
 			HledaciRunnableSwingWorker<?> hledaciRunnableNaKancl = map.remove(refreshor); // zrušit a když to tam je tak zkanclovat
-			if (hledaciRunnableNaKancl != null)  hledaciRunnableNaKancl.cancel(true); // zkanclovat, když se hledalo
-			//System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnableNaKancl) + ": CANCEL");
+			if (hledaciRunnableNaKancl != null)
+				hledaciRunnableNaKancl.cancel(true); // zkanclovat, když se hledalo
+			// System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnableNaKancl) + ": CANCEL");
 		}
 		HledaciRunnableSwingWorker<T> hledaciRunnable = new HledaciRunnableSwingWorker<>(new Finishor<>(refreshor), podm, hledac);
 		map.put(refreshor, hledaciRunnable);
-		//System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnable) + ": EXECUTE");
+		// System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnable) + ": EXECUTE");
 		hledaciRunnable.execute();
 	}
-
 
 	class Finishor<T extends Nalezenec0> {
 		private final RefreshorVysledkuHledani<T> refreshor;

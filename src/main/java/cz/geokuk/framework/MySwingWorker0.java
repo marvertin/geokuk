@@ -14,8 +14,9 @@ public abstract class MySwingWorker0<T, V> extends SwingWorker<T, V> {
 	protected void donex() throws Exception {
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override

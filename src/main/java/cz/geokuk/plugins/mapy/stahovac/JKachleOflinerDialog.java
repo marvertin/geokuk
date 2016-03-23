@@ -1,14 +1,10 @@
 package cz.geokuk.plugins.mapy.stahovac;
 
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,47 +12,36 @@ import org.apache.logging.log4j.Logger;
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coord.VyrezChangedEvent;
 import cz.geokuk.core.program.ZobrazServisniOknoAction;
-import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
-import cz.geokuk.framework.JMyDialog0;
-import cz.geokuk.framework.MySwingWorker0;
+import cz.geokuk.framework.*;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.DiagnosticsData;
-import cz.geokuk.plugins.mapy.kachle.JKachle;
-import cz.geokuk.plugins.mapy.kachle.KaAll;
-import cz.geokuk.plugins.mapy.kachle.KaAllReq;
-import cz.geokuk.plugins.mapy.kachle.KaLoc;
-import cz.geokuk.plugins.mapy.kachle.KaSet;
-import cz.geokuk.plugins.mapy.kachle.KachleModel;
-import cz.geokuk.plugins.mapy.kachle.Kaputer;
-import cz.geokuk.plugins.mapy.kachle.Priority;
+import cz.geokuk.plugins.mapy.kachle.*;
 
 public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long serialVersionUID = 7180968190465321695L;
+	private static final long					serialVersionUID	= 7180968190465321695L;
 
-	private static final Logger log = LogManager.getLogger(JKachleOflinerDialog.class.getSimpleName());
+	private static final Logger					log					= LogManager.getLogger(JKachleOflinerDialog.class.getSimpleName());
 
-	private static final int LIMIT_DLAZDIC = 100000;
+	private static final int					LIMIT_DLAZDIC		= 100000;
 
-	private JTextPane uvod;
-	private JButton spustit;
+	private JTextPane							uvod;
+	private JButton								spustit;
 
-	private Coord moord;
+	private Coord								moord;
 
+	private TotoSeTaha							totoSeTaha;
 
-	private TotoSeTaha totoSeTaha;
+	private KachleOflinerSwingWorker			kosw;
 
-	private KachleOflinerSwingWorker kosw;
+	private KachleModel							kachleModel;
 
-	private KachleModel kachleModel;
+	private KaSet								xkaSet;
 
-	private KaSet xkaSet;
+	private int									xminmoumer;
 
-	private int xminmoumer;
+	private ZobrazServisniOknoAction			zobrazServisniOknoAction;
 
-	private ZobrazServisniOknoAction zobrazServisniOknoAction;
-
-	private JKachleOflinerPocetStazenychDialog jVysledek;
+	private JKachleOflinerPocetStazenychDialog	jVysledek;
 
 	public JKachleOflinerDialog() {
 		setTitle("Hromadné dotažení mapových dlaždic");
@@ -66,7 +51,6 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 	private void registerEvents() {
 
 		spustit.addActionListener(new ActionListener() {
-
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -81,7 +65,6 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 				kosw.execute();
 			}
 		});
-
 
 	}
 
@@ -100,7 +83,6 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 			kosw.execute();
 		}
 	}
-
 
 	@Override
 	protected void initComponents() {
@@ -128,23 +110,17 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 	 * @return
 	 */
 	private String pokecani() {
-		return String.format(
-				"<html>Budou stahovány dlaždice mapových pokladů <b>%s</b> v rozmění měřítek " +
-						" <b>&lt;%d,%d&gt;</b>" +
-						" nyní natavte v hlavním okně výřez mapy který chcete stáhnout. Výřez můžete" +
-						" nastavit v libovolném měřítku a v na libovolném mapovém podkladu. " +
-						" Pak spusťte stahování tlačítkem. Stahování poběží na pozadí. V servisním okně lze sledovat," +
-						" jak se zkracují frony. Stahování nelze zastavit jinak než ukončením programu.",
-						totoSeTaha.kaSet.getKts(),
-						totoSeTaha.minmoumer,
-						totoSeTaha.maxmoumer);
+		return String.format("<html>Budou stahovány dlaždice mapových pokladů <b>%s</b> v rozmění měřítek " + " <b>&lt;%d,%d&gt;</b>"
+				+ " nyní natavte v hlavním okně výřez mapy který chcete stáhnout. Výřez můžete" + " nastavit v libovolném měřítku a v na libovolném mapovém podkladu. "
+				+ " Pak spusťte stahování tlačítkem. Stahování poběží na pozadí. V servisním okně lze sledovat," + " jak se zkracují frony. Stahování nelze zastavit jinak než ukončením programu.",
+				totoSeTaha.kaSet.getKts(), totoSeTaha.minmoumer, totoSeTaha.maxmoumer);
 	}
 
-	private void nastavCudl(final int pocetDlazdic)  {
+	private void nastavCudl(final int pocetDlazdic) {
 		final boolean b = pocetDlazdic > 0 && pocetDlazdic <= LIMIT_DLAZDIC;
 		spustit.setEnabled(b);
 		if (b) {
-			spustit.setText(String.format("Stáhnout %d dlaždic do cache",  pocetDlazdic));
+			spustit.setText(String.format("Stáhnout %d dlaždic do cache", pocetDlazdic));
 		} else {
 			if (pocetDlazdic == 0) {
 				spustit.setText("Počítáme dlaždice");
@@ -172,7 +148,9 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 		@Override
 		protected Integer doInBackground() throws Exception {
 			if (zafrontovati) {
-				new Thread(() -> { postahovatNeboSpocitat(true); }, "pro-offline").start();
+				new Thread(() -> {
+					postahovatNeboSpocitat(true);
+				} , "pro-offline").start();
 				return 0;
 			} else {
 				return postahovatNeboSpocitat(false);
@@ -197,7 +175,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 				w /= 2;
 				h /= 2;
 				moumer--;
-				final Coord coco = new Coord(moumer, moord.getMoustred(), new Dimension(w,h), 0.0);
+				final Coord coco = new Coord(moumer, moord.getMoustred(), new Dimension(w, h), 0.0);
 
 				final Kaputer kaputer = new Kaputer(coco);
 				if (log.isTraceEnabled()) {
@@ -210,18 +188,20 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 						pocetKachli += totoSeTaha.kaSet.getKts().size(); // po každý podklad jedna kachle
 						if (zafrontovat) {
 							final KaAll kaall = new KaAll(kaloc, totoSeTaha.kaSet);
-							final DiagnosticsData.Listener diagListener = (diagnosticsData, diagnosticesFazeStr) ->  {
+							final DiagnosticsData.Listener diagListener = (diagnosticsData, diagnosticesFazeStr) -> {
 								log.trace("Stahování offline kache: {}: {}", diagnosticesFazeStr, diagnosticsData);
 							};
 							final KaAllReq req = new KaAllReq(kaall, kastat -> {
 								log.debug("Stahování offline kache: STAŽENO: {} -> {}", kastat);
-							}, Priority.STAHOVANI);
-							//kachleModel.getZiskavac().hloupěČekejAžNebudeZabránoMocZdrojů();
-							kachleModel.getZiskavac().ziskejObsah(req,  DiagnosticsData.create(null, "Stathování pro offline" , diagListener).with("kaAllReq", req));
-							//kachleModel.getZiskavac().hloupěČekejAžNebudeZabránoMocZdrojů();
+							} , Priority.STAHOVANI);
+							// kachleModel.getZiskavac().hloupěČekejAžNebudeZabránoMocZdrojů();
+							kachleModel.getZiskavac().ziskejObsah(req, DiagnosticsData.create(null, "Stathování pro offline", diagListener).with("kaAllReq", req));
+							// kachleModel.getZiskavac().hloupěČekejAžNebudeZabránoMocZdrojů();
 							final int p = pocetKachli;
 							if (jVysledek != null) {
-								SwingUtilities.invokeLater(() -> { jVysledek.setPocetStazenych(p); });
+								SwingUtilities.invokeLater(() -> {
+									jVysledek.setPocetStazenych(p);
+								});
 							}
 						}
 					}
@@ -231,10 +211,9 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 			return pocetKachli;
 		}
 
-
 		@Override
 		protected void donex() throws Exception {
-			if (! isCancelled()) {
+			if (!isCancelled()) {
 				final Integer pocet = get();
 				nastavCudl(pocet);
 			}
@@ -247,12 +226,14 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 	}
 
 	private class TotoSeTaha {
-		private int minmoumer;
-		private int maxmoumer;
-		private KaSet kaSet;
+		private int		minmoumer;
+		private int		maxmoumer;
+		private KaSet	kaSet;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -274,6 +255,5 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 	protected String getTemaNapovedyDialogu() {
 		return "StahovaniMapovychDlazdic";
 	}
-
 
 }

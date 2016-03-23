@@ -1,12 +1,13 @@
 package cz.geokuk.plugins.kesoid;
 
+import java.io.File;
+
+import javax.swing.Icon;
+
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
-
-import javax.swing.*;
-import java.io.File;
 
 /**
  * Kesoid representing coordinates loaded from EXIF of a picture.

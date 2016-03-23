@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.cesty.akce.soubor;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -15,16 +14,16 @@ import cz.geokuk.plugins.cesty.CestyModel;
 
 public class ImportujAction extends Action0 {
 
-	private static final long serialVersionUID = 1L;
-	private CestyModel cestyModel;
-	private JFileChooser fc;
+	private static final long	serialVersionUID	= 1L;
+	private CestyModel			cestyModel;
+	private JFileChooser		fc;
 
 	public ImportujAction() {
 		super("Importovat cesty (gpx, ggt)");
 		putValue(SHORT_DESCRIPTION, "Do otevřeného výletu importuje cesty z GPX souborů a GGT soubory.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_V);
-		//putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));
-		//putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
+		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));
+		// putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class ImportujAction extends Action0 {
 		}
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setMultiSelectionEnabled(true);
-		//fc.setCurrentDirectory(new File(jtext.getText()));
+		// fc.setCurrentDirectory(new File(jtext.getText()));
 		fc.setSelectedFile(cestyModel.defaultAktualnihoVyletuFile());
 		int result = fc.showDialog(Dlg.parentFrame(), "Importovat");
 		if (result == JFileChooser.APPROVE_OPTION) {
@@ -51,14 +50,16 @@ public class ImportujAction extends Action0 {
 		this.cestyModel = cestyModel;
 	}
 
-
 	private class AllAkceptableFilter extends FileFilter {
 
 		@Override
 		public boolean accept(File pathname) {
-			if (pathname.isDirectory()) return true;
-			if (pathname.getName().toLowerCase().endsWith(".gpx")) return true;
-			if (pathname.getName().toLowerCase().endsWith(".ggt")) return true;
+			if (pathname.isDirectory())
+				return true;
+			if (pathname.getName().toLowerCase().endsWith(".gpx"))
+				return true;
+			if (pathname.getName().toLowerCase().endsWith(".ggt"))
+				return true;
 			return false;
 		}
 
@@ -68,6 +69,5 @@ public class ImportujAction extends Action0 {
 		}
 
 	}
-
 
 }

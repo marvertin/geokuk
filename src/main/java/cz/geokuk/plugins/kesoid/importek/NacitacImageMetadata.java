@@ -1,9 +1,6 @@
 package cz.geokuk.plugins.kesoid.importek;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
@@ -25,12 +22,11 @@ import cz.geokuk.core.coordinates.Wgs;
 
 public class NacitacImageMetadata extends NacitacInputStream0 {
 
-	private static final Logger log = LogManager.getLogger(NacitacImageMetadata.class.getSimpleName());
+	private static final Logger					log							= LogManager.getLogger(NacitacImageMetadata.class.getSimpleName());
 
-	private static final ImmutableSet<String> SUPPORTED_FILE_EXTENSIONS = ImmutableSet.of("jpg", "raw", "tif");
+	private static final ImmutableSet<String>	SUPPORTED_FILE_EXTENSIONS	= ImmutableSet.of("jpg", "raw", "tif");
 
-	protected void nacti(InputStream istm, String name, IImportBuilder builder, Future<?> future)
-			throws IOException {
+	protected void nacti(InputStream istm, String name, IImportBuilder builder, Future<?> future) throws IOException {
 		if (future.isCancelled()) {
 			return;
 		}
@@ -66,8 +62,6 @@ public class NacitacImageMetadata extends NacitacInputStream0 {
 			log.info("Image {} has GPS metadata, but no lat/lon information.", name);
 		}
 	}
-
-
 
 	@Override
 	boolean umiNacist(ZipEntry zipEntry) {

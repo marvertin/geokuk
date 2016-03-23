@@ -1,13 +1,8 @@
 package cz.geokuk.plugins.mapy.kachle;
 
-
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.EnumMap;
 
@@ -19,27 +14,22 @@ import org.apache.logging.log4j.Logger;
 import cz.geokuk.util.pocitadla.Pocitadlo;
 import cz.geokuk.util.pocitadla.PocitadloRoste;
 
-
 public class KachloDownloader {
 
-	private final Pocitadlo pocitDownloadleDlazdice = new PocitadloRoste("Downloadlé dlaždice",
-			"Počet dlaždic, které byly downloadovány.");
+	private final Pocitadlo							pocitDownloadleDlazdice	= new PocitadloRoste("Downloadlé dlaždice", "Počet dlaždic, které byly downloadovány.");
 
-	private static final Logger log =
-			LogManager.getLogger(KachloDownloader.class.getSimpleName());
+	private static final Logger						log						= LogManager.getLogger(KachloDownloader.class.getSimpleName());
 
-
-	private final EnumMap<EPraznyObrazek, Image> prazdneObrazky = new EnumMap<>(EPraznyObrazek.class);
+	private final EnumMap<EPraznyObrazek, Image>	prazdneObrazky			= new EnumMap<>(EPraznyObrazek.class);
 
 	public KachloDownloader() {
 	}
 
-
 	public ImageWithData downloadImage(final URL url) throws IOException {
 		log.debug("Loading kachle from URL: \"{}\"", url);
-		//    if (Math.random() > 0.5 && url.toString().contains("hybrid")) {
-		//      throw new IOException("Nasimulovaná chyba hybrid");
-		//    }
+		// if (Math.random() > 0.5 && url.toString().contains("hybrid")) {
+		// throw new IOException("Nasimulovaná chyba hybrid");
+		// }
 		final ImageWithData imda = new ImageWithData();
 		final DataHoldingInputStream dhis = new DataHoldingInputStream(url.openStream());
 		try (InputStream stm = new BufferedInputStream(dhis)) {
@@ -47,13 +37,12 @@ public class KachloDownloader {
 		}
 		imda.data = dhis.getData();
 		pocitDownloadleDlazdice.inc();
-		//Thread.sleep(300);
+		// Thread.sleep(300);
 		log.debug("Loaded {} bytes", imda.data.length);
-		//if (Math.random() > 0.9) throw new RuntimeException("Nepovedlo se");
+		// if (Math.random() > 0.9) throw new RuntimeException("Nepovedlo se");
 		return imda;
 
 	}
-
 
 	/**
 	 * @return
@@ -102,7 +91,6 @@ public class KachloDownloader {
 		}
 		return image;
 	}
-
 
 	/**
 	 * Nepřejmenovávat hodnoty, odvozuje se z něj název resourcu

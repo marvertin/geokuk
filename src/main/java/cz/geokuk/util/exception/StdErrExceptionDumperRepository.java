@@ -5,23 +5,25 @@ import java.net.URL;
 
 import cz.geokuk.util.lang.StringUtils;
 
-
 /**
- * Dumpuje výjimky na standardní chybový výstup.
- * Použije se, pokud se nepodaří inicializovat skutečnou repozitoř.
+ * Dumpuje výjimky na standardní chybový výstup. Použije se, pokud se nepodaří inicializovat skutečnou repozitoř.
+ * 
  * @author veverka
  */
 public class StdErrExceptionDumperRepository implements ExceptionDumperRepositorySpi {
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.tconsult.tw.util.exception.ExceptionDumperRepositorySpi#write(java.lang.String, java.lang.String)
 	 */
 	public void write(AExcId aCode, String aExceptionData) throws IOException {
 		System.err.println(aCode + StringUtils.LINE_SEPARATOR + aExceptionData);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.tconsult.tw.util.exception.ExceptionDumperRepositorySpi#getRunNumber()
 	 */
 	public int getRunNumber() {
@@ -30,6 +32,7 @@ public class StdErrExceptionDumperRepository implements ExceptionDumperRepositor
 
 	/**
 	 * Nelze konvertovat na URL
+	 * 
 	 * @param aCode
 	 * @return
 	 * @since 15.9.2006 7:24:56

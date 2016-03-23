@@ -1,17 +1,14 @@
 package cz.geokuk.plugins.cesty.akce.doc;
 
-
 import java.awt.event.KeyEvent;
 
 import cz.geokuk.core.coordinates.MouRect;
 import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.cesty.data.Doc;
 
-
 public class CestyZoomAction extends DocAction0 {
 
 	private static final long serialVersionUID = -7547868179813232769L;
-
 
 	public CestyZoomAction(Doc doc) {
 		super(doc);
@@ -19,7 +16,6 @@ public class CestyZoomAction extends DocAction0 {
 		putValue(SHORT_DESCRIPTION, "Zobrazí měřítko a výřez mapy tak, aby na mapě byly všechny nakreslené cesty.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_Z);
 	}
-
 
 	@Override
 	protected boolean mamPovolitProDoc(Doc doc) {
@@ -40,8 +36,5 @@ public class CestyZoomAction extends DocAction0 {
 		mourect.resize(1.2);
 		vyrezModel.zoomTo(mourect);
 	}
-
-
-
 
 }

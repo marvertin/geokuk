@@ -8,8 +8,5 @@ package cz.geokuk.core.render;
  *
  */
 public enum EWhatRender {
-	TISK,
-	JEN_OBRAZEK,
-	GOOGLE_EARTH,
-	OZI_EXPLORER,
+	TISK, JEN_OBRAZEK, GOOGLE_EARTH, OZI_EXPLORER,
 }

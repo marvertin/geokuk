@@ -5,15 +5,15 @@ package cz.geokuk.framework;
 
 import javax.swing.SwingUtilities;
 
-
 /**
  * @author veverka
  *
  */
 public class ProgressModel extends Model0 {
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.Model0#initAndFire()
 	 */
 	@Override
@@ -27,27 +27,27 @@ public class ProgressModel extends Model0 {
 		return progressor;
 	}
 
-
 	private class SimpleNotParalelProgressor implements Progressor {
 
-		private int progress;
-		private int max;
-		private String text = "";
-		private String tooltip = "";
-		private boolean visible;
-		private final long startTime = System.currentTimeMillis();
+		private int					progress;
+		private int					max;
+		private String				text										= "";
+		private String				tooltip										= "";
+		private boolean				visible;
+		private final long			startTime									= System.currentTimeMillis();
 
-
-		private static final long millisToDecideToPopup = 500;
-		private static final long millisToPopup = 2000;
+		private static final long	millisToDecideToPopup						= 500;
+		private static final long	millisToPopup								= 2000;
 
 		/**
 		 *
 		 */
-		private static final int MINIMALNI_DOBA_MEZI_DVEVA_POSUNY_PROGRESORU = 101;
-		private long lastFireTime;
+		private static final int	MINIMALNI_DOBA_MEZI_DVEVA_POSUNY_PROGRESORU	= 101;
+		private long				lastFireTime;
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see nove.Progressor#addProgress(int)
 		 */
 		@Override
@@ -55,7 +55,9 @@ public class ProgressModel extends Model0 {
 			setProgress(progress + aProgress);
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see nove.Progressor#incProgress()
 		 */
 		@Override
@@ -63,17 +65,22 @@ public class ProgressModel extends Model0 {
 			addProgress(1);
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see nove.Progressor#setMax(int)
 		 */
 		@Override
 		public void setMax(int aMax) {
-			if (max == aMax) return;
+			if (max == aMax)
+				return;
 			max = aMax;
 			firex(false);
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see nove.Progressor#setProgress(int)
 		 */
 		@Override
@@ -86,13 +93,11 @@ public class ProgressModel extends Model0 {
 					firex(false);
 				} else {
 					long T = System.currentTimeMillis();
-					long dT = T-startTime;
+					long dT = T - startTime;
 					if (dT >= millisToDecideToPopup) {
 						long predictedCompletionTime;
 						if (nv > 0) {
-							predictedCompletionTime = (int)(dT *
-									(max) /
-									(nv));
+							predictedCompletionTime = (int) (dT * (max) / (nv));
 						} else {
 							predictedCompletionTime = millisToPopup;
 						}
@@ -105,7 +110,9 @@ public class ProgressModel extends Model0 {
 			}
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see nove.Progressor#finish()
 		 */
 		@Override
@@ -116,23 +123,28 @@ public class ProgressModel extends Model0 {
 			firex(true);
 		}
 
-
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see nove.Progressor#setText(java.lang.String)
 		 */
 		@Override
 		public void setText(String aText) {
-			if (text.equals(aText)) return;
+			if (text.equals(aText))
+				return;
 			text = aText;
 			firex(true);
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see nove.Progressor#setTooltip(java.lang.String)
 		 */
 		@Override
 		public void setTooltip(String aTooltip) {
-			if (tooltip.equals(aTooltip)) return;
+			if (tooltip.equals(aTooltip))
+				return;
 			tooltip = aTooltip;
 			firex(true);
 		}
@@ -148,14 +160,16 @@ public class ProgressModel extends Model0 {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						//System.out.println("PROEVE " + event);
+						// System.out.println("PROEVE " + event);
 						fire(event);
 					}
 				});
 			}
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see cz.geokuk.framework.Progressor#getProgress()
 		 */
 		@Override
@@ -164,6 +178,5 @@ public class ProgressModel extends Model0 {
 		}
 
 	}
-
 
 }

@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class KaAll extends Ka0 {
 
-	//private int DOPLNKOVAC = 1<<28;
+	// private int DOPLNKOVAC = 1<<28;
 
 	public KaSet kaSet;
 
@@ -13,8 +13,6 @@ public class KaAll extends Ka0 {
 		super(loc);
 		this.kaSet = kaSet;
 	}
-
-
 
 	@Override
 	public String typToString() {
@@ -26,13 +24,10 @@ public class KaAll extends Ka0 {
 		return sb.toString();
 	}
 
-
 	@Override
 	public String toString() {
 		return super.getLoc().toString() + "*" + kaSet;
 	}
-
-
 
 	@Override
 	public int hashCode() {
@@ -41,8 +36,6 @@ public class KaAll extends Ka0 {
 		result = prime * result + (kaSet == null ? 0 : kaSet.hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(final Object obj) {
@@ -66,28 +59,21 @@ public class KaAll extends Ka0 {
 		return true;
 	}
 
-
-
 	public EKaType getPodkladType() {
 		return kaSet.getPodklad();
 	}
-
-
 
 	public KaOne getPodklad() {
 		return new KaOne(getLoc(), getPodkladType());
 	}
 
-
-
 	/**
 	 * Rozpad na jednotlivé rekvesty
+	 * 
 	 * @return
 	 */
 	public Set<KaOne> getKaOnes() {
 		return kaSet.getKts().stream().map(kaa -> new KaOne(super.getLoc(), kaa)).collect(Collectors.toSet());
 	}
-
-
 
 }

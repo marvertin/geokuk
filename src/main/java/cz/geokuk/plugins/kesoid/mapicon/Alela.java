@@ -6,15 +6,16 @@ import java.util.Set;
 /**
  * Alela is a value of a property (i.e. a value of {@link Gen}.
  *
- * <p>For example, Gen {@code size of cache} has alelas {@code micro}, {@code small}, {@code regular}...
+ * <p>
+ * For example, Gen {@code size of cache} has alelas {@code micro}, {@code small}, {@code regular}...
  */
 public class Alela {
 
-	private final String alelaName;
-	private String displayName;
-	private Gen gen;
-	private Grupa grupa;
-	private final int celkovePoradi;
+	private final String	alelaName;
+	private String			displayName;
+	private Gen				gen;
+	private Grupa			grupa;
+	private final int		celkovePoradi;
 
 	/**
 	 * @return the grupa
@@ -24,7 +25,8 @@ public class Alela {
 	}
 
 	/**
-	 * @param aGrupa the grupa to set
+	 * @param aGrupa
+	 *            the grupa to set
 	 */
 	public void setGrupa(Grupa aGrupa) {
 		grupa = aGrupa;

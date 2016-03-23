@@ -1,13 +1,8 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-
 import java.util.Map;
 
-import javax.swing.ButtonGroup;
-import javax.swing.Icon;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
+import javax.swing.*;
 
 import cz.geokuk.framework.Factory;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
@@ -17,26 +12,24 @@ public class JMenuIkony extends JMenu {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -1589308487736315040L;
+	private static final long	serialVersionUID	= -1589308487736315040L;
 
-	private int pocetSad;
+	private int					pocetSad;
 
-	private final JMenu menu;
+	private final JMenu			menu;
 
-	private Factory factory;
-
+	private Factory				factory;
 
 	public JMenuIkony() {
-		super ("Ikony");
+		super("Ikony");
 		setToolTipText("Výběr sady ikok, řízení, co se na ikonách zobrazuje");
 		this.menu = this;
 	}
 
-
 	public void onEvent(IkonyNactenyEvent event) {
 		IkonBag bag = event.getBag();
 		while (pocetSad > 0) {
-			pocetSad --;
+			pocetSad--;
 			menu.remove(0);
 		}
 		ASada aktualniSada = event.getJmenoAktualniSady();
@@ -53,8 +46,10 @@ public class JMenuIkony extends JMenu {
 			menu.insert(item, pocetSad);
 			bg.add(item);
 			pocetSad++;
-			if (sada == aktualniSada) akce.setSelected(true);
-			if (sada == ASada.STANDARD) standard = akce;
+			if (sada == aktualniSada)
+				akce.setSelected(true);
+			if (sada == ASada.STANDARD)
+				standard = akce;
 		}
 		if (aktualniSada == null && standard != null) {
 			standard.setSelected(true);
@@ -65,6 +60,5 @@ public class JMenuIkony extends JMenu {
 	public void inject(Factory factory) {
 		this.factory = factory;
 	}
-
 
 }

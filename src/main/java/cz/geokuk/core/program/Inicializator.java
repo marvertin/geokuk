@@ -10,33 +10,20 @@ import cz.geokuk.core.napoveda.NapovedaModel;
 import cz.geokuk.core.onoffline.OnofflineModel;
 import cz.geokuk.core.profile.ProfileModel;
 import cz.geokuk.core.render.RenderModel;
-import cz.geokuk.framework.BeanBag;
-import cz.geokuk.framework.EventManager;
-import cz.geokuk.framework.Prefe;
-import cz.geokuk.framework.ProgressModel;
-import cz.geokuk.plugins.cesty.CestyModel;
-import cz.geokuk.plugins.cesty.CestyNacitaniKesoiduWatchDog;
-import cz.geokuk.plugins.cesty.CestyZperzistentnovac;
+import cz.geokuk.framework.*;
+import cz.geokuk.plugins.cesty.*;
 import cz.geokuk.plugins.geocoding.GeocodingModel;
 import cz.geokuk.plugins.kesoid.KesFilter;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoidkruhy.KruhyModel;
 import cz.geokuk.plugins.kesoidobsazenost.ObsazenostModel;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyModel;
-import cz.geokuk.plugins.mapy.DekoraceAction;
-import cz.geokuk.plugins.mapy.MapyAction0;
-import cz.geokuk.plugins.mapy.MapyModel;
-import cz.geokuk.plugins.mapy.PodkladAction;
-import cz.geokuk.plugins.mapy.kachle.EKaType;
-import cz.geokuk.plugins.mapy.kachle.KachleModel;
-import cz.geokuk.plugins.mapy.kachle.KachleZiskavac;
-import cz.geokuk.plugins.mapy.kachle.KachloDownloader;
+import cz.geokuk.plugins.mapy.*;
+import cz.geokuk.plugins.mapy.kachle.*;
 import cz.geokuk.plugins.mrizky.MrizkaModel;
 import cz.geokuk.plugins.refbody.HlidacReferencnihoBodu;
 import cz.geokuk.plugins.refbody.RefbodyModel;
-import cz.geokuk.plugins.vylety.VyletModel;
-import cz.geokuk.plugins.vylety.VyletNacitaniKesoiduWatchDog;
-import cz.geokuk.plugins.vylety.VyletovyZperzistentnovac;
+import cz.geokuk.plugins.vylety.*;
 
 /**
  * @author veverka
@@ -44,8 +31,8 @@ import cz.geokuk.plugins.vylety.VyletovyZperzistentnovac;
  */
 public class Inicializator {
 
-	private final MainFrameHolder mainFrameHolder = new MainFrameHolder();
-	private NapovedaModel napovedaModel;
+	private final MainFrameHolder	mainFrameHolder	= new MainFrameHolder();
+	private NapovedaModel			napovedaModel;
 
 	public void inicializace() {
 		final BeanBag bb = new BeanBag();
@@ -53,10 +40,8 @@ public class Inicializator {
 		bb.registerSigleton(new EventManager());
 		bb.registerSigleton(new Prefe());
 
-
 		bb.registerSigleton(new CestyZperzistentnovac());
 		bb.registerSigleton(new VyletovyZperzistentnovac());
-
 
 		// modely
 		bb.registerSigleton(new PoziceModel());
@@ -106,17 +91,14 @@ public class Inicializator {
 		//
 		bb.registerSigleton(mainFrameHolder);
 		bb.init();
-		//Board.eveman = eveman;
+		// Board.eveman = eveman;
 	}
 
 	public void intMapAkce(final BeanBag bb, final Akce akce) {
 		for (final EKaType ka : EKaType.values()) {
-			final MapyAction0 jednamapoakce =
-					ka.isPodklad() ?
-							new PodkladAction(ka) :
-								new DekoraceAction(ka);
-							akce.mapoakce.add(jednamapoakce);
-							bb.registerSigleton(jednamapoakce);
+			final MapyAction0 jednamapoakce = ka.isPodklad() ? new PodkladAction(ka) : new DekoraceAction(ka);
+			akce.mapoakce.add(jednamapoakce);
+			bb.registerSigleton(jednamapoakce);
 
 		}
 	}

@@ -9,31 +9,25 @@ import java.util.Set;
 import javax.swing.Icon;
 
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.mapicon.Alela;
-import cz.geokuk.plugins.kesoid.mapicon.Genom;
-import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
+import cz.geokuk.plugins.kesoid.mapicon.*;
 
 public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
-	private static String[] urlPrefixes = new String[] {
-			"http://www.geocaching.com/seek/cache_details.aspx?guid=",
-			"http://www.waymarking.com/waymarks/",
-			"http://dataz.cuzk.cz/gu/ztl",
-	};
-	//protected static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
+	private static String[]	urlPrefixes	= new String[] { "http://www.geocaching.com/seek/cache_details.aspx?guid=", "http://www.waymarking.com/waymarks/", "http://dataz.cuzk.cz/gu/ztl", };
+	// protected static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
 
 	/** Jednoznacna identifikace jako GC124X4 nebo WM4587 */
-	private String identifier;
+	private String			identifier;
 
-	private EKesVztah vztah = EKesVztah.NORMAL;
-	private EKesStatus status = EKesStatus.ACTIVE;
+	private EKesVztah		vztah		= EKesVztah.NORMAL;
+	private EKesStatus		status		= EKesStatus.ACTIVE;
 
-	private String author;
-	private String hidden;
+	private String			author;
+	private String			hidden;
 
-	private String zbytekUrl;
+	private String			zbytekUrl;
 
-	private Set<Alela> userDefinedAlelas;
+	private Set<Alela>		userDefinedAlelas;
 
 	/**
 	 * @return the firstWpt
@@ -54,9 +48,11 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	 * @return the url
 	 */
 	public String getUrl() {
-		if (zbytekUrl == null || zbytekUrl.length() == 0) return zbytekUrl;
+		if (zbytekUrl == null || zbytekUrl.length() == 0)
+			return zbytekUrl;
 		char c = zbytekUrl.charAt(0);
-		if (c == '-') return zbytekUrl.substring(1);
+		if (c == '-')
+			return zbytekUrl.substring(1);
 		int index = c - '0';
 		return urlPrefixes[index] + zbytekUrl.substring(1);
 	}
@@ -79,7 +75,8 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	}
 
 	/**
-	 * @param aUrl the url to set
+	 * @param aUrl
+	 *            the url to set
 	 */
 	public void setUrl(String aUrl) {
 		if (aUrl == null) {
@@ -94,11 +91,10 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 				zbytekUrl = index + aUrl.substring(prefix.length());
 				return;
 			}
-			index ++;
+			index++;
 		}
-		zbytekUrl ='-' + aUrl;  // nemá žádný prefix
+		zbytekUrl = '-' + aUrl; // nemá žádný prefix
 	}
-
 
 	//////////////////////////////////////////////////////////////////
 	public Iterable<Wpt> getWpts() {
@@ -133,8 +129,9 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
 	public int getWptsCount() {
 		int count = 0;
-		for (@SuppressWarnings("unused") Wpt wpt : getWpts()) {
-			count ++;
+		for (@SuppressWarnings("unused")
+		Wpt wpt : getWpts()) {
+			count++;
 		}
 		return count;
 
@@ -149,8 +146,10 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	}
 
 	public void promoteVztah(EKesVztah vztah) {
-		if (this.vztah == null) this.vztah = vztah;
-		if (vztah.ordinal() > this.vztah.ordinal()) this.vztah = vztah;
+		if (this.vztah == null)
+			this.vztah = vztah;
+		if (vztah.ordinal() > this.vztah.ordinal())
+			this.vztah = vztah;
 	}
 
 	public String getIdentifier() {
@@ -162,7 +161,8 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	}
 
 	public void addWpt(Wpt wpt) {
-		if (wpt == null) return;
+		if (wpt == null)
+			return;
 		// najít konec
 		Weikoid0 weik = this;
 		while (weik.next instanceof Wpt) {
@@ -179,7 +179,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	}
 
 	public String[] getProhledavanci() {
-		return new String[] {getNazev(), getIdentifier()};
+		return new String[] { getNazev(), getIdentifier() };
 	}
 
 	public String getAuthor() {
@@ -206,7 +206,6 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		this.status = status;
 	}
 
-
 	public abstract EKesoidKind getKesoidKind();
 
 	public abstract void prispejDoTooltipu(StringBuilder sb, Wpt wpt);
@@ -215,7 +214,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
 	public final void doBuildGenotyp(Genom genom, Genotyp g) {
 		buildGenotyp(genom, g);
-		if(userDefinedAlelas != null) {
+		if (userDefinedAlelas != null) {
 			for (Alela alela : userDefinedAlelas) {
 				assert alela != null;
 				g.put(alela);

@@ -1,55 +1,46 @@
 package cz.geokuk.core.program;
 
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import cz.geokuk.core.program.JPrehledSouboru.YNejdeTo;
-import cz.geokuk.util.file.Filex;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cz.geokuk.core.program.JPrehledSouboru.YNejdeTo;
+import cz.geokuk.util.file.Filex;
+
 public class JJedenSouborPanel extends JPanel implements DocumentListener {
 
-	private static final Logger log =
-			LogManager.getLogger(JJedenSouborPanel.class.getSimpleName());
+	private static final Logger		log					= LogManager.getLogger(JJedenSouborPanel.class.getSimpleName());
 
-	private static final long serialVersionUID = -3579395922979423765L;
+	private static final long		serialVersionUID	= -3579395922979423765L;
 
-	private final boolean jenAdresare;
+	private final boolean			jenAdresare;
 
-	private final String label;
-	private JTextField jtext;
-	private JCheckBox jRelativneKProgramu;
-	private JCheckBox jActive;
-	private JTextField jCurrVal;
+	private final String			label;
+	private JTextField				jtext;
+	private JCheckBox				jRelativneKProgramu;
+	private JCheckBox				jActive;
+	private JTextField				jCurrVal;
 
-	private Filex filex;
+	private Filex					filex;
 
-	private final boolean editovatelne;
+	private final boolean			editovatelne;
 
-	private final boolean lzeDeaktivovat;
+	private final boolean			lzeDeaktivovat;
 
-	private final ESouborPanelName souborPanelName;
+	private final ESouborPanelName	souborPanelName;
 
 	/**
-	 * @param souborPanelName identifikátor panelu. Je jen proto, aby se podle něj mohl panel najít.
+	 * @param souborPanelName
+	 *            identifikátor panelu. Je jen proto, aby se podle něj mohl panel najít.
 	 */
 	public JJedenSouborPanel(ESouborPanelName souborPanelName, String label, final boolean jenAdresare, boolean editovatelne, boolean lzeDeaktivovat) {
 		this.souborPanelName = souborPanelName;
@@ -70,7 +61,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		setBorder(border);
 
 		jtext = new JTextField();
-		//jtext.setText(defalt.getFile().getPath());
+		// jtext.setText(defalt.getFile().getPath());
 		jRelativneKProgramu = new JCheckBox("Relativně k umístění programu");
 		jRelativneKProgramu.setEnabled(FConst.JAR_DIR_EXISTUJE);
 		jActive = new JCheckBox("Aktivní");
@@ -80,7 +71,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		jCurrVal.setEditable(false);
 		jCurrVal.setBorder(null);
 		final JButton jbut = new JButton("...");
-		//jtext.setText(defalt.getFile().getPath());
+		// jtext.setText(defalt.getFile().getPath());
 		jtext.setColumns(50);
 		if (editovatelne) {
 			Box box2 = Box.createHorizontalBox();
@@ -100,11 +91,11 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 			panel3.setAlignmentX(LEFT_ALIGNMENT);
 			add(box2);
 		}
-		//panel.add(Box.createVerticalStrut(20));
+		// panel.add(Box.createVerticalStrut(20));
 		jCurrVal.setAlignmentX(LEFT_ALIGNMENT);
 		add(jCurrVal);
-		//    add(panel);
-		//    add(Box.createVerticalStrut(20));
+		// add(panel);
+		// add(Box.createVerticalStrut(20));
 		jbut.addActionListener(new ActionListener() {
 			private JFileChooser fc;
 
@@ -148,7 +139,8 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		if (!jenAdresare) {
 			dir = dir.getParentFile();
 		}
-		if (dir.isDirectory() && dir.canRead()) return filex;
+		if (dir.isDirectory() && dir.canRead())
+			return filex;
 		boolean vysl = dir.mkdirs();
 		if (!vysl)
 			throw new JPrehledSouboru.YNejdeTo("Složku \"" + dir + "\" se nepodařilo stvořit pro \"" + label + "\"");
@@ -162,12 +154,12 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 	public void setFilex(Filex filex) {
 		jtext.setText(filex.getFile().getPath());
 		jRelativneKProgramu.setSelected(filex.isRelativeToProgram());
-		jActive.setSelected(filex.isActive() || ! lzeDeaktivovat);
+		jActive.setSelected(filex.isActive() || !lzeDeaktivovat);
 		prepocitej();
 	}
 
 	private void prepocitej() {
-		filex = new Filex (new File(jtext.getText()), jRelativneKProgramu.isSelected(), jActive.isSelected());
+		filex = new Filex(new File(jtext.getText()), jRelativneKProgramu.isSelected(), jActive.isSelected());
 		jCurrVal.setText(filex.getEffectiveFile().getPath());
 		jtext.setEnabled(jActive.isSelected());
 		jRelativneKProgramu.setEnabled(jActive.isSelected());
@@ -208,9 +200,9 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		return souborPanelName;
 	}
 
-	//  @Override
-	//  public void requestFocus() {
-	//    super.requestFocus();
-	//    jtext.requestFocus();
-	//  }
+	// @Override
+	// public void requestFocus() {
+	// super.requestFocus();
+	// jtext.requestFocus();
+	// }
 }

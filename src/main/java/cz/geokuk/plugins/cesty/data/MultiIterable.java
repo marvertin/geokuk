@@ -15,8 +15,8 @@ public abstract class MultiIterable<T, M> implements Iterable<T> {
 	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
-			Iterator<M> ceit = list.iterator();
-			Iterator<T> boit = new EmptyIterator<>();
+			Iterator<M>	ceit	= list.iterator();
+			Iterator<T>	boit	= new EmptyIterator<>();
 
 			{
 				najezd();
@@ -35,7 +35,7 @@ public abstract class MultiIterable<T, M> implements Iterable<T> {
 			}
 
 			private void najezd() {
-				while (! boit.hasNext() && ceit.hasNext()) {
+				while (!boit.hasNext() && ceit.hasNext()) {
 					M cesta = ceit.next();
 					boit = prepareIterable(cesta).iterator();
 				}
@@ -48,6 +48,6 @@ public abstract class MultiIterable<T, M> implements Iterable<T> {
 		};
 	}
 
-	//  boit = ceit.next().getBody().iterator();
+	// boit = ceit.next().getBody().iterator();
 	protected abstract Iterable<T> prepareIterable(M m);
 }

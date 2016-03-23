@@ -1,12 +1,6 @@
 package cz.geokuk.plugins.kesoidpopisky;
 
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -19,21 +13,17 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
-import cz.geokuk.util.index2d.FlatVisitor;
-import cz.geokuk.util.index2d.Indexator;
-import cz.geokuk.util.index2d.Sheet;
-
+import cz.geokuk.util.index2d.*;
 
 public class JPopiskySlide extends JSingleSlide0 {
 
-	private static final long serialVersionUID = -5858146658366237217L;
+	private static final long	serialVersionUID	= -5858146658366237217L;
 
-	private Indexator<Wpt> iIndexator;
+	private Indexator<Wpt>		iIndexator;
 
-	private PopiskySettings pose;
+	private PopiskySettings		pose;
 
-	private PopiskyModel popiskyModel;
-
+	private PopiskyModel		popiskyModel;
 
 	public JPopiskySlide() {
 		setOpaque(false);
@@ -47,7 +37,6 @@ public class JPopiskySlide extends JSingleSlide0 {
 
 		add(box, BorderLayout.WEST);
 	}
-
 
 	public void onEvent(KeskyVyfiltrovanyEvent event) {
 		iIndexator = event.getFiltrovane().getIndexator();
@@ -66,15 +55,18 @@ public class JPopiskySlide extends JSingleSlide0 {
 
 	@Override
 	public void paintComponent(Graphics aG) {
-		if (iIndexator == null) return;
-		if (pose == null) return;
+		if (iIndexator == null)
+			return;
+		if (pose == null)
+			return;
 		final boolean prekrocenLimit = iIndexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
-		if (prekrocenLimit) return;
+		if (prekrocenLimit)
+			return;
 
 		final Graphics2D g = (Graphics2D) aG;
-		//    final Color barvaTextu = iSlidovnikText.getColor();
-		//    final Color barvaPodkladu = iSlidovnikPodklad.getColor();
-		//    g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+		// final Color barvaTextu = iSlidovnikText.getColor();
+		// final Color barvaPodkladu = iSlidovnikPodklad.getColor();
+		// g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
 
 		g.setFont(pose.font);
 		final Color barvaTextu = pose.foreground;
@@ -84,7 +76,7 @@ public class JPopiskySlide extends JSingleSlide0 {
 		final int posuny = fontMetrics.getDescent() - height2;
 		final EnumMap<EKesoidKind, SestavovacPopisku> sestavmapa = new EnumMap<>(EKesoidKind.class);
 		for (Map.Entry<EKesoidKind, String> entry : popiskyModel.getData().getPatterns().asMap().entrySet()) {
-			sestavmapa.put(entry.getKey(),  new SestavovacPopisku(entry.getValue()));
+			sestavmapa.put(entry.getKey(), new SestavovacPopisku(entry.getValue()));
 		}
 
 		iIndexator.visit(getSoord().getBoundingRect(), new FlatVisitor<Wpt>() {
@@ -92,7 +84,8 @@ public class JPopiskySlide extends JSingleSlide0 {
 			@Override
 			public void visit(Sheet<Wpt> aSheet) {
 				Wpt wpt = aSheet.get();
-				if (!wpt.isMainWpt()) return;
+				if (!wpt.isMainWpt())
+					return;
 				Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
 				Point p = getSoord().transform(mou);
 				p.x -= 10;
@@ -105,15 +98,15 @@ public class JPopiskySlide extends JSingleSlide0 {
 				}
 				g.fillRect(p.x + pose.posuX, p.y + posuny + pose.posuY, stringWidth, height2 * popisky.length);
 
-				//g.drawString(str, x, y)
+				// g.drawString(str, x, y)
 				g.setBackground(Color.YELLOW);
 				g.setColor(barvaTextu);
 				int yOffset = pose.posuY;
 				for (String popisek : popisky) {
-					g.drawString(popisek , p.x + pose.posuX, p.y + yOffset );
+					g.drawString(popisek, p.x + pose.posuX, p.y + yOffset);
 					yOffset += height2;
 				}
-				//g.fillOval(p.x -r, p.y - r, d, d);
+				// g.fillOval(p.x -r, p.y - r, d, d);
 			}
 		});
 
@@ -129,7 +122,7 @@ public class JPopiskySlide extends JSingleSlide0 {
 		return EJakOtacetPriRendrovani.COORD;
 	}
 
-	public void inject (PopiskyModel popiskyModel) {
+	public void inject(PopiskyModel popiskyModel) {
 		this.popiskyModel = popiskyModel;
 	}
 }

@@ -2,9 +2,8 @@ package cz.geokuk.core.coordinates;
 
 public class Wgs extends Misto0 {
 
-	public final double lat;
-	public final double lon;
-
+	public final double	lat;
+	public final double	lon;
 
 	@Override
 	public int hashCode() {
@@ -39,9 +38,9 @@ public class Wgs extends Misto0 {
 		return true;
 	}
 
-
 	/**
 	 * Souřdnice se normalizují na interval <-180,180)
+	 * 
 	 * @param lat
 	 * @param lon
 	 */
@@ -59,7 +58,6 @@ public class Wgs extends Misto0 {
 		return new Wgs(lat + dlat, lon + dlon);
 	}
 
-
 	public Wgs add(final Wgsd wgsd) {
 		return new Wgs(lat + wgsd.lat, lon + wgsd.lon);
 	}
@@ -75,20 +73,19 @@ public class Wgs extends Misto0 {
 	public static String toGeoFormat(final double d) {
 		final double stupne = Math.floor(d);
 		final double minuty = (d - stupne) * 60.0;
-		final String s = String.format("%02d°%06.3f", (int)stupne, minuty).replace(',', '.');
+		final String s = String.format("%02d°%06.3f", (int) stupne, minuty).replace(',', '.');
 		return s;
 	}
 
 	public static String toDdMmSsFormat(final double stupne) {
-		final int istupne = (int)Math.floor(stupne);
+		final int istupne = (int) Math.floor(stupne);
 		final double minuty = (stupne - istupne) * 60.0;
-		final int iminuty = (int)Math.floor(minuty);
+		final int iminuty = (int) Math.floor(minuty);
 		final double vteriny = (minuty - iminuty) * 60.0;
-		final int ivteriny = (int)Math.floor(vteriny);
+		final int ivteriny = (int) Math.floor(vteriny);
 		final String s = String.format("%02d°%02d'%02d\"", istupne, iminuty, ivteriny);
 		return s;
 	}
-
 
 	@Override
 	public String toString() {
@@ -102,10 +99,10 @@ public class Wgs extends Misto0 {
 	public static String vzdalenostStr(final Wgs bod1, final Wgs bod2) {
 		final double dalka = vzdalenost(bod1, bod2);
 		String result;
-		if (dalka < 10000) {  // vyjádříme v metrech
+		if (dalka < 10000) { // vyjádříme v metrech
 			result = Math.round(dalka) + " m";
 		} else if (dalka < 100000) {
-			result = (double)Math.round(dalka / 100) / 10 + " km";
+			result = (double) Math.round(dalka / 100) / 10 + " km";
 		} else {
 			result = Math.round(dalka / 1000) + " km";
 		}
@@ -145,6 +142,7 @@ public class Wgs extends Misto0 {
 
 	/**
 	 * Vrátí, kolik metrů vychází na mou souřanici na dané šířce.
+	 * 
 	 * @return
 	 */
 	public double metryNaMou() {
@@ -167,6 +165,5 @@ public class Wgs extends Misto0 {
 	public Utm toUtm() {
 		return FGeoKonvertor.toUtm(this);
 	}
-
 
 }

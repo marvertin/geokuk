@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.cesty.akce;
 
-
 /*
  * Předek všech akcích volaných z kontextového menu z pozice.
 
@@ -35,9 +34,8 @@ package cz.geokuk.plugins.cesty.akce;
 
 
  */
-public abstract class PositionedAction0 extends CestyAction0  {
+public abstract class PositionedAction0 extends CestyAction0 {
 
 	private static final long serialVersionUID = -5593905643299540151L;
-
 
 }

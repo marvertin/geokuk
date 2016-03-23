@@ -36,33 +36,18 @@ package cz.geokuk.plugins.kesoid.hledani;
  * content.txt
  */
 
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.PatternSyntaxException;
 
-import javax.swing.AbstractAction;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
 import cz.geokuk.core.coord.PoziceModel;
 import cz.geokuk.core.coord.VyrezModel;
 import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.core.hledani.HledaciSluzba;
-import cz.geokuk.core.hledani.RefreshorVysledkuHledani;
-import cz.geokuk.core.hledani.VysledekHledani;
+import cz.geokuk.core.hledani.*;
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.kesoid.KesBag;
@@ -71,43 +56,38 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
-public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit,
-RefreshorVysledkuHledani<Nalezenec>
-,DocumentListener {
+public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit, RefreshorVysledkuHledani<Nalezenec>, DocumentListener {
 
-	private static final long serialVersionUID = 7087453419069194768L;
+	private static final long	serialVersionUID	= 7087453419069194768L;
 
-	private JTextField entry;
-	private JLabel jLabel1;
-	private JButton jButtonCentruj;
-	private JKesTable jKeskovaciTabulka;
-	private JLabel status;
-	private JCheckBox jRegularniVyrazy;
-	private JCheckBox jJenVZobrazenych;
+	private JTextField			entry;
+	private JLabel				jLabel1;
+	private JButton				jButtonCentruj;
+	private JKesTable			jKeskovaciTabulka;
+	private JLabel				status;
+	private JCheckBox			jRegularniVyrazy;
+	private JCheckBox			jJenVZobrazenych;
 
-	final static Color  HILIT_COLOR = Color.LIGHT_GRAY;
-	final static Color  ERROR_COLOR = Color.PINK;
-	final static String CANCEL_ACTION = "cancel-search";
+	final static Color			HILIT_COLOR			= Color.LIGHT_GRAY;
+	final static Color			ERROR_COLOR			= Color.PINK;
+	final static String			CANCEL_ACTION		= "cancel-search";
 
-	final Color entryBg;
-	//  final Highlighter hilit;
-	//  final Highlighter.HighlightPainter painter;
-	private KesBag vsechny;
-	private KesBag filtrovane;
+	final Color					entryBg;
+	// final Highlighter hilit;
+	// final Highlighter.HighlightPainter painter;
+	private KesBag				vsechny;
+	private KesBag				filtrovane;
 
+	private Wgs					referencniBod;
 
-	private Wgs referencniBod;
+	private PoziceModel			poziceModel;
 
-	private PoziceModel poziceModel;
+	private VyrezModel			vyrezModel;
 
-	private VyrezModel vyrezModel;
-
-	private HledaciSluzba hledaciSluzba;
-
+	private HledaciSluzba		hledaciSluzba;
 
 	public JTextoveHledaniDialog() {
 		init();
-
 
 		entryBg = entry.getBackground();
 		entry.getDocument().addDocumentListener(this);
@@ -130,19 +110,15 @@ RefreshorVysledkuHledani<Nalezenec>
 					Kesoid kes = nalezenec.getKes();
 					poziceModel.setPozice(kes.getMainWpt());
 					vyrezModel.vystredovatNaPozici();
-					//Board.eveman.fire(new PoziceChangedEvent(kes.getMainWpt(), true) );
+					// Board.eveman.fire(new PoziceChangedEvent(kes.getMainWpt(), true) );
 				}
-				//System.out.println("NEJBLIZSI KES: " + nejblizsiKes);
+				// System.out.println("NEJBLIZSI KES: " + nejblizsiKes);
 			}
 		});
 
+		// Board.eveman.registerWeakly(this);
 
-
-		//Board.eveman.registerWeakly(this);
-
-
-
-		//jKeskovaciTabulka.getMod
+		// jKeskovaciTabulka.getMod
 		jKeskovaciTabulka.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -164,8 +140,8 @@ RefreshorVysledkuHledani<Nalezenec>
 		setReferencniBod(aEvent.wgs);
 	}
 
-	/** This method is called from within the constructor to
-	 * initialize the form.
+	/**
+	 * This method is called from within the constructor to initialize the form.
 	 */
 
 	@Override
@@ -180,7 +156,7 @@ RefreshorVysledkuHledani<Nalezenec>
 		setTitle("Najdi keš");
 
 		JKesTable kesTable = new JKesTable();
-		//    jKeskovaciTabulka = new JScrollPane(textArea);
+		// jKeskovaciTabulka = new JScrollPane(textArea);
 		jKeskovaciTabulka = kesTable;
 
 		jLabel1.setText("Hledat: ");
@@ -195,40 +171,22 @@ RefreshorVysledkuHledani<Nalezenec>
 
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)       //hroup
-				.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()  //h1
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)                  //h2
-								.addComponent(jKeskovaciTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-								.addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-								.addGroup(layout.createSequentialGroup()        // h3
-										.addComponent(jLabel1)
-										.addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-										.addComponent(jButtonCentruj)
-										)
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(jJenVZobrazenych)
-										.addComponent(jRegularniVyrazy)
-										)
-								)
-						)
-				);
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // hroup
+				.addGroup(GroupLayout.Alignment.TRAILING,
+						layout.createSequentialGroup() // h1
+								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // h2
+										.addComponent(jKeskovaciTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+										.addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+										.addGroup(layout.createSequentialGroup() // h3
+												.addComponent(jLabel1).addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE).addComponent(jButtonCentruj))
+								.addGroup(layout.createSequentialGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)))));
 
-
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)  // vGrou
-				.addGroup(layout.createSequentialGroup()                                       //v1
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)        //v2
-								.addComponent(jLabel1)
-								.addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButtonCentruj)
-								)
-						.addGroup(layout.createParallelGroup()
-								.addComponent(jJenVZobrazenych)
-								.addComponent(jRegularniVyrazy)
-								)
-						.addComponent(status)
-						.addComponent(jKeskovaciTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-						)
-				);
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // vGrou
+				.addGroup(layout.createSequentialGroup() // v1
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE) // v2
+								.addComponent(jLabel1).addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jButtonCentruj))
+						.addGroup(layout.createParallelGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)).addComponent(status)
+						.addComponent(jKeskovaciTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)));
 
 		pack();
 	}
@@ -243,15 +201,16 @@ RefreshorVysledkuHledani<Nalezenec>
 		search();
 	}
 
-
 	protected void setReferencniBod(Wgs wgs) {
-		if (wgs.equals(referencniBod)) return;
+		if (wgs.equals(referencniBod))
+			return;
 		referencniBod = wgs;
 		search();
 	}
 
 	public void search() {
-		if (vsechny == null || filtrovane == null || referencniBod == null) return;
+		if (vsechny == null || filtrovane == null || referencniBod == null)
+			return;
 		message("Hleda se ...");
 		String s = entry.getText();
 		HledaciPodminka podm = new HledaciPodminka();
@@ -302,23 +261,22 @@ RefreshorVysledkuHledani<Nalezenec>
 
 		@Override
 		public void actionPerformed(ActionEvent ev) {
-			//      hilit.removeAllHighlights();
+			// hilit.removeAllHighlights();
 			entry.setText("");
 			entry.setBackground(entryBg);
 		}
 	}
 
-
 	@Override
 	public void refreshVysledekHledani(VysledekHledani<Nalezenec> vysledekHledani) {
-		//    if (nalezenci.size() == 0) {
-		//      jButtonCentruj.setEnabled(false);
-		//    } else {
-		//      jButtonCentruj.setEnabled(true);
-		//    }
+		// if (nalezenci.size() == 0) {
+		// jButtonCentruj.setEnabled(false);
+		// } else {
+		// jButtonCentruj.setEnabled(true);
+		// }
 		if (vysledekHledani.nalezenci != null) {
 			jKeskovaciTabulka.setKeslist(vysledekHledani.nalezenci);
-			if (vysledekHledani.nalezenci.size() > 0) {   // match found
+			if (vysledekHledani.nalezenci.size() > 0) { // match found
 				entry.setBackground(entryBg);
 				message("Nalezeno " + vysledekHledani.nalezenci.size() + " keší.");
 			} else {
@@ -334,18 +292,21 @@ RefreshorVysledkuHledani<Nalezenec>
 		}
 	}
 
-
 	public void inject(PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
+
 	public void inject(VyrezModel vyrezModel) {
 		this.vyrezModel = vyrezModel;
 	}
+
 	public void inject(HledaciSluzba hledaciSluzba) {
 		this.hledaciSluzba = hledaciSluzba;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
 	 */
 	@Override
@@ -359,4 +320,3 @@ RefreshorVysledkuHledani<Nalezenec>
 	}
 
 }
-

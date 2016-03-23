@@ -3,40 +3,35 @@
  */
 package cz.geokuk.plugins.kesoid;
 
+import java.util.concurrent.*;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.LinkedBlockingDeque;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import cz.geokuk.framework.MySwingWorker0;
-import cz.geokuk.framework.ProgressModel;
-import cz.geokuk.framework.Progressor;
+import cz.geokuk.framework.*;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.index2d.BoundingRect;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 
 /**
  * @author veverka
  */
 public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
-	private static final Logger log = LogManager.getLogger(KesFilteringSwingWorker.class.getSimpleName());
+	private static final Logger	log		= LogManager.getLogger(KesFilteringSwingWorker.class.getSimpleName());
 
-	private static final Dvojka ZARAZKA = new Dvojka();
-	private static int citac;
+	private static final Dvojka	ZARAZKA	= new Dvojka();
+	private static int			citac;
 
-	private final KesBag vsechny;
-	private final Genom iGenom;
-	private final int cisloFiltrovani;
-	private long startTime;
-	private final KesFilter kesfilter;
-	private final ProgressModel progresModel;
-	private final KesoidModel kesoidModel;
+	private final KesBag		vsechny;
+	private final Genom			iGenom;
+	private final int			cisloFiltrovani;
+	private long				startTime;
+	private final KesFilter		kesfilter;
+	private final ProgressModel	progresModel;
+	private final KesoidModel	kesoidModel;
 
 	/**
 	 * @param aBoard
@@ -51,7 +46,9 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 		cisloFiltrovani = ++citac;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
@@ -63,8 +60,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 		try {
 			final KesBag kesbag = new KesBag(iGenom);
 			final BlockingQueue<Dvojka> queue = new LinkedBlockingDeque<>();
-			log.debug("FILTERING {} - start, source: {} caches, {}={} waypoints.", cisloFiltrovani, vsechny2.getKesoidy().size(),
-					pocetvsech, vsechny2.getIndexator().count(BoundingRect.ALL));
+			log.debug("FILTERING {} - start, source: {} caches, {}={} waypoints.", cisloFiltrovani, vsechny2.getKesoidy().size(), pocetvsech, vsechny2.getIndexator().count(BoundingRect.ALL));
 			startTime = System.currentTimeMillis();
 			kesfilter.init();
 			new Thread(new Runnable() {
@@ -72,9 +68,10 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 				public void run() {
 					try {
 						int citac = 0;
-						//System.out.println("VSECHNY: " + vsechny2);
+						// System.out.println("VSECHNY: " + vsechny2);
 						for (Wpt wpt : vsechny2.getWpts()) {
-							if (isCancelled()) return;
+							if (isCancelled())
+								return;
 							Genotyp genotyp = wpt.getGenotyp(iGenom);
 							// TEn genotyp se předává jen z důvodu optimalizace
 							if (kesfilter.isFiltered(wpt, iGenom, genotyp)) {
@@ -94,15 +91,14 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 					}
 				}
 			}, "Filtrovani kesoidu").start();
-			for (; ; ) {
+			for (;;) {
 				Dvojka dvojka = queue.take();
-				if (dvojka == ZARAZKA) break;
+				if (dvojka == ZARAZKA)
+					break;
 				kesbag.add(dvojka.wpt, dvojka.genotyp);
 			}
 			kesfilter.done();
-			log.debug("FILTERING {} - prepared result, {} ms.",
-					cisloFiltrovani,
-					(System.currentTimeMillis() - startTime));
+			log.debug("FILTERING {} - prepared result, {} ms.", cisloFiltrovani, (System.currentTimeMillis() - startTime));
 			kesbag.done();
 			progressor.finish();
 			return kesbag;
@@ -112,7 +108,9 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
@@ -122,20 +120,16 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 			return;
 		}
 		KesBag result = get();
-		if (result == null) return; // asi zkanclváno
+		if (result == null)
+			return; // asi zkanclváno
 		// TODO řešit progresy nějak ssematicky
 		kesoidModel.fire(new KeskyVyfiltrovanyEvent(result, vsechny));
-		log.debug("FILTERING {} - finished, filtered {} caches, {}={} waypoints, {} ms.\n",
-				cisloFiltrovani,
-				result.getKesoidy().size(),
-				result.getWpts().size(),
-				result.getIndexator().count(BoundingRect.ALL),
-				(System.currentTimeMillis() - startTime));
+		log.debug("FILTERING {} - finished, filtered {} caches, {}={} waypoints, {} ms.\n", cisloFiltrovani, result.getKesoidy().size(), result.getWpts().size(),
+				result.getIndexator().count(BoundingRect.ALL), (System.currentTimeMillis() - startTime));
 	}
 
 	private static class Dvojka {
-		Wpt wpt;
-		Genotyp genotyp;
+		Wpt		wpt;
+		Genotyp	genotyp;
 	}
 }
-

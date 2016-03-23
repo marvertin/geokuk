@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-
 import java.util.concurrent.ExecutionException;
 
 import cz.geokuk.framework.MySwingWorker0;
@@ -12,9 +11,9 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
  */
 public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
 
-	private final IkonNacitacLoader ikonNacitac;
-	private final boolean iPrenacti;
-	private final KesoidModel kesoidModel;
+	private final IkonNacitacLoader	ikonNacitac;
+	private final boolean			iPrenacti;
+	private final KesoidModel		kesoidModel;
 
 	/**
 	 * @param aBoard
@@ -25,7 +24,9 @@ public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
 		this.kesoidModel = kesoidModel;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
@@ -34,21 +35,23 @@ public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
 		return ikonNacitac.nacti(this, iPrenacti, kesoidModel.getJmenoAktualniSadyIkon());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
-		if (isCancelled()) return;
+		if (isCancelled())
+			return;
 		IkonBag result = get();
-		if (result == null) return; // asi zkanclváno
-		//      System.out.printf("Loaded %d caches, %d=%d waypoints: \n",
-		//          result.getKesky().size(),
-		//          result.getWpts().size(),
-		//          result.getIndexator().count(BoundingRect.ALL));
+		if (result == null)
+			return; // asi zkanclváno
+		// System.out.printf("Loaded %d caches, %d=%d waypoints: \n",
+		// result.getKesky().size(),
+		// result.getWpts().size(),
+		// result.getIndexator().count(BoundingRect.ALL));
 		kesoidModel.setIkonBag(result);
 	}
 
-
 }
-

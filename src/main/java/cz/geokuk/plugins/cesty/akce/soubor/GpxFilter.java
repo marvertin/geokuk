@@ -8,8 +8,10 @@ class GpxFilter extends FileFilter {
 
 	@Override
 	public boolean accept(File pathname) {
-		if (pathname.isDirectory()) return true;
-		if (pathname.getName().toLowerCase().endsWith(".gpx")) return true;
+		if (pathname.isDirectory())
+			return true;
+		if (pathname.getName().toLowerCase().endsWith(".gpx"))
+			return true;
 		return false;
 	}
 

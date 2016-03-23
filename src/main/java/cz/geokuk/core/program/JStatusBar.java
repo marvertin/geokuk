@@ -3,46 +3,25 @@
  */
 package cz.geokuk.core.program;
 
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-import cz.geokuk.core.coord.Coord;
-import cz.geokuk.core.coord.PoziceChangedEvent;
-import cz.geokuk.core.coord.Poziceq;
-import cz.geokuk.core.coord.VyrezChangedEvent;
-import cz.geokuk.core.coord.ZmenaSouradnicMysiEvent;
+import cz.geokuk.core.coord.*;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.framework.FKurzory;
-import cz.geokuk.framework.ProgressEvent;
-import cz.geokuk.framework.Progressor;
+import cz.geokuk.framework.*;
 import cz.geokuk.plugins.cesty.CestyChangedEvent;
 import cz.geokuk.plugins.cesty.data.Doc;
 import cz.geokuk.plugins.kesoid.Ikonizer;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
-import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
-import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
-import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
-import cz.geokuk.plugins.kesoid.mvc.PrekrocenLimitWaypointuVeVyrezuEvent;
-import cz.geokuk.plugins.vylety.EVylet;
-import cz.geokuk.plugins.vylety.VyletChangeEvent;
-import cz.geokuk.plugins.vylety.VyletModel;
+import cz.geokuk.plugins.kesoid.mvc.*;
+import cz.geokuk.plugins.vylety.*;
 
 /**
  * @author veverka
@@ -50,51 +29,51 @@ import cz.geokuk.plugins.vylety.VyletModel;
  */
 public class JStatusBar extends JPanel {
 
-	private static final long serialVersionUID = -6267502844907253041L;
+	private static final long					serialVersionUID				= -6267502844907253041L;
 
-	private Mou cur = new Mou(0, 0);
+	private Mou									cur								= new Mou(0, 0);
 
-	private Poziceq poziceq = new Poziceq();
+	private Poziceq								poziceq							= new Poziceq();
 
-	private final JValue souradnice = new JValue();
+	private final JValue						souradnice						= new JValue();
 
-	private final JValue celkovePoctyVsude = new JValue();
-	private final JValue filtrovanePocetyVsude = new JValue();
-	private final JSkrtnutaValue celkovePoctyVyrez = new JSkrtnutaValue();
-	private final JSkrtnutaValue filtrovanePocetyVyrez = new JSkrtnutaValue();
+	private final JValue						celkovePoctyVsude				= new JValue();
+	private final JValue						filtrovanePocetyVsude			= new JValue();
+	private final JSkrtnutaValue				celkovePoctyVyrez				= new JSkrtnutaValue();
+	private final JSkrtnutaValue				filtrovanePocetyVyrez			= new JSkrtnutaValue();
 
-	private final JValue vzdalenost = new JValue();
-	private final JLabel azimutSmer = new JLabel();
-	private final JValue azimutCislo = new JValue();
+	private final JValue						vzdalenost						= new JValue();
+	private final JLabel						azimutSmer						= new JLabel();
+	private final JValue						azimutCislo						= new JValue();
 
-	private final JValue vyletAno = new JValue();
-	private final JValue vyletNe  = new JValue();
+	private final JValue						vyletAno						= new JValue();
+	private final JValue						vyletNe							= new JValue();
 
-	private final JValue souradnicePozice = new JValue();
-	private final JValue meritkoMapy = new JValue();
+	private final JValue						souradnicePozice				= new JValue();
+	private final JValue						meritkoMapy						= new JValue();
 
-	private final JLabel varovaniPoctuPrekrocenych = new JLabel();
+	private final JLabel						varovaniPoctuPrekrocenych		= new JLabel();
 
-	private JPanel odPozice;
+	private JPanel								odPozice;
 
-	private final Map<Progressor, JProgressBar> jFilterProgressMap = new HashMap<>();
-	private JPanel jFilterProgressPanel;
+	private final Map<Progressor, JProgressBar>	jFilterProgressMap				= new HashMap<>();
+	private JPanel								jFilterProgressPanel;
 
-	private final JValue jZdrojeKesoiduPocetNactenych = new JValue();
-	private final JSkrtnutaValue jZdrojeKesoiduPocetNenactenych = new JSkrtnutaValue();
-	private final JValue jZdrojeKesoiduCas = new JValue();
+	private final JValue						jZdrojeKesoiduPocetNactenych	= new JValue();
+	private final JSkrtnutaValue				jZdrojeKesoiduPocetNenactenych	= new JSkrtnutaValue();
+	private final JValue						jZdrojeKesoiduCas				= new JValue();
 
-	private final JValue jSouborSVyletem = new JValue();
-	private final JLabel jSouborSVyletemPotrebujeUlozit = new JLabel();
+	private final JValue						jSouborSVyletem					= new JValue();
+	private final JLabel						jSouborSVyletemPotrebujeUlozit	= new JLabel();
 
-	private KesBag filtrovane;
-	private KesBag vsechny;
+	private KesBag								filtrovane;
+	private KesBag								vsechny;
 
-	private Coord moord;
+	private Coord								moord;
 
-	private Akce akce;
+	private Akce								akce;
 
-	private final JValue jPocetKesiVCestach = new JValue();
+	private final JValue						jPocetKesiVCestach				= new JValue();
 
 	public JStatusBar() {
 		initComponents();
@@ -103,14 +82,14 @@ public class JStatusBar extends JPanel {
 	private void initComponents() {
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
-		JPanel souradnicePanel =  createPanel();
-		//souradnicePanel.setBorder(BorderFactory.createEtchedBorder());
+		JPanel souradnicePanel = createPanel();
+		// souradnicePanel.setBorder(BorderFactory.createEtchedBorder());
 
-		//souradnicePozice.setEditable(false);
+		// souradnicePozice.setEditable(false);
 
 		souradnicePanel.add(new JLabel("Myš:"));
 		souradnicePanel.add(souradnice);
-		//    souradnice.setColumns(13);
+		// souradnice.setColumns(13);
 		souradnice.setToolTipText("Souřadnice kurzoru myši");
 		souradnicePanel.add(new JLabel("Z="));
 		souradnicePanel.add(meritkoMapy);
@@ -135,22 +114,21 @@ public class JStatusBar extends JPanel {
 		azimutCislo.setToolTipText("Azimut od vyznačené pozice k myši kurzoru.");
 
 		meritkoMapy.setToolTipText("Měřítko mapy, čím větší číslo, tím větší přiblížení");
-		//add(mapoveMeritko);
-
+		// add(mapoveMeritko);
 
 		add(odPozice);
 
-		//add(Box.createHorizontalGlue());
+		// add(Box.createHorizontalGlue());
 
-		//	  add(new JLabel("Meritko:"));
-		//	  add(meritkoMapy);
-		//	  meritkoMapy.setToolTipText("Aktuální měřítko zobrazené mapy, čím menší číslo, tím oddálenější mapa.");
+		// add(new JLabel("Meritko:"));
+		// add(meritkoMapy);
+		// meritkoMapy.setToolTipText("Aktuální měřítko zobrazené mapy, čím menší číslo, tím oddálenější mapa.");
 
 		///////////////////////////////
 		JPanel poctyKesi = createPanel();
-		//	  poctyKesi.setBorder(BorderFactory.createLoweredBevelBorder());
-		//	  poctyKesi.setBorder(BorderFactory.createRaisedBevelBorder());
-		//poctyKesi.setBorder(BorderFactory.createEtchedBorder());
+		// poctyKesi.setBorder(BorderFactory.createLoweredBevelBorder());
+		// poctyKesi.setBorder(BorderFactory.createRaisedBevelBorder());
+		// poctyKesi.setBorder(BorderFactory.createEtchedBorder());
 		poctyKesi.add(new JLabel("Vše:"));
 		poctyKesi.add(celkovePoctyVsude);
 		celkovePoctyVsude.setToolTipText("Počet waypointů celkem / počet kešoidů celkem.");
@@ -166,11 +144,10 @@ public class JStatusBar extends JPanel {
 		filtrovanePocetyVyrez.setToolTipText("Počet všech zobrazených waypointů ve výřezu.");
 		add(poctyKesi);
 
-
 		////////////////////////////
 
 		JPanel vylety = createPanel();
-		//vylety.setBorder(BorderFactory.createEtchedBorder());
+		// vylety.setBorder(BorderFactory.createEtchedBorder());
 		vylety.add(new JLabel("Výlet:"));
 		vylety.add(vyletAno);
 		vyletAno.setToolTipText("Počet keší, u kterých má vyznačen příznak, že je chci lovit.");
@@ -184,13 +161,10 @@ public class JStatusBar extends JPanel {
 		jPocetKesiVCestach.setToolTipText("Počet waypointů dohromady / počet cest.");
 		add(vylety);
 
-
-
-
 		add(varovaniPoctuPrekrocenych);
 		jFilterProgressPanel = createPanel();
-		//    jFilterProgress.setVisible(false);
-		//    jFilterProgress.setStringPainted(true);
+		// jFilterProgress.setVisible(false);
+		// jFilterProgress.setStringPainted(true);
 		add(jFilterProgressPanel);
 
 		JPanel zdrojeKesoiduPanel = createPanel();
@@ -205,9 +179,10 @@ public class JStatusBar extends JPanel {
 		zdrojeKesoiduPanel.setCursor(FKurzory.KAM_SE_DA_KLIKNOUT);
 		add(zdrojeKesoiduPanel);
 
-
 		zdrojeKesoiduPanel.addMouseListener(new MouseAdapter() {
-			/* (non-Javadoc)
+			/*
+			 * (non-Javadoc)
+			 * 
 			 * @see java.awt.event.MouseAdapter#mouseEntered(java.awt.event.MouseEvent)
 			 */
 			@Override
@@ -233,12 +208,12 @@ public class JStatusBar extends JPanel {
 	}
 
 	public void onEvent(ZmenaSouradnicMysiEvent event) {
-		if (cur != null && cur.equals(event.moucur) ) return;
+		if (cur != null && cur.equals(event.moucur))
+			return;
 		cur = event.moucur;
-		souradnice.setText(cur == null ? "?" :  cur.toWgs().toString());
+		souradnice.setText(cur == null ? "?" : cur.toWgs().toString());
 		prepocitejVzdalenostAAzimut();
 	}
-
 
 	public void onEvent(KeskyVyfiltrovanyEvent aEvent) {
 		filtrovane = aEvent.getFiltrovane();
@@ -266,11 +241,11 @@ public class JStatusBar extends JPanel {
 
 	public void onEvent(ProgressEvent event) {
 		Progressor progressor = event.getProgressor();
-		//progressor = null;
+		// progressor = null;
 		JProgressBar jProgressBar = jFilterProgressMap.get(progressor);
-		//System.out.println(event);
+		// System.out.println(event);
 		boolean pridavat = event.isVisible();
-		//pridavat = true;
+		// pridavat = true;
 		if (pridavat) {
 			if (jProgressBar == null) {
 				jProgressBar = new JProgressBar();
@@ -297,30 +272,30 @@ public class JStatusBar extends JPanel {
 	public void onEvent(PoziceChangedEvent event) {
 		poziceq = event.poziceq;
 		prepocitejVzdalenostAAzimut();
-		//    vzdalenost.setText("");
-		//    azimutCislo.setText("");
-		//    azimutSmer.setText("");
-		//    azimutSmer.setIcon(null);
-		//System.out.println("VELIKOST STAVOVEHO RADKU: " + JStatusBar.this.getSize());
+		// vzdalenost.setText("");
+		// azimutCislo.setText("");
+		// azimutSmer.setText("");
+		// azimutSmer.setIcon(null);
+		// System.out.println("VELIKOST STAVOVEHO RADKU: " + JStatusBar.this.getSize());
 
 		if (poziceq.isNoPosition()) {
-			//      souradnicePozice.setVisible(false);
+			// souradnicePozice.setVisible(false);
 			souradnicePozice.setText("N/A");
 		} else {
 			souradnicePozice.setText(poziceq.getWgs().toString());
-			//      souradnicePozice.setVisible(true);
+			// souradnicePozice.setVisible(true);
 		}
 	}
 
-	//  public void onEvent(IgnoreListChangedEvent aEvent) {
-	//    CestyModel cestyModel = aEvent.getModel();
-	//    //vyletAno.setText(cestyModel.get(EVylet.ANO).size()+"");
-	//    vyletNe.setText(cestyModel.getPocetIgnorovanychKesoidu()+"");
-	//  }
+	// public void onEvent(IgnoreListChangedEvent aEvent) {
+	// CestyModel cestyModel = aEvent.getModel();
+	// //vyletAno.setText(cestyModel.get(EVylet.ANO).size()+"");
+	// vyletNe.setText(cestyModel.getPocetIgnorovanychKesoidu()+"");
+	// }
 
 	public void onEvent(CestyChangedEvent aEvent) {
 		Doc doc = aEvent.getModel().getDoc();
-		//    vyletAno.setText(doc.getPocetWaypointu() + "");
+		// vyletAno.setText(doc.getPocetWaypointu() + "");
 		if (doc.isEmpty()) {
 			jSouborSVyletem.setText(".");
 			jSouborSVyletem.setToolTipText("Výlet není vůbec definován.");
@@ -337,44 +312,41 @@ public class JStatusBar extends JPanel {
 			}
 		}
 		jPocetKesiVCestach.setText(doc.getPocetWaypointu() + "/" + doc.getPocetCest());
-		//    vyletNe.setText(cestyModel.get(EVylet.NE).size()+"");
+		// vyletNe.setText(cestyModel.get(EVylet.NE).size()+"");
 	}
 
 	public void onEvent(VyletChangeEvent aEvent) {
 		VyletModel vyletModel = aEvent.getVyletModel();
-		vyletAno.setText(vyletModel.get(EVylet.ANO).size()+"");
-		vyletNe.setText(vyletModel.get(EVylet.NE).size()+"");
+		vyletAno.setText(vyletModel.get(EVylet.ANO).size() + "");
+		vyletNe.setText(vyletModel.get(EVylet.NE).size() + "");
 	}
 
-
-
 	private void prepocitejVzdalenostAAzimut() {
-		if (! poziceq.isNoPosition() && cur  != null) {
+		if (!poziceq.isNoPosition() && cur != null) {
 			vzdalenost.setText(vzdalenostPoziceAMysia());
 			azimutSmer.setIcon(Ikonizer.findSmerIcon(azimutPoziceAMysi()));
-			//azimutSmer.set
+			// azimutSmer.set
 			azimutCislo.setText(Math.round(azimutPoziceAMysi()) + "°");
 			odPozice.setVisible(true);
 			revalidate();
 		} else {
 			odPozice.setVisible(false);
 		}
-		//meritkoMapy.setText(coord.getMoumer() + "");
+		// meritkoMapy.setText(coord.getMoumer() + "");
 	}
 
-
 	private String celkove(KesBag bag) {
-		String s =  bag.getWpts().size() + "/" +  bag.getKesoidy().size();
+		String s = bag.getWpts().size() + "/" + bag.getKesoidy().size();
 		return s;
 	}
 
 	private String veVyrezu(KesBag bag) {
-		if (bag == null) return null;
+		if (bag == null)
+			return null;
 		int count = bag.getIndexator().count(moord.getBoundingRect());
 		String s = count + "";
 		return s;
 	}
-
 
 	private String vzdalenostPoziceAMysia() {
 		return Wgs.vzdalenostStr(cur.toWgs(), poziceq.getWgs());
@@ -384,16 +356,14 @@ public class JStatusBar extends JPanel {
 		return poziceq.getWgs().azimut(cur.toWgs());
 	}
 
-
 	public void onEvent(PrekrocenLimitWaypointuVeVyrezuEvent event) {
 		setVarujPrekroceni(event.isPrekrocen());
 	}
 
 	public void onEvent(KesoidOnoffEvent event) {
-		celkovePoctyVyrez.setSkrtnuto(! event.isOnoff());
-		filtrovanePocetyVyrez.setSkrtnuto(! event.isOnoff());
+		celkovePoctyVyrez.setSkrtnuto(!event.isOnoff());
+		filtrovanePocetyVyrez.setSkrtnuto(!event.isOnoff());
 	}
-
 
 	private void setVarujPrekroceni(boolean b) {
 		if (b) {
@@ -411,15 +381,16 @@ public class JStatusBar extends JPanel {
 		private static final long serialVersionUID = 870515243956856500L;
 
 		public JValue() {
-			//setFocusable(false);
+			// setFocusable(false);
 			setEditable(false);
 			setCursor(FKurzory.TEXTOVY_KURZOR);
-			//System.out.println("INPUTOVA MAPA: " + getInputMap().keys() );
+			// System.out.println("INPUTOVA MAPA: " + getInputMap().keys() );
 			setMargin(new Insets(0, 5, 0, 0));
 		}
 
-
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JTextField#getPreferredSize()
 		 */
 		@Override
@@ -429,33 +400,34 @@ public class JStatusBar extends JPanel {
 			return preferredSize;
 		}
 
-
-		//    @Override
-		//    public void setText(String s) {
-		//      super.setText(s);
-		//      //super.setColumns(s.length());
-		//      Dimension preferredSize = super.getPreferredSize();
-		//      preferredSize.width +=3;
-		//      setPreferredSize(preferredSize);
-		//      System.out.println(preferredSize);
-		//    }
+		// @Override
+		// public void setText(String s) {
+		// super.setText(s);
+		// //super.setColumns(s.length());
+		// Dimension preferredSize = super.getPreferredSize();
+		// preferredSize.width +=3;
+		// setPreferredSize(preferredSize);
+		// System.out.println(preferredSize);
+		// }
 
 	}
 
 	private class JSkrtnutaValue extends JValue {
 
-		private static final long serialVersionUID = 4571833579561872745L;
+		private static final long	serialVersionUID	= 4571833579561872745L;
 
-		private boolean skrtnuto = true;
-
+		private boolean				skrtnuto			= true;
 
 		public void setSkrtnuto(boolean skrtnuto) {
-			if (this.skrtnuto == skrtnuto) return;
+			if (this.skrtnuto == skrtnuto)
+				return;
 			this.skrtnuto = skrtnuto;
 			repaint();
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 		 */
 		@Override
@@ -468,6 +440,7 @@ public class JStatusBar extends JPanel {
 		}
 
 	}
+
 	public void inject(Akce akce) {
 		this.akce = akce;
 	}

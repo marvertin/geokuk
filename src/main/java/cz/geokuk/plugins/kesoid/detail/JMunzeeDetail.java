@@ -1,16 +1,14 @@
 package cz.geokuk.plugins.kesoid.detail;
 
-
 import javax.swing.Box;
 
 import cz.geokuk.plugins.kesoid.Munzee;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 
-
-
 /**
  * Detailní informace o vybrané keši.
+ * 
  * @author Spikodrob
  *
  */
@@ -19,15 +17,13 @@ public class JMunzeeDetail extends JKesoidDetail0 {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -3323887260932949747L;
+	private static final long	serialVersionUID	= -3323887260932949747L;
 
-	private Munzee munzee;
-
+	private Munzee				munzee;
 
 	public JMunzeeDetail() {
 		initComponents();
 	}
-
 
 	private void initComponents() {
 
@@ -36,14 +32,12 @@ public class JMunzeeDetail extends JKesoidDetail0 {
 
 		Box box2 = Box.createHorizontalBox();
 
-
 		Box pan4b = Box.createVerticalBox();
 
 		box2.add(Box.createHorizontalGlue());
 
-		//  pan4.setAlignmentX(RIGHT_ALIGNMENT);
+		// pan4.setAlignmentX(RIGHT_ALIGNMENT);
 		box2.add(pan4b);
-
 
 		hlav.add(box2);
 
@@ -51,15 +45,11 @@ public class JMunzeeDetail extends JKesoidDetail0 {
 		box3.add(Box.createGlue());
 		hlav.add(box3);
 
-
-
-
-
 	}
 
 	@Override
 	public void napln(Wpt wpt) {
-		munzee = (Munzee)wpt.getKesoid();
+		munzee = (Munzee) wpt.getKesoid();
 		napln();
 	}
 
@@ -69,11 +59,7 @@ public class JMunzeeDetail extends JKesoidDetail0 {
 		}
 	}
 
-
 	private void napln() {
 	}
-
-
-
 
 }

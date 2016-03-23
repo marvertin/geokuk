@@ -4,10 +4,8 @@ import cz.geokuk.framework.Event0;
 
 public class PripravaRendrovaniEvent extends Event0<RenderModel> {
 
-	private final RenderSettings renderSettings;
-	private final EStavRendrovani stavRendrovani;
-
-
+	private final RenderSettings	renderSettings;
+	private final EStavRendrovani	stavRendrovani;
 
 	/**
 	 * @param renderSettings
@@ -18,7 +16,6 @@ public class PripravaRendrovaniEvent extends Event0<RenderModel> {
 		this.stavRendrovani = stavRendrovani;
 	}
 
-
 	/**
 	 * @return the renderSettings
 	 */
@@ -26,13 +23,11 @@ public class PripravaRendrovaniEvent extends Event0<RenderModel> {
 		return renderSettings;
 	}
 
-
 	/**
 	 * @return the stavRendrovani
 	 */
 	public EStavRendrovani getStavRendrovani() {
 		return stavRendrovani;
 	}
-
 
 }

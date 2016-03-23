@@ -7,8 +7,8 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public abstract class DocAction0 extends PositionedAction0 {
 
-	private static final long serialVersionUID = 1L;
-	private final Doc kontextovyDoc;
+	private static final long	serialVersionUID	= 1L;
+	private final Doc			kontextovyDoc;
 
 	public DocAction0(Doc kontextovyDoc) {
 		this.kontextovyDoc = kontextovyDoc;
@@ -21,7 +21,6 @@ public abstract class DocAction0 extends PositionedAction0 {
 	protected final void vyletChanged() {
 		vyhodnotitPovolenost();
 	}
-
 
 	private void vyhodnotitPovolenost() {
 		Doc doc = getDoc();
@@ -46,8 +45,8 @@ public abstract class DocAction0 extends PositionedAction0 {
 	}
 
 	/**
-	 * Pokud je daný Cesta, tak se nechá natavit jméno. Natavovací metoda také
-	 * ví, zda je akce z kontexotvého menu nebo z hlavního
+	 * Pokud je daný Cesta, tak se nechá natavit jméno. Natavovací metoda také ví, zda je akce z kontexotvého menu nebo z hlavního
+	 * 
 	 * @param Cesta
 	 * @param aZKontextovehoMenu
 	 */
@@ -55,13 +54,16 @@ public abstract class DocAction0 extends PositionedAction0 {
 
 	/**
 	 * Zda se pro dany Cesta ma akce povolit.
-	 * @param Cesta Nikdy nebude predano null
+	 * 
+	 * @param Cesta
+	 *            Nikdy nebude predano null
 	 * @return
 	 */
 	protected abstract boolean mamPovolitProDoc(Doc doc);
 
 	/**
 	 * Provedení akce pro daný Cesta.
+	 * 
 	 * @param Cesta
 	 */
 	protected abstract void provedProDoc(Doc doc);
@@ -71,16 +73,12 @@ public abstract class DocAction0 extends PositionedAction0 {
 			curdoc().kontrolaKonzistence();
 		}
 		if (kontextovyDoc != null) {
-			//System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-getClass " + getClass());
-			//kontextovaCesta.kontrolaKonzistence();
+			// System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-getClass " + getClass());
+			// kontextovaCesta.kontrolaKonzistence();
 			return kontextovyDoc;
-		}
-		else {
+		} else {
 			return curdoc();
 		}
 	}
 
-
-
 }
-

@@ -1,23 +1,22 @@
 package cz.geokuk.framework;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import cz.geokuk.plugins.kesoid.mapicon.ASada;
+import static com.google.common.truth.Truth.assertThat;
+
+import java.io.File;
+import java.util.*;
+import java.util.prefs.AbstractPreferences;
+import java.util.prefs.BackingStoreException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.prefs.AbstractPreferences;
-import java.util.prefs.BackingStoreException;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
-import static com.google.common.truth.Truth.assertThat;
+import cz.geokuk.plugins.kesoid.mapicon.ASada;
 
 /**
  * Unit tests for {@link MyPreferences}.
@@ -72,7 +71,7 @@ public class MyPreferencesTest {
 	public void test_putStringSet() {
 		Set<String> toStore = ImmutableSet.of("12345", "qwert", "asdfgh", "yxcvb", "12345", "@{}^<");
 		preferences.putStringSet("jhka", toStore);
-		assertThat((Iterable<String>)preferences.getStringSet("jhka", null)).isEqualTo(toStore);
+		assertThat((Iterable<String>) preferences.getStringSet("jhka", null)).isEqualTo(toStore);
 	}
 
 	class MockPreferences extends AbstractPreferences {
@@ -129,5 +128,3 @@ public class MyPreferencesTest {
 		}
 	}
 }
-
-

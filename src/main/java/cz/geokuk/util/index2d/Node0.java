@@ -11,9 +11,7 @@ public abstract class Node0<T> {
 		return count;
 	}
 
-
 	abstract boolean isSheet();
-
 
 	abstract void visit(BoundingRect rect, Visitor<T> visitor);
 

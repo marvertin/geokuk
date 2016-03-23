@@ -28,5 +28,4 @@ public class KesoidUmisteniSouboruChangedEvent extends Event0<KesoidModel> {
 		return umisteniSouboru;
 	}
 
-
 }

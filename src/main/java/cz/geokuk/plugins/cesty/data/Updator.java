@@ -14,7 +14,6 @@ public class Updator {
 		doc.xadd(cesta);
 	}
 
-
 	public Bod pridejNaKonec(Cesta cesta, Mouable mouable) {
 		cesta.setChanged();
 		return cesta.pridejNaKonec(mouable);
@@ -29,10 +28,10 @@ public class Updator {
 		bod.remove();
 	}
 
-	//  public void odeberBod(Cesta cesta, Mouable mouable) {
-	//    cesta.setChanged();
-	//    cesta.odeberBod(mouable);
-	//  }
+	// public void odeberBod(Cesta cesta, Mouable mouable) {
+	// cesta.setChanged();
+	// cesta.odeberBod(mouable);
+	// }
 
 	public Bod rozdelUsekNaDvaNove(Usek usek, Mou mouNovy) {
 		usek.setChanged();
@@ -43,7 +42,6 @@ public class Updator {
 		usek.setChanged();
 		usek.setVzdusny(vzdusny);
 	}
-
 
 	public Usek removeBod(Bod bod) {
 		bod.setChanged();

@@ -3,7 +3,6 @@
  */
 package cz.geokuk.util.pocitadla;
 
-
 public class PocitadloRoste extends Pocitadlo {
 
 	public PocitadloRoste(String aName, String aDescription) {

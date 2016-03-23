@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public class Root {
-	public final File dir;
-	public final Def def;
+	public final File	dir;
+	public final Def	def;
 
 	public Root(File aRoot, Def aDef) {
 		super();
@@ -20,9 +20,9 @@ public class Root {
 	}
 
 	public static class Def {
-		final int maxDepth;
-		final Pattern patternIncludes;
-		final Pattern patternExcludes;
+		final int		maxDepth;
+		final Pattern	patternIncludes;
+		final Pattern	patternExcludes;
 
 		public Def(int aMaxDepth, Pattern aPatternIncludes, Pattern aPatternExcludes) {
 			super();
@@ -35,7 +35,6 @@ public class Root {
 		public String toString() {
 			return "Def [maxDepth=" + maxDepth + ", patternIncludes=" + patternIncludes + ", patternExcludes=" + patternExcludes + "]";
 		}
-
 
 	}
 
@@ -68,10 +67,5 @@ public class Root {
 	public String toString() {
 		return "Root [dir=" + dir + ", def=" + def + "]";
 	}
-
-
-
-
-
 
 }

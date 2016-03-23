@@ -3,11 +3,7 @@
  */
 package cz.geokuk.util.gui;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.LayoutManager2;
+import java.awt.*;
 
 /**
  * @author veverka
@@ -15,17 +11,19 @@ import java.awt.LayoutManager2;
  */
 public class CornerLayoutManager implements LayoutManager2 {
 
-	private static final float ratiox = 0.25f;
-	private static final float ratioy = 0.33f;
+	private static final float	ratiox	= 0.25f;
+	private static final float	ratioy	= 0.33f;
 
-	private Component sz;
-	private Component sv;
-	private Component jz;
-	private Component jv;
+	private Component			sz;
+	private Component			sv;
+	private Component			jz;
+	private Component			jv;
 
-	private Component podklad;
+	private Component			podklad;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager2#addLayoutComponent(java.awt.Component, java.lang.Object)
 	 */
 	@Override
@@ -35,16 +33,27 @@ public class CornerLayoutManager implements LayoutManager2 {
 			podklad = c;
 		} else {
 			switch (roh) {
-			case SZ: sz = c; break;
-			case SV: sv = c; break;
-			case JZ: jz = c; break;
-			case JV: jv = c; break;
-			default: podklad = c;
+			case SZ:
+				sz = c;
+				break;
+			case SV:
+				sv = c;
+				break;
+			case JZ:
+				jz = c;
+				break;
+			case JV:
+				jv = c;
+				break;
+			default:
+				podklad = c;
 			}
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager2#getLayoutAlignmentX(java.awt.Container)
 	 */
 	@Override
@@ -52,7 +61,9 @@ public class CornerLayoutManager implements LayoutManager2 {
 		return 0;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager2#getLayoutAlignmentY(java.awt.Container)
 	 */
 	@Override
@@ -60,14 +71,18 @@ public class CornerLayoutManager implements LayoutManager2 {
 		return 0;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager2#invalidateLayout(java.awt.Container)
 	 */
 	@Override
 	public void invalidateLayout(Container aArg0) {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager2#maximumLayoutSize(java.awt.Container)
 	 */
 	@Override
@@ -75,7 +90,9 @@ public class CornerLayoutManager implements LayoutManager2 {
 		return podklad.getMinimumSize();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager#addLayoutComponent(java.lang.String, java.awt.Component)
 	 */
 	@Override
@@ -83,7 +100,9 @@ public class CornerLayoutManager implements LayoutManager2 {
 		addLayoutComponent(c, s);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager#layoutContainer(java.awt.Container)
 	 */
 	@Override
@@ -93,9 +112,9 @@ public class CornerLayoutManager implements LayoutManager2 {
 		int x2 = c.getWidth() - in.right;
 		int y1 = in.top;
 		int y2 = c.getHeight() - in.bottom;
-		Dimension dim = new Dimension(x2-x1, y2-y1);
+		Dimension dim = new Dimension(x2 - x1, y2 - y1);
 
-		//System.out.println(dim + " " + c.getWidth() + " " + c.getHeight());
+		// System.out.println(dim + " " + c.getWidth() + " " + c.getHeight());
 		doRohu(sz, dim, x1, y1);
 		doRohu(jz, dim, x1, -y2);
 		doRohu(sv, dim, -x2, y1);
@@ -111,10 +130,11 @@ public class CornerLayoutManager implements LayoutManager2 {
 			int x0 = x < 0 ? -v.width - x : x;
 			int y0 = y < 0 ? -v.height - y : y;
 			cc.setBounds(x0, y0, v.width, v.height);
-			//System.out.println(x0 + " " + y0 + v);
+			// System.out.println(x0 + " " + y0 + v);
 		}
 
 	}
+
 	/**
 	 * @param dim
 	 * @param cc
@@ -139,7 +159,9 @@ public class CornerLayoutManager implements LayoutManager2 {
 		return v;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager#minimumLayoutSize(java.awt.Container)
 	 */
 	@Override
@@ -147,7 +169,9 @@ public class CornerLayoutManager implements LayoutManager2 {
 		return podklad.getMaximumSize();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager#preferredLayoutSize(java.awt.Container)
 	 */
 	@Override
@@ -155,16 +179,23 @@ public class CornerLayoutManager implements LayoutManager2 {
 		return podklad.getPreferredSize();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.LayoutManager#removeLayoutComponent(java.awt.Component)
 	 */
 	@Override
 	public void removeLayoutComponent(Component c) {
-		if (sz == c) sz = null;
-		if (sv == c) sv = null;
-		if (jz == c) jz = null;
-		if (jv == c) jv = null;
-		if (podklad == c) podklad = null;
+		if (sz == c)
+			sz = null;
+		if (sv == c)
+			sv = null;
+		if (jz == c)
+			jz = null;
+		if (jv == c)
+			jv = null;
+		if (podklad == c)
+			podklad = null;
 	}
 
 }

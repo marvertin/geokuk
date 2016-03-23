@@ -3,10 +3,7 @@
  */
 package cz.geokuk.framework;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
+import java.awt.event.*;
 
 /**
  * @author veverka
@@ -14,10 +11,9 @@ import java.awt.event.WindowEvent;
  */
 public abstract class DialogOpeningAction0 extends Action0 {
 
-	private static final long serialVersionUID = 1736854705007384645L;
+	private static final long	serialVersionUID	= 1736854705007384645L;
 
-	private JMyDialog0 mydialog;
-
+	private JMyDialog0			mydialog;
 
 	/**
 	 * @param string
@@ -26,14 +22,17 @@ public abstract class DialogOpeningAction0 extends Action0 {
 		super(name);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
 	public final void actionPerformed(ActionEvent e) {
 		if (mydialog == null) {
 			JMyDialog0 dialog = createDialog();
-			if (factory == null) throw new RuntimeException("Neinicializovana akce: " + this.getClass());
+			if (factory == null)
+				throw new RuntimeException("Neinicializovana akce: " + this.getClass());
 			factory.init(dialog);
 			mydialog = dialog;
 			dialog.addWindowListener(new WindowAdapter() {

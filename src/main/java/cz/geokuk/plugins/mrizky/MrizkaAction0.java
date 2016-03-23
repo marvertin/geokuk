@@ -1,14 +1,12 @@
 package cz.geokuk.plugins.mrizky;
 
-import cz.geokuk.framework.BeanSubtypable;
-import cz.geokuk.framework.BeanSubtype;
-import cz.geokuk.framework.ToggleAction0;
+import cz.geokuk.framework.*;
 
 public abstract class MrizkaAction0 extends ToggleAction0 implements BeanSubtypable {
 
-	private static final long serialVersionUID = -8064505014609316205L;
+	private static final long	serialVersionUID	= -8064505014609316205L;
 
-	protected MrizkaModel mrizkaModel;
+	protected MrizkaModel		mrizkaModel;
 
 	public MrizkaAction0(String name) {
 		super(name);

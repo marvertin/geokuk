@@ -1,25 +1,17 @@
 package cz.geokuk.plugins.kesoid.detail;
 
-
 import java.awt.Color;
 import java.awt.Font;
 import java.util.EnumMap;
 
-import javax.swing.Box;
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.core.program.Akce;
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.img.ImageLoader;
-import cz.geokuk.plugins.kesoid.EKesStatus;
-import cz.geokuk.plugins.kesoid.EKesVztah;
-import cz.geokuk.plugins.kesoid.Ikonizer;
-import cz.geokuk.plugins.kesoid.Kesoid;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
@@ -30,6 +22,7 @@ import cz.geokuk.util.gui.JSmallPictureButton;
 
 /**
  * Detailní informace o vybrané keši.
+ * 
  * @author Spikodrob
  *
  */
@@ -38,50 +31,50 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -3323887260932949747L;
+	private static final long							serialVersionUID	= -3323887260932949747L;
 
-	private Kesoid kesoid;
+	private Kesoid										kesoid;
 
-	private JLabel jKesoidCode;
-	private JLabel jKesoidNazev;
-	private JLabel jKesoidSym;
+	private JLabel										jKesoidCode;
+	private JLabel										jKesoidNazev;
+	private JLabel										jKesoidSym;
 
-	private JLabel jWptName;
-	private JLabel jWptNazev;
-	private JLabel jWptSym;
+	private JLabel										jWptName;
+	private JLabel										jWptNazev;
+	private JLabel										jWptSym;
 
-	private JLabel jElevation;
+	private JLabel										jElevation;
 
-	private JLabel jType;
-	private JLabel jAuthor;
-	private JLabel jHiddenTime;
-	private JLabel jVztah;
+	private JLabel										jType;
+	private JLabel										jAuthor;
+	private JLabel										jHiddenTime;
+	private JLabel										jVztah;
 
-	private JLabel jVzdalenost;
-	private JLabel jAzimut;
+	private JLabel										jVzdalenost;
+	private JLabel										jAzimut;
 
-	private JSmallPictureButton jOtevriUrl;
-	private JSmallPictureButton vyletAnoButton;
-	private JSmallPictureButton vyletNeButton;
-	private JSmallPictureButton vyletNevimButton;
+	private JSmallPictureButton							jOtevriUrl;
+	private JSmallPictureButton							vyletAnoButton;
+	private JSmallPictureButton							vyletNeButton;
+	private JSmallPictureButton							vyletNevimButton;
 
+	private final EnumMap<EKesoidKind, JKesoidDetail0>	jDetailyKesoidu		= new EnumMap<>(EKesoidKind.class);
 
-	private final EnumMap<EKesoidKind, JKesoidDetail0> jDetailyKesoidu = new EnumMap<>(EKesoidKind.class);
+	private IkonBag										ikonBag;
 
-	private IkonBag ikonBag;
+	private Wpt											wpt;
 
-	private Wpt wpt;
+	private JLabel										jRucnePridany;
 
-	private JLabel jRucnePridany;
+	private Akce										akce;
 
-	private Akce akce;
+	private Factory										factory;
 
-	private Factory factory;
+	private RefbodyModel								refbodyModel;
 
-	private RefbodyModel refbodyModel;
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.program.AfterInjectInit#initAfterInject()
 	 */
 	@Override
@@ -95,8 +88,8 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		jKesoidSym = new JLabel();
 
 		jWptName = new JLabel();
-		jWptNazev= new JLabel();
-		jWptSym= new JLabel();
+		jWptNazev = new JLabel();
+		jWptSym = new JLabel();
 
 		jType = new JLabel();
 		jAuthor = new JLabel();
@@ -115,7 +108,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		vyletAnoButton = new JSmallPictureButton(ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
 		vyletAnoButton.setAction(akce.vyletAnoAction);
 		vyletAnoButton.setText(null);
-		//vyletAnoButton.setPreferredSize(new Dimension(30,10));
+		// vyletAnoButton.setPreferredSize(new Dimension(30,10));
 		vyletNeButton = new JSmallPictureButton(ImageLoader.seekResIcon("x16/vylet/vyletNe.png"));
 		vyletNeButton.setAction(akce.vyletNeAction);
 		vyletNeButton.setText(null);
@@ -233,8 +226,8 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 				}
 				jOtevriUrl.setText(null);
 				napln();
-				//          boolean mameHint = kes.getHint() != null && ! kes.getHint().trim().isEmpty();
-				//          zobrazHint.setEnabled(mameHint);
+				// boolean mameHint = kes.getHint() != null && ! kes.getHint().trim().isEmpty();
+				// zobrazHint.setEnabled(mameHint);
 				setVisible(true);
 			}
 		}
@@ -260,10 +253,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		jWptNazev.setText(formatuj(wpt.getNazev(), kesoid.getStatus()));
 		jWptSym.setText(wpt.getSym());
 		jRucnePridany.setText(wpt.isRucnePridany() ? "+" : "*");
-		jRucnePridany.setToolTipText(wpt.isRucnePridany()
-				? "Waypoint byl ručně přidán v Geogetu nebo podobném programu."
-						: "Waypoint byl obsažen v PQ"
-				);
+		jRucnePridany.setToolTipText(wpt.isRucnePridany() ? "Waypoint byl ručně přidán v Geogetu nebo podobném programu." : "Waypoint byl obsažen v PQ");
 		int elevation = wpt.getElevation();
 		jElevation.setText(elevation == 0 ? null : elevation + " m n. m.");
 		jAuthor.setText(kesoid.getAuthor());
@@ -275,8 +265,8 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		jAzimut.setIcon(azimut(kesoid.getMainWpt()));
 		jVzdalenost.setText(vzdalenost(kesoid.getMainWpt()));
 
-		//jNoFirstWpt.setVisible(wpt != kesoid.getFirstWpt());
-		//    kesoid.getKesoidKind().getDetail().setVisible(true);
+		// jNoFirstWpt.setVisible(wpt != kesoid.getFirstWpt());
+		// kesoid.getKesoidKind().getDetail().setVisible(true);
 
 	}
 
@@ -284,12 +274,9 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		return refbodyModel.getHc().vzdalenostStr(wpt.getWgs());
 	}
 
-
 	private Icon azimut(Wpt wpt) {
 		return Ikonizer.findSmerIcon(refbodyModel.getHc().azimut(wpt.getWgs()));
 	}
-
-
 
 	private static String formatuj(String s, EKesStatus status) {
 		StringBuilder sb = new StringBuilder();
@@ -316,14 +303,18 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		return sb.toString();
 	}
 
-
 	private static Icon vztah(EKesVztah vztah) {
 		switch (vztah) {
-		case FOUND: return ImageLoader.seekResIcon("kesvztah/found.gif");
-		case OWN: return ImageLoader.seekResIcon("kesvztah/own.gif");
-		case NORMAL: return null;
-		case NOT:    return null;
-		default: return null;
+		case FOUND:
+			return ImageLoader.seekResIcon("kesvztah/found.gif");
+		case OWN:
+			return ImageLoader.seekResIcon("kesvztah/own.gif");
+		case NORMAL:
+			return null;
+		case NOT:
+			return null;
+		default:
+			return null;
 		}
 	}
 
@@ -338,6 +329,5 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	public void inject(RefbodyModel refbodyModel) {
 		this.refbodyModel = refbodyModel;
 	}
-
 
 }

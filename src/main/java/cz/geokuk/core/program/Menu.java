@@ -1,35 +1,23 @@
 package cz.geokuk.core.program;
 
-
 import java.awt.event.KeyEvent;
 import java.util.List;
 
-import javax.swing.Action;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JMenuBar;
-import javax.swing.JToolBar;
+import javax.swing.*;
 
 import cz.geokuk.core.lookandfeel.LafSupport;
 import cz.geokuk.plugins.kesoid.mapicon.JMenuIkony;
-import cz.geokuk.plugins.kesoid.mvc.JVybiracBestOf;
-import cz.geokuk.plugins.kesoid.mvc.JVybiracFavorit;
-import cz.geokuk.plugins.kesoid.mvc.JVybiracHodnoceni;
-import cz.geokuk.plugins.kesoid.mvc.JVybiracVyletu;
-import cz.geokuk.plugins.mapy.DekoraceAction;
-import cz.geokuk.plugins.mapy.MapyAction0;
-import cz.geokuk.plugins.mapy.PodkladAction;
+import cz.geokuk.plugins.kesoid.mvc.*;
+import cz.geokuk.plugins.mapy.*;
 import cz.geokuk.plugins.refbody.NaKonkretniBodAction;
 import cz.geokuk.plugins.refbody.RefbodyModel;
 import cz.geokuk.util.gui.MenuStrujce;
 
 public class Menu extends MenuStrujce {
 
-
-	private Akce akce;
-	private RefbodyModel refbodyModel;
-	private final JMainFrame jMainFrame;
+	private Akce				akce;
+	private RefbodyModel		refbodyModel;
+	private final JMainFrame	jMainFrame;
 
 	public Menu(JMainFrame jMainFrame, JGeokukToolbar geokukToolbar) {
 		super(new JMenuBar(), geokukToolbar);
@@ -56,7 +44,6 @@ public class Menu extends MenuStrujce {
 		item(akce.fullScreenAction);
 		separator();
 		item(akce.closeAction);
-
 
 		// Jít
 		menu("Jít", "Přesun aktuálního bodu a mapy na zadané místo.");
@@ -107,7 +94,6 @@ public class Menu extends MenuStrujce {
 		item(akce.ukladatMapyNaDiskAction);
 		item(akce.kachleOflinerAction);
 
-
 		// Ovládání zobrazení keší
 		menu("Kešoidy", "Řízení zobrazení keší a waypointů.");
 		menu.setMnemonic(KeyEvent.VK_K);
@@ -144,7 +130,7 @@ public class Menu extends MenuStrujce {
 		/////////////////////////////////////////////////////
 		JLabel lbl;
 
-		JVybiracHodnoceni jVybiracHodnoceni = factory.init(new JVybiracHodnoceni ());
+		JVybiracHodnoceni jVybiracHodnoceni = factory.init(new JVybiracHodnoceni());
 		tb.add(jVybiracHodnoceni);
 
 		JVybiracBestOf jVybiraceBestOf = factory.init(new JVybiracBestOf());
@@ -169,7 +155,6 @@ public class Menu extends MenuStrujce {
 		separator();
 		item(akce.vyletSmazAnoAction);
 		item(akce.vyletSmazNeAction);
-
 
 		menu("Cesty", "Plánování cest");
 		menu.setMnemonic(KeyEvent.VK_V);
@@ -208,18 +193,16 @@ public class Menu extends MenuStrujce {
 		item(akce.mrizkaDdMmSsAction);
 
 		item(akce.mrizkaUtmAction);
-		//    item(kontejner.mrizkaS42Action);
-		//    item(kontejner.mrizkaJTSKAction);
+		// item(kontejner.mrizkaS42Action);
+		// item(kontejner.mrizkaJTSKAction);
 
 		separator();
 		item(akce.zhasniVsechnyMrizkyAction);
-
 
 		// Look&Feel
 		getMenuBar().add(LafSupport.getLafMenu());
 		LafSupport.setFrame(jMainFrame);
 		///// Nápověda
-
 
 		JMenuIkony menuIkony = factory.init(new JMenuIkony());
 		menuBar.add(menuIkony);
@@ -230,8 +213,6 @@ public class Menu extends MenuStrujce {
 		separator();
 		item(akce.refreshIkonAction);
 		item(akce.debugIkonyAction);
-
-
 
 		menu("Nápověda", "Nápověda, odkazy na web, kotnrola aktualiozací");
 		menu.setMnemonic(KeyEvent.VK_N);
@@ -277,6 +258,5 @@ public class Menu extends MenuStrujce {
 	public void inject(RefbodyModel refbodyModel) {
 		this.refbodyModel = refbodyModel;
 	}
-
 
 }

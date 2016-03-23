@@ -10,8 +10,8 @@ import cz.geokuk.framework.Factory;
 
 public class MainFrameHolder implements SlideListProvider {
 
-	private JMainFrame mainFrame;
-	private Factory factory;
+	private JMainFrame	mainFrame;
+	private Factory		factory;
 
 	public void setMainFrame(JMainFrame mainFrame) {
 		this.mainFrame = mainFrame;
@@ -26,7 +26,9 @@ public class MainFrameHolder implements SlideListProvider {
 		this.factory = factory;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.core.coord.SlideListProvider#getSlides()
 	 */
 	@Override

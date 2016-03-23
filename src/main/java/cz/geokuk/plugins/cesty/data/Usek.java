@@ -1,16 +1,13 @@
 package cz.geokuk.plugins.cesty.data;
 
-import cz.geokuk.core.coordinates.FGeoKonvertor;
-import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.core.coordinates.Mouable;
-import cz.geokuk.core.coordinates.Moud;
+import cz.geokuk.core.coordinates.*;
 
 public class Usek extends Bousek0 {
 
-	private Bod bvpred;
-	private Bod bvzad;
-	private boolean vzdusny = false;
-	private double dalka = -1;
+	private Bod		bvpred;
+	private Bod		bvzad;
+	private boolean	vzdusny	= false;
+	private double	dalka	= -1;
 
 	Usek(Cesta cesta) {
 		super(cesta);
@@ -24,34 +21,28 @@ public class Usek extends Bousek0 {
 	}
 
 	/**
-	 * V zorném poli bodu je úsek tehdy,
-	 * když je v obdélníku "opsaném" nad úsekem.
-	 * Opsaným obdélníkem rozumíme nejmenší možný obdélník,
-	 * jehož strany jsou rovnoběžné se souřadnicovými osami a to takový,
-	 * že celý úsek leží v tomto obdélníku.
+	 * V zorném poli bodu je úsek tehdy, když je v obdélníku "opsaném" nad úsekem. Opsaným obdélníkem rozumíme nejmenší možný obdélník, jehož strany jsou rovnoběžné se souřadnicovými osami a to takový, že celý úsek leží v tomto obdélníku.
 	 */
 	@Override
 	boolean jeVOpsanemObdelniku(Mou mou) {
-		if (mou == null) return false;
+		if (mou == null)
+			return false;
 		Mou mou1 = bvzad.getMou();
 		Mou mou2 = bvpred.getMou();
-		boolean jex = mou1.xx <= mou.xx && mou.xx <= mou2.xx
-				|| mou1.xx >= mou.xx && mou.xx >= mou2.xx;
-				boolean jey = mou1.yy <= mou.yy && mou.yy <= mou2.yy
-						|| mou1.yy >= mou.yy && mou.yy >= mou2.yy;
-						return jex && jey;
+		boolean jex = mou1.xx <= mou.xx && mou.xx <= mou2.xx || mou1.xx >= mou.xx && mou.xx >= mou2.xx;
+		boolean jey = mou1.yy <= mou.yy && mou.yy <= mou2.yy || mou1.yy >= mou.yy && mou.yy >= mou2.yy;
+		return jex && jey;
 	}
 
 	/**
-	 * Vrací nejbližší bod k danému úseku, ale jen
-	 * když pata kolmice leží na úsečce, tedy může vrátit ve speciálním případě i krajní body,
-	 * ale jen pokud pata kolmice padne přesně na krajní bod.
+	 * Vrací nejbližší bod k danému úseku, ale jen když pata kolmice leží na úsečce, tedy může vrátit ve speciálním případě i krajní body, ale jen pokud pata kolmice padne přesně na krajní bod.
 	 *
 	 * @param mou
 	 * @return null, když je pata kolmice mimo úsečku.
 	 */
 	public Mou getNejblizsiBodKolmoKUsecce(Mou mou) {
-		if (mou == null) return null;
+		if (mou == null)
+			return null;
 		Mou m = prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
 		if (jeVOpsanemObdelniku(m)) {
 			return m;
@@ -61,8 +52,7 @@ public class Usek extends Bousek0 {
 	}
 
 	/**
-	 * Vrací nejbližší bod k přímce zdadané daným úsekem.
-	 * nevrací tedy krajní body.
+	 * Vrací nejbližší bod k přímce zdadané daným úsekem. nevrací tedy krajní body.
 	 *
 	 * @param mou
 	 * @return
@@ -76,15 +66,14 @@ public class Usek extends Bousek0 {
 
 	public long computeKvadratVzdalenostiBoduKUsecce(Mou mou) {
 		Mou m = getNejblizsiBodKolmoKUsecce(mou);
-		if (m == null) return Long.MAX_VALUE;
+		if (m == null)
+			return Long.MAX_VALUE;
 		long kvadrat = mou.getKvadratVzdalenosti(m);
 		return kvadrat;
 	}
 
-
 	/**
-	 * Spočítá kvadrát vzdálenosti bodu k úsečce úseku,
-	 * což může být i ke krajním bodům.
+	 * Spočítá kvadrát vzdálenosti bodu k úsečce úseku, což může být i ke krajním bodům.
 	 *
 	 * @param mou
 	 * @return
@@ -103,8 +92,7 @@ public class Usek extends Bousek0 {
 	}
 
 	/**
-	 * Spočítá kvadrát vzdálenosti bodu k úsečce úseku,
-	 * což může být i ke krajním bodům.
+	 * Spočítá kvadrát vzdálenosti bodu k úsečce úseku, což může být i ke krajním bodům.
 	 *
 	 * @param mou
 	 * @return
@@ -115,10 +103,8 @@ public class Usek extends Bousek0 {
 		return kvadrat;
 	}
 
-
 	/**
-	 * Spočítá bod, který leží na přímce m1m2 a je nejblíže m3.
-	 * To je průsečík kolmice.
+	 * Spočítá bod, který leží na přímce m1m2 a je nejblíže m3. To je průsečík kolmice.
 	 *
 	 * @param m1
 	 * @param m2
@@ -153,8 +139,8 @@ public class Usek extends Bousek0 {
 		double y = d2 / d;
 
 		Mou mou = new Mou((int) x, (int) y);
-		//System.out.printf("pruseCikk [%d,%d] --- [%d,%d]  | [%d,%d] = [%d,%d]%n", x1, y1, x2, y2, x3, y3, x, y);
-		//System.out.printf("pruseCikk (%d,%d) %n", a11, a12);
+		// System.out.printf("pruseCikk [%d,%d] --- [%d,%d] | [%d,%d] = [%d,%d]%n", x1, y1, x2, y2, x3, y3, x, y);
+		// System.out.printf("pruseCikk (%d,%d) %n", a11, a12);
 		return mou;
 
 	}
@@ -211,13 +197,15 @@ public class Usek extends Bousek0 {
 	}
 
 	public double getMouDelkaVpred(Mou aMou) {
-		if (isVzdusny()) return 0;
+		if (isVzdusny())
+			return 0;
 		Mou mou = getNejblizsiBodKPrimce(aMou);
 		return FGeoKonvertor.dalka(mou, bvpred);
 	}
 
 	public double getMouDelkaVzad(Mou aMou) {
-		if (isVzdusny()) return 0;
+		if (isVzdusny())
+			return 0;
 		Mou mou = getNejblizsiBodKPrimce(aMou);
 		return FGeoKonvertor.dalka(mou, bvzad);
 	}
@@ -236,7 +224,8 @@ public class Usek extends Bousek0 {
 
 	@Override
 	public double dalka() {
-		if (isVzdusny()) return 0;
+		if (isVzdusny())
+			return 0;
 		if (dalka < 0) {
 			dalka = FGeoKonvertor.dalka(bvpred, bvzad);
 		}

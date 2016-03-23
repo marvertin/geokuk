@@ -10,18 +10,16 @@ import javax.swing.JFrame;
 
 import cz.geokuk.core.program.MainFrameHolder;
 
-
 /**
  * @author veverka
  *
  */
 public abstract class Model0 implements AfterInjectInit {
 
-	private EventFirer ef;
-	private Prefe prefe;
-	private MainFrameHolder mainFrameHolder;
-	private Factory factory;
-
+	private EventFirer		ef;
+	private Prefe			prefe;
+	private MainFrameHolder	mainFrameHolder;
+	private Factory			factory;
 
 	public void inject(EventFirer ef) {
 		this.ef = ef;
@@ -35,15 +33,15 @@ public abstract class Model0 implements AfterInjectInit {
 		this.prefe = prefe;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.program.AfterInjectInit#initAfterInject()
 	 */
 	@Override
 	public final void initAfterInject() {
 		initAndFire();
 	}
-
 
 	protected MyPreferences currPrefe() {
 		return prefe.curr();
@@ -58,7 +56,6 @@ public abstract class Model0 implements AfterInjectInit {
 	 */
 	protected void reloadPreferences() {
 	}
-
 
 	public void onEvent(PreferencesProfileChangedEvent event) {
 		// staci jen reloadnout pri zmeně, protože teĎ už prefe.curr()

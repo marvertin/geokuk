@@ -1,19 +1,15 @@
 package cz.geokuk.plugins.kesoidobsazenost;
 
-
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
 import cz.geokuk.framework.ToggleAction0;
 
+public class ObsazenostOnoffAction extends ToggleAction0 {
 
-public class ObsazenostOnoffAction extends ToggleAction0  {
-
-	private static final long serialVersionUID = -7547868179813232769L;
-	private ObsazenostModel popiskyModel;
-
-
+	private static final long	serialVersionUID	= -7547868179813232769L;
+	private ObsazenostModel		popiskyModel;
 
 	public ObsazenostOnoffAction() {
 		super("Obsazenost 161 m");
@@ -23,8 +19,7 @@ public class ObsazenostOnoffAction extends ToggleAction0  {
 
 	}
 
-
-	public void inject (ObsazenostModel popiskyModel) {
+	public void inject(ObsazenostModel popiskyModel) {
 		this.popiskyModel = popiskyModel;
 	}
 
@@ -36,7 +31,5 @@ public class ObsazenostOnoffAction extends ToggleAction0  {
 	protected void onSlectedChange(boolean nastaveno) {
 		popiskyModel.visible.setOnoff(nastaveno);
 	}
-
-
 
 }

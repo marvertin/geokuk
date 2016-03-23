@@ -9,7 +9,9 @@ package cz.geokuk.util.index2d;
  */
 public abstract class SloucenyVisitor<T> implements Visitor<T> {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see objekty.Visitor#visit(objekty.Sheet)
 	 */
 	public final void visit(Sheet<T> aSheet) {
@@ -18,7 +20,9 @@ public abstract class SloucenyVisitor<T> implements Visitor<T> {
 
 	protected abstract void visitNod(Node0<T> node);
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see objekty.Visitor#visit(objekty.Ctverecnik)
 	 */
 	public final void visit(Ctverecnik<T> aCtver) {

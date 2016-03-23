@@ -3,29 +3,14 @@ package cz.geokuk.plugins.mapy.kachle;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.MapMaker;
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import com.google.common.util.concurrent.ForwardingFuture;
 
 import cz.geokuk.core.onoffline.OnofflineModel;
@@ -34,139 +19,125 @@ import cz.geokuk.plugins.mapy.kachle.KachloDownloader.EPraznyObrazek;
 import cz.geokuk.plugins.mapy.kachle.KachloStav.EFaze;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
-import cz.geokuk.util.pocitadla.Pocitadlo;
-import cz.geokuk.util.pocitadla.PocitadloMalo;
-import cz.geokuk.util.pocitadla.PocitadloNula;
-import cz.geokuk.util.pocitadla.PocitadloRoste;
+import cz.geokuk.util.pocitadla.*;
 
 /**
  * V novém pojetí zodpovídá za získávání kachlí z disku, paměti i downloadování.
+ * 
  * @author veverka
  *
  */
 public class KachleZiskavac {
 
+	private static final Logger									log													= LogManager.getLogger(KachleZiskavac.class.getSimpleName() + "_diskWrite");
 
-	private static final Logger log = LogManager.getLogger(KachleZiskavac.class.getSimpleName() + "_diskWrite");
-
-
-	private final Pocitadlo pocitSubmitJednaDlazdice = new PocitadloRoste("ka01 Počet požadavků na jednu dlaždici",
+	private final Pocitadlo										pocitSubmitJednaDlazdice							= new PocitadloRoste("ka01 Počet požadavků na jednu dlaždici",
 			"Kolikrát byl nakonec zadán požadavek na získání jedné dlaždice z jedné vrstvy. Tedy pokud zobrazujeme mapu s turistickými trasami a cyklotrasami, je dlaždice na podklad, na turistickou i na cyklo počítána zvlášť.");
 
-	private final Pocitadlo pocitZasahPametoveKese = new PocitadloRoste("ka11 MEM cache #zásahů",
+	private final Pocitadlo										pocitZasahPametoveKese								= new PocitadloRoste("ka11 MEM cache #zásahů",
 			"Kolikrát se podařilo hledanou dlaždici zasáhnout v paměti. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
 
-	private final Pocitadlo pocitMinutiPametoveKese = new PocitadloRoste("ka12 MEM cache #minutí",
+	private final Pocitadlo										pocitMinutiPametoveKese								= new PocitadloRoste("ka12 MEM cache #minutí",
 			"Kolikrát se nepodařilo hledanou dlaždici v paměťové keši nalézt a co se dělo dál není tímto atributem určeno..");
 
-	private final Pocitadlo pocitZametenePametoveKese = new PocitadloRoste("ka13 MEM cache #zametených",
+	private final Pocitadlo										pocitZametenePametoveKese							= new PocitadloRoste("ka13 MEM cache #zametených",
 			"Počet obrázků, které garbage collector zametrl pryč a my díky tomu odstranili referenci z keše.");
 
-
-	private final PocitadloRoste pocitSubmitDiskoveKese = new PocitadloRoste("ka21 DISK cache #požadovaných",
+	private final PocitadloRoste								pocitSubmitDiskoveKese								= new PocitadloRoste("ka21 DISK cache #požadovaných",
 			"Kolikrát bylo požadováno číst dlaždici z disku. Obsahuje všechny zásahy, minutí, chyby a také skutečně zknclované čtení");
 
-	private final PocitadloRoste pocitZasahDiskoveKese = new PocitadloRoste("ka22 DISK cache #zásahů",
+	private final PocitadloRoste								pocitZasahDiskoveKese								= new PocitadloRoste("ka22 DISK cache #zásahů",
 			"Kolikrát se podařilo hledanou dlaždici zasáhnout na disku, tedy naloadovat. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
 
-	private final PocitadloRoste pocitMinutiDiskoveKese = new PocitadloRoste("ka23 DISK cache #minutí",
+	private final PocitadloRoste								pocitMinutiDiskoveKese								= new PocitadloRoste("ka23 DISK cache #minutí",
 			"Kolikrát se nepodařilo hledanou dlaždici v paměťové keši minout, co se dělo dál není tímto atributem určeno..");
 
-	private final PocitadloRoste pociChybDiskoveKese = new PocitadloRoste("ka24 DISK cache #chyb čtení",
+	private final PocitadloRoste								pociChybDiskoveKese									= new PocitadloRoste("ka24 DISK cache #chyb čtení",
 			"Kolikrát selhalo čtení dlaždich z disku.");
 
-	private final PocitadloRoste pocitSubmitWeb = new PocitadloRoste("ka31 WEB #požadovaných",
+	private final PocitadloRoste								pocitSubmitWeb										= new PocitadloRoste("ka31 WEB #požadovaných",
 			"Kolikrát bylo požadováno číst dlaždici z webu. Vždy poté, co se nenašly na disku.disku. Obsahuje všechny úspěšně i neúspěšně načtené a také zkanclované");
 
-	private final PocitadloRoste pocitDownloadWeb = new PocitadloRoste("ka32 WEB #načtených",
+	private final PocitadloRoste								pocitDownloadWeb									= new PocitadloRoste("ka32 WEB #načtených",
 			"Kolikrát se muselo hledanou flaždici stáhnout z webu a to úspěšně.");
 
-	private final PocitadloRoste pocitChybDownloadWeb = new PocitadloRoste("ka33 WEB #chyb",
+	private final PocitadloRoste								pocitChybDownloadWeb								= new PocitadloRoste("ka33 WEB #chyb",
 			"Kolikrát downloadování dlaždice zahlásilo chybu.");
 
-	private final PocitadloRoste pocitZapsanoChunkuNaDisk = new PocitadloRoste("ka41 disk write #bloků",
+	private final PocitadloRoste								pocitZapsanoChunkuNaDisk							= new PocitadloRoste("ka41 disk write #bloků",
 			"V kolika diskovžch operacích byl prováděn zápis na disk. Z důvodu optimalizace se zápisy na disk združují do větších bloků.");
 
-	private final PocitadloRoste pocitZapsanoNaDisk = new PocitadloRoste("ka42 disk write #dlaždic",
+	private final PocitadloRoste								pocitZapsanoNaDisk									= new PocitadloRoste("ka42 disk write #dlaždic",
 			"Kolik dlaždic bylo úspěšně zapsáno na disk asynchronním zapisovačem.");
 
-	private final PocitadloRoste pocitCancelCelkem = new PocitadloRoste("ka51 #cancel celkem",
+	private final PocitadloRoste								pocitCancelCelkem									= new PocitadloRoste("ka51 #cancel celkem",
 			"Celkový počet vydaných poždavaků na kanclování");
 
-	private final PocitadloRoste pocitCancelOdebranListener = new PocitadloRoste("ka52 #cancel jen odebrán listener",
+	private final PocitadloRoste								pocitCancelOdebranListener							= new PocitadloRoste("ka52 #cancel jen odebrán listener",
 			"Z celového počtu cancelů ty, kde byl jen odebrán listener a dál se nic nemusí řešit, protože ještě někdo jiný čeká.");
 
-	private final PocitadloRoste pocitCancelProvedenePokusy = new PocitadloRoste("ka53 #cance provedené pokusy",
+	private final PocitadloRoste								pocitCancelProvedenePokusy							= new PocitadloRoste("ka53 #cance provedené pokusy",
 			"Počet skutečně provedených pokusů o kanclování, tedy zavoláníá future.cancel");
 
-	private final PocitadloRoste pocitCancelNehotovePozadavky = new PocitadloRoste("ka54 #cance skutečné cancely ještě nedokončených požadavků",
+	private final PocitadloRoste								pocitCancelNehotovePozadavky						= new PocitadloRoste("ka54 #cance skutečné cancely ještě nedokončených požadavků",
 			"Počet SKUTEČNÝCH cancelů ,tedy cancelů proti nehotovým požadavkům.");
 
-	private final PocitadloRoste pocitCancelPozde = new PocitadloRoste("ka55 #cance pozdní, když už je kachle získána",
+	private final PocitadloRoste								pocitCancelPozde									= new PocitadloRoste("ka55 #cance pozdní, když už je kachle získána",
 			"Počet tancelů, které přišly pozdě, kdy už jsou data načtena.");
 
-
-	private static Pocitadlo pocitPlneniImageDoZnicenychKachli = new PocitadloRoste("ka56 #duplicitně přijaté obrázky",
+	private static Pocitadlo									pocitPlneniImageDoZnicenychKachli					= new PocitadloRoste("ka56 #duplicitně přijaté obrázky",
 			"Počítá, kolikrát se stáhla kachle duplicitně, tedy když už díky plnění jiného poždavku byla naplněna a požadavek nebyl všas zkanclován.");
 
-	private static Pocitadlo pocitBrzdeniOfflineKdyzJeOnline = new PocitadloRoste("ka61 #počet brzdení dávkového downloadu",
+	private static Pocitadlo									pocitBrzdeniOfflineKdyzJeOnline						= new PocitadloRoste("ka61 #počet brzdení dávkového downloadu",
 			"Počítá, kolikrát se o 100 ms zbrzdilo dávkové dotahování, protože běžel online.");
 
-
-
-	private final Pocitadlo pocitVelikostPametoveKese = new PocitadloMalo("Počet dlaždic v memcache: ",
+	private final Pocitadlo										pocitVelikostPametoveKese							= new PocitadloMalo("Počet dlaždic v memcache: ",
 			"Počet závisí na velikosti pro Javu dostupné paměti (-Xmx) a měl by se ustálit na určité hodnotě, občas možná snížit, nikdy však nemůže být menší než počet dlaždic na mapě.");
 
-
-	private final PocitadloNula pocitVelikostDiskFrontyOnline = new PocitadloNula("ka1 velikost fronty čtení z disku (online)",
+	private final PocitadloNula									pocitVelikostDiskFrontyOnline						= new PocitadloNula("ka1 velikost fronty čtení z disku (online)",
 			"Kolik je ve frontě požadavků na čtení dlaždic z webu.");
-	private final PocitadloNula pocitVelikostDiskFrontyBatch = new PocitadloNula("ka2 velikost fronty čtení z disku (batch)",
-			"Kolik je ve frontě požadavků na čtení dlaždic z webu.");
-
-	private final PocitadloNula pocitVelikostWebFrontyOnline = new PocitadloNula("ka3 veliksot fronty čtení z webu (online)",
+	private final PocitadloNula									pocitVelikostDiskFrontyBatch						= new PocitadloNula("ka2 velikost fronty čtení z disku (batch)",
 			"Kolik je ve frontě požadavků na čtení dlaždic z webu.");
 
-	private final PocitadloNula pocitVelikostWebFrontyBatch = new PocitadloNula("ka3 veliksot fronty čtení z webu (batch)",
+	private final PocitadloNula									pocitVelikostWebFrontyOnline						= new PocitadloNula("ka3 veliksot fronty čtení z webu (online)",
 			"Kolik je ve frontě požadavků na čtení dlaždic z webu.");
 
-	private final PocitadloNula pocitVelikostZapisoveFronty = new PocitadloNula("ka3 veliksot fronty zápisu na disk",
+	private final PocitadloNula									pocitVelikostWebFrontyBatch							= new PocitadloNula("ka3 veliksot fronty čtení z webu (batch)",
+			"Kolik je ve frontě požadavků na čtení dlaždic z webu.");
+
+	private final PocitadloNula									pocitVelikostZapisoveFronty							= new PocitadloNula("ka3 veliksot fronty zápisu na disk",
 			"Kolik bloků dlaždic je ještě ve frontě a čeká na zápis na disk.");
 
-
-	private final PocitadloMalo pocitKachlice = new PocitadloMalo("#kachlic",
+	private final PocitadloMalo									pocitKachlice										= new PocitadloMalo("#kachlic",
 			"Počet tzv. kachlic, což je objekt určený k řízení získávání kachle z disku, z webu a pak ukládání. Kachlice také reprezentují MEM cache");
 
+	private static final int									MAXIMALNI_POCET_UKLADANYCH_KACHLI_V_JEDNOM_CHUNKU	= 300;
+	private static final int									NTHREADS_WEB_CORE_ONLINE							= 5;
+	private static final int									NTHREADS_WEB_CORE_BATCH								= 5;
+	private static final int									NTHREADS_WEB_MAXIMUM_BACTH							= 10;
 
-	private static final int MAXIMALNI_POCET_UKLADANYCH_KACHLI_V_JEDNOM_CHUNKU = 300;
-	private static final int NTHREADS_WEB_CORE_ONLINE = 5;
-	private static final int NTHREADS_WEB_CORE_BATCH = 5;
-	private static final int NTHREADS_WEB_MAXIMUM_BACTH = 10;
+	private static final int									WEB_QUEUE_SIZE										= 100;
+	private static final int									BATCH_DISK_QUEUE_SIZE								= 100;
 
-	private static final int WEB_QUEUE_SIZE = 100;
-	private static final int BATCH_DISK_QUEUE_SIZE = 100;
+	private static final int									NTHREADS_DISK										= 2;
 
-	private static final int NTHREADS_DISK = 2;
+	private final EnumMap<Priority, DvojiceExekucnichSluzeb>	exekucniSluzby										= new EnumMap<>(Priority.class);
 
+	private final ExecutorService								execDiskWrite										= Executors.newFixedThreadPool(1);
+	private final ScheduledExecutorService						tikacVelikostiFront									= Executors.newSingleThreadScheduledExecutor();
 
-	private final EnumMap<Priority, DvojiceExekucnichSluzeb> exekucniSluzby = new EnumMap<>(Priority.class);
+	private final KachloDownloader								downloader											= new KachloDownloader();
 
-	private final ExecutorService execDiskWrite = Executors.newFixedThreadPool(1);
-	private final ScheduledExecutorService tikacVelikostiFront = Executors.newSingleThreadScheduledExecutor();
+	private final ConcurrentMap<KaOne, Kachlice>				pozadavky											= new MapMaker().weakValues().makeMap();
 
-	private final KachloDownloader downloader = new KachloDownloader();
+	private KachleManager										kachleManager;
 
-	private final ConcurrentMap <KaOne, Kachlice> pozadavky =  new MapMaker().weakValues().makeMap();
+	private final KachleUkladac									ukladac												= new KachleUkladac();
+	private OnofflineModel										onofflineModel;
 
-	private KachleManager kachleManager;
-
-	private final KachleUkladac ukladac = new KachleUkladac();
-	private OnofflineModel onofflineModel;
-
-
-	private KachleModel kachleModel;
+	private KachleModel											kachleModel;
 
 	public KachleZiskavac() {
-
 
 		final DvojiceExekucnichSluzeb dvojiceOnline = new DvojiceExekucnichSluzeb();
 		// Fronta je pro oonline přístup neomezená, protože nemůžeme nijak blokovat rsponsivnost UI */
@@ -180,7 +151,8 @@ public class KachleZiskavac {
 		// Pro background stahování. Jen jedno vlákno pro disk, krátká fronta a po přetížení nechat na volajícím */
 		dvojiceBatch.disk = new ThreadPoolExecutor(1, 1, 1, TimeUnit.MINUTES, new ArrayBlockingQueue<>(BATCH_DISK_QUEUE_SIZE), new ThreadPoolExecutor.CallerRunsPolicy());
 		// Pokud bude fornta na web přetížená, vykonává stahování vlákno pro dotahování z disku, čímž se to zpomalí
-		dvojiceBatch.web = new ThreadPoolExecutor(NTHREADS_WEB_CORE_BATCH, NTHREADS_WEB_MAXIMUM_BACTH, 1, TimeUnit.MINUTES, new ArrayBlockingQueue<>(WEB_QUEUE_SIZE), new ThreadPoolExecutor.CallerRunsPolicy());
+		dvojiceBatch.web = new ThreadPoolExecutor(NTHREADS_WEB_CORE_BATCH, NTHREADS_WEB_MAXIMUM_BACTH, 1, TimeUnit.MINUTES, new ArrayBlockingQueue<>(WEB_QUEUE_SIZE),
+				new ThreadPoolExecutor.CallerRunsPolicy());
 		dvojiceBatch.log = LogManager.getLogger(KachleZiskavac.class.getSimpleName() + "_batch");
 
 		exekucniSluzby.put(Priority.KACHLE, dvojiceOnline);
@@ -198,15 +170,16 @@ public class KachleZiskavac {
 				log.error("Chyba při tikání a zjišťování velikosti fornt: {}", e);
 			}
 
-
-		}, 1l, 1l, TimeUnit.SECONDS);
+		} , 1l, 1l, TimeUnit.SECONDS);
 	}
 
 	private int getVelikostFronty(final ExecutorService executorService) {
-		return ((ThreadPoolExecutor)executorService).getQueue().size();
+		return ((ThreadPoolExecutor) executorService).getQueue().size();
 	}
+
 	/**
 	 * Zadá požadavekl na získání jedné kachle.
+	 * 
 	 * @param kaoneReq
 	 * @param imageReceiver
 	 * @param aDiagnosticsData
@@ -233,7 +206,7 @@ public class KachleZiskavac {
 			} else { // obrázek ještě nemáme
 				kachloStav = null;
 				kachlice.receivers.add(imageReceiver); // pokud ješte nebyl, je přidán receiver, protože získáváme
-				submitnoutDoFronty =  ! kachlice.uzSeNacita;
+				submitnoutDoFronty = !kachlice.uzSeNacita;
 				kachlice.uzSeNacita = true; // a poznačíme, že se načítá ještě v synchronizaci, je nevyhnutlené, že se to stane
 			}
 		}
@@ -247,7 +220,7 @@ public class KachleZiskavac {
 		}
 
 		if (submitnoutDoFronty) { // když se ještě nenačítá, nutno načíst
-			final MyFuture<Void> future = new MyFuture<Void> ();
+			final MyFuture<Void> future = new MyFuture<Void>();
 			future.delegate = submitDiskLoad(dvojiceExekucnichSluzeb, kaone, kachlice, diagnosticsData);
 			kachlice.future = future; // tato futura bude delegovat, protože později se to vystřídá
 			diagnosticsData.send("Submitnuto do fronty");
@@ -264,24 +237,23 @@ public class KachleZiskavac {
 	}
 
 	/**
-	 * Kachlice drží obrázek jedné kachle.
-	 * Je zodpovědná za uchování stavu během získávání kachle.
+	 * Kachlice drží obrázek jedné kachle. Je zodpovědná za uchování stavu během získávání kachle.
 	 *
 	 */
 	private class Kachlice implements ImageReceiver {
-		private final KaOne kaone;
+		private final KaOne		kaone;
 
-		/** Příznak, že se už načítá, takže další požadavek nezahajuje načítání.
-		 * K testu nelze použít future, protože future je k dispozcici až po submitu a protože
-		 * je možné, že zpracování proběhne v aktuálním vlákně, nechceme submitnutí synchronizovat  */
-		boolean uzSeNacita;
-		MyFuture<Void> future; // pokud není null, probíhá získáváí a je možné kanclovat
-		Image image; // pokud už máme obrázek, je vše hotovo a je zde
-		Set<ImageReceiver> receivers = Sets.newIdentityHashSet(); // tyto  je nutné všechny informovat
+		/**
+		 * Příznak, že se už načítá, takže další požadavek nezahajuje načítání. K testu nelze použít future, protože future je k dispozcici až po submitu a protože je možné, že zpracování proběhne v aktuálním vlákně, nechceme submitnutí synchronizovat
+		 */
+		boolean					uzSeNacita;
+		MyFuture<Void>			future;										// pokud není null, probíhá získáváí a je možné kanclovat
+		Image					image;										// pokud už máme obrázek, je vše hotovo a je zde
+		Set<ImageReceiver>		receivers	= Sets.newIdentityHashSet();	// tyto je nutné všechny informovat
 
-		private byte[] imageData;
+		private byte[]			imageData;
 
-		private final Logger log;
+		private final Logger	log;
 
 		public Kachlice(final KaOne kaone, final Logger log) {
 			this.kaone = kaone;
@@ -300,15 +272,15 @@ public class KachleZiskavac {
 		synchronized void kancluj(final ImageReceiver imageReceiver, final DiagnosticsData diagnosticsData) {
 			pocitCancelCelkem.inc();
 			// To co kancluju, dám pryč
-			log.debug("POŽADEVK NA CANCEL 1: {} - {}",  kaone, receivers.size());
+			log.debug("POŽADEVK NA CANCEL 1: {} - {}", kaone, receivers.size());
 			receivers.remove(imageReceiver);
-			log.debug("POŽADEVK NA CANCEL 2: {} - {}",  kaone, receivers.size());
+			log.debug("POŽADEVK NA CANCEL 2: {} - {}", kaone, receivers.size());
 			if (receivers.size() == 0) { // kanclovat můžeme jen když už nikdo nečeká
 				if (future != null) { // a jen když máme čím kanclovat, může to být už načteno a tedy kancloadlo vymazáno
 					pocitCancelProvedenePokusy.inc();
 					if (!future.isDone()) {
 						pocitCancelNehotovePozadavky.inc();
-						log.debug("KANCLUJU SKUTEČNĚ: {} - {}",  kaone, diagnosticsData);
+						log.debug("KANCLUJU SKUTEČNĚ: {} - {}", kaone, diagnosticsData);
 					} else {
 						pocitCancelPozde.inc();
 					}
@@ -320,12 +292,11 @@ public class KachleZiskavac {
 			}
 		}
 
-
 		@Override
 		public void send(final KachloStav kachloStav) {
 			boolean zaplanovatUlozeni = false;
 			synchronized (this) {
-				receivers.forEach(rcv ->  rcv.send(kachloStav)); // rozesíláme vždy dál
+				receivers.forEach(rcv -> rcv.send(kachloStav)); // rozesíláme vždy dál
 				final Image img = kachloStav.img;
 				if (img != null) {
 					if (image != null) { // kdyý už tam bylo nenull, bylo to zbytečné
@@ -380,7 +351,7 @@ public class KachleZiskavac {
 			} else {
 				diagnosticsData.send("Disk load - not in disk cache");
 				pocitMinutiDiskoveKese.inc();
-				if (! onofflineModel.isOnlineMode()) {
+				if (!onofflineModel.isOnlineMode()) {
 					kachlice.send(new KachloStav(EFaze.RESULT_ONE, downloader.prazdnyObrazekBezDat(EPraznyObrazek.OFFLINE).img));
 					return null; // a konec nemůžeme downloadovat v offline módu
 				}
@@ -447,10 +418,11 @@ public class KachleZiskavac {
 
 	/**
 	 * Získá obsah, získává ho postupně a plní ho do ImageReceveru v rekvesti
+	 * 
 	 * @param req
 	 */
-	public Kanceler ziskejObsah(final KaAllReq req,  final DiagnosticsData diagnosticsDatax) {
-		final DiagnosticsData diagnosticsData =  diagnosticsDatax.with("priorita", req.getPriorita());
+	public Kanceler ziskejObsah(final KaAllReq req, final DiagnosticsData diagnosticsDatax) {
+		final DiagnosticsData diagnosticsData = diagnosticsDatax.with("priorita", req.getPriorita());
 
 		final DlazebniKombiner kombiner = new DlazebniKombiner(req.getKa().kaSet.getKts());
 
@@ -460,7 +432,7 @@ public class KachleZiskavac {
 		final List<Kanceler> kanceleri = req.getKa().getKaOnes().stream().map(kaone -> {
 
 			// Získání obsahu jednotlivých kachlí. Instance převezmou dlažebního kombinéra budou kombinovat.
-			return ziskejObsah(dvojiceExekucnichSluzeb, new KaOneReq(kaone, req.getPriorita()),  kachloStav -> {
+			return ziskejObsah(dvojiceExekucnichSluzeb, new KaOneReq(kaone, req.getPriorita()), kachloStav -> {
 				if (kachloStav.img != null) {
 					kombiner.add(kaone.getType(), kachloStav.img);
 				} else if (kachloStav.thr != null) {
@@ -475,20 +447,18 @@ public class KachleZiskavac {
 				log.debug("ziskanObsah: {}", diagnosticsData.with("faze", kachloStav2.faze));
 				req.getImageReceiver().send(kachloStav2);
 
-			}, diagnosticsData);
+			} , diagnosticsData);
 
 		}).collect(Collectors.toList());
 
 		// Vracený kanceler provolá jednotlivé kancelery
 		return () -> {
-			kanceleri.forEach(kanceler ->  kanceler.cancel());
+			kanceleri.forEach(kanceler -> kanceler.cancel());
 		};
 
 	}
 
-
-
-	private URL buildUrl(final KaOne kaone)  {
+	private URL buildUrl(final KaOne kaone) {
 		try {
 			final URL url = kaone.getType().getUrlBuilder().buildUrl(kaone);
 			return url;
@@ -497,7 +467,7 @@ public class KachleZiskavac {
 		}
 	}
 
-	private class MyFuture<T> extends ForwardingFuture<T>{
+	private class MyFuture<T> extends ForwardingFuture<T> {
 
 		private Future<T> delegate;
 
@@ -506,24 +476,25 @@ public class KachleZiskavac {
 			return delegate;
 		}
 
-
 	}
 
 	/**
 	 * Řízení ukládání achlí na disk po čancích
+	 * 
 	 * @author veverka
 	 *
 	 */
 	public class KachleUkladac {
-		private static final int CAS_PO_KTEREM_SE_ZAHAJI_UKLADANI_NA_DISK = 5;
-		private final BlockingQueue<Kachlice> queue = Queues.newLinkedBlockingQueue();
+		private static final int				CAS_PO_KTEREM_SE_ZAHAJI_UKLADANI_NA_DISK	= 5;
+		private final BlockingQueue<Kachlice>	queue										= Queues.newLinkedBlockingQueue();
 
-		ScheduledExecutorService planovacUkladani = Executors.newSingleThreadScheduledExecutor();
+		ScheduledExecutorService				planovacUkladani							= Executors.newSingleThreadScheduledExecutor();
 
-		private ScheduledFuture<?> future;
+		private ScheduledFuture<?>				future;
 
 		/**
 		 * Zaplánuje uložení kachlice.
+		 * 
 		 * @param kachlice
 		 */
 		synchronized void zaplanujUlozeni(final Kachlice kachlice) {
@@ -536,12 +507,12 @@ public class KachleZiskavac {
 			} else { // plánuji zahájit ukládání pro případ, že nová kachle nepřijde.
 				future = planovacUkladani.schedule(() -> {
 					submitChunks();
-				}, CAS_PO_KTEREM_SE_ZAHAJI_UKLADANI_NA_DISK, TimeUnit.SECONDS);
+				} , CAS_PO_KTEREM_SE_ZAHAJI_UKLADANI_NA_DISK, TimeUnit.SECONDS);
 			}
 		}
 
 		synchronized private void submitChunks() {
-			for(;;) {
+			for (;;) {
 				final ArrayList<Kachlice> list = new ArrayList<>(MAXIMALNI_POCET_UKLADANYCH_KACHLI_V_JEDNOM_CHUNKU);
 				queue.drainTo(list, MAXIMALNI_POCET_UKLADANYCH_KACHLI_V_JEDNOM_CHUNKU);
 				if (list.size() == 0) {
@@ -552,15 +523,13 @@ public class KachleZiskavac {
 		}
 
 		private void submitDiskSave(final Collection<Kachlice> kachlicky) {
-			if (! kachleModel.isUkladatMapyNaDisk()) {
+			if (!kachleModel.isUkladatMapyNaDisk()) {
 				return; // zakázáno ukládat
 			}
 			log.debug("Submitujeme ukladani kachle na disk #{}: {}", kachlicky.size(), kachlicky);
 			execDiskWrite.submit(() -> {
 				log.debug("Ukladani kachle na disk #{}: {}", kachlicky.size(), kachlicky);
-				final List<ItemToSave> list = kachlicky.stream()
-						.map(kachlice -> new ItemToSave(kachlice.kaone, kachlice.imageData))
-						.collect(Collectors.toList());
+				final List<ItemToSave> list = kachlicky.stream().map(kachlice -> new ItemToSave(kachlice.kaone, kachlice.imageData)).collect(Collectors.toList());
 				kachleManager.save(list);
 				pocitZapsanoChunkuNaDisk.inc();
 				pocitZapsanoNaDisk.add(list.size());
@@ -575,25 +544,23 @@ public class KachleZiskavac {
 		log.debug("Cache cleared");
 		pozadavky.clear();
 	}
+
 	public void setKachleManager(final KachleManager kachleManager) {
 		this.kachleManager = kachleManager;
 	}
 
-	public void inject (final OnofflineModel onofflineModel) {
+	public void inject(final OnofflineModel onofflineModel) {
 		this.onofflineModel = onofflineModel;
 	}
 
-	public void inject (final KachleModel kachleModel) {
+	public void inject(final KachleModel kachleModel) {
 		this.kachleModel = kachleModel;
 	}
 
-
-
 	private static class DvojiceExekucnichSluzeb {
-		Priority priority;
-		ExecutorService disk;
-		ExecutorService web;
-		Logger log;
+		Priority		priority;
+		ExecutorService	disk;
+		ExecutorService	web;
+		Logger			log;
 	}
 }
-

@@ -3,21 +3,17 @@
  */
 package cz.geokuk.util.file;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Jménovací uzel podle vzoru composite.
+ * 
  * @author veverka
  */
 public class KeyNode<K, D> {
 
-	private D data;
-	private final SortedMap<K, KeyNode<K,D>> items = new TreeMap<>();
+	private D									data;
+	private final SortedMap<K, KeyNode<K, D>>	items	= new TreeMap<>();
 
 	public KeyNode<K, D> locate(List<K> keys) {
 		if (keys.isEmpty()) {
@@ -25,7 +21,8 @@ public class KeyNode<K, D> {
 		} else {
 			K key = keys.get(0);
 			KeyNode<K, D> node = items.get(key);
-			if (node == null) return null;
+			if (node == null)
+				return null;
 			return node.locate(keys.subList(1, keys.size())); // a s o jedno míň zařaď
 		}
 	}
@@ -34,7 +31,7 @@ public class KeyNode<K, D> {
 		return locate(Collections.singletonList(key));
 	}
 
-	public SortedMap<K, KeyNode<K,D>> getItems() {
+	public SortedMap<K, KeyNode<K, D>> getItems() {
 		return items;
 	}
 
@@ -68,9 +65,11 @@ public class KeyNode<K, D> {
 		} else {
 			K key = keys.get(0);
 			KeyNode<K, D> node = items.get(key);
-			if (node == null) return; // není tam
+			if (node == null)
+				return; // není tam
 			node.remove(keys.subList(1, keys.size()));
-			if (node.data == null && node.items.isEmpty()) items.remove(key);
+			if (node.data == null && node.items.isEmpty())
+				items.remove(key);
 		}
 	}
 
@@ -82,7 +81,9 @@ public class KeyNode<K, D> {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -94,7 +95,9 @@ public class KeyNode<K, D> {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -128,7 +131,5 @@ public class KeyNode<K, D> {
 	public String toString() {
 		return "KeyNode [data=" + data + "] " + getKeys();
 	}
-
-
 
 }

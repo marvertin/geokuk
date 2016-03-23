@@ -3,13 +3,10 @@
  */
 package cz.geokuk.core.profile;
 
-
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
 import cz.geokuk.framework.MySwingWorker0;
-
-
 
 /**
  * @author veverka
@@ -17,13 +14,12 @@ import cz.geokuk.framework.MySwingWorker0;
  */
 public class ProfileUkladacSwingWorker extends MySwingWorker0<File, Void> {
 
-
-
 	public ProfileUkladacSwingWorker() {
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
@@ -32,13 +28,13 @@ public class ProfileUkladacSwingWorker extends MySwingWorker0<File, Void> {
 		return file;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
 	}
 
-
 }
-

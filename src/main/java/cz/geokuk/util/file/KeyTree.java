@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Jménovací uzel podle vzoru composite.
+ * 
  * @author veverka
  */
 public class KeyTree<K, D> {
@@ -34,7 +35,6 @@ public class KeyTree<K, D> {
 		remove(Arrays.asList(keys));
 	}
 
-
 	public KeyNode<K, D> getRoot() {
 		return root;
 	}
@@ -43,7 +43,9 @@ public class KeyTree<K, D> {
 		root.print("");
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -54,7 +56,9 @@ public class KeyTree<K, D> {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -74,6 +78,5 @@ public class KeyTree<K, D> {
 			return false;
 		return true;
 	}
-
 
 }

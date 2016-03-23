@@ -1,14 +1,14 @@
 package cz.geokuk.core.coordinates;
 
-
 /**
  * Viditelná masa v mou souřadnicích.
+ * 
  * @author tatinek
  *
  */
 public class MouFrame {
-	public Mou moujz;
-	public Mou mousv;
+	public Mou	moujz;
+	public Mou	mousv;
 
 	@Override
 	public int hashCode() {
@@ -51,8 +51,5 @@ public class MouFrame {
 			return false;
 		return true;
 	}
-
-
-
 
 }

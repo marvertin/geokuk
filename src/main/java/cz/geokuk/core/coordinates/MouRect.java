@@ -4,13 +4,12 @@ import cz.geokuk.util.index2d.BoundingRect;
 
 public class MouRect {
 
+	private int	xx1;
+	private int	yy1;
+	private int	xx2;
+	private int	yy2;
 
-	private int xx1;
-	private int yy1;
-	private int xx2;
-	private int yy2;
-
-	public Mou sstre;
+	public Mou	sstre;
 
 	public MouRect() {
 	}
@@ -23,10 +22,10 @@ public class MouRect {
 		add(roh1);
 		add(roh2);
 		sstre = new Mou((roh1.xx + roh2.xx) / 2, (roh1.yy + roh2.yy) / 2);
-		//		assert roh1.xx == xx1;
-		//		assert roh2.xx == xx2;
-		//		assert roh1.yy == yy1 : roh1.yy + " " + yy1;
-		//		assert roh2.yy == yy2;
+		// assert roh1.xx == xx1;
+		// assert roh2.xx == xx2;
+		// assert roh1.yy == yy1 : roh1.yy + " " + yy1;
+		// assert roh2.yy == yy2;
 	}
 
 	public Mou getStred() {
@@ -69,13 +68,12 @@ public class MouRect {
 		return yy2 - yy1;
 	}
 
-
 	public boolean isLine() {
 		return isVerticalLine() || isHorizontalLine();
 	}
 
 	public boolean isPoint() {
-		return ! isEmpty() && xx1 == xx2 && yy1 == yy2;
+		return !isEmpty() && xx1 == xx2 && yy1 == yy2;
 	}
 
 	public boolean isEmpty() {
@@ -93,10 +91,14 @@ public class MouRect {
 			yy1 = mou.yy;
 			yy2 = mou.yy;
 		} else {
-			if (mou.xx < xx1) xx1 = mou.xx;
-			if (mou.xx > xx2) xx2 = mou.xx;
-			if (mou.yy < yy1) yy1 = mou.yy;
-			if (mou.yy > yy2) yy2 = mou.yy;
+			if (mou.xx < xx1)
+				xx1 = mou.xx;
+			if (mou.xx > xx2)
+				xx2 = mou.xx;
+			if (mou.yy < yy1)
+				yy1 = mou.yy;
+			if (mou.yy > yy2)
+				yy2 = mou.yy;
 		}
 
 	}
@@ -134,8 +136,7 @@ public class MouRect {
 
 	@Override
 	public String toString() {
-		return "MouRect [xx1=" + xx1 + ", xx2=" + xx2 + ", yy1=" + yy1 + ", yy2="
-				+ yy2 + "]";
+		return "MouRect [xx1=" + xx1 + ", xx2=" + xx2 + ", yy1=" + yy1 + ", yy2=" + yy2 + "]";
 	}
 
 	/**
@@ -149,6 +150,5 @@ public class MouRect {
 		yy1 -= dy;
 		yy2 += dy;
 	}
-
 
 }

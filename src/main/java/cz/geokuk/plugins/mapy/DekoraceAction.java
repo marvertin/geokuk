@@ -8,7 +8,6 @@ public class DekoraceAction extends MapyAction0 {
 
 	private static final long serialVersionUID = 8106696486908484270L;
 
-
 	public DekoraceAction(EKaType aKatype) {
 		super(aKatype);
 	}

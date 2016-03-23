@@ -9,10 +9,10 @@ import cz.geokuk.plugins.cesty.data.Bod;
 
 public abstract class BodAction0 extends BousekAction0 {
 
-	private static final long serialVersionUID = -7263554527636792222L;
-	protected Poziceq poziceq;
+	private static final long	serialVersionUID	= -7263554527636792222L;
+	protected Poziceq			poziceq;
 
-	private final Bod kontextovyBod;
+	private final Bod			kontextovyBod;
 
 	public BodAction0(Bod kontextovyBod) {
 		this.kontextovyBod = kontextovyBod;
@@ -20,7 +20,8 @@ public abstract class BodAction0 extends BousekAction0 {
 
 	@Override
 	protected final void vyletChanged() {
-		if (poziceq == null) return; // ještě je čas
+		if (poziceq == null)
+			return; // ještě je čas
 		vyhodnotitPovolenost();
 	}
 
@@ -52,8 +53,8 @@ public abstract class BodAction0 extends BousekAction0 {
 	}
 
 	/**
-	 * Pokud je daný bod, tak se nechá natavit jméno. Natavovací metoda také
-	 * ví, zda je akce z kontexotvého menu nebo z hlavního
+	 * Pokud je daný bod, tak se nechá natavit jméno. Natavovací metoda také ví, zda je akce z kontexotvého menu nebo z hlavního
+	 * 
 	 * @param bod
 	 * @param aZKontextovehoMenu
 	 */
@@ -61,13 +62,16 @@ public abstract class BodAction0 extends BousekAction0 {
 
 	/**
 	 * Zda se pro dany bod ma akce povolit.
-	 * @param bod Nikdy nebude predano null
+	 * 
+	 * @param bod
+	 *            Nikdy nebude predano null
 	 * @return
 	 */
 	protected abstract boolean mamPovolitProBod(Bod bod);
 
 	/**
 	 * Provedení akce pro daný bod.
+	 * 
 	 * @param bod
 	 */
 	protected abstract void provedProBod(Bod bod);
@@ -75,11 +79,9 @@ public abstract class BodAction0 extends BousekAction0 {
 	protected Bod getBod() {
 		if (kontextovyBod != null) {
 			return kontextovyBod;
-		}
-		else {
+		} else {
 			return poziceq.getBod();
 		}
 	}
-
 
 }

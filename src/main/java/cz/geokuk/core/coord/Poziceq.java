@@ -1,8 +1,6 @@
 package cz.geokuk.core.coord;
 
-import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.core.coordinates.Mouable;
-import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
@@ -10,10 +8,10 @@ import cz.geokuk.plugins.kesoid.Wpt;
 public class Poziceq {
 
 	/** Sem pozice vede */
-	private final Mouable mouable;
+	private final Mouable	mouable;
 
 	/** Tak sem to bylo dáno bez ohledu na to, jak se MOu mění v mouabblu */
-	private final Mou originalMou;
+	private final Mou		originalMou;
 
 	public Poziceq() {
 		mouable = null;
@@ -33,9 +31,9 @@ public class Poziceq {
 		return mouable == null;
 	}
 
-
 	public Mouable getPoziceMouable() {
-		if (isNoPosition()) return null;
+		if (isNoPosition())
+			return null;
 		return mouable.getMou().equals(originalMou) ? mouable : originalMou;
 	}
 
@@ -62,13 +60,12 @@ public class Poziceq {
 		return null;
 	}
 
-
 	public Kesoid getKesoid() {
 		Wpt wpt = getWpt();
-		if (wpt == null) return null;
+		if (wpt == null)
+			return null;
 		return wpt.getKesoid();
 	}
-
 
 	public Wgs getWgs() {
 		// Here, if the underlying mouable has latitude and longitude, simply return its Wgs, because it's more accurate
@@ -84,10 +81,9 @@ public class Poziceq {
 		return mou == null ? null : mou.toWgs();
 	}
 
-	//  public Utm getUtm() {
-	//    Mou mou = getPoziceMou();
-	//    return mou == null ? null : mou.toUtm();
-	//  }
-
+	// public Utm getUtm() {
+	// Mou mou = getPoziceMou();
+	// return mou == null ? null : mou.toUtm();
+	// }
 
 }

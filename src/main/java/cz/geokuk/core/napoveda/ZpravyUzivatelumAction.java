@@ -3,13 +3,11 @@
  */
 package cz.geokuk.core.napoveda;
 
-
 import java.awt.event.KeyEvent;
 import java.util.List;
 
 import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
-
 
 /**
  * @author veverka
@@ -17,8 +15,9 @@ import cz.geokuk.framework.JMyDialog0;
  */
 public class ZpravyUzivatelumAction extends DialogOpeningAction0 {
 
-	private static final long serialVersionUID = -2882817111560336824L;
-	private List<ZpravaUzivateli> zpravyUzivatelum;
+	private static final long		serialVersionUID	= -2882817111560336824L;
+	private List<ZpravaUzivateli>	zpravyUzivatelum;
+
 	/**
 	 * @param aBoard
 	 */
@@ -28,7 +27,9 @@ public class ZpravyUzivatelumAction extends DialogOpeningAction0 {
 		putValue(MNEMONIC_KEY, KeyEvent.VK_U);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.DialogOpeningAction0#createDialog()
 	 */
 	@Override

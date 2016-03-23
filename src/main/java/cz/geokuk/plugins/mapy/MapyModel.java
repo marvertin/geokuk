@@ -9,7 +9,6 @@ import cz.geokuk.plugins.mapy.kachle.KaSet;
 
 public class MapyModel extends Model0 {
 
-
 	private EKaType podklad;
 
 	public EKaType getPodklad() {
@@ -23,14 +22,16 @@ public class MapyModel extends Model0 {
 	private EnumSet<EKaType> dekorace;
 
 	public void setPodklad(EKaType podklad) {
-		if (podklad == this.podklad) return;
+		if (podklad == this.podklad)
+			return;
 		this.podklad = podklad;
 		currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnum(FPref.VALUE_MAPOVE_PODKLADY_value, podklad);
 		fajruj();
 	}
 
 	public void setDekorace(EnumSet<EKaType> dekorace) {
-		if (dekorace.equals(this.dekorace)) return;
+		if (dekorace.equals(this.dekorace))
+			return;
 		this.dekorace = dekorace.clone();
 		currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, dekorace);
 		fajruj();
@@ -57,9 +58,5 @@ public class MapyModel extends Model0 {
 		setPodklad(podklad);
 		setDekorace(dekorace);
 	}
-
-
-
-
 
 }

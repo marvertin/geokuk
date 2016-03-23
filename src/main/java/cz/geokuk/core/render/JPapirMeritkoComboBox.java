@@ -8,11 +8,11 @@ import javax.swing.JComboBox;
 
 public class JPapirMeritkoComboBox extends JComboBox<String> {
 
-	private static final long serialVersionUID = -3121505662505169240L;
+	private static final long	serialVersionUID	= -3121505662505169240L;
 
-	private int naposledZadana;
+	private int					naposledZadana;
 
-	private static final int[] MERITKA = {10000, 15000, 20000, 25000, 50000, 100000 };
+	private static final int[]	MERITKA				= { 10000, 15000, 20000, 25000, 50000, 100000 };
 
 	public JPapirMeritkoComboBox() {
 		setEditable(true);
@@ -32,9 +32,9 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 		});
 	}
 
-
 	public void setMeritko(int mer) {
-		if (mer == 0) return;
+		if (mer == 0)
+			return;
 		naposledZadana = mer;
 		setSelectedItem(formatuj(mer));
 	}
@@ -66,7 +66,6 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 			return naposledZadana;
 		}
 	}
-
 
 	@Override
 	public Dimension getMaximumSize() {

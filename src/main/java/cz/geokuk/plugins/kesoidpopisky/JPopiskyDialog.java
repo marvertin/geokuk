@@ -36,41 +36,31 @@ package cz.geokuk.plugins.kesoidpopisky;
  * content.txt
  */
 
-
 import java.awt.BorderLayout;
 
-import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
 
 public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long serialVersionUID = 7087453419069194768L;
+	private static final long	serialVersionUID			= 7087453419069194768L;
 
+	private JTextField			jKesPatternEdit;
+	private JTextField			jWaymarkPatternEdit;
+	private JTextField			jCgpPatternEdit;
+	private JTextField			jSimplewaypontPatternEdit;
 
-	private JTextField jKesPatternEdit;
-	private JTextField jWaymarkPatternEdit;
-	private JTextField jCgpPatternEdit;
-	private JTextField jSimplewaypontPatternEdit;
+	private final JLabel		jKesPatternLabel			= new JLabel("Keš:");
+	private final JLabel		jWaymarkPatternLabel		= new JLabel("Waymark:");
+	private final JLabel		jCgpPatternLabel			= new JLabel("Czech geodetic point:");
+	private final JLabel		jSimplewaypontPatternLabel	= new JLabel("Simple waypoint:");
 
-	private final JLabel jKesPatternLabel = new JLabel("Keš:");
-	private final JLabel jWaymarkPatternLabel = new JLabel("Waymark:");
-	private final JLabel jCgpPatternLabel = new JLabel("Czech geodetic point:");
-	private final JLabel jSimplewaypontPatternLabel = new JLabel("Simple waypoint:");
+	private PopiskyModel		popiskyModel;
 
-	private PopiskyModel popiskyModel;
-
-
-	private JVlastnostiPisma jVlastnostiPisma = new JVlastnostiPisma();
+	private JVlastnostiPisma	jVlastnostiPisma			= new JVlastnostiPisma();
 
 	public JPopiskyDialog() {
 		setTitle("Nastavení paramtrů popisek keší na mapě");
@@ -94,14 +84,14 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 	}
 
 	private void setPattern(final JTextField jField, final String pattern) {
-		if (! jField.getText().equals(pattern)) {
+		if (!jField.getText().equals(pattern)) {
 			jField.setText(pattern);
 		}
 
 	}
 
-	/** This method is called from within the constructor to
-	 * initialize the form.
+	/**
+	 * This method is called from within the constructor to initialize the form.
 	 */
 	@Override
 	protected void initComponents() {
@@ -109,7 +99,6 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 		jWaymarkPatternEdit = new JTextField();
 		jCgpPatternEdit = new JTextField();
 		jSimplewaypontPatternEdit = new JTextField();
-
 
 		jVlastnostiPisma = new JVlastnostiPisma();
 
@@ -123,7 +112,6 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 		pack();
 	}
 
-
 	private void grlay(final JPanel panel) {
 		final GroupLayout layout = new GroupLayout(panel);
 		panel.setBorder(BorderFactory.createTitledBorder("Vzorky popisků: " + SestavovacPopisku.getNahrazovaceDisplay()));
@@ -131,47 +119,29 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
 
-		//    panel.add(jKesPatternEdit);
-		//    panel.add(jWaymarkPatternEdit);
-		//    panel.add(jCgpPatternEdit);
-		//    panel.add(jSimplewaypontPatternEdit);
+		// panel.add(jKesPatternEdit);
+		// panel.add(jWaymarkPatternEdit);
+		// panel.add(jCgpPatternEdit);
+		// panel.add(jSimplewaypontPatternEdit);
 
-		layout.setHorizontalGroup(layout.createSequentialGroup()       //hroup
-				.addGroup(layout.createParallelGroup()  //h1
-						.addComponent(jKesPatternLabel)
-						.addComponent(jWaymarkPatternLabel)
-						.addComponent(jCgpPatternLabel)
-						.addComponent(jSimplewaypontPatternLabel)
-						)
-				.addGroup(layout.createParallelGroup()  //h1
-						.addComponent(jKesPatternEdit)
-						.addComponent(jWaymarkPatternEdit)
-						.addComponent(jCgpPatternEdit)
-						.addComponent(jSimplewaypontPatternEdit)
-						)
-				);
-		layout.setVerticalGroup(layout.createSequentialGroup()       //hroup
-				.addGroup(layout.createParallelGroup()  //h1
-						.addComponent(jKesPatternLabel)
-						.addComponent(jKesPatternEdit)
-						)
-				.addGroup(layout.createParallelGroup()  //h1
-						.addComponent(jWaymarkPatternLabel)
-						.addComponent(jWaymarkPatternEdit)
-						)
-				.addGroup(layout.createParallelGroup()  //h1
-						.addComponent(jCgpPatternLabel)
-						.addComponent(jCgpPatternEdit)
-						)
-				.addGroup(layout.createParallelGroup()  //h1
-						.addComponent(jSimplewaypontPatternLabel)
-						.addComponent(jSimplewaypontPatternEdit)
-						)
-				);
+		layout.setHorizontalGroup(layout.createSequentialGroup() // hroup
+				.addGroup(layout.createParallelGroup() // h1
+						.addComponent(jKesPatternLabel).addComponent(jWaymarkPatternLabel).addComponent(jCgpPatternLabel).addComponent(jSimplewaypontPatternLabel))
+				.addGroup(layout.createParallelGroup() // h1
+						.addComponent(jKesPatternEdit).addComponent(jWaymarkPatternEdit).addComponent(jCgpPatternEdit).addComponent(jSimplewaypontPatternEdit)));
+		layout.setVerticalGroup(layout.createSequentialGroup() // hroup
+				.addGroup(layout.createParallelGroup() // h1
+						.addComponent(jKesPatternLabel).addComponent(jKesPatternEdit))
+				.addGroup(layout.createParallelGroup() // h1
+						.addComponent(jWaymarkPatternLabel).addComponent(jWaymarkPatternEdit))
+				.addGroup(layout.createParallelGroup() // h1
+						.addComponent(jCgpPatternLabel).addComponent(jCgpPatternEdit))
+				.addGroup(layout.createParallelGroup() // h1
+						.addComponent(jSimplewaypontPatternLabel).addComponent(jSimplewaypontPatternEdit)));
 	}
 
-	//  private JPanel obalRameckem(JComponent com, String title) {
-	//  }
+	// private JPanel obalRameckem(JComponent com, String title) {
+	// }
 	/**
 	 *
 	 */
@@ -197,14 +167,17 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 			public void removeUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			private void zmena() {
 				final PopiskySettings data = popiskyModel.getData();
 				data.patterns.setKesPattern(jKesPatternEdit.getText());
@@ -217,14 +190,17 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 			public void removeUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			private void zmena() {
 				final PopiskySettings data = popiskyModel.getData();
 				data.patterns.setWaymarkPattern(jWaymarkPatternEdit.getText());
@@ -237,14 +213,17 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 			public void removeUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			private void zmena() {
 				final PopiskySettings data = popiskyModel.getData();
 				data.patterns.setCgpPattern(jCgpPatternEdit.getText());
@@ -257,14 +236,17 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 			public void removeUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
 				zmena();
 			}
+
 			private void zmena() {
 				final PopiskySettings data = popiskyModel.getData();
 				data.patterns.setSimplewaypointPattern(jSimplewaypontPatternEdit.getText());
@@ -272,14 +254,15 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 			}
 		});
 
-
 	}
 
-	public void inject (final PopiskyModel popiskyModel) {
+	public void inject(final PopiskyModel popiskyModel) {
 		this.popiskyModel = popiskyModel;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -293,4 +276,3 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 	}
 
 }
-

@@ -3,18 +3,16 @@ package cz.geokuk.plugins.kesoid.mapicon;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import cz.geokuk.api.mapicon.Drawer0;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 
 public class IconDefNacitac {
 
@@ -22,19 +20,18 @@ public class IconDefNacitac {
 	 *
 	 */
 
-	private static final Logger log =
-			LogManager.getLogger(IconDefNacitac.class.getSimpleName());
+	private static final Logger		log	= LogManager.getLogger(IconDefNacitac.class.getSimpleName());
 
-	private final String jmenoSPriponou;
-	//private IconDef iconDef;
+	private final String			jmenoSPriponou;
+	// private IconDef iconDef;
 
-	IkonDrawingProperties idp;
+	IkonDrawingProperties			idp;
 	// TODO : The alelas should have a more generic name
-	private static Pattern pat = Pattern.compile("([a-z0-9]+!)*([^_]*)((?:_[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮa-zA-z -]+)*)(_x-?[0-9]+)*(_y-?[0-9]+)*(_p[0-9])*\\.([a-z]+)");
-	private final URL url;
+	private static Pattern			pat	= Pattern.compile("([a-z0-9]+!)*([^_]*)((?:_[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮa-zA-z -]+)*)(_x-?[0-9]+)*(_y-?[0-9]+)*(_p[0-9])*\\.([a-z]+)");
+	private final URL				url;
 
-	private final Genom genom;
-	private final IkonNacitacSada iIkonNacitacSada;
+	private final Genom				genom;
+	private final IkonNacitacSada	iIkonNacitacSada;
 
 	public IconDefNacitac(Genom genom, String jmenoSPriponou, URL url, IkonNacitacSada aIkonNacitacSada) {
 		this.jmenoSPriponou = jmenoSPriponou;
@@ -73,7 +70,7 @@ public class IconDefNacitac {
 			alelaSym.getGrupa().setDisplayName(iIkonNacitacSada.getGroupDisplayName(grupaName));
 			alely.add(alelaSym);
 		}
-		//rozmnoz(alely, sese);
+		// rozmnoz(alely, sese);
 		String sufix = mat.group(7);
 		if (isProperties(sufix)) {
 			nactiObrazekDefinovanyVPropertach();
@@ -99,7 +96,8 @@ public class IconDefNacitac {
 	 * @return
 	 */
 	private String odstranZazavorkovaneNesouboroviteZnaky(String s) {
-		if (s.indexOf('[') < 0) return s;
+		if (s.indexOf('[') < 0)
+			return s;
 		s = s.replace("[lomitko]", "/");
 		s = s.replace("[hvezdicka]", "*");
 		s = s.replace("[uvozovky]", "*");
@@ -111,7 +109,7 @@ public class IconDefNacitac {
 	private Set<Alela> nactiAlely(String alelygroup) {
 		Set<Alela> alely = new HashSet<>();
 		for (String s : alelygroup.split("_")) {
-			if (s.isEmpty())  {
+			if (s.isEmpty()) {
 				continue;
 			}
 			Alela alela;
@@ -122,21 +120,23 @@ public class IconDefNacitac {
 				String alelaName = s.substring(pozminus + 1);
 				String genName = s.substring(0, pozminus);
 				alela = genom.alela(alelaName, genName);
-				if (alela == null) continue;
+				if (alela == null)
+					continue;
 			}
 			alely.add(alela);
 		}
 		return alely;
 	}
 
-
 	private int zpracujNaPrioritu(String zadano) {
-		if (zadano == null) return 5;
+		if (zadano == null)
+			return 5;
 		return Integer.parseInt(zadano.substring(2));
 	}
 
 	private int zpracujNaOffsete(String zadano) {
-		if (zadano == null) return 0;
+		if (zadano == null)
+			return 0;
 		int zadanapozice = Integer.parseInt(zadano.substring(2));
 		return zadanapozice;
 	}
@@ -144,8 +144,8 @@ public class IconDefNacitac {
 	private void nactiObrazekDefinovanyVPropertach() throws IOException {
 		Properties prop = new Properties();
 		prop.load(new BufferedInputStream(idp.url.openStream()));
-		//    idp.width = Integer.parseInt(prop.getProperty("width"));
-		//    idp.height= Integer.parseInt(prop.getProperty("height"));
+		// idp.width = Integer.parseInt(prop.getProperty("width"));
+		// idp.height= Integer.parseInt(prop.getProperty("height"));
 		idp.properties = prop;
 		String className = prop.getProperty("class");
 		try {
@@ -157,10 +157,10 @@ public class IconDefNacitac {
 	}
 
 	private void otestujAVydefinujSkutecnyObrazek(ImagantCache imagantCache) throws IOException {
-		//    @SuppressWarnings("unused") // jen pro kontrolu
-		//    BufferedImage bi = ImageIO.read(idp.url);
-		//    idp.width = bi.getWidth();
-		//    idp.height = bi.getHeight();
+		// @SuppressWarnings("unused") // jen pro kontrolu
+		// BufferedImage bi = ImageIO.read(idp.url);
+		// idp.width = bi.getWidth();
+		// idp.height = bi.getHeight();
 		idp.properties = new Properties();
 		idp.vykreslovac = new DefaultVykreslovac(imagantCache);
 		naplnVykreslovac(idp.vykreslovac);
@@ -173,10 +173,8 @@ public class IconDefNacitac {
 		vykreslovac.setIdp(idp);
 	}
 
-
 	private boolean isProperties(String sufix) {
 		return sufix.equals("properties");
 	}
-
 
 }

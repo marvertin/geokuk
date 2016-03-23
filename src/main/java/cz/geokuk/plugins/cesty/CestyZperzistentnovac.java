@@ -1,46 +1,26 @@
 package cz.geokuk.plugins.cesty;
 
+import java.io.*;
+import java.util.*;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.program.FConst;
-import cz.geokuk.plugins.cesty.data.Bod;
-import cz.geokuk.plugins.cesty.data.Cesta;
-import cz.geokuk.plugins.cesty.data.Doc;
-import cz.geokuk.plugins.cesty.data.Updator;
-import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.Kesoid;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.cesty.data.*;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.importek.NacitacGpx;
-import cz.geokuk.util.index2d.BoundingRect;
-import cz.geokuk.util.index2d.Indexator;
-import cz.geokuk.util.index2d.Sheet;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import cz.geokuk.util.index2d.*;
 
 public class CestyZperzistentnovac {
 
-	private static final Logger log = LogManager.getLogger(CestyZperzistentnovac.class.getSimpleName());
+	private static final Logger	log		= LogManager.getLogger(CestyZperzistentnovac.class.getSimpleName());
 
-	private int smimCist;
+	private int					smimCist;
 
-	private final Updator updator = new Updator();
+	private final Updator		updator	= new Updator();
 
 	private Ggt loadGgt(File file) throws IOException {
 		FileReader filere = null;
@@ -49,7 +29,7 @@ public class CestyZperzistentnovac {
 			BufferedReader br = new BufferedReader(filere);
 			return loadGgt(br);
 		} catch (FileNotFoundException e) {
-			//FExceptionDumper.dump(e, EExceptionSeverity.CATCHE, "Nacitani vyletu.");
+			// FExceptionDumper.dump(e, EExceptionSeverity.CATCHE, "Nacitani vyletu.");
 			return new Ggt(new HashSet<String>());
 		} finally {
 			if (filere != null) {
@@ -71,7 +51,6 @@ public class CestyZperzistentnovac {
 		Ggt vyletPul = new Ggt(set);
 		return vyletPul;
 	}
-
 
 	void zapisGgt(Doc doc, File file) {
 		BufferedWriter wrt = null;
@@ -105,14 +84,14 @@ public class CestyZperzistentnovac {
 	}
 
 	private void zapisKdyzNeni(BufferedWriter wrt, String kod, Set<String> exportovano) throws IOException {
-		if (kod == null) return;
+		if (kod == null)
+			return;
 		if (exportovano.add(kod)) {
 			wrt.write(String.format("%s%s", kod, FConst.NL));
-			//    } else {
-			//      wrt.write(String.format("NEBERU %s%s", kod, FConst.NL));
+			// } else {
+			// wrt.write(String.format("NEBERU %s%s", kod, FConst.NL));
 		}
 	}
-
 
 	List<Cesta> nacti(List<File> files, KesBag kesBag) {
 		List<Cesta> cesty = new ArrayList<>();
@@ -139,7 +118,6 @@ public class CestyZperzistentnovac {
 		return cesty;
 	}
 
-
 	private Cesta zbuildujCestuZGgt(Ggt ggt, KesBag kesBag) {
 		Cesta cesta = Cesta.create();
 		if (kesBag != null) {
@@ -165,13 +143,14 @@ public class CestyZperzistentnovac {
 		}
 	}
 
-
 	private Wpt najdiExtremneBlizouckyWpt(Mou mou, KesBag kesBag) {
-		if (kesBag == null) return null;
+		if (kesBag == null)
+			return null;
 		Indexator<Wpt> indexator = kesBag.getIndexator();
 		BoundingRect br = new BoundingRect(mou.xx, mou.yy, mou.xx, mou.yy).rozsir(100);
 		Sheet<Wpt> sheet = indexator.locateAnyOne(br);
-		if (sheet == null) return null;
+		if (sheet == null)
+			return null;
 		return sheet.get();
 	}
 

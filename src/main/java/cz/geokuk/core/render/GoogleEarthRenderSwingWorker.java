@@ -16,7 +16,6 @@ import cz.geokuk.framework.Progressor;
 
 public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 
-
 	GoogleEarthRenderSwingWorker() {
 	}
 
@@ -24,33 +23,30 @@ public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 	protected RenderResult doInBackground() throws Exception {
 		System.out.println("Ukladam KMZ");
 		File file = computeFileName();
-		if (! Dlg.prepsatSoubor(file)) return null;
+		if (!Dlg.prepsatSoubor(file))
+			return null;
 		try {
-			KmzWriter kmzwrt = new KmzWriter(file,
-					renderModel.getRenderSettings().getKmzFolder().getText(),
-					renderModel.getRenderSettings().getKmzFolderDescription());
+			KmzWriter kmzwrt = new KmzWriter(file, renderModel.getRenderSettings().getKmzFolder().getText(), renderModel.getRenderSettings().getKmzFolderDescription());
 			RenderParams pp = new RenderParams();
 			pp.roord = renderModel.createRenderedCoord();
 			EImageType imageType = renderModel.getRenderSettings().getImageType();
 			pp.pruhledne = imageType.isUmoznujePruhlednost();
 			Coord coordCely = pp.roord;
 			int citac = 0;
-			//int xDlazdice = 0, yDlazdice = 0;
+			// int xDlazdice = 0, yDlazdice = 0;
 			DlazdicovaMetrikaXY dlas = renderModel.spoctiDlazdicovouMetriku();
 			progressor.setMax(dlas.getPcoetDlazdic() * Rendrovadlo.KOLIK_PROGRESUJEME_NA_KACHLICH);
-			//System.out.println("DLADLADLA: " + xDlaSize + " " + yDlaSize);
+			// System.out.println("DLADLADLA: " + xDlaSize + " " + yDlaSize);
 			for (DlazdicovaMetrikaXY.Dlazdice dla : dlas) {
-				//System.out.println("DLA: " + dla.xn + " " + dla.yn + " " + dla.xs + " " + dla.ys);
+				// System.out.println("DLA: " + dla.xn + " " + dla.yn + " " + dla.xs + " " + dla.ys);
 				RenderParams p = new RenderParams();
 				p.natacetDoSeveru = renderModel.getRenderSettings().isSrovnatDoSeveru();
-				p.roord = pp.roord.derive(coordCely.transform(new Point(dla.xs, dla.ys)),
-						new Dimension(dla.dim.width, dla.dim.height));
+				p.roord = pp.roord.derive(coordCely.transform(new Point(dla.xs, dla.ys)), new Dimension(dla.dim.width, dla.dim.height));
 				p.pruhledne = imageType.isUmoznujePruhlednost();
 				p.drawOrder = renderModel.getRenderSettings().getKmzDrawOrder();
 				progressor.setText(String.format("Rendruji %d/%d", ++citac, dlas.getPcoetDlazdic()));
 				renderDlazdice(kmzwrt, p, dla.xn, dla.yn, progressor);
 			}
-
 
 			kmzwrt.finish();
 			System.out.println("Konec rendrovani");
@@ -58,14 +54,17 @@ public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 			result.file = file;
 			return result;
 		} catch (Exception e) {
-			try {  file.delete(); } catch (Exception e1) { e.fillInStackTrace(); }
+			try {
+				file.delete();
+			} catch (Exception e1) {
+				e.fillInStackTrace();
+			}
 			throw e;
 		}
 	}
 
 	private void renderDlazdice(KmzWriter kmzwrt, RenderParams p, int xDlazdice, int yDlazdice, Progressor progressor)
-			throws InterruptedException, IOException,
-			ParserConfigurationException, TransformerException {
+			throws InterruptedException, IOException, ParserConfigurationException, TransformerException {
 		KmzParams kmzpar = new KmzParams();
 		kmzpar.imageType = renderModel.getRenderSettings().getImageType();
 
@@ -74,19 +73,19 @@ public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 
 		Coord roord = p.roord;
 		// TODO kontrola souřadnic zde býti musí, zjištění chyby, případné průměrování
-		Mou SZ = roord.transform(new Point(0,0));
+		Mou SZ = roord.transform(new Point(0, 0));
 		@SuppressWarnings("unused")
-		Mou SV = roord.transform(new Point(p.roord.getWidth(),0));
+		Mou SV = roord.transform(new Point(p.roord.getWidth(), 0));
 		@SuppressWarnings("unused")
-		Mou JZ = roord.transform(new Point(0,p.roord.getHeight()));
-		Mou JV = roord.transform(new Point(p.roord.getWidth(),p.roord.getHeight()));
+		Mou JZ = roord.transform(new Point(0, p.roord.getHeight()));
+		Mou JV = roord.transform(new Point(p.roord.getWidth(), p.roord.getHeight()));
 		kmzpar.sever = SZ.toWgs().lat;
 		kmzpar.jih = JV.toWgs().lat;
 		kmzpar.zapad = SZ.toWgs().lon;
 		kmzpar.vychod = JV.toWgs().lon;
 		kmzpar.xDlazdice = xDlazdice;
 		kmzpar.yDlazdice = yDlazdice;
-		if (! renderModel.getRenderSettings().isSrovnatDoSeveru()) {
+		if (!renderModel.getRenderSettings().isSrovnatDoSeveru()) {
 			kmzpar.rotation = roord.computNataceciUhel() * 180 / Math.PI;
 		}
 		kmzpar.drawOrder = p.drawOrder;
@@ -104,7 +103,5 @@ public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 		}
 		return file;
 	}
-
-
 
 }

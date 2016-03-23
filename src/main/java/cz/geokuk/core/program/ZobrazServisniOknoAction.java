@@ -3,11 +3,8 @@
  */
 package cz.geokuk.core.program;
 
-
 import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
-
-
 
 /**
  * @author veverka
@@ -24,7 +21,10 @@ public class ZobrazServisniOknoAction extends DialogOpeningAction0 {
 		super("Servis...");
 		putValue(SHORT_DESCRIPTION, "Zobrazí okno se servisními informacemi.");
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override

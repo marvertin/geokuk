@@ -3,7 +3,6 @@
  */
 package cz.geokuk.plugins.kesoid.mvc;
 
-
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -16,18 +15,17 @@ import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 
-
 /**
  * @author veverka
  *
  */
 public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long serialVersionUID = -8054017274338240706L;
-	private IkonBag ikonBag;
-	private final Alela alela;
-	private KesoidModel kesoidModel;
-	private KesBag vsechny;
+	private static final long	serialVersionUID	= -8054017274338240706L;
+	private IkonBag				ikonBag;
+	private final Alela			alela;
+	private KesoidModel			kesoidModel;
+	private KesBag				vsechny;
 
 	/**
 	 *
@@ -35,7 +33,9 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 	public ZhasniKeseUrciteAlelyAction(Alela alela) {
 		this.alela = alela;
 	}
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
@@ -52,22 +52,21 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 		vsechny = event.getVsechny();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.program.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
 	public void initAfterEventReceiverRegistration() {
 		super.putValue(NAME, sestavJmeno());
-		super.putValue(SMALL_ICON,  new PreskrtnutaIkona(ikonBag.seekIkon(ikonBag.getGenom().getGenotypProAlelu(alela))));
+		super.putValue(SMALL_ICON, new PreskrtnutaIkona(ikonBag.seekIkon(ikonBag.getGenom().getGenotypProAlelu(alela))));
 		super.putValue(SHORT_DESCRIPTION, "Zhasne waypointy daného typu.");
 
-
 	}
+
 	private String sestavJmeno() {
-		return String.format("<html>%s: <b>%s</b> <i>(%d)</i>",
-				alela.getGen().getDisplayName(),
-				alela.getDisplayName(),
-				vsechny.getPoctyAlel().count(alela));
+		return String.format("<html>%s: <b>%s</b> <i>(%d)</i>", alela.getGen().getDisplayName(), alela.getDisplayName(), vsechny.getPoctyAlel().count(alela));
 	}
 
 	public void inject(KesoidModel kesoidModel) {
@@ -77,6 +76,7 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 	private class PreskrtnutaIkona implements Icon {
 
 		private final Icon icon;
+
 		/**
 		 * @param image
 		 */
@@ -84,7 +84,9 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 			this.icon = icon;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.ImageIcon#paintIcon(java.awt.Component, java.awt.Graphics, int, int)
 		 */
 		@Override
@@ -115,8 +117,4 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 		}
 	}
 
-
 }
-
-
-

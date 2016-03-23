@@ -3,11 +3,9 @@
  */
 package cz.geokuk.core.coord;
 
-
 import java.awt.event.ActionEvent;
 
 import cz.geokuk.framework.Action0;
-
 
 /**
  * @author veverka
@@ -23,10 +21,12 @@ public class NastavMapuCeskaAction extends Action0 {
 	public NastavMapuCeskaAction() {
 		super("Na mapu Česka");
 		putValue(SHORT_DESCRIPTION, "Změna pozice a měřítka mapy, aby ukazovala českou republiku.");
-		//    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
+		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
 
 	}
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
@@ -37,7 +37,3 @@ public class NastavMapuCeskaAction extends Action0 {
 	}
 
 }
-
-
-
-

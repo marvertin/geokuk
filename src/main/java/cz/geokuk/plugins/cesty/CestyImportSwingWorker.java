@@ -3,17 +3,16 @@
  */
 package cz.geokuk.plugins.cesty;
 
-
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import cz.geokuk.framework.MySwingWorker0;
-import cz.geokuk.plugins.cesty.data.Cesta;
-import cz.geokuk.plugins.kesoid.KesBag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cz.geokuk.framework.MySwingWorker0;
+import cz.geokuk.plugins.cesty.data.Cesta;
+import cz.geokuk.plugins.kesoid.KesBag;
 
 /**
  * @author veverka
@@ -21,14 +20,12 @@ import org.apache.logging.log4j.Logger;
  */
 public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 
-	private static final Logger log =
-			LogManager.getLogger(CestyImportSwingWorker.class.getSimpleName());
+	private static final Logger			log	= LogManager.getLogger(CestyImportSwingWorker.class.getSimpleName());
 
-	private final CestyZperzistentnovac cestyZperzistentnovac;
-	private final KesBag kesBag;
-	private final CestyModel cestyModel;
-	private final List<File> files;
-
+	private final CestyZperzistentnovac	cestyZperzistentnovac;
+	private final KesBag				kesBag;
+	private final CestyModel			cestyModel;
+	private final List<File>			files;
 
 	public CestyImportSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, KesBag vsechny, CestyModel cestyModel, List<File> files) {
 		this.cestyZperzistentnovac = cestyZperzistentnovac;
@@ -37,8 +34,9 @@ public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 		this.files = files;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
@@ -47,17 +45,18 @@ public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 		return cesty;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
 		List<Cesta> cesty = get();
-		if (cesty == null) return; // asi zkanclváno
-		log.info("Načteny cesty %d: \n",  cesty.size());
+		if (cesty == null)
+			return; // asi zkanclváno
+		log.info("Načteny cesty %d: \n", cesty.size());
 		cestyModel.prevezmiImportovaneCesty(cesty);
 	}
 
-
 }
-

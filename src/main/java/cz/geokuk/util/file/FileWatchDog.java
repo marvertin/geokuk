@@ -1,23 +1,15 @@
 package cz.geokuk.util.file;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 import java.nio.charset.Charset;
-
 
 public class FileWatchDog<R> {
 
-	private final File file;
+	private final File		file;
 
-	private long lastmodified;
+	private long			lastmodified;
 
-	private WatchDogGroup watchDogGroup;
+	private WatchDogGroup	watchDogGroup;
 
 	public FileWatchDog(File file) {
 		super();
@@ -57,14 +49,16 @@ public class FileWatchDog<R> {
 		BufferedReader rdr = null;
 		try {
 			long lm = wasModified();
-			if (lm < 0) return null;
+			if (lm < 0)
+				return null;
 			rdr = open();
 			R result = callback.load(rdr);
 			lastmodified = lm; // tepre až se povede načíst, můžeme změni
 			return result;
 		} finally {
 			try {
-				if (rdr != null) rdr.close();
+				if (rdr != null)
+					rdr.close();
 			} catch (IOException e) { // s tím nic nenadělám
 			}
 		}
@@ -72,6 +66,7 @@ public class FileWatchDog<R> {
 
 	/**
 	 * Vrátí čas modifikace souboru pokud byl modifikován a -1 když nebyl
+	 * 
 	 * @return
 	 */
 	public synchronized long wasModified() {
@@ -81,7 +76,8 @@ public class FileWatchDog<R> {
 		} else {
 			lm = 0;
 		}
-		if (lm == lastmodified) return -1;
+		if (lm == lastmodified)
+			return -1;
 		return lm;
 	}
 
@@ -90,7 +86,8 @@ public class FileWatchDog<R> {
 	}
 
 	public void setGroup(WatchDogGroup watchDogGroup) {
-		if (this.watchDogGroup == watchDogGroup) return;
+		if (this.watchDogGroup == watchDogGroup)
+			return;
 		this.watchDogGroup = watchDogGroup;
 		watchDogGroup.add(this);
 	}

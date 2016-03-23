@@ -3,12 +3,7 @@
  */
 package cz.geokuk.core.profile;
 
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.prefs.Preferences;
 
 import cz.geokuk.core.program.FConst;
@@ -22,7 +17,8 @@ public final class FPreferencesInNearFile {
 
 	private static boolean ukladatDoSouboru = false;
 
-	private FPreferencesInNearFile() {}
+	private FPreferencesInNearFile() {
+	}
 
 	public static void saveNearToProgramIfShould() {
 		if (ukladatDoSouboru) {
@@ -42,7 +38,7 @@ public final class FPreferencesInNearFile {
 	}
 
 	private static File saveNearToProgram() {
-		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(FConst.PREFERENCES_FILE))){
+		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(FConst.PREFERENCES_FILE))) {
 			MyPreferences.root().exportSubtree(bos);
 			bos.close();
 			updateLastModified();
@@ -53,7 +49,6 @@ public final class FPreferencesInNearFile {
 		}
 		return FConst.PREFERENCES_FILE;
 	}
-
 
 	/**
 	 * Nový soubor dotáhne do preferences, pokud
@@ -70,7 +65,7 @@ public final class FPreferencesInNearFile {
 	}
 
 	private static void loadNearToProgram() {
-		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(FConst.PREFERENCES_FILE))){
+		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(FConst.PREFERENCES_FILE))) {
 			Preferences.importPreferences(bis);
 			bis.close();
 			updateLastModified();

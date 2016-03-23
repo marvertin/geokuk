@@ -13,18 +13,18 @@ import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
  *
  */
 public class JRenderNahledPrekryvnik extends JCoordPrekryvnik0 {
-	private static final long serialVersionUID = -5996655830197513951L;
-	private int renderedMoumer = -1;
-	private Mou moustred;
-	private Coord moord;
+	private static final long	serialVersionUID	= -5996655830197513951L;
+	private int					renderedMoumer		= -1;
+	private Mou					moustred;
+	private Coord				moord;
 
 	/**
 	 *
 	 */
 	public JRenderNahledPrekryvnik() {
 		// TODO To by mělo jít jistojistě odstranit
-		//    getCoord().setMoustred(new Wgs(50.284, 14.3563).toMou());
-		//    getCoord().setMoumer(17);
+		// getCoord().setMoustred(new Wgs(50.284, 14.3563).toMou());
+		// getCoord().setMoumer(17);
 
 	}
 
@@ -40,10 +40,9 @@ public class JRenderNahledPrekryvnik extends JCoordPrekryvnik0 {
 	}
 
 	private void nastavto() {
-		if (renderedMoumer < 0 || moord == null) return;
+		if (renderedMoumer < 0 || moord == null)
+			return;
 		setSoord(moord.derive(renderedMoumer, moustred));
 	}
-
-
 
 }

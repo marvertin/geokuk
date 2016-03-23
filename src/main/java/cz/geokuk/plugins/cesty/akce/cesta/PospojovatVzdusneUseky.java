@@ -9,14 +9,13 @@ public class PospojovatVzdusneUseky extends CestaAction0 {
 	public PospojovatVzdusneUseky(Cesta cesta) {
 		super(cesta);
 
-		//putValue(NAME,  "<html>Odstraň cestu <i>" + jCestaMenu.getNazev() + "</i> " + (jCestaMenu.getMouDelkaCesta() + " mou"));
-		putValue(NAME,  "Pospojovat vzdušné úseky");
+		// putValue(NAME, "<html>Odstraň cestu <i>" + jCestaMenu.getNazev() + "</i> " + (jCestaMenu.getMouDelkaCesta() + " mou"));
+		putValue(NAME, "Pospojovat vzdušné úseky");
 		putValue(SHORT_DESCRIPTION, "Nalezne všechny vzdušné úseky v cestě a pospojuje je.");
-		//putValue(MNEMONIC_KEY, KeyEvent.VK_V);
-		//putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));
-		//putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
+		// putValue(MNEMONIC_KEY, KeyEvent.VK_V);
+		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));
+		// putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
 	}
-
 
 	@Override
 	protected boolean mamPovolitProCestu(Cesta cesta) {
@@ -33,6 +32,5 @@ public class PospojovatVzdusneUseky extends CestaAction0 {
 	protected void provedProCestu(Cesta cesta) {
 		cestyModel.pospojujVzdusneUseky(cesta);
 	}
-
 
 }

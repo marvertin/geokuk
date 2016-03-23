@@ -1,28 +1,16 @@
 package cz.geokuk.core.program;
 
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.EnumMap;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import cz.geokuk.core.render.RenderModel;
-import cz.geokuk.core.render.RenderUmisteniSouboru;
-import cz.geokuk.core.render.RenderUmisteniSouboruChangedEvent;
+import cz.geokuk.core.render.*;
 import cz.geokuk.framework.Dlg;
-import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
-import cz.geokuk.plugins.kesoid.mvc.KesoidUmisteniSouboru;
-import cz.geokuk.plugins.kesoid.mvc.KesoidUmisteniSouboruChangedEvent;
+import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboru;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboruChangedEvent;
 import cz.geokuk.plugins.mapy.kachle.KachleModel;
@@ -31,32 +19,31 @@ import cz.geokuk.util.file.Filex;
 
 public class JPrehledSouboru extends JPanel {
 
-	private static final long serialVersionUID = -2491414463002815835L;
+	private static final long									serialVersionUID	= -2491414463002815835L;
 
-	private JJedenSouborPanel jKesDir;
-	private JJedenSouborPanel jCestyDir;
-	private JJedenSouborPanel jNeGgtFile;
-	private JJedenSouborPanel jAnoGgtFile;
-	private JJedenSouborPanel jKachleCacheDir;
+	private JJedenSouborPanel									jKesDir;
+	private JJedenSouborPanel									jCestyDir;
+	private JJedenSouborPanel									jNeGgtFile;
+	private JJedenSouborPanel									jAnoGgtFile;
+	private JJedenSouborPanel									jKachleCacheDir;
 
-	private JJedenSouborPanel jGeogetDataDir;
-	private JJedenSouborPanel jImage3rdPartyDir;
-	private JJedenSouborPanel jImageMyDir;
+	private JJedenSouborPanel									jGeogetDataDir;
+	private JJedenSouborPanel									jImage3rdPartyDir;
+	private JJedenSouborPanel									jImageMyDir;
 
-	private JJedenSouborPanel jOziDir;
-	private JJedenSouborPanel jKmzDir;
-	private JJedenSouborPanel jPictureDir;
+	private JJedenSouborPanel									jOziDir;
+	private JJedenSouborPanel									jKmzDir;
+	private JJedenSouborPanel									jPictureDir;
 
-	private KesoidModel kesoidModel;
+	private KesoidModel											kesoidModel;
 
-	private KachleModel kachleModel;
+	private KachleModel											kachleModel;
 
-	private RenderModel renderModel;
+	private RenderModel											renderModel;
 
-	private JTabbedPane jTabbedPane;
+	private JTabbedPane											jTabbedPane;
 
-	private final EnumMap<ESouborPanelName, JJedenSouborPanel> mapaProFokusovani = new EnumMap<>(ESouborPanelName.class);
-
+	private final EnumMap<ESouborPanelName, JJedenSouborPanel>	mapaProFokusovani	= new EnumMap<>(ESouborPanelName.class);
 
 	public JPrehledSouboru(Void v) {
 		initComponents();
@@ -84,27 +71,26 @@ public class JPrehledSouboru extends JPanel {
 		jTabbedPane.addTab("Rendr", null, tab3, "Výstupní složky pro rendrování.");
 		JComponent tab4 = createTab();
 		jTabbedPane.addTab("Technické", null, tab4, "Technické složky jako jseou programové cache a podobně.");
-		//tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+		// tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
+		jKesDir = pridejJednuPolozkuproEdit(null, tab1, "Složka s keškami získaný z Geogetu nebo jiného programu.", true, false);
+		jCestyDir = pridejJednuPolozkuproEdit(null, tab1, "Složka, do které se implicitně ukládají cesty.", true, false);
+		jGeogetDataDir = pridejJednuPolozkuproEdit(null, tab1, "Datová složka geogetu.", true, true);
 
-		jKesDir =  pridejJednuPolozkuproEdit(null, tab1, "Složka s keškami získaný z Geogetu nebo jiného programu.",  true, false);
-		jCestyDir =  pridejJednuPolozkuproEdit(null, tab1, "Složka, do které se implicitně ukládají cesty.",  true, false);
-		jGeogetDataDir =  pridejJednuPolozkuproEdit(null, tab1, "Datová složka geogetu.", true, true);
-
-		jNeGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, na které teď na výlet nepůjdeme (GGT pro Geoget).",  false,  false);
-		jAnoGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, které se chysáme jít lovit (GGT pro Geoget).",  false,  false);
-		jImage3rdPartyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s rozšiřujícími obrázky jiných geokolegů.",  true, true);
+		jNeGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, na které teď na výlet nepůjdeme (GGT pro Geoget).", false, false);
+		jAnoGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, které se chysáme jít lovit (GGT pro Geoget).", false, false);
+		jImage3rdPartyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s rozšiřujícími obrázky jiných geokolegů.", true, true);
 		jImageMyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s mými vlastními rozšiřujícími obrázky.", true, true);
 
 		jOziDir = pridejJednuPolozkuproEdit(ESouborPanelName.OZI, tab3, "Složka pro rendrování kalibrovaných mapy pro OziExplorer", true, false);
 		jKmzDir = pridejJednuPolozkuproEdit(ESouborPanelName.KMZ, tab3, "Složka pro rendrování KMZ souborů (GoogleEarthj)", true, false);
 		jPictureDir = pridejJednuPolozkuproEdit(ESouborPanelName.PICTURE, tab3, "Složka pro rendrování obrázků map", true, false);
 
-		jKachleCacheDir = pridejJednuPolozkuproEdit(null, tab4, "Složka s kachlemi uloženými na disk (možno promazávat).",  true,  false);
+		jKachleCacheDir = pridejJednuPolozkuproEdit(null, tab4, "Složka s kachlemi uloženými na disk (možno promazávat).", true, false);
 
 		pridejJednuPolozkuProCteni(null, tab4, "Složka s exporty výjimek (chybových hlášení)", new Filex(FExceptionDumper.EXCEPTION_DIR, false, true), true);
 		if (FConst.JAR_DIR_EXISTUJE) {
-			pridejJednuPolozkuProCteni(null, tab4,"Složka s programem (zde je geokuk.jar)", new Filex(FConst.JAR_DIR, false, true), true);
+			pridejJednuPolozkuProCteni(null, tab4, "Složka s programem (zde je geokuk.jar)", new Filex(FConst.JAR_DIR, false, true), true);
 		}
 		pridejJednuPolozkuProCteni(null, tab4, "Aktuální složka", new Filex(new File("").getAbsoluteFile(), false, true), true);
 		ukonciPanel(tab1);
@@ -116,23 +102,23 @@ public class JPrehledSouboru extends JPanel {
 
 		Box ulobox = Box.createHorizontalBox();
 		JButton ulozit = new JButton("Uložit");
-		//ulozit.setAlignmentX(CENTER_ALIGNMENT);
-		//    JLabel ulozlabel = new JLabel("Po uložení změn v souborech bude program ukončen");
-		//    ulozlabel.setForeground(Color.RED);
+		// ulozit.setAlignmentX(CENTER_ALIGNMENT);
+		// JLabel ulozlabel = new JLabel("Po uložení změn v souborech bude program ukončen");
+		// ulozlabel.setForeground(Color.RED);
 
-		//    ulobox.add(ulozlabel);
+		// ulobox.add(ulozlabel);
 		ulobox.add(Box.createHorizontalGlue());
 		ulobox.add(ulozit);
 		ulobox.setAlignmentX(LEFT_ALIGNMENT);
 		add(ulobox);
 
-		//    jTabbedPane.setSelectedIndex(2);
-		//    jKmzDir.requestFocus();
+		// jTabbedPane.setSelectedIndex(2);
+		// jKmzDir.requestFocus();
 		registerEvents(ulozit);
 	}
 
 	private void ukonciPanel(JComponent tab) {
-		tab.remove(tab.getComponentCount()-1); // odstranit mezeru za poslední podtovoru
+		tab.remove(tab.getComponentCount() - 1); // odstranit mezeru za poslední podtovoru
 		tab.add(Box.createVerticalGlue());
 	}
 
@@ -167,9 +153,9 @@ public class JPrehledSouboru extends JPanel {
 						renderModel.setUmisteniSouboru(u);
 					}
 
-					//Board.multiNacitacLoaderManager.startLoad(true);
+					// Board.multiNacitacLoaderManager.startLoad(true);
 
-					((JUmisteniSouboruDialog)SwingUtilities.getRoot(JPrehledSouboru.this)).dispose();
+					((JUmisteniSouboruDialog) SwingUtilities.getRoot(JPrehledSouboru.this)).dispose();
 				} catch (YNejdeTo e) {
 					Dlg.error(e.getMessage());
 				}
@@ -177,14 +163,11 @@ public class JPrehledSouboru extends JPanel {
 		});
 	}
 
-
-
-	private JJedenSouborPanel pridejJednuPolozkuProCteni(ESouborPanelName souborPanelName, JComponent tab, String label,  Filex hodnota,
-			final boolean jenAdresare) {
+	private JJedenSouborPanel pridejJednuPolozkuProCteni(ESouborPanelName souborPanelName, JComponent tab, String label, Filex hodnota, final boolean jenAdresare) {
 		JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, false, false);
 		panel.setFilex(hodnota);
 		tab.add(panel);
-		tab.add(Box.createRigidArea(new Dimension(0,20)));
+		tab.add(Box.createRigidArea(new Dimension(0, 20)));
 		panel.setMaximumSize(new Dimension(1000, 40));
 		if (souborPanelName != null) {
 			mapaProFokusovani.put(souborPanelName, panel);
@@ -192,13 +175,12 @@ public class JPrehledSouboru extends JPanel {
 		return panel;
 	}
 
-	private JJedenSouborPanel pridejJednuPolozkuproEdit(ESouborPanelName souborPanelName, JComponent tab, String label,
-			final boolean jenAdresare, boolean lzeDeaktivovat) {
+	private JJedenSouborPanel pridejJednuPolozkuproEdit(ESouborPanelName souborPanelName, JComponent tab, String label, final boolean jenAdresare, boolean lzeDeaktivovat) {
 		JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, true, lzeDeaktivovat);
 		tab.add(panel);
-		tab.add(Box.createRigidArea(new Dimension(0,20)));
+		tab.add(Box.createRigidArea(new Dimension(0, 20)));
 		// Zjištěno, že to funguje, pokud je tam i lepidlo
-		//panel.setMaximumSize(new Dimension(1000, 40));
+		// panel.setMaximumSize(new Dimension(1000, 40));
 		panel.setMaximumSize(new Dimension(panel.getMaximumSize().width, panel.getPreferredSize().height));
 		if (souborPanelName != null) {
 			mapaProFokusovani.put(souborPanelName, panel);
@@ -212,7 +194,6 @@ public class JPrehledSouboru extends JPanel {
 		jKmzDir.setFilex(u.getKmzDir());
 		jOziDir.setFilex(u.getOziDir());
 	}
-
 
 	public void onEvent(KachleUmisteniSouboruChangedEvent event) {
 		KachleUmisteniSouboru u = event.getUmisteniSouboru();
@@ -245,7 +226,8 @@ public class JPrehledSouboru extends JPanel {
 
 	public void fokusni(ESouborPanelName panelName) {
 		JJedenSouborPanel panel = mapaProFokusovani.get(panelName);
-		if (panel == null) return;
+		if (panel == null)
+			return;
 		panel.fokusniSe();
 	}
 

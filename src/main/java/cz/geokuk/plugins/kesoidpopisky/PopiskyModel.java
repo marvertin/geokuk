@@ -1,14 +1,13 @@
 package cz.geokuk.plugins.kesoidpopisky;
 
-
 import cz.geokuk.core.program.FPref;
-import cz.geokuk.framework.Onoff;
-import cz.geokuk.framework.OnoffEvent0;
-import cz.geokuk.framework.PodkladMapSpecificModel0;
+import cz.geokuk.framework.*;
 
 public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, PopiskySettings> {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#createDefaults()
 	 */
 	@Override
@@ -16,7 +15,9 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 		return new PopiskySettings();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#createEvent(java.lang.Object)
 	 */
 	@Override
@@ -24,7 +25,9 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 		return new PopiskyPreferencesChangeEvent(structure);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#visiblexxx()
 	 */
 	@Override
@@ -32,7 +35,9 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 		return visible;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#getOnoffEventClass()
 	 */
 	@Override
@@ -40,7 +45,9 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 		return PopiskyOnoffEvent.class;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#preferenceNodeName()
 	 */
 	@Override
@@ -48,7 +55,9 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 		return FPref.KESOID_POPISKY_node;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#putVisibleToPreferences(boolean)
 	 */
 	@Override
@@ -56,13 +65,14 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 		currPrefe().node(FPref.VSEOBECNE_node).putBoolean(FPref.ZOBRAZ_POPISY_KESI_value, onoff);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#getVisibleFromPreferences(boolean)
 	 */
 	@Override
 	protected boolean getVisibleFromPreferences(boolean defaultOnoff) {
 		return currPrefe().node(FPref.VSEOBECNE_node).getBoolean(FPref.ZOBRAZ_POPISY_KESI_value, defaultOnoff);
 	}
-
 
 }

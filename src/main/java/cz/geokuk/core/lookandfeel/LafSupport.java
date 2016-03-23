@@ -1,34 +1,19 @@
 package cz.geokuk.core.lookandfeel;
 
-
 /*
  * @(#)SwingSet2.java	1.54 06/05/31
  */
-
-
-
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.AbstractAction;
-import javax.swing.ButtonGroup;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.plaf.metal.DefaultMetalTheme;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.MetalTheme;
-import javax.swing.plaf.metal.OceanTheme;
+import javax.swing.*;
+import javax.swing.plaf.metal.*;
 
 import cz.geokuk.framework.MyPreferences;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
-
 
 /**
  * A demo that shows all of the Swing components.
@@ -36,26 +21,23 @@ import cz.geokuk.util.exception.FExceptionDumper;
  * @version 1.54 05/31/06
  * @author Jeff Dinkins
  */
-public class LafSupport  {
+public class LafSupport {
 
-	private static final String LOOK_AND_FEEL = "lookAndFeel";
+	private static final String		LOOK_AND_FEEL	= "lookAndFeel";
 
+	private static final String		metal			= "javax.swing.plaf.metal.MetalLookAndFeel";
 
+	private static LafItem			current;
+	private static LafItem			metalli;
 
-	private static final String metal    =
-			"javax.swing.plaf.metal.MetalLookAndFeel";
+	private static JMenu			lafMenu			= null;
+	private static JMenu			themesMenu		= null;
+	private static ButtonGroup		lafMenuGroup	= new ButtonGroup();
+	private static ButtonGroup		themesMenuGroup	= new ButtonGroup();
 
-	private static LafItem current;
-	private static LafItem metalli;
-
-	private static JMenu lafMenu = null;
-	private static JMenu themesMenu = null;
-	private static ButtonGroup lafMenuGroup = new ButtonGroup();
-	private static ButtonGroup themesMenuGroup = new ButtonGroup();
-
-	private static List<LafItem> lafitems = new ArrayList<>();
+	private static List<LafItem>	lafitems		= new ArrayList<>();
 	// Used only if swingset is an application
-	private static JFrame frame;
+	private static JFrame			frame;
 
 	/**
 	 * SwingSet2 Constructor
@@ -84,10 +66,10 @@ public class LafSupport  {
 		themesMenu.setMnemonic('T');
 
 		// *** now back to adding color/font themes to the theme menu
-		JMenuItem mi = createThemesMenuItem(themesMenu, "Ocean", 'O',	new OceanTheme());
+		JMenuItem mi = createThemesMenuItem(themesMenu, "Ocean", 'O', new OceanTheme());
 		mi.setSelected(miMetal != null && miMetal.isSelected()); // This is the default theme
 
-		createThemesMenuItem(themesMenu, "Steel", 'S', 	new DefaultMetalTheme());
+		createThemesMenuItem(themesMenu, "Steel", 'S', new DefaultMetalTheme());
 		createThemesMenuItem(themesMenu, "Aqua", 'A', new AquaTheme());
 		createThemesMenuItem(themesMenu, "Charcoal", 'C', new CharcoalTheme());
 
@@ -123,15 +105,11 @@ public class LafSupport  {
 		}
 	}
 
-
 	static {
-		createLafList();  // vytvořit seznam a vybrat aktuální
+		createLafList(); // vytvořit seznam a vybrat aktuální
 		updateLookAndFeel();
 		createLafMenu();
 	}
-
-
-
 
 	/**
 	 * Creates a JRadioButtonMenuItem for the Themes menu
@@ -144,7 +122,6 @@ public class LafSupport  {
 		return mi;
 	}
 
-
 	// *******************************************************
 	// ****************** Utility Methods ********************
 	// *******************************************************
@@ -153,15 +130,14 @@ public class LafSupport  {
 	 * Stores the current L&F, and calls updateLookAndFeel, below
 	 */
 	private static void setLookAndFeel(LafItem li) {
-		if(current == li) return;
+		if (current == li)
+			return;
 		current = li;
 		current.mi.setSelected(true);
 		themesMenu.setEnabled(current == metalli);
 
-		/* The recommended way of synchronizing state between multiple
-		 * controls that represent the same command is to use Actions.
-		 * The code below is a workaround and will be replaced in future
-		 * version of SwingSet2 demo.
+		/*
+		 * The recommended way of synchronizing state between multiple controls that represent the same command is to use Actions. The code below is a workaround and will be replaced in future version of SwingSet2 demo.
 		 */
 		updateLookAndFeel();
 	}
@@ -185,11 +161,11 @@ public class LafSupport  {
 		}
 	}
 
-
 	private static String getPrefferencedLookAndFeel() {
 		try {
-			String s  = MyPreferences.current().get(LOOK_AND_FEEL, null);
-			if (s == null) return metal;
+			String s = MyPreferences.current().get(LOOK_AND_FEEL, null);
+			if (s == null)
+				return metal;
 			return s;
 		} catch (Throwable e) {
 			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Když nejde nastavit skin, tak nejde!");
@@ -198,8 +174,9 @@ public class LafSupport  {
 	}
 
 	static class ChangeLookAndFeelAction extends AbstractAction {
-		private static final long serialVersionUID = -910826756747137014L;
-		private final LafItem laf;
+		private static final long	serialVersionUID	= -910826756747137014L;
+		private final LafItem		laf;
+
 		protected ChangeLookAndFeelAction(LafItem laf) {
 			super("ChangeTheme");
 			this.laf = laf;
@@ -211,10 +188,10 @@ public class LafSupport  {
 		}
 	}
 
-
 	static class ChangeThemeAction extends AbstractAction {
-		private static final long serialVersionUID = -910826756747137014L;
-		MetalTheme theme;
+		private static final long	serialVersionUID	= -910826756747137014L;
+		MetalTheme					theme;
+
 		protected ChangeThemeAction(MetalTheme theme) {
 			super("ChangeTheme");
 			this.theme = theme;
@@ -227,13 +204,11 @@ public class LafSupport  {
 		}
 	}
 
-
 	private static class LafItem {
-		UIManager.LookAndFeelInfo info;
-		JMenuItem mi;
+		UIManager.LookAndFeelInfo	info;
+		JMenuItem					mi;
 
 	}
-
 
 	public static void setFrame(JFrame frame) {
 		LafSupport.frame = frame;
@@ -243,4 +218,3 @@ public class LafSupport  {
 		return lafMenu;
 	}
 }
-

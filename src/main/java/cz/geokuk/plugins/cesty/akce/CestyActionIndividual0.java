@@ -6,13 +6,12 @@ import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.plugins.cesty.data.Bod;
 import cz.geokuk.plugins.kesoid.Wpt;
 
-public abstract class CestyActionIndividual0 extends CestyAction0  {
+public abstract class CestyActionIndividual0 extends CestyAction0 {
 
-	private static final long serialVersionUID = -649900052004328014L;
+	private static final long	serialVersionUID	= -649900052004328014L;
 
-	private final Mouable kontextoveMouable;
-	private Poziceq poziceq;
-
+	private final Mouable		kontextoveMouable;
+	private Poziceq				poziceq;
 
 	public CestyActionIndividual0(Mouable kontextoveMouable) {
 		this.kontextoveMouable = kontextoveMouable;
@@ -34,6 +33,7 @@ public abstract class CestyActionIndividual0 extends CestyAction0  {
 
 	/**
 	 * Do vyýletu se dá přidat jen WPT, ale ne Bod, ale také volná pozice.
+	 * 
 	 * @param mouable
 	 * @return
 	 */
@@ -49,14 +49,14 @@ public abstract class CestyActionIndividual0 extends CestyAction0  {
 		if (kontextoveMouable != null)
 			return proOdstraneniZVyletu(kontextoveMouable);
 		// jinak se musíme spolehnout na pozici
-		if (! poziceq.isNoPosition())
+		if (!poziceq.isNoPosition())
 			return proOdstraneniZVyletu(poziceq.getPoziceMouable());
 		return null;
 	}
 
-	//  protected Mouable effectiveMouable() {
-	//    if (uchopenec != null) return uchopenec.getProOdsraneniZVyletu();
-	//    return pozice == null ? null : pozice.getProOdsraneniZVyletu();
-	//  }
+	// protected Mouable effectiveMouable() {
+	// if (uchopenec != null) return uchopenec.getProOdsraneniZVyletu();
+	// return pozice == null ? null : pozice.getProOdsraneniZVyletu();
+	// }
 
 }

@@ -7,8 +7,8 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
  * Created by dan on 16.3.15.
  */
 public class GenotypBuilderPhoto {
-	private final Genotyp g;
-	private final Genom genom;
+	private final Genotyp	g;
+	private final Genom		genom;
 
 	public GenotypBuilderPhoto(Genom genom, Genotyp g) {
 		this.genom = genom;

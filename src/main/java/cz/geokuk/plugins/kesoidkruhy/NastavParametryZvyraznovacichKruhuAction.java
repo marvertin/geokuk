@@ -1,14 +1,11 @@
 package cz.geokuk.plugins.kesoidkruhy;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
 import cz.geokuk.framework.Action0;
-
-
 
 public class NastavParametryZvyraznovacichKruhuAction extends Action0 {
 
@@ -26,6 +23,5 @@ public class NastavParametryZvyraznovacichKruhuAction extends Action0 {
 		JKruhyDialog parametryZvyraznovacichKruhuFrame = factory.init(new JKruhyDialog());
 		parametryZvyraznovacichKruhuFrame.setVisible(true);
 	}
-
 
 }

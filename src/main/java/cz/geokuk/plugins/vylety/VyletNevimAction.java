@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.vylety;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 

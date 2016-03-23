@@ -3,12 +3,7 @@
  */
 package cz.geokuk.core.render;
 
-import cz.geokuk.framework.AfterInjectInit;
-import cz.geokuk.framework.Factory;
-import cz.geokuk.framework.MySwingWorker0;
-import cz.geokuk.framework.ProgressModel;
-import cz.geokuk.framework.Progressor;
-
+import cz.geokuk.framework.*;
 
 /**
  * @author veverka
@@ -16,11 +11,10 @@ import cz.geokuk.framework.Progressor;
  */
 public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, Void> implements AfterInjectInit {
 
-	protected RenderModel renderModel;
-	private ProgressModel progressModel;
-	protected Factory factory;
-	protected Progressor progressor;
-
+	protected RenderModel	renderModel;
+	private ProgressModel	progressModel;
+	protected Factory		factory;
+	protected Progressor	progressor;
 
 	public void inject(RenderModel renderModel) {
 		this.renderModel = renderModel;
@@ -35,7 +29,9 @@ public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, 
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
 	 */
 	@Override
@@ -43,7 +39,9 @@ public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, 
 		progressor = progressModel.start(0, "xxx");
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.MySwingWorker0#donex()
 	 */
 	@Override
@@ -56,8 +54,8 @@ public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, 
 		renderModel.rendrovaniSkoncilo(renderResult);
 	}
 
-	//  protected Progressor createProgressor(int pocetKachli) {
-	////    return progressModel.start(pocetKachli * Rendrovadlo.KOLIK_PROGRESUJEME_NA_KACHLICH, "Rendrování");
-	//    return null;
-	//  }
+	// protected Progressor createProgressor(int pocetKachli) {
+	//// return progressModel.start(pocetKachli * Rendrovadlo.KOLIK_PROGRESUJEME_NA_KACHLICH, "Rendrování");
+	// return null;
+	// }
 }

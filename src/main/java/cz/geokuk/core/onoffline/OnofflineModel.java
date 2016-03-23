@@ -12,9 +12,9 @@ public class OnofflineModel extends Model0 {
 		fire(new OnofflineModelChangeEvent(onlineMode));
 	}
 
-
 	/**
-	 * @param onlineMode the onlineMode to set
+	 * @param onlineMode
+	 *            the onlineMode to set
 	 */
 	public void setOnlineMode(final boolean onlineMode) {
 		if (onlineMode == this.onlineMode) {
@@ -24,7 +24,6 @@ public class OnofflineModel extends Model0 {
 		currPrefe().putBoolean("onlineMode", onlineMode);
 		fire(new OnofflineModelChangeEvent(onlineMode));
 	}
-
 
 	/**
 	 * @return the onlineMode

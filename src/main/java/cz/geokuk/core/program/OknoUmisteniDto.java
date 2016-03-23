@@ -16,8 +16,8 @@ import cz.geokuk.framework.Preferenceble;
 @Preferenceble
 public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 
-	private Point pozice = new Point(Integer.MIN_VALUE,Integer.MIN_VALUE);
-	private Dimension  velikost = new Dimension(Integer.MIN_VALUE, Integer.MIN_VALUE);
+	private Point		pozice		= new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+	private Dimension	velikost	= new Dimension(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
 	/**
 	 * @return the velikost
@@ -25,14 +25,18 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 	public Dimension getVelikost() {
 		return velikost;
 	}
+
 	/**
-	 * @param velikost the velikost to set
+	 * @param velikost
+	 *            the velikost to set
 	 */
 	public void setVelikost(Dimension velikost) {
 		this.velikost = velikost;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -43,7 +47,10 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 		result = prime * result + ((velikost == null) ? 0 : velikost.hashCode());
 		return result;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -67,26 +74,34 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 			return false;
 		return true;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "OknoStatusDto [pozice=" + pozice +  ", velikost=" + velikost + "]";
+		return "OknoStatusDto [pozice=" + pozice + ", velikost=" + velikost + "]";
 	}
+
 	/**
-	 * @param pozice the pozice to set
+	 * @param pozice
+	 *            the pozice to set
 	 */
 	public void setPozice(Point pozice) {
 		this.pozice = pozice;
 	}
+
 	/**
 	 * @return the pozice
 	 */
 	public Point getPozice() {
 		return pozice;
 	}
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.Copyable#copy()
 	 */
 
@@ -98,6 +113,5 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 			throw new RuntimeException(e);
 		}
 	}
-
 
 }

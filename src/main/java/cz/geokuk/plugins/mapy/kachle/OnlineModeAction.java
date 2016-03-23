@@ -6,12 +6,10 @@ import cz.geokuk.core.onoffline.OnofflineModel;
 import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.ToggleAction0;
 
-
 public class OnlineModeAction extends ToggleAction0 {
-	private static final long serialVersionUID = -3631232428454275961L;
+	private static final long	serialVersionUID	= -3631232428454275961L;
 
-	private OnofflineModel onofflineModel;
-
+	private OnofflineModel		onofflineModel;
 
 	public OnlineModeAction() {
 		super("Online");
@@ -32,8 +30,5 @@ public class OnlineModeAction extends ToggleAction0 {
 	public void inject(final OnofflineModel onofflineModel) {
 		this.onofflineModel = onofflineModel;
 	}
-
-
-
 
 }

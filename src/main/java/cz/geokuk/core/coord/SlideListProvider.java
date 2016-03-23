@@ -5,7 +5,6 @@ package cz.geokuk.core.coord;
 
 import java.util.List;
 
-
 /**
  * @author veverka
  *

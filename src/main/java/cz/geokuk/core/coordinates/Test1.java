@@ -19,19 +19,19 @@ public class Test1 {
 			double lon = Math.random() + 18;
 			Wgs wgs1 = new Wgs(lat, lon);
 			Wgs wgs2 = wgs1.toMou().toWgs();
-			//      if (wgs1.toString().equals(wgs2.toString())) {
-			//        spravne ++;
-			//      } else {
-			//        spatne ++;
-			//      }
+			// if (wgs1.toString().equals(wgs2.toString())) {
+			// spravne ++;
+			// } else {
+			// spatne ++;
+			// }
 			double difflat = (wgs2.lat - wgs1.lat) * 60 * 1000;
-			double difflon = (wgs2.lon - wgs1.lon) * 60 * 1000 ;
+			double difflon = (wgs2.lon - wgs1.lon) * 60 * 1000;
 			double ctverec = difflat * difflat + difflon * difflon;
 			rozptyl += ctverec;
 			if (Math.abs(difflat) < 1 && Math.abs(difflon) < 1) {
-				spravne ++;
+				spravne++;
 			} else {
-				spatne ++;
+				spatne++;
 			}
 			System.out.printf("%s -- %s\n", wgs1, new UtmMgrsWgsConvertor().latLon2UTM(lat, lon));
 

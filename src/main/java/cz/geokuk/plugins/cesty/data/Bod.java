@@ -1,40 +1,34 @@
 package cz.geokuk.plugins.cesty.data;
 
-import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.core.coordinates.Mouable;
-import cz.geokuk.core.coordinates.Uchopenec;
+import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.kesoid.Wpt;
 
 public class Bod extends Bousek0 implements Uchopenec {
 
-	Mouable mouable;
+	Mouable			mouable;
 
-	private Usek uvpred;
-	private Usek uvzad;
-
-
+	private Usek	uvpred;
+	private Usek	uvzad;
 
 	Bod(Cesta cesta, Mouable mouable) {
 		super(cesta);
 		this.mouable = mouable;
 	}
 
-
 	@Override
 	public Mou getMou() {
 		return mouable.getMou();
 	}
-
 
 	@Override
 	boolean jeVOpsanemObdelniku(Mou mou) {
 		return false;
 	}
 
-
 	@Override
 	public long computeKvadratVzdalenosti(Mou mou) {
-		if (mou == null) return Long.MAX_VALUE;
+		if (mou == null)
+			return Long.MAX_VALUE;
 		Mou m = getMou();
 		long dx = m.xx - mou.xx;
 		long dy = m.yy - mou.yy;
@@ -43,14 +37,13 @@ public class Bod extends Bousek0 implements Uchopenec {
 	}
 
 	/**
-	 * Určuje jak je bod daleko kolmo k úsečce,
-	 * která spojuje druhé strany úseků vedoucí z tohoto bodu.
-	 * Pokud je tento bod krajový nebo pokud kolmice spuštěná z tohoto
-	 * bodu ke zmíněné úsečce na úsečce neleží, vrací MAC_VALUE, takže je to moc daleko.
+	 * Určuje jak je bod daleko kolmo k úsečce, která spojuje druhé strany úseků vedoucí z tohoto bodu. Pokud je tento bod krajový nebo pokud kolmice spuštěná z tohoto bodu ke zmíněné úsečce na úsečce neleží, vrací MAC_VALUE, takže je to moc daleko.
+	 * 
 	 * @return
 	 */
 	public long computeKvadratOdklonu() {
-		if (uvpred == null || uvzad == null) return Long.MAX_VALUE; // moc odkloneno, kdyz neurcime
+		if (uvpred == null || uvzad == null)
+			return Long.MAX_VALUE; // moc odkloneno, kdyz neurcime
 		Bod b1 = uvzad.getBvzad();
 		Bod b2 = uvpred.getBvpred();
 		Usek pomUsek = getCesta().createUsek();
@@ -61,8 +54,7 @@ public class Bod extends Bousek0 implements Uchopenec {
 	}
 
 	/**
-	 * Odstraní bod z cesty včetně přilehlých úseků a zbylé body spojí novým úsekem.
-	 * Vrací nově vytvořený úsek
+	 * Odstraní bod z cesty včetně přilehlých úseků a zbylé body spojí novým úsekem. Vrací nově vytvořený úsek
 	 */
 	Usek remove() {
 		setChanged();
@@ -105,22 +97,22 @@ public class Bod extends Bousek0 implements Uchopenec {
 		return uvpred == null && uvzad == null;
 	}
 
-
 	/**
-	 * Pokud je bod bodem krajovým, vrací krajový úsek, pokud je vnitřní nebo samsotatný,
-	 * vrací null.
+	 * Pokud je bod bodem krajovým, vrací krajový úsek, pokud je vnitřní nebo samsotatný, vrací null.
+	 * 
 	 * @return
 	 */
 	public Usek getKrajovyUsek() {
-		if (!isKrajovy()) return null;
-		if (uvzad != null) return uvzad;
+		if (!isKrajovy())
+			return null;
+		if (uvzad != null)
+			return uvzad;
 		return uvpred;
 	}
 
 	/**
-	 * Vrátí bližší úsek z obou úseků, kpokud jsou oba.
-	 * Pokud je jediný úsek, vrátí ho jen tehdy, kdy je ten ůsek blíž než tento bod,
-	 * jinak vrací null.
+	 * Vrátí bližší úsek z obou úseků, kpokud jsou oba. Pokud je jediný úsek, vrátí ho jen tehdy, kdy je ten ůsek blíž než tento bod, jinak vrací null.
+	 * 
 	 * @param mou
 	 * @return
 	 */
@@ -132,24 +124,22 @@ public class Bod extends Bousek0 implements Uchopenec {
 			return usek;
 		}
 		Usek usek = getKrajovyUsek();
-		if (usek == null) return null; // tak uz to muze byt jen samsotatny bod
-		if (usek.getNejblizsiBodKolmoKUsecce(mou) != null) return usek; // kdyz je kolmo k úsečce, je to ten úsek
+		if (usek == null)
+			return null; // tak uz to muze byt jen samsotatny bod
+		if (usek.getNejblizsiBodKolmoKUsecce(mou) != null)
+			return usek; // kdyz je kolmo k úsečce, je to ten úsek
 		return null; // jinak null, protože to není bližší úsek
 
-
 	}
-
 
 	public Mouable getMouable() {
 		return mouable;
 	}
 
-
 	void setMouable(Mouable mouable) {
 		this.mouable = mouable;
 		zneschopniDelkuPrilehlychUseku();
 	}
-
 
 	void setUvpred(Usek vpred) {
 		uvpred = vpred;
@@ -160,7 +150,6 @@ public class Bod extends Bousek0 implements Uchopenec {
 		uvzad = vzad;
 		zneschopniDelkuPrilehlychUseku();
 	}
-
 
 	public Usek getUvpred() {
 		return uvpred;
@@ -178,26 +167,25 @@ public class Bod extends Bousek0 implements Uchopenec {
 		return uvzad;
 	}
 
-
 	public boolean isNaHraniciSegmentu() {
-		if (isKrajovy()) return true;
+		if (isKrajovy())
+			return true;
 		boolean result = getUvzad().isVzdusny() || getUvpred().isVzdusny();
 		return result;
 	}
 
 	/**
 	 * U kruhových cest je startocil startovní a cílový bod. U nekruhových není startocil.
+	 * 
 	 * @return
 	 */
 	public boolean isStartocil() {
 		return isKrajovy() && cesta.isKruh();
 	}
 
-
 	public boolean isWpt() {
 		return mouable instanceof Wpt;
 	}
-
 
 	@Override
 	public double dalka() {
@@ -207,7 +195,7 @@ public class Bod extends Bousek0 implements Uchopenec {
 	@Override
 	public double dalkaCestaVpred(Mou aMou) {
 		double delka = 0;
-		for (Bod bod = this; ! bod.isCil(); bod = bod.getBvpred()) {
+		for (Bod bod = this; !bod.isCil(); bod = bod.getBvpred()) {
 			delka += bod.getUvpred().dalka();
 		}
 		return delka;
@@ -216,7 +204,7 @@ public class Bod extends Bousek0 implements Uchopenec {
 	@Override
 	public double dalkaCestaVzad(Mou aMou) {
 		double delka = 0;
-		for (Bod bod = this; ! bod.isStart(); bod = bod.getBvzad()) {
+		for (Bod bod = this; !bod.isStart(); bod = bod.getBvzad()) {
 			delka += bod.getUvzad().dalka();
 		}
 		return delka;
@@ -231,9 +219,9 @@ public class Bod extends Bousek0 implements Uchopenec {
 		}
 	}
 
-
-	/** Rozdělí cestu v bodě a vrátí novou cestu.
-	 * Tento bod zůstane v cestě původní */
+	/**
+	 * Rozdělí cestu v bodě a vrátí novou cestu. Tento bod zůstane v cestě původní
+	 */
 	public Cesta rozdelCestu() {
 		Cesta novaCesta = Cesta.create();
 		Bod novyBod = novaCesta.pridejNaKonec(mouable); // přidám první nový bod nad tímto mouablem
@@ -267,26 +255,28 @@ public class Bod extends Bousek0 implements Uchopenec {
 	protected void kontrolaKonzistence() {
 		boolean assertsEnabled = false;
 		assert assertsEnabled = true;
-		if (!assertsEnabled) return;
+		if (!assertsEnabled)
+			return;
 		if (uvpred == null) {
-			kon (cesta.getCil() == this);
+			kon(cesta.getCil() == this);
 		} else {
-			kon (uvpred.getBvzad() == this);
+			kon(uvpred.getBvzad() == this);
 		}
 		if (uvzad == null) {
-			kon (cesta.getStart() == this);
+			kon(cesta.getStart() == this);
 		} else {
-			kon (uvzad.getBvpred() == this);
+			kon(uvzad.getBvpred() == this);
 		}
 	}
 
-
 	@Override
 	public Bod getKoncovyBodDruheCestyVhodnyProSpojeni() {
-		if (cesta.isKruh()) return null;
-		if (! isKrajovy()) return null;
+		if (cesta.isKruh())
+			return null;
+		if (!isKrajovy())
+			return null;
 		Mou myMou = getMou();
-		//System.out.println("MOZNOST SPOJENI proverujeme ");
+		// System.out.println("MOZNOST SPOJENI proverujeme ");
 
 		for (Cesta c : cesta.getDoc()) {
 			if (c == cesta) {
@@ -305,7 +295,7 @@ public class Bod extends Bousek0 implements Uchopenec {
 			if (tenDruhy == null) {
 				continue;
 			}
-			//System.out.println("   MOUKY: " + tenDruhy.getMou() + " - " + myMou);
+			// System.out.println(" MOUKY: " + tenDruhy.getMou() + " - " + myMou);
 			if (tenDruhy.getMou().equals(myMou))
 				return tenDruhy;
 

@@ -9,8 +9,8 @@ import java.util.List;
 import cz.geokuk.api.mapicon.Imagant;
 
 /**
- * Sklivec obsahuje všechny obrázku pro
- * definovaná sklad.
+ * Sklivec obsahuje všechny obrázku pro definovaná sklad.
+ * 
  * @author veverka
  */
 public class Sklivec {

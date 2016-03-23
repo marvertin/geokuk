@@ -1,11 +1,9 @@
 package cz.geokuk.plugins.vylety;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import cz.geokuk.framework.Dlg;
-
 
 public class VyletSmazAnoAction extends VyletAction0 {
 
@@ -29,6 +27,5 @@ public class VyletSmazAnoAction extends VyletAction0 {
 		super.vyletChanged();
 		setEnabled(vyletModel.get(EVylet.ANO).size() > 0);
 	}
-
 
 }

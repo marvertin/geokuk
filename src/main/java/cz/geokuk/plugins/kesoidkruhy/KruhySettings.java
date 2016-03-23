@@ -8,18 +8,18 @@ import cz.geokuk.framework.Preferenceble;
 @Preferenceble
 public class KruhySettings implements Copyable<KruhySettings> {
 
-	private boolean onoff = false;
-	private Color barva = new Color(153, 0, 220, 70);
-	private int velikost = 20;
-	private boolean jednotkovaVelikost = false;
+	private boolean	onoff				= false;
+	private Color	barva				= new Color(153, 0, 220, 70);
+	private int		velikost			= 20;
+	private boolean	jednotkovaVelikost	= false;
 
 	public boolean isOnoff() {
 		return onoff;
 	}
+
 	public void setOnoff(final boolean onoff) {
 		this.onoff = onoff;
 	}
-
 
 	/**
 	 * @return the barva
@@ -27,37 +27,44 @@ public class KruhySettings implements Copyable<KruhySettings> {
 	public Color getBarva() {
 		return barva;
 	}
+
 	/**
-	 * @param barva the barva to set
+	 * @param barva
+	 *            the barva to set
 	 */
 	public void setBarva(final Color barva) {
 		this.barva = barva;
 	}
+
 	/**
 	 * @return the velikost
 	 */
 	public int getVelikost() {
 		return velikost;
 	}
+
 	/**
-	 * @param velikost the velikost to set
+	 * @param velikost
+	 *            the velikost to set
 	 */
 	public void setVelikost(final int velikost) {
 		this.velikost = velikost;
 	}
+
 	/**
 	 * @return the jednotkovaVelikost
 	 */
 	public boolean isJednotkovaVelikost() {
 		return jednotkovaVelikost;
 	}
+
 	/**
-	 * @param jednotkovaVelikost the jednotkovaVelikost to set
+	 * @param jednotkovaVelikost
+	 *            the jednotkovaVelikost to set
 	 */
 	public void setJednotkovaVelikost(final boolean jednotkovaVelikost) {
 		this.jednotkovaVelikost = jednotkovaVelikost;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -69,6 +76,7 @@ public class KruhySettings implements Copyable<KruhySettings> {
 		result = prime * result + velikost;
 		return result;
 	}
+
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -100,13 +108,16 @@ public class KruhySettings implements Copyable<KruhySettings> {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "KruhySettings [onoff=" + onoff + ", velikost=" + velikost + ", barva=" + barva + ", jednotkovaVelikost=" + jednotkovaVelikost + "]";
 	}
+
 	@Override
 	public KruhySettings copy() {
 		try {
@@ -115,6 +126,5 @@ public class KruhySettings implements Copyable<KruhySettings> {
 			throw new RuntimeException(e);
 		}
 	}
-
 
 }

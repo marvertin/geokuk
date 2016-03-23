@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.kesoid.filtr;
 
-
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
@@ -8,7 +7,6 @@ import javax.swing.KeyStroke;
 import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.img.ImageLoader;
-
 
 public class FiltrIkonyAction extends DialogOpeningAction0 {
 
@@ -22,13 +20,14 @@ public class FiltrIkonyAction extends DialogOpeningAction0 {
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/filtr.png"));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.DilogOpeningAction0#createDialog()
 	 */
 	@Override
 	public JMyDialog0 createDialog() {
-		return  new JFiltrIkonyDialog();
+		return new JFiltrIkonyDialog();
 	}
-
 
 }

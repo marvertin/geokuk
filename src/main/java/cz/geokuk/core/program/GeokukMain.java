@@ -5,20 +5,19 @@ import java.util.prefs.BackingStoreException;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cz.geokuk.core.lookandfeel.LafSupport;
 import cz.geokuk.core.profile.FPreferencesInNearFile;
 import cz.geokuk.framework.MyPreferences;
-import cz.geokuk.util.exception.EExceptionSeverity;
-import cz.geokuk.util.exception.FExceptionDumper;
-import cz.geokuk.util.exception.MyExceptionHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import cz.geokuk.util.exception.*;
 
 /**
  * @author veverka
  *
  */
-public class GeokukMain  {
+public class GeokukMain {
 
 	private static final Logger log = LogManager.getLogger(GeokukMain.class.getSimpleName());
 
@@ -64,7 +63,7 @@ public class GeokukMain  {
 		}
 	}
 
-	public static void main(String[] args)  {
+	public static void main(String[] args) {
 		new GeokukMain().execute(args);
 	}
 

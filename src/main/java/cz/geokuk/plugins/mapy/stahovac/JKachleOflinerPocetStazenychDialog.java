@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.mapy.stahovac;
 
-
 import java.awt.Dimension;
 
 import javax.swing.Box;
@@ -11,9 +10,9 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JKachleOflinerPocetStazenychDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long serialVersionUID = 7180968190465321695L;
+	private static final long	serialVersionUID	= 7180968190465321695L;
 
-	private JLabel pocetStazenychKachli;
+	private JLabel				pocetStazenychKachli;
 
 	public JKachleOflinerPocetStazenychDialog() {
 		setTitle("Průběh hrromadného dotažení mapových dlaždic");
@@ -47,6 +46,5 @@ public class JKachleOflinerPocetStazenychDialog extends JMyDialog0 implements Af
 	public void setPocetStazenych(final int pocet) {
 		pocetStazenychKachli.setText("Požadováno ke stažení jž " + pocet + " dlaždic");
 	}
-
 
 }

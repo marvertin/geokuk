@@ -13,32 +13,32 @@ import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 
-
 /**
  * @author veverka
  *
  */
 public class Kes extends Kesoid {
 
-	private int bestOf = Kes.NENI_HODNOCENI;
-	private int hodnoceni = Kes.NENI_HODNOCENI;
-	private int hodnoceniPocet = Kes.NENI_HODNOCENI;
-	private int znamka = Kes.NENI_HODNOCENI;
-	private int favorit = Kes.NENI_HODNOCENI;
+	private int					bestOf				= Kes.NENI_HODNOCENI;
+	private int					hodnoceni			= Kes.NENI_HODNOCENI;
+	private int					hodnoceniPocet		= Kes.NENI_HODNOCENI;
+	private int					znamka				= Kes.NENI_HODNOCENI;
+	private int					favorit				= Kes.NENI_HODNOCENI;
 
-	private String hint;
-	private EKesSize size;
-	private EKesDiffTerRating difficulty;
-	private EKesDiffTerRating terrain;
-	//private String guid;
-	private Wpt finalWpt;
-	private static String URL_PREFIX_PRINT = "http://www.geocaching.com/seek/cdpf.aspx?guid=";
-	private static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
-	public static final int NENI_HODNOCENI = -1;
+	private String				hint;
+	private EKesSize			size;
+	private EKesDiffTerRating	difficulty;
+	private EKesDiffTerRating	terrain;
+	// private String guid;
+	private Wpt					finalWpt;
+	private static String		URL_PREFIX_PRINT	= "http://www.geocaching.com/seek/cdpf.aspx?guid=";
+	private static String		URL_PREFIX_SHOW		= "http://www.geocaching.com/seek/cache_details.aspx?guid=";
+	public static final int		NENI_HODNOCENI		= -1;
 
-	private String iFountTime;
+	private String				iFountTime;
 
-	private Wpt mainWpt;
+	private Wpt					mainWpt;
+
 	/**
 	 * @return the bestOf
 	 */
@@ -51,19 +51,22 @@ public class Kes extends Kesoid {
 	 */
 	@Override
 	public Wpt getMainWpt() {
-		if (mainWpt != null) return mainWpt;
+		if (mainWpt != null)
+			return mainWpt;
 		return super.getMainWpt();
 	}
 
 	/**
-	 * @param aMainWpt the mainWpt to set
+	 * @param aMainWpt
+	 *            the mainWpt to set
 	 */
 	public void setMainWpt(Wpt aMainWpt) {
 		mainWpt = aMainWpt;
 	}
 
 	/**
-	 * @param aBestOf the bestOf to set
+	 * @param aBestOf
+	 *            the bestOf to set
 	 */
 	public void setBestOf(int aBestOf) {
 		bestOf = aBestOf;
@@ -77,7 +80,8 @@ public class Kes extends Kesoid {
 	}
 
 	/**
-	 * @param aHodnoceni the hodnoceni to set
+	 * @param aHodnoceni
+	 *            the hodnoceni to set
 	 */
 	public void setHodnoceni(int aHodnoceni) {
 		hodnoceni = aHodnoceni;
@@ -91,7 +95,8 @@ public class Kes extends Kesoid {
 	}
 
 	/**
-	 * @param aHodnoceniPocet the hodnoceniPocet to set
+	 * @param aHodnoceniPocet
+	 *            the hodnoceniPocet to set
 	 */
 	public void setHodnoceniPocet(int aHodnoceniPocet) {
 		hodnoceniPocet = aHodnoceniPocet;
@@ -105,7 +110,8 @@ public class Kes extends Kesoid {
 	}
 
 	/**
-	 * @param aZnamka the znamka to set
+	 * @param aZnamka
+	 *            the znamka to set
 	 */
 	public void setZnamka(int aZnamka) {
 		znamka = aZnamka;
@@ -119,15 +125,16 @@ public class Kes extends Kesoid {
 	}
 
 	/**
-	 * @param aHint the hint to set
+	 * @param aHint
+	 *            the hint to set
 	 */
 	public void setHint(String aHint) {
 		hint = aHint;
 	}
 
-	//  public Wpt getGc() {
-	//    return gc;
-	//  }
+	// public Wpt getGc() {
+	// return gc;
+	// }
 
 	public EKesSize getSize() {
 		return size;
@@ -168,13 +175,14 @@ public class Kes extends Kesoid {
 
 	@Override
 	public String[] getProhledavanci() {
-		return new String[] {getNazev(), getIdentifier(), getAuthor()};
+		return new String[] { getNazev(), getIdentifier(), getAuthor() };
 	}
 
 	@Override
 	public void addWpt(Wpt wpt) {
 		super.addWpt(wpt);
-		if (wpt == null) return;
+		if (wpt == null)
+			return;
 		if (EKesWptType.FINAL_LOCATION == wpt.getType()) {
 			finalWpt = wpt;
 		}
@@ -199,7 +207,9 @@ public class Kes extends Kesoid {
 		return EKesoidKind.KES;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.Kesoid#prispejDoTooltipu(java.lang.StringBuilder)
 	 */
 	@Override
@@ -214,7 +224,7 @@ public class Kes extends Kesoid {
 		sb.append("</small>");
 		sb.append("<br>");
 		if (wpt != getFirstWpt()) {
-			if (! getNazev().contains(wpt.getNazev())) {
+			if (!getNazev().contains(wpt.getNazev())) {
 				sb.append(wpt.isRucnePridany() ? "+ " : "");
 				sb.append("<i>");
 				sb.append(wpt.getName().substring(0, 2));
@@ -222,15 +232,15 @@ public class Kes extends Kesoid {
 				sb.append(wpt.getNazev());
 				sb.append("</i>");
 			}
-			//if (! getSym().equals(wpt.getSym())) {
+			// if (! getSym().equals(wpt.getSym())) {
 			sb.append("<small>");
 			sb.append(" - ");
 			sb.append(wpt.getSym());
 			sb.append("  (").append(wpt.getName()).append(")");
 			sb.append("</small>");
 		}
-		//}
-		//}
+		// }
+		// }
 
 	}
 
@@ -248,7 +258,9 @@ public class Kes extends Kesoid {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.Kesoid#getUrlIcon()
 	 */
 	@Override
@@ -261,7 +273,8 @@ public class Kes extends Kesoid {
 	 */
 	public char getOneLetterType() {
 		String sym = getMainWpt().getSym();
-		if (sym == null || sym.length() == 0) return '?';
+		if (sym == null || sym.length() == 0)
+			return '?';
 		return sym.charAt(0);
 	}
 
@@ -288,6 +301,7 @@ public class Kes extends Kesoid {
 
 	/**
 	 * Vrátí takové to čtyřznakové info TR3A
+	 * 
 	 * @return
 	 */
 	public String getInfo() {
@@ -306,6 +320,5 @@ public class Kes extends Kesoid {
 	public String toString() {
 		return "Kes [mainWpt=" + mainWpt + ", finalWpt=" + finalWpt + "]";
 	}
-
 
 }

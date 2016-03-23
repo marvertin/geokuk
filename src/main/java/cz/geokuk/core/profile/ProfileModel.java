@@ -4,13 +4,11 @@ import java.io.File;
 import java.util.concurrent.ExecutionException;
 
 import cz.geokuk.core.program.FConst;
-import cz.geokuk.framework.Dlg;
-import cz.geokuk.framework.Model0;
-import cz.geokuk.framework.MySwingWorker0;
+import cz.geokuk.framework.*;
 
 public class ProfileModel extends Model0 {
 
-	//TODO Naplnit profile model
+	// TODO Naplnit profile model
 
 	private ProfileUkladacSwingWorker profileUkladacSwingWorker;
 
@@ -42,7 +40,6 @@ public class ProfileModel extends Model0 {
 		fire(new NastaveniUkladatDoSouboruEvent());
 	}
 
-
 	public void ulozJenKdyzJeulozPreferenceDoSouboruJenKdyzSeUklaatMaji() {
 		FPreferencesInNearFile.saveNearToProgramIfShould();
 
@@ -58,8 +55,9 @@ public class ProfileModel extends Model0 {
 
 	private class ProfileUkladacSwingWorker extends MySwingWorker0<File, Void> {
 
-
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.SwingWorker#doInBackground()
 		 */
 		@Override
@@ -68,19 +66,20 @@ public class ProfileModel extends Model0 {
 			return file;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.SwingWorker#done()
 		 */
 		@Override
 		protected void donex() throws InterruptedException, ExecutionException {
 			profileUkladacSwingWorker = null;
-			if (isCancelled()) return;
+			if (isCancelled())
+				return;
 			File file = get();
 			fire(new NastaveniUkladatDoSouboruEvent());
-			Dlg.info("Nastavení byla uložena do souboru \"" + file + "\",\n"
-					+ "při příštím spuštění budou těmito nastaveními nahrazeny nastavení v Java preferences,\n" +
-					"pokud budou nastavení v souboru novější a naopak bude soubor automaticky aktualizován,\n" +
-					"pokud budou novější data v Java preferences", "Oznámení");
+			Dlg.info("Nastavení byla uložena do souboru \"" + file + "\",\n" + "při příštím spuštění budou těmito nastaveními nahrazeny nastavení v Java preferences,\n"
+					+ "pokud budou nastavení v souboru novější a naopak bude soubor automaticky aktualizován,\n" + "pokud budou novější data v Java preferences", "Oznámení");
 		}
 
 	}

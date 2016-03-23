@@ -5,13 +5,11 @@ import org.junit.Test;
 
 public class FGeoKonvertorTest {
 
-	private static final double PRESNOST_WGS = 1e-5;
-	private static final double PRESNOST_MERKATOR = 0.01;
+	private static final double	PRESNOST_WGS		= 1e-5;
+	private static final double	PRESNOST_MERKATOR	= 0.01;
 
-	private static double RZ = 6378137;
-	private static double OZ = 2 * Math.PI * RZ;
-
-
+	private static double		RZ					= 6378137;
+	private static double		OZ					= 2 * Math.PI * RZ;
 
 	private void assertEquals(Wgs wgs1, Wgs wgs2) {
 		Assert.assertEquals(wgs1.lat, wgs2.lat, PRESNOST_WGS);
@@ -39,8 +37,8 @@ public class FGeoKonvertorTest {
 		Mou m1 = new Mou(xx, yy);
 		Mou m2 = w.toMou();
 		System.out.println(w + " = " + m2 + " ... (" + m1 + ")");
-		Assert.assertEquals((double)m1.xx, (double)m2.xx, 1);
-		Assert.assertEquals((double)m1.yy, (double)m2.yy, 1);
+		Assert.assertEquals((double) m1.xx, (double) m2.xx, 1);
+		Assert.assertEquals((double) m1.yy, (double) m2.yy, 1);
 		assertEquals(w, m2.toWgs());
 	}
 
@@ -156,7 +154,6 @@ public class FGeoKonvertorTest {
 		testWgs2Mercator(0, 15.6, OZ / 360 * 15.6, 0);
 	}
 
-
 	@Test
 	public void test90rovnikm() {
 		testWgs2Mercator(0, 90, OZ / 4, 0);
@@ -207,7 +204,6 @@ public class FGeoKonvertorTest {
 		testWgs2Mercator(80, 15.6, OZ / 360 * 15.6, 15538711.1);
 	}
 
-
 	@Test
 	public void testWgsToMerk5m() {
 		testWgs2Mercator(-4.5, 0, 0, -501453.51);
@@ -225,15 +221,15 @@ public class FGeoKonvertorTest {
 
 	@Test
 	public void testMercatorToMou1() {
-		Mou mou = FGeoKonvertor.toMou(new Mercator(OZ/4, 0));
-		System.out.println(OZ/4 + " " + mou);
+		Mou mou = FGeoKonvertor.toMou(new Mercator(OZ / 4, 0));
+		System.out.println(OZ / 4 + " " + mou);
 		Assert.assertEquals(0x4000_0000, mou.xx);
 	}
 
 	@Test
 	public void testMercatorToMou2() {
-		Mou mou = FGeoKonvertor.toMou(new Mercator(OZ/4, OZ/8));
-		System.out.println(OZ/4 + " " + mou);
+		Mou mou = FGeoKonvertor.toMou(new Mercator(OZ / 4, OZ / 8));
+		System.out.println(OZ / 4 + " " + mou);
 		Assert.assertEquals(0x4000_0000, mou.xx);
 		Assert.assertEquals(0x2000_0000, mou.yy);
 	}

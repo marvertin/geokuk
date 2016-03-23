@@ -1,28 +1,25 @@
 package cz.geokuk.core.coordinates;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.atan;
-import static java.lang.Math.exp;
-import static java.lang.Math.log;
-import static java.lang.Math.tan;
+import static java.lang.Math.*;
 
 /**
  * Konvertor geografických souřadnic
+ * 
  * @author tatinek
  *
  */
 public class FGeoKonvertor {
 
-	public static final double RZ = 6378137;
-	public static final double OBVOD_ZEME = 2 * PI * RZ; // v metrech
-	public static final double OBVOD_ZEME_V_MOU = 0x1_0000_0000l;
+	public static final double			RZ							= 6378137;
+	public static final double			OBVOD_ZEME					= 2 * PI * RZ;					// v metrech
+	public static final double			OBVOD_ZEME_V_MOU			= 0x1_0000_0000l;
 
 	/** Merkátoryvy metry, skutečné metry jsou to jen na rovníku */
-	public static final double Q_METRY_NA_MOU = OBVOD_ZEME / OBVOD_ZEME_V_MOU;
+	public static final double			Q_METRY_NA_MOU				= OBVOD_ZEME / OBVOD_ZEME_V_MOU;
 
-	public static final double STUPEN_NA_ROVNIKU_V_METRECH = PI / 180 * RZ;
+	public static final double			STUPEN_NA_ROVNIKU_V_METRECH	= PI / 180 * RZ;
 
-	private static UtmMgrsWgsConvertor utmWgsConvertor = new UtmMgrsWgsConvertor();
+	private static UtmMgrsWgsConvertor	utmWgsConvertor				= new UtmMgrsWgsConvertor();
 
 	public static double normalizujUhel(double uhel) {
 		// TODO optimálněji, ale možná to v praxi stačí
@@ -40,22 +37,22 @@ public class FGeoKonvertor {
 
 	public static Mercator toMercator(final Wgs w) {
 		final double mx = w.lon * STUPEN_NA_ROVNIKU_V_METRECH;
-		final double my = log( tan(w.lat * (PI/180) / 2 + PI / 4) ) * RZ;
+		final double my = log(tan(w.lat * (PI / 180) / 2 + PI / 4)) * RZ;
 		return new Mercator(mx, my);
 	}
 
 	public static Wgs toWgs(final Mercator w) {
 		final double lon = w.mx / STUPEN_NA_ROVNIKU_V_METRECH;
-		final double lat = (atan(exp( w.my / RZ ) ) - PI / 4) * (180 / PI) * 2;
+		final double lat = (atan(exp(w.my / RZ)) - PI / 4) * (180 / PI) * 2;
 		return new Wgs(lat, lon);
 	}
 
 	public static Utm toUtm(Wgs wgs) {
-		//String s = "33 U " + ux + " " + uy;
+		// String s = "33 U " + ux + " " + uy;
 		final String s = utmWgsConvertor.latLon2UTM(wgs.lat, wgs.lon);
 		final String[] utm = s.split(" ");
-		//zone = Integer.parseInt(utm[0]);
-		//String latBand = utm[1];
+		// zone = Integer.parseInt(utm[0]);
+		// String latBand = utm[1];
 		final double easting = Double.parseDouble(utm[2]);
 		final double northing = Double.parseDouble(utm[3]);
 		final int polednikovaZona = Integer.parseInt(utm[0]);
@@ -71,7 +68,7 @@ public class FGeoKonvertor {
 	public static Mou toMou(final Mercator mer) {
 		final double xxd = mer.mx / Q_METRY_NA_MOU;
 		final double yyd = mer.my / Q_METRY_NA_MOU;
-		final Mou mou = new Mou((int)xxd, (int)yyd);
+		final Mou mou = new Mou((int) xxd, (int) yyd);
 		return mou;
 
 	}
@@ -109,9 +106,9 @@ public class FGeoKonvertor {
 		return toMou(toWgs(utm));
 	}
 
-
 	/**
 	 * Kolik metrůpřipadá na jeden krok mou, na dané šířce
+	 * 
 	 * @param lat
 	 * @return
 	 */
@@ -147,7 +144,6 @@ public class FGeoKonvertor {
 	public static double dalka(final Mouable mouable1, final Mouable mouable2) {
 		return FGeoKonvertor.dalka(mouable1.getMou().toWgs(), mouable2.getMou().toWgs());
 	}
-
 
 	public static void main(final String[] args) {
 		System.out.println(-3.25 % 1);

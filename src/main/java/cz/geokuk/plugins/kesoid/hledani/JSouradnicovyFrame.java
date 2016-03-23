@@ -35,26 +35,15 @@ package cz.geokuk.plugins.kesoid.hledani;
  * TextFieldDemo.java requires one additional file:
  * content.txt
  */
-
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractAction;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import cz.geokuk.core.coord.PoziceModel;
-import cz.geokuk.core.coord.VyrezChangedEvent;
-import cz.geokuk.core.coord.VyrezModel;
+import cz.geokuk.core.coord.*;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.core.coordinates.WgsParser;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
@@ -63,41 +52,38 @@ import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
 public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiverRegistrationInit, DocumentListener {
 
-	private static final Double SPATNY_FORMAT = Double.NEGATIVE_INFINITY;
+	private static final Double	SPATNY_FORMAT		= Double.NEGATIVE_INFINITY;
 
-	private static final long serialVersionUID = 7087453419069194768L;
-
+	private static final long	serialVersionUID	= 7087453419069194768L;
 
 	// TODO skutečnou hodnotu maximální šířky sem dát
-	private static final double SIRKA_MAX = 80;
-	private static final double SIRKA_MIN = -80;
+	private static final double	SIRKA_MAX			= 80;
+	private static final double	SIRKA_MIN			= -80;
 
-	private static final double DELKA_MIN =  -180;
-	private static final double DELKA_MAX = 180;
+	private static final double	DELKA_MIN			= -180;
+	private static final double	DELKA_MAX			= 180;
 
+	private JTextField			jSouEdit;
+	private JLabel				jSouEditLabel;
+	private JButton				jButtonCentruj;
+	private JLabel				jHotovaSirka;
+	private JLabel				jHotovaDelka;
+	private JLabel				jUtm;
 
-	private JTextField jSouEdit;
-	private JLabel jSouEditLabel;
-	private JButton jButtonCentruj;
-	private JLabel jHotovaSirka;
-	private JLabel jHotovaDelka;
-	private JLabel jUtm;
+	final static Color			HILIT_COLOR			= Color.LIGHT_GRAY;
+	final static Color			ERROR_COLOR			= Color.PINK;
+	final static String			CANCEL_ACTION		= "cancel-search";
 
-	final static Color  HILIT_COLOR = Color.LIGHT_GRAY;
-	final static Color  ERROR_COLOR = Color.PINK;
-	final static String CANCEL_ACTION = "cancel-search";
+	private Color				entryBg;
 
-	private Color entryBg;
+	private Wgs					souradniceEditovane;
+	private Wgs					souradniceReferencni;
 
-	private Wgs souradniceEditovane;
-	private Wgs souradniceReferencni;
+	private PoziceModel			poziceModel;
 
-	private PoziceModel poziceModel;
+	private VyrezModel			vyrezModel;
 
-	private VyrezModel vyrezModel;
-
-	private boolean souradniceNastavenyRukama;
-
+	private boolean				souradniceNastavenyRukama;
 
 	public JSouradnicovyFrame() {
 		setTitle("Zadání souřadnic");
@@ -105,7 +91,6 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		jSouEdit.getDocument().addDocumentListener(this);
 
 		registerEvents();
-
 
 	}
 
@@ -129,16 +114,15 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		vyhodnotEnableCentrovacihoTlacitka();
 	}
 
-
-	/** This method is called from within the constructor to
-	 * initialize the form.
+	/**
+	 * This method is called from within the constructor to initialize the form.
 	 */
 
 	@Override
 	protected void initComponents() {
-		final String tooltip = "Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny)," +
-				" jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. " +
-				" Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
+		final String tooltip = "Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny),"
+				+ " jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. "
+				+ " Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
 		jSouEdit = new JTextField();
 		jSouEdit.setToolTipText(tooltip);
 
@@ -167,49 +151,26 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
 		jButtonCentruj.setAlignmentY(CENTER_ALIGNMENT);
 		jUtm.setText("?");
-		//    panel.add(jSirka);
-		//    panel.add(jDelka);
-		//    panel.add(jButtonCentruj);
+		// panel.add(jSirka);
+		// panel.add(jDelka);
+		// panel.add(jButtonCentruj);
 
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jSouEditLabel)
-								)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jSouEdit)
-								)
-						)
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jHotovaSirka)
-								.addComponent(jHotovaDelka)
-								)
-						.addComponent(jButtonCentruj)
-						)
-				.addComponent(jUtm)
-				);
+				.addGroup(GroupLayout.Alignment.TRAILING,
+						layout.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jSouEditLabel))
+								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jSouEdit)))
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jHotovaSirka).addComponent(jHotovaDelka))
+						.addComponent(jButtonCentruj))
+				.addComponent(jUtm));
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup()
-										.addComponent(jSouEditLabel)
-										.addComponent(jSouEdit)
-										)
-								)
-						)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(jHotovaSirka)
-								.addComponent(jHotovaDelka)
-								)
-						.addComponent(jButtonCentruj)
-						)
-				.addComponent(jUtm)
-				);
+						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup().addComponent(jSouEditLabel).addComponent(jSouEdit))))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addGroup(layout.createSequentialGroup().addComponent(jHotovaSirka).addComponent(jHotovaDelka))
+						.addComponent(jButtonCentruj))
+				.addComponent(jUtm));
 		jSouEdit.setPreferredSize(new Dimension(150, jSouEdit.getPreferredSize().height));
 		jSouEdit.setText("");
 		entryBg = jSouEdit.getBackground();
@@ -231,11 +192,11 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 	}
 
 	private void edituj() {
-		//if (souradnice == null) return;
+		// if (souradnice == null) return;
 		boolean ok;
 		final Wgs wgs = new WgsParser().parsruj(jSouEdit.getText());
 		if (wgs == null) { // prizpusobeni puvodni verzi
-			//  wgs = new Wgs(SPATNY_FORMAT, SPATNY_FORMAT);
+			// wgs = new Wgs(SPATNY_FORMAT, SPATNY_FORMAT);
 		}
 		final double lat = wgs == null ? SPATNY_FORMAT : wgs.lat;
 		final double lon = wgs == null ? SPATNY_FORMAT : wgs.lon;
@@ -257,7 +218,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 	private void vyhodnotEnableCentrovacihoTlacitka() {
 		final boolean jsmeNaMiste = jsmeVycentrovaniSeZadanouPozici();
 
-		//jsmeNaMiste = vyrezModel.isPoziceUprostred();
+		// jsmeNaMiste = vyrezModel.isPoziceUprostred();
 		jButtonCentruj.setEnabled(!jsmeNaMiste);
 	}
 
@@ -265,14 +226,11 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 	 * @return
 	 */
 	private boolean jsmeVycentrovaniSeZadanouPozici() {
-		final boolean jsmeNaMiste =
-				souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni)
-				&& vyrezModel.isPoziceUprostred();
+		final boolean jsmeNaMiste = souradniceEditovane != null && souradniceEditovane.equals(souradniceReferencni) && vyrezModel.isPoziceUprostred();
 		return jsmeNaMiste;
 	}
 
-
-	private boolean aplikuj(final JLabel jHotova, final JTextField editacni,  final double val, final double min, final double max) {
+	private boolean aplikuj(final JLabel jHotova, final JTextField editacni, final double val, final double min, final double max) {
 		boolean ok;
 		if (val == SPATNY_FORMAT) {
 			jHotova.setText("Grrrr!");
@@ -286,7 +244,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 				editacni.setBackground(Color.WHITE);
 				ok = true;
 			} else {
-				if (val < 10 && val == (long)val) {
+				if (val < 10 && val == (long) val) {
 					jHotova.setBackground(Color.GRAY);
 					jHotova.setText(jHotova.getText().replaceAll("\\d", "?"));
 					editacni.setBackground(Color.WHITE);
@@ -321,38 +279,36 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		edituj();
 	}
 
-	//  private final class SpousteniVyhledavace implements ChangeListener {
-	//    @Override
-	//    public void stateChanged(ChangeEvent e) {
-	//      search();
-	//    }
-	//  }
+	// private final class SpousteniVyhledavace implements ChangeListener {
+	// @Override
+	// public void stateChanged(ChangeEvent e) {
+	// search();
+	// }
+	// }
 
 	class CancelAction extends AbstractAction {
 		private static final long serialVersionUID = -480129891208539096L;
 
 		@Override
 		public void actionPerformed(final ActionEvent ev) {
-			//      hilit.removeAllHighlights();
+			// hilit.removeAllHighlights();
 			jSouEdit.setText("");
 			jSouEdit.setBackground(entryBg);
 		}
 	}
 
-
-	//  public static void main(String args[]) {
-	//    //Schedule a job for the event dispatch thread:
-	//    //creating and showing this application's GUI.
+	// public static void main(String args[]) {
+	// //Schedule a job for the event dispatch thread:
+	// //creating and showing this application's GUI.
 	//
-	//    SwingUtilities.invokeLater(new Runnable() {
-	//      public void run() {
-	//        //Turn off metal's use of bold fonts
-	////        UIManager.put("swing.boldMetal", Boolean.FALSE);
-	//        new JSouradnicovyFrame(null).setVisible(true);
-	//      }
-	//    });
-	//  }
-
+	// SwingUtilities.invokeLater(new Runnable() {
+	// public void run() {
+	// //Turn off metal's use of bold fonts
+	//// UIManager.put("swing.boldMetal", Boolean.FALSE);
+	// new JSouradnicovyFrame(null).setVisible(true);
+	// }
+	// });
+	// }
 
 	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
@@ -362,12 +318,14 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		this.vyrezModel = vyrezModel;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
 	public void initAfterEventReceiverRegistration() {
-		//super.ini
+		// super.ini
 	}
 
 	@Override
@@ -375,4 +333,3 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		return "JintNaSouradnice";
 	}
 }
-

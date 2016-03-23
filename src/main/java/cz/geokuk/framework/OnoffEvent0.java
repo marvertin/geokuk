@@ -7,8 +7,8 @@ package cz.geokuk.framework;
  * @author veverka
  *
  */
-public abstract class OnoffEvent0<T extends Model0>  extends Event0<T> {
-	//TODO divne
+public abstract class OnoffEvent0<T extends Model0> extends Event0<T> {
+	// TODO divne
 	public boolean onoff;
 
 	/**
@@ -17,6 +17,5 @@ public abstract class OnoffEvent0<T extends Model0>  extends Event0<T> {
 	public boolean isOnoff() {
 		return onoff;
 	}
-
 
 }

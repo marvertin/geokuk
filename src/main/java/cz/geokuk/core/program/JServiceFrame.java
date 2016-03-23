@@ -3,36 +3,16 @@
  */
 package cz.geokuk.core.program;
 
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.awt.event.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import cz.geokuk.framework.JMyDialog0;
-import cz.geokuk.util.pocitadla.Pocitadlo;
-import cz.geokuk.util.pocitadla.PocitadloMalo;
-import cz.geokuk.util.pocitadla.PocitadloNula;
-import cz.geokuk.util.pocitadla.PocitadloRoste;
-import cz.geokuk.util.pocitadla.SpravcePocitadel;
-import cz.geokuk.util.pocitadla.SystemovaPocitadla;
+import cz.geokuk.util.pocitadla.*;
 
 /**
  * @author veverka
@@ -40,10 +20,9 @@ import cz.geokuk.util.pocitadla.SystemovaPocitadla;
  */
 public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 
-	private static final long serialVersionUID = 5761908785083097975L;
+	private static final long				serialVersionUID	= 5761908785083097975L;
 
-
-	private final Map<Pocitadlo, JLabel> hodmap = new WeakHashMap<>();
+	private final Map<Pocitadlo, JLabel>	hodmap				= new WeakHashMap<>();
 
 	public JServiceFrame() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -62,6 +41,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 			public void windowClosing(final WindowEvent e) {
 				Pocitadlo.callback = null;
 			}
+
 			@Override
 			public void windowClosed(final WindowEvent e) {
 				Pocitadlo.callback = null;
@@ -73,10 +53,10 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 	public void onChange() {
 		SystemovaPocitadla.spustPocitani();
 		final List<Pocitadlo> pocitadla = new ArrayList<>(SpravcePocitadel.getPocitadla());
-		//    initComponents();
-		//    pack();
+		// initComponents();
+		// pack();
 		if (hodmap == null || pocitadla.size() != hodmap.size()) {
-			//System.out.println("NEsouhlasi pocet pocitadel a hodnot: " + pocitadla.size() + " == " + hodmap.size());
+			// System.out.println("NEsouhlasi pocet pocitadel a hodnot: " + pocitadla.size() + " == " + hodmap.size());
 			initComponents(pocitadla);
 			pack();
 		}
@@ -88,17 +68,15 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 		}
 	}
 
-
 	protected void initComponents(final List<Pocitadlo> pocitadla) {
 		final Box b = createtComponents(pocitadla);
 		getContentPane().removeAll();
 		getContentPane().add(b);
 	}
 
-
 	private Box createtComponents(final List<Pocitadlo> pocitadla) {
 		Box b;
-		//System.out.println("INICOMP");
+		// System.out.println("INICOMP");
 		hodmap.clear();
 		b = Box.createVerticalBox();
 		final JPanel jGcPanel = createGcButton();
@@ -128,13 +106,12 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 				final long pouzitaPamet = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 				final long narustPameti = pouzitaPamet - minulePouzitaPamet;
 				minulePouzitaPamet = pouzitaPamet;
-				jMemoryPoGc.setText(pouzitaPamet/1000 + " KiB  |  rozdil=" + narustPameti/1000 + " KiB");
+				jMemoryPoGc.setText(pouzitaPamet / 1000 + " KiB  |  rozdil=" + narustPameti / 1000 + " KiB");
 				System.out.println("Garbage collector ukončen");
 			}
 		});
 		return jGcPanel;
 	}
-
 
 	private JTextField nadpis(final String typ) {
 		final JTextField lbl = new JTextField(typ);
@@ -145,7 +122,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 	/**
 	 *
 	 */
-	private  JPanel initJedenPanel(final String typPocitadla, final List<Pocitadlo> pocitadla) {
+	private JPanel initJedenPanel(final String typPocitadla, final List<Pocitadlo> pocitadla) {
 		final JPanel pan = new JPanel();
 		pan.setBorder(BorderFactory.createEtchedBorder());
 		pan.setLayout(new GridBagLayout());
@@ -156,11 +133,11 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 		}
 		final GridBagConstraints c = new GridBagConstraints();
 		int i = 0;
-		//hodnoty.clear();
-		final List<Pocitadlo> pocitadlaFiltrovanaSerazena = pocitadla.stream().filter(p -> p.getTextovyPopisTypu().equals(typPocitadla))
-				.sorted((p1,p2) -> p1.getName().compareTo(p2.getName())).collect(Collectors.toList());
+		// hodnoty.clear();
+		final List<Pocitadlo> pocitadlaFiltrovanaSerazena = pocitadla.stream().filter(p -> p.getTextovyPopisTypu().equals(typPocitadla)).sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+				.collect(Collectors.toList());
 		for (final Pocitadlo p : pocitadlaFiltrovanaSerazena) {
-			final JLabel label = new JLabel(p.getName()+ ": ");
+			final JLabel label = new JLabel(p.getName() + ": ");
 			label.setToolTipText(p.getDescription());
 			final JLabel value = new JLabel(p.get() + "");
 			value.setToolTipText(p.getDescription());
@@ -184,10 +161,9 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 		for (final Pocitadlo p : pocitadla) {
 			types.add(p.getTextovyPopisTypu());
 		}
-		//System.out.println(types);
+		// System.out.println(types);
 		return types;
 	}
-
 
 	public static void main(final String[] args) {
 		final JServiceFrame serviceFrame = new JServiceFrame();
@@ -195,13 +171,13 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 
 		for (int i = 0; i < 12; i++) {
 			Pocitadlo poc = null;
-			if ( i % 3 == 0) {
+			if (i % 3 == 0) {
 				poc = new PocitadloRoste("pociA " + i, "Popis počítadla " + i);
 			}
-			if ( i % 3 == 1) {
+			if (i % 3 == 1) {
 				poc = new PocitadloMalo("pociB " + i, "Popis počítadla " + i);
 			}
-			if ( i % 3 == 2) {
+			if (i % 3 == 2) {
 				poc = new PocitadloNula("pociC " + i, "Popis počítadla " + i);
 			}
 			final Pocitadlo po = poc;

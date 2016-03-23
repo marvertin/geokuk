@@ -1,8 +1,6 @@
 package cz.geokuk.util.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
@@ -10,8 +8,8 @@ import javax.swing.JCheckBox;
 import cz.geokuk.framework.Action0;
 
 public class JIconCheckBox extends JCheckBox {
-	private static final long serialVersionUID = 1L;
-	private Icon icon;
+	private static final long	serialVersionUID	= 1L;
+	private Icon				icon;
 
 	public JIconCheckBox(Icon icon) {
 		super(icon);
@@ -21,7 +19,6 @@ public class JIconCheckBox extends JCheckBox {
 		super(action);
 		setIcon(action.getIcon());
 	}
-
 
 	public JIconCheckBox() {
 	}
@@ -55,11 +52,11 @@ public class JIconCheckBox extends JCheckBox {
 			g.setColor(Color.BLACK);
 			int iconWidth = icon.getIconWidth();
 			int iconHeight = icon.getIconHeight();
-			g.drawRect(x-4, y-4, iconWidth-1+8, iconHeight-1+8);
+			g.drawRect(x - 4, y - 4, iconWidth - 1 + 8, iconHeight - 1 + 8);
 			g.setColor(Color.RED);
-			//	    int width2 = c.getWidth()-1;
-			//			int height2 = c.getHeight()-1;
-			//			g.drawRect(0, 0, width2, height2);
+			// int width2 = c.getWidth()-1;
+			// int height2 = c.getHeight()-1;
+			// g.drawRect(0, 0, width2, height2);
 		}
 
 	}
@@ -68,7 +65,7 @@ public class JIconCheckBox extends JCheckBox {
 		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			g.setColor(Color.GREEN);
-			g.fillRect(x-2, y-2, icon.getIconWidth()+4, icon.getIconHeight()+4);
+			g.fillRect(x - 2, y - 2, icon.getIconWidth() + 4, icon.getIconHeight() + 4);
 			icon.paintIcon(c, g, x, y);
 		}
 

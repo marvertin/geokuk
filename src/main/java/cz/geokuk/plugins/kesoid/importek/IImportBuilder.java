@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.kesoid.importek;
 
-
 public interface IImportBuilder {
 
 	void addGpxWpt(GpxWpt gpxwpt);

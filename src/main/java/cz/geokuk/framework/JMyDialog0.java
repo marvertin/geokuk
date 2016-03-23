@@ -1,36 +1,18 @@
 package cz.geokuk.framework;
 
+import java.awt.*;
+import java.awt.event.*;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-
-
+import javax.swing.*;
 
 public abstract class JMyDialog0 extends JDialog {
 
-	private static final long serialVersionUID = 1L;
-	private static final Object CANCEL_ACTION = "kanclujToVsecko";
-	protected Factory factory;
-	private EventManager eventManager;
-	private final JFrame frame;
-	private final NapovedaAction napovedaAction = new NapovedaAction("Dialog/" + getTemaNapovedyDialogu());
+	private static final long		serialVersionUID	= 1L;
+	private static final Object		CANCEL_ACTION		= "kanclujToVsecko";
+	protected Factory				factory;
+	private EventManager			eventManager;
+	private final JFrame			frame;
+	private final NapovedaAction	napovedaAction		= new NapovedaAction("Dialog/" + getTemaNapovedyDialogu());
 
 	public JMyDialog0() {
 		super(Dlg.parentFrame());
@@ -64,14 +46,11 @@ public abstract class JMyDialog0 extends JDialog {
 		Point p = new Point(loc.x + xo, loc.y + yo);
 		p.x = Math.max(Math.min(p.x, screenSize.width - mySize.width), 0);
 		p.y = Math.max(Math.min(p.y, screenSize.height - mySize.height), 0);
-		Dimension novy = new Dimension(
-				Math.min(mySize.width, screenSize.width - p.x),
-				Math.min(mySize.height, screenSize.height - p.y)
+		Dimension novy = new Dimension(Math.min(mySize.width, screenSize.width - p.x), Math.min(mySize.height, screenSize.height - p.y)
 
-				);
+		);
 		setLocation(p);
 		setSize(novy);
-
 
 		InputMap im = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap am = getRootPane().getActionMap();
@@ -92,7 +71,6 @@ public abstract class JMyDialog0 extends JDialog {
 		});
 
 	}
-
 
 	public void odregistrujUdalosti() {
 		odregistrujUdalosti(this);
@@ -117,6 +95,7 @@ public abstract class JMyDialog0 extends JDialog {
 		public CancelAction() {
 			super("Zavřít");
 		}
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			dispose();

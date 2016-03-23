@@ -9,15 +9,14 @@ import cz.geokuk.framework.Preferenceble;
 @Preferenceble
 public class PopiskySettings implements Copyable<PopiskySettings> {
 
-	public Font font= new Font(Font.SANS_SERIF, Font.PLAIN, 12);
-	public Color foreground = Color.BLACK;
-	public Color background = new Color(255,255,255,70);
+	public Font				font		= new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+	public Color			foreground	= Color.BLACK;
+	public Color			background	= new Color(255, 255, 255, 70);
 
-	public int posuX = 0;
-	public int posuY = 0;
+	public int				posuX		= 0;
+	public int				posuY		= 0;
 
-
-	public PopiskyPatterns patterns = new PopiskyPatterns();
+	public PopiskyPatterns	patterns	= new PopiskyPatterns();
 
 	/**
 	 * @return the font
@@ -27,7 +26,8 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 	}
 
 	/**
-	 * @param font the font to set
+	 * @param font
+	 *            the font to set
 	 */
 	public void setFont(final Font font) {
 		this.font = font;
@@ -41,7 +41,8 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 	}
 
 	/**
-	 * @param foreground the foreground to set
+	 * @param foreground
+	 *            the foreground to set
 	 */
 	public void setForeground(final Color foreground) {
 		this.foreground = foreground;
@@ -55,7 +56,8 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 	}
 
 	/**
-	 * @param background the background to set
+	 * @param background
+	 *            the background to set
 	 */
 	public void setBackground(final Color background) {
 		this.background = background;
@@ -69,7 +71,8 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 	}
 
 	/**
-	 * @param posuX the posuX to set
+	 * @param posuX
+	 *            the posuX to set
 	 */
 	public void setPosuX(final int posuX) {
 		this.posuX = posuX;
@@ -83,13 +86,12 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 	}
 
 	/**
-	 * @param posuY the posuY to set
+	 * @param posuY
+	 *            the posuY to set
 	 */
 	public void setPosuY(final int posuY) {
 		this.posuY = posuY;
 	}
-
-
 
 	@Override
 	public PopiskySettings copy() {
@@ -110,13 +112,16 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 	}
 
 	/**
-	 * @param patterns the patterns to set
+	 * @param patterns
+	 *            the patterns to set
 	 */
 	public void setPatterns(final PopiskyPatterns patterns) {
 		this.patterns = patterns;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -132,7 +137,9 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -184,15 +191,14 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "PopiskySettings [font=" + font + ", foreground=" + foreground + ", background=" + background + ", posuX=" + posuX + ", posuY=" + posuY
-				+ ", patterns=" + patterns + "]";
+		return "PopiskySettings [font=" + font + ", foreground=" + foreground + ", background=" + background + ", posuX=" + posuX + ", posuY=" + posuY + ", patterns=" + patterns + "]";
 	}
-
-
 
 }

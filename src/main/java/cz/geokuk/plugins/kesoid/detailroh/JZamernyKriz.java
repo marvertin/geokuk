@@ -3,9 +3,7 @@
  */
 package cz.geokuk.plugins.kesoid.detailroh;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 
 import cz.geokuk.core.coord.JSingleSlide0;
 
@@ -24,7 +22,9 @@ public class JZamernyKriz extends JSingleSlide0 {
 		setOpaque(false);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	@Override

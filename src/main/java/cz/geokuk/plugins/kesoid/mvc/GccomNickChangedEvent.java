@@ -15,5 +15,4 @@ public class GccomNickChangedEvent extends Event0<KesoidModel> {
 		return gccomNick;
 	}
 
-
 }

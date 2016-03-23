@@ -14,9 +14,9 @@ import cz.geokuk.plugins.vylety.EVylet;
 
 public class JVybiracVyletu extends JComboBox<EVylet> implements AfterEventReceiverRegistrationInit {
 
-	private static final long serialVersionUID = 1L;
-	private final DefaultComboBoxModel<EVylet> model = new DefaultComboBoxModel<>(EVylet.values());
-	private KesoidModel kesoidModel;
+	private static final long					serialVersionUID	= 1L;
+	private final DefaultComboBoxModel<EVylet>	model				= new DefaultComboBoxModel<>(EVylet.values());
+	private KesoidModel							kesoidModel;
 
 	public JVybiracVyletu() {
 		setModel(model);
@@ -28,8 +28,9 @@ public class JVybiracVyletu extends JComboBox<EVylet> implements AfterEventRecei
 		model.setSelectedItem(event.getFilterDefinition().getPrahVyletu());
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -62,6 +63,5 @@ public class JVybiracVyletu extends JComboBox<EVylet> implements AfterEventRecei
 	public void inject(KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
-
 
 }

@@ -4,37 +4,28 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp.Otisk;
 import cz.geokuk.util.index2d.BoundingRect;
-import cz.geokuk.util.pocitadla.Pocitadlo;
-import cz.geokuk.util.pocitadla.PocitadloMalo;
-import cz.geokuk.util.pocitadla.PocitadloRoste;
+import cz.geokuk.util.pocitadla.*;
 
 public class Sklo implements ImagantCache {
 
-	private Pocitadlo pocitImangantu = new PocitadloMalo("Imagant - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
-	private static Pocitadlo pocitImangantuZasah = new PocitadloRoste("Imagant - zásahy cache", "");
-	private Pocitadlo pocitSourceImagu = new PocitadloMalo("Zdrojové obrázky - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
-	private static Pocitadlo pocitSourceImaguZasah = new PocitadloRoste("Zdrojové obrázky - zásah cache", "");
+	private Pocitadlo					pocitImangantu			= new PocitadloMalo("Imagant - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
+	private static Pocitadlo			pocitImangantuZasah		= new PocitadloRoste("Imagant - zásahy cache", "");
+	private Pocitadlo					pocitSourceImagu		= new PocitadloMalo("Zdrojové obrázky - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
+	private static Pocitadlo			pocitSourceImaguZasah	= new PocitadloRoste("Zdrojové obrázky - zásah cache", "");
 
-	List<Vrstva> vrstvy = new ArrayList<>();
+	List<Vrstva>						vrstvy					= new ArrayList<>();
 
-	private Map<Genotyp.Otisk, Imagant> cache = new HashMap<>();
-	private Map<URL, BufferedImage> sourceImageCache  = Collections.synchronizedMap(new HashMap<URL, BufferedImage>());
+	private Map<Genotyp.Otisk, Imagant>	cache					= new HashMap<>();
+	private Map<URL, BufferedImage>		sourceImageCache		= Collections.synchronizedMap(new HashMap<URL, BufferedImage>());
 
-	private final String iName;
+	private final String				iName;
 
 	/**
 	 *
@@ -49,17 +40,17 @@ public class Sklo implements ImagantCache {
 	public String getName() {
 		return iName;
 	}
+
 	/**
-	 * Vrací sklivec pro daný genotyp s tím, že se hrabe v keši,
-	 * aby se jednak zvýšila rychnlost, druhak, aby se šetřila paměť
+	 * Vrací sklivec pro daný genotyp s tím, že se hrabe v keši, aby se jednak zvýšila rychnlost, druhak, aby se šetřila paměť
 	 *
 	 * @param genotyp
 	 * @return
 	 */
-	public synchronized Imagant getRenderedImage (Genotyp genotyp) {
+	public synchronized Imagant getRenderedImage(Genotyp genotyp) {
 		Otisk otisk = genotyp.getOtisk();
 		Imagant imagant = cache.get(otisk);
-		if (! cache.containsKey(otisk)) { // může tam být totiž null
+		if (!cache.containsKey(otisk)) { // může tam být totiž null
 			imagant = render(genotyp);
 			cache.put(otisk, imagant);
 			pocitImangantu.set(cache.size());
@@ -71,6 +62,7 @@ public class Sklo implements ImagantCache {
 
 	/**
 	 * Vyrendruje ikonu pro sklo pro daný genotyp.
+	 * 
 	 * @param genotyp
 	 * @return
 	 */
@@ -85,7 +77,7 @@ public class Sklo implements ImagantCache {
 		}
 
 		List<Imagant> list = new ArrayList<>();
-		for (Iterator<Imagant> it = imaganti.descendingIterator(); it.hasNext(); ) {
+		for (Iterator<Imagant> it = imaganti.descendingIterator(); it.hasNext();) {
 			Imagant ima = it.next();
 			list.add(ima);
 		}
@@ -95,11 +87,12 @@ public class Sklo implements ImagantCache {
 	}
 
 	public static Imagant prekresliNaSebe(List<Imagant> imaganti) {
-		if (imaganti.isEmpty()) return null;
+		if (imaganti.isEmpty())
+			return null;
 		BoundingRect br = Sklo.sjednoceni(imaganti);
 
 		if (br == null) {
-			//TODO log.warn()
+			// TODO log.warn()
 			return null;
 		}
 
@@ -110,7 +103,7 @@ public class Sklo implements ImagantCache {
 		BufferedImage resultbi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = resultbi.getGraphics();
 		try {
-			g.translate(-br.xx1, -br.yy1);  // nastavit správný střed
+			g.translate(-br.xx1, -br.yy1); // nastavit správný střed
 
 			// vykreslení obrázků
 			for (Imagant ima : imaganti) {
@@ -121,8 +114,8 @@ public class Sklo implements ImagantCache {
 
 			// a vyvorit výsledek
 			imagant = new Imagant(resultbi);
-			imagant.setXoffset(br.xx1 - (- width/2));
-			imagant.setYoffset(br.yy1 - (- height/2));
+			imagant.setXoffset(br.xx1 - (-width / 2));
+			imagant.setYoffset(br.yy1 - (-height / 2));
 		} finally {
 			g.dispose();
 		}
@@ -140,9 +133,10 @@ public class Sklo implements ImagantCache {
 
 	public static BoundingRect sjednoceni(List<Imagant> imaganti) {
 		// Spočítat hranice
-		int xx1=0, xx2=0, yy1=0, yy2=0;
+		int xx1 = 0, xx2 = 0, yy1 = 0, yy2 = 0;
 		for (Imagant imagant : imaganti) {
-			if (imagant == null) continue;
+			if (imagant == null)
+				continue;
 			int x1 = imagant.getXpos();
 			int y1 = imagant.getYpos();
 			int x2 = x1 + imagant.getImage().getWidth();
@@ -152,12 +146,13 @@ public class Sklo implements ImagantCache {
 			yy1 = Math.min(yy1, y1);
 			yy2 = Math.max(yy2, y2);
 		}
-		if (xx2 - xx1 == 0 || yy2 - yy1 == 0) return null;
+		if (xx2 - xx1 == 0 || yy2 - yy1 == 0)
+			return null;
 		BoundingRect br = new BoundingRect(xx1, yy1, xx2, yy2);
 		return br;
 	}
 
-	public BufferedImage getImage(URL url)  {
+	public BufferedImage getImage(URL url) {
 		try {
 			BufferedImage bi = sourceImageCache.get(url);
 			if (bi == null) {

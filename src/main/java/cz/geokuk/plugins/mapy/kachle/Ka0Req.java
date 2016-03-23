@@ -3,16 +3,13 @@ package cz.geokuk.plugins.mapy.kachle;
 import cz.geokuk.util.pocitadla.Pocitadlo;
 import cz.geokuk.util.pocitadla.PocitadloMalo;
 
+abstract class Ka0Req {
 
-abstract class Ka0Req  {
+	private static Pocitadlo	pocitadloInstanci	= new PocitadloMalo("Počet instancí požadavků na dlaždice.", "Počítá, kolik existuje instancí " + Ka0Req.class.getName() + ".");
 
-	private static Pocitadlo pocitadloInstanci = new PocitadloMalo("Počet instancí požadavků na dlaždice.",
-			"Počítá, kolik existuje instancí " + Ka0Req.class.getName() + ".");
+	private final Ka0			ka;
 
-	private final Ka0 ka;
-
-	private final Priority priorita;
-
+	private final Priority		priorita;
 
 	protected Ka0Req(final Ka0 ka, final Priority priorita) {
 		super();
@@ -26,7 +23,6 @@ abstract class Ka0Req  {
 		super.finalize();
 		pocitadloInstanci.dec();
 	}
-
 
 	public Ka0 getKa() {
 		return ka;

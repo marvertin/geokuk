@@ -3,15 +3,14 @@
  */
 package cz.geokuk.util.index2d;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.geokuk.util.index2d.Ctverecnik.DuplikHlidac;
 
-
 /**
- * Drží celý index všech objektů na mapě, tedy se dají  přes něj dostat i ty objekty.
+ * Drží celý index všech objektů na mapě, tedy se dají přes něj dostat i ty objekty.
+ * 
  * @author veverka
  *
  */
@@ -27,27 +26,27 @@ public class Indexator<T> {
 	}
 
 	public Indexator() {
-		this(new BoundingRect(0,0,Integer.MAX_VALUE / 2, Integer.MAX_VALUE/ 2));
+		this(new BoundingRect(0, 0, Integer.MAX_VALUE / 2, Integer.MAX_VALUE / 2));
 	}
 
 	public void vloz(int xx, int yy, T mapobj) {
-		if (! checkRozsah(xx, yy) )
+		if (!checkRozsah(xx, yy))
 			throw new RuntimeException("Hodnoty " + xx + " " + yy + " jsou mimo rozsah " + root);
 
 		Sheet<T> sheet = new Sheet<>(xx, yy, mapobj);
 		DuplikHlidac duplikHlidac = new Ctverecnik.DuplikHlidac();
 		root.vloz(sheet, duplikHlidac);
 		while (duplikHlidac.duplicita) {
-			//throw new RuntimeException("Duplicita");
+			// throw new RuntimeException("Duplicita");
 			sheet = new Sheet<>(sheet.xx + 3, sheet.yy + 7, mapobj);
 			duplikHlidac = new Ctverecnik.DuplikHlidac();
 			root.vloz(sheet, duplikHlidac);
-			//System.out.println("Duplicita resena " + mapobj);
+			// System.out.println("Duplicita resena " + mapobj);
 		}
 	}
 
 	public boolean checkRozsah(int xx, int yy) {
-		return ! (xx < root.getXx1() || xx >= root.getXx2() || yy < root.getYy1() || yy >= root.getYy2());
+		return !(xx < root.getXx1() || xx >= root.getXx2() || yy < root.getYy1() || yy >= root.getYy2());
 	}
 
 	public int count(BoundingRect boundingRect) {
@@ -110,8 +109,8 @@ public class Indexator<T> {
 
 	public Sheet<T> locateNearestOne(BoundingRect br, final int xx, final int yy) {
 		class Drzak {
-			Sheet<T> tt;
-			long d2 = Long.MAX_VALUE;
+			Sheet<T>	tt;
+			long		d2	= Long.MAX_VALUE;
 		}
 		final Drzak drzak = new Drzak();
 		visit(br, new FlatVisitor<T>() {
@@ -119,7 +118,7 @@ public class Indexator<T> {
 			public void visit(Sheet<T> sheet) {
 				long dx = (sheet.xx - xx);
 				long dy = (sheet.yy - yy);
-				long d2 =  dx * dx + dy * dy;
+				long d2 = dx * dx + dy * dy;
 				if (d2 < drzak.d2) {
 					drzak.d2 = d2;
 					drzak.tt = sheet;

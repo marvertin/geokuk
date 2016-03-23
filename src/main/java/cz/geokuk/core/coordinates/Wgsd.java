@@ -2,10 +2,11 @@ package cz.geokuk.core.coordinates;
 
 public class Wgsd {
 
-	public double lat;
-	public double lon;
+	public double	lat;
+	public double	lon;
 
-	public Wgsd() {}
+	public Wgsd() {
+	}
 
 	public Wgsd(double dlat, double dlon) {
 		this.lat = dlat;
@@ -53,10 +54,9 @@ public class Wgsd {
 		return new Wgsd(this.lat - dlat, this.lon - dlon);
 	}
 
-
 	@Override
 	public String toString() {
-		return "WHS-D[" + lon + "," + lat  + "]";
+		return "WHS-D[" + lon + "," + lat + "]";
 	}
 
 }

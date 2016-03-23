@@ -1,27 +1,19 @@
 package cz.geokuk.plugins.kesoid.importek;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import cz.geokuk.util.file.FileAndTime;
-import cz.geokuk.util.file.KeFile;
-import cz.geokuk.util.file.Root;
+import cz.geokuk.util.file.*;
 
 public class InformaceOZdrojich {
-	private static final Logger log = LogManager.getLogger(GeogetLoader.class.getSimpleName());
+	private static final Logger		log		= LogManager.getLogger(GeogetLoader.class.getSimpleName());
 
-	private final Map<Root, Strom> stromy = new LinkedHashMap<>();
+	private final Map<Root, Strom>	stromy	= new LinkedHashMap<>();
 
-	private InformaceOZdroji root;
+	private InformaceOZdroji		root;
 
 	private InformaceOZdrojich() {
 	}
@@ -86,12 +78,11 @@ public class InformaceOZdrojich {
 			}
 		}
 
-
 		/** Objekt je hotov */
 		public InformaceOZdrojich done() {
 			// našvindlený root
 			final File pseudoFile = new File("[gc]");
-			root = new InformaceOZdroji(new KeFile(new FileAndTime(pseudoFile, 0), new Root(pseudoFile, new Root.Def(0,  null,  null))), false);
+			root = new InformaceOZdroji(new KeFile(new FileAndTime(pseudoFile, 0), new Root(pseudoFile, new Root.Def(0, null, null))), false);
 			for (final Strom strom : stromy.values()) {
 				root.addChild(strom.root);
 				strom.root.parent = root;
@@ -119,7 +110,6 @@ public class InformaceOZdrojich {
 		}
 		return loaded ? loadedCount : notLoadedCount;
 	}
-
 
 	public InformaceOZdroji getRoot() {
 		return root;
@@ -169,8 +159,8 @@ public class InformaceOZdrojich {
 	}
 
 	private static class Strom {
-		InformaceOZdroji root;
-		Map<KeFile, InformaceOZdroji> map = new LinkedHashMap<>();
+		InformaceOZdroji				root;
+		Map<KeFile, InformaceOZdroji>	map	= new LinkedHashMap<>();
 	}
 
 	public long getYungest() {

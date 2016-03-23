@@ -12,19 +12,17 @@ import cz.geokuk.util.process.BrowserOpener;
 
 public class NapovedaModel extends Model0 {
 
-	private List<ZpravaUzivateli> zpravyUzivatelum;
-	private int lastViewedMsgNum;
-	private boolean onlineMode;
+	private List<ZpravaUzivateli>	zpravyUzivatelum;
+	private int						lastViewedMsgNum;
+	private boolean					onlineMode;
 
 	public int getLastViewedMsgNum() {
 		return lastViewedMsgNum;
 	}
 
-
 	public List<ZpravaUzivateli> getZpravyUzivatelum() {
 		return zpravyUzivatelum;
 	}
-
 
 	public void setZpravyUzivatelum(final List<ZpravaUzivateli> zpravyUzivatelum) {
 		this.zpravyUzivatelum = zpravyUzivatelum;
@@ -34,7 +32,6 @@ public class NapovedaModel extends Model0 {
 			factoryInit(new ZpravyUzivatelumAction()).actionPerformed(null);
 		}
 	}
-
 
 	@Override
 	protected void initAndFire() {
@@ -47,7 +44,6 @@ public class NapovedaModel extends Model0 {
 		lastViewedMsgNum = aLastViewedMsgNum;
 		currPrefe().node(FPref.VSEOBECNE_node).putInt(FPref.LAST_VIEWED_MSG_NUM_value, lastViewedMsgNum);
 	}
-
 
 	public void zkontrolujNoveAktualizace(final boolean zobrazovatInfoPriSpravneVerzi) {
 		if (onlineMode) {

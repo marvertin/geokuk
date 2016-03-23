@@ -1,55 +1,39 @@
 package cz.geokuk.plugins.cesty;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
-import cz.geokuk.plugins.cesty.data.Bod;
-import cz.geokuk.plugins.cesty.data.Bousek0;
-import cz.geokuk.plugins.cesty.data.Cesta;
-import cz.geokuk.plugins.cesty.data.Doc;
-import cz.geokuk.plugins.cesty.data.Usek;
+import cz.geokuk.plugins.cesty.data.*;
 
 public class Malovadlo {
-	private final Graphics2D       g;
+	private final Graphics2D		g;
 
-	private static final int       SIRKA_CARY_VYBRANE = 6;
+	private static final int		SIRKA_CARY_VYBRANE	= 6;
 
-	private final Stroke           strokeVzdusny      = new BasicStroke(3,
-			BasicStroke.CAP_BUTT,
-			BasicStroke.JOIN_BEVEL,
-			0,
-			new float[] { 3, 3 }, 0);
+	private final Stroke			strokeVzdusny		= new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3, 3 }, 0);
 
-	private final Doc              doc;
+	private final Doc				doc;
 
-	private final Bousek0          blizkyBousek;
+	private final Bousek0			blizkyBousek;
 
-	private final Coord            soord;
+	private final Coord				soord;
 
 	/** Obsahuje bod, který je přidáván, pak se kreslí k němu přidávací čára */
-	private final Mou          pridavanyBod1;
-	private final Mou          pridavanyBod2;
+	private final Mou				pridavanyBod1;
+	private final Mou				pridavanyBod2;
 
-	private final Mou              mouDeliciNaBlizkemBousku;
+	private final Mou				mouDeliciNaBlizkemBousku;
 
-	private final Cesta            curta;
+	private final Cesta				curta;
 
-	private final Mouable  poziceMouable;
+	private final Mouable			poziceMouable;
 
-	private static final Polygon   bodovaSipecka      = new Polygon(
-			new int[] {-3, 2, 5,  2, -3},
-			new int[] { 3, 3, 0, -3, -3}, 5);
+	private static final Polygon	bodovaSipecka		= new Polygon(new int[] { -3, 2, 5, 2, -3 }, new int[] { 3, 3, 0, -3, -3 }, 5);
 
-	private static final Ellipse2D bodStartocilu      = new Ellipse2D.Float(-10,
-			-10, 20, 20);
+	private static final Ellipse2D	bodStartocilu		= new Ellipse2D.Float(-10, -10, 20, 20);
 
 	public Malovadlo(Graphics2D g2, MalovadloParams params) {
 		g = g2;
@@ -77,14 +61,14 @@ public class Malovadlo {
 
 	}
 
-
 	private Graphics2D createGraphics() {
 		return (Graphics2D) g.create();
 
 	}
 
 	private void paintPridavaciUsecka() {
-		if (pridavanyBod1 == null || pridavanyBod2 == null) return;
+		if (pridavanyBod1 == null || pridavanyBod2 == null)
+			return;
 		Point p1 = soord.transform(pridavanyBod1);
 		// Point p2 = getSoord().transform(semSePridava.getMou());
 		// Point p2 = getSoord().transform(moucur);
@@ -99,21 +83,19 @@ public class Malovadlo {
 		gg.drawLine(0, 2, (int) delka, 2);
 	}
 
-
 	class MalovadloCesty {
 
-		private final Cesta   cesta;
-		private final boolean jeCurta;
-		private final boolean jeBlizkyBousekVTetoCeste;
+		private final Cesta		cesta;
+		private final boolean	jeCurta;
+		private final boolean	jeBlizkyBousekVTetoCeste;
 
-		private final Color   barvaCestyPredKurzorem;
-		private final Color   barvaCestyZaKurzorem;
+		private final Color		barvaCestyPredKurzorem;
+		private final Color		barvaCestyZaKurzorem;
 
 		public MalovadloCesty(Cesta cesta) {
 			this.cesta = cesta;
 			jeCurta = cesta == curta;
-			jeBlizkyBousekVTetoCeste = blizkyBousek != null
-					&& blizkyBousek.getCesta() == cesta;
+			jeBlizkyBousekVTetoCeste = blizkyBousek != null && blizkyBousek.getCesta() == cesta;
 			if (jeCurta) {
 				if (jeBlizkyBousekVTetoCeste) {
 					barvaCestyPredKurzorem = FBarvy.CURTA_PRED_KURZOREM;
@@ -316,10 +298,10 @@ public class Malovadlo {
 			}
 		}
 
-		//    private void fillCircle(Graphics2D g, Point p, int r) {
-		//      int r2 = 2 * r;
-		//      g.fillOval(p.x - r, p.y - r, r2, r2);
-		//    }
+		// private void fillCircle(Graphics2D g, Point p, int r) {
+		// int r2 = 2 * r;
+		// g.fillOval(p.x - r, p.y - r, r2, r2);
+		// }
 
 	} // MalovadloCesty
 }

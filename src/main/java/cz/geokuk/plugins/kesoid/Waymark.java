@@ -20,7 +20,9 @@ public class Waymark extends Kesoid {
 		return EKesoidKind.WAYMARK;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.Kesoid#prispejDoTooltipu(java.lang.StringBuilder)
 	 */
 	@Override
@@ -35,7 +37,7 @@ public class Waymark extends Kesoid {
 		sb.append("</small>");
 		sb.append("<br>");
 		if (wpt != getFirstWpt()) {
-			if (! getNazev().contains(wpt.getNazev())) {
+			if (!getNazev().contains(wpt.getNazev())) {
 				sb.append(wpt.isRucnePridany() ? "+ " : "");
 				sb.append("<i>");
 				sb.append(wpt.getName().substring(0, 2));
@@ -43,7 +45,7 @@ public class Waymark extends Kesoid {
 				sb.append(wpt.getNazev());
 				sb.append("</i>");
 			}
-			//if (! getSym().equals(wpt.getSym())) {
+			// if (! getSym().equals(wpt.getSym())) {
 			sb.append("<small>");
 			sb.append(" - ");
 			sb.append(wpt.getSym());

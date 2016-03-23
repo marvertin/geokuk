@@ -3,11 +3,8 @@
  */
 package cz.geokuk.plugins.kesoid.mvc;
 
-
 import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
-
-
 
 /**
  * @author veverka
@@ -23,9 +20,12 @@ public class NickEditAction extends DialogOpeningAction0 {
 	public NickEditAction() {
 		super("Nastavit nick...");
 		putValue(SHORT_DESCRIPTION, "Nastaví nick, který používáš na geocaching.com, nutné pro označení tebou založených kešíků.");
-		//    putValue(MNEMONIC_KEY, KeyEvent.VK_D);
+		// putValue(MNEMONIC_KEY, KeyEvent.VK_D);
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override

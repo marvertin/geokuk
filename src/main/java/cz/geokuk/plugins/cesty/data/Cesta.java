@@ -1,32 +1,25 @@
 package cz.geokuk.plugins.cesty.data;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import cz.geokuk.core.coordinates.FGeoKonvertor;
-import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.core.coordinates.Mouable;
+import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.cesty.FBarvy;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.util.lang.FUtil;
 
 public class Cesta implements Iterable<Bousek0> {
 
-	private static final Logger log =
-			LogManager.getLogger(Cesta.class.getSimpleName());
+	private static final Logger	log	= LogManager.getLogger(Cesta.class.getSimpleName());
 
 	/// prazdna cesta ma prazdny start i cil, ale snad by ani nemala byt
-	private Bod start;
-	private Bod cil;
-	private Doc doc;
-	private String nazev;
+	private Bod					start;
+	private Bod					cil;
+	private Doc					doc;
+	private String				nazev;
 
 	public static Cesta create() {
 		return new Cesta();
@@ -112,9 +105,7 @@ public class Cesta implements Iterable<Bousek0> {
 	}
 
 	/**
-	 * Vrací nejbližší objekt, ale jen když je do zadané vzálenosti.
-	 * Dá se vždy přednost bodu před úsekem.
-	 * Vrací null, pokud nic není do zadané vzdálenosti
+	 * Vrací nejbližší objekt, ale jen když je do zadané vzálenosti. Dá se vždy přednost bodu před úsekem. Vrací null, pokud nic není do zadané vzdálenosti
 	 *
 	 * @param mou
 	 * @param maximalniVzdalenost
@@ -154,15 +145,15 @@ public class Cesta implements Iterable<Bousek0> {
 	}
 
 	public static class SearchResult {
-		public Bousek0 bousek;
-		public long kvadradVzdalenosti = Long.MAX_VALUE;
+		public Bousek0	bousek;
+		public long		kvadradVzdalenosti	= Long.MAX_VALUE;
 	}
 
 	/**
-	 * Najde úsek, do kterého je nejlepší daný bod vložit.
-	 * Pokud vrátí bod, je to bod krajový a je nejlepší vložit za něj.
+	 * Najde úsek, do kterého je nejlepší daný bod vložit. Pokud vrátí bod, je to bod krajový a je nejlepší vložit za něj.
 	 *
-	 * @param mou Null vrací jen pokud je cesta úplně prázdná.
+	 * @param mou
+	 *            Null vrací jen pokud je cesta úplně prázdná.
 	 * @return
 	 */
 	public Bousek0 locateBousekKamNejlepeVlozit(final Mou mou) {
@@ -180,9 +171,7 @@ public class Cesta implements Iterable<Bousek0> {
 	}
 
 	/**
-	 * Vrací nejbližší objekt.
-	 * Dá se vždy přednost bodu před úsekem.
-	 * Vrací null, pokud nic není do zadané vzdálenosti
+	 * Vrací nejbližší objekt. Dá se vždy přednost bodu před úsekem. Vrací null, pokud nic není do zadané vzdálenosti
 	 *
 	 * @param mou
 	 * @param maximalniVzdalenost
@@ -207,7 +196,6 @@ public class Cesta implements Iterable<Bousek0> {
 		}
 		return neblizsiUsta;
 	}
-
 
 	/**
 	 * Vrací seznam všechj úseků cesty.
@@ -316,7 +304,6 @@ public class Cesta implements Iterable<Bousek0> {
 		};
 	}
 
-
 	/**
 	 * Vrátí množinu waypointů, které jsou v cestě.
 	 *
@@ -333,8 +320,8 @@ public class Cesta implements Iterable<Bousek0> {
 	}
 
 	void clear() {
-		//System.out.println(System.identityHashCode(this) + ": clear()");
-		//new Throwable().printStackTrace(System.out);
+		// System.out.println(System.identityHashCode(this) + ": clear()");
+		// new Throwable().printStackTrace(System.out);
 		start = null;
 		cil = null;
 	}
@@ -356,8 +343,8 @@ public class Cesta implements Iterable<Bousek0> {
 	}
 
 	public boolean hasWpt(final Wpt wpt) {
-		//System.out.println("Volá se hasWpt");
-		//TODO-vylet Optimalizovat, volá se často.
+		// System.out.println("Volá se hasWpt");
+		// TODO-vylet Optimalizovat, volá se často.
 		for (final Bod bod : getBody()) {
 			if (bod.mouable == wpt) {
 				return true;
@@ -367,9 +354,9 @@ public class Cesta implements Iterable<Bousek0> {
 	}
 
 	public int getPocetWaypointu() {
-		//System.out.println("Volá se getPocetWaypointu");
-		//new Throwable().printStackTrace();
-		//TODO-vylet Optimalizovat, volá se často.
+		// System.out.println("Volá se getPocetWaypointu");
+		// new Throwable().printStackTrace();
+		// TODO-vylet Optimalizovat, volá se často.
 		int sum = 0;
 		for (final Bod bod : getBody()) {
 			if (bod.mouable instanceof Wpt) {
@@ -392,7 +379,7 @@ public class Cesta implements Iterable<Bousek0> {
 			clear();
 		} else {
 			this.start = start;
-			start.setUvzad(null);   // odříznout zbytek k začátku
+			start.setUvzad(null); // odříznout zbytek k začátku
 		}
 	}
 
@@ -401,7 +388,7 @@ public class Cesta implements Iterable<Bousek0> {
 			clear();
 		} else {
 			this.cil = cil;
-			cil.setUvpred(null);  // odříznout zbytek ke konci
+			cil.setUvpred(null); // odříznout zbytek ke konci
 		}
 	}
 
@@ -414,13 +401,11 @@ public class Cesta implements Iterable<Bousek0> {
 	}
 
 	public boolean isKruh() {
-		if (isEmpty())
-		{
+		if (isEmpty()) {
 			return false; // prázdná není kruh
 		}
-		if (isJednobodova())
-		{
-			return false;  // jednobodová není kruh
+		if (isJednobodova()) {
+			return false; // jednobodová není kruh
 		}
 		final boolean result = start.getMouable().equals(cil.getMouable());
 		return result;
@@ -449,7 +434,7 @@ public class Cesta implements Iterable<Bousek0> {
 	}
 
 	public double dalkaStartuACile() {
-		//System.out.println(System.identityHashCode(this) + ": dalkaStartuACile "+ start + " " + cil);
+		// System.out.println(System.identityHashCode(this) + ": dalkaStartuACile "+ start + " " + cil);
 		kontrolaKonzistence();
 		return FGeoKonvertor.dalka(start, cil);
 	}
@@ -457,7 +442,6 @@ public class Cesta implements Iterable<Bousek0> {
 	public String dalkaStartuACileHtml() {
 		return dalkaHtml(dalkaStartuACile(), Color.BLACK);
 	}
-
 
 	void reverse() {
 		final ArrayList<Usek> useky = new ArrayList<>();
@@ -582,7 +566,6 @@ public class Cesta implements Iterable<Bousek0> {
 		return pocet;
 	}
 
-
 	private void kon(final boolean podm) {
 		if (!podm) {
 			throw new RuntimeException("Selhala kontrola konzistence cesty");
@@ -625,7 +608,7 @@ public class Cesta implements Iterable<Bousek0> {
 			}
 		}
 
-		//System.out.println(System.identityHashCode(this) + ": uspela kontrola existence: " + pocetBousku + " bousku " + ATimestamp.now());
+		// System.out.println(System.identityHashCode(this) + ": uspela kontrola existence: " + pocetBousku + " bousku " + ATimestamp.now());
 	}
 
 	public void pospojujVzdusneUseky() {

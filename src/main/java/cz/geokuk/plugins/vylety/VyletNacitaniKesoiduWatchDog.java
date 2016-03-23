@@ -21,5 +21,4 @@ public class VyletNacitaniKesoiduWatchDog {
 		this.vyletModel = vyletModel;
 	}
 
-
 }

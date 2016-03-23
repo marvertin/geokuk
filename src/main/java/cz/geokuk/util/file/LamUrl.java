@@ -5,18 +5,20 @@ package cz.geokuk.util.file;
 
 import java.net.URL;
 
-public class LamUrl  {
-	public URL url;
-	public long lastModified;
-	public String name; // kousek jména a to ten poslední
+public class LamUrl {
+	public URL		url;
+	public long		lastModified;
+	public String	name;			// kousek jména a to ten poslední
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -24,9 +26,9 @@ public class LamUrl  {
 		return "LamUrl [lastModified=" + lastModified + ", url=" + url + "]";
 	}
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -38,9 +40,9 @@ public class LamUrl  {
 		return result;
 	}
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -61,7 +63,5 @@ public class LamUrl  {
 			return false;
 		return true;
 	}
-
-
 
 }

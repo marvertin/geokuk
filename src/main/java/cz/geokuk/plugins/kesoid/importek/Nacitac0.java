@@ -1,9 +1,6 @@
 package cz.geokuk.plugins.kesoid.importek;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -21,14 +18,15 @@ import cz.geokuk.util.lang.FString;
  */
 public abstract class Nacitac0 {
 
-	protected static final String PREFIX_USERDEFINOANYCH_GENU = "geokuk_";
-	static Pattern osetriCislo = Pattern.compile("[^0-9]");
+	protected static final String	PREFIX_USERDEFINOANYCH_GENU	= "geokuk_";
+	static Pattern					osetriCislo					= Pattern.compile("[^0-9]");
 
-	protected abstract void nacti(File file, IImportBuilder builder,  Future<?> future, ProgressModel aProgressModel) throws IOException;
-	protected abstract void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel)
-			throws IOException;
+	protected abstract void nacti(File file, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) throws IOException;
+
+	protected abstract void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) throws IOException;
 
 	abstract boolean umiNacist(ZipEntry zipEntry);
+
 	abstract boolean umiNacist(File file);
 
 	protected final void nactiBezVyjimky(File file, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) {
@@ -61,7 +59,8 @@ public abstract class Nacitac0 {
 	 */
 	protected int parseCislo(String s) {
 		s = osetriCislo.matcher(s).replaceAll("").trim();
-		if (s.length() == 0) return 0;
+		if (s.length() == 0)
+			return 0;
 		try {
 			return Integer.parseInt(s);
 		} catch (NumberFormatException e) {
@@ -69,11 +68,11 @@ public abstract class Nacitac0 {
 			return 0; // je to španě, vrátíme nuli
 		}
 	}
+
 	protected InputStream wrapByProgressor(InputStream istm, String sourceName, ProgressModel aProgressModel) {
-		return new BufferedInputStream(
-				new ProgressorInputStream(aProgressModel, "Loading: " + sourceName,
-						istm));
+		return new BufferedInputStream(new ProgressorInputStream(aProgressModel, "Loading: " + sourceName, istm));
 	}
+
 	protected String intern(String aString) {
 		return FString.intern(aString);
 	}

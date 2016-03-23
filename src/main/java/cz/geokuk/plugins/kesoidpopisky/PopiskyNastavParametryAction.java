@@ -1,14 +1,11 @@
 package cz.geokuk.plugins.kesoidpopisky;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
 import cz.geokuk.framework.Action0;
-
-
 
 public class PopiskyNastavParametryAction extends Action0 {
 
@@ -26,6 +23,5 @@ public class PopiskyNastavParametryAction extends Action0 {
 		JPopiskyDialog frame = factory.init(new JPopiskyDialog());
 		frame.setVisible(true);
 	}
-
 
 }

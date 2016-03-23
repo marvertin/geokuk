@@ -1,19 +1,16 @@
 package cz.geokuk.plugins.mapy.kachle;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
- * Stream drží veškerá data, která se načetla a dokáže je pak vydat jako
- * bytové pole.
+ * Stream drží veškerá data, která se načetla a dokáže je pak vydat jako bytové pole.
+ * 
  * @author tatinek
  *
  */
-class DataHoldingInputStream extends FilterInputStream{
+class DataHoldingInputStream extends FilterInputStream {
 
-	private ByteArrayOutputStream baos = new ByteArrayOutputStream(256*256);
+	private ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 256);
 
 	protected DataHoldingInputStream(InputStream in) {
 		super(in);

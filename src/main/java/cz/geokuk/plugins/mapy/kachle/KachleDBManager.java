@@ -3,9 +3,7 @@ package cz.geokuk.plugins.mapy.kachle;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.imageio.ImageIO;
@@ -15,10 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.schema.SqlJetConflictAction;
-import org.tmatesoft.sqljet.core.table.ISqlJetCursor;
-import org.tmatesoft.sqljet.core.table.ISqlJetTable;
-import org.tmatesoft.sqljet.core.table.ISqlJetTransaction;
-import org.tmatesoft.sqljet.core.table.SqlJetDb;
+import org.tmatesoft.sqljet.core.table.*;
 
 /**
  * An implementation of KachleManager that stores the data to SQLite database.
@@ -27,43 +22,38 @@ import org.tmatesoft.sqljet.core.table.SqlJetDb;
  */
 public class KachleDBManager implements KachleManager {
 
-	private static final Logger log = LogManager.getLogger(KachleDBManager.class.getSimpleName());
+	private static final Logger						log					= LogManager.getLogger(KachleDBManager.class.getSimpleName());
 
 	/**
 	 * The name of the SQLite file
 	 */
-	private static final String FILE_NAME = "tiles.sqlite";
+	private static final String						FILE_NAME			= "tiles.sqlite";
 
 	/**
 	 * The name of the table with tiles
 	 */
-	private static final String TABLE_NAME = "tiles";
+	private static final String						TABLE_NAME			= "tiles";
 
 	/**
 	 * A query to create the appropriate table
 	 */
-	private static final String TABLE_CREATE_QUERY = String.format("CREATE TABLE %s (x int, y int, " +
-			"z int, s varchar(10), image blob, PRIMARY KEY(x, y, z, s))", TABLE_NAME);
+	private static final String						TABLE_CREATE_QUERY	= String.format("CREATE TABLE %s (x int, y int, " + "z int, s varchar(10), image blob, PRIMARY KEY(x, y, z, s))", TABLE_NAME);
 
 	/**
-	 * Since we've got multiple threads that can write to the database, using a single connection
-	 * is hardly possible (would require synchronization on code level, which is not the way
-	 * to go). We also want to avoid exposing the implementation details further. Since the
-	 * number of threads is small enough, we don't need a connection pool and instead we've got
-	 * a connection for each thread.
+	 * Since we've got multiple threads that can write to the database, using a single connection is hardly possible (would require synchronization on code level, which is not the way to go). We also want to avoid exposing the implementation details further. Since the number of threads is small
+	 * enough, we don't need a connection pool and instead we've got a connection for each thread.
 	 */
-	final Map<Map.Entry<Thread, File>, SqlJetDb> connections = new ConcurrentHashMap<>();
+	final Map<Map.Entry<Thread, File>, SqlJetDb>	connections			= new ConcurrentHashMap<>();
 
 	/**
 	 * The DB file.
 	 */
-	final KachleCacheFolderHolder folderHolder;
+	final KachleCacheFolderHolder					folderHolder;
 
 	/**
-	 * Get a connection to the database for the current thread. Also closes all invalid connections for the current
-	 * thread.
-	 * @return
-	 *      The connection or null if the connection couldn't be established.
+	 * Get a connection to the database for the current thread. Also closes all invalid connections for the current thread.
+	 * 
+	 * @return The connection or null if the connection couldn't be established.
 	 *
 	 * @see #connections
 	 */
@@ -108,10 +98,10 @@ public class KachleDBManager implements KachleManager {
 
 	/**
 	 * Checks whether the DB at the current location is initialized and ready for use.
+	 * 
 	 * @param connection
-	 *      A connection to the database.
-	 * @return
-	 *      True if its initialized, false otherwise
+	 *            A connection to the database.
+	 * @return True if its initialized, false otherwise
 	 */
 	private boolean isDbInitialized(final SqlJetDb connection) {
 		try {
@@ -124,8 +114,9 @@ public class KachleDBManager implements KachleManager {
 
 	/**
 	 * Initializes the database (if needed)
+	 * 
 	 * @param connection
-	 *      A connection to the database.
+	 *            A connection to the database.
 	 */
 	private synchronized void initDb(final SqlJetDb connection) {
 		// Another thread might have already done this, so check it once again
@@ -180,13 +171,11 @@ public class KachleDBManager implements KachleManager {
 		try {
 			final ISqlJetTable table = database.getTable(TABLE_NAME);
 			database.beginTransaction(SqlJetTransactionMode.READ_ONLY);
-			cursor = table.lookup(table.getPrimaryKeyIndexName(), ki.getLoc().getFromSzUnsignedX(),
-					ki.getLoc().getFromSzUnsignedY(), ki.getLoc().getMoumer(), ki.typToString());
+			cursor = table.lookup(table.getPrimaryKeyIndexName(), ki.getLoc().getFromSzUnsignedX(), ki.getLoc().getFromSzUnsignedY(), ki.getLoc().getMoumer(), ki.typToString());
 			if (cursor.eof()) {
 				return null;
 			}
-			log.debug("{} : {} {} {} {} loading from DB", cursor.getRowId(), cursor.getInteger("x"),
-					cursor.getInteger("y"), cursor.getInteger("z"), cursor.getString("s"));
+			log.debug("{} : {} {} {} {} loading from DB", cursor.getRowId(), cursor.getInteger("x"), cursor.getInteger("y"), cursor.getInteger("z"), cursor.getString("s"));
 			img = ImageIO.read(cursor.getBlobAsStream("image"));
 			if (img == null) {
 				log.debug("Loaded DB image is null!");
@@ -217,7 +206,6 @@ public class KachleDBManager implements KachleManager {
 	public boolean save(final Collection<ItemToSave> imagesToSave) {
 		final SqlJetDb database = getDatabaseConnection();
 
-
 		// in case something goes wrong, rollback the transaction
 		boolean failed = false;
 
@@ -227,7 +215,6 @@ public class KachleDBManager implements KachleManager {
 			for (final ItemToSave imageToSave : imagesToSave) {
 				final Ka0 ki = imageToSave.key;
 
-
 				dataToSave = imageToSave.imageData;
 
 				// Save to the database
@@ -235,8 +222,7 @@ public class KachleDBManager implements KachleManager {
 				final int kx = kaloc.getFromSzUnsignedX();
 				final int ky = kaloc.getFromSzUnsignedY();
 				log.debug("Adding {} {} {} {}", kx, ky, kaloc.getMoumer(), ki.typToString());
-				database.getTable(TABLE_NAME).insertOr(SqlJetConflictAction.REPLACE, kx, ky,
-						kaloc.getMoumer(), ki.typToString(), dataToSave);
+				database.getTable(TABLE_NAME).insertOr(SqlJetConflictAction.REPLACE, kx, ky, kaloc.getMoumer(), ki.typToString(), dataToSave);
 			}
 		} catch (final SqlJetException e) {
 			log.error("A database error has occurred!", e);

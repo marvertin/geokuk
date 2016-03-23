@@ -2,12 +2,12 @@ package cz.geokuk.framework;
 
 public class Event0<T extends Model0> implements BeanSubtypable {
 
-	protected String subType;
-	private T model;
+	protected String	subType;
+	private T			model;
 	/** Firer, který poslal událost, vhodné pro účelypřeposlání dál nebo vygenerování následné události */
-	private EventFirer eventFirer;
+	private EventFirer	eventFirer;
 
-	private boolean locked;
+	private boolean		locked;
 
 	/**
 	 * @return the model
@@ -17,12 +17,13 @@ public class Event0<T extends Model0> implements BeanSubtypable {
 	}
 
 	/**
-	 * @param model the model to set
+	 * @param model
+	 *            the model to set
 	 */
 	public void setModel(Model0 model) {
 		checkLocked();
 		@SuppressWarnings("unchecked")
-		T m = (T)model;
+		T m = (T) model;
 		this.model = m;
 	}
 
@@ -32,7 +33,8 @@ public class Event0<T extends Model0> implements BeanSubtypable {
 	}
 
 	public void setEventFirer(EventFirer eventFirer) {
-		if (this.eventFirer == eventFirer) return;
+		if (this.eventFirer == eventFirer)
+			return;
 		checkLocked();
 		this.eventFirer = eventFirer;
 	}
@@ -47,7 +49,8 @@ public class Event0<T extends Model0> implements BeanSubtypable {
 	}
 
 	private void checkLocked() {
-		if (locked) throw new RuntimeException("Locked event: " + getClass().getName() + " - " + this);
+		if (locked)
+			throw new RuntimeException("Locked event: " + getClass().getName() + " - " + this);
 	}
 
 }

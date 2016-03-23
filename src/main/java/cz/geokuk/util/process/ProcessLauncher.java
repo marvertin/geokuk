@@ -1,15 +1,12 @@
 package cz.geokuk.util.process;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Třída spouštějící process korektním způsobem.
- * Doporučuji si pročíst odkaz.
+ * Třída spouštějící process korektním způsobem. Doporučuji si pročíst odkaz.
+ * 
  * @author http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html?page=3
  * @author polakm
  * @since 2008-06-04
@@ -17,8 +14,8 @@ import java.util.List;
 public class ProcessLauncher {
 
 	private static class StreamGobbler extends Thread {
-		private final InputStream is;
-		private final List<ResultItem> content;
+		private final InputStream		is;
+		private final List<ResultItem>	content;
 
 		StreamGobbler(InputStream aIs) {
 			is = aIs;
@@ -31,7 +28,7 @@ public class ProcessLauncher {
 				BufferedReader br = new BufferedReader(new InputStreamReader(is));
 				String line = null;
 				while ((line = br.readLine()) != null) {
-					content.add(new ResultItem( System.currentTimeMillis(),line));
+					content.add(new ResultItem(System.currentTimeMillis(), line));
 				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
@@ -45,20 +42,24 @@ public class ProcessLauncher {
 
 	/**
 	 * Dvojice časová známka, řádek textu
+	 * 
 	 * @author polakm
 	 */
 	public static class ResultItem {
 
-		private final long timeStamp;
-		private final String text;
+		private final long		timeStamp;
+		private final String	text;
+
 		ResultItem(long aTs, String aText) {
 
 			timeStamp = aTs;
 			text = aText;
 		}
+
 		public long getTimeStamp() {
 			return timeStamp;
 		}
+
 		public String getText() {
 			return text;
 		}
@@ -66,14 +67,15 @@ public class ProcessLauncher {
 
 	/**
 	 * Výsledek spuštění.
+	 * 
 	 * @author polakm
 	 */
 	public static class Result {
 
-		private final String executedCommand;
-		private final List<ResultItem> error;
-		private final List<ResultItem> output;
-		private final int exitValue;
+		private final String			executedCommand;
+		private final List<ResultItem>	error;
+		private final List<ResultItem>	output;
+		private final int				exitValue;
 
 		Result(String aExecutedCommand, int aExitValue, List<ResultItem> aError, List<ResultItem> aOutput) {
 
@@ -123,10 +125,12 @@ public class ProcessLauncher {
 
 	/**
 	 * Spustí daný program s parametry
+	 * 
 	 * @param aPrgFileName
 	 * @param aParams
 	 * @return
-	 * @exception RuntimeException při libovolné chybě
+	 * @exception RuntimeException
+	 *                při libovolné chybě
 	 */
 	public static Result exec(String aPrgFileName, String... aParams) {
 

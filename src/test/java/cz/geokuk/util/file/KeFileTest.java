@@ -10,9 +10,9 @@ import cz.geokuk.util.file.KeFile.XRelativizeDubleDot;
 
 public class KeFileTest {
 
-	private static long NOW = System.currentTimeMillis();
-	private static  Root.Def PATTERN = new Root.Def(0,  null,  null);
-	private static  Root.Def PATTERN2 =  new Root.Def(1,  null,  null);
+	private static long		NOW			= System.currentTimeMillis();
+	private static Root.Def	PATTERN		= new Root.Def(0, null, null);
+	private static Root.Def	PATTERN2	= new Root.Def(1, null, null);
 
 	private KeFile create(String file, String root) {
 		return create(file, root, NOW, PATTERN);
@@ -56,21 +56,21 @@ public class KeFileTest {
 		Assert.assertNull(k.getParent());
 	}
 
-	@Test(expected=XRelativizeDubleDot.class)
+	@Test(expected = XRelativizeDubleDot.class)
 	public void testGetParent3() {
 		create("/c//jedna//bb", "/c//dva//bb");
 	}
 
-	@Test(expected=XRelativizeDubleDot.class)
+	@Test(expected = XRelativizeDubleDot.class)
 	public void testGetParent4() {
 		create("/c//aa//bb", "/c//aa//bb/cc/dd");
 	}
 
 	// problém s testy na Unixech, nedokážeme zařídit, aby cesty nebyly navzájem ralitivizovtelné
-	//  @Test(expected=IllegalArgumentException.class)
-	//  public void testGetParent5() {
-	//    create("/c//jedna//bb", "d://dva//bb");
-	//  }
+	// @Test(expected=IllegalArgumentException.class)
+	// public void testGetParent5() {
+	// create("/c//jedna//bb", "d://dva//bb");
+	// }
 
 	@Test
 	public void testGetLastModified() {
@@ -84,56 +84,55 @@ public class KeFileTest {
 		Assert.assertEquals(Paths.get("ccc//ddd"), k.getRelativePath());
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNull1() {
 		new KeFile(null, new Root(new File("roo"), PATTERN));
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNull11() {
 		new KeFile(new FileAndTime(null, NOW), new Root(new File("roo"), PATTERN));
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNull111() {
-		new KeFile(new FileAndTime(new File((String)null), NOW), new Root(new File("roo"), PATTERN));
+		new KeFile(new FileAndTime(new File((String) null), NOW), new Root(new File("roo"), PATTERN));
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNull2() {
 		new KeFile(new FileAndTime(new File("aaa"), NOW), null);
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNull21() {
 		new KeFile(new FileAndTime(new File("aaa"), NOW), new Root(null, PATTERN));
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNull211() {
-		new KeFile(new FileAndTime(new File("aaa"), NOW), new Root(new File((String)null), PATTERN));
+		new KeFile(new FileAndTime(new File("aaa"), NOW), new Root(new File((String) null), PATTERN));
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNull22() {
 		new KeFile(new FileAndTime(new File("aaa"), NOW), new Root(new File("aaa"), null));
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNullRoot1() {
 		new Root(null, PATTERN);
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNullRoot11() {
-		new Root(new File((String)null), PATTERN);
+		new Root(new File((String) null), PATTERN);
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void tesNullRoot2() {
 		new Root(new File("aaa"), null);
 	}
-
 
 	@Test
 	public void testEquals1() {
@@ -178,7 +177,6 @@ public class KeFileTest {
 		Assert.assertFalse(k2.equals(k1));
 	}
 
-
 	@Test
 	public void testNotEquals3() {
 		KeFile k1 = create("/c//aa//bb//ccXc/ddd1", "/c//aa//bb");
@@ -186,6 +184,5 @@ public class KeFileTest {
 		Assert.assertFalse(k1.equals(k2));
 		Assert.assertFalse(k2.equals(k1));
 	}
-
 
 }

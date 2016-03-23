@@ -36,22 +36,12 @@ package cz.geokuk.plugins.geocoding;
  * content.txt
  */
 
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractAction;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
 import cz.geokuk.core.coord.PoziceModel;
 import cz.geokuk.core.coord.VyrezModel;
@@ -61,34 +51,31 @@ import cz.geokuk.core.hledani.VysledekHledani;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 
-public class JAdrDialog extends JMyDialog0
-implements RefreshorVysledkuHledani<Nalezenec>
-,DocumentListener {
+public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<Nalezenec>, DocumentListener {
 
-	private static final long serialVersionUID = 7087453419069194768L;
+	private static final long	serialVersionUID	= 7087453419069194768L;
 
-	private JTextField entry;
-	private JLabel jLabel1;
-	private JButton jButtonCentruj;
-	private JAdrTable jAdrTabulka;
-	private JLabel status;
+	private JTextField			entry;
+	private JLabel				jLabel1;
+	private JButton				jButtonCentruj;
+	private JAdrTable			jAdrTabulka;
+	private JLabel				status;
 
-	final static Color  HILIT_COLOR = Color.LIGHT_GRAY;
-	final static Color  ERROR_COLOR = Color.PINK;
-	final static String CANCEL_ACTION = "cancel-adr-hled";
+	final static Color			HILIT_COLOR			= Color.LIGHT_GRAY;
+	final static Color			ERROR_COLOR			= Color.PINK;
+	final static String			CANCEL_ACTION		= "cancel-adr-hled";
 
-	final Color entryBg;
-	//  final Highlighter hilit;
-	//  final Highlighter.HighlightPainter painter;
+	final Color					entryBg;
+	// final Highlighter hilit;
+	// final Highlighter.HighlightPainter painter;
 
-	private Wgs referencniBod;
+	private Wgs					referencniBod;
 
-	private PoziceModel poziceModel;
+	private PoziceModel			poziceModel;
 
-	private VyrezModel vyrezModel;
+	private VyrezModel			vyrezModel;
 
-	private GeocodingModel geocodingModel;
-
+	private GeocodingModel		geocodingModel;
 
 	public JAdrDialog() {
 		init();
@@ -107,14 +94,14 @@ implements RefreshorVysledkuHledani<Nalezenec>
 				if (nalezenec != null) {
 					poziceModel.setPozice(nalezenec.wgs);
 					vyrezModel.vystredovatNaPozici();
-					//Board.eveman.fire(new PoziceChangedEvent(nalezenec.wgs, true) );
+					// Board.eveman.fire(new PoziceChangedEvent(nalezenec.wgs, true) );
 				}
 			}
 		});
 
-		//    Board.eveman.registerWeakly(this);
+		// Board.eveman.registerWeakly(this);
 
-		//jKeskovaciTabulka.getMod
+		// jKeskovaciTabulka.getMod
 		jAdrTabulka.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -134,13 +121,15 @@ implements RefreshorVysledkuHledani<Nalezenec>
 
 	private boolean naVstupuJsouSouradkyNeboNic() {
 		String text = entry.getText();
-		if (text.trim().length() == 0) return true;
-		if (text.matches("-?\\d+(\\.\\d+),-?\\d+(\\.\\d+)")) return true;
+		if (text.trim().length() == 0)
+			return true;
+		if (text.matches("-?\\d+(\\.\\d+),-?\\d+(\\.\\d+)"))
+			return true;
 		return false;
 	}
 
-	/** This method is called from within the constructor to
-	 * initialize the form.
+	/**
+	 * This method is called from within the constructor to initialize the form.
 	 */
 
 	@Override
@@ -155,7 +144,7 @@ implements RefreshorVysledkuHledani<Nalezenec>
 		setTitle("Najdi místo dle adresy");
 
 		JAdrTable kesTable = new JAdrTable();
-		//    jKeskovaciTabulka = new JScrollPane(textArea);
+		// jKeskovaciTabulka = new JScrollPane(textArea);
 		jAdrTabulka = kesTable;
 
 		jLabel1.setText("Hledat: ");
@@ -167,45 +156,33 @@ implements RefreshorVysledkuHledani<Nalezenec>
 
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)       //hroup
-				.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()  //h1
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)                  //h2
-								.addComponent(jAdrTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-								.addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-								.addGroup(layout.createSequentialGroup()        // h3
-										.addComponent(jLabel1)
-										.addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-										.addComponent(jButtonCentruj)
-										)
-								)
-						)
-				);
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // hroup
+				.addGroup(GroupLayout.Alignment.TRAILING,
+						layout.createSequentialGroup() // h1
+								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // h2
+										.addComponent(jAdrTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+										.addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE).addGroup(layout.createSequentialGroup() // h3
+												.addComponent(jLabel1).addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE).addComponent(jButtonCentruj)))));
 
-
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)  // vGrou
-				.addGroup(layout.createSequentialGroup()                                       //v1
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)        //v2
-								.addComponent(jLabel1)
-								.addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButtonCentruj)
-								)
-						.addComponent(status)
-						.addComponent(jAdrTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-						)
-				);
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // vGrou
+				.addGroup(layout.createSequentialGroup() // v1
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE) // v2
+								.addComponent(jLabel1).addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jButtonCentruj))
+						.addComponent(status).addComponent(jAdrTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)));
 
 		pack();
 	}
 
-
 	protected void setReferencniBod(Wgs wgs) {
-		if (wgs.equals(referencniBod)) return;
+		if (wgs.equals(referencniBod))
+			return;
 		referencniBod = wgs;
 		search();
 	}
 
 	public void search() {
-		if (referencniBod == null) return;
+		if (referencniBod == null)
+			return;
 		message("Hleda se ...");
 		String s = entry.getText();
 		geocodingModel.spustHledani(s, this);
@@ -231,28 +208,27 @@ implements RefreshorVysledkuHledani<Nalezenec>
 	public void changedUpdate(DocumentEvent ev) {
 	}
 
-	class CancelAction extends AbstractAction  {
+	class CancelAction extends AbstractAction {
 		private static final long serialVersionUID = -480129891208539096L;
 
 		@Override
 		public void actionPerformed(ActionEvent ev) {
-			//      hilit.removeAllHighlights();
+			// hilit.removeAllHighlights();
 			entry.setText("");
 			entry.setBackground(entryBg);
 		}
 	}
 
-
 	@Override
 	public void refreshVysledekHledani(VysledekHledani<Nalezenec> vysledekHledani) {
-		//    if (nalezenci.size() == 0) {
-		//      jButtonCentruj.setEnabled(false);
-		//    } else {
-		//      jButtonCentruj.setEnabled(true);
-		//    }
+		// if (nalezenci.size() == 0) {
+		// jButtonCentruj.setEnabled(false);
+		// } else {
+		// jButtonCentruj.setEnabled(true);
+		// }
 		if (vysledekHledani.nalezenci != null) {
 			jAdrTabulka.setNalezenci(vysledekHledani.nalezenci);
-			if (vysledekHledani.nalezenci.size() > 0) {   // match found
+			if (vysledekHledani.nalezenci.size() > 0) { // match found
 				entry.setBackground(entryBg);
 				message("Nalezeno " + vysledekHledani.nalezenci.size() + " možných adres.");
 			} else {
@@ -279,4 +255,3 @@ implements RefreshorVysledkuHledani<Nalezenec>
 		this.geocodingModel = geocodingModel;
 	}
 }
-

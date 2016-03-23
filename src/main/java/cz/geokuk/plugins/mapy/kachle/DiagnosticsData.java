@@ -1,17 +1,16 @@
 package cz.geokuk.plugins.mapy.kachle;
 
 /**
- * Sbírá postupně diagnostická data, je možné přibalovat.
- * Ni nevyhodnocuje, tkže je rychlé, vyhonocuje až toString při vypisování.
+ * Sbírá postupně diagnostická data, je možné přibalovat. Ni nevyhodnocuje, tkže je rychlé, vyhonocuje až toString při vypisování.
+ * 
  * @author tatinek
  *
  */
 public class DiagnosticsData {
-	private final DiagnosticsData parent;
-	private final String nazev;
-	private final Object dato;
-	private final Listener listener;
-
+	private final DiagnosticsData	parent;
+	private final String			nazev;
+	private final Object			dato;
+	private final Listener			listener;
 
 	private DiagnosticsData(final DiagnosticsData parent, final String nazev, final Object dato, final Listener listener) {
 		this.parent = parent;
@@ -20,21 +19,20 @@ public class DiagnosticsData {
 		this.listener = listener;
 	}
 
-
 	public static DiagnosticsData create(final String nazev, final Object dato, final Listener listener) {
-		return new DiagnosticsData(null,  nazev, dato, listener);
+		return new DiagnosticsData(null, nazev, dato, listener);
 	}
 
 	/**
 	 * Přidá další položku do diagnostickýc dat.
+	 * 
 	 * @param nazev
 	 * @param dato
 	 * @return
 	 */
 	public DiagnosticsData with(final String nazev, final Object dato) {
-		return new DiagnosticsData(this,  nazev, dato, listener);
+		return new DiagnosticsData(this, nazev, dato, listener);
 	}
-
 
 	private void addToString(final StringBuilder sb) {
 		if (parent != null) {
@@ -58,21 +56,17 @@ public class DiagnosticsData {
 		return sb.toString();
 	}
 
-
 	public DiagnosticsData getParent() {
 		return parent;
 	}
-
 
 	public String getNazev() {
 		return nazev;
 	}
 
-
 	public Object getDato() {
 		return dato;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -82,7 +76,6 @@ public class DiagnosticsData {
 		result = prime * result + (nazev == null ? 0 : nazev.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(final Object obj) {
@@ -113,8 +106,11 @@ public class DiagnosticsData {
 		return true;
 	}
 
-	/** Pošle diagnostiku do listenera
-	 * @param faze */
+	/**
+	 * Pošle diagnostiku do listenera
+	 * 
+	 * @param faze
+	 */
 	public void send(final String faze) {
 		if (listener != null) {
 			listener.send(this, faze);

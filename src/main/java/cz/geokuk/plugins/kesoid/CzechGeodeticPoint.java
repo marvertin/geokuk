@@ -9,8 +9,8 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 
 public class CzechGeodeticPoint extends Kesoid {
 
-	private double xjtsk;
-	private double yjtsk;
+	private double	xjtsk;
+	private double	yjtsk;
 
 	@Override
 	public void buildGenotyp(Genom genom, Genotyp g) {
@@ -23,7 +23,9 @@ public class CzechGeodeticPoint extends Kesoid {
 		return EKesoidKind.CGP;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.kes.Kesoid#prispejDoTooltipu(java.lang.StringBuilder)
 	 */
 	@Override
@@ -32,7 +34,7 @@ public class CzechGeodeticPoint extends Kesoid {
 		sb.append(wpt.getName());
 		sb.append("</b>  - ");
 		sb.append(wpt.getNazev());
-		if (! wpt.getNazev().contains(wpt.getSym())) {
+		if (!wpt.getNazev().contains(wpt.getSym())) {
 			sb.append("<small>");
 			sb.append(" - ");
 			sb.append(wpt.getSym());

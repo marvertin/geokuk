@@ -2,12 +2,11 @@ package cz.geokuk.framework;
 
 import java.lang.reflect.Method;
 
-public class BeanType  {
+public class BeanType {
 
-	private final Class<?> cls;
-	private final String subType;
-	private final boolean multinInjectionSupported;
-
+	private final Class<?>	cls;
+	private final String	subType;
+	private final boolean	multinInjectionSupported;
 
 	private BeanType(Class<?> cls, String subType, boolean multiInjection) {
 		this.cls = cls;
@@ -17,8 +16,11 @@ public class BeanType  {
 
 	/**
 	 * Vytvoří bean type pro cílovou metodu
-	 * @param targetBean Bean, na kterém má být voláno.
-	 * @param method Metoda, která má být volána.
+	 * 
+	 * @param targetBean
+	 *            Bean, na kterém má být voláno.
+	 * @param method
+	 *            Metoda, která má být volána.
 	 */
 	public static BeanType createForTargetMethod(Object targetBean, Method method) {
 		Class<?>[] parameterTypes = method.getParameterTypes();
@@ -62,6 +64,7 @@ public class BeanType  {
 		BeanType result = new BeanType(cls, null, multinInjectionSupported);
 		return result;
 	}
+
 	/**
 	 * @return
 	 */
@@ -70,14 +73,16 @@ public class BeanType  {
 	}
 
 	public boolean canInjectFrom(BeanType injectedBeanType) {
-		if (!cls.isAssignableFrom(injectedBeanType.cls)) return false; // při nekompatibilních třídách vůbec neuvažujma injektování
+		if (!cls.isAssignableFrom(injectedBeanType.cls))
+			return false; // při nekompatibilních třídách vůbec neuvažujma injektování
 		// teď už víme, že třídy jsou kompatibilní a že by to šlo rozhodnou subtypy
-		if (subType == null) return true; // bez subtypů jse cíl, takže mu nezáleží na to, co do něj přijde, čili injektujeme
+		if (subType == null)
+			return true; // bez subtypů jse cíl, takže mu nezáleží na to, co do něj přijde, čili injektujeme
 		// teď už víme, že cíl definuje subtyp
-		if (subType.equals(injectedBeanType.subType)) return true; // tak ten musí mít zdroj úplně stejný
+		if (subType.equals(injectedBeanType.subType))
+			return true; // tak ten musí mít zdroj úplně stejný
 		return false; // tak to ono není nic pro injektování
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -114,6 +119,5 @@ public class BeanType  {
 	public String toString() {
 		return "BeanType [cls=" + cls + ", subType=" + subType + "]";
 	}
-
 
 }

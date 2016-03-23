@@ -8,17 +8,15 @@ import cz.geokuk.core.coordinates.Uchopenec;
 import cz.geokuk.framework.Event0;
 
 /**
- * Event bude poslán vždy, když se má měnit pozice, aby se zjistilo, zda
- * přesně na těchto souřadnicích nesídlí nějaké objekty.
- * Jaké objekty tam sídlí řeknou jednotlivé modely.
+ * Event bude poslán vždy, když se má měnit pozice, aby se zjistilo, zda přesně na těchto souřadnicích nesídlí nějaké objekty. Jaké objekty tam sídlí řeknou jednotlivé modely.
  *
  */
 public class PoziceSeMaMenitEvent extends Event0<PoziceModel> {
 
-	public final Mou mou;
-	//private final List<Uchopenec> uchopenci = new ArrayList<Uchopenec>();
-	private Uchopenec uchopenec;
-	private int priorita;
+	public final Mou	mou;
+	// private final List<Uchopenec> uchopenci = new ArrayList<Uchopenec>();
+	private Uchopenec	uchopenec;
+	private int			priorita;
 
 	/**
 	 * @param aPozice

@@ -7,7 +7,6 @@ import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.img.ImageLoader;
 
-
 public class RenderAction extends DialogOpeningAction0 {
 
 	private static final long serialVersionUID = -5465641756515262340L;
@@ -15,16 +14,19 @@ public class RenderAction extends DialogOpeningAction0 {
 	public RenderAction() {
 		super("Tisknout/Rendrovat...");
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl P"));
-		putValue(SHORT_DESCRIPTION, "Zobrazí dialog s možností vyrendrovat mapový podklad libovolné velikosti i s kešemi a mřížkami s možností kalibrací pro GoogleEarth, OziExplorer a jiné programy.");
+		putValue(SHORT_DESCRIPTION,
+				"Zobrazí dialog s možností vyrendrovat mapový podklad libovolné velikosti i s kešemi a mřížkami s možností kalibrací pro GoogleEarth, OziExplorer a jiné programy.");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/printer.jpg"));
 
 	}
 
 	public void onEvent(final OnofflineModelChangeEvent event) {
-		//    setEnabled(event.getModel().isOnlineMode());
+		// setEnabled(event.getModel().isOnlineMode());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.DialogOpeningAction0#createDialog()
 	 */
 	@Override

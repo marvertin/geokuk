@@ -8,10 +8,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import cz.geokuk.core.coord.PoziceModel;
 import cz.geokuk.core.coord.VyrezModel;
@@ -22,13 +19,13 @@ import cz.geokuk.core.program.MainFrameHolder;
  *
  */
 public abstract class Action0 extends AbstractAction {
-	private static final long serialVersionUID = -8430830975286039793L;
+	private static final long	serialVersionUID	= -8430830975286039793L;
 
-	protected Factory factory;
-	protected PoziceModel poziceModel;
-	protected VyrezModel vyrezModel;
+	protected Factory			factory;
+	protected PoziceModel		poziceModel;
+	protected VyrezModel		vyrezModel;
 
-	private MainFrameHolder mainFrameHolder;
+	private MainFrameHolder		mainFrameHolder;
 
 	/**
 	 * @param string
@@ -59,19 +56,16 @@ public abstract class Action0 extends AbstractAction {
 	 * Spustí akci
 	 */
 	public void fire() {
-		if (!isEnabled()) return; // žádná akce, pokud je zakázána
+		if (!isEnabled())
+			return; // žádná akce, pokud je zakázána
 		int modifiers = 0;
 		AWTEvent currentEvent = EventQueue.getCurrentEvent();
 		if (currentEvent instanceof InputEvent) {
-			modifiers = ((InputEvent)currentEvent).getModifiers();
+			modifiers = ((InputEvent) currentEvent).getModifiers();
 		} else if (currentEvent instanceof ActionEvent) {
-			modifiers = ((ActionEvent)currentEvent).getModifiers();
+			modifiers = ((ActionEvent) currentEvent).getModifiers();
 		}
-		actionPerformed(
-				new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
-						getActionCommand(),
-						EventQueue.getMostRecentEventTime(),
-						modifiers));
+		actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand(), EventQueue.getMostRecentEventTime(), modifiers));
 	}
 
 	/**
@@ -95,6 +89,7 @@ public abstract class Action0 extends AbstractAction {
 
 	/**
 	 * Výhradně za účelem definování parenta dialogům.
+	 * 
 	 * @return
 	 */
 	protected JFrame getMainFrame() {
@@ -104,6 +99,5 @@ public abstract class Action0 extends AbstractAction {
 	public void inject(MainFrameHolder mainFrameHolder) {
 		this.mainFrameHolder = mainFrameHolder;
 	}
-
 
 }

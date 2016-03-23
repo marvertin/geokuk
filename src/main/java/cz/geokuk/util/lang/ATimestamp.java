@@ -1,29 +1,24 @@
 package cz.geokuk.util.lang;
 
 import java.text.MessageFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
-
-/** Časová známka
+/**
+ * Časová známka
  *
  * @author Veverka Martin
  * @version 0.00.00
  */
 public final class ATimestamp extends Object0 implements IElement, IElementLong, Comparable<ATimestamp>, Ordinable<ATimestamp> {
 
-	private static final long serialVersionUID = -4333541321205520147L;
+	private static final long	serialVersionUID	= -4333541321205520147L;
 
-	private java.util.Date iJavaDate;
+	private java.util.Date		iJavaDate;
 
 	/* Patern regulárního výrazu, dosazovaný při prvním použití */
-	private static Pattern sPattern;
+	private static Pattern		sPattern;
 
 	/**
 	 * Počet milisekund v jednom dni
@@ -33,17 +28,14 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	/**
-	 * Koonstruuje datum z double cisla tohoto formátu: před desetinou čárkou:
-	 * počet dnů od 1.1.1900 za desetinnou čárkou: část dne od půlnoci public
-	 * ATimestamp(double cislo){ this((long)(cislo*getMillisecondsPerDay()));
-	 * checkRange(); }
+	 * Koonstruuje datum z double cisla tohoto formátu: před desetinou čárkou: počet dnů od 1.1.1900 za desetinnou čárkou: část dne od půlnoci public ATimestamp(double cislo){ this((long)(cislo*getMillisecondsPerDay())); checkRange(); }
 	 */
 
 	/**
 	 * Konstruuje z počtu milisekund po 1.1.1970
 	 */
 	private ATimestamp(long cislo) {
-		//super(cislo - getBulgarian1970Constant());
+		// super(cislo - getBulgarian1970Constant());
 		iJavaDate = new Date(cislo);
 	}
 
@@ -59,9 +51,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	/**
 	 * Převod na standardní typ {@link Date}.
 	 *
-	 * Hlavním smyslem metody je, abychom se nemuseli trápit, zda hodnota
-	 * {@link #asLong() ATimestamp.asLong()}má stejný význam jako
-	 * {@link Date#getTime() java.util.Date.getTime()}.
+	 * Hlavním smyslem metody je, abychom se nemuseli trápit, zda hodnota {@link #asLong() ATimestamp.asLong()}má stejný význam jako {@link Date#getTime() java.util.Date.getTime()}.
 	 *
 	 * @return {@link Date}se stejným významem jako ATimestamp.
 	 */
@@ -76,9 +66,8 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * Převod {@link ATimestamp}na standardní {@link Date}.
 	 *
 	 * @param ts
-	 *          Časová známka, kterou potřebujeme převést na standardní Java typ.
-	 * @return java.util.Date se stejným významem jako <tt>ts</tt> nebo <b>null
-	 *         </b>, pokud je <tt>ts</tt> <b>null </b>.
+	 *            Časová známka, kterou potřebujeme převést na standardní Java typ.
+	 * @return java.util.Date se stejným významem jako <tt>ts</tt> nebo <b>null </b>, pokud je <tt>ts</tt> <b>null </b>.
 	 */
 	public static Date asJavaDate(ATimestamp ts) {
 		if (ts == null)
@@ -87,12 +76,9 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	/**
-	 * Vrací datum jako double: před desetinou čárkou: počet dnů od 1.1.1900 za
-	 * desetinnou čárkou: část dne od půlnoci
+	 * Vrací datum jako double: před desetinou čárkou: počet dnů od 1.1.1900 za desetinnou čárkou: část dne od půlnoci
 	 *
-	 * @return double Datum public double asDouble() { //Neodmazávat vnější
-	 *         závorky, jinak zaokrouhlení v nevhodném pořadí. return
-	 *         ((double)asLong() / getMillisecondsPerDay()); }
+	 * @return double Datum public double asDouble() { //Neodmazávat vnější závorky, jinak zaokrouhlení v nevhodném pořadí. return ((double)asLong() / getMillisecondsPerDay()); }
 	 */
 
 	/**
@@ -101,7 +87,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * @return long Datum
 	 */
 	public long asLong() {
-		//return this.getTime() + _getBulgarian1970Constant();
+		// return this.getTime() + _getBulgarian1970Constant();
 		return iJavaDate.getTime();
 	}
 
@@ -116,22 +102,20 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * Převádí long na double z báze 1.1.1970 na 1.1.1900
 	 *
 	 * @param int
-	 *          dateTime
+	 *            dateTime
 	 * @return double private static double getDouble (long dateTime) {
 	 *
-	 * return (dateTime + _getBulgarian1970Constant()) / getMillisecondsPerDay();
+	 *         return (dateTime + _getBulgarian1970Constant()) / getMillisecondsPerDay();
 	 *
 	 *
-	 * //if (vdablu == 0) // dodablu(); //return vdablu; }
+	 *         //if (vdablu == 0) // dodablu(); //return vdablu; }
 	 */
 
 	/**
-	 * Nejdříve zkusí získat číslo (inverzní fce k asString()), pak ze
-	 * standardního stringu získat datum a čas, pokud se to nepovede, zkouší náš
-	 * fromFormatedString {@link #fromFormatedString(String)}.
+	 * Nejdříve zkusí získat číslo (inverzní fce k asString()), pak ze standardního stringu získat datum a čas, pokud se to nepovede, zkouší náš fromFormatedString {@link #fromFormatedString(String)}.
 	 *
 	 * @param String
-	 *          datum
+	 *            datum
 	 * @return Date
 	 */
 	private static long fromString(String datum) {
@@ -146,11 +130,8 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	/**
-	 * Vrátí v pro člověka čitelném formátu. Obsahuje úplné informace, které jsou
-	 * k dispozici. Takto vracené hodnoty slouží k zobrazení za účelem logování,
-	 * testování a podobně, v žádné, případě by se přijatá data neměla parsrovat a
-	 * něco z nich odvozovat. Pokud potřebujete konkrétní formát využijte metody
-	 * info.., získejte odpovídající poliožky a využijte formátovače.
+	 * Vrátí v pro člověka čitelném formátu. Obsahuje úplné informace, které jsou k dispozici. Takto vracené hodnoty slouží k zobrazení za účelem logování, testování a podobně, v žádné, případě by se přijatá data neměla parsrovat a něco z nich odvozovat. Pokud potřebujete konkrétní formát využijte
+	 * metody info.., získejte odpovídající poliožky a využijte formátovače.
 	 */
 	public String toString() {
 		return infoUtc().toString();
@@ -164,16 +145,14 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	/**
-	 * Return an ISO 8601 compliant timestamp representation vyjádřenou v zadané
-	 * zóně.
+	 * Return an ISO 8601 compliant timestamp representation vyjádřenou v zadané zóně.
 	 */
 	public String toIsoString(TimeZone aZone) {
 		return info(aZone).toIsoString();
 	}
 
 	/**
-	 * Return an ISO 8601 compliant timestamp representation vyjádřenou v lokální
-	 * zóně
+	 * Return an ISO 8601 compliant timestamp representation vyjádřenou v lokální zóně
 	 */
 	public String toIsoStringLocal() {
 		return info(TimeZone.getDefault()).toIsoString();
@@ -187,7 +166,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	public static ATimestamp now() {
 
 		Date d = new Date();
-		//return new ATimestamp(d.getTime() + getBulgarian1970Constant());
+		// return new ATimestamp(d.getTime() + getBulgarian1970Constant());
 		return new ATimestamp(d.getTime());
 	}
 
@@ -198,7 +177,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 */
 	public ADate getDate(TimeZone aZone) {
 		GregorianCalendar cal = new GregorianCalendar(aZone);
-		cal.setTime(iJavaDate); //nastavím sám sebe do kalenfářč
+		cal.setTime(iJavaDate); // nastavím sám sebe do kalenfářč
 		return ADate.from(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
 	}
 
@@ -217,8 +196,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	/**
 	 * Vrací zónový ofset v miliseknudách.
 	 *
-	 * @deprecated Metoda nemusí vracet, co chceš. Použij některou z metod info a
-	 *             na ní zjisti potřebné informace.
+	 * @deprecated Metoda nemusí vracet, co chceš. Použij některou z metod info a na ní zjisti potřebné informace.
 	 */
 	public long getZoneOffset() {
 		Calendar cal = new GregorianCalendar();
@@ -229,8 +207,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	/**
 	 * Vrací ofset letního času.
 	 *
-	 * @deprecated Metoda nemusí vracet, co chceš. Použij některou z metod info a
-	 *             na ní zjisti potřebné informace.
+	 * @deprecated Metoda nemusí vracet, co chceš. Použij některou z metod info a na ní zjisti potřebné informace.
 	 */
 	public long getDstOffset() {
 		Calendar cal = new GregorianCalendar();
@@ -267,25 +244,23 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		return cal.getTimeInMillis(); // vytvořit hodnotu
 	}
 
-
-	private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefaultTimeZone)
-	{
+	private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefaultTimeZone) {
 		if (sPattern == null)
-			sPattern = Pattern.compile("\\s*(\\d\\d\\d\\d)[-./](\\d\\d?)(?:[-./](\\d\\d?)(?:[ tT]+(\\d\\d?)(?::(\\d\\d)(?::(\\d\\d)(?:\\.(\\d+))?)?)?)?)? *(UTC|Z|(?:GMT)?[+-]\\d\\d?(?::)?\\d\\d|(?:GMT)?[+-]\\d{1,3})?\\s*");
+			sPattern = Pattern.compile(
+					"\\s*(\\d\\d\\d\\d)[-./](\\d\\d?)(?:[-./](\\d\\d?)(?:[ tT]+(\\d\\d?)(?::(\\d\\d)(?::(\\d\\d)(?:\\.(\\d+))?)?)?)?)? *(UTC|Z|(?:GMT)?[+-]\\d\\d?(?::)?\\d\\d|(?:GMT)?[+-]\\d{1,3})?\\s*");
 		Matcher mat = sPattern.matcher(aDatStr);
-		//          System.out.p rint("*** >" + aDatStr + "< ");
-		if (mat.matches())
-		{
+		// System.out.p rint("*** >" + aDatStr + "< ");
+		if (mat.matches()) {
 			/*
-			 * for (int i = 1; i <= mat.groupCount(); i++) {
-			 * System.out.p rint(mat.group(i) + "|"); } System.out.p rintln();
+			 * for (int i = 1; i <= mat.groupCount(); i++) { System.out.p rint(mat.group(i) + "|"); } System.out.p rintln();
 			 */
 
 			TimeZone zona;
 			String zonastr = mat.group(8);
 			if (zonastr != null) { // je naplněna časová zóna
 				char prvni = zonastr.charAt(0);
-				if (prvni == '+' || prvni == '-') zonastr = "GMT" + zonastr;
+				if (prvni == '+' || prvni == '-')
+					zonastr = "GMT" + zonastr;
 				zona = TimeZone.getTimeZone(zonastr);
 			} else {
 				zona = aDefaultTimeZone;
@@ -295,24 +270,17 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 			// zpracovat milisekundy
 			String smilis = mat.group(7); // milisekundy
 			int milis = 0;
-			if (smilis != null)
-			{
+			if (smilis != null) {
 				while (smilis.length() < 3) {
 					smilis += "0"; // nevýkonné, ale nebude se dělat často
 				}
-				if (smilis.length() > 3) smilis = smilis.substring(0,3);
+				if (smilis.length() > 3)
+					smilis = smilis.substring(0, 3);
 				milis = Integer.parseInt(smilis);
 			}
 
-			return fromItems(
-					_rezezNaCislo(mat.group(1),0),
-					_rezezNaCislo(mat.group(2),1),
-					_rezezNaCislo(mat.group(3),1),
-					_rezezNaCislo(mat.group(4),0),
-					_rezezNaCislo(mat.group(5),0),
-					_rezezNaCislo(mat.group(6),0),
-					milis, zona
-					);
+			return fromItems(_rezezNaCislo(mat.group(1), 0), _rezezNaCislo(mat.group(2), 1), _rezezNaCislo(mat.group(3), 1), _rezezNaCislo(mat.group(4), 0), _rezezNaCislo(mat.group(5), 0),
+					_rezezNaCislo(mat.group(6), 0), milis, zona);
 		} else {
 			throw new XCreateElement("Pokus o vytvoreni ATimestamp z '" + aDatStr + "', retezec ma spatnou syntaxi");
 		}
@@ -372,43 +340,16 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		testZona("Z");
 
 		/*
-		 * System.out.p rintln(new ATimestamp("1996-10-27
-		 * 00:00:00").toGmtIsoString()); System.out.p rintln(new
-		 * ATimestamp("1996-10-27 00:30:00").toGmtIsoString());
-		 * System.out.p rintln(new ATimestamp("1996-10-27
-		 * 01:00:00").toGmtIsoString()); System.out.p rintln(new
-		 * ATimestamp("1996-10-27 01:30:00").toGmtIsoString());
-		 * System.out.p rintln(new ATimestamp("1996-10-27
-		 * 02:00:00").toGmtIsoString()); System.out.p rintln(new
-		 * ATimestamp("1996-10-27 02:30:00").toGmtIsoString());
-		 * System.out.p rintln(new ATimestamp("1996-10-27
-		 * 03:00:00").toGmtIsoString()); System.out.p rintln(new
-		 * ATimestamp("1996-10-27 03:30:00").toGmtIsoString());
-		 * System.out.p rintln(new ATimestamp("1996-10-27
-		 * 04:00:00").toGmtIsoString()); System.out.p rintln(new
-		 * ATimestamp("1996-02-14 16:16:16").toGmtIsoString());
-		 * System.out.p rintln(new ATimestamp("1966-08-14
-		 * 16:16:16").toGmtIsoString()); System.out.p rintln(new
-		 * ATimestamp("1966-02-14 16:16:16").toGmtIsoString());
-		 * System.out.p rintln("------------------------------------------------------");
-		 * ATimestamp ts = now(); // aktualni čas System.out.p rintln("Vypis
-		 * verejnymi metodami"); System.out.p rintln(" asLong: " + ts.asLong());
-		 * System.out.p rintln(" asString: " + ts.asString()); System.out.p rintln("
-		 * toString: " + ts.toString()); System.out.p rintln("Vypis interni hodnoty
-		 * typu java.util.Date"); System.out.p rintln(" by DateFormat: " +
-		 * DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG,Locale.getDefault()).format(ts.iJavaDate));
-		 * System.out.p rintln(" toString: " + ts.iJavaDate.toString());
-		 * System.out.p rintln(" DefaulTimeZone: " +
-		 * TimeZone.getDefault().toString()); //System.out.p rintln(" toGMTString: " +
-		 * ts.iJavaDate.toGMTString()); //System.out.p rintln(" toLocaleString: " +
-		 * ts.iJavaDate.toLocaleString());
+		 * System.out.p rintln(new ATimestamp("1996-10-27 00:00:00").toGmtIsoString()); System.out.p rintln(new ATimestamp("1996-10-27 00:30:00").toGmtIsoString()); System.out.p rintln(new ATimestamp("1996-10-27 01:00:00").toGmtIsoString()); System.out.p rintln(new ATimestamp("1996-10-27 01:30:00"
+		 * ).toGmtIsoString()); System.out.p rintln(new ATimestamp("1996-10-27 02:00:00").toGmtIsoString()); System.out.p rintln(new ATimestamp("1996-10-27 02:30:00").toGmtIsoString()); System.out.p rintln(new ATimestamp("1996-10-27 03:00:00").toGmtIsoString()); System.out.p rintln(new ATimestamp(
+		 * "1996-10-27 03:30:00").toGmtIsoString()); System.out.p rintln(new ATimestamp("1996-10-27 04:00:00").toGmtIsoString()); System.out.p rintln(new ATimestamp("1996-02-14 16:16:16").toGmtIsoString()); System.out.p rintln(new ATimestamp("1966-08-14 16:16:16").toGmtIsoString()); System.out.p
+		 * rintln(new ATimestamp("1966-02-14 16:16:16").toGmtIsoString()); System.out.p rintln("------------------------------------------------------"); ATimestamp ts = now(); // aktualni čas System.out.p rintln("Vypis verejnymi metodami"); System.out.p rintln(" asLong: " + ts.asLong());
+		 * System.out.p rintln(" asString: " + ts.asString()); System.out.p rintln(" toString: " + ts.toString()); System.out.p rintln("Vypis interni hodnoty typu java.util.Date"); System.out.p rintln(" by DateFormat: " +
+		 * DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG,Locale.getDefault()).format(ts.iJavaDate)); System.out.p rintln(" toString: " + ts.iJavaDate.toString()); System.out.p rintln(" DefaulTimeZone: " + TimeZone.getDefault().toString()); //System.out.p rintln(" toGMTString: " +
+		 * ts.iJavaDate.toGMTString()); //System.out.p rintln(" toLocaleString: " + ts.iJavaDate.toLocaleString());
 		 *
-		 * System.out.p rintln("------------------------------------------------------");
-		 * long l = 846356400000L; for (int i = 0; i <15; i++) { l+= 1812345;
-		 * ATimestamp t = new ATimestamp(l); System.out.p rintln(t.asString() + " - " +
-		 * t.toString() + " ||| " + " - " + t.infoDefault() + " - " + t.infoUtc() + " - " +
-		 * t.info(TimeZone.getTimeZone("GMT+5")) + " - " +
-		 * t.info(TimeZone.getTimeZone("GMT-7")) ); }
+		 * System.out.p rintln("------------------------------------------------------"); long l = 846356400000L; for (int i = 0; i <15; i++) { l+= 1812345; ATimestamp t = new ATimestamp(l); System.out.p rintln(t.asString() + " - " + t.toString() + " ||| " + " - " + t.infoDefault() + " - " +
+		 * t.infoUtc() + " - " + t.info(TimeZone.getTimeZone("GMT+5")) + " - " + t.info(TimeZone.getTimeZone("GMT-7")) ); }
 		 */
 
 	}
@@ -417,7 +358,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * Zjistí, zda je ostře menší než b.
 	 *
 	 * @param Object
-	 *          b
+	 *            b
 	 * @return boolean Výsledek
 	 */
 	public boolean isLess(Object b) {
@@ -454,7 +395,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * Zjistí, zda je rovno datumu.
 	 *
 	 * @param Object
-	 *          aDatum
+	 *            aDatum
 	 * @return boolean Výsledek
 	 */
 	public boolean equals(Object aObject) {
@@ -481,19 +422,12 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	/**
-	 * Dekóduje časový parametr zadaný jako řetězec. Musí obsahovat i časovou
-	 * zónu, jinak bude vyhozena výjimka. Pokud máš datumy bez časové zóny, použij
-	 * další parametr.
+	 * Dekóduje časový parametr zadaný jako řetězec. Musí obsahovat i časovou zónu, jinak bude vyhozena výjimka. Pokud máš datumy bez časové zóny, použij další parametr.
 	 *
 	 * @param s
-	 *          Řetězec obsahující datum a čas. Nebo zde může být v řetězci číslo
-	 *          vyhozené metodou asString. Řetězec musí vyhovovat regulárnímu
-	 *          výrazu: \s*\d\d\d\d[-./]\d\d?([-./]\d\d?(
-	 *          +\d\d?(:\d\d(:\d\d(\.\d+)?)?)?)?)?
-	 *          *(UTC|GMT[+-]\d\d?:\d\d|GMT[+-]\d{1,3})\s|\d+*
+	 *            Řetězec obsahující datum a čas. Nebo zde může být v řetězci číslo vyhozené metodou asString. Řetězec musí vyhovovat regulárnímu výrazu: \s*\d\d\d\d[-./]\d\d?([-./]\d\d?( +\d\d?(:\d\d(:\d\d(\.\d+)?)?)?)?)? *(UTC|GMT[+-]\d\d?:\d\d|GMT[+-]\d{1,3})\s|\d+*
 	 * @param aTimeZone
-	 *          Zóna, která se použije v případě, že v etězci není zóna explicitně
-	 *          uvedena. Pokud uvedena je, tak se tento údaj ignoruje.
+	 *            Zóna, která se použije v případě, že v etězci není zóna explicitně uvedena. Pokud uvedena je, tak se tento údaj ignoruje.
 	 * @return Vytvořený ATimestamp.
 	 */
 	public static ATimestamp from(String s) {
@@ -501,17 +435,12 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	/**
-	 * Vytvoří ATimestamp analýzou řetězce. Pokud v řetězci není zadána časová
-	 * zóna, předpokládá se, že čas je uveden v zadané časové zóně.
+	 * Vytvoří ATimestamp analýzou řetězce. Pokud v řetězci není zadána časová zóna, předpokládá se, že čas je uveden v zadané časové zóně.
 	 *
 	 * @param s
-	 *          Řetězec obsahující datum a čas. Řetězec musí vyhovovat regulárnímu
-	 *          výrazu: \s*\d\d\d\d[-./]\d\d?([-./]\d\d?(
-	 *          +\d\d?(:\d\d(:\d\d(\.\d+)?)?)?)?)?
-	 *          *(UTC|GMT[+-]\d\d?:\d\d|GMT[+-]\d{1,3})?\s*
+	 *            Řetězec obsahující datum a čas. Řetězec musí vyhovovat regulárnímu výrazu: \s*\d\d\d\d[-./]\d\d?([-./]\d\d?( +\d\d?(:\d\d(:\d\d(\.\d+)?)?)?)?)? *(UTC|GMT[+-]\d\d?:\d\d|GMT[+-]\d{1,3})?\s*
 	 * @param aTimeZone
-	 *          Zóna, která se použije v případě, že v etězci není zóna explicitně
-	 *          uvedena. Pokud uvedena je, tak se tento údaj ignoruje.
+	 *            Zóna, která se použije v případě, že v etězci není zóna explicitně uvedena. Pokud uvedena je, tak se tento údaj ignoruje.
 	 * @return Vytvořený ATimestamp.
 	 */
 	public static ATimestamp from(String s, TimeZone aTimeZone) {
@@ -519,14 +448,10 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	/**
-	 * Vytvoří ATimestamp analýzou řetězce. Pokud v řetězci není zadána časová
-	 * zóna, předpokládá se, že čas je v UTC.
+	 * Vytvoří ATimestamp analýzou řetězce. Pokud v řetězci není zadána časová zóna, předpokládá se, že čas je v UTC.
 	 *
 	 * @param s
-	 *          Řetězec obsahující datum a čas. Řetězec musí vyhovovat regulárnímu
-	 *          výrazu: \s*\d\d\d\d[-./]\d\d?([-./]\d\d?(
-	 *          +\d\d?(:\d\d(:\d\d(\.\d+)?)?)?)?)?
-	 *          *(UTC|GMT[+-]\d\d?:\d\d|GMT[+-]\d{1,3})?\s*
+	 *            Řetězec obsahující datum a čas. Řetězec musí vyhovovat regulárnímu výrazu: \s*\d\d\d\d[-./]\d\d?([-./]\d\d?( +\d\d?(:\d\d(:\d\d(\.\d+)?)?)?)?)? *(UTC|GMT[+-]\d\d?:\d\d|GMT[+-]\d{1,3})?\s*
 	 * @return Vytvořený ATimestamp.
 	 */
 	public static ATimestamp fromUtc(String s) {
@@ -537,21 +462,21 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * Vytvoří ATimestamp ze zadaných údajů, které odpovídají zadané časové zóně.
 	 *
 	 * @param aRok
-	 *          Rok čtyřmístný.
+	 *            Rok čtyřmístný.
 	 * @param aMesic
-	 *          Měsíc 1..12
+	 *            Měsíc 1..12
 	 * @param aDen
-	 *          1..31
+	 *            1..31
 	 * @param aHodina
-	 *          0..23
+	 *            0..23
 	 * @param aMinuta
-	 *          0..59
+	 *            0..59
 	 * @param aSekunda
-	 *          0..59
+	 *            0..59
 	 * @param aMilisekund
-	 *          0..999
+	 *            0..999
 	 * @param aTimeZone
-	 *          Časová zóna.
+	 *            Časová zóna.
 	 * @return
 	 */
 	public static ATimestamp from(int aRok, int aMesic, int aDen, int aHodina, int aMinuta, int aSekunda, int aMilisekund, TimeZone aTimeZone) {
@@ -566,21 +491,21 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * Vytvoří ATimestamp ze zadaných údajů, které odpovídají zadané časové zóně.
 	 *
 	 * @param aRok
-	 *          Rok čtyřmístný.
+	 *            Rok čtyřmístný.
 	 * @param aMesic
-	 *          Měsíc 1..12
+	 *            Měsíc 1..12
 	 * @param aDen
-	 *          1..31
+	 *            1..31
 	 * @param aHodina
-	 *          0..23
+	 *            0..23
 	 * @param aMinuta
-	 *          0..59
+	 *            0..59
 	 * @param aSekunda
-	 *          0..59
+	 *            0..59
 	 * @param aMilisekund
-	 *          0..999
+	 *            0..999
 	 * @param aTimeZone
-	 *          Časová zóna.
+	 *            Časová zóna.
 	 * @return
 	 */
 	public static ATimestamp fromUtc(int aRok, int aMesic, int aDen, int aHodina, int aMinuta, int aSekunda, int aMilisekund) {
@@ -588,11 +513,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	/**
-	 * @deprecated Newní důvod pro existenci takové metody. Použij stejnojmennou
-	 *             metodu přijímající long a ze svého timestampu, který máš si
-	 *             vytáhni long, aspon budeš vědět, co děláš. Ujisiti, se, že
-	 *             předávaný argument je opravdu správný a ne posunutý
-	 *             nepochopením významu timestampu.
+	 * @deprecated Newní důvod pro existenci takové metody. Použij stejnojmennou metodu přijímající long a ze svého timestampu, který máš si vytáhni long, aspon budeš vědět, co děláš. Ujisiti, se, že předávaný argument je opravdu správný a ne posunutý nepochopením významu timestampu.
 	 */
 	public static ATimestamp from(java.sql.Timestamp ts) {
 		return ts == null ? null : new ATimestamp(ts.getTime());
@@ -612,11 +533,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	/**
-	 * @deprecated Newní důvod pro existenci takové metody. Použij stejnojmennou
-	 *             metodu přijímající long a ze svého timestampu, který máš si
-	 *             vytáhni long, aspon budeš vědět, co děláš. Ujisiti, se, že
-	 *             předávaný argument je opravdu správný a ne posunutý
-	 *             nepochopením významu timestampu.
+	 * @deprecated Newní důvod pro existenci takové metody. Použij stejnojmennou metodu přijímající long a ze svého timestampu, který máš si vytáhni long, aspon budeš vědět, co děláš. Ujisiti, se, že předávaný argument je opravdu správný a ne posunutý nepochopením významu timestampu.
 	 */
 	public static boolean canFrom(java.sql.Timestamp ts) {
 		return true;
@@ -644,8 +561,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 
 		/**
-		 * Vrací číslo roku odpovídající časové rzóně, pro kterou bylo Info
-		 * vytvořeno
+		 * Vrací číslo roku odpovídající časové rzóně, pro kterou bylo Info vytvořeno
 		 *
 		 * @return čtyřmístné číslo roku
 		 */
@@ -654,8 +570,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 
 		/**
-		 * Vrací číslo měsíce odpovídající časové zóně, pro kterou bylo Info
-		 * vytvořeno
+		 * Vrací číslo měsíce odpovídající časové zóně, pro kterou bylo Info vytvořeno
 		 *
 		 * @return 1 až 12
 		 */
@@ -673,8 +588,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 
 		/**
-		 * Vrací počet hodin odpovídající časové zóně, pro kterou bylo Info
-		 * vytvořeno
+		 * Vrací počet hodin odpovídající časové zóně, pro kterou bylo Info vytvořeno
 		 *
 		 * @return 0 až 23
 		 */
@@ -683,8 +597,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 
 		/**
-		 * Vrací počet minut odpovídající časové zóně, pro kterou bylo Info
-		 * vytvořeno
+		 * Vrací počet minut odpovídající časové zóně, pro kterou bylo Info vytvořeno
 		 *
 		 * @return 0 až 59
 		 */
@@ -693,8 +606,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 
 		/**
-		 * Vrací počet sekund odpovídající časové zóně, pro kterou bylo Info
-		 * vytvořeno
+		 * Vrací počet sekund odpovídající časové zóně, pro kterou bylo Info vytvořeno
 		 *
 		 * @return 0 až 59
 		 */
@@ -703,8 +615,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 
 		/**
-		 * Vrací počet milisekund odpovídající časové zóně, pro kterou bylo Info
-		 * vytvořeno.
+		 * Vrací počet milisekund odpovídající časové zóně, pro kterou bylo Info vytvořeno.
 		 *
 		 * @return 0 ažž 999
 		 */
@@ -745,8 +656,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 
 		/**
-		 * Vrací offset v milisekundách oproti UTC. Výsledek je součtem zónového a
-		 * DST offsetu.
+		 * Vrací offset v milisekundách oproti UTC. Výsledek je součtem zónového a DST offsetu.
 		 *
 		 * @return
 		 */
@@ -755,19 +665,13 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 
 		/**
-		 * Vrátí v pro člověka čitelném formátu. Obsahuje úplné informace, které
-		 * jsou k dispozici. Takto vracené hodnoty slouží k zobrazení za účelem
-		 * logování, testování a podobně, v žádné, případě by se přijatá data neměla
-		 * parsrovat a něco z nich odvozovat. Pokud potřebujete konkrétní formát
-		 * využijte metody info.., získejte odpovídající poliožky a využijte
-		 * formátovače.
+		 * Vrátí v pro člověka čitelném formátu. Obsahuje úplné informace, které jsou k dispozici. Takto vracené hodnoty slouží k zobrazení za účelem logování, testování a podobně, v žádné, případě by se přijatá data neměla parsrovat a něco z nich odvozovat. Pokud potřebujete konkrétní formát
+		 * využijte metody info.., získejte odpovídající poliožky a využijte formátovače.
 		 */
 		public String toString() {
 			long offset = getOffset();
-			String vysl = MessageFormat.format(
-					"{0,number,0000}-{1,number,00}-{2,number,00} {3,number,00}:{4,number,00}:{5,number,00}.{6,number,000} GMT{7,number,+00;-00}",
-					getYearNumber(), getMonthNumber(), getDayNumber(), getHour(), getMinute(),
-					getSecond(), getMilisecond(), offset / 3600000);
+			String vysl = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00} {3,number,00}:{4,number,00}:{5,number,00}.{6,number,000} GMT{7,number,+00;-00}", getYearNumber(),
+					getMonthNumber(), getDayNumber(), getHour(), getMinute(), getSecond(), getMilisecond(), offset / 3600000);
 			if (offset % 3600000 != 0) {
 				vysl += ":" + offset / 60000;
 			}
@@ -778,9 +682,8 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		 * Return an ISO 8601 compliant timestamp representation.
 		 */
 		public String toIsoString() {
-			String result = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00}T{3,number,00}:{4,number,00}:{5,number,00}.{6,number,000}",
-					getYearNumber(), getMonthNumber(), getDayNumber(), getHour(),getMinute(), getSecond(),
-					getMilisecond());
+			String result = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00}T{3,number,00}:{4,number,00}:{5,number,00}.{6,number,000}", getYearNumber(), getMonthNumber(),
+					getDayNumber(), getHour(), getMinute(), getSecond(), getMilisecond());
 			return result + offsetStr();
 		}
 
@@ -791,7 +694,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 			char sign = offset < 0 ? '-' : '+';
 			offset = Math.abs(offset);
 			offset = offset / (1000 * 60); // a je to v minutách
-			return sign + MessageFormat.format("{0,number,00}{1,number,00}", new Object[] {offset / 60, offset % 60, });
+			return sign + MessageFormat.format("{0,number,00}{1,number,00}", new Object[] { offset / 60, offset % 60, });
 		}
 	}
 
@@ -799,7 +702,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * Totéžž co {@link #add}
 	 *
 	 * @param aNthObject
-	 *          Počet milisekund o kolik posunout.
+	 *            Počet milisekund o kolik posunout.
 	 * @return Instance ATimestamp s posunutým měsícem.
 	 */
 	public ATimestamp getAnother(long aNthObject) {
@@ -810,7 +713,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * Totéž co diff.
 	 *
 	 * @param aObject
-	 *          Objekt, který se odečítá.
+	 *            Objekt, který se odečítá.
 	 * @return Počet milisekund rozdílu.
 	 */
 	public long getDistance(ATimestamp aObject) {

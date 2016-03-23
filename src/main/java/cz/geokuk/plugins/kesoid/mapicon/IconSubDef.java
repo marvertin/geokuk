@@ -4,6 +4,7 @@ import java.util.Set;
 
 /**
  * Definice ikony.
+ * 
  * @author tatinek
  *
  */
@@ -18,6 +19,5 @@ public class IconSubDef {
 	public String toString() {
 		return alely.toString();
 	}
-
 
 }

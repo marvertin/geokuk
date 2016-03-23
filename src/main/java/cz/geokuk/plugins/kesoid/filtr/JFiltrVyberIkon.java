@@ -1,23 +1,19 @@
 package cz.geokuk.plugins.kesoid.filtr;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mapicon.Alela;
-import cz.geokuk.plugins.kesoid.mapicon.Gen;
-import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
-import cz.geokuk.plugins.kesoid.mapicon.JVyberIkon0;
+import cz.geokuk.plugins.kesoid.mapicon.*;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 public class JFiltrVyberIkon extends JVyberIkon0 {
 
-	private static final long serialVersionUID = -6496737194139718970L;
+	private static final long	serialVersionUID	= -6496737194139718970L;
 
-	private KesBag kesBag;
+	private KesBag				kesBag;
 
-	private KesoidModel kesoidModel;
+	private KesoidModel			kesoidModel;
 
 	/**
 	 * @param aJskelneikony
@@ -25,7 +21,6 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
 	public JFiltrVyberIkon() {
 		super(false, true);
 	}
-
 
 	public void resetBag(IkonBag bag, KesBag kesBag, Set<String> aJmenaVybranychAlel) {
 		this.kesBag = kesBag;
@@ -38,8 +33,9 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
 		kesoidModel.setJmenaNechtenychAlel(Alela.alelyToNames(aAlely));
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Alela)
 	 */
 	@Override
@@ -47,8 +43,9 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
 		return kesBag.getPouziteAlely().contains(alela);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Gen)
 	 */
 	@Override
@@ -57,7 +54,6 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
 		alely.retainAll(kesBag.getPouziteAlely());
 		return alely.size() > 1;
 	}
-
 
 	@Override
 	protected boolean shouldEnable(Alela alela) {

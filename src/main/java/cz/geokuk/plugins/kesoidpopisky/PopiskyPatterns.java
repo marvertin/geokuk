@@ -16,12 +16,12 @@ import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 @Preferenceble
 public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 
-	private String kesPattern = "{info} - {nazev} ({wpt})";
-	private String waymarkPattern = "{nazev} ({wpt})";
-	private String cgpPattern = "{wpt}";
-	private String simplewaypointPattern = "{nazev} ({wpt})";
-	private String munzeePattern = "{nazev} ({wpt})";
-	private String photoPattern = "{wpt}";
+	private String	kesPattern				= "{info} - {nazev} ({wpt})";
+	private String	waymarkPattern			= "{nazev} ({wpt})";
+	private String	cgpPattern				= "{wpt}";
+	private String	simplewaypointPattern	= "{nazev} ({wpt})";
+	private String	munzeePattern			= "{nazev} ({wpt})";
+	private String	photoPattern			= "{wpt}";
 
 	public EnumMap<EKesoidKind, String> asMap() {
 		EnumMap<EKesoidKind, String> map = new EnumMap<>(EKesoidKind.class);
@@ -42,7 +42,8 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	}
 
 	/**
-	 * @param kesPattern the kesPattern to set
+	 * @param kesPattern
+	 *            the kesPattern to set
 	 */
 	public void setKesPattern(String kesPattern) {
 		this.kesPattern = kesPattern;
@@ -56,7 +57,8 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	}
 
 	/**
-	 * @param waymarkPattern the waymarkPattern to set
+	 * @param waymarkPattern
+	 *            the waymarkPattern to set
 	 */
 	public void setWaymarkPattern(String waymarkPattern) {
 		this.waymarkPattern = waymarkPattern;
@@ -70,7 +72,8 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	}
 
 	/**
-	 * @param cgpPattern the cgpPattern to set
+	 * @param cgpPattern
+	 *            the cgpPattern to set
 	 */
 	public void setCgpPattern(String cgpPattern) {
 		this.cgpPattern = cgpPattern;
@@ -84,24 +87,26 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	}
 
 	/**
-	 * @param simplewaypointPattern the simplewaypointPattern to set
+	 * @param simplewaypointPattern
+	 *            the simplewaypointPattern to set
 	 */
 	public void setSimplewaypointPattern(String simplewaypointPattern) {
 		this.simplewaypointPattern = simplewaypointPattern;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "PopiskyPatterns [kesPattern=" + kesPattern + ", waymarkPattern=" + waymarkPattern + ", cgpPattern=" + cgpPattern + ", simplewaypointPattern="
-				+ simplewaypointPattern + "]";
+		return "PopiskyPatterns [kesPattern=" + kesPattern + ", waymarkPattern=" + waymarkPattern + ", cgpPattern=" + cgpPattern + ", simplewaypointPattern=" + simplewaypointPattern + "]";
 	}
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -115,9 +120,9 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 		return result;
 	}
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -151,7 +156,6 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 			return false;
 		return true;
 	}
-
 
 	@Override
 	public PopiskyPatterns copy() {

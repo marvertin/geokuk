@@ -5,9 +5,7 @@ package cz.geokuk.plugins.vylety;
 
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -22,11 +20,11 @@ import cz.geokuk.plugins.kesoid.Kesoid;
  */
 public class VyletModel extends Model0 {
 
-	private Vylet vylet;
+	private Vylet						vylet;
 
-	private VyletovyZperzistentnovac vyletovyZperzistentnovac;
+	private VyletovyZperzistentnovac	vyletovyZperzistentnovac;
 
-	private Worker worker;
+	private Worker						worker;
 
 	public void add(EVylet evyl, Kesoid kes) {
 		EVylet evylPuvodni = vylet.add(evyl, kes);
@@ -42,7 +40,6 @@ public class VyletModel extends Model0 {
 		return vylet.get(kes);
 	}
 
-
 	public void removeAll(EVylet evyl) {
 		vylet.removeAll(evyl);
 		VyletSaveSwingWorker worker = new VyletSaveSwingWorker(vyletovyZperzistentnovac, vylet);
@@ -54,9 +51,9 @@ public class VyletModel extends Model0 {
 		return vylet.get(evyl);
 	}
 
-
 	private void onChange(Kesoid kes, EVylet evylPuvodni, EVylet evyl) {
-		if (!SwingUtilities.isEventDispatchThread()) return;
+		if (!SwingUtilities.isEventDispatchThread())
+			return;
 		fire(new VyletChangeEvent(this, kes, evyl, evylPuvodni));
 	}
 
@@ -73,12 +70,13 @@ public class VyletModel extends Model0 {
 		fire(new VyletChangeEvent(this, null, null, null));
 	}
 
-
 	public void inject(VyletovyZperzistentnovac vyletovyZperzistentnovac) {
 		this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.program.Model0#initAndFire()
 	 */
 	@Override
@@ -98,13 +96,13 @@ public class VyletModel extends Model0 {
 
 		private final List<Kesoid> kese;
 
-
-
 		public Worker(List<Kesoid> kese) {
 			this.kese = kese;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.SwingWorker#doInBackground()
 		 */
 		@Override

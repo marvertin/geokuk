@@ -9,10 +9,10 @@ import cz.geokuk.plugins.cesty.data.Usek;
 
 public abstract class UsekAction0 extends BousekAction0 implements AfterInjectInit {
 
-	private static final long serialVersionUID = 1L;
+	private static final long	serialVersionUID	= 1L;
 
-	private final Usek usek;
-	private final Mou mou;
+	private final Usek			usek;
+	private final Mou			mou;
 
 	public UsekAction0(Usek usek, Mou mouMysi) {
 		this.usek = usek;
@@ -24,7 +24,6 @@ public abstract class UsekAction0 extends BousekAction0 implements AfterInjectIn
 	protected abstract void nastavJmenoAkce(Usek usek, Mou mou);
 
 	protected abstract void provedProUsek(Usek usek, Mou mou);
-
 
 	@Override
 	protected final void vyletChanged() {
@@ -44,8 +43,5 @@ public abstract class UsekAction0 extends BousekAction0 implements AfterInjectIn
 	public final void actionPerformed(ActionEvent aE) {
 		provedProUsek(usek, mou);
 	}
-
-
-
 
 }

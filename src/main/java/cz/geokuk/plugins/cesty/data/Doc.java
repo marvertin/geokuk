@@ -1,9 +1,7 @@
 package cz.geokuk.plugins.cesty.data;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
@@ -12,20 +10,22 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 /**
  * Dokument GPX se vším, co budeme podporovat
+ * 
  * @author tatinek
  *
  */
 public class Doc implements Iterable<Cesta> {
 
 	/** Soubor ze kterého byla cesta načtena a do kterého se bude ukládat, null pokud ještě neuloženo */
-	private File file;
-	private boolean changed;
+	private File				file;
+	private boolean				changed;
 
-	private final List<Cesta> cesty = new ArrayList<>();
+	private final List<Cesta>	cesty	= new ArrayList<>();
 
 	public boolean hasWpt(Wpt wpt) {
 		for (Cesta cesta : cesty) {
-			if (cesta.hasWpt(wpt)) return true;
+			if (cesta.hasWpt(wpt))
+				return true;
 		}
 		return false;
 	}
@@ -48,7 +48,8 @@ public class Doc implements Iterable<Cesta> {
 	}
 
 	public Cesta getPrvniCesta() {
-		if (cesty.size() == 0) return null;
+		if (cesty.size() == 0)
+			return null;
 		return cesty.get(0);
 	}
 
@@ -58,6 +59,7 @@ public class Doc implements Iterable<Cesta> {
 
 	/**
 	 * Vrací seznam všech bodů cesty.
+	 * 
 	 * @return
 	 */
 	public Iterable<Bod> getBody() {
@@ -69,12 +71,10 @@ public class Doc implements Iterable<Cesta> {
 		};
 	}
 
-
-	public Bousek0 locateNejblizsiDoKvadratuVzdalenosi(Mou mou,
-			long kvadratMaximalniVzdalenosti, Cesta preferovanaCesta, boolean aDatPrednostBoduPredUsekem) {
+	public Bousek0 locateNejblizsiDoKvadratuVzdalenosi(Mou mou, long kvadratMaximalniVzdalenosti, Cesta preferovanaCesta, boolean aDatPrednostBoduPredUsekem) {
 		SearchResult srmin = new SearchResult();
 		for (Cesta cesta : cesty) {
-			SearchResult sr  = cesta.locateNejblizsiDoKvadratuVzdalenosi(mou, kvadratMaximalniVzdalenosti, aDatPrednostBoduPredUsekem);
+			SearchResult sr = cesta.locateNejblizsiDoKvadratuVzdalenosi(mou, kvadratMaximalniVzdalenosti, aDatPrednostBoduPredUsekem);
 			if (sr.bousek != null) { // když je z preferované cesty není co řešit
 				if (sr.bousek.getCesta() == preferovanaCesta)
 					return sr.bousek;
@@ -131,6 +131,7 @@ public class Doc implements Iterable<Cesta> {
 
 	/**
 	 * Vyhledá bod s přesně zadanými souřadnicemi
+	 * 
 	 * @param mouable
 	 * @return
 	 */
@@ -152,20 +153,19 @@ public class Doc implements Iterable<Cesta> {
 		return bousek == null ? null : bousek.cesta;
 	}
 
-
 	/**
-	 * Propojí dvě cesty do jiné nové cesty.
-	 * Původní dvě cesty jsou odteď prázdné, ale další atributy jako jméo zůstanou netčeny.
+	 * Propojí dvě cesty do jiné nové cesty. Původní dvě cesty jsou odteď prázdné, ale další atributy jako jméo zůstanou netčeny.
+	 * 
 	 * @param c1
 	 * @param c2
 	 * @return
 	 */
 	static Cesta propojCestyDoJine(Cesta c1, Cesta c2) {
-		assert ! c2.isEmpty();
-		assert ! c1.isEmpty();
+		assert !c2.isEmpty();
+		assert !c1.isEmpty();
 		Cesta cesta = Cesta.create();
 		Bod vaznyBod = c1.getCil();
-		if (vaznyBod.getMou().equals(c2.getStart().getMou()))  {
+		if (vaznyBod.getMou().equals(c2.getStart().getMou())) {
 			Usek prvniUsekDruheCesty = c2.getStart().getUvpred();
 			if (prvniUsekDruheCesty != null) { // jen když není jednobodová
 				vaznyBod.setUvpred(prvniUsekDruheCesty);
@@ -192,7 +192,6 @@ public class Doc implements Iterable<Cesta> {
 		return cesta;
 	}
 
-
 	private void kon(boolean podm) {
 		if (!podm)
 			throw new RuntimeException("Selhala kontrola konzistence cesty");
@@ -201,17 +200,18 @@ public class Doc implements Iterable<Cesta> {
 	public void kontrolaKonzistence() {
 		boolean assertsEnabled = false;
 		assert assertsEnabled = true;
-		if (!assertsEnabled) return;
+		if (!assertsEnabled)
+			return;
 
 		for (Cesta cesta : getCesty()) {
-			kon (cesta.getDoc() == this);
+			kon(cesta.getDoc() == this);
 			cesta.kontrolaKonzistence();
 		}
 	}
 
 	public void kontrolaZeJeTady(Cesta cesta) {
-		kon (cesta.getDoc() == this);
-		kon (cesty.indexOf(cesta) >= 0);
+		kon(cesta.getDoc() == this);
+		kon(cesty.indexOf(cesta) >= 0);
 	}
 
 	@Override

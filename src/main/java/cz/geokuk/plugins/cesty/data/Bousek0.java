@@ -7,6 +7,7 @@ import cz.geokuk.plugins.cesty.FBarvy;
 
 /**
  * Předek úseku a cesty
+ * 
  * @author veverka
  *
  */
@@ -17,9 +18,10 @@ public abstract class Bousek0 {
 	Bousek0(Cesta cesta) {
 		this.cesta = cesta;
 	}
+
 	/**
-	 * Spočítá kvadrát vzdálenosti úseku či bodu od zadaného bodu.
-	 * Vrací Long.MAX_VALUE, pokud nemá smysl počítat.
+	 * Spočítá kvadrát vzdálenosti úseku či bodu od zadaného bodu. Vrací Long.MAX_VALUE, pokud nemá smysl počítat.
+	 * 
 	 * @param mou
 	 * @return
 	 */
@@ -27,7 +29,9 @@ public abstract class Bousek0 {
 
 	/** Spočítá velikost úsek, velikost boduje 0 */
 	public abstract double dalka();
+
 	public abstract double dalkaCestaVpred(Mou aMou);
+
 	public abstract double dalkaCestaVzad(Mou aMou);
 
 	public String dalkaHtml() {
@@ -74,8 +78,8 @@ public abstract class Bousek0 {
 	protected abstract void kontrolaKonzistence();
 
 	/**
-	 * Pokud tendo bousek představuje krajový bod nekruhové cesty,
-	 * a pod tímto bodem leží opačný krajový bod jiné cesty, vrátí tento jiný bod.
+	 * Pokud tendo bousek představuje krajový bod nekruhové cesty, a pod tímto bodem leží opačný krajový bod jiné cesty, vrátí tento jiný bod.
+	 * 
 	 * @return
 	 */
 	public abstract Bod getKoncovyBodDruheCestyVhodnyProSpojeni();

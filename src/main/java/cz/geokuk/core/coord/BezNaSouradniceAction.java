@@ -1,6 +1,5 @@
 package cz.geokuk.core.coord;
 
-
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -10,12 +9,9 @@ import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.kesoid.hledani.JSouradnicovyFrame;
 
-
-
 public class BezNaSouradniceAction extends DialogOpeningAction0 {
 
 	private static final long serialVersionUID = -2637836928166450446L;
-
 
 	public BezNaSouradniceAction() {
 		super("Zadat souřadnice...");
@@ -28,6 +24,5 @@ public class BezNaSouradniceAction extends DialogOpeningAction0 {
 	public JMyDialog0 createDialog() {
 		return new JSouradnicovyFrame();
 	}
-
 
 }

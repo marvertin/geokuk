@@ -1,8 +1,6 @@
 package cz.geokuk.plugins.mapy.kachle;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -17,44 +15,37 @@ import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.util.pocitadla.Pocitadlo;
-import cz.geokuk.util.pocitadla.PocitadloMalo;
-import cz.geokuk.util.pocitadla.PocitadloRoste;
+import cz.geokuk.util.pocitadla.*;
 
 public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
 
-	private static final Logger log = LogManager.getLogger(JKachlovnik.class.getSimpleName());
+	private static final Logger		log										= LogManager.getLogger(JKachlovnik.class.getSimpleName());
 
-	private static final long serialVersionUID = -6300199882447791157L;
+	private static final long		serialVersionUID						= -6300199882447791157L;
 
-	private static Pocitadlo pocitZustalychKachli = new PocitadloRoste("Počet zůstalých kachlí",
-			"Počet kachlí jKachle, které jako kompoenty zůstaly a jen se změnila její lokace, protože po reinicializaci " +
-			"byly na svém místě (obvykle posun) a nebylo je tudíž nutné znovu vytvářet");
+	private static Pocitadlo		pocitZustalychKachli					= new PocitadloRoste("Počet zůstalých kachlí",
+			"Počet kachlí jKachle, které jako kompoenty zůstaly a jen se změnila její lokace, protože po reinicializaci "
+					+ "byly na svém místě (obvykle posun) a nebylo je tudíž nutné znovu vytvářet");
 
-	private static Pocitadlo pocitReinicializaceKachlovniku = new PocitadloRoste("Kolikrát bylo nuceno reinicializovat " +
-			"celý kachlovník",
-			"Říká, kolikrát byla zavolána metoda init pro reinicializaci celého kachlovníku v důsledku posunu, změnu " +
-			"velikosti, zůůmování atd.");
+	private static Pocitadlo		pocitReinicializaceKachlovniku			= new PocitadloRoste("Kolikrát bylo nuceno reinicializovat " + "celý kachlovník",
+			"Říká, kolikrát byla zavolána metoda init pro reinicializaci celého kachlovníku v důsledku posunu, změnu " + "velikosti, zůůmování atd.");
 
-	private static Pocitadlo pocitVynuceneNepouzitiExistujiciKachle = new PocitadloRoste("Vynucené použití neexistující " +
-			"kachle", "Kolikrát do JKachlovnik.ini() přišlo z venku, že JKachle komponenty nesmím použít");
+	private static Pocitadlo		pocitVynuceneNepouzitiExistujiciKachle	= new PocitadloRoste("Vynucené použití neexistující " + "kachle",
+			"Kolikrát do JKachlovnik.ini() přišlo z venku, že JKachle komponenty nesmím použít");
 
-	private static final Pocitadlo pocitKachliVKachlovniku2 = new PocitadloMalo("#kachlí v kachlovníku", "");
+	private static final Pocitadlo	pocitKachliVKachlovniku2				= new PocitadloMalo("#kachlí v kachlovníku", "");
 
-	private KaSet kachloTypesSet = new KaSet(EnumSet.noneOf(EKaType.class));
+	private KaSet					kachloTypesSet							= new KaSet(EnumSet.noneOf(EKaType.class));
 
-	private KachleModel kachleModel;
-
+	private KachleModel				kachleModel;
 
 	// TODO musí to být private a musí být na tru nastaveno jen při rendrování
-	protected boolean vykreslovatokamzite;
+	protected boolean				vykreslovatokamzite;
 
 	/** Jen pro ladící účely */
-	public final String nazevKachlovniku;
+	public final String				nazevKachlovniku;
 
-	private final Priority priorita;
-
-
+	private final Priority			priorita;
 
 	// je to jen kvuli garbage collectoru, aby nezrusil, NERUSIT PROMENNU i kdyz zdanlive je to na nic
 	public JKachlovnik(final String nazevKachlovniku, final Priority priority) {
@@ -66,7 +57,6 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 		setOpaque(false);
 	}
 
-
 	@Override
 	public void onVyrezChanged() {
 		init(true);
@@ -74,7 +64,6 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 
 	private void registerEvents() {
 	}
-
 
 	public void onEvent(final ZmenaMapNastalaEvent event) {
 		setKachloTypes(event.getKaSet());
@@ -84,8 +73,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 		if (!isSoordInitialized()) {
 			return;
 		}
-		if (getWidth() == 0 || getHeight() == 0)
-		{
+		if (getWidth() == 0 || getHeight() == 0) {
 			return; // nemá smysl rendrovat prázdný kachlovník
 		}
 		final Coord soord = getSoord();
@@ -105,9 +93,10 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 		// Musí to být multimapa, protože při malých měřítcích je jedna kachle vícekrát zorbazena,
 		// takže pro jeden klíč máme hodně hodnot
 		final LinkedListMultimap<KaLoc, JKachle> mapaKachli = LinkedListMultimap.create();
-		Arrays.stream(getComponents()).map(jka -> (JKachle)jka).forEach(jka -> {
-			mapaKachli.put(jka.getKaLoc(),  jka);
-		});;
+		Arrays.stream(getComponents()).map(jka -> (JKachle) jka).forEach(jka -> {
+			mapaKachli.put(jka.getKaLoc(), jka);
+		});
+		;
 		log.trace("Mapa {} kachlí {}", getComponents().length, mapaKachli);
 		final Kaputer kaputer = new Kaputer(soord);
 		if (log.isTraceEnabled()) {
@@ -120,26 +109,26 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 				final List<JKachle> seznamStejnychKachli = mapaKachli.get(kaloc);
 				final boolean kachleSePouzije = smimZnovuPouzitKachle && seznamStejnychKachli.size() > 0;
 				final JKachle jkachle;
-				if (! kachleSePouzije) {
+				if (!kachleSePouzije) {
 					log.trace("............... Vytváření JKachle" + kaloc);
 					jkachle = createJKachle(new KaAll(kaloc, kachloTypesSet));
-					add(jkachle);          // a přidat jako komponentu
-					//kachle.ziskejObsah(priorita);
+					add(jkachle); // a přidat jako komponentu
+					// kachle.ziskejObsah(priorita);
 					jkachle.ziskejObsah(kachleModel, priorita);
 
-				} else {  // použije se původní kachle
-					jkachle = seznamStejnychKachli.remove(0);  // jednu z nich vezmeme, je jedno kterou, všechny mají stejný obsah
+				} else { // použije se původní kachle
+					jkachle = seznamStejnychKachli.remove(0); // jednu z nich vezmeme, je jedno kterou, všechny mají stejný obsah
 					pocitZustalychKachli.inc();
 				}
 				// napozicujeme každou kachli do správné podoby
-				final Point p = kaputer.getKachlePoint(xi,  yi);
+				final Point p = kaputer.getKachlePoint(xi, yi);
 				log.trace("....... vykresulji kachli {} na {}", kaloc, p);
-				//System.out.println("KACHLE xx: " + new Point(x,y) + " ********* " + getSize());
+				// System.out.println("KACHLE xx: " + new Point(x,y) + " ********* " + getSize());
 				jkachle.setLocation(p.x, p.y);
 			}
 		}
-		//System.out.println("mame komponent: " + super.getComponentCount());
-		//System.out.println("Nahrazenych kachli: " + kachles.size());
+		// System.out.println("mame komponent: " + super.getComponentCount());
+		// System.out.println("Nahrazenych kachli: " + kachles.size());
 
 		// Kachle, které zbyly v mapě jsou komponenty, jenž nebyly recyklovány, musí být odstraněny
 		mapaKachli.values().forEach(jka -> {
@@ -150,12 +139,9 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 		log.trace("Počet komponent (nejspíš kachlí) v kachlovníku: {}", getComponentCount());
 	}
 
-
 	protected JKachle createJKachle(final KaAll kaall) {
 		return new JKachle(this, kaall);
 	}
-
-
 
 	/**
 	 * @return the kachloTypes
@@ -166,14 +152,14 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 
 	public void onEvent(final OnofflineModelChangeEvent event) {
 		if (event.isOnlineMOde()) {
-			// Při zapnutí online módu e musí překlreslit. To se stane  i když není online mód právě zapínán, ale to nevadí.
+			// Při zapnutí online módu e musí překlreslit. To se stane i když není online mód právě zapínán, ale to nevadí.
 			init(false);
 		}
 	}
 
-
 	/**
-	 * @param aKachloTypes the kachloTypes to set
+	 * @param aKachloTypes
+	 *            the kachloTypes to set
 	 */
 	public void setKachloTypes(final KaSet aKachloSet) {
 		if (kachloTypesSet.equals(aKachloSet)) {
@@ -187,7 +173,9 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 		this.kachleModel = kachleModel;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -198,9 +186,8 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 	void kachleZpracovana(final JKachle jKachle) {
 	}
 
-
-	//  @Override
-	//  public void finalize() {
-	//    System.out.println("Kachlovník finalizován");
-	//  }
+	// @Override
+	// public void finalize() {
+	// System.out.println("Kachlovník finalizován");
+	// }
 }

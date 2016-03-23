@@ -7,9 +7,9 @@ import java.util.StringTokenizer;
 import cz.geokuk.core.program.FConst;
 
 public class Filex {
-	private final File file;
-	private final boolean relativeToProgram;
-	private final boolean active;
+	private final File		file;
+	private final boolean	relativeToProgram;
+	private final boolean	active;
 
 	public Filex(File file, boolean relativeToProgram, boolean active) {
 		super();
@@ -28,6 +28,7 @@ public class Filex {
 
 	/**
 	 * Pokud je nastaven adresář jako aktivní, tak bere efektivní soubor, jinak null.
+	 * 
 	 * @return
 	 */
 	public File getEffectiveFileIfActive() {
@@ -36,7 +37,7 @@ public class Filex {
 
 	public File getEffectiveFile() {
 		File f = file;
-		if (! file.isAbsolute()) {
+		if (!file.isAbsolute()) {
 			if (relativeToProgram) {
 				f = new File(FConst.JAR_DIR, file.getPath());
 			} else {
@@ -50,42 +51,36 @@ public class Filex {
 	/**
 	 * Kanonizuj danou cestu. Pokud je cesta relativní, nejdříve ji zabsolutni.
 	 *
-	 * <p>This includes:
+	 * <p>
+	 * This includes:
 	 * <ul>
-	 *   <li>Uppercase the drive letter if there is one.</li>
-	 *   <li>Remove redundant slashes after the drive spec.</li>
-	 *   <li>resolve all ./, .\, ../ and ..\ sequences.</li>
-	 *   <li>DOS style paths that start with a drive letter will have
-	 *     \ as the separator.</li>
+	 * <li>Uppercase the drive letter if there is one.</li>
+	 * <li>Remove redundant slashes after the drive spec.</li>
+	 * <li>resolve all ./, .\, ../ and ..\ sequences.</li>
+	 * <li>DOS style paths that start with a drive letter will have \ as the separator.</li>
 	 * </ul>
 	 *
-	 * @param aPath Cesta, jenž má být kanonizována.
+	 * @param aPath
+	 *            Cesta, jenž má být kanonizována.
 	 * @return Kanonizovaná cesta. Nikdy nevrací null.
-	 * @throws java.lang.NullPointerException if the file path is
-	 * equal to null.
+	 * @throws java.lang.NullPointerException
+	 *             if the file path is equal to null.
 	 */
 	public static File canonize(File aPath) {
 		// Nechť jsou v cestě lomítka dle operačního systému
-		String path = aPath.getAbsolutePath()
-				.replace('/', File.separatorChar)
-				.replace('\\', File.separatorChar);
+		String path = aPath.getAbsolutePath().replace('/', File.separatorChar).replace('\\', File.separatorChar);
 
 		// Ujistěme se, že máme absolutní cestu. Relativní cesty není dobré normalizovat.
 		int colon = path.indexOf(':');
 
-		if (!path.startsWith(File.separator) &&
-				!(path.length() >= 2 &&
-				Character.isLetter(path.charAt(0)) &&
-				colon == 1)) {
+		if (!path.startsWith(File.separator) && !(path.length() >= 2 && Character.isLetter(path.charAt(0)) && colon == 1)) {
 			throw new IllegalArgumentException(path + " is not an absolute path");
 		}
 
 		boolean dosWithDrive = false;
 		String root = null;
 		// Eliminate consecutive slashes after the drive spec
-		if ((path.length() >= 2 &&
-				Character.isLetter(path.charAt(0)) &&
-				path.charAt(1) == ':') ) {
+		if ((path.length() >= 2 && Character.isLetter(path.charAt(0)) && path.charAt(1) == ':')) {
 
 			dosWithDrive = true;
 
@@ -103,8 +98,7 @@ public class Filex {
 			// Eliminate consecutive slashes after the drive spec
 			StringBuilder sbPath = new StringBuilder();
 			for (int i = colon + 1; i < ca.length; i++) {
-				if ((ca[i] != '\\') ||
-						(ca[i] == '\\' && ca[i - 1] != '\\')) {
+				if ((ca[i] != '\\') || (ca[i] == '\\' && ca[i - 1] != '\\')) {
 					sbPath.append(ca[i]);
 				}
 			}
@@ -150,14 +144,12 @@ public class Filex {
 			sb.append(s.elementAt(i));
 		}
 
-
 		path = sb.toString();
 		if (dosWithDrive) {
 			path = path.replace('/', '\\');
 		}
 		return new File(path);
 	}
-
 
 	@Override
 	public String toString() {
@@ -195,6 +187,5 @@ public class Filex {
 	public boolean isActive() {
 		return active;
 	}
-
 
 }

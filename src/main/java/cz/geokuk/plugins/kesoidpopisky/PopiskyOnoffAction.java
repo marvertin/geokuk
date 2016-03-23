@@ -1,19 +1,15 @@
 package cz.geokuk.plugins.kesoidpopisky;
 
-
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
 import cz.geokuk.framework.ToggleAction0;
 
+public class PopiskyOnoffAction extends ToggleAction0 {
 
-public class PopiskyOnoffAction extends ToggleAction0  {
-
-	private static final long serialVersionUID = -7547868179813232769L;
-	private PopiskyModel popiskyModel;
-
-
+	private static final long	serialVersionUID	= -7547868179813232769L;
+	private PopiskyModel		popiskyModel;
 
 	public PopiskyOnoffAction() {
 		super("Popisky na mapě");
@@ -22,8 +18,7 @@ public class PopiskyOnoffAction extends ToggleAction0  {
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 	}
 
-
-	public void inject (PopiskyModel popiskyModel) {
+	public void inject(PopiskyModel popiskyModel) {
 		this.popiskyModel = popiskyModel;
 	}
 
@@ -35,7 +30,5 @@ public class PopiskyOnoffAction extends ToggleAction0  {
 	protected void onSlectedChange(boolean nastaveno) {
 		popiskyModel.visible.setOnoff(nastaveno);
 	}
-
-
 
 }

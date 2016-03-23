@@ -36,14 +36,9 @@ package cz.geokuk.plugins.kesoidkruhy;
  * content.txt
  */
 
-
 import java.awt.Color;
 
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
-import javax.swing.JLabel;
-import javax.swing.JSlider;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -52,14 +47,14 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long serialVersionUID = 7087453419069194768L;
+	private static final long	serialVersionUID	= 7087453419069194768L;
 
-	private JLabel velikostLabel;
-	private JSlider velikostSlider;
-	private JColorChooser alfaColorChooser;
-	private JCheckBox jJednotkoveKruhy;
+	private JLabel				velikostLabel;
+	private JSlider				velikostSlider;
+	private JColorChooser		alfaColorChooser;
+	private JCheckBox			jJednotkoveKruhy;
 
-	private KruhyModel kruhyModel;
+	private KruhyModel			kruhyModel;
 
 	public JKruhyDialog() {
 		setTitle("Nastavení parametrů zvýrazňovaích kruhů");
@@ -74,7 +69,7 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				//Board.mainFrame.parametryZvyraznovaceKruhuSeZmenily();
+				// Board.mainFrame.parametryZvyraznovaceKruhuSeZmenily();
 				KruhySettings kruhy = new KruhySettings();
 				Color barva = alfaColorChooser.getSelectionModel().getSelectedColor();
 				System.out.println("KRUHY1: " + barva + barva.getAlpha());
@@ -92,8 +87,8 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 
 	}
 
-	/** This method is called from within the constructor to
-	 * initialize the form.
+	/**
+	 * This method is called from within the constructor to initialize the form.
 	 */
 	@Override
 	protected void initComponents() {
@@ -116,11 +111,13 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 		box.add(alfaColorChooser);
 	}
 
-	public void inject (KruhyModel kruhyModel) {
+	public void inject(KruhyModel kruhyModel) {
 		this.kruhyModel = kruhyModel;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
 	 */
 	public void onEvent(KruhyPreferencesChangeEvent event) {
@@ -130,7 +127,9 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 		alfaColorChooser.getSelectionModel().setSelectedColor(barva);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -144,4 +143,3 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 	}
 
 }
-

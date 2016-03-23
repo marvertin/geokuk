@@ -1,127 +1,72 @@
 package cz.geokuk.plugins.kesoid;
 
-
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import cz.geokuk.api.mapicon.Imagant;
-import cz.geokuk.core.coord.EJakOtacetPriRendrovani;
-import cz.geokuk.core.coord.JSingleSlide0;
-import cz.geokuk.core.coord.PoziceModel;
-import cz.geokuk.core.coord.PoziceSeMaMenitEvent;
-import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.core.coordinates.MouRect;
-import cz.geokuk.core.coordinates.Mouable;
+import cz.geokuk.core.coord.*;
+import cz.geokuk.core.coordinates.*;
 import cz.geokuk.core.program.FConst;
-import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
-import cz.geokuk.framework.FKurzory;
-import cz.geokuk.framework.Factory;
-import cz.geokuk.framework.MouseGestureContext;
+import cz.geokuk.framework.*;
 import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.cesty.akce.OdebratZCestyAction;
 import cz.geokuk.plugins.cesty.akce.PridatDoCestyAction;
-import cz.geokuk.plugins.kesoid.mapicon.Alela;
-import cz.geokuk.plugins.kesoid.mapicon.EAplikaceSkla;
-import cz.geokuk.plugins.kesoid.mapicon.FenotypPreferencesChangedEvent;
-import cz.geokuk.plugins.kesoid.mapicon.Genom;
-import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
-import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
-import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
-import cz.geokuk.plugins.kesoid.mapicon.SkloAplikant;
-import cz.geokuk.plugins.kesoid.mvc.CenterWaypointAction;
-import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
-import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
-import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
-import cz.geokuk.plugins.kesoid.mvc.KesoidCodeToClipboard;
-import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
-import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
-import cz.geokuk.plugins.kesoid.mvc.OpenFileAction;
-import cz.geokuk.plugins.kesoid.mvc.TiskniNaGcComAction;
-import cz.geokuk.plugins.kesoid.mvc.UrlToClipboardForGeogetAction;
-import cz.geokuk.plugins.kesoid.mvc.UrlToListingForGeogetAction;
-import cz.geokuk.plugins.kesoid.mvc.ZhasniKeseUrciteAlelyAction;
-import cz.geokuk.plugins.kesoid.mvc.ZobrazNaGcComAction;
-import cz.geokuk.plugins.kesoid.mvc.ZoomKesAction;
-import cz.geokuk.plugins.vylety.VyletAnoAction;
-import cz.geokuk.plugins.vylety.VyletChangeEvent;
-import cz.geokuk.plugins.vylety.VyletModel;
-import cz.geokuk.plugins.vylety.VyletNeAction;
-import cz.geokuk.plugins.vylety.VyletNevimAction;
-import cz.geokuk.util.index2d.BoundingRect;
-import cz.geokuk.util.index2d.FlatVisitor;
-import cz.geokuk.util.index2d.Indexator;
-import cz.geokuk.util.index2d.Sheet;
+import cz.geokuk.plugins.kesoid.mapicon.*;
+import cz.geokuk.plugins.kesoid.mvc.*;
+import cz.geokuk.plugins.vylety.*;
+import cz.geokuk.util.index2d.*;
 import cz.geokuk.util.pocitadla.PocitadloNula;
 import cz.geokuk.util.process.BrowserOpener;
 
-
 public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
 
-	//  static int POLOMER_KESE = 15; // je to v pixlech
-	private static final int POLOMER_CITLIVOSTI = 10;
+	// static int POLOMER_KESE = 15; // je to v pixlech
+	private static final int						POLOMER_CITLIVOSTI				= 10;
 
-	private final BlockingQueue<WptPaintRequest> frontaWaypointu = new LinkedBlockingQueue<>();
-	private static final PocitadloNula pocitVelikostFrontyWaypointu = new PocitadloNula("Velikost vykreslovací waypointové fronty",
-			"Kolik waypointů čeká na vykreslení.");
+	private final BlockingQueue<WptPaintRequest>	frontaWaypointu					= new LinkedBlockingQueue<>();
+	private static final PocitadloNula				pocitVelikostFrontyWaypointu	= new PocitadloNula("Velikost vykreslovací waypointové fronty", "Kolik waypointů čeká na vykreslení.");
 
-	private static final long serialVersionUID = -5858146658366237217L;
+	private static final long						serialVersionUID				= -5858146658366237217L;
 
+	private Indexator<Wpt>							indexator;
 
-	private Indexator<Wpt> indexator;
+	private CestyModel								cestyModel;
 
-	private CestyModel cestyModel;
+	private Kesoid									kesoidPodMysi;
+	private Wpt										wptPodMysi;
 
-	private Kesoid kesoidPodMysi;
-	private Wpt wptPodMysi;
+	private final JLabel							jakoTooltip						= new JLabel();
 
-	private final JLabel jakoTooltip = new JLabel();
+	// private List<Rectangle> repaintovaneCtverce = new ArrayList<Rectangle>();
+	// private List<Rectangle> klipovanci = new ArrayList<Rectangle>();
 
-	//	private List<Rectangle> repaintovaneCtverce = new ArrayList<Rectangle>();
-	//	private List<Rectangle> klipovanci = new ArrayList<Rectangle>();
+	private IkonBag									ikonBag;
 
+	private Set<Alela>								fenotypoveZakazaneAlely;
 
-	private IkonBag ikonBag;
+	private Set<String>								iJmenaAlel;
 
-	private Set<Alela> fenotypoveZakazaneAlely;
+	private Factory									factory;
 
-	private Set<String> iJmenaAlel;
+	private PoziceModel								poziceModel;
 
-	private Factory factory;
+	private KesoidModel								kesoidModel;
 
-	private PoziceModel poziceModel;
+	private final boolean							vykreslovatOkamtiteAleDlouho;
 
-	private KesoidModel kesoidModel;
+	private static final double						scale							= 1;
 
-	private final boolean vykreslovatOkamtiteAleDlouho;
+	private KesBag									vsechny;
 
-	private static final double scale = 1;
-
-	private KesBag vsechny;
-
-	private VyletModel vyletModel;
-
+	private VyletModel								vyletModel;
 
 	public JKesoidySlide(final boolean vykreslovatOkamtiteAleDlouho) {
 		this.vykreslovatOkamtiteAleDlouho = vykreslovatOkamtiteAleDlouho;
@@ -138,13 +83,11 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 	}
 
-
 	/**
 	 *
 	 */
 	private void registerEvents() {
 	}
-
 
 	public void onEvent(final KeskyVyfiltrovanyEvent aEvent) {
 		indexator = aEvent.getFiltrovane().getIndexator();
@@ -181,7 +124,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		repaint();
 	}
 
-
 	@Override
 	protected void paintComponent(final Graphics ag) {
 		final Graphics2D gg = (Graphics2D) ag;
@@ -193,7 +135,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 			return;
 		}
 		// Nevykresluju. kdyz je prekrocen limit, ale jen kdyz kreslim na obrazovku
-		final boolean prekrocenLimit = ! vykreslovatOkamtiteAleDlouho && indexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
+		final boolean prekrocenLimit = !vykreslovatOkamtiteAleDlouho && indexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -208,7 +150,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 
 		// Roztřídit waypointy podle pořadí vykreslování
-		if (! prekrocenLimit) {
+		if (!prekrocenLimit) {
 			final BoundingRect hranice = coVykreslovat(gg);
 			indexator.visit(hranice, new FlatVisitor<Wpt>() {
 				@Override
@@ -220,10 +162,10 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 
 		final List<SkloAplikant> skloAplikanti = ikonBag.getSada().getSkloAplikanti();
-		for (int i=0; i< skloAplikanti.size(); i++) {
+		for (int i = 0; i < skloAplikanti.size(); i++) {
 			final SkloAplikant skloAplikant = skloAplikanti.get(i);
-			if (skloAplikant.aplikaceSkla == EAplikaceSkla.VSE) {  // jen na skla, na kterych je vsechno
-				if (! prekrocenLimit) {
+			if (skloAplikant.aplikaceSkla == EAplikaceSkla.VSE) { // jen na skla, na kterych je vsechno
+				if (!prekrocenLimit) {
 					for (final List<Sheet<Wpt>> list : mapa.values()) {
 						for (final Sheet<Wpt> swpt : list) {
 							final Wpt wpt = swpt.get();
@@ -249,13 +191,12 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	 * @param i
 	 */
 	private void paintWaypoint(Graphics2D g, final Wpt wpt, Mou mou, final int i) {
-		if (mou == null)
-		{
+		if (mou == null) {
 			mou = wpt.getMou(); // z vykonnostnich duvodu se to vetsinou predava
 		}
 		Sklivec sklivec = wpt.getSklivec();
 
-		//sklivec = null; // pro ucely testovani vzdfy vykreslujeme
+		// sklivec = null; // pro ucely testovani vzdfy vykreslujeme
 
 		if (sklivec == null) { // nemame sklivce
 			if (vykreslovatOkamtiteAleDlouho) {
@@ -272,12 +213,11 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		final Point p = getSoord().transform(mou);
 
 		final Imagant imagant = sklivec.imaganti.get(i);
-		if (imagant == null)
-		{
-			return;  // neni co vykreslovat
-			//    if (vykreslovatOkamtiteAleDlouho) {
-			//      System.out.println("Malujem kesika " + x + " " + y + " --- " +imagant.getImage().getWidth() + " " + imagant.getImage().getHeight());
-			//    }
+		if (imagant == null) {
+			return; // neni co vykreslovat
+			// if (vykreslovatOkamtiteAleDlouho) {
+			// System.out.println("Malujem kesika " + x + " " + y + " --- " +imagant.getImage().getWidth() + " " + imagant.getImage().getHeight());
+			// }
 		}
 
 		// getScale() vrací vždy 1, ale tento kód zde chceme, protože se někdy zřejmě hodil
@@ -298,20 +238,25 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 		frontaWaypointu.add(new WptPaintRequest(wpt, mou));
 		pocitVelikostFrontyWaypointu.set(frontaWaypointu.size());
-		//    spocitejSklivece(wpt);
+		// spocitejSklivece(wpt);
 	}
 
 	private Genotyp computeGenotyp(final Wpt wpt) {
 		final Genom genom = ikonBag.getGenom();
 		final Genotyp g = wpt.getGenotyp(genom);
-		//    switch (cestyModel.get(wpt.getKesoid())) {
-		//    //    case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
-		//    case NE:  g.put(ikonBag.getGenom().ALELA_ignoru); break;
-		//    }
+		// switch (cestyModel.get(wpt.getKesoid())) {
+		// // case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
+		// case NE: g.put(ikonBag.getGenom().ALELA_ignoru); break;
+		// }
 		switch (vyletModel.get(wpt.getKesoid())) {
-		case ANO: g.put(genom.ALELA_lovime); break;
-		case NE:  g.put(genom.ALELA_ignoru); break;
-		case NEVIM: break;
+		case ANO:
+			g.put(genom.ALELA_lovime);
+			break;
+		case NE:
+			g.put(genom.ALELA_ignoru);
+			break;
+		case NEVIM:
+			break;
 		}
 		g.put(cestyModel.isOnVylet(wpt) ? genom.ALELA_nacestejsou : genom.ALELA_mimocesticu);
 
@@ -325,7 +270,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		return g;
 	}
 
-
 	private BoundingRect coVykreslovat(final Graphics gg) {
 		final Insets bii = ikonBag.getSada().getBigiestIconInsets();
 		Rectangle rect = gg.getClipBounds();
@@ -335,18 +279,13 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		if (rect == null) {
 			rect = new Rectangle(getSize());
 		}
-		//  	klipovanci.add(rect);
+		// klipovanci.add(rect);
 		// to right a bottom je v poradku, protoze zvetsujeme obdelnik,
 		// abychom chytli vsechy kese, ktere k nam mohou zapadnout
-		final Rectangle rect2 = new Rectangle(rect.x - bii.right, rect.y - bii.bottom,
-				rect.width +  bii.left + bii.right ,
-				rect.height + bii.top + bii.bottom);
+		final Rectangle rect2 = new Rectangle(rect.x - bii.right, rect.y - bii.bottom, rect.width + bii.left + bii.right, rect.height + bii.top + bii.bottom);
 		final BoundingRect br = getSoord().transforToBounding(rect2);
 		return br;
 	}
-
-
-
 
 	private void repaintKes(final Kesoid kes) {
 		if (kes == null) {
@@ -360,27 +299,27 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	private void repaintWpt(final Wpt wpt) {
 		wpt.invalidate();
 
-		//    Point p = coord.transform(wpt.getWgs().toMou());
-		//    Rectangle rect1 = new Rectangle(p.x - POLOMER_KESE, p.y - POLOMER_KESE,
-		//        POLOMER_KESE * 2, POLOMER_KESE * 2);
+		// Point p = coord.transform(wpt.getWgs().toMou());
+		// Rectangle rect1 = new Rectangle(p.x - POLOMER_KESE, p.y - POLOMER_KESE,
+		// POLOMER_KESE * 2, POLOMER_KESE * 2);
 
 		frontaWaypointu.add(new WptPaintRequest(wpt, null));
-		//    Repaintanger repaintanger = new Repaintanger();
-		//    repaintanger.includeInsetsOnly(wpt);
-		//    repaintanger.include(wpt.getWgs().toMou());
+		// Repaintanger repaintanger = new Repaintanger();
+		// repaintanger.includeInsetsOnly(wpt);
+		// repaintanger.include(wpt.getWgs().toMou());
 		//
-		//    Rectangle rect2 = repaintanger.computeRectangle(coord);
-		//    //    	new Rectangle(p.x - POLOMER_KESE, p.y - POLOMER_KESE,
-		//    //        POLOMER_KESE * 2, POLOMER_KESE * 2);
-		//    //	  repaintovaneCtverce .add(rect);
-		//    //    System.out.println("REKTANGLE-1: " + rect1 + " -- " + p);
-		//    //    System.out.println("REKTANGLE-2: " + rect2);
-		//    repaint(rect2);
+		// Rectangle rect2 = repaintanger.computeRectangle(coord);
+		// // new Rectangle(p.x - POLOMER_KESE, p.y - POLOMER_KESE,
+		// // POLOMER_KESE * 2, POLOMER_KESE * 2);
+		// // repaintovaneCtverce .add(rect);
+		// // System.out.println("REKTANGLE-1: " + rect1 + " -- " + p);
+		// // System.out.println("REKTANGLE-2: " + rect2);
+		// repaint(rect2);
 	}
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -401,7 +340,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 	}
 
-
 	@Override
 	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
 		if (wptPodMysi != null) {
@@ -417,7 +355,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		p.add(zhasinace);
 		final Genotyp genotyp = mysNadWpt.getGenotyp(vsechny.getGenom());
 		for (final Alela alela : genotyp.getAlely()) {
-			if (alela.getGen().isVypsatelnyVeZhasinaci() &&  !alela.isVychozi()) {
+			if (alela.getGen().isVypsatelnyVeZhasinaci() && !alela.isVychozi()) {
 				zhasinace.add(factory.init(new ZhasniKeseUrciteAlelyAction(alela)));
 			}
 		}
@@ -427,7 +365,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		p.add(factory.init(new ZoomKesAction(kesoid)));
 		final JMenuItem item = new JMenuItem(factory.init(new CenterWaypointAction(mysNadWpt)));
 		item.setText("Centruj");
-		//TODO Dát ikonu středování
+		// TODO Dát ikonu středování
 		item.setIcon(null);
 		p.add(item);
 		if (kesoid.getUrlShow() != null) {
@@ -462,7 +400,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -474,13 +414,13 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		if (kes != kesoidPodMysi) {
 			final Kesoid staraKes = kesoidPodMysi;
 			kesoidPodMysi = kes;
-			//repaint();
+			// repaint();
 			repaintKes(staraKes);
 			repaintKes(kesoidPodMysi);
 		}
 
 		if (wptPodMysi != null) {
-			//      setCursor(cursor);
+			// setCursor(cursor);
 			jakoTooltip.setText(wptPodMysi.textToolTipu());
 			jakoTooltip.setOpaque(true);
 			jakoTooltip.setBackground(Color.WHITE);
@@ -490,18 +430,18 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 			p.y -= jakoTooltip.getHeight();
 			jakoTooltip.setLocation(p);
 			jakoTooltip.setVisible(true);
-			//System.out.println("TEXTIK ZDE: " + p);
+			// System.out.println("TEXTIK ZDE: " + p);
 		} else {
 			jakoTooltip.setVisible(false);
-			//System.out.println("TEXTIK PRYC: ");
+			// System.out.println("TEXTIK PRYC: ");
 		}
-		//setToolTipText();
+		// setToolTipText();
 
 	}
 
 	@Override
 	public Cursor getMouseCursor(final boolean pressed) {
-		if (wptPodMysi != null && ! pressed) {
+		if (wptPodMysi != null && !pressed) {
 			final Cursor cursor = FKurzory.NAD_WAYPOINTEM;
 			return cursor;
 		} else {
@@ -509,26 +449,21 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 	}
 
-
 	private Wpt najdiWptVBlizkosti(final Point p) {
-		//System.out.println("POSUNOVACKA TO ASI BUDE: " + e);
+		// System.out.println("POSUNOVACKA TO ASI BUDE: " + e);
 		final int polomerCitlivosi = POLOMER_CITLIVOSTI;
-		final Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi,
-				polomerCitlivosi * 2, polomerCitlivosi * 2);
+		final Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi, polomerCitlivosi * 2, polomerCitlivosi * 2);
 		final Sheet<Wpt> swpt = indexator == null ? null : indexator.locateAnyOne(getSoord().transforToBounding(rect));
 		final Wpt wpt = swpt == null ? null : swpt.get();
 		return wpt;
 	}
 
-
 	public void onEvent(final PoziceSeMaMenitEvent event) {
 		// TODO-vylet Tato metoda by měla být na modelu, pak je otázkou s jakou citlivostí vybírat
 		final int polomerCitlivosi = POLOMER_CITLIVOSTI;
 		final Point p = getSoord().transform(event.mou);
-		final Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi,
-				polomerCitlivosi * 2, polomerCitlivosi * 2);
-		final Sheet<Wpt> swpt = indexator == null ? null : indexator.locateNearestOne(
-				getSoord().transforToBounding(rect), event.mou.xx, event.mou.yy);
+		final Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi, polomerCitlivosi * 2, polomerCitlivosi * 2);
+		final Sheet<Wpt> swpt = indexator == null ? null : indexator.locateNearestOne(getSoord().transforToBounding(rect), event.mou.xx, event.mou.yy);
 		final Wpt wpt = swpt == null ? null : swpt.get();
 		if (wpt != null && wpt.getMou().equals(event.mou)) { // je to přesně on
 			int priorita = 40;
@@ -549,9 +484,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 	}
 
-
 	/**
 	 * Vrátí pozici nmyši, pokud je v blízkosti kříže
+	 * 
 	 * @return
 	 */
 	@Override
@@ -570,8 +505,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	private static class WptPaintRequest {
 
-		private final Wpt wpt;
-		private final Mou mou;
+		private final Wpt	wpt;
+		private final Mou	mou;
 
 		public WptPaintRequest(final Wpt wpt, final Mou mou) {
 			this.wpt = wpt;
@@ -585,7 +520,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		private final WeakReference<JKesoidySlide> wrKesoidy;
 
 		public PaintovaciVlakno(final JKesoidySlide jKesoidy) {
-			super ("Paintovani");
+			super("Paintovani");
 			final ReferenceQueue<JKesoidySlide> refqueue = new ReferenceQueue<>();
 			wrKesoidy = new WeakReference<>(jKesoidy, refqueue);
 			new Thread("Zabijec paintovaciho vlakna") {
@@ -603,8 +538,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		@Override
 		public void run() {
 			JKesoidySlide jKesoidy = wrKesoidy.get();
-			if (jKesoidy == null)
-			{
+			if (jKesoidy == null) {
 				return; // slide kešoidů už je pryč, takže ani nemá cenu dál něco řešit
 			}
 			for (;;) {
@@ -613,8 +547,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 					jKesoidy = null; // přičekání na požadavek ve froně nesmím držet slide waypointů, aby mohl být garbage collectorem sebrán
 					WptPaintRequest wpr = frontaWaypointu2.poll(10000, TimeUnit.MILLISECONDS); // aby umělo vlákno skončit, musí být timeout
 					jKesoidy = wrKesoidy.get();
-					if (jKesoidy == null)
-					{
+					if (jKesoidy == null) {
 						return; // slide kešoidů už je pryč, takže ani nemá cenu dál něco řešit
 					}
 					if (wpr == null) {
@@ -631,7 +564,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 					}
 					vyvolejVykresleni(mouRect, jKesoidy);
 				} catch (final InterruptedException e) {
-					//          System.out.println("Paintovaci vlakno konci diky intrerupci.");
+					// System.out.println("Paintovaci vlakno konci diky intrerupci.");
 					return;
 				}
 			}
@@ -639,41 +572,42 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 		/**
 		 * Asynchronně volaná metoda provýpočet sklivce
+		 * 
 		 * @param wpt
 		 */
 		private void spocitejSklivece(final Wpt wpt, final JKesoidySlide jKesoidy) {
 			jKesoidy.computeSklivec(wpt);
 		}
 
-
 		private void vyvolejVykresleni(final MouRect aMouRect, final JKesoidySlide jKesoidy) {
 			if (aMouRect.isEmpty()) {
 				return;
 			}
-			SwingUtilities.invokeLater(
-					new Runnable() {
-						@Override
-						public void run() {
-							final Insets bigiestIconInsets = jKesoidy.ikonBag.getSada().getBigiestIconInsets();
-							final Rectangle rect = jKesoidy.getSoord().transform(aMouRect, bigiestIconInsets);
-							jKesoidy.repaint(rect);
-						}
-					});
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					final Insets bigiestIconInsets = jKesoidy.ikonBag.getSada().getBigiestIconInsets();
+					final Rectangle rect = jKesoidy.getSoord().transform(aMouRect, bigiestIconInsets);
+					jKesoidy.repaint(rect);
+				}
+			});
 		}
 
-		//    @Override
-		//    public void finalize() {
-		//      System.out.println("Paintovací vlákno fanalizováno");
-		//    }
+		// @Override
+		// public void finalize() {
+		// System.out.println("Paintovací vlákno fanalizováno");
+		// }
 	}
 
 	@Override
 	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
+
 	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
+
 	public void inject(final CestyModel cestyModel) {
 		this.cestyModel = cestyModel;
 	}
@@ -681,12 +615,13 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
-	//  public void inject(VyrezModel vyrezModel) {
-	//    this.vyrezModel = vyrezModel;
-	//  }
+	// public void inject(VyrezModel vyrezModel) {
+	// this.vyrezModel = vyrezModel;
+	// }
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -694,7 +629,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		registerEvents();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.core.coord.JSingleSlide0#render(java.awt.Graphics)
 	 */
 	@Override
@@ -702,8 +639,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		paintComponent(g);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
 	 */
 	@Override
@@ -716,10 +654,10 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		return EJakOtacetPriRendrovani.COORD;
 	}
 
-	//  @Override
-	//  public void finalize() {
-	//    System.out.println("Kesoidy finalizovány");
-	//  }
+	// @Override
+	// public void finalize() {
+	// System.out.println("Kesoidy finalizovány");
+	// }
 
 	private void computeSklivec(final Wpt wpt) {
 		final Sklivec sklivec = ikonBag.getSada().getSklivec(computeGenotyp(wpt));
@@ -729,7 +667,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	public void inject(final VyletModel vyletModel) {
 		this.vyletModel = vyletModel;
 	}
-
 
 	public static double getScale() {
 		return scale;

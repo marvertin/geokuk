@@ -35,13 +35,10 @@ public class Utm extends Misto0 {
 		return true;
 	}
 
-
-
-	public final double ux;
-	public final double uy;
-	public final int polednikovaZona;
-	public final char rovnobezkovaZona;
-
+	public final double	ux;
+	public final double	uy;
+	public final int	polednikovaZona;
+	public final char	rovnobezkovaZona;
 
 	public Utm(final double ux, final double uy, final int polednikovaZona, final char rovnobezkovaZona) {
 		this.ux = ux;
@@ -52,6 +49,7 @@ public class Utm extends Misto0 {
 
 	/**
 	 * Vrací jiné místo na zemi, ale ve stejné zóně.
+	 * 
 	 * @param ux
 	 * @param uy
 	 * @return
@@ -62,11 +60,12 @@ public class Utm extends Misto0 {
 
 	/**
 	 * Vrací stejné místo na zemi, ael v souřadnicích vyjádřených v jiné zóně.
+	 * 
 	 * @param ux
 	 * @param uy
 	 * @return
 	 */
-	public Utm toSampePlaceInAnotherZone( final int polednikovaZona, final char rovnobezkovaZona) {
+	public Utm toSampePlaceInAnotherZone(final int polednikovaZona, final char rovnobezkovaZona) {
 		return new Utm(this.ux, this.uy, polednikovaZona, rovnobezkovaZona);
 	}
 
@@ -86,9 +85,9 @@ public class Utm extends Misto0 {
 
 	public Mou toMou() {
 		// Takto to bylo v seznamových mapách
-		//double xx = (ux + 3700000) / MOU_FACTOR;
-		//double yy = (uy - 1300000) / MOU_FACTOR;
-		//return new Mou((int)xx, (int)yy);
+		// double xx = (ux + 3700000) / MOU_FACTOR;
+		// double yy = (uy - 1300000) / MOU_FACTOR;
+		// return new Mou((int)xx, (int)yy);
 		return toWgs().toMou();
 	}
 
@@ -96,6 +95,5 @@ public class Utm extends Misto0 {
 	public Utm toUtm() {
 		return this;
 	}
-
 
 }

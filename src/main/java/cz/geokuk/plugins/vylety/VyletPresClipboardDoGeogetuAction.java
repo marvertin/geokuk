@@ -1,11 +1,9 @@
 package cz.geokuk.plugins.vylety;
 
-
-import cz.geokuk.img.ImageLoader;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
+import cz.geokuk.img.ImageLoader;
 
 public class VyletPresClipboardDoGeogetuAction extends VyletAction0 {
 
@@ -27,6 +25,5 @@ public class VyletPresClipboardDoGeogetuAction extends VyletAction0 {
 		super.vyletChanged();
 		setEnabled(vyletModel.get(EVylet.ANO).size() > 0);
 	}
-
 
 }

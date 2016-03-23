@@ -3,7 +3,6 @@
  */
 package cz.geokuk.plugins.kesoid.hledani;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,8 +14,6 @@ import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.util.lang.FUtil;
 
-
-
 /**
  * @author veverka
  *
@@ -24,6 +21,7 @@ import cz.geokuk.util.lang.FUtil;
 public class Hledac extends Hledac0<Nalezenec> {
 
 	private KesBag kesBag;
+
 	/**
 	 * @param aKl
 	 */
@@ -37,13 +35,15 @@ public class Hledac extends Hledac0<Nalezenec> {
 		Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());
 		List<Nalezenec> list = new ArrayList<>();
 		for (Kesoid kesoid : kesBag.getKesoidy()) {
-			if (getFuture() != null && getFuture().isCancelled()) return null;
+			if (getFuture() != null && getFuture().isCancelled())
+				return null;
 			String[] prohledavanci = kesoid.getProhledavanci();
 			Nalezenec nal = null;
 			for (String prohledavanec : prohledavanci) {
 				if (prohledavanec != null) {
 					nal = poro.porovnej(prohledavanec);
-					if (nal != null) break;
+					if (nal != null)
+						break;
 				}
 			}
 			if (nal != null) {
@@ -58,10 +58,10 @@ public class Hledac extends Hledac0<Nalezenec> {
 	}
 
 	private class Porovnavac {
-		private final String vzorek;
-		private final boolean regularniVyraz;
+		private final String	vzorek;
+		private final boolean	regularniVyraz;
 
-		private final Pattern pat;
+		private final Pattern	pat;
 
 		/**
 		 * @param aVzorek
@@ -103,9 +103,9 @@ public class Hledac extends Hledac0<Nalezenec> {
 
 	}
 
-	//  public static void main(String[] args) {
-	//	  System.out.println(FUtil.cestinuPryc("Příliš žluťoučký kůň úpěl ďábelské ódy"));
-	//	  System.out.println(FUtil.cestinuPryc("Tady neni cestina"));
-	//	  System.out.println(FUtil.cestinuPryc("Tady je čeština"));
-	//  }
+	// public static void main(String[] args) {
+	// System.out.println(FUtil.cestinuPryc("Příliš žluťoučký kůň úpěl ďábelské ódy"));
+	// System.out.println(FUtil.cestinuPryc("Tady neni cestina"));
+	// System.out.println(FUtil.cestinuPryc("Tady je čeština"));
+	// }
 }

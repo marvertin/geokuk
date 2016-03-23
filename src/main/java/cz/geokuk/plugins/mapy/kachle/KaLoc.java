@@ -3,16 +3,15 @@ package cz.geokuk.plugins.mapy.kachle;
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coordinates.Mou;
 
-
 public class KaLoc {
 
-
-	private final int moumer;
-	private final int ksx;
-	private final int ksy;
+	private final int	moumer;
+	private final int	ksx;
+	private final int	ksy;
 
 	/**
 	 * Konstruuje lokaci kachle na základě snalosti souřadnic severozápadního rohu.
+	 * 
 	 * @param mouSZ
 	 * @param moumer
 	 * @return
@@ -21,11 +20,12 @@ public class KaLoc {
 		if (moumer == 0) {
 			return new KaLoc(0, 0, moumer);
 		}
-		return ofJZ(new Mou(mouSZ.xx, mouSZ.yy  - (1 << Coord.MOU_BITS - moumer) ), moumer);
+		return ofJZ(new Mou(mouSZ.xx, mouSZ.yy - (1 << Coord.MOU_BITS - moumer)), moumer);
 	}
 
 	/**
 	 * Konstruuje lokaci kachle na základě snalosti souřadnic jihozápadního rohu.
+	 * 
 	 * @param mouJZ
 	 * @param moumer
 	 * @return
@@ -39,12 +39,11 @@ public class KaLoc {
 		return new KaLoc(ksx, ksy, moumer);
 	}
 
-
-
 	/**
 	 * Vrátí souřadnice JZ rohu.
 	 *
 	 * Je to potřeba jen kvůli prioritnímu stahování od středu.
+	 * 
 	 * @return
 	 */
 	public Mou getMouJZ() {
@@ -55,16 +54,18 @@ public class KaLoc {
 	 * Vrátí souřadnice JZ rohu.
 	 *
 	 * Je to potřeba jen kvůli prioritnímu stahování od středu.
+	 * 
 	 * @return
 	 */
 	public Mou getMouSZ() {
 		return getMouJZ().add(0, 1 << Coord.MOU_BITS - moumer);
 	}
 
-
 	/**
-	 * @param mou Souřadnice levého horního (SZ) rohu kachle.
-	 * @param moumer měřítko
+	 * @param mou
+	 *            Souřadnice levého horního (SZ) rohu kachle.
+	 * @param moumer
+	 *            měřítko
 	 */
 	private KaLoc(final int ksx, final int ksy, final int moumer) {
 		this.ksx = ksx;
@@ -72,22 +73,20 @@ public class KaLoc {
 		this.moumer = moumer;
 	}
 
-
 	/**
-	 * Počet kachlí vodorovně nebo svisle pro aktuální měřítko.
-	 * Je t ovždy mocnina dvou
+	 * Počet kachlí vodorovně nebo svisle pro aktuální měřítko. Je t ovždy mocnina dvou
+	 * 
 	 * @return
 	 */
 	public int getSize() {
 		return 1 << moumer;
 	}
+
 	/**
-	 * Xsová souřadnice kachle. U vedlejších kachlí se souřadnice liší o jednu.
-	 * Jsou se zanménkkem, například pro moumer=3 jdou souřadnice -4 až 3.
-	 * Nula je kachle ležící svým JZ bodem na WGS=[0,0]
+	 * Xsová souřadnice kachle. U vedlejších kachlí se souřadnice liší o jednu. Jsou se zanménkkem, například pro moumer=3 jdou souřadnice -4 až 3. Nula je kachle ležící svým JZ bodem na WGS=[0,0]
 	 *
-	 * Kachle jdou zleva doprava a zespodu nahoru jako normální souřadnice.
-	 * Kachle ze [signedMapX, signedMapY] leží v africe
+	 * Kachle jdou zleva doprava a zespodu nahoru jako normální souřadnice. Kachle ze [signedMapX, signedMapY] leží v africe
+	 * 
 	 * @return
 	 */
 	public int getSignedX() {
@@ -100,6 +99,7 @@ public class KaLoc {
 
 	/**
 	 * Konvertuje merkátorovu souřadnici na mapovou souřadnici
+	 * 
 	 * @param mersou
 	 * @return
 	 */
@@ -109,6 +109,7 @@ public class KaLoc {
 
 	/**
 	 * Konvertuje merkátorovu souřadnici na mapovou souřadnici
+	 * 
 	 * @param mersou
 	 * @return
 	 */
@@ -119,23 +120,19 @@ public class KaLoc {
 		return getSize() / 2 - 1 - getSignedY();
 	}
 
-
-
-
-
 	public int getMoumer() {
 		return moumer;
 	}
 
 	private static int maskuj(final int a, final int bitu) {
 		final int m = (1 << bitu) - 1;
-		return (a & 1 << bitu - 1) != 0 ? a | ~ m : a & m;
+		return (a & 1 << bitu - 1) != 0 ? a | ~m : a & m;
 
 	}
 
 	public static void main(final String[] args) {
 
-		for (int i=-20; i< 20; i++) {
+		for (int i = -20; i < 20; i++) {
 
 			System.out.println(i + " " + maskuj(i, 3));
 

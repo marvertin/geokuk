@@ -11,8 +11,8 @@ class GenotypBuilderWpt {
 	/**
 	 *
 	 */
-	final Genotyp g;
-	private final Genom genom;
+	final Genotyp		g;
+	private final Genom	genom;
 
 	/**
 	 *
@@ -22,12 +22,9 @@ class GenotypBuilderWpt {
 		this.genom = genom;
 	}
 
-
 	void build(Wpt wpt) {
 		g.put(wpt.isMainWpt() ? genom.ALELA_h : genom.ALELA_v);
 		g.put(genom.alelaSym(wpt.getSym(), null));
 	}
-
-
 
 }

@@ -14,11 +14,11 @@ import cz.geokuk.framework.JPrekryvnik;
  */
 public class JCoordPrekryvnik0 extends JPrekryvnik {
 
-	private static final long serialVersionUID = -4498307548625868036L;
+	private static final long			serialVersionUID	= -4498307548625868036L;
 
-	private Coord soord = Coord.prozatimniInicializacni();
+	private Coord						soord				= Coord.prozatimniInicializacni();
 
-	private final List<JSingleSlide0> slides = new ArrayList<>();
+	private final List<JSingleSlide0>	slides				= new ArrayList<>();
 
 	/**
 	 * @return the coord
@@ -30,6 +30,7 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 	public JCoordPrekryvnik0() {
 		registerEvents();
 	}
+
 	/**
 	 *
 	 */
@@ -42,7 +43,10 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 			}
 		});
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.JPrekryvnik#add(java.awt.Component)
 	 */
 	@Override
@@ -59,7 +63,8 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 	 * @param newSoord
 	 */
 	protected void setSoord(Coord newSoord) {
-		if (newSoord.equals(soord)) return; // je to to samé
+		if (newSoord.equals(soord))
+			return; // je to to samé
 		soord = newSoord;
 		reinicializujVyrezy();
 	}
@@ -76,6 +81,5 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 			slide.onVyrezChanged();
 		}
 	}
-
 
 }

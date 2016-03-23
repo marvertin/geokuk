@@ -3,7 +3,6 @@
  */
 package cz.geokuk.util.pocitadla;
 
-
 public class PocitadloMalo extends Pocitadlo {
 
 	public PocitadloMalo(String aName, String aDescription) {

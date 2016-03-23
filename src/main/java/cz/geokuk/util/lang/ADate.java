@@ -2,11 +2,7 @@ package cz.geokuk.util.lang;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
-
+import java.util.*;
 
 /** Třída pro prácis datumy a časem. Od svého předka Date se liší zejména:
  * množstvím funkcí které je schopna provádět a větším počtem konstruktorů
@@ -31,22 +27,18 @@ import java.util.TimeZone;
  */
 
 /**
- * Reprezentuje datum jako takové, to znamená den měsíc rok
- * bez vazby na konkrétní okamžik. Datum je reprezentováno
- * interně jako počet dnů od 1.1.1900.
+ * Reprezentuje datum jako takové, to znamená den měsíc rok bez vazby na konkrétní okamžik. Datum je reprezentováno interně jako počet dnů od 1.1.1900.
  */
-public final class ADate
-extends AObject0
-implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateComparable {
+public final class ADate extends AObject0 implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateComparable {
 
-	private static final long serialVersionUID = -5930101122857422133L;
+	private static final long	serialVersionUID	= -5930101122857422133L;
 
 	// LATER [veverka?] vnitřní držbu udělej pomocí den,měsíc,ruk a metody stav nad kalendářem
 	/**
 	 * Drží datum. Je reprezentováno půlnocí v GMT čase.
 	 */
-	//final jsem musel odstranit kvůli _clone()
-	private java.util.Date iJavaDatum;
+	// final jsem musel odstranit kvůli _clone()
+	private java.util.Date		iJavaDatum;
 
 	/**
 	 * Vytvoří datum z SQL datumu
@@ -56,42 +48,34 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * Konstruuje z již existujícího java.util.Date.
-	 * Pouze pro interní potřebu.
+	 * Konstruuje z již existujícího java.util.Date. Pouze pro interní potřebu.
 	 */
 	private ADate(java.util.Date aJavaDatum) {
 		iJavaDatum = aJavaDatum;
 	}
 
-
 	/**
 	 * Konstruuje datum z roku, měsíce a dne.
 	 *
-	 * @param int rok, int mesic, int den
+	 * @param int
+	 *            rok, int mesic, int den
 	 */
 	private ADate(int rok, int mesic, int den) {
 		iJavaDatum = fromRokMesicDen(rok, mesic, den);
 	}
 
-
 	/**
-	 * Koonstruuje datum z řetězce. Možné formáty řetězců:
-	 * yyyy-mm-dd (yyyy-m-d)
-	 * mm-dd-yyyy (m-d-yyyy)
-	 * yyyy/mm/dd (yyyy/m/d)
-	 * mm/dd/yyyy (m/d/yyyy)
-	 * dd.mm.yyyy (d.m.yyyy)
+	 * Koonstruuje datum z řetězce. Možné formáty řetězců: yyyy-mm-dd (yyyy-m-d) mm-dd-yyyy (m-d-yyyy) yyyy/mm/dd (yyyy/m/d) mm/dd/yyyy (m/d/yyyy) dd.mm.yyyy (d.m.yyyy)
 	 *
-	 * @param String Datum
+	 * @param String
+	 *            Datum
 	 */
 	private ADate(String Datum) {
 		iJavaDatum = fromString(Datum);
 	}
 
 	/**
-	 * Pořadí dne v měsíci jako int(rozsah 1 až 31)
-	 * 1...první den v měsící
-	 * 31..zpravidla poslední den v měsíci (zálěží na měsíci)
+	 * Pořadí dne v měsíci jako int(rozsah 1 až 31) 1...první den v měsící 31..zpravidla poslední den v měsíci (zálěží na měsíci)
 	 *
 	 * @return Den v měsíci
 	 */
@@ -100,14 +84,12 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * Pořadí měsíce v roce jako int(1 až 12)
-	 * 1...první měsíc (leden)
-	 * 12..poslední měsíc (prosinec)
+	 * Pořadí měsíce v roce jako int(1 až 12) 1...první měsíc (leden) 12..poslední měsíc (prosinec)
 	 *
 	 * @return Měsíc v roce
 	 */
 	public int getMonthNumber() {
-		//Pozor, Calendar ma mesice od nuly !!
+		// Pozor, Calendar ma mesice od nuly !!
 		return actcal().get(Calendar.MONTH) + 1;
 	}
 
@@ -129,7 +111,6 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 		return asString();
 	}
 
-
 	/**
 	 * @deprecated Tato metoda je jen pro ladící účely, normálně nepoužívat!
 	 */
@@ -140,40 +121,32 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	/**
 	 * Vrací datum jako SQL datum
 	 *
-	 * @deprecated Pouzij FPersistence.encodeDateToPersistence(ADate date).
-	 * FPersistence vraci Date tak jak je potřeba pro zperzistnentěnéí.
-	 * Nebo použij {@link #getSqlDateInDefaultTimezone()} nebo {@link #getSqlDateInUtc()}, podle toho co doopravdy potřebuješ.
-	 * <p/>
-	 * Uvědomme si, že java.sqlDate má uvnitř čas s přessností na milisekndy a ten
-	 * jak víme je:
-	 * the difference, measured in milliseconds, between
-	 * the current time and midnight, January 1, 1970 UTC.
-	 * <p/>
-	 * Skutečnost, že je typ java.sql.Data v dané časové zńě znamená,
-	 * že obsahuje čas odpovídající přesně půlnoci, ktrou začíná zobrazované den v patřičné časové zóně.
-	 * <p/>
-	 * Skutečnost, že vrací Date v nějakém locale znemená, že vrací čst
+	 * @deprecated Pouzij FPersistence.encodeDateToPersistence(ADate date). FPersistence vraci Date tak jak je potřeba pro zperzistnentěnéí. Nebo použij {@link #getSqlDateInDefaultTimezone()} nebo {@link #getSqlDateInUtc()}, podle toho co doopravdy potřebuješ.
+	 *             <p/>
+	 *             Uvědomme si, že java.sqlDate má uvnitř čas s přessností na milisekndy a ten jak víme je: the difference, measured in milliseconds, between the current time and midnight, January 1, 1970 UTC.
+	 *             <p/>
+	 *             Skutečnost, že je typ java.sql.Data v dané časové zńě znamená, že obsahuje čas odpovídající přesně půlnoci, ktrou začíná zobrazované den v patřičné časové zóně.
+	 *             <p/>
+	 *             Skutečnost, že vrací Date v nějakém locale znemená, že vrací čst
 	 */
 	public java.sql.Date asSqlDate() {
 		return new java.sql.Date(iJavaDatum.getTime());
 	}
 
-
 	/**
 	 * Konstruuje datum z roku, mesice a dne.
 	 *
-	 * @param int rok, int mesic, int den
+	 * @param int
+	 *            rok, int mesic, int den
 	 * @return java.util.Date Datum
 	 */
 	private static java.util.Date fromRokMesicDen(int rok, int mesic, int den) {
 		try {
 			Calendar c = newcal();
-			//Pozor, Calendar ma mesice od nuly !!
+			// Pozor, Calendar ma mesice od nuly !!
 			c.set(rok, mesic - 1, den, 0, 0, 0);
 
-			if (c.get(Calendar.YEAR) != rok
-					|| c.get(Calendar.MONTH) != mesic - 1
-					|| c.get(Calendar.DAY_OF_MONTH) != den)
+			if (c.get(Calendar.YEAR) != rok || c.get(Calendar.MONTH) != mesic - 1 || c.get(Calendar.DAY_OF_MONTH) != den)
 				throw new IllegalArgumentException(den + "." + mesic + "." + rok);
 
 			c.set(Calendar.MILLISECOND, 0);
@@ -184,14 +157,10 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * Datum z řetězce. Možné formáty řetězců:
-	 * yyyy-mm-dd (yyyy-m-d)
-	 * mm-dd-yyyy (m-d-yyyy)
-	 * yyyy/mm/dd (yyyy/m/d)
-	 * mm/dd/yyyy (m/d/yyyy)
-	 * dd.mm.yyyy (d.m.yyyy)
+	 * Datum z řetězce. Možné formáty řetězců: yyyy-mm-dd (yyyy-m-d) mm-dd-yyyy (m-d-yyyy) yyyy/mm/dd (yyyy/m/d) mm/dd/yyyy (m/d/yyyy) dd.mm.yyyy (d.m.yyyy)
 	 *
-	 * @param String Datum
+	 * @param String
+	 *            Datum
 	 * @return java.util.Date Datum
 	 */
 	private static java.util.Date fromString(String Datum) {
@@ -236,14 +205,12 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 		}
 	}
 
-
-	/** Vrací formátovaný řetězec z datumu
-	 * @return d.m.yyyy
-    private String toDmyString() {
-
-    return MessageFormat.format("{0,number,0}.{1,number,0}.{2,number,0000}", new Object[]
-    {new Integer(getDayNumber()), new Integer(getMonthNumber()), new Integer(getYearNumber())});
-    }
+	/**
+	 * Vrací formátovaný řetězec z datumu
+	 * 
+	 * @return d.m.yyyy private String toDmyString() {
+	 * 
+	 *         return MessageFormat.format("{0,number,0}.{1,number,0}.{2,number,0000}", new Object[] {new Integer(getDayNumber()), new Integer(getMonthNumber()), new Integer(getYearNumber())}); }
 	 */
 
 	/**
@@ -252,14 +219,11 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	 * @return yyyy-mm-dd
 	 */
 	public String asString() {
-		return MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00}",
-				getYearNumber(), getMonthNumber(), getDayNumber());
+		return MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00}", getYearNumber(), getMonthNumber(), getDayNumber());
 	}
 
-
-	//================================================
+	// ================================================
 	// práce s localy
-
 
 	/**
 	 * Dodá gregoriánský kalendář pro nulový offset (0, UTC).
@@ -277,10 +241,8 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 		return c;
 	}
 
-
 	/**
-	 * Je po zadaném datumu, ne však toto datum. Pokud je zadané datum null,
-	 * vždy je po něm.
+	 * Je po zadaném datumu, ne však toto datum. Pokud je zadané datum null, vždy je po něm.
 	 *
 	 * @return boolean Zda je po
 	 * @deprecated Použij isGreater
@@ -290,8 +252,7 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * Je po zadaném datumu nebo rovno tomuto datumu. Pokud je zadané datum null,
-	 * vždy je po něm.
+	 * Je po zadaném datumu nebo rovno tomuto datumu. Pokud je zadané datum null, vždy je po něm.
 	 *
 	 * @return boolean Zda je po nebo dnes
 	 * @deprecated Použij isGreaterOrEqual
@@ -301,8 +262,7 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * Je před zadaným datumem, ne však toto datum. Pokud je zadané datum null,
-	 * vždy je před ním.
+	 * Je před zadaným datumem, ne však toto datum. Pokud je zadané datum null, vždy je před ním.
 	 *
 	 * @return boolean Zda je před
 	 * @deprecated Použij isLess
@@ -312,8 +272,7 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * Je před zadaným datumem nebo rovno tomuto datumu. Pokud je zadané datum null,
-	 * vždy je před ním.
+	 * Je před zadaným datumem nebo rovno tomuto datumu. Pokud je zadané datum null, vždy je před ním.
 	 *
 	 * @return boolean Zda je před nebo dnes
 	 * @deprecated Použij isLessOrEqual
@@ -322,13 +281,10 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 		return isLessOrEqual(adatum);
 	}
 
-
-	//===========================Datumová aritmetika===================
+	// ===========================Datumová aritmetika===================
 
 	/**
-	 * Pořadí dne v týdnu jako int (rozsah 1 až 7)
-	 * 1...neděle
-	 * 7...sobota
+	 * Pořadí dne v týdnu jako int (rozsah 1 až 7) 1...neděle 7...sobota
 	 *
 	 * @return den v týdnu
 	 * @deprecated JP měla by se použít funkce s naším výčtovým typem, see getWeekDay
@@ -350,7 +306,8 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	/**
 	 * Přičte k datumu určený počet dní (int i)a vrátí nové datum
 	 *
-	 * @param Počet přičítaných dní
+	 * @param Počet
+	 *            přičítaných dní
 	 * @return ADate Datum
 	 */
 	public ADate addDays(int i) {
@@ -362,7 +319,8 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	/**
 	 * Přičte k datumu určený počet týdnů (int i) a vrátí nové datum
 	 *
-	 * @param Počet přičítaných týdnů
+	 * @param Počet
+	 *            přičítaných týdnů
 	 * @return ADate Datum
 	 */
 	public ADate addWeeks(int i) {
@@ -371,17 +329,16 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 		return new ADate(c.getTime());
 	}
 
-
 	/**
 	 * Rozdíl v počtu dnů mezi dvěma datumy
 	 *
-	 * @param ADate Druhé datum
+	 * @param ADate
+	 *            Druhé datum
 	 * @return Počet dnů mezi datumy
 	 */
 	public int daysBetw(ADate Datum) {
 		return (int) ((iJavaDatum.getTime() - Datum.iJavaDatum.getTime()) / ATimestamp.getMillisecondsPerDay());
 	}
-
 
 	/**
 	 * Datum posledního dne v měsíci
@@ -424,8 +381,7 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	/**
 	 * Následující den (podle názvu dne).
 	 *
-	 * @return ADate Datum
-	 * vrátí první následující datum pro WeekDay (tedy ne dnešek.
+	 * @return ADate Datum vrátí první následující datum pro WeekDay (tedy ne dnešek.
 	 */
 	public ADate getNextWeekDay(EDayOfWeek DayOfWeek) {
 		ADate Result = addDays(1);
@@ -444,7 +400,6 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	public ADate getLastDayInWeek() {
 		return addWeeks(1).addDays(-actcal().get(Calendar.DAY_OF_WEEK));
 	}
-
 
 	/**
 	 * Vrací datum odpovídající zadanému časovému pásmu.
@@ -483,8 +438,7 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * Vrátí java.sql.Date obsahující časový okamžik, který je o půlnoci, kdy začíná den
-	 * v defaultní časové zuóně..
+	 * Vrátí java.sql.Date obsahující časový okamžik, který je o půlnoci, kdy začíná den v defaultní časové zuóně..
 	 *
 	 * @return
 	 * @author veverka
@@ -495,8 +449,7 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * Vrátí java.sql.Date obsahující časový okamžik, který je o půlnoci, kdy začíná den
-	 * na nultém poledníku.
+	 * Vrátí java.sql.Date obsahující časový okamžik, který je o půlnoci, kdy začíná den na nultém poledníku.
 	 *
 	 * @return
 	 * @author veverka
@@ -521,11 +474,13 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	/**
 	 * Zjistí, zda je rovno datumu.
 	 *
-	 * @param Object aDatum
+	 * @param Object
+	 *            aDatum
 	 * @return boolean Výsledek. Pokud byl argument null, je vráceno false.
 	 */
 	public boolean equals(Object aDatum) {
-		if (!(aDatum instanceof ADate)) return false;
+		if (!(aDatum instanceof ADate))
+			return false;
 		ADate obj = (ADate) aDatum;
 		return iJavaDatum.equals(obj.iJavaDatum);
 	}
@@ -554,11 +509,13 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 		return compareTo(b) != 0;
 	}
 
-
 	public int compareTo(ADate aObj) {
-		if (iJavaDatum.equals(aObj.iJavaDatum)) return 0;
-		if (aObj.iJavaDatum.after(iJavaDatum)) return -1;
-		if (iJavaDatum.after(aObj.iJavaDatum)) return 1;
+		if (iJavaDatum.equals(aObj.iJavaDatum))
+			return 0;
+		if (aObj.iJavaDatum.after(iJavaDatum))
+			return -1;
+		if (iJavaDatum.after(aObj.iJavaDatum))
+			return 1;
 		throw new RuntimeException("Interni chyba porovnavani ADate");
 	}
 
@@ -576,12 +533,8 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * Vrátí datum, které je v defaultní časové zóně, v zadaném čase.
-	 * Zdá se, že tuto metodu lze použít pto získání správného datumu z datumu získaného
-	 * z informixí proměnné typu DATE. Takto to srpávně funguje v JDK 1.4 a JAVA 5. Ve verzích JDK 1.3, 1.2
-	 * a 1.1 to fungovalo pokaždé jinak, stále do toho Sunové vrtali.
-	 * Pravděpodobně musí být splněna podmínka, že klientská Java aplikaci běží ve stejné nóně jako Informixí server,
-	 * jist si ale nejsem.
+	 * Vrátí datum, které je v defaultní časové zóně, v zadaném čase. Zdá se, že tuto metodu lze použít pto získání správného datumu z datumu získaného z informixí proměnné typu DATE. Takto to srpávně funguje v JDK 1.4 a JAVA 5. Ve verzích JDK 1.3, 1.2 a 1.1 to fungovalo pokaždé jinak, stále do toho
+	 * Sunové vrtali. Pravděpodobně musí být splněna podmínka, že klientská Java aplikaci běží ve stejné nóně jako Informixí server, jist si ale nejsem.
 	 *
 	 * @param date
 	 * @return
@@ -591,24 +544,20 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 		if (date == null) {
 			return null;
 		}
-		Calendar cal = Calendar.getInstance(); //kalendar se standardni casovou zonou
+		Calendar cal = Calendar.getInstance(); // kalendar se standardni casovou zonou
 
-		cal.setTime(date); //nastavim kalendar na cas z prijateho data
+		cal.setTime(date); // nastavim kalendar na cas z prijateho data
 		int rok = cal.get(Calendar.YEAR);
-		int mesic = cal.get(Calendar.MONTH) + 1; //JANUARY = 0
+		int mesic = cal.get(Calendar.MONTH) + 1; // JANUARY = 0
 		int den = cal.get(Calendar.DAY_OF_MONTH);
 
-		//return ADateConvertor.toADate(date);
+		// return ADateConvertor.toADate(date);
 		return new ADate(rok, mesic, den);
 	}
 
 	/**
-	 * Vrátí datum, které je na nultém poledníku, v zadaném čase.
-	 * Zdá se, že tuto metodu lze použít pto získání správného datumu z datumu získaného
-	 * z informixí proměnné typu DATE. Takto to srpávně funguje v JDK 1.4 a JAVA 5. Ve verzích JDK 1.3, 1.2
-	 * a 1.1 to fungovalo pokaždé jinak, stále do toho Sunové vrtali.
-	 * Pravděpodobně musí být splněna podmínka, že klientská Java aplikaci běží ve stejné nóně jako Informixí server,
-	 * jist si ale nejsem.
+	 * Vrátí datum, které je na nultém poledníku, v zadaném čase. Zdá se, že tuto metodu lze použít pto získání správného datumu z datumu získaného z informixí proměnné typu DATE. Takto to srpávně funguje v JDK 1.4 a JAVA 5. Ve verzích JDK 1.3, 1.2 a 1.1 to fungovalo pokaždé jinak, stále do toho
+	 * Sunové vrtali. Pravděpodobně musí být splněna podmínka, že klientská Java aplikaci běží ve stejné nóně jako Informixí server, jist si ale nejsem.
 	 *
 	 * @param date
 	 * @return
@@ -618,14 +567,14 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 		if (date == null) {
 			return null;
 		}
-		Calendar cal = Calendar.getInstance(new SimpleTimeZone(0, "UTC")); //kalendar se standardni casovou zonou
+		Calendar cal = Calendar.getInstance(new SimpleTimeZone(0, "UTC")); // kalendar se standardni casovou zonou
 
-		cal.setTime(date); //nastavim kalendar na cas z prijateho data
+		cal.setTime(date); // nastavim kalendar na cas z prijateho data
 		int rok = cal.get(Calendar.YEAR);
-		int mesic = cal.get(Calendar.MONTH) + 1; //JANUARY = 0
+		int mesic = cal.get(Calendar.MONTH) + 1; // JANUARY = 0
 		int den = cal.get(Calendar.DAY_OF_MONTH);
 
-		//return ADateConvertor.toADate(date);
+		// return ADateConvertor.toADate(date);
 		return new ADate(rok, mesic, den);
 	}
 
@@ -643,9 +592,7 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/**
-	 * @deprecated Metoda nedělá to, co chceš. Může mosunout datum o jedničku.
-	 * Doporučuji použít kalendář, vytáhnout SQL date jednotlivé složky a zkonstruovat datum.
-	 * Pozor na časovou zuónu.
+	 * @deprecated Metoda nedělá to, co chceš. Může mosunout datum o jedničku. Doporučuji použít kalendář, vytáhnout SQL date jednotlivé složky a zkonstruovat datum. Pozor na časovou zuónu.
 	 */
 
 	public static boolean canFrom(java.sql.Date aSqlDatum) {
@@ -664,7 +611,8 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	/**
 	 * Totéžž co {@link #add}
 	 *
-	 * @param aNthObject Počet dnů o kolik posunout.
+	 * @param aNthObject
+	 *            Počet dnů o kolik posunout.
 	 * @return Instance ADate s posunutým měsícem.
 	 */
 	public ADate getAnother(long aNthObject) {
@@ -676,7 +624,8 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	/**
 	 * Totéž co diff.
 	 *
-	 * @param aObject Objekt, který se odečítá.
+	 * @param aObject
+	 *            Objekt, který se odečítá.
 	 * @return Počet dnů rozdílu.
 	 */
 	public long getDistance(ADate aObject) {
@@ -710,15 +659,8 @@ implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateCom
 	}
 
 	/*
-  public static void main(String[] aArgs) {
-
-    ADate aDate = ADate.from(2005, 3, 30);
-    int dayNumber = aDate.getDayNumber();
-    AMonth m = aDate.prevMonth();
-    ADate lastMonthDate = m.lastDate();
-    int i = lastMonthDate.getDayNumber();
-    ADate d = (i < dayNumber) ? lastMonthDate : m.dateOf(dayNumber);
-    System.err.p rintln(d);
-  }
+	 * public static void main(String[] aArgs) {
+	 * 
+	 * ADate aDate = ADate.from(2005, 3, 30); int dayNumber = aDate.getDayNumber(); AMonth m = aDate.prevMonth(); ADate lastMonthDate = m.lastDate(); int i = lastMonthDate.getDayNumber(); ADate d = (i < dayNumber) ? lastMonthDate : m.dateOf(dayNumber); System.err.p rintln(d); }
 	 */
 }

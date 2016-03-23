@@ -35,16 +35,12 @@ package cz.geokuk.plugins.kesoid.hledani;
  * TableDemo.java requires no other files.
  */
 
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.Icon;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
@@ -54,22 +50,20 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
 
-
 /**
- * TableDemo is just like SimpleTableDemo, except that it
- * uses a custom TableModel.
+ * TableDemo is just like SimpleTableDemo, except that it uses a custom TableModel.
  */
 public class JKesTable extends JPanel {
-	private static final long serialVersionUID = 7687619215661046034L;
+	private static final long	serialVersionUID	= 7687619215661046034L;
 
-	private final MyTableModel tableModel;
+	private final MyTableModel	tableModel;
 
-	private final JTable table;
+	private final JTable		table;
 
-	private IkonBag ikonBag;
+	private IkonBag				ikonBag;
 
 	public JKesTable() {
-		super(new GridLayout(1,0));
+		super(new GridLayout(1, 0));
 
 		tableModel = new MyTableModel();
 
@@ -77,10 +71,10 @@ public class JKesTable extends JPanel {
 		table.setPreferredScrollableViewportSize(new Dimension(600, 70));
 		table.setFillsViewportHeight(true);
 
-		//Create the scroll pane and add the table to it.
+		// Create the scroll pane and add the table to it.
 		JScrollPane scrollPane = new JScrollPane(table);
 
-		//Add the scroll pane to this panel.
+		// Add the scroll pane to this panel.
 		add(scrollPane);
 		nastavVlastnostiSLoupcu();
 	}
@@ -88,7 +82,6 @@ public class JKesTable extends JPanel {
 	public void onEvent(IkonyNactenyEvent event) {
 		ikonBag = event.getBag();
 	}
-
 
 	public void addListSelectionListener(ListSelectionListener listener) {
 		table.getSelectionModel().addListSelectionListener(listener);
@@ -102,7 +95,8 @@ public class JKesTable extends JPanel {
 	}
 
 	/**
-	 * @param aKeslist the keslist to set
+	 * @param aKeslist
+	 *            the keslist to set
 	 */
 	public void setKeslist(List<Nalezenec> aKeslist) {
 		Nalezenec current = getCurrent();
@@ -115,7 +109,7 @@ public class JKesTable extends JPanel {
 					table.getSelectionModel().setSelectionInterval(index, index);
 					return;
 				}
-				index ++;
+				index++;
 			}
 		}
 		if (aKeslist.size() > 0) {
@@ -126,7 +120,6 @@ public class JKesTable extends JPanel {
 
 	}
 
-
 	private void nastavVlastnostiSLoupcu() {
 		TableColumn column;
 		column = table.getColumnModel().getColumn(0);
@@ -136,7 +129,6 @@ public class JKesTable extends JPanel {
 		column = table.getColumnModel().getColumn(1);
 		column.setMaxWidth(55);
 		column.setResizable(false);
-
 
 		column = table.getColumnModel().getColumn(2);
 		column.setMaxWidth(25);
@@ -154,37 +146,30 @@ public class JKesTable extends JPanel {
 
 	public Nalezenec getCurrent() {
 		int selectedRow = table.getSelectedRow();
-		if (selectedRow < 0 || selectedRow >= tableModel.getKeslist().size()) return null;
+		if (selectedRow < 0 || selectedRow >= tableModel.getKeslist().size())
+			return null;
 		Nalezenec nalezenec = tableModel.getKeslist().get(selectedRow);
 		return nalezenec;
 	}
 
 	class MyTableModel extends AbstractTableModel {
-		private static final long serialVersionUID = -1777521413836209700L;
+		private static final long	serialVersionUID	= -1777521413836209700L;
 
-		private List<Nalezenec> keslist = new ArrayList<>();
+		private List<Nalezenec>		keslist				= new ArrayList<>();
 
-		private final String[] columnNames = {
-				"Typ",
-				"Vzdálenost",
-				"Azimut",
-				"Id",
-				"Jméno",
-		"Autor"};
-		//    private Object[][] data = {
-		//        {"Mary", "Campione",
-		//          "Snowboarding", new Integer(5), new Boolean(false)},
-		//          {"Alison", "Huml",
-		//            "Rowing", new Integer(3), new Boolean(true)},
-		//            {"Kathy", "Walrath",
-		//              "Knitting", new Integer(2), new Boolean(false)},
-		//              {"Sharon", "Zakhour",
-		//                "Speed reading", new Integer(20), new Boolean(true)},
-		//                {"Philip", "Milne",
-		//                  "Pool", new Integer(10), new Boolean(false)},
-		//    };
-
-
+		private final String[]		columnNames			= { "Typ", "Vzdálenost", "Azimut", "Id", "Jméno", "Autor" };
+		// private Object[][] data = {
+		// {"Mary", "Campione",
+		// "Snowboarding", new Integer(5), new Boolean(false)},
+		// {"Alison", "Huml",
+		// "Rowing", new Integer(3), new Boolean(true)},
+		// {"Kathy", "Walrath",
+		// "Knitting", new Integer(2), new Boolean(false)},
+		// {"Sharon", "Zakhour",
+		// "Speed reading", new Integer(20), new Boolean(true)},
+		// {"Philip", "Milne",
+		// "Pool", new Integer(10), new Boolean(false)},
+		// };
 
 		/**
 		 * @return the keslist
@@ -194,13 +179,13 @@ public class JKesTable extends JPanel {
 		}
 
 		/**
-		 * @param aKeslist the keslist to set
+		 * @param aKeslist
+		 *            the keslist to set
 		 */
 		public void setKeslist(List<Nalezenec> aKeslist) {
 			keslist = aKeslist;
 			fireTableStructureChanged();
 		}
-
 
 		@Override
 		public int getColumnCount() {
@@ -224,13 +209,25 @@ public class JKesTable extends JPanel {
 
 			Object s = null;
 			switch (col) {
-			case 0: s = kesIkona(kesoid); break;
-			case 1: s = Math.round(nalezenec.getVzdalenost() / 100) / 10.0; break;
-			case 2: s = Ikonizer.findSmerIcon(nalezenec.getAzimut()); break;
-			case 3: s = formatuj(nalezenec, kesoid.getIdentifier()); break;
-			case 4: s = formatuj(nalezenec, kesoid.getNazev());  break;
-			case 5: s = formatuj(nalezenec, computeAutora(kesoid));  break;
-			//case 6: s = kes.getStatus() == EKesStatus.DISABLED;  break;
+			case 0:
+				s = kesIkona(kesoid);
+				break;
+			case 1:
+				s = Math.round(nalezenec.getVzdalenost() / 100) / 10.0;
+				break;
+			case 2:
+				s = Ikonizer.findSmerIcon(nalezenec.getAzimut());
+				break;
+			case 3:
+				s = formatuj(nalezenec, kesoid.getIdentifier());
+				break;
+			case 4:
+				s = formatuj(nalezenec, kesoid.getNazev());
+				break;
+			case 5:
+				s = formatuj(nalezenec, computeAutora(kesoid));
+				break;
+			// case 6: s = kes.getStatus() == EKesStatus.DISABLED; break;
 			}
 			return s;
 		}
@@ -243,21 +240,19 @@ public class JKesTable extends JPanel {
 		private Object formatuj(Nalezenec nal, String s) {
 			// TODO : ??
 			// Zde je správně použito porovnání referencí, protože řetězec zde jen identifikuje, kde přesně došlo k nálezu
-			if (nal.getKdeNalezeno() != s) return s;
-			return "<html>" + s.substring(0, nal.getPoc()) + "<b bgcolor='yellow'>" + s.substring(nal.getPoc(), nal.getKon())
-			+ "</b>" + s.substring(nal.getKon()) + "</html>";
+			if (nal.getKdeNalezeno() != s)
+				return s;
+			return "<html>" + s.substring(0, nal.getPoc()) + "<b bgcolor='yellow'>" + s.substring(nal.getPoc(), nal.getKon()) + "</b>" + s.substring(nal.getKon()) + "</html>";
 		}
 
 		private Icon kesIkona(Kesoid kes) {
-			if (ikonBag == null) return null;
+			if (ikonBag == null)
+				return null;
 			return ikonBag.seekIkon(kes.getMainWpt().getGenotyp(ikonBag.getGenom()));
 		}
 
 		/*
-		 * JTable uses this method to determine the default renderer/
-		 * editor for each cell.  If we didn't implement this method,
-		 * then the last column would contain text ("true"/"false"),
-		 * rather than a check box.
+		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
 		 */
 		@Override
 		public Class<?> getColumnClass(int c) {
@@ -265,8 +260,7 @@ public class JKesTable extends JPanel {
 		}
 
 		/*
-		 * Don't need to implement this method unless your table's
-		 * editable.
+		 * Don't need to implement this method unless your table's editable.
 		 */
 		@Override
 		public boolean isCellEditable(int row, int col) {
@@ -275,6 +269,4 @@ public class JKesTable extends JPanel {
 
 	}
 
-
 }
-

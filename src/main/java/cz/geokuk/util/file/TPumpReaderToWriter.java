@@ -3,10 +3,18 @@ package cz.geokuk.util.file;
 import java.io.*;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
- * <p>Copyright: Copyright (c) 2003 TurboConsult s.r.o.</p>
- * <p>Company: </p>
+ * <p>
+ * Title:
+ * </p>
+ * <p>
+ * Description:
+ * </p>
+ * <p>
+ * Copyright: Copyright (c) 2003 TurboConsult s.r.o.
+ * </p>
+ * <p>
+ * Company:
+ * </p>
  *
  * @author unascribed
  * @version 1.0
@@ -14,36 +22,36 @@ import java.io.*;
 
 public class TPumpReaderToWriter extends Thread {
 
-
-	private Reader iRdr;
-	private Writer iWrt;
-	private boolean iCloseWriter = false;
-	private boolean iCloseReader = true;
-	private int iBufferSize = 1024;
-	private Object iNotificationReceiver = this;
-	private IOException iException = null; // bude obsahovat výjimku, pokud nějaká bude
-	private boolean iIsFinished = false;
-
+	private Reader		iRdr;
+	private Writer		iWrt;
+	private boolean		iCloseWriter			= false;
+	private boolean		iCloseReader			= true;
+	private int			iBufferSize				= 1024;
+	private Object		iNotificationReceiver	= this;
+	private IOException	iException				= null;	// bude obsahovat výjimku, pokud nějaká bude
+	private boolean		iIsFinished				= false;
 
 	public TPumpReaderToWriter(Reader aRdr, Writer aWrt) {
 		iRdr = aRdr;
 		iWrt = aWrt;
 	}
 
-
 	public void run() {
 		try {
 			char[] buf = new char[iBufferSize];
 
-			for (; ; ) {
+			for (;;) {
 				int len = iRdr.read(buf);
-				if (len <= 0) break; // dočteno
-				//        System.out.p rint(buf);
+				if (len <= 0)
+					break; // dočteno
+				// System.out.p rint(buf);
 				iWrt.write(buf, 0, len);
 			}
 			iWrt.flush();
-			if (iCloseReader) iRdr.close();
-			if (iCloseWriter) iWrt.close();
+			if (iCloseReader)
+				iRdr.close();
+			if (iCloseWriter)
+				iWrt.close();
 			iIsFinished = true;
 		} catch (IOException ex) {
 			synchronized (this) {
@@ -86,7 +94,8 @@ public class TPumpReaderToWriter extends Thread {
 	}
 
 	public void setBufferSize(int bufferSize) {
-		if (bufferSize < 1) bufferSize = 1;
+		if (bufferSize < 1)
+			bufferSize = 1;
 		this.iBufferSize = bufferSize;
 	}
 
@@ -101,6 +110,5 @@ public class TPumpReaderToWriter extends Thread {
 	public Object getNotificationReceiver() {
 		return iNotificationReceiver;
 	}
-
 
 }

@@ -5,25 +5,22 @@ package cz.geokuk.util.pocitadla;
 
 import javax.swing.SwingUtilities;
 
-
-
-
 /**
- * počítadlo čehokoli, ale jeho smyslem je počítat
- * technické záležitosti, jak jsou dély front a podobně.
+ * počítadlo čehokoli, ale jeho smyslem je počítat technické záležitosti, jak jsou dély front a podobně.
  *
  * Předpokládá se, že to budou singletony ve statických proměnných
+ * 
  * @author veverka
  *
  */
 public abstract class Pocitadlo {
 
-	public static Callback callback;
+	public static Callback	callback;
 
-	private int val;
-	private final String name;
-	private final String description;
-	private final String textovyPopisTypu;
+	private int				val;
+	private final String	name;
+	private final String	description;
+	private final String	textovyPopisTypu;
 
 	/**
 	 * @param aName
@@ -36,7 +33,6 @@ public abstract class Pocitadlo {
 		this.textovyPopisTypu = textovyPopisTypu;
 		SpravcePocitadel.register(this);
 	}
-
 
 	/**
 	 * @return the name
@@ -58,11 +54,12 @@ public abstract class Pocitadlo {
 
 	public synchronized void set(int val) {
 		synchronized (this) {
-			if (this.val == val) return;
+			if (this.val == val)
+				return;
 			this.val = val;
 		}
 		if (callback != null) {
-			//System.out.println("Pocitani");
+			// System.out.println("Pocitani");
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -92,11 +89,9 @@ public abstract class Pocitadlo {
 		sub(1);
 	}
 
-
 	public String getTextovyPopisTypu() {
 		return textovyPopisTypu;
 	}
-
 
 	@Override
 	public String toString() {
@@ -107,8 +102,8 @@ public abstract class Pocitadlo {
 		public void onChange();
 	}
 
-	//  @Override
-	//  public void finalize() {
-	//    System.out.println("Pocitadlo finalizováno");
-	//  }
+	// @Override
+	// public void finalize() {
+	// System.out.println("Pocitadlo finalizováno");
+	// }
 }

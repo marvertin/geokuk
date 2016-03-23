@@ -1,75 +1,67 @@
 package cz.geokuk.core.coord;
 
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 
-import cz.geokuk.core.coordinates.Mou;
-import cz.geokuk.core.coordinates.MouRect;
-import cz.geokuk.core.coordinates.Moud;
-import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.core.coordinates.*;
 import cz.geokuk.util.index2d.BoundingRect;
 
 /**
  * Objekt je immuitable.
+ * 
  * @author veverka
  *
  */
-public class Coord  {
+public class Coord {
 
-	/** Počet bitů mou 2^MOU_BITS obtáčí rovník kolem dokola (odpovídá 40 000 km*/
-	public static final int MOU_BITS = 32;
+	/** Počet bitů mou 2^MOU_BITS obtáčí rovník kolem dokola (odpovídá 40 000 km */
+	public static final int	MOU_BITS		= 32;
 
-	/** Počet bitů, na kterém je zobrazena celá země v merkátoru, když je nejmenší možné měřítko a to. 0
-	 * 2^ MOUMER_0_BITS je hrana čtverce nejmenší kachle (ale, o kachlích se zde mluvi nesmí).
-	 * Takže je to počet pixlů, do kterého se vejde celá země při měřítkui 0.
+	/**
+	 * Počet bitů, na kterém je zobrazena celá země v merkátoru, když je nejmenší možné měřítko a to. 0 2^ MOUMER_0_BITS je hrana čtverce nejmenší kachle (ale, o kachlích se zde mluvi nesmí). Takže je to počet pixlů, do kterého se vejde celá země při měřítkui 0.
 	 */
-	public static final int MOUMER_0_BITS = 8;
+	public static final int	MOUMER_0_BITS	= 8;
 
 	/**
 	 * Teoreticky možné největší měřítko, kdy jedomu pixlu odpovídá jedna mouřadnice.
 	 */
-	public static final int MAX_MOUMER = MOU_BITS - MOUMER_0_BITS;  // 24
+	public static final int	MAX_MOUMER		= MOU_BITS - MOUMER_0_BITS;	// 24
 
-	//	X_UTM=(sX*0,03125)-3700000 = 292576
-	//	Y_UTM=(sY*0,03125)+1300000 = 5570080
+	// X_UTM=(sX*0,03125)-3700000 = 292576
+	// Y_UTM=(sY*0,03125)+1300000 = 5570080
 
 	// Základní parametry
-	private final int moumer;  // měřítko
-	private final Mou moustred; // střed
-	private final Dimension dim; // velikost
-	private final double natoceni; // natočení v radiánech
+	private final int		moumer;										// měřítko
+	private final Mou		moustred;									// střed
+	private final Dimension	dim;										// velikost
+	private final double	natoceni;									// natočení v radiánech
 
 	// odvozené
-	//poměr mezi mou a pixlama, kolik mou souřadnic je na pixel. U teoreticky nejvyššího měřítka 24 to bude 1:1.
+	// poměr mezi mou a pixlama, kolik mou souřadnic je na pixel. U teoreticky nejvyššího měřítka 24 to bude 1:1.
 	// Jinak vždy jsou mou drobnější než pisly a jeden z pixl se kládá z mnoha mou (mocniny dvou).
 	// Vždy to bude rozumné číslo v intu (maximálně 16 milionů, takže se s tím dá normálně počítat)
-	private final int mouNaPixl;
+	private final int		mouNaPixl;
 
-	private final int mpShift;
+	private final int		mpShift;
 
-	private AffineTransform tam;
-	private AffineTransform zpet;
+	private AffineTransform	tam;
+	private AffineTransform	zpet;
 
 	/**
 	 *
 	 */
 	public Coord(final int moumer, final Mou moustred, final Dimension dim, final double natoceni) {
-		//moumer
+		// moumer
 		this.moumer = moumer;
 
 		/**
-		 * mou - pixle shift.
-		 *   << .... z pixklů udělá mou
-		 *   >> .... z mou uděllá pixly
+		 * mou - pixle shift. << .... z pixklů udělá mou >> .... z mou uděllá pixly
 		 */
 		mpShift = MAX_MOUMER - moumer;
 		mouNaPixl = 1 << mpShift;
 
-		//moustred
+		// moustred
 		this.moustred = new Mou(moustred);
 
 		// dim
@@ -87,11 +79,11 @@ public class Coord  {
 			return;
 		}
 		final AffineTransform tra = new AffineTransform();
-		final double widthPul = (double)dim.width / 2;
-		final double heightPul = (double)dim.height / 2;
+		final double widthPul = (double) dim.width / 2;
+		final double heightPul = (double) dim.height / 2;
 		tra.translate(widthPul, heightPul);
 		tra.rotate(natoceni);
-		tra.translate(- widthPul, -heightPul);
+		tra.translate(-widthPul, -heightPul);
 		tam = tra;
 		try {
 			zpet = tam.createInverse();
@@ -107,11 +99,10 @@ public class Coord  {
 		// pozor na to, že pro moumer blížící se k nule může dojít k přetečení při posunu
 		// pro případ, kdy se v okně objeví celá mapa světa vícekrát
 		final Mou moujz = getMouJZ();
-		//System.out.println("TRANSUJEME: " +   p + " / " + moustred + " -/- " + moujz + " -+++- " + moustred.toWgs() + " -/- " + moujz.toWgs());
+		// System.out.println("TRANSUJEME: " + p + " / " + moustred + " -/- " + moujz + " -+++- " + moustred.toWgs() + " -/- " + moujz.toWgs());
 
 		return new Mou(moujz.xx + (p.x << mpShift), moujz.yy + (dim.height - p.y << mpShift));
 	}
-
 
 	/*
 	 * Transformuje vzdálnost v pixlech na vzdálenost v mouřadnicích.
@@ -123,12 +114,11 @@ public class Coord  {
 	/** transformuje posun v pixlech na posun v mouřadnicích */
 	public Moud transformShift(final int dx, final int dy) {
 		// minus zde je proto, že na obrazovce jdou souadnice shora dolu a mouřadnice naopak
-		return new Moud(transformPoindDiff(dx), - transformPoindDiff(dy));
+		return new Moud(transformPoindDiff(dx), -transformPoindDiff(dy));
 	}
 
 	public MouRect transform(final Rectangle rect) {
-		return new MouRect(transform(new Point(rect.x, rect.y)),
-				transform(new Point(rect.x + rect.width, rect.y + rect.height) ));
+		return new MouRect(transform(new Point(rect.x, rect.y)), transform(new Point(rect.x + rect.width, rect.y + rect.height)));
 
 	}
 
@@ -141,12 +131,10 @@ public class Coord  {
 		return new BoundingRect(mou1.xx, mou2.yy, mou2.xx, mou1.yy);
 	}
 
-
-
 	public Rectangle transform(final MouRect mourect) {
 		final Point p1 = transform(mourect.getSz());
 		final Point p2 = transform(mourect.getJv());
-		//System.err.println("RORERO: " + rect + " --- " + mourect + " / " + p1 + "+" + p2);
+		// System.err.println("RORERO: " + rect + " --- " + mourect + " / " + p1 + "+" + p2);
 		return new Rectangle(p1, new Dimension(p2.x - p1.x, p2.y - p1.y));
 	}
 
@@ -155,7 +143,6 @@ public class Coord  {
 		final Point p2 = transform(mou2);
 		return Math.hypot(p1.x - p2.x, p1.y - p2.y);
 	}
-
 
 	public Point transform(final Mou mou) {
 		// pro moumer blížící se k nule nemusí být transformace jednoznačná, protože plocha v bodech
@@ -174,30 +161,26 @@ public class Coord  {
 	}
 
 	/**
-	 * Spočítá nový moustred, který musí být pokud se zazůmuje na danou veliksot,
-	 * ab zůstal zadaný střed na svém místě obrazovky.
+	 * Spočítá nový moustred, který musí být pokud se zazůmuje na danou veliksot, ab zůstal zadaný střed na svém místě obrazovky.
 	 */
 	public Mou computeZoom(final int newMoumer, final Mou zoomMouStred) {
 		if (newMoumer == moumer) {
 			return getMoustred();
 		}
-		//    Point zommstred = zoomMouStred == null ? new Point(cur) : transform(zoomMouStred);
+		// Point zommstred = zoomMouStred == null ? new Point(cur) : transform(zoomMouStred);
 		// získat střed zoomování na obrazovce, podle tohoto zoomujeme
 		final Point pointZoomStred = zoomMouStred == null ? transform(getMoustred()) : transform(zoomMouStred); // střed zůmování v bodech
 		final Mou mouZoomStred = transform(pointZoomStred); // a střed v mou
 		final Coord c = derive(newMoumer); // pokusne tam nastavit nové měřítko
 		final Moud rozdil = c.transform(pointZoomStred).sub(mouZoomStred); // korigovat střed map, aby zůstal střed zůmování
-		//System.out.println("CCCCCCCCCCCCCCCCCCC: " + rozdil + " " + pointZoomStred + " " + zoomMouStred);
+		// System.out.println("CCCCCCCCCCCCCCCCCCC: " + rozdil + " " + pointZoomStred + " " + zoomMouStred);
 		return getMoustred().sub(rozdil);
 	}
 
-
-
 	public Mou getMoustred() {
-		//Mou moustred = new Mou(moupoc.xx + width * pomer / 2, moupoc.yy + height * pomer / 2);
+		// Mou moustred = new Mou(moupoc.xx + width * pomer / 2, moupoc.yy + height * pomer / 2);
 		return moustred;
 	}
-
 
 	public Moud getMouSize() {
 		// pozor na to, že pokud půjde moumer k nule a v mapš se bude opakovat motiv, tak to přeteče
@@ -222,31 +205,29 @@ public class Coord  {
 	}
 
 	public Mou getMouJ() {
-		return getMoustred().add(0, - getMouSize().dyy / 2);
+		return getMoustred().add(0, -getMouSize().dyy / 2);
 	}
-
 
 	/**
 	 * Je vždy v levém dlolním oruhu okna, na rozdíl od ostatních.
+	 * 
 	 * @return
 	 */
 	public Mou getMouJZ() {
 		// ta minus jednička je zde proto, že jdeme od středu, je to vlastně dělení dvěma.
 		final Moud d = new Moud(dim.width << mpShift - 1, dim.height << mpShift - 1);
 		final Mou mou = moustred.sub(d);
-		//System.out.printf("mpShift=%d, dim=%s | moustred=%s=%s + %s = moujz=%s=%s%n", mpShift, dim, moustred, moustred.toWgs(), d, mou, mou.toWgs());
+		// System.out.printf("mpShift=%d, dim=%s | moustred=%s=%s + %s = moujz=%s=%s%n", mpShift, dim, moustred, moustred.toWgs(), d, mou, mou.toWgs());
 		return mou;
 	}
 
 	public Mou getMouZ() {
-		return getMoustred().add(- getMouSize().dxx / 2, 0);
+		return getMoustred().add(-getMouSize().dxx / 2, 0);
 	}
 
 	public Mou getMouSZ() {
 		return getMouJZ().add(0, getMouSize().dyy);
 	}
-
-
 
 	public int getWidth() {
 		return dim.width;
@@ -266,14 +247,15 @@ public class Coord  {
 		return new BoundingRect(jz.xx, jz.yy, sv.xx, sv.yy);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "Coord [moumer=" + moumer + ", moustred=" + moustred + ", dim=" + dim + ", natoceni=" + natoceni + "]";
 	}
-
 
 	/**
 	 *
@@ -290,7 +272,7 @@ public class Coord  {
 
 		final Wgs wgs = getMoustred().toWgs();
 		final double pixlyNaMetr = 1 / (wgs.metryNaMou() * mouNaPixl);
-		//System.out.println("PIXLU NA METR: " + metry + "        " + 1 / metry);
+		// System.out.println("PIXLU NA METR: " + metry + " " + 1 / metry);
 		return pixlyNaMetr;
 	}
 
@@ -302,10 +284,9 @@ public class Coord  {
 		return dim.height / getPixluNaMetr();
 	}
 
-
 	/**
-	 * Vypočítá obdélník vyhovující souřadnicovému obdélníku a přidá nějaké pixly
-	 * na stranách podle incestu.
+	 * Vypočítá obdélník vyhovující souřadnicovému obdélníku a přidá nějaké pixly na stranách podle incestu.
+	 * 
 	 * @param mourect
 	 * @param insets
 	 * @return
@@ -316,16 +297,13 @@ public class Coord  {
 		}
 
 		final Rectangle r = transform(mourect);
-		//System.out.println("Kompjuted rektangle: " + rect + " | " + r + " -- " + mourect);
-		return new Rectangle(
-				r.x - insets.left,
-				r.y - insets.top,
-				r.width + insets.left + insets.right,
-				r.height + insets.top + insets.bottom);
+		// System.out.println("Kompjuted rektangle: " + rect + " | " + r + " -- " + mourect);
+		return new Rectangle(r.x - insets.left, r.y - insets.top, r.width + insets.left + insets.right, r.height + insets.top + insets.bottom);
 	}
 
 	/**
 	 * Úhel, o který je mapa v daném bodě pootočena oproti normálnímu směru na sever.
+	 * 
 	 * @return
 	 */
 	public double computNataceciUhel() {
@@ -339,7 +317,7 @@ public class Coord  {
 		final double lon = (wgsS.lon + wgsJ.lon) / 2; // stredova délka
 		final Mou mouSq = new Wgs(wgsS.lat, lon).toMou();
 		final Mou mouJq = new Wgs(wgsJ.lat, lon).toMou();
-		return Math.atan( (double)(mouSq.xx - mouJq.xx) / (double)(mouSq.yy - mouJq.yy));
+		return Math.atan((double) (mouSq.xx - mouJq.xx) / (double) (mouSq.yy - mouJq.yy));
 	}
 
 	/**
@@ -349,8 +327,6 @@ public class Coord  {
 		return dim;
 	}
 
-
-
 	/**
 	 * @return the natoceni
 	 */
@@ -359,33 +335,28 @@ public class Coord  {
 	}
 
 	private Coord create(final int moumer, final Mou moustred, final Dimension dim, final double natoceni) {
-		if (moumer == this.getMoumer()
-				&& moustred.equals(this.moustred)
-				&& dim.equals(this.dim)
-				&& natoceni == this.natoceni
-				)
-		{
+		if (moumer == this.getMoumer() && moustred.equals(this.moustred) && dim.equals(this.dim) && natoceni == this.natoceni) {
 			return this; // vrátíme stejnou instanci, podle čehož se pozná, že nedošlo ke změně
 		}
 		return new Coord(moumer, moustred, dim, natoceni);
 	}
 
-
-
 	public Coord derive(final int moumer, final Mou moustred, final Dimension dim, final double natoceni) {
 		return create(moumer, moustred, dim, natoceni);
 	}
 
-
 	public Coord derive(final int moumer, final Mou moustred, final Dimension dim) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final int moumer, final Mou moustred, final double natoceni) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final int moumer, final Dimension dim, final double natoceni) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final Mou moustred, final Dimension dim, final double natoceni) {
 		return create(moumer, moustred, dim, natoceni);
 	}
@@ -393,18 +364,23 @@ public class Coord  {
 	public Coord derive(final int moumer, final Mou moustred) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final int moumer, final Dimension dim) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final int moumer, final double natoceni) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final Mou moustred, final Dimension dim) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final Mou moustred, final double natoceni) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final Dimension dim, final double natoceni) {
 		return create(moumer, moustred, dim, natoceni);
 	}
@@ -412,19 +388,22 @@ public class Coord  {
 	public Coord derive(final int moumer) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final Mou moustred) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final Dimension dim) {
 		return create(moumer, moustred, dim, natoceni);
 	}
+
 	public Coord derive(final double natoceni) {
 		return create(moumer, moustred, dim, natoceni);
 	}
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -440,9 +419,9 @@ public class Coord  {
 		return result;
 	}
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -477,11 +456,8 @@ public class Coord  {
 		return Double.doubleToLongBits(natoceni) == Double.doubleToLongBits(other.natoceni);
 	}
 
-
-
 	public static Coord prozatimniInicializacni() {
-		return new Coord(0, new Mou(0x0800_000, 0x0800_000),
-				new Dimension(100,100), 0.0);
+		return new Coord(0, new Mou(0x0800_000, 0x0800_000), new Dimension(100, 100), 0.0);
 	}
 
 }

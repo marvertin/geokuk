@@ -1,22 +1,16 @@
 package cz.geokuk.core.render;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 public class JTwoColumnsPanel extends JPanel {
 
-	private static final long serialVersionUID = 1201157823732225635L;
+	private static final long	serialVersionUID	= 1201157823732225635L;
 
-	GridBagConstraints gbc;
-	int radek;
+	GridBagConstraints			gbc;
+	int							radek;
 
 	public JTwoColumnsPanel(String titleText) {
 		TitledBorder border = BorderFactory.createTitledBorder(titleText);
@@ -43,7 +37,7 @@ public class JTwoColumnsPanel extends JPanel {
 	public void addx(String label, JComponent jComp) {
 		JLabel jLabel = new JLabel(label);
 		jLabel.setLabelFor(jComp);
-		GridBagConstraints gbcLabel =  new GridBagConstraints();
+		GridBagConstraints gbcLabel = new GridBagConstraints();
 		gbcLabel.gridx = 0;
 		gbcLabel.gridy = radek;
 		gbcLabel.anchor = GridBagConstraints.WEST;
@@ -53,7 +47,7 @@ public class JTwoColumnsPanel extends JPanel {
 		}
 		add(jLabel, gbcLabel);
 
-		//gbc.insets.bottom = 3;
+		// gbc.insets.bottom = 3;
 		add(jComp, gbc);
 		radek++;
 		createNewConstraint();

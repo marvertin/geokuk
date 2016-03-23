@@ -9,7 +9,9 @@ public class ObsazenostPreferencesChangeEvent extends Event0<ObsazenostModel> {
 		this.obsazenost = obsazenost;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

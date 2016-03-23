@@ -1,6 +1,5 @@
 package cz.geokuk.framework;
 
-
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.plugins.mapy.kachle.EKaType;
 
@@ -9,21 +8,20 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	/**
 	 *
 	 */
-	protected MyPreferences prefNode;
-	private EKaType podkladMap;
+	protected MyPreferences	prefNode;
+	private EKaType			podkladMap;
 
-	private S structure;
+	private S				structure;
 
 	@SuppressWarnings("unchecked")
-	private final T tthis = (T) this;
+	private final T			tthis	= (T) this;
 
-	public final Onoff<T> visible = new Onoff<T>(tthis, getOnoffEventClass()) {
-		@Override
-		protected void onSetOnOff(boolean onoff) {
-			putVisibleToPreferences(onoff);
-		}
-	};
-
+	public final Onoff<T>	visible	= new Onoff<T>(tthis, getOnoffEventClass()) {
+										@Override
+										protected void onSetOnOff(boolean onoff) {
+											putVisibleToPreferences(onoff);
+										}
+									};
 
 	protected abstract Onoff<T> visiblexxx();
 
@@ -35,7 +33,6 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 		return null;
 	}
 
-
 	protected abstract void putVisibleToPreferences(boolean onoff);
 
 	protected abstract boolean getVisibleFromPreferences(boolean defaultOnoff);
@@ -46,7 +43,8 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	 * @param podklad
 	 */
 	public void setPodkladMap(EKaType podklad) {
-		if (podkladMap == podklad) return;
+		if (podkladMap == podklad)
+			return;
 		podkladMap = podklad;
 		S p = load(podklad);
 		setData(p);
@@ -58,7 +56,8 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	}
 
 	public void setData(S structure) {
-		if (structure.equals(this.structure)) return;
+		if (structure.equals(this.structure))
+			return;
 		this.structure = structure;
 		save(podkladMap, structure);
 		fire(createEvent(structure));
@@ -71,7 +70,6 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 		S p = prefNode.getStructure(jmenoPodkladu(podklad), createDefaults());
 		return p;
 	}
-
 
 	/**
 	 * @param p
@@ -93,8 +91,9 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 		setPodkladMap(podklad);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.program.Model0#initAndFire()
 	 */
 	@Override
@@ -112,6 +111,5 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 		S p = load(podkladMap);
 		setData(p);
 	}
-
 
 }

@@ -3,28 +3,19 @@
  */
 package cz.geokuk.framework;
 
-
-import java.lang.ref.Reference;
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
+import java.lang.ref.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.swing.SwingUtilities;
 
-import cz.geokuk.util.exception.EExceptionSeverity;
-import cz.geokuk.util.exception.FExceptionDumper;
-import cz.geokuk.util.pocitadla.Pocitadlo;
-import cz.geokuk.util.pocitadla.PocitadloMalo;
-import cz.geokuk.util.pocitadla.PocitadloRoste;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cz.geokuk.util.exception.EExceptionSeverity;
+import cz.geokuk.util.exception.FExceptionDumper;
+import cz.geokuk.util.pocitadla.*;
 
 /**
  * @author veverka
@@ -32,18 +23,20 @@ import org.apache.logging.log4j.Logger;
  */
 public class EventManager implements EventFirer {
 
-	private static final Logger log =
-			LogManager.getLogger(EventManager.class.getSimpleName());
+	private static final Logger		log							= LogManager.getLogger(EventManager.class.getSimpleName());
 
-	private static Pocitadlo pocitTypy = new PocitadloMalo("Počet typů registrovaných eventů", "Kolik registrovaných typů eventů (tříd) je ve třídě Eventmanager, mělo by to být v v jednotkách či malých desítkách a nemělo by narůstat.");
-	private static Pocitadlo pocitObservery = new PocitadloMalo("Počet observerů za všechny typy dohromady", "Kolik celkem observerů je regostrováno pro události. Musí být v desítkách a nesmí růst.");
-	private static Pocitadlo pocitReistraceOdregistrace = new PocitadloRoste("Počet registrací observerů", "Kolikrát se registrovaly a odregistrovávaly observery (dohromady), číslo stále roste, ale nesmí moc rychle, neboť registrace a deregistrace nemusí být laciná," +
-			" ale pravděpodobně poroste s otvíráním a zavíráním různých oken.");
-	public ReferenceQueue<Object> referencequeue = new ReferenceQueue<>();
+	private static Pocitadlo		pocitTypy					= new PocitadloMalo("Počet typů registrovaných eventů",
+			"Kolik registrovaných typů eventů (tříd) je ve třídě Eventmanager, mělo by to být v v jednotkách či malých desítkách a nemělo by narůstat.");
+	private static Pocitadlo		pocitObservery				= new PocitadloMalo("Počet observerů za všechny typy dohromady",
+			"Kolik celkem observerů je regostrováno pro události. Musí být v desítkách a nesmí růst.");
+	private static Pocitadlo		pocitReistraceOdregistrace	= new PocitadloRoste("Počet registrací observerů",
+			"Kolikrát se registrovaly a odregistrovávaly observery (dohromady), číslo stále roste, ale nesmí moc rychle, neboť registrace a deregistrace nemusí být laciná,"
+					+ " ale pravděpodobně poroste s otvíráním a zavíráním různých oken.");
+	public ReferenceQueue<Object>	referencequeue				= new ReferenceQueue<>();
 
-	Map<BeanType, Observry> mapaclsobs = new HashMap<>();
+	Map<BeanType, Observry>			mapaclsobs					= new HashMap<>();
 
-	private int urovenZanoreni;
+	private int						urovenZanoreni;
 
 	public EventManager() {
 		Thread thread = new Thread(new Runnable() {
@@ -53,7 +46,7 @@ public class EventManager implements EventFirer {
 					try {
 						Reference<?> ref = referencequeue.remove();
 						ObserverInvocation obsin = (ObserverInvocation) ref;
-						synchronized(this) {
+						synchronized (this) {
 							obsin.iParentList.remove(obsin);
 							aktualizujPocitadla();
 						}
@@ -76,7 +69,9 @@ public class EventManager implements EventFirer {
 		pocitObservery.set(n);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.events.EventFirer#fire(E)
 	 */
 	@Override
@@ -84,7 +79,7 @@ public class EventManager implements EventFirer {
 		event.setEventFirer(this);
 		event.lock();
 		boolean logovatx = maSeLogovat(event);
-		urovenZanoreni ++;
+		urovenZanoreni++;
 		if (logovatx) {
 			log("FIRE beg: " + event);
 		}
@@ -101,7 +96,7 @@ public class EventManager implements EventFirer {
 			if (logovatx) {
 				log("FIRE end: " + event);
 			}
-			urovenZanoreni --;
+			urovenZanoreni--;
 		}
 	}
 
@@ -113,10 +108,10 @@ public class EventManager implements EventFirer {
 			observry.lastEvent = event;
 		}
 		for (ObserverInvocation invocation : invocations) {
-			//      System.out.println("FIRE: " + event + " ===> " + eveon);
-			//long cas = System.currentTimeMillis();
+			// System.out.println("FIRE: " + event + " ===> " + eveon);
+			// long cas = System.currentTimeMillis();
 			vyvolej(event, invocation);
-			//System.out.printf("Cas %d zpracovani udalosti %s - %s\n", System.currentTimeMillis() - cas, event, invocation);
+			// System.out.printf("Cas %d zpracovani udalosti %s - %s\n", System.currentTimeMillis() - cas, event, invocation);
 		}
 	}
 
@@ -127,7 +122,7 @@ public class EventManager implements EventFirer {
 	 */
 	private <E> void vyvolej(E event, ObserverInvocation invocation) {
 		boolean logovat = maSeLogovat(event);
-		urovenZanoreni ++;
+		urovenZanoreni++;
 		if (logovat) {
 			log("INVOKE beg " + invocation + " " + event);
 		}
@@ -137,7 +132,7 @@ public class EventManager implements EventFirer {
 			if (logovat) {
 				log("INVOKE end " + invocation + " " + event);
 			}
-			urovenZanoreni --;
+			urovenZanoreni--;
 		}
 	}
 
@@ -148,7 +143,7 @@ public class EventManager implements EventFirer {
 	 */
 	private <E> boolean maSeLogovat(E event) {
 		boolean logovat = false;
-		//boolean logovat = event.getClass() != ZmenaSouradnicMysiEvent.class;
+		// boolean logovat = event.getClass() != ZmenaSouradnicMysiEvent.class;
 		return logovat;
 	}
 
@@ -156,8 +151,7 @@ public class EventManager implements EventFirer {
 	 * @param string
 	 */
 	private void log(String text) {
-		String pading = "                                                                                 "
-				.substring(0,urovenZanoreni*3);
+		String pading = "                                                                                 ".substring(0, urovenZanoreni * 3);
 		log.debug(pading + text);
 	}
 
@@ -171,24 +165,22 @@ public class EventManager implements EventFirer {
 		return observry;
 	}
 
-
 	private class Observry {
-		List<ObserverInvocation> listo = new LinkedList<>();
-		private Object lastEvent;
+		List<ObserverInvocation>	listo	= new LinkedList<>();
+		private Object				lastEvent;
 	}
-
 
 	public void registerWeakly(Object observer, boolean aOnlyInvoke) {
 		register(observer, aOnlyInvoke);
 	}
 
 	/**
-	 * Zajistí, že se na daném objektu budou volat metody "onEvent"
-	 * s příslušnými typy parametrů.
+	 * Zajistí, že se na daném objektu budou volat metody "onEvent" s příslušnými typy parametrů.
+	 * 
 	 * @param observer
 	 */
 	private void register(Object observer, boolean aOnlyInvoke) {
-		urovenZanoreni ++;
+		urovenZanoreni++;
 		boolean logovat = maSeLogovat(null);
 		if (logovat) {
 			log("REGISTER beg " + observer);
@@ -199,29 +191,30 @@ public class EventManager implements EventFirer {
 			if (logovat) {
 				log("REGISTER end " + observer);
 			}
-			urovenZanoreni --;
+			urovenZanoreni--;
 		}
 
 	}
 
 	private void _register(Object observer, boolean aOnlyInvoke) {
 		for (Method m : observer.getClass().getMethods()) {
-			if (! m.getName().equals("onEvent")) {
+			if (!m.getName().equals("onEvent")) {
 				continue;
 			}
 			Class<?>[] parameterTypes = m.getParameterTypes();
-			if (parameterTypes.length != 1) return;
+			if (parameterTypes.length != 1)
+				return;
 			register(observer, m, aOnlyInvoke);
 		}
 	}
-
 
 	/**
 	 * @param aTypeventu
 	 * @param aObserver
 	 * @param method
 	 * @param aStrongly
-	 * @param aOnlyInvoke Parametr říká, že se vlastně neprovádí registrace, ele pouze se pošlou současné eventy
+	 * @param aOnlyInvoke
+	 *            Parametr říká, že se vlastně neprovádí registrace, ele pouze se pošlou současné eventy
 	 */
 	private void register(Object aObserver, Method method, boolean aOnlyInvoke) {
 		Observry observry;
@@ -242,10 +235,10 @@ public class EventManager implements EventFirer {
 	public void unregister(Object aObserver) {
 		synchronized (this) {
 			for (Observry observry : mapaclsobs.values()) {
-				for (Iterator<ObserverInvocation> it = observry.listo.iterator(); it.hasNext(); ) {
+				for (Iterator<ObserverInvocation> it = observry.listo.iterator(); it.hasNext();) {
 					ObserverInvocation oi = it.next();
 					if (oi.get() == aObserver) {
-						it.remove();  // pro tento observer iž nebudeme poslouchat
+						it.remove(); // pro tento observer iž nebudeme poslouchat
 					}
 				}
 			}
@@ -253,11 +246,10 @@ public class EventManager implements EventFirer {
 		}
 	}
 
-
 	private class ObserverInvocation extends WeakReference<Object> {
-		Method observerOnEventMethod;
-		private final List<ObserverInvocation> iParentList;
-		private final Class<?> observerClass;
+		Method									observerOnEventMethod;
+		private final List<ObserverInvocation>	iParentList;
+		private final Class<?>					observerClass;
 
 		/**
 		 * @param aObserverObject
@@ -266,7 +258,7 @@ public class EventManager implements EventFirer {
 		 * @param aEvent
 		 */
 		public ObserverInvocation(Object aObserverObject, Method aObserverOnEventMethod, List<ObserverInvocation> parentList) {
-			super(aObserverObject, referencequeue );
+			super(aObserverObject, referencequeue);
 			observerClass = aObserverObject.getClass();
 			observerOnEventMethod = aObserverOnEventMethod;
 			iParentList = parentList;
@@ -287,13 +279,9 @@ public class EventManager implements EventFirer {
 
 		@Override
 		public String toString() {
-			return "ObserverInvocation [observerOnEventMethod="
-					+ observerOnEventMethod + "]";
+			return "ObserverInvocation [observerOnEventMethod=" + observerOnEventMethod + "]";
 		}
 
 	}
-
-
-
 
 }

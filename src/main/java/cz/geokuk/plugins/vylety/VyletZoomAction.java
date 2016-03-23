@@ -1,13 +1,11 @@
 package cz.geokuk.plugins.vylety;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Set;
 
 import cz.geokuk.core.coordinates.MouRect;
 import cz.geokuk.plugins.kesoid.Kesoid;
-
 
 public class VyletZoomAction extends VyletAction0 {
 
@@ -35,6 +33,5 @@ public class VyletZoomAction extends VyletAction0 {
 		super.vyletChanged();
 		setEnabled(vyletModel.get(EVylet.ANO).size() > 0);
 	}
-
 
 }

@@ -3,13 +3,11 @@
  */
 package cz.geokuk.plugins.kesoid.mvc;
 
-
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.ToggleAction0;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.mapicon.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
-
 
 /**
  * @author veverka
@@ -17,11 +15,11 @@ import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
  */
 public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long serialVersionUID = -8054017274338240706L;
-	private IkonBag ikonBag;
-	private final Alela alela;
-	private KesoidModel kesoidModel;
-	private KesBag vsechny;
+	private static final long	serialVersionUID	= -8054017274338240706L;
+	private IkonBag				ikonBag;
+	private final Alela			alela;
+	private KesoidModel			kesoidModel;
+	private KesBag				vsechny;
 
 	/**
 	 *
@@ -29,11 +27,13 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 	public SwitchKesoidUrciteAlelyAction(Alela alela) {
 		super("Zapnuti vypnuti alely");
 		this.alela = alela;
-		//putValue(MNEMONIC_KEY, InputEvent.)
-		//   putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
+		// putValue(MNEMONIC_KEY, InputEvent.)
+		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
 
 	}
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
@@ -45,21 +45,20 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 		vsechny = event.getVsechny();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.program.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
 	public void initAfterEventReceiverRegistration() {
 		super.putValue(NAME, sestavJmeno());
-		super.putValue(SMALL_ICON,  ikonBag.seekIkon(ikonBag.getGenom().getGenotypProAlelu(alela)));
+		super.putValue(SMALL_ICON, ikonBag.seekIkon(ikonBag.getGenom().getGenotypProAlelu(alela)));
 		super.putValue(SHORT_DESCRIPTION, sestavJmeno());
 	}
 
 	private String sestavJmeno() {
-		return String.format("<html>%s: <b>%s</b> <i>(%d)</i>",
-				alela.getGen().getDisplayName(),
-				alela.getDisplayName(),
-				vsechny.getPoctyAlel().count(alela));
+		return String.format("<html>%s: <b>%s</b> <i>(%d)</i>", alela.getGen().getDisplayName(), alela.getDisplayName(), vsechny.getPoctyAlel().count(alela));
 	}
 
 	public void inject(KesoidModel kesoidModel) {
@@ -69,7 +68,7 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 	public void onEvent(KeskyVyfiltrovanyEvent event) {
 		vsechny = event.getVsechny();
 		boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().contains(alela.toString());
-		setSelected(! nechtena);
+		setSelected(!nechtena);
 		super.putValue(SHORT_DESCRIPTION, sestavJmeno());
 	}
 
@@ -78,9 +77,4 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 		kesoidModel.filtrujDleAlely(alela.toString(), nastaveno);
 	}
 
-
-
 }
-
-
-

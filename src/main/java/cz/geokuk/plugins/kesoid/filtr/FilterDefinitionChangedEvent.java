@@ -15,9 +15,9 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
  */
 public class FilterDefinitionChangedEvent extends Event0<KesoidModel> {
 
-	private final FilterDefinition filterDefinition;
-	private final Set<String> jmenaNechtenychAlel;
-	private final Set<String> jmenaAlelNaToolbaru;
+	private final FilterDefinition	filterDefinition;
+	private final Set<String>		jmenaNechtenychAlel;
+	private final Set<String>		jmenaAlelNaToolbaru;
 
 	/**
 	 * @return the filterDefinition
@@ -27,8 +27,9 @@ public class FilterDefinitionChangedEvent extends Event0<KesoidModel> {
 	}
 
 	/**
-
-  /**
+	 * 
+	 * /**
+	 * 
 	 * @return the jmenaAlelNaToolbaru
 	 */
 	public Set<String> getJmenaAlelNaToolbaru() {
@@ -47,7 +48,5 @@ public class FilterDefinitionChangedEvent extends Event0<KesoidModel> {
 		this.jmenaNechtenychAlel = jmenaNechtenychAlel;
 		this.jmenaAlelNaToolbaru = jmenaAlelNaToolbaru;
 	}
-
-
 
 }

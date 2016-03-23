@@ -1,10 +1,9 @@
 package cz.geokuk.util.lang;
 
+import java.text.MessageFormat;
 import java.util.*;
-import java.text.*;
-import java.util.regex.*;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Reprezentace konkrétního měsíce, například května 2001.
@@ -13,32 +12,28 @@ import java.util.GregorianCalendar;
  * @version $Revision: 3 $
  * @see "$Header: /Zakazky/TWare/Distribuce/TW0139/Util/cz/tconsult/tw/data/AMonth.java 3     30.03.01 11:52 Veverka $"
  */
-public final class AMonth
-extends AObject0
-implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
-	private static final long serialVersionUID = 6216726658054355928L;
+public final class AMonth extends AObject0 implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
+	private static final long	serialVersionUID	= 6216726658054355928L;
 
-	private static final int MINY = 12; //Months IN Year
-	private static final int MINVALUE = 1000 * MINY;
-	private static final int MAXVALUE = 9999 * MINY + MINY - 1;
+	private static final int	MINY				= 12;						// Months IN Year
+	private static final int	MINVALUE			= 1000 * MINY;
+	private static final int	MAXVALUE			= 9999 * MINY + MINY - 1;
 
-	private static Pattern sPattern;
+	private static Pattern		sPattern;
 
 	/**
 	 * Hodnota
 	 */
-	private final int iRokMes;
+	private final int			iRokMes;
 
 	/**
 	 * Vrací se jako long.
 	 *
-	 * @return Hodnota udávající počet měsíců, které uplynuly od začátku našeho letopočtu.
-	 * Přitom Leden hypotetického roku 0 má hodnotu 0, čili leden roku 1 má hodnotu 12.
+	 * @return Hodnota udávající počet měsíců, které uplynuly od začátku našeho letopočtu. Přitom Leden hypotetického roku 0 má hodnotu 0, čili leden roku 1 má hodnotu 12.
 	 */
 	public int asInt() {
 		return iRokMes;
 	}
-
 
 	/**
 	 * Vrací se jako string.
@@ -46,8 +41,7 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	 * @return Měsíc jako řetězec vždy na 7 znaků ve tvaru RRRR-MM.
 	 */
 	public String asString() {
-		return MessageFormat.format("{0,number,0000}-{1,number,00}", iRokMes / MINY,
-				iRokMes % MINY + 1);
+		return MessageFormat.format("{0,number,0000}-{1,number,00}", iRokMes / MINY, iRokMes % MINY + 1);
 	}
 
 	/**
@@ -80,7 +74,8 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Přičte požadovaný počet měsíců.
 	 *
-	 * @param aKolik Kolik měsíců se má přičíst. Záporné číslo odčítá.
+	 * @param aKolik
+	 *            Kolik měsíců se má přičíst. Záporné číslo odčítá.
 	 * @return Objekt měsíce zvýšený o patřičný počet měsíců.
 	 */
 	public AMonth add(int aKolik) {
@@ -90,7 +85,8 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Přičte požadovaný počet roků.
 	 *
-	 * @param aKolik Kolik roků se má přičíst. Záporné číslo odčítá.
+	 * @param aKolik
+	 *            Kolik roků se má přičíst. Záporné číslo odčítá.
 	 * @return Objekt měsíce snížený o příslušný počet roků.
 	 */
 	public AMonth addYears(int aKolik) {
@@ -118,7 +114,8 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Vrátí datum v příslušném roce a měsíci v zadaném dni.
 	 *
-	 * @param aDay Číslo dne v intervalu 1..31, pro některé měsíce musí být menší.
+	 * @param aDay
+	 *            Číslo dne v intervalu 1..31, pro některé měsíce musí být menší.
 	 * @return Datum odpovídající číslu měsíce.
 	 */
 	public ADate dateOf(int aDay) {
@@ -126,7 +123,8 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	}
 
 	/**
-	 * @param aDay je dceprekovaný, nemá význbam.
+	 * @param aDay
+	 *            je dceprekovaný, nemá význbam.
 	 * @return tOTÉŽ CO FUNKCE BEZ PARAMETRŮ.
 	 * @deprecated Použij metodu bez parametru, stejně parametr nemá na nic vliv, je to chyba.
 	 */
@@ -167,6 +165,7 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 
 	/**
 	 * Rozdíl zadaných měsíců. Příklad:
+	 * 
 	 * <pre>
 	 *   5, AMonth.from(2003, 8).diff(AMonth.from(2003,3)) == 5
 	 *  11, AMonth.from(2003,12).diff(AMonth.from(2003,1)) == 11
@@ -175,7 +174,8 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	 *   0, AMonth.from(2003, 8).diff(AMonth.from(2003,8)) == 0
 	 * </pre>
 	 *
-	 * @param aMonth Měsíc, který má být odečten.
+	 * @param aMonth
+	 *            Měsíc, který má být odečten.
 	 * @return Počet měsíců mezi zadanými měsíci, může být i záportný.
 	 */
 	public int diff(AMonth aMonth) {
@@ -206,12 +206,11 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 		return compareTo(b) != 0;
 	}
 
-
 	/**
-	 * Porovná dva objekty typu AMonth. Vyhodí výjimku, pokud se porovnává s null nebo s jiným
-	 * typem než AMonth.
+	 * Porovná dva objekty typu AMonth. Vyhodí výjimku, pokud se porovnává s null nebo s jiným typem než AMonth.
 	 *
-	 * @param aObj Objekt se, kterým porovnávat.
+	 * @param aObj
+	 *            Objekt se, kterým porovnávat.
 	 * @return -1, pokud je menší než argument, 0, při rovnosti, 1, pokud je větší než argument
 	 */
 	public int compareTo(AMonth aObj) {
@@ -221,11 +220,13 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Porovnání dvou měsíců.
 	 *
-	 * @param aObject Objekt, se kterým se porovnává.
+	 * @param aObject
+	 *            Objekt, se kterým se porovnává.
 	 * @return true, pokud se rovnají. False pokud se nerovnají, argument je null nebo jiný typ než AMonth.
 	 */
 	public boolean equals(Object aObject) {
-		if (!(aObject instanceof AMonth)) return false;
+		if (!(aObject instanceof AMonth))
+			return false;
 		AMonth obj = (AMonth) aObject;
 		return iRokMes == obj.iRokMes;
 	}
@@ -239,11 +240,11 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 		return Integer.valueOf(iRokMes).hashCode();
 	}
 
-
 	/**
 	 * Zkosntruuje objekt ze ztadaného roku a měsíce.
 	 *
-	 * @param aRokMes Pořadové číslo měsíce. Blíže viz {@link #asInt())
+	 * @param aRokMes
+	 *            Pořadové číslo měsíce. Blíže viz {@link #asInt())
 	 * @return Zkosntruovaný objekt AMonth
 	 */
 	public static AMonth from(int aRokMes) {
@@ -253,7 +254,8 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Vytvoří hodnotu ze zadaného řetězce
 	 *
-	 * @param aRokMes Rok a měsíc ve tvaru RRRR-MM.
+	 * @param aRokMes
+	 *            Rok a měsíc ve tvaru RRRR-MM.
 	 * @return odpovídající hodnota
 	 */
 	public static AMonth from(String aRokMes) {
@@ -263,8 +265,10 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Vytvoří AMonth ze zadaných hodnot
 	 *
-	 * @param aRok Čtyřmístný rok
-	 * @param aMes Měsíc 1..12
+	 * @param aRok
+	 *            Čtyřmístný rok
+	 * @param aMes
+	 *            Měsíc 1..12
 	 * @return Zkosntruovaný objekt AMonth
 	 */
 	public static AMonth from(int aRok, int aMes) {
@@ -289,7 +293,8 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Otestuje, zda je možné vytvořit instanci ze řetězece.
 	 *
-	 * @param aRokMes V řetězcovém tvaru rok a měsíc.
+	 * @param aRokMes
+	 *            V řetězcovém tvaru rok a měsíc.
 	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
 	 */
 	public static boolean canFrom(String aRokMes) {
@@ -304,8 +309,10 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Otestuje, zda je možné vytvořit instanci ze zadaného roku a měsíce.
 	 *
-	 * @param aRok Hodntoa roku..
-	 * @param aMes Měsíc v intervalu 1..12
+	 * @param aRok
+	 *            Hodntoa roku..
+	 * @param aMes
+	 *            Měsíc v intervalu 1..12
 	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
 	 */
 	public static boolean canFrom(int aRok, int aMes) {
@@ -320,7 +327,8 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Totéž co {@link #add}
 	 *
-	 * @param aNthObject Počet měsíců o kolik posunout.
+	 * @param aNthObject
+	 *            Počet měsíců o kolik posunout.
 	 * @return Instance AMonth s posunutým měsícem.
 	 */
 	public AMonth getAnother(long aNthObject) {
@@ -332,7 +340,8 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	/**
 	 * Totéž co diff.
 	 *
-	 * @param aObject Objekt, který se odečítá.
+	 * @param aObject
+	 *            Objekt, který se odečítá.
 	 * @return Počet měsíců rozdílu.
 	 */
 	public long getDistance(AMonth aObject) {
@@ -365,7 +374,7 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 		return aRok * MINY + aMes - 1; // aby uvnitř měsíce byly od nuly
 	}
 
-	//Kontrola rozsahu.
+	// Kontrola rozsahu.
 	private AMonth(int aRokMes) {
 		iRokMes = aRokMes;
 		checkRange();
@@ -376,14 +385,11 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	 */
 	protected final void checkRange() {
 		if (!(MINVALUE <= iRokMes && iRokMes <= MAXVALUE))
-			throw new XCreateElement("Hodnota " + iRokMes + " není v požadovaném intervalu <"
-					+ MINVALUE + "," + MAXVALUE + ">");
+			throw new XCreateElement("Hodnota " + iRokMes + " není v požadovaném intervalu <" + MINVALUE + "," + MAXVALUE + ">");
 	}
 
-
 	/**
-	 * Returns minimal acceptable value of <code>AMonth</code>.
-	 * You can't create an instance of <code>AMonth</code> with any less value.
+	 * Returns minimal acceptable value of <code>AMonth</code>. You can't create an instance of <code>AMonth</code> with any less value.
 	 *
 	 * @author kalendov
 	 */
@@ -392,8 +398,7 @@ implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
 	}
 
 	/**
-	 * Returns maximal acceptable value of <code>AMonth</code>.
-	 * You can't create an instance of <code>AMonth</code> with any greater value.
+	 * Returns maximal acceptable value of <code>AMonth</code>. You can't create an instance of <code>AMonth</code> with any greater value.
 	 *
 	 * @author kalendov
 	 */

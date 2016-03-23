@@ -9,21 +9,22 @@ import cz.geokuk.api.mapicon.Imagant;
 
 public class DefaultVykreslovac extends Drawer0 {
 
-
-
 	private final ImagantCache imagantCache;
 
-	public DefaultVykreslovac (ImagantCache imagantCache) {
+	public DefaultVykreslovac(ImagantCache imagantCache) {
 		this.imagantCache = imagantCache;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see geokuk.mapicon.Vykreslovac#draw(geokuk.mapicon.VykreslovaciKontext, java.util.List)
 	 */
 	@Override
 	public void draw(Deque<Imagant> aImaganti) {
 		/**
 		 * Načte obrázek, mělo by to jít, když je voláno.
+		 * 
 		 * @return
 		 */
 		URL url = getUrl();
@@ -36,6 +37,5 @@ public class DefaultVykreslovac extends Drawer0 {
 		aImaganti.addFirst(imagant);
 
 	}
-
 
 }

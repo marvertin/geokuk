@@ -1,14 +1,11 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
 import cz.geokuk.framework.DialogOpeningAction0;
 import cz.geokuk.framework.JMyDialog0;
-
-
 
 public class FenotypIkonyAction extends DialogOpeningAction0 {
 
@@ -21,13 +18,14 @@ public class FenotypIkonyAction extends DialogOpeningAction0 {
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F6"));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.DilogOpeningAction0#createDialog()
 	 */
 	@Override
 	public JMyDialog0 createDialog() {
 		return new JFenotypIkonyDialog();
 	}
-
 
 }

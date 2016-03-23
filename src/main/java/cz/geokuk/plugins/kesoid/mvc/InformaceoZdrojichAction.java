@@ -23,7 +23,9 @@ public class InformaceoZdrojichAction extends DialogOpeningAction0 {
 		setEnabled(false);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see cz.geokuk.framework.DialogOpeningAction0#createDialog()
 	 */
 	@Override

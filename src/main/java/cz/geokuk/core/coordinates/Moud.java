@@ -2,10 +2,11 @@ package cz.geokuk.core.coordinates;
 
 public class Moud {
 
-	public int dxx;
-	public int dyy;
+	public int	dxx;
+	public int	dyy;
 
-	public Moud() {}
+	public Moud() {
+	}
 
 	public Moud(int dxx, int dyy) {
 		this.dxx = dxx;
@@ -30,19 +31,19 @@ public class Moud {
 		return dxx ^ dyy;
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == this) return true;
-		if (! (obj instanceof Moud)) return false;
+		if (obj == this)
+			return true;
+		if (!(obj instanceof Moud))
+			return false;
 		Moud m = (Moud) obj;
 		return dxx == m.dxx && dyy == m.dyy;
 	}
 
-
 	@Override
 	public String toString() {
-		return "[" + Integer.toHexString(dxx)  + "," + Integer.toHexString(dyy)  + "]";
+		return "[" + Integer.toHexString(dxx) + "," + Integer.toHexString(dyy) + "]";
 	}
 
 	public boolean isAnyRozmerEmpty() {

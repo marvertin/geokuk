@@ -9,10 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.*;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -42,23 +39,20 @@ public class Hledac extends Hledac0<Nalezenec> {
 
 		XPath xpath = factory.newXPath();
 
-		try (InputStream stm = url.openStream()){
+		try (InputStream stm = url.openStream()) {
 			InputSource inputXml = new InputSource(stm);
-			NodeList adressList = (NodeList) xpath.evaluate(
-					"GeocodeResponse/result", inputXml,
-					XPathConstants.NODESET);
+			NodeList adressList = (NodeList) xpath.evaluate("GeocodeResponse/result", inputXml, XPathConstants.NODESET);
 			List<Nalezenec> list = new ArrayList<>();
 
 			for (int i = 0; i < adressList.getLength(); i++) {
 				Node item = adressList.item(i);
-				//System.out.println("xpath    " + item.getTextContent());
+				// System.out.println("xpath " + item.getTextContent());
 
 				String formatovanaAdresa = xpath.evaluate("formatted_address", item);
-				//System.out.println("xpath    " + formatovanaAdresa);
+				// System.out.println("xpath " + formatovanaAdresa);
 				Nalezenec nalezenec = new Nalezenec();
 				nalezenec.adresa = formatovanaAdresa;
-				nalezenec.wgs = new Wgs(Double.parseDouble(xpath.evaluate("geometry/location/lat", item)),
-						Double.parseDouble(xpath.evaluate("geometry/location/lng", item)));
+				nalezenec.wgs = new Wgs(Double.parseDouble(xpath.evaluate("geometry/location/lat", item)), Double.parseDouble(xpath.evaluate("geometry/location/lng", item)));
 				nalezenec.locationType = xpath.evaluate("geometry/location_type", item);
 				list.add(nalezenec);
 			}
@@ -67,7 +61,6 @@ public class Hledac extends Hledac0<Nalezenec> {
 			throw new RuntimeException(e);
 		}
 	}
-
 
 }
 

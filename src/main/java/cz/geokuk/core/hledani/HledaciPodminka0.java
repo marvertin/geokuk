@@ -3,8 +3,8 @@ package cz.geokuk.core.hledani;
 import cz.geokuk.core.coordinates.Wgs;
 
 public abstract class HledaciPodminka0 {
-	private Wgs stredHledani = new Wgs(49.284, 16.3563);
-	private String vzorek;
+	private Wgs		stredHledani	= new Wgs(49.284, 16.3563);
+	private String	vzorek;
 
 	public Wgs getStredHledani() {
 		return stredHledani;
@@ -22,11 +22,11 @@ public abstract class HledaciPodminka0 {
 	}
 
 	/**
-	 * @param aVzorek the vzorek to set
+	 * @param aVzorek
+	 *            the vzorek to set
 	 */
 	public void setVzorek(String aVzorek) {
 		vzorek = aVzorek;
 	}
-
 
 }

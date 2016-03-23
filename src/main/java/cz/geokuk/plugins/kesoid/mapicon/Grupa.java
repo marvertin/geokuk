@@ -1,20 +1,16 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 import cz.geokuk.util.lang.FString;
 
-
-
 public class Grupa {
-	static final String IMPLICITNI_GRUPA_NAME = "other!";
+	static final String		IMPLICITNI_GRUPA_NAME	= "other!";
 
-	private final String grupaName;
-	private String displayName;
+	private final String	grupaName;
+	private String			displayName;
 
-	private Set<Alela> alely = new LinkedHashSet<>();
+	private Set<Alela>		alely					= new LinkedHashSet<>();
 
 	/**
 	 * @return the alely
@@ -26,8 +22,8 @@ public class Grupa {
 	public synchronized void add(Alela alela) {
 		Grupa puvodniGrupa = alela.getGrupa();
 		if (puvodniGrupa != this) {
-			//    	System.out.printf("Prerazovani alely mezi grupami %s: %s -> %s\n", alela, puvodniGrupa, this);
-			//    	new RuntimeException().printStackTrace();
+			// System.out.printf("Prerazovani alely mezi grupami %s: %s -> %s\n", alela, puvodniGrupa, this);
+			// new RuntimeException().printStackTrace();
 			if (puvodniGrupa != null) {
 				puvodniGrupa.alely.remove(alela);
 			}
@@ -36,14 +32,13 @@ public class Grupa {
 		}
 	}
 
-
 	public Grupa(String grupaName) {
 		this.grupaName = grupaName;
 		this.displayName = grupaName;
 	}
 
 	public String getDisplayName() {
-		return  FString.isEmpty(displayName) ? grupaName : displayName;
+		return FString.isEmpty(displayName) ? grupaName : displayName;
 	}
 
 	public boolean isOther() {
@@ -59,11 +54,8 @@ public class Grupa {
 		return grupaName;
 	}
 
-
 	public String name() {
 		return grupaName;
 	}
-
-
 
 }

@@ -1,10 +1,6 @@
 package cz.geokuk.plugins.kesoidobsazenost;
 
-
-import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 import javax.swing.event.ChangeEvent;
@@ -17,26 +13,21 @@ import cz.geokuk.framework.MouseGestureContext;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.util.gui.JBarvovyDvojSlider;
-import cz.geokuk.util.index2d.BoundingRect;
-import cz.geokuk.util.index2d.FlatVisitor;
-import cz.geokuk.util.index2d.Indexator;
-import cz.geokuk.util.index2d.Sheet;
-
+import cz.geokuk.util.index2d.*;
 
 public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
 
-	private static final int POLOMER_OBSAZENOSTI = 161;
+	private static final int	POLOMER_OBSAZENOSTI	= 161;
 
-	private static final long serialVersionUID = -5858146658366237217L;
+	private static final long	serialVersionUID	= -5858146658366237217L;
 
-	private ObsazenostSettings obsazenost;
+	private ObsazenostSettings	obsazenost;
 
-	private Indexator<Wpt> iIndexator;
+	private Indexator<Wpt>		iIndexator;
 
-	private JBarvovyDvojSlider iSlidovnik;
+	private JBarvovyDvojSlider	iSlidovnik;
 
-
-	private ObsazenostModel obsazenostModel;
+	private ObsazenostModel		obsazenostModel;
 
 	public JObsazenost() {
 		setOpaque(false);
@@ -78,36 +69,37 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		repaint();
 	}
 
-
-
 	@Override
 	public void paintComponent(Graphics aG) {
-		if (iIndexator == null) return;
+		if (iIndexator == null)
+			return;
 		final Graphics2D g = (Graphics2D) aG;
 		final int r = polomerObsazenosti();
 		final int d = 2 * r;
-		if (d < 4) return; // nemá smysl kreslit malé kroužky
-		//obsazenost.setColor(new Color(128,128,128,128));
+		if (d < 4)
+			return; // nemá smysl kreslit malé kroužky
+		// obsazenost.setColor(new Color(128,128,128,128));
 		g.setColor(obsazenost.getColor());
 		int mouokraj = (int) (getSoord().getMouboduNaMetr() * POLOMER_OBSAZENOSTI);
 		BoundingRect boundingRect = getSoord().getBoundingRect().rozsir(mouokraj);
-		//final Area area = new Area();
+		// final Area area = new Area();
 		iIndexator.visit(boundingRect, new FlatVisitor<Wpt>() {
 
 			@Override
 			public void visit(Sheet<Wpt> aSheet) {
 				Wpt wpt = aSheet.get();
-				if (! wpt.obsazujeOblast()) return;
+				if (!wpt.obsazujeOblast())
+					return;
 				Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
 				Point p = getSoord().transform(mou);
-				//Ellipse2D kruh = new Ellipse2D.Float(p.x -r, p.y - r, d, d);
-				//Area areakruh = new Area(kruh);
-				//area.add(areakruh);
-				g.fillOval(p.x -r, p.y - r, d, d);
+				// Ellipse2D kruh = new Ellipse2D.Float(p.x -r, p.y - r, d, d);
+				// Area areakruh = new Area(kruh);
+				// area.add(areakruh);
+				g.fillOval(p.x - r, p.y - r, d, d);
 			}
 		});
 
-		//g.fill(area);
+		// g.fill(area);
 	}
 
 	/**
@@ -117,7 +109,7 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		return (int) (getSoord().getPixluNaMetr() * POLOMER_OBSAZENOSTI);
 	}
 
-	//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+	// g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 	/**
 	 * @author veverka
 	 *
@@ -136,7 +128,6 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		registerEvents();
 	}
 
-
 	public void inject(ObsazenostModel obsazenostModel) {
 		this.obsazenostModel = obsazenostModel;
 	}
@@ -148,7 +139,7 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 
 	@Override
 	public void mouseDragged(MouseEvent e, MouseGestureContext ctx) {
-		//ctx.setMouseCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		// ctx.setMouseCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		super.mouseDragged(e, ctx);
 	}
 }

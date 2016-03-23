@@ -7,11 +7,11 @@ import cz.geokuk.plugins.cesty.data.Cesta;
 
 public abstract class CestaAction0 extends PositionedAction0 {
 
-	private static final long serialVersionUID = 1L;
-	private final Cesta kontextovaCesta;
+	private static final long	serialVersionUID	= 1L;
+	private final Cesta			kontextovaCesta;
 
 	public CestaAction0(Cesta kontextovaCesta) {
-		//System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-konstruktor " + getClass());
+		// System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-konstruktor " + getClass());
 		this.kontextovaCesta = kontextovaCesta;
 		if (kontextovaCesta != null) {
 			kontextovaCesta.kontrolaKonzistence();
@@ -22,7 +22,6 @@ public abstract class CestaAction0 extends PositionedAction0 {
 	protected final void vyletChanged() {
 		vyhodnotitPovolenost();
 	}
-
 
 	private void vyhodnotitPovolenost() {
 		Cesta cesta = getCesta();
@@ -47,8 +46,8 @@ public abstract class CestaAction0 extends PositionedAction0 {
 	}
 
 	/**
-	 * Pokud je daný Cesta, tak se nechá natavit jméno. Natavovací metoda také
-	 * ví, zda je akce z kontexotvého menu nebo z hlavního
+	 * Pokud je daný Cesta, tak se nechá natavit jméno. Natavovací metoda také ví, zda je akce z kontexotvého menu nebo z hlavního
+	 * 
 	 * @param Cesta
 	 * @param aZKontextovehoMenu
 	 */
@@ -56,13 +55,16 @@ public abstract class CestaAction0 extends PositionedAction0 {
 
 	/**
 	 * Zda se pro dany Cesta ma akce povolit.
-	 * @param Cesta Nikdy nebude predano null
+	 * 
+	 * @param Cesta
+	 *            Nikdy nebude predano null
 	 * @return
 	 */
 	protected abstract boolean mamPovolitProCestu(Cesta cesta);
 
 	/**
 	 * Provedení akce pro daný Cesta.
+	 * 
 	 * @param Cesta
 	 */
 	protected abstract void provedProCestu(Cesta cesta);
@@ -72,7 +74,7 @@ public abstract class CestaAction0 extends PositionedAction0 {
 			curta().kontrolaKonzistence();
 		}
 		if (kontextovaCesta != null) {
-			//System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-getClass " + getClass());
+			// System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-getClass " + getClass());
 			kontextovaCesta.kontrolaKonzistence();
 			return kontextovaCesta;
 		} else {
@@ -80,7 +82,4 @@ public abstract class CestaAction0 extends PositionedAction0 {
 		}
 	}
 
-
-
 }
-

@@ -1,18 +1,11 @@
 package cz.geokuk.plugins.cesty;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Locale;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.plugins.cesty.data.Bod;
-import cz.geokuk.plugins.cesty.data.Cesta;
-import cz.geokuk.plugins.cesty.data.Doc;
+import cz.geokuk.plugins.cesty.data.*;
 
 public class Ukladac {
 
@@ -33,7 +26,6 @@ public class Ukladac {
 		p("</gpx>");
 		pwrt.close();
 	}
-
 
 	private void uloz(Doc doc) {
 		for (Cesta cesta : doc.getCesty()) {
@@ -59,14 +51,12 @@ public class Ukladac {
 
 	}
 
-
-
 	private void uloz(Mou mou) {
 		Wgs wgs = mou.toWgs();
 		p("    <trkpt lat=\"%f\" lon=\"%f\" />", wgs.lat, wgs.lon);
 	}
 
-	private void p(String format, Object ... p) {
+	private void p(String format, Object... p) {
 		pwrt.printf(Locale.US, format, p);
 		pwrt.println();
 	}

@@ -3,14 +3,9 @@
  */
 package cz.geokuk.plugins.kesoid.mapicon;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import cz.geokuk.framework.Factory;
 import cz.geokuk.plugins.kesoid.KesBag;
@@ -24,18 +19,18 @@ import cz.geokuk.util.gui.JIconCheckBox;
  */
 public class JToolbarOvladaceAlel extends JPanel {
 
-	private static final long serialVersionUID = 2858792073950044988L;
+	private static final long			serialVersionUID	= 2858792073950044988L;
 
-	private Genom genom;
-	protected Factory factory;
+	private Genom						genom;
+	protected Factory					factory;
 
-	private final JToolbarOvladaceAlel tb;
+	private final JToolbarOvladaceAlel	tb;
 
 	/**
 	 *
 	 */
 	public JToolbarOvladaceAlel(JToolBar tb) {
-		//super(BoxLayout.LINE_AXIS);
+		// super(BoxLayout.LINE_AXIS);
 		this.tb = this;
 	}
 
@@ -70,7 +65,7 @@ public class JToolbarOvladaceAlel extends JPanel {
 		ovladac(vsechny, genom.ALELA_arch);
 		ovladac(vsechny, genom.ALELA_cpt);
 		ovladac(vsechny, genom.ALELA_dpl);
-		//add(new JToolBar.Separator());
+		// add(new JToolBar.Separator());
 		add(new JSeparator(SwingConstants.VERTICAL));
 		ovladac(vsechny, genom.ALELA_gc);
 		ovladac(vsechny, genom.ALELA_mz);
@@ -85,28 +80,30 @@ public class JToolbarOvladaceAlel extends JPanel {
 				ovladac(vsechny, alela);
 			}
 		}
-		//    add(new JToolBar.Separator());
+		// add(new JToolBar.Separator());
 		add(new JSeparator(SwingConstants.VERTICAL));
 		if (genom.GRUPA_gcawp != null) {
 			for (Alela alela : genom.GRUPA_gcawp.getAlely()) {
 				ovladac(vsechny, alela);
 			}
 		}
-		//    for (Gen gen : genom.getGeny()) {
-		//      System.out.println("1");
-		//      System.out.println("GEN: " + gen);
-		//      System.out.println("2");
-		//      for (Grupa grp : gen.getGrupy().values()) {
-		//        System.out.println("   GRUPA: " + grp);
-		//        for (Alela alela : grp.getAlely()) {
-		//          System.out.println("          ALELA: " + alela);
-		//        }
-		//      }
-		//    }
+		// for (Gen gen : genom.getGeny()) {
+		// System.out.println("1");
+		// System.out.println("GEN: " + gen);
+		// System.out.println("2");
+		// for (Grupa grp : gen.getGrupy().values()) {
+		// System.out.println(" GRUPA: " + grp);
+		// for (Alela alela : grp.getAlely()) {
+		// System.out.println(" ALELA: " + alela);
+		// }
+		// }
+		// }
 		setVisible(true);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#removeAll()
 	 */
 	@Override
@@ -114,7 +111,6 @@ public class JToolbarOvladaceAlel extends JPanel {
 		super.removeAll();
 		mapka.clear();
 	}
-
 
 	/**
 	 * @return
@@ -126,6 +122,5 @@ public class JToolbarOvladaceAlel extends JPanel {
 	public void inject(Factory factory) {
 		this.factory = factory;
 	}
-
 
 }

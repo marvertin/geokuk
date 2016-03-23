@@ -28,5 +28,4 @@ public class RenderUmisteniSouboruChangedEvent extends Event0<RenderModel> {
 		return umisteniSouboru;
 	}
 
-
 }

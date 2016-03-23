@@ -9,7 +9,9 @@ public class PopiskyPreferencesChangeEvent extends Event0<PopiskyModel> {
 		this.pose = pose;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

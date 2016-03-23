@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.cesty.akce.cesta;
 
-
 import cz.geokuk.plugins.cesty.data.Cesta;
 
 public class SmazatCestuAction extends CestaAction0 {
@@ -9,14 +8,13 @@ public class SmazatCestuAction extends CestaAction0 {
 
 	public SmazatCestuAction(Cesta cesta) {
 		super(cesta);
-		//putValue(NAME,  "<html>Odstraň cestu <i>" + jCestaMenu.getNazev() + "</i> " + (jCestaMenu.getMouDelkaCesta() + " mou"));
-		putValue(NAME,  "Smazat cestu");
+		// putValue(NAME, "<html>Odstraň cestu <i>" + jCestaMenu.getNazev() + "</i> " + (jCestaMenu.getMouDelkaCesta() + " mou"));
+		putValue(NAME, "Smazat cestu");
 		putValue(SHORT_DESCRIPTION, "Vybranou cestu zcela odstraní z výletu se všemi jejími body a úseky");
-		//putValue(MNEMONIC_KEY, KeyEvent.VK_V);
-		//putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));
-		//putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
+		// putValue(MNEMONIC_KEY, KeyEvent.VK_V);
+		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));
+		// putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/vylet/vyletAno.png"));
 	}
-
 
 	@Override
 	protected boolean mamPovolitProCestu(Cesta cesta) {
@@ -32,7 +30,5 @@ public class SmazatCestuAction extends CestaAction0 {
 	protected void provedProCestu(Cesta cesta) {
 		cestyModel.removeCestu(cesta);
 	}
-
-
 
 }
