@@ -69,13 +69,14 @@ době opět dostat.
 
 <?php } ?>
 
-<?php if ($msgnad < 5) { ?>
-<h1>==5==</h1>
+<?php if ($msgnad < 6) { ?>
+<h1>==6==</h1>
 <h2>Geokuk zobrazuje mapy celého světa</h2>
-Od verze 5.0.0-beta1 Geokuk zobrazuje mapy z celého světa.
+<p>Od verze 5.0.0 Geokuk zobrazuje mapy z celého světa.
 Je umožněno používat nejrůznější mapové podklady.
-Blíže na stánkách http://geokuk.cz.               
-
+Blíže na stánkách http://geokuk.cz. 
+<p>Byl také přepracován systém stahování mapových dlaždic, takže je rychlejší a spolehlivější
+i při použití ne zrovna spolehlivých mapových podkladů.
 <?php } ?>
 
 <? include "zastatistikuj.php"; ?>
