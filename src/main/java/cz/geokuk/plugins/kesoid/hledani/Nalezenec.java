@@ -41,7 +41,7 @@ public class Nalezenec extends Nalezenec0 {
 	}
 
 	public void setKes(final Kesoid kes) {
-		this.kesoid = kes;
+		kesoid = kes;
 	}
 
 	@Override

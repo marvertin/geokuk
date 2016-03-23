@@ -60,7 +60,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		if (iJavaDate == null) {
 			throw new IllegalStateException("INTERNAL ERROR - iJavaDate cannot be null.");
 		}
-		final Date date = new Date(this.asLong());
+		final Date date = new Date(asLong());
 		return date;
 	}
 
@@ -420,7 +420,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 
 	@Override
 	public int compareTo(final ATimestamp aObj) {
-		final long a = this.asLong();
+		final long a = asLong();
 		final long b = ((ATimestamp) checkCompare(aObj)).asLong(); // vyhodí výjimku,
 		// pokud bude null
 		return a == b ? 0 : a < b ? -1 : 1;
@@ -726,7 +726,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 */
 	@Override
 	public ATimestamp getAnother(final long aNthObject) {
-		return this.add(aNthObject);
+		return add(aNthObject);
 	}
 
 	/**

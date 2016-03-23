@@ -41,7 +41,7 @@ public class ZhasniVsechnyMrizkyAction extends Action0 {
 	@MultiInjection
 	public void inject(final MrizkaModel mrizkaModel) {
 		if (!"Meritkovnik".equals(mrizkaModel.getSubType())) {
-			this.mrizkaModels.add(mrizkaModel); // jenom přížky se zhasínají
+			mrizkaModels.add(mrizkaModel); // jenom přížky se zhasínají
 		}
 	}
 

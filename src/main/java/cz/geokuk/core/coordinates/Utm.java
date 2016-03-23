@@ -55,7 +55,7 @@ public class Utm extends Misto0 {
 	 * @return
 	 */
 	public Utm toUtmInTheSameZone(final double ux, final double uy) {
-		return new Utm(ux, uy, this.polednikovaZona, this.rovnobezkovaZona);
+		return new Utm(ux, uy, polednikovaZona, rovnobezkovaZona);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class Utm extends Misto0 {
 	 * @return
 	 */
 	public Utm toSampePlaceInAnotherZone(final int polednikovaZona, final char rovnobezkovaZona) {
-		return new Utm(this.ux, this.uy, polednikovaZona, rovnobezkovaZona);
+		return new Utm(ux, uy, polednikovaZona, rovnobezkovaZona);
 	}
 
 	@Override

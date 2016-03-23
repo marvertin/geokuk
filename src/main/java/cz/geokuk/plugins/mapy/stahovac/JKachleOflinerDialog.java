@@ -136,7 +136,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 		private final boolean zafrontovati;
 
 		KachleOflinerSwingWorker(final boolean zafrontovat) {
-			this.zafrontovati = zafrontovat;
+			zafrontovati = zafrontovat;
 		}
 
 		@Override

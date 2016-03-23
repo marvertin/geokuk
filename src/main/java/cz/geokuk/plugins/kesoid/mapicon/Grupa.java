@@ -34,7 +34,7 @@ public class Grupa {
 
 	public Grupa(final String grupaName) {
 		this.grupaName = grupaName;
-		this.displayName = grupaName;
+		displayName = grupaName;
 	}
 
 	public String getDisplayName() {

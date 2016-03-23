@@ -426,7 +426,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 */
 	public ATimestamp getNoonTimestamp(final TimeZone aZone) {
 		final Calendar cal = new GregorianCalendar(aZone);
-		cal.set(this.getYearNumber(), this.getMonthNumber() - 1, this.getDayNumber(), 0, 0, 0);
+		cal.set(getYearNumber(), getMonthNumber() - 1, getDayNumber(), 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		return ATimestamp.from(cal.getTime().getTime() + 12 * 60 * 60 * 1000);
 	}

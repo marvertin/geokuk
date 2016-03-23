@@ -9,8 +9,8 @@ public class Wgsd {
 	}
 
 	public Wgsd(final double dlat, final double dlon) {
-		this.lat = dlat;
-		this.lon = dlon;
+		lat = dlat;
+		lon = dlon;
 	}
 
 	public Wgsd(final Wgsd wgs) {
@@ -52,11 +52,11 @@ public class Wgsd {
 	}
 
 	public Wgsd add(final double dlat, final double dlon) {
-		return new Wgsd(this.lat + dlat, this.lon + dlon);
+		return new Wgsd(lat + dlat, lon + dlon);
 	}
 
 	public Wgsd sub(final double dlat, final double dlon) {
-		return new Wgsd(this.lat - dlat, this.lon - dlon);
+		return new Wgsd(lat - dlat, lon - dlon);
 	}
 
 	@Override

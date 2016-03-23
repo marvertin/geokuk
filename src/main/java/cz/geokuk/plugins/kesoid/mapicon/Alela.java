@@ -34,7 +34,7 @@ public class Alela {
 
 	public Alela(final String alelaName, final int celkovePoradi) {
 		this.alelaName = alelaName;
-		this.displayName = alelaName;
+		displayName = alelaName;
 		this.celkovePoradi = celkovePoradi;
 	}
 

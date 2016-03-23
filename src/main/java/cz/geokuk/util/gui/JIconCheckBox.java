@@ -26,7 +26,7 @@ public class JIconCheckBox extends JCheckBox {
 	@Override
 	public void setIcon(final Icon defaultIcon) {
 		super.setIcon(defaultIcon);
-		this.icon = defaultIcon;
+		icon = defaultIcon;
 		setRolloverIcon(new RolloverIcon());
 		setSelectedIcon(new SelectedIcon());
 		setRolloverSelectedIcon(new RollOverSelectedIcon());

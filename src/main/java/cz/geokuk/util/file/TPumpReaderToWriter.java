@@ -86,11 +86,11 @@ public class TPumpReaderToWriter extends Thread {
 	}
 
 	public void setCloseWriter(final boolean closeWriter) {
-		this.iCloseWriter = closeWriter;
+		iCloseWriter = closeWriter;
 	}
 
 	public void setCloseReader(final boolean closeReader) {
-		this.iCloseReader = closeReader;
+		iCloseReader = closeReader;
 	}
 
 	public boolean isCloseReader() {
@@ -101,7 +101,7 @@ public class TPumpReaderToWriter extends Thread {
 		if (bufferSize < 1) {
 			bufferSize = 1;
 		}
-		this.iBufferSize = bufferSize;
+		iBufferSize = bufferSize;
 	}
 
 	public int getBufferSize() {
@@ -109,7 +109,7 @@ public class TPumpReaderToWriter extends Thread {
 	}
 
 	public void setNotificationReceiver(final Object notificationReceiver) {
-		this.iNotificationReceiver = notificationReceiver;
+		iNotificationReceiver = notificationReceiver;
 	}
 
 	public Object getNotificationReceiver() {

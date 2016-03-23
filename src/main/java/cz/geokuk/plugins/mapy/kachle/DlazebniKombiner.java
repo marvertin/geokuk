@@ -197,12 +197,12 @@ class DlazebniKombiner {
 
 		ImageOrException(final Image image) {
 			this.image = image;
-			this.throwable = null;
+			throwable = null;
 		}
 
 		ImageOrException(final Throwable throwable) {
 			this.throwable = throwable;
-			this.image = null;
+			image = null;
 		}
 
 	}

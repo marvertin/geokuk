@@ -15,7 +15,7 @@ public enum EKesDiffTerRating {
 		if (this == UNKNOWN) {
 			return "0";
 		} else {
-			return String.valueOf(this.ordinal() / 2. + 1);
+			return String.valueOf(ordinal() / 2. + 1);
 		}
 	}
 
@@ -23,7 +23,7 @@ public enum EKesDiffTerRating {
 		if (this == UNKNOWN) {
 			return "0";
 		} else {
-			return Integer.toString(this.ordinal() * 5 + 10);
+			return Integer.toString(ordinal() * 5 + 10);
 		}
 	}
 

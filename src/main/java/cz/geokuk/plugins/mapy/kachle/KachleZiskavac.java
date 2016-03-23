@@ -307,7 +307,7 @@ public class KachleZiskavac {
 					future = null; // už dojelo, tak není co kanclovat
 					uzSeNacita = false;
 					if (kachloStav.imageData != null) {
-						this.imageData = kachloStav.imageData;
+						imageData = kachloStav.imageData;
 						zaplanovatUlozeni = true;
 					}
 				}
@@ -426,7 +426,7 @@ public class KachleZiskavac {
 
 		final DlazebniKombiner kombiner = new DlazebniKombiner(req.getKa().kaSet.getKts());
 
-		final DvojiceExekucnichSluzeb dvojiceExekucnichSluzeb = this.exekucniSluzby.get(req.getPriorita());
+		final DvojiceExekucnichSluzeb dvojiceExekucnichSluzeb = exekucniSluzby.get(req.getPriorita());
 		final Logger log = dvojiceExekucnichSluzeb.log;
 		log.debug("ziskejObsah: {}", diagnosticsData);
 		final List<Kanceler> kanceleri = req.getKa().getKaOnes().stream().map(kaone -> {

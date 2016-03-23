@@ -19,7 +19,7 @@ public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
 	 * @param aBoard
 	 */
 	public IkonNacitacSwingWorker(final IkonNacitacLoader multiNacitac, final boolean prenacti, final KesoidModel kesoidModel) {
-		this.ikonNacitac = multiNacitac;
+		ikonNacitac = multiNacitac;
 		iPrenacti = prenacti;
 		this.kesoidModel = kesoidModel;
 	}

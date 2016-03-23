@@ -11,7 +11,7 @@ public class BeanType {
 	private BeanType(final Class<?> cls, final String subType, final boolean multiInjection) {
 		this.cls = cls;
 		this.subType = subType;
-		this.multinInjectionSupported = multiInjection;
+		multinInjectionSupported = multiInjection;
 	}
 
 	/**

@@ -46,7 +46,7 @@ public abstract class ToggleAction0 extends Action0 {
 	}
 
 	public void setSelected(final boolean onoff) {
-		this.iOnoff = onoff;
+		iOnoff = onoff;
 		nastavDoButtonu();
 	}
 

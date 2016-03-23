@@ -178,10 +178,10 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 			if (d < PIXLMEZ) {
 				return; // to je ještě málo;
 			}
-			this.xkrok = krok;
-			this.ykrok = krok;
-			this.tlustsiX = tlustsi;
-			this.tlustsiY = tlustsi;
+			xkrok = krok;
+			ykrok = krok;
+			tlustsiX = tlustsi;
+			tlustsiY = tlustsi;
 			final Mou moustred = getSoord().getMoustred();
 			x0 = Math.round(convertToX(moustred) / krok) * krok;
 			y0 = Math.round(convertToY(moustred) / krok) * krok;

@@ -335,7 +335,7 @@ public class Coord {
 	}
 
 	private Coord create(final int moumer, final Mou moustred, final Dimension dim, final double natoceni) {
-		if (moumer == this.getMoumer() && moustred.equals(this.moustred) && dim.equals(this.dim) && natoceni == this.natoceni) {
+		if (moumer == getMoumer() && moustred.equals(this.moustred) && dim.equals(this.dim) && natoceni == this.natoceni) {
 			return this; // vrátíme stejnou instanci, podle čehož se pozná, že nedošlo ke změně
 		}
 		return new Coord(moumer, moustred, dim, natoceni);

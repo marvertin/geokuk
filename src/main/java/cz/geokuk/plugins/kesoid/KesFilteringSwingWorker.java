@@ -40,7 +40,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 	public KesFilteringSwingWorker(final KesBag vsechny, final Genom genom, final KesFilter kesFilter, final KesoidModel kesoidModel, final ProgressModel progresModel) {
 		this.vsechny = vsechny;
 		iGenom = genom;
-		this.kesfilter = kesFilter;
+		kesfilter = kesFilter;
 		this.kesoidModel = kesoidModel;
 		this.progresModel = progresModel;
 		cisloFiltrovani = ++citac;

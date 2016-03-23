@@ -6,7 +6,7 @@ public class MrizkaEvent extends Event0<MrizkaModel> {
 	public final boolean onoff;
 
 	MrizkaEvent(final String kteraMrizka, final boolean onoff) {
-		this.subType = kteraMrizka;
+		subType = kteraMrizka;
 		this.onoff = onoff;
 	}
 

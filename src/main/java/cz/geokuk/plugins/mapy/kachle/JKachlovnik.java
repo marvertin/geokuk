@@ -50,7 +50,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 	// je to jen kvuli garbage collectoru, aby nezrusil, NERUSIT PROMENNU i kdyz zdanlive je to na nic
 	public JKachlovnik(final String nazevKachlovniku, final Priority priority) {
 		this.nazevKachlovniku = nazevKachlovniku;
-		this.priorita = priority;
+		priorita = priority;
 		setLayout(null);
 		setPreferredSize(new Dimension(800, 600));
 		setBackground(Color.GREEN);
