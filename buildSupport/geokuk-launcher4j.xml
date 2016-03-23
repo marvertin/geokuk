@@ -19,16 +19,16 @@
   </singleInstance>
   <jre>
     <path></path>
-    <minVersion>1.7.0</minVersion>
+    <minVersion>1.8.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
-    <maxHeapSize>512</maxHeapSize>
+    <maxHeapSize>1300</maxHeapSize>
   </jre>
   <versionInfo>
     <fileVersion>4.0.0</fileVersion>
     <txtFileVersion>neuvedena</txtFileVersion>
-    <fileDescription>GEOUK - program pro praci s keskami nad mapy.cz.</fileDescription>
-    <copyright>(c) Martin Veverka, 2009 - 2011, Dan Stahr 2014 - 2015</copyright>
+    <fileDescription>GEOKUK - program pro praci s gaocache nad mapami.</fileDescription>
+    <copyright>(c) Martin Veverka, 2009 - 2016, Dan Stahr 2014 - 2016</copyright>
     <productVersion>0.0.0.0</productVersion>
     <txtProductVersion>neuvedena</txtProductVersion>
     <productName>Geokuk</productName>
