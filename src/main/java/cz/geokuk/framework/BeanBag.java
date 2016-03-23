@@ -116,7 +116,7 @@ public class BeanBag implements Factory {
 	 * @param bean
 	 */
 	private void callAfterEventReceiverRegistrationInit(final Object bean) {
-		if ((bean instanceof AfterEventReceiverRegistrationInit)) {
+		if (bean instanceof AfterEventReceiverRegistrationInit) {
 			((AfterEventReceiverRegistrationInit) bean).initAfterEventReceiverRegistration();
 		}
 	}
@@ -125,7 +125,7 @@ public class BeanBag implements Factory {
 	 * @param bean
 	 */
 	private void callAfterInjectInit(final Object bean) {
-		if ((bean instanceof AfterInjectInit)) {
+		if (bean instanceof AfterInjectInit) {
 			((AfterInjectInit) bean).initAfterInject();
 		}
 	}

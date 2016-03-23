@@ -46,19 +46,19 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((imageType == null) ? 0 : imageType.hashCode());
+		result = prime * result + (imageType == null ? 0 : imageType.hashCode());
 		result = prime * result + kalibrBodu;
 		result = prime * result + (kalibracniZnackyProTisk ? 1231 : 1237);
 		result = prime * result + kmzDrawOrder;
-		result = prime * result + ((kmzFolder == null) ? 0 : kmzFolder.hashCode());
-		result = prime * result + ((kmzFolderDescription == null) ? 0 : kmzFolderDescription.hashCode());
+		result = prime * result + (kmzFolder == null ? 0 : kmzFolder.hashCode());
+		result = prime * result + (kmzFolderDescription == null ? 0 : kmzFolderDescription.hashCode());
 		result = prime * result + kmzMaxDlazdiceX;
 		result = prime * result + kmzMaxDlazdiceY;
 		result = prime * result + papiroveMeritko;
-		result = prime * result + ((pureFileName == null) ? 0 : pureFileName.hashCode());
+		result = prime * result + (pureFileName == null ? 0 : pureFileName.hashCode());
 		result = prime * result + renderedMoumer;
 		result = prime * result + (srovnatDoSeveru ? 1231 : 1237);
-		result = prime * result + ((whatRender == null) ? 0 : whatRender.hashCode());
+		result = prime * result + (whatRender == null ? 0 : whatRender.hashCode());
 		return result;
 	}
 
@@ -375,9 +375,9 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((patternNumberCilovy == null) ? 0 : patternNumberCilovy.hashCode());
-			result = prime * result + ((patternNumberPredbezny == null) ? 0 : patternNumberPredbezny.hashCode());
-			result = prime * result + ((text == null) ? 0 : text.hashCode());
+			result = prime * result + (patternNumberCilovy == null ? 0 : patternNumberCilovy.hashCode());
+			result = prime * result + (patternNumberPredbezny == null ? 0 : patternNumberPredbezny.hashCode());
+			result = prime * result + (text == null ? 0 : text.hashCode());
 			return result;
 		}
 

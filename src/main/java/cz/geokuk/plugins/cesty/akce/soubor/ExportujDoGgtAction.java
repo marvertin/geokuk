@@ -50,7 +50,7 @@ public class ExportujDoGgtAction extends SouboeCestaAction0 {
 
 	public void onEvent(final CestyChangedEvent event) {
 		doc = event.getDoc();
-		setEnabled(doc != null && (!doc.isEmpty()));
+		setEnabled(doc != null && !doc.isEmpty());
 	}
 
 }

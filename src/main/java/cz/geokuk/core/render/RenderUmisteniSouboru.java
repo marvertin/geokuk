@@ -49,9 +49,9 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((kmzDir == null) ? 0 : kmzDir.hashCode());
-		result = prime * result + ((oziDir == null) ? 0 : oziDir.hashCode());
-		result = prime * result + ((pictureDir == null) ? 0 : pictureDir.hashCode());
+		result = prime * result + (kmzDir == null ? 0 : kmzDir.hashCode());
+		result = prime * result + (oziDir == null ? 0 : oziDir.hashCode());
+		result = prime * result + (pictureDir == null ? 0 : pictureDir.hashCode());
 		return result;
 	}
 

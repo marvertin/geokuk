@@ -82,11 +82,11 @@ public class Doc implements Iterable<Cesta> {
 					return sr.bousek;
 				}
 			}
-			if (aDatPrednostBoduPredUsekem && (srmin.bousek instanceof Usek) && (sr.bousek instanceof Bod)) {
+			if (aDatPrednostBoduPredUsekem && srmin.bousek instanceof Usek && sr.bousek instanceof Bod) {
 				srmin = sr; // tentokrát přišel bod, tak mu dáme přednost
 				continue;
 			}
-			if (aDatPrednostBoduPredUsekem && (srmin.bousek instanceof Bod) && (sr.bousek instanceof Usek)) {
+			if (aDatPrednostBoduPredUsekem && srmin.bousek instanceof Bod && sr.bousek instanceof Usek) {
 				continue; // přišel úsek, přitom jsme měli už bod, nebudeme se tím zabývat
 			}
 			// je to buď bodbod nebo usek-usek nebo nezáleží na typu, budeme porovnávat veliksoti

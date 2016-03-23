@@ -34,15 +34,15 @@ public class JIkonkaPapiru extends JComponent {
 		final double kratsi = metrika.getKratsiStrana() * kvoc;
 		if (metrika.naSirku) {
 			g.setColor(Color.WHITE);
-			g.fillRect((int) (-delsi / 2), ((int) -kratsi / 2), ((int) delsi), ((int) kratsi));
+			g.fillRect((int) (-delsi / 2), (int) -kratsi / 2, (int) delsi, (int) kratsi);
 			g.setColor(Color.BLACK);
-			g.drawRect((int) (-delsi / 2), ((int) -kratsi / 2), ((int) delsi), ((int) kratsi));
+			g.drawRect((int) (-delsi / 2), (int) -kratsi / 2, (int) delsi, (int) kratsi);
 		}
 		if (metrika.naVysku) {
 			g.setColor(Color.WHITE);
-			g.fillRect((int) (-kratsi / 2), ((int) -delsi / 2), ((int) kratsi), ((int) delsi));
+			g.fillRect((int) (-kratsi / 2), (int) -delsi / 2, (int) kratsi, (int) delsi);
 			g.setColor(Color.BLACK);
-			g.drawRect((int) (-kratsi / 2), ((int) -delsi / 2), ((int) kratsi), ((int) delsi));
+			g.drawRect((int) (-kratsi / 2), (int) -delsi / 2, (int) kratsi, (int) delsi);
 		}
 		g.setColor(Color.DARK_GRAY);
 		g.setFont(getFont().deriveFont(Font.BOLD, 2));
@@ -55,7 +55,7 @@ public class JIkonkaPapiru extends JComponent {
 		g.setColor(Color.MAGENTA);
 		final double sirka = metrika.xsize * kvoc;
 		final double vyska = metrika.ysize * kvoc;
-		g.drawRect((int) (-sirka / 2), ((int) -vyska / 2), ((int) sirka), ((int) vyska));
+		g.drawRect((int) (-sirka / 2), (int) -vyska / 2, (int) sirka, (int) vyska);
 	}
 
 	public void setMetrikia(final PapirovaMetrika metrika) {

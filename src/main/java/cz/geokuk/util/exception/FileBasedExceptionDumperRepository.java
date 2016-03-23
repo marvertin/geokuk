@@ -136,7 +136,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 					int c;
 					while ((c = raf.read()) >= 0) {
 						if (c >= '0' && c <= '9') { // jen číslice nás zajímají
-							runNumber = runNumber * 10 + (c - '0');
+							runNumber = runNumber * 10 + c - '0';
 						}
 					}
 					runNumber++; // inkrementujeme načtené číslo, pokud jsme nenačetli minule nic, inkrementujeme jedničku

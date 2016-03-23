@@ -144,13 +144,13 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((geogetDataDir == null) ? 0 : geogetDataDir.hashCode());
-		result = prime * result + ((image3rdPartyDir == null) ? 0 : image3rdPartyDir.hashCode());
-		result = prime * result + ((imageMyDir == null) ? 0 : imageMyDir.hashCode());
-		result = prime * result + ((kesDir == null) ? 0 : kesDir.hashCode());
-		result = prime * result + ((cestyDir == null) ? 0 : cestyDir.hashCode());
-		result = prime * result + ((neGgtFile == null) ? 0 : neGgtFile.hashCode());
-		result = prime * result + ((anoGgtFile == null) ? 0 : anoGgtFile.hashCode());
+		result = prime * result + (geogetDataDir == null ? 0 : geogetDataDir.hashCode());
+		result = prime * result + (image3rdPartyDir == null ? 0 : image3rdPartyDir.hashCode());
+		result = prime * result + (imageMyDir == null ? 0 : imageMyDir.hashCode());
+		result = prime * result + (kesDir == null ? 0 : kesDir.hashCode());
+		result = prime * result + (cestyDir == null ? 0 : cestyDir.hashCode());
+		result = prime * result + (neGgtFile == null ? 0 : neGgtFile.hashCode());
+		result = prime * result + (anoGgtFile == null ? 0 : anoGgtFile.hashCode());
 		return result;
 	}
 

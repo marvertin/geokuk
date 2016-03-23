@@ -282,7 +282,7 @@ public class SestavovacPopisku {
 
 	public static String computeByvalyPopisek(final Wpt wpt) {
 		final Kesoid kesoid = wpt.getKesoid();
-		final String nazev = (kesoid.getKesoidKind() == EKesoidKind.CGP) ? kesoid.getIdentifier() : kesoid.getNazev();
+		final String nazev = kesoid.getKesoidKind() == EKesoidKind.CGP ? kesoid.getIdentifier() : kesoid.getNazev();
 		return nazev;
 
 	}

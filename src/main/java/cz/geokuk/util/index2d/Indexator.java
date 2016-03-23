@@ -117,8 +117,8 @@ public class Indexator<T> {
 		visit(br, new FlatVisitor<T>() {
 			@Override
 			public void visit(final Sheet<T> sheet) {
-				final long dx = (sheet.xx - xx);
-				final long dy = (sheet.yy - yy);
+				final long dx = sheet.xx - xx;
+				final long dy = sheet.yy - yy;
 				final long d2 = dx * dx + dy * dy;
 				if (d2 < drzak.d2) {
 					drzak.d2 = d2;

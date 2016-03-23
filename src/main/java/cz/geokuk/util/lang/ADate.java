@@ -608,7 +608,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	}
 
 	public static ADate from(final int aRok, final int aMesic, final int aDen) {
-		return (aRok == 0 && aMesic == 0 && aDen == 0) ? null : new ADate(aRok, aMesic, aDen);
+		return aRok == 0 && aMesic == 0 && aDen == 0 ? null : new ADate(aRok, aMesic, aDen);
 	}
 
 	public static boolean canFrom(final String aDatum) {

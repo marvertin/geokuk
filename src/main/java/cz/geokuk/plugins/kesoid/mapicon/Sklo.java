@@ -115,8 +115,8 @@ public class Sklo implements ImagantCache {
 
 			// a vyvorit výsledek
 			imagant = new Imagant(resultbi);
-			imagant.setXoffset(br.xx1 - (-width / 2));
-			imagant.setYoffset(br.yy1 - (-height / 2));
+			imagant.setXoffset(br.xx1 - -width / 2);
+			imagant.setYoffset(br.yy1 - -height / 2);
 		} finally {
 			g.dispose();
 		}

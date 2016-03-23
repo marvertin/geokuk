@@ -177,7 +177,7 @@ public class Ctverecnik<T> extends Node0<T> {
 	 */
 	@Override
 	void vypis(final String prefix, final int aLevel) {
-		final String mezery = String.format("%" + (aLevel * 2) + "s", " ");
+		final String mezery = String.format("%" + aLevel * 2 + "s", " ");
 		log.debug("{}{}: ({}) [{},{}] - [{},{}]", mezery, prefix, count, xx1, yy1, xx2, yy2);
 		podvypis(jz, "jz", aLevel + 1);
 		podvypis(jv, "jv", aLevel + 1);
@@ -192,7 +192,7 @@ public class Ctverecnik<T> extends Node0<T> {
 	 */
 	private void podvypis(final Node0<T> aNode, final String aPrefix, final int aLevel) {
 		if (aNode == null) {
-			final String mezery = String.format("%" + (aLevel * 2) + "s", " ");
+			final String mezery = String.format("%" + aLevel * 2 + "s", " ");
 			log.debug("{}{}: null", mezery, aPrefix);
 		} else {
 			aNode.vypis(aPrefix, aLevel);

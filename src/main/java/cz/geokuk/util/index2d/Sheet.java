@@ -47,7 +47,7 @@ public class Sheet<T> extends Node0<T> {
 	 */
 	@Override
 	void vypis(final String aPrefix, final int aLevel) {
-		final String mezery = String.format("%" + (aLevel * 2) + "s", " ");
+		final String mezery = String.format("%" + aLevel * 2 + "s", " ");
 		System.out.printf("%s%s: [%d,%d] %s\n", mezery, aPrefix, xx, yy, obj);
 	}
 
@@ -58,7 +58,7 @@ public class Sheet<T> extends Node0<T> {
 	 */
 	@Override
 	void visit(final BoundingRect rect, final Visitor<T> aVisitor) {
-		if (rect == null || (xx >= rect.xx1 && xx < rect.xx2 & yy >= rect.yy1 && yy < rect.yy2)) {
+		if (rect == null || xx >= rect.xx1 && xx < rect.xx2 & yy >= rect.yy1 && yy < rect.yy2) {
 			// jsem uvnitr
 			aVisitor.visit(this);
 		}

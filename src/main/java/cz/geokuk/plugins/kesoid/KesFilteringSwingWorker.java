@@ -100,7 +100,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 				kesbag.add(dvojka.wpt, dvojka.genotyp);
 			}
 			kesfilter.done();
-			log.debug("FILTERING {} - prepared result, {} ms.", cisloFiltrovani, (System.currentTimeMillis() - startTime));
+			log.debug("FILTERING {} - prepared result, {} ms.", cisloFiltrovani, System.currentTimeMillis() - startTime);
 			kesbag.done();
 			progressor.finish();
 			return kesbag;
@@ -128,7 +128,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 		// TODO řešit progresy nějak ssematicky
 		kesoidModel.fire(new KeskyVyfiltrovanyEvent(result, vsechny));
 		log.debug("FILTERING {} - finished, filtered {} caches, {}={} waypoints, {} ms.\n", cisloFiltrovani, result.getKesoidy().size(), result.getWpts().size(),
-				result.getIndexator().count(BoundingRect.ALL), (System.currentTimeMillis() - startTime));
+				result.getIndexator().count(BoundingRect.ALL), System.currentTimeMillis() - startTime);
 	}
 
 	private static class Dvojka {

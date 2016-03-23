@@ -55,7 +55,7 @@ public class KachleUmisteniSouboru extends UmisteniSouboru0 {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((kachleCacheDir == null) ? 0 : kachleCacheDir.hashCode());
+		result = prime * result + (kachleCacheDir == null ? 0 : kachleCacheDir.hashCode());
 		return result;
 	}
 

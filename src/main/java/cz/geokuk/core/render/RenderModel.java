@@ -425,7 +425,7 @@ public class RenderModel extends Model0 {
 		final List<Wgs> wgss = new ArrayList<>();
 		final int width = cocox.getDim().width;
 		final int height = cocox.getDim().height;
-		final int kalistrana = (int) (Math.ceil(Math.sqrt(kalibrBodu))); // počet kalibračních bodů rastru ve sloupci a řádku
+		final int kalistrana = (int) Math.ceil(Math.sqrt(kalibrBodu)); // počet kalibračních bodů rastru ve sloupci a řádku
 		final double kalifaktor = (kalistrana * kalistrana - 1) / ((double) kalibrBodu - 1); // po jaké vzdálenosti kalibrační bod
 		System.out.println("kalistrana: " + kalistrana);
 		double kalicitac = 0;

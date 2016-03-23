@@ -39,8 +39,8 @@ public class MyExceptionHandler implements UncaughtExceptionHandler {
 	private void zpracujMaloPameti(final OutOfMemoryError oome) {
 		System.err.println("Málo paměti!");
 		final Runtime runtime = Runtime.getRuntime();
-		final long freeMemory = (runtime.freeMemory() / 1024);
-		final long totalMemory = (runtime.totalMemory() / 1024);
+		final long freeMemory = runtime.freeMemory() / 1024;
+		final long totalMemory = runtime.totalMemory() / 1024;
 		spunt = null; // uvolníme špunt, čímž umožníme ještě zobrazit okno a ukončit program
 		final AExcId excId = FExceptionDumper.dump(oome, EExceptionSeverity.DISPLAY, "Málo paměti odchyceno.");
 		System.err.println("Exception: " + excId);

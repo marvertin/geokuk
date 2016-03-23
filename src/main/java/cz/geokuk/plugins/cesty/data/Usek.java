@@ -131,7 +131,7 @@ public class Usek extends Bousek0 {
 		final double a12 = y1 - y2;
 		final double a21 = a12;
 		final double a22 = -a11;
-		final double b1 = -((a22) * x3 + (-a12) * y3);
+		final double b1 = -(a22 * x3 + -a12 * y3);
 		final double b2 = -(x1 * y2 - x2 * y1);
 
 		final double d = a11 * a22 - a12 * a21;

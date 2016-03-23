@@ -43,7 +43,7 @@ public class JMvComboBox<T> extends JComboBox<Item<T>> {
 
 			private void nastavto() {
 				@SuppressWarnings("unchecked")
-				final Item<T> item = ((Item<T>) defmod.getSelectedItem());
+				final Item<T> item = (Item<T>) defmod.getSelectedItem();
 				model.setSelectedItem(item);
 			}
 		});

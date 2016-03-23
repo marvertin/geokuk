@@ -259,8 +259,8 @@ public class GeogetLoader extends Nacitac0 {
 
 	private String formatDateTime(final int yyyymmddDate) {
 		final int day = yyyymmddDate % 100;
-		final int month = (yyyymmddDate / 100) % 100;
-		final int year = (yyyymmddDate / 10000);
+		final int month = yyyymmddDate / 100 % 100;
+		final int year = yyyymmddDate / 10000;
 		return String.format(DATE_FORMAT_TEMPLATE, year, month, day);
 	}
 

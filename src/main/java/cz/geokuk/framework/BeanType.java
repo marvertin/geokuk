@@ -91,8 +91,8 @@ public class BeanType {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cls == null) ? 0 : cls.hashCode());
-		result = prime * result + ((subType == null) ? 0 : subType.hashCode());
+		result = prime * result + (cls == null ? 0 : cls.hashCode());
+		result = prime * result + (subType == null ? 0 : subType.hashCode());
 		return result;
 	}
 

@@ -20,7 +20,7 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 	public void setSelectedColor(final Color color) {
 		// musíme pžidávat alfu zevnitř, protože takto nám volá model bez alfy
 		// color chooser
-		super.setSelectedColor(new Color((color.getRGB() & 0xFFFFFF) | (alfa << 24), true));
+		super.setSelectedColor(new Color(color.getRGB() & 0xFFFFFF | alfa << 24, true));
 	}
 
 	/*
@@ -50,7 +50,7 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 
 	public Color getSelectedColorWithAlfa() {
 		log.debug("MODEL-getSelectedColorWithAlfa1: " + alfa);
-		final Color color = new Color(super.getSelectedColor().getRGB() & 0xFFFFFF | (alfa << 24), true);
+		final Color color = new Color(super.getSelectedColor().getRGB() & 0xFFFFFF | alfa << 24, true);
 		log.debug("MODEL-getSelectedColorWithAlfa2: " + color + color.getAlpha() + " " + alfa);
 		return color;
 	}

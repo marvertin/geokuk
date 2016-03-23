@@ -14,8 +14,8 @@ public class MouFrame {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((moujz == null) ? 0 : moujz.hashCode());
-		result = prime * result + ((mousv == null) ? 0 : mousv.hashCode());
+		result = prime * result + (moujz == null ? 0 : moujz.hashCode());
+		result = prime * result + (mousv == null ? 0 : mousv.hashCode());
 		return result;
 	}
 

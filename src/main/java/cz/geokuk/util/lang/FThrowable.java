@@ -204,7 +204,7 @@ public final class FThrowable {
 		}
 
 		protected void printZdrojMetoda(final PrintWriter wrt, final Method zdroj) {
-			wrt.print(zdroj == null ? "<unknown method>" : (zdroj.getName() + "()"));
+			wrt.print(zdroj == null ? "<unknown method>" : zdroj.getName() + "()");
 		}
 
 		protected void printExceptionClassName(final PrintWriter wrt, final String aClassName) {
@@ -271,7 +271,7 @@ public final class FThrowable {
 				return;
 			}
 			for (int i = 0; i < trace.length - aKolikNezobrazit; i++) {
-				final String vypsanec = trace[i] == null ? "neznamy" : (trace[i].getClassName() + "." + trace[i].getMethodName() + "-" + (trace.length - i));
+				final String vypsanec = trace[i] == null ? "neznamy" : trace[i].getClassName() + "." + trace[i].getMethodName() + "-" + (trace.length - i);
 				pwrt.println("    " + (aPoradoveCislo == 0 ? "render" : Integer.toString(aPoradoveCislo)) + "." + (trace.length - i) + (aVypsanci.contains(vypsanec) ? " * " : " - ")
 						+ (trace[i] + "").replace('\t', ' '));
 				aVypsanci.add(vypsanec);

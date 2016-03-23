@@ -33,7 +33,7 @@ public final class FString {
 
 	/** Vrací true, pokud je řětězec null nebo délku 0. */
 	public static boolean isVoid(final String s) {
-		return (s == null || s.length() == 0);
+		return s == null || s.length() == 0;
 	}
 
 	/**

@@ -24,9 +24,9 @@ public class Wgsd {
 		int result = 1;
 		long temp;
 		temp = Double.doubleToLongBits(lat);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + (int) (temp ^ temp >>> 32);
 		temp = Double.doubleToLongBits(lon);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + (int) (temp ^ temp >>> 32);
 		return result;
 	}
 

@@ -65,7 +65,7 @@ public class VyrezModel extends Model0 {
 		// odspodu hledáme měřítko, které tam vleze
 		int mer = 20;
 		for (;; mer--) {
-			final int pom = 1 << (20 - mer); // pomer pro toto meritko
+			final int pom = 1 << 20 - mer; // pomer pro toto meritko
 			if (mourect.getMouWidth() / pom <= moord.getDim().getWidth() && mourect.getMouHeight() / pom <= moord.getDim().getHeight()) {
 				break; // hledáme nejbližší nejlepší
 			}

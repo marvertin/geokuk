@@ -35,8 +35,8 @@ public class LamUrl {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (lastModified ^ (lastModified >>> 32));
-		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		result = prime * result + (int) (lastModified ^ lastModified >>> 32);
+		result = prime * result + (url == null ? 0 : url.hashCode());
 		return result;
 	}
 

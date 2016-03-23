@@ -109,7 +109,7 @@ public class MultiFolder {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((tree == null) ? 0 : tree.hashCode());
+		result = prime * result + (tree == null ? 0 : tree.hashCode());
 		return result;
 	}
 

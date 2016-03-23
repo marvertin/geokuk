@@ -68,9 +68,9 @@ public class Mercator extends Misto0 {
 		int result = 1;
 		long temp;
 		temp = Double.doubleToLongBits(mx);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + (int) (temp ^ temp >>> 32);
 		temp = Double.doubleToLongBits(my);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + (int) (temp ^ temp >>> 32);
 		return result;
 	}
 

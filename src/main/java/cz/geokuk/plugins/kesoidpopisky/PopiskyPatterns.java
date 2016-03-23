@@ -113,10 +113,10 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cgpPattern == null) ? 0 : cgpPattern.hashCode());
-		result = prime * result + ((kesPattern == null) ? 0 : kesPattern.hashCode());
-		result = prime * result + ((simplewaypointPattern == null) ? 0 : simplewaypointPattern.hashCode());
-		result = prime * result + ((waymarkPattern == null) ? 0 : waymarkPattern.hashCode());
+		result = prime * result + (cgpPattern == null ? 0 : cgpPattern.hashCode());
+		result = prime * result + (kesPattern == null ? 0 : kesPattern.hashCode());
+		result = prime * result + (simplewaypointPattern == null ? 0 : simplewaypointPattern.hashCode());
+		result = prime * result + (waymarkPattern == null ? 0 : waymarkPattern.hashCode());
 		return result;
 	}
 

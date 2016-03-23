@@ -43,8 +43,8 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((pozice == null) ? 0 : pozice.hashCode());
-		result = prime * result + ((velikost == null) ? 0 : velikost.hashCode());
+		result = prime * result + (pozice == null ? 0 : pozice.hashCode());
+		result = prime * result + (velikost == null ? 0 : velikost.hashCode());
 		return result;
 	}
 

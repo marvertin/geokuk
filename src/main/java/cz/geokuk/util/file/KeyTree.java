@@ -52,7 +52,7 @@ public class KeyTree<K, D> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((root == null) ? 0 : root.hashCode());
+		result = prime * result + (root == null ? 0 : root.hashCode());
 		return result;
 	}
 

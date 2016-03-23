@@ -40,8 +40,8 @@ public class Kaputer {
 		// int maskaHorni = ~ (moukrok - 1);
 		// int xx0 = moustred.xx & maskaHorni; // posuneme od středu nalevo na nejbližší hranici kachlí
 		// int yy0 = moustred.yy & maskaHorni; // posuneme od středu dolů na nejbližší hranici kachlí
-		final int xd = (moustred.xx >> (Coord.MAX_MOUMER - moumer)) & KACHLE_MASKA; // o tolik pixlů nalevo od středu bude svislá hranice kachlí
-		final int yd = (moustred.yy >> (Coord.MAX_MOUMER - moumer)) & KACHLE_MASKA; // o tolik pixklů dolů od středu bude vodorovná hranice kachlí
+		final int xd = moustred.xx >> Coord.MAX_MOUMER - moumer & KACHLE_MASKA; // o tolik pixlů nalevo od středu bude svislá hranice kachlí
+		final int yd = moustred.yy >> Coord.MAX_MOUMER - moumer & KACHLE_MASKA; // o tolik pixklů dolů od středu bude vodorovná hranice kachlí
 		assert xd >= 0 && xd < KACHLE_PIXELS;
 		assert yd >= 0 && yd < KACHLE_PIXELS;
 		// if (log.isTraceEnabled()) {
@@ -70,7 +70,7 @@ public class Kaputer {
 	}
 
 	public int getMoukrok() {
-		return soord.getMoumer() == 0 ? 0 : 1 << (Coord.MOU_BITS - soord.getMoumer()); // o kolik mou je to od kachle ke kachli (pro moumer=0 je to 2^32, tedy v integeru 0, což odpovídá, že se stále zobrazuje stejná kachle)
+		return soord.getMoumer() == 0 ? 0 : 1 << Coord.MOU_BITS - soord.getMoumer(); // o kolik mou je to od kachle ke kachli (pro moumer=0 je to 2^32, tedy v integeru 0, což odpovídá, že se stále zobrazuje stejná kachle)
 	}
 
 	public int getVzdalenostKachleOdStredu(final Mou moupoc) {

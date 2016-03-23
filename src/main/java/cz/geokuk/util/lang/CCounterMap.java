@@ -180,7 +180,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		int maxvalue = 0;
 		for (final Map.Entry<T, Citac> entry : iCitace.entrySet()) {
 			strlen = Math.max(strlen, (entry.getKey() + "").length());
-			maxvalue = Math.max(maxvalue, (entry.getValue()).get());
+			maxvalue = Math.max(maxvalue, entry.getValue().get());
 		}
 		// spočítat počet míst
 		int pocetmist = 0;
@@ -212,7 +212,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 			iPocet += aPocet; // posunout
 			iAllCount += aPocet; // celkový posunout
 			if (iPocet < 0) {
-				iAllCount += (-iPocet); // tak moc toho nemůžeme odečíst
+				iAllCount += -iPocet; // tak moc toho nemůžeme odečíst
 				iPocet = 0;
 			}
 		}

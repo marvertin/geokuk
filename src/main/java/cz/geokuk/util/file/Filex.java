@@ -80,7 +80,7 @@ public class Filex {
 		boolean dosWithDrive = false;
 		String root = null;
 		// Eliminate consecutive slashes after the drive spec
-		if ((path.length() >= 2 && Character.isLetter(path.charAt(0)) && path.charAt(1) == ':')) {
+		if (path.length() >= 2 && Character.isLetter(path.charAt(0)) && path.charAt(1) == ':') {
 
 			dosWithDrive = true;
 
@@ -98,7 +98,7 @@ public class Filex {
 			// Eliminate consecutive slashes after the drive spec
 			final StringBuilder sbPath = new StringBuilder();
 			for (int i = colon + 1; i < ca.length; i++) {
-				if ((ca[i] != '\\') || (ca[i] == '\\' && ca[i - 1] != '\\')) {
+				if (ca[i] != '\\' || ca[i] == '\\' && ca[i - 1] != '\\') {
 					sbPath.append(ca[i]);
 				}
 			}
@@ -160,7 +160,7 @@ public class Filex {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((file == null) ? 0 : file.hashCode());
+		result = prime * result + (file == null ? 0 : file.hashCode());
 		result = prime * result + (relativeToProgram ? 1231 : 1237);
 		return result;
 	}
