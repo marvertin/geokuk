@@ -18,7 +18,7 @@ public enum EKaType {
 	ZEMEPIS_M(true, false, 0, 16, 16, "Zeměpisná", "Zeměpisná mapa", KeyEvent.VK_G, KeyStroke.getKeyStroke('g'), new MapyCzUrlBuilder("zemepis-m")),
 	ARMY2_M(true, true, 0, 13, 13, "Historická", "Historická mapa z let 1836-52", KeyEvent.VK_H, KeyStroke.getKeyStroke('h'), new MapyCzUrlBuilder("army2-m")),
 
-	OPEN_STREAT(true, false, 0, 18, 18, "Open streat", "Open streat map.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o'), new OpenStreatMapUrlBuilder("https://b.tile.openstreetmap.org/")),
+	OPEN_STREAT(true, false, 0, 18, 18, "Openstreetmap", "Openstreetmap.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o'), new OpenStreatMapUrlBuilder("https://b.tile.openstreetmap.org/")),
 	// http://otile{switch:1,2,3,4}.mqcdn.com/tiles/1.0.0/osm/{zoom}/{x}/{y}.png
 	MAPBOX(true, false, 0, 18, 18, "Map box", "Open streat map box.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o'), new OpenStreatMapUrlBuilder("http://otile1.mqcdn.com/tiles/1.0.0/osm/")),
 	TUR_FREEMAP_SK_T(true, false, 0, 18, 18, "Slovensko turistická", "turistika.freemap.sk - turisktická mapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/T/")),
