@@ -21,7 +21,7 @@ public abstract class JMyDialog0 extends JDialog {
 	}
 
 	protected final void init() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		final JButton jZavri = new JButton("Zavřít");
 		final JButton jNapoveda = new JButton("Nápověda");
 		final CancelAction cancelAction = new CancelAction();

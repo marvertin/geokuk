@@ -47,14 +47,14 @@ public class JBarvovyDvojSlider extends JPanel {
 
 		// iBarvovnik = new JSlider(JSlider.VERTICAL, 0, 255, 128);
 		// iBarvovnik = new JSlider(Board.hodnotyObsazenosti.getBarvovnikModel());
-		iBarvovnik = new JSlider(JSlider.VERTICAL);
+		iBarvovnik = new JSlider(SwingConstants.VERTICAL);
 		iBarvovnik.setOpaque(false);
 		iBarvovnik.setToolTipText("Nastavení stupně šedi kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");
 		iBarvovnik.setFocusable(false);
 		final DefaultBoundedRangeModel barvovnikModel = new DefaultBoundedRangeModel(128, 0, 0, 255);
 		iBarvovnik.setModel(barvovnikModel);
 
-		iPruhlednik = new JSlider(JSlider.VERTICAL);
+		iPruhlednik = new JSlider(SwingConstants.VERTICAL);
 		// iPruhlednik = new JSlider(Board.hodnotyObsazenosti.getPruhlednikModel());
 		iPruhlednik.setOpaque(false);
 		iPruhlednik.setToolTipText("Nastavení průhlednosti kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");

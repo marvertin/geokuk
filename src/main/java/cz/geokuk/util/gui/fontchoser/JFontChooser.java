@@ -178,7 +178,7 @@ public class JFontChooser extends JComponent {
 		add(new JScrollPane(fontList), new GridBagConstraints(0, 0, 1, 1, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, ins, 0, 0));
 
 		sizeList = new JList<>(SIZES);
-		((JLabel) sizeList.getCellRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+		((JLabel) sizeList.getCellRenderer()).setHorizontalAlignment(SwingConstants.RIGHT);
 		sizeList.setVisibleRowCount(10);
 		sizeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		add(new JScrollPane(sizeList), new GridBagConstraints(1, 0, 1, 1, 1, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, ins, 0, 0));
@@ -190,8 +190,8 @@ public class JFontChooser extends JComponent {
 		add(italicCheckBox, new GridBagConstraints(0, 2, 2, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, ins, 0, 0));
 
 		previewLabel = new JLabel("");
-		previewLabel.setHorizontalAlignment(JLabel.CENTER);
-		previewLabel.setVerticalAlignment(JLabel.CENTER);
+		previewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		previewLabel.setVerticalAlignment(SwingConstants.CENTER);
 		add(new JScrollPane(previewLabel), new GridBagConstraints(0, 3, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, ins, 0, 0));
 
 		setFont(font == null ? previewLabel.getFont() : font);

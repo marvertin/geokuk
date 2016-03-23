@@ -25,7 +25,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 	private final Map<Pocitadlo, JLabel>	hodmap				= new WeakHashMap<>();
 
 	public JServiceFrame() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		initComponents();
 		pack();
 		Pocitadlo.callback = this;

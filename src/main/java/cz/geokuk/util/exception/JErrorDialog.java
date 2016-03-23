@@ -56,7 +56,7 @@ public class JErrorDialog extends JMyDialog0 {
 	public JErrorDialog() {
 		setTitle("Přehled problémů");
 		init();
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		registerEvents();
 
 	}

@@ -54,7 +54,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		imgs.add(ImageLoader.seekResImage("geokuk16.png", 16, 16));
 		imgs.add(ImageLoader.seekResImage("geokuk48.png", 48, 48));
 		setIconImages(imgs);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		// Jen kvůli tomu, aby se nezničilo a chodili eventy
 		// TODO Na menu by neměly být asi události
