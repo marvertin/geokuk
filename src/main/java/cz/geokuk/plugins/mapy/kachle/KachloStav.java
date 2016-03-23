@@ -6,7 +6,8 @@ public class KachloStav {
 	public static enum EFaze {
 		RESULT_ONE,
 
-		RESULT_ALL_PRUBEH, RESULT_ALL_POSLEDNI,;
+		RESULT_ALL_PRUBEH,
+		RESULT_ALL_POSLEDNI,;
 	}
 
 	public final EFaze		faze;

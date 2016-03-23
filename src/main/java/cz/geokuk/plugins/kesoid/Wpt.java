@@ -66,8 +66,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	/**
 	 *
 	 */
-	public Wpt() {
-	}
+	public Wpt() {}
 
 	/**
 	 * @return the elevation

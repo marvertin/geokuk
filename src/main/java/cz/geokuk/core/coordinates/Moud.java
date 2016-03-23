@@ -5,8 +5,7 @@ public class Moud {
 	public int	dxx;
 	public int	dyy;
 
-	public Moud() {
-	}
+	public Moud() {}
 
 	public Moud(final int dxx, final int dyy) {
 		this.dxx = dxx;

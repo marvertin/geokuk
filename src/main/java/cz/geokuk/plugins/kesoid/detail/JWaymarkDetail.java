@@ -59,7 +59,6 @@ public class JWaymarkDetail extends JKesoidDetail0 {
 
 	}
 
-	private void napln() {
-	}
+	private void napln() {}
 
 }

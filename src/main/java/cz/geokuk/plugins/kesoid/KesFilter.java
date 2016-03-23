@@ -15,8 +15,7 @@ public class KesFilter {
 
 	private VyletModel			vyletModel;
 
-	public KesFilter() {
-	}
+	public KesFilter() {}
 
 	// public void onEvent(IgnoreListChangedEvent event) {
 	// if (filterDefinition.getPrahVyletu() != EVylet.VSECHNY) {

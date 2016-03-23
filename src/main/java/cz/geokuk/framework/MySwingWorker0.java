@@ -25,6 +25,5 @@ public abstract class MySwingWorker0<T, V> extends SwingWorker<T, V> {
 		}
 	}
 
-	protected void donex() throws Exception {
-	}
+	protected void donex() throws Exception {}
 }

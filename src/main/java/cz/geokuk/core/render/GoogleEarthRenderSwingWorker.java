@@ -16,8 +16,7 @@ import cz.geokuk.framework.Progressor;
 
 public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 
-	GoogleEarthRenderSwingWorker() {
-	}
+	GoogleEarthRenderSwingWorker() {}
 
 	@Override
 	protected RenderResult doInBackground() throws Exception {

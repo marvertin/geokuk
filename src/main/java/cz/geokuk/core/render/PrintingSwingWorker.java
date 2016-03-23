@@ -12,8 +12,7 @@ public class PrintingSwingWorker extends RendererSwingWorker0 implements Printab
 
 	private int citac;
 
-	PrintingSwingWorker() {
-	}
+	PrintingSwingWorker() {}
 
 	@Override
 	public RenderResult doInBackground() throws Exception {

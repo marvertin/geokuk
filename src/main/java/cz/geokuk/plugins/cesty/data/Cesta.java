@@ -37,8 +37,7 @@ public class Cesta implements Iterable<Bousek0> {
 		return String.format("<font color=%s><i>%.1f km</i></font>", FUtil.getHtmlColor(color), dalka / 1000);
 	}
 
-	private Cesta() {
-	}
+	private Cesta() {}
 
 	public double dalka() {
 		double suma = 0;

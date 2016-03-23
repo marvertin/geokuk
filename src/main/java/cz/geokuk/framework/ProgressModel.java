@@ -173,7 +173,6 @@ public class ProgressModel extends Model0 {
 	 * @see cz.geokuk.framework.Model0#initAndFire()
 	 */
 	@Override
-	protected void initAndFire() {
-	}
+	protected void initAndFire() {}
 
 }

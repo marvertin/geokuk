@@ -17,8 +17,7 @@ public class MyOverlayManager implements LayoutManager2 {
 	 * @see java.awt.LayoutManager2#addLayoutComponent(java.awt.Component, java.lang.Object)
 	 */
 	@Override
-	public void addLayoutComponent(final Component c, final Object o) {
-	}
+	public void addLayoutComponent(final Component c, final Object o) {}
 
 	/*
 	 * (non-Javadoc)
@@ -56,8 +55,7 @@ public class MyOverlayManager implements LayoutManager2 {
 	 * @see java.awt.LayoutManager2#invalidateLayout(java.awt.Container)
 	 */
 	@Override
-	public void invalidateLayout(final Container aArg0) {
-	}
+	public void invalidateLayout(final Container aArg0) {}
 
 	/*
 	 * (non-Javadoc)
@@ -143,8 +141,7 @@ public class MyOverlayManager implements LayoutManager2 {
 	 * @see java.awt.LayoutManager#removeLayoutComponent(java.awt.Component)
 	 */
 	@Override
-	public void removeLayoutComponent(final Component c) {
-	}
+	public void removeLayoutComponent(final Component c) {}
 
 	private void pridejInsets(final Dimension dim, final Container c) {
 		final Insets in = c.getInsets();

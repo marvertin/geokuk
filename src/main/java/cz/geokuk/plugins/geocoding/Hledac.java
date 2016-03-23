@@ -27,8 +27,7 @@ public class Hledac extends Hledac0<Nalezenec> {
 
 	private final XPathFactory factory = XPathFactory.newInstance();
 
-	public Hledac() {
-	}
+	public Hledac() {}
 
 	@Override
 	public List<Nalezenec> hledej(final HledaciPodminka0 aPodm) {

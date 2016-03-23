@@ -1,9 +1,15 @@
 package cz.geokuk.plugins.kesoid;
 
 public enum EKesSize {
-	MICRO, SMALL, REGULAR, LARGE, HUGE, UNKNOWN,
+	MICRO,
+	SMALL,
+	REGULAR,
+	LARGE,
+	HUGE,
+	UNKNOWN,
 
-	NOT_CHOSEN, OTHER,
+	NOT_CHOSEN,
+	OTHER,
 
 	VIRTUAL,;
 

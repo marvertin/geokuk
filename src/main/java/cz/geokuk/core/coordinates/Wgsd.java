@@ -5,8 +5,7 @@ public class Wgsd {
 	public double	lat;
 	public double	lon;
 
-	public Wgsd() {
-	}
+	public Wgsd() {}
 
 	public Wgsd(final double dlat, final double dlon) {
 		lat = dlat;

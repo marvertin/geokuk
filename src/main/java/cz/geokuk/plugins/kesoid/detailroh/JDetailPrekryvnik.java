@@ -27,8 +27,7 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
 	/**
 	 *
 	 */
-	public JDetailPrekryvnik() {
-	}
+	public JDetailPrekryvnik() {}
 
 	public void onEvent(final PoziceChangedEvent aEvent) {
 		poziceq = aEvent.poziceq;

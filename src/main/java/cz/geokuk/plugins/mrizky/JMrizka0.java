@@ -214,8 +214,7 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
 	public abstract double convertToY(Mou mou);
 
-	public void donePainting() {
-	}
+	public void donePainting() {}
 
 	@Override
 	public String getSubType() {

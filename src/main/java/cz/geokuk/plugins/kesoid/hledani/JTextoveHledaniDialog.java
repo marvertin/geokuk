@@ -122,8 +122,7 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 	}
 
 	@Override
-	public void changedUpdate(final DocumentEvent ev) {
-	}
+	public void changedUpdate(final DocumentEvent ev) {}
 
 	/*
 	 * (non-Javadoc)

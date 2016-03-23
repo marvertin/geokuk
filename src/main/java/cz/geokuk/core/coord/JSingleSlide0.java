@@ -65,7 +65,6 @@ public abstract class JSingleSlide0 extends JSlide0 {
 		return soord != null;
 	}
 
-	protected void onVyrezChanged() {
-	}
+	protected void onVyrezChanged() {}
 
 }

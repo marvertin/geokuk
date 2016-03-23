@@ -98,8 +98,7 @@ public class InformaceOZdrojich {
 		return new InformaceOZdrojich().new Builder();
 	}
 
-	private InformaceOZdrojich() {
-	}
+	private InformaceOZdrojich() {}
 
 	public InformaceOZdroji get(final KeFile key) {
 		final InformaceOZdroji informaceOZdroji = stromy.get(key.root).map.get(key);

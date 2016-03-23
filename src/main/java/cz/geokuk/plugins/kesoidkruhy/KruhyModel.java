@@ -52,8 +52,7 @@ public class KruhyModel extends PodkladMapSpecificModel0<KruhyModel, KruhySettin
 	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#putVisibleToPreferences(boolean)
 	 */
 	@Override
-	protected void putVisibleToPreferences(final boolean onoff) {
-	}
+	protected void putVisibleToPreferences(final boolean onoff) {}
 
 	/*
 	 * (non-Javadoc)

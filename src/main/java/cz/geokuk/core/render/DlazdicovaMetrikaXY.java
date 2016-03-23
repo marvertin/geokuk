@@ -91,8 +91,7 @@ public class DlazdicovaMetrikaXY implements Iterable<Dlazdice> {
 			}
 
 			@Override
-			public void remove() {
-			}
+			public void remove() {}
 		};
 	}
 

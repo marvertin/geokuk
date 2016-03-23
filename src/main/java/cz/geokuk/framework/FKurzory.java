@@ -9,8 +9,7 @@ public class FKurzory {
 
 	private static class CtyrSipka extends KurzorovyMatlak0 {
 
-		public CtyrSipka() {
-		}
+		public CtyrSipka() {}
 
 		@Override
 		void nakresli() {
@@ -74,8 +73,7 @@ public class FKurzory {
 
 	private static class PohybMapou extends KurzorovyMatlak0 {
 
-		public PohybMapou() {
-		}
+		public PohybMapou() {}
 
 		@Override
 		void nakresli() {

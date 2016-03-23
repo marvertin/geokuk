@@ -316,8 +316,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 			private static final long serialVersionUID = 7253981658581992444L;
 
 			@Override
-			public void napln(final Wpt wpt) {
-			}
+			public void napln(final Wpt wpt) {}
 		}));
 		for (final EKesoidKind kind : EKesoidKind.values()) {
 			final JKesoidDetail0 detail = jDetailyKesoidu.get(kind);

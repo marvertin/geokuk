@@ -97,7 +97,6 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 	 * Kontrola platnosti typu. Metoda je volána z kosntruktoru poté, co byla provedena validace rozsahu dély řetězce. V okamžiku volání je zřejmé, že hodnota iValue není null, neobsahuje koncové mezery a je ve stanoveném rozsahu. Metoda v případě nevalidity vyhazuje nečekovanou výjimku. Neplést s
 	 * metodou isValid(), to je jiná validita (menší váha).
 	 */
-	protected void validate() {
-	}
+	protected void validate() {}
 
 }

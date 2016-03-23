@@ -494,8 +494,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		cal.setTimeInMillis(cas.asLong());
 	}
 
-	private static void testZona(final String aStr) {
-	}
+	private static void testZona(final String aStr) {}
 
 	/**
 	 * Konstruuje z počtu milisekund po 1.1.1970

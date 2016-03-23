@@ -53,8 +53,7 @@ public class FileManager {
 		return fm;
 	}
 
-	private FileManager() {
-	}
+	private FileManager() {}
 
 	/**
 	 * Binárně zkopíruje soubor na do zadaného adresáře. Vlastní jméno souboru bude stejné. Čas vytvoření se zkopíruje také.

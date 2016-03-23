@@ -96,8 +96,7 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 	}
 
 	@Override
-	public void changedUpdate(final DocumentEvent ev) {
-	}
+	public void changedUpdate(final DocumentEvent ev) {}
 
 	public void inject(final GeocodingModel geocodingModel) {
 		this.geocodingModel = geocodingModel;

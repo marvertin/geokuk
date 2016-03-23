@@ -180,11 +180,9 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 		log.trace("Počet komponent (nejspíš kachlí) v kachlovníku: {}", getComponentCount());
 	}
 
-	void kachleZpracovana(final JKachle jKachle) {
-	}
+	void kachleZpracovana(final JKachle jKachle) {}
 
-	private void registerEvents() {
-	}
+	private void registerEvents() {}
 
 	// @Override
 	// public void finalize() {

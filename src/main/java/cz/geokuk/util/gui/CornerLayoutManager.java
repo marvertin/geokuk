@@ -87,8 +87,7 @@ public class CornerLayoutManager implements LayoutManager2 {
 	 * @see java.awt.LayoutManager2#invalidateLayout(java.awt.Container)
 	 */
 	@Override
-	public void invalidateLayout(final Container aArg0) {
-	}
+	public void invalidateLayout(final Container aArg0) {}
 
 	/*
 	 * (non-Javadoc)

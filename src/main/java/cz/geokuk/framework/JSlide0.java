@@ -150,8 +150,7 @@ public class JSlide0 extends JComponent implements MySlideListener {
 
 	void addChained(final JSlide0 slide) {
 		JSlide0 ch;
-		for (ch = this; ch.nextChained != null; ch = ch.nextChained) {
-		}
+		for (ch = this; ch.nextChained != null; ch = ch.nextChained) {}
 		ch.nextChained = slide;
 	}
 

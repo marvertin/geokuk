@@ -84,7 +84,6 @@ public final class FPreferencesInNearFile {
 		MyPreferences.root().putLong("lastModified", lastModified);
 	}
 
-	private FPreferencesInNearFile() {
-	}
+	private FPreferencesInNearFile() {}
 
 }

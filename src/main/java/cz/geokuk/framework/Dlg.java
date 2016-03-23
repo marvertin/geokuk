@@ -34,7 +34,6 @@ public final class Dlg {
 		return !file.exists() || anone("Soubor \"" + file.getAbsolutePath() + "\" existuje, má být přepsán?");
 	}
 
-	private Dlg() {
-	}
+	private Dlg() {}
 
 }

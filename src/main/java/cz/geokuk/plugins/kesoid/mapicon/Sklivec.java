@@ -23,7 +23,6 @@ public class Sklivec {
 	/**
 	 *
 	 */
-	public Sklivec() {
-	}
+	public Sklivec() {}
 
 }

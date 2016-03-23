@@ -97,8 +97,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 	}
 
 	@Override
-	protected void initComponents() {
-	}
+	protected void initComponents() {}
 
 	protected void initComponents(final List<Pocitadlo> pocitadla) {
 		final Box b = createtComponents(pocitadla);

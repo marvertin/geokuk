@@ -21,16 +21,13 @@ import cz.geokuk.plugins.kesoid.Wpt;
 public final class MouseKonecListener implements MySlideListener {
 
 	@Override
-	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
-	}
+	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {}
 
 	@Override
-	public void ctrlKeyPressed(final MouseGestureContext ctx) {
-	}
+	public void ctrlKeyPressed(final MouseGestureContext ctx) {}
 
 	@Override
-	public void ctrlKeyReleased(final MouseGestureContext ctx) {
-	}
+	public void ctrlKeyReleased(final MouseGestureContext ctx) {}
 
 	@Override
 	public Cursor getMouseCursor(final boolean pressed) {
@@ -48,39 +45,30 @@ public final class MouseKonecListener implements MySlideListener {
 	}
 
 	@Override
-	public void mouseClicked(final MouseEvent e, final MouseGestureContext ctx) {
-	}
+	public void mouseClicked(final MouseEvent e, final MouseGestureContext ctx) {}
 
 	@Override
-	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
-	}
+	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {}
 
 	@Override
-	public void mouseEntered(final MouseEvent e, final MouseGestureContext ctx) {
-	}
+	public void mouseEntered(final MouseEvent e, final MouseGestureContext ctx) {}
 
 	@Override
-	public void mouseExited(final MouseEvent e, final MouseGestureContext ctx) {
-	}
+	public void mouseExited(final MouseEvent e, final MouseGestureContext ctx) {}
 
 	@Override
-	public void mouseMoved(final MouseEvent e, final MouseGestureContext ctx) {
-	}
+	public void mouseMoved(final MouseEvent e, final MouseGestureContext ctx) {}
 
 	@Override
-	public void mousePressed(final MouseEvent e, final MouseGestureContext ctx) {
-	}
+	public void mousePressed(final MouseEvent e, final MouseGestureContext ctx) {}
 
 	@Override
-	public void mouseReleased(final MouseEvent e, final MouseGestureContext ctx) {
-	}
+	public void mouseReleased(final MouseEvent e, final MouseGestureContext ctx) {}
 
 	@Override
-	public void mouseWheelMoved(final MouseWheelEvent e, final MouseGestureContext ctx) {
-	}
+	public void mouseWheelMoved(final MouseWheelEvent e, final MouseGestureContext ctx) {}
 
 	@Override
-	public void zjistiBlizkost(final MouseGestureContext ctx) {
-	}
+	public void zjistiBlizkost(final MouseGestureContext ctx) {}
 
 }

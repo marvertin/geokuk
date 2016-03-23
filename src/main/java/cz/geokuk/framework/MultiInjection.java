@@ -12,5 +12,4 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 
-public @interface MultiInjection {
-}
+public @interface MultiInjection {}

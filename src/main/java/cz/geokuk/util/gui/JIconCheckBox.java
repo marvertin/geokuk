@@ -60,8 +60,7 @@ public class JIconCheckBox extends JCheckBox {
 
 	private Icon				icon;
 
-	public JIconCheckBox() {
-	}
+	public JIconCheckBox() {}
 
 	public JIconCheckBox(final Action0 action) {
 		super(action);

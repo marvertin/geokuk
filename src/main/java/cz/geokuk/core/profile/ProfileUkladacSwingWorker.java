@@ -14,8 +14,7 @@ import cz.geokuk.framework.MySwingWorker0;
  */
 public class ProfileUkladacSwingWorker extends MySwingWorker0<File, Void> {
 
-	public ProfileUkladacSwingWorker() {
-	}
+	public ProfileUkladacSwingWorker() {}
 
 	/*
 	 * (non-Javadoc)
@@ -34,7 +33,6 @@ public class ProfileUkladacSwingWorker extends MySwingWorker0<File, Void> {
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
-	protected void donex() throws InterruptedException, ExecutionException {
-	}
+	protected void donex() throws InterruptedException, ExecutionException {}
 
 }

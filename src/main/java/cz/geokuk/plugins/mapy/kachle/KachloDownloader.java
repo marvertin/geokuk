@@ -36,8 +36,7 @@ public class KachloDownloader {
 
 	private final EnumMap<EPraznyObrazek, Image>	prazdneObrazky			= new EnumMap<>(EPraznyObrazek.class);
 
-	public KachloDownloader() {
-	}
+	public KachloDownloader() {}
 
 	public ImageWithData downloadImage(final URL url) throws IOException {
 		log.debug("Loading kachle from URL: \"{}\"", url);

@@ -33,6 +33,5 @@ public abstract class VyletAction0 extends Action0 {
 		vyletChanged();
 	}
 
-	protected void vyletChanged() {
-	}
+	protected void vyletChanged() {}
 }

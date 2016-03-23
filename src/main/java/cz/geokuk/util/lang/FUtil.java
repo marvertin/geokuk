@@ -186,7 +186,6 @@ public final class FUtil {
 
 	}
 
-	private FUtil() {
-	}
+	private FUtil() {}
 
 }

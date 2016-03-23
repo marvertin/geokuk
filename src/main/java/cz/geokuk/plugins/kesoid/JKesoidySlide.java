@@ -608,8 +608,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	/**
 	 *
 	 */
-	private void registerEvents() {
-	}
+	private void registerEvents() {}
 
 	private void repaintIfVse() {
 		if (iJmenaAlel == null) {

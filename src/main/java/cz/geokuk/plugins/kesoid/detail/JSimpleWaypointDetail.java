@@ -55,6 +55,5 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
 		hlav.add(box3);
 	}
 
-	private void napln() {
-	}
+	private void napln() {}
 }

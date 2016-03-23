@@ -97,8 +97,7 @@ public class Malovadlo {
 					if (blizkyBousek == bod || blizkyBousek == bod.getUvzad()) {
 						g.setColor(barvaCestyZaKurzorem);
 					}
-				} else {
-				}
+				} else {}
 				// boolean blizkyBod = bod.jeDoKvadratuVzdalenosti(moucur,
 				// kvadratMaximalniVzdalenosti);
 				// if (blizkyBod) {
@@ -127,8 +126,7 @@ public class Malovadlo {
 					// //gg.fillRect(p.x - 7, p.y - 7, 14, 14);
 					// }
 					gg.fillPolygon(bodovaSipecka);
-				} else {
-				}
+				} else {}
 
 			}
 			// zvýrazňování

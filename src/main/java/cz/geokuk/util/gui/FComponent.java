@@ -37,7 +37,6 @@ public final class FComponent {
 		}
 	}
 
-	private FComponent() {
-	}
+	private FComponent() {}
 
 }

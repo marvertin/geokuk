@@ -11,8 +11,7 @@ public class MouRect {
 
 	public Mou	sstre;
 
-	public MouRect() {
-	}
+	public MouRect() {}
 
 	public MouRect(final Mou mou) {
 		add(mou);

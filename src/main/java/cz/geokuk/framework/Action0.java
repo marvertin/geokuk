@@ -30,8 +30,7 @@ public abstract class Action0 extends AbstractAction {
 	/**
 	 *
 	 */
-	public Action0() {
-	}
+	public Action0() {}
 
 	/**
 	 * @param string

@@ -218,6 +218,5 @@ public class LafSupport {
 	/**
 	 * SwingSet2 Constructor
 	 */
-	private LafSupport() {
-	}
+	private LafSupport() {}
 }

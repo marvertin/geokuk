@@ -68,7 +68,6 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 		return cestyModel.getCurta();
 	}
 
-	protected void vyletChanged() {
-	}
+	protected void vyletChanged() {}
 
 }

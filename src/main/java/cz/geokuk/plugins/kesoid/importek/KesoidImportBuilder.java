@@ -90,16 +90,13 @@ public class KesoidImportBuilder implements IImportBuilder {
 	}
 
 	@Override
-	public void addTrackWpt(final GpxWpt wpt) {
-	}
+	public void addTrackWpt(final GpxWpt wpt) {}
 
 	@Override
-	public void begTrack() {
-	}
+	public void begTrack() {}
 
 	@Override
-	public void begTrackSegment() {
-	}
+	public void begTrackSegment() {}
 
 	/*
 	 * (non-Javadoc)
@@ -203,12 +200,10 @@ public class KesoidImportBuilder implements IImportBuilder {
 	}
 
 	@Override
-	public void endTrack() {
-	}
+	public void endTrack() {}
 
 	@Override
-	public void endTrackSegment() {
-	}
+	public void endTrackSegment() {}
 
 	@Override
 	public GpxWpt get(final String aName) {
@@ -229,16 +224,14 @@ public class KesoidImportBuilder implements IImportBuilder {
 	 *
 	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#init()
 	 */
-	public void init() {
-	}
+	public void init() {}
 
 	public synchronized void setCurrentlyLoading(final KeFile aJmenoZdroje, final boolean nacteno) {
 		infoOCurrentnimZdroji = informaceOZdrojichBuilder.add(aJmenoZdroje, nacteno);
 	}
 
 	@Override
-	public void setTrackName(final String aTrackName) {
-	}
+	public void setTrackName(final String aTrackName) {}
 
 	protected EKesStatus urciStatus(final boolean archived, final boolean availaible) {
 		if (archived) {

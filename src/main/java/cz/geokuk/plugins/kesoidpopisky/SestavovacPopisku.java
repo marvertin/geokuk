@@ -78,8 +78,7 @@ public class SestavovacPopisku {
 	private static class NahrBr implements Nahrazovac {
 
 		@Override
-		public void pridej(final StringBuilder sb, final Context ctx) {
-		}
+		public void pridej(final StringBuilder sb, final Context ctx) {}
 
 	}
 

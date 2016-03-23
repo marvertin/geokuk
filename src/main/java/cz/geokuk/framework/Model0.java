@@ -80,8 +80,7 @@ public abstract class Model0 implements AfterInjectInit {
 
 	/**
 	 */
-	protected void reloadPreferences() {
-	}
+	protected void reloadPreferences() {}
 
 	private JFrame getMainFrame() {
 		return mainFrameHolder.getMainFrame();

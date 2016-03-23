@@ -89,8 +89,7 @@ class UtmMgrsWgsConvertor {
 
 		private final int		arrayLength	= 22;
 
-		public LatBands() {
-		}
+		public LatBands() {}
 
 		public String getLatBand(final double latitude) {
 			int latIndex = -2;

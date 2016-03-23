@@ -16,12 +16,10 @@ public class DocImportBuilder implements IImportBuilder {
 
 	private final Updator	updator	= new Updator();
 
-	public DocImportBuilder() {
-	}
+	public DocImportBuilder() {}
 
 	@Override
-	public void addGpxWpt(final GpxWpt gpxwpt) {
-	}
+	public void addGpxWpt(final GpxWpt gpxwpt) {}
 
 	@Override
 	public void addTrackWpt(final GpxWpt wpt) {
@@ -50,8 +48,7 @@ public class DocImportBuilder implements IImportBuilder {
 	}
 
 	@Override
-	public void endTrackSegment() {
-	}
+	public void endTrackSegment() {}
 
 	@Override
 	public GpxWpt get(final String aName) {

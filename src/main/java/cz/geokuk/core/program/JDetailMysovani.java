@@ -37,8 +37,7 @@ public final class JDetailMysovani extends JSingleSlide0 implements MouseInputLi
 	}
 
 	@Override
-	public void mouseDragged(final MouseEvent e) {
-	}
+	public void mouseDragged(final MouseEvent e) {}
 
 	/*
 	 * (non-Javadoc)
@@ -47,12 +46,10 @@ public final class JDetailMysovani extends JSingleSlide0 implements MouseInputLi
 	 */
 
 	@Override
-	public void mouseEntered(final MouseEvent e) {
-	}
+	public void mouseEntered(final MouseEvent e) {}
 
 	@Override
-	public void mouseExited(final MouseEvent e) {
-	}
+	public void mouseExited(final MouseEvent e) {}
 
 	@Override
 	public void mouseMoved(final MouseEvent e) {
@@ -60,12 +57,10 @@ public final class JDetailMysovani extends JSingleSlide0 implements MouseInputLi
 	}
 
 	@Override
-	public void mousePressed(final MouseEvent e) {
-	}
+	public void mousePressed(final MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(final MouseEvent e) {
-	}
+	public void mouseReleased(final MouseEvent e) {}
 
 	@Override
 	public void mouseWheelMoved(final MouseWheelEvent mwe) {

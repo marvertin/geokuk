@@ -91,8 +91,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
 					}
 					queue.put(ZARAZKA);
-				} catch (final InterruptedException ignored) {
-				}
+				} catch (final InterruptedException ignored) {}
 			} , "Filtrovani kesoidu").start();
 			for (;;) {
 				final Dvojka dvojka = queue.take();
