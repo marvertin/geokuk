@@ -23,12 +23,12 @@ public class CornerLayoutManager implements LayoutManager2 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager2#addLayoutComponent(java.awt.Component, java.lang.Object)
 	 */
 	@Override
-	public void addLayoutComponent(Component c, Object o) {
-		ERoh roh = (ERoh) o;
+	public void addLayoutComponent(final Component c, final Object o) {
+		final ERoh roh = (ERoh) o;
 		if (roh == null) {
 			podklad = c;
 		} else {
@@ -53,66 +53,66 @@ public class CornerLayoutManager implements LayoutManager2 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager2#getLayoutAlignmentX(java.awt.Container)
 	 */
 	@Override
-	public float getLayoutAlignmentX(Container aArg0) {
+	public float getLayoutAlignmentX(final Container aArg0) {
 		return 0;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager2#getLayoutAlignmentY(java.awt.Container)
 	 */
 	@Override
-	public float getLayoutAlignmentY(Container aArg0) {
+	public float getLayoutAlignmentY(final Container aArg0) {
 		return 0;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager2#invalidateLayout(java.awt.Container)
 	 */
 	@Override
-	public void invalidateLayout(Container aArg0) {
+	public void invalidateLayout(final Container aArg0) {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager2#maximumLayoutSize(java.awt.Container)
 	 */
 	@Override
-	public Dimension maximumLayoutSize(Container c) {
+	public Dimension maximumLayoutSize(final Container c) {
 		return podklad.getMinimumSize();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager#addLayoutComponent(java.lang.String, java.awt.Component)
 	 */
 	@Override
-	public void addLayoutComponent(String s, Component c) {
+	public void addLayoutComponent(final String s, final Component c) {
 		addLayoutComponent(c, s);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager#layoutContainer(java.awt.Container)
 	 */
 	@Override
-	public void layoutContainer(Container c) {
-		Insets in = c.getInsets();
-		int x1 = in.left;
-		int x2 = c.getWidth() - in.right;
-		int y1 = in.top;
-		int y2 = c.getHeight() - in.bottom;
-		Dimension dim = new Dimension(x2 - x1, y2 - y1);
+	public void layoutContainer(final Container c) {
+		final Insets in = c.getInsets();
+		final int x1 = in.left;
+		final int x2 = c.getWidth() - in.right;
+		final int y1 = in.top;
+		final int y2 = c.getHeight() - in.bottom;
+		final Dimension dim = new Dimension(x2 - x1, y2 - y1);
 
 		// System.out.println(dim + " " + c.getWidth() + " " + c.getHeight());
 		doRohu(sz, dim, x1, y1);
@@ -124,11 +124,11 @@ public class CornerLayoutManager implements LayoutManager2 {
 
 	}
 
-	private void doRohu(Component cc, Dimension dim, int x, int y) {
+	private void doRohu(final Component cc, final Dimension dim, final int x, final int y) {
 		if (cc != null) {
-			Dimension v = rozmer(dim, cc);
-			int x0 = x < 0 ? -v.width - x : x;
-			int y0 = y < 0 ? -v.height - y : y;
+			final Dimension v = rozmer(dim, cc);
+			final int x0 = x < 0 ? -v.width - x : x;
+			final int y0 = y < 0 ? -v.height - y : y;
 			cc.setBounds(x0, y0, v.width, v.height);
 			// System.out.println(x0 + " " + y0 + v);
 		}
@@ -139,19 +139,19 @@ public class CornerLayoutManager implements LayoutManager2 {
 	 * @param dim
 	 * @param cc
 	 */
-	private Dimension rozmer(Dimension dim, Component cc) {
-		Dimension prs = cc.getPreferredSize();
-		Dimension mis = cc.getMinimumSize();
-		Dimension mas = cc.getMaximumSize();
+	private Dimension rozmer(final Dimension dim, final Component cc) {
+		final Dimension prs = cc.getPreferredSize();
+		final Dimension mis = cc.getMinimumSize();
+		final Dimension mas = cc.getMaximumSize();
 
-		int dx = rozmer(ratiox, dim.width, prs.width, mis.width, mas.width);
-		int dy = rozmer(ratioy, dim.height, prs.height, mis.height, mas.height);
-		Dimension v = new Dimension(dx, dy);
+		final int dx = rozmer(ratiox, dim.width, prs.width, mis.width, mas.width);
+		final int dy = rozmer(ratioy, dim.height, prs.height, mis.height, mas.height);
+		final Dimension v = new Dimension(dx, dy);
 		return v;
 	}
 
-	private int rozmer(float ratio, int size, int pr, int mi, int ma) {
-		int mypr = (int) (size * ratio);
+	private int rozmer(final float ratio, final int size, final int pr, final int mi, final int ma) {
+		final int mypr = (int) (size * ratio);
 		int v = Math.min(mypr, pr);
 		v = Math.max(v, mi);
 		v = Math.min(v, ma);
@@ -161,31 +161,31 @@ public class CornerLayoutManager implements LayoutManager2 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager#minimumLayoutSize(java.awt.Container)
 	 */
 	@Override
-	public Dimension minimumLayoutSize(Container aArg0) {
+	public Dimension minimumLayoutSize(final Container aArg0) {
 		return podklad.getMaximumSize();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager#preferredLayoutSize(java.awt.Container)
 	 */
 	@Override
-	public Dimension preferredLayoutSize(Container aArg0) {
+	public Dimension preferredLayoutSize(final Container aArg0) {
 		return podklad.getPreferredSize();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.LayoutManager#removeLayoutComponent(java.awt.Component)
 	 */
 	@Override
-	public void removeLayoutComponent(Component c) {
+	public void removeLayoutComponent(final Component c) {
 		if (sz == c)
 			sz = null;
 		if (sv == c)

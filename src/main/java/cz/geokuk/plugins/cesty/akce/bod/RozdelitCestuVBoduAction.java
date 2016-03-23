@@ -7,7 +7,7 @@ import cz.geokuk.plugins.cesty.data.Bod;
 
 /**
  * Jde na vybranou pozici
- * 
+ *
  * @author veverka
  *
  */
@@ -19,7 +19,7 @@ public class RozdelitCestuVBoduAction extends BodAction0 {
 	/**
 	 * @param aBoard
 	 */
-	public RozdelitCestuVBoduAction(Bod bod) {
+	public RozdelitCestuVBoduAction(final Bod bod) {
 		super(bod);
 		putValue(NAME, "Rozdělit cestu");
 		putValue(SHORT_DESCRIPTION, "Rozdělí cestu na dvě cesty kratší.");
@@ -28,17 +28,17 @@ public class RozdelitCestuVBoduAction extends BodAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProBod(Bod bod) {
+	protected boolean mamPovolitProBod(final Bod bod) {
 		return !bod.isKrajovy();
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Bod bod, boolean aZKontextovehoMenu) {
+	protected void nastavJmenoAkce(final Bod bod, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "<html>Rozdělit cestu" + bod.getCesta().getNazevHtml() + " " + bod.dalkaCestaRozdelenoHtml(null));
 	}
 
 	@Override
-	protected void provedProBod(Bod bod) {
+	protected void provedProBod(final Bod bod) {
 		cestyModel.rozdelCestuVBode(bod, false);
 	}
 

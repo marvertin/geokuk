@@ -29,7 +29,7 @@ public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
 	private final CestyModel			cestyModel;
 	private final File					file;
 
-	public CestyOtevriSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, KesBag vsechny, CestyModel cestyModel, File file) {
+	public CestyOtevriSwingWorker(final CestyZperzistentnovac cestyZperzistentnovac, final KesBag vsechny, final CestyModel cestyModel, final File file) {
 		this.cestyZperzistentnovac = cestyZperzistentnovac;
 		kesBag = vsechny;
 		this.cestyModel = cestyModel;
@@ -38,15 +38,15 @@ public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
 	public Doc doInBackground() throws Exception {
-		Doc doc = new Doc();
+		final Doc doc = new Doc();
 		doc.setFile(file);
-		List<Cesta> cesty = cestyZperzistentnovac.nacti(Collections.singletonList(file), kesBag);
-		for (Cesta cesta : cesty) {
+		final List<Cesta> cesty = cestyZperzistentnovac.nacti(Collections.singletonList(file), kesBag);
+		for (final Cesta cesta : cesty) {
 			doc.xadd(cesta);
 		}
 		return doc;
@@ -54,12 +54,12 @@ public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
-		Doc doc = get();
+		final Doc doc = get();
 		if (doc == null)
 			return; // asi zkanclváno
 		log.info("Načten dokument {}.", doc.getFile());

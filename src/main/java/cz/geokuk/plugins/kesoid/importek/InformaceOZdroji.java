@@ -15,7 +15,7 @@ public class InformaceOZdroji {
 	private final List<InformaceOZdroji>	children	= new ArrayList<>();
 	public InformaceOZdroji					parent;
 
-	public InformaceOZdroji(KeFile jmenoZdroje, boolean nacteno) {
+	public InformaceOZdroji(final KeFile jmenoZdroje, final boolean nacteno) {
 		this.jmenoZdroje = jmenoZdroje;
 		this.nacteno = nacteno;
 	}
@@ -24,20 +24,20 @@ public class InformaceOZdroji {
 		return jmenoZdroje.getLastModified();
 	}
 
-	public void addChild(InformaceOZdroji child) {
+	public void addChild(final InformaceOZdroji child) {
 		// TODO : use a sane data structure for this
 		children.add(child);
 		Collections.sort(children, InformaceOZdrojiComparator.INSTANCE);
 	}
 
-	public InformaceOZdroji removeChild(int index) {
-		InformaceOZdroji odebranec = children.remove(index);
+	public InformaceOZdroji removeChild(final int index) {
+		final InformaceOZdroji odebranec = children.remove(index);
 		odebranec.parent = null;
 		return odebranec;
 	}
 
-	public int remplaceChild(InformaceOZdroji iozOld, InformaceOZdroji iozNew) {
-		int index = children.indexOf(iozOld);
+	public int remplaceChild(final InformaceOZdroji iozOld, final InformaceOZdroji iozNew) {
+		final int index = children.indexOf(iozOld);
 		children.set(index, iozNew);
 		return index;
 	}
@@ -50,7 +50,7 @@ public class InformaceOZdroji {
 		private static final InformaceOZdrojiComparator INSTANCE = new InformaceOZdrojiComparator();
 
 		@Override
-		public int compare(InformaceOZdroji o1, InformaceOZdroji o2) {
+		public int compare(final InformaceOZdroji o1, final InformaceOZdroji o2) {
 			return FileDirComparator.INSTANCE.compare(o1.jmenoZdroje.getFile(), o2.jmenoZdroje.getFile());
 		}
 	}
@@ -59,7 +59,7 @@ public class InformaceOZdroji {
 		private static final FileDirComparator INSTANCE = new FileDirComparator();
 
 		@Override
-		public int compare(File file1, File file2) {
+		public int compare(final File file1, final File file2) {
 			if (file1.isDirectory() && file2.isFile()) {
 				return -1;
 			} else if (file1.isFile() && file2.isDirectory()) {
@@ -69,20 +69,20 @@ public class InformaceOZdroji {
 			}
 		}
 
-		private int compareNames(File file1, File file2) {
+		private int compareNames(final File file1, final File file2) {
 			return file1.getName().compareToIgnoreCase(file2.getName());
 		}
 	}
 
 	/**
 	 * Rekuzivně vypíše intormace
-	 * 
+	 *
 	 * @param maToBytParent
 	 */
-	public void print(String odsazovac, InformaceOZdroji maToBytParent) {
-		String parentProblem = parent == maToBytParent ? "" : "!!!  NESEDI PARENT: " + parent + " <> " + maToBytParent;
+	public void print(final String odsazovac, final InformaceOZdroji maToBytParent) {
+		final String parentProblem = parent == maToBytParent ? "" : "!!!  NESEDI PARENT: " + parent + " <> " + maToBytParent;
 		System.out.println(odsazovac + jmenoZdroje.getFile() + parentProblem);
-		for (InformaceOZdroji info : getChildren()) {
+		for (final InformaceOZdroji info : getChildren()) {
 			info.print(odsazovac + "  ", this);
 		}
 	}
@@ -103,7 +103,7 @@ public class InformaceOZdroji {
 	void spocitejSiPocetWaipointuChildren() {
 		pocetWaypointuBranychChildren = 0;
 		pocetWaypointuCelkemChildren = 0;
-		for (InformaceOZdroji ioz : children) {
+		for (final InformaceOZdroji ioz : children) {
 			ioz.spocitejSiPocetWaipointuChildren();
 			pocetWaypointuBranychChildren += ioz.getPocetWaypointuBranychSDetmi();
 			pocetWaypointuCelkemChildren += ioz.getPocetWaypointuCelkemSDetmi();

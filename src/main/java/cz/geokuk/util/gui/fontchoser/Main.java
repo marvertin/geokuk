@@ -20,7 +20,7 @@ public class Main extends JFrame {
 	 *
 	 */
 	private static final long	serialVersionUID	= 258357579389164969L;
-	private JLabel				ukazovyText			= new JLabel("tak toto fontujeme");
+	private final JLabel		ukazovyText			= new JLabel("tak toto fontujeme");
 
 	/**
 	 *
@@ -30,7 +30,7 @@ public class Main extends JFrame {
 		fc.getSelectionModel().addChangeListener(new ChangeListener() {
 
 			@Override
-			public void stateChanged(ChangeEvent aE) {
+			public void stateChanged(final ChangeEvent aE) {
 				ukazovyText.setFont(fc.getFont());
 			}
 		});
@@ -43,7 +43,7 @@ public class Main extends JFrame {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		new Main().setVisible(true);
 	}
 

@@ -29,7 +29,7 @@ public class JToolbarOvladaceAlel extends JPanel {
 	/**
 	 *
 	 */
-	public JToolbarOvladaceAlel(JToolBar tb) {
+	public JToolbarOvladaceAlel(final JToolBar tb) {
 		// super(BoxLayout.LINE_AXIS);
 		this.tb = this;
 	}
@@ -38,25 +38,25 @@ public class JToolbarOvladaceAlel extends JPanel {
 	// TODO Celkově nějak refactorovat
 	private final Map<String, JIconCheckBox> mapka = new HashMap<>();
 
-	private void ovladac(KesBag vsechny, Alela alela) {
+	private void ovladac(final KesBag vsechny, final Alela alela) {
 		JIconCheckBox cb = mapka.get(alela.toString());
 		if (cb == null) {
-			SwitchKesoidUrciteAlelyAction action = factory.init(new SwitchKesoidUrciteAlelyAction(alela));
+			final SwitchKesoidUrciteAlelyAction action = factory.init(new SwitchKesoidUrciteAlelyAction(alela));
 			cb = new JIconCheckBox();
 			action.join(cb);
 			tb.add(cb);
 			cb.setText(null);
 			mapka.put(alela.toString(), cb);
 		}
-		boolean jetam = vsechny.getPouziteAlely().contains(alela);
+		final boolean jetam = vsechny.getPouziteAlely().contains(alela);
 		cb.setVisible(jetam);
 
 	}
 
-	public void onEvent(KeskyNactenyEvent event) {
+	public void onEvent(final KeskyNactenyEvent event) {
 		// TODO Nějak ty separátory a layoutování lépe řešit.
 		removeAll();
-		KesBag vsechny = event.getVsechny();
+		final KesBag vsechny = event.getVsechny();
 		genom = vsechny.getGenom();
 		ovladac(vsechny, genom.ALELA_hnf);
 		ovladac(vsechny, genom.ALELA_fnd);
@@ -76,14 +76,14 @@ public class JToolbarOvladaceAlel extends JPanel {
 		ovladac(vsechny, genom.ALELA_nevyluste);
 		add(new JSeparator(SwingConstants.VERTICAL));
 		if (genom.GRUPA_gc != null) {
-			for (Alela alela : genom.GRUPA_gc.getAlely()) {
+			for (final Alela alela : genom.GRUPA_gc.getAlely()) {
 				ovladac(vsechny, alela);
 			}
 		}
 		// add(new JToolBar.Separator());
 		add(new JSeparator(SwingConstants.VERTICAL));
 		if (genom.GRUPA_gcawp != null) {
-			for (Alela alela : genom.GRUPA_gcawp.getAlely()) {
+			for (final Alela alela : genom.GRUPA_gcawp.getAlely()) {
 				ovladac(vsechny, alela);
 			}
 		}
@@ -103,7 +103,7 @@ public class JToolbarOvladaceAlel extends JPanel {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.Container#removeAll()
 	 */
 	@Override
@@ -119,7 +119,7 @@ public class JToolbarOvladaceAlel extends JPanel {
 		return mapka.keySet();
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 

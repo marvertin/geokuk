@@ -9,7 +9,7 @@ import javax.swing.KeyStroke;
 
 /**
  * Jde na vybranou pozici
- * 
+ *
  * @author veverka
  *
  */
@@ -31,11 +31,11 @@ public class BezNaBodVpredAction extends CestyAction0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent aE) {
+	public void actionPerformed(final ActionEvent aE) {
 		// poziceModel.setPozice(pozice);
 		cestyModel.bezNaBodVpred();
 		vyrezModel.vystredovatNaPozici();

@@ -10,7 +10,7 @@ public abstract class HledaciPodminka0 {
 		return stredHledani;
 	}
 
-	public void setStredHledani(Wgs stredHledani) {
+	public void setStredHledani(final Wgs stredHledani) {
 		this.stredHledani = stredHledani;
 	}
 
@@ -25,7 +25,7 @@ public abstract class HledaciPodminka0 {
 	 * @param aVzorek
 	 *            the vzorek to set
 	 */
-	public void setVzorek(String aVzorek) {
+	public void setVzorek(final String aVzorek) {
 		vzorek = aVzorek;
 	}
 

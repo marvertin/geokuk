@@ -13,12 +13,12 @@ public abstract class CestyActionIndividual0 extends CestyAction0 {
 	private final Mouable		kontextoveMouable;
 	private Poziceq				poziceq;
 
-	public CestyActionIndividual0(Mouable kontextoveMouable) {
+	public CestyActionIndividual0(final Mouable kontextoveMouable) {
 		this.kontextoveMouable = kontextoveMouable;
 		setEnabled(false);
 	}
 
-	public void onEvent(PoziceChangedEvent aEvent) {
+	public void onEvent(final PoziceChangedEvent aEvent) {
 		poziceq = aEvent.poziceq;
 		enablujPokudMaSmysl();
 	}
@@ -33,11 +33,11 @@ public abstract class CestyActionIndividual0 extends CestyAction0 {
 
 	/**
 	 * Do vyýletu se dá přidat jen WPT, ale ne Bod, ale také volná pozice.
-	 * 
+	 *
 	 * @param mouable
 	 * @return
 	 */
-	private Mouable proOdstraneniZVyletu(Mouable mouable) {
+	private Mouable proOdstraneniZVyletu(final Mouable mouable) {
 		if (mouable instanceof Wpt)
 			return mouable;
 		if (mouable instanceof Bod)

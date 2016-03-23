@@ -17,7 +17,7 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 	private static final long	serialVersionUID	= -3816615837981907372L;
 	protected final String		iValue;
 
-	protected AString0(String aValue) {
+	protected AString0(final String aValue) {
 		iValue = aValue.trim();
 		if (iValue == null)
 			throw new NullPointerException("Cannot use null value as constructor parameter of tw elementary types " + getClass());
@@ -57,12 +57,12 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 	/**
 	 * Porovnání dvou elementárních typů.
 	 */
-	public boolean equals(Object aObject) {
+	public boolean equals(final Object aObject) {
 		if (aObject == this)
 			return true; // pokud porovnávám se sebou, tak se rovnají
 		if (!(aObject instanceof AString0))
 			return false; // s jiným typem se nerovnají
-		AString0 obj = (AString0) aObject;
+		final AString0 obj = (AString0) aObject;
 		return iValue.equals(obj.iValue); // porovnat přímo řetězce
 	}
 
@@ -82,10 +82,10 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(AString0 aObject) {
+	public int compareTo(final AString0 aObject) {
 		if (aObject == null) {
 			throw new IllegalArgumentException("Cannot compare with null");
 		}

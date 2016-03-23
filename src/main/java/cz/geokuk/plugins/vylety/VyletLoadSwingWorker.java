@@ -22,7 +22,7 @@ public class VyletLoadSwingWorker extends MySwingWorker0<Vylet, Void> {
 	private final KesBag					vsechny;
 	private final VyletModel				vyletModel;
 
-	public VyletLoadSwingWorker(VyletovyZperzistentnovac vyletovyZperzistentnovac2, KesBag vsechny, VyletModel vyletModel) {
+	public VyletLoadSwingWorker(final VyletovyZperzistentnovac vyletovyZperzistentnovac2, final KesBag vsechny, final VyletModel vyletModel) {
 		vyletovyZperzistentnovac = vyletovyZperzistentnovac2;
 		this.vsechny = vsechny;
 		this.vyletModel = vyletModel;
@@ -30,7 +30,7 @@ public class VyletLoadSwingWorker extends MySwingWorker0<Vylet, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
@@ -40,12 +40,12 @@ public class VyletLoadSwingWorker extends MySwingWorker0<Vylet, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
-		Vylet result = get();
+		final Vylet result = get();
 		if (result == null)
 			return; // asi zkanclváno
 		log.info("Nahran vylet, {} lovenych a {} ignorovanych.", result.get(EVylet.ANO).size(), result.get(EVylet.NE).size());

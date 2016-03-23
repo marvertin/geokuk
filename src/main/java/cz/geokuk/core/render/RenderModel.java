@@ -86,23 +86,23 @@ public class RenderModel extends Model0 {
 
 	/**
 	 * Bere natočení mapy od severu na aktuálním středu. Nebere v úvahu inforamci o tom, jak se má moc natáčet.
-	 * 
+	 *
 	 * @return
 	 */
 	public double getNatoceni() {
 		return natoceni;
 	}
 
-	public void onEvent(VyrezChangedEvent event) {
+	public void onEvent(final VyrezChangedEvent event) {
 		natoceni = event.getMoord().computNataceciUhel();
 		moord = event.getMoord();
 		spocitejVelikost();
 		fire();
 	}
 
-	public void onEvent(ZmenaMapNastalaEvent event) {
-		EKaType podklad = event.getKaSet().getPodklad();
-		RenderSettings rs = renderSettings.copy();
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		final EKaType podklad = event.getKaSet().getPodklad();
+		final RenderSettings rs = renderSettings.copy();
 		rs.setRenderedMoumer(podklad.fitMoumer(rs.getRenderedMoumer()));
 		setRenderSettings(rs);
 	}
@@ -113,37 +113,37 @@ public class RenderModel extends Model0 {
 
 	public void uschovejAktualniMeritko() {
 		// TODO asi testovat
-		RenderSettings rs = renderSettings.copy();
+		final RenderSettings rs = renderSettings.copy();
 		rs.setRenderedMoumer(getMoord().getMoumer());
 		setRenderSettings(rs);
 	}
 
-	private Dvoj spoctiOrezavaciOblednik(double a, double b) {
+	private Dvoj spoctiOrezavaciOblednik(final double a, final double b) {
 		return spocti(-getOKolikNatacet(), a, b);
 	}
 
 	/**
 	 * Spočítá veliksot obdélníku tak, aby nový obdélník vešel do obdélníku daném zadanými stranami, když je pootočen o zadaný úhel.
-	 * 
+	 *
 	 * @param uhel
 	 * @param a
 	 * @param b
 	 * @return
 	 */
-	private static Dvoj spocti(double uhel, double a, double b) {
+	private static Dvoj spocti(final double uhel, final double a, final double b) {
 
-		double q = Math.abs(Math.tan(uhel));
-		double q2m = 1 - q * q;
+		final double q = Math.abs(Math.tan(uhel));
+		final double q2m = 1 - q * q;
 
-		double a1 = (a - q * b) / q2m;
-		double b1 = (b - q * a) / q2m;
-		double a2 = a - a1;
-		double b2 = b - b1;
+		final double a1 = (a - q * b) / q2m;
+		final double b1 = (b - q * a) / q2m;
+		final double a2 = a - a1;
+		final double b2 = b - b1;
 
-		double ar = Math.hypot(a1, b2);
-		double br = Math.hypot(b1, a2);
+		final double ar = Math.hypot(a1, b2);
+		final double br = Math.hypot(b1, a2);
 
-		Dvoj dvoj = new Dvoj();
+		final Dvoj dvoj = new Dvoj();
 		dvoj.a = ar;
 		dvoj.b = br;
 
@@ -160,8 +160,8 @@ public class RenderModel extends Model0 {
 
 	@Override
 	protected void initAndFire() {
-		RenderUmisteniSouboru u = new RenderUmisteniSouboru();
-		MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
+		final RenderUmisteniSouboru u = new RenderUmisteniSouboru();
+		final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
 		u.setKmzDir(pref.getFilex(FPref.RENDER_KMZ_DIR_value, RenderUmisteniSouboru.KMZ_DIR));
 		u.setOziDir(pref.getFilex(FPref.RENDER_OZI_DIR_value, RenderUmisteniSouboru.OZI_DIR));
 		u.setPictureDir(pref.getFilex(FPref.RENDER_PICTURE_DIR_value, RenderUmisteniSouboru.PICURE_DIR));
@@ -201,7 +201,7 @@ public class RenderModel extends Model0 {
 		int widthSurove = moord.getWidth();
 		int heightSurove = moord.getHeight();
 		// nastavit na najvětší měřítko
-		int renderedMoumer = getRenderedMoumer();
+		final int renderedMoumer = getRenderedMoumer();
 		while (moumera < renderedMoumer) {
 			widthSurove *= 2;
 			heightSurove *= 2;
@@ -212,7 +212,7 @@ public class RenderModel extends Model0 {
 			heightSurove /= 2;
 			moumera--;
 		}
-		Dvoj dvoj = spoctiOrezavaciOblednik(widthSurove, heightSurove);
+		final Dvoj dvoj = spoctiOrezavaciOblednik(widthSurove, heightSurove);
 		dim = new Dimension((int) dvoj.a, (int) dvoj.b);
 		// return new Dimension(width, height);
 	}
@@ -242,9 +242,9 @@ public class RenderModel extends Model0 {
 	 * @return
 	 */
 	public Dvoj spoctiMalyOrezavaciOblednik() {
-		Dvoj dvoj = spoctiOrezavaciOblednik();
+		final Dvoj dvoj = spoctiOrezavaciOblednik();
 		int moumera = moord.getMoumer(); // aktuální měřítko
-		int renderedMoumer = getRenderedMoumer();
+		final int renderedMoumer = getRenderedMoumer();
 		while (moumera < renderedMoumer) {
 			dvoj.a /= 2;
 			dvoj.b /= 2;
@@ -257,11 +257,11 @@ public class RenderModel extends Model0 {
 	 * @param umisteniSouboru
 	 *            the umisteniSouboru to set
 	 */
-	public void setUmisteniSouboru(RenderUmisteniSouboru umisteniSouboru) {
+	public void setUmisteniSouboru(final RenderUmisteniSouboru umisteniSouboru) {
 		if (umisteniSouboru.equals(this.umisteniSouboru))
 			return;
 		this.umisteniSouboru = umisteniSouboru;
-		MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
+		final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
 		pref.putFilex(FPref.RENDER_KMZ_DIR_value, umisteniSouboru.getKmzDir());
 		pref.putFilex(FPref.RENDER_OZI_DIR_value, umisteniSouboru.getOziDir());
 		pref.putFilex(FPref.RENDER_PICTURE_DIR_value, umisteniSouboru.getOziDir());
@@ -277,7 +277,7 @@ public class RenderModel extends Model0 {
 	 * @param renderSettings
 	 *            the renderSettings to set
 	 */
-	public void setRenderSettings(RenderSettings renderSettings) {
+	public void setRenderSettings(final RenderSettings renderSettings) {
 		if (renderSettings.equals(this.renderSettings))
 			return;
 		this.renderSettings = renderSettings;
@@ -306,7 +306,7 @@ public class RenderModel extends Model0 {
 			koswx.cancel(true);
 		}
 		// zobrazServisniOknoAction.actionPerformed(null);
-		EWhatRender whatRender = renderSettings.getWhatRender();
+		final EWhatRender whatRender = renderSettings.getWhatRender();
 		switch (whatRender) {
 		case GOOGLE_EARTH:
 			koswx = new GoogleEarthRenderSwingWorker();
@@ -334,7 +334,7 @@ public class RenderModel extends Model0 {
 		fire();
 	}
 
-	public void rendrovaniSkoncilo(RenderResult renderResult) {
+	public void rendrovaniSkoncilo(final RenderResult renderResult) {
 		koswx = null;
 		fire();
 		if (renderResult == null) {
@@ -374,10 +374,10 @@ public class RenderModel extends Model0 {
 
 	/** Vrací rendrovací informace */
 	public Coord getRoord() {
-		Mou moustred = getMoord().getMoustred();
-		int width = getDim().width;
-		int height = getDim().height;
-		Coord roord = new Coord(getRenderedMoumer(), moustred, new Dimension(width, height), getOKolikNatacet());
+		final Mou moustred = getMoord().getMoustred();
+		final int width = getDim().width;
+		final int height = getDim().height;
+		final Coord roord = new Coord(getRenderedMoumer(), moustred, new Dimension(width, height), getOKolikNatacet());
 		return roord;
 	}
 
@@ -389,10 +389,10 @@ public class RenderModel extends Model0 {
 	}
 
 	public long odhadniMnozstviZabranePameti() {
-		int velikostPixlu = renderSettings.getImageType() == EImageType.png ? 4 : 3;
+		final int velikostPixlu = renderSettings.getImageType() == EImageType.png ? 4 : 3;
 		long pamet;
 		if (getRenderSettings().getWhatRender() == EWhatRender.GOOGLE_EARTH) {
-			DlazdicovaMetrikaXY metrika = spoctiDlazdicovouMetriku();
+			final DlazdicovaMetrikaXY metrika = spoctiDlazdicovouMetriku();
 			pamet = (long) metrika.xx.dlaSize * metrika.yy.dlaSize * velikostPixlu;
 		} else {
 			pamet = (long) dim.height * dim.width * velikostPixlu;
@@ -402,14 +402,14 @@ public class RenderModel extends Model0 {
 
 	public DlazdicovaMetrikaXY spoctiDlazdicovouMetriku() {
 
-		Coord coord = createRenderedCoord();
+		final Coord coord = createRenderedCoord();
 		return new DlazdicovaMetrikaXY(new DlazdicovaMetrika(renderSettings.getKmzMaxDlazdiceX(), coord.getWidth()), new DlazdicovaMetrika(renderSettings.getKmzMaxDlazdiceY(), coord.getHeight()));
 
 	}
 
 	public PapirovaMetrika getPapirovaMetrika() {
-		Coord roord = getRoord();
-		int meritko = getRenderSettings().getPapiroveMeritko();
+		final Coord roord = getRoord();
+		final int meritko = getRenderSettings().getPapiroveMeritko();
 		return new PapirovaMetrika(roord.getWidthMetru() / meritko, roord.getHeightMetru() / meritko, OKRAJ_CENTIMETR);
 	}
 
@@ -417,21 +417,21 @@ public class RenderModel extends Model0 {
 		return spocitejKalibracniBody(getRoord(), renderSettings.getKalibrBodu());
 	}
 
-	public List<Wgs> spocitejKalibracniBody(Coord cocox, int kalibrBodu) {
-		List<Wgs> wgss = new ArrayList<>();
-		int width = cocox.getDim().width;
-		int height = cocox.getDim().height;
-		int kalistrana = (int) (Math.ceil(Math.sqrt(kalibrBodu))); // počet kalibračních bodů rastru ve sloupci a řádku
-		double kalifaktor = (kalistrana * kalistrana - 1) / ((double) kalibrBodu - 1); // po jaké vzdálenosti kalibrační bod
+	public List<Wgs> spocitejKalibracniBody(final Coord cocox, final int kalibrBodu) {
+		final List<Wgs> wgss = new ArrayList<>();
+		final int width = cocox.getDim().width;
+		final int height = cocox.getDim().height;
+		final int kalistrana = (int) (Math.ceil(Math.sqrt(kalibrBodu))); // počet kalibračních bodů rastru ve sloupci a řádku
+		final double kalifaktor = (kalistrana * kalistrana - 1) / ((double) kalibrBodu - 1); // po jaké vzdálenosti kalibrační bod
 		System.out.println("kalistrana: " + kalistrana);
 		double kalicitac = 0;
 		int bodocitac = 0;
 		for (int x = 0; x < kalistrana; x++) {
 			for (int y = 0; y < kalistrana; y++) {
 				if (Math.round(kalicitac) == bodocitac) {
-					int xp = x * width / (kalistrana - 1);
-					int yp = y * height / (kalistrana - 1);
-					Wgs wgs = cocox.transform(new Point(xp, yp)).toWgs();
+					final int xp = x * width / (kalistrana - 1);
+					final int yp = y * height / (kalistrana - 1);
+					final Wgs wgs = cocox.transform(new Point(xp, yp)).toWgs();
 					wgss.add(wgs);
 					kalicitac += kalifaktor;
 				}

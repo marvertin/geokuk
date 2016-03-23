@@ -22,7 +22,7 @@ import cz.geokuk.util.gui.JSmallPictureButton;
 
 /**
  * Detailní informace o vybrané keši.
- * 
+ *
  * @author Spikodrob
  *
  */
@@ -74,7 +74,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.AfterInjectInit#initAfterInject()
 	 */
 	@Override
@@ -119,11 +119,11 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		jKesoidCode.setForeground(Color.RED);
 		jKesoidNazev.setFont(jKesoidNazev.getFont().deriveFont(Font.BOLD));
 		jKesoidSym.setFont(jKesoidSym.getFont().deriveFont(Font.ITALIC));
-		Box hlav = Box.createVerticalBox();
+		final Box hlav = Box.createVerticalBox();
 		add(hlav);
 
 		{
-			Box box1 = Box.createHorizontalBox();
+			final Box box1 = Box.createHorizontalBox();
 			box1.add(jKesoidNazev);
 			box1.add(Box.createHorizontalStrut(10));
 			hlav.add(box1);
@@ -131,19 +131,19 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 
 		{
 
-			Box box2a = Box.createVerticalBox();
+			final Box box2a = Box.createVerticalBox();
 			jVzdalenost.setAlignmentX(CENTER_ALIGNMENT);
 			jAzimut.setAlignmentX(CENTER_ALIGNMENT);
 			box2a.add(jVzdalenost);
 			box2a.add(jAzimut);
 
-			Box box2b = Box.createVerticalBox();
+			final Box box2b = Box.createVerticalBox();
 			jKesoidSym.setAlignmentX(RIGHT_ALIGNMENT);
 			jKesoidCode.setAlignmentX(RIGHT_ALIGNMENT);
 			box2b.add(jKesoidCode);
 			box2b.add(jKesoidSym);
 
-			Box box2 = Box.createHorizontalBox();
+			final Box box2 = Box.createHorizontalBox();
 			box2.add(jType);
 			box2.add(Box.createHorizontalStrut(5));
 			box2.add(jVztah);
@@ -156,7 +156,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 			hlav.add(box2);
 		}
 
-		Box box9 = Box.createHorizontalBox();
+		final Box box9 = Box.createHorizontalBox();
 		box9.add(Box.createGlue());
 		box9.add(vyletAnoButton);
 		box9.add(vyletNeButton);
@@ -165,13 +165,13 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		box9.add(jOtevriUrl);
 
 		{
-			Box box8a = Box.createVerticalBox();
+			final Box box8a = Box.createVerticalBox();
 			jHiddenTime.setAlignmentX(LEFT_ALIGNMENT);
 			jAuthor.setAlignmentX(LEFT_ALIGNMENT);
 			box8a.add(jHiddenTime);
 			box8a.add(jAuthor);
 
-			Box box8 = Box.createHorizontalBox();
+			final Box box8 = Box.createHorizontalBox();
 			box8.add(box8a);
 			box8.add(Box.createGlue());
 			box8.add(box9);
@@ -188,17 +188,17 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 			private static final long serialVersionUID = 7253981658581992444L;
 
 			@Override
-			public void napln(Wpt wpt) {
+			public void napln(final Wpt wpt) {
 			}
 		}));
-		for (EKesoidKind kind : EKesoidKind.values()) {
-			JKesoidDetail0 detail = jDetailyKesoidu.get(kind);
+		for (final EKesoidKind kind : EKesoidKind.values()) {
+			final JKesoidDetail0 detail = jDetailyKesoidu.get(kind);
 			detail.setVisible(false);
 			hlav.add(detail);
 		}
 	}
 
-	public void onEvent(PoziceChangedEvent aEvent) {
+	public void onEvent(final PoziceChangedEvent aEvent) {
 		if (aEvent.poziceq.isNoPosition()) {
 			setVisible(false);
 		} else {
@@ -206,7 +206,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 			if (wpt == null) {
 				setVisible(false);
 			} else {
-				Kesoid k = wpt.getKesoid();
+				final Kesoid k = wpt.getKesoid();
 				if (kesoid == null || k.getKesoidKind() != kesoid.getKesoidKind()) {
 					if (kesoid != null) {
 						jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(false);
@@ -233,13 +233,13 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		}
 	}
 
-	public void onEvent(DomaciSouradniceSeZmenilyEvent aEvent) {
+	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
 		if (isVisible() && kesoid != null) {
 			napln();
 		}
 	}
 
-	public void onEvent(IkonyNactenyEvent event) {
+	public void onEvent(final IkonyNactenyEvent event) {
 		ikonBag = event.getBag();
 
 	}
@@ -254,7 +254,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		jWptSym.setText(wpt.getSym());
 		jRucnePridany.setText(wpt.isRucnePridany() ? "+" : "*");
 		jRucnePridany.setToolTipText(wpt.isRucnePridany() ? "Waypoint byl ručně přidán v Geogetu nebo podobném programu." : "Waypoint byl obsažen v PQ");
-		int elevation = wpt.getElevation();
+		final int elevation = wpt.getElevation();
 		jElevation.setText(elevation == 0 ? null : elevation + " m n. m.");
 		jAuthor.setText(kesoid.getAuthor());
 		jHiddenTime.setText(JKesoidDetail0.formatujDatum(kesoid.getHidden()));
@@ -270,16 +270,16 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 
 	}
 
-	private String vzdalenost(Wpt wpt) {
+	private String vzdalenost(final Wpt wpt) {
 		return refbodyModel.getHc().vzdalenostStr(wpt.getWgs());
 	}
 
-	private Icon azimut(Wpt wpt) {
+	private Icon azimut(final Wpt wpt) {
 		return Ikonizer.findSmerIcon(refbodyModel.getHc().azimut(wpt.getWgs()));
 	}
 
-	private static String formatuj(String s, EKesStatus status) {
-		StringBuilder sb = new StringBuilder();
+	private static String formatuj(final String s, final EKesStatus status) {
+		final StringBuilder sb = new StringBuilder();
 		sb.append("<html>");
 		if (status != EKesStatus.ACTIVE) {
 			sb.append("<strike>");
@@ -303,7 +303,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		return sb.toString();
 	}
 
-	private static Icon vztah(EKesVztah vztah) {
+	private static Icon vztah(final EKesVztah vztah) {
 		switch (vztah) {
 		case FOUND:
 			return ImageLoader.seekResIcon("kesvztah/found.gif");
@@ -318,15 +318,15 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		}
 	}
 
-	public void inject(Akce akce) {
+	public void inject(final Akce akce) {
 		this.akce = akce;
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 
-	public void inject(RefbodyModel refbodyModel) {
+	public void inject(final RefbodyModel refbodyModel) {
 		this.refbodyModel = refbodyModel;
 	}
 

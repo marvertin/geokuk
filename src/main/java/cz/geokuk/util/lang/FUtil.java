@@ -8,22 +8,22 @@ public final class FUtil {
 	private FUtil() {
 	}
 
-	public static String cestinuPryc(String s) {
+	public static String cestinuPryc(final String s) {
 		int i;
-		int n = s.length();
+		final int n = s.length();
 		for (i = 0; i < n; i++) {
-			char c = s.charAt(i);
+			final char c = s.charAt(i);
 			if (c < 128) {
 				continue;
 			}
-			char cc = FUtil.cestinuPryc(c);
+			final char cc = FUtil.cestinuPryc(c);
 			if (cc != c) {
 				break;
 			}
 		}
 		if (i == n)
 			return s; // není čeština
-		StringBuilder sb = new StringBuilder(n);
+		final StringBuilder sb = new StringBuilder(n);
 		sb.append(s.substring(0, i));
 		for (; i < n; i++) {
 			char c = s.charAt(i);
@@ -35,7 +35,7 @@ public final class FUtil {
 		return sb.toString();
 	}
 
-	public static char cestinuPryc(char c) {
+	public static char cestinuPryc(final char c) {
 		switch (c) {
 		case 'á':
 			return 'a';
@@ -113,12 +113,12 @@ public final class FUtil {
 
 	}
 
-	public static String vycistiJmenoSouboru(String s) {
+	public static String vycistiJmenoSouboru(final String s) {
 		if (s == null)
 			return null;
 		StringBuilder sb = null;
 		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+			final char c = s.charAt(i);
 			char x;
 			switch (c) {
 			case '"':
@@ -163,27 +163,27 @@ public final class FUtil {
 
 	}
 
-	public static String getHtmlColor(Color color) {
+	public static String getHtmlColor(final Color color) {
 		return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
 	}
 
-	public static <T> boolean equalsa(T o1, T o2) {
+	public static <T> boolean equalsa(final T o1, final T o2) {
 		return ((o1 == null && o2 == null) || (o1 != null && o1.equals(o2)));
 	}
 
-	public static <T> boolean addAll(Collection<? super T> col, Iterable<? extends T> iterable) {
+	public static <T> boolean addAll(final Collection<? super T> col, final Iterable<? extends T> iterable) {
 		boolean celkovaZmena = false;
-		for (T tt : iterable) {
-			boolean zmena = col.add(tt);
+		for (final T tt : iterable) {
+			final boolean zmena = col.add(tt);
 			celkovaZmena = celkovaZmena || zmena;
 		}
 		return celkovaZmena;
 	}
 
-	public static long soucetKvadratu(int dx, int dy) {
-		long ldx = dx;
-		long ldy = dy;
-		long result = ldx * ldx + ldy * ldy;
+	public static long soucetKvadratu(final int dx, final int dy) {
+		final long ldx = dx;
+		final long ldy = dy;
+		final long result = ldx * ldx + ldy * ldy;
 		return result;
 	}
 

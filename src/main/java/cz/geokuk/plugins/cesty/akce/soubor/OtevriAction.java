@@ -24,7 +24,7 @@ public class OtevriAction extends SouboeCestaAction0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (!super.ulozitSDotazem())
 			return; // mělo se ukládat a řeklo se, že ne
 		if (fc == null) { // dlouho to trvá, tak vytvoříme vždy nový
@@ -35,9 +35,9 @@ public class OtevriAction extends SouboeCestaAction0 {
 		// fc.setCurrentDirectory(new File(jtext.getText()));
 		fc.setSelectedFile(cestyModel.defaultAktualnihoVyletuFile());
 
-		int result = fc.showDialog(Dlg.parentFrame(), "Otevřít");
+		final int result = fc.showDialog(Dlg.parentFrame(), "Otevřít");
 		if (result == JFileChooser.APPROVE_OPTION) {
-			File selectedFile = fc.getSelectedFile();
+			final File selectedFile = fc.getSelectedFile();
 			if (!new GpxFilter().accept(selectedFile)) {
 				Dlg.error("Soubor \"" + selectedFile + "\" nemá příponu GPX!");
 			} else { // je to dobré, otvíráme
@@ -50,7 +50,7 @@ public class OtevriAction extends SouboeCestaAction0 {
 	private class GpxFilter extends FileFilter {
 
 		@Override
-		public boolean accept(File pathname) {
+		public boolean accept(final File pathname) {
 			if (pathname.isDirectory())
 				return true;
 			if (pathname.getName().toLowerCase().endsWith(".gpx"))

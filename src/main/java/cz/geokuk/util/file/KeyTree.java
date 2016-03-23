@@ -8,30 +8,30 @@ import java.util.List;
 
 /**
  * Jménovací uzel podle vzoru composite.
- * 
+ *
  * @author veverka
  */
 public class KeyTree<K, D> {
 
 	private final KeyNode<K, D> root = new KeyNode<>();
 
-	public KeyNode<K, D> locate(List<K> keys) {
+	public KeyNode<K, D> locate(final List<K> keys) {
 		return root.locate(keys);
 	}
 
-	void add(D data, List<K> keys) {
+	void add(final D data, final List<K> keys) {
 		root.add(data, keys);
 	}
 
-	void add(D data, @SuppressWarnings("unchecked") K... keys) {
+	void add(final D data, @SuppressWarnings("unchecked") final K... keys) {
 		add(data, Arrays.asList(keys));
 	}
 
-	void remove(List<K> keys) {
+	void remove(final List<K> keys) {
 		root.remove(keys);
 	}
 
-	void remove(@SuppressWarnings("unchecked") K... keys) {
+	void remove(@SuppressWarnings("unchecked") final K... keys) {
 		remove(Arrays.asList(keys));
 	}
 
@@ -45,7 +45,7 @@ public class KeyTree<K, D> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -58,11 +58,11 @@ public class KeyTree<K, D> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -70,7 +70,7 @@ public class KeyTree<K, D> {
 		if (getClass() != obj.getClass())
 			return false;
 		@SuppressWarnings({ "rawtypes" })
-		KeyTree other = (KeyTree) obj;
+		final KeyTree other = (KeyTree) obj;
 		if (root == null) {
 			if (other.root != null)
 				return false;

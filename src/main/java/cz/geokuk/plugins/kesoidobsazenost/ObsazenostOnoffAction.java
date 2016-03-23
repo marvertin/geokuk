@@ -19,16 +19,16 @@ public class ObsazenostOnoffAction extends ToggleAction0 {
 
 	}
 
-	public void inject(ObsazenostModel popiskyModel) {
+	public void inject(final ObsazenostModel popiskyModel) {
 		this.popiskyModel = popiskyModel;
 	}
 
-	public void onEvent(ObsazenostOnoffEvent event) {
+	public void onEvent(final ObsazenostOnoffEvent event) {
 		setSelected(event.isOnoff());
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		popiskyModel.visible.setOnoff(nastaveno);
 	}
 

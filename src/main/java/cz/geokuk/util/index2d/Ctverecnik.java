@@ -19,7 +19,7 @@ public class Ctverecnik<T> extends Node0<T> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -61,7 +61,7 @@ public class Ctverecnik<T> extends Node0<T> {
 	 * @param aYy1
 	 * @param aYy2
 	 */
-	public Ctverecnik(int aXx1, int aYy1, int aXx2, int aYy2) {
+	public Ctverecnik(final int aXx1, final int aYy1, final int aXx2, final int aYy2) {
 		xx1 = aXx1;
 		yy1 = aYy1;
 		xx2 = aXx2;
@@ -69,13 +69,13 @@ public class Ctverecnik<T> extends Node0<T> {
 	}
 
 	@Override
-	public void visit(BoundingRect rect, Visitor<T> visitor) {
+	public void visit(final BoundingRect rect, final Visitor<T> visitor) {
 		if (rect != null) {
-			boolean jeToMimo = xx1 >= rect.xx2 || xx2 <= rect.xx1 || yy1 >= rect.yy2 || yy2 <= rect.yy1;
+			final boolean jeToMimo = xx1 >= rect.xx2 || xx2 <= rect.xx1 || yy1 >= rect.yy2 || yy2 <= rect.yy1;
 			if (jeToMimo)
 				return;
 
-			boolean jeToKompletUvnitr = xx1 >= rect.xx1 && xx2 <= rect.xx2 && yy1 >= rect.yy1 && yy2 <= rect.yy2;
+			final boolean jeToKompletUvnitr = xx1 >= rect.xx1 && xx2 <= rect.xx2 && yy1 >= rect.yy1 && yy2 <= rect.yy2;
 
 			if (jeToKompletUvnitr) {
 				visitor.visit(this);
@@ -92,7 +92,7 @@ public class Ctverecnik<T> extends Node0<T> {
 	 * @param rect
 	 * @param visitor
 	 */
-	private void visitPodrizene(BoundingRect rect, Visitor<T> visitor) {
+	private void visitPodrizene(final BoundingRect rect, final Visitor<T> visitor) {
 		if (jz != null)
 			jz.visit(rect, visitor);
 		if (jv != null)
@@ -103,13 +103,13 @@ public class Ctverecnik<T> extends Node0<T> {
 			sv.visit(rect, visitor);
 	}
 
-	public void vloz(Sheet<T> sheet, DuplikHlidac dh) {
+	public void vloz(final Sheet<T> sheet, final DuplikHlidac dh) {
 
-		int xxs = xx1 + (xx2 - xx1) / 2;
-		int yys = yy1 + (yy2 - yy1) / 2;
+		final int xxs = xx1 + (xx2 - xx1) / 2;
+		final int yys = yy1 + (yy2 - yy1) / 2;
 
-		int xx = sheet.xx;
-		int yy = sheet.yy;
+		final int xx = sheet.xx;
+		final int yy = sheet.yy;
 
 		if (xx < xxs && yy < yys) {
 			jz = vlozDoPodctverce(jz, sheet, xx1, yy1, xxs, yys, dh);
@@ -128,21 +128,21 @@ public class Ctverecnik<T> extends Node0<T> {
 
 	}
 
-	private Node0<T> vlozDoPodctverce(Node0<T> node, Sheet<T> aSheet, int xx1, int yy1, int xx2, int yy2, DuplikHlidac dh) {
+	private Node0<T> vlozDoPodctverce(final Node0<T> node, final Sheet<T> aSheet, final int xx1, final int yy1, final int xx2, final int yy2, final DuplikHlidac dh) {
 		// System.out.printf("xx1=%d xx2=%d yy1=%d yy2=%d\n", xx1, xx2, yy1, yy2);
 		if (node == null) { // vlozit se tam
 			return aSheet;
 		} else if (node instanceof Ctverecnik) {
-			Ctverecnik<T> ctver = (Ctverecnik<T>) node;
+			final Ctverecnik<T> ctver = (Ctverecnik<T>) node;
 			ctver.vloz(aSheet, dh);
 			return node;
 		} else if (node instanceof Sheet) {
-			Sheet<T> sheet = (Sheet<T>) node;
+			final Sheet<T> sheet = (Sheet<T>) node;
 			if (sheet.xx == aSheet.xx && sheet.yy == aSheet.yy) {
 				dh.duplicita = true; // takovy uz tam mame
 				return node; // beze zmeny
 			}
-			Ctverecnik<T> ctver = new Ctverecnik<>(xx1, yy1, xx2, yy2);
+			final Ctverecnik<T> ctver = new Ctverecnik<>(xx1, yy1, xx2, yy2);
 			ctver.vloz(sheet, dh);
 			ctver.vloz(aSheet, dh);
 			return ctver;
@@ -153,7 +153,7 @@ public class Ctverecnik<T> extends Node0<T> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see objekty.Node0#isSheet()
 	 */
 	@Override
@@ -167,12 +167,12 @@ public class Ctverecnik<T> extends Node0<T> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see objekty.Node0#vypis(int)
 	 */
 	@Override
-	void vypis(String prefix, int aLevel) {
-		String mezery = String.format("%" + (aLevel * 2) + "s", " ");
+	void vypis(final String prefix, final int aLevel) {
+		final String mezery = String.format("%" + (aLevel * 2) + "s", " ");
 		log.debug("{}{}: ({}) [{},{}] - [{},{}]", mezery, prefix, count, xx1, yy1, xx2, yy2);
 		podvypis(jz, "jz", aLevel + 1);
 		podvypis(jv, "jv", aLevel + 1);
@@ -185,9 +185,9 @@ public class Ctverecnik<T> extends Node0<T> {
 	 * @param aString
 	 * @param aLevel
 	 */
-	private void podvypis(Node0<T> aNode, String aPrefix, int aLevel) {
+	private void podvypis(final Node0<T> aNode, final String aPrefix, final int aLevel) {
 		if (aNode == null) {
-			String mezery = String.format("%" + (aLevel * 2) + "s", " ");
+			final String mezery = String.format("%" + (aLevel * 2) + "s", " ");
 			log.debug("{}{}: null", mezery, aPrefix);
 		} else {
 			aNode.vypis(aPrefix, aLevel);

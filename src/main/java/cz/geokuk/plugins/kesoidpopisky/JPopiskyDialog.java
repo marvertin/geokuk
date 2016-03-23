@@ -262,7 +262,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override

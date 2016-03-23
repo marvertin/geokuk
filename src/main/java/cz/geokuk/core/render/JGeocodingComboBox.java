@@ -45,15 +45,15 @@ public class JGeocodingComboBox extends JComboBox<String> {
 	 * @param patterned
 	 *            the patterned to set
 	 */
-	public void setPatterned(RenderSettings.Patterned patterned) {
+	public void setPatterned(final RenderSettings.Patterned patterned) {
 		if (patterned.equals(this.patterned))
 			return;
 		this.patterned = patterned.copy();
 		if (getSelectedIndex() >= 0) { // něco bylo vybráno, ne text, tak to novu vybrat, ale ponovu
-			int index = urciCoMabytVybrano();
+			final int index = urciCoMabytVybrano();
 			setSelectedIndex(index);
 		}
-		for (Listener listener : listeners) {
+		for (final Listener listener : listeners) {
 			listener.patternChanged(patterned);
 		}
 	}
@@ -68,7 +68,7 @@ public class JGeocodingComboBox extends JComboBox<String> {
 	/**
 	 * Přidá geotaging vzory, ty jsou asynchronně a později
 	 */
-	public void addPatterns(SortedMap<String, String> pattsSouradnice, SortedMap<String, String> pattsGeocoding) {
+	public void addPatterns(final SortedMap<String, String> pattsSouradnice, final SortedMap<String, String> pattsGeocoding) {
 		allPatterns.clear();
 		if (pattsSouradnice != null) {
 			souradnicovePatterns.clear();
@@ -91,10 +91,10 @@ public class JGeocodingComboBox extends JComboBox<String> {
 	 *
 	 */
 	private void vyskladejCheckBox() {
-		int selectedIndex = getSelectedIndex();
+		final int selectedIndex = getSelectedIndex();
 		blokujEventy = true;
-		int puvodniPocetItemu = getItemCount();
-		for (String s : allPatterns.values()) {
+		final int puvodniPocetItemu = getItemCount();
+		for (final String s : allPatterns.values()) {
 			addItem(s.trim());
 		}
 		for (int i = 0; i < puvodniPocetItemu; i++) {
@@ -102,14 +102,14 @@ public class JGeocodingComboBox extends JComboBox<String> {
 		}
 		blokujEventy = false;
 		if (selectedIndex >= 0 || puvodniPocetItemu == 0) { // něco bylo vybráno, ne text, tak to novu vybrat, ale ponovu
-			int index = urciCoMabytVybrano();
+			final int index = urciCoMabytVybrano();
 			setSelectedIndex(-1);
 			setSelectedIndex(index);
 		}
 	}
 
 	private int urciCoMabytVybrano() {
-		String klic = urciVybranyKlic();
+		final String klic = urciVybranyKlic();
 		return keys.indexOf(klic);
 	}
 
@@ -128,11 +128,11 @@ public class JGeocodingComboBox extends JComboBox<String> {
 	private void nastavPatterned() {
 		if (blokujEventy)
 			return;
-		RenderSettings.Patterned p = patterned.copy();
-		int index = getSelectedIndex();
+		final RenderSettings.Patterned p = patterned.copy();
+		final int index = getSelectedIndex();
 		// aby tam vůbec vešel
 		if (index >= 0) {
-			String key = keys.get(index);
+			final String key = keys.get(index);
 			if (!geotaggingPatterns.isEmpty()) { // mame data geotaggingu
 				p.setPatternNumberCilovy(key);
 				if (souradnicovePatterns.containsKey(key)) {
@@ -156,7 +156,7 @@ public class JGeocodingComboBox extends JComboBox<String> {
 		addItemListener(new ItemListener() {
 
 			@Override
-			public void itemStateChanged(ItemEvent e) {
+			public void itemStateChanged(final ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					nastavPatterned();
 				}
@@ -165,7 +165,7 @@ public class JGeocodingComboBox extends JComboBox<String> {
 
 	}
 
-	public void addListener(Listener listener) {
+	public void addListener(final Listener listener) {
 		listeners.add(listener);
 	}
 

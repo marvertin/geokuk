@@ -39,7 +39,7 @@ public class GeocodingModel extends Model0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.Model0#initAndFire()
 	 */
 	@Override

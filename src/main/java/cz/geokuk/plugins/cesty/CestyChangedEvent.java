@@ -7,7 +7,7 @@ import cz.geokuk.plugins.cesty.data.Doc;
 public class CestyChangedEvent extends Event0<CestyModel> {
 	private final Doc doc;
 
-	public CestyChangedEvent(Doc doc, Cesta curta) {
+	public CestyChangedEvent(final Doc doc, final Cesta curta) {
 		this.doc = doc;
 	}
 

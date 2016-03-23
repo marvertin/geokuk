@@ -32,7 +32,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -63,14 +63,14 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RenderSettings other = (RenderSettings) obj;
+		final RenderSettings other = (RenderSettings) obj;
 		if (imageType != other.imageType)
 			return false;
 		if (kalibrBodu != other.kalibrBodu)
@@ -113,7 +113,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param renderedMoumer
 	 *            the renderedMoumer to set
 	 */
-	public void setRenderedMoumer(int renderedMoumer) {
+	public void setRenderedMoumer(final int renderedMoumer) {
 		this.renderedMoumer = renderedMoumer;
 	}
 
@@ -121,7 +121,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param imageType
 	 *            the imageType to set
 	 */
-	public void setImageType(EImageType imageType) {
+	public void setImageType(final EImageType imageType) {
 		this.imageType = imageType;
 	}
 
@@ -129,7 +129,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param whatRender
 	 *            the whatRender to set
 	 */
-	public void setWhatRender(EWhatRender whatRender) {
+	public void setWhatRender(final EWhatRender whatRender) {
 		this.whatRender = whatRender;
 	}
 
@@ -144,7 +144,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param pureFileName
 	 *            the pureFileName to set
 	 */
-	public void setPureFileName(Patterned pureFileName) {
+	public void setPureFileName(final Patterned pureFileName) {
 		this.pureFileName = pureFileName;
 	}
 
@@ -159,7 +159,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param kmzFolder
 	 *            the kmzFolder to set
 	 */
-	public void setKmzFolder(Patterned kmzFolder) {
+	public void setKmzFolder(final Patterned kmzFolder) {
 		this.kmzFolder = kmzFolder;
 	}
 
@@ -174,7 +174,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param kmzFolderDescription
 	 *            the kmzFolderDescription to set
 	 */
-	public void setKmzFolderDescription(String kmzFolderDescription) {
+	public void setKmzFolderDescription(final String kmzFolderDescription) {
 		this.kmzFolderDescription = kmzFolderDescription;
 	}
 
@@ -189,7 +189,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param kmzDrawOrder
 	 *            the kmzDrawOrder to set
 	 */
-	public void setKmzDrawOrder(int kmzDrawOrder) {
+	public void setKmzDrawOrder(final int kmzDrawOrder) {
 		this.kmzDrawOrder = kmzDrawOrder;
 	}
 
@@ -204,7 +204,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param kalibrBodu
 	 *            the kalibrBodu to set
 	 */
-	public void setKalibrBodu(int kalibrBodu) {
+	public void setKalibrBodu(final int kalibrBodu) {
 		this.kalibrBodu = kalibrBodu;
 	}
 
@@ -219,7 +219,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param srovnatDoSeveru
 	 *            the srovnatDoSeveru to set
 	 */
-	public void setSrovnatDoSeveru(boolean srovnatDoSeveru) {
+	public void setSrovnatDoSeveru(final boolean srovnatDoSeveru) {
 		this.srovnatDoSeveru = srovnatDoSeveru;
 	}
 
@@ -234,7 +234,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param papiroveMeritko
 	 *            the papiroveMeritko to set
 	 */
-	public void setPapiroveMeritko(int papiroveMeritko) {
+	public void setPapiroveMeritko(final int papiroveMeritko) {
 		this.papiroveMeritko = papiroveMeritko;
 	}
 
@@ -249,7 +249,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param kalibracniZnackyProTisk
 	 *            the kalibracniZnackyProTisk to set
 	 */
-	public void setKalibracniZnackyProTisk(boolean kalibracniZnackyProTisk) {
+	public void setKalibracniZnackyProTisk(final boolean kalibracniZnackyProTisk) {
 		this.kalibracniZnackyProTisk = kalibracniZnackyProTisk;
 	}
 
@@ -277,11 +277,11 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	@Override
 	public RenderSettings copy() {
 		try {
-			RenderSettings klon = (RenderSettings) super.clone();
+			final RenderSettings klon = (RenderSettings) super.clone();
 			klon.pureFileName = klon.pureFileName.copy();
 			klon.kmzFolder = klon.kmzFolder.copy();
 			return klon;
-		} catch (CloneNotSupportedException e) {
+		} catch (final CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -294,7 +294,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Object#toString()
 		 */
 		@Override
@@ -313,7 +313,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		 * @param patternNumberCilovy
 		 *            the patternNumberCilovy to set
 		 */
-		public void setPatternNumberCilovy(String patternNumberCilovy) {
+		public void setPatternNumberCilovy(final String patternNumberCilovy) {
 			this.patternNumberCilovy = patternNumberCilovy;
 		}
 
@@ -328,7 +328,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		 * @param patternNumberPredbezny
 		 *            the patternNumberPredbezny to set
 		 */
-		public void setPatternNumberPredbezny(String patternNumberPredbezny) {
+		public void setPatternNumberPredbezny(final String patternNumberPredbezny) {
 			this.patternNumberPredbezny = patternNumberPredbezny;
 		}
 
@@ -343,13 +343,13 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		 * @param text
 		 *            the text to set
 		 */
-		public void setText(String text) {
+		public void setText(final String text) {
 			this.text = text;
 		}
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Object#hashCode()
 		 */
 		@Override
@@ -364,18 +364,18 @@ public class RenderSettings implements Copyable<RenderSettings> {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(final Object obj) {
 			if (this == obj)
 				return true;
 			if (obj == null)
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			Patterned other = (Patterned) obj;
+			final Patterned other = (Patterned) obj;
 			if (patternNumberCilovy == null) {
 				if (other.patternNumberCilovy != null)
 					return false;
@@ -397,9 +397,9 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		@Override
 		public Patterned copy() {
 			try {
-				Patterned klon = (Patterned) super.clone();
+				final Patterned klon = (Patterned) super.clone();
 				return klon;
-			} catch (CloneNotSupportedException e) {
+			} catch (final CloneNotSupportedException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -424,7 +424,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param kmzMaxDlazdiceX
 	 *            the kmzMaxDlazdiceX to set
 	 */
-	public void setKmzMaxDlazdiceX(int kmzMaxDlazdiceX) {
+	public void setKmzMaxDlazdiceX(final int kmzMaxDlazdiceX) {
 		this.kmzMaxDlazdiceX = kmzMaxDlazdiceX;
 	}
 
@@ -432,7 +432,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	 * @param kmzMaxDlazdiceY
 	 *            the kmzMaxDlazdiceY to set
 	 */
-	public void setKmzMaxDlazdiceY(int kmzMaxDlazdiceY) {
+	public void setKmzMaxDlazdiceY(final int kmzMaxDlazdiceY) {
 		this.kmzMaxDlazdiceY = kmzMaxDlazdiceY;
 	}
 }

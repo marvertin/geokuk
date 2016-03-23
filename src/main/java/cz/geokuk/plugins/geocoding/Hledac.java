@@ -25,32 +25,32 @@ import cz.geokuk.core.hledani.HledaciPodminka0;
  */
 public class Hledac extends Hledac0<Nalezenec> {
 
-	private XPathFactory factory = XPathFactory.newInstance();
+	private final XPathFactory factory = XPathFactory.newInstance();
 
 	public Hledac() {
 	}
 
 	@Override
-	public List<Nalezenec> hledej(HledaciPodminka0 aPodm) {
-		HledaciPodminka podm = (HledaciPodminka) aPodm;
+	public List<Nalezenec> hledej(final HledaciPodminka0 aPodm) {
+		final HledaciPodminka podm = (HledaciPodminka) aPodm;
 		// starý způsob:
 		// http://maps.google.com/maps/geo?q=vranovice&output=xml&sensor=false&key=geokuk&gl=CZ
-		URL url = podm.computeUrl();
+		final URL url = podm.computeUrl();
 
-		XPath xpath = factory.newXPath();
+		final XPath xpath = factory.newXPath();
 
 		try (InputStream stm = url.openStream()) {
-			InputSource inputXml = new InputSource(stm);
-			NodeList adressList = (NodeList) xpath.evaluate("GeocodeResponse/result", inputXml, XPathConstants.NODESET);
-			List<Nalezenec> list = new ArrayList<>();
+			final InputSource inputXml = new InputSource(stm);
+			final NodeList adressList = (NodeList) xpath.evaluate("GeocodeResponse/result", inputXml, XPathConstants.NODESET);
+			final List<Nalezenec> list = new ArrayList<>();
 
 			for (int i = 0; i < adressList.getLength(); i++) {
-				Node item = adressList.item(i);
+				final Node item = adressList.item(i);
 				// System.out.println("xpath " + item.getTextContent());
 
-				String formatovanaAdresa = xpath.evaluate("formatted_address", item);
+				final String formatovanaAdresa = xpath.evaluate("formatted_address", item);
 				// System.out.println("xpath " + formatovanaAdresa);
-				Nalezenec nalezenec = new Nalezenec();
+				final Nalezenec nalezenec = new Nalezenec();
 				nalezenec.adresa = formatovanaAdresa;
 				nalezenec.wgs = new Wgs(Double.parseDouble(xpath.evaluate("geometry/location/lat", item)), Double.parseDouble(xpath.evaluate("geometry/location/lng", item)));
 				nalezenec.locationType = xpath.evaluate("geometry/location_type", item);

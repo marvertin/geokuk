@@ -12,8 +12,8 @@ public class JTwoColumnsPanel extends JPanel {
 	GridBagConstraints			gbc;
 	int							radek;
 
-	public JTwoColumnsPanel(String titleText) {
-		TitledBorder border = BorderFactory.createTitledBorder(titleText);
+	public JTwoColumnsPanel(final String titleText) {
+		final TitledBorder border = BorderFactory.createTitledBorder(titleText);
 		if (border.getTitleFont() != null) {
 			border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD | Font.ITALIC));
 		}
@@ -34,10 +34,10 @@ public class JTwoColumnsPanel extends JPanel {
 		}
 	}
 
-	public void addx(String label, JComponent jComp) {
-		JLabel jLabel = new JLabel(label);
+	public void addx(final String label, final JComponent jComp) {
+		final JLabel jLabel = new JLabel(label);
 		jLabel.setLabelFor(jComp);
-		GridBagConstraints gbcLabel = new GridBagConstraints();
+		final GridBagConstraints gbcLabel = new GridBagConstraints();
 		gbcLabel.gridx = 0;
 		gbcLabel.gridy = radek;
 		gbcLabel.anchor = GridBagConstraints.WEST;

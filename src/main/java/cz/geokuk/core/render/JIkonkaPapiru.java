@@ -11,7 +11,7 @@ public class JIkonkaPapiru extends JComponent {
 	private PapirovaMetrika		metrika;
 
 	public JIkonkaPapiru() {
-		Dimension dim = new Dimension(80, 80);
+		final Dimension dim = new Dimension(80, 80);
 		setPreferredSize(dim);
 		setMinimumSize(dim);
 		setMaximumSize(dim);
@@ -19,18 +19,18 @@ public class JIkonkaPapiru extends JComponent {
 	}
 
 	@Override
-	protected void paintComponent(Graphics aG) {
+	protected void paintComponent(final Graphics aG) {
 		if (metrika == null)
 			return;
 		// System.out.println();
 		// System.out.printf("METRIKA- sirka:%.0f vyska:%.0f \n",
 		// metrika.xsize *1000, metrika.ysize *1000);
 
-		Graphics2D g = (Graphics2D) aG.create();
-		double kvoc = getWidth() / metrika.getDelsiStrana() * 0.8;
+		final Graphics2D g = (Graphics2D) aG.create();
+		final double kvoc = getWidth() / metrika.getDelsiStrana() * 0.8;
 		g.translate(getWidth() / 2, getHeight() / 2);
-		double delsi = metrika.getDelsiStrana() * kvoc;
-		double kratsi = metrika.getKratsiStrana() * kvoc;
+		final double delsi = metrika.getDelsiStrana() * kvoc;
+		final double kratsi = metrika.getKratsiStrana() * kvoc;
 		if (metrika.naSirku) {
 			g.setColor(Color.WHITE);
 			g.fillRect((int) (-delsi / 2), ((int) -kratsi / 2), ((int) delsi), ((int) kratsi));
@@ -46,18 +46,18 @@ public class JIkonkaPapiru extends JComponent {
 		g.setColor(Color.DARK_GRAY);
 		g.setFont(getFont().deriveFont(Font.BOLD, 2));
 		g.setFont(Font.decode("Arial-BOLD-18"));
-		String formatStr = "A" + metrika.format;
-		FontMetrics fontMetrics = g.getFontMetrics();
-		int charsWidth = fontMetrics.stringWidth(formatStr);
+		final String formatStr = "A" + metrika.format;
+		final FontMetrics fontMetrics = g.getFontMetrics();
+		final int charsWidth = fontMetrics.stringWidth(formatStr);
 		g.drawString(formatStr, -charsWidth / 2, fontMetrics.getHeight() / 2 - fontMetrics.getDescent());
 
 		g.setColor(Color.MAGENTA);
-		double sirka = metrika.xsize * kvoc;
-		double vyska = metrika.ysize * kvoc;
+		final double sirka = metrika.xsize * kvoc;
+		final double vyska = metrika.ysize * kvoc;
 		g.drawRect((int) (-sirka / 2), ((int) -vyska / 2), ((int) sirka), ((int) vyska));
 	}
 
-	public void setMetrikia(PapirovaMetrika metrika) {
+	public void setMetrikia(final PapirovaMetrika metrika) {
 		this.metrika = metrika;
 		repaint();
 	}

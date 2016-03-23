@@ -12,7 +12,7 @@ public class Object0 {
 	/**
 	 * Metoda se použije v metodě equals následníka pro určení shodnosti typů
 	 */
-	protected final Object checkCompare(Object aObject) {
+	protected final Object checkCompare(final Object aObject) {
 		// S null lze porovnávat vše
 		if (aObject == null) {
 			throw new IllegalArgumentException("Pokus o porovnávání '" + this.getClass() + "' s hodnotou null, to se nesmi!");
@@ -28,7 +28,7 @@ public class Object0 {
 	 *
 	 * @deprecated To byla špatná myšlenka
 	 */
-	protected final Object checkEquals(Object aObject) {
+	protected final Object checkEquals(final Object aObject) {
 		return aObject;
 		/*
 		 * //S null lze porovnávat vše if (aObject == null) return null; else if (getClass() != aObject.getClass()) { throw new ClassCastException("Pokus o porovnávání '" + this.getClass() + "' s '" + aObject.getClass().getName() + "', je povoleno porovnávat pouze instance stejné třídy"); } else
@@ -41,7 +41,7 @@ public class Object0 {
 	 *
 	 * @deprecated To byla špatná myšlenka
 	 */
-	protected final Object checkEquals(Object aObject, Class<?> aStartFrom) {
+	protected final Object checkEquals(final Object aObject, final Class<?> aStartFrom) {
 		return aObject;
 		/*
 		 * //S null lze porovnávat vše if (aObject == null) return null; else if (! (aStartFrom.isInstance(this) && aStartFrom.isInstance(aObject))) { throw new ClassCastException("Pokus o porovnávání '" + this.getClass().getName() + "' s '" + aObject.getClass().getName() +

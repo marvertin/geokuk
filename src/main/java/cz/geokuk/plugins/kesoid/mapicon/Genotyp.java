@@ -14,14 +14,14 @@ public class Genotyp {
 		return Collections.unmodifiableSet(alely);
 	}
 
-	public void put(Alela alela) {
+	public void put(final Alela alela) {
 		if (alela == null)
 			return;
 		alely.removeAll(alela.getGen().getAlely());
 		alely.add(alela);
 	}
 
-	public void remove(Alela alela) {
+	public void remove(final Alela alela) {
 		if (!alely.contains(alela))
 			return;
 		if (alela.getGen().getVychoziAlela() == alela)
@@ -29,10 +29,10 @@ public class Genotyp {
 		put(alela.getGen().getVychoziAlela()); // a prdneme tam vyhozi
 	}
 
-	public void removeAll(Set<Alela> alely) {
+	public void removeAll(final Set<Alela> alely) {
 		if (alely == null)
 			return;
-		for (Alela alela : alely) {
+		for (final Alela alela : alely) {
 			remove(alela);
 		}
 	}
@@ -40,7 +40,7 @@ public class Genotyp {
 	/**
 	 * @param aAlely
 	 */
-	public Genotyp(Set<Alela> aAlely, Genom genom) {
+	public Genotyp(final Set<Alela> aAlely, final Genom genom) {
 		assert !aAlely.contains(null);
 		this.genom = genom;
 		alely.addAll(aAlely);
@@ -48,7 +48,7 @@ public class Genotyp {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -58,7 +58,7 @@ public class Genotyp {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -68,18 +68,18 @@ public class Genotyp {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Genotyp other = (Genotyp) obj;
+		final Genotyp other = (Genotyp) obj;
 		if (alely == null) {
 			if (other.alely != null)
 				return false;
@@ -103,14 +103,14 @@ public class Genotyp {
 		}
 
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(final Object obj) {
 			if (obj == null)
 				return false;
 			if (obj == this)
 				return true;
 			if (!(obj instanceof Otisk))
 				return false;
-			Otisk otisk = (Otisk) obj;
+			final Otisk otisk = (Otisk) obj;
 			return gege().equals(otisk.gege());
 		}
 
@@ -121,7 +121,7 @@ public class Genotyp {
 
 	// najde alelu, která odpovídá symbolu, pokud tam nějaká taková je
 	Alela getAlelaSym() {
-		for (Alela alela : alely) {
+		for (final Alela alela : alely) {
 			if (alela.isSym()) {
 				return alela;
 			}

@@ -17,7 +17,7 @@ public class NastavAktualniSaduAction extends AbstractAction {
 	/**
 	 *
 	 */
-	public NastavAktualniSaduAction(String jmenoSady) {
+	public NastavAktualniSaduAction(final String jmenoSady) {
 		super(jmenoSady);
 		putValue(SHORT_DESCRIPTION, "Nastaví aktuální sadu mapových ikon.");
 		// putValue(MNEMONIC_KEY, KeyEvent.VK_R);
@@ -25,15 +25,15 @@ public class NastavAktualniSaduAction extends AbstractAction {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		System.out.println("Sada nastavena");
 	}
 
-	public void onEvent(IkonyNactenyEvent event) {
+	public void onEvent(final IkonyNactenyEvent event) {
 		// setEnabled(true);
 	}
 

@@ -4,16 +4,16 @@ import java.util.*;
 
 public class Vrstva {
 
-	private Map<Alela, Seznamec>	icondefsProSymbol	= new HashMap<>();
-	private Seznamec				hlavickaObecnych	= new Seznamec();
-	private Set<Alela>				pouziteAlely		= new HashSet<>();
+	private final Map<Alela, Seznamec>	icondefsProSymbol	= new HashMap<>();
+	private final Seznamec				hlavickaObecnych	= new Seznamec();
+	private final Set<Alela>			pouziteAlely		= new HashSet<>();
 
-	private int						pocet;
+	private int							pocet;
 
-	void add(IconDef iconDef) {
+	void add(final IconDef iconDef) {
 		if (iconDef != null) {
-			Alela alelaSym = iconDef.getAlelaSym();
-			Seznamec seznamecPredNeho = new Seznamec();
+			final Alela alelaSym = iconDef.getAlelaSym();
+			final Seznamec seznamecPredNeho = new Seznamec();
 			seznamecPredNeho.iconDef = iconDef;
 			if (alelaSym == null) {
 				seznamecPredNeho.next = hlavickaObecnych.next;
@@ -28,7 +28,7 @@ public class Vrstva {
 				pocet++;
 			}
 			// A Ještě schovat použité alely
-			for (IconSubDef subDef : iconDef.getSubdefs()) {
+			for (final IconSubDef subDef : iconDef.getSubdefs()) {
 				pouziteAlely.addAll(subDef.alely);
 			}
 		}
@@ -37,21 +37,21 @@ public class Vrstva {
 
 	/**
 	 * Nalezne jediný icondef vyhovující danému genotypu, nebo vrátí null, pokud nic nevyhovuje
-	 * 
+	 *
 	 * @param genotyp
 	 * @return
 	 */
-	public IconDef locate(Genotyp genotyp) {
+	public IconDef locate(final Genotyp genotyp) {
 
-		Set<Alela> hledaneAlely = genotyp.getAlely();
-		List<IconDef> vybrane = new ArrayList<>(pocet);
+		final Set<Alela> hledaneAlely = genotyp.getAlely();
+		final List<IconDef> vybrane = new ArrayList<>(pocet);
 		int maxPriorita = -1;
 
 		for (Seznamec seznamec = najdiPocatek(genotyp); seznamec != null; seznamec = seznamec.next) {
-			IconDef iconDef = seznamec.iconDef;
+			final IconDef iconDef = seznamec.iconDef;
 			if (iconDef == null)
 				continue; // to bude určtitě v hlavičce obecných
-			for (IconSubDef subDef : iconDef.getSubdefs()) {
+			for (final IconSubDef subDef : iconDef.getSubdefs()) {
 				if (hledaneAlely.containsAll(subDef.alely)) { // je to kandidát
 					if (iconDef.priorita > maxPriorita) { // vysoka priorita, přebíjí všechny jiné
 						vybrane.clear();
@@ -61,9 +61,9 @@ public class Vrstva {
 						// ignorujeme toto, protože už máme s vyšší prioritou
 					} else { // máme nejvyšší prioritu, musíme tedy zjistit, které jsou méně obecné
 						boolean pridat = true;
-						for (ListIterator<IconDef> it = vybrane.listIterator(); it.hasNext();) {
-							IconDef icondef2 = it.next();
-							for (IconSubDef subDef2 : icondef2.getSubdefs()) {
+						for (final ListIterator<IconDef> it = vybrane.listIterator(); it.hasNext();) {
+							final IconDef icondef2 = it.next();
+							for (final IconSubDef subDef2 : icondef2.getSubdefs()) {
 								if (subDef.alely.containsAll(subDef2.alely)) { // tento je konkretnejsi než seznamový nebo stejný, vymažme ze seznamu
 									it.remove();
 								} else if (subDef2.alely.containsAll(subDef.alely)) { // ten v seznamu je konkrétnější ignorujeme
@@ -89,8 +89,8 @@ public class Vrstva {
 		return vybrane.get(0); // a ten první vátit
 	}
 
-	private Seznamec najdiPocatek(Genotyp genotyp) {
-		Alela alelaSym = genotyp.getAlelaSym();
+	private Seznamec najdiPocatek(final Genotyp genotyp) {
+		final Alela alelaSym = genotyp.getAlelaSym();
 		Seznamec pocatek;
 		if (alelaSym == null) {
 			return hlavickaObecnych;
@@ -107,9 +107,9 @@ public class Vrstva {
 	 * @param genotyp
 	 * @param vybrane
 	 */
-	private void error(String aString, Genotyp genotyp, List<IconDef> vybrane) {
+	private void error(final String aString, final Genotyp genotyp, final List<IconDef> vybrane) {
 		System.err.println("Našlo se toho moc na zobrazení pro: " + genotyp);
-		for (IconDef iconDef : vybrane) {
+		for (final IconDef iconDef : vybrane) {
 			System.err.println("    " + iconDef.getSubdefs() + "  -  " + iconDef.idp.url);
 		}
 	}

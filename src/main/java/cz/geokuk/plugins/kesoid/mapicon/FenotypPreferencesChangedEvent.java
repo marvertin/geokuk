@@ -10,7 +10,7 @@ public class FenotypPreferencesChangedEvent extends Event0<KesoidModel> {
 
 	private final Set<String> jmenaNefenotypovanychAlel;
 
-	public FenotypPreferencesChangedEvent(Set<String> jmenaNefenotypovanychAlel) {
+	public FenotypPreferencesChangedEvent(final Set<String> jmenaNefenotypovanychAlel) {
 		this.jmenaNefenotypovanychAlel = jmenaNefenotypovanychAlel;
 	}
 

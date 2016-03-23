@@ -18,7 +18,7 @@ import java.nio.channels.FileChannel;
  * fm.copyFileToFile(zdroj, cil);
  *
  * </pre>
- * 
+ *
  * <pre>
  * Pokud neexistuje cílový adresář, není vytvářen, k tomu lze použít metodu File.mkdirs().*. Příklad:
  *
@@ -28,9 +28,9 @@ import java.nio.channels.FileChannel;
  * fm.copyFileToFile(zdroj, cil);
  *
  * </pre>
- * 
+ *
  * Pro implemetnaci je využito přímo nové IO rozhraní java.nio, takže kopírování je nejrychlejší možné, které lze jednodušše v Javě realizovat. Pokud se jeví kopírování pomalé, insspirujte se touto implemetnací a použijte direct buffery, ale nejdříve si o tom něco přečtětě.
- * 
+ *
  * @author Martin Veverka
  * @version 1.0
  */
@@ -46,7 +46,7 @@ public class FileManager {
 
 	/**
 	 * Vytvoří isntanci file manageru. Parametrem je velikost bufferu, který bude použit při kopírování. Nutno vhodně zvolit podle velikosti kopírovaných souborů, jejich počtu, množství paměti, požadované odezvy.
-	 * 
+	 *
 	 * @param aBufferSize
 	 * @return
 	 */
@@ -58,7 +58,7 @@ public class FileManager {
 
 	/**
 	 * Binárně zkopíruje soubor na jiné místo. Čas vytvoření se zkopíruje také.
-	 * 
+	 *
 	 * @param aFrom
 	 *            Zdrojový soubor
 	 * @param aTo
@@ -75,7 +75,7 @@ public class FileManager {
 
 	/**
 	 * Binárně zkopíruje soubor na do zadaného adresáře. Vlastní jméno souboru bude stejné. Čas vytvoření se zkopíruje také.
-	 * 
+	 *
 	 * @param aFrom
 	 *            Zdrojový soubor
 	 * @param aTo
@@ -93,7 +93,7 @@ public class FileManager {
 
 	/**
 	 * Binárně přesune soubor na jiné místo. Čas vytvoření se přesune také. Tato implementace využívá kopie a následného smazání, nespoléhejte však na to, třeba pozdější implementace budou využívat služeb filesystému a přesouvat přímo.
-	 * 
+	 *
 	 * @param aFrom
 	 *            Zdrojový soubor
 	 * @param aTo
@@ -111,7 +111,7 @@ public class FileManager {
 
 	/**
 	 * Binárně přesune soubor na do zadaného adresáře. Vlastní jméno souboru bude stejné. Čas vytvoření se přesune také. Tato implementace využívá kopie a následného smazání, nespoléhejte však na to, třeba pozdější implementace budou využívat služeb filesystému a přesouvat přímo.
-	 * 
+	 *
 	 * @param aFrom
 	 *            Zdrojový soubor
 	 * @param aTo
@@ -130,7 +130,7 @@ public class FileManager {
 
 	/**
 	 * Vrátí nastavenou velikost bufferu, která se používá pro kopírování.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getBufferSize() {
@@ -139,7 +139,7 @@ public class FileManager {
 
 	/**
 	 * Nastaví velikost bufferu pro kopírování souborů. Pro jedno běžící kopírování bude vytvořen jeden buffer.
-	 * 
+	 *
 	 * @param aBufferSize
 	 *            Velikost naastavovaného bufferu. Nejdříve bude upravena na rozumnou velikost, ani velké ani malé. A také zaokrouhlí na nějaký rozumný celý násobek.
 	 */
@@ -156,7 +156,7 @@ public class FileManager {
 
 	/**
 	 * Obsah souboru vrácený jako pole bytů.
-	 * 
+	 *
 	 * @param aFile
 	 *            Soubor, který má být čten.
 	 * @param aEncoding
@@ -185,7 +185,7 @@ public class FileManager {
 
 	/**
 	 * Přečte co nejrychleji celý soubor a vrátí ho jako řetězec.
-	 * 
+	 *
 	 * @param aFile
 	 *            Soubor, který má být čten.
 	 * @param aEncoding
@@ -199,7 +199,7 @@ public class FileManager {
 
 	/**
 	 * Přečte co nejrychleji celý soubor a vrátí ho jako řetězec.
-	 * 
+	 *
 	 * @param aFile
 	 *            Soubor, který má být čten.
 	 * @param aEncoding
@@ -213,7 +213,7 @@ public class FileManager {
 
 	/**
 	 * Zapíše řetězec do zadaného souboru. Soubor přepíše.
-	 * 
+	 *
 	 * @param aFile
 	 *            Soubor, do kterého se zapisuje.
 	 * @param aString
@@ -231,7 +231,7 @@ public class FileManager {
 
 	/**
 	 * Zapíše řetězec do zadaného souboru. Soubor přepíše.
-	 * 
+	 *
 	 * @param aFile
 	 *            Soubor, do kterého se zapisuje.
 	 * @param aString
@@ -248,7 +248,7 @@ public class FileManager {
 
 	/**
 	 * Kopíruje vstupní proud do souboru co možná nejefektivnějším způsobem.
-	 * 
+	 *
 	 * @param aIs
 	 *            Vstupní proud, po zkopírování bude uzavřen.
 	 * @param aOut

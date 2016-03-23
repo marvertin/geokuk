@@ -30,7 +30,7 @@ public class JSlidePozadi extends JSlide0 {
 		setOpaque(true);
 	}
 
-	public void onEvent(ZmenaSouradnicMysiEvent event) {
+	public void onEvent(final ZmenaSouradnicMysiEvent event) {
 		moumys = event.moucur;
 		// System.out.println("Nastaveni moumys: " + moumys);
 		// assert moumys != null;
@@ -38,7 +38,7 @@ public class JSlidePozadi extends JSlide0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.JSlide0#getUpravenaMys()
 	 */
 	@Override
@@ -49,11 +49,11 @@ public class JSlidePozadi extends JSlide0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.Container#paintComponents(java.awt.Graphics)
 	 */
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, getWidth(), getHeight());

@@ -6,11 +6,11 @@ public class PodkladAction extends MapyAction0 {
 
 	private static final long serialVersionUID = 8106696486908484270L;
 
-	public PodkladAction(EKaType katype) {
+	public PodkladAction(final EKaType katype) {
 		super(katype);
 	}
 
-	public void onEvent(ZmenaMapNastalaEvent event) {
+	public void onEvent(final ZmenaMapNastalaEvent event) {
 		setSelected(getMapyModel().getPodklad() == getPodklad());
 	}
 
@@ -19,7 +19,7 @@ public class PodkladAction extends MapyAction0 {
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		if (nastaveno) {
 			getMapyModel().setPodklad(getPodklad());
 		}

@@ -56,14 +56,14 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RenderUmisteniSouboru other = (RenderUmisteniSouboru) obj;
+		final RenderUmisteniSouboru other = (RenderUmisteniSouboru) obj;
 		if (kmzDir == null) {
 			if (other.kmzDir != null)
 				return false;
@@ -85,7 +85,7 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 	/**
 	 * @param aKesDir
 	 */
-	private void check(Filex file) {
+	private void check(final Filex file) {
 		if (file == null)
 			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
 	}
@@ -94,7 +94,7 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 	 * @param kmzDir
 	 *            the kmzDir to set
 	 */
-	public void setKmzDir(Filex kmzDir) {
+	public void setKmzDir(final Filex kmzDir) {
 		check(kmzDir);
 		this.kmzDir = kmzDir;
 	}
@@ -103,12 +103,12 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 	 * @param oziDir
 	 *            the oziDir to set
 	 */
-	public void setOziDir(Filex oziDir) {
+	public void setOziDir(final Filex oziDir) {
 		check(oziDir);
 		this.oziDir = oziDir;
 	}
 
-	public void setPictureDir(Filex pictureDir) {
+	public void setPictureDir(final Filex pictureDir) {
 		check(pictureDir);
 		this.pictureDir = pictureDir;
 	}

@@ -17,12 +17,12 @@ class GenotypBuilderSimpleWaypoint {
 	/**
 	 *
 	 */
-	public GenotypBuilderSimpleWaypoint(Genom genom, Genotyp g) {
+	public GenotypBuilderSimpleWaypoint(final Genom genom, final Genotyp g) {
 		this.genom = genom;
 		this.g = g;
 	}
 
-	public void build(SimpleWaypoint simpleWpt) {
+	public void build(final SimpleWaypoint simpleWpt) {
 		g.put(genom.ALELA_wp);
 	}
 

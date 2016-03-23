@@ -77,7 +77,7 @@ public enum EKaType {
 	 * @param urlBuilder
 	 *            Implementace třídy, která sestaví URL pro zobrazení mapy.
 	 */
-	private EKaType(final boolean podklad, String nazev, String popis, int klavesa, KeyStroke keyStroke, KachleUrlBuilder urlBuilder) {
+	private EKaType(final boolean podklad, final String nazev, final String popis, final int klavesa, final KeyStroke keyStroke, final KachleUrlBuilder urlBuilder) {
 		this.podklad = podklad;
 		this.urlBuilder = urlBuilder;
 		minMoumer = 3;
@@ -111,8 +111,8 @@ public enum EKaType {
 	 * @param urlBuilder
 	 *            Implementace třídy, která sestaví URL pro zobrazení mapy.
 	 */
-	private EKaType(final boolean podklad, final boolean jeMozneNavrsitTexty, final int minMoumer, final int maxMoumer, final int maxAutoMoumer, String nazev, String popis, int klavesa,
-			KeyStroke keyStroke, KachleUrlBuilder urlBuilder) {
+	private EKaType(final boolean podklad, final boolean jeMozneNavrsitTexty, final int minMoumer, final int maxMoumer, final int maxAutoMoumer, final String nazev, final String popis,
+			final int klavesa, final KeyStroke keyStroke, final KachleUrlBuilder urlBuilder) {
 		this.podklad = podklad;
 		this.minMoumer = minMoumer;
 		this.maxMoumer = maxMoumer;

@@ -24,7 +24,7 @@ public class UlozitNastaveniKProgramuAction extends ToggleAction0 {
 				+ ", při příštím spuštění budou těmito nastaveními nahrazeny nastavení v Java preferences, pokud budou nastavení v souboru novější");
 	}
 
-	public void onEvent(NastaveniUkladatDoSouboruEvent event) {
+	public void onEvent(final NastaveniUkladatDoSouboruEvent event) {
 		setSelected(event.getModel().isUkladatDoSouboru());
 		setEnabled(event.getModel().isUkladaniDoSouboruMozne());
 	}
@@ -45,11 +45,11 @@ public class UlozitNastaveniKProgramuAction extends ToggleAction0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.ToggleAction0#onSlectedChange(boolean)
 	 */
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		if (nastaveno) {
 			profileModel.spustUlozeniDoSouboru();
 			// File file = profileModel.ulozDoSouboruAZapniUkladani();
@@ -61,7 +61,7 @@ public class UlozitNastaveniKProgramuAction extends ToggleAction0 {
 		}
 	}
 
-	public void inject(ProfileModel profileModel) {
+	public void inject(final ProfileModel profileModel) {
 		this.profileModel = profileModel;
 	}
 

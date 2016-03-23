@@ -53,7 +53,7 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	@Override
@@ -146,7 +146,7 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see mrizka.JMrizka0#initPainting(coordinates.Mou)
 		 */
 		private int convertVzdalenostMensi(final double vzdalenost) {

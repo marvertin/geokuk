@@ -57,7 +57,7 @@ public class KachleModel extends Model0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.Model0#initAndFire()
 	 */
 	@Override

@@ -8,7 +8,7 @@ public class DlazdicovaMetrika {
 	final int			maxDlazdice;
 	final int			sizeCele;
 
-	DlazdicovaMetrika(int maxDlazdice, int sizeCele) {
+	DlazdicovaMetrika(final int maxDlazdice, final int sizeCele) {
 		this.maxDlazdice = maxDlazdice;
 		this.sizeCele = sizeCele;
 		dlaPocet = sizeCele / (maxDlazdice + dlaMezera) + 1;

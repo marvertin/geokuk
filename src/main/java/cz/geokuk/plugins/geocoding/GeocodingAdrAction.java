@@ -22,7 +22,7 @@ public class GeocodingAdrAction extends DialogOpeningAction0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.DialogOpeningAction0#createDialog()
 	 */
 	@Override

@@ -26,32 +26,32 @@ public class VyletModel extends Model0 {
 
 	private Worker						worker;
 
-	public void add(EVylet evyl, Kesoid kes) {
-		EVylet evylPuvodni = vylet.add(evyl, kes);
+	public void add(final EVylet evyl, final Kesoid kes) {
+		final EVylet evylPuvodni = vylet.add(evyl, kes);
 		if (evyl != evylPuvodni) {
-			VyletSaveSwingWorker worker = new VyletSaveSwingWorker(vyletovyZperzistentnovac, vylet);
+			final VyletSaveSwingWorker worker = new VyletSaveSwingWorker(vyletovyZperzistentnovac, vylet);
 			worker.execute();
 			onChange(kes, evylPuvodni, evyl);
 		}
 
 	}
 
-	public EVylet get(Kesoid kes) {
+	public EVylet get(final Kesoid kes) {
 		return vylet.get(kes);
 	}
 
-	public void removeAll(EVylet evyl) {
+	public void removeAll(final EVylet evyl) {
 		vylet.removeAll(evyl);
-		VyletSaveSwingWorker worker = new VyletSaveSwingWorker(vyletovyZperzistentnovac, vylet);
+		final VyletSaveSwingWorker worker = new VyletSaveSwingWorker(vyletovyZperzistentnovac, vylet);
 		worker.execute();
 		onChange(null, null, null);
 	}
 
-	public Set<Kesoid> get(EVylet evyl) {
+	public Set<Kesoid> get(final EVylet evyl) {
 		return vylet.get(evyl);
 	}
 
-	private void onChange(Kesoid kes, EVylet evylPuvodni, EVylet evyl) {
+	private void onChange(final Kesoid kes, final EVylet evylPuvodni, final EVylet evyl) {
 		if (!SwingUtilities.isEventDispatchThread())
 			return;
 		fire(new VyletChangeEvent(this, kes, evyl, evylPuvodni));
@@ -60,23 +60,23 @@ public class VyletModel extends Model0 {
 	/**
 	 * @param vsechny
 	 */
-	public void startLoadingVylet(KesBag vsechny) {
-		VyletLoadSwingWorker worker = new VyletLoadSwingWorker(vyletovyZperzistentnovac, vsechny, this);
+	public void startLoadingVylet(final KesBag vsechny) {
+		final VyletLoadSwingWorker worker = new VyletLoadSwingWorker(vyletovyZperzistentnovac, vsechny, this);
 		worker.execute();
 	}
 
-	public void setNewVylet(Vylet newvylet) {
+	public void setNewVylet(final Vylet newvylet) {
 		vylet = newvylet;
 		fire(new VyletChangeEvent(this, null, null, null));
 	}
 
-	public void inject(VyletovyZperzistentnovac vyletovyZperzistentnovac) {
+	public void inject(final VyletovyZperzistentnovac vyletovyZperzistentnovac) {
 		this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.Model0#initAndFire()
 	 */
 	@Override
@@ -96,19 +96,19 @@ public class VyletModel extends Model0 {
 
 		private final List<Kesoid> kese;
 
-		public Worker(List<Kesoid> kese) {
+		public Worker(final List<Kesoid> kese) {
 			this.kese = kese;
 		}
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see javax.swing.SwingWorker#doInBackground()
 		 */
 		@Override
 		protected Void doInBackground() throws Exception {
-			Clipboard scl = getSystemClipboard();
-			for (Kesoid kes : kese) {
+			final Clipboard scl = getSystemClipboard();
+			for (final Kesoid kes : kese) {
 				if (isCancelled()) {
 					break;
 				}

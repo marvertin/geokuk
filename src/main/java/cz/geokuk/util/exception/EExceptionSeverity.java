@@ -2,7 +2,7 @@ package cz.geokuk.util.exception;
 
 /**
  * Závažnost chyby. Určuje kam bude chyba dumpována.
- * 
+ *
  * @author veverka
  */
 public enum EExceptionSeverity {
@@ -33,7 +33,7 @@ public enum EExceptionSeverity {
 	/**
 	 * @param aC
 	 */
-	EExceptionSeverity(String aCode) {
+	EExceptionSeverity(final String aCode) {
 		iCode = aCode;
 	}
 

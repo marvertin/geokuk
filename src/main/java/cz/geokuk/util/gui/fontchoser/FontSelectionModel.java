@@ -32,7 +32,7 @@ public interface FontSelectionModel {
 
 	/**
 	 * Adds <code>listener</code> as a listener to changes in the model.
-	 * 
+	 *
 	 * @param listener
 	 *            the <code>ChangeListener</code> to be added
 	 */
@@ -40,7 +40,7 @@ public interface FontSelectionModel {
 
 	/**
 	 * Removes <code>listener</code> as a listener to changes in the model.
-	 * 
+	 *
 	 * @param listener
 	 *            the <code>ChangeListener</code> to be removed
 	 */

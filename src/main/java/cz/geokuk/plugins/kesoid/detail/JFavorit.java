@@ -13,19 +13,19 @@ public class JFavorit extends JComponent {
 	private int					kolik				= Integer.MIN_VALUE;
 	private static final Font	sFont				= new Font("SansSerif", Font.BOLD, 18);
 
-	public JFavorit(int kolik) {
+	public JFavorit(final int kolik) {
 		setKolik(kolik);
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
-		int w = getWidth();
-		int h = getHeight();
-		int zaobleni = 20;
+	protected void paintComponent(final Graphics g) {
+		final Graphics2D g2 = (Graphics2D) g;
+		final int w = getWidth();
+		final int h = getHeight();
+		final int zaobleni = 20;
 
 		// fill Ellipse2D.Double
-		GradientPaint redtowhite = new GradientPaint(w / 2, 0, new Color(242, 222, 158), w / 2, h, new Color(251, 251, 243));
+		final GradientPaint redtowhite = new GradientPaint(w / 2, 0, new Color(242, 222, 158), w / 2, h, new Color(251, 251, 243));
 		g2.setPaint(redtowhite);
 		g2.fillRoundRect(0, 0, w, h, zaobleni, zaobleni);
 
@@ -35,27 +35,27 @@ public class JFavorit extends JComponent {
 
 		g2.drawImage(ImageLoader.seekResImage("icon_fav.png"), 8, 7, null);
 
-		String ss = String.valueOf(kolik);
+		final String ss = String.valueOf(kolik);
 		g2.setFont(sFont);
 		g2.setColor(Color.BLACK);
 		g2.drawString(ss, 25, 22);
 	}
 
-	public void setKolik(int kolik) {
+	public void setKolik(final int kolik) {
 		if (kolik == this.kolik)
 			return;
 		this.kolik = kolik;
-		String ss = String.valueOf(kolik);
-		int stringWidth = super.getFontMetrics(sFont).stringWidth(ss);
-		Dimension newPrefferedSize = new Dimension(33 + stringWidth, 30);
+		final String ss = String.valueOf(kolik);
+		final int stringWidth = super.getFontMetrics(sFont).stringWidth(ss);
+		final Dimension newPrefferedSize = new Dimension(33 + stringWidth, 30);
 		setPreferredSize(newPrefferedSize);
 		revalidate();
 		repaint();
 	}
 
-	public static void main(String[] args) {
-		JFrame frm = new JFrame();
-		JPanel p = new JPanel();
+	public static void main(final String[] args) {
+		final JFrame frm = new JFrame();
+		final JPanel p = new JPanel();
 		final JFavorit jFavorit = new JFavorit(-1);
 		p.add(jFavorit);
 		frm.add(p);
@@ -65,7 +65,7 @@ public class JFavorit extends JComponent {
 		jFavorit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		jFavorit.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent mouseevent) {
+			public void mouseClicked(final MouseEvent mouseevent) {
 				System.out.println("Prasteno do mysi " + jFavorit.kolik);
 			}
 		});
@@ -74,7 +74,7 @@ public class JFavorit extends JComponent {
 			int kolik = 0;
 
 			@Override
-			public void actionPerformed(ActionEvent actionevent) {
+			public void actionPerformed(final ActionEvent actionevent) {
 				kolik++;
 				jFavorit.setKolik(kolik);
 			}

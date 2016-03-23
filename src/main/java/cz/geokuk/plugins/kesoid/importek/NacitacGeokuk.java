@@ -21,8 +21,8 @@ public class NacitacGeokuk extends NacitacInputStream0 {
 	private static final String HLAVICKA = "*geokuk:exportversion=2";
 
 	@Override
-	protected void nacti(InputStream aIstm, String name, IImportBuilder builder, Future<?> future) throws IOException {
-		BufferedReader rdr = new BufferedReader(new InputStreamReader(aIstm, Charset.forName("UTF8")));
+	protected void nacti(final InputStream aIstm, final String name, final IImportBuilder builder, final Future<?> future) throws IOException {
+		final BufferedReader rdr = new BufferedReader(new InputStreamReader(aIstm, Charset.forName("UTF8")));
 
 		String hlavicka = rdr.readLine();
 		if (hlavicka.charAt(0) == 0xfeff) {
@@ -48,8 +48,8 @@ public class NacitacGeokuk extends NacitacInputStream0 {
 				if (line.length() == 0) {
 					continue;
 				}
-				char cmd = line.charAt(0);
-				String[] pp = line.substring(1).split("\\|", 19);
+				final char cmd = line.charAt(0);
+				final String[] pp = line.substring(1).split("\\|", 19);
 
 				switch (cmd) {
 				case ':': {
@@ -86,7 +86,7 @@ public class NacitacGeokuk extends NacitacInputStream0 {
 						gpxwpt.sym = pp[1];
 					}
 					gpxwpt.wgs = new Wgs(Double.parseDouble(pp[2]), Double.parseDouble(pp[3]));
-					String nazev = pp.length > 4 ? pp[4] : "";
+					final String nazev = pp.length > 4 ? pp[4] : "";
 					gpxwpt.cmt = nazev;
 					if (gpxwpt.groundspeak != null) {
 						gpxwpt.groundspeak.name = nazev;
@@ -102,8 +102,8 @@ public class NacitacGeokuk extends NacitacInputStream0 {
 				case '*': // ignorovat druhou hlavičku
 					break;
 				}
-			} catch (Exception e) {
-				String positionInfo = "ERORR on line=" + linenumber + " while reading cache " + jmenoAktualniKese;
+			} catch (final Exception e) {
+				final String positionInfo = "ERORR on line=" + linenumber + " while reading cache " + jmenoAktualniKese;
 				FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, positionInfo);
 			}
 		}
@@ -111,16 +111,16 @@ public class NacitacGeokuk extends NacitacInputStream0 {
 	}
 
 	@Override
-	boolean umiNacist(ZipEntry zipEntry) {
+	boolean umiNacist(final ZipEntry zipEntry) {
 		return umiNacist(zipEntry.getName());
 	}
 
 	@Override
-	boolean umiNacist(File file) {
+	boolean umiNacist(final File file) {
 		return umiNacist(file.getName());
 	}
 
-	private boolean umiNacist(String resourceName) {
+	private boolean umiNacist(final String resourceName) {
 		return resourceName.toLowerCase().trim().endsWith(".geokuk");
 	}
 }

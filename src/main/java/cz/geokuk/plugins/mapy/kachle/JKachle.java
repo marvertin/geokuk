@@ -166,7 +166,7 @@ public class JKachle extends JComponent {
 
 	/**
 	 * Získá obsah
-	 * 
+	 *
 	 * @param kachleModel
 	 * @param priorita
 	 */

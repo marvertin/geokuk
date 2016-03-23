@@ -20,15 +20,15 @@ public final class FThrowable {
 	private static int								sČítačVypisovačů	= 0;
 	private static final Map<Throwable, Integer>	sVýjimkaNaČíslo		= new WeakHashMap<>();
 
-	public static int getExceptionNumber(Throwable aTh) {
+	public static int getExceptionNumber(final Throwable aTh) {
 		if (aTh == null)
 			return 0;
 		// získat řetěz výjimek
-		ThrowableAndSourceMethod[] throwableChain = getThrowableChain(aTh);
+		final ThrowableAndSourceMethod[] throwableChain = getThrowableChain(aTh);
 		assert throwableChain.length > 0; // protože nějakou výjimku máme, tak musí být i včejnu
 		// a vzít číslo té poslední, protože to je jádro pudla, protože to je jádro pudla, to je ta pravá
 		// příčina všeho a dle ní se výjimky musejí číslovat
-		Throwable th = throwableChain[throwableChain.length - 1].getThrowable();
+		final Throwable th = throwableChain[throwableChain.length - 1].getThrowable();
 
 		Integer číslo = sVýjimkaNaČíslo.get(th);
 		if (číslo == null) {
@@ -45,16 +45,16 @@ public final class FThrowable {
 	 *            Výjimka, od nějž se má řetězec odvíjet.
 	 * @return Pole obsahující řetězec výjimek a zdojových metod. Pod indexem nula je nejvyšší výjimka, tedy výjimka předaná jako parameter a metoda je null.
 	 */
-	public static ThrowableAndSourceMethod[] getThrowableChain(Throwable thr) {
+	public static ThrowableAndSourceMethod[] getThrowableChain(final Throwable thr) {
 		if (thr == null)
 			return new ThrowableAndSourceMethod[0]; // prázdné pole, pokud žádná výjimka není.
-		ThrowableAndSourceMethod[] vazy = ThrowableChainPicker.from(thr).poskládejŘetězVýjimek();
+		final ThrowableAndSourceMethod[] vazy = ThrowableChainPicker.from(thr).poskládejŘetězVýjimek();
 		return vazy;
 	}
 
 	/**
 	 * Vrátí výjimku přehozenou přes zadanou výjimku, typ výjimky vrátí co možná nejbližší nahoru k přehazované výjimce. Pokud žádný rozumný typ nenalezne, přehazuje XRuntime.
-	 * 
+	 *
 	 * @param s
 	 *            Technicky orientovaná zpráva. Řetězec se stane technickou zprávou nově vytvořené výjimky.
 	 * @parem exc Přehazovaná výjimka
@@ -64,7 +64,7 @@ public final class FThrowable {
 	/**
 	 * Konstruuje řetězec přidáním třídy.
 	 */
-	static String _constructClassString(Object c, String s) {
+	static String _constructClassString(final Object c, final String s) {
 		if (c == null) {
 			return s;
 		} else if (c instanceof Class<?>) {
@@ -74,7 +74,7 @@ public final class FThrowable {
 			// při problémech s toString() vyhodit bez toho
 			try {
 				ss = c.toString();
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				ss = "problém s toString()";
 			}
 			return "[" + c.getClass().getName() + "] " + ss + " = " + s;
@@ -85,18 +85,18 @@ public final class FThrowable {
 	 * @deprecated Použij findThrowableType;
 	 */
 	@Deprecated
-	public static Exception findExceptionType(Throwable thr, Class<? extends Throwable> aExcType) {
+	public static Exception findExceptionType(final Throwable thr, final Class<? extends Throwable> aExcType) {
 		return (Exception) findThrowableType(thr, aExcType);
 	}
 
 	/**
 	 * Vyhledání konkrétní výjimky v seznamu výjimek. Hledá první výjimku, která je zadaná nebo její následník. Vrací null, pokud se taková výjimka nenajde. Může vrátit i kořen výjimek, pokud je to již ona.
 	 */
-	public static Throwable findThrowableType(Throwable thr, Class<? extends Throwable> aExcType) {
+	public static Throwable findThrowableType(final Throwable thr, final Class<? extends Throwable> aExcType) {
 		if (!Throwable.class.isAssignableFrom(aExcType))
 			throw new XRuntime("findExceptionType: třída " + aExcType + " není výjimka");
-		ThrowableAndSourceMethod[] vazy = getThrowableChain(thr);
-		for (ThrowableAndSourceMethod vaz : vazy) {
+		final ThrowableAndSourceMethod[] vazy = getThrowableChain(thr);
+		for (final ThrowableAndSourceMethod vaz : vazy) {
 			if (aExcType.isAssignableFrom(vaz.iThrowable.getClass()))
 				return vaz.iThrowable; // aby se zabránilo cyklů, pokudb by nějaká vjimka odkazovala na sebe
 		}
@@ -106,18 +106,18 @@ public final class FThrowable {
 	/**
 	 * @param aStream
 	 */
-	public static String printStackTrace(Throwable th, PrintStream aStream, String aPrefix) {
-		PrintWriter pwrt = new PrintWriter(aStream, false);
-		String s = printStackTrace(th, pwrt, aPrefix);
+	public static String printStackTrace(final Throwable th, final PrintStream aStream, final String aPrefix) {
+		final PrintWriter pwrt = new PrintWriter(aStream, false);
+		final String s = printStackTrace(th, pwrt, aPrefix);
 		pwrt.flush();
 		return s;
 	}
 
-	public static String printStackTrace(Throwable th, PrintWriter aStream, String aPrefix) {
+	public static String printStackTrace(final Throwable th, final PrintWriter aStream, final String aPrefix) {
 		return new ExceptionPrinter().printStackTrace(th, aStream, aPrefix);
 	}
 
-	public static String printStackTraceHtml(Throwable th, PrintWriter aStream, String aPrefix) {
+	public static String printStackTraceHtml(final Throwable th, final PrintWriter aStream, final String aPrefix) {
 		return new ExceptionPrinterHtml().printStackTrace(th, aStream, aPrefix);
 	}
 
@@ -126,44 +126,44 @@ public final class FThrowable {
 
 	private static class ExceptionPrinterHtml extends ExceptionPrinter {
 		@Override
-		protected void printlnExceptionMessage(PrintWriter wrt, String message) {
+		protected void printlnExceptionMessage(final PrintWriter wrt, final String message) {
 			wrt.print("<span style='color: red'>");
 			wrt.print(message);
 			wrt.println("</span>");
 		}
 
 		@Override
-		protected void printExceptionNestingNumber(PrintWriter wrt, String nestingNumber) {
+		protected void printExceptionNestingNumber(final PrintWriter wrt, final String nestingNumber) {
 			wrt.print("<span style='color: green'>" + nestingNumber + "</span>");
 		}
 
 		@Override
-		protected void printZdrojMetoda(PrintWriter wrt, Method zdroj) {
+		protected void printZdrojMetoda(final PrintWriter wrt, final Method zdroj) {
 			wrt.print("<span style='color: darkmagenta'>" + zdroj.getName() + "()" + "</span>");
 		}
 
 		@Override
-		protected void printExceptionClassName(PrintWriter wrt, String aClassName) {
+		protected void printExceptionClassName(final PrintWriter wrt, final String aClassName) {
 			wrt.print("<span style='color: blue'>" + aClassName + "</span>");
 		}
 
 		@Override
-		protected void printIdentityHashCode(PrintWriter wrt, int aIdentityHashCode) {
+		protected void printIdentityHashCode(final PrintWriter wrt, final int aIdentityHashCode) {
 			wrt.print("<small>" + aIdentityHashCode + "</small>");
 		}
 	}
 
 	private static class ExceptionPrinter {
-		private void _printStackTrace(Throwable thr, PrintWriter wrt) {
+		private void _printStackTrace(final Throwable thr, final PrintWriter wrt) {
 			// System.err.p rintln("======================ZZZZZZZZZZZZZZZZ=================");
 			// thr.printStackTrace();
 			// System.err.p rintln("======================KKKKKKKKKKKKK=================");
 			boolean vypisujJmenoMetody = true;
 			synchronized (wrt) {
-				ThrowableAndSourceMethod[] vazy = ThrowableChainPicker.from(thr).poskládejŘetězVýjimek();
-				Set<String> vypsanci = new HashSet<>(); // poznání co se vypsalo, aby se dalo označit hvězdičkou
+				final ThrowableAndSourceMethod[] vazy = ThrowableChainPicker.from(thr).poskládejŘetězVýjimek();
+				final Set<String> vypsanci = new HashSet<>(); // poznání co se vypsalo, aby se dalo označit hvězdičkou
 				for (int i = 0; i < vazy.length; i++) {
-					ThrowableAndSourceMethod vaz = vazy[i];
+					final ThrowableAndSourceMethod vaz = vazy[i];
 					if (!(vaz.iThrowable instanceof XTopRenderingException)) { // Není to ta renderovací pseudovýjimka
 						printExceptionNestingNumber(wrt, i + "/" + (vazy.length - 1) + " ");
 						if (vypisujJmenoMetody && vaz.iSourceMethod != null) {
@@ -178,10 +178,10 @@ public final class FThrowable {
 						vypisujJmenoMetody = false;
 					}
 
-					StackTraceElement[] trace = vaz.iThrowable.getStackTrace();
+					final StackTraceElement[] trace = vaz.iThrowable.getStackTrace();
 					int shodnych;
 					if (i + 1 < vazy.length) { // pokud není tento stek stekem posledním
-						StackTraceElement[] nextTrace = vazy[i + 1].iThrowable.getStackTrace();
+						final StackTraceElement[] nextTrace = vazy[i + 1].iThrowable.getStackTrace();
 						shodnych = compareStackTraces(trace, nextTrace);
 					} else {
 						shodnych = 0;
@@ -191,32 +191,32 @@ public final class FThrowable {
 			}
 		}
 
-		protected void printlnExceptionMessage(PrintWriter wrt, String message) {
+		protected void printlnExceptionMessage(final PrintWriter wrt, final String message) {
 			wrt.println(message);
 		}
 
-		protected void printExceptionNestingNumber(PrintWriter wrt, String nestingNumber) {
+		protected void printExceptionNestingNumber(final PrintWriter wrt, final String nestingNumber) {
 			wrt.print(nestingNumber);
 		}
 
-		protected void printZdrojMetoda(PrintWriter wrt, Method zdroj) {
+		protected void printZdrojMetoda(final PrintWriter wrt, final Method zdroj) {
 			wrt.print(zdroj == null ? "<unknown method>" : (zdroj.getName() + "()"));
 		}
 
-		protected void printExceptionClassName(PrintWriter wrt, String aClassName) {
+		protected void printExceptionClassName(final PrintWriter wrt, final String aClassName) {
 			wrt.print(aClassName);
 		}
 
-		protected void printIdentityHashCode(PrintWriter wrt, int aIdentityHashCode) {
+		protected void printIdentityHashCode(final PrintWriter wrt, final int aIdentityHashCode) {
 			wrt.print('#');
 			wrt.print(aIdentityHashCode);
 		}
 
-		public String printStackTrace(Throwable th, PrintWriter s, String aPrefix) {
+		public String printStackTrace(final Throwable th, final PrintWriter s, final String aPrefix) {
 			try {
-				LineWrappingDecorationWriter wrt = new LineWrappingDecorationWriter(s);
-				PrintWriter pwrt = new PrintWriter(wrt);
-				String pfx = "EXC-" + getExceptionNumber(th) + "-" + (aPrefix == null ? "" : aPrefix);
+				final LineWrappingDecorationWriter wrt = new LineWrappingDecorationWriter(s);
+				final PrintWriter pwrt = new PrintWriter(wrt);
+				final String pfx = "EXC-" + getExceptionNumber(th) + "-" + (aPrefix == null ? "" : aPrefix);
 				wrt.setPrefix(pfx + ": ");
 				pwrt.println("Exception printed at " + ATimestamp.now().toIsoStringLocal());
 				// StackTraceElement trace = inferCaller(FThrowable.class);
@@ -226,7 +226,7 @@ public final class FThrowable {
 				_printStackTrace(new XTopRenderingException(th), pwrt);
 				pwrt.flush();
 				return pfx;
-			} catch (Throwable e) {
+			} catch (final Throwable e) {
 				// Tyhle výpisy vypadají jak vypadají a jsou už dost dobře zušlechtěny.
 				// Reagují na situaci, kdy z nějakého neznámého důvodu selže poměrně dost komplikované
 				// sestavení výjimky, pak se co nejjednoduššími prostředky vypisuje jak výjimka selhání, tak
@@ -255,7 +255,7 @@ public final class FThrowable {
 		 * @param aPoradoveCislo
 		 *            Pořadové číslo řetězené výjimky, které se také vypíše.
 		 */
-		private void printOnlyStackTrace(PrintWriter pwrt, StackTraceElement[] trace, int aKolikNezobrazit, int aPoradoveCislo, Set<String> aVypsanci) {
+		private void printOnlyStackTrace(final PrintWriter pwrt, final StackTraceElement[] trace, int aKolikNezobrazit, final int aPoradoveCislo, final Set<String> aVypsanci) {
 			if (aKolikNezobrazit < 0)
 				aKolikNezobrazit = 0;
 			if (aKolikNezobrazit >= trace.length && trace.length > 0)
@@ -263,7 +263,7 @@ public final class FThrowable {
 			if (trace == null || trace.length - aKolikNezobrazit <= 0)
 				return;
 			for (int i = 0; i < trace.length - aKolikNezobrazit; i++) {
-				String vypsanec = trace[i] == null ? "neznamy" : (trace[i].getClassName() + "." + trace[i].getMethodName() + "-" + (trace.length - i));
+				final String vypsanec = trace[i] == null ? "neznamy" : (trace[i].getClassName() + "." + trace[i].getMethodName() + "-" + (trace.length - i));
 				pwrt.println("    " + (aPoradoveCislo == 0 ? "render" : Integer.toString(aPoradoveCislo)) + "." + (trace.length - i) + (aVypsanci.contains(vypsanec) ? " * " : " - ")
 						+ (trace[i] + "").replace('\t', ' '));
 				aVypsanci.add(vypsanec);
@@ -280,7 +280,7 @@ public final class FThrowable {
 		 * @param aTrace2
 		 * @return
 		 */
-		private int compareStackTraces(StackTraceElement[] aTrace1, StackTraceElement[] aTrace2) {
+		private int compareStackTraces(final StackTraceElement[] aTrace1, final StackTraceElement[] aTrace2) {
 			if (aTrace1 == null || aTrace2 == null)
 				return 0; // nemají společnou část, pokud jsou null
 			int m = aTrace1.length - 1, n = aTrace2.length - 1;
@@ -288,20 +288,20 @@ public final class FThrowable {
 				m--;
 				n--;
 			}
-			int framesInCommon = aTrace1.length - 1 - m;
+			final int framesInCommon = aTrace1.length - 1 - m;
 			return framesInCommon;
 		}
 
-		private static String buildThrowableMessageWithoutExceptionName(Throwable th) {
+		private static String buildThrowableMessageWithoutExceptionName(final Throwable th) {
 			String s;
 			if (th instanceof SQLException) {
-				SQLException e = (SQLException) th;
+				final SQLException e = (SQLException) th;
 				s = e + "<b> SQLSTATE=" + e.getSQLState() + " ERRORCODE=" + e.getErrorCode() + "</b>";
 			} else {
 				s = th + "";
 			}
 			if (s.startsWith(th.getClass().getName())) { // toString nebyl přepsán a normálně přidává jméno výjimky
-				int poz = th.getClass().getName().length();
+				final int poz = th.getClass().getName().length();
 				s = s.substring(poz);
 			}
 			return s;
@@ -321,17 +321,17 @@ public final class FThrowable {
 		 * Sestrojí picker nad určitou výjimkou.
 		 */
 
-		private ThrowableChainPicker(Throwable aThr) {
+		private ThrowableChainPicker(final Throwable aThr) {
 			iThr = aThr;
 		}
 
-		public static ThrowableChainPicker from(Throwable aThr) {
+		public static ThrowableChainPicker from(final Throwable aThr) {
 			return aThr == null ? null : new ThrowableChainPicker(aThr);
 		}
 
 		public ThrowableAndSourceMethod[] poskládejŘetězVýjimek() {
 			iJizZarazeneVyjimkyx.clear();
-			List<ThrowableAndSourceMethod> list = new ArrayList<>();
+			final List<ThrowableAndSourceMethod> list = new ArrayList<>();
 			poskládejŘetězVýjimek(list, iThr, null);
 			return list.toArray(new ThrowableAndSourceMethod[list.size()]);
 		}
@@ -344,16 +344,16 @@ public final class FThrowable {
 		 * @param th
 		 *            Výjimka pro zařazení do řetězu.
 		 */
-		private void poskládejŘetězVýjimek(List<ThrowableAndSourceMethod> aList, Throwable th, Method aZdrojMetoda) {
+		private void poskládejŘetězVýjimek(final List<ThrowableAndSourceMethod> aList, final Throwable th, final Method aZdrojMetoda) {
 			if (iJizZarazeneVyjimkyx.contains(th))
 				return; // tato výjimky již v řetězu je
 			iJizZarazeneVyjimkyx.add(th);
-			ThrowableAndSourceMethod vaz1x = new ThrowableAndSourceMethod();
+			final ThrowableAndSourceMethod vaz1x = new ThrowableAndSourceMethod();
 			vaz1x.iThrowable = th;
 			vaz1x.iSourceMethod = aZdrojMetoda;
 			aList.add(vaz1x);
-			ThrowableAndSourceMethod[] vazy = pickoutNestedThrowable(th);
-			for (ThrowableAndSourceMethod vaz : vazy) {
+			final ThrowableAndSourceMethod[] vazy = pickoutNestedThrowable(th);
+			for (final ThrowableAndSourceMethod vaz : vazy) {
 				poskládejŘetězVýjimek(aList, vaz.iThrowable, vaz.iSourceMethod);
 			}
 		}
@@ -366,22 +366,22 @@ public final class FThrowable {
 		 * @author veverka
 		 * @since 31.10.2006 11:04:27
 		 */
-		private static ThrowableAndSourceMethod[] pickoutNestedThrowable(Throwable thr) {
-			List<ThrowableAndSourceMethod> list = new ArrayList<>(3);
+		private static ThrowableAndSourceMethod[] pickoutNestedThrowable(final Throwable thr) {
+			final List<ThrowableAndSourceMethod> list = new ArrayList<>(3);
 			// Standardní getCause() je nutno ověřit přednostně, aby se výjimky správně řadily, pokud někdo doplní getMostSpecificCause,
 			// jak to s voblibó činí spring.
 			if (thr.getCause() != null) {
-				ThrowableAndSourceMethod vaz = new ThrowableAndSourceMethod();
+				final ThrowableAndSourceMethod vaz = new ThrowableAndSourceMethod();
 				vaz.iThrowable = thr.getCause();
 				try {
 					vaz.iSourceMethod = Throwable.class.getMethod("getCause");
-				} catch (NoSuchMethodException e) {
+				} catch (final NoSuchMethodException e) {
 					// INTENTIONAL: budeme ticho, nehodí se vyhazovat výjimku, pokud nelze zjistit metodu, prostě metoda nebude
 				}
 				list.add(vaz);
 			}
-			Method[] mets = thr.getClass().getMethods();
-			for (Method method : mets) {
+			final Method[] mets = thr.getClass().getMethods();
+			for (final Method method : mets) {
 				if (method.getParameterTypes().length != 0)
 					continue; // metoda není bezparametrická
 				if (Modifier.isStatic(method.getModifiers()))
@@ -393,16 +393,16 @@ public final class FThrowable {
 				// tak teď víme, že metoda vrací buď přímo výjimku nebo pole výjimek
 				try {
 					// System.out.p rintln("Volam metodu " + method.getName() + " na " + thr);
-					Object vysledek = method.invoke(thr);
+					final Object vysledek = method.invoke(thr);
 					if (vysledek instanceof Throwable) {
-						ThrowableAndSourceMethod vaz = new ThrowableAndSourceMethod();
+						final ThrowableAndSourceMethod vaz = new ThrowableAndSourceMethod();
 						vaz.iThrowable = (Throwable) vysledek;
 						vaz.iSourceMethod = method;
 						list.add(vaz);
 					} else if (vysledek instanceof Throwable[]) {
-						Throwable[] vyjimky = (Throwable[]) vysledek;
-						for (Throwable aVyjimky : vyjimky) {
-							ThrowableAndSourceMethod vaz = new ThrowableAndSourceMethod();
+						final Throwable[] vyjimky = (Throwable[]) vysledek;
+						for (final Throwable aVyjimky : vyjimky) {
+							final ThrowableAndSourceMethod vaz = new ThrowableAndSourceMethod();
 							vaz.iThrowable = aVyjimky;
 							vaz.iSourceMethod = method;
 							list.add(vaz);
@@ -442,7 +442,7 @@ public final class FThrowable {
 	private static class XTopRenderingException extends Exception {
 		static final long serialVersionUID = 4670301709951704844L;
 
-		public XTopRenderingException(Throwable aCause) {
+		public XTopRenderingException(final Throwable aCause) {
 			super("JO, to je vono", aCause);
 		}
 	}
@@ -460,7 +460,7 @@ public final class FThrowable {
 		void metoda2() throws InvocationTargetException {
 			try {
 				metoda1();
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				throw new InvocationTargetException(e, "Prvni prehozeni");
 			}
 		}
@@ -468,7 +468,7 @@ public final class FThrowable {
 		void metoda3a() {
 			try {
 				metoda2();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -484,52 +484,52 @@ public final class FThrowable {
 		void metoda4() {
 			try {
 				metoda3c();
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				throw new RuntimeException("Treti prehozeni", e);
 			}
 		}
 
-		void dolu1a(RuntimeException e) {
+		void dolu1a(final RuntimeException e) {
 			throw new RuntimeException("Dole poprve", e);
 		}
 
-		void dolu1b(RuntimeException e) {
+		void dolu1b(final RuntimeException e) {
 			try {
 				dolu1a(e);
-			} catch (RuntimeException ee) {
+			} catch (final RuntimeException ee) {
 				throw new RuntimeException("Zespodu B", ee);
 			}
 		}
 
-		void dolu1c(RuntimeException e) {
+		void dolu1c(final RuntimeException e) {
 			try {
 				dolu1b(e);
-			} catch (RuntimeException ee) {
+			} catch (final RuntimeException ee) {
 				throw new RuntimeException("Zespodu C", ee);
 			}
 		}
 
-		void dolu2(RuntimeException e) {
+		void dolu2(final RuntimeException e) {
 			dolu1c(e);
 		}
 
-		void dolu3(RuntimeException e) {
+		void dolu3(final RuntimeException e) {
 			dolu2(e);
 		}
 
-		void dolu4(RuntimeException e) {
+		void dolu4(final RuntimeException e) {
 			dolu3(e);
 		}
 
 		void vyhodVyjimkuChytAPosliDolu() {
 			try {
 				metoda4();
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				dolu4(e);
 			}
 		}
 
-		void uzKonecneVypisVyjimku(Throwable e) {
+		void uzKonecneVypisVyjimku(final Throwable e) {
 			FThrowable.printStackTrace(e, System.err, "ctxnav");
 
 		}
@@ -547,7 +547,7 @@ public final class FThrowable {
 			try {
 				vyhodJenzBudeChycena2();
 				return null;
-			} catch (ParseException e) {
+			} catch (final ParseException e) {
 				return e;
 			}
 		}
@@ -567,7 +567,7 @@ public final class FThrowable {
 		void vyhodVyjimkuChytAVypis1() {
 			try {
 				vyhodVyjimkuChytAPosliDolu();
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				uzKonecneVypisVyjimku(e);
 			}
 		}
@@ -591,7 +591,7 @@ public final class FThrowable {
 
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		new VyjimkovySimulovac().vyhodVyjimkuChytAVypis5();
 	}
 

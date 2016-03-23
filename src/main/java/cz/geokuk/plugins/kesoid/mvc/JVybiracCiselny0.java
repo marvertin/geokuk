@@ -25,7 +25,7 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 	/**
 	 *
 	 */
-	public JVybiracCiselny0(String label) {
+	public JVybiracCiselny0(final String label) {
 		jLabel = new JLabel(label);
 		jSpinner = new JSpinner();
 		jSpinner.setModel(iModel);
@@ -39,7 +39,7 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 	}
 
 	private void lejaut() {
-		GroupLayout layout = new GroupLayout(this);
+		final GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 
 		layout.setAutoCreateGaps(false);
@@ -51,17 +51,17 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 
 	}
 
-	public void onEvent(KeskyNactenyEvent aEvent) {
-		KesBag vsechny = aEvent.getVsechny();
-		int maximalniFavorit = getMaximum(vsechny);
+	public void onEvent(final KeskyNactenyEvent aEvent) {
+		final KesBag vsechny = aEvent.getVsechny();
+		final int maximalniFavorit = getMaximum(vsechny);
 		iModel.setMinimum(0);
 		iModel.setMaximum(maximalniFavorit);
 		iModel.setValue(Math.min((Integer) iModel.getNumber(), maximalniFavorit));
 		setVisible(!iModel.getMinimum().equals(iModel.getMaximum()));
 	}
 
-	public void onEvent(FilterDefinitionChangedEvent event) {
-		FilterDefinition filterDefinition = event.getFilterDefinition();
+	public void onEvent(final FilterDefinitionChangedEvent event) {
+		final FilterDefinition filterDefinition = event.getFilterDefinition();
 		iModel.setValue(getPrah(filterDefinition));
 	}
 
@@ -69,9 +69,9 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 	public void initAfterEventReceiverRegistration() {
 		iModel.addChangeListener(new ChangeListener() {
 			@Override
-			public void stateChanged(ChangeEvent e) {
-				FilterDefinition definition = kesoidModel.getDefinition();
-				Integer prah = (Integer) iModel.getNumber();
+			public void stateChanged(final ChangeEvent e) {
+				final FilterDefinition definition = kesoidModel.getDefinition();
+				final Integer prah = (Integer) iModel.getNumber();
 				setPrah(definition, prah);
 				kesoidModel.setDefinition(definition);
 			}
@@ -85,7 +85,7 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 
 	protected abstract int getMaximum(KesBag vsechny);
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 

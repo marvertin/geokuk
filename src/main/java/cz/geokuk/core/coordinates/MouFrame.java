@@ -2,7 +2,7 @@ package cz.geokuk.core.coordinates;
 
 /**
  * Viditelná masa v mou souřadnicích.
- * 
+ *
  * @author tatinek
  *
  */
@@ -19,7 +19,7 @@ public class MouFrame {
 		return result;
 	}
 
-	public MouFrame(Mou moujz, Mou mousv) {
+	public MouFrame(final Mou moujz, final Mou mousv) {
 		super();
 		this.moujz = moujz;
 		this.mousv = mousv;
@@ -31,14 +31,14 @@ public class MouFrame {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MouFrame other = (MouFrame) obj;
+		final MouFrame other = (MouFrame) obj;
 		if (moujz == null) {
 			if (other.moujz != null)
 				return false;

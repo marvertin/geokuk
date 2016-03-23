@@ -320,7 +320,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override

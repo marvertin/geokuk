@@ -22,7 +22,7 @@ public class SouradniceDoClipboarduAction extends Action0 {
 	/**
 	 *
 	 */
-	public SouradniceDoClipboarduAction(Mouable mouable) {
+	public SouradniceDoClipboarduAction(final Mouable mouable) {
 		super(null);
 		this.mouable = mouable;
 		putValue(NAME, "Souřadnice do clipboardu");
@@ -32,12 +32,12 @@ public class SouradniceDoClipboarduAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		Mouable m = mouable;
 		if (m == null) {
 			m = poziceq.getPoziceMouable();
@@ -47,13 +47,13 @@ public class SouradniceDoClipboarduAction extends Action0 {
 		poziceModel.souradniceDoClipboardu(m.getMou());
 	}
 
-	public void onEvent(PoziceChangedEvent event) {
+	public void onEvent(final PoziceChangedEvent event) {
 		poziceq = event.poziceq;
 		setEnabled(mouable != null || !poziceq.isNoPosition());
 	}
 
 	@Override
-	public void inject(PoziceModel poziceModel) {
+	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
 }

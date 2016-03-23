@@ -22,7 +22,7 @@ public class SwitchSadaAction extends ToggleAction0 {
 	/**
 	 *
 	 */
-	public SwitchSadaAction(ASada sada, Icon ikonaSady) {
+	public SwitchSadaAction(final ASada sada, final Icon ikonaSady) {
 		super(sada.name());
 		this.sada = sada;
 		super.putValue(SMALL_ICON, ikonaSady);
@@ -40,12 +40,12 @@ public class SwitchSadaAction extends ToggleAction0 {
 	// super.putValue(SHORT_DESCRIPTION, sestavJmeno());
 	// }
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		if (nastaveno) {
 			kesoidModel.setJmenoAktualniSadyIkon(sada);
 		}

@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 /**
  * Dny v týdnu.
- * 
+ *
  * @author <a href="mailto:Jiri.Polak@turboconsult.cz">Jiří Polák</a>
  * @version $Revision: 1 $
  * @see "TW0139Util.vjp"
@@ -17,7 +17,7 @@ public enum EDayOfWeek {
 
 	private final int			iDayOfWeakAsCalendar;
 
-	EDayOfWeek(int aDayOfWeakAsCalendar) {
+	EDayOfWeek(final int aDayOfWeakAsCalendar) {
 		iDayOfWeakAsCalendar = aDayOfWeakAsCalendar;
 	}
 
@@ -27,16 +27,16 @@ public enum EDayOfWeek {
 
 	/**
 	 * Vrátí honodu dne v týdnu na základě kalendáře.
-	 * 
+	 *
 	 * @param aCalendarValue
 	 * @return
 	 */
-	public static EDayOfWeek fromCalendarValue(int aCalendarValue) {
+	public static EDayOfWeek fromCalendarValue(final int aCalendarValue) {
 		if (sCalendarNaNas == null) {
 			// Zde se spoléháme trochu nesprávně na to, jak jsou konstanty
 			// ve tříde Calendar implementovány.
 			sCalendarNaNas = new EDayOfWeek[8];
-			for (EDayOfWeek dayOfWeek : EDayOfWeek.values()) {
+			for (final EDayOfWeek dayOfWeek : EDayOfWeek.values()) {
 				sCalendarNaNas[dayOfWeek.iDayOfWeakAsCalendar] = dayOfWeek;
 			}
 		}

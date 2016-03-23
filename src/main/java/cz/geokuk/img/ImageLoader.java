@@ -20,7 +20,7 @@ public class ImageLoader {
 
 	/**
 	 * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */
@@ -36,7 +36,7 @@ public class ImageLoader {
 
 	/**
 	 * Nahraje obeázek a dá do keše, vhodné tedy jen pro malé často zobrazované obrázky
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */

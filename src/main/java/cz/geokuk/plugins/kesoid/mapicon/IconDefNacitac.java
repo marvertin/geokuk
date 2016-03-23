@@ -33,37 +33,37 @@ public class IconDefNacitac {
 	private final Genom				genom;
 	private final IkonNacitacSada	iIkonNacitacSada;
 
-	public IconDefNacitac(Genom genom, String jmenoSPriponou, URL url, IkonNacitacSada aIkonNacitacSada) {
+	public IconDefNacitac(final Genom genom, final String jmenoSPriponou, final URL url, final IkonNacitacSada aIkonNacitacSada) {
 		this.jmenoSPriponou = jmenoSPriponou;
 		this.url = url;
 		this.genom = genom;
 		iIkonNacitacSada = aIkonNacitacSada;
 	}
 
-	public IconDef loadIconDef(ImagantCache imagantCache) {
+	public IconDef loadIconDef(final ImagantCache imagantCache) {
 		try {
 			return load(imagantCache);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Selhalo čtení obrázku ikony, tak obrázek nemůžeme použít");
 			log.error("Selhalo čtení obrázku ikony, tak obrázek nemůžeme použít", e);
 			return null;
 		}
 	}
 
-	private IconDef load(ImagantCache imagantCache) throws IOException {
+	private IconDef load(final ImagantCache imagantCache) throws IOException {
 		idp = new IkonDrawingProperties();
 		idp.url = url;
-		String machovanec = jmenoSPriponou.startsWith("_.") ? jmenoSPriponou.substring(1) : jmenoSPriponou;
-		Matcher mat = pat.matcher(machovanec);
+		final String machovanec = jmenoSPriponou.startsWith("_.") ? jmenoSPriponou.substring(1) : jmenoSPriponou;
+		final Matcher mat = pat.matcher(machovanec);
 		if (!mat.matches()) {
 			log.error("Jméno \"" + jmenoSPriponou + "\" nevyhovuje regulárnímu výrazu: " + pat);
 			return null;
 		}
-		String grupaName = mat.group(1);
+		final String grupaName = mat.group(1);
 
-		String wptsym = odstranZazavorkovaneNesouboroviteZnaky(mat.group(2));
+		final String wptsym = odstranZazavorkovaneNesouboroviteZnaky(mat.group(2));
 
-		Set<Alela> alely = nactiAlely(mat.group(3));
+		final Set<Alela> alely = nactiAlely(mat.group(3));
 		Alela alelaSym = null;
 		if (wptsym != null && wptsym.trim().length() > 0) {
 			alelaSym = genom.alelaSym(wptsym, grupaName);
@@ -71,7 +71,7 @@ public class IconDefNacitac {
 			alely.add(alelaSym);
 		}
 		// rozmnoz(alely, sese);
-		String sufix = mat.group(7);
+		final String sufix = mat.group(7);
 		if (isProperties(sufix)) {
 			nactiObrazekDefinovanyVPropertach();
 		} else { // zkusíme to považovat za obrázek
@@ -80,9 +80,9 @@ public class IconDefNacitac {
 
 		idp.xoffset = zpracujNaOffsete(mat.group(4));
 		idp.yoffset = zpracujNaOffsete(mat.group(5));
-		int priorita = zpracujNaPrioritu(mat.group(6));
+		final int priorita = zpracujNaPrioritu(mat.group(6));
 
-		IconDef iconDef = new IconDef();
+		final IconDef iconDef = new IconDef();
 		iconDef.setAlelyx(alely);
 		iconDef.setAlelaSym(alelaSym); // nastavit, aby se podle ní dalo rychle filtrovat, může být i null, pak je to bez alely a filtruje se vždy.
 		iconDef.idp = idp;
@@ -106,19 +106,19 @@ public class IconDefNacitac {
 		return s;
 	}
 
-	private Set<Alela> nactiAlely(String alelygroup) {
-		Set<Alela> alely = new HashSet<>();
-		for (String s : alelygroup.split("_")) {
+	private Set<Alela> nactiAlely(final String alelygroup) {
+		final Set<Alela> alely = new HashSet<>();
+		for (final String s : alelygroup.split("_")) {
 			if (s.isEmpty()) {
 				continue;
 			}
 			Alela alela;
-			int pozminus = s.indexOf('-');
+			final int pozminus = s.indexOf('-');
 			if (pozminus < 0) { // žádné mínus, alela musí existovat
 				alela = genom.seekAlela(s);
 			} else {
-				String alelaName = s.substring(pozminus + 1);
-				String genName = s.substring(0, pozminus);
+				final String alelaName = s.substring(pozminus + 1);
+				final String genName = s.substring(0, pozminus);
 				alela = genom.alela(alelaName, genName);
 				if (alela == null)
 					continue;
@@ -128,35 +128,35 @@ public class IconDefNacitac {
 		return alely;
 	}
 
-	private int zpracujNaPrioritu(String zadano) {
+	private int zpracujNaPrioritu(final String zadano) {
 		if (zadano == null)
 			return 5;
 		return Integer.parseInt(zadano.substring(2));
 	}
 
-	private int zpracujNaOffsete(String zadano) {
+	private int zpracujNaOffsete(final String zadano) {
 		if (zadano == null)
 			return 0;
-		int zadanapozice = Integer.parseInt(zadano.substring(2));
+		final int zadanapozice = Integer.parseInt(zadano.substring(2));
 		return zadanapozice;
 	}
 
 	private void nactiObrazekDefinovanyVPropertach() throws IOException {
-		Properties prop = new Properties();
+		final Properties prop = new Properties();
 		prop.load(new BufferedInputStream(idp.url.openStream()));
 		// idp.width = Integer.parseInt(prop.getProperty("width"));
 		// idp.height= Integer.parseInt(prop.getProperty("height"));
 		idp.properties = prop;
-		String className = prop.getProperty("class");
+		final String className = prop.getProperty("class");
 		try {
 			idp.vykreslovac = (Drawer0) Class.forName(className).newInstance();
 			naplnVykreslovac(idp.vykreslovac);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void otestujAVydefinujSkutecnyObrazek(ImagantCache imagantCache) throws IOException {
+	private void otestujAVydefinujSkutecnyObrazek(final ImagantCache imagantCache) throws IOException {
 		// @SuppressWarnings("unused") // jen pro kontrolu
 		// BufferedImage bi = ImageIO.read(idp.url);
 		// idp.width = bi.getWidth();
@@ -169,11 +169,11 @@ public class IconDefNacitac {
 	/**
 	 * @param aVykreslovac
 	 */
-	private void naplnVykreslovac(Drawer0 vykreslovac) {
+	private void naplnVykreslovac(final Drawer0 vykreslovac) {
 		vykreslovac.setIdp(idp);
 	}
 
-	private boolean isProperties(String sufix) {
+	private boolean isProperties(final String sufix) {
 		return sufix.equals("properties");
 	}
 

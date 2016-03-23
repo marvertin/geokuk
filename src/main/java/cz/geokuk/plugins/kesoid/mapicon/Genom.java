@@ -104,13 +104,13 @@ public class Genom {
 	public Grupa						GRUPA_gcawp;
 	public Grupa						GRUPA_gc;
 
-	private Alela coale(String alelaName, String displayName) {
-		Alela alela = makeAlela(alelaName);
+	private Alela coale(final String alelaName, final String displayName) {
+		final Alela alela = makeAlela(alelaName);
 		alela.setDisplayName(displayName);
 		return alela;
 	}
 
-	private synchronized Alela makeAlela(String alelaName) {
+	private synchronized Alela makeAlela(final String alelaName) {
 		Alela alela = alely.get(alelaName);
 		if (alela == null) {
 			alela = new Alela(alelaName, alely.size());
@@ -119,13 +119,13 @@ public class Genom {
 		return alela;
 	}
 
-	private synchronized Alela alela(String alelaName, Gen gen, String jmenoGrupy) {
-		Alela alela = makeAlela(alelaName);
+	private synchronized Alela alela(final String alelaName, final Gen gen, final String jmenoGrupy) {
+		final Alela alela = makeAlela(alelaName);
 		gen.add(alela, jmenoGrupy);
 		return alela;
 	}
 
-	public Alela seekAlela(String alelaName) {
+	public Alela seekAlela(final String alelaName) {
 		Alela alela = alely.get(alelaName);
 		if (alela == null) {
 			log.warn("Alela [{}] neni definovana!", alelaName);
@@ -135,11 +135,11 @@ public class Genom {
 		return alela;
 	}
 
-	public Alela locateAlela(String alelaName) {
+	public Alela locateAlela(final String alelaName) {
 		return alely.get(alelaName);
 	}
 
-	private synchronized Gen gen(String displayName, boolean vypsatelnyVeZhasinaci) {
+	private synchronized Gen gen(final String displayName, final boolean vypsatelnyVeZhasinaci) {
 		Gen gen = geny.get(displayName);
 		if (gen == null) {
 			gen = new Gen(displayName, this, vypsatelnyVeZhasinaci);
@@ -150,9 +150,9 @@ public class Genom {
 		return gen;
 	}
 
-	public Genotyp getGenotypProAlelu(Alela alela) {
-		Set<Alela> alely = new HashSet<>();
-		for (Gen gen : genyList) {
+	public Genotyp getGenotypProAlelu(final Alela alela) {
+		final Set<Alela> alely = new HashSet<>();
+		for (final Gen gen : genyList) {
 			if (gen.getAlely().contains(alela)) {
 				alely.add(alela);
 			} else {
@@ -163,8 +163,8 @@ public class Genom {
 	}
 
 	public Genotyp getGenotypVychozi() {
-		Set<Alela> alely = new HashSet<>();
-		for (Gen gen : genyList) {
+		final Set<Alela> alely = new HashSet<>();
+		for (final Gen gen : genyList) {
 			assert gen != null;
 			alely.add(gen.getVychoziAlela());
 		}
@@ -266,7 +266,7 @@ public class Genom {
 		currentGen = null;
 	}
 
-	private void ale(Alela alela) {
+	private void ale(final Alela alela) {
 		currentGen.add(alela, null);
 	}
 
@@ -277,12 +277,12 @@ public class Genom {
 	 * @param genName
 	 * @return
 	 */
-	public Alela alela(String alelaName, String genName) {
-		Gen gen = gen(genName, false);
+	public Alela alela(final String alelaName, final String genName) {
+		final Gen gen = gen(genName, false);
 		if (gen.getAlely().size() == 0) {
 			gen.add(makeAlela(":" + genName), null);
 		}
-		Alela alela = makeAlela(alelaName);
+		final Alela alela = makeAlela(alelaName);
 		if (alela.hasGen()) {
 			if (alela.getGen() == gen) {
 				return alela; // tak vrátíme tu alelu
@@ -296,26 +296,26 @@ public class Genom {
 		}
 	}
 
-	public Alela alelaSym(String wptsym, String jmenoGrupy) {
+	public Alela alelaSym(final String wptsym, final String jmenoGrupy) {
 		return alela(wptsym, symGen, jmenoGrupy);
 	}
 
-	public Set<Alela> namesToAlely(Set<String> jmenaAlel) {
-		Set<Alela> alely = new HashSet<>();
-		for (String jmeno : jmenaAlel) {
+	public Set<Alela> namesToAlely(final Set<String> jmenaAlel) {
+		final Set<Alela> alely = new HashSet<>();
+		for (final String jmeno : jmenaAlel) {
 			if (jmeno != null && jmeno.length() > 0) {
-				Alela alela = seekAlela(jmeno);
+				final Alela alela = seekAlela(jmeno);
 				alely.add(alela);
 			}
 		}
 		return alely;
 	}
 
-	public Set<Alela> namesToAlelyIgnorujNeexistujici(Set<String> jmenaAlel) {
-		Set<Alela> alely = new HashSet<>();
-		for (String jmeno : jmenaAlel) {
+	public Set<Alela> namesToAlelyIgnorujNeexistujici(final Set<String> jmenaAlel) {
+		final Set<Alela> alely = new HashSet<>();
+		for (final String jmeno : jmenaAlel) {
 			if (jmeno != null && jmeno.length() > 0) {
-				Alela alela = locateAlela(jmeno);
+				final Alela alela = locateAlela(jmeno);
 				if (alela != null) {
 					alely.add(alela);
 				}
@@ -328,7 +328,7 @@ public class Genom {
 		return genyList;
 	}
 
-	public boolean existsGen(String displayName) {
+	public boolean existsGen(final String displayName) {
 		return geny.containsKey(displayName);
 	}
 
@@ -336,7 +336,7 @@ public class Genom {
 		return symGen;
 	}
 
-	boolean isAlelaSym(Alela alela) {
+	boolean isAlelaSym(final Alela alela) {
 		return alela.getGen() == symGen;
 	}
 
@@ -352,11 +352,11 @@ public class Genom {
 			pocty = new int[1000];
 		}
 
-		public void add(Alela alela) {
+		public void add(final Alela alela) {
 			assert alela != null;
-			int poradi = alela.getCelkovePoradi();
+			final int poradi = alela.getCelkovePoradi();
 			if (poradi >= pocty.length) {
-				int[] p = pocty;
+				final int[] p = pocty;
 				pocty = new int[poradi + 1000];
 				System.arraycopy(p, 0, pocty, 0, p.length);
 
@@ -365,9 +365,9 @@ public class Genom {
 		}
 
 		public CounterMap<Alela> getCounterMap() {
-			CounterMap<Alela> cm = new CCounterMap<>();
-			for (Alela alela : alely.values()) {
-				int celkovePoradi = alela.getCelkovePoradi();
+			final CounterMap<Alela> cm = new CCounterMap<>();
+			for (final Alela alela : alely.values()) {
+				final int celkovePoradi = alela.getCelkovePoradi();
 				cm.set(alela, celkovePoradi >= pocty.length ? 0 : pocty[celkovePoradi]);
 			}
 			return cm;

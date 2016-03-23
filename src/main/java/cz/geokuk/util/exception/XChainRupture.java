@@ -2,7 +2,7 @@ package cz.geokuk.util.exception;
 
 /**
  * Výjimka přerušující řetězec výjimek
- * 
+ *
  * @author veverka
  *
  */
@@ -12,7 +12,7 @@ public class XChainRupture extends RuntimeException {
 	private final AExcId	iExceptionId;
 	private final String	iCircumstance;
 
-	public XChainRupture(AExcId aExceptionId, String aCircumstance) {
+	public XChainRupture(final AExcId aExceptionId, final String aCircumstance) {
 		iExceptionId = aExceptionId;
 		iCircumstance = aCircumstance;
 	}
@@ -24,7 +24,7 @@ public class XChainRupture extends RuntimeException {
 
 	/**
 	 * Identifikace výjimky, jak je uložena v servrovské repozitoři.
-	 * 
+	 *
 	 * @return
 	 */
 	public AExcId getExceptionId() {

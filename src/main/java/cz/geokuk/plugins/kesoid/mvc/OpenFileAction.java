@@ -17,19 +17,19 @@ public class OpenFileAction extends Action0 {
 
 	private final File			fileToOpen;
 
-	public OpenFileAction(File file) {
+	public OpenFileAction(final File file) {
 		super("Otevřít v defaultním programu");
 		fileToOpen = file;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (!Desktop.isDesktopSupported()) {
 			log.error("Unable to retrieve Desktop environment. not supported on current platform!");
 		}
 		try {
 			Desktop.getDesktop().open(fileToOpen);
-		} catch (IOException exception) {
+		} catch (final IOException exception) {
 			log.error("Unable to open file " + fileToOpen, exception);
 		}
 	}

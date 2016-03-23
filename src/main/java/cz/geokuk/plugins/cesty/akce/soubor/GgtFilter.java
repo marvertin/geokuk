@@ -7,7 +7,7 @@ import javax.swing.filechooser.FileFilter;
 class GgtFilter extends FileFilter {
 
 	@Override
-	public boolean accept(File pathname) {
+	public boolean accept(final File pathname) {
 		if (pathname.isDirectory())
 			return true;
 		if (pathname.getName().toLowerCase().endsWith(".ggt"))

@@ -16,7 +16,7 @@ public abstract class MenuStrujce {
 
 	protected Factory				factory;
 
-	public MenuStrujce(JMenuBar menuBar, JGeokukToolbar toolBar) {
+	public MenuStrujce(final JMenuBar menuBar, final JGeokukToolbar toolBar) {
 		this.menuBar = menuBar;
 		tb = toolBar;
 	}
@@ -25,15 +25,15 @@ public abstract class MenuStrujce {
 		return menuBar;
 	}
 
-	protected void menu(String name, String aTooltip) {
+	protected void menu(final String name, final String aTooltip) {
 		menu = new JMenu(name);
 		menu.setToolTipText(aTooltip);
 		menuBar.add(menu);
 	}
 
-	protected void item(Action action) {
+	protected void item(final Action action) {
 		if (action instanceof ToggleAction0) {
-			ToggleAction0 moa = (ToggleAction0) action;
+			final ToggleAction0 moa = (ToggleAction0) action;
 			item = new JCheckBoxMenuItem();
 			moa.join(item);
 			menu.add(item);
@@ -43,7 +43,7 @@ public abstract class MenuStrujce {
 		}
 	}
 
-	protected void item(ToggleAction0 action, ButtonGroup bg) {
+	protected void item(final ToggleAction0 action, final ButtonGroup bg) {
 		item = new JRadioButtonMenuItem(action);
 		action.join(item);
 		menu.add(item);
@@ -54,7 +54,7 @@ public abstract class MenuStrujce {
 		menu.addSeparator();
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 

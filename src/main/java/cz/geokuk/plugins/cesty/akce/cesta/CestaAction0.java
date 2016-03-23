@@ -10,7 +10,7 @@ public abstract class CestaAction0 extends PositionedAction0 {
 	private static final long	serialVersionUID	= 1L;
 	private final Cesta			kontextovaCesta;
 
-	public CestaAction0(Cesta kontextovaCesta) {
+	public CestaAction0(final Cesta kontextovaCesta) {
 		// System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-konstruktor " + getClass());
 		this.kontextovaCesta = kontextovaCesta;
 		if (kontextovaCesta != null) {
@@ -24,7 +24,7 @@ public abstract class CestaAction0 extends PositionedAction0 {
 	}
 
 	private void vyhodnotitPovolenost() {
-		Cesta cesta = getCesta();
+		final Cesta cesta = getCesta();
 		if (cesta == null) {
 			setEnabled(false);
 		} else {
@@ -38,8 +38,8 @@ public abstract class CestaAction0 extends PositionedAction0 {
 	}
 
 	@Override
-	public final void actionPerformed(ActionEvent aE) {
-		Cesta cesta = getCesta();
+	public final void actionPerformed(final ActionEvent aE) {
+		final Cesta cesta = getCesta();
 		if (cesta != null) {
 			provedProCestu(cesta);
 		}
@@ -47,7 +47,7 @@ public abstract class CestaAction0 extends PositionedAction0 {
 
 	/**
 	 * Pokud je daný Cesta, tak se nechá natavit jméno. Natavovací metoda také ví, zda je akce z kontexotvého menu nebo z hlavního
-	 * 
+	 *
 	 * @param Cesta
 	 * @param aZKontextovehoMenu
 	 */
@@ -55,7 +55,7 @@ public abstract class CestaAction0 extends PositionedAction0 {
 
 	/**
 	 * Zda se pro dany Cesta ma akce povolit.
-	 * 
+	 *
 	 * @param Cesta
 	 *            Nikdy nebude predano null
 	 * @return
@@ -64,7 +64,7 @@ public abstract class CestaAction0 extends PositionedAction0 {
 
 	/**
 	 * Provedení akce pro daný Cesta.
-	 * 
+	 *
 	 * @param Cesta
 	 */
 	protected abstract void provedProCestu(Cesta cesta);

@@ -31,10 +31,10 @@ public class CenterPoziceAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		vyrezModel.vystredovatNaPozici();
 	}
 

@@ -11,7 +11,7 @@ public class Filex {
 	private final boolean	relativeToProgram;
 	private final boolean	active;
 
-	public Filex(File file, boolean relativeToProgram, boolean active) {
+	public Filex(final File file, final boolean relativeToProgram, final boolean active) {
 		super();
 		this.file = file;
 		this.relativeToProgram = relativeToProgram;
@@ -28,7 +28,7 @@ public class Filex {
 
 	/**
 	 * Pokud je nastaven adresář jako aktivní, tak bere efektivní soubor, jinak null.
-	 * 
+	 *
 	 * @return
 	 */
 	public File getEffectiveFileIfActive() {
@@ -66,12 +66,12 @@ public class Filex {
 	 * @throws java.lang.NullPointerException
 	 *             if the file path is equal to null.
 	 */
-	public static File canonize(File aPath) {
+	public static File canonize(final File aPath) {
 		// Nechť jsou v cestě lomítka dle operačního systému
 		String path = aPath.getAbsolutePath().replace('/', File.separatorChar).replace('\\', File.separatorChar);
 
 		// Ujistěme se, že máme absolutní cestu. Relativní cesty není dobré normalizovat.
-		int colon = path.indexOf(':');
+		final int colon = path.indexOf(':');
 
 		if (!path.startsWith(File.separator) && !(path.length() >= 2 && Character.isLetter(path.charAt(0)) && colon == 1)) {
 			throw new IllegalArgumentException(path + " is not an absolute path");
@@ -84,8 +84,8 @@ public class Filex {
 
 			dosWithDrive = true;
 
-			char[] ca = path.replace('/', '\\').toCharArray();
-			StringBuilder sbRoot = new StringBuilder();
+			final char[] ca = path.replace('/', '\\').toCharArray();
+			final StringBuilder sbRoot = new StringBuilder();
 			for (int i = 0; i < colon; i++) {
 				sbRoot.append(Character.toUpperCase(ca[i]));
 			}
@@ -96,7 +96,7 @@ public class Filex {
 			root = sbRoot.toString();
 
 			// Eliminate consecutive slashes after the drive spec
-			StringBuilder sbPath = new StringBuilder();
+			final StringBuilder sbPath = new StringBuilder();
 			for (int i = colon + 1; i < ca.length; i++) {
 				if ((ca[i] != '\\') || (ca[i] == '\\' && ca[i - 1] != '\\')) {
 					sbPath.append(ca[i]);
@@ -118,11 +118,11 @@ public class Filex {
 			}
 		}
 
-		Stack<String> s = new Stack<>();
+		final Stack<String> s = new Stack<>();
 		s.push(root);
-		StringTokenizer tok = new StringTokenizer(path, File.separator);
+		final StringTokenizer tok = new StringTokenizer(path, File.separator);
 		while (tok.hasMoreTokens()) {
-			String thisToken = tok.nextToken();
+			final String thisToken = tok.nextToken();
 			if (!".".equals(thisToken)) {
 				if ("..".equals(thisToken)) {
 					if (s.size() >= 2) {
@@ -134,7 +134,7 @@ public class Filex {
 			}
 		}
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < s.size(); i++) {
 			if (i > 1) {
 				// not before the filesystem root and not after it, since root
@@ -166,14 +166,14 @@ public class Filex {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Filex other = (Filex) obj;
+		final Filex other = (Filex) obj;
 		if (file == null) {
 			if (other.file != null)
 				return false;

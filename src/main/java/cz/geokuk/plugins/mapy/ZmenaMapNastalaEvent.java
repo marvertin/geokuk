@@ -17,7 +17,7 @@ public class ZmenaMapNastalaEvent extends Event0<MapyModel> {
 	/**
 	 * @param aKaSet
 	 */
-	public ZmenaMapNastalaEvent(KaSet aKaSet) {
+	public ZmenaMapNastalaEvent(final KaSet aKaSet) {
 		kaSet = aKaSet;
 	}
 

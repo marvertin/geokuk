@@ -29,9 +29,9 @@ public class JZoomovaciObdelnik extends JSingleSlide0 {
 	}
 
 	@Override
-	protected void paintComponent(Graphics aG) {
-		Graphics2D g = (Graphics2D) aG;
-		Rectangle rect = getRectangle();
+	protected void paintComponent(final Graphics aG) {
+		final Graphics2D g = (Graphics2D) aG;
+		final Rectangle rect = getRectangle();
 		if (rect != null) {
 
 			Stroke stroke = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3, 3 }, 0);
@@ -47,8 +47,8 @@ public class JZoomovaciObdelnik extends JSingleSlide0 {
 			g.drawLine(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
 			g.drawLine(rect.x + rect.width, rect.y, rect.x, rect.y + rect.height);
 
-			Mou stred = getSoord().transform(getRectangle()).getStred();
-			Point p = getSoord().transform(stred);
+			final Mou stred = getSoord().transform(getRectangle()).getStred();
+			final Point p = getSoord().transform(stred);
 			g.fillOval(p.x - 5, p.y - 5, 10, 10);
 			// Rectangle r = getRectangle();
 			//
@@ -74,7 +74,7 @@ public class JZoomovaciObdelnik extends JSingleSlide0 {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e, MouseGestureContext ctx) {
+	public void mousePressed(final MouseEvent e, final MouseGestureContext ctx) {
 		if (e.isShiftDown()) {
 			pocatek = e.getPoint();
 		}
@@ -83,7 +83,7 @@ public class JZoomovaciObdelnik extends JSingleSlide0 {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseReleased(final MouseEvent e, final MouseGestureContext ctx) {
 		if (e.isShiftDown() && getRectangle() != null) {
 			// System.out.println("Budeme zoomovat na " + getRectangle());
 			vyrezModel.zoomTo(getSoord().transform(getRectangle()));
@@ -93,7 +93,7 @@ public class JZoomovaciObdelnik extends JSingleSlide0 {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
 		Point point = e.getPoint();
 		if (!e.isShiftDown()) {
 			point = null;
@@ -102,7 +102,7 @@ public class JZoomovaciObdelnik extends JSingleSlide0 {
 		chain().mouseDragged(e, ctx);
 	}
 
-	private void changeEndPoint(Point point) {
+	private void changeEndPoint(final Point point) {
 		Rectangle rect = getRectangle();
 		if (rect != null) {
 			rect.width++;
@@ -121,7 +121,7 @@ public class JZoomovaciObdelnik extends JSingleSlide0 {
 		}
 	}
 
-	public void inject(VyrezModel vyrezModel) {
+	public void inject(final VyrezModel vyrezModel) {
 		this.vyrezModel = vyrezModel;
 	}
 

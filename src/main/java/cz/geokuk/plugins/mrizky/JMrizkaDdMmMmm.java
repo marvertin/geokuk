@@ -22,7 +22,7 @@ public class JMrizkaDdMmMmm extends JMrizkaWgs {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mrizka.JMrizka0#initPainting(mrizka.JMrizka0.Vykreslovac)
 	 */
 	@Override
@@ -53,7 +53,7 @@ public class JMrizkaDdMmMmm extends JMrizkaWgs {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
 	 */
 	@Override

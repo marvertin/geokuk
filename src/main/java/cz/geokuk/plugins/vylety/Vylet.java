@@ -9,7 +9,7 @@ public class Vylet {
 	private final Set<Kesoid>	ano	= new HashSet<>();
 	private final Set<Kesoid>	ne	= new HashSet<>();
 
-	void removeAll(EVylet evyl) {
+	void removeAll(final EVylet evyl) {
 		switch (evyl) {
 		case ANO:
 			ano.clear();
@@ -24,8 +24,8 @@ public class Vylet {
 		}
 	}
 
-	EVylet add(EVylet evyl, Kesoid kes) {
-		EVylet evylPuvodni = get(kes);
+	EVylet add(final EVylet evyl, final Kesoid kes) {
+		final EVylet evylPuvodni = get(kes);
 		switch (evyl) {
 		case ANO:
 			ano.add(kes);
@@ -45,7 +45,7 @@ public class Vylet {
 		return evylPuvodni;
 	}
 
-	public EVylet get(Kesoid kes) {
+	public EVylet get(final Kesoid kes) {
 		if (ano.contains(kes))
 			return EVylet.ANO;
 		if (ne.contains(kes))
@@ -53,7 +53,7 @@ public class Vylet {
 		return EVylet.NEVIM;
 	}
 
-	public Set<Kesoid> get(EVylet evyl) {
+	public Set<Kesoid> get(final EVylet evyl) {
 		Set<Kesoid> set;
 		switch (evyl) {
 		case ANO:

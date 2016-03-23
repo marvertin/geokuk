@@ -31,7 +31,7 @@ public class KachleUmisteniSouboru extends UmisteniSouboru0 {
 	/**
 	 * @param aKesDir
 	 */
-	private void check(Filex file) {
+	private void check(final Filex file) {
 		if (file == null)
 			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
 	}
@@ -40,14 +40,14 @@ public class KachleUmisteniSouboru extends UmisteniSouboru0 {
 	 * @param kachleCacheDir
 	 *            the kachleCacheDir to set
 	 */
-	public void setKachleCacheDir(Filex kachleCacheDir) {
+	public void setKachleCacheDir(final Filex kachleCacheDir) {
 		check(kachleCacheDir);
 		this.kachleCacheDir = kachleCacheDir;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -60,18 +60,18 @@ public class KachleUmisteniSouboru extends UmisteniSouboru0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		KachleUmisteniSouboru other = (KachleUmisteniSouboru) obj;
+		final KachleUmisteniSouboru other = (KachleUmisteniSouboru) obj;
 		if (kachleCacheDir == null) {
 			if (other.kachleCacheDir != null)
 				return false;

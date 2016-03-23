@@ -24,7 +24,7 @@ public class JMrizkaDdMmSs extends JMrizkaWgs {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mrizka.JMrizka0#initPainting(mrizka.JMrizka0.Vykreslovac)
 	 */
 	@Override

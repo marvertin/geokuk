@@ -8,12 +8,12 @@ public class Wgsd {
 	public Wgsd() {
 	}
 
-	public Wgsd(double dlat, double dlon) {
+	public Wgsd(final double dlat, final double dlon) {
 		this.lat = dlat;
 		this.lon = dlon;
 	}
 
-	public Wgsd(Wgsd wgs) {
+	public Wgsd(final Wgsd wgs) {
 		lat = wgs.lat;
 		lon = wgs.lon;
 	}
@@ -31,14 +31,14 @@ public class Wgsd {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Wgsd other = (Wgsd) obj;
+		final Wgsd other = (Wgsd) obj;
 		if (Double.doubleToLongBits(lat) != Double.doubleToLongBits(other.lat))
 			return false;
 		if (Double.doubleToLongBits(lon) != Double.doubleToLongBits(other.lon))
@@ -46,11 +46,11 @@ public class Wgsd {
 		return true;
 	}
 
-	public Wgsd add(double dlat, double dlon) {
+	public Wgsd add(final double dlat, final double dlon) {
 		return new Wgsd(this.lat + dlat, this.lon + dlon);
 	}
 
-	public Wgsd sub(double dlat, double dlon) {
+	public Wgsd sub(final double dlat, final double dlon) {
 		return new Wgsd(this.lat - dlat, this.lon - dlon);
 	}
 

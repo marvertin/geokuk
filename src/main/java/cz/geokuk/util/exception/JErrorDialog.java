@@ -76,7 +76,7 @@ public class JErrorDialog extends JMyDialog0 {
 	@Override
 	protected void initComponents() {
 
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		add(panel);
 
@@ -84,7 +84,7 @@ public class JErrorDialog extends JMyDialog0 {
 		panel.add(jErrorTable);
 
 		jVymaz = new JButton("Vymaž vše");
-		Box box = Box.createHorizontalBox();
+		final Box box = Box.createHorizontalBox();
 		panel.add(box, BorderLayout.SOUTH);
 
 		jOtviracVyjimky = new JButton();
@@ -99,7 +99,7 @@ public class JErrorDialog extends JMyDialog0 {
 		jVymaz.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				jErrorTable.getProblemList().clear();
 				jErrorTable.revalidate();
 				jErrorTable.repaint();
@@ -112,9 +112,9 @@ public class JErrorDialog extends JMyDialog0 {
 		lsm.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
-			public void valueChanged(ListSelectionEvent event) {
+			public void valueChanged(final ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting()) {
-					int row = lsm.getLeadSelectionIndex();
+					final int row = lsm.getLeadSelectionIndex();
 					currentExcId = jErrorTable.tableModel.getProblemlist().get(row).excId;
 					if (currentExcId != null) {
 						jOtviracVyjimky.setText("Zobraz " + currentExcId + "");
@@ -131,8 +131,8 @@ public class JErrorDialog extends JMyDialog0 {
 		jOtviracVyjimky.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent aE) {
-				URL url = FExceptionDumper.getExceptionUrl(currentExcId);
+			public void actionPerformed(final ActionEvent aE) {
+				final URL url = FExceptionDumper.getExceptionUrl(currentExcId);
 				BrowserOpener.displayURL(url);
 			}
 		});
@@ -140,23 +140,23 @@ public class JErrorDialog extends JMyDialog0 {
 		pack();
 	}
 
-	public void addProblem(String problem, AExcId excid) {
+	public void addProblem(final String problem, final AExcId excid) {
 		jErrorTable.addProblem(problem, excid);
 		jErrorTable.repaint(50);
 	}
 
-	public static void main(String args[]) {
+	public static void main(final String args[]) {
 
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
 
-		JFrame frm = new JFrame();
+		final JFrame frm = new JFrame();
 		frm.setVisible(true);
 
 		new Timer(1000, new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent aE) {
+			public void actionPerformed(final ActionEvent aE) {
 				System.out.println("LOPU");
 				FError.report("To je teda texytik " + System.currentTimeMillis());
 			}

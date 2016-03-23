@@ -11,7 +11,7 @@ public class KaLoc {
 
 	/**
 	 * Konstruuje lokaci kachle na základě snalosti souřadnic severozápadního rohu.
-	 * 
+	 *
 	 * @param mouSZ
 	 * @param moumer
 	 * @return
@@ -25,7 +25,7 @@ public class KaLoc {
 
 	/**
 	 * Konstruuje lokaci kachle na základě snalosti souřadnic jihozápadního rohu.
-	 * 
+	 *
 	 * @param mouJZ
 	 * @param moumer
 	 * @return
@@ -43,7 +43,7 @@ public class KaLoc {
 	 * Vrátí souřadnice JZ rohu.
 	 *
 	 * Je to potřeba jen kvůli prioritnímu stahování od středu.
-	 * 
+	 *
 	 * @return
 	 */
 	public Mou getMouJZ() {
@@ -54,7 +54,7 @@ public class KaLoc {
 	 * Vrátí souřadnice JZ rohu.
 	 *
 	 * Je to potřeba jen kvůli prioritnímu stahování od středu.
-	 * 
+	 *
 	 * @return
 	 */
 	public Mou getMouSZ() {
@@ -75,7 +75,7 @@ public class KaLoc {
 
 	/**
 	 * Počet kachlí vodorovně nebo svisle pro aktuální měřítko. Je t ovždy mocnina dvou
-	 * 
+	 *
 	 * @return
 	 */
 	public int getSize() {
@@ -86,7 +86,7 @@ public class KaLoc {
 	 * Xsová souřadnice kachle. U vedlejších kachlí se souřadnice liší o jednu. Jsou se zanménkkem, například pro moumer=3 jdou souřadnice -4 až 3. Nula je kachle ležící svým JZ bodem na WGS=[0,0]
 	 *
 	 * Kachle jdou zleva doprava a zespodu nahoru jako normální souřadnice. Kachle ze [signedMapX, signedMapY] leží v africe
-	 * 
+	 *
 	 * @return
 	 */
 	public int getSignedX() {
@@ -99,7 +99,7 @@ public class KaLoc {
 
 	/**
 	 * Konvertuje merkátorovu souřadnici na mapovou souřadnici
-	 * 
+	 *
 	 * @param mersou
 	 * @return
 	 */
@@ -109,7 +109,7 @@ public class KaLoc {
 
 	/**
 	 * Konvertuje merkátorovu souřadnici na mapovou souřadnici
-	 * 
+	 *
 	 * @param mersou
 	 * @return
 	 */

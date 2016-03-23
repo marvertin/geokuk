@@ -11,7 +11,7 @@ import com.google.common.base.Objects;
 
 /**
  * Swingovitý model (nikoli geokuí) vtýkající se vlastností písma, jenž se objevuje někde na mpapě.
- * 
+ *
  * @author veverka
  *
  */
@@ -64,7 +64,7 @@ public class VlastnostiPismaModel {
 
 	/**
 	 * Return an array of all the listeners of the given type that were added to this model. For example to find all of the ChangeListeners added to this model:
-	 * 
+	 *
 	 * <pre>
 	 * myAbstractSpinnerModel.getListeners(ChangeListener.class);
 	 * </pre>

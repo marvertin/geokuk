@@ -7,7 +7,7 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#createDefaults()
 	 */
 	@Override
@@ -17,17 +17,17 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#createEvent(java.lang.Object)
 	 */
 	@Override
-	protected PopiskyPreferencesChangeEvent createEvent(PopiskySettings structure) {
+	protected PopiskyPreferencesChangeEvent createEvent(final PopiskySettings structure) {
 		return new PopiskyPreferencesChangeEvent(structure);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#visiblexxx()
 	 */
 	@Override
@@ -37,7 +37,7 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#getOnoffEventClass()
 	 */
 	@Override
@@ -47,7 +47,7 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.popisky.PodkladMapSpecificModel0#preferenceNodeName()
 	 */
 	@Override
@@ -57,21 +57,21 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#putVisibleToPreferences(boolean)
 	 */
 	@Override
-	protected void putVisibleToPreferences(boolean onoff) {
+	protected void putVisibleToPreferences(final boolean onoff) {
 		currPrefe().node(FPref.VSEOBECNE_node).putBoolean(FPref.ZOBRAZ_POPISY_KESI_value, onoff);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.PodkladMapSpecificModel0#getVisibleFromPreferences(boolean)
 	 */
 	@Override
-	protected boolean getVisibleFromPreferences(boolean defaultOnoff) {
+	protected boolean getVisibleFromPreferences(final boolean defaultOnoff) {
 		return currPrefe().node(FPref.VSEOBECNE_node).getBoolean(FPref.ZOBRAZ_POPISY_KESI_value, defaultOnoff);
 	}
 

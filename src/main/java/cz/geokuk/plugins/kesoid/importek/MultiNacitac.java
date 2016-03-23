@@ -35,7 +35,7 @@ public class MultiNacitac {
 
 	// private static final String CACHE_SUFFIX = ".cache.serialized";
 
-	public MultiNacitac(KesoidModel kesoidModel) {
+	public MultiNacitac(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 		ds = new DirScanner();
 		nacitace.add(new NacitacGeokuk());
@@ -44,8 +44,8 @@ public class MultiNacitac {
 		nacitace.add(new GeogetLoader());
 	}
 
-	public void setRootDirs(boolean prenacti, File kesDir, File geogetDir) {
-		List<Root> roots = new ArrayList<>();
+	public void setRootDirs(final boolean prenacti, final File kesDir, final File geogetDir) {
+		final List<Root> roots = new ArrayList<>();
 		if (kesDir != null) {
 			roots.add(new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR));
 		}
@@ -55,22 +55,22 @@ public class MultiNacitac {
 		ds.seRootDirs(prenacti, roots.toArray(new Root[roots.size()]));
 	}
 
-	public void setGeogetDataDir(File aEffectiveFile, boolean aPrenacti) {
+	public void setGeogetDataDir(final File aEffectiveFile, final boolean aPrenacti) {
 		// TODO Auto-generated method stub
 	}
 
-	public KesBag nacti(Future<?> future, Genom genom) throws IOException {
-		List<KeFile> list = ds.coMamNacist();
+	public KesBag nacti(final Future<?> future, final Genom genom) throws IOException {
+		final List<KeFile> list = ds.coMamNacist();
 		if (list == null) {
 			return null;
 		}
-		KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
+		final KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
 		builder.init();
-		for (KeFile file : list) {
+		for (final KeFile file : list) {
 			log.debug("Nacitam: " + file);
 			try {
 				zpracujJedenFile(file, builder, future);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Problem pri cteni souboru " + file);
 				ds.nulujLastScaned(); // ať se načte znovu
 			}
@@ -87,14 +87,14 @@ public class MultiNacitac {
 	 * @param future
 	 * @throws IOException
 	 */
-	private void zpracujJedenFile(KeFile kefile, KesoidImportBuilder builder, Future<?> future) throws IOException {
-		File file = kefile.getFile();
+	private void zpracujJedenFile(final KeFile kefile, final KesoidImportBuilder builder, final Future<?> future) throws IOException {
+		final File file = kefile.getFile();
 		if (isZipFile(file)) {
 			try (ZipFile zipFile = new ZipFile(file)) {
-				boolean nacitat = kesoidModel.maSeNacist(kefile);
-				for (Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements();) {
-					ZipEntry entry = en.nextElement();
-					for (Nacitac0 nacitac : nacitace) {
+				final boolean nacitat = kesoidModel.maSeNacist(kefile);
+				for (final Enumeration<? extends ZipEntry> en = zipFile.entries(); en.hasMoreElements();) {
+					final ZipEntry entry = en.nextElement();
+					for (final Nacitac0 nacitac : nacitace) {
 						builder.setCurrentlyLoading(kefile, nacitat);
 						if (nacitat && nacitac.umiNacist(entry)) {
 							nacitac.nactiBezVyjimky(zipFile, entry, builder, future, kesoidModel.getProgressModel());
@@ -103,8 +103,8 @@ public class MultiNacitac {
 				}
 			}
 		} else {
-			for (Nacitac0 nacitac : nacitace) {
-				boolean nacitat = kesoidModel.maSeNacist(kefile);
+			for (final Nacitac0 nacitac : nacitace) {
+				final boolean nacitat = kesoidModel.maSeNacist(kefile);
 				builder.setCurrentlyLoading(kefile, nacitat);
 				if (nacitat && nacitac.umiNacist(file)) {
 					nacitac.nactiBezVyjimky(file, builder, future, kesoidModel.getProgressModel());
@@ -116,7 +116,7 @@ public class MultiNacitac {
 	/**
 	 * Checks whether the given file is a ZIP file. Copied from http://www.java2s.com/Code/Java/File-Input-Output/DeterminewhetherafileisaZIPFile.htm
 	 */
-	private static boolean isZipFile(File fileToTest) {
+	private static boolean isZipFile(final File fileToTest) {
 		if (fileToTest.isDirectory()) {
 			return false;
 		}
@@ -124,9 +124,9 @@ public class MultiNacitac {
 			return false;
 		}
 		try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(fileToTest)))) {
-			int test = in.readInt();
+			final int test = in.readInt();
 			return test == 0x504b0304;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new IllegalArgumentException("The file " + fileToTest + " cannot be checked!", e);
 		}
 	}

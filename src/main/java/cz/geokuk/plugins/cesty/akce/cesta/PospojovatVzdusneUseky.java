@@ -6,7 +6,7 @@ public class PospojovatVzdusneUseky extends CestaAction0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public PospojovatVzdusneUseky(Cesta cesta) {
+	public PospojovatVzdusneUseky(final Cesta cesta) {
 		super(cesta);
 
 		// putValue(NAME, "<html>Odstraň cestu <i>" + jCestaMenu.getNazev() + "</i> " + (jCestaMenu.getMouDelkaCesta() + " mou"));
@@ -18,18 +18,18 @@ public class PospojovatVzdusneUseky extends CestaAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProCestu(Cesta cesta) {
-		int pocetVzdusnychUseku = cesta.getPocetVzdusnychUseku();
+	protected boolean mamPovolitProCestu(final Cesta cesta) {
+		final int pocetVzdusnychUseku = cesta.getPocetVzdusnychUseku();
 		return pocetVzdusnychUseku > 1 && cesta.getPocetPodcestVzdusnychUseku() < pocetVzdusnychUseku;
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Cesta cesta, boolean aZKontextovehoMenu) {
+	protected void nastavJmenoAkce(final Cesta cesta, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "<html>Pospojovat vzdušné úseky " + cesta.getPocetVzdusnychUseku() + " => " + cesta.getPocetPodcestVzdusnychUseku());
 	}
 
 	@Override
-	protected void provedProCestu(Cesta cesta) {
+	protected void provedProCestu(final Cesta cesta) {
 		cestyModel.pospojujVzdusneUseky(cesta);
 	}
 

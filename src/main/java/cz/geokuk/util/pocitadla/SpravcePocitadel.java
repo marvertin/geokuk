@@ -18,7 +18,7 @@ public class SpravcePocitadel {
 		// return new ArrayList<Pocitadlo>();
 	}
 
-	public static void register(Pocitadlo pocitadlo) {
+	public static void register(final Pocitadlo pocitadlo) {
 		pocitadla.put(pocitadlo, 0);
 	}
 }

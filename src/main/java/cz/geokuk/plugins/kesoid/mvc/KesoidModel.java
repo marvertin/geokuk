@@ -55,14 +55,14 @@ public class KesoidModel extends Model0 {
 	 * @param umisteniSouboru
 	 *            the umisteniSouboru to set
 	 */
-	public void setUmisteniSouboru(KesoidUmisteniSouboru umisteniSouboru) {
+	public void setUmisteniSouboru(final KesoidUmisteniSouboru umisteniSouboru) {
 		if (umisteniSouboru.equals(this.umisteniSouboru))
 			return;
-		boolean nacistIkony = this.umisteniSouboru == null || this.umisteniSouboru.getImageMyDir().equals(umisteniSouboru.getImageMyDir())
+		final boolean nacistIkony = this.umisteniSouboru == null || this.umisteniSouboru.getImageMyDir().equals(umisteniSouboru.getImageMyDir())
 				|| this.umisteniSouboru.getImage3rdPartyDir().equals(umisteniSouboru.getImage3rdPartyDir());
-		boolean nacistKese = this.umisteniSouboru == null || this.umisteniSouboru.getKesDir().equals(umisteniSouboru.getKesDir());
+		final boolean nacistKese = this.umisteniSouboru == null || this.umisteniSouboru.getKesDir().equals(umisteniSouboru.getKesDir());
 		this.umisteniSouboru = umisteniSouboru;
-		MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
+		final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
 		pref.putFilex(FPref.KES_DIR_value, umisteniSouboru.getKesDir());
 		pref.putFilex(FPref.CESTY_DIR_value, umisteniSouboru.getCestyDir());
 		pref.putFilex(FPref.GEOGET_DATA_DIR_value, umisteniSouboru.getGeogetDataDir());
@@ -82,7 +82,7 @@ public class KesoidModel extends Model0 {
 		}
 	}
 
-	public void setJmenaNefenotypovanychAlel(Set<String> jmenaNefenotypovanychAlel) {
+	public void setJmenaNefenotypovanychAlel(final Set<String> jmenaNefenotypovanychAlel) {
 		if (jmenaNefenotypovanychAlel.equals(this.jmenaNefenotypovanychAlel))
 			return;
 		this.jmenaNefenotypovanychAlel = jmenaNefenotypovanychAlel;
@@ -98,7 +98,7 @@ public class KesoidModel extends Model0 {
 		return filter.getFilterDefinition().copy();
 	}
 
-	public void setDefinition(FilterDefinition filterDefinition) {
+	public void setDefinition(final FilterDefinition filterDefinition) {
 		if (filterDefinition.equals(filter.getFilterDefinition()))
 			return;
 		filter.setFilterDefinition(filterDefinition);
@@ -114,32 +114,32 @@ public class KesoidModel extends Model0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.Model0#initAndFire()
 	 */
 	@Override
 	protected void initAndFire() {
-		String gccomNickName = currPrefe().node(FPref.NASTAVENI_node).get(FPref.GEOCACHING_COM_NICK_value, "sem napis svuj nick na GC.COM");
-		int gccomNickId = currPrefe().node(FPref.NASTAVENI_node).getInt(FPref.GEOCACHING_COM_NICK_ID_value, -1);
+		final String gccomNickName = currPrefe().node(FPref.NASTAVENI_node).get(FPref.GEOCACHING_COM_NICK_value, "sem napis svuj nick na GC.COM");
+		final int gccomNickId = currPrefe().node(FPref.NASTAVENI_node).getInt(FPref.GEOCACHING_COM_NICK_ID_value, -1);
 
 		setGccomNick(new GccomNick(gccomNickName, gccomNickId));
-		FilterDefinition filterDefinition = currPrefe().getStructure(FPref.KESFILTER_structure_node, new FilterDefinition());
-		int prahVyletuOrdinal = currPrefe().node(FPref.KESFILTER_structure_node).getInt("prahVyletu", filterDefinition.getPrahVyletu().ordinal());
-		for (EVylet vylet : EVylet.values()) {
+		final FilterDefinition filterDefinition = currPrefe().getStructure(FPref.KESFILTER_structure_node, new FilterDefinition());
+		final int prahVyletuOrdinal = currPrefe().node(FPref.KESFILTER_structure_node).getInt("prahVyletu", filterDefinition.getPrahVyletu().ordinal());
+		for (final EVylet vylet : EVylet.values()) {
 			if (prahVyletuOrdinal == vylet.ordinal()) {
 				filterDefinition.setPrahVyletu(vylet);
 			}
 		}
 		filter.setFilterDefinition(filterDefinition);
 
-		Set<String> defval = new HashSet<>();
+		final Set<String> defval = new HashSet<>();
 		defval.add("fnd");
 		defval.add("dsbl");
 		defval.add("arch");
 		filter.setJmenaNechtenychAlel(currPrefe().node(FPref.KESOID_FILTR_node).getStringSet(FPref.KESOID_FILTER_ALELY_value, defval));
 		jmenaAlelNaToolbaru = currPrefe().node(FPref.KESOID_FILTR_node).getStringSet(FPref.KESOID_FILTER_NATOOLBARU_value, defval);
 
-		ASada jmenoAktualniSadyIkon = currPrefe().node(FPref.JMENO_VYBRANE_SADY_IKON_node).getAtom(FPref.JMENO_VYBRANE_SADY_IKON_value, ASada.STANDARD, ASada.class);
+		final ASada jmenoAktualniSadyIkon = currPrefe().node(FPref.JMENO_VYBRANE_SADY_IKON_node).getAtom(FPref.JMENO_VYBRANE_SADY_IKON_value, ASada.STANDARD, ASada.class);
 		this.jmenoAktualniSadyIkon = jmenoAktualniSadyIkon;
 		fire(new JmenoAktualniSadyIkonChangeEvent(jmenoAktualniSadyIkon));
 		// fire(new GccomNickChangedEvent(gccomNick));
@@ -150,13 +150,13 @@ public class KesoidModel extends Model0 {
 		fajruj();
 	}
 
-	public void inject(KesFilter filter) {
+	public void inject(final KesFilter filter) {
 		this.filter = filter;
 	}
 
 	private KesoidUmisteniSouboru loadUmisteniSouboru() {
-		KesoidUmisteniSouboru u = new KesoidUmisteniSouboru();
-		MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
+		final KesoidUmisteniSouboru u = new KesoidUmisteniSouboru();
+		final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
 		u.setKesDir(pref.getFilex("kesDir", KesoidUmisteniSouboru.GEOKUK_DATA_DIR));
 		u.setCestyDir(pref.getFilex(FPref.CESTY_DIR_value, KesoidUmisteniSouboru.CESTY_DIR));
 		u.setGeogetDataDir(pref.getFilex("geogetDataDir", KesoidUmisteniSouboru.GEOGET_DATA_DIR));
@@ -177,8 +177,8 @@ public class KesoidModel extends Model0 {
 		filteringSwingWorker.execute();
 	}
 
-	public void filtrujDleAlely(String alelaName, boolean zobrazit) {
-		Set<String> jmena = new HashSet<>(filter.getJmenaNechtenychAlel());
+	public void filtrujDleAlely(final String alelaName, final boolean zobrazit) {
+		final Set<String> jmena = new HashSet<>(filter.getJmenaNechtenychAlel());
 		boolean zmena;
 		if (zobrazit) {
 			zmena = jmena.remove(alelaName);
@@ -190,7 +190,7 @@ public class KesoidModel extends Model0 {
 		setJmenaNechtenychAlel(jmena);
 	}
 
-	public void setJmenaNechtenychAlel(Set<String> jmenaNechtenychAlel) {
+	public void setJmenaNechtenychAlel(final Set<String> jmenaNechtenychAlel) {
 		if (jmenaNechtenychAlel.equals(filter.getJmenaNechtenychAlel())) {
 			return;
 		}
@@ -199,7 +199,7 @@ public class KesoidModel extends Model0 {
 		fajruj();
 	}
 
-	public void setJmenaAlelNaToolbaru(Set<String> jmenaAlelNaToolbaru) {
+	public void setJmenaAlelNaToolbaru(final Set<String> jmenaAlelNaToolbaru) {
 		if (jmenaAlelNaToolbaru.equals(filter.getJmenaNechtenychAlel()))
 			return;
 		this.jmenaAlelNaToolbaru = jmenaAlelNaToolbaru;
@@ -207,30 +207,30 @@ public class KesoidModel extends Model0 {
 		fajruj();
 	}
 
-	public void onEvent(IkonyNactenyEvent event) {
+	public void onEvent(final IkonyNactenyEvent event) {
 		jmenoSady = event.getBag().getSada().getName();
 		setJmenaNefenotypovanychAlel(currPrefe().node(FPref.MAPICON_FENOTYP_node).getStringSet(jmenoSady, new HashSet<String>()));
 	}
 
-	public void onEvent(KeskyNactenyEvent aEvent) {
+	public void onEvent(final KeskyNactenyEvent aEvent) {
 		vycistiBlokovaneZdroje(aEvent.getVsechny().getInformaceOZdrojich());
 		startIkonLoad(false);
 	}
 
-	private void vycistiBlokovaneZdroje(InformaceOZdrojich informaceOZdrojich) {
-		boolean zmena = blokovaneZdroje.retainAll(informaceOZdrojich.getJmenaZdroju());
+	private void vycistiBlokovaneZdroje(final InformaceOZdrojich informaceOZdrojich) {
+		final boolean zmena = blokovaneZdroje.retainAll(informaceOZdrojich.getJmenaZdroju());
 		if (!zmena)
 			return;
 		currPrefe().node(FPref.KESOID_node).putFileCollection(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
 	}
 
-	public void setVsechnyKesoidy(KesBag vsechnyKesoidy) {
+	public void setVsechnyKesoidy(final KesBag vsechnyKesoidy) {
 		vsechny = vsechnyKesoidy;
 		spustFiltrovani();
 		fire(new KeskyNactenyEvent(vsechnyKesoidy));
 	}
 
-	public void setIkonBag(IkonBag ikonBag) {
+	public void setIkonBag(final IkonBag ikonBag) {
 		this.ikonBag = ikonBag;
 		fire(new IkonyNactenyEvent(ikonBag, getJmenoAktualniSadyIkon()));
 		startKesLoading();
@@ -242,11 +242,11 @@ public class KesoidModel extends Model0 {
 		}
 	}
 
-	public void startIkonLoad(boolean prenacti) {
+	public void startIkonLoad(final boolean prenacti) {
 		ikonNacitacLoaderManager.startLoad(prenacti);
 	}
 
-	public void setGccomNick(GccomNick gccomNick) {
+	public void setGccomNick(final GccomNick gccomNick) {
 		if (gccomNick.equals(this.gccomNick))
 			return;
 		this.gccomNick = gccomNick;
@@ -260,7 +260,7 @@ public class KesoidModel extends Model0 {
 		return gccomNick;
 	}
 
-	public void setJmenoAktualniSadyIkon(ASada jmenoAktualniSadyIkon) {
+	public void setJmenoAktualniSadyIkon(final ASada jmenoAktualniSadyIkon) {
 		if (jmenoAktualniSadyIkon.equals(jmenaAlelNaToolbaru))
 			return;
 		this.jmenoAktualniSadyIkon = jmenoAktualniSadyIkon;
@@ -273,43 +273,43 @@ public class KesoidModel extends Model0 {
 		return jmenoAktualniSadyIkon;
 	}
 
-	public void otevriListingVGeogetu(Kesoid kes) {
+	public void otevriListingVGeogetu(final Kesoid kes) {
 		if (kes == null)
 			return;
-		Clipboard scl = getSystemClipboard();
-		StringSelection ss = new StringSelection(kes.getUrlPrint().toExternalForm());
+		final Clipboard scl = getSystemClipboard();
+		final StringSelection ss = new StringSelection(kes.getUrlPrint().toExternalForm());
 		try {
 			scl.setContents(ss, null);
-		} catch (IllegalStateException e2) {
+		} catch (final IllegalStateException e2) {
 			FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
 		}
 	}
 
-	public void pridejDoSeznamuVGeogetu(Kesoid kes) {
+	public void pridejDoSeznamuVGeogetu(final Kesoid kes) {
 		if (kes == null)
 			return;
-		Clipboard scl = getSystemClipboard();
-		StringSelection ss = new StringSelection(kes.getUrlShow().toExternalForm());
+		final Clipboard scl = getSystemClipboard();
+		final StringSelection ss = new StringSelection(kes.getUrlShow().toExternalForm());
 		try {
 			scl.setContents(ss, null);
-		} catch (IllegalStateException e2) {
+		} catch (final IllegalStateException e2) {
 			FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
 		}
 	}
 
-	public void pridejKodKesoiduDoClipboardu(Kesoid kes) {
+	public void pridejKodKesoiduDoClipboardu(final Kesoid kes) {
 		if (kes == null)
 			return;
-		Clipboard scl = getSystemClipboard();
-		StringSelection ss = new StringSelection(kes.getIdentifier());
+		final Clipboard scl = getSystemClipboard();
+		final StringSelection ss = new StringSelection(kes.getIdentifier());
 		try {
 			scl.setContents(ss, null);
-		} catch (IllegalStateException e2) {
+		} catch (final IllegalStateException e2) {
 			FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
 		}
 	}
 
-	public void inject(ProgressModel progressModel) {
+	public void inject(final ProgressModel progressModel) {
 		this.progressModel = progressModel;
 	}
 
@@ -317,20 +317,20 @@ public class KesoidModel extends Model0 {
 		return progressModel;
 	}
 
-	public void setPrekrocenLimitWaypointuVeVyrezu(boolean prekrocenLimit) {
+	public void setPrekrocenLimitWaypointuVeVyrezu(final boolean prekrocenLimit) {
 		fire(new PrekrocenLimitWaypointuVeVyrezuEvent(prekrocenLimit));
 	}
 
-	public boolean maSeNacist(KeFile jmenoZdroje) {
+	public boolean maSeNacist(final KeFile jmenoZdroje) {
 		return !blokovaneZdroje.contains(jmenoZdroje.getFile());
 	}
 
-	public void setNacitatSoubor(KeFile jmenoZDroje, boolean nacitat) {
+	public void setNacitatSoubor(final KeFile jmenoZDroje, final boolean nacitat) {
 		// TODO : speed up
 		boolean zmena;
-		Collection<File> changedFiles = Collections2.transform(vsechny.getInformaceOZdrojich().getSubtree(jmenoZDroje), new Function<InformaceOZdroji, File>() {
+		final Collection<File> changedFiles = Collections2.transform(vsechny.getInformaceOZdrojich().getSubtree(jmenoZDroje), new Function<InformaceOZdroji, File>() {
 			@Override
-			public File apply(InformaceOZdroji informaceOZdroji) {
+			public File apply(final InformaceOZdroji informaceOZdroji) {
 				return informaceOZdroji.jmenoZdroje.getFile();
 			}
 		});
@@ -347,7 +347,7 @@ public class KesoidModel extends Model0 {
 		startKesLoading();
 	}
 
-	public void setOnoff(boolean onoff) {
+	public void setOnoff(final boolean onoff) {
 		if (this.onoff != null && this.onoff == onoff)
 			return;
 		this.onoff = onoff;

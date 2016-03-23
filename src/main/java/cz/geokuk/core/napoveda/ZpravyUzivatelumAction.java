@@ -29,7 +29,7 @@ public class ZpravyUzivatelumAction extends DialogOpeningAction0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.DialogOpeningAction0#createDialog()
 	 */
 	@Override

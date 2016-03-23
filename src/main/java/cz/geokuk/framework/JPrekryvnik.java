@@ -24,13 +24,13 @@ public abstract class JPrekryvnik extends JSlide0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.Container#add(java.awt.Component)
 	 */
 	@Override
-	public Component add(Component aComp) {
+	public Component add(final Component aComp) {
 		if (aComp instanceof JSlide0) {
-			JSlide0 slide = (JSlide0) aComp;
+			final JSlide0 slide = (JSlide0) aComp;
 			if (lastAddedSlide != null) {
 				lastAddedSlide.addChained(slide);
 			}

@@ -15,8 +15,8 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 public class Photo extends Kesoid {
 
 	@Override
-	public void buildGenotyp(Genom genom, Genotyp genotyp) {
-		GenotypBuilderPhoto genotypBuilder = new GenotypBuilderPhoto(genom, genotyp);
+	public void buildGenotyp(final Genom genom, final Genotyp genotyp) {
+		final GenotypBuilderPhoto genotypBuilder = new GenotypBuilderPhoto(genom, genotyp);
 		genotypBuilder.build(this);
 	}
 
@@ -27,7 +27,7 @@ public class Photo extends Kesoid {
 
 	@Override
 	public File getSourceFile() {
-		File file = new File(getIdentifier());
+		final File file = new File(getIdentifier());
 		if (file.exists()) {
 			return file;
 		} else {
@@ -36,7 +36,7 @@ public class Photo extends Kesoid {
 	}
 
 	@Override
-	public void prispejDoTooltipu(StringBuilder sb, Wpt wpt) {
+	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
 		sb.append("<b>").append(wpt.getName()).append("<b>");
 	}
 

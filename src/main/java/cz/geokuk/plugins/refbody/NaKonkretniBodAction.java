@@ -24,7 +24,7 @@ public class NaKonkretniBodAction extends Action0 {
 	/**
 	 * @param aBoard
 	 */
-	public NaKonkretniBodAction(String kam, Wgs wgs) {
+	public NaKonkretniBodAction(final String kam, final Wgs wgs) {
 		super(kam);
 		this.wgs = wgs;
 		putValue(SHORT_DESCRIPTION, "Přesune mapu na referenční bod: \" " + kam + "\"");
@@ -33,11 +33,11 @@ public class NaKonkretniBodAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent aE) {
+	public void actionPerformed(final ActionEvent aE) {
 		poziceModel.setPozice(wgs);
 		vyrezModel.vystredovatNaPozici();
 	}

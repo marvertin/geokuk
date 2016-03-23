@@ -23,7 +23,7 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 	/**
 	 *
 	 */
-	public JNastavovacVelikostiDlazdic(String smer) {
+	public JNastavovacVelikostiDlazdic(final String smer) {
 		initComponents(smer);
 
 	}
@@ -31,7 +31,7 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 	/**
 	 *
 	 */
-	private void initComponents(String smer) {
+	private void initComponents(final String smer) {
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		jMaximalniVelikost = new JSpinner();
 		jMaximalniVelikost.setModel(iModel);
@@ -56,19 +56,19 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 
 	}
 
-	public void setMetrika(DlazdicovaMetrika metrika) {
+	public void setMetrika(final DlazdicovaMetrika metrika) {
 		jSkutecnaVelikost.setText(metrika.dlaSize + "");
 		jPocetDlazdic.setText(metrika.dlaPocet + "");
 	}
 
-	public void onEvent(ZmenaMapNastalaEvent event) {
-		EKaType podklad = event.getKaSet().getPodklad();
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		final EKaType podklad = event.getKaSet().getPodklad();
 		iModel.setMinimum(podklad.getMinMoumer());
 		iModel.setMaximum(podklad.getMaxMoumer());
 		iModel.setValue(podklad.fitMoumer((Integer) iModel.getValue()));
 	}
 
-	public void onEvent(PripravaRendrovaniEvent event) {
+	public void onEvent(final PripravaRendrovaniEvent event) {
 		iModel.setValue(event.getRenderSettings().getRenderedMoumer());
 	}
 
@@ -77,7 +77,7 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 		registerEvents();
 	}
 
-	public void addChangeListener(ChangeListener listener) {
+	public void addChangeListener(final ChangeListener listener) {
 		jMaximalniVelikost.addChangeListener(listener);
 	}
 
@@ -87,15 +87,15 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 	private void registerEvents() {
 		iModel.addChangeListener(new ChangeListener() {
 			@Override
-			public void stateChanged(ChangeEvent e) {
-				RenderSettings settings = renderModel.getRenderSettings();
+			public void stateChanged(final ChangeEvent e) {
+				final RenderSettings settings = renderModel.getRenderSettings();
 				settings.setKmzMaxDlazdiceX((Integer) iModel.getNumber());
 				renderModel.setRenderSettings(settings);
 			}
 		});
 	}
 
-	public void inject(RenderModel renderModel) {
+	public void inject(final RenderModel renderModel) {
 		this.renderModel = renderModel;
 
 	}
@@ -110,7 +110,7 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 	/**
 	 * @param kmzMaxDlazdiceX
 	 */
-	public void setMaximalniVelikost(int kmzMaxDlazdice) {
+	public void setMaximalniVelikost(final int kmzMaxDlazdice) {
 		iModel.setValue(kmzMaxDlazdice);
 	}
 

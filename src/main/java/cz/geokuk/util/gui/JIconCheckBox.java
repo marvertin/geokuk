@@ -11,11 +11,11 @@ public class JIconCheckBox extends JCheckBox {
 	private static final long	serialVersionUID	= 1L;
 	private Icon				icon;
 
-	public JIconCheckBox(Icon icon) {
+	public JIconCheckBox(final Icon icon) {
 		super(icon);
 	}
 
-	public JIconCheckBox(Action0 action) {
+	public JIconCheckBox(final Action0 action) {
 		super(action);
 		setIcon(action.getIcon());
 	}
@@ -24,7 +24,7 @@ public class JIconCheckBox extends JCheckBox {
 	}
 
 	@Override
-	public void setIcon(Icon defaultIcon) {
+	public void setIcon(final Icon defaultIcon) {
 		super.setIcon(defaultIcon);
 		this.icon = defaultIcon;
 		setRolloverIcon(new RolloverIcon());
@@ -47,11 +47,11 @@ public class JIconCheckBox extends JCheckBox {
 	private class RolloverIcon extends Icon0 {
 
 		@Override
-		public void paintIcon(Component c, Graphics g, int x, int y) {
+		public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
 			icon.paintIcon(c, g, x, y);
 			g.setColor(Color.BLACK);
-			int iconWidth = icon.getIconWidth();
-			int iconHeight = icon.getIconHeight();
+			final int iconWidth = icon.getIconWidth();
+			final int iconHeight = icon.getIconHeight();
 			g.drawRect(x - 4, y - 4, iconWidth - 1 + 8, iconHeight - 1 + 8);
 			g.setColor(Color.RED);
 			// int width2 = c.getWidth()-1;
@@ -63,7 +63,7 @@ public class JIconCheckBox extends JCheckBox {
 
 	private class SelectedIcon extends Icon0 {
 		@Override
-		public void paintIcon(Component c, Graphics g, int x, int y) {
+		public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
 			g.setColor(Color.GREEN);
 			g.fillRect(x - 2, y - 2, icon.getIconWidth() + 4, icon.getIconHeight() + 4);
 			icon.paintIcon(c, g, x, y);
@@ -73,7 +73,7 @@ public class JIconCheckBox extends JCheckBox {
 
 	private class RollOverSelectedIcon extends Icon0 {
 		@Override
-		public void paintIcon(Component c, Graphics g, int x, int y) {
+		public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
 			new SelectedIcon().paintIcon(c, g, x, y);
 			new RolloverIcon().paintIcon(c, g, x, y);
 		}

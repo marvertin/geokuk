@@ -65,13 +65,13 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 	 *
 	 */
 	private void registerEvents() {
-		ChangeListener chlist = new ChangeListener() {
+		final ChangeListener chlist = new ChangeListener() {
 
 			@Override
-			public void stateChanged(ChangeEvent e) {
+			public void stateChanged(final ChangeEvent e) {
 				// Board.mainFrame.parametryZvyraznovaceKruhuSeZmenily();
-				KruhySettings kruhy = new KruhySettings();
-				Color barva = alfaColorChooser.getSelectionModel().getSelectedColor();
+				final KruhySettings kruhy = new KruhySettings();
+				final Color barva = alfaColorChooser.getSelectionModel().getSelectedColor();
 				System.out.println("KRUHY1: " + barva + barva.getAlpha());
 				kruhy.setBarva(barva);
 				System.out.println("KRUHY2: " + barva + barva.getAlpha());
@@ -101,7 +101,7 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 		jJednotkoveKruhy.setText("Jednotkové kruhy");
 		jJednotkoveKruhy.setToolTipText("Nastavení jednotkovosti kruhů");
 
-		Box box = Box.createVerticalBox();
+		final Box box = Box.createVerticalBox();
 		add(box);
 
 		box.add(jJednotkoveKruhy);
@@ -111,25 +111,25 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 		box.add(alfaColorChooser);
 	}
 
-	public void inject(KruhyModel kruhyModel) {
+	public void inject(final KruhyModel kruhyModel) {
 		this.kruhyModel = kruhyModel;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
 	 */
-	public void onEvent(KruhyPreferencesChangeEvent event) {
+	public void onEvent(final KruhyPreferencesChangeEvent event) {
 		jJednotkoveKruhy.getModel().setSelected(event.kruhy.isJednotkovaVelikost());
 		velikostSlider.getModel().setValue(event.kruhy.getVelikost());
-		Color barva = event.kruhy.getBarva();
+		final Color barva = event.kruhy.getBarva();
 		alfaColorChooser.getSelectionModel().setSelectedColor(barva);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override

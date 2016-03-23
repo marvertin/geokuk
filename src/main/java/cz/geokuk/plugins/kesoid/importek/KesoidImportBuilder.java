@@ -55,7 +55,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#addGpxWpt(cz.geokuk.plugins.kesoid.importek.GpxWpt)
 	 */
 	@Override
@@ -91,7 +91,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#init()
 	 */
 	public void init() {
@@ -99,7 +99,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#done(cz.geokuk.plugins.kesoid.mapicon.Genom)
 	 */
 	public void done(final Genom genom) {
@@ -748,7 +748,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#getKesBag()
 	 */
 	public KesBag getKesBag() {

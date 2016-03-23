@@ -20,26 +20,26 @@ import cz.geokuk.util.lang.FUtil;
  */
 public class Hledac extends Hledac0<Nalezenec> {
 
-	private KesBag kesBag;
+	private final KesBag kesBag;
 
 	/**
 	 * @param aKl
 	 */
-	public Hledac(KesBag kesBag) {
+	public Hledac(final KesBag kesBag) {
 		super();
 		this.kesBag = kesBag;
 	}
 
-	public List<Nalezenec> hledej(HledaciPodminka0 podm) {
+	public List<Nalezenec> hledej(final HledaciPodminka0 podm) {
 		System.out.println("Hledy, hledy, hledy: " + kesBag.getKesoidy().size() + " " + podm.getVzorek());
-		Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());
-		List<Nalezenec> list = new ArrayList<>();
-		for (Kesoid kesoid : kesBag.getKesoidy()) {
+		final Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());
+		final List<Nalezenec> list = new ArrayList<>();
+		for (final Kesoid kesoid : kesBag.getKesoidy()) {
 			if (getFuture() != null && getFuture().isCancelled())
 				return null;
-			String[] prohledavanci = kesoid.getProhledavanci();
+			final String[] prohledavanci = kesoid.getProhledavanci();
 			Nalezenec nal = null;
-			for (String prohledavanec : prohledavanci) {
+			for (final String prohledavanec : prohledavanci) {
 				if (prohledavanec != null) {
 					nal = poro.porovnej(prohledavanec);
 					if (nal != null)
@@ -67,19 +67,19 @@ public class Hledac extends Hledac0<Nalezenec> {
 		 * @param aVzorek
 		 * @param aRegularniVyraz
 		 */
-		public Porovnavac(String aVzorek, boolean aRegularniVyraz) {
+		public Porovnavac(final String aVzorek, final boolean aRegularniVyraz) {
 			super();
 			vzorek = FUtil.cestinuPryc(aVzorek.toLowerCase());
 			regularniVyraz = aRegularniVyraz;
 			pat = regularniVyraz ? Pattern.compile(vzorek, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE) : null;
 		}
 
-		public Nalezenec porovnej(String vCem) {
+		public Nalezenec porovnej(final String vCem) {
 			if (regularniVyraz) {
-				Matcher mat = pat.matcher(FUtil.cestinuPryc(vCem));
-				boolean found = mat.find();
+				final Matcher mat = pat.matcher(FUtil.cestinuPryc(vCem));
+				final boolean found = mat.find();
 				if (found) {
-					Nalezenec nal = new Nalezenec();
+					final Nalezenec nal = new Nalezenec();
 					nal.setKdeNalezeno(vCem);
 					nal.setPoc(mat.start());
 					nal.setKon(mat.end());
@@ -88,9 +88,9 @@ public class Hledac extends Hledac0<Nalezenec> {
 					return null;
 				}
 			} else {
-				int poz = FUtil.cestinuPryc(vCem.toLowerCase()).indexOf(vzorek);
+				final int poz = FUtil.cestinuPryc(vCem.toLowerCase()).indexOf(vzorek);
 				if (poz >= 0) {
-					Nalezenec nal = new Nalezenec();
+					final Nalezenec nal = new Nalezenec();
 					nal.setKdeNalezeno(vCem);
 					nal.setPoc(poz);
 					nal.setKon(poz + vzorek.length());

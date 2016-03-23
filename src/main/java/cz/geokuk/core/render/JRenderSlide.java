@@ -34,18 +34,18 @@ public class JRenderSlide extends JSingleSlide0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	@Override
 	protected void paintComponent(final Graphics aG) {
-		Graphics2D g = (Graphics2D) aG.create();
+		final Graphics2D g = (Graphics2D) aG.create();
 		// paintRožek(g, renderModel.SZ);
 		// paintRožek(g, renderModel.SV);
 		// paintRožek(g, renderModel.JZ);
 		// paintRožek(g, renderModel.JV);
-		int a = getWidth();
-		int b = getHeight();
+		final int a = getWidth();
+		final int b = getHeight();
 
 		// Nakreslíme kříž vodorovný středový
 		// g.drawLine(0, b/2, a, b/2);
@@ -54,7 +54,7 @@ public class JRenderSlide extends JSingleSlide0 {
 		// g.drawString((uhel / Math.PI * 180 ) + "", a/2, b/2);
 
 		// if (! probihaNastavovaniRendrovani) return;
-		double uhel = -renderModel.getOKolikNatacet();
+		final double uhel = -renderModel.getOKolikNatacet();
 		// Dvoj d = renderModel.spoctiOrezavaciOblednik(a, b);
 
 		// // Vykreslíme bez transformací
@@ -74,11 +74,11 @@ public class JRenderSlide extends JSingleSlide0 {
 		g.setStroke(new BasicStroke(3));
 		Dvoj orezavaci = new Dvoj();
 		orezavaci = renderModel.spoctiOrezavaciOblednik();
-		int x0 = (int) -orezavaci.a / 2;
-		int y0 = (int) -orezavaci.b / 2;
+		final int x0 = (int) -orezavaci.a / 2;
+		final int y0 = (int) -orezavaci.b / 2;
 		g.drawRect(x0, y0, (int) orezavaci.a, (int) orezavaci.b);
 		// malý ořezávací obdélník
-		Dvoj d = renderModel.spoctiMalyOrezavaciOblednik();
+		final Dvoj d = renderModel.spoctiMalyOrezavaciOblednik();
 		if (renderModel.getCurrentMoumer() != renderModel.getRenderedMoumer()) {
 			g.drawRect(x0 + 50, y0 + 50, (int) d.a, (int) d.b);
 		}
@@ -89,7 +89,7 @@ public class JRenderSlide extends JSingleSlide0 {
 
 		g.drawString(d.a + " " + d.b + "", 0, 0);
 
-		EWhatRender whatRender = renderModel.getRenderSettings().getWhatRender();
+		final EWhatRender whatRender = renderModel.getRenderSettings().getWhatRender();
 
 		if (whatRender == EWhatRender.GOOGLE_EARTH) {
 			// dlaždice pro KMZ
@@ -100,11 +100,11 @@ public class JRenderSlide extends JSingleSlide0 {
 		}
 	}
 
-	private void drawKalibody(Graphics aG) {
-		Graphics g = aG.create();
+	private void drawKalibody(final Graphics aG) {
+		final Graphics g = aG.create();
 		g.setColor(Color.MAGENTA);
-		for (Wgs wgs : renderModel.spocitejKalibracniBody()) {
-			Point p = moord.transform(wgs.toMou());
+		for (final Wgs wgs : renderModel.spocitejKalibracniBody()) {
+			final Point p = moord.transform(wgs.toMou());
 			g.fillOval(p.x - 15, p.y - 15, 30, 30);
 		}
 
@@ -114,25 +114,25 @@ public class JRenderSlide extends JSingleSlide0 {
 	 * @param g
 	 * @param d
 	 */
-	private void drawDlazdice(Graphics ag, Dvoj d) {
+	private void drawDlazdice(final Graphics ag, final Dvoj d) {
 		if (renderModel.getRenderSettings().getWhatRender() != EWhatRender.GOOGLE_EARTH)
 			return;
-		Graphics g = ag.create();
+		final Graphics g = ag.create();
 		// g.translate(- getWidth()/2, -getHeight()/2);
-		DlazdicovaMetrikaXY dlas = renderModel.spoctiDlazdicovouMetriku();
+		final DlazdicovaMetrikaXY dlas = renderModel.spoctiDlazdicovouMetriku();
 		// System.out.println("33DLADLADLA: " + dlas.xx.dlaRoztec + " " + dlas.yy.dlaRoztec);
 		// System.out.println("44DLADLADLA: " + dlas.xx.dlaRoztec + " " + dlas.yy.dlaRoztec);
 
-		double quotX = d.a / dlas.xx.sizeCele;
-		double quotY = d.b / dlas.yy.sizeCele;
+		final double quotX = d.a / dlas.xx.sizeCele;
+		final double quotY = d.b / dlas.yy.sizeCele;
 		if (quotX * dlas.xx.dlaSize < 5 || quotY * dlas.yy.dlaSize < 5)
 			return;
 		if (quotX * dlas.xx.dlaRoztec < 5 || quotY * dlas.yy.dlaRoztec < 5)
 			return;
 
-		for (DlazdicovaMetrikaXY.Dlazdice dla : dlas) {
+		for (final DlazdicovaMetrikaXY.Dlazdice dla : dlas) {
 			// System.out.println("DLA: " + dla.xn + " " + dla.yn + " " + dla.xs + " " + dla.ys);
-			Graphics2D gg = (Graphics2D) g.create();
+			final Graphics2D gg = (Graphics2D) g.create();
 			gg.scale(quotX, quotY);
 			gg.translate(-dlas.xx.sizeCele / 2, -dlas.yy.sizeCele / 2);
 			gg.translate(dla.xs, dla.ys);
@@ -161,13 +161,13 @@ public class JRenderSlide extends JSingleSlide0 {
 	//
 	// }
 
-	public void onEvent(PripravaRendrovaniEvent event) {
+	public void onEvent(final PripravaRendrovaniEvent event) {
 		renderModel = event.getModel();
 		setVisible(event.getStavRendrovani() != EStavRendrovani.NIC);
 		repaint();
 	}
 
-	public void onEvent(VyrezChangedEvent event) {
+	public void onEvent(final VyrezChangedEvent event) {
 		moord = event.getMoord();
 	}
 

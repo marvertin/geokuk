@@ -17,28 +17,28 @@ public class VyletovyZperzistentnovac {
 
 	private KesoidModel			kesoidModel;
 
-	private VyletPul loadGgt(File file) throws IOException {
+	private VyletPul loadGgt(final File file) throws IOException {
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			return loadGgt(br);
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			return new VyletPul(new HashSet<String>());
 		}
 	}
 
-	public Vylet immediatlyNactiVylet(KesBag vsechny) {
+	public Vylet immediatlyNactiVylet(final KesBag vsechny) {
 		try {
-			Vylet novyvylet = new Vylet();
+			final Vylet novyvylet = new Vylet();
 			aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getAnoGgtFile().getEffectiveFile()), EVylet.ANO, vsechny);
 			aktualizujVylet(novyvylet, loadGgt(kesoidModel.getUmisteniSouboru().getNeGgtFile().getEffectiveFile()), EVylet.NE, vsechny);
 			return novyvylet;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private VyletPul loadGgt(BufferedReader reader) throws IOException {
+	private VyletPul loadGgt(final BufferedReader reader) throws IOException {
 		String line;
-		Set<String> set = new HashSet<>();
+		final Set<String> set = new HashSet<>();
 		while ((line = reader.readLine()) != null) {
 			line = line.trim();
 			if (line.isEmpty()) {
@@ -49,9 +49,9 @@ public class VyletovyZperzistentnovac {
 		return new VyletPul(set);
 	}
 
-	private void aktualizujVylet(Vylet novyvylet, VyletPul vyletPul, EVylet evyl, KesBag vsechny) {
+	private void aktualizujVylet(final Vylet novyvylet, final VyletPul vyletPul, final EVylet evyl, final KesBag vsechny) {
 		if (vsechny != null) {
-			for (Kesoid kes : vsechny.getKesoidy()) {
+			for (final Kesoid kes : vsechny.getKesoidy()) {
 				if (vyletPul.kesides.contains(kes.getIdentifier())) {
 					novyvylet.add(evyl, kes);
 				}
@@ -59,18 +59,18 @@ public class VyletovyZperzistentnovac {
 		}
 	}
 
-	public void immediatlyZapisVylet(Vylet vylet) {
+	public void immediatlyZapisVylet(final Vylet vylet) {
 		zapis(vylet, kesoidModel.getUmisteniSouboru().getAnoGgtFile().getEffectiveFile(), EVylet.ANO);
 		zapis(vylet, kesoidModel.getUmisteniSouboru().getNeGgtFile().getEffectiveFile(), EVylet.NE);
 	}
 
-	private void zapis(Vylet vylet, File file, EVylet evyl) {
-		Set<Kesoid> caches = vylet.get(evyl);
-		Set<String> tripGeocodes = new HashSet<>(caches.size());
-		for (Kesoid cache : caches) {
+	private void zapis(final Vylet vylet, final File file, final EVylet evyl) {
+		final Set<Kesoid> caches = vylet.get(evyl);
+		final Set<String> tripGeocodes = new HashSet<>(caches.size());
+		for (final Kesoid cache : caches) {
 			tripGeocodes.add(cache.getIdentifier());
 		}
-		List<String> toWrite = new ArrayList<>();
+		final List<String> toWrite = new ArrayList<>();
 
 		boolean rewrite = false;
 
@@ -85,7 +85,7 @@ public class VyletovyZperzistentnovac {
 						rewrite = true;
 					}
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				rewrite = true;
 				log.error("Error while reading a trip file!", e);
 			}
@@ -103,18 +103,18 @@ public class VyletovyZperzistentnovac {
 		}
 	}
 
-	private void flushToFile(Collection<String> lines, File file, boolean append) {
+	private void flushToFile(final Collection<String> lines, final File file, final boolean append) {
 		try (BufferedWriter wrt = new BufferedWriter(new FileWriter(file, append))) {
 			// TODO : portability
-			for (String s : lines) {
+			for (final String s : lines) {
 				wrt.write(String.format("%s%s", s, FConst.NL));
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 }

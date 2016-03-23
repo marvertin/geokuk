@@ -22,7 +22,7 @@ public enum EImageType {
 	/**
 	 *
 	 */
-	private EImageType(boolean umoznujePruhlednost) {
+	private EImageType(final boolean umoznujePruhlednost) {
 		this.umoznujePruhlednost = umoznujePruhlednost;
 	}
 

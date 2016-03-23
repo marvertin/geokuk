@@ -24,7 +24,7 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 	/**
 	 *
 	 */
-	public SwitchKesoidUrciteAlelyAction(Alela alela) {
+	public SwitchKesoidUrciteAlelyAction(final Alela alela) {
 		super("Zapnuti vypnuti alely");
 		this.alela = alela;
 		// putValue(MNEMONIC_KEY, InputEvent.)
@@ -33,21 +33,21 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
-	public void onEvent(IkonyNactenyEvent event) {
+	public void onEvent(final IkonyNactenyEvent event) {
 		ikonBag = event.getBag();
 	}
 
-	public void onEvent(KeskyNactenyEvent event) {
+	public void onEvent(final KeskyNactenyEvent event) {
 		vsechny = event.getVsechny();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -61,19 +61,19 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 		return String.format("<html>%s: <b>%s</b> <i>(%d)</i>", alela.getGen().getDisplayName(), alela.getDisplayName(), vsechny.getPoctyAlel().count(alela));
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 
-	public void onEvent(KeskyVyfiltrovanyEvent event) {
+	public void onEvent(final KeskyVyfiltrovanyEvent event) {
 		vsechny = event.getVsechny();
-		boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().contains(alela.toString());
+		final boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().contains(alela.toString());
 		setSelected(!nechtena);
 		super.putValue(SHORT_DESCRIPTION, sestavJmeno());
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		kesoidModel.filtrujDleAlely(alela.toString(), nastaveno);
 	}
 

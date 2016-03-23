@@ -29,16 +29,16 @@ public class PriblizMapuAction extends Action0 {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		vyrezModel.setMeritkoMapy(vyrezModel.getMoord().getMoumer() + 1);
 	}
 
-	public void onEvent(VyrezChangedEvent event) {
+	public void onEvent(final VyrezChangedEvent event) {
 		setEnabled(!event.getModel().jeNejblizsiMeritko());
 	}
 

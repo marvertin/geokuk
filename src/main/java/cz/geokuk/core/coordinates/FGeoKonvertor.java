@@ -4,7 +4,7 @@ import static java.lang.Math.*;
 
 /**
  * Konvertor geografických souřadnic
- * 
+ *
  * @author tatinek
  *
  */
@@ -47,7 +47,7 @@ public class FGeoKonvertor {
 		return new Wgs(lat, lon);
 	}
 
-	public static Utm toUtm(Wgs wgs) {
+	public static Utm toUtm(final Wgs wgs) {
 		// String s = "33 U " + ux + " " + uy;
 		final String s = utmWgsConvertor.latLon2UTM(wgs.lat, wgs.lon);
 		final String[] utm = s.split(" ");
@@ -73,7 +73,7 @@ public class FGeoKonvertor {
 
 	}
 
-	public static Wgs toWgs(Utm utm) {
+	public static Wgs toWgs(final Utm utm) {
 		try {
 			final double[] utm2LatLon = utmWgsConvertor.utm2LatLon(utm.toString());
 			return new Wgs(utm2LatLon[0], utm2LatLon[1]);
@@ -90,25 +90,25 @@ public class FGeoKonvertor {
 		return toWgs(toMercator(mou));
 	}
 
-	public static Utm toUtm(Mercator mercator) {
+	public static Utm toUtm(final Mercator mercator) {
 		return toUtm(toWgs(mercator));
 	}
 
-	public static Mercator toMercator(Utm utm) {
+	public static Mercator toMercator(final Utm utm) {
 		return toMercator(toWgs(utm));
 	}
 
-	public static Utm toUtm(Mou mou) {
+	public static Utm toUtm(final Mou mou) {
 		return toUtm(toWgs(mou));
 	}
 
-	public static Mou toMou(Utm utm) {
+	public static Mou toMou(final Utm utm) {
 		return toMou(toWgs(utm));
 	}
 
 	/**
 	 * Kolik metrůpřipadá na jeden krok mou, na dané šířce
-	 * 
+	 *
 	 * @param lat
 	 * @return
 	 */

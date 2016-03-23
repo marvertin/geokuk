@@ -5,13 +5,13 @@ import cz.geokuk.framework.Event0;
 public class PopiskyPreferencesChangeEvent extends Event0<PopiskyModel> {
 	public final PopiskySettings pose;
 
-	PopiskyPreferencesChangeEvent(PopiskySettings pose) {
+	PopiskyPreferencesChangeEvent(final PopiskySettings pose) {
 		this.pose = pose;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

@@ -34,11 +34,11 @@ public class IkonNacitacLoader {
 
 	private static final String	MAPUZEL		= "map";
 
-	public IkonBag nacti(Future<?> future, boolean aPrenacti, ASada jmenoSady) throws IOException {
+	public IkonBag nacti(final Future<?> future, final boolean aPrenacti, final ASada jmenoSady) throws IOException {
 		if (aPrenacti)
 			lastScan = null;
 		// Nejdříve skenovat, čímž také zjistíme, zda došlo ke změně
-		MultiFolder mf = new MultiFolder();
+		final MultiFolder mf = new MultiFolder();
 		mf.addResourceTree("img");
 		if (imageMyDir != null)
 			mf.addFolderTree(imageMyDir);
@@ -49,31 +49,31 @@ public class IkonNacitacLoader {
 			return null; // nedošlo ke změně
 		lastScan = mf;
 
-		IkonBag ikonBag = new IkonBag();
-		KeyNode<String, LamUrl> mapNode = mf.getNode(MAPUZEL);
+		final IkonBag ikonBag = new IkonBag();
+		final KeyNode<String, LamUrl> mapNode = mf.getNode(MAPUZEL);
 
 		ikonBag.setJmenaSad(mapNode.getKeys());
 		ikonBag.setJmenaAIkonySad(nactiIkonySad(mapNode));
 
-		IkonNacitacSada ikonNacitacSada = new IkonNacitacSada(ikonBag.getGenom());
-		String key = MAPUZEL + "/" + jmenoSady;
-		KeyNode<String, LamUrl> node = mf.getNode(key);
-		Sada sada = ikonNacitacSada.loadSada(node);
+		final IkonNacitacSada ikonNacitacSada = new IkonNacitacSada(ikonBag.getGenom());
+		final String key = MAPUZEL + "/" + jmenoSady;
+		final KeyNode<String, LamUrl> node = mf.getNode(key);
+		final Sada sada = ikonNacitacSada.loadSada(node);
 		ikonBag.setSada(sada);
 		return ikonBag;
 	}
 
-	public Map<ASada, Icon> nactiIkonySad(KeyNode<String, LamUrl> mapNode) {
-		Map<ASada, Icon> jmenaAIkonySad = new TreeMap<>();
-		List<KeyNode<String, LamUrl>> subNodes = mapNode.getSubNodes();
-		for (KeyNode<String, LamUrl> nodeSada : subNodes) {
+	public Map<ASada, Icon> nactiIkonySad(final KeyNode<String, LamUrl> mapNode) {
+		final Map<ASada, Icon> jmenaAIkonySad = new TreeMap<>();
+		final List<KeyNode<String, LamUrl>> subNodes = mapNode.getSubNodes();
+		for (final KeyNode<String, LamUrl> nodeSada : subNodes) {
 			Icon icon = null;
-			for (String klic : nodeSada.getKeys()) {
+			for (final String klic : nodeSada.getKeys()) {
 				if (klic.startsWith(IKONA_SADY)) {
-					KeyNode<String, LamUrl> node = nodeSada.getItems().get(klic);
+					final KeyNode<String, LamUrl> node = nodeSada.getItems().get(klic);
 					try {
 						icon = new ImageIcon(ImageIO.read(node.getData().url));
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Problem s nacitanim ikony sady: " + node.getData().url);
 					}
 				}
@@ -84,11 +84,11 @@ public class IkonNacitacLoader {
 
 	}
 
-	public void setImage3rdPartyDir(File image3rdPartyDir) {
+	public void setImage3rdPartyDir(final File image3rdPartyDir) {
 		this.image3rdPartyDir = image3rdPartyDir;
 	}
 
-	public void setImageMyDir(File imageMyDir) {
+	public void setImageMyDir(final File imageMyDir) {
 		this.imageMyDir = imageMyDir;
 	}
 }

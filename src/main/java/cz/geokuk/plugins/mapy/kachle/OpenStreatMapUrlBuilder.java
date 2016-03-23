@@ -5,25 +5,25 @@ import java.net.URL;
 
 public class OpenStreatMapUrlBuilder implements KachleUrlBuilder {
 
-	private String urlBase;
+	private final String urlBase;
 
-	public OpenStreatMapUrlBuilder(String urlBase) {
+	public OpenStreatMapUrlBuilder(final String urlBase) {
 		this.urlBase = urlBase;
 	}
 
 	@Override
-	public URL buildUrl(KaOne kaOne) throws MalformedURLException {
+	public URL buildUrl(final KaOne kaOne) throws MalformedURLException {
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(urlBase);
-		KaLoc kaloc = kaOne.getLoc();
+		final KaLoc kaloc = kaOne.getLoc();
 		sb.append(kaloc.getMoumer());
 		sb.append('/');
 		sb.append(kaloc.getFromSzUnsignedX());
 		sb.append('/');
 		sb.append(kaloc.getFromSzUnsignedY());
 		sb.append(".png");
-		URL url = new URL(sb.toString());
+		final URL url = new URL(sb.toString());
 		return url;
 	}
 

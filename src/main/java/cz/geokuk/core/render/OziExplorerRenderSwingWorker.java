@@ -17,30 +17,30 @@ public class OziExplorerRenderSwingWorker extends RendererSwingWorker0 {
 
 	private final EWhatRender whatRender;
 
-	OziExplorerRenderSwingWorker(EWhatRender whatRender) {
+	OziExplorerRenderSwingWorker(final EWhatRender whatRender) {
 		this.whatRender = whatRender;
 	}
 
 	@Override
 	protected RenderResult doInBackground() throws Exception {
 		progressor.setMax(Rendrovadlo.KOLIK_PROGRESUJEME_NA_KACHLICH);
-		File dir = renderModel.getOutputFolder();
+		final File dir = renderModel.getOutputFolder();
 
-		EImageType imageType = renderModel.getRenderSettings().getImageType();
+		final EImageType imageType = renderModel.getRenderSettings().getImageType();
 
 		// TODO správně by se parametry měly spočítat v konstruktoru, aby se nemohly v rendermodelu změnit
-		Rendrovadlo rendrovadlo = factory.init(new Rendrovadlo(this));
-		RenderParams p = new RenderParams();
+		final Rendrovadlo rendrovadlo = factory.init(new Rendrovadlo(this));
+		final RenderParams p = new RenderParams();
 		p.roord = renderModel.getRoord();
 		p.natacetDoSeveru = renderModel.getRenderSettings().isSrovnatDoSeveru();
 		// p.resultImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		// TODO typ obrázku musí být určen podle toho, zda se rendruje JPG nebo PNG.
-		String imageFileName = renderModel.getRenderSettings().getPureFileName().getText();
+		final String imageFileName = renderModel.getRenderSettings().getPureFileName().getText();
 		progressor.setText("Rendrování " + imageFileName);
 		dir.mkdirs();
-		String imageShortName = imageFileName + "." + imageType;
-		File imagePathName = new File(dir, imageShortName);
-		File mapPathName = new File(dir, imageFileName + ".map");
+		final String imageShortName = imageFileName + "." + imageType;
+		final File imagePathName = new File(dir, imageShortName);
+		final File mapPathName = new File(dir, imageFileName + ".map");
 		if (!Dlg.prepsatSoubor(imagePathName))
 			return null;
 		if (whatRender == EWhatRender.OZI_EXPLORER) {
@@ -52,7 +52,7 @@ public class OziExplorerRenderSwingWorker extends RendererSwingWorker0 {
 		p.pruhledne = imageType.isUmoznujePruhlednost();
 
 		try {
-			BufferedImage image = rendrovadlo.rendruj(p, progressor);
+			final BufferedImage image = rendrovadlo.rendruj(p, progressor);
 			// renderModel.vypisChybySouradnic(cocox.getPixluNaMetr());
 
 			System.out.printf("Zapis obrazku [%d,%d] do souboru \"%s\"%n", image.getWidth(), image.getHeight(), imagePathName);
@@ -60,11 +60,11 @@ public class OziExplorerRenderSwingWorker extends RendererSwingWorker0 {
 
 			File vytvorenySoubor;
 			if (whatRender == EWhatRender.OZI_EXPLORER) {
-				int width = p.roord.getDim().width;
-				int height = p.roord.getDim().height;
-				Coord cocox = p.roord;
-				PrintWriter pwrt = new PrintWriter(mapPathName);
-				List<Wgs> kalibody = renderModel.spocitejKalibracniBody();
+				final int width = p.roord.getDim().width;
+				final int height = p.roord.getDim().height;
+				final Coord cocox = p.roord;
+				final PrintWriter pwrt = new PrintWriter(mapPathName);
+				final List<Wgs> kalibody = renderModel.spocitejKalibracniBody();
 				printOziMetafile(pwrt, imageShortName, width, height, cocox, renderModel.getRenderSettings().getKalibrBodu(), kalibody);
 				pwrt.close();
 				vytvorenySoubor = mapPathName;
@@ -73,30 +73,30 @@ public class OziExplorerRenderSwingWorker extends RendererSwingWorker0 {
 			}
 			System.out.println("Konec rendrovani");
 
-			RenderResult result = new RenderResult();
+			final RenderResult result = new RenderResult();
 			result.file = vytvorenySoubor;
 			System.out.println("Konecc OZI rendrování");
 			return result;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			try {
 				imagePathName.delete();
-			} catch (Exception e1) {
+			} catch (final Exception e1) {
 				e.fillInStackTrace();
 			}
 			try {
 				mapPathName.delete();
-			} catch (Exception e1) {
+			} catch (final Exception e1) {
 				e.fillInStackTrace();
 			}
 			throw e;
 		}
 	}
 
-	private void printOziMetafile(PrintWriter p, String fileName, int width, int height, Coord cocox, int kalibrBodu, List<Wgs> kalibody) {
-		Wgs sz = cocox.transform(new Point(0, 0)).toWgs();
-		Wgs sv = cocox.transform(new Point(width, 0)).toWgs();
-		Wgs jz = cocox.transform(new Point(0, height)).toWgs();
-		Wgs jv = cocox.transform(new Point(width, height)).toWgs();
+	private void printOziMetafile(final PrintWriter p, final String fileName, final int width, final int height, final Coord cocox, final int kalibrBodu, final List<Wgs> kalibody) {
+		final Wgs sz = cocox.transform(new Point(0, 0)).toWgs();
+		final Wgs sv = cocox.transform(new Point(width, 0)).toWgs();
+		final Wgs jz = cocox.transform(new Point(0, height)).toWgs();
+		final Wgs jv = cocox.transform(new Point(width, height)).toWgs();
 
 		p.println("OziExplorer Map Data File Version 2.2");
 		p.println(fileName);
@@ -108,9 +108,9 @@ public class OziExplorerRenderSwingWorker extends RendererSwingWorker0 {
 		p.println("Magnetic Variation,,,E");
 		p.println("Map Projection,Latitude/Longitude,PolyCal,No,AutoCalOnly,No,BSBUseWPX,No");
 		int i = 0;
-		for (Wgs kalibod : kalibody) {
+		for (final Wgs kalibod : kalibody) {
 			i++;
-			Point point = cocox.transform(kalibod.toMou());
+			final Point point = cocox.transform(kalibod.toMou());
 			printOziKalibracniBod(p, i, point.x, point.y, kalibod);
 		}
 		// printOziKalibracniBod(p, 1, 0, height, jz);
@@ -132,11 +132,11 @@ public class OziExplorerRenderSwingWorker extends RendererSwingWorker0 {
 
 	}
 
-	private void printOziKalibracniBod(PrintWriter p, int cisloBodu, int x, int y, Wgs wgs) {
-		int latStup = (int) Math.floor(wgs.lat);
-		int lonStup = (int) Math.floor(wgs.lon);
-		double latMinut = (wgs.lat - latStup) * 60;
-		double lonMinut = (wgs.lon - lonStup) * 60;
+	private void printOziKalibracniBod(final PrintWriter p, final int cisloBodu, final int x, final int y, final Wgs wgs) {
+		final int latStup = (int) Math.floor(wgs.lat);
+		final int lonStup = (int) Math.floor(wgs.lon);
+		final double latMinut = (wgs.lat - latStup) * 60;
+		final double lonMinut = (wgs.lon - lonStup) * 60;
 		p.printf(Locale.ENGLISH, "Point%02d,xy,%d,%d,in, deg,%d,%10.3f,N,%d, %10.3f,E, grid,,,,N%n", cisloBodu, x, y, latStup, latMinut, lonStup, lonMinut);
 
 	}

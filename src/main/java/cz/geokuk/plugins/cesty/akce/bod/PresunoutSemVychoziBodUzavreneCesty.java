@@ -7,7 +7,7 @@ import cz.geokuk.plugins.cesty.data.Bod;
 
 /**
  * Jde na vybranou pozici
- * 
+ *
  * @author veverka
  *
  */
@@ -19,7 +19,7 @@ public class PresunoutSemVychoziBodUzavreneCesty extends BodAction0 {
 	/**
 	 * @param aBoard
 	 */
-	public PresunoutSemVychoziBodUzavreneCesty(Bod bod) {
+	public PresunoutSemVychoziBodUzavreneCesty(final Bod bod) {
 		super(bod);
 		putValue(NAME, "Přesunout výchozí bod");
 		putValue(SHORT_DESCRIPTION, "Přesune sem výchozí bod uzavřené cesty.");
@@ -28,17 +28,17 @@ public class PresunoutSemVychoziBodUzavreneCesty extends BodAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProBod(Bod bod) {
+	protected boolean mamPovolitProBod(final Bod bod) {
 		return bod.getCesta().isKruh() && !bod.isKrajovy();
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Bod bod, boolean aZKontextovehoMenu) {
+	protected void nastavJmenoAkce(final Bod bod, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "<html>Přesunout výchozí bod" + bod.getCesta().getNazevHtml() + " " + bod.dalkaCestaRozdelenoHtml(null));
 	}
 
 	@Override
-	protected void provedProBod(Bod bod) {
+	protected void provedProBod(final Bod bod) {
 		cestyModel.presunoutVyhoziBod(bod);
 	}
 

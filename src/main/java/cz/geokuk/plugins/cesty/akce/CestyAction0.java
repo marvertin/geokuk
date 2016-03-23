@@ -26,7 +26,7 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 	}
 
 	@Override
-	public void setEnabled(boolean newValue) {
+	public void setEnabled(final boolean newValue) {
 		super.setEnabled(newValue);
 		if (!newValue) {
 			if (puvodniJednoducheJmeno != null) {
@@ -35,7 +35,7 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 		}
 	}
 
-	public CestyAction0(String string) {
+	public CestyAction0(final String string) {
 		super(string);
 		setEnabled(false);
 	}
@@ -44,12 +44,12 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 	 * @param aString
 	 * @param aSeekResIcon
 	 */
-	public CestyAction0(String aString, Icon aIcon) {
+	public CestyAction0(final String aString, final Icon aIcon) {
 		super(aString, aIcon);
 		setEnabled(false);
 	}
 
-	public final void onEvent(CestyChangedEvent aEvent) {
+	public final void onEvent(final CestyChangedEvent aEvent) {
 		// System.out.println("********* dorucen event na: " + System.identityHashCode(this) + ": " + getClass().getName());
 		aEvent.getDoc().kontrolaKonzistence();
 		vyletChanged();
@@ -58,7 +58,7 @@ public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 	protected void vyletChanged() {
 	}
 
-	public final void inject(CestyModel cestyModel) {
+	public final void inject(final CestyModel cestyModel) {
 		this.cestyModel = cestyModel;
 
 	}

@@ -26,7 +26,7 @@ public class NacitacImageMetadata extends NacitacInputStream0 {
 
 	private static final ImmutableSet<String>	SUPPORTED_FILE_EXTENSIONS	= ImmutableSet.of("jpg", "raw", "tif");
 
-	protected void nacti(InputStream istm, String name, IImportBuilder builder, Future<?> future) throws IOException {
+	protected void nacti(final InputStream istm, final String name, final IImportBuilder builder, final Future<?> future) throws IOException {
 		if (future.isCancelled()) {
 			return;
 		}
@@ -39,18 +39,18 @@ public class NacitacImageMetadata extends NacitacInputStream0 {
 		Metadata imageMetadata;
 		try {
 			imageMetadata = ImageMetadataReader.readMetadata(bis, true);
-		} catch (ImageProcessingException e) {
+		} catch (final ImageProcessingException e) {
 			log.error("The input stream for file " + name + "couldn't be loaded!", e);
 			return;
 		}
-		GpsDirectory gpsDirectory = imageMetadata.getDirectory(GpsDirectory.class);
+		final GpsDirectory gpsDirectory = imageMetadata.getDirectory(GpsDirectory.class);
 		if (gpsDirectory == null) {
 			log.info("Image has no GPS metadata.");
 			return;
 		}
-		GeoLocation exifLocation = gpsDirectory.getGeoLocation();
+		final GeoLocation exifLocation = gpsDirectory.getGeoLocation();
 		if (exifLocation != null) {
-			GpxWpt gpxWpt = new GpxWpt();
+			final GpxWpt gpxWpt = new GpxWpt();
 			gpxWpt.wgs = new Wgs(exifLocation.getLatitude(), exifLocation.getLongitude());
 			gpxWpt.name = Iterables.getLast(Arrays.asList(name.split(Pattern.quote(File.separator))), "");
 			gpxWpt.link.href = name;
@@ -64,16 +64,16 @@ public class NacitacImageMetadata extends NacitacInputStream0 {
 	}
 
 	@Override
-	boolean umiNacist(ZipEntry zipEntry) {
+	boolean umiNacist(final ZipEntry zipEntry) {
 		return umiNacist(zipEntry.getName());
 	}
 
 	@Override
-	boolean umiNacist(File file) {
+	boolean umiNacist(final File file) {
 		return umiNacist(file.getName());
 	}
 
-	private boolean umiNacist(String resourceName) {
+	private boolean umiNacist(final String resourceName) {
 		return SUPPORTED_FILE_EXTENSIONS.contains(Files.getFileExtension(resourceName.toLowerCase()));
 	}
 

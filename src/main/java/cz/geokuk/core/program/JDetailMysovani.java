@@ -27,23 +27,23 @@ public final class JDetailMysovani extends JSingleSlide0 implements MouseInputLi
 
 	private PoziceModel poziceModel;
 
-	public void inject(PoziceModel poziceModel) {
+	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(final MouseEvent e) {
 		poziceModel.setPozice(getSoord().transform(e.getPoint()).toWgs());
 	}
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent mwe) {
-		JComponent c = (JComponent) getParent();
-		int krok = mwe.getUnitsToScroll();
+	public void mouseWheelMoved(final MouseWheelEvent mwe) {
+		final JComponent c = (JComponent) getParent();
+		final int krok = mwe.getUnitsToScroll();
 
-		Dimension d = c.getPreferredSize();
-		Dimension ma = c.getMaximumSize();
-		Dimension mi = c.getMinimumSize();
+		final Dimension d = c.getPreferredSize();
+		final Dimension ma = c.getMaximumSize();
+		final Dimension mi = c.getMinimumSize();
 
 		d.height += krok;
 		d.width += krok;
@@ -58,32 +58,32 @@ public final class JDetailMysovani extends JSingleSlide0 implements MouseInputLi
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.MouseWheelEvent)
 	 */
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
+	public void mouseMoved(final MouseEvent e) {
 		poziceModel.setMys(e.getPoint(), getSoord().transform(e.getPoint()), getUpravenaMys());
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
+	public void mouseEntered(final MouseEvent e) {
 	}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
+	public void mouseExited(final MouseEvent e) {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(final MouseEvent e) {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(final MouseEvent e) {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
+	public void mouseDragged(final MouseEvent e) {
 	}
 }

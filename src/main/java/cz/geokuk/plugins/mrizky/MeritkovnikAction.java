@@ -17,17 +17,17 @@ public class MeritkovnikAction extends ToggleAction0 {
 	}
 
 	@BeanSubtype("Meritkovnik")
-	public void inject(MrizkaModel mrizkaModel) {
+	public void inject(final MrizkaModel mrizkaModel) {
 		this.mrizkaModel = mrizkaModel;
 	}
 
 	@BeanSubtype("Meritkovnik")
-	public void onEvent(MrizkaEvent event) {
+	public void onEvent(final MrizkaEvent event) {
 		setSelected(event.onoff);
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		mrizkaModel.setOnoff(nastaveno);
 	}
 

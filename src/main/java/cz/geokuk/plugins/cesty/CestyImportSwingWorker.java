@@ -27,7 +27,7 @@ public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 	private final CestyModel			cestyModel;
 	private final List<File>			files;
 
-	public CestyImportSwingWorker(CestyZperzistentnovac cestyZperzistentnovac, KesBag vsechny, CestyModel cestyModel, List<File> files) {
+	public CestyImportSwingWorker(final CestyZperzistentnovac cestyZperzistentnovac, final KesBag vsechny, final CestyModel cestyModel, final List<File> files) {
 		this.cestyZperzistentnovac = cestyZperzistentnovac;
 		kesBag = vsechny;
 		this.cestyModel = cestyModel;
@@ -36,23 +36,23 @@ public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
 	public List<Cesta> doInBackground() throws Exception {
-		List<Cesta> cesty = cestyZperzistentnovac.nacti(files, kesBag);
+		final List<Cesta> cesty = cestyZperzistentnovac.nacti(files, kesBag);
 		return cesty;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
-		List<Cesta> cesty = get();
+		final List<Cesta> cesty = get();
 		if (cesty == null)
 			return; // asi zkanclváno
 		log.info("Načteny cesty %d: \n", cesty.size());

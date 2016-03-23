@@ -45,12 +45,12 @@ public class JPrehledSouboru extends JPanel {
 
 	private final EnumMap<ESouborPanelName, JJedenSouborPanel>	mapaProFokusovani	= new EnumMap<>(ESouborPanelName.class);
 
-	public JPrehledSouboru(Void v) {
+	public JPrehledSouboru(final Void v) {
 		initComponents();
 	}
 
 	private JComponent createTab() {
-		JComponent tab = new JPanel();
+		final JComponent tab = new JPanel();
 		tab.setLayout(new BoxLayout(tab, BoxLayout.PAGE_AXIS));
 		return tab;
 	}
@@ -58,18 +58,18 @@ public class JPrehledSouboru extends JPanel {
 	private void initComponents() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-		int ho = 8;
+		final int ho = 8;
 		setBorder(BorderFactory.createEmptyBorder(ho, ho, ho, ho));
 
 		jTabbedPane = new JTabbedPane();
 
-		JComponent tab1 = createTab();
+		final JComponent tab1 = createTab();
 		jTabbedPane.addTab("Data", null, tab1, "Základní datové složky.");
-		JComponent tab2 = createTab();
+		final JComponent tab2 = createTab();
 		jTabbedPane.addTab("Ikony", null, tab2, "Složky s uživatelskými ikonami.");
-		JComponent tab3 = createTab();
+		final JComponent tab3 = createTab();
 		jTabbedPane.addTab("Rendr", null, tab3, "Výstupní složky pro rendrování.");
-		JComponent tab4 = createTab();
+		final JComponent tab4 = createTab();
 		jTabbedPane.addTab("Technické", null, tab4, "Technické složky jako jseou programové cache a podobně.");
 		// tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
@@ -100,8 +100,8 @@ public class JPrehledSouboru extends JPanel {
 		add(jTabbedPane);
 		add(Box.createVerticalGlue());
 
-		Box ulobox = Box.createHorizontalBox();
-		JButton ulozit = new JButton("Uložit");
+		final Box ulobox = Box.createHorizontalBox();
+		final JButton ulozit = new JButton("Uložit");
 		// ulozit.setAlignmentX(CENTER_ALIGNMENT);
 		// JLabel ulozlabel = new JLabel("Po uložení změn v souborech bude program ukončen");
 		// ulozlabel.setForeground(Color.RED);
@@ -117,19 +117,19 @@ public class JPrehledSouboru extends JPanel {
 		registerEvents(ulozit);
 	}
 
-	private void ukonciPanel(JComponent tab) {
+	private void ukonciPanel(final JComponent tab) {
 		tab.remove(tab.getComponentCount() - 1); // odstranit mezeru za poslední podtovoru
 		tab.add(Box.createVerticalGlue());
 	}
 
-	private void registerEvents(JButton ulozit) {
+	private void registerEvents(final JButton ulozit) {
 		ulozit.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent aE) {
+			public void actionPerformed(final ActionEvent aE) {
 				try {
 					{
-						KesoidUmisteniSouboru u = new KesoidUmisteniSouboru();
+						final KesoidUmisteniSouboru u = new KesoidUmisteniSouboru();
 						u.setKesDir(jKesDir.vezmiSouborAProver());
 						u.setCestyDir(jCestyDir.vezmiSouborAProver());
 
@@ -141,12 +141,12 @@ public class JPrehledSouboru extends JPanel {
 						kesoidModel.setUmisteniSouboru(u);
 					}
 					{
-						KachleUmisteniSouboru u = new KachleUmisteniSouboru();
+						final KachleUmisteniSouboru u = new KachleUmisteniSouboru();
 						u.setKachleCacheDir(jKachleCacheDir.vezmiSouborAProver());
 						kachleModel.setUmisteniSouboru(u);
 					}
 					{
-						RenderUmisteniSouboru u = new RenderUmisteniSouboru();
+						final RenderUmisteniSouboru u = new RenderUmisteniSouboru();
 						u.setOziDir(jOziDir.vezmiSouborAProver());
 						u.setKmzDir(jKmzDir.vezmiSouborAProver());
 						u.setPictureDir(jPictureDir.vezmiSouborAProver());
@@ -156,15 +156,15 @@ public class JPrehledSouboru extends JPanel {
 					// Board.multiNacitacLoaderManager.startLoad(true);
 
 					((JUmisteniSouboruDialog) SwingUtilities.getRoot(JPrehledSouboru.this)).dispose();
-				} catch (YNejdeTo e) {
+				} catch (final YNejdeTo e) {
 					Dlg.error(e.getMessage());
 				}
 			}
 		});
 	}
 
-	private JJedenSouborPanel pridejJednuPolozkuProCteni(ESouborPanelName souborPanelName, JComponent tab, String label, Filex hodnota, final boolean jenAdresare) {
-		JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, false, false);
+	private JJedenSouborPanel pridejJednuPolozkuProCteni(final ESouborPanelName souborPanelName, final JComponent tab, final String label, final Filex hodnota, final boolean jenAdresare) {
+		final JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, false, false);
 		panel.setFilex(hodnota);
 		tab.add(panel);
 		tab.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -175,8 +175,8 @@ public class JPrehledSouboru extends JPanel {
 		return panel;
 	}
 
-	private JJedenSouborPanel pridejJednuPolozkuproEdit(ESouborPanelName souborPanelName, JComponent tab, String label, final boolean jenAdresare, boolean lzeDeaktivovat) {
-		JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, true, lzeDeaktivovat);
+	private JJedenSouborPanel pridejJednuPolozkuproEdit(final ESouborPanelName souborPanelName, final JComponent tab, final String label, final boolean jenAdresare, final boolean lzeDeaktivovat) {
+		final JJedenSouborPanel panel = new JJedenSouborPanel(souborPanelName, label, jenAdresare, true, lzeDeaktivovat);
 		tab.add(panel);
 		tab.add(Box.createRigidArea(new Dimension(0, 20)));
 		// Zjištěno, že to funguje, pokud je tam i lepidlo
@@ -188,20 +188,20 @@ public class JPrehledSouboru extends JPanel {
 		return panel;
 	}
 
-	public void onEvent(RenderUmisteniSouboruChangedEvent event) {
-		RenderUmisteniSouboru u = event.getUmisteniSouboru();
+	public void onEvent(final RenderUmisteniSouboruChangedEvent event) {
+		final RenderUmisteniSouboru u = event.getUmisteniSouboru();
 		jPictureDir.setFilex(u.getPictureDir());
 		jKmzDir.setFilex(u.getKmzDir());
 		jOziDir.setFilex(u.getOziDir());
 	}
 
-	public void onEvent(KachleUmisteniSouboruChangedEvent event) {
-		KachleUmisteniSouboru u = event.getUmisteniSouboru();
+	public void onEvent(final KachleUmisteniSouboruChangedEvent event) {
+		final KachleUmisteniSouboru u = event.getUmisteniSouboru();
 		jKachleCacheDir.setFilex(u.getKachleCacheDir());
 	}
 
-	public void onEvent(KesoidUmisteniSouboruChangedEvent event) {
-		KesoidUmisteniSouboru u = event.getUmisteniSouboru();
+	public void onEvent(final KesoidUmisteniSouboruChangedEvent event) {
+		final KesoidUmisteniSouboru u = event.getUmisteniSouboru();
 		jKesDir.setFilex(u.getKesDir());
 		jCestyDir.setFilex(u.getCestyDir());
 		jGeogetDataDir.setFilex(u.getGeogetDataDir());
@@ -212,20 +212,20 @@ public class JPrehledSouboru extends JPanel {
 		jImageMyDir.setFilex(u.getImageMyDir());
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 
-	public void inject(RenderModel renderModel) {
+	public void inject(final RenderModel renderModel) {
 		this.renderModel = renderModel;
 	}
 
-	public void inject(KachleModel kachleModel) {
+	public void inject(final KachleModel kachleModel) {
 		this.kachleModel = kachleModel;
 	}
 
-	public void fokusni(ESouborPanelName panelName) {
-		JJedenSouborPanel panel = mapaProFokusovani.get(panelName);
+	public void fokusni(final ESouborPanelName panelName) {
+		final JJedenSouborPanel panel = mapaProFokusovani.get(panelName);
 		if (panel == null)
 			return;
 		panel.fokusniSe();
@@ -238,7 +238,7 @@ public class JPrehledSouboru extends JPanel {
 		/**
 		 * @param aMessage
 		 */
-		public YNejdeTo(String aMessage) {
+		public YNejdeTo(final String aMessage) {
 			super(aMessage);
 		}
 	}

@@ -7,7 +7,7 @@ public interface KachleUrlBuilder {
 
 	/**
 	 * Vytvoří URL pro sgtažení dané dlaždice.
-	 * 
+	 *
 	 * @param kaOne
 	 * @return
 	 * @throws MalformedURLException

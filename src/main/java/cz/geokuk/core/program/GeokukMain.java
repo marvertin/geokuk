@@ -21,7 +21,7 @@ public class GeokukMain {
 
 	private static final Logger log = LogManager.getLogger(GeokukMain.class.getSimpleName());
 
-	public void execute(String[] args) {
+	public void execute(final String[] args) {
 		FConst.logInit();
 		log.info("Default character encoding: {}", Charset.defaultCharset());
 		nastavSkin();
@@ -32,9 +32,9 @@ public class GeokukMain {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Inicializator inicializator = new Inicializator();
+				final Inicializator inicializator = new Inicializator();
 				inicializator.inicializace();
-				JMainFrame mainFrame = new JMainFrame();
+				final JMainFrame mainFrame = new JMainFrame();
 				inicializator.setMainFrame(mainFrame);
 				mainFrame.init();
 				mainFrame.setVisible(true);
@@ -46,24 +46,24 @@ public class GeokukMain {
 	private void nastavSkin() {
 		try {
 			LafSupport.updateLookAndFeel();
-		} catch (Throwable t) {
+		} catch (final Throwable t) {
 			FExceptionDumper.dump(t, EExceptionSeverity.WORKARROUND, "Nastavení skinu");
 		}
 	}
 
-	private void promazPreferencePokudJeToPrikazano(String[] args) {
-		for (String s : args) {
+	private void promazPreferencePokudJeToPrikazano(final String[] args) {
+		for (final String s : args) {
 			if (s.trim().equalsIgnoreCase("--reset")) {
 				try {
 					MyPreferences.root().removeNode();
-				} catch (BackingStoreException e) {
+				} catch (final BackingStoreException e) {
 					FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Problém s promazáváním preferencí");
 				}
 			}
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		new GeokukMain().execute(args);
 	}
 

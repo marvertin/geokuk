@@ -6,7 +6,7 @@ public class GccomNickChangedEvent extends Event0<KesoidModel> {
 
 	private final GccomNick gccomNick;
 
-	public GccomNickChangedEvent(GccomNick gccomNick) {
+	public GccomNickChangedEvent(final GccomNick gccomNick) {
 		super();
 		this.gccomNick = gccomNick;
 	}

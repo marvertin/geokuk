@@ -9,11 +9,11 @@ public class Usek extends Bousek0 {
 	private boolean	vzdusny	= false;
 	private double	dalka	= -1;
 
-	Usek(Cesta cesta) {
+	Usek(final Cesta cesta) {
 		super(cesta);
 	}
 
-	void spoj(Bod b1, Bod b2) {
+	void spoj(final Bod b1, final Bod b2) {
 		bvzad = b1;
 		bvpred = b2;
 		b1.setUvpred(this);
@@ -24,13 +24,13 @@ public class Usek extends Bousek0 {
 	 * V zorném poli bodu je úsek tehdy, když je v obdélníku "opsaném" nad úsekem. Opsaným obdélníkem rozumíme nejmenší možný obdélník, jehož strany jsou rovnoběžné se souřadnicovými osami a to takový, že celý úsek leží v tomto obdélníku.
 	 */
 	@Override
-	boolean jeVOpsanemObdelniku(Mou mou) {
+	boolean jeVOpsanemObdelniku(final Mou mou) {
 		if (mou == null)
 			return false;
-		Mou mou1 = bvzad.getMou();
-		Mou mou2 = bvpred.getMou();
-		boolean jex = mou1.xx <= mou.xx && mou.xx <= mou2.xx || mou1.xx >= mou.xx && mou.xx >= mou2.xx;
-		boolean jey = mou1.yy <= mou.yy && mou.yy <= mou2.yy || mou1.yy >= mou.yy && mou.yy >= mou2.yy;
+		final Mou mou1 = bvzad.getMou();
+		final Mou mou2 = bvpred.getMou();
+		final boolean jex = mou1.xx <= mou.xx && mou.xx <= mou2.xx || mou1.xx >= mou.xx && mou.xx >= mou2.xx;
+		final boolean jey = mou1.yy <= mou.yy && mou.yy <= mou2.yy || mou1.yy >= mou.yy && mou.yy >= mou2.yy;
 		return jex && jey;
 	}
 
@@ -40,10 +40,10 @@ public class Usek extends Bousek0 {
 	 * @param mou
 	 * @return null, když je pata kolmice mimo úsečku.
 	 */
-	public Mou getNejblizsiBodKolmoKUsecce(Mou mou) {
+	public Mou getNejblizsiBodKolmoKUsecce(final Mou mou) {
 		if (mou == null)
 			return null;
-		Mou m = prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
+		final Mou m = prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
 		if (jeVOpsanemObdelniku(m)) {
 			return m;
 		} else {
@@ -57,18 +57,18 @@ public class Usek extends Bousek0 {
 	 * @param mou
 	 * @return
 	 */
-	public Mou getNejblizsiBodKPrimce(Mou mou) {
+	public Mou getNejblizsiBodKPrimce(final Mou mou) {
 		if (mou == null) {
 			return null;
 		}
 		return prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
 	}
 
-	public long computeKvadratVzdalenostiBoduKUsecce(Mou mou) {
-		Mou m = getNejblizsiBodKolmoKUsecce(mou);
+	public long computeKvadratVzdalenostiBoduKUsecce(final Mou mou) {
+		final Mou m = getNejblizsiBodKolmoKUsecce(mou);
 		if (m == null)
 			return Long.MAX_VALUE;
-		long kvadrat = mou.getKvadratVzdalenosti(m);
+		final long kvadrat = mou.getKvadratVzdalenosti(m);
 		return kvadrat;
 	}
 
@@ -79,8 +79,8 @@ public class Usek extends Bousek0 {
 	 * @return
 	 */
 	@Override
-	public long computeKvadratVzdalenosti(Mou mou) {
-		Mou m = getNejblizsiBodKolmoKUsecce(mou);
+	public long computeKvadratVzdalenosti(final Mou mou) {
+		final Mou m = getNejblizsiBodKolmoKUsecce(mou);
 		long kvadrat;
 		if (mou == null) { // je to jeden z krajnich bodul
 			kvadrat = Math.min(bvzad.getMou().getKvadratVzdalenosti(m), bvpred.getMou().getKvadratVzdalenosti(m));
@@ -97,9 +97,9 @@ public class Usek extends Bousek0 {
 	 * @param mou
 	 * @return
 	 */
-	public long computeKvadratVzdalenostiKPrimce(Mou mou) {
-		Mou m = getNejblizsiBodKPrimce(mou);
-		long kvadrat = mou.getKvadratVzdalenosti(m);
+	public long computeKvadratVzdalenostiKPrimce(final Mou mou) {
+		final Mou m = getNejblizsiBodKPrimce(mou);
+		final long kvadrat = mou.getKvadratVzdalenosti(m);
 		return kvadrat;
 	}
 
@@ -111,49 +111,49 @@ public class Usek extends Bousek0 {
 	 * @param m3
 	 * @return Průsečík kolmice, nikdy nevrací null.
 	 */
-	private static Mou prusecikKolmice(Mou m1, Mou m2, Mou m3) {
+	private static Mou prusecikKolmice(final Mou m1, final Mou m2, final Mou m3) {
 		// TODO : what to do if m1 == m2?
 		if (m1.equals(m2)) {
 			return new Mou(m3);
 		}
 
-		double x1 = m1.xx;
-		double y1 = m1.yy;
-		double x2 = m2.xx;
-		double y2 = m2.yy;
-		double x3 = m3.xx;
-		double y3 = m3.yy;
+		final double x1 = m1.xx;
+		final double y1 = m1.yy;
+		final double x2 = m2.xx;
+		final double y2 = m2.yy;
+		final double x3 = m3.xx;
+		final double y3 = m3.yy;
 
-		double a11 = x1 - x2;
-		double a12 = y1 - y2;
-		double a21 = a12;
-		double a22 = -a11;
-		double b1 = -((a22) * x3 + (-a12) * y3);
-		double b2 = -(x1 * y2 - x2 * y1);
+		final double a11 = x1 - x2;
+		final double a12 = y1 - y2;
+		final double a21 = a12;
+		final double a22 = -a11;
+		final double b1 = -((a22) * x3 + (-a12) * y3);
+		final double b2 = -(x1 * y2 - x2 * y1);
 
-		double d = a11 * a22 - a12 * a21;
-		double d1 = b1 * a22 - a12 * b2;
-		double d2 = a11 * b2 - b1 * a21;
+		final double d = a11 * a22 - a12 * a21;
+		final double d1 = b1 * a22 - a12 * b2;
+		final double d2 = a11 * b2 - b1 * a21;
 
-		double x = d1 / d;
-		double y = d2 / d;
+		final double x = d1 / d;
+		final double y = d2 / d;
 
-		Mou mou = new Mou((int) x, (int) y);
+		final Mou mou = new Mou((int) x, (int) y);
 		// System.out.printf("pruseCikk [%d,%d] --- [%d,%d] | [%d,%d] = [%d,%d]%n", x1, y1, x2, y2, x3, y3, x, y);
 		// System.out.printf("pruseCikk (%d,%d) %n", a11, a12);
 		return mou;
 
 	}
 
-	Bod rozdelAZanikni(Mouable mouable) {
-		Bod bod = getCesta().createBod(mouable);
-		Usek u1 = getCesta().createUsek();
-		Usek u2 = getCesta().createUsek();
+	Bod rozdelAZanikni(final Mouable mouable) {
+		final Bod bod = getCesta().createBod(mouable);
+		final Usek u1 = getCesta().createUsek();
+		final Usek u2 = getCesta().createUsek();
 		u1.spoj(bvzad, bod);
 		u2.spoj(bod, bvpred);
 		if (isVzdusny()) {
-			long kvadratDalkyVzad = getBvzad().computeKvadratVzdalenosti(bod.getMou());
-			long kvadratDalkyVpred = getBvpred().computeKvadratVzdalenosti(bod.getMou());
+			final long kvadratDalkyVzad = getBvzad().computeKvadratVzdalenosti(bod.getMou());
+			final long kvadratDalkyVpred = getBvpred().computeKvadratVzdalenosti(bod.getMou());
 			if (kvadratDalkyVpred > kvadratDalkyVzad) {
 				u2.setVzdusny(true);
 			} else {
@@ -164,7 +164,7 @@ public class Usek extends Bousek0 {
 
 	}
 
-	void setBvpred(Bod vpred) {
+	void setBvpred(final Bod vpred) {
 		bvpred = vpred;
 		zneschopniDalku();
 	}
@@ -173,7 +173,7 @@ public class Usek extends Bousek0 {
 		return bvpred;
 	}
 
-	void setBvzad(Bod vzad) {
+	void setBvzad(final Bod vzad) {
 		bvzad = vzad;
 		zneschopniDalku();
 	}
@@ -186,39 +186,39 @@ public class Usek extends Bousek0 {
 		return vzdusny;
 	}
 
-	void setVzdusny(boolean vzdusny) {
+	void setVzdusny(final boolean vzdusny) {
 		this.vzdusny = vzdusny;
 	}
 
 	public double getUhel() {
-		Moud moud = bvpred.mouable.getMou().sub(bvzad.mouable.getMou());
-		double uhel = Math.atan2(moud.dxx, moud.dyy);
+		final Moud moud = bvpred.mouable.getMou().sub(bvzad.mouable.getMou());
+		final double uhel = Math.atan2(moud.dxx, moud.dyy);
 		return uhel;
 	}
 
-	public double getMouDelkaVpred(Mou aMou) {
+	public double getMouDelkaVpred(final Mou aMou) {
 		if (isVzdusny())
 			return 0;
-		Mou mou = getNejblizsiBodKPrimce(aMou);
+		final Mou mou = getNejblizsiBodKPrimce(aMou);
 		return FGeoKonvertor.dalka(mou, bvpred);
 	}
 
-	public double getMouDelkaVzad(Mou aMou) {
+	public double getMouDelkaVzad(final Mou aMou) {
 		if (isVzdusny())
 			return 0;
-		Mou mou = getNejblizsiBodKPrimce(aMou);
+		final Mou mou = getNejblizsiBodKPrimce(aMou);
 		return FGeoKonvertor.dalka(mou, bvzad);
 	}
 
 	@Override
-	public double dalkaCestaVpred(Mou aMou) {
-		double delka = getMouDelkaVpred(aMou) + bvpred.dalkaCestaVpred(aMou);
+	public double dalkaCestaVpred(final Mou aMou) {
+		final double delka = getMouDelkaVpred(aMou) + bvpred.dalkaCestaVpred(aMou);
 		return delka;
 	}
 
 	@Override
-	public double dalkaCestaVzad(Mou aMou) {
-		double delka = getMouDelkaVzad(aMou) + bvzad.dalkaCestaVzad(aMou);
+	public double dalkaCestaVzad(final Mou aMou) {
+		final double delka = getMouDelkaVzad(aMou) + bvzad.dalkaCestaVzad(aMou);
 		return delka;
 	}
 
@@ -246,7 +246,7 @@ public class Usek extends Bousek0 {
 		return getBvzad();
 	}
 
-	private void kon(boolean podm) {
+	private void kon(final boolean podm) {
 		if (!podm)
 			throw new RuntimeException("Selhala kontrola konzistence useku");
 	}

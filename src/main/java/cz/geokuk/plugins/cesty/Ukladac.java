@@ -11,11 +11,11 @@ public class Ukladac {
 
 	private PrintWriter pwrt;
 
-	public void uloz(File f, Doc doc) {
+	public void uloz(final File f, final Doc doc) {
 
 		try {
 			pwrt = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), "UTF-8")));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 
@@ -27,19 +27,19 @@ public class Ukladac {
 		pwrt.close();
 	}
 
-	private void uloz(Doc doc) {
-		for (Cesta cesta : doc.getCesty()) {
+	private void uloz(final Doc doc) {
+		for (final Cesta cesta : doc.getCesty()) {
 			uloz(cesta);
 		}
 	}
 
-	private void uloz(Cesta cesta) {
+	private void uloz(final Cesta cesta) {
 		p("<trk>");
 		if (cesta.getNazev() != null) {
 			p("  <name>" + cesta.getNazev() + "</name>");
 		}
 		p("  <trkseg>");
-		for (Bod b : cesta.getBody()) {
+		for (final Bod b : cesta.getBody()) {
 			uloz(b.getMouable().getMou());
 			if (b.getUvpred() != null && b.getUvpred().isVzdusny()) {
 				p("  </trkseg>");
@@ -51,12 +51,12 @@ public class Ukladac {
 
 	}
 
-	private void uloz(Mou mou) {
-		Wgs wgs = mou.toWgs();
+	private void uloz(final Mou mou) {
+		final Wgs wgs = mou.toWgs();
 		p("    <trkpt lat=\"%f\" lon=\"%f\" />", wgs.lat, wgs.lon);
 	}
 
-	private void p(String format, Object... p) {
+	private void p(final String format, final Object... p) {
 		pwrt.printf(Locale.US, format, p);
 		pwrt.println();
 	}

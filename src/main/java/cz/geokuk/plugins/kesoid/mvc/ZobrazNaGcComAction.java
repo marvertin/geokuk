@@ -22,7 +22,7 @@ public class ZobrazNaGcComAction extends Action0 {
 	/**
 	 *
 	 */
-	public ZobrazNaGcComAction(Kesoid kesoid) {
+	public ZobrazNaGcComAction(final Kesoid kesoid) {
 
 		super("Zobrazení na webu", kesoid.getUrlIcon());
 		url = kesoid.getUrlShow();
@@ -33,11 +33,11 @@ public class ZobrazNaGcComAction extends Action0 {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		BrowserOpener.displayURL(url);
 	}
 

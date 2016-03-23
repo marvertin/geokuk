@@ -8,7 +8,7 @@ import java.util.Map;
  * vedla, zastaví se čítač na nule.
  *
  * Title: Evidence exemplářů a dodávek Description: V první fázi zde bude implementace přidání dodávky a jejích exemplářů Copyright: Copyright (c) 2001 Company: TurboConsult s.r.o.
- * 
+ *
  * @author
  * @version 1.0
  */
@@ -16,7 +16,7 @@ import java.util.Map;
 public interface CounterMap<T> {
 	/**
 	 * Inkrtementuje o jedničku čítač specifikovaný zadaným klíčem
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, který má být počítán.
 	 * @return Hodnota čítače před provedením operace.
@@ -25,7 +25,7 @@ public interface CounterMap<T> {
 
 	/**
 	 * Dekrementuje o jedničku čítač specifikovaný zadaným klíčem
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, který má být počítán.
 	 * @return Hodnota čítače před provedením operace.
@@ -34,7 +34,7 @@ public interface CounterMap<T> {
 
 	/**
 	 * Vrátí hodnotu čítače pro daný objekt.
-	 * 
+	 *
 	 * @parame aKey(Object aKey)
 	 * @return Hodnota čítače pro daný objekt. Vrací nulu, pokud objekt není v mapě evidován. Nikdy nevrátí zápornou hodnotu. Je to vlastně také hodnota před provedením operace.
 	 */
@@ -42,7 +42,7 @@ public interface CounterMap<T> {
 
 	/**
 	 * Přičte zadanou hodnotu k čítači pro daný objekt.
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, který má být čítán.
 	 * @param aOKolik
@@ -53,7 +53,7 @@ public interface CounterMap<T> {
 
 	/**
 	 * Přičte zadanou hodnotu k čítači pro daný objekt.
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, který má být čítán.
 	 * @param aOKolik
@@ -64,7 +64,7 @@ public interface CounterMap<T> {
 
 	/**
 	 * Resetuje čítač daného objektu
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, jehož čítač má být resetován.
 	 * @return Hodnota čítače před provedením operace. Pokud je záporná, je považována za nulu.
@@ -73,7 +73,7 @@ public interface CounterMap<T> {
 
 	/**
 	 * Vrátí nemodifikovatelnou mapu objektů na objekty Integer
-	 * 
+	 *
 	 * @return Naplněný objekt implementující rozhraní Map jako mapa na čítače. Objekt není
 	 */
 	public Map<T, Integer> getMap();
@@ -90,7 +90,7 @@ public interface CounterMap<T> {
 
 	/**
 	 * Přičte odpovídající hodnoty čítačů ze zadané mapy.
-	 * 
+	 *
 	 * @param aMap
 	 *            mapa, která se má přičíst.
 	 * @return Celková suma čítačů teéto mapy před přičtěním.
@@ -99,7 +99,7 @@ public interface CounterMap<T> {
 
 	/**
 	 * Odečte odpovídající hodnoty čítačů ze zadané mapy.
-	 * 
+	 *
 	 * @param aMap
 	 *            mapa, která se má přičíst.
 	 * @return Celková suma čítačů teéto mapy před přičtěním.

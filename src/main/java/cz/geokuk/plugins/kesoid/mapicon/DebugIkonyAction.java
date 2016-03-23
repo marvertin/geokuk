@@ -16,7 +16,7 @@ public class DebugIkonyAction extends DialogOpeningAction0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.DilogOpeningAction0#createDialog()
 	 */
 	@Override

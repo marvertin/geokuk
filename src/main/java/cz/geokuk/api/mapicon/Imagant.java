@@ -10,7 +10,7 @@ import cz.geokuk.plugins.kesoid.Repaintanger;
 
 /**
  * Obrázek i s offsetem.
- * 
+ *
  * @author veverka
  *
  */
@@ -23,21 +23,21 @@ public class Imagant {
 	private int					yoffset;
 
 	/** Pozice středu obrázku bez aplikace offsetu */
-	private int					x0;
-	private int					y0;
+	private final int			x0;
+	private final int			y0;
 
 	/**
 	 * @param aBi
 	 */
-	public Imagant(BufferedImage aBi) {
+	public Imagant(final BufferedImage aBi) {
 		image = aBi;
 		x0 = -image.getWidth() / 2;
 		y0 = -image.getHeight() / 2;
 	}
 
 	public Imagant cloneEmpty() {
-		BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Imagant imagant = new Imagant(bi);
+		final BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		final Imagant imagant = new Imagant(bi);
 		imagant.setXoffset(xoffset);
 		imagant.setYoffset(yoffset);
 		return imagant;
@@ -68,7 +68,7 @@ public class Imagant {
 	 * @param aXoffset
 	 *            the xoffset to set
 	 */
-	public void setXoffset(int aXoffset) {
+	public void setXoffset(final int aXoffset) {
 		xoffset = aXoffset;
 	}
 
@@ -76,12 +76,12 @@ public class Imagant {
 	 * @param aYoffset
 	 *            the yoffset to set
 	 */
-	public void setYoffset(int aYoffset) {
+	public void setYoffset(final int aYoffset) {
 		yoffset = aYoffset;
 	}
 
-	public void computeInsets(Repaintanger repaintanger) {
-		Insets insets = new Insets(-getYpos(), -getXpos(), getYpos() + image.getHeight(), getXpos() + image.getWidth());
+	public void computeInsets(final Repaintanger repaintanger) {
+		final Insets insets = new Insets(-getYpos(), -getXpos(), getYpos() + image.getHeight(), getXpos() + image.getWidth());
 		repaintanger.include(insets);
 	}
 

@@ -14,16 +14,16 @@ public class KesoidyOnoffAction extends ToggleAction0 {
 		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 
-	public void onEvent(KesoidOnoffEvent event) {
+	public void onEvent(final KesoidOnoffEvent event) {
 		setSelected(event.isOnoff());
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		kesoidModel.setOnoff(nastaveno);
 	}
 

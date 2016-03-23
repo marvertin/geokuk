@@ -33,17 +33,17 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
 	public JDetailPrekryvnik() {
 	}
 
-	public void onEvent(ZmenaSouradnicMysiEvent aEvent) {
+	public void onEvent(final ZmenaSouradnicMysiEvent aEvent) {
 		moucur = aEvent.upravenaMys == null ? aEvent.moucur : aEvent.upravenaMys.getMou();
 		nastav();
 	}
 
-	public void onEvent(PridavaniBoduEvent aEvent) {
+	public void onEvent(final PridavaniBoduEvent aEvent) {
 		probihaPridavani = aEvent.probihaPridavani;
 		nastav();
 	}
 
-	public void onEvent(PoziceChangedEvent aEvent) {
+	public void onEvent(final PoziceChangedEvent aEvent) {
 		poziceq = aEvent.poziceq;
 		nastav();
 	}
@@ -69,7 +69,7 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
 		}
 		zpozdovaciTimer = new Timer(SPOZDENI_ZOBRAZENI_DETAILU, new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				zpozdovaciTimer = null;
 				if (moucur != null) {
 					setSoord(getSoord().derive(DETAIL_MOUMER, moucur));

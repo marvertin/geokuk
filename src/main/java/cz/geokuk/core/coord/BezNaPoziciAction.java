@@ -10,7 +10,7 @@ import cz.geokuk.framework.Action0;
 
 /**
  * Jde na vybranou pozici
- * 
+ *
  * @author veverka
  *
  */
@@ -31,18 +31,18 @@ public class BezNaPoziciAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent aE) {
+	public void actionPerformed(final ActionEvent aE) {
 		// poziceModel.setPozice(pozice);
 		vyrezModel.vystredovatNaPozici();
 
 		// Board.eveman.fire(new PoziceChangedEvent(pozice, true));
 	}
 
-	public void onEvent(PoziceChangedEvent event) {
+	public void onEvent(final PoziceChangedEvent event) {
 		setEnabled(!event.poziceq.isNoPosition());
 	}
 

@@ -23,18 +23,18 @@ public class JenDoTerenuUNenalezenychAction extends ToggleAction0 {
 		putValue(SHORT_DESCRIPTION, "U ještě nenalezených vyluštěných mysterek a multin zhasne úvodní souřadnice a všechny stage.");
 	}
 
-	public void onEvent(FilterDefinitionChangedEvent event) {
+	public void onEvent(final FilterDefinitionChangedEvent event) {
 		setSelected(event.getFilterDefinition().isJenDoTerenuUNenalezenych());
 	}
 
 	@Override
-	protected void onSlectedChange(boolean onoff) {
-		FilterDefinition definition = model.getDefinition();
+	protected void onSlectedChange(final boolean onoff) {
+		final FilterDefinition definition = model.getDefinition();
 		definition.setJenDoTerenuUNenalezenych(onoff);
 		model.setDefinition(definition);
 	}
 
-	public void inject(KesoidModel model) {
+	public void inject(final KesoidModel model) {
 		this.model = model;
 	}
 

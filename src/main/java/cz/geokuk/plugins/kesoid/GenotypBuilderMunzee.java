@@ -8,12 +8,12 @@ class GenotypBuilderMunzee {
 	private final Genotyp	g;
 	private final Genom		genom;
 
-	public GenotypBuilderMunzee(Genom genom, Genotyp g) {
+	public GenotypBuilderMunzee(final Genom genom, final Genotyp g) {
 		this.genom = genom;
 		this.g = g;
 	}
 
-	public void build(Munzee munzee) {
+	public void build(final Munzee munzee) {
 		g.put(genom.ALELA_mz);
 		switch (munzee.getVztah()) {
 		case NORMAL:

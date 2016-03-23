@@ -6,7 +6,7 @@ public class PridavaniBoduEvent extends Event0<CestyModel> {
 
 	public final boolean probihaPridavani;
 
-	public PridavaniBoduEvent(boolean probihaPridavani) {
+	public PridavaniBoduEvent(final boolean probihaPridavani) {
 		this.probihaPridavani = probihaPridavani;
 	}
 

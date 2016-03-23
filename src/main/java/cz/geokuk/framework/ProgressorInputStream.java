@@ -14,7 +14,7 @@ import javax.swing.ProgressMonitor;
 
 /**
  * Monitors the progress of reading from some InputStream. This ProgressMonitor is normally invoked in roughly this form:
- * 
+ *
  * <pre>
  * InputStream in = new BufferedInputStream(new ProgressMonitorInputStream(parentComponent, "Reading " + fileName, new FileInputStream(fileName)));
  * </pre>
@@ -47,11 +47,11 @@ public class ProgressorInputStream extends FilterInputStream {
 	 * @param in
 	 *            The input stream to be monitored.
 	 */
-	public ProgressorInputStream(ProgressModel progressModel, String message, InputStream in) {
+	public ProgressorInputStream(final ProgressModel progressModel, final String message, final InputStream in) {
 		super(in);
 		try {
 			size = in.available();
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			size = 0;
 		}
 		progressor = progressModel.start(size, message);
@@ -62,7 +62,7 @@ public class ProgressorInputStream extends FilterInputStream {
 	 */
 	@Override
 	public int read() throws IOException {
-		int c = in.read();
+		final int c = in.read();
 		if (c >= 0)
 			progressor.setProgress(++nread);
 		return c;
@@ -72,8 +72,8 @@ public class ProgressorInputStream extends FilterInputStream {
 	 * Overrides <code>FilterInputStream.read</code> to update the progress monitor after the read.
 	 */
 	@Override
-	public int read(byte b[]) throws IOException {
-		int nr = in.read(b);
+	public int read(final byte b[]) throws IOException {
+		final int nr = in.read(b);
 		if (nr > 0)
 			progressor.setProgress(nread += nr);
 		return nr;
@@ -83,8 +83,8 @@ public class ProgressorInputStream extends FilterInputStream {
 	 * Overrides <code>FilterInputStream.read</code> to update the progress monitor after the read.
 	 */
 	@Override
-	public int read(byte b[], int off, int len) throws IOException {
-		int nr = in.read(b, off, len);
+	public int read(final byte b[], final int off, final int len) throws IOException {
+		final int nr = in.read(b, off, len);
 		if (nr > 0)
 			progressor.setProgress(nread += nr);
 		return nr;
@@ -94,8 +94,8 @@ public class ProgressorInputStream extends FilterInputStream {
 	 * Overrides <code>FilterInputStream.skip</code> to update the progress monitor after the skip.
 	 */
 	@Override
-	public long skip(long n) throws IOException {
-		long nr = in.skip(n);
+	public long skip(final long n) throws IOException {
+		final long nr = in.skip(n);
 		if (nr > 0)
 			progressor.setProgress(nread += nr);
 		return nr;

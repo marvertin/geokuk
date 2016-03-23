@@ -30,7 +30,7 @@ public abstract class Action0 extends AbstractAction {
 	/**
 	 * @param string
 	 */
-	public Action0(String string) {
+	public Action0(final String string) {
 		super(string);
 	}
 
@@ -44,7 +44,7 @@ public abstract class Action0 extends AbstractAction {
 	 * @param aString
 	 * @param aIcon
 	 */
-	public Action0(String aString, Icon aIcon) {
+	public Action0(final String aString, final Icon aIcon) {
 		super(aString, aIcon);
 	}
 
@@ -59,7 +59,7 @@ public abstract class Action0 extends AbstractAction {
 		if (!isEnabled())
 			return; // žádná akce, pokud je zakázána
 		int modifiers = 0;
-		AWTEvent currentEvent = EventQueue.getCurrentEvent();
+		final AWTEvent currentEvent = EventQueue.getCurrentEvent();
 		if (currentEvent instanceof InputEvent) {
 			modifiers = ((InputEvent) currentEvent).getModifiers();
 		} else if (currentEvent instanceof ActionEvent) {
@@ -75,28 +75,28 @@ public abstract class Action0 extends AbstractAction {
 		return null;
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 
-	public void inject(PoziceModel poziceModel) {
+	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
 
-	public void inject(VyrezModel vyrezModel) {
+	public void inject(final VyrezModel vyrezModel) {
 		this.vyrezModel = vyrezModel;
 	}
 
 	/**
 	 * Výhradně za účelem definování parenta dialogům.
-	 * 
+	 *
 	 * @return
 	 */
 	protected JFrame getMainFrame() {
 		return mainFrameHolder.getMainFrame();
 	}
 
-	public void inject(MainFrameHolder mainFrameHolder) {
+	public void inject(final MainFrameHolder mainFrameHolder) {
 		this.mainFrameHolder = mainFrameHolder;
 	}
 

@@ -8,7 +8,7 @@ import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 
 /**
  * Detailní informace o vybrané keši.
- * 
+ *
  * @author Spikodrob
  *
  */
@@ -24,12 +24,12 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
 
 	private void initComponents() {
 
-		Box hlav = Box.createVerticalBox();
+		final Box hlav = Box.createVerticalBox();
 		add(hlav);
 
-		Box box2 = Box.createHorizontalBox();
+		final Box box2 = Box.createHorizontalBox();
 
-		Box pan4b = Box.createVerticalBox();
+		final Box pan4b = Box.createVerticalBox();
 
 		box2.add(Box.createHorizontalGlue());
 
@@ -38,18 +38,18 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
 
 		hlav.add(box2);
 
-		Box box3 = Box.createHorizontalBox();
+		final Box box3 = Box.createHorizontalBox();
 		box3.add(Box.createGlue());
 		hlav.add(box3);
 	}
 
 	@Override
-	public void napln(Wpt wpt) {
+	public void napln(final Wpt wpt) {
 		simwpt = (SimpleWaypoint) wpt.getKesoid();
 		napln();
 	}
 
-	public void onEvent(DomaciSouradniceSeZmenilyEvent aEvent) {
+	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
 		if (isVisible() && simwpt != null) {
 			napln();
 		}

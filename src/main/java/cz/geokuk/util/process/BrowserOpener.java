@@ -28,14 +28,14 @@ public class BrowserOpener {
 	 * @param url
 	 *            the file's url (the url must start with either "http://" or "file://").
 	 */
-	public static void displayURL(URL url) {
+	public static void displayURL(final URL url) {
 		try {
 			Desktop.getDesktop().browse(url.toURI());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			try {
-				Runtime runtime = Runtime.getRuntime();
+				final Runtime runtime = Runtime.getRuntime();
 				runtime.exec("xdg-open " + url);
-			} catch (Exception e1) {
+			} catch (final Exception e1) {
 				throw new RuntimeException(String.format("Nedari se otevrit browser na pro \"%s\"", url), e);
 			}
 		}

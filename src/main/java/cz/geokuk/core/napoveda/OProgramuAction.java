@@ -28,12 +28,12 @@ public class OProgramuAction extends DialogOpeningAction0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.DialogOpeningAction0#createDialog()
 	 */
 	@Override
 	public JMyDialog0 createDialog() {
-		JOProgramuDialog dlg = new JOProgramuDialog();
+		final JOProgramuDialog dlg = new JOProgramuDialog();
 		dlg.setModal(true);
 		return dlg;
 	}

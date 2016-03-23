@@ -69,7 +69,7 @@ public class KaAll extends Ka0 {
 
 	/**
 	 * Rozpad na jednotlivé rekvesty
-	 * 
+	 *
 	 * @return
 	 */
 	public Set<KaOne> getKaOnes() {

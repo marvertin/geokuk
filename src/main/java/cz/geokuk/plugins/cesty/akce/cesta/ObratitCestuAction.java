@@ -6,7 +6,7 @@ public class ObratitCestuAction extends CestaAction0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public ObratitCestuAction(Cesta cesta) {
+	public ObratitCestuAction(final Cesta cesta) {
 		super(cesta);
 
 		// putValue(NAME, "<html>Odstraň cestu <i>" + jCestaMenu.getNazev() + "</i> " + (jCestaMenu.getMouDelkaCesta() + " mou"));
@@ -18,17 +18,17 @@ public class ObratitCestuAction extends CestaAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProCestu(Cesta cesta) {
+	protected boolean mamPovolitProCestu(final Cesta cesta) {
 		return !cesta.isJednobodova();
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Cesta cesta, boolean aZKontextovehoMenu) {
+	protected void nastavJmenoAkce(final Cesta cesta, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "<html>Obrátit cestu" + cesta.getNazevHtml() + " " + cesta.dalkaHtml());
 	}
 
 	@Override
-	protected void provedProCestu(Cesta cesta) {
+	protected void provedProCestu(final Cesta cesta) {
 		cestyModel.reverseCestu(cesta);
 	}
 

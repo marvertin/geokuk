@@ -21,7 +21,7 @@ public class MapyModel extends Model0 {
 
 	private EnumSet<EKaType> dekorace;
 
-	public void setPodklad(EKaType podklad) {
+	public void setPodklad(final EKaType podklad) {
 		if (podklad == this.podklad)
 			return;
 		this.podklad = podklad;
@@ -29,7 +29,7 @@ public class MapyModel extends Model0 {
 		fajruj();
 	}
 
-	public void setDekorace(EnumSet<EKaType> dekorace) {
+	public void setDekorace(final EnumSet<EKaType> dekorace) {
 		if (dekorace.equals(this.dekorace))
 			return;
 		this.dekorace = dekorace.clone();
@@ -38,10 +38,10 @@ public class MapyModel extends Model0 {
 	}
 
 	public KaSet getKaSet() {
-		EnumSet<EKaType> kts = EnumSet.of(podklad);
+		final EnumSet<EKaType> kts = EnumSet.of(podklad);
 		kts.addAll(dekorace);
 		assert kts != null;
-		KaSet kaSet = new KaSet(kts);
+		final KaSet kaSet = new KaSet(kts);
 		return kaSet;
 	}
 
@@ -53,8 +53,8 @@ public class MapyModel extends Model0 {
 
 	@Override
 	protected void initAndFire() {
-		EKaType podklad = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnum(FPref.VALUE_MAPOVE_PODKLADY_value, EKaType.TURIST_M, EKaType.class);
-		EnumSet<EKaType> dekorace = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, EnumSet.of(EKaType.TTUR_M), EKaType.class);
+		final EKaType podklad = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnum(FPref.VALUE_MAPOVE_PODKLADY_value, EKaType.TURIST_M, EKaType.class);
+		final EnumSet<EKaType> dekorace = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, EnumSet.of(EKaType.TTUR_M), EKaType.class);
 		setPodklad(podklad);
 		setDekorace(dekorace);
 	}

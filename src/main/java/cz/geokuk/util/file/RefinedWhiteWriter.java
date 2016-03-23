@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * Třída je dekorační třídou writeru. Upravuje do použitelné podoby bílé znaky. Znak tabulátoru '\t' nahradí mezerou. Mezery na konci řádku odstraní. Výskyty \r, \n, \r\n nahradí oddělovačem konce řádku daným property line.separator. Pokud poslední řádek nekončí oddělovačem řádku, přidá oddělovač
  * řádku. Výstup má tedy bud nulovou délku nebo končí znaky nového řádku. Příklad:
- * 
+ *
  * <pre>
  * PrintWriter pwr = new PrintWriter(new RefinedWhiteWriter(new FileWriter("test_RefineWhiteWriter.txt")));
  * </pre>
@@ -22,7 +22,7 @@ import java.io.*;
  * <p>
  * Company:
  * </p>
- * 
+ *
  * @author unascribed
  * @version 1.0
  */
@@ -36,12 +36,12 @@ public class RefinedWhiteWriter extends Writer {
 	private boolean				iLfNeukoncuje			= false;
 	private boolean				iPotrebaUkoncitRadek	= false;
 
-	public RefinedWhiteWriter(Writer aWriter) {
+	public RefinedWhiteWriter(final Writer aWriter) {
 		iWriter = aWriter;
 	}
 
-	public void write(char[] aZnaky, int aOd, int aPocet) throws IOException {
-		int xxdo = aOd + aPocet;
+	public void write(final char[] aZnaky, final int aOd, final int aPocet) throws IOException {
+		final int xxdo = aOd + aPocet;
 		for (int i = aOd; i < xxdo; i++) { // všechny znaky po jednom zpracovat
 			zpracujZnak(aZnaky[i]);
 		}
@@ -89,8 +89,8 @@ public class RefinedWhiteWriter extends Writer {
 		}
 	}
 
-	public static void main(String[] args) throws IOException {
-		PrintWriter pwr = new PrintWriter(new RefinedWhiteWriter(new FileWriter("test_RefineWhiteWriter.txt")));
+	public static void main(final String[] args) throws IOException {
+		final PrintWriter pwr = new PrintWriter(new RefinedWhiteWriter(new FileWriter("test_RefineWhiteWriter.txt")));
 		// PrintWriter pwr = new PrintWriter(new FileWriter("test_RefineWhiteWriter.txt"));
 		pwr.print("Nenimezera\r");
 		pwr.print("                         jedna dva  tri   ctyri  a nic\n");

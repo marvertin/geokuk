@@ -49,7 +49,7 @@ public class Utm extends Misto0 {
 
 	/**
 	 * Vrací jiné místo na zemi, ale ve stejné zóně.
-	 * 
+	 *
 	 * @param ux
 	 * @param uy
 	 * @return
@@ -60,7 +60,7 @@ public class Utm extends Misto0 {
 
 	/**
 	 * Vrací stejné místo na zemi, ael v souřadnicích vyjádřených v jiné zóně.
-	 * 
+	 *
 	 * @param ux
 	 * @param uy
 	 * @return

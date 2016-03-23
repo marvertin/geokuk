@@ -26,7 +26,7 @@ public class JMrizkaUtm extends JMrizka0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mrizka.JMrizka0#convertToMou(double, double)
 	 */
 	@Override
@@ -42,7 +42,7 @@ public class JMrizkaUtm extends JMrizka0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mrizka.JMrizka0#convertToX(coordinates.Mou)
 	 */
 	@Override
@@ -55,7 +55,7 @@ public class JMrizkaUtm extends JMrizka0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mrizka.JMrizka0#convertToY(coordinates.Mou)
 	 */
 	@Override
@@ -78,7 +78,7 @@ public class JMrizkaUtm extends JMrizka0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mrizka.JMrizka0#initPainting(mrizka.JMrizka0.Vykreslovac)
 	 */
 	@Override
@@ -93,7 +93,7 @@ public class JMrizkaUtm extends JMrizka0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
 	 */
 	@Override

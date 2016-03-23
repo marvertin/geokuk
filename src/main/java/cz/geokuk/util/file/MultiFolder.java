@@ -19,25 +19,25 @@ public class MultiFolder {
 
 	private final KeyTree<String, LamUrl>	tree			= new KeyTree<>();
 
-	public KeyNode<String, LamUrl> getNode(String key) {
-		String[] ss = key.split("/");
+	public KeyNode<String, LamUrl> getNode(final String key) {
+		final String[] ss = key.split("/");
 		return tree.locate(Arrays.asList(ss));
 	}
 
-	public void addFolderTree(File dir) {
-		List<String> emptyList = Collections.emptyList();
+	public void addFolderTree(final File dir) {
+		final List<String> emptyList = Collections.emptyList();
 		addOneFord(dir, emptyList);
 	}
 
-	private void addOneFord(File ford, List<String> names) {
-		LamUrl lamUrl = new LamUrl();
+	private void addOneFord(final File ford, final List<String> names) {
+		final LamUrl lamUrl = new LamUrl();
 		lamUrl.url = fileToUrl(ford);
 		lamUrl.lastModified = ford.lastModified();
 		lamUrl.name = ford.getName();
 		tree.add(lamUrl, names);
 		if (ford.isDirectory()) {
-			for (String s : ford.list()) {
-				List<String> list = new ArrayList<>(names.size() + 1);
+			for (final String s : ford.list()) {
+				final List<String> list = new ArrayList<>(names.size() + 1);
 				list.addAll(names);
 				if (s.endsWith(REMOVE_SUFFIX)) {
 					list.add(s.substring(0, s.length() - REMOVE_SUFFIX.length()));
@@ -55,10 +55,10 @@ public class MultiFolder {
 	 * @return
 	 * @throws MalformedURLException
 	 */
-	private URL fileToUrl(File ford) {
+	private URL fileToUrl(final File ford) {
 		try {
 			return ford.toURI().toURL();
-		} catch (MalformedURLException e) {
+		} catch (final MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -68,11 +68,11 @@ public class MultiFolder {
 	 *
 	 * @param rootresource
 	 */
-	public void addResourceTree(String rootresource) {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		InputStream is = classLoader.getResourceAsStream(rootresource + "/" + CONTENT_TXT);
+	public void addResourceTree(final String rootresource) {
+		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		final InputStream is = classLoader.getResourceAsStream(rootresource + "/" + CONTENT_TXT);
 		if (is != null) {
-			BufferedReader bis = new BufferedReader(new InputStreamReader(is));
+			final BufferedReader bis = new BufferedReader(new InputStreamReader(is));
 			String line;
 			try {
 				while ((line = bis.readLine()) != null) {
@@ -80,21 +80,21 @@ public class MultiFolder {
 					if (line.length() == 0) {
 						continue;
 					}
-					String s = rootresource + "/" + line;
-					URL url = classLoader.getResource(s);
-					String[] jmena = line.split("/");
+					final String s = rootresource + "/" + line;
+					final URL url = classLoader.getResource(s);
+					final String[] jmena = line.split("/");
 					if (jmena[jmena.length - 1].endsWith(REMOVE_SUFFIX)) {
 						jmena[jmena.length - 1] = jmena[jmena.length - 1].substring(0, jmena[jmena.length - 1].length() - REMOVE_SUFFIX.length());
 						tree.remove(jmena);
 					} else {
-						LamUrl lamUrl = new LamUrl();
+						final LamUrl lamUrl = new LamUrl();
 						lamUrl.url = url;
 						lamUrl.name = jmena[jmena.length - 1];
 						tree.add(lamUrl, jmena);
 					}
 				}
 				bis.close();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -102,7 +102,7 @@ public class MultiFolder {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -115,18 +115,18 @@ public class MultiFolder {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MultiFolder other = (MultiFolder) obj;
+		final MultiFolder other = (MultiFolder) obj;
 		if (tree == null) {
 			if (other.tree != null)
 				return false;
@@ -135,9 +135,9 @@ public class MultiFolder {
 		return true;
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
-		MultiFolder mf = new MultiFolder();
+		final MultiFolder mf = new MultiFolder();
 		mf.addResourceTree("geokuk/image");
 		mf.addFolderTree(new File("img2"));
 		mf.addFolderTree(new File("img3"));

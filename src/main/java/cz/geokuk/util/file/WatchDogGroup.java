@@ -9,19 +9,19 @@ public class WatchDogGroup {
 
 	void forceIfAnyModified() {
 		boolean zmena = false;
-		for (FileWatchDog<?> fwd : list) {
+		for (final FileWatchDog<?> fwd : list) {
 			if (fwd.wasModified() > 0) {
 				zmena = true;
 			}
 		}
 		if (zmena) {
-			for (FileWatchDog<?> fwd : list) {
+			for (final FileWatchDog<?> fwd : list) {
 				fwd.forceLoad();
 			}
 		}
 	}
 
-	void add(FileWatchDog<?> fwd) {
+	void add(final FileWatchDog<?> fwd) {
 		list.add(fwd);
 		fwd.setGroup(this);
 	}

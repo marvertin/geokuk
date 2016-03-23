@@ -12,23 +12,23 @@ public class JSmallPictureButton extends JButton {
 		nastav();
 	}
 
-	public JSmallPictureButton(Action a) {
+	public JSmallPictureButton(final Action a) {
 		super(a);
 		nastav();
 	}
 
-	public JSmallPictureButton(Icon icon) {
+	public JSmallPictureButton(final Icon icon) {
 		super(icon);
 		nastav();
 	}
 
-	public JSmallPictureButton(Action a, Icon icon) {
+	public JSmallPictureButton(final Action a, final Icon icon) {
 		super(a);
 		setIcon(icon);
 		nastav();
 	}
 
-	public JSmallPictureButton(String string) {
+	public JSmallPictureButton(final String string) {
 		super(string);
 		nastav();
 	}

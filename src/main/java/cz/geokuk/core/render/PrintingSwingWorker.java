@@ -41,7 +41,7 @@ public class PrintingSwingWorker extends RendererSwingWorker0 implements Printab
 	}
 
 	@Override
-	public int print(Graphics graphics, PageFormat pf, int pageIndex) throws PrinterException {
+	public int print(final Graphics graphics, final PageFormat pf, final int pageIndex) throws PrinterException {
 		System.out.println("TISK STRANY " + pageIndex + " - " + graphics.getClipBounds());
 		if (pageIndex > 0)
 			return NO_SUCH_PAGE;
@@ -51,25 +51,25 @@ public class PrintingSwingWorker extends RendererSwingWorker0 implements Printab
 		// if (pocetPokusu < 0) return PAGE_EXISTS;
 
 		Graphics2D g = (Graphics2D) graphics;
-		Rendrovadlo rendrovadlo = factory.init(new Rendrovadlo(this));
-		RenderParams p = new RenderParams();
+		final Rendrovadlo rendrovadlo = factory.init(new Rendrovadlo(this));
+		final RenderParams p = new RenderParams();
 		p.roord = renderModel.getRoord();
 		p.natacetDoSeveru = renderModel.getRenderSettings().isSrovnatDoSeveru();
 		progressor.setText("Tisk");
 		progressor.setTooltip("Probíhá tisk");
 		p.pruhledne = false;
 
-		Coord roord = renderModel.getRoord();
+		final Coord roord = renderModel.getRoord();
 		// g.scale(pf.getImageableWidth() / roord.getWidth(),
 		// pf.getImageableHeight() / roord.getHeight());
 		// PapirovaMetrika pm = renderModel.getPapirovaMetrika();
-		int papiroveMeritko = renderModel.getRenderSettings().getPapiroveMeritko();
-		double pixluNaMetr = roord.getPixluNaMetr();
-		double pixluNaMilimetrMapy = pixluNaMetr / 1000 * papiroveMeritko;
-		double dpi = pixluNaMilimetrMapy * 25.4;
+		final int papiroveMeritko = renderModel.getRenderSettings().getPapiroveMeritko();
+		final double pixluNaMetr = roord.getPixluNaMetr();
+		final double pixluNaMilimetrMapy = pixluNaMetr / 1000 * papiroveMeritko;
+		final double dpi = pixluNaMilimetrMapy * 25.4;
 		// double vzdalenostBodu = 1000 / pixluNaMilimetrMapy;
 
-		double scale = 72 / dpi;
+		final double scale = 72 / dpi;
 
 		g.translate(pf.getImageableX(), pf.getImageableY());
 		g.translate(pf.getImageableWidth() / 2, pf.getImageableHeight() / 2);
@@ -83,14 +83,14 @@ public class PrintingSwingWorker extends RendererSwingWorker0 implements Printab
 
 		System.out.println("Chce to po me tisk: " + ++citac);
 		try {
-			BufferedImage bi = rendrovadlo.rendruj(p, progressor);
+			final BufferedImage bi = rendrovadlo.rendruj(p, progressor);
 			g.drawImage(bi, 0, 0, null);
 			// g.setColor(Color.YELLOW);
 			// g.fillRect(-10000, -10000, 10000, 30000);
 			g.setColor(Color.MAGENTA);
 			g.setStroke(new BasicStroke(4));
 			g.drawRect(0, 0, roord.getWidth(), roord.getHeight());
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 		return PAGE_EXISTS;

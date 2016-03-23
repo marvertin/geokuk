@@ -29,7 +29,7 @@ public class ZkontrolovatAktualizaceAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override

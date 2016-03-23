@@ -13,14 +13,14 @@ public interface MySlideListener {
 
 	/**
 	 * Vrátí upravené souřadnice myši, pokud něco takobého zná
-	 * 
+	 *
 	 * @return
 	 */
 	public Mouable getUpravenaMys();
 
 	/**
 	 * Vrátí waypoint, na kterém je myš, pokud něco takového zná.
-	 * 
+	 *
 	 * @return
 	 */
 	public Wpt getWptPodMysi();
@@ -71,7 +71,7 @@ public interface MySlideListener {
 
 	/**
 	 * Invoked when the mouse wheel is rotated.
-	 * 
+	 *
 	 * @see MouseWheelEvent
 	 */
 	public void mouseWheelMoved(MouseWheelEvent e, MouseGestureContext ctx);

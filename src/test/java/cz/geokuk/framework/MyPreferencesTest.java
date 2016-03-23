@@ -41,59 +41,59 @@ public class MyPreferencesTest {
 
 	@Test
 	public void test_longStringStorage() {
-		String storingString = Strings.repeat("FOOBAR@;", 1000);
+		final String storingString = Strings.repeat("FOOBAR@;", 1000);
 		preferences.put("@jhka", storingString);
 		assertThat(preferences.get("@jhka", null)).isEqualTo(storingString);
 	}
 
 	@Test
 	public void test_putFile() {
-		File toStore = new File("/tmp/foobar");
+		final File toStore = new File("/tmp/foobar");
 		preferences.putFile("jhka", toStore);
 		assertThat(preferences.getFile("jhka", null)).isEqualTo(toStore);
 	}
 
 	@Test
 	public void test_putAtom() {
-		Atom toStore = Atom.valueOf(ASada.class, "Standard");
+		final Atom toStore = Atom.valueOf(ASada.class, "Standard");
 		preferences.putAtom("jhka", toStore);
 		assertThat(preferences.getAtom("jhka", null, ASada.class)).isEqualTo(toStore);
 	}
 
 	@Test
 	public void test_putStringList() {
-		List<String> toStore = ImmutableList.of("qwert", "asdfgh", "yxcvb", "12345", "@{}^<");
+		final List<String> toStore = ImmutableList.of("qwert", "asdfgh", "yxcvb", "12345", "@{}^<");
 		preferences.putStringList("jhka", toStore);
 		assertThat(preferences.getStringList("jhka", null)).isEqualTo(toStore);
 	}
 
 	@Test
 	public void test_putStringSet() {
-		Set<String> toStore = ImmutableSet.of("12345", "qwert", "asdfgh", "yxcvb", "12345", "@{}^<");
+		final Set<String> toStore = ImmutableSet.of("12345", "qwert", "asdfgh", "yxcvb", "12345", "@{}^<");
 		preferences.putStringSet("jhka", toStore);
 		assertThat((Iterable<String>) preferences.getStringSet("jhka", null)).isEqualTo(toStore);
 	}
 
 	class MockPreferences extends AbstractPreferences {
 
-		private Map<String, String> storage = new HashMap<>();
+		private final Map<String, String> storage = new HashMap<>();
 
-		protected MockPreferences(AbstractPreferences parent, String name) {
+		protected MockPreferences(final AbstractPreferences parent, final String name) {
 			super(parent, name);
 		}
 
 		@Override
-		protected void putSpi(String key, String value) {
+		protected void putSpi(final String key, final String value) {
 			storage.put(key, value);
 		}
 
 		@Override
-		protected String getSpi(String key) {
+		protected String getSpi(final String key) {
 			return storage.get(key);
 		}
 
 		@Override
-		protected void removeSpi(String key) {
+		protected void removeSpi(final String key) {
 			storage.remove(key);
 		}
 
@@ -113,7 +113,7 @@ public class MyPreferencesTest {
 		}
 
 		@Override
-		protected AbstractPreferences childSpi(String name) {
+		protected AbstractPreferences childSpi(final String name) {
 			return null;
 		}
 

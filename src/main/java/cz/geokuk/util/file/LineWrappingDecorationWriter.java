@@ -28,7 +28,7 @@ public class LineWrappingDecorationWriter extends LineDecorationWriter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.tconsult.tw.util.LineDecorationWriter#onLineBeg()
 	 */
 	@Override
@@ -40,7 +40,7 @@ public class LineWrappingDecorationWriter extends LineDecorationWriter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.tconsult.tw.util.LineDecorationWriter#onLineEnd()
 	 */
 	@Override

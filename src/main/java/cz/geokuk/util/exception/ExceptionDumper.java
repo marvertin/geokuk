@@ -16,11 +16,11 @@ import cz.geokuk.util.lang.FThrowable.ThrowableAndSourceMethod;
  */
 public class ExceptionDumper {
 
-	private static final Logger			log		= LogManager.getLogger(ExceptionDumper.class.getSimpleName());
+	private static final Logger				log		= LogManager.getLogger(ExceptionDumper.class.getSimpleName());
 	/** Signleton proměnná pri implicitní repozitoř */
 
-	private List<AditionalInfoEntry>	iStackx	= new ArrayList<>();
-	private int							iStackSize;
+	private final List<AditionalInfoEntry>	iStackx	= new ArrayList<>();
+	private int								iStackSize;
 
 	/**
 	 * Vydumpuje předanou výjimku do lokality k tomu určené. Poté vrátí identifikátor, pod kterým může být vydumpovaná podoba výjimky nalezena za účelem zobrazení.
@@ -38,7 +38,7 @@ public class ExceptionDumper {
 	 *            Okolnosti, za jichž je výjimka dumpována. Libovolný i víceřádkový text. Nezáleží na oddělovačích řádků. Oddělovače budou upraveny dle hostitelského systému.
 	 *
 	 * @return Jednoznačnou identifikaci výjimky. Kód je volen tak, aby se mohl stát součástí jména souboru nebo součástí URL. Tento kód bude zobrazen uživateli, je tedy volen také tak, aby uživatel dokázal tento kód opsat na papír, případně nadiktovat někomu do telefonu. Číslo má tento formát:
-	 * 
+	 *
 	 *         <pre>
 	 * ssznnnn
 	 *
@@ -52,13 +52,13 @@ public class ExceptionDumper {
 	 *         </pre>
 	 *
 	 */
-	public synchronized AExcId dump(Throwable aThrowable, EExceptionSeverity aExceptionSeverity, String aCircumstance, ExceptionDumperRepositorySpi aRepository) {
+	public synchronized AExcId dump(final Throwable aThrowable, final EExceptionSeverity aExceptionSeverity, final String aCircumstance, final ExceptionDumperRepositorySpi aRepository) {
 		return dump(new Throwable[] { aThrowable }, aExceptionSeverity, new String[] { aCircumstance }, aRepository);
 	}
 
 	/**
 	 * Do jednoho souboru vypustí více výpisů výjimek. Celé to však očísluje podle první výjimky, jenž je vypisována.
-	 * 
+	 *
 	 * @param aThrowablea
 	 * @param aExceptionSeverity
 	 * @param aCircumstancea
@@ -66,7 +66,7 @@ public class ExceptionDumper {
 	 * @return
 	 * @since 4.8.2006 10:43:04
 	 */
-	public synchronized AExcId dump(Throwable[] aThrowables, EExceptionSeverity aExceptionSeverity, String[] aCircumstances, ExceptionDumperRepositorySpi aRepository) {
+	public synchronized AExcId dump(Throwable[] aThrowables, EExceptionSeverity aExceptionSeverity, String[] aCircumstances, final ExceptionDumperRepositorySpi aRepository) {
 		if (aThrowables == null)
 			aThrowables = new Throwable[0];
 		if (aCircumstances == null)
@@ -74,7 +74,7 @@ public class ExceptionDumper {
 		// Odstranění null
 		// Nejdříve zjistíme, kolik je jich v oli nenulových
 		int pocetNeNull = 0;
-		for (Throwable aThrowable : aThrowables) {
+		for (final Throwable aThrowable : aThrowables) {
 			if (aThrowable != null)
 				pocetNeNull++;
 		}
@@ -99,11 +99,11 @@ public class ExceptionDumper {
 		try {
 			if (aExceptionSeverity == null)
 				aExceptionSeverity = EExceptionSeverity.DISPLAY;
-			int exceptionNumber = FThrowable.getExceptionNumber(throwables[0]);
-			AExcId id = AExcId.from(ExceptionDumperRepositorySpi.EXC_PREFIX + aRepository.getRunNumber() + aExceptionSeverity.getCode() + exceptionNumber);
+			final int exceptionNumber = FThrowable.getExceptionNumber(throwables[0]);
+			final AExcId id = AExcId.from(ExceptionDumperRepositorySpi.EXC_PREFIX + aRepository.getRunNumber() + aExceptionSeverity.getCode() + exceptionNumber);
 
-			StringWriter swrt = new StringWriter();
-			PrintWriter pwrt = new PrintWriter(new RefinedWhiteWriter(swrt));
+			final StringWriter swrt = new StringWriter();
+			final PrintWriter pwrt = new PrintWriter(new RefinedWhiteWriter(swrt));
 			pwrt.print("<span id='tcTechException'>");
 			pwrt.println("<h1>EXCEPTION " + id + "</h1>");
 			if (throwables.length > 1) {
@@ -122,8 +122,8 @@ public class ExceptionDumper {
 			pwrt.println("<hr/>");
 			pwrt.println("<h2>Brief exception info for exceptions (" + throwables.length + ")</h2>");
 			for (int j = 0; j < throwables.length; j++) {
-				Throwable throwable = throwables[j];
-				String circumstance = circumstances[j];
+				final Throwable throwable = throwables[j];
+				final String circumstance = circumstances[j];
 				// Okolnosti, za jakých výjimka nastala
 				if (circumstance != null) {
 					pwrt.println("<p>");
@@ -138,7 +138,7 @@ public class ExceptionDumper {
 			}
 			pwrt.println("<hr/>");
 			pwrt.println("<h2>Stack trace for exceptions (" + throwables.length + ")</h2>");
-			for (Throwable throwable : throwables) {
+			for (final Throwable throwable : throwables) {
 				// vlastní výjimku
 				pwrt.println("<pre>");
 				FThrowable.printStackTraceHtml(throwable, pwrt, "**");
@@ -171,9 +171,9 @@ public class ExceptionDumper {
 			aRepository.write(id, swrt.toString());
 			logZeVyjimkaBylaVypsana(aExceptionSeverity, id, aRepository);
 			return id;
-		} catch (ThreadDeath e) {
+		} catch (final ThreadDeath e) {
 			throw e;
-		} catch (Throwable e) { // to je průšvih, došlo k chybě při dumpování chyby
+		} catch (final Throwable e) { // to je průšvih, došlo k chybě při dumpování chyby
 			// tak jednoduše vypsat na standardní chybový výstup a kočit, jako by se nic nestalo
 			log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -182,7 +182,7 @@ public class ExceptionDumper {
 			FThrowable.printStackTrace(e, System.err, "exceptionOnEception");
 			log.error("-----------------------------");
 			for (int j = 0; j < throwables.length; j++) {
-				Throwable throwable = throwables[j];
+				final Throwable throwable = throwables[j];
 				FThrowable.printStackTrace(throwable, System.err, "originalException" + j);
 			}
 			log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -198,8 +198,8 @@ public class ExceptionDumper {
 	 * @param id
 	 * @since 15.9.2006 8:33:05
 	 */
-	private void logZeVyjimkaBylaVypsana(EExceptionSeverity aExceptionSeverity, AExcId id, ExceptionDumperRepositorySpi aRepository) {
-		String logMsg = "!!! DUMPED EXCEPTION '" + id + "' into \"" + aRepository.getUrl(id) + "\" !!!";
+	private void logZeVyjimkaBylaVypsana(final EExceptionSeverity aExceptionSeverity, final AExcId id, final ExceptionDumperRepositorySpi aRepository) {
+		final String logMsg = "!!! DUMPED EXCEPTION '" + id + "' into \"" + aRepository.getUrl(id) + "\" !!!";
 		log.error(logMsg); // nechci, aby se dalo zabránit tomuto výpisu, tak přímo na standardní výstup
 	}
 
@@ -208,22 +208,22 @@ public class ExceptionDumper {
 	 * @param aThrowable
 	 * @since 4.8.2006 10:29:15
 	 */
-	private void printShortExceptionListInHtml(PrintWriter pwrt, Throwable aThrowable) {
-		ThrowableAndSourceMethod[] throwableChain = FThrowable.getThrowableChain(aThrowable);
+	private void printShortExceptionListInHtml(final PrintWriter pwrt, final Throwable aThrowable) {
+		final ThrowableAndSourceMethod[] throwableChain = FThrowable.getThrowableChain(aThrowable);
 		for (int i = 0; i < throwableChain.length; i++) {
-			FThrowable.ThrowableAndSourceMethod method = throwableChain[i];
-			String prefix = "EXC-" + FThrowable.getExceptionNumber(aThrowable) + ": ";
+			final FThrowable.ThrowableAndSourceMethod method = throwableChain[i];
+			final String prefix = "EXC-" + FThrowable.getExceptionNumber(aThrowable) + ": ";
 			pwrt.println("    " + prefix + "<span style='color: green'>" + (i + 1) + "/" + throwableChain.length + "</span> "
 					+ (method.getSourceMethod() == null ? "" : "<span style='color: darkmagenta'>" + method.getSourceMethod().getName() + "()" + "</span>: ") + "<span style='color: blue'>"
 					+ method.getThrowable().getClass().getName() + "</span> : <span style='color: red'>" + method.getThrowable().getMessage() + "</span>");
 		}
 	}
 
-	private void printShortExceptionList(PrintStream pwrt, Throwable aThrowable) {
-		ThrowableAndSourceMethod[] throwableChain = FThrowable.getThrowableChain(aThrowable);
+	private void printShortExceptionList(final PrintStream pwrt, final Throwable aThrowable) {
+		final ThrowableAndSourceMethod[] throwableChain = FThrowable.getThrowableChain(aThrowable);
 		for (int i = 0; i < throwableChain.length; i++) {
-			FThrowable.ThrowableAndSourceMethod method = throwableChain[i];
-			String prefix = "EXC-" + FThrowable.getExceptionNumber(aThrowable) + ": ";
+			final FThrowable.ThrowableAndSourceMethod method = throwableChain[i];
+			final String prefix = "EXC-" + FThrowable.getExceptionNumber(aThrowable) + ": ";
 			pwrt.println("!!!!! " + prefix + (i + 1) + "/" + throwableChain.length + " " + method.getThrowable().getClass().getName() + ": " + method.getThrowable().getMessage());
 		}
 	}
@@ -231,22 +231,22 @@ public class ExceptionDumper {
 	/**
 	 * @param pwrt
 	 */
-	private void printSystemProperties(PrintWriter pwrt) {
-		SortedMap<String, String> sm = new TreeMap<>();
-		for (Object oklic : System.getProperties().keySet()) {
-			String sklic = oklic + ""; // pomalost zde nevadí
+	private void printSystemProperties(final PrintWriter pwrt) {
+		final SortedMap<String, String> sm = new TreeMap<>();
+		for (final Object oklic : System.getProperties().keySet()) {
+			final String sklic = oklic + ""; // pomalost zde nevadí
 			sm.put(sklic, System.getProperty(sklic));
 		}
 
-		String pathSeparator = sm.get("path.separator");
-		for (Map.Entry<String, String> entry : sm.entrySet()) {
-			String key = entry.getKey();
-			String value = entry.getValue();
-			String[] strings = value.split(pathSeparator);
-			boolean jeToCesta = strings.length > 1 && (key.endsWith(".path") || key.endsWith(".dirs"));
+		final String pathSeparator = sm.get("path.separator");
+		for (final Map.Entry<String, String> entry : sm.entrySet()) {
+			final String key = entry.getKey();
+			final String value = entry.getValue();
+			final String[] strings = value.split(pathSeparator);
+			final boolean jeToCesta = strings.length > 1 && (key.endsWith(".path") || key.endsWith(".dirs"));
 			if (jeToCesta) {
 				pwrt.println(key + " = ");
-				for (String string : strings) {
+				for (final String string : strings) {
 					pwrt.println("        " + string);
 				}
 			} else {
@@ -255,18 +255,18 @@ public class ExceptionDumper {
 		}
 	}
 
-	private synchronized void dumpAdditionaEntries(PrintWriter pwrt, Throwable[] aThrowables) {
+	private synchronized void dumpAdditionaEntries(final PrintWriter pwrt, final Throwable[] aThrowables) {
 		// Prevence proti java.util.ConcurrentModificationException
 		// Zřejmě občas docházelo k tomu, že v průběhu tady tohoto výpisu
 		// někdo (nějaký zaregistrovaný AditionalInfoProvider) vrtnul do iStackx
-		List<AditionalInfoEntry> copiedStackx = new ArrayList<>(iStackx);
-		for (AditionalInfoEntry entry : copiedStackx) {
+		final List<AditionalInfoEntry> copiedStackx = new ArrayList<>(iStackx);
+		for (final AditionalInfoEntry entry : copiedStackx) {
 			entry.dump(pwrt);
 		}
 	}
 
-	public synchronized void pushAditionalInfoProvider(AditionalInfoProvider aAditionalInfoProvider, String aDescription, Class<?> aPushingClass) {
-		AditionalInfoEntry entry = new AditionalInfoEntry();
+	public synchronized void pushAditionalInfoProvider(final AditionalInfoProvider aAditionalInfoProvider, final String aDescription, final Class<?> aPushingClass) {
+		final AditionalInfoEntry entry = new AditionalInfoEntry();
 		entry.iProvider = aAditionalInfoProvider;
 		entry.iDescription = aDescription;
 		entry.iPushingClass = aPushingClass;
@@ -290,7 +290,7 @@ public class ExceptionDumper {
 		private Class<?>				iPushingClass;
 		private int						iNumber;
 
-		private void dump(PrintWriter pwrt) {
+		private void dump(final PrintWriter pwrt) {
 			pwrt.println("<hr><h2>Additional info (" + iNumber + "/" + iStackx.size() + ") - " + iDescription + "</h2>");
 			pwrt.println("AditionalIfnfo provider class <tt>" + (iProvider == null ? "NULL" : iProvider.getClass().getName()) + "</tt> was pushed by <tt>" + iPushingClass.getName() + "</tt>");
 			pwrt.println("<br/>");
@@ -305,16 +305,16 @@ public class ExceptionDumper {
 		/**
 		 * @param pwrt
 		 */
-		private void callPrintAditionalInfo(PrintWriter pwrt) {
+		private void callPrintAditionalInfo(final PrintWriter pwrt) {
 			try {
 				if (iProvider == null) {
 					pwrt.println("Aditional infor provider is NULL");
 				} else {
 					iProvider.printAditionalInfo(pwrt);
 				}
-			} catch (ThreadDeath td) {
+			} catch (final ThreadDeath td) {
 				throw td;
-			} catch (Throwable t) {
+			} catch (final Throwable t) {
 				pwrt.println("Exception while addint aditional context by addAditionalContext of " + getClass());
 				pwrt.println();
 				FThrowable.printStackTrace(t, pwrt, "printAditionalInfo");

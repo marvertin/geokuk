@@ -22,23 +22,23 @@ public abstract class LineDecorationWriter extends FilterWriter {
 	/**
 	 * @param out
 	 */
-	public LineDecorationWriter(Writer out) {
+	public LineDecorationWriter(final Writer out) {
 		super(out);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.io.Writer#write(char[], int, int)
 	 */
-	public void write(char[] cbuf, int off, int len) throws IOException {
+	public void write(final char[] cbuf, final int off, final int len) throws IOException {
 		int lastWrited = off;
 		for (int i = off; i < off + len; i++) { // pro každý znak
-			char c = cbuf[i];
+			final char c = cbuf[i];
 			if (iIgnoreLf && c == '\n')
 				continue; // ignorujeme lf, takže normálně zpracováváme
 			iIgnoreLf = c == '\r'; // příští LF budeme ignorovat
-			boolean endOfLine = c == '\r' || c == '\n'; // právě přišel znak ukončující řádek
+			final boolean endOfLine = c == '\r' || c == '\n'; // právě přišel znak ukončující řádek
 			if (!iProcessingLine) { // právě přišel nějaký znak dalšího řádku, může to být i znak ukončovací
 				iEmptyLine = endOfLine; // pokud jsme na začátku řádku, ale máme již konec, jedná se o prázdný řádek
 				out.write(cbuf, lastWrited, i - lastWrited); // zapsat, až podsud (ne aktuální znak)
@@ -69,10 +69,10 @@ public abstract class LineDecorationWriter extends FilterWriter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.io.Writer#write(java.lang.String, int, int)
 	 */
-	public void write(String str, int off, int len) throws IOException {
+	public void write(final String str, final int off, final int len) throws IOException {
 		write(str.toCharArray(), off, len);
 	}
 

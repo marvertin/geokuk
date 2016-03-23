@@ -12,7 +12,7 @@ package cz.geokuk.util.lang;
  * Notice: Sometimes is A.getAnother(1) known as "successor" and A.getAnother(-1) as "ancestor".
  *
  * Title: Description: Copyright: Copyright (c) 2001 Company: TurboConsult s.r.o.
- * 
+ *
  * @author Michal Polák
  * @version 1.0
  */

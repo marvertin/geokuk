@@ -18,17 +18,17 @@ public class JednotkoveKruhyAction extends ToggleAction0 {
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("alt F8"));
 	}
 
-	public void inject(KruhyModel model) {
+	public void inject(final KruhyModel model) {
 		this.model = model;
 	}
 
-	public void onEvent(KruhyPreferencesChangeEvent event) {
+	public void onEvent(final KruhyPreferencesChangeEvent event) {
 		setSelected(event.kruhy.isJednotkovaVelikost());
 	}
 
 	@Override
-	protected void onSlectedChange(boolean onoff) {
-		KruhySettings data = model.getData();
+	protected void onSlectedChange(final boolean onoff) {
+		final KruhySettings data = model.getData();
 		data.setJednotkovaVelikost(onoff);
 		model.setData(data);
 	}

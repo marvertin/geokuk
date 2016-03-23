@@ -27,7 +27,7 @@ public class UrlToClipboardForGeogetAction extends Action0 {
 	/**
 	 *
 	 */
-	public UrlToClipboardForGeogetAction(Kesoid aKesoid) {
+	public UrlToClipboardForGeogetAction(final Kesoid aKesoid) {
 		super("Url do Geogetu", ImageLoader.seekResIcon("x16/geoget.png"));
 		kesoid = aKesoid;
 		putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží URL listingu keše, na nějž se chytne spuštěný GEOGET (a možná i GSAK).");
@@ -37,12 +37,12 @@ public class UrlToClipboardForGeogetAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		Kesoid kes = kesoid;
 		if (kes == null) {
 			kes = poziceq.getKesoid();
@@ -52,12 +52,12 @@ public class UrlToClipboardForGeogetAction extends Action0 {
 		kesoidModel.pridejDoSeznamuVGeogetu(kes);
 	}
 
-	public void onEvent(PoziceChangedEvent event) {
+	public void onEvent(final PoziceChangedEvent event) {
 		poziceq = event.poziceq;
 		setEnabled(kesoid != null || poziceq.getWpt() != null);
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 }

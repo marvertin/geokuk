@@ -40,27 +40,27 @@ public class KesBag {
 		citacAlel = genom.createCitacAlel();
 	}
 
-	public void add(Wpt wpt, Genotyp genotyp) {
+	public void add(final Wpt wpt, Genotyp genotyp) {
 		if (genotyp == null) { // to je zde jen z důvodu optimalizace
 			genotyp = wpt.getGenotyp(genom);
 		}
-		Mou mou = wpt.getMou();
+		final Mou mou = wpt.getMou();
 		if (mou.xx < 0 || mou.yy < 0) {
 			//// TODO [veverka] Řešit rozsah [25.11.2009 9:45:59; veverka]
 			log.error("Nelze přidat takový waypoint: " + mou + " / " + mou.xx + ":" + mou.yy + " / " + wpt + " --- " + wpt.getKesoid());
 			return;
 		}
 		indexator.vloz(mou.xx, mou.yy, wpt);
-		Kesoid kesoid = wpt.getKesoid();
+		final Kesoid kesoid = wpt.getKesoid();
 		kesoidyset.add(kesoid);
 		wpts.add(wpt);
 		if (kesoid instanceof Kes) {
-			Kes kes = (Kes) kesoid;
+			final Kes kes = (Kes) kesoid;
 			maximalniBestOf = Math.max(maximalniBestOf, kes.getBestOf());
 			maximalniHodnoceni = Math.max(maximalniHodnoceni, kes.getHodnoceni());
 			maximalniFavorit = Math.max(maximalniFavorit, kes.getFavorit());
 		}
-		for (Alela alela : genotyp.getAlely()) {
+		for (final Alela alela : genotyp.getAlely()) {
 			assert alela != null;
 			citacAlel.add(alela);
 		}
@@ -128,7 +128,7 @@ public class KesBag {
 	 * @param informaceOZdrojich
 	 *            the informaceOZdrojich to set
 	 */
-	public void setInformaceOZdrojich(InformaceOZdrojich informaceOZdrojich) {
+	public void setInformaceOZdrojich(final InformaceOZdrojich informaceOZdrojich) {
 		iInformaceOZdrojich = informaceOZdrojich;
 	}
 

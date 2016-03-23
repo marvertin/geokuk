@@ -60,7 +60,7 @@ public class Kes extends Kesoid {
 	 * @param aMainWpt
 	 *            the mainWpt to set
 	 */
-	public void setMainWpt(Wpt aMainWpt) {
+	public void setMainWpt(final Wpt aMainWpt) {
 		mainWpt = aMainWpt;
 	}
 
@@ -68,7 +68,7 @@ public class Kes extends Kesoid {
 	 * @param aBestOf
 	 *            the bestOf to set
 	 */
-	public void setBestOf(int aBestOf) {
+	public void setBestOf(final int aBestOf) {
 		bestOf = aBestOf;
 	}
 
@@ -83,7 +83,7 @@ public class Kes extends Kesoid {
 	 * @param aHodnoceni
 	 *            the hodnoceni to set
 	 */
-	public void setHodnoceni(int aHodnoceni) {
+	public void setHodnoceni(final int aHodnoceni) {
 		hodnoceni = aHodnoceni;
 	}
 
@@ -98,7 +98,7 @@ public class Kes extends Kesoid {
 	 * @param aHodnoceniPocet
 	 *            the hodnoceniPocet to set
 	 */
-	public void setHodnoceniPocet(int aHodnoceniPocet) {
+	public void setHodnoceniPocet(final int aHodnoceniPocet) {
 		hodnoceniPocet = aHodnoceniPocet;
 	}
 
@@ -113,7 +113,7 @@ public class Kes extends Kesoid {
 	 * @param aZnamka
 	 *            the znamka to set
 	 */
-	public void setZnamka(int aZnamka) {
+	public void setZnamka(final int aZnamka) {
 		znamka = aZnamka;
 	}
 
@@ -128,7 +128,7 @@ public class Kes extends Kesoid {
 	 * @param aHint
 	 *            the hint to set
 	 */
-	public void setHint(String aHint) {
+	public void setHint(final String aHint) {
 		hint = aHint;
 	}
 
@@ -140,7 +140,7 @@ public class Kes extends Kesoid {
 		return size;
 	}
 
-	public void setSize(EKesSize size) {
+	public void setSize(final EKesSize size) {
 		this.size = size;
 	}
 
@@ -148,7 +148,7 @@ public class Kes extends Kesoid {
 		return difficulty;
 	}
 
-	public void setDifficulty(EKesDiffTerRating difficulty) {
+	public void setDifficulty(final EKesDiffTerRating difficulty) {
 		this.difficulty = difficulty;
 	}
 
@@ -156,7 +156,7 @@ public class Kes extends Kesoid {
 		return terrain;
 	}
 
-	public void setTerrain(EKesDiffTerRating terrain) {
+	public void setTerrain(final EKesDiffTerRating terrain) {
 		this.terrain = terrain;
 	}
 
@@ -168,8 +168,8 @@ public class Kes extends Kesoid {
 	}
 
 	@Override
-	public void buildGenotyp(Genom genom, Genotyp g) {
-		GenotypBuilderKes genotypBuilder = new GenotypBuilderKes(genom, g);
+	public void buildGenotyp(final Genom genom, final Genotyp g) {
+		final GenotypBuilderKes genotypBuilder = new GenotypBuilderKes(genom, g);
 		genotypBuilder.build(this);
 	}
 
@@ -179,7 +179,7 @@ public class Kes extends Kesoid {
 	}
 
 	@Override
-	public void addWpt(Wpt wpt) {
+	public void addWpt(final Wpt wpt) {
 		super.addWpt(wpt);
 		if (wpt == null)
 			return;
@@ -191,7 +191,7 @@ public class Kes extends Kesoid {
 	/**
 	 * @param aFound
 	 */
-	public void setFoundTime(String fountTime) {
+	public void setFoundTime(final String fountTime) {
 		iFountTime = fountTime;
 	}
 
@@ -209,11 +209,11 @@ public class Kes extends Kesoid {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.Kesoid#prispejDoTooltipu(java.lang.StringBuilder)
 	 */
 	@Override
-	public void prispejDoTooltipu(StringBuilder sb, Wpt wpt) {
+	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
 		sb.append("<b>");
 		sb.append(getNazev());
 		sb.append("</b>");
@@ -247,20 +247,20 @@ public class Kes extends Kesoid {
 	@Override
 	public URL getUrlPrint() {
 		try {
-			String urls = getUrl();
+			final String urls = getUrl();
 			if (urls.startsWith(URL_PREFIX_SHOW)) {
 				return new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));
 			} else {
 				return null;
 			}
-		} catch (MalformedURLException e) {
+		} catch (final MalformedURLException e) {
 			return null;
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.Kesoid#getUrlIcon()
 	 */
 	@Override
@@ -272,7 +272,7 @@ public class Kes extends Kesoid {
 	 * @return
 	 */
 	public char getOneLetterType() {
-		String sym = getMainWpt().getSym();
+		final String sym = getMainWpt().getSym();
 		if (sym == null || sym.length() == 0)
 			return '?';
 		return sym.charAt(0);
@@ -301,7 +301,7 @@ public class Kes extends Kesoid {
 
 	/**
 	 * Vrátí takové to čtyřznakové info TR3A
-	 * 
+	 *
 	 * @return
 	 */
 	public String getInfo() {
@@ -312,7 +312,7 @@ public class Kes extends Kesoid {
 		return favorit;
 	}
 
-	public void setFavorit(int favorit) {
+	public void setFavorit(final int favorit) {
 		this.favorit = favorit;
 	}
 

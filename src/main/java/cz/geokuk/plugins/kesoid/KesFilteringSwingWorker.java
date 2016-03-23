@@ -37,7 +37,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 	 * @param aBoard
 	 * @param aKesList
 	 */
-	public KesFilteringSwingWorker(KesBag vsechny, Genom genom, KesFilter kesFilter, KesoidModel kesoidModel, ProgressModel progresModel) {
+	public KesFilteringSwingWorker(final KesBag vsechny, final Genom genom, final KesFilter kesFilter, final KesoidModel kesoidModel, final ProgressModel progresModel) {
 		this.vsechny = vsechny;
 		iGenom = genom;
 		this.kesfilter = kesFilter;
@@ -48,7 +48,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
@@ -69,13 +69,13 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 					try {
 						int citac = 0;
 						// System.out.println("VSECHNY: " + vsechny2);
-						for (Wpt wpt : vsechny2.getWpts()) {
+						for (final Wpt wpt : vsechny2.getWpts()) {
 							if (isCancelled())
 								return;
-							Genotyp genotyp = wpt.getGenotyp(iGenom);
+							final Genotyp genotyp = wpt.getGenotyp(iGenom);
 							// TEn genotyp se předává jen z důvodu optimalizace
 							if (kesfilter.isFiltered(wpt, iGenom, genotyp)) {
-								Dvojka dvojka = new Dvojka();
+								final Dvojka dvojka = new Dvojka();
 								dvojka.wpt = wpt;
 								dvojka.genotyp = genotyp;
 								queue.put(dvojka);
@@ -87,12 +87,12 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
 						}
 						queue.put(ZARAZKA);
-					} catch (InterruptedException ignored) {
+					} catch (final InterruptedException ignored) {
 					}
 				}
 			}, "Filtrovani kesoidu").start();
 			for (;;) {
-				Dvojka dvojka = queue.take();
+				final Dvojka dvojka = queue.take();
 				if (dvojka == ZARAZKA)
 					break;
 				kesbag.add(dvojka.wpt, dvojka.genotyp);
@@ -110,7 +110,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
@@ -119,7 +119,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 			log.debug("FILTERING {} - canceled.", cisloFiltrovani);
 			return;
 		}
-		KesBag result = get();
+		final KesBag result = get();
 		if (result == null)
 			return; // asi zkanclváno
 		// TODO řešit progresy nějak ssematicky

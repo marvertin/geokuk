@@ -27,7 +27,7 @@ public class RefbodyModel extends Model0 {
 
 	private KesoidModel			kesoidModel;
 
-	public void setHc(Wgs hc) {
+	public void setHc(final Wgs hc) {
 		if (hc.equals(this.hc))
 			return;
 		this.hc = hc;
@@ -49,22 +49,22 @@ public class RefbodyModel extends Model0 {
 		final List<NaKonkretniBodAction> list = new ArrayList<>();
 		if (!kesoidModel.getUmisteniSouboru().getGeogetDataDir().isActive())
 			return list;
-		File file = new File(kesoidModel.getUmisteniSouboru().getGeogetDataDir().getEffectiveFile(), "geohome.ini");
+		final File file = new File(kesoidModel.getUmisteniSouboru().getGeogetDataDir().getEffectiveFile(), "geohome.ini");
 		try {
 			if (file.canRead()) {
 				// TODO prozkoumat, zda opravdu geogetí data jsou v tomto kódování
 				try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "CP1250"))) {
 					String line;
 					while ((line = br.readLine()) != null) {
-						String[] aa = line.split(" +", 3);
+						final String[] aa = line.split(" +", 3);
 						if (aa.length != 3) {
 							continue;
 						}
 						try {
-							Wgs wgs = new Wgs(Double.parseDouble(aa[0]), Double.parseDouble(aa[1]));
-							NaKonkretniBodAction action = factory.init(new NaKonkretniBodAction(aa[2], wgs));
+							final Wgs wgs = new Wgs(Double.parseDouble(aa[0]), Double.parseDouble(aa[1]));
+							final NaKonkretniBodAction action = factory.init(new NaKonkretniBodAction(aa[2], wgs));
 							list.add(action);
-						} catch (Throwable e) {
+						} catch (final Throwable e) {
 							FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Pokus nacist data ze souboru " + file + ", radek " + (list.size() + 1));
 						}
 					}
@@ -73,18 +73,18 @@ public class RefbodyModel extends Model0 {
 				log.error("Soubor \"" + file + "\" nelze číst!");
 			}
 			return list;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Pokus nacist data ze souboru " + file + ", radek " + (list.size() + 1));
 			return list;
 		}
 	}
 
 	@Override
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 

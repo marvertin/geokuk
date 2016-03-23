@@ -16,7 +16,7 @@ public class VyletSmazAnoAction extends VyletAction0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (Dlg.anone("Opravdu odstranit z výletu " + vyletModel.get(EVylet.ANO).size() + " keší, které chcete lovit?")) {
 			vyletModel.removeAll(EVylet.ANO);
 		}

@@ -5,7 +5,7 @@ import cz.geokuk.framework.Event0;
 public class MrizkaEvent extends Event0<MrizkaModel> {
 	public final boolean onoff;
 
-	MrizkaEvent(String kteraMrizka, boolean onoff) {
+	MrizkaEvent(final String kteraMrizka, final boolean onoff) {
 		this.subType = kteraMrizka;
 		this.onoff = onoff;
 	}

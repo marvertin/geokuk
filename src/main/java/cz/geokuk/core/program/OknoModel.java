@@ -27,7 +27,7 @@ public class OknoModel extends Model0 {
 	 * @param stavOkna
 	 *            the stavOkna to set
 	 */
-	public void setStavOkna(int stavOkna) {
+	public void setStavOkna(final int stavOkna) {
 		if (stavOkna == this.stavOkna)
 			return;
 		this.stavOkna = stavOkna;
@@ -38,7 +38,7 @@ public class OknoModel extends Model0 {
 	 * @param oknoUmisteni
 	 *            the oknoStatus to set
 	 */
-	public void setOknoUmisteni(OknoUmisteniDto oknoUmisteni) {
+	public void setOknoUmisteni(final OknoUmisteniDto oknoUmisteni) {
 		if (oknoUmisteni.equals(this.oknoUmisteni))
 			return;
 		this.oknoUmisteni = oknoUmisteni;
@@ -54,7 +54,7 @@ public class OknoModel extends Model0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.Model0#initAndFire()
 	 */
 	@Override

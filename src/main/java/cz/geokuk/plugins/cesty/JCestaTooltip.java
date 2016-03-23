@@ -27,10 +27,10 @@ public class JCestaTooltip extends JComponent {
 		jNazevCesty.setForeground(Color.WHITE);
 	}
 
-	public void setPridavaciDalkoviny(Cesta cesta, Mou mou) {
+	public void setPridavaciDalkoviny(final Cesta cesta, final Mou mou) {
 
-		double dalkaPuvodni = cesta == null ? 0 : cesta.dalka();
-		double dalkaDodana = cesta == null ? 0 : FGeoKonvertor.dalka(cesta.getCil(), mou);
+		final double dalkaPuvodni = cesta == null ? 0 : cesta.dalka();
+		final double dalkaDodana = cesta == null ? 0 : FGeoKonvertor.dalka(cesta.getCil(), mou);
 		jVzad.setText("<html>" + Cesta.dalkaHtml(dalkaPuvodni, FBarvy.CURTA_NORMALNE) + "<font color=white> +</font>" + Cesta.dalkaHtml(dalkaDodana, Color.WHITE));
 		jVzad.setVisible(true);
 		jVpred.setVisible(false);
@@ -39,7 +39,7 @@ public class JCestaTooltip extends JComponent {
 
 	}
 
-	public void setDalkoviny(Bousek0 blizkyBousek, Mou aMou) {
+	public void setDalkoviny(final Bousek0 blizkyBousek, final Mou aMou) {
 		jVpred.setText("<html>" + blizkyBousek.dalkaCestaVpredHtml(aMou));
 		jVzad.setText("<html>" + blizkyBousek.dalkaCestaVzadHtml(aMou));
 		jVpred.setVisible(true);
@@ -50,7 +50,7 @@ public class JCestaTooltip extends JComponent {
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
+	protected void paintComponent(final Graphics g) {
 		g.setColor(new Color(0, 0, 0, 128));
 		g.fillRect(0, 0, getWidth(), getHeight());
 	}

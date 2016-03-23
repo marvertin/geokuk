@@ -10,7 +10,7 @@ public class MrizkaModel extends Model0 implements BeanSubtypable {
 	private final String	kteraMrizka;
 	private final boolean	defaultZobrazeni;
 
-	public MrizkaModel(String kteraMrizka, boolean defaultZobrazeni) {
+	public MrizkaModel(final String kteraMrizka, final boolean defaultZobrazeni) {
 		super();
 		this.kteraMrizka = kteraMrizka;
 		this.defaultZobrazeni = defaultZobrazeni;
@@ -20,7 +20,7 @@ public class MrizkaModel extends Model0 implements BeanSubtypable {
 		return onoff;
 	}
 
-	public void setOnoff(boolean onoff) {
+	public void setOnoff(final boolean onoff) {
 		if (this.onoff != null && onoff == this.onoff)
 			return;
 		this.onoff = onoff;

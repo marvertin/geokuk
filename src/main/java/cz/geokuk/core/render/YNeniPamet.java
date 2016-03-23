@@ -12,7 +12,7 @@ public class YNeniPamet extends Exception {
 	/**
 	 * @param e
 	 */
-	public YNeniPamet(OutOfMemoryError e) {
+	public YNeniPamet(final OutOfMemoryError e) {
 		super(e);
 	}
 

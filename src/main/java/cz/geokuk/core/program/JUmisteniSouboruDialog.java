@@ -22,7 +22,7 @@ public class JUmisteniSouboruDialog extends JMyDialog0 implements AfterInjectIni
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
 	 */
 	@Override
@@ -35,7 +35,7 @@ public class JUmisteniSouboruDialog extends JMyDialog0 implements AfterInjectIni
 		return "UmisteniSouboru";
 	}
 
-	public void fokusni(ESouborPanelName panelName) {
+	public void fokusni(final ESouborPanelName panelName) {
 		jPrehledSoubor.fokusni(panelName);
 	}
 

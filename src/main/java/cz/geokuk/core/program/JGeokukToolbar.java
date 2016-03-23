@@ -28,13 +28,13 @@ public class JGeokukToolbar extends JToolBar {
 
 	public void addOvladaceAlel() {
 
-		JToolbarOvladaceAlel jToolbarOvladaceAlel = factory.init(new JToolbarOvladaceAlel(this));
+		final JToolbarOvladaceAlel jToolbarOvladaceAlel = factory.init(new JToolbarOvladaceAlel(this));
 		jToolbarOvladaceAlel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		// jToolbarOvladaceAlel.setBackground(Color.MAGENTA);
 		add(jToolbarOvladaceAlel);
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 

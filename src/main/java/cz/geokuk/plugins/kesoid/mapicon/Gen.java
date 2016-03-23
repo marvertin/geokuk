@@ -30,7 +30,7 @@ public class Gen {
 		return grupy;
 	}
 
-	public Gen(String displayName, Genom genom, boolean vypsatelnyVeZhasinaci) {
+	public Gen(final String displayName, final Genom genom, final boolean vypsatelnyVeZhasinaci) {
 		this.displayName = displayName;
 		this.genom = genom;
 		this.vypsatelnyVeZhasinaci = vypsatelnyVeZhasinaci;
@@ -40,10 +40,10 @@ public class Gen {
 		return displayName;
 	}
 
-	public synchronized void add(Alela alela, String jmenoGrupy) {
+	public synchronized void add(final Alela alela, final String jmenoGrupy) {
 		if (locked)
 			throw new RuntimeException("Nemozne pridavat alely " + alela + " k zamcenemu genu " + this);
-		Gen puvodniGen = alela.hasGen() ? alela.getGen() : null;
+		final Gen puvodniGen = alela.hasGen() ? alela.getGen() : null;
 		if (puvodniGen != this) {
 			if (puvodniGen != null) {
 				puvodniGen.alely.remove(alela);
@@ -51,7 +51,7 @@ public class Gen {
 			alely.add(alela);
 			alela.setGen(this);
 		}
-		Grupa grupa = grupa(jmenoGrupy);
+		final Grupa grupa = grupa(jmenoGrupy);
 		if (alela.getGrupa() == null || grupa != IMPLICITNI_GRUPA) {
 			grupa.add(alela);
 		}
@@ -69,7 +69,7 @@ public class Gen {
 		return vychoziAlela;
 	}
 
-	public synchronized Grupa grupa(String grupaName) {
+	public synchronized Grupa grupa(final String grupaName) {
 		if (FString.isEmpty(grupaName))
 			return IMPLICITNI_GRUPA;
 		Grupa grupa = grupy.get(grupaName);

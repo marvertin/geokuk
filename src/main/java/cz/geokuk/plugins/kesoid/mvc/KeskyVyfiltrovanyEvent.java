@@ -12,14 +12,14 @@ import cz.geokuk.plugins.kesoid.KesBag;
  */
 public class KeskyVyfiltrovanyEvent extends Event0<KesoidModel> {
 	private final KesBag	filtrovane;
-	private KesBag			vsechny;
+	private final KesBag	vsechny;
 	// private final Set<Kes> filtrovaneKese;
 
 	public KesBag getVsechny() {
 		return vsechny;
 	}
 
-	public KeskyVyfiltrovanyEvent(KesBag filtrovane, KesBag vsechny) {
+	public KeskyVyfiltrovanyEvent(final KesBag filtrovane, final KesBag vsechny) {
 		this.filtrovane = filtrovane;
 		this.vsechny = vsechny;
 	}

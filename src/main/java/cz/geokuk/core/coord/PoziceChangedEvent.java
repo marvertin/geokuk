@@ -17,7 +17,7 @@ public class PoziceChangedEvent extends Event0<PoziceModel> {
 	 * @param aPozice
 	 * @param aMeloBySeCentrovat
 	 */
-	PoziceChangedEvent(Poziceq aPoziceq) {
+	PoziceChangedEvent(final Poziceq aPoziceq) {
 		assert aPoziceq != null;
 		poziceq = aPoziceq;
 	}

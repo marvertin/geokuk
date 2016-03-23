@@ -696,7 +696,7 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override

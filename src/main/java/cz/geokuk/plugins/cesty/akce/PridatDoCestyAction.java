@@ -18,7 +18,7 @@ public class PridatDoCestyAction extends CestyAction0 {
 	private final Mouable		kontextoveMouable;
 	private Poziceq				poziceq;
 
-	public PridatDoCestyAction(Mouable kontextoveMouable) {
+	public PridatDoCestyAction(final Mouable kontextoveMouable) {
 		this.kontextoveMouable = kontextoveMouable;
 
 		putValue(NAME, "Přidat do cesty");
@@ -29,7 +29,7 @@ public class PridatDoCestyAction extends CestyAction0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		cestyModel.addToVylet(effectiveMouable());
 	}
 
@@ -37,7 +37,7 @@ public class PridatDoCestyAction extends CestyAction0 {
 		setEnabled(effectiveMouable() != null && !cestyModel.isOnVylet(effectiveMouable()));
 	}
 
-	public void onEvent(PoziceChangedEvent aEvent) {
+	public void onEvent(final PoziceChangedEvent aEvent) {
 		poziceq = aEvent.poziceq;
 		enablujPokudMaSmysl();
 	}
@@ -50,11 +50,11 @@ public class PridatDoCestyAction extends CestyAction0 {
 
 	/**
 	 * Do vyýletu se dá přidat jen WPT, ale ne Bod, ale také volná pozice.
-	 * 
+	 *
 	 * @param mouable
 	 * @return
 	 */
-	private Mouable proPridaniDoVyletu(Mouable mouable) {
+	private Mouable proPridaniDoVyletu(final Mouable mouable) {
 		if (mouable instanceof Wpt)
 			return mouable;
 		if (mouable instanceof Bod)

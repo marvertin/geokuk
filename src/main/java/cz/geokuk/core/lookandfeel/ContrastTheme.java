@@ -124,11 +124,11 @@ public class ContrastTheme extends DefaultMetalTheme {
 		return getWhite();
 	}
 
-	public void addCustomEntriesToTable(UIDefaults table) {
+	public void addCustomEntriesToTable(final UIDefaults table) {
 
-		Border blackLineBorder = new BorderUIResource(new LineBorder(getBlack()));
+		final Border blackLineBorder = new BorderUIResource(new LineBorder(getBlack()));
 
-		Object textBorder = new BorderUIResource(new CompoundBorder(blackLineBorder, new BasicBorders.MarginBorder()));
+		final Object textBorder = new BorderUIResource(new CompoundBorder(blackLineBorder, new BasicBorders.MarginBorder()));
 
 		table.put("ToolTip.border", blackLineBorder);
 		table.put("TitledBorder.border", blackLineBorder);

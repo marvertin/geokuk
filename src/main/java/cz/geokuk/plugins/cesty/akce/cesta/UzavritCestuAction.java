@@ -7,7 +7,7 @@ import cz.geokuk.plugins.cesty.data.Cesta;
 
 /**
  * Jde na vybranou pozici
- * 
+ *
  * @author veverka
  *
  */
@@ -19,7 +19,7 @@ public class UzavritCestuAction extends CestaAction0 {
 	/**
 	 * @param aBoard
 	 */
-	public UzavritCestuAction(Cesta cesta) {
+	public UzavritCestuAction(final Cesta cesta) {
 		super(cesta);
 		putValue(NAME, "Uzavřít cestu");
 		putValue(SHORT_DESCRIPTION, "Rozdělí cestu na dvě cesty kratší.");
@@ -28,17 +28,17 @@ public class UzavritCestuAction extends CestaAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProCestu(Cesta cesta) {
+	protected boolean mamPovolitProCestu(final Cesta cesta) {
 		return !cesta.isKruh();
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Cesta cesta, boolean aZKontextovehoMenu) {
+	protected void nastavJmenoAkce(final Cesta cesta, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "<html>Uzavřít cestu" + cesta.getNazevHtml() + " " + cesta.dalkaHtml() + " +" + cesta.dalkaStartuACileHtml());
 	}
 
 	@Override
-	protected void provedProCestu(Cesta cesta) {
+	protected void provedProCestu(final Cesta cesta) {
 		cestyModel.uzavriCestu(cesta);
 	}
 

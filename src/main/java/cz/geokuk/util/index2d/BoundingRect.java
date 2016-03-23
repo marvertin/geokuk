@@ -22,7 +22,7 @@ public class BoundingRect {
 	 * @param aYy1
 	 * @param aYy2
 	 */
-	public BoundingRect(int aXx1, int aYy1, int aXx2, int aYy2) {
+	public BoundingRect(final int aXx1, final int aYy1, final int aXx2, final int aYy2) {
 		xx1 = aXx1;
 		yy1 = aYy1;
 		xx2 = aXx2;
@@ -35,7 +35,7 @@ public class BoundingRect {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -43,7 +43,7 @@ public class BoundingRect {
 		return "BoundingRect [xx1=" + xx1 + ", xx2=" + xx2 + ", yy1=" + yy1 + ", yy2=" + yy2 + "]";
 	}
 
-	public BoundingRect rozsir(int okolik) {
+	public BoundingRect rozsir(final int okolik) {
 		return new BoundingRect(xx1 - okolik, yy1 - okolik, xx2 + okolik, yy2 + okolik);
 	}
 

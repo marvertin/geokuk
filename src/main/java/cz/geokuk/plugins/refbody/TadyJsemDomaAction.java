@@ -34,7 +34,7 @@ public class TadyJsemDomaAction extends Action0 {
 
 	}
 
-	public void onEvent(PoziceChangedEvent aEvent) {
+	public void onEvent(final PoziceChangedEvent aEvent) {
 		if (aEvent.poziceq.isNoPosition()) {
 			setEnabled(false);
 		} else {
@@ -45,12 +45,12 @@ public class TadyJsemDomaAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent aE) {
-		Wgs stareGc = refbodyModel.getHc();
+	public void actionPerformed(final ActionEvent aE) {
+		final Wgs stareGc = refbodyModel.getHc();
 		boolean zapsat = true;
 		if (!VyrezModel.DEFAULTNI_DOMACI_SOURADNICE.equals(stareGc)) {
 			// ještě neukládal, tak se nemusíme ptát
@@ -61,7 +61,7 @@ public class TadyJsemDomaAction extends Action0 {
 		}
 	}
 
-	public void inject(RefbodyModel refbodyModel) {
+	public void inject(final RefbodyModel refbodyModel) {
 		this.refbodyModel = refbodyModel;
 	}
 

@@ -48,7 +48,7 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
 	 * @param pozice
 	 *            the pozice to set
 	 */
-	public void setPozice(Mouable mouable) {
+	public void setPozice(final Mouable mouable) {
 		if (mouable == null) {
 			poziceq = new Poziceq();
 			fire(new PoziceChangedEvent(poziceq));
@@ -59,11 +59,11 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
 
 	/**
 	 * Pozice je doopravdy nová a není prázdná
-	 * 
+	 *
 	 * @param mou
 	 */
-	private void novaPozice(Mou mou) {
-		PoziceSeMaMenitEvent event = new PoziceSeMaMenitEvent(mou);
+	private void novaPozice(final Mou mou) {
+		final PoziceSeMaMenitEvent event = new PoziceSeMaMenitEvent(mou);
 		fire(event); // proženeme event přes všechny
 		Mouable mouable = event.mou;
 		if (event.getUchopenec() != null) {
@@ -75,15 +75,15 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
 		}
 	}
 
-	public void souradniceDoClipboardu(Mouable mouable) {
+	public void souradniceDoClipboardu(final Mouable mouable) {
 		if (mouable == null)
 			return;
-		Clipboard scl = getSystemClipboard();
-		Wgs wgs = mouable.getMou().toWgs();
-		StringSelection ss = new StringSelection(wgs.toString());
+		final Clipboard scl = getSystemClipboard();
+		final Wgs wgs = mouable.getMou().toWgs();
+		final StringSelection ss = new StringSelection(wgs.toString());
 		try {
 			scl.setContents(ss, null);
-		} catch (IllegalStateException e2) {
+		} catch (final IllegalStateException e2) {
 			FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
 		}
 	}
@@ -98,13 +98,13 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
 		setPozice(null);
 	}
 
-	public void onEvent(PoziceChangedEvent event) {
+	public void onEvent(final PoziceChangedEvent event) {
 		poziceq = event.poziceq;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.AfterInjectInit#initAfterInject()
 	 */
 	@Override
@@ -112,7 +112,7 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
 		clearPozice();
 	}
 
-	public void setMys(Point cur, Mou mouCur, Mouable mouable) {
+	public void setMys(final Point cur, final Mou mouCur, final Mouable mouable) {
 		fire(new ZmenaSouradnicMysiEvent(cur, mouCur, mouable));
 	}
 

@@ -7,7 +7,7 @@ import cz.geokuk.api.mapicon.Drawer0;
 
 /**
  * Vlastnosti, které jsou nutné pro vykreslení ikony. Ne tedy pro její výběr.
- * 
+ *
  * @author tatinek
  *
  */

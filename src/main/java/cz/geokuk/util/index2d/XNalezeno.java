@@ -9,7 +9,7 @@ public class XNalezeno extends RuntimeException {
 	// TO není výjimka, ale my neumíme jinak končit
 	Sheet<?>					sheet;
 
-	XNalezeno(Sheet<?> sheet) {
+	XNalezeno(final Sheet<?> sheet) {
 		super();
 		this.sheet = sheet;
 	}

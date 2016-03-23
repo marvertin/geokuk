@@ -16,7 +16,7 @@ public class KesoidUmisteniSouboruChangedEvent extends Event0<KesoidModel> {
 	/**
 	 * @param umisteniSouboru
 	 */
-	public KesoidUmisteniSouboruChangedEvent(KesoidUmisteniSouboru umisteniSouboru) {
+	public KesoidUmisteniSouboruChangedEvent(final KesoidUmisteniSouboru umisteniSouboru) {
 		super();
 		this.umisteniSouboru = umisteniSouboru;
 	}

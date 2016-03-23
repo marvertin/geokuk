@@ -49,7 +49,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 	public void init() {
 		// umistitOkno();
 		setTitle("GeoKuk");
-		List<Image> imgs = new ArrayList<>();
+		final List<Image> imgs = new ArrayList<>();
 		imgs.add(ImageLoader.seekResImage("geokuk32.png", 32, 32));
 		imgs.add(ImageLoader.seekResImage("geokuk16.png", 16, 16));
 		imgs.add(ImageLoader.seekResImage("geokuk48.png", 48, 48));
@@ -58,7 +58,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 
 		// Jen kvůli tomu, aby se nezničilo a chodili eventy
 		// TODO Na menu by neměly být asi události
-		JGeokukToolbar jGeokukToolbar = factory.init(new JGeokukToolbar());
+		final JGeokukToolbar jGeokukToolbar = factory.init(new JGeokukToolbar());
 		menux = factory.init(new Menu(this, jGeokukToolbar));
 
 		// Settings.prefbag = new PreferencableBag(new Runnable() {
@@ -71,7 +71,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		// Settings.loadCurrentPreferences();
 		menux.makeMenu();
 
-		JComponent srohama = new JSRohamaPrekryvnik();
+		final JComponent srohama = new JSRohamaPrekryvnik();
 		srohama.setLayout(new CornerLayoutManager());
 		// srohama.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 5));
 		srohama.add(createDetailRoh(), ERoh.JZ);
@@ -79,7 +79,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 
 		final JPresCeleMysovani mysovani = new JPresCeleMysovani();
 		{
-			JComponent smrizema = new JPresCelePrekryvnik();
+			final JComponent smrizema = new JPresCelePrekryvnik();
 			smrizema.setLayout(new OverlayLayout(smrizema));
 
 			final JComponent renderSlide = new JRenderSlide();
@@ -142,9 +142,9 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			// Musí být dole ,aby fungovaly slidery.
 			smrizema.remove(mysovani);
 			slideList = new ArrayList<>();
-			for (Component comp : smrizema.getComponents()) {
+			for (final Component comp : smrizema.getComponents()) {
 				if (comp instanceof JSingleSlide0) {
-					JSingleSlide0 slide = (JSingleSlide0) comp;
+					final JSingleSlide0 slide = (JSingleSlide0) comp;
 					slideList.add(0, slide);
 				}
 			}
@@ -178,12 +178,12 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		});
 	}
 
-	public void onEvent(OknoStatusChangedEvent event) {
-		OknoUmisteniDto oknoStatus = event.getOknoStatus();
+	public void onEvent(final OknoStatusChangedEvent event) {
+		final OknoUmisteniDto oknoStatus = event.getOknoStatus();
 		if (!jeRozumneNaObrazovce(oknoStatus)) {
 			// Implicitní veliksot a umístění
 			final Toolkit toolkit = getToolkit();
-			Dimension screenSize = toolkit.getScreenSize();
+			final Dimension screenSize = toolkit.getScreenSize();
 			setSize(new Dimension(screenSize.width * 3 / 4, screenSize.height * 3 / 4));
 			setLocation(new Point(screenSize.width / 2 - getWidth() / 2, screenSize.height / 2 - getHeight() / 2));
 			// event.getModel().setOknoUmisteni(oknoUmisteni); // a aktualizovat model
@@ -194,11 +194,11 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		setExtendedState(event.getStavOkna());
 	}
 
-	private boolean jeRozumneNaObrazovce(OknoUmisteniDto u) {
+	private boolean jeRozumneNaObrazovce(final OknoUmisteniDto u) {
 		final Toolkit toolkit = getToolkit();
-		Dimension screenSize = toolkit.getScreenSize();
-		Dimension velikost = u.getVelikost();
-		Point pozice = u.getPozice();
+		final Dimension screenSize = toolkit.getScreenSize();
+		final Dimension velikost = u.getVelikost();
+		final Point pozice = u.getPozice();
 		if (velikost.width < 200 || velikost.width >= screenSize.width)
 			return false; // moc uzke nebo siroke
 		if (velikost.height < 200 || velikost.height >= screenSize.height)
@@ -216,10 +216,10 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 	}
 
 	private void ulozeStav() {
-		int extendedState = getExtendedState();
+		final int extendedState = getExtendedState();
 		if (extendedState == NORMAL) {
 			// pozici a veliksot ukládáme jen v normálním stavu
-			OknoUmisteniDto oknoUmisteni = new OknoUmisteniDto();
+			final OknoUmisteniDto oknoUmisteni = new OknoUmisteniDto();
 			oknoUmisteni.setPozice(getLocation());
 			oknoUmisteni.setVelikost(getSize());
 			oknoModel.setOknoUmisteni(oknoUmisteni);
@@ -234,87 +234,87 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		addComponentListener(new ComponentListener() {
 
 			@Override
-			public void componentShown(ComponentEvent e) {
+			public void componentShown(final ComponentEvent e) {
 				ulozeStav();
 			}
 
 			@Override
-			public void componentResized(ComponentEvent e) {
+			public void componentResized(final ComponentEvent e) {
 				ulozeStav();
 			}
 
 			@Override
-			public void componentMoved(ComponentEvent e) {
+			public void componentMoved(final ComponentEvent e) {
 				ulozeStav();
 			}
 
 			@Override
-			public void componentHidden(ComponentEvent e) {
+			public void componentHidden(final ComponentEvent e) {
 				ulozeStav();
 			}
 		});
 		addWindowFocusListener(new WindowFocusListener() {
 
 			@Override
-			public void windowLostFocus(WindowEvent e) {
+			public void windowLostFocus(final WindowEvent e) {
 				ulozeStav();
 			}
 
 			@Override
-			public void windowGainedFocus(WindowEvent e) {
+			public void windowGainedFocus(final WindowEvent e) {
 				ulozeStav();
 			}
 		});
 
 		addWindowStateListener(new WindowStateListener() {
 			@Override
-			public void windowStateChanged(WindowEvent e) {
+			public void windowStateChanged(final WindowEvent e) {
 				ulozeStav();
 			}
 		});
 
 		addWindowListener(new WindowListener() {
 			@Override
-			public void windowOpened(WindowEvent aE) {
+			public void windowOpened(final WindowEvent aE) {
 				zkontrolujALoadni();
 				// System.out.println(aE);
 			}
 
 			@Override
-			public void windowIconified(WindowEvent aE) {
+			public void windowIconified(final WindowEvent aE) {
 				ulozeStav();
 				// System.out.println(aE);
 			}
 
 			@Override
-			public void windowDeiconified(WindowEvent aE) {
+			public void windowDeiconified(final WindowEvent aE) {
 				ulozeStav();
 				zkontrolujALoadni();
 				// System.out.println(aE);
 			}
 
 			@Override
-			public void windowDeactivated(WindowEvent aE) {
+			public void windowDeactivated(final WindowEvent aE) {
 				ulozeStav();
 				// ulozeStav();
 				// System.out.println(aE);
 			}
 
 			@Override
-			public void windowClosing(WindowEvent aE) {
+			public void windowClosing(final WindowEvent aE) {
 				// System.out.println(aE);
 				ulozeStav();
 				closeAction.actionPerformed(null);
 			}
 
 			@Override
-			public void windowClosed(WindowEvent aE) {
+			public void windowClosed(final WindowEvent aE) {
 				ulozeStav();
 				System.exit(0);
 			}
 
 			@Override
-			public void windowActivated(WindowEvent aE) {
+			public void windowActivated(final WindowEvent aE) {
 				ulozeStav();
 				zkontrolujALoadni();
 			}
@@ -343,10 +343,10 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		detailRoh.setPreferredSize(new Dimension(200, 200));
 		detailRoh.setMaximumSize(new Dimension(300, 300));
 
-		JDetailMysovani mysovani = new JDetailMysovani();
+		final JDetailMysovani mysovani = new JDetailMysovani();
 		detailRoh.add(mysovani);
 		detailRoh.add(new JZamernyKriz());
-		JKachlovnik detailKachlovnik = new JKachlovnikDoRohu();
+		final JKachlovnik detailKachlovnik = new JKachlovnikDoRohu();
 		detailRoh.add(detailKachlovnik);
 		factory.init(detailKachlovnik);
 		factory.init(mysovani);
@@ -359,7 +359,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		kesoidModel.startIkonLoad(false);
 	}
 
-	public void setFullScreen(boolean fs) {
+	public void setFullScreen(final boolean fs) {
 		// JMenuBar menubar = getJMenuBar();
 		// if (fs) {
 		// menubar.setVisible(false);
@@ -379,29 +379,29 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 
-	public void inject(FullScreenAction fullScreenAction) {
+	public void inject(final FullScreenAction fullScreenAction) {
 		this.fullScreenAction = fullScreenAction;
 	}
 
-	public void inject(OknoModel oknoModel) {
+	public void inject(final OknoModel oknoModel) {
 		this.oknoModel = oknoModel;
 	}
 
-	public void inject(CloseAction closeAction) {
+	public void inject(final CloseAction closeAction) {
 		this.closeAction = closeAction;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.core.coord.SlidListProvider#getSlides()
 	 */
 	@Override

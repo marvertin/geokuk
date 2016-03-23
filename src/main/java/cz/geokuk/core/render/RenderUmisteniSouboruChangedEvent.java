@@ -16,7 +16,7 @@ public class RenderUmisteniSouboruChangedEvent extends Event0<RenderModel> {
 	/**
 	 * @param umisteniSouboru
 	 */
-	public RenderUmisteniSouboruChangedEvent(RenderUmisteniSouboru umisteniSouboru) {
+	public RenderUmisteniSouboruChangedEvent(final RenderUmisteniSouboru umisteniSouboru) {
 		super();
 		this.umisteniSouboru = umisteniSouboru;
 	}

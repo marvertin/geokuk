@@ -24,16 +24,16 @@ public class JZamernyKriz extends JSingleSlide0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	@Override
-	protected void paintComponent(Graphics aG) {
-		Graphics2D g = (Graphics2D) aG;
+	protected void paintComponent(final Graphics aG) {
+		final Graphics2D g = (Graphics2D) aG;
 		g.setColor(Color.RED);
-		int xs = getWidth() / 2;
-		int ys = getHeight() / 2;
-		int r = 20;
+		final int xs = getWidth() / 2;
+		final int ys = getHeight() / 2;
+		final int r = 20;
 		g.drawLine(0, ys, getWidth(), ys);
 		g.drawLine(xs, 0, xs, getHeight());
 		g.drawOval(xs - r, ys - r, 2 * r, 2 * r);

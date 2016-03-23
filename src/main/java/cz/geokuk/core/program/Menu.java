@@ -19,7 +19,7 @@ public class Menu extends MenuStrujce {
 	private RefbodyModel		refbodyModel;
 	private final JMainFrame	jMainFrame;
 
-	public Menu(JMainFrame jMainFrame, JGeokukToolbar geokukToolbar) {
+	public Menu(final JMainFrame jMainFrame, final JGeokukToolbar geokukToolbar) {
 		super(new JMenuBar(), geokukToolbar);
 		this.jMainFrame = jMainFrame;
 	}
@@ -60,10 +60,10 @@ public class Menu extends MenuStrujce {
 		item(akce.bezNaBodVzadAction);
 		item(akce.souradniceDoClipboarduAction);
 
-		List<NaKonkretniBodAction> geoHomeBodyAction = refbodyModel.nacti();
+		final List<NaKonkretniBodAction> geoHomeBodyAction = refbodyModel.nacti();
 		if (geoHomeBodyAction.size() > 0) {
 			separator();
-			for (Action a : geoHomeBodyAction) {
+			for (final Action a : geoHomeBodyAction) {
 				item(a);
 			}
 		}
@@ -130,16 +130,16 @@ public class Menu extends MenuStrujce {
 		/////////////////////////////////////////////////////
 		JLabel lbl;
 
-		JVybiracHodnoceni jVybiracHodnoceni = factory.init(new JVybiracHodnoceni());
+		final JVybiracHodnoceni jVybiracHodnoceni = factory.init(new JVybiracHodnoceni());
 		tb.add(jVybiracHodnoceni);
 
-		JVybiracBestOf jVybiraceBestOf = factory.init(new JVybiracBestOf());
+		final JVybiracBestOf jVybiraceBestOf = factory.init(new JVybiracBestOf());
 		tb.add(jVybiraceBestOf);
 
-		JVybiracFavorit jVybiraceFavorit = factory.init(new JVybiracFavorit());
+		final JVybiracFavorit jVybiraceFavorit = factory.init(new JVybiracFavorit());
 		tb.add(jVybiraceFavorit);
 
-		JVybiracVyletu iVybiracVyletu = factory.init(new JVybiracVyletu());
+		final JVybiracVyletu iVybiracVyletu = factory.init(new JVybiracVyletu());
 		lbl = new JLabel("Výlet: ");
 		lbl.setLabelFor(iVybiracVyletu);
 		tb.add(lbl);
@@ -204,7 +204,7 @@ public class Menu extends MenuStrujce {
 		LafSupport.setFrame(jMainFrame);
 		///// Nápověda
 
-		JMenuIkony menuIkony = factory.init(new JMenuIkony());
+		final JMenuIkony menuIkony = factory.init(new JMenuIkony());
 		menuBar.add(menuIkony);
 		menu = menuIkony;
 
@@ -230,9 +230,9 @@ public class Menu extends MenuStrujce {
 
 	}
 
-	public void makeMapSubmenuPart(Akce akce) {
-		ButtonGroup mapPodkladButtonGroup = new ButtonGroup();
-		for (MapyAction0 mapoakce1 : akce.mapoakce) {
+	public void makeMapSubmenuPart(final Akce akce) {
+		final ButtonGroup mapPodkladButtonGroup = new ButtonGroup();
+		for (final MapyAction0 mapoakce1 : akce.mapoakce) {
 			if (mapoakce1 instanceof PodkladAction) {
 				item(mapoakce1, mapPodkladButtonGroup);
 			}
@@ -240,7 +240,7 @@ public class Menu extends MenuStrujce {
 
 		separator();
 
-		for (MapyAction0 mapoakce1 : akce.mapoakce) {
+		for (final MapyAction0 mapoakce1 : akce.mapoakce) {
 			if (mapoakce1 instanceof DekoraceAction) {
 				item(mapoakce1);
 			}
@@ -251,11 +251,11 @@ public class Menu extends MenuStrujce {
 		return tb;
 	}
 
-	public void inject(Akce akce) {
+	public void inject(final Akce akce) {
 		this.akce = akce;
 	}
 
-	public void inject(RefbodyModel refbodyModel) {
+	public void inject(final RefbodyModel refbodyModel) {
 		this.refbodyModel = refbodyModel;
 	}
 

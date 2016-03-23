@@ -12,7 +12,7 @@ public interface ExceptionDumperRepositorySpi {
 
 	/**
 	 * Zjištění, zda repozitoř umožňuje číst do ní zapsané výjimky.
-	 * 
+	 *
 	 * @return Vrátí true, pokud repozitoř umožňuje čtení do nich zapsaných vyjímek. V tom případě však musí metoda getUrl vrátit URL, ze kterého lze výjimku opravdu přečíst.
 	 * @since 15.9.2006 7:30:29
 	 */
@@ -20,7 +20,7 @@ public interface ExceptionDumperRepositorySpi {
 
 	/**
 	 * Zapíše text výjimky někam na základě zadaného kódu.
-	 * 
+	 *
 	 * @param aCode
 	 * @param aExceptionData
 	 * @throws IOException
@@ -37,7 +37,7 @@ public interface ExceptionDumperRepositorySpi {
 	/**
 	 * Vrátí URL, pomocí něhož je možné přistoupit k výpisu výjimky. URL musí být funkční minimálně v té JVM, v níž je tato funkce vyvolána. Pokud ve vyjímečném případě je repozitoř postavena tak, že výpis výjimky nelze získat, vrací se null. To je však dovoleno je v případě triviálních repozitoří,
 	 * jako standardní výstup.
-	 * 
+	 *
 	 * @return Pokud {@link #isReadable()} vrací false, tak tato metoda vrací null. Jinak vrací URL. Null vrací i v případě, kdy pro zadaný kód není výjimka nalezena, to znamená, kdy kód je špatně.
 	 */
 	public URL getUrl(AExcId aCode);

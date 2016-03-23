@@ -53,9 +53,9 @@ import cz.geokuk.plugins.kesoid.Ikonizer;
 public class JAdrTable extends JPanel {
 	private static final long	serialVersionUID	= 7687619215661046034L;
 
-	private MyTableModel		tableModel;
+	private final MyTableModel	tableModel;
 
-	private JTable				table;
+	private final JTable		table;
 
 	public JAdrTable() {
 		super(new GridLayout(1, 0));
@@ -67,14 +67,14 @@ public class JAdrTable extends JPanel {
 		table.setFillsViewportHeight(true);
 
 		// Create the scroll pane and add the table to it.
-		JScrollPane scrollPane = new JScrollPane(table);
+		final JScrollPane scrollPane = new JScrollPane(table);
 
 		// Add the scroll pane to this panel.
 		add(scrollPane);
 		nastavVlastnostiSLoupcu();
 	}
 
-	public void addListSelectionListener(ListSelectionListener listener) {
+	public void addListSelectionListener(final ListSelectionListener listener) {
 		table.getSelectionModel().addListSelectionListener(listener);
 	}
 
@@ -89,7 +89,7 @@ public class JAdrTable extends JPanel {
 	 * @param aAdresList
 	 *            the keslist to set
 	 */
-	public void setNalezenci(List<Nalezenec> aAdresList) {
+	public void setNalezenci(final List<Nalezenec> aAdresList) {
 		// Nalezenec current = getCurrent();
 		tableModel.setAdressList(aAdresList);
 		nastavVlastnostiSLoupcu();
@@ -133,10 +133,10 @@ public class JAdrTable extends JPanel {
 	}
 
 	public Nalezenec getCurrent() {
-		int selectedRow = table.getSelectedRow();
+		final int selectedRow = table.getSelectedRow();
 		if (selectedRow < 0 || selectedRow >= tableModel.getAdressList().size())
 			return null;
-		Nalezenec nalezenec = tableModel.getAdressList().get(selectedRow);
+		final Nalezenec nalezenec = tableModel.getAdressList().get(selectedRow);
 		return nalezenec;
 	}
 
@@ -145,7 +145,7 @@ public class JAdrTable extends JPanel {
 
 		private List<Nalezenec>		adressList			= new ArrayList<>();
 
-		private String[]			columnNames			= { "Přesnost", "Vzdálenost", "Azimut", "Adresa" };
+		private final String[]		columnNames			= { "Přesnost", "Vzdálenost", "Azimut", "Adresa" };
 
 		/**
 		 * @return the keslist
@@ -158,7 +158,7 @@ public class JAdrTable extends JPanel {
 		 * @param aKeslist
 		 *            the keslist to set
 		 */
-		public void setAdressList(List<Nalezenec> aKeslist) {
+		public void setAdressList(final List<Nalezenec> aKeslist) {
 			adressList = aKeslist;
 			fireTableStructureChanged();
 		}
@@ -171,12 +171,12 @@ public class JAdrTable extends JPanel {
 			return adressList.size();
 		}
 
-		public String getColumnName(int col) {
+		public String getColumnName(final int col) {
 			return columnNames[col];
 		}
 
-		public Object getValueAt(int row, int col) {
-			Nalezenec nalezenec = adressList.get(row);
+		public Object getValueAt(final int row, final int col) {
+			final Nalezenec nalezenec = adressList.get(row);
 
 			Object s = null;
 			switch (col) {
@@ -199,14 +199,14 @@ public class JAdrTable extends JPanel {
 		/*
 		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
 		 */
-		public Class<?> getColumnClass(int c) {
+		public Class<?> getColumnClass(final int c) {
 			return getValueAt(0, c).getClass();
 		}
 
 		/*
 		 * Don't need to implement this method unless your table's editable.
 		 */
-		public boolean isCellEditable(int row, int col) {
+		public boolean isCellEditable(final int row, final int col) {
 			return false;
 		}
 

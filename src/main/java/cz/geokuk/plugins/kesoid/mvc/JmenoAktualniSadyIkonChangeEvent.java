@@ -15,7 +15,7 @@ public class JmenoAktualniSadyIkonChangeEvent extends KesoidModelEvent0 {
 	/**
 	 * @param jmenoSadyIkon
 	 */
-	public JmenoAktualniSadyIkonChangeEvent(ASada jmenoSadyIkon) {
+	public JmenoAktualniSadyIkonChangeEvent(final ASada jmenoSadyIkon) {
 		super();
 		this.jmenoSadyIkon = jmenoSadyIkon;
 	}

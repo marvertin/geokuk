@@ -11,10 +11,10 @@ public abstract class SloucenyVisitor<T> implements Visitor<T> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see objekty.Visitor#visit(objekty.Sheet)
 	 */
-	public final void visit(Sheet<T> aSheet) {
+	public final void visit(final Sheet<T> aSheet) {
 		visitNod(aSheet);
 	}
 
@@ -22,10 +22,10 @@ public abstract class SloucenyVisitor<T> implements Visitor<T> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see objekty.Visitor#visit(objekty.Ctverecnik)
 	 */
-	public final void visit(Ctverecnik<T> aCtver) {
+	public final void visit(final Ctverecnik<T> aCtver) {
 		visitNod(aCtver);
 	}
 

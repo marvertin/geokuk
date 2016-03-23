@@ -19,34 +19,34 @@ public abstract class JMrizkaWgs extends JMrizka0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mrizka.JMrizka0#convertToMou(double, double)
 	 */
 	@Override
-	public Mou convertToMou(double aX, double aY) {
-		Wgs wgs = new Wgs(aY, aX);
-		Mou mou = wgs.toMou();
+	public Mou convertToMou(final double aX, final double aY) {
+		final Wgs wgs = new Wgs(aY, aX);
+		final Mou mou = wgs.toMou();
 		return mou;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mrizka.JMrizka0#convertToX(coordinates.Mou)
 	 */
 	@Override
-	public double convertToX(Mou aMou) {
+	public double convertToX(final Mou aMou) {
 		return aMou.toWgs().lon;
 		// throw new RuntimeException("Spadlo to");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mrizka.JMrizka0#convertToY(coordinates.Mou)
 	 */
 	@Override
-	public double convertToY(Mou aMou) {
+	public double convertToY(final Mou aMou) {
 		return aMou.toWgs().lat;
 	}
 

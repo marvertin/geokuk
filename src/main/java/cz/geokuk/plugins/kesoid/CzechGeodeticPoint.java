@@ -13,8 +13,8 @@ public class CzechGeodeticPoint extends Kesoid {
 	private double	yjtsk;
 
 	@Override
-	public void buildGenotyp(Genom genom, Genotyp g) {
-		GenotypBuilderCgp genotypBuilder = new GenotypBuilderCgp(genom, g);
+	public void buildGenotyp(final Genom genom, final Genotyp g) {
+		final GenotypBuilderCgp genotypBuilder = new GenotypBuilderCgp(genom, g);
 		genotypBuilder.build(this);
 	}
 
@@ -25,11 +25,11 @@ public class CzechGeodeticPoint extends Kesoid {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.Kesoid#prispejDoTooltipu(java.lang.StringBuilder)
 	 */
 	@Override
-	public void prispejDoTooltipu(StringBuilder sb, Wpt wpt) {
+	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
 		sb.append("<b>");
 		sb.append(wpt.getName());
 		sb.append("</b>  - ");
@@ -46,7 +46,7 @@ public class CzechGeodeticPoint extends Kesoid {
 		return xjtsk;
 	}
 
-	public void setXjtsk(double xjtsk) {
+	public void setXjtsk(final double xjtsk) {
 		this.xjtsk = xjtsk;
 	}
 
@@ -54,7 +54,7 @@ public class CzechGeodeticPoint extends Kesoid {
 		return yjtsk;
 	}
 
-	public void setYjtsk(double yjtsk) {
+	public void setYjtsk(final double yjtsk) {
 		this.yjtsk = yjtsk;
 	}
 

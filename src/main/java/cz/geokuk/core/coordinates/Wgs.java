@@ -40,7 +40,7 @@ public class Wgs extends Misto0 {
 
 	/**
 	 * Souřdnice se normalizují na interval <-180,180)
-	 * 
+	 *
 	 * @param lat
 	 * @param lon
 	 */
@@ -142,7 +142,7 @@ public class Wgs extends Misto0 {
 
 	/**
 	 * Vrátí, kolik metrů vychází na mou souřanici na dané šířce.
-	 * 
+	 *
 	 * @return
 	 */
 	public double metryNaMou() {

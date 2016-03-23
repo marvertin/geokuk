@@ -16,7 +16,7 @@ public class JMvRadioPanel<T> extends JPanel {
 	private SelectionModel<T>			model				= new SelectionModel<>();
 	private final List<JRadioButton>	buttons				= new ArrayList<>();
 
-	public JMvRadioPanel(String title) {
+	public JMvRadioPanel(final String title) {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		// setBorder(BorderFactory.createRaisedBevelBorder());
 		setBorder(BorderFactory.createTitledBorder(title));
@@ -24,8 +24,8 @@ public class JMvRadioPanel<T> extends JPanel {
 
 	public void setSelectionModel(final SelectionModel<T> model) {
 		this.model = model;
-		List<Item<T>> items = model.items;
-		ButtonGroup bg = new ButtonGroup();
+		final List<Item<T>> items = model.items;
+		final ButtonGroup bg = new ButtonGroup();
 		for (final Item<T> item : items) {
 			final JRadioButton rb = new JRadioButton(item.displayText);
 			buttons.add(rb);
@@ -33,7 +33,7 @@ public class JMvRadioPanel<T> extends JPanel {
 			add(rb);
 			rb.addChangeListener(new ChangeListener() {
 				@Override
-				public void stateChanged(ChangeEvent e) {
+				public void stateChanged(final ChangeEvent e) {
 					if (rb.isSelected()) {
 						model.setSelectedItem(item);
 					}
@@ -42,7 +42,7 @@ public class JMvRadioPanel<T> extends JPanel {
 		}
 		model.addListener(new SelectionListener<T>() {
 			@Override
-			public void selectionChanged(SelectionEvent<T> event) {
+			public void selectionChanged(final SelectionEvent<T> event) {
 				buttons.get(event.item.poradi).setSelected(true);
 			}
 		});

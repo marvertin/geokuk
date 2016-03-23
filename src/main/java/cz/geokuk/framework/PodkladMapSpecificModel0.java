@@ -18,7 +18,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 
 	public final Onoff<T>	visible	= new Onoff<T>(tthis, getOnoffEventClass()) {
 										@Override
-										protected void onSetOnOff(boolean onoff) {
+										protected void onSetOnOff(final boolean onoff) {
 											putVisibleToPreferences(onoff);
 										}
 									};
@@ -42,20 +42,20 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	/**
 	 * @param podklad
 	 */
-	public void setPodkladMap(EKaType podklad) {
+	public void setPodkladMap(final EKaType podklad) {
 		if (podkladMap == podklad)
 			return;
 		podkladMap = podklad;
-		S p = load(podklad);
+		final S p = load(podklad);
 		setData(p);
 	}
 
 	public S getData() {
-		S result = structure.copy();
+		final S result = structure.copy();
 		return result;
 	}
 
-	public void setData(S structure) {
+	public void setData(final S structure) {
 		if (structure.equals(this.structure))
 			return;
 		this.structure = structure;
@@ -66,15 +66,15 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	/**
 	 * @return
 	 */
-	private S load(EKaType podklad) {
-		S p = prefNode.getStructure(jmenoPodkladu(podklad), createDefaults());
+	private S load(final EKaType podklad) {
+		final S p = prefNode.getStructure(jmenoPodkladu(podklad), createDefaults());
 		return p;
 	}
 
 	/**
 	 * @param p
 	 */
-	private void save(EKaType podklad, S p) {
+	private void save(final EKaType podklad, final S p) {
 		prefNode.putStructure(jmenoPodkladu(podklad), p);
 	}
 
@@ -82,18 +82,18 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	 * @param podklad
 	 * @return
 	 */
-	private String jmenoPodkladu(EKaType podklad) {
+	private String jmenoPodkladu(final EKaType podklad) {
 		return podklad == null ? "bezmap" : podklad.name();
 	}
 
-	public void onEvent(ZmenaMapNastalaEvent event) {
-		EKaType podklad = event.getKaSet().getPodklad();
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		final EKaType podklad = event.getKaSet().getPodklad();
 		setPodkladMap(podklad);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.Model0#initAndFire()
 	 */
 	@Override
@@ -108,7 +108,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	protected void reloadPreferences() {
 		prefNode = currPrefe().node(preferenceNodeName());
 		visiblexxx().setOnoff(getVisibleFromPreferences(true));
-		S p = load(podkladMap);
+		final S p = load(podkladMap);
 		setData(p);
 	}
 

@@ -28,11 +28,11 @@ public class NastaveniAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent aE) {
+	public void actionPerformed(final ActionEvent aE) {
 		Dlg.info("Akce ještě nebyla implementována.", "Informace");
 		setEnabled(false);
 	}

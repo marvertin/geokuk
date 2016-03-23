@@ -11,7 +11,7 @@ import cz.geokuk.framework.OnoffEvent0;
  */
 public class KesoidOnoffEvent extends OnoffEvent0<KesoidModel> {
 
-	KesoidOnoffEvent(boolean onoff) {
+	KesoidOnoffEvent(final boolean onoff) {
 		this.onoff = onoff;
 	}
 }

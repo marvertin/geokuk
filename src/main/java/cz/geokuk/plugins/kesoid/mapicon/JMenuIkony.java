@@ -26,20 +26,20 @@ public class JMenuIkony extends JMenu {
 		this.menu = this;
 	}
 
-	public void onEvent(IkonyNactenyEvent event) {
-		IkonBag bag = event.getBag();
+	public void onEvent(final IkonyNactenyEvent event) {
+		final IkonBag bag = event.getBag();
 		while (pocetSad > 0) {
 			pocetSad--;
 			menu.remove(0);
 		}
-		ASada aktualniSada = event.getJmenoAktualniSady();
+		final ASada aktualniSada = event.getJmenoAktualniSady();
 		SwitchSadaAction standard = null;
-		ButtonGroup bg = new ButtonGroup();
-		for (Map.Entry<ASada, Icon> jmenoAIkonaSady : bag.getJmenaAIkonySad().entrySet()) {
+		final ButtonGroup bg = new ButtonGroup();
+		for (final Map.Entry<ASada, Icon> jmenoAIkonaSady : bag.getJmenaAIkonySad().entrySet()) {
 			final ASada sada = jmenoAIkonaSady.getKey();
-			SwitchSadaAction akce = new SwitchSadaAction(sada, jmenoAIkonaSady.getValue());
+			final SwitchSadaAction akce = new SwitchSadaAction(sada, jmenoAIkonaSady.getValue());
 			factory.init(akce);
-			JMenuItem item = new JRadioButtonMenuItem();
+			final JMenuItem item = new JRadioButtonMenuItem();
 			akce.join(item);
 			menu.add(item);
 			menu.remove(item);
@@ -57,7 +57,7 @@ public class JMenuIkony extends JMenu {
 
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 

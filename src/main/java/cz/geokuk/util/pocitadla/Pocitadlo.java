@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities;
  * počítadlo čehokoli, ale jeho smyslem je počítat technické záležitosti, jak jsou dély front a podobně.
  *
  * Předpokládá se, že to budou singletony ve statických proměnných
- * 
+ *
  * @author veverka
  *
  */
@@ -26,7 +26,7 @@ public abstract class Pocitadlo {
 	 * @param aName
 	 * @param aDescription
 	 */
-	public Pocitadlo(String aName, String aDescription, String textovyPopisTypu) {
+	public Pocitadlo(final String aName, final String aDescription, final String textovyPopisTypu) {
 		super();
 		name = aName;
 		description = aDescription;
@@ -52,7 +52,7 @@ public abstract class Pocitadlo {
 		return val;
 	}
 
-	public synchronized void set(int val) {
+	public synchronized void set(final int val) {
 		synchronized (this) {
 			if (this.val == val)
 				return;
@@ -64,7 +64,7 @@ public abstract class Pocitadlo {
 				@Override
 				public void run() {
 					// To řpiřazení zde musí být, neboď callback může být jiným vláknem kdykoli smazán
-					Callback c = callback;
+					final Callback c = callback;
 					if (c != null) {
 						c.onChange();
 					}
@@ -73,11 +73,11 @@ public abstract class Pocitadlo {
 		}
 	}
 
-	public synchronized void add(int diff) {
+	public synchronized void add(final int diff) {
 		set(val + diff);
 	}
 
-	public synchronized void sub(int diff) {
+	public synchronized void sub(final int diff) {
 		set(val - diff);
 	}
 

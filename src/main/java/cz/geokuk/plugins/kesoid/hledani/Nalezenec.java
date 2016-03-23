@@ -20,7 +20,7 @@ public class Nalezenec extends Nalezenec0 {
 		return kdeNalezeno;
 	}
 
-	public void setKdeNalezeno(String kdeNalezeno) {
+	public void setKdeNalezeno(final String kdeNalezeno) {
 		this.kdeNalezeno = kdeNalezeno;
 	}
 
@@ -28,7 +28,7 @@ public class Nalezenec extends Nalezenec0 {
 		return poc;
 	}
 
-	public void setPoc(int poc) {
+	public void setPoc(final int poc) {
 		this.poc = poc;
 	}
 
@@ -36,11 +36,11 @@ public class Nalezenec extends Nalezenec0 {
 		return kon;
 	}
 
-	public void setKon(int kon) {
+	public void setKon(final int kon) {
 		this.kon = kon;
 	}
 
-	public void setKes(Kesoid kes) {
+	public void setKes(final Kesoid kes) {
 		this.kesoid = kes;
 	}
 

@@ -19,7 +19,7 @@ public abstract class JVyberIkon0 extends Box {
 	private final boolean		iOdskrtnutiVybira;
 	private final boolean		iRadioButton;
 
-	public JVyberIkon0(boolean aRadioButton, boolean aOdskrtnutiVybira) {
+	public JVyberIkon0(final boolean aRadioButton, final boolean aOdskrtnutiVybira) {
 		super(BoxLayout.LINE_AXIS);
 		iRadioButton = aRadioButton;
 		iOdskrtnutiVybira = aOdskrtnutiVybira;
@@ -29,13 +29,13 @@ public abstract class JVyberIkon0 extends Box {
 	protected void initComponents() {
 
 		jvyber1 = Box.createVerticalBox();
-		JScrollPane sp1 = new JScrollPane(jvyber1);
+		final JScrollPane sp1 = new JScrollPane(jvyber1);
 		sp1.setViewportBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 		// sp1.setAutoscrolls(true);
 		FComponent.enableMouseSroll(jvyber1);
 
 		jvyber2 = Box.createVerticalBox();
-		JScrollPane sp2 = new JScrollPane(jvyber2);
+		final JScrollPane sp2 = new JScrollPane(jvyber2);
 		sp2.setViewportBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 		FComponent.enableMouseSroll(sp2);
 
@@ -45,7 +45,7 @@ public abstract class JVyberIkon0 extends Box {
 
 	}
 
-	protected final void refresh(final IkonBag bag, Set<String> aJmenaVybranychAlel, CounterMap<Alela> aPoctyVybranychAlel) {
+	protected final void refresh(final IkonBag bag, final Set<String> aJmenaVybranychAlel, final CounterMap<Alela> aPoctyVybranychAlel) {
 		// onInitRefreshing();
 
 		final Genom genom = bag.getGenom();
@@ -54,15 +54,15 @@ public abstract class JVyberIkon0 extends Box {
 		jvyber2.removeAll();
 		final Set<Alela> vybraneAlely = new HashSet<>();
 
-		for (Gen gen : genom.getGeny()) {
-			ButtonGroup bg = new ButtonGroup();
+		for (final Gen gen : genom.getGeny()) {
+			final ButtonGroup bg = new ButtonGroup();
 			if (shouldRender(gen)) {
 				// if (pouziteGeny.contains(gen)) {
 				// System.out.println("Nas gen: " + gen.getDisplayName());
-				for (Grupa grupa : gen.getGrupy().values()) {
-					Box boxgen = Box.createVerticalBox();
+				for (final Grupa grupa : gen.getGrupy().values()) {
+					final Box boxgen = Box.createVerticalBox();
 					boxgen.setBorder(BorderFactory.createTitledBorder(grupa.isOther() ? gen.getDisplayName() : grupa.getDisplayName()));
-					for (Alela alela : grupa.getAlely()) {
+					for (final Alela alela : grupa.getAlely()) {
 						final Alela alelax = alela;
 						// To tady musí být proto, že už na začátku se musí vytvořit instance
 						// filtru, aby se dostaly ikony na toolbár, ale toto vytvoření pro moc ikon dost
@@ -70,8 +70,8 @@ public abstract class JVyberIkon0 extends Box {
 						if (shouldRender(alelax)) {
 							// System.out.println("Nase alela: " + agen.getDisplayName());
 							final Icon ikona = najdiIkonu(alela, bag);
-							JComponent radiosikonou = Box.createHorizontalBox();
-							JLabel ikonilajbl = new JLabel(ikona);
+							final JComponent radiosikonou = Box.createHorizontalBox();
+							final JLabel ikonilajbl = new JLabel(ikona);
 							// ikonilajbl.setAlignmentX(LEFT_ALIGNMENT);
 							radiosikonou.add(ikonilajbl);
 							final JToggleButton rb = createToggleButton();
@@ -100,7 +100,7 @@ public abstract class JVyberIkon0 extends Box {
 							rb.getModel().addItemListener(new ItemListener() {
 
 								@Override
-								public void itemStateChanged(ItemEvent e) {
+								public void itemStateChanged(final ItemEvent e) {
 									if (e.getStateChange() == ItemEvent.DESELECTED ^ iOdskrtnutiVybira) {
 										vybraneAlely.remove(alelax);
 									}
@@ -166,8 +166,8 @@ public abstract class JVyberIkon0 extends Box {
 
 	protected abstract void zmenaVyberu(Set<Alela> aVybraneAlely);
 
-	private Icon najdiIkonu(Alela alela, IkonBag bag) {
-		Genotyp genotypProAlelu = bag.getGenom().getGenotypProAlelu(alela);
+	private Icon najdiIkonu(final Alela alela, final IkonBag bag) {
+		final Genotyp genotypProAlelu = bag.getGenom().getGenotypProAlelu(alela);
 		// genotypProAlelu.put(bag.getGenom().ALELA_H);
 		return bag.seekIkon(genotypProAlelu);
 	}

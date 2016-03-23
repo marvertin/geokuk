@@ -20,7 +20,7 @@ public class ZoomPoziceAction extends Action0 {
 	/**
 	 *
 	 */
-	public ZoomPoziceAction(Wgs wgs) {
+	public ZoomPoziceAction(final Wgs wgs) {
 		// this.wgs = wgs;
 		super.putValue(NAME, "Přiblížit..");
 		// super.putValue(SMALL_ICON, Board.ikonizer.findIcon(wpt, "x16", true));
@@ -33,10 +33,10 @@ public class ZoomPoziceAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		vyrezModel.setMeritkoMapyAutomaticky(vyrezModel.nejblizsiMeritko());
 		// Board.eveman.fire(new PoziceChangedEvent(wgs, true));
 	}

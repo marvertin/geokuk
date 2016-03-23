@@ -10,7 +10,7 @@ import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 
 /**
  * Třída, která sestavuje popisky. Její stvoření může trvat, ale její provádění nikoli
- * 
+ *
  * @author veverka
  *
  *
@@ -29,11 +29,11 @@ public class SestavovacPopisku {
 	/**
 	 *
 	 */
-	public SestavovacPopisku(String pattern) {
-		List<Nahrazovac> nahrazovace = new ArrayList<>();
+	public SestavovacPopisku(final String pattern) {
+		final List<Nahrazovac> nahrazovace = new ArrayList<>();
 		vytvorNahrazovace(nahrazovace, pattern);
 		int n = 1;
-		for (Nahrazovac nahr : nahrazovace) {
+		for (final Nahrazovac nahr : nahrazovace) {
 			if (nahr == NAHRBR) {
 				n++;
 			}
@@ -42,12 +42,12 @@ public class SestavovacPopisku {
 		nahrazky = nahrazovace.toArray(new Nahrazovac[nahrazovace.size()]);
 	}
 
-	private void vytvorNahrazovace(List<Nahrazovac> nahrazovace, String vzorek) {
+	private void vytvorNahrazovace(final List<Nahrazovac> nahrazovace, final String vzorek) {
 		if (vzorek.length() == 0)
 			return;
-		for (Map.Entry<String, Nahrazovac> entry : sNahrazovace.entrySet()) {
-			int delka = entry.getKey().length();
-			int poz = vzorek.indexOf(entry.getKey());
+		for (final Map.Entry<String, Nahrazovac> entry : sNahrazovace.entrySet()) {
+			final int delka = entry.getKey().length();
+			final int poz = vzorek.indexOf(entry.getKey());
 			if (poz >= 0) { // našli jsme některý
 				vytvorNahrazovace(nahrazovace, vzorek.substring(0, poz));
 				nahrazovace.add(entry.getValue());
@@ -58,12 +58,12 @@ public class SestavovacPopisku {
 		nahrazovace.add(new NahrKonstantni(vzorek));
 	}
 
-	public String[] sestavPopisek(Wpt wpt) {
+	public String[] sestavPopisek(final Wpt wpt) {
 		int n = 0;
-		Context ctx = new Context(wpt);
-		String[] popisky = new String[pocetRadku];
-		StringBuilder sb = new StringBuilder();
-		for (Nahrazovac nahr : nahrazky) {
+		final Context ctx = new Context(wpt);
+		final String[] popisky = new String[pocetRadku];
+		final StringBuilder sb = new StringBuilder();
+		for (final Nahrazovac nahr : nahrazky) {
 			nahr.pridej(sb, ctx);
 			if (nahr == NAHRBR) {
 				popisky[n] = sb.toString();
@@ -87,12 +87,12 @@ public class SestavovacPopisku {
 		/**
 		 *
 		 */
-		public NahrKonstantni(String konstatna) {
+		public NahrKonstantni(final String konstatna) {
 			this.konstatna = konstatna;
 		}
 
 		@Override
-		public void pridej(StringBuilder sb, Context ctx) {
+		public void pridej(final StringBuilder sb, final Context ctx) {
 			sb.append(konstatna);
 		}
 
@@ -100,14 +100,14 @@ public class SestavovacPopisku {
 
 	/**
 	 * Oddělovač řádků. Lze ho najít
-	 * 
+	 *
 	 * @author veverka
 	 *
 	 */
 	private static class NahrBr implements Nahrazovac {
 
 		@Override
-		public void pridej(StringBuilder sb, Context ctx) {
+		public void pridej(final StringBuilder sb, final Context ctx) {
 		}
 
 	}
@@ -115,14 +115,14 @@ public class SestavovacPopisku {
 	static {
 		def("{wpt}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				sb.append(ctx.wpt.getName());
 			}
 		});
 
 		def("{typ1}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				if (ctx.isKes()) {
 					sb.append(ctx.kes.getOneLetterType());
 				}
@@ -131,7 +131,7 @@ public class SestavovacPopisku {
 
 		def("{velikost}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				if (ctx.isKes()) {
 					sb.append(ctx.kes.getSize());
 				}
@@ -140,7 +140,7 @@ public class SestavovacPopisku {
 
 		def("{velikost1}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				if (ctx.isKes()) {
 					sb.append(ctx.kes.getOneLetterSize());
 				}
@@ -149,7 +149,7 @@ public class SestavovacPopisku {
 
 		def("{obtiznost}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				if (ctx.isKes()) {
 					sb.append(ctx.kes.getDifficulty());
 				}
@@ -158,7 +158,7 @@ public class SestavovacPopisku {
 
 		def("{obtiznost1}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				if (ctx.isKes()) {
 					sb.append(ctx.kes.getOneLetterDifficulty());
 				}
@@ -167,7 +167,7 @@ public class SestavovacPopisku {
 
 		def("{teren}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				if (ctx.isKes()) {
 					sb.append(ctx.kes.getTerrain());
 				}
@@ -176,7 +176,7 @@ public class SestavovacPopisku {
 
 		def("{teren1}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				if (ctx.isKes()) {
 					sb.append(ctx.kes.getOneLetterTerrain());
 				}
@@ -185,21 +185,21 @@ public class SestavovacPopisku {
 
 		def("{autor}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				sb.append(ctx.getKesoid().getAuthor());
 			}
 		});
 
 		def("{nazev}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				sb.append(ctx.wpt.getNazev());
 			}
 		});
 
 		def("{zalozeno}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				sb.append(ctx.getKesoid().getHidden());
 			}
 		});
@@ -209,7 +209,7 @@ public class SestavovacPopisku {
 
 		def("{puvodnipotvora}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				sb.append(computeByvalyPopisek(ctx.wpt));
 			}
 		});
@@ -218,7 +218,7 @@ public class SestavovacPopisku {
 
 		def("{info}", new Nahrazovac() {
 			@Override
-			public void pridej(StringBuilder sb, Context ctx) {
+			public void pridej(final StringBuilder sb, final Context ctx) {
 				if (ctx.isKes()) {
 					sb.append(ctx.kes.getInfo());
 				}
@@ -235,7 +235,7 @@ public class SestavovacPopisku {
 		public Kesoid		kesoid;
 		private Kes			kes;
 
-		Context(Wpt wpt) {
+		Context(final Wpt wpt) {
 			this.wpt = wpt;
 		}
 
@@ -274,13 +274,13 @@ public class SestavovacPopisku {
 	 * @param string
 	 * @param xXX2
 	 */
-	private static void def(String key, Nahrazovac nahrazovac) {
+	private static void def(final String key, final Nahrazovac nahrazovac) {
 		sNahrazovace.put(key, nahrazovac);
 	}
 
-	public static String computeByvalyPopisek(Wpt wpt) {
-		Kesoid kesoid = wpt.getKesoid();
-		String nazev = (kesoid.getKesoidKind() == EKesoidKind.CGP) ? kesoid.getIdentifier() : kesoid.getNazev();
+	public static String computeByvalyPopisek(final Wpt wpt) {
+		final Kesoid kesoid = wpt.getKesoid();
+		final String nazev = (kesoid.getKesoidKind() == EKesoidKind.CGP) ? kesoid.getIdentifier() : kesoid.getNazev();
 		return nazev;
 
 	}

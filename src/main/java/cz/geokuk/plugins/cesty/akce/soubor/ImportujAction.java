@@ -27,7 +27,7 @@ public class ImportujAction extends Action0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (fc == null) { // dlouho to trvá, tak vytvoříme vždy nový
 			fc = new JFileChooser();
 			fc.addChoosableFileFilter(new GpxFilter());
@@ -38,22 +38,22 @@ public class ImportujAction extends Action0 {
 		fc.setMultiSelectionEnabled(true);
 		// fc.setCurrentDirectory(new File(jtext.getText()));
 		fc.setSelectedFile(cestyModel.defaultAktualnihoVyletuFile());
-		int result = fc.showDialog(Dlg.parentFrame(), "Importovat");
+		final int result = fc.showDialog(Dlg.parentFrame(), "Importovat");
 		if (result == JFileChooser.APPROVE_OPTION) {
-			File[] selectedFiles = fc.getSelectedFiles();
+			final File[] selectedFiles = fc.getSelectedFiles();
 			cestyModel.importuj(Arrays.asList(selectedFiles));
 			System.out.println("Nactena cesta z: " + Arrays.asList(selectedFiles));
 		}
 	}
 
-	public void inject(CestyModel cestyModel) {
+	public void inject(final CestyModel cestyModel) {
 		this.cestyModel = cestyModel;
 	}
 
 	private class AllAkceptableFilter extends FileFilter {
 
 		@Override
-		public boolean accept(File pathname) {
+		public boolean accept(final File pathname) {
 			if (pathname.isDirectory())
 				return true;
 			if (pathname.getName().toLowerCase().endsWith(".gpx"))

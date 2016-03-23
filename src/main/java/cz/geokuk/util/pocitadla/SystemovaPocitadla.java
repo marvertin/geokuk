@@ -22,8 +22,8 @@ public class SystemovaPocitadla {
 		tm = new Timer(100, new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				Runtime runtime = Runtime.getRuntime();
+			public void actionPerformed(final ActionEvent e) {
+				final Runtime runtime = Runtime.getRuntime();
 				volnaPamet.set((int) (runtime.freeMemory() / 1024));
 				celkovaPamet.set((int) (runtime.totalMemory() / 1024));
 				dostupnychProcesoru.set(runtime.availableProcessors());

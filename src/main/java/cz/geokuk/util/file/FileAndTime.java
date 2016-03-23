@@ -7,18 +7,18 @@ public class FileAndTime implements Comparable<FileAndTime> {
 	final File	file;
 	final long	lastmodify;
 
-	public FileAndTime(File aFile) {
+	public FileAndTime(final File aFile) {
 		this(aFile, aFile.lastModified());
 	}
 
-	public FileAndTime(File aFile, long aLastmodify) {
+	public FileAndTime(final File aFile, final long aLastmodify) {
 		file = aFile;
 		lastmodify = aLastmodify;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -32,18 +32,18 @@ public class FileAndTime implements Comparable<FileAndTime> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FileAndTime other = (FileAndTime) obj;
+		final FileAndTime other = (FileAndTime) obj;
 		if (file == null) {
 			if (other.file != null)
 				return false;
@@ -56,7 +56,7 @@ public class FileAndTime implements Comparable<FileAndTime> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -66,11 +66,11 @@ public class FileAndTime implements Comparable<FileAndTime> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public int compareTo(FileAndTime fat) {
+	public int compareTo(final FileAndTime fat) {
 		if (lastmodify == fat.lastmodify) {
 			return 0;
 		}

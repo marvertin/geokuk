@@ -38,7 +38,7 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 		// Listener zajístí, že za zapíše šířka i výška do použitého souřadničníku
 		addComponentListener(new ComponentAdapter() {
 			@Override
-			public void componentResized(ComponentEvent e) {
+			public void componentResized(final ComponentEvent e) {
 				setSoord(soord.derive(getSize()));
 			}
 		});
@@ -46,14 +46,14 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.JPrekryvnik#add(java.awt.Component)
 	 */
 	@Override
-	public Component add(Component aComp) {
+	public Component add(final Component aComp) {
 		if (aComp instanceof JSingleSlide0) {
 			// Nastavit coordináty do slidu, aby je mohli konkrétníci čerpat
-			JSingleSlide0 slide = (JSingleSlide0) aComp;
+			final JSingleSlide0 slide = (JSingleSlide0) aComp;
 			slides.add(slide);
 		}
 		return super.add(aComp);
@@ -62,7 +62,7 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 	/**
 	 * @param newSoord
 	 */
-	protected void setSoord(Coord newSoord) {
+	protected void setSoord(final Coord newSoord) {
 		if (newSoord.equals(soord))
 			return; // je to to samé
 		soord = newSoord;
@@ -74,10 +74,10 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 	 */
 	private void reinicializujVyrezy() {
 		// Raději ve dvou cyklech, aby už ho měli správně, když se začne reinicializovat
-		for (JSingleSlide0 slide : slides) {
+		for (final JSingleSlide0 slide : slides) {
 			slide.setSoord(soord);
 		}
-		for (JSingleSlide0 slide : slides) {
+		for (final JSingleSlide0 slide : slides) {
 			slide.onVyrezChanged();
 		}
 	}

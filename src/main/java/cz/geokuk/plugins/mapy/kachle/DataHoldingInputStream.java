@@ -4,28 +4,28 @@ import java.io.*;
 
 /**
  * Stream drží veškerá data, která se načetla a dokáže je pak vydat jako bytové pole.
- * 
+ *
  * @author tatinek
  *
  */
 class DataHoldingInputStream extends FilterInputStream {
 
-	private ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 256);
+	private final ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 256);
 
-	protected DataHoldingInputStream(InputStream in) {
+	protected DataHoldingInputStream(final InputStream in) {
 		super(in);
 	}
 
 	@Override
 	public int read() throws IOException {
-		int c = super.read();
+		final int c = super.read();
 		baos.write(c);
 		return c;
 	}
 
 	@Override
-	public int read(byte[] b, int off, int len) throws IOException {
-		int delka = super.read(b, off, len);
+	public int read(final byte[] b, final int off, final int len) throws IOException {
+		final int delka = super.read(b, off, len);
 		if (delka > 0) {
 			baos.write(b, off, delka);
 		}

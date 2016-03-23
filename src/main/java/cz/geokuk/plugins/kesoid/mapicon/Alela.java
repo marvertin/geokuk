@@ -28,11 +28,11 @@ public class Alela {
 	 * @param aGrupa
 	 *            the grupa to set
 	 */
-	public void setGrupa(Grupa aGrupa) {
+	public void setGrupa(final Grupa aGrupa) {
 		grupa = aGrupa;
 	}
 
-	public Alela(String alelaName, int celkovePoradi) {
+	public Alela(final String alelaName, final int celkovePoradi) {
 		this.alelaName = alelaName;
 		this.displayName = alelaName;
 		this.celkovePoradi = celkovePoradi;
@@ -42,7 +42,7 @@ public class Alela {
 		return displayName;
 	}
 
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(final String displayName) {
 		this.displayName = displayName == null ? alelaName : displayName;
 	}
 
@@ -57,7 +57,7 @@ public class Alela {
 		return gen;
 	}
 
-	public void setGen(Gen gen) {
+	public void setGen(final Gen gen) {
 		this.gen = gen;
 	}
 
@@ -74,9 +74,9 @@ public class Alela {
 		return alelaName;
 	}
 
-	public static Set<String> alelyToNames(Set<Alela> alely) {
-		Set<String> jmenaAlel = new HashSet<>(alely.size());
-		for (Alela alela : alely) {
+	public static Set<String> alelyToNames(final Set<Alela> alely) {
+		final Set<String> jmenaAlel = new HashSet<>(alely.size());
+		for (final Alela alela : alely) {
 			jmenaAlel.add(alela.name());
 		}
 		return jmenaAlel;

@@ -10,7 +10,7 @@ public abstract class VyletAction0 extends Action0 {
 
 	protected VyletModel		vyletModel;
 
-	public VyletAction0(String string) {
+	public VyletAction0(final String string) {
 		super(string);
 		setEnabled(false);
 	}
@@ -19,19 +19,19 @@ public abstract class VyletAction0 extends Action0 {
 	 * @param aString
 	 * @param aSeekResIcon
 	 */
-	public VyletAction0(String aString, Icon aIcon) {
+	public VyletAction0(final String aString, final Icon aIcon) {
 		super(aString, aIcon);
 		setEnabled(false);
 	}
 
-	public final void onEvent(VyletChangeEvent aEvent) {
+	public final void onEvent(final VyletChangeEvent aEvent) {
 		vyletChanged();
 	}
 
 	protected void vyletChanged() {
 	}
 
-	public void inject(VyletModel vyletModel) {
+	public void inject(final VyletModel vyletModel) {
 		this.vyletModel = vyletModel;
 
 	}

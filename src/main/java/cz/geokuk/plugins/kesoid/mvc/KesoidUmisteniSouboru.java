@@ -48,7 +48,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	/**
 	 * @param aKesDir
 	 */
-	private void check(Filex file) {
+	private void check(final Filex file) {
 		if (file == null)
 			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
 	}
@@ -57,11 +57,11 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	 * @param kesDir
 	 *            the kesDir to set
 	 */
-	public void setKesDir(Filex kesDir) {
+	public void setKesDir(final Filex kesDir) {
 		this.kesDir = kesDir;
 	}
 
-	public void setCestyDir(Filex cestyDir) {
+	public void setCestyDir(final Filex cestyDir) {
 		this.cestyDir = cestyDir;
 	}
 
@@ -82,7 +82,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	 * @param neGgtFile
 	 *            the neGgtFile to set
 	 */
-	public void setNeGgtFile(Filex neGgtFile) {
+	public void setNeGgtFile(final Filex neGgtFile) {
 		this.neGgtFile = neGgtFile;
 	}
 
@@ -90,7 +90,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	 * @param neGgtFile
 	 *            the neGgtFile to set
 	 */
-	public void setAnoGgtFile(Filex anoGgtFile) {
+	public void setAnoGgtFile(final Filex anoGgtFile) {
 		this.anoGgtFile = anoGgtFile;
 	}
 
@@ -114,7 +114,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 		return geogetDataDir;
 	}
 
-	public void setGeogetDataDir(Filex geogetDir) {
+	public void setGeogetDataDir(final Filex geogetDir) {
 		geogetDataDir = geogetDir;
 	}
 
@@ -122,7 +122,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 		return image3rdPartyDir;
 	}
 
-	public void setImage3rdPartyDir(Filex image3rdPartyDir) {
+	public void setImage3rdPartyDir(final Filex image3rdPartyDir) {
 		this.image3rdPartyDir = image3rdPartyDir;
 	}
 
@@ -130,13 +130,13 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 		return imageMyDir;
 	}
 
-	public void setImageMyDir(Filex imageMyDir) {
+	public void setImageMyDir(final Filex imageMyDir) {
 		this.imageMyDir = imageMyDir;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -154,13 +154,13 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		KesoidUmisteniSouboru that = (KesoidUmisteniSouboru) o;
+		final KesoidUmisteniSouboru that = (KesoidUmisteniSouboru) o;
 
 		if (anoGgtFile != null ? !anoGgtFile.equals(that.anoGgtFile) : that.anoGgtFile != null)
 			return false;

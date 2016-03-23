@@ -71,7 +71,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	@Override
 	public Mou getMou() {
 		if (yy == -1) { // testovat yy, protože se nastavuje později
-			Mou mou = getWgs().toMou();
+			final Mou mou = getWgs().toMou();
 			xx = mou.xx;
 			yy = mou.yy;
 			return mou;
@@ -85,7 +85,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	 * @param aWgs
 	 *            the wgs to set
 	 */
-	public void setWgs(Wgs aWgs) {
+	public void setWgs(final Wgs aWgs) {
 		lat = aWgs.lat;
 		lon = aWgs.lon;
 	}
@@ -94,7 +94,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	// this.prefix = prefix.intern();
 	// }
 
-	public void setNazev(String aNazev) {
+	public void setNazev(final String aNazev) {
 		// Je tam strašne moc krátkých názvů jako TrB nebo ZhB
 		nazev = aNazev.length() >= 5 ? aNazev : aNazev.intern();
 	}
@@ -122,7 +122,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		if (getKesoid().getStatus() == EKesStatus.ARCHIVED) {
 			return false;
 		}
-		EKesWptType type = getType();
+		final EKesWptType type = getType();
 		return type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE || TRADITIONAL_CACHE.equals(sym);
 	}
 
@@ -132,7 +132,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -142,18 +142,18 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 
 	// private Genotyp __;
 
-	public Genotyp getGenotyp(Genom genom) {
+	public Genotyp getGenotyp(final Genom genom) {
 		// if (__ != null) return __;
 		//
-		Genotyp g = genom.getGenotypVychozi();
+		final Genotyp g = genom.getGenotypVychozi();
 		buildGenotyp(genom, g);
 		getKesoid().doBuildGenotyp(genom, g);
 		// __ = g;
 		return g;
 	}
 
-	private void buildGenotyp(Genom genom, Genotyp g) {
-		GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom, g);
+	private void buildGenotyp(final Genom genom, final Genotyp g) {
+		final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom, g);
 		genotypBuilder.build(this);
 	}
 
@@ -168,7 +168,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return sklivec;
 	}
 
-	public void setSklivec(Sklivec sklivec) {
+	public void setSklivec(final Sklivec sklivec) {
 		this.sklivec = sklivec;
 		sklivecValidityCode = currentSklivecValidityCode;
 	}
@@ -185,8 +185,8 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	}
 
 	public String textToolTipu() {
-		Wpt wpt = this;
-		StringBuilder sb = new StringBuilder();
+		final Wpt wpt = this;
+		final StringBuilder sb = new StringBuilder();
 		sb.append("<html>");
 		// TODO Zpbrazení tooltipu nutno dořešit
 		// if (wpt.getType() != EKesWptType.CACHE && wpt.getType() != EKesWptType.FINAL_LOCATION) {
@@ -222,7 +222,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return getKesoid().getMainWpt() == this;
 	}
 
-	public void setSym(String sym) {
+	public void setSym(final String sym) {
 		String adjustedSym = wptMapping.get(sym);
 		if (adjustedSym == null) {
 			adjustedSym = sym;
@@ -234,7 +234,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -249,7 +249,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	 * @param aElevation
 	 *            the elevation to set
 	 */
-	public void setElevation(int aElevation) {
+	public void setElevation(final int aElevation) {
 		elevation = aElevation;
 	}
 
@@ -264,7 +264,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	 * @param aRucnePridany
 	 *            the rucnePridany to set
 	 */
-	public void setRucnePridany(boolean aRucnePridany) {
+	public void setRucnePridany(final boolean aRucnePridany) {
 		rucnePridany = aRucnePridany;
 	}
 
@@ -272,7 +272,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	 * @param zorder
 	 *            the zorder to set
 	 */
-	public void setZorder(EZOrder zorder) {
+	public void setZorder(final EZOrder zorder) {
 		this.zorder = zorder;
 	}
 

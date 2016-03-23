@@ -25,7 +25,7 @@ public class InformaceoZdrojichAction extends DialogOpeningAction0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.DialogOpeningAction0#createDialog()
 	 */
 	@Override
@@ -33,7 +33,7 @@ public class InformaceoZdrojichAction extends DialogOpeningAction0 {
 		return new JInformaceOZdrojichDialog();
 	}
 
-	public void onEvent(KeskyNactenyEvent event) {
+	public void onEvent(final KeskyNactenyEvent event) {
 		setEnabled(true);
 	}
 }

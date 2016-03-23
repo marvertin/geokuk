@@ -12,7 +12,7 @@ class HledaciRunnableSwingWorker<T extends Nalezenec0> extends MySwingWorker0<Vy
 	private final Hledac0<T>		hledac;
 	private final Finishor<T>		finishor;
 
-	public HledaciRunnableSwingWorker(Finishor<T> finishor, HledaciPodminka0 podminka, Hledac0<T> hledac) {
+	public HledaciRunnableSwingWorker(final Finishor<T> finishor, final HledaciPodminka0 podminka, final Hledac0<T> hledac) {
 		super();
 		this.finishor = finishor;
 		this.podminka = podminka;
@@ -21,11 +21,11 @@ class HledaciRunnableSwingWorker<T extends Nalezenec0> extends MySwingWorker0<Vy
 
 	@Override
 	protected VysledekHledani<T> doInBackground() throws Exception {
-		VysledekHledani<T> result = new VysledekHledani<>();
+		final VysledekHledani<T> result = new VysledekHledani<>();
 		hledac.setFuture(this);
 		try {
 			result.nalezenci = hledac.najdiASerad(podminka);
-		} catch (PatternSyntaxException e) {
+		} catch (final PatternSyntaxException e) {
 			result.exception = e;
 		}
 		if (isCancelled())

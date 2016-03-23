@@ -16,7 +16,7 @@ import cz.geokuk.util.gui.JSmallPictureButton;
 
 /**
  * Detailní informace o vybrané keši.
- * 
+ *
  * @author Spikodrob
  *
  */
@@ -60,14 +60,14 @@ public class JKesDetail extends JKesoidDetail0 {
 		zobrazHint = new JSmallPictureButton("Hint");
 		zobrazHint.setToolTipText("Zobrazí rozkódovaný hint");
 
-		Box hlav = Box.createVerticalBox();
+		final Box hlav = Box.createVerticalBox();
 		add(hlav);
 
-		Box box2 = Box.createHorizontalBox();
+		final Box box2 = Box.createHorizontalBox();
 
 		{
 
-			Box box3 = Box.createVerticalBox();
+			final Box box3 = Box.createVerticalBox();
 			box3.add(size);
 			box3.add(Box.createGlue());
 			box3.add(jFoundTime);
@@ -78,13 +78,13 @@ public class JKesDetail extends JKesoidDetail0 {
 		box2.add(zobrazHint);
 
 		{
-			Box pan4a = Box.createVerticalBox();
-			JLabel lblObtiznost = new Popisek("D:");
+			final Box pan4a = Box.createVerticalBox();
+			final JLabel lblObtiznost = new Popisek("D:");
 			pan4a.add(lblObtiznost);
-			JLabel lblTeren = new Popisek("T:");
+			final JLabel lblTeren = new Popisek("T:");
 			pan4a.add(lblTeren);
 
-			Box pan4b = Box.createVerticalBox();
+			final Box pan4b = Box.createVerticalBox();
 			pan4b.add(difficulty);
 			pan4b.add(terrain);
 
@@ -98,7 +98,7 @@ public class JKesDetail extends JKesoidDetail0 {
 
 		hlav.add(box2);
 
-		JPanel box4 = new JPanel();
+		final JPanel box4 = new JPanel();
 		box4.add(new Popisek("Hodnoceni:"));
 		box4.add(hodnoceni);
 		box4.add(new JLabel("/"));
@@ -120,21 +120,21 @@ public class JKesDetail extends JKesoidDetail0 {
 		zobrazHint.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				Dlg.info(kes.getHint(), "Hint");
 			}
 		});
 	}
 
 	@Override
-	public void napln(Wpt wpt) {
+	public void napln(final Wpt wpt) {
 		kes = (Kes) wpt.getKesoid();
 		napln();
-		boolean mameHint = kes.getHint() != null && !kes.getHint().trim().isEmpty();
+		final boolean mameHint = kes.getHint() != null && !kes.getHint().trim().isEmpty();
 		zobrazHint.setEnabled(mameHint);
 	}
 
-	public void onEvent(DomaciSouradniceSeZmenilyEvent aEvent) {
+	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
 		if (isVisible() && kes != null) {
 			napln();
 		}
@@ -154,28 +154,28 @@ public class JKesDetail extends JKesoidDetail0 {
 		jFavorit.setVisible(kes.getFavorit() > 0);
 	}
 
-	private static Icon hvezdicky(String kolik) {
+	private static Icon hvezdicky(final String kolik) {
 		// TODO : revisit this...
-		String kolikAdjusted = kolik.replaceAll("\\.(0+|$)", "");
-		String path = "gccom/stars/stars" + kolikAdjusted.replace('.', '_') + ".gif";
-		BufferedImage image = ImageLoader.seekResImage(path, 61, 13);
-		Icon icon = new ImageIcon(image);
+		final String kolikAdjusted = kolik.replaceAll("\\.(0+|$)", "");
+		final String path = "gccom/stars/stars" + kolikAdjusted.replace('.', '_') + ".gif";
+		final BufferedImage image = ImageLoader.seekResImage(path, 61, 13);
+		final Icon icon = new ImageIcon(image);
 		return icon;
 	}
 
-	private static Icon velikost(EKesSize size) {
-		String path = "gccom/container/" + size.name().toLowerCase() + ".gif";
-		BufferedImage image = ImageLoader.seekResImage(path, 45, 12);
-		Icon icon = new ImageIcon(image);
+	private static Icon velikost(final EKesSize size) {
+		final String path = "gccom/container/" + size.name().toLowerCase() + ".gif";
+		final BufferedImage image = ImageLoader.seekResImage(path, 45, 12);
+		final Icon icon = new ImageIcon(image);
 		return icon;
 	}
 
 	private class Popisek extends JLabel {
 		private static final long serialVersionUID = -79636254895417957L;
 
-		public Popisek(String text) {
+		public Popisek(final String text) {
 			super(text);
-			Font font = getFont().deriveFont(0);
+			final Font font = getFont().deriveFont(0);
 			setFont(font);
 
 		}

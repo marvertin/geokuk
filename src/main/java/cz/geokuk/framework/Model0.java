@@ -21,21 +21,21 @@ public abstract class Model0 implements AfterInjectInit {
 	private MainFrameHolder	mainFrameHolder;
 	private Factory			factory;
 
-	public void inject(EventFirer ef) {
+	public void inject(final EventFirer ef) {
 		this.ef = ef;
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 
-	public void inject(Prefe prefe) {
+	public void inject(final Prefe prefe) {
 		this.prefe = prefe;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.AfterInjectInit#initAfterInject()
 	 */
 	@Override
@@ -57,21 +57,21 @@ public abstract class Model0 implements AfterInjectInit {
 	protected void reloadPreferences() {
 	}
 
-	public void onEvent(PreferencesProfileChangedEvent event) {
+	public void onEvent(final PreferencesProfileChangedEvent event) {
 		// staci jen reloadnout pri zmeně, protože teĎ už prefe.curr()
 		// bude spravne preference nastavovat
 		reloadPreferences();
 	}
 
 	// TODO udělat zase protected, aže se nebude vyhazovat KeskyVyfiltrovanyEvent
-	public void fire(Event0<?> event) {
+	public void fire(final Event0<?> event) {
 		event.setModel(this);
 		ef.fire(event);
 	}
 
 	protected Clipboard getSystemClipboard() {
-		Toolkit toolkit = getMainFrame().getToolkit();
-		Clipboard scl = toolkit.getSystemClipboard();
+		final Toolkit toolkit = getMainFrame().getToolkit();
+		final Clipboard scl = toolkit.getSystemClipboard();
 		return scl;
 	}
 
@@ -79,11 +79,11 @@ public abstract class Model0 implements AfterInjectInit {
 		return mainFrameHolder.getMainFrame();
 	}
 
-	public void inject(MainFrameHolder mainFrameHolder) {
+	public void inject(final MainFrameHolder mainFrameHolder) {
 		this.mainFrameHolder = mainFrameHolder;
 	}
 
-	protected <T> T factoryInit(T obj) {
+	protected <T> T factoryInit(final T obj) {
 		return factory.init(obj);
 	}
 }

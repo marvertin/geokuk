@@ -18,16 +18,16 @@ public class PopiskyOnoffAction extends ToggleAction0 {
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 	}
 
-	public void inject(PopiskyModel popiskyModel) {
+	public void inject(final PopiskyModel popiskyModel) {
 		this.popiskyModel = popiskyModel;
 	}
 
-	public void onEvent(PopiskyOnoffEvent event) {
+	public void onEvent(final PopiskyOnoffEvent event) {
 		setSelected(event.isOnoff());
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		popiskyModel.visible.setOnoff(nastaveno);
 	}
 

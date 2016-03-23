@@ -10,7 +10,7 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 /**
  * Dokument GPX se vším, co budeme podporovat
- * 
+ *
  * @author tatinek
  *
  */
@@ -22,8 +22,8 @@ public class Doc implements Iterable<Cesta> {
 
 	private final List<Cesta>	cesty	= new ArrayList<>();
 
-	public boolean hasWpt(Wpt wpt) {
-		for (Cesta cesta : cesty) {
+	public boolean hasWpt(final Wpt wpt) {
+		for (final Cesta cesta : cesty) {
 			if (cesta.hasWpt(wpt))
 				return true;
 		}
@@ -32,7 +32,7 @@ public class Doc implements Iterable<Cesta> {
 
 	public int getPocetWaypointu() {
 		int suma = 0;
-		for (Cesta cesta : cesty) {
+		for (final Cesta cesta : cesty) {
 			suma += cesta.getPocetWaypointu();
 		}
 		return suma;
@@ -41,7 +41,7 @@ public class Doc implements Iterable<Cesta> {
 	public Iterable<Wpt> getWpts() {
 		return new MultiIterable<Wpt, Cesta>(cesty) {
 			@Override
-			protected Iterable<Wpt> prepareIterable(Cesta m) {
+			protected Iterable<Wpt> prepareIterable(final Cesta m) {
 				return m.getWpts();
 			}
 		};
@@ -59,22 +59,22 @@ public class Doc implements Iterable<Cesta> {
 
 	/**
 	 * Vrací seznam všech bodů cesty.
-	 * 
+	 *
 	 * @return
 	 */
 	public Iterable<Bod> getBody() {
 		return new MultiIterable<Bod, Cesta>(cesty) {
 			@Override
-			protected Iterable<Bod> prepareIterable(Cesta m) {
+			protected Iterable<Bod> prepareIterable(final Cesta m) {
 				return m.getBody();
 			}
 		};
 	}
 
-	public Bousek0 locateNejblizsiDoKvadratuVzdalenosi(Mou mou, long kvadratMaximalniVzdalenosti, Cesta preferovanaCesta, boolean aDatPrednostBoduPredUsekem) {
+	public Bousek0 locateNejblizsiDoKvadratuVzdalenosi(final Mou mou, final long kvadratMaximalniVzdalenosti, final Cesta preferovanaCesta, final boolean aDatPrednostBoduPredUsekem) {
 		SearchResult srmin = new SearchResult();
-		for (Cesta cesta : cesty) {
-			SearchResult sr = cesta.locateNejblizsiDoKvadratuVzdalenosi(mou, kvadratMaximalniVzdalenosti, aDatPrednostBoduPredUsekem);
+		for (final Cesta cesta : cesty) {
+			final SearchResult sr = cesta.locateNejblizsiDoKvadratuVzdalenosi(mou, kvadratMaximalniVzdalenosti, aDatPrednostBoduPredUsekem);
 			if (sr.bousek != null) { // když je z preferované cesty není co řešit
 				if (sr.bousek.getCesta() == preferovanaCesta)
 					return sr.bousek;
@@ -98,7 +98,7 @@ public class Doc implements Iterable<Cesta> {
 		return file;
 	}
 
-	public void setFile(File file) {
+	public void setFile(final File file) {
 		this.file = file;
 	}
 
@@ -118,29 +118,29 @@ public class Doc implements Iterable<Cesta> {
 		changed = true;
 	}
 
-	public void xadd(Cesta cesta) {
+	public void xadd(final Cesta cesta) {
 		cesty.add(cesta);
 		cesta.setDoc(this);
 		setChanged();
 	}
 
-	void removex(Cesta cesta) {
+	void removex(final Cesta cesta) {
 		cesty.remove(cesta);
 		setChanged();
 	}
 
 	/**
 	 * Vyhledá bod s přesně zadanými souřadnicemi
-	 * 
+	 *
 	 * @param mouable
 	 * @return
 	 */
-	public Bod findBod(Mouable mouable) {
+	public Bod findBod(final Mouable mouable) {
 		if (mouable == null)
 			return null;
 		if (mouable instanceof Bod)
 			return (Bod) mouable;
-		for (Bod bod : getBody()) {
+		for (final Bod bod : getBody()) {
 			if (mouable.getMou().equals(bod.getMou()))
 				return bod;
 		}
@@ -148,25 +148,25 @@ public class Doc implements Iterable<Cesta> {
 
 	}
 
-	public Cesta findNejblizsiCesta(Mou mou) {
-		Bousek0 bousek = locateNejblizsiDoKvadratuVzdalenosi(mou, Long.MAX_VALUE, null, false);
+	public Cesta findNejblizsiCesta(final Mou mou) {
+		final Bousek0 bousek = locateNejblizsiDoKvadratuVzdalenosi(mou, Long.MAX_VALUE, null, false);
 		return bousek == null ? null : bousek.cesta;
 	}
 
 	/**
 	 * Propojí dvě cesty do jiné nové cesty. Původní dvě cesty jsou odteď prázdné, ale další atributy jako jméo zůstanou netčeny.
-	 * 
+	 *
 	 * @param c1
 	 * @param c2
 	 * @return
 	 */
-	static Cesta propojCestyDoJine(Cesta c1, Cesta c2) {
+	static Cesta propojCestyDoJine(final Cesta c1, final Cesta c2) {
 		assert !c2.isEmpty();
 		assert !c1.isEmpty();
-		Cesta cesta = Cesta.create();
-		Bod vaznyBod = c1.getCil();
+		final Cesta cesta = Cesta.create();
+		final Bod vaznyBod = c1.getCil();
 		if (vaznyBod.getMou().equals(c2.getStart().getMou())) {
-			Usek prvniUsekDruheCesty = c2.getStart().getUvpred();
+			final Usek prvniUsekDruheCesty = c2.getStart().getUvpred();
 			if (prvniUsekDruheCesty != null) { // jen když není jednobodová
 				vaznyBod.setUvpred(prvniUsekDruheCesty);
 				prvniUsekDruheCesty.setBvzad(vaznyBod);
@@ -176,7 +176,7 @@ public class Doc implements Iterable<Cesta> {
 			}
 			cesta.setStart(c1.getStart());
 		} else { // body nejsou na sobě, spojují se úsekem
-			Usek usek = cesta.createUsek();
+			final Usek usek = cesta.createUsek();
 			vaznyBod.setUvpred(usek);
 			usek.setBvpred(c2.getStart());
 			c2.getStart().setUvzad(usek);
@@ -192,7 +192,7 @@ public class Doc implements Iterable<Cesta> {
 		return cesta;
 	}
 
-	private void kon(boolean podm) {
+	private void kon(final boolean podm) {
 		if (!podm)
 			throw new RuntimeException("Selhala kontrola konzistence cesty");
 	}
@@ -203,13 +203,13 @@ public class Doc implements Iterable<Cesta> {
 		if (!assertsEnabled)
 			return;
 
-		for (Cesta cesta : getCesty()) {
+		for (final Cesta cesta : getCesty()) {
 			kon(cesta.getDoc() == this);
 			cesta.kontrolaKonzistence();
 		}
 	}
 
-	public void kontrolaZeJeTady(Cesta cesta) {
+	public void kontrolaZeJeTady(final Cesta cesta) {
 		kon(cesta.getDoc() == this);
 		kon(cesty.indexOf(cesta) >= 0);
 	}
@@ -225,7 +225,7 @@ public class Doc implements Iterable<Cesta> {
 
 	public int getPocetJednobodovychCest() {
 		int citac = 0;
-		for (Cesta cesta : getCesty()) {
+		for (final Cesta cesta : getCesty()) {
 			if (cesta.isJednobodova()) {
 				citac++;
 			}
@@ -235,7 +235,7 @@ public class Doc implements Iterable<Cesta> {
 
 	public int getPocetPrazdnychCest() {
 		int citac = 0;
-		for (Cesta cesta : getCesty()) {
+		for (final Cesta cesta : getCesty()) {
 			if (cesta.isEmpty()) {
 				citac++;
 			}

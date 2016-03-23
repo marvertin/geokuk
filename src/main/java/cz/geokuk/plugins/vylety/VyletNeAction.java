@@ -12,7 +12,7 @@ public class VyletNeAction extends VyletActionIndividual0 {
 
 	private static final long serialVersionUID = -2637836928166450446L;
 
-	public VyletNeAction(Kesoid kes) {
+	public VyletNeAction(final Kesoid kes) {
 		super("Ignoruj", kes);
 		putValue(SHORT_DESCRIPTION, "Zařadí keš mezi keše ignorované.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_I);
@@ -22,7 +22,7 @@ public class VyletNeAction extends VyletActionIndividual0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		vyletModel.add(EVylet.NE, kesoid());
 	}
 

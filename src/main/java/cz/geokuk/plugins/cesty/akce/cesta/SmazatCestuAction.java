@@ -6,7 +6,7 @@ public class SmazatCestuAction extends CestaAction0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public SmazatCestuAction(Cesta cesta) {
+	public SmazatCestuAction(final Cesta cesta) {
 		super(cesta);
 		// putValue(NAME, "<html>Odstraň cestu <i>" + jCestaMenu.getNazev() + "</i> " + (jCestaMenu.getMouDelkaCesta() + " mou"));
 		putValue(NAME, "Smazat cestu");
@@ -17,17 +17,17 @@ public class SmazatCestuAction extends CestaAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProCestu(Cesta cesta) {
+	protected boolean mamPovolitProCestu(final Cesta cesta) {
 		return true;
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Cesta cesta, boolean aZKontextovehoMenu) {
+	protected void nastavJmenoAkce(final Cesta cesta, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "<html>Smazat cestu" + cesta.getNazevHtml() + " " + cesta.dalkaHtml());
 	}
 
 	@Override
-	protected void provedProCestu(Cesta cesta) {
+	protected void provedProCestu(final Cesta cesta) {
 		cestyModel.removeCestu(cesta);
 	}
 

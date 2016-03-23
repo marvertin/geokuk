@@ -35,7 +35,7 @@ public abstract class JSingleSlide0 extends JSlide0 {
 	 * @param coord
 	 *            the coord to set
 	 */
-	public void setSoord(Coord soord) {
+	public void setSoord(final Coord soord) {
 		assert soord != null;
 		this.soord = soord;
 	}
@@ -47,17 +47,17 @@ public abstract class JSingleSlide0 extends JSlide0 {
 	//
 	// }
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 
-	public void render(Graphics g) throws InterruptedException {
+	public void render(final Graphics g) throws InterruptedException {
 		paintComponent(g);
 	}
 
 	/**
 	 * Potomek musí vytvořit novou instanci slidu, který bude rendrovatelný. Obvykle postačí, když vytvoří prázdnou instanci své vlastní třídy. Pokud vrátí null, nic se rendrovat nebude
-	 * 
+	 *
 	 * @return
 	 */
 	public JSingleSlide0 createRenderableSlide() {

@@ -26,20 +26,20 @@ public class RefreshIkonAction extends Action0 {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		setEnabled(false);
 		kesoidModel.startIkonLoad(true);
 	}
 
-	public void onEvent(IkonyNactenyEvent event) {
+	public void onEvent(final IkonyNactenyEvent event) {
 		setEnabled(true);
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 

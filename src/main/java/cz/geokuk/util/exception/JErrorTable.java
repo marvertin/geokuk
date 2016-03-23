@@ -66,7 +66,7 @@ public class JErrorTable extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// Create the scroll pane and add the table to it.
-		JScrollPane scrollPane = new JScrollPane(table);
+		final JScrollPane scrollPane = new JScrollPane(table);
 
 		// Add the scroll pane to this panel.
 		add(scrollPane);
@@ -90,7 +90,7 @@ public class JErrorTable extends JPanel {
 
 	}
 
-	public void addListSelectionListener(ListSelectionListener listener) {
+	public void addListSelectionListener(final ListSelectionListener listener) {
 		table.getSelectionModel().addListSelectionListener(listener);
 	}
 
@@ -126,19 +126,19 @@ public class JErrorTable extends JPanel {
 	}
 
 	public Problem getCurrent() {
-		int selectedRow = table.getSelectedRow();
+		final int selectedRow = table.getSelectedRow();
 		if (selectedRow < 0 || selectedRow >= tableModel.getProblemlist().size())
 			return null;
-		Problem nalezenec = tableModel.getProblemlist().get(selectedRow);
+		final Problem nalezenec = tableModel.getProblemlist().get(selectedRow);
 		return nalezenec;
 	}
 
 	class MyTableModel extends AbstractTableModel {
 		private static final long	serialVersionUID	= -1777521413836209700L;
 
-		private List<Problem>		problemlist			= new ArrayList<>();
+		private final List<Problem>	problemlist			= new ArrayList<>();
 
-		private String[]			columnNames			= { "Závažnost", "Výjimka", "Popis",
+		private final String[]		columnNames			= { "Závažnost", "Výjimka", "Popis",
 
 															};
 
@@ -157,12 +157,12 @@ public class JErrorTable extends JPanel {
 			return problemlist.size();
 		}
 
-		public String getColumnName(int col) {
+		public String getColumnName(final int col) {
 			return columnNames[col];
 		}
 
-		public Object getValueAt(int row, int col) {
-			Problem nalezenec = problemlist.get(row);
+		public Object getValueAt(final int row, final int col) {
+			final Problem nalezenec = problemlist.get(row);
 			Object s = null;
 			switch (col) {
 			case 0:
@@ -182,7 +182,7 @@ public class JErrorTable extends JPanel {
 		/*
 		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
 		 */
-		public Class<?> getColumnClass(int col) {
+		public Class<?> getColumnClass(final int col) {
 			Class<?> cls = null;
 			switch (col) {
 			case 0:
@@ -201,7 +201,7 @@ public class JErrorTable extends JPanel {
 		/*
 		 * Don't need to implement this method unless your table's editable.
 		 */
-		public boolean isCellEditable(int row, int col) {
+		public boolean isCellEditable(final int row, final int col) {
 			return false;
 		}
 
@@ -216,7 +216,7 @@ public class JErrorTable extends JPanel {
 			return zavaznost;
 		}
 
-		public void setZavaznost(String zavaznost) {
+		public void setZavaznost(final String zavaznost) {
 			this.zavaznost = zavaznost;
 		}
 
@@ -224,7 +224,7 @@ public class JErrorTable extends JPanel {
 			return popis;
 		}
 
-		public void setPopis(String popis) {
+		public void setPopis(final String popis) {
 			this.popis = popis;
 		}
 
@@ -232,14 +232,14 @@ public class JErrorTable extends JPanel {
 			return excId;
 		}
 
-		public void setExcId(AExcId excId) {
+		public void setExcId(final AExcId excId) {
 			this.excId = excId;
 		}
 
 	}
 
-	public void addProblem(String problem, AExcId excId) {
-		Problem pbm = new Problem();
+	public void addProblem(final String problem, final AExcId excId) {
+		final Problem pbm = new Problem();
 		pbm.setPopis(problem);
 		pbm.setExcId(excId);
 		tableModel.getProblemlist().add(pbm);

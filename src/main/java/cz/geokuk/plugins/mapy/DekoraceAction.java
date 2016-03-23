@@ -8,7 +8,7 @@ public class DekoraceAction extends MapyAction0 {
 
 	private static final long serialVersionUID = 8106696486908484270L;
 
-	public DekoraceAction(EKaType aKatype) {
+	public DekoraceAction(final EKaType aKatype) {
 		super(aKatype);
 	}
 
@@ -16,8 +16,8 @@ public class DekoraceAction extends MapyAction0 {
 		return super.getKaType();
 	}
 
-	protected void nastavDekoraci(boolean onoff) {
-		EnumSet<EKaType> dekoraces = getMapyModel().getDekorace();
+	protected void nastavDekoraci(final boolean onoff) {
+		final EnumSet<EKaType> dekoraces = getMapyModel().getDekorace();
 		if (onoff) {
 			dekoraces.add(getDekorace());
 		} else {
@@ -27,13 +27,13 @@ public class DekoraceAction extends MapyAction0 {
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		nastavDekoraci(nastaveno);
 	}
 
-	public void onEvent(ZmenaMapNastalaEvent event) {
-		EnumSet<EKaType> dekoraces = getMapyModel().getDekorace();
-		boolean nastaveno = dekoraces.contains(getDekorace());
+	public void onEvent(final ZmenaMapNastalaEvent event) {
+		final EnumSet<EKaType> dekoraces = getMapyModel().getDekorace();
+		final boolean nastaveno = dekoraces.contains(getDekorace());
 		setSelected(nastaveno);
 	}
 

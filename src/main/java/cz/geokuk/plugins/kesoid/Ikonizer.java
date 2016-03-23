@@ -18,20 +18,20 @@ public class Ikonizer {
 	// return ImageLoader.seekResIcon("x16/smery/" + smer + ".gif");
 	// }
 
-	public Icon seekIcon(String path) {
-		Image bi = ImageLoader.locateResImage(path);
+	public Icon seekIcon(final String path) {
+		final Image bi = ImageLoader.locateResImage(path);
 		if (bi != null)
 			return new ImageIcon(bi);
 		return new MissingIcon();
 	}
 
-	public static Icon findSmerIcon(double smer) {
-		BufferedImage sm = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = (Graphics2D) sm.getGraphics();
+	public static Icon findSmerIcon(final double smer) {
+		final BufferedImage sm = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		final Graphics2D g = (Graphics2D) sm.getGraphics();
 		g.translate(8, 8);
 		g.rotate(smer * Math.PI / 180);
 		g.translate(-8, -8);
-		BufferedImage severni = ImageLoader.locateResImage("x16/smery/N.gif");
+		final BufferedImage severni = ImageLoader.locateResImage("x16/smery/N.gif");
 		g.drawImage(severni, 0, 0, null);
 		return new ImageIcon(sm);
 		// int index = ((int)smer + 45) % 360 / 45;

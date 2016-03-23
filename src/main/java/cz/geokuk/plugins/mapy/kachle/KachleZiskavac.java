@@ -23,7 +23,7 @@ import cz.geokuk.util.pocitadla.*;
 
 /**
  * V novém pojetí zodpovídá za získávání kachlí z disku, paměti i downloadování.
- * 
+ *
  * @author veverka
  *
  */
@@ -179,7 +179,7 @@ public class KachleZiskavac {
 
 	/**
 	 * Zadá požadavekl na získání jedné kachle.
-	 * 
+	 *
 	 * @param kaoneReq
 	 * @param imageReceiver
 	 * @param aDiagnosticsData
@@ -418,7 +418,7 @@ public class KachleZiskavac {
 
 	/**
 	 * Získá obsah, získává ho postupně a plní ho do ImageReceveru v rekvesti
-	 * 
+	 *
 	 * @param req
 	 */
 	public Kanceler ziskejObsah(final KaAllReq req, final DiagnosticsData diagnosticsDatax) {
@@ -480,7 +480,7 @@ public class KachleZiskavac {
 
 	/**
 	 * Řízení ukládání achlí na disk po čancích
-	 * 
+	 *
 	 * @author veverka
 	 *
 	 */
@@ -494,7 +494,7 @@ public class KachleZiskavac {
 
 		/**
 		 * Zaplánuje uložení kachlice.
-		 * 
+		 *
 		 * @param kachlice
 		 */
 		synchronized void zaplanujUlozeni(final Kachlice kachlice) {

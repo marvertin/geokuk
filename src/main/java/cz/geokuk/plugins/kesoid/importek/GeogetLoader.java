@@ -61,36 +61,36 @@ public class GeogetLoader extends Nacitac0 {
 			+ GEOGET_TAGS_QUERY_FRAGMENT;
 
 	@Override
-	protected void nacti(File file, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) throws IOException {
+	protected void nacti(final File file, final IImportBuilder builder, final Future<?> future, final ProgressModel aProgressModel) throws IOException {
 		if (!umiNacist(file)) {
 			throw new IllegalArgumentException("Cannot load from file " + file);
 		}
 		try (Connection c = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath()); Statement statement = c.createStatement()) {
-			int pocet = count(statement, GEOGET_CACHES_COUNT) * PROGRESS_VAHA_CACHES + count(statement, GEOGET_WAYPOINTS_COUNT) * PROGRESS_VAHA_WAYPOINTS
+			final int pocet = count(statement, GEOGET_CACHES_COUNT) * PROGRESS_VAHA_CACHES + count(statement, GEOGET_WAYPOINTS_COUNT) * PROGRESS_VAHA_WAYPOINTS
 					+ count(statement, GEOGET_TAGS_COUNT) * PROGRESS_VAHA_TAGS;
-			Progressor progressor = aProgressModel.start(pocet, "Loading " + file.toString());
+			final Progressor progressor = aProgressModel.start(pocet, "Loading " + file.toString());
 			loadCaches(statement, builder, future, progressor);
 			loadWaypoints(statement, builder, future, progressor);
 			loadTags(statement, builder, future, progressor);
 			progressor.finish();
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			throw new IOException("Unable to load from " + file, e);
 		}
 	}
 
-	private int count(Statement statement, String countQuery) throws SQLException {
+	private int count(final Statement statement, final String countQuery) throws SQLException {
 		try (ResultSet rs = statement.executeQuery(countQuery)) {
 			return rs.getInt(1);
 		}
 	}
 
-	private void logResult(String nazev, ATimestamp startTime, int pocet) {
-		double trvani = ATimestamp.now().diff(startTime);
+	private void logResult(final String nazev, final ATimestamp startTime, final int pocet) {
+		final double trvani = ATimestamp.now().diff(startTime);
 		log.info("{} {} loaded in {} s, it is {} items/s. ", pocet, nazev, trvani / 1000.0, pocet * 1000 / trvani);
 	}
 
-	private void loadCaches(Statement statement, IImportBuilder builder, Future<?> future, Progressor progressor) throws SQLException, IOException {
-		ATimestamp startTime = ATimestamp.now();
+	private void loadCaches(final Statement statement, final IImportBuilder builder, final Future<?> future, final Progressor progressor) throws SQLException, IOException {
+		final ATimestamp startTime = ATimestamp.now();
 		int citac = 0;
 		try (ResultSet rs = statement.executeQuery(GEOGET_CACHES_QUERY)) {
 			while (rs.next()) {
@@ -98,12 +98,12 @@ public class GeogetLoader extends Nacitac0 {
 					return;
 				}
 				progressor.addProgress(PROGRESS_VAHA_CACHES);
-				GpxWpt gpxWpt = new GpxWpt();
+				final GpxWpt gpxWpt = new GpxWpt();
 				gpxWpt.wgs = new Wgs(rs.getDouble("lat"), rs.getDouble("lon"));
 				gpxWpt.name = rs.getString("id");
 				if (gpxWpt.name != null && gpxWpt.name.length() > 1) {
-					String prefix = gpxWpt.name.substring(0, 2);
-					String sym = ID_PREFIX_TO_SYM.get(prefix);
+					final String prefix = gpxWpt.name.substring(0, 2);
+					final String sym = ID_PREFIX_TO_SYM.get(prefix);
 					if (sym != null) {
 						gpxWpt.sym = sym;
 					}
@@ -111,7 +111,7 @@ public class GeogetLoader extends Nacitac0 {
 
 				gpxWpt.time = formatDateTime(rs.getInt("dthidden"));
 
-				Groundspeak groundspeak = new Groundspeak();
+				final Groundspeak groundspeak = new Groundspeak();
 				groundspeak.ownerid = rs.getInt("gs_ownerid");
 				groundspeak.name = rs.getString("name");
 				groundspeak.placedBy = intern(rs.getString("author"));
@@ -124,14 +124,14 @@ public class GeogetLoader extends Nacitac0 {
 				groundspeak.state = intern(rs.getString("state"));
 				groundspeak.encodedHints = rs.getString("hint");
 
-				byte[] shortDescBytes = rs.getBytes("shortdesc");
+				final byte[] shortDescBytes = rs.getBytes("shortdesc");
 				if (shortDescBytes != null) {
 					try (InputStream is = new InflaterInputStream(new ByteArrayInputStream(shortDescBytes))) {
 						groundspeak.shortDescription = CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
 					}
 				}
 
-				int cacheStatus = rs.getInt("cachestatus");
+				final int cacheStatus = rs.getInt("cachestatus");
 				switch (cacheStatus) {
 				case 0:
 					groundspeak.archived = false;
@@ -153,7 +153,7 @@ public class GeogetLoader extends Nacitac0 {
 				gpxWpt.link.href = "http://coord.info/" + gpxWpt.name;
 				gpxWpt.link.text = String.format("%s by %s", gpxWpt.groundspeak.name, gpxWpt.groundspeak.placedBy);
 
-				long dtfound = rs.getLong("dtfound");
+				final long dtfound = rs.getLong("dtfound");
 				if (dtfound != 0) {
 					gpxWpt.sym = "Geocache Found";
 					gpxWpt.gpxg.found = Long.toString(dtfound);
@@ -169,8 +169,8 @@ public class GeogetLoader extends Nacitac0 {
 		}
 	}
 
-	private void loadWaypoints(Statement statement, IImportBuilder builder, Future<?> future, Progressor progressor) throws SQLException {
-		ATimestamp startTime = ATimestamp.now();
+	private void loadWaypoints(final Statement statement, final IImportBuilder builder, final Future<?> future, final Progressor progressor) throws SQLException {
+		final ATimestamp startTime = ATimestamp.now();
 		int citac = 0;
 		try (ResultSet rs = statement.executeQuery(GEOGET_WAYPOINTS_QUERY)) {
 			while (rs.next()) {
@@ -178,11 +178,11 @@ public class GeogetLoader extends Nacitac0 {
 					return;
 				}
 				progressor.addProgress(PROGRESS_VAHA_WAYPOINTS);
-				GpxWpt gpxWpt = new GpxWpt();
+				final GpxWpt gpxWpt = new GpxWpt();
 				gpxWpt.wgs = new Wgs(rs.getDouble("lat"), rs.getDouble("lon"));
-				String parentId = rs.getString("id");
+				final String parentId = rs.getString("id");
 				if (parentId != null && parentId.length() > 1) {
-					String suffix = parentId.substring(2);
+					final String suffix = parentId.substring(2);
 					gpxWpt.name = rs.getString("prefixid") + suffix;
 				}
 				gpxWpt.sym = rs.getString("wpttype");
@@ -196,8 +196,8 @@ public class GeogetLoader extends Nacitac0 {
 		}
 	}
 
-	private void loadTags(Statement statement, IImportBuilder builder, Future<?> future, Progressor progressor) throws SQLException {
-		ATimestamp startTime = ATimestamp.now();
+	private void loadTags(final Statement statement, final IImportBuilder builder, final Future<?> future, final Progressor progressor) throws SQLException {
+		final ATimestamp startTime = ATimestamp.now();
 		int citac = 0;
 		try (ResultSet rs = statement.executeQuery(GEOGET_TAGS_QUERY)) {
 			while (rs.next()) {
@@ -206,10 +206,10 @@ public class GeogetLoader extends Nacitac0 {
 				}
 				progressor.addProgress(PROGRESS_VAHA_TAGS);
 
-				String name = rs.getString("id");
-				String category = rs.getString("category");
-				String value = rs.getString("value");
-				GpxWpt gpxWpt = builder.get(name);
+				final String name = rs.getString("id");
+				final String category = rs.getString("category");
+				final String value = rs.getString("value");
+				final GpxWpt gpxWpt = builder.get(name);
 
 				if (name == null || category == null || value == null || gpxWpt == null) {
 					continue;
@@ -246,7 +246,7 @@ public class GeogetLoader extends Nacitac0 {
 							log.warn("Unknown tag category: {}", category);
 						}
 					}
-				} catch (NumberFormatException e) {
+				} catch (final NumberFormatException e) {
 					log.warn("Unable to parse number!", e);
 				}
 				citac++;
@@ -257,26 +257,26 @@ public class GeogetLoader extends Nacitac0 {
 		}
 	}
 
-	private String formatDateTime(int yyyymmddDate) {
-		int day = yyyymmddDate % 100;
-		int month = (yyyymmddDate / 100) % 100;
-		int year = (yyyymmddDate / 10000);
+	private String formatDateTime(final int yyyymmddDate) {
+		final int day = yyyymmddDate % 100;
+		final int month = (yyyymmddDate / 100) % 100;
+		final int year = (yyyymmddDate / 10000);
 		return String.format(DATE_FORMAT_TEMPLATE, year, month, day);
 	}
 
 	@Override
-	protected void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> f, ProgressModel aProgressModel) throws IOException {
+	protected void nacti(final ZipFile zipFile, final ZipEntry zipEntry, final IImportBuilder builder, final Future<?> f, final ProgressModel aProgressModel) throws IOException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	boolean umiNacist(ZipEntry zipEntry) {
+	boolean umiNacist(final ZipEntry zipEntry) {
 		// JDBC can't access zipped files.
 		return false;
 	}
 
 	@Override
-	boolean umiNacist(File file) {
+	boolean umiNacist(final File file) {
 		return SUPPORTED_FILE_EXTENSIONS.contains(Files.getFileExtension(file.getAbsolutePath().toLowerCase()));
 	}
 }

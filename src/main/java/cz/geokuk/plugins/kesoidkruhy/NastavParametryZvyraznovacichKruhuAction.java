@@ -19,8 +19,8 @@ public class NastavParametryZvyraznovacichKruhuAction extends Action0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		JKruhyDialog parametryZvyraznovacichKruhuFrame = factory.init(new JKruhyDialog());
+	public void actionPerformed(final ActionEvent e) {
+		final JKruhyDialog parametryZvyraznovacichKruhuFrame = factory.init(new JKruhyDialog());
 		parametryZvyraznovacichKruhuFrame.setVisible(true);
 	}
 

@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * Definice ikony.
- * 
+ *
  * @author tatinek
  *
  */
@@ -36,22 +36,22 @@ public class IconDef {
 
 	/**
 	 * Rozmnoží set alel tak, aby ve výsledých setech byla pro každý gen jedna alela.
-	 * 
+	 *
 	 * @param set
 	 * @return
 	 */
-	private void rozmnoz(Set<Alela> set, Set<IconSubDef> sese) {
+	private void rozmnoz(final Set<Alela> set, final Set<IconSubDef> sese) {
 		// Set<Set<Alela>> sese = new HashSet<Set<Alela>>();
-		Map<Gen, Alela> geny = new HashMap<>();
-		for (Alela alela : set) {
+		final Map<Gen, Alela> geny = new HashMap<>();
+		for (final Alela alela : set) {
 			if (!alela.hasGen()) {
 				continue;
 			}
-			Gen gen = alela.getGen();
-			Alela lastAlela = geny.get(gen);
+			final Gen gen = alela.getGen();
+			final Alela lastAlela = geny.get(gen);
 			if (lastAlela != null) { // duplicita
-				Set<Alela> set1 = new HashSet<>(set);
-				Set<Alela> set2 = new HashSet<>(set);
+				final Set<Alela> set1 = new HashSet<>(set);
+				final Set<Alela> set2 = new HashSet<>(set);
 				set1.remove(alela);
 				set2.remove(lastAlela);
 				rozmnoz(set1, sese);
@@ -64,7 +64,7 @@ public class IconDef {
 
 	}
 
-	void setAlelyx(Set<Alela> alelyx) {
+	void setAlelyx(final Set<Alela> alelyx) {
 		this.alelyx = alelyx;
 	}
 
@@ -72,7 +72,7 @@ public class IconDef {
 		return alelyx;
 	}
 
-	public void setAlelaSym(Alela alelaSym) {
+	public void setAlelaSym(final Alela alelaSym) {
 		this.alelaSym = alelaSym;
 	}
 

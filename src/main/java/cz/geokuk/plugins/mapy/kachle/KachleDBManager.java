@@ -52,7 +52,7 @@ public class KachleDBManager implements KachleManager {
 
 	/**
 	 * Get a connection to the database for the current thread. Also closes all invalid connections for the current thread.
-	 * 
+	 *
 	 * @return The connection or null if the connection couldn't be established.
 	 *
 	 * @see #connections
@@ -98,7 +98,7 @@ public class KachleDBManager implements KachleManager {
 
 	/**
 	 * Checks whether the DB at the current location is initialized and ready for use.
-	 * 
+	 *
 	 * @param connection
 	 *            A connection to the database.
 	 * @return True if its initialized, false otherwise
@@ -114,7 +114,7 @@ public class KachleDBManager implements KachleManager {
 
 	/**
 	 * Initializes the database (if needed)
-	 * 
+	 *
 	 * @param connection
 	 *            A connection to the database.
 	 */

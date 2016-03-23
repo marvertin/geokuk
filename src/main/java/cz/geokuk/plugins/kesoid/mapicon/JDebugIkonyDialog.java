@@ -39,7 +39,7 @@ public class JDebugIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 		jvse.setPreferredSize(new Dimension(700, 600));
 	}
 
-	public void onEvent(IkonyNactenyEvent event) {
+	public void onEvent(final IkonyNactenyEvent event) {
 		debugVyberIkon.resetBag(event.getBag());
 		jvse.revalidate();
 	}

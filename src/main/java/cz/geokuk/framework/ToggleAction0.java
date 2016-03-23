@@ -10,16 +10,16 @@ public abstract class ToggleAction0 extends Action0 {
 	private ButtonModel			bm;											// = new DefaultButtonModel();
 	private boolean				iOnoff;
 
-	public ToggleAction0(String name) {
+	public ToggleAction0(final String name) {
 		super(name);
 	}
 
 	/**
 	 * Přidá tuto modelo akci nějakému buttonu. Z prvního buttonu bere model, do dalšího buttonu dává.
-	 * 
+	 *
 	 * @param ab
 	 */
-	public void join(AbstractButton ab) {
+	public void join(final AbstractButton ab) {
 		if (bm == null) {
 			bm = ab.getModel();
 			nastavDoButtonu();
@@ -28,7 +28,7 @@ public abstract class ToggleAction0 extends Action0 {
 			ab.setModel(bm);
 		}
 		ab.setAction(this);
-		Icon icon = getIcon();
+		final Icon icon = getIcon();
 		if (icon != null) {
 			ab.setIcon(icon);
 		}
@@ -37,8 +37,8 @@ public abstract class ToggleAction0 extends Action0 {
 	private void registerEvents() {
 		bm.addItemListener(new ItemListener() {
 			@Override
-			public void itemStateChanged(ItemEvent event) {
-				boolean onoff = event.getStateChange() == ItemEvent.SELECTED;
+			public void itemStateChanged(final ItemEvent event) {
+				final boolean onoff = event.getStateChange() == ItemEvent.SELECTED;
 				if (iOnoff != onoff) {
 					iOnoff = onoff;
 					onSlectedChange(iOnoff);
@@ -47,7 +47,7 @@ public abstract class ToggleAction0 extends Action0 {
 		});
 	}
 
-	public void setSelected(boolean onoff) {
+	public void setSelected(final boolean onoff) {
 		this.iOnoff = onoff;
 		nastavDoButtonu();
 	}
@@ -65,7 +65,7 @@ public abstract class ToggleAction0 extends Action0 {
 	protected abstract void onSlectedChange(boolean nastaveno);
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		// Neni potreba definovat, dela se to pres model
 	}
 

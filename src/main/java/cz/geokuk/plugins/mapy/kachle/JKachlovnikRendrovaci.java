@@ -21,7 +21,7 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.core.coord.JSingleSlide0#render(java.awt.Graphics)
 	 */
 	@Override

@@ -4,7 +4,7 @@ class ZpravaUzivateli {
 	final int		msgnum;
 	final String	text;
 
-	public ZpravaUzivateli(int msgnum, String text) {
+	public ZpravaUzivateli(final int msgnum, final String text) {
 		this.msgnum = msgnum;
 		this.text = text;
 	}

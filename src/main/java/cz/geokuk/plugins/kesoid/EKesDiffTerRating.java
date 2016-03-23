@@ -31,28 +31,28 @@ public enum EKesDiffTerRating {
 		if (this == EKesDiffTerRating.UNKNOWN) {
 			return '?';
 		} else {
-			int ordHalf = ordinal() / 2;
-			char base = (ordinal() & 1) == 0 ? '1' : 'A';
+			final int ordHalf = ordinal() / 2;
+			final char base = (ordinal() & 1) == 0 ? '1' : 'A';
 			return (char) (base + ordHalf);
 		}
 	}
 
-	public static EKesDiffTerRating parse(String toParse) {
+	public static EKesDiffTerRating parse(final String toParse) {
 		if (toParse == null) {
 			log.warn("Null passed as parameter to EKesDiffTerRating parser!");
 			return UNKNOWN;
 		}
 		try {
-			float f = Float.parseFloat(toParse);
-			int ordinal = (int) (f * 2 - 2);
-			EKesDiffTerRating[] values = values();
+			final float f = Float.parseFloat(toParse);
+			final int ordinal = (int) (f * 2 - 2);
+			final EKesDiffTerRating[] values = values();
 			if (ordinal < values.length && ordinal >= 0) {
 				return values[ordinal];
 			} else {
 				log.error("Ordinal out of range for string {}! Was {}, expected less than {}.", toParse, ordinal, values.length);
 				return UNKNOWN;
 			}
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			log.error("Unable to parse {} as float!", toParse);
 			return UNKNOWN;
 		}

@@ -2,7 +2,7 @@ package cz.geokuk.core.program;
 
 /**
  * Jména uzlů a hodnot v preferencích
- * 
+ *
  * @author tatinek
  *
  */

@@ -8,21 +8,21 @@ public class Moud {
 	public Moud() {
 	}
 
-	public Moud(int dxx, int dyy) {
+	public Moud(final int dxx, final int dyy) {
 		this.dxx = dxx;
 		this.dyy = dyy;
 	}
 
-	public Moud(Moud mou) {
+	public Moud(final Moud mou) {
 		dxx = mou.dxx;
 		dyy = mou.dyy;
 	}
 
-	public Moud add(int dxx, int dyy) {
+	public Moud add(final int dxx, final int dyy) {
 		return new Moud(this.dxx + dxx, this.dyy + dyy);
 	}
 
-	public Moud sub(int dxx, int dyy) {
+	public Moud sub(final int dxx, final int dyy) {
 		return new Moud(this.dxx - dxx, this.dyy - dyy);
 	}
 
@@ -32,12 +32,12 @@ public class Moud {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == this)
 			return true;
 		if (!(obj instanceof Moud))
 			return false;
-		Moud m = (Moud) obj;
+		final Moud m = (Moud) obj;
 		return dxx == m.dxx && dyy == m.dyy;
 	}
 
@@ -51,8 +51,8 @@ public class Moud {
 	}
 
 	public long getKvadratVzdalenosti() {
-		long lxx = dxx;
-		long lyy = dyy;
+		final long lxx = dxx;
+		final long lyy = dyy;
 		return lxx * lxx + lyy * lyy;
 	}
 }

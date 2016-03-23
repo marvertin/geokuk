@@ -50,18 +50,18 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	public String getUrl() {
 		if (zbytekUrl == null || zbytekUrl.length() == 0)
 			return zbytekUrl;
-		char c = zbytekUrl.charAt(0);
+		final char c = zbytekUrl.charAt(0);
 		if (c == '-')
 			return zbytekUrl.substring(1);
-		int index = c - '0';
+		final int index = c - '0';
 		return urlPrefixes[index] + zbytekUrl.substring(1);
 	}
 
 	public URL getUrlShow() {
 		try {
-			String url = getUrl();
+			final String url = getUrl();
 			return new URL(url);
-		} catch (MalformedURLException e) {
+		} catch (final MalformedURLException e) {
 			return null;
 		}
 	}
@@ -78,7 +78,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	 * @param aUrl
 	 *            the url to set
 	 */
-	public void setUrl(String aUrl) {
+	public void setUrl(final String aUrl) {
 		if (aUrl == null) {
 			zbytekUrl = null;
 			return;
@@ -86,7 +86,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		// Řetězcová konkatenace zde provedená vytvoří nový řetězec, takže se nemusíme bát,
 		// že podstringy všechno nesou
 		char index = '0';
-		for (String prefix : urlPrefixes) {
+		for (final String prefix : urlPrefixes) {
 			if (aUrl.startsWith(prefix)) {
 				zbytekUrl = index + aUrl.substring(prefix.length());
 				return;
@@ -113,7 +113,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
 					@Override
 					public Wpt next() {
-						Wpt result = (Wpt) curwk;
+						final Wpt result = (Wpt) curwk;
 						curwk = curwk.next;
 						return result;
 					}
@@ -130,7 +130,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	public int getWptsCount() {
 		int count = 0;
 		for (@SuppressWarnings("unused")
-		Wpt wpt : getWpts()) {
+		final Wpt wpt : getWpts()) {
 			count++;
 		}
 		return count;
@@ -141,11 +141,11 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		return vztah;
 	}
 
-	public void setVztahx(EKesVztah vztah) {
+	public void setVztahx(final EKesVztah vztah) {
 		this.vztah = vztah;
 	}
 
-	public void promoteVztah(EKesVztah vztah) {
+	public void promoteVztah(final EKesVztah vztah) {
 		if (this.vztah == null)
 			this.vztah = vztah;
 		if (vztah.ordinal() > this.vztah.ordinal())
@@ -156,11 +156,11 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		return identifier;
 	}
 
-	public void setIdentifier(String identifier) {
+	public void setIdentifier(final String identifier) {
 		this.identifier = identifier;
 	}
 
-	public void addWpt(Wpt wpt) {
+	public void addWpt(final Wpt wpt) {
 		if (wpt == null)
 			return;
 		// najít konec
@@ -186,7 +186,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		return author;
 	}
 
-	public void setAuthor(String author) {
+	public void setAuthor(final String author) {
 		this.author = author.intern();
 	}
 
@@ -194,7 +194,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		return hidden;
 	}
 
-	public void setHidden(String hidden) {
+	public void setHidden(final String hidden) {
 		this.hidden = hidden;
 	}
 
@@ -202,7 +202,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		return status;
 	}
 
-	public void setStatus(EKesStatus status) {
+	public void setStatus(final EKesStatus status) {
 		this.status = status;
 	}
 
@@ -212,17 +212,17 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
 	public abstract Icon getUrlIcon();
 
-	public final void doBuildGenotyp(Genom genom, Genotyp g) {
+	public final void doBuildGenotyp(final Genom genom, final Genotyp g) {
 		buildGenotyp(genom, g);
 		if (userDefinedAlelas != null) {
-			for (Alela alela : userDefinedAlelas) {
+			for (final Alela alela : userDefinedAlelas) {
 				assert alela != null;
 				g.put(alela);
 			}
 		}
 	}
 
-	public void setUserDefinedAlelas(Set<Alela> userDefinedAlelas) {
+	public void setUserDefinedAlelas(final Set<Alela> userDefinedAlelas) {
 		this.userDefinedAlelas = userDefinedAlelas;
 	}
 

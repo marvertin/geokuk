@@ -13,12 +13,12 @@ import java.util.regex.Pattern;
  */
 public final class ATimestamp extends Object0 implements IElement, IElementLong, Comparable<ATimestamp>, Ordinable<ATimestamp> {
 
-	private static final long	serialVersionUID	= -4333541321205520147L;
+	private static final long		serialVersionUID	= -4333541321205520147L;
 
-	private java.util.Date		iJavaDate;
+	private final java.util.Date	iJavaDate;
 
 	/* Patern regulárního výrazu, dosazovaný při prvním použití */
-	private static Pattern		sPattern;
+	private static Pattern			sPattern;
 
 	/**
 	 * Počet milisekund v jednom dni
@@ -34,7 +34,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	/**
 	 * Konstruuje z počtu milisekund po 1.1.1970
 	 */
-	private ATimestamp(long cislo) {
+	private ATimestamp(final long cislo) {
 		// super(cislo - getBulgarian1970Constant());
 		iJavaDate = new Date(cislo);
 	}
@@ -58,7 +58,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	public Date asJavaDate() {
 		if (iJavaDate == null)
 			throw new IllegalStateException("INTERNAL ERROR - iJavaDate cannot be null.");
-		Date date = new Date(this.asLong());
+		final Date date = new Date(this.asLong());
 		return date;
 	}
 
@@ -69,7 +69,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Časová známka, kterou potřebujeme převést na standardní Java typ.
 	 * @return java.util.Date se stejným významem jako <tt>ts</tt> nebo <b>null </b>, pokud je <tt>ts</tt> <b>null </b>.
 	 */
-	public static Date asJavaDate(ATimestamp ts) {
+	public static Date asJavaDate(final ATimestamp ts) {
 		if (ts == null)
 			return null;
 		return ts.asJavaDate();
@@ -118,11 +118,11 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            datum
 	 * @return Date
 	 */
-	private static long fromString(String datum) {
+	private static long fromString(final String datum) {
 
 		try {
 			return Long.valueOf(datum);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return fromFormatedStringByRegexp(datum, null); // pi použití této metody
 			// musí být zadána zóna
 		}
@@ -147,7 +147,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	/**
 	 * Return an ISO 8601 compliant timestamp representation vyjádřenou v zadané zóně.
 	 */
-	public String toIsoString(TimeZone aZone) {
+	public String toIsoString(final TimeZone aZone) {
 		return info(aZone).toIsoString();
 	}
 
@@ -165,7 +165,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 */
 	public static ATimestamp now() {
 
-		Date d = new Date();
+		final Date d = new Date();
 		// return new ATimestamp(d.getTime() + getBulgarian1970Constant());
 		return new ATimestamp(d.getTime());
 	}
@@ -175,20 +175,20 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *
 	 * @return Datum, které je v zadaný čas v odpovídajícím časovém, =ásmu.
 	 */
-	public ADate getDate(TimeZone aZone) {
-		GregorianCalendar cal = new GregorianCalendar(aZone);
+	public ADate getDate(final TimeZone aZone) {
+		final GregorianCalendar cal = new GregorianCalendar(aZone);
 		cal.setTime(iJavaDate); // nastavím sám sebe do kalenfářč
 		return ADate.from(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
 	}
 
-	public ATimestamp add(long aDiff) {
+	public ATimestamp add(final long aDiff) {
 		return new ATimestamp(asLong() + aDiff);
 	}
 
 	/**
 	 * Rozdíl v milisekundách. O kolik milisekund je objekt mladší než argument.
 	 */
-	public long diff(ATimestamp aTime) {
+	public long diff(final ATimestamp aTime) {
 
 		return asLong() - aTime.asLong();
 	}
@@ -199,7 +199,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * @deprecated Metoda nemusí vracet, co chceš. Použij některou z metod info a na ní zjisti potřebné informace.
 	 */
 	public long getZoneOffset() {
-		Calendar cal = new GregorianCalendar();
+		final Calendar cal = new GregorianCalendar();
 		cal.setTime(iJavaDate);
 		return cal.get(Calendar.ZONE_OFFSET);
 	}
@@ -210,7 +210,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * @deprecated Metoda nemusí vracet, co chceš. Použij některou z metod info a na ní zjisti potřebné informace.
 	 */
 	public long getDstOffset() {
-		Calendar cal = new GregorianCalendar();
+		final Calendar cal = new GregorianCalendar();
 		cal.setTime(iJavaDate);
 		return cal.get(Calendar.DST_OFFSET);
 	}
@@ -220,7 +220,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *
 	 * @return Objekt poskytující svými metodami infomrace o času.
 	 */
-	public Info info(TimeZone aZone) {
+	public Info info(final TimeZone aZone) {
 		return new Info(aZone);
 	}
 
@@ -233,22 +233,22 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		return new Info(TimeZone.getTimeZone("UTC"));
 	}
 
-	private static int _rezezNaCislo(String aRetez, int aDefault) {
+	private static int _rezezNaCislo(final String aRetez, final int aDefault) {
 		return aRetez == null ? aDefault : Integer.parseInt(aRetez);
 	}
 
-	private static long fromItems(int aRok, int aMesic, int aDen, int aHodina, int aMinuta, int aSekunda, int aMilisekund, TimeZone aTimeZone) {
-		Calendar cal = Calendar.getInstance(aTimeZone);
+	private static long fromItems(final int aRok, final int aMesic, final int aDen, final int aHodina, final int aMinuta, final int aSekunda, final int aMilisekund, final TimeZone aTimeZone) {
+		final Calendar cal = Calendar.getInstance(aTimeZone);
 		cal.set(aRok, aMesic - 1, aDen, aHodina, aMinuta, aSekunda);
 		cal.set(Calendar.MILLISECOND, aMilisekund);
 		return cal.getTimeInMillis(); // vytvořit hodnotu
 	}
 
-	private static long fromFormatedStringByRegexp(String aDatStr, TimeZone aDefaultTimeZone) {
+	private static long fromFormatedStringByRegexp(final String aDatStr, final TimeZone aDefaultTimeZone) {
 		if (sPattern == null)
 			sPattern = Pattern.compile(
 					"\\s*(\\d\\d\\d\\d)[-./](\\d\\d?)(?:[-./](\\d\\d?)(?:[ tT]+(\\d\\d?)(?::(\\d\\d)(?::(\\d\\d)(?:\\.(\\d+))?)?)?)?)? *(UTC|Z|(?:GMT)?[+-]\\d\\d?(?::)?\\d\\d|(?:GMT)?[+-]\\d{1,3})?\\s*");
-		Matcher mat = sPattern.matcher(aDatStr);
+		final Matcher mat = sPattern.matcher(aDatStr);
 		// System.out.p rint("*** >" + aDatStr + "< ");
 		if (mat.matches()) {
 			/*
@@ -258,7 +258,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 			TimeZone zona;
 			String zonastr = mat.group(8);
 			if (zonastr != null) { // je naplněna časová zóna
-				char prvni = zonastr.charAt(0);
+				final char prvni = zonastr.charAt(0);
 				if (prvni == '+' || prvni == '-')
 					zonastr = "GMT" + zonastr;
 				zona = TimeZone.getTimeZone(zonastr);
@@ -286,17 +286,17 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 	}
 
-	private static void testZona(String aStr) {
+	private static void testZona(final String aStr) {
 	}
 
-	private static void testFormat(String aStr) {
+	private static void testFormat(final String aStr) {
 
-		ATimestamp cas = ATimestamp.from(aStr);
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		final ATimestamp cas = ATimestamp.from(aStr);
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.setTimeInMillis(cas.asLong());
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		testFormat("2015-11-28 17:33:53.12 GMT+05:00");
 		testFormat("2015-11-28 19:44:17.789 GMT+3");
 		testFormat("  2015-11-28 17:33:53.224 GMT+05");
@@ -361,33 +361,33 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            b
 	 * @return boolean Výsledek
 	 */
-	public boolean isLess(Object b) {
+	public boolean isLess(final Object b) {
 
-		ATimestamp obj = (ATimestamp) checkCompare(b);
+		final ATimestamp obj = (ATimestamp) checkCompare(b);
 		return obj != null && asLong() < obj.asLong();
 	}
 
-	public boolean isLess(ATimestamp b) {
+	public boolean isLess(final ATimestamp b) {
 		return compareTo(b) < 0;
 	}
 
-	public boolean isLessOrEqual(ATimestamp b) {
+	public boolean isLessOrEqual(final ATimestamp b) {
 		return compareTo(b) <= 0;
 	}
 
-	public boolean isGreater(ATimestamp b) {
+	public boolean isGreater(final ATimestamp b) {
 		return compareTo(b) > 0;
 	}
 
-	public boolean isGreaterOrEqual(ATimestamp b) {
+	public boolean isGreaterOrEqual(final ATimestamp b) {
 		return compareTo(b) >= 0;
 	}
 
-	public boolean isEqual(ATimestamp b) {
+	public boolean isEqual(final ATimestamp b) {
 		return compareTo(b) == 0;
 	}
 
-	public boolean isNotEqual(ATimestamp b) {
+	public boolean isNotEqual(final ATimestamp b) {
 		return compareTo(b) != 0;
 	}
 
@@ -398,16 +398,16 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            aDatum
 	 * @return boolean Výsledek
 	 */
-	public boolean equals(Object aObject) {
+	public boolean equals(final Object aObject) {
 		if (!(aObject instanceof ATimestamp))
 			return false;
-		ATimestamp obj = (ATimestamp) aObject;
+		final ATimestamp obj = (ATimestamp) aObject;
 		return asLong() == obj.asLong();
 	}
 
-	public int compareTo(ATimestamp aObj) {
-		long a = this.asLong();
-		long b = ((ATimestamp) checkCompare(aObj)).asLong(); // vyhodí výjimku,
+	public int compareTo(final ATimestamp aObj) {
+		final long a = this.asLong();
+		final long b = ((ATimestamp) checkCompare(aObj)).asLong(); // vyhodí výjimku,
 		// pokud bude null
 		return a == b ? 0 : a < b ? -1 : 1;
 	}
@@ -430,7 +430,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Zóna, která se použije v případě, že v etězci není zóna explicitně uvedena. Pokud uvedena je, tak se tento údaj ignoruje.
 	 * @return Vytvořený ATimestamp.
 	 */
-	public static ATimestamp from(String s) {
+	public static ATimestamp from(final String s) {
 		return StringUtils.isBlank(s) ? null : new ATimestamp(fromString(s));
 	}
 
@@ -443,7 +443,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Zóna, která se použije v případě, že v etězci není zóna explicitně uvedena. Pokud uvedena je, tak se tento údaj ignoruje.
 	 * @return Vytvořený ATimestamp.
 	 */
-	public static ATimestamp from(String s, TimeZone aTimeZone) {
+	public static ATimestamp from(final String s, final TimeZone aTimeZone) {
 		return StringUtils.isBlank(s) ? null : new ATimestamp(fromFormatedStringByRegexp(s, aTimeZone));
 	}
 
@@ -454,7 +454,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Řetězec obsahující datum a čas. Řetězec musí vyhovovat regulárnímu výrazu: \s*\d\d\d\d[-./]\d\d?([-./]\d\d?( +\d\d?(:\d\d(:\d\d(\.\d+)?)?)?)?)? *(UTC|GMT[+-]\d\d?:\d\d|GMT[+-]\d{1,3})?\s*
 	 * @return Vytvořený ATimestamp.
 	 */
-	public static ATimestamp fromUtc(String s) {
+	public static ATimestamp fromUtc(final String s) {
 		return StringUtils.isBlank(s) ? null : new ATimestamp(fromFormatedStringByRegexp(s, TimeZone.getTimeZone("UTC")));
 	}
 
@@ -479,7 +479,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Časová zóna.
 	 * @return
 	 */
-	public static ATimestamp from(int aRok, int aMesic, int aDen, int aHodina, int aMinuta, int aSekunda, int aMilisekund, TimeZone aTimeZone) {
+	public static ATimestamp from(final int aRok, final int aMesic, final int aDen, final int aHodina, final int aMinuta, final int aSekunda, final int aMilisekund, final TimeZone aTimeZone) {
 		if (aTimeZone == null) {
 			throw new IllegalArgumentException("Casova zona musi byt uvedena");
 		}
@@ -508,26 +508,26 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Časová zóna.
 	 * @return
 	 */
-	public static ATimestamp fromUtc(int aRok, int aMesic, int aDen, int aHodina, int aMinuta, int aSekunda, int aMilisekund) {
+	public static ATimestamp fromUtc(final int aRok, final int aMesic, final int aDen, final int aHodina, final int aMinuta, final int aSekunda, final int aMilisekund) {
 		return new ATimestamp(fromItems(aRok, aMesic, aDen, aHodina, aMinuta, aSekunda, aMilisekund, TimeZone.getTimeZone("UTC")));
 	}
 
 	/**
 	 * @deprecated Newní důvod pro existenci takové metody. Použij stejnojmennou metodu přijímající long a ze svého timestampu, který máš si vytáhni long, aspon budeš vědět, co děláš. Ujisiti, se, že předávaný argument je opravdu správný a ne posunutý nepochopením významu timestampu.
 	 */
-	public static ATimestamp from(java.sql.Timestamp ts) {
+	public static ATimestamp from(final java.sql.Timestamp ts) {
 		return ts == null ? null : new ATimestamp(ts.getTime());
 	}
 
-	public static ATimestamp from(long aCas) {
+	public static ATimestamp from(final long aCas) {
 		return new ATimestamp(aCas);
 	}
 
-	public static boolean canFrom(String s) {
+	public static boolean canFrom(final String s) {
 		try {
 			from(s);
 			return true;
-		} catch (XCreateElement e) {
+		} catch (final XCreateElement e) {
 			return false;
 		}
 	}
@@ -535,15 +535,15 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	/**
 	 * @deprecated Newní důvod pro existenci takové metody. Použij stejnojmennou metodu přijímající long a ze svého timestampu, který máš si vytáhni long, aspon budeš vědět, co děláš. Ujisiti, se, že předávaný argument je opravdu správný a ne posunutý nepochopením významu timestampu.
 	 */
-	public static boolean canFrom(java.sql.Timestamp ts) {
+	public static boolean canFrom(final java.sql.Timestamp ts) {
 		return true;
 	}
 
-	public static boolean canFrom(long aCas) {
+	public static boolean canFrom(final long aCas) {
 		try {
 			from(aCas);
 			return true;
-		} catch (XCreateElement e) {
+		} catch (final XCreateElement e) {
 			return false;
 		}
 	}
@@ -554,7 +554,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	public final class Info {
 		private final Calendar iCal;
 
-		Info(TimeZone aTimeZone) {
+		Info(final TimeZone aTimeZone) {
 			iCal = Calendar.getInstance(aTimeZone); // instance kalendáře pro určitou
 			// zónu
 			iCal.setTimeInMillis(iJavaDate.getTime()); // čas v milisekundách
@@ -669,7 +669,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		 * využijte metody info.., získejte odpovídající poliožky a využijte formátovače.
 		 */
 		public String toString() {
-			long offset = getOffset();
+			final long offset = getOffset();
 			String vysl = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00} {3,number,00}:{4,number,00}:{5,number,00}.{6,number,000} GMT{7,number,+00;-00}", getYearNumber(),
 					getMonthNumber(), getDayNumber(), getHour(), getMinute(), getSecond(), getMilisecond(), offset / 3600000);
 			if (offset % 3600000 != 0) {
@@ -682,7 +682,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		 * Return an ISO 8601 compliant timestamp representation.
 		 */
 		public String toIsoString() {
-			String result = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00}T{3,number,00}:{4,number,00}:{5,number,00}.{6,number,000}", getYearNumber(), getMonthNumber(),
+			final String result = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00}T{3,number,00}:{4,number,00}:{5,number,00}.{6,number,000}", getYearNumber(), getMonthNumber(),
 					getDayNumber(), getHour(), getMinute(), getSecond(), getMilisecond());
 			return result + offsetStr();
 		}
@@ -691,7 +691,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 			long offset = getOffset();
 			if (offset == 0)
 				return "Z";
-			char sign = offset < 0 ? '-' : '+';
+			final char sign = offset < 0 ? '-' : '+';
 			offset = Math.abs(offset);
 			offset = offset / (1000 * 60); // a je to v minutách
 			return sign + MessageFormat.format("{0,number,00}{1,number,00}", new Object[] { offset / 60, offset % 60, });
@@ -705,7 +705,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Počet milisekund o kolik posunout.
 	 * @return Instance ATimestamp s posunutým měsícem.
 	 */
-	public ATimestamp getAnother(long aNthObject) {
+	public ATimestamp getAnother(final long aNthObject) {
 		return this.add(aNthObject);
 	}
 
@@ -716,7 +716,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Objekt, který se odečítá.
 	 * @return Počet milisekund rozdílu.
 	 */
-	public long getDistance(ATimestamp aObject) {
+	public long getDistance(final ATimestamp aObject) {
 		if (aObject == null) {
 			throw new IllegalArgumentException();
 		}

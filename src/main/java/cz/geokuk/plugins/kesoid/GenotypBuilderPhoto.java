@@ -10,12 +10,12 @@ public class GenotypBuilderPhoto {
 	private final Genotyp	g;
 	private final Genom		genom;
 
-	public GenotypBuilderPhoto(Genom genom, Genotyp g) {
+	public GenotypBuilderPhoto(final Genom genom, final Genotyp g) {
 		this.genom = genom;
 		this.g = g;
 	}
 
-	public void build(Photo p) {
+	public void build(final Photo p) {
 		g.put(genom.ALELA_pic);
 	}
 }

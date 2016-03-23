@@ -10,7 +10,7 @@ import cz.geokuk.framework.ProgressModel;
 public abstract class NacitacInputStream0 extends Nacitac0 {
 
 	@Override
-	protected final void nacti(File file, IImportBuilder builder, Future<?> future, ProgressModel progressModel) throws IOException {
+	protected final void nacti(final File file, final IImportBuilder builder, final Future<?> future, final ProgressModel progressModel) throws IOException {
 		if (!umiNacist(file)) {
 			throw new IllegalArgumentException("Cannot load file " + file);
 		}
@@ -18,11 +18,11 @@ public abstract class NacitacInputStream0 extends Nacitac0 {
 	}
 
 	@Override
-	protected final void nacti(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> future, ProgressModel progressModel) throws IOException {
+	protected final void nacti(final ZipFile zipFile, final ZipEntry zipEntry, final IImportBuilder builder, final Future<?> future, final ProgressModel progressModel) throws IOException {
 		if (!umiNacist(zipEntry)) {
 			throw new IllegalArgumentException("Cannot load zipped entry " + zipEntry + " from file " + zipFile);
 		}
-		String name = zipFile.getName() + "/" + zipEntry.getName();
+		final String name = zipFile.getName() + "/" + zipEntry.getName();
 		nacti(wrapByProgressor(zipFile.getInputStream(zipEntry), name, progressModel), name, builder, future);
 	}
 

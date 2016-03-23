@@ -31,26 +31,26 @@ import java.util.*;
  */
 public final class ADate extends AObject0 implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateComparable {
 
-	private static final long	serialVersionUID	= -5930101122857422133L;
+	private static final long		serialVersionUID	= -5930101122857422133L;
 
 	// LATER [veverka?] vnitřní držbu udělej pomocí den,měsíc,ruk a metody stav nad kalendářem
 	/**
 	 * Drží datum. Je reprezentováno půlnocí v GMT čase.
 	 */
 	// final jsem musel odstranit kvůli _clone()
-	private java.util.Date		iJavaDatum;
+	private final java.util.Date	iJavaDatum;
 
 	/**
 	 * Vytvoří datum z SQL datumu
 	 */
-	private ADate(java.sql.Date aSqlDatum) {
+	private ADate(final java.sql.Date aSqlDatum) {
 		iJavaDatum = new java.util.Date(aSqlDatum.getTime());
 	}
 
 	/**
 	 * Konstruuje z již existujícího java.util.Date. Pouze pro interní potřebu.
 	 */
-	private ADate(java.util.Date aJavaDatum) {
+	private ADate(final java.util.Date aJavaDatum) {
 		iJavaDatum = aJavaDatum;
 	}
 
@@ -60,7 +60,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @param int
 	 *            rok, int mesic, int den
 	 */
-	private ADate(int rok, int mesic, int den) {
+	private ADate(final int rok, final int mesic, final int den) {
 		iJavaDatum = fromRokMesicDen(rok, mesic, den);
 	}
 
@@ -70,7 +70,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @param String
 	 *            Datum
 	 */
-	private ADate(String Datum) {
+	private ADate(final String Datum) {
 		iJavaDatum = fromString(Datum);
 	}
 
@@ -140,9 +140,9 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            rok, int mesic, int den
 	 * @return java.util.Date Datum
 	 */
-	private static java.util.Date fromRokMesicDen(int rok, int mesic, int den) {
+	private static java.util.Date fromRokMesicDen(final int rok, final int mesic, final int den) {
 		try {
-			Calendar c = newcal();
+			final Calendar c = newcal();
 			// Pozor, Calendar ma mesice od nuly !!
 			c.set(rok, mesic - 1, den, 0, 0, 0);
 
@@ -151,7 +151,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 
 			c.set(Calendar.MILLISECOND, 0);
 			return c.getTime();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new XCreateElement("Z cisel'" + rok + " " + mesic + " " + den + "' nelze udelat datum", e);
 		}
 	}
@@ -163,7 +163,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            Datum
 	 * @return java.util.Date Datum
 	 */
-	private static java.util.Date fromString(String Datum) {
+	private static java.util.Date fromString(final String Datum) {
 		try {
 			String DatePart;
 
@@ -180,7 +180,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 				odd = "/";
 			DatePart = DatePart + odd;
 			int poradi = 0;
-			String Parts[] = new String[3];
+			final String Parts[] = new String[3];
 			for (int i = 0; i < 3; i++) {
 				Parts[i] = DatePart.substring(0, DatePart.indexOf(odd));
 				DatePart = DatePart.substring(DatePart.indexOf(odd) + 1);
@@ -188,7 +188,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 					poradi = i;
 			}
 
-			int iDateParts[] = new int[3];
+			final int iDateParts[] = new int[3];
 			if (poradi == 0) {
 				iDateParts[0] = Integer.valueOf(Parts[0]);
 				iDateParts[1] = Integer.valueOf(Parts[1]);
@@ -200,16 +200,16 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 			}
 
 			return fromRokMesicDen(iDateParts[0], iDateParts[1], iDateParts[2]);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new XCreateElement("Z reztezce '" + Datum + "' nelze udelat datum", e);
 		}
 	}
 
 	/**
 	 * Vrací formátovaný řetězec z datumu
-	 * 
+	 *
 	 * @return d.m.yyyy private String toDmyString() {
-	 * 
+	 *
 	 *         return MessageFormat.format("{0,number,0}.{1,number,0}.{2,number,0000}", new Object[] {new Integer(getDayNumber()), new Integer(getMonthNumber()), new Integer(getYearNumber())}); }
 	 */
 
@@ -236,7 +236,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	}
 
 	private Calendar actcal() {
-		Calendar c = newcal();
+		final Calendar c = newcal();
 		c.setTime(iJavaDatum);
 		return c;
 	}
@@ -247,7 +247,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return boolean Zda je po
 	 * @deprecated Použij isGreater
 	 */
-	public boolean after(ADate adatum) {
+	public boolean after(final ADate adatum) {
 		return isGreater(adatum);
 	}
 
@@ -257,7 +257,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return boolean Zda je po nebo dnes
 	 * @deprecated Použij isGreaterOrEqual
 	 */
-	public boolean afterOrThis(ADate adatum) {
+	public boolean afterOrThis(final ADate adatum) {
 		return isGreaterOrEqual(adatum);
 	}
 
@@ -267,7 +267,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return boolean Zda je před
 	 * @deprecated Použij isLess
 	 */
-	public boolean before(ADate adatum) {
+	public boolean before(final ADate adatum) {
 		return isLess(adatum);
 	}
 
@@ -277,7 +277,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return boolean Zda je před nebo dnes
 	 * @deprecated Použij isLessOrEqual
 	 */
-	public boolean beforeOrThis(ADate adatum) {
+	public boolean beforeOrThis(final ADate adatum) {
 		return isLessOrEqual(adatum);
 	}
 
@@ -310,8 +310,8 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            přičítaných dní
 	 * @return ADate Datum
 	 */
-	public ADate addDays(int i) {
-		Calendar c = actcal();
+	public ADate addDays(final int i) {
+		final Calendar c = actcal();
 		c.add(Calendar.DATE, i);
 		return new ADate(c.getTime());
 	}
@@ -323,8 +323,8 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            přičítaných týdnů
 	 * @return ADate Datum
 	 */
-	public ADate addWeeks(int i) {
-		Calendar c = actcal();
+	public ADate addWeeks(final int i) {
+		final Calendar c = actcal();
 		c.add(Calendar.DATE, i * 7);
 		return new ADate(c.getTime());
 	}
@@ -336,7 +336,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            Druhé datum
 	 * @return Počet dnů mezi datumy
 	 */
-	public int daysBetw(ADate Datum) {
+	public int daysBetw(final ADate Datum) {
 		return (int) ((iJavaDatum.getTime() - Datum.iJavaDatum.getTime()) / ATimestamp.getMillisecondsPerDay());
 	}
 
@@ -383,7 +383,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *
 	 * @return ADate Datum vrátí první následující datum pro WeekDay (tedy ne dnešek.
 	 */
-	public ADate getNextWeekDay(EDayOfWeek DayOfWeek) {
+	public ADate getNextWeekDay(final EDayOfWeek DayOfWeek) {
 		ADate Result = addDays(1);
 		while (!DayOfWeek.equals(Result.getWeekDay())) {
 			Result = Result.addDays(1);
@@ -406,8 +406,8 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *
 	 * @return Datum, které je v zadaný čas v odpovídajícím časovém, =ásmu.
 	 */
-	public ATimestamp getNoonTimestamp(TimeZone aZone) {
-		Calendar cal = new GregorianCalendar(aZone);
+	public ATimestamp getNoonTimestamp(final TimeZone aZone) {
+		final Calendar cal = new GregorianCalendar(aZone);
 		cal.set(this.getYearNumber(), this.getMonthNumber() - 1, this.getDayNumber(), 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		return ATimestamp.from(cal.getTime().getTime() + 12 * 60 * 60 * 1000);
@@ -421,7 +421,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @author veverka
 	 * @since 16.9.2006 17:20:06
 	 */
-	public ATimestamp getMidnightStarting(TimeZone aZone) {
+	public ATimestamp getMidnightStarting(final TimeZone aZone) {
 		return getNoonTimestamp(aZone).add(-12 * 60 * 60 * 1000);
 	}
 
@@ -433,7 +433,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @author veverka
 	 * @since 16.9.2006 17:20:19
 	 */
-	public ATimestamp getMidnightEnding(TimeZone aZone) {
+	public ATimestamp getMidnightEnding(final TimeZone aZone) {
 		return getNoonTimestamp(aZone).add(+12 * 60 * 60 * 1000);
 	}
 
@@ -478,38 +478,38 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            aDatum
 	 * @return boolean Výsledek. Pokud byl argument null, je vráceno false.
 	 */
-	public boolean equals(Object aDatum) {
+	public boolean equals(final Object aDatum) {
 		if (!(aDatum instanceof ADate))
 			return false;
-		ADate obj = (ADate) aDatum;
+		final ADate obj = (ADate) aDatum;
 		return iJavaDatum.equals(obj.iJavaDatum);
 	}
 
-	public boolean isLess(ADate b) {
+	public boolean isLess(final ADate b) {
 		return compareTo(b) < 0;
 	}
 
-	public boolean isLessOrEqual(ADate b) {
+	public boolean isLessOrEqual(final ADate b) {
 		return compareTo(b) <= 0;
 	}
 
-	public boolean isGreater(ADate b) {
+	public boolean isGreater(final ADate b) {
 		return compareTo(b) > 0;
 	}
 
-	public boolean isGreaterOrEqual(ADate b) {
+	public boolean isGreaterOrEqual(final ADate b) {
 		return compareTo(b) >= 0;
 	}
 
-	public boolean isEqual(ADate b) {
+	public boolean isEqual(final ADate b) {
 		return compareTo(b) == 0;
 	}
 
-	public boolean isNotEqual(ADate b) {
+	public boolean isNotEqual(final ADate b) {
 		return compareTo(b) != 0;
 	}
 
-	public int compareTo(ADate aObj) {
+	public int compareTo(final ADate aObj) {
 		if (iJavaDatum.equals(aObj.iJavaDatum))
 			return 0;
 		if (aObj.iJavaDatum.after(iJavaDatum))
@@ -528,7 +528,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 		return iJavaDatum.hashCode();
 	}
 
-	public static ADate from(String aDatum) {
+	public static ADate from(final String aDatum) {
 		return StringUtils.isBlank(aDatum) ? null : new ADate(aDatum);
 	}
 
@@ -540,16 +540,16 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return
 	 * @author veverka
 	 */
-	public static ADate fromSqlDateInDefaultTimezone(java.sql.Date date) {
+	public static ADate fromSqlDateInDefaultTimezone(final java.sql.Date date) {
 		if (date == null) {
 			return null;
 		}
-		Calendar cal = Calendar.getInstance(); // kalendar se standardni casovou zonou
+		final Calendar cal = Calendar.getInstance(); // kalendar se standardni casovou zonou
 
 		cal.setTime(date); // nastavim kalendar na cas z prijateho data
-		int rok = cal.get(Calendar.YEAR);
-		int mesic = cal.get(Calendar.MONTH) + 1; // JANUARY = 0
-		int den = cal.get(Calendar.DAY_OF_MONTH);
+		final int rok = cal.get(Calendar.YEAR);
+		final int mesic = cal.get(Calendar.MONTH) + 1; // JANUARY = 0
+		final int den = cal.get(Calendar.DAY_OF_MONTH);
 
 		// return ADateConvertor.toADate(date);
 		return new ADate(rok, mesic, den);
@@ -563,30 +563,30 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return
 	 * @author veverka
 	 */
-	public static ADate fromSqlDateInUtc(java.sql.Date date) {
+	public static ADate fromSqlDateInUtc(final java.sql.Date date) {
 		if (date == null) {
 			return null;
 		}
-		Calendar cal = Calendar.getInstance(new SimpleTimeZone(0, "UTC")); // kalendar se standardni casovou zonou
+		final Calendar cal = Calendar.getInstance(new SimpleTimeZone(0, "UTC")); // kalendar se standardni casovou zonou
 
 		cal.setTime(date); // nastavim kalendar na cas z prijateho data
-		int rok = cal.get(Calendar.YEAR);
-		int mesic = cal.get(Calendar.MONTH) + 1; // JANUARY = 0
-		int den = cal.get(Calendar.DAY_OF_MONTH);
+		final int rok = cal.get(Calendar.YEAR);
+		final int mesic = cal.get(Calendar.MONTH) + 1; // JANUARY = 0
+		final int den = cal.get(Calendar.DAY_OF_MONTH);
 
 		// return ADateConvertor.toADate(date);
 		return new ADate(rok, mesic, den);
 	}
 
-	public static ADate from(int aRok, int aMesic, int aDen) {
+	public static ADate from(final int aRok, final int aMesic, final int aDen) {
 		return (aRok == 0 && aMesic == 0 && aDen == 0) ? null : new ADate(aRok, aMesic, aDen);
 	}
 
-	public static boolean canFrom(String aDatum) {
+	public static boolean canFrom(final String aDatum) {
 		try {
 			from(aDatum);
 			return true;
-		} catch (XCreateElement e) {
+		} catch (final XCreateElement e) {
 			return false;
 		}
 	}
@@ -595,15 +595,15 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @deprecated Metoda nedělá to, co chceš. Může mosunout datum o jedničku. Doporučuji použít kalendář, vytáhnout SQL date jednotlivé složky a zkonstruovat datum. Pozor na časovou zuónu.
 	 */
 
-	public static boolean canFrom(java.sql.Date aSqlDatum) {
+	public static boolean canFrom(final java.sql.Date aSqlDatum) {
 		return true;
 	}
 
-	public static boolean canFrom(int aRok, int aMesic, int aDen) {
+	public static boolean canFrom(final int aRok, final int aMesic, final int aDen) {
 		try {
 			from(aRok, aMesic, aDen);
 			return true;
-		} catch (XCreateElement e) {
+		} catch (final XCreateElement e) {
 			return false;
 		}
 	}
@@ -615,7 +615,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            Počet dnů o kolik posunout.
 	 * @return Instance ADate s posunutým měsícem.
 	 */
-	public ADate getAnother(long aNthObject) {
+	public ADate getAnother(final long aNthObject) {
 		if (Math.abs(aNthObject) > Integer.MAX_VALUE - 2)
 			throw new IllegalArgumentException("Počtu dnů o něž posouvat je " + aNthObject + " a to je na mě v absolutní hodnotě moc!");
 		return addDays((int) aNthObject);
@@ -628,7 +628,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            Objekt, který se odečítá.
 	 * @return Počet dnů rozdílu.
 	 */
-	public long getDistance(ADate aObject) {
+	public long getDistance(final ADate aObject) {
 		if (aObject == null) {
 			throw new IllegalArgumentException("aObject is null!");
 		}
@@ -660,7 +660,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 
 	/*
 	 * public static void main(String[] aArgs) {
-	 * 
+	 *
 	 * ADate aDate = ADate.from(2005, 3, 30); int dayNumber = aDate.getDayNumber(); AMonth m = aDate.prevMonth(); ADate lastMonthDate = m.lastDate(); int i = lastMonthDate.getDayNumber(); ADate d = (i < dayNumber) ? lastMonthDate : m.dateOf(dayNumber); System.err.p rintln(d); }
 	 */
 }

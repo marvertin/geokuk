@@ -24,7 +24,7 @@ public class Gpxg {
 	public String				czokres;
 	public Map<String, String>	userTags	= new HashMap<>();
 
-	public void putUserTag(String genname, String alelaname) {
+	public void putUserTag(final String genname, final String alelaname) {
 		userTags.put(genname, alelaname);
 	}
 

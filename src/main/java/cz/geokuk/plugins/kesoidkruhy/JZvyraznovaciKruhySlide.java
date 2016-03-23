@@ -33,18 +33,18 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		provazModely();
 	}
 
-	public void onEvent(KeskyVyfiltrovanyEvent event) {
+	public void onEvent(final KeskyVyfiltrovanyEvent event) {
 		iIndexator = event.getFiltrovane().getIndexator();
 		repaint();
 	}
 
-	public void onEvent(KruhyPreferencesChangeEvent event) {
+	public void onEvent(final KruhyPreferencesChangeEvent event) {
 		setVisible(event.kruhy.isOnoff());
 		kruhy = event.kruhy;
 		repaint();
 	}
 
-	public void onEvent(ZmenaMapNastalaEvent event) {
+	public void onEvent(final ZmenaMapNastalaEvent event) {
 		podklad = event.getKaSet().getPodklad();
 		provazModely();
 	}
@@ -56,7 +56,7 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 	}
 
 	@Override
-	public void paintComponent(Graphics aG) {
+	public void paintComponent(final Graphics aG) {
 		if (iIndexator == null)
 			return;
 		final boolean prekrocenLimit = iIndexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
@@ -78,9 +78,9 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		iIndexator.visit(getSoord().getBoundingRect(), new FlatVisitor<Wpt>() {
 
 			@Override
-			public void visit(Sheet<Wpt> aSheet) {
-				Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
-				Point p = getSoord().transform(mou);
+			public void visit(final Sheet<Wpt> aSheet) {
+				final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
+				final Point p = getSoord().transform(mou);
 				g.setStroke(prerus);
 				g.setColor(barva);
 				g.fillOval(p.x - r, p.y - r, d, d);
@@ -95,7 +95,7 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 	}
 
 	private int vypoctiJednotkovyPolomer() {
-		double pixluNaMetr = getSoord().getPixluNaMetr();
+		final double pixluNaMetr = getSoord().getPixluNaMetr();
 		int metru = 1;
 		int pixlu;
 		do {

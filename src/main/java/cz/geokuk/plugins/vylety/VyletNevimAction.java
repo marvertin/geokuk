@@ -12,7 +12,7 @@ public class VyletNevimAction extends VyletActionIndividual0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public VyletNevimAction(Kesoid kes) {
+	public VyletNevimAction(final Kesoid kes) {
 		super("Nevím", kes);
 		putValue(SHORT_DESCRIPTION, "Ještě nevím, zda tuto keš budu lovit nebo ignorovat.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_N);
@@ -21,7 +21,7 @@ public class VyletNevimAction extends VyletActionIndividual0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		vyletModel.add(EVylet.NEVIM, kesoid());
 	}
 

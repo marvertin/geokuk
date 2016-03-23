@@ -18,10 +18,10 @@ public class VyletZoomAction extends VyletAction0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		Set<Kesoid> set = vyletModel.get(EVylet.ANO);
-		MouRect mourect = new MouRect();
-		for (Kesoid kes : set) {
+	public void actionPerformed(final ActionEvent e) {
+		final Set<Kesoid> set = vyletModel.get(EVylet.ANO);
+		final MouRect mourect = new MouRect();
+		for (final Kesoid kes : set) {
 			mourect.add(kes.getMainWpt().getWgs().toMou());
 		}
 		mourect.resize(1.2);

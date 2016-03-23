@@ -175,7 +175,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override

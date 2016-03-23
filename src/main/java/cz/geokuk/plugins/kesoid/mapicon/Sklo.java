@@ -15,22 +15,22 @@ import cz.geokuk.util.pocitadla.*;
 
 public class Sklo implements ImagantCache {
 
-	private Pocitadlo					pocitImangantu			= new PocitadloMalo("Imagant - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
-	private static Pocitadlo			pocitImangantuZasah		= new PocitadloRoste("Imagant - zásahy cache", "");
-	private Pocitadlo					pocitSourceImagu		= new PocitadloMalo("Zdrojové obrázky - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
-	private static Pocitadlo			pocitSourceImaguZasah	= new PocitadloRoste("Zdrojové obrázky - zásah cache", "");
+	private final Pocitadlo						pocitImangantu			= new PocitadloMalo("Imagant - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
+	private static Pocitadlo					pocitImangantuZasah		= new PocitadloRoste("Imagant - zásahy cache", "");
+	private final Pocitadlo						pocitSourceImagu		= new PocitadloMalo("Zdrojové obrázky - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
+	private static Pocitadlo					pocitSourceImaguZasah	= new PocitadloRoste("Zdrojové obrázky - zásah cache", "");
 
-	List<Vrstva>						vrstvy					= new ArrayList<>();
+	List<Vrstva>								vrstvy					= new ArrayList<>();
 
-	private Map<Genotyp.Otisk, Imagant>	cache					= new HashMap<>();
-	private Map<URL, BufferedImage>		sourceImageCache		= Collections.synchronizedMap(new HashMap<URL, BufferedImage>());
+	private final Map<Genotyp.Otisk, Imagant>	cache					= new HashMap<>();
+	private final Map<URL, BufferedImage>		sourceImageCache		= Collections.synchronizedMap(new HashMap<URL, BufferedImage>());
 
-	private final String				iName;
+	private final String						iName;
 
 	/**
 	 *
 	 */
-	public Sklo(String name) {
+	public Sklo(final String name) {
 		iName = name;
 	}
 
@@ -47,8 +47,8 @@ public class Sklo implements ImagantCache {
 	 * @param genotyp
 	 * @return
 	 */
-	public synchronized Imagant getRenderedImage(Genotyp genotyp) {
-		Otisk otisk = genotyp.getOtisk();
+	public synchronized Imagant getRenderedImage(final Genotyp genotyp) {
+		final Otisk otisk = genotyp.getOtisk();
 		Imagant imagant = cache.get(otisk);
 		if (!cache.containsKey(otisk)) { // může tam být totiž null
 			imagant = render(genotyp);
@@ -62,23 +62,23 @@ public class Sklo implements ImagantCache {
 
 	/**
 	 * Vyrendruje ikonu pro sklo pro daný genotyp.
-	 * 
+	 *
 	 * @param genotyp
 	 * @return
 	 */
-	Imagant render(Genotyp genotyp) {
+	Imagant render(final Genotyp genotyp) {
 		// Vyrendrovat jednotlivé vrstvy samostatně
-		Deque<Imagant> imaganti = new ArrayDeque<>();
-		for (Vrstva vrstva : vrstvy) {
-			IconDef iconDef = vrstva.locate(genotyp);
+		final Deque<Imagant> imaganti = new ArrayDeque<>();
+		for (final Vrstva vrstva : vrstvy) {
+			final IconDef iconDef = vrstva.locate(genotyp);
 			if (iconDef != null) {
 				render(iconDef.idp, imaganti);
 			}
 		}
 
-		List<Imagant> list = new ArrayList<>();
-		for (Iterator<Imagant> it = imaganti.descendingIterator(); it.hasNext();) {
-			Imagant ima = it.next();
+		final List<Imagant> list = new ArrayList<>();
+		for (final Iterator<Imagant> it = imaganti.descendingIterator(); it.hasNext();) {
+			final Imagant ima = it.next();
 			list.add(ima);
 		}
 
@@ -86,10 +86,10 @@ public class Sklo implements ImagantCache {
 
 	}
 
-	public static Imagant prekresliNaSebe(List<Imagant> imaganti) {
+	public static Imagant prekresliNaSebe(final List<Imagant> imaganti) {
 		if (imaganti.isEmpty())
 			return null;
-		BoundingRect br = Sklo.sjednoceni(imaganti);
+		final BoundingRect br = Sklo.sjednoceni(imaganti);
 
 		if (br == null) {
 			// TODO log.warn()
@@ -97,16 +97,16 @@ public class Sklo implements ImagantCache {
 		}
 
 		// vytvořit cílový brázek ve správné velikosti
-		int width = br.xx2 - br.xx1;
-		int height = br.yy2 - br.yy1;
+		final int width = br.xx2 - br.xx1;
+		final int height = br.yy2 - br.yy1;
 		Imagant imagant;
-		BufferedImage resultbi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = resultbi.getGraphics();
+		final BufferedImage resultbi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		final Graphics g = resultbi.getGraphics();
 		try {
 			g.translate(-br.xx1, -br.yy1); // nastavit správný střed
 
 			// vykreslení obrázků
-			for (Imagant ima : imaganti) {
+			for (final Imagant ima : imaganti) {
 				if (ima != null) {
 					g.drawImage(ima.getImage(), ima.getXpos(), ima.getYpos(), null);
 				}
@@ -126,21 +126,21 @@ public class Sklo implements ImagantCache {
 	 * @param aIdp
 	 * @param aImaganti
 	 */
-	private void render(IkonDrawingProperties idp, Deque<Imagant> aImaganti) {
+	private void render(final IkonDrawingProperties idp, final Deque<Imagant> aImaganti) {
 
 		idp.vykreslovac.draw(aImaganti);
 	}
 
-	public static BoundingRect sjednoceni(List<Imagant> imaganti) {
+	public static BoundingRect sjednoceni(final List<Imagant> imaganti) {
 		// Spočítat hranice
 		int xx1 = 0, xx2 = 0, yy1 = 0, yy2 = 0;
-		for (Imagant imagant : imaganti) {
+		for (final Imagant imagant : imaganti) {
 			if (imagant == null)
 				continue;
-			int x1 = imagant.getXpos();
-			int y1 = imagant.getYpos();
-			int x2 = x1 + imagant.getImage().getWidth();
-			int y2 = y1 + imagant.getImage().getHeight();
+			final int x1 = imagant.getXpos();
+			final int y1 = imagant.getYpos();
+			final int x2 = x1 + imagant.getImage().getWidth();
+			final int y2 = y1 + imagant.getImage().getHeight();
 			xx1 = Math.min(xx1, x1);
 			xx2 = Math.max(xx2, x2);
 			yy1 = Math.min(yy1, y1);
@@ -148,11 +148,11 @@ public class Sklo implements ImagantCache {
 		}
 		if (xx2 - xx1 == 0 || yy2 - yy1 == 0)
 			return null;
-		BoundingRect br = new BoundingRect(xx1, yy1, xx2, yy2);
+		final BoundingRect br = new BoundingRect(xx1, yy1, xx2, yy2);
 		return br;
 	}
 
-	public BufferedImage getImage(URL url) {
+	public BufferedImage getImage(final URL url) {
 		try {
 			BufferedImage bi = sourceImageCache.get(url);
 			if (bi == null) {
@@ -163,7 +163,7 @@ public class Sklo implements ImagantCache {
 				pocitSourceImaguZasah.inc();
 			}
 			return bi;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 

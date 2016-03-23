@@ -88,9 +88,9 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		jButtonCentruj.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 
-				Nalezenec nalezenec = jAdrTabulka.getCurrent();
+				final Nalezenec nalezenec = jAdrTabulka.getCurrent();
 				if (nalezenec != null) {
 					poziceModel.setPozice(nalezenec.wgs);
 					vyrezModel.vystredovatNaPozici();
@@ -105,13 +105,13 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		jAdrTabulka.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
-			public void valueChanged(ListSelectionEvent aE) {
+			public void valueChanged(final ListSelectionEvent aE) {
 				jButtonCentruj.setEnabled(jAdrTabulka.getCurrent() != null);
 			}
 		});
 	}
 
-	public void onEvent(ReferencniBodSeZmenilEvent aEvent) {
+	public void onEvent(final ReferencniBodSeZmenilEvent aEvent) {
 		if (naVstupuJsouSouradkyNeboNic()) {
 			entry.setText(aEvent.wgs.lat + "," + aEvent.wgs.lon);
 			entry.selectAll();
@@ -120,7 +120,7 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 	}
 
 	private boolean naVstupuJsouSouradkyNeboNic() {
-		String text = entry.getText();
+		final String text = entry.getText();
 		if (text.trim().length() == 0)
 			return true;
 		if (text.matches("-?\\d+(\\.\\d+),-?\\d+(\\.\\d+)"))
@@ -143,14 +143,14 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Najdi místo dle adresy");
 
-		JAdrTable kesTable = new JAdrTable();
+		final JAdrTable kesTable = new JAdrTable();
 		// jKeskovaciTabulka = new JScrollPane(textArea);
 		jAdrTabulka = kesTable;
 
 		jLabel1.setText("Hledat: ");
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
+		final JPanel panel = new JPanel();
+		final GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 		add(panel);
 
@@ -173,7 +173,7 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		pack();
 	}
 
-	protected void setReferencniBod(Wgs wgs) {
+	protected void setReferencniBod(final Wgs wgs) {
 		if (wgs.equals(referencniBod))
 			return;
 		referencniBod = wgs;
@@ -184,35 +184,35 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		if (referencniBod == null)
 			return;
 		message("Hleda se ...");
-		String s = entry.getText();
+		final String s = entry.getText();
 		geocodingModel.spustHledani(s, this);
 	}
 
-	void message(String msg) {
+	void message(final String msg) {
 		status.setText(msg);
 	}
 
 	// DocumentListener methods
 
 	@Override
-	public void insertUpdate(DocumentEvent ev) {
+	public void insertUpdate(final DocumentEvent ev) {
 		search();
 	}
 
 	@Override
-	public void removeUpdate(DocumentEvent ev) {
+	public void removeUpdate(final DocumentEvent ev) {
 		search();
 	}
 
 	@Override
-	public void changedUpdate(DocumentEvent ev) {
+	public void changedUpdate(final DocumentEvent ev) {
 	}
 
 	class CancelAction extends AbstractAction {
 		private static final long serialVersionUID = -480129891208539096L;
 
 		@Override
-		public void actionPerformed(ActionEvent ev) {
+		public void actionPerformed(final ActionEvent ev) {
 			// hilit.removeAllHighlights();
 			entry.setText("");
 			entry.setBackground(entryBg);
@@ -220,7 +220,7 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 	}
 
 	@Override
-	public void refreshVysledekHledani(VysledekHledani<Nalezenec> vysledekHledani) {
+	public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {
 		// if (nalezenci.size() == 0) {
 		// jButtonCentruj.setEnabled(false);
 		// } else {
@@ -238,11 +238,11 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		}
 	}
 
-	public void inject(PoziceModel poziceModel) {
+	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
 
-	public void inject(VyrezModel vyrezModel) {
+	public void inject(final VyrezModel vyrezModel) {
 		this.vyrezModel = vyrezModel;
 	}
 
@@ -251,7 +251,7 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		return "HledatAdresu";
 	}
 
-	public void inject(GeocodingModel geocodingModel) {
+	public void inject(final GeocodingModel geocodingModel) {
 		this.geocodingModel = geocodingModel;
 	}
 }

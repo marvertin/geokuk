@@ -7,7 +7,7 @@ public class PrepniVzdusnostUseku extends UsekAction0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public PrepniVzdusnostUseku(Usek usek, Mou mouMysi) {
+	public PrepniVzdusnostUseku(final Usek usek, final Mou mouMysi) {
 		super(usek, mouMysi);
 		// putValue(MNEMONIC_KEY, KeyEvent.VK_V);
 		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));
@@ -15,13 +15,13 @@ public class PrepniVzdusnostUseku extends UsekAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProUsek(Usek usek, Mou mou) {
+	protected boolean mamPovolitProUsek(final Usek usek, final Mou mou) {
 		return true;
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Usek usek, Mou mou) {
-		String dalkas = usek.dalkaHtml();
+	protected void nastavJmenoAkce(final Usek usek, final Mou mou) {
+		final String dalkas = usek.dalkaHtml();
 		if (usek.isVzdusny()) {
 			putValue(NAME, "<html>Přepni úsek " + dalkas + " na běžný");
 			putValue(SHORT_DESCRIPTION,
@@ -34,7 +34,7 @@ public class PrepniVzdusnostUseku extends UsekAction0 {
 	}
 
 	@Override
-	protected void provedProUsek(Usek usek, Mou mou) {
+	protected void provedProUsek(final Usek usek, final Mou mou) {
 		cestyModel.prepniVzdusnostUseku(usek, !usek.isVzdusny());
 	}
 

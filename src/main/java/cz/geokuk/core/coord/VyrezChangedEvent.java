@@ -6,7 +6,7 @@ public class VyrezChangedEvent extends Event0<VyrezModel> {
 
 	private final Coord moord;
 
-	public VyrezChangedEvent(Coord moord) {
+	public VyrezChangedEvent(final Coord moord) {
 		this.moord = moord;
 	}
 

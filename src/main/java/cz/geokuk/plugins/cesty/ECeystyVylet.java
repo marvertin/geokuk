@@ -8,7 +8,7 @@ public enum ECeystyVylet {
 
 	private final String doKomboBoxu;
 
-	ECeystyVylet(String doKomboBoxu) {
+	ECeystyVylet(final String doKomboBoxu) {
 		this.doKomboBoxu = doKomboBoxu;
 	}
 

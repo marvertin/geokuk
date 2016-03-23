@@ -16,7 +16,7 @@ public class KeskyNactenyEvent extends Event0<KesoidModel> {
 	/**
 	 * @return the informaceOZdrojich
 	 */
-	public KeskyNactenyEvent(KesBag vsechny) {
+	public KeskyNactenyEvent(final KesBag vsechny) {
 		super();
 		this.vsechny = vsechny;
 	}

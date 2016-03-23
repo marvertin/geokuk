@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Kontejner, který drží objekty a injektuje je.
- * 
+ *
  * @author tatinek
  *
  */
@@ -20,24 +20,24 @@ public class BeanBag implements Factory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.Factory#create(java.lang.Class, java.lang.Object)
 	 */
 	@Override
-	public <T> T create(Class<T> klasa, Object... params) {
+	public <T> T create(final Class<T> klasa, final Object... params) {
 		if (!initialized)
 			throw new RuntimeException("Kontejner jeste nebyl inicializovan");
-		Class<?>[] types = new Class<?>[params.length];
+		final Class<?>[] types = new Class<?>[params.length];
 		for (int i = 0; i < params.length; i++) {
-			Object param = params[i];
+			final Object param = params[i];
 			types[i] = param == null ? null : param.getClass();
 		}
 		try {
-			Constructor<T> constructor = klasa.getConstructor(types);
-			T obj = constructor.newInstance(params);
+			final Constructor<T> constructor = klasa.getConstructor(types);
+			final T obj = constructor.newInstance(params);
 			init(obj);
 			return obj;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 
@@ -48,7 +48,7 @@ public class BeanBag implements Factory {
 	 * @param obj
 	 */
 	@Override
-	public <T> T init(T obj) {
+	public <T> T init(final T obj) {
 		inject(obj);
 		callAfterInjectInit(obj);
 		registerEventReceiver(obj, false);
@@ -61,7 +61,7 @@ public class BeanBag implements Factory {
 	 * @param obj
 	 */
 	@Override
-	public <T> T initNow(T obj) {
+	public <T> T initNow(final T obj) {
 		inject(obj);
 		callAfterInjectInit(obj);
 		registerEventReceiver(obj, true);
@@ -69,7 +69,7 @@ public class BeanBag implements Factory {
 		return obj;
 	}
 
-	public <T> T registerSigleton(T object) {
+	public <T> T registerSigleton(final T object) {
 		if (initialized)
 			throw new RuntimeException("Kontejner uz byl inicializovan");
 		if (object == null)
@@ -78,32 +78,32 @@ public class BeanBag implements Factory {
 		return object;
 	}
 
-	public void registrFieldsAsSingleton(Object obj) {
+	public void registrFieldsAsSingleton(final Object obj) {
 		try {
-			Field[] fields = obj.getClass().getFields();
-			for (Field field : fields) {
+			final Field[] fields = obj.getClass().getFields();
+			for (final Field field : fields) {
 				if (Modifier.isStatic(field.getModifiers())) {
 					continue;
 				}
 				registerSigleton(field.get(obj));
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	public void init() {
 
-		for (Object bean : beans) {
+		for (final Object bean : beans) {
 			inject(bean);
 		}
-		for (Object bean : beans) {
+		for (final Object bean : beans) {
 			callAfterInjectInit(bean);
 		}
-		for (Object bean : beans) {
+		for (final Object bean : beans) {
 			registerEventReceiver(bean, false);
 		}
-		for (Object bean : beans) {
+		for (final Object bean : beans) {
 			callAfterEventReceiverRegistrationInit(bean);
 		}
 		initialized = true;
@@ -112,7 +112,7 @@ public class BeanBag implements Factory {
 	/**
 	 * @param bean
 	 */
-	private void callAfterEventReceiverRegistrationInit(Object bean) {
+	private void callAfterEventReceiverRegistrationInit(final Object bean) {
 		if ((bean instanceof AfterEventReceiverRegistrationInit)) {
 			((AfterEventReceiverRegistrationInit) bean).initAfterEventReceiverRegistration();
 		}
@@ -121,7 +121,7 @@ public class BeanBag implements Factory {
 	/**
 	 * @param bean
 	 */
-	private void callAfterInjectInit(Object bean) {
+	private void callAfterInjectInit(final Object bean) {
 		if ((bean instanceof AfterInjectInit)) {
 			((AfterInjectInit) bean).initAfterInject();
 		}
@@ -130,22 +130,22 @@ public class BeanBag implements Factory {
 	/**
 	 * @param bean
 	 */
-	private void registerEventReceiver(Object bean, boolean aOnlyInvoke) {
+	private void registerEventReceiver(final Object bean, final boolean aOnlyInvoke) {
 		eveman.registerWeakly(bean, aOnlyInvoke);
 	}
 
 	/**
 	 * @param targetBean
 	 */
-	private void inject(Object targetBean) {
-		for (Method method : targetBean.getClass().getMethods()) {
+	private void inject(final Object targetBean) {
+		for (final Method method : targetBean.getClass().getMethods()) {
 			if (method.getName().equals("inject")) {
-				BeanType targetBeanType = BeanType.createForTargetMethod(targetBean, method);
-				boolean multiInjection = targetBeanType.isMultiInjectionSupported();
+				final BeanType targetBeanType = BeanType.createForTargetMethod(targetBean, method);
+				final boolean multiInjection = targetBeanType.isMultiInjectionSupported();
 				Object injectedBean = null; // sem budeme injektovat, pokud nepodporujeme multiinjekci
 				int pocetInjekci = 0;
-				for (Object injectedBeanCandidate : beans) {
-					BeanType injectedBeanType = BeanType.createForInjectedBean(injectedBeanCandidate);
+				for (final Object injectedBeanCandidate : beans) {
+					final BeanType injectedBeanType = BeanType.createForInjectedBean(injectedBeanCandidate);
 					if (targetBeanType.canInjectFrom(injectedBeanType)) {
 						if (injectedBean != null)
 							throw new RuntimeException("Prilis mnoho implementaci pro " + method + " v " + injectedBean.getClass() + " a " + injectedBeanCandidate.getClass());
@@ -172,17 +172,17 @@ public class BeanBag implements Factory {
 	 * @param targetBean
 	 * @param injectedBean
 	 */
-	private void callInjection(Method method, Object targetBean, Object injectedBean) {
+	private void callInjection(final Method method, final Object targetBean, final Object injectedBean) {
 		try {
 			// System.out.println("INJEKTUJI:: " + targetBean.getClass() + " <== " + injectedBean.getClass() + " ... " + method);
 			// System.out.println(m);
 			method.invoke(targetBean, injectedBean);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public void inject(EventManager eveman) {
+	public void inject(final EventManager eveman) {
 		this.eveman = eveman;
 	}
 }

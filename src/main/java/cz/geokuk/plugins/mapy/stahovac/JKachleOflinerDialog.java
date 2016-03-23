@@ -233,7 +233,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override

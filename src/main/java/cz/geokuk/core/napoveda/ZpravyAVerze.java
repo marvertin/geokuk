@@ -6,7 +6,7 @@ class ZpravyAVerze {
 	final List<ZpravaUzivateli>	zpravy;
 	final String				lastVersion;
 
-	public ZpravyAVerze(List<ZpravaUzivateli> zpravy, String lastVersion) {
+	public ZpravyAVerze(final List<ZpravaUzivateli> zpravy, final String lastVersion) {
 		this.zpravy = zpravy;
 		this.lastVersion = lastVersion;
 	}

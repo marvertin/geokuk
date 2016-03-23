@@ -7,7 +7,7 @@ public class SmazatUsekAOtevritNeboRozdelitCestu extends UsekAction0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public SmazatUsekAOtevritNeboRozdelitCestu(Usek usek, Mou mouMysi) {
+	public SmazatUsekAOtevritNeboRozdelitCestu(final Usek usek, final Mou mouMysi) {
 		super(usek, mouMysi);
 		// putValue(MNEMONIC_KEY, KeyEvent.VK_V);
 		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F3"));
@@ -15,13 +15,13 @@ public class SmazatUsekAOtevritNeboRozdelitCestu extends UsekAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProUsek(Usek usek, Mou mou) {
+	protected boolean mamPovolitProUsek(final Usek usek, final Mou mou) {
 		return true;
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Usek usek, Mou mou) {
-		String dalkas = usek.dalkaHtml();
+	protected void nastavJmenoAkce(final Usek usek, final Mou mou) {
+		final String dalkas = usek.dalkaHtml();
 		if (usek.getCesta().isKruh()) {
 			putValue(NAME, "<html>Smazat úsek " + dalkas + " a otevřít cestu" + usek.getCesta().getNazevADalkaHtml());
 			putValue(SHORT_DESCRIPTION, "Smaže vybraný úsek, čímž se uzavřená cesta otevře. Koncové body mazaného úseku se stanou startovním a koncovým bodem cesty.");
@@ -32,7 +32,7 @@ public class SmazatUsekAOtevritNeboRozdelitCestu extends UsekAction0 {
 	}
 
 	@Override
-	protected void provedProUsek(Usek usek, Mou mou) {
+	protected void provedProUsek(final Usek usek, final Mou mou) {
 		// LATER zamyšlet se nad krajovými úseky
 		cestyModel.smazatUsekAOtevritNeboRozdelitCestu(usek);
 	}

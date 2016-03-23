@@ -53,15 +53,15 @@ public class CestyModel extends Model0 {
 	private Coord					moord;
 	private boolean					probihaPridavani;
 
-	public void addToVylet(Mouable mouable) {
+	public void addToVylet(final Mouable mouable) {
 		pridejBodNaMisto(mouable);
 	}
 
-	public boolean isOnVylet(Mouable mouable) {
+	public boolean isOnVylet(final Mouable mouable) {
 		if (mouable == null)
 			return false;
 		if (mouable instanceof Wpt) {
-			Wpt wpt = (Wpt) mouable;
+			final Wpt wpt = (Wpt) mouable;
 			return doc.hasWpt(wpt);
 		}
 		if (mouable instanceof Bod)
@@ -82,19 +82,19 @@ public class CestyModel extends Model0 {
 		return doc.getPocetWaypointu();
 	}
 
-	public void inject(CestyZperzistentnovac cestyZperzistentnovac) {
+	public void inject(final CestyZperzistentnovac cestyZperzistentnovac) {
 		this.cestyZperzistentnovac = cestyZperzistentnovac;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.Model0#initAndFire()
 	 */
 	@Override
 	protected void initAndFire() {
-		boolean mameOtevritVylet = currPrefe().node(FPref.VYLET_node).getBoolean(FPref.JE_OTEVRENY_VYLET_value, false);
-		File file = currPrefe().node(FPref.VYLET_node).getFile(FPref.AKTUALNI_SOUBOR_value, null);
+		final boolean mameOtevritVylet = currPrefe().node(FPref.VYLET_node).getBoolean(FPref.JE_OTEVRENY_VYLET_value, false);
+		final File file = currPrefe().node(FPref.VYLET_node).getFile(FPref.AKTUALNI_SOUBOR_value, null);
 		if (mameOtevritVylet && file != null && file.canRead()) {
 			otevri(file);
 		}
@@ -107,7 +107,7 @@ public class CestyModel extends Model0 {
 	}
 
 	public File defaultAktualnihoVyletuFile() {
-		File defaultFile = new File(kesoidModel.getUmisteniSouboru().getCestyDir().getEffectiveFile(), "Můj výlet.gpx");
+		final File defaultFile = new File(kesoidModel.getUmisteniSouboru().getCestyDir().getEffectiveFile(), "Můj výlet.gpx");
 		return currPrefe().node(FPref.VYLET_node).getFile(FPref.AKTUALNI_SOUBOR_value, defaultFile);
 	}
 
@@ -115,19 +115,19 @@ public class CestyModel extends Model0 {
 
 		private final List<Kesoid> kese;
 
-		public Worker(List<Kesoid> kese) {
+		public Worker(final List<Kesoid> kese) {
 			this.kese = kese;
 		}
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see javax.swing.SwingWorker#doInBackground()
 		 */
 		@Override
 		protected Void doInBackground() throws Exception {
-			Clipboard scl = getSystemClipboard();
-			for (Kesoid kes : kese) {
+			final Clipboard scl = getSystemClipboard();
+			for (final Kesoid kes : kese) {
 				if (isCancelled()) {
 					break;
 				}
@@ -143,15 +143,15 @@ public class CestyModel extends Model0 {
 		if (worker != null) {
 			worker.cancel(true);
 		}
-		List<Kesoid> kesoidy = new ArrayList<>();
-		for (Wpt wpt : doc.getWpts()) {
+		final List<Kesoid> kesoidy = new ArrayList<>();
+		for (final Wpt wpt : doc.getWpts()) {
 			kesoidy.add(wpt.getKesoid());
 		}
 		worker = new Worker(kesoidy);
 		worker.execute();
 	}
 
-	public void pridejBodNaMisto(Mouable mouable) {
+	public void pridejBodNaMisto(final Mouable mouable) {
 		if (curta == null) {
 			Cesta cesta = doc.findNejblizsiCesta(mouable.getMou());
 			if (cesta == null) {
@@ -164,38 +164,38 @@ public class CestyModel extends Model0 {
 		fireCesta();
 	}
 
-	public Bod pridejBodNaKonec(Mouable mouable) {
+	public Bod pridejBodNaKonec(final Mouable mouable) {
 		if (curta == null) {
-			Cesta cesta = Cesta.create();
+			final Cesta cesta = Cesta.create();
 			updator.xadd(doc, cesta);
 			curta = cesta;
 		}
-		Bod bod = updator.pridejNaKonec(getCurta(), mouable);
+		final Bod bod = updator.pridejNaKonec(getCurta(), mouable);
 		fireCesta();
 		return bod;
 	}
 
-	public void odeberBod(Mouable mouable) {
-		Bod bod = doc.findBod(mouable);
+	public void odeberBod(final Mouable mouable) {
+		final Bod bod = doc.findBod(mouable);
 		if (bod == null)
 			return;
 		removeBod(bod);
 		fireCesta();
 	}
 
-	public Usek removeBod(Bod bb) {
-		Usek usek = updator.removeBod(bb);
+	public Usek removeBod(final Bod bb) {
+		final Usek usek = updator.removeBod(bb);
 		fireCesta();
 		return usek;
 	}
 
-	public Bod rozdelUsekNaDvaNove(Usek usek, Mou mouNovy) {
-		Bod bod = updator.rozdelUsekNaDvaNove(usek, mouNovy);
+	public Bod rozdelUsekNaDvaNove(final Usek usek, final Mou mouNovy) {
+		final Bod bod = updator.rozdelUsekNaDvaNove(usek, mouNovy);
 		fireCesta();
 		return bod;
 	}
 
-	public void presunBod(Bod bb, Mouable mouable) {
+	public void presunBod(final Bod bb, Mouable mouable) {
 		// if (mouable instanceof Wpt) {
 		// Wpt wpt = (Wpt) mouable;
 		// wpt.invalidate();
@@ -206,7 +206,7 @@ public class CestyModel extends Model0 {
 		// }
 		// musime odstranit reference bodi na bod
 		while (mouable instanceof Bod) {
-			Bod bod = (Bod) mouable;
+			final Bod bod = (Bod) mouable;
 			mouable = bod.getMouable();
 		}
 		invalidate(mouable);
@@ -220,20 +220,20 @@ public class CestyModel extends Model0 {
 		fireCesta();
 	}
 
-	private void invalidate(Mouable mouable) {
+	private void invalidate(final Mouable mouable) {
 		if (mouable instanceof Wpt) {
-			Wpt wpt = (Wpt) mouable;
+			final Wpt wpt = (Wpt) mouable;
 			wpt.invalidate();
 		} else if (mouable instanceof Bod) {
-			Bod bod = (Bod) mouable;
+			final Bod bod = (Bod) mouable;
 			invalidate(bod.getMouable());
 		}
 	}
 
-	private void invalidate(Doc doc) {
+	private void invalidate(final Doc doc) {
 		if (doc == null)
 			return;
-		for (Bod bod : doc.getBody()) {
+		for (final Bod bod : doc.getBody()) {
 			invalidate(bod);
 		}
 	}
@@ -241,7 +241,7 @@ public class CestyModel extends Model0 {
 	private void cleanCurta() {
 		if (curta == null)
 			return;
-		for (Cesta cesta : doc.getCesty()) {
+		for (final Cesta cesta : doc.getCesty()) {
 			if (cesta == curta)
 				return;
 		}
@@ -257,7 +257,7 @@ public class CestyModel extends Model0 {
 		fire(new CestyChangedEvent(doc, curta));
 	}
 
-	void prevezmiNoveOtevrenyDokument(Doc doc) {
+	void prevezmiNoveOtevrenyDokument(final Doc doc) {
 		setDefaultProAktualniVyletFile(doc.getFile());
 		doc.resetChanged();
 		invalidate(doc);
@@ -266,23 +266,23 @@ public class CestyModel extends Model0 {
 		fireCesta();
 	}
 
-	void prevezmiImportovaneCesty(List<Cesta> cesty) {
-		for (Cesta cesta : cesty) {
+	void prevezmiImportovaneCesty(final List<Cesta> cesty) {
+		for (final Cesta cesta : cesty) {
 			doc.xadd(cesta);
 		}
 		invalidate(doc);
 		fireCesta();
 	}
 
-	public void otevri(File file) {
-		Doc doc = new Doc();
+	public void otevri(final File file) {
+		final Doc doc = new Doc();
 		doc.setFile(file);
-		CestyOtevriSwingWorker wrk = new CestyOtevriSwingWorker(cestyZperzistentnovac, kesBag, this, file);
+		final CestyOtevriSwingWorker wrk = new CestyOtevriSwingWorker(cestyZperzistentnovac, kesBag, this, file);
 		wrk.execute();
 	}
 
-	public void importuj(List<File> files) {
-		CestyImportSwingWorker wrk = new CestyImportSwingWorker(cestyZperzistentnovac, kesBag, this, files);
+	public void importuj(final List<File> files) {
+		final CestyImportSwingWorker wrk = new CestyImportSwingWorker(cestyZperzistentnovac, kesBag, this, files);
 		wrk.execute();
 	}
 
@@ -290,11 +290,11 @@ public class CestyModel extends Model0 {
 		return doc;
 	}
 
-	public void onEvent(KeskyNactenyEvent aEvent) {
+	public void onEvent(final KeskyNactenyEvent aEvent) {
 		kesBag = aEvent.getVsechny();
 	}
 
-	public void onEvent(VyrezChangedEvent aEvent) {
+	public void onEvent(final VyrezChangedEvent aEvent) {
 		moord = aEvent.getMoord();
 	}
 
@@ -302,21 +302,21 @@ public class CestyModel extends Model0 {
 		return curta;
 	}
 
-	void setCurta(Cesta curta) {
+	void setCurta(final Cesta curta) {
 		if (this.curta == curta)
 			return;
 		this.curta = curta;
 		fireCesta();
 	}
 
-	public void prepniVzdusnostUseku(Usek usek, boolean vzdusny) {
+	public void prepniVzdusnostUseku(final Usek usek, final boolean vzdusny) {
 		if (usek.isVzdusny() == vzdusny)
 			return;
 		updator.setVzdusny(usek, vzdusny);
 		fireCesta();
 	}
 
-	public void uloz(File file, Doc doc, boolean statSeImplicitniProDokument) {
+	public void uloz(final File file, final Doc doc, final boolean statSeImplicitniProDokument) {
 		new Ukladac().uloz(file, doc);
 		if (statSeImplicitniProDokument) {
 			doc.setFile(file);
@@ -326,62 +326,62 @@ public class CestyModel extends Model0 {
 		fireCesta();
 	}
 
-	public void exportujDoGgt(File file, Doc doc2) {
+	public void exportujDoGgt(final File file, final Doc doc2) {
 		cestyZperzistentnovac.zapisGgt(doc, file);
 	}
 
-	private void setDefaultProAktualniVyletFile(File file) {
+	private void setDefaultProAktualniVyletFile(final File file) {
 		currPrefe().node(FPref.VYLET_node).putFile(FPref.AKTUALNI_SOUBOR_value, file);
 		currPrefe().node(FPref.VYLET_node).putBoolean(FPref.JE_OTEVRENY_VYLET_value, true);
 	}
 
-	public void inject(PoziceModel poziceModel) {
+	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 
 	public File getImplicitniVyletNovyFile() {
-		File dir = defaultAktualnihoVyletuFile().getParentFile();
-		File result = najdiNeexistujiciSoubor(new File(dir, MUJ_VYLET + "." + VYLET_EXTENSION));
+		final File dir = defaultAktualnihoVyletuFile().getParentFile();
+		final File result = najdiNeexistujiciSoubor(new File(dir, MUJ_VYLET + "." + VYLET_EXTENSION));
 		return result;
 	}
 
 	public File getImplicitniVyletSaveAsNovyFile() {
-		File file = doc.getFile();
+		final File file = doc.getFile();
 		if (file == null) {
 			return getImplicitniVyletNovyFile();
 		} else {
-			File result = najdiNeexistujiciSoubor(file);
+			final File result = najdiNeexistujiciSoubor(file);
 			return result;
 		}
 	}
 
 	public File getImplicitniVyletSaveCopyNovyFile() {
-		File file = doc.getFile();
+		final File file = doc.getFile();
 		if (file == null) {
 			return getImplicitniVyletNovyFile();
 		} else {
-			File result = najdiNeexistujiciSoubor(new File(file.getParentFile(), "Kopie " + file.getName()));
+			final File result = najdiNeexistujiciSoubor(new File(file.getParentFile(), "Kopie " + file.getName()));
 			return result;
 		}
 	}
 
-	private File najdiNeexistujiciSoubor(File aFile) {
-		File dir = aFile.getParentFile();
-		String pureName = aFile.getName();
-		Pattern pat = Pattern.compile("^(.*?)(?: *\\(\\d+\\))?(\\.[^.]+)?$");
-		Matcher mat = pat.matcher(pureName);
+	private File najdiNeexistujiciSoubor(final File aFile) {
+		final File dir = aFile.getParentFile();
+		final String pureName = aFile.getName();
+		final Pattern pat = Pattern.compile("^(.*?)(?: *\\(\\d+\\))?(\\.[^.]+)?$");
+		final Matcher mat = pat.matcher(pureName);
 		log.debug(pureName + ": " + mat.matches() + " -- " + pat);
 		log.debug(mat.group(1) + " * " + mat.group(2));
 		// String baseName = poz < 0 ? pureName : pureName.substring(0, poz);
 		// String extension = poz < 0 ? "" : pureName.substring(poz);
-		String baseName = mat.group(1);
-		String extension = mat.group(2);
+		final String baseName = mat.group(1);
+		final String extension = mat.group(2);
 		for (int i = 0;; i++) {
-			File file = new File(dir, baseName + (i == 0 ? "" : " (" + i + ")") + extension);
+			final File file = new File(dir, baseName + (i == 0 ? "" : " (" + i + ")") + extension);
 			if (!file.exists())
 				return file;
 		}
@@ -400,21 +400,21 @@ public class CestyModel extends Model0 {
 		fireCesta();
 	}
 
-	public void removeCestu(Cesta cesta) {
-		for (Bod bod : cesta.getBody()) {
+	public void removeCestu(final Cesta cesta) {
+		for (final Bod bod : cesta.getBody()) {
 			invalidate(bod);
 		}
 		updator.remove(cesta);
 		fireCesta();
 	}
 
-	public void reverseCestu(Cesta cesta) {
+	public void reverseCestu(final Cesta cesta) {
 		updator.reverse(cesta);
 		fireCesta();
 	}
 
-	public void onEvent(PoziceSeMaMenitEvent event) {
-		for (Bod bod : doc.getBody()) {
+	public void onEvent(final PoziceSeMaMenitEvent event) {
+		for (final Bod bod : doc.getBody()) {
 			if (event.mou.equals(bod.getMou())) {
 				int priorita = 20;
 				if (bod.isStart()) {
@@ -448,12 +448,12 @@ public class CestyModel extends Model0 {
 		poziceModel.setPozice(cesta.getCil());
 	}
 
-	public void bezNaBod(Bod bod) {
+	public void bezNaBod(final Bod bod) {
 		poziceModel.setPozice(bod);
 	}
 
 	public void bezNaBodVpred() {
-		Bod bod = doc.findBod(poziceModel.getPoziceq().getPoziceMouable());
+		final Bod bod = doc.findBod(poziceModel.getPoziceq().getPoziceMouable());
 		if (bod != null) {
 			if (!bod.isCil()) {
 				poziceModel.setPozice(bod.getBvpred());
@@ -464,7 +464,7 @@ public class CestyModel extends Model0 {
 	}
 
 	public void bezNaBodVzad() {
-		Bod bod = doc.findBod(poziceModel.getPoziceq().getPoziceMouable());
+		final Bod bod = doc.findBod(poziceModel.getPoziceq().getPoziceMouable());
 		if (bod != null) {
 			if (!bod.isStart()) {
 				poziceModel.setPozice(bod.getBvzad());
@@ -474,36 +474,36 @@ public class CestyModel extends Model0 {
 		}
 	}
 
-	public void rozdelCestuVBode(Bod bod, boolean aSmazOdriznutyKus) {
+	public void rozdelCestuVBode(final Bod bod, final boolean aSmazOdriznutyKus) {
 		invalidate(doc);
-		Cesta novaCesta = updator.rozdelCestuVBode(bod);
+		final Cesta novaCesta = updator.rozdelCestuVBode(bod);
 		if (aSmazOdriznutyKus) {
-			InvalidacniPesek invalidacniPesek = invalidacniPesek();
+			final InvalidacniPesek invalidacniPesek = invalidacniPesek();
 			updator.remove(novaCesta);
 			invalidacniPesek.invaliduj();
 		}
 		fireCesta();
 	}
 
-	public void rozdelCestuVUseku(Usek usek, Mou mou, boolean aSmazOdriznutyKus) {
+	public void rozdelCestuVUseku(final Usek usek, final Mou mou, final boolean aSmazOdriznutyKus) {
 		invalidate(doc);
-		Cesta novaCesta = updator.rozdelCestuVUseku(usek, mou);
+		final Cesta novaCesta = updator.rozdelCestuVUseku(usek, mou);
 		if (aSmazOdriznutyKus) {
-			InvalidacniPesek invalidacniPesek = invalidacniPesek();
+			final InvalidacniPesek invalidacniPesek = invalidacniPesek();
 			updator.remove(novaCesta);
 			invalidacniPesek.invaliduj();
 		}
 		fireCesta();
 	}
 
-	public void uzavriCestu(Cesta cesta) {
+	public void uzavriCestu(final Cesta cesta) {
 		if (cesta.isKruh())
 			return;
 		updator.pridejNaKonec(cesta, cesta.getStart().getMouable());
 		fireCesta();
 	}
 
-	public void pripojitCestuZa(Cesta cesta1, Cesta cesta2) {
+	public void pripojitCestuZa(final Cesta cesta1, final Cesta cesta2) {
 		doc.kontrolaKonzistence();
 		cesta1.kontrolaKonzistence();
 		cesta2.kontrolaKonzistence();
@@ -514,7 +514,7 @@ public class CestyModel extends Model0 {
 		fireCesta();
 	}
 
-	public void pripojitCestuPred(Cesta cesta1, Cesta cesta2) {
+	public void pripojitCestuPred(final Cesta cesta1, final Cesta cesta2) {
 		doc.kontrolaKonzistence();
 		cesta1.kontrolaKonzistence();
 		cesta2.kontrolaKonzistence();
@@ -525,8 +525,8 @@ public class CestyModel extends Model0 {
 		fireCesta();
 	}
 
-	public void spojCestyVPrekryvnemBode(Bod bod) {
-		Bod druhyBod = bod.getKoncovyBodDruheCestyVhodnyProSpojeni();
+	public void spojCestyVPrekryvnemBode(final Bod bod) {
+		final Bod druhyBod = bod.getKoncovyBodDruheCestyVhodnyProSpojeni();
 		if (druhyBod == null)
 			return;
 		if (bod.isCil()) {
@@ -537,46 +537,46 @@ public class CestyModel extends Model0 {
 		fireCesta();
 	}
 
-	public void pospojujVzdusneUseky(Cesta cesta) {
+	public void pospojujVzdusneUseky(final Cesta cesta) {
 		updator.pospojujVzdusneUseky(cesta);
 		fireCesta();
 	}
 
-	public void smazatUsekAOtevritNeboRozdelitCestu(Usek usek) {
+	public void smazatUsekAOtevritNeboRozdelitCestu(final Usek usek) {
 		updator.smazatUsekAOtevritNeboRozdelitCestu(usek);
 		fireCesta();
 
 	}
 
-	public void presunoutVyhoziBod(Bod bod) {
-		Cesta cesta = bod.getCesta();
-		Cesta novaCesta = updator.rozdelCestuVBode(bod);
+	public void presunoutVyhoziBod(final Bod bod) {
+		final Cesta cesta = bod.getCesta();
+		final Cesta novaCesta = updator.rozdelCestuVBode(bod);
 		updator.pipojitCestuPred(cesta, novaCesta);
 		fireCesta();
 	}
 
 	private InvalidacniPesek invalidacniPesek() {
-		InvalidacniPesek pesek = new InvalidacniPesek(doc.getWpts());
+		final InvalidacniPesek pesek = new InvalidacniPesek(doc.getWpts());
 		return pesek;
 	}
 
 	private class InvalidacniPesek {
 		private Set<Wpt> puvodnici = new HashSet<>();
 
-		public InvalidacniPesek(Iterable<Wpt> wpts) {
+		public InvalidacniPesek(final Iterable<Wpt> wpts) {
 			FUtil.addAll(puvodnici, wpts);
 		}
 
 		void invaliduj() {
 			assert puvodnici != null : "Pokus o duplicitní použití invalidačního peška";
-			for (Wpt wpt : doc.getWpts()) {
-				boolean removedNow = puvodnici.remove(wpt);
+			for (final Wpt wpt : doc.getWpts()) {
+				final boolean removedNow = puvodnici.remove(wpt);
 				if (!removedNow) { // to znamená, že v čase vytváření peška tam nebyl
 					wpt.invalidate();
 				}
 			}
 			// Vše, co tam zbyle dnes nemáme a tedy invalidujeme
-			for (Wpt wpt : puvodnici) {
+			for (final Wpt wpt : puvodnici) {
 				wpt.invalidate();
 			}
 			// znemožníme invalidačního peška
@@ -586,7 +586,7 @@ public class CestyModel extends Model0 {
 
 	}
 
-	public void setPridavaniBodu(boolean probihaPridavani) {
+	public void setPridavaniBodu(final boolean probihaPridavani) {
 		if (this.probihaPridavani == probihaPridavani)
 			return;
 		this.probihaPridavani = probihaPridavani;

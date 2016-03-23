@@ -8,7 +8,7 @@ public class BeanType {
 	private final String	subType;
 	private final boolean	multinInjectionSupported;
 
-	private BeanType(Class<?> cls, String subType, boolean multiInjection) {
+	private BeanType(final Class<?> cls, final String subType, final boolean multiInjection) {
 		this.cls = cls;
 		this.subType = subType;
 		this.multinInjectionSupported = multiInjection;
@@ -16,21 +16,21 @@ public class BeanType {
 
 	/**
 	 * Vytvoří bean type pro cílovou metodu
-	 * 
+	 *
 	 * @param targetBean
 	 *            Bean, na kterém má být voláno.
 	 * @param method
 	 *            Metoda, která má být volána.
 	 */
-	public static BeanType createForTargetMethod(Object targetBean, Method method) {
-		Class<?>[] parameterTypes = method.getParameterTypes();
-		Class<?> cls = parameterTypes[0];
-		BeanSubtype annotation = method.getAnnotation(BeanSubtype.class);
+	public static BeanType createForTargetMethod(final Object targetBean, final Method method) {
+		final Class<?>[] parameterTypes = method.getParameterTypes();
+		final Class<?> cls = parameterTypes[0];
+		final BeanSubtype annotation = method.getAnnotation(BeanSubtype.class);
 		String subType;
 		if (annotation != null) {
 			if ("_use_interface_BeanSubtypable_".equals(annotation.value())) {
 				if (targetBean instanceof BeanSubtypable) {
-					BeanSubtypable beanSubtypable = (BeanSubtypable) targetBean;
+					final BeanSubtypable beanSubtypable = (BeanSubtypable) targetBean;
 					subType = beanSubtypable.getSubType();
 				} else {
 					throw new RuntimeException("Kdyz ma metoda anotaci BeanTyype bez parametru, tak objekt musi imlementovat BeanSubtypable");
@@ -41,14 +41,14 @@ public class BeanType {
 		} else {
 			subType = null;
 		}
-		BeanType bt = new BeanType(cls, subType, method.isAnnotationPresent(MultiInjection.class));
+		final BeanType bt = new BeanType(cls, subType, method.isAnnotationPresent(MultiInjection.class));
 		return bt;
 	}
 
-	public static BeanType createForInjectedBean(Object injectedBean) {
+	public static BeanType createForInjectedBean(final Object injectedBean) {
 		String subType;
 		if (injectedBean instanceof BeanSubtypable) {
-			BeanSubtypable beanSubtypable = (BeanSubtypable) injectedBean;
+			final BeanSubtypable beanSubtypable = (BeanSubtypable) injectedBean;
 			subType = beanSubtypable.getSubType();
 		} else {
 			subType = null;
@@ -61,7 +61,7 @@ public class BeanType {
 	}
 
 	public BeanType cloneWithotSubtype() {
-		BeanType result = new BeanType(cls, null, multinInjectionSupported);
+		final BeanType result = new BeanType(cls, null, multinInjectionSupported);
 		return result;
 	}
 
@@ -72,7 +72,7 @@ public class BeanType {
 		return multinInjectionSupported;
 	}
 
-	public boolean canInjectFrom(BeanType injectedBeanType) {
+	public boolean canInjectFrom(final BeanType injectedBeanType) {
 		if (!cls.isAssignableFrom(injectedBeanType.cls))
 			return false; // při nekompatibilních třídách vůbec neuvažujma injektování
 		// teď už víme, že třídy jsou kompatibilní a že by to šlo rozhodnou subtypy
@@ -94,14 +94,14 @@ public class BeanType {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BeanType other = (BeanType) obj;
+		final BeanType other = (BeanType) obj;
 		if (cls == null) {
 			if (other.cls != null)
 				return false;

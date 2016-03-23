@@ -14,7 +14,7 @@ public abstract class BodAction0 extends BousekAction0 {
 
 	private final Bod			kontextovyBod;
 
-	public BodAction0(Bod kontextovyBod) {
+	public BodAction0(final Bod kontextovyBod) {
 		this.kontextovyBod = kontextovyBod;
 	}
 
@@ -25,13 +25,13 @@ public abstract class BodAction0 extends BousekAction0 {
 		vyhodnotitPovolenost();
 	}
 
-	public final void onEvent(PoziceChangedEvent aEvent) {
+	public final void onEvent(final PoziceChangedEvent aEvent) {
 		poziceq = aEvent.poziceq;
 		vyhodnotitPovolenost();
 	}
 
 	private void vyhodnotitPovolenost() {
-		Bod bod = getBod();
+		final Bod bod = getBod();
 		if (bod == null) {
 			setEnabled(false);
 		} else {
@@ -45,8 +45,8 @@ public abstract class BodAction0 extends BousekAction0 {
 	}
 
 	@Override
-	public final void actionPerformed(ActionEvent aE) {
-		Bod bod = getBod();
+	public final void actionPerformed(final ActionEvent aE) {
+		final Bod bod = getBod();
 		if (bod != null) {
 			provedProBod(bod);
 		}
@@ -54,7 +54,7 @@ public abstract class BodAction0 extends BousekAction0 {
 
 	/**
 	 * Pokud je daný bod, tak se nechá natavit jméno. Natavovací metoda také ví, zda je akce z kontexotvého menu nebo z hlavního
-	 * 
+	 *
 	 * @param bod
 	 * @param aZKontextovehoMenu
 	 */
@@ -62,7 +62,7 @@ public abstract class BodAction0 extends BousekAction0 {
 
 	/**
 	 * Zda se pro dany bod ma akce povolit.
-	 * 
+	 *
 	 * @param bod
 	 *            Nikdy nebude predano null
 	 * @return
@@ -71,7 +71,7 @@ public abstract class BodAction0 extends BousekAction0 {
 
 	/**
 	 * Provedení akce pro daný bod.
-	 * 
+	 *
 	 * @param bod
 	 */
 	protected abstract void provedProBod(Bod bod);

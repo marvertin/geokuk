@@ -38,15 +38,15 @@ public class JMeritkoSlide extends JSingleSlide0 implements AfterInjectInit {
 	}
 
 	@SuppressWarnings("unused")
-	private void drawLine(Graphics g, int xx1, int yy1, int xx2, int yy2) {
-		Point p1 = getSoord().transform(new Mou(xx1, yy1));
-		Point p2 = getSoord().transform(new Mou(xx2, yy2));
+	private void drawLine(final Graphics g, final int xx1, final int yy1, final int xx2, final int yy2) {
+		final Point p1 = getSoord().transform(new Mou(xx1, yy1));
+		final Point p2 = getSoord().transform(new Mou(xx2, yy2));
 		g.drawLine(p1.x, p1.y, p2.x, p2.y);
 
 	}
 
 	@BeanSubtype("Meritkovnik")
-	public void onEvent(MrizkaEvent event) {
+	public void onEvent(final MrizkaEvent event) {
 		setVisible(event.onoff);
 	}
 
@@ -65,13 +65,13 @@ public class JMeritkoSlide extends JSingleSlide0 implements AfterInjectInit {
 	}
 
 	@Override
-	public void render(Graphics gg) throws InterruptedException {
+	public void render(final Graphics gg) throws InterruptedException {
 		// paint(g);
-		Graphics2D g = (Graphics2D) gg.create();
+		final Graphics2D g = (Graphics2D) gg.create();
 		// g.translate(0, 500);
 		// meritko.setMaximalniSirkaMeritka(getWidth() * 3 / 4);
 		// meritko.setPixluNaMetr(getSoord().getPixluNaMetr());
-		Coord soord = getSoord();
+		final Coord soord = getSoord();
 		meritko.setMaximalniSirkaMeritka(soord.getWidth() * 3 / 4);
 		meritko.setPixluNaMetr(soord.getPixluNaMetr());
 		meritko.setSize(meritko.getPreferredSize());

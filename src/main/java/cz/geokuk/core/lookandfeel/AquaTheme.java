@@ -46,7 +46,7 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  * This class describes a theme using "blue-green" colors.
  *
  * 1.10 11/17/05
- * 
+ *
  * @author Steve Wilson
  */
 public class AquaTheme extends DefaultMetalTheme {

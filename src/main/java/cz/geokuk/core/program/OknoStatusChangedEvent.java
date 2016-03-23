@@ -16,7 +16,7 @@ public class OknoStatusChangedEvent extends Event0<OknoModel> {
 	/**
 	 * @param oknoUmisteni
 	 */
-	public OknoStatusChangedEvent(int stavOkna, OknoUmisteniDto oknoUmisteni) {
+	public OknoStatusChangedEvent(final int stavOkna, final OknoUmisteniDto oknoUmisteni) {
 		this.stavOkna = stavOkna;
 		this.oknoUmisteni = oknoUmisteni;
 	}
@@ -30,7 +30,7 @@ public class OknoStatusChangedEvent extends Event0<OknoModel> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

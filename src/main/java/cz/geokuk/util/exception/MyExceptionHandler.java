@@ -18,31 +18,31 @@ public class MyExceptionHandler implements UncaughtExceptionHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Thread.UncaughtExceptionHandler#uncaughtException(java.lang.Thread, java.lang.Throwable)
 	 */
 	@Override
-	public void uncaughtException(Thread vlakno, Throwable t) {
+	public void uncaughtException(final Thread vlakno, final Throwable t) {
 		try {
 			if (t instanceof OutOfMemoryError) {
 				zpracujMaloPameti((OutOfMemoryError) t);
 			}
-			AExcId excId = FExceptionDumper.dump(t, EExceptionSeverity.DISPLAY, "Výjimka vypadla až z vlákna " + vlakno);
+			final AExcId excId = FExceptionDumper.dump(t, EExceptionSeverity.DISPLAY, "Výjimka vypadla až z vlákna " + vlakno);
 			System.err.println("Exception: " + excId);
-		} catch (Throwable tt) {
+		} catch (final Throwable tt) {
 			// Tak když výjimku nešlo ani vypsat
 			t.printStackTrace();
 			tt.printStackTrace();
 		}
 	}
 
-	private void zpracujMaloPameti(OutOfMemoryError oome) {
+	private void zpracujMaloPameti(final OutOfMemoryError oome) {
 		System.err.println("Málo paměti!");
-		Runtime runtime = Runtime.getRuntime();
-		long freeMemory = (runtime.freeMemory() / 1024);
-		long totalMemory = (runtime.totalMemory() / 1024);
+		final Runtime runtime = Runtime.getRuntime();
+		final long freeMemory = (runtime.freeMemory() / 1024);
+		final long totalMemory = (runtime.totalMemory() / 1024);
 		spunt = null; // uvolníme špunt, čímž umožníme ještě zobrazit okno a ukončit program
-		AExcId excId = FExceptionDumper.dump(oome, EExceptionSeverity.DISPLAY, "Málo paměti odchyceno.");
+		final AExcId excId = FExceptionDumper.dump(oome, EExceptionSeverity.DISPLAY, "Málo paměti odchyceno.");
 		System.err.println("Exception: " + excId);
 		JOptionPane.showMessageDialog(null,
 				excId + ": došla paměť, total=" + totalMemory + " KiB, free=" + freeMemory + " KiB, proces bude ukončen, zkus: \"java -Xmx256m -jar geokuk.jar\"; " + oome.toString(), "Chyba",

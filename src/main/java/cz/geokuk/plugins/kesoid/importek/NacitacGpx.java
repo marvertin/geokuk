@@ -115,7 +115,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 	private static QName		TRKSEG;
 	private static QName		TRKPT;
 
-	private void initNamesTopografic(String topograficNamespaceUri) {
+	private void initNamesTopografic(final String topograficNamespaceUri) {
 		WPT = new QName(topograficNamespaceUri, "wpt");
 		TYPE = new QName(topograficNamespaceUri, "type");
 		TIME = new QName(topograficNamespaceUri, "time");
@@ -132,7 +132,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 		TRKPT = new QName(topograficNamespaceUri, "trkpt");
 	}
 
-	private void initNamesGroundspeak(String groundspeakNameSpaceUri) {
+	private void initNamesGroundspeak(final String groundspeakNameSpaceUri) {
 		GS_CACHE = new QName(groundspeakNameSpaceUri, "cache");
 
 		// <groundspeak:name>Vyroba vapna</groundspeak:name>
@@ -170,19 +170,19 @@ public class NacitacGpx extends NacitacInputStream0 {
 	}
 
 	@Override
-	public void nacti(InputStream istm, String name, IImportBuilder builder, Future<?> future) throws FactoryConfigurationError, IOException {
-		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+	public void nacti(final InputStream istm, final String name, final IImportBuilder builder, final Future<?> future) throws FactoryConfigurationError, IOException {
+		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader reader;
 		try {
 			reader = inputFactory.createXMLStreamReader(istm);
 			load(reader, builder, future);
-		} catch (XMLStreamException e) {
+		} catch (final XMLStreamException e) {
 			throw new IOException(e);
 		}
 	}
 
 	// priloudne do waypointu
-	public void load(XMLStreamReader rdr, IImportBuilder builder, Future<?> future) throws XMLStreamException {
+	public void load(final XMLStreamReader rdr, final IImportBuilder builder, final Future<?> future) throws XMLStreamException {
 		// nejdrive naplnit tim co uz mame
 		while (rdr.hasNext()) {
 			if (future != null && future.isCancelled())
@@ -194,7 +194,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 				// System.out.println("/////////////////////" + rdr.getName() + " **** " + rdr.getNamespaceURI());
 				// QName jmeno = rdr.getName();
 				if (rdr.getName().equals(WPT)) {
-					GpxWpt wpt = new GpxWpt();
+					final GpxWpt wpt = new GpxWpt();
 					readWpt(rdr, wpt, WPT);
 					builder.addGpxWpt(wpt);
 					// System.out.println(wpt);
@@ -205,7 +205,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 					builder.begTrack();
 					for (; !(rdr.isEndElement() && rdr.getName().equals(TRK)); rdr.next()) {
 						if (rdr.isStartElement() && rdr.getName().equals(NAME)) {
-							String nazev = rdr.getElementText();
+							final String nazev = rdr.getElementText();
 							builder.setTrackName(nazev);
 						}
 
@@ -213,7 +213,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 							builder.begTrackSegment();
 							for (; !(rdr.isEndElement() && rdr.getName().equals(TRKSEG)); rdr.next()) {
 								if (rdr.isStartElement() && rdr.getName().equals(TRKPT)) {
-									GpxWpt wpt = new GpxWpt();
+									final GpxWpt wpt = new GpxWpt();
 									readWpt(rdr, wpt, TRKPT);
 									builder.addTrackWpt(wpt);
 								}
@@ -228,24 +228,24 @@ public class NacitacGpx extends NacitacInputStream0 {
 		}
 	}
 
-	private void readWpt(XMLStreamReader rdr, GpxWpt wpt, QName tag) throws XMLStreamException {
-		String lat = rdr.getAttributeValue(null, "lat");
-		String lon = rdr.getAttributeValue(null, "lon");
+	private void readWpt(final XMLStreamReader rdr, final GpxWpt wpt, final QName tag) throws XMLStreamException {
+		final String lat = rdr.getAttributeValue(null, "lat");
+		final String lon = rdr.getAttributeValue(null, "lon");
 		if (lat == null || lon == null) {
 			log.warn("The waypoint doesn't have latitude or longitude defined!");
 		} else {
 			try {
-				Double dlat = Double.parseDouble(lat);
-				Double dlon = Double.parseDouble(lon);
+				final Double dlat = Double.parseDouble(lat);
+				final Double dlon = Double.parseDouble(lon);
 				wpt.wgs = new Wgs(dlat, dlon);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				log.error("Invalid latitude or longitude string! Lat : [" + lat + "], lon : [" + lon + lon + "]", e);
 			}
 		}
 		// pro celý wayipoint
 		for (; !(rdr.isEndElement() && rdr.getName().equals(tag)); rdr.next()) {
 			if (rdr.isStartElement()) {
-				QName jmeno = rdr.getName();
+				final QName jmeno = rdr.getName();
 				if (jmeno.equals(TIME)) {
 					wpt.time = rdr.getElementText(); // nemůžeme to hend použít
 				}
@@ -264,7 +264,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 						if (!rdr.isStartElement()) {
 							continue;
 						}
-						QName jmeno3 = rdr.getName();
+						final QName jmeno3 = rdr.getName();
 						if (jmeno3.equals(LINK_TEXT)) {
 							wpt.link.text = rdr.getElementText();
 						}
@@ -305,7 +305,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 		} // konec wpt cyklu
 	}
 
-	private void readGroudspeak(XMLStreamReader rdr, GpxWpt wpt) throws XMLStreamException {
+	private void readGroudspeak(final XMLStreamReader rdr, final GpxWpt wpt) throws XMLStreamException {
 		wpt.groundspeak = new Groundspeak();
 		wpt.groundspeak.availaible = Boolean.valueOf(rdr.getAttributeValue(null, "available"));
 		wpt.groundspeak.archived = Boolean.valueOf(rdr.getAttributeValue(null, "archived"));
@@ -313,7 +313,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 			if (!rdr.isStartElement()) {
 				continue;
 			}
-			QName jmeno2 = rdr.getName();
+			final QName jmeno2 = rdr.getName();
 			if (jmeno2.equals(GS_NAME)) {
 				wpt.groundspeak.name = rdr.getElementText();
 			}
@@ -321,11 +321,11 @@ public class NacitacGpx extends NacitacInputStream0 {
 				wpt.groundspeak.placedBy = rdr.getElementText();
 			}
 			if (jmeno2.equals(GS_OWNER)) {
-				String ownerIdStr = rdr.getAttributeValue(null, "id");
+				final String ownerIdStr = rdr.getAttributeValue(null, "id");
 				if (ownerIdStr != null && ownerIdStr.length() > 0) {
 					try {
 						wpt.groundspeak.ownerid = Integer.parseInt(ownerIdStr);
-					} catch (NumberFormatException e) {
+					} catch (final NumberFormatException e) {
 						System.err.println("Nenumerické číslo vlastníka: \"" + ownerIdStr + "\" " + wpt);
 						wpt.groundspeak.ownerid = -999;
 					}
@@ -351,7 +351,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 				wpt.groundspeak.state = rdr.getElementText().intern();
 			}
 			if (jmeno2.equals(GS_SHORT_DESCRIPTION)) {
-				String shortDescription = rdr.getElementText();
+				final String shortDescription = rdr.getElementText();
 				// if (shortDescription.startsWith("http")
 				// || (wpt.name.length() == 8 && wpt.name.startsWith("GC")) ) { // Tent test je výkonnostní optimalizace, protože víme, že krátké popisky potřebujeme jen pro České Geodetické Body a je zde URL
 				wpt.groundspeak.shortDescription = shortDescription;
@@ -364,18 +364,18 @@ public class NacitacGpx extends NacitacInputStream0 {
 		}
 	}
 
-	private void readGeogetExtension(XMLStreamReader rdr, GpxWpt wpt) throws XMLStreamException {
+	private void readGeogetExtension(final XMLStreamReader rdr, final GpxWpt wpt) throws XMLStreamException {
 		for (; !(rdr.isEndElement() && rdr.getName().equals(GPXG_GEOGET_EXTENSION)); rdr.next()) {
 			if (!rdr.isStartElement()) {
 				continue;
 			}
-			QName jmeno4 = rdr.getName();
+			final QName jmeno4 = rdr.getName();
 			if (jmeno4.equals(GPXG_FOUND)) {
 				wpt.gpxg.found = rdr.getElementText();
 			}
 			if (jmeno4.equals(GPXG_TAG)) {
-				String category = rdr.getAttributeValue(null, "Category");
-				String value = rdr.getElementText();
+				final String category = rdr.getAttributeValue(null, "Category");
+				final String value = rdr.getElementText();
 				if ("Hodnoceni".equals(category)) {
 					wpt.gpxg.hodnoceni = parseCislo(value);
 				}
@@ -411,16 +411,16 @@ public class NacitacGpx extends NacitacInputStream0 {
 	}
 
 	@Override
-	boolean umiNacist(ZipEntry zipEntry) {
+	boolean umiNacist(final ZipEntry zipEntry) {
 		return umiNacist(zipEntry.getName());
 	}
 
 	@Override
-	boolean umiNacist(File file) {
+	boolean umiNacist(final File file) {
 		return umiNacist(file.getName());
 	}
 
-	private boolean umiNacist(String resourceName) {
+	private boolean umiNacist(final String resourceName) {
 		return resourceName.toLowerCase().trim().endsWith(".gpx");
 	}
 }

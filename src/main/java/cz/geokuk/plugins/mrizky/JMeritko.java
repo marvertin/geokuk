@@ -42,24 +42,24 @@ public class JMeritko extends JPanel {
 
 	@Override
 	public Dimension getPreferredSize() {
-		Insets insets = getInsets();
+		final Insets insets = getInsets();
 		return new Dimension(sirka + insets.left + insets.right, vyska + insets.top + insets.bottom);
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		g = g.create();
-		Insets insets = getInsets();
+		final Insets insets = getInsets();
 		g.translate(insets.left, insets.top);
 		if (pixluNaMetr <= 0 || Double.isNaN(pixluNaMetr))
 			return;
 		g.setFont(font);
 
-		int offset = (getWidth() - sirka) / 2;
-		int pocatekY = fontMetrics.getHeight() + vyskaCarky + ODSTUP_POPISKU_OD_CARKY;
+		final int offset = (getWidth() - sirka) / 2;
+		final int pocatekY = fontMetrics.getHeight() + vyskaCarky + ODSTUP_POPISKU_OD_CARKY;
 		for (int i = 0; i < pocetDilku; i++) {
-			double metruOdZacatku = i * metruNaDilek;
-			int pixluOdZacatku = offset + (int) (metruOdZacatku * pixluNaMetr);
+			final double metruOdZacatku = i * metruNaDilek;
+			final int pixluOdZacatku = offset + (int) (metruOdZacatku * pixluNaMetr);
 			g.setColor(i % 2 == 0 ? Color.BLACK : Color.WHITE);
 			g.fillRect(pixluOdZacatku, pocatekY, pixluNaDilek, tloustka);
 			g.setColor(Color.BLACK);
@@ -77,8 +77,8 @@ public class JMeritko extends JPanel {
 
 			g.drawString(popisek(metruOdZacatku), pixluOdZacatku, pocatekY - vyskaCarky - ODSTUP_POPISKU_OD_CARKY);
 		}
-		double metruOdZacatku = pocetDilku * metruNaDilek;
-		int pixluOdZacatku = offset + (int) (metruOdZacatku * getPixluNaMetr());
+		final double metruOdZacatku = pocetDilku * metruNaDilek;
+		final int pixluOdZacatku = offset + (int) (metruOdZacatku * getPixluNaMetr());
 		g.drawString(jednotka(metruNaDilek), pixluOdZacatku, pocatekY - vyskaCarky - ODSTUP_POPISKU_OD_CARKY);
 	}
 
@@ -91,14 +91,14 @@ public class JMeritko extends JPanel {
 		}
 		pocetDilku = (int) Math.min(8.0, getMaximalniSirkaMeritka() / pixluNaDilek);
 
-		Map<TextAttribute, Object> map = new Hashtable<>();
+		final Map<TextAttribute, Object> map = new Hashtable<>();
 		// map.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
 		map.put(TextAttribute.BACKGROUND, Color.WHITE);
 		map.put(TextAttribute.SWAP_COLORS, TextAttribute.SWAP_COLORS_ON);
 		map.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
 		font = Font.decode("ARIAL-BOLD-12").deriveFont(map);
 		fontMetrics = getFontMetrics(font);
-		int naJednotkuNaKonci = fontMetrics.stringWidth(jednotka(metruNaDilek));
+		final int naJednotkuNaKonci = fontMetrics.stringWidth(jednotka(metruNaDilek));
 
 		sirka = pixluNaDilek * pocetDilku + naJednotkuNaKonci;
 		vyska = vyskaCarky + tloustka + ODSTUP_POPISKU_OD_CARKY + fontMetrics.getHeight();
@@ -111,7 +111,7 @@ public class JMeritko extends JPanel {
 		return Math.round(d) + "";
 	}
 
-	private String jednotka(double d) {
+	private String jednotka(final double d) {
 		if (d >= 1000) {
 			return "km";
 		} else {
@@ -119,7 +119,7 @@ public class JMeritko extends JPanel {
 		}
 	}
 
-	public void setPixluNaMetr(double pixluNaMetr) {
+	public void setPixluNaMetr(final double pixluNaMetr) {
 		if (pixluNaMetr == this.pixluNaMetr)
 			return;
 		this.pixluNaMetr = pixluNaMetr;
@@ -128,7 +128,7 @@ public class JMeritko extends JPanel {
 		repaint();
 	}
 
-	public void setMaximalniSirkaMeritka(double maximalniSirkaMeritka) {
+	public void setMaximalniSirkaMeritka(final double maximalniSirkaMeritka) {
 		if (this.maximalniSirkaMeritka == maximalniSirkaMeritka)
 			return;
 		this.maximalniSirkaMeritka = maximalniSirkaMeritka;

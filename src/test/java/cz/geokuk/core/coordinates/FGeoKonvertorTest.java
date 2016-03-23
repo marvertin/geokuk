@@ -11,40 +11,40 @@ public class FGeoKonvertorTest {
 	private static double		RZ					= 6378137;
 	private static double		OZ					= 2 * Math.PI * RZ;
 
-	private void assertEquals(Wgs wgs1, Wgs wgs2) {
+	private void assertEquals(final Wgs wgs1, final Wgs wgs2) {
 		Assert.assertEquals(wgs1.lat, wgs2.lat, PRESNOST_WGS);
 		Assert.assertEquals(wgs1.lon, wgs2.lon, PRESNOST_WGS);
 	}
 
-	private void assertEquals(Mercator mer1, Mercator mer2) {
+	private void assertEquals(final Mercator mer1, final Mercator mer2) {
 		Assert.assertEquals(mer1.mx, mer2.mx, PRESNOST_MERKATOR);
 		Assert.assertEquals(mer1.my, mer2.my, PRESNOST_MERKATOR);
 	}
 
-	private void testBijekce(Wgs w) {
+	private void testBijekce(final Wgs w) {
 		assertEquals(w, w.toMercator().toWgs());
 	}
 
-	private void testMouWgs(double lat, double lon, int xx, int yy) {
-		Wgs w = new Wgs(lat, lon);
-		Mou m = new Mou(xx, yy);
+	private void testMouWgs(final double lat, final double lon, final int xx, final int yy) {
+		final Wgs w = new Wgs(lat, lon);
+		final Mou m = new Mou(xx, yy);
 		assertEquals(w, m.toWgs());
 		// assertEquals(m, w.toMou());
 	}
 
-	private void testWgs2Mou(double lat, double lon, int xx, int yy) {
-		Wgs w = new Wgs(lat, lon);
-		Mou m1 = new Mou(xx, yy);
-		Mou m2 = w.toMou();
+	private void testWgs2Mou(final double lat, final double lon, final int xx, final int yy) {
+		final Wgs w = new Wgs(lat, lon);
+		final Mou m1 = new Mou(xx, yy);
+		final Mou m2 = w.toMou();
 		System.out.println(w + " = " + m2 + " ... (" + m1 + ")");
 		Assert.assertEquals((double) m1.xx, (double) m2.xx, 1);
 		Assert.assertEquals((double) m1.yy, (double) m2.yy, 1);
 		assertEquals(w, m2.toWgs());
 	}
 
-	private void testWgs2Mercator(double lat, double lon, double mx, double my) {
-		Wgs w = new Wgs(lat, lon);
-		Mercator m = new Mercator(mx, my);
+	private void testWgs2Mercator(final double lat, final double lon, final double mx, final double my) {
+		final Wgs w = new Wgs(lat, lon);
+		final Mercator m = new Mercator(mx, my);
 		System.out.println(w + " = " + w.toMercator() + " ... (" + m + ")");
 		assertEquals(m, w.toMercator());
 	}
@@ -221,14 +221,14 @@ public class FGeoKonvertorTest {
 
 	@Test
 	public void testMercatorToMou1() {
-		Mou mou = FGeoKonvertor.toMou(new Mercator(OZ / 4, 0));
+		final Mou mou = FGeoKonvertor.toMou(new Mercator(OZ / 4, 0));
 		System.out.println(OZ / 4 + " " + mou);
 		Assert.assertEquals(0x4000_0000, mou.xx);
 	}
 
 	@Test
 	public void testMercatorToMou2() {
-		Mou mou = FGeoKonvertor.toMou(new Mercator(OZ / 4, OZ / 8));
+		final Mou mou = FGeoKonvertor.toMou(new Mercator(OZ / 4, OZ / 8));
 		System.out.println(OZ / 4 + " " + mou);
 		Assert.assertEquals(0x4000_0000, mou.xx);
 		Assert.assertEquals(0x2000_0000, mou.yy);

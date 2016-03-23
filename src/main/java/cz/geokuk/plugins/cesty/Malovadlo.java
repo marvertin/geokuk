@@ -35,7 +35,7 @@ public class Malovadlo {
 
 	private static final Ellipse2D	bodStartocilu		= new Ellipse2D.Float(-10, -10, 20, 20);
 
-	public Malovadlo(Graphics2D g2, MalovadloParams params) {
+	public Malovadlo(final Graphics2D g2, final MalovadloParams params) {
 		g = g2;
 		doc = params.doc;
 		curta = params.curta;
@@ -50,11 +50,11 @@ public class Malovadlo {
 	public void paint() {
 		// long kvadratMaximalniVzdalenosti = getKvadratMaximalniVzdalenosti();
 
-		for (Cesta cesta : doc.getCesty()) {
+		for (final Cesta cesta : doc.getCesty()) {
 			if (cesta == null || cesta.isEmpty()) {
 				continue;
 			}
-			MalovadloCesty malovadloCesty = new MalovadloCesty(cesta);
+			final MalovadloCesty malovadloCesty = new MalovadloCesty(cesta);
 			malovadloCesty.paint();
 		}
 		paintPridavaciUsecka();
@@ -69,15 +69,15 @@ public class Malovadlo {
 	private void paintPridavaciUsecka() {
 		if (pridavanyBod1 == null || pridavanyBod2 == null)
 			return;
-		Point p1 = soord.transform(pridavanyBod1);
+		final Point p1 = soord.transform(pridavanyBod1);
 		// Point p2 = getSoord().transform(semSePridava.getMou());
 		// Point p2 = getSoord().transform(moucur);
-		Point p2 = soord.transform(pridavanyBod2);
-		Graphics2D gg = createGraphics();
+		final Point p2 = soord.transform(pridavanyBod2);
+		final Graphics2D gg = createGraphics();
 		// gg.setColor(FBarvy.USEK_PRIDAVANY);
 		gg.translate(p1.x, p1.y);
 		gg.rotate(Math.atan2(p2.y - p1.y, p2.x - p1.x));
-		double delka = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+		final double delka = Math.hypot(p2.x - p1.x, p2.y - p1.y);
 		gg.setStroke(new BasicStroke(2));
 		gg.drawLine(0, -2, (int) delka, -2);
 		gg.drawLine(0, 2, (int) delka, 2);
@@ -92,7 +92,7 @@ public class Malovadlo {
 		private final Color		barvaCestyPredKurzorem;
 		private final Color		barvaCestyZaKurzorem;
 
-		public MalovadloCesty(Cesta cesta) {
+		public MalovadloCesty(final Cesta cesta) {
 			this.cesta = cesta;
 			jeCurta = cesta == curta;
 			jeBlizkyBousekVTetoCeste = blizkyBousek != null && blizkyBousek.getCesta() == cesta;
@@ -151,9 +151,9 @@ public class Malovadlo {
 
 			// Vykreslování úseků této cesty
 			g.setColor(barvaCestyPredKurzorem);
-			for (Usek usek : cesta.getUseky()) {
-				Point p1 = soord.transform(usek.getBvzad().getMou());
-				Point p2 = soord.transform(usek.getBvpred().getMou());
+			for (final Usek usek : cesta.getUseky()) {
+				final Point p1 = soord.transform(usek.getBvzad().getMou());
+				final Point p2 = soord.transform(usek.getBvpred().getMou());
 				g.setStroke(new BasicStroke(SIRKA_CARY_VYBRANE));
 				if (jeCurta) {
 					g.setStroke(new BasicStroke(SIRKA_CARY_VYBRANE));
@@ -164,13 +164,13 @@ public class Malovadlo {
 				if (blizkyBousek == usek) {
 					// bod musi být na úsečce, ale nějaká zaokrouhlování mohouz působit,
 					// že není
-					Mou nejblizsiBod = usek.getNejblizsiBodKPrimce(mouDeliciNaBlizkemBousku);
-					Point p = soord.transform(nejblizsiBod);
+					final Mou nejblizsiBod = usek.getNejblizsiBodKPrimce(mouDeliciNaBlizkemBousku);
+					final Point p = soord.transform(nejblizsiBod);
 					g.drawLine(p1.x, p1.y, p.x, p.y);
 					g.setColor(barvaCestyZaKurzorem);
 					g.drawLine(p.x, p.y, p2.x, p2.y);
 					// a ještě vykreslit zvýraznění
-					Graphics2D gg = createGraphics();
+					final Graphics2D gg = createGraphics();
 					gg.setColor(FBarvy.USEK_ZVYRAZNENY);
 					gg.setStroke(new BasicStroke(1));
 					gg.drawLine(p1.x, p1.y, p2.x, p2.y);
@@ -197,14 +197,14 @@ public class Malovadlo {
 		private void paintBody() {
 			paintKoncoveBody();
 			// vykreslování bodů přes již vykreslené úseky
-			Bod cilovyBodyKruhoveCesty = cesta.isKruh() ? cesta.getCil() : null;
-			for (Bod bod : cesta.getBody()) {
+			final Bod cilovyBodyKruhoveCesty = cesta.isKruh() ? cesta.getCil() : null;
+			for (final Bod bod : cesta.getBody()) {
 				if (bod == poziceMouable) {
 					g.setColor(Color.RED);
 				} else {
 					g.setColor(barvaCestyPredKurzorem);
 				}
-				Point p = soord.transform(bod.getMou());
+				final Point p = soord.transform(bod.getMou());
 				if (jeBlizkyBousekVTetoCeste) {
 					if (blizkyBousek == bod || blizkyBousek == bod.getUvzad()) {
 						g.setColor(barvaCestyZaKurzorem);
@@ -217,7 +217,7 @@ public class Malovadlo {
 				// g.setColor(Color.ORANGE);
 				// }
 				if (jeCurta && bod != cilovyBodyKruhoveCesty && !bod.isWpt()) {
-					Graphics2D gg = (Graphics2D) g.create();
+					final Graphics2D gg = (Graphics2D) g.create();
 					gg.translate(p.x, p.y);
 					natocVeSmeru(gg, bod);
 					// gg.rotate(1);
@@ -228,7 +228,7 @@ public class Malovadlo {
 					// gg.drawLineRect(- 3, - 3, 6, 6);
 				}
 				if (bod == blizkyBousek) {
-					Graphics2D gg = (Graphics2D) g.create();
+					final Graphics2D gg = (Graphics2D) g.create();
 					gg.setColor(FBarvy.ZVYRAZNOVAC_BLIZKEHO_BOUSKU);
 					gg.translate(p.x, p.y);
 					natocVeSmeru(gg, bod);
@@ -257,21 +257,21 @@ public class Malovadlo {
 			// Vykreslení přidáváného bodu pře CTRL
 		}
 
-		private void natocVeSmeru(Graphics2D gg, Bod bod) {
-			Usek uvpred = bod.getUvpred();
+		private void natocVeSmeru(final Graphics2D gg, final Bod bod) {
+			final Usek uvpred = bod.getUvpred();
 			if (uvpred != null) {
 				gg.rotate(uvpred.getUhel() - Math.PI / 2);
 			} else {
-				Usek uvzad = bod.getUvzad();
+				final Usek uvzad = bod.getUvzad();
 				if (uvzad != null) {
 					gg.rotate(uvzad.getUhel() - Math.PI / 2);
 				}
 			}
 		}
 
-		private void paintKoncovyBod(Bod bod, Color color) {
-			Graphics2D gg = (Graphics2D) g.create();
-			Point p = soord.transform(bod.getMou());
+		private void paintKoncovyBod(final Bod bod, final Color color) {
+			final Graphics2D gg = (Graphics2D) g.create();
+			final Point p = soord.transform(bod.getMou());
 			gg.translate(p.x, p.y);
 			natocVeSmeru(gg, bod);
 			gg.scale(2, 2);
@@ -281,19 +281,19 @@ public class Malovadlo {
 
 		private void paintKoncoveBody() {
 			if (cesta.isJednobodova()) {
-				Graphics2D gg = (Graphics2D) g.create();
-				Point p = soord.transform(cesta.getStart().getMou());
+				final Graphics2D gg = (Graphics2D) g.create();
+				final Point p = soord.transform(cesta.getStart().getMou());
 				gg.translate(p.x, p.y);
 				gg.fill(bodStartocilu);
 			} else if (cesta.isKruh()) {
-				Graphics2D gg = (Graphics2D) g.create();
-				Point p = soord.transform(cesta.getStart().getMou());
+				final Graphics2D gg = (Graphics2D) g.create();
+				final Point p = soord.transform(cesta.getStart().getMou());
 				gg.translate(p.x, p.y);
 				gg.fill(bodStartocilu);
 			} else { // normální cesta
-				Bod start = cesta.getStart();
+				final Bod start = cesta.getStart();
 				paintKoncovyBod(start, barvaCestyPredKurzorem);
-				Bod cil = cesta.getCil();
+				final Bod cil = cesta.getCil();
 				paintKoncovyBod(cil, barvaCestyZaKurzorem);
 			}
 		}

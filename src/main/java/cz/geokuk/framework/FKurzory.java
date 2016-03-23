@@ -49,12 +49,12 @@ public class FKurzory {
 			// Area a1 = new Area([triangle 0,0 => 8,0 => 0,8]);
 			// Area a2 = new Area([triangle 0,0 => 8,0 => 8,8]);
 			// a1.add(a2);
-			Area poly = new Area(new Polygon(new int[] { 0, 1, 1, 5, 0 }, new int[] { 0, 1, 7, 7, 12 }, 5));
-			Area a = new Area();
+			final Area poly = new Area(new Polygon(new int[] { 0, 1, 1, 5, 0 }, new int[] { 0, 1, 7, 7, 12 }, 5));
+			final Area a = new Area();
 
-			AffineTransform rotace = new AffineTransform();
+			final AffineTransform rotace = new AffineTransform();
 			rotace.rotate(Math.PI / 2);
-			AffineTransform zrcadlo = new AffineTransform();
+			final AffineTransform zrcadlo = new AffineTransform();
 			zrcadlo.scale(1, -1);
 			for (int i = 0; i < 4; i++) {
 				a.transform(zrcadlo);
@@ -79,7 +79,7 @@ public class FKurzory {
 		void nakresli() {
 			vystreduj();
 
-			Polygon poly = new Polygon(new int[] { 1, 3, 3, 8, 1 }, new int[] { 5, 5, 10, 10, 15 }, 5);
+			final Polygon poly = new Polygon(new int[] { 1, 3, 3, 8, 1 }, new int[] { 5, 5, 10, 10, 15 }, 5);
 			for (int i = 0; i < 4; i++) {
 				g.scale(1, -1);
 				g.setColor(Color.WHITE);
@@ -101,7 +101,7 @@ public class FKurzory {
 		private final Color		vnitrek;
 		private final boolean	zamernyKriz;
 
-		public PridavaniBodu(Color vnitrek, boolean zamernyKriz) {
+		public PridavaniBodu(final Color vnitrek, final boolean zamernyKriz) {
 			this.vnitrek = vnitrek;
 			this.zamernyKriz = zamernyKriz;
 		}
@@ -109,11 +109,11 @@ public class FKurzory {
 		@Override
 		void nakresli() {
 			vystreduj();
-			int kr = 3;
-			int in = 11;
-			int ex = 14;
+			final int kr = 3;
+			final int in = 11;
+			final int ex = 14;
 
-			Polygon poly = new Polygon(new int[] { kr, ex, ex, in, in, kr }, new int[] { ex, ex, kr, kr, in, in }, 6);
+			final Polygon poly = new Polygon(new int[] { kr, ex, ex, in, in, kr }, new int[] { ex, ex, kr, kr, in, in }, 6);
 			for (int i = 0; i < 4; i++) {
 				g.setColor(vnitrek);
 				g.fillPolygon(poly);
@@ -125,7 +125,7 @@ public class FKurzory {
 			// g.setXORMode(Color.WHITE);
 			if (zamernyKriz) {
 				g.setColor(vnitrek);
-				int kriz = 6;
+				final int kriz = 6;
 				g.drawLine(-kriz, -kriz, kriz, kriz);
 				g.drawLine(-kriz, kriz, kriz, -kriz);
 			}
@@ -156,7 +156,7 @@ public class FKurzory {
 		}
 
 		private void novy() {
-			Dimension bestCursorSize = Toolkit.getDefaultToolkit().getBestCursorSize(300, 300);
+			final Dimension bestCursorSize = Toolkit.getDefaultToolkit().getBestCursorSize(300, 300);
 			// System.out.println(bestCursorSize);
 			img = new BufferedImage(bestCursorSize.width, bestCursorSize.height, BufferedImage.TYPE_4BYTE_ABGR);
 			w = img.getWidth();

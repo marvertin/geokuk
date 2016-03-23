@@ -51,7 +51,7 @@ public class JBarvovyDvojSlider extends JPanel {
 		iBarvovnik.setOpaque(false);
 		iBarvovnik.setToolTipText("Nastavení stupně šedi kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");
 		iBarvovnik.setFocusable(false);
-		DefaultBoundedRangeModel barvovnikModel = new DefaultBoundedRangeModel(128, 0, 0, 255);
+		final DefaultBoundedRangeModel barvovnikModel = new DefaultBoundedRangeModel(128, 0, 0, 255);
 		iBarvovnik.setModel(barvovnikModel);
 
 		iPruhlednik = new JSlider(JSlider.VERTICAL);
@@ -59,7 +59,7 @@ public class JBarvovyDvojSlider extends JPanel {
 		iPruhlednik.setOpaque(false);
 		iPruhlednik.setToolTipText("Nastavení průhlednosti kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");
 		iPruhlednik.setFocusable(false);
-		DefaultBoundedRangeModel pruhlednikModel = new DefaultBoundedRangeModel(128, 0, 0, 255);
+		final DefaultBoundedRangeModel pruhlednikModel = new DefaultBoundedRangeModel(128, 0, 0, 255);
 		iPruhlednik.setModel(pruhlednikModel);
 
 		add(Box.createRigidArea(new Dimension(0, 20)));
@@ -70,14 +70,14 @@ public class JBarvovyDvojSlider extends JPanel {
 	}
 
 	public Color getColor() {
-		int barva = iBarvovnik.getModel().getValue();
-		int pruhlednost = iPruhlednik.getModel().getValue();
+		final int barva = iBarvovnik.getModel().getValue();
+		final int pruhlednost = iPruhlednik.getModel().getValue();
 		return new Color(barva, barva, barva, pruhlednost);
 	}
 
-	public void setColor(Color color) {
-		int barva = (color.getBlue() + color.getRed() + color.getGreen()) / 3;
-		int pruhlednost = color.getAlpha();
+	public void setColor(final Color color) {
+		final int barva = (color.getBlue() + color.getRed() + color.getGreen()) / 3;
+		final int pruhlednost = color.getAlpha();
 		iBarvovnik.getModel().setValue(barva);
 		iPruhlednik.getModel().setValue(pruhlednost);
 	}
@@ -85,7 +85,7 @@ public class JBarvovyDvojSlider extends JPanel {
 	/**
 	 * @param aChangeListener
 	 */
-	public void addChangeListener(ChangeListener aChangeListener) {
+	public void addChangeListener(final ChangeListener aChangeListener) {
 		iBarvovnik.addChangeListener(aChangeListener);
 		iPruhlednik.addChangeListener(aChangeListener);
 	}

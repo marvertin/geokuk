@@ -7,7 +7,7 @@ public class Ggt {
 
 	public Set<String> kesides = new HashSet<>();
 
-	public Ggt(Set<String> kesides) {
+	public Ggt(final Set<String> kesides) {
 		this.kesides = kesides;
 	}
 }

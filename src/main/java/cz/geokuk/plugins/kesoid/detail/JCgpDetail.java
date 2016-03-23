@@ -8,7 +8,7 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 /**
  * Detailní informace o vybrané keši.
- * 
+ *
  * @author Spikodrob
  *
  */
@@ -32,10 +32,10 @@ public class JCgpDetail extends JKesoidDetail0 {
 		jXjtsk = new JLabel();
 		jYjtsk = new JLabel();
 
-		Box hlav = Box.createVerticalBox();
+		final Box hlav = Box.createVerticalBox();
 		add(hlav);
 
-		Box box2 = Box.createHorizontalBox();
+		final Box box2 = Box.createHorizontalBox();
 		box2.add(new JLabel("y = "));
 		box2.add(jYjtsk);
 		box2.add(Box.createHorizontalStrut(20));
@@ -61,7 +61,7 @@ public class JCgpDetail extends JKesoidDetail0 {
 	}
 
 	@Override
-	public void napln(Wpt wpt) {
+	public void napln(final Wpt wpt) {
 		cgp = (CzechGeodeticPoint) wpt.getKesoid();
 		jXjtsk.setText(cgp.getXjtsk() + "");
 		jYjtsk.setText(cgp.getYjtsk() + "");

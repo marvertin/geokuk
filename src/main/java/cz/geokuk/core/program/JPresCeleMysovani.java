@@ -54,10 +54,10 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 	 * Invoked when a mouse button has been pressed on a component.
 	 */
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(final MouseEvent e) {
 		maybeShowPopup(e);
 		bod = e.getPoint();
-		MouseGestureContext ctx = ctx();
+		final MouseGestureContext ctx = ctx();
 		chain().mousePressed(e, ctx);
 		if (!e.isConsumed()) {
 			if (!e.isShiftDown()) {
@@ -72,7 +72,7 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 	}
 
 	@Override
-	public Cursor getMouseCursor(boolean pressed) {
+	public Cursor getMouseCursor(final boolean pressed) {
 		Cursor kurzor;
 		if (posouvameMapu) {
 			kurzor = FKurzory.POSOUVANI_MAPY;
@@ -87,10 +87,10 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(final MouseEvent e) {
 		maybeShowPopup(e);
 		posouvameMapu = false;
-		MouseGestureContext ctx = ctx();
+		final MouseGestureContext ctx = ctx();
 		chain().mouseReleased(e, ctx);
 		skutecneNastavMysiKurzor(getMouseCursor(false));
 		// zoomovaciObdelnik.mouseReleased(e);
@@ -99,9 +99,9 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 	/**
 	 * @param aE
 	 */
-	private void maybeShowPopup(MouseEvent e) {
+	private void maybeShowPopup(final MouseEvent e) {
 		if (e.isPopupTrigger()) {
-			JPopupMenu popup = new JPopupMenu();
+			final JPopupMenu popup = new JPopupMenu();
 			addPopouItems(popup, ctx());
 			if (popup.getComponentCount() > 0) {
 				popup.show(e.getComponent(), e.getX(), e.getY());
@@ -111,25 +111,25 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
+	public void mouseDragged(final MouseEvent e) {
 		// posouvameMapu = false;
 		if (posouvameMapu) {
 			cur = e.getPoint();
-			int dx = cur.x - bod.x;
-			int dy = cur.y - bod.y;
+			final int dx = cur.x - bod.x;
+			final int dy = cur.y - bod.y;
 
-			Mou mou = getSoord().getMoustred();
+			final Mou mou = getSoord().getMoustred();
 			// Mou moustred = new Mou(mou.xx + -dx * getSoord().getPomer(), mou.yy + dy * getSoord().getPomer());
-			Mou moustred = mou.add(getSoord().transformShift(-dx, -dy));
+			final Mou moustred = mou.add(getSoord().transformShift(-dx, -dy));
 			// getCoord().setMoustredNezadouci(moustred);
 			vyrezModel.presunMapuNaMoustred(moustred);
 			bod = cur;
 		} else {
-			Point bodik = e.getPoint();
-			Mou mouCur = getSoord().transform(bodik);
+			final Point bodik = e.getPoint();
+			final Mou mouCur = getSoord().transform(bodik);
 			poziceModel.setMys(bodik, mouCur, getUpravenaMys());
 		}
-		MouseGestureContext ctx = ctx();
+		final MouseGestureContext ctx = ctx();
 		chain().mouseDragged(e, ctx);
 		skutecneNastavMysiKurzor(getMouseCursor(true));
 
@@ -137,13 +137,13 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
+	public void mouseMoved(final MouseEvent e) {
 		if ((e.getModifiers() & Event.CTRL_MASK) != 0) {
 			// to je proto, abychom při stiskuném Ctrl, kdy chceme začít kreslit cestu, tak dostali fokus
 			requestFocus();
 		}
 		cur = e.getPoint();
-		Mou mouCur = getSoord().transform(cur);
+		final Mou mouCur = getSoord().transform(cur);
 		// ХХSystem.out.println("MYSUJEME: " + cur + " --- " + mouCur + " - " + mouCur.toWgs());
 		// System.out.printf("stred=%s=%s, jz=%s, sz=%s, jv=%s, sv=%s",
 		// getSoord().getMoustred().toWgs(), getSoord().getMoustred(),
@@ -155,55 +155,55 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 
 		poziceModel.setMys(cur, mouCur, getUpravenaMys());
 		// System.out.println("Souradnice: " + wgs);
-		MouseGestureContext ctx = ctx();
+		final MouseGestureContext ctx = ctx();
 		chain().mouseMoved(e, ctx);
 		skutecneNastavMysiKurzor(getMouseCursor(false));
 	}
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		Mouable upravenaMys = getUpravenaMys();
+	public void mouseWheelMoved(final MouseWheelEvent e) {
+		final Mouable upravenaMys = getUpravenaMys();
 		if (upravenaMys == null)
 			return; // to by nemělo nastat, protože pokud jsme nad slidem, tak musím mít myš, ale co kdyby
-		int rotation = e.getWheelRotation();
+		final int rotation = e.getWheelRotation();
 		// System.out.println("Rotace: " + rotation);
-		int moumer = getSoord().getMoumer() - rotation;
-		Mou mou = upravenaMys.getMou();
+		final int moumer = getSoord().getMoumer() - rotation;
+		final Mou mou = upravenaMys.getMou();
 		vyrezModel.zoomByGivenPoint(moumer, mou);
 		requestFocus();
 
 	}
 
-	public void inject(VyrezModel vyrezModel) {
+	public void inject(final VyrezModel vyrezModel) {
 		this.vyrezModel = vyrezModel;
 	}
 
-	public void inject(PoziceModel poziceModel) {
+	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(final MouseEvent e) {
 		chain().mouseClicked(e, ctx());
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
+	public void mouseEntered(final MouseEvent e) {
 		chain().mouseEntered(e, ctx());
 	}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
+	public void mouseExited(final MouseEvent e) {
 		poziceModel.setMys(null, null, null);
 		chain().mouseExited(e, ctx());
 	}
 
-	private void skutecneNastavMysiKurzor(Cursor cursor) {
+	private void skutecneNastavMysiKurzor(final Cursor cursor) {
 		getParent().setCursor(cursor);
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(final KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
 			ctrlKeyPressed(ctx());
 			skutecneNastavMysiKurzor(getMouseCursor(false));
@@ -211,7 +211,7 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
+	public void keyReleased(final KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
 			ctrlKeyReleased(ctx());
 			skutecneNastavMysiKurzor(getMouseCursor(false));
@@ -219,7 +219,7 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
+	public void keyTyped(final KeyEvent e) {
 		// Nezájem
 	}
 

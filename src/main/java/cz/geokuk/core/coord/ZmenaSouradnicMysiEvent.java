@@ -18,7 +18,7 @@ public class ZmenaSouradnicMysiEvent extends Event0<PoziceModel> {
 	public final Point		pointcur;
 	public final Mouable	upravenaMys;
 
-	public ZmenaSouradnicMysiEvent(Point pointcur, Mou moucur, Mouable upravenaMys) {
+	public ZmenaSouradnicMysiEvent(final Point pointcur, final Mou moucur, final Mouable upravenaMys) {
 		super();
 		this.pointcur = pointcur;
 		this.moucur = moucur;

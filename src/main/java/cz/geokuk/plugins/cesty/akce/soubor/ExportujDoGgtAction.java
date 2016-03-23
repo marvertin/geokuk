@@ -28,15 +28,15 @@ public class ExportujDoGgtAction extends SouboeCestaAction0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 
-		JFileChooser fc = new JFileChooser();
+		final JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(new GgtFilter());
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setSelectedFile(cestyModel.defaultExportuDoGgt());
-		int result = fc.showDialog(Dlg.parentFrame(), "Exportovat GGT");
+		final int result = fc.showDialog(Dlg.parentFrame(), "Exportovat GGT");
 		if (result == JFileChooser.APPROVE_OPTION) {
-			File selectedFile = doplnGgtPriponuProUkladani(fc.getSelectedFile());
+			final File selectedFile = doplnGgtPriponuProUkladani(fc.getSelectedFile());
 			if (selectedFile.exists()) { // dtaz na přepsání
 				if (!Dlg.prepsatSoubor(selectedFile))
 					return;
@@ -47,7 +47,7 @@ public class ExportujDoGgtAction extends SouboeCestaAction0 {
 		// TODO ukládat na pozadí
 	}
 
-	public void onEvent(CestyChangedEvent event) {
+	public void onEvent(final CestyChangedEvent event) {
 		doc = event.getDoc();
 		setEnabled(doc != null && (!doc.isEmpty()));
 	}

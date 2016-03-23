@@ -7,7 +7,7 @@ import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
 
 /**
  * Ovjekt držící, co se bude repaintovat
- * 
+ *
  * @author tatinek
  *
  */
@@ -21,22 +21,22 @@ public class Repaintanger {
 		return insets;
 	}
 
-	public void include(Insets in) {
+	public void include(final Insets in) {
 		insets = new Insets(Math.max(insets.top, in.top), Math.max(insets.left, in.left), Math.max(insets.bottom, in.bottom), Math.max(insets.right, in.right));
 
 	}
 
-	public void include(Imagant imagant) {
+	public void include(final Imagant imagant) {
 		if (imagant == null)
 			return;
-		Insets insets = new Insets(-imagant.getYpos(), -imagant.getXpos(), imagant.getYpos() + imagant.getImage().getHeight(), imagant.getXpos() + imagant.getImage().getWidth());
+		final Insets insets = new Insets(-imagant.getYpos(), -imagant.getXpos(), imagant.getYpos() + imagant.getImage().getHeight(), imagant.getXpos() + imagant.getImage().getWidth());
 		include(insets);
 	}
 
-	public void include(Sklivec sklivec) {
+	public void include(final Sklivec sklivec) {
 		if (sklivec == null)
 			return;
-		for (Imagant imagant : sklivec.imaganti) {
+		for (final Imagant imagant : sklivec.imaganti) {
 			if (imagant != null) {
 				include(imagant);
 			}

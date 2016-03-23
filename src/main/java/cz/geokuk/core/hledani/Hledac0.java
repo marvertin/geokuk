@@ -15,24 +15,24 @@ public abstract class Hledac0<T extends Nalezenec0> {
 		return future;
 	}
 
-	public void setFuture(Future<?> future) {
+	public void setFuture(final Future<?> future) {
 		this.future = future;
 	}
 
 	public abstract List<T> hledej(HledaciPodminka0 podm);
 
-	public List<T> najdiASerad(HledaciPodminka0 podm) {
-		List<T> list = hledej(podm);
+	public List<T> najdiASerad(final HledaciPodminka0 podm) {
+		final List<T> list = hledej(podm);
 		// dopočítat vzdálenost a azimut
-		Wgs stredHledani = podm.getStredHledani();
-		for (T nal : list) {
+		final Wgs stredHledani = podm.getStredHledani();
+		for (final T nal : list) {
 			dopicitejVzdalenostAAzimut(nal, stredHledani);
 		}
 
 		// Seřadit
 		try {
 			Collections.sort(list, new PorovnavacOdStredu(getFuture()));
-		} catch (XZaknclovanoRazeni e) {
+		} catch (final XZaknclovanoRazeni e) {
 			return null; // hned zkoncit, protože řazení nedoběhlo
 		}
 		return list;
@@ -43,8 +43,8 @@ public abstract class Hledac0<T extends Nalezenec0> {
 	 * @param aNal
 	 * @param aStredHledani
 	 */
-	protected void dopicitejVzdalenostAAzimut(Nalezenec0 aNal, Wgs aStredHledani) {
-		double dalka = FGeoKonvertor.dalka(aNal.getWgs(), aStredHledani);
+	protected void dopicitejVzdalenostAAzimut(final Nalezenec0 aNal, final Wgs aStredHledani) {
+		final double dalka = FGeoKonvertor.dalka(aNal.getWgs(), aStredHledani);
 		if (aStredHledani == null)
 			return;
 		double uhel = Wgs.azimut(aStredHledani, aNal.getWgs());

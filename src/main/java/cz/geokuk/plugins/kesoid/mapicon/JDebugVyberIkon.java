@@ -25,33 +25,33 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 	/**
 	 * @param aJskelneikony
 	 */
-	public JDebugVyberIkon(JComponent aJskelneikony) {
+	public JDebugVyberIkon(final JComponent aJskelneikony) {
 		super(true, false);
 		jskelneikony = aJskelneikony;
 	}
 
-	public void resetBag(IkonBag aBag) {
+	public void resetBag(final IkonBag aBag) {
 		bag = aBag;
 		if (jmenaVybranychAlel == null) {
-			Genotyp genotypVychozi = bag.getGenom().getGenotypVychozi();
+			final Genotyp genotypVychozi = bag.getGenom().getGenotypVychozi();
 			jmenaVybranychAlel = Alela.alelyToNames(genotypVychozi.getAlely());
 		}
 		refresh(aBag, jmenaVybranychAlel, null);
 	}
 
 	@Override
-	protected void zmenaVyberu(Set<Alela> aAlelyx) {
+	protected void zmenaVyberu(final Set<Alela> aAlelyx) {
 		jmenaVybranychAlel = Alela.alelyToNames(aAlelyx);
-		Genotyp genotyp = new Genotyp(aAlelyx, bag.getGenom());
-		Sklivec sklivec = bag.getSklivec(genotyp);
+		final Genotyp genotyp = new Genotyp(aAlelyx, bag.getGenom());
+		final Sklivec sklivec = bag.getSklivec(genotyp);
 		jskelneikony.removeAll();
 		// BoundingRect br = Imagant.sjednoceni(sklivec.imaganti);
 		{
 			jskelneikony.add(Box.createVerticalStrut(20));
-			JButton jLabel = new JButton();
+			final JButton jLabel = new JButton();
 			jLabel.setAlignmentX(CENTER_ALIGNMENT);
 			// jLabel.setText("všechna skla přes sebe");
-			Imagant imagant = Sklo.prekresliNaSebe(sklivec.imaganti);
+			final Imagant imagant = Sklo.prekresliNaSebe(sklivec.imaganti);
 			if (imagant != null) {
 				jLabel.setIcon(new ImageIcon(imagant.getImage()));
 			}
@@ -59,15 +59,15 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		}
 		jskelneikony.add(Box.createVerticalStrut(50));
 
-		Iterator<SkloAplikant> iterator = bag.getSada().getSkloAplikanti().iterator();
+		final Iterator<SkloAplikant> iterator = bag.getSada().getSkloAplikanti().iterator();
 
-		for (Imagant imagant : sklivec.imaganti) {
-			SkloAplikant skloAplikant = iterator.next();
-			Box panel = Box.createHorizontalBox();
-			TitledBorder border = BorderFactory.createTitledBorder(skloAplikant.sklo.getName());
+		for (final Imagant imagant : sklivec.imaganti) {
+			final SkloAplikant skloAplikant = iterator.next();
+			final Box panel = Box.createHorizontalBox();
+			final TitledBorder border = BorderFactory.createTitledBorder(skloAplikant.sklo.getName());
 			border.setTitleJustification(TitledBorder.CENTER);
 			panel.setBorder(border);
-			JLabel jLabel = new JLabel();
+			final JLabel jLabel = new JLabel();
 			// jLabel.setText("sklo");
 			if (imagant != null) {
 				jLabel.setIcon(new ImageIcon(imagant.getImage()));
@@ -95,7 +95,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 
 		jZobrazovaniVseho.addItemListener(new ItemListener() {
 			@Override
-			public void itemStateChanged(ItemEvent e) {
+			public void itemStateChanged(final ItemEvent e) {
 				zobrazovatVse = jZobrazovaniVseho.isSelected();
 				resetBag(bag);
 			}
@@ -110,31 +110,31 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Alela)
 	 */
 	@Override
-	protected boolean shouldRender(Alela alela) {
+	protected boolean shouldRender(final Alela alela) {
 		return alela.isVychozi() || bag.getSada().getPouziteAlely().contains(alela) || zobrazovatVse;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Gen)
 	 */
 	@Override
-	protected boolean shouldRender(Gen gen) {
+	protected boolean shouldRender(final Gen gen) {
 		return bag.getSada().getPouziteGeny().contains(gen) || zobrazovatVse;
 	}
 
 	@Override
-	protected boolean shouldEnable(Alela alela) {
+	protected boolean shouldEnable(final Alela alela) {
 		return alela.isVychozi() || bag.getSada().getPouziteAlely().contains(alela);
 	}
 
-	public void onEvent(PoziceChangedEvent event) {
-		Wpt wpt = event.poziceq.getWpt();
+	public void onEvent(final PoziceChangedEvent event) {
+		final Wpt wpt = event.poziceq.getWpt();
 		if (wpt == null)
 			return;
 		if (bag == null)

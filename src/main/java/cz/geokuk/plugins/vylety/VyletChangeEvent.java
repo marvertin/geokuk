@@ -11,7 +11,7 @@ public class VyletChangeEvent extends Event0<VyletModel> {
 	private final EVylet		evyl;
 	private final EVylet		evylPuvodni;
 
-	VyletChangeEvent(VyletModel vylet, Kesoid kes, EVylet evyl, EVylet evylPuvodni) {
+	VyletChangeEvent(final VyletModel vylet, final Kesoid kes, final EVylet evyl, final EVylet evylPuvodni) {
 		super();
 		vyletModel = vylet;
 		this.evyl = evyl;
@@ -21,7 +21,7 @@ public class VyletChangeEvent extends Event0<VyletModel> {
 
 	/**
 	 * Zda se změnil celý výlet, pokud ano, tak se nsmí brát jednotlivé změny Většinout to bude znamenat načtení výletu.
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isVelkaZmena() {

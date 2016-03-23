@@ -20,7 +20,7 @@ public class ZavriAction extends SouboeCestaAction0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (!super.ulozitSDotazem())
 			return; // mělo se ukládat a řeklo se, že ne
 		cestyModel.zavri();
@@ -43,7 +43,7 @@ public class ZavriAction extends SouboeCestaAction0 {
 		// System.out.println("Uložena cesta do: " + doc.getFile());
 	}
 
-	public void onEvent(CestyChangedEvent event) {
+	public void onEvent(final CestyChangedEvent event) {
 		doc = event.getDoc();
 		setEnabled(doc != null && !doc.isEmpty());
 	}

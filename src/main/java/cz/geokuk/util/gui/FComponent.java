@@ -16,25 +16,25 @@ public final class FComponent {
 	private FComponent() {
 	}
 
-	public static void enableMouseSroll(JComponent component) {
+	public static void enableMouseSroll(final JComponent component) {
 		component.addMouseMotionListener(new ScrollRectToVisibleListener());
 		component.setAutoscrolls(true);
 	}
 
-	public static void setEnabled(Component component, boolean enabled) {
+	public static void setEnabled(final Component component, final boolean enabled) {
 		component.setEnabled(enabled);
 		if (component instanceof Container) {
-			Container container = (Container) component;
-			for (Component c : container.getComponents()) {
+			final Container container = (Container) component;
+			for (final Component c : container.getComponents()) {
 				setEnabled(c, enabled);
 			}
 		}
 	}
 
-	public static void setEnabledChildren(Component component, boolean enabled) {
+	public static void setEnabledChildren(final Component component, final boolean enabled) {
 		if (component instanceof Container) {
-			Container container = (Container) component;
-			for (Component c : container.getComponents()) {
+			final Container container = (Container) component;
+			for (final Component c : container.getComponents()) {
 				setEnabled(c, enabled);
 			}
 		}

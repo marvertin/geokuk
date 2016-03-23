@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 /**
  * Parsruje souřadnice ze stringu zadané v libovolném formátu
- * 
+ *
  * @author tatinek
  *
  */
@@ -18,8 +18,8 @@ public class WgsParser {
 	private static final Pattern						pat				= Pattern.compile("([0-9]+[.,]?[0-9]*) *°? *(?:([0-9]+[.,]?[0-9]*) *'? *(?:([0-9]+[.,]?[0-9]*) *\"? *)?)?");
 
 	/** Rozprasruje souřasdnice, pokud se to nepodaří, vrátí null */
-	public Wgs parsruj(String s) {
-		Vzorek vzorek = najdiNejvhodnejsi(s);
+	public Wgs parsruj(final String s) {
+		final Vzorek vzorek = najdiNejvhodnejsi(s);
 		if (vzorek == null)
 			return null;
 		return vzorek.toWgs();
@@ -42,11 +42,11 @@ public class WgsParser {
 	//
 	// }
 
-	private Souradky najdi(String s, Matcher m, int start, int end) {
+	private Souradky najdi(final String s, final Matcher m, final int start, final int end) {
 		m.reset();
 		m.region(start, end);
 		if (m.find()) {
-			Souradky sou = new Souradky();
+			final Souradky sou = new Souradky();
 			sou.prefix = s.substring(m.regionStart(), m.start()).toUpperCase();
 			sou.stupne = new Cislo(m.group(1));
 			sou.minuty = new Cislo(m.group(2));
@@ -57,7 +57,7 @@ public class WgsParser {
 				return null;
 			if (obsahujeNepovolenyZnak(sou.suffix))
 				return null;
-			Character pismenoSvetovychStran = sou.pismenoSvetovychStran();
+			final Character pismenoSvetovychStran = sou.pismenoSvetovychStran();
 			if (pismenoSvetovychStran == null)
 				return null; // odfilrovana pismena
 			// a filtrujeme desetinná čísla, která nejsou na konci
@@ -73,7 +73,7 @@ public class WgsParser {
 		}
 	}
 
-	private boolean obsahujeNepovolenyZnak(String s) {
+	private boolean obsahujeNepovolenyZnak(final String s) {
 		for (int i = 0; i < s.length(); i++) {
 			if (Character.isDigit(s.charAt(i)))
 				return true;
@@ -87,10 +87,10 @@ public class WgsParser {
 		return false;
 	}
 
-	private Vzorek rozeber(String s, Matcher m, int pozice) {
+	private Vzorek rozeber(final String s, final Matcher m, final int pozice) {
 		if (Character.isDigit(s.charAt(pozice)) && Character.isDigit(s.charAt(pozice - 1)))
 			return null; // hlavně neřezat mezi číslicemi
-		Vzorek v = new Vzorek();
+		final Vzorek v = new Vzorek();
 		v.sou1 = najdi(s, m, 0, pozice);
 		if (v.sou1 == null)
 			return null;
@@ -99,16 +99,16 @@ public class WgsParser {
 			return null;
 
 		// odfiltrujeme nejasne kombinace pismen, jako W a S
-		Character pismeno1 = v.sou1.pismenoSvetovychStran();
-		Character pismeno2 = v.sou2.pismenoSvetovychStran();
+		final Character pismeno1 = v.sou1.pismenoSvetovychStran();
+		final Character pismeno2 = v.sou2.pismenoSvetovychStran();
 		if (pismeno1 == null || pismeno2 == null)
 			return null;
 
-		for (PovolenaVariacePismen povapi : povoleneVariace) {
+		for (final PovolenaVariacePismen povapi : povoleneVariace) {
 			if (povapi.p1 == pismeno1 && povapi.p2 == pismeno2)
 				return v; // je to OK
 			if (povapi.p1 == pismeno2 && povapi.p2 == pismeno1) {
-				Souradky pom = v.sou1;
+				final Souradky pom = v.sou1;
 				v.sou1 = v.sou2;
 				v.sou2 = pom;
 				return v; // je to OK, ale msueli jsme vyměnit strany
@@ -117,14 +117,14 @@ public class WgsParser {
 		return null; // neprošlo sítem písmen
 	}
 
-	private Vzorek najdiNejvhodnejsi(String s) {
+	private Vzorek najdiNejvhodnejsi(final String s) {
 		int symetrieNejlepsihoVzorku = Integer.MAX_VALUE;
 		Vzorek nejlepsiVzorek = null;
-		Matcher m = pat.matcher(s);
+		final Matcher m = pat.matcher(s);
 		for (int i = 2; i < s.length() - 2; i++) {
-			Vzorek vzorek = rozeber(s, m, i);
+			final Vzorek vzorek = rozeber(s, m, i);
 			if (vzorek != null) {
-				int symetrie = vzorek.symetrie();
+				final int symetrie = vzorek.symetrie();
 				if (symetrie < symetrieNejlepsihoVzorku) {
 					nejlepsiVzorek = vzorek;
 					symetrieNejlepsihoVzorku = symetrie;
@@ -137,7 +137,7 @@ public class WgsParser {
 		return nejlepsiVzorek;
 	}
 
-	private void zkousej(String s) {
+	private void zkousej(final String s) {
 		System.out.println("-----------" + s + "-----------------------------------------------");
 		// Matcher m = pat.matcher(s);
 		// for (int i=2; i < s.length()-2; i++) {
@@ -147,7 +147,7 @@ public class WgsParser {
 		// }
 		// }
 
-		Vzorek vzorek = najdiNejvhodnejsi(s);
+		final Vzorek vzorek = najdiNejvhodnejsi(s);
 		System.out.println(vzorek);
 
 	}
@@ -163,7 +163,7 @@ public class WgsParser {
 
 		/**
 		 * 0 znamená zcela symetrické, 1 liší se o jedno, 2 liší se o dvě.
-		 * 
+		 *
 		 * @return
 		 */
 		int symetrie() {
@@ -179,7 +179,7 @@ public class WgsParser {
 
 		private final String s;
 
-		Cislo(String s) {
+		Cislo(final String s) {
 			this.s = s == null ? null : s.replace(',', '.');
 		}
 
@@ -199,7 +199,7 @@ public class WgsParser {
 		private double toDouble() {
 			if (s == null || s.length() == 0)
 				return 0;
-			double result = Double.parseDouble(s);
+			final double result = Double.parseDouble(s);
 			return result;
 		}
 
@@ -221,14 +221,14 @@ public class WgsParser {
 		 * Vrací null, pokud je to špatně, co se týče písmen, ' ' pokud písmeno není uvedeno nebo N, E, S, W pro světové strany případně X, když se neví zda sever nebo jih.
 		 */
 		public Character pismenoSvetovychStran() {
-			Character pismeno1 = extrahujJedinePovolenePismeno(prefix);
-			Character pismeno2 = extrahujJedinePovolenePismeno(suffix);
-			Character pismeno = urciToSpravnePismeno(pismeno1, pismeno2);
+			final Character pismeno1 = extrahujJedinePovolenePismeno(prefix);
+			final Character pismeno2 = extrahujJedinePovolenePismeno(suffix);
+			final Character pismeno = urciToSpravnePismeno(pismeno1, pismeno2);
 			return pismeno;
 
 		}
 
-		private Character extrahujJedinePovolenePismeno(String s) {
+		private Character extrahujJedinePovolenePismeno(final String s) {
 			Character pismeno = ' '; // to znamená žádné písmeno tam nebylo
 			for (int i = 0; i < s.length(); i++) {
 				if (Character.isLetter(s.charAt(i))) {
@@ -251,7 +251,7 @@ public class WgsParser {
 			return null; // je tam špatné písmeno
 		}
 
-		private Character urciToSpravnePismeno(Character pismeno1, Character pismeno2) {
+		private Character urciToSpravnePismeno(final Character pismeno1, final Character pismeno2) {
 			// System.out.println("soluad? " + pismeno1 + pismeno2);
 			if (pismeno1 == null || pismeno2 == null)
 				return null;
@@ -273,7 +273,7 @@ public class WgsParser {
 		}
 
 		double toDouble() {
-			double x = stupne.toDouble() + minuty.toDouble() / 60 + vteriny.toDouble() / 3600;
+			final double x = stupne.toDouble() + minuty.toDouble() / 60 + vteriny.toDouble() / 3600;
 			return x;
 		}
 	}
@@ -282,14 +282,14 @@ public class WgsParser {
 		final char	p1;
 		final char	p2;
 
-		public PovolenaVariacePismen(char p1, char p2) {
+		public PovolenaVariacePismen(final char p1, final char p2) {
 			this.p1 = p1;
 			this.p2 = p2;
 		}
 	}
 
-	private static void povolVariaci(char p1, char p2) {
-		PovolenaVariacePismen variace = new PovolenaVariacePismen(p1, p2);
+	private static void povolVariaci(final char p1, final char p2) {
+		final PovolenaVariacePismen variace = new PovolenaVariacePismen(p1, p2);
 		povoleneVariace.add(variace);
 
 	}
@@ -317,9 +317,9 @@ public class WgsParser {
 		povolVariaci(' ', 'V');
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
-		WgsParser parser = new WgsParser();
+		final WgsParser parser = new WgsParser();
 
 		parser.zkousej(";;111 222 333 444 555 666\";");
 		parser.zkousej(";;111 222 333E;N444 555 666++");

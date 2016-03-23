@@ -24,7 +24,7 @@ public class DlazdicovaMetrikaXY implements Iterable<Dlazdice> {
 	 * @param x
 	 * @param y
 	 */
-	public DlazdicovaMetrikaXY(DlazdicovaMetrika xx, DlazdicovaMetrika yy) {
+	public DlazdicovaMetrikaXY(final DlazdicovaMetrika xx, final DlazdicovaMetrika yy) {
 		super();
 		this.xx = xx;
 		this.yy = yy;
@@ -41,7 +41,7 @@ public class DlazdicovaMetrikaXY implements Iterable<Dlazdice> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Iterable#iterator()
 	 */
 	@Override
@@ -60,7 +60,7 @@ public class DlazdicovaMetrikaXY implements Iterable<Dlazdice> {
 
 			@Override
 			public Dlazdice next() {
-				Dlazdice dla = new Dlazdice();
+				final Dlazdice dla = new Dlazdice();
 				dla.xn = xn;
 				dla.yn = yn;
 				dla.xs = x;

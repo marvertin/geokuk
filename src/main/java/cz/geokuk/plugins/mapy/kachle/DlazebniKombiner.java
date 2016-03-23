@@ -14,7 +14,7 @@ import cz.geokuk.util.pocitadla.PocitadloMalo;
 
 /**
  * Kombinuje do sebe různé dlaždice, aby se to nemusel dělat draze v paintu. Není nijak aktivní ve smyslu, že by něco provolával, když je hotov.
- * 
+ *
  * @author tatinek
  *
  */
@@ -36,7 +36,7 @@ class DlazebniKombiner {
 
 	/**
 	 * Nová instance bude kombinovat kachle daných mapových podkladů. Až nakombinuje, vrací. Ale vrátit dokáže i postupně.
-	 * 
+	 *
 	 * @param coCekam
 	 */
 	public DlazebniKombiner(final EnumSet<EKaType> coCekam) {
@@ -47,7 +47,7 @@ class DlazebniKombiner {
 
 	/**
 	 * Vloží obrázek kachle daného typu. Pro daný typ lpe obrázek vložit jen jednou. Pokud ho dostane podruhé (nemělo by se stát), neudělá nic. Pokud vloží obrázek, který nečekám, tak také neudělám nic. Pokud mám hotovo, neudělá nic.
-	 * 
+	 *
 	 * @param type
 	 * @param img
 	 */
@@ -58,7 +58,7 @@ class DlazebniKombiner {
 
 	/**
 	 * Vloží výjimku při získávání kachle daného typu. Vzhledem k ostatnímu posuzování je to jako prázdný obrázek.
-	 * 
+	 *
 	 * @param type
 	 * @param img
 	 */
@@ -112,7 +112,7 @@ class DlazebniKombiner {
 
 	/**
 	 * Vrací první výjimku, která byla zjiětěna. To znamená na první dlaždici, která se stahovala.
-	 * 
+	 *
 	 * @return
 	 */
 	public synchronized Throwable getFirstException() {
@@ -143,7 +143,7 @@ class DlazebniKombiner {
 
 	/**
 	 * Vrátí co mám.
-	 * 
+	 *
 	 * @return Pokud nic nemám, je set prázdný.
 	 */
 	public EnumSet<EKaType> getCoMam() {
@@ -153,7 +153,7 @@ class DlazebniKombiner {
 	/**
 	 * Vrátí nakombinovaný image. Může být částečně nakombinovaný, pokdu nedošlo vše. Ale nikdy se vrstvy nepřekračují. Když už došla 1. a 2. a 4. vrstva, vrací image nakombinovaný jen z prvních dvou vrstev. Když mám jen vrstvy 2. a 3., vrací null. Nemůže tedy vrátit jen vrstvu turistických tras bez
 	 * podkladu.
-	 * 
+	 *
 	 * @return Pokud nic nemám, vracéí se null.
 	 */
 	public BufferedImage getKombinedImage() {
@@ -162,7 +162,7 @@ class DlazebniKombiner {
 
 	/**
 	 * Pokud je už vše nakombinováno, co má být.
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isHotovo() {

@@ -16,7 +16,7 @@ public final class FString {
 		/* INTENDED: zabránění externí instanciace. */ }
 
 	/** Pokud to lze, zařízne String na danou délku. */
-	public static String truncateRight(String s, int maxlen) {
+	public static String truncateRight(final String s, final int maxlen) {
 		if (s.length() > maxlen) {
 			return s.substring(0, maxlen);
 		}
@@ -24,7 +24,7 @@ public final class FString {
 	}
 
 	/** Pokud to lze, zařízne String na danou délku. */
-	public static String truncateLeft(String s, int maxlen) {
+	public static String truncateLeft(final String s, final int maxlen) {
 		if (s.length() > maxlen) {
 			return s.substring(s.length() - maxlen, s.length());
 		}
@@ -32,14 +32,14 @@ public final class FString {
 	}
 
 	/** Vrací true, pokud je řětězec null nebo délku 0. */
-	public static boolean isVoid(String s) {
+	public static boolean isVoid(final String s) {
 		return (s == null || s.length() == 0);
 	}
 
 	/**
 	 * Vrací true, pokud je řetězec prázdný, to znamená null, nebo prázdný nebo mezery.
 	 */
-	public static boolean isEmpty(String s) {
+	public static boolean isEmpty(final String s) {
 		return StringUtils.isBlank(s);
 	}
 
@@ -51,17 +51,17 @@ public final class FString {
 	 * @param aPole
 	 *            Pole nějakých objektů, jejichž hodnoty .toString() budou spojeny do výsledku.
 	 */
-	public static String mergeArray(String aDelimiter, Object aPole) {
+	public static String mergeArray(final String aDelimiter, final Object aPole) {
 		if (aPole == null) {
 			return null;
 		}
 
-		Class<?> c = aPole.getClass();
+		final Class<?> c = aPole.getClass();
 		if (!c.isArray())
 			throw new IllegalArgumentException("Argument aPole typu " + c + " není pole.");
 
-		StringBuilder result = new StringBuilder(300);
-		int len = Array.getLength(aPole);
+		final StringBuilder result = new StringBuilder(300);
+		final int len = Array.getLength(aPole);
 		for (int i = 0; i < len; i++) {
 			if (i > 0) {
 				result.append(aDelimiter);
@@ -76,7 +76,7 @@ public final class FString {
 	 * Zarovná řetězec na požadovanou délku.
 	 *
 	 * Pokud je řetězec příliš krátký,
-	 * 
+	 *
 	 * @param s
 	 *            Zarovnávaný řetězec.
 	 * @param len
@@ -85,13 +85,13 @@ public final class FString {
 	 *            Řetězec, kterým má být zarovnávaný řetězec doplněn na požadovanou délku. * Je-li prázdný nebo null, použije se jedna mezera.
 	 * @return Zadaný řetězec doplněný zprava na požadovanou délku určený vyplňovacím řetězcem.
 	 */
-	public static String alignRight(String s, int len, String fill) {
+	public static String alignRight(final String s, final int len, String fill) {
 		if (s.length() == len)
 			return s;
 		if (s.length() < len) {
 			if (isVoid(fill))
 				fill = " ";
-			StringBuilder sb = new StringBuilder(len);
+			final StringBuilder sb = new StringBuilder(len);
 			sb.append(s);
 			while (sb.length() < len) {
 				sb.append(fill);
@@ -107,7 +107,7 @@ public final class FString {
 	 * Zarovná řetězec na požadovanou délku.
 	 *
 	 * Pokud je řetězec příliš krátký,
-	 * 
+	 *
 	 * @param s
 	 *            Zarovnávaný řetězec.
 	 * @param len
@@ -116,7 +116,7 @@ public final class FString {
 	 *            Znak, kterým má být zarovnávaný řetězec doplněn na požadovanou délku.
 	 * @return Zadaný řetězec doplněný zprava na požadovanou délku určený vyplňovacím znakem.
 	 */
-	public static String alignRight(String s, int len, char fill) {
+	public static String alignRight(final String s, final int len, final char fill) {
 		return alignRight(s, len, String.valueOf(fill));
 	}
 
@@ -127,11 +127,11 @@ public final class FString {
 	 * @param s2
 	 * @return
 	 */
-	public static boolean equals(String s1, String s2) {
+	public static boolean equals(final String s1, final String s2) {
 		return s1 == null && s2 == null || !(s1 == null || s2 == null) && s1.equals(s2);
 	}
 
-	public static String intern(String aString) {
+	public static String intern(final String aString) {
 		return aString == null ? null : aString.intern();
 	}
 

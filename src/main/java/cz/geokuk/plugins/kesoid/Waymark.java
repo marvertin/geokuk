@@ -10,8 +10,8 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 public class Waymark extends Kesoid {
 
 	@Override
-	public void buildGenotyp(Genom genom, Genotyp g) {
-		GenotypBuilderWaymark genotypBuilder = new GenotypBuilderWaymark(genom, g);
+	public void buildGenotyp(final Genom genom, final Genotyp g) {
+		final GenotypBuilderWaymark genotypBuilder = new GenotypBuilderWaymark(genom, g);
 		genotypBuilder.build(this);
 	}
 
@@ -22,11 +22,11 @@ public class Waymark extends Kesoid {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.Kesoid#prispejDoTooltipu(java.lang.StringBuilder)
 	 */
 	@Override
-	public void prispejDoTooltipu(StringBuilder sb, Wpt wpt) {
+	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
 		sb.append("<b>");
 		sb.append(getNazev());
 		sb.append("</b>");

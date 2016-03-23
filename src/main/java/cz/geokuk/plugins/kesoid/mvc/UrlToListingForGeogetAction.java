@@ -27,7 +27,7 @@ public class UrlToListingForGeogetAction extends Action0 {
 	/**
 	 *
 	 */
-	public UrlToListingForGeogetAction(Kesoid kes) {
+	public UrlToListingForGeogetAction(final Kesoid kes) {
 		super("Listing do Geogetu", ImageLoader.seekResIcon("x16/geoget.png"));
 		iKes = kes;
 		putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží URL tiskové podoby listingu keše, na nějž se chytne spuštěný GEOGET a otevře listing (a možná i GSAK).");
@@ -37,12 +37,12 @@ public class UrlToListingForGeogetAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		Kesoid kes = iKes;
 		if (kes == null) {
 			kes = poziceq.getKesoid();
@@ -52,11 +52,11 @@ public class UrlToListingForGeogetAction extends Action0 {
 		kesoidModel.otevriListingVGeogetu(kes);
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 
-	public void onEvent(PoziceChangedEvent event) {
+	public void onEvent(final PoziceChangedEvent event) {
 		poziceq = event.poziceq;
 		setEnabled(iKes != null || poziceq.getWpt() != null);
 	}

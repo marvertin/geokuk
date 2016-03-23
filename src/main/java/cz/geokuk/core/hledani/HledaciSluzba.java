@@ -16,20 +16,20 @@ public class HledaciSluzba {
 
 	/**
 	 * Spustí vyhledávání zadaným hledačem, zaanou hledací podmínkou a hledá se do zadaného refreshoru. Pokud pro daný refreshoir již běží nějaké hledání, je nejdříve zkanclováno a pak zahájeno nové hledání.
-	 * 
+	 *
 	 * @param hledac
 	 * @param podm
 	 * @param refreshor
 	 */
-	public synchronized <T extends Nalezenec0> void spustHledani(Hledac0<T> hledac, HledaciPodminka0 podm, RefreshorVysledkuHledani<T> refreshor) {
+	public synchronized <T extends Nalezenec0> void spustHledani(final Hledac0<T> hledac, final HledaciPodminka0 podm, final RefreshorVysledkuHledani<T> refreshor) {
 
 		{
-			HledaciRunnableSwingWorker<?> hledaciRunnableNaKancl = map.remove(refreshor); // zrušit a když to tam je tak zkanclovat
+			final HledaciRunnableSwingWorker<?> hledaciRunnableNaKancl = map.remove(refreshor); // zrušit a když to tam je tak zkanclovat
 			if (hledaciRunnableNaKancl != null)
 				hledaciRunnableNaKancl.cancel(true); // zkanclovat, když se hledalo
 			// System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnableNaKancl) + ": CANCEL");
 		}
-		HledaciRunnableSwingWorker<T> hledaciRunnable = new HledaciRunnableSwingWorker<>(new Finishor<>(refreshor), podm, hledac);
+		final HledaciRunnableSwingWorker<T> hledaciRunnable = new HledaciRunnableSwingWorker<>(new Finishor<>(refreshor), podm, hledac);
 		map.put(refreshor, hledaciRunnable);
 		// System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnable) + ": EXECUTE");
 		hledaciRunnable.execute();
@@ -41,11 +41,11 @@ public class HledaciSluzba {
 		/**
 		 * @param refreshor
 		 */
-		public Finishor(RefreshorVysledkuHledani<T> refreshor) {
+		public Finishor(final RefreshorVysledkuHledani<T> refreshor) {
 			this.refreshor = refreshor;
 		}
 
-		void finish(VysledekHledani<T> vysledekHledani) {
+		void finish(final VysledekHledani<T> vysledekHledani) {
 			map.remove(refreshor);
 			if (vysledekHledani != null) { // poslat dál, jen když nebyl kancel
 				refreshor.refreshVysledekHledani(vysledekHledani);

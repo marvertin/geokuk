@@ -6,7 +6,7 @@ package cz.geokuk.plugins.mapy.kachle;
 public class KaAllReq extends Ka0Req {
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 

@@ -23,41 +23,41 @@ public class JOProgramuDialog extends JMyDialog0 {
 
 	@Override
 	protected void initComponents() {
-		Box box = Box.createVerticalBox();
+		final Box box = Box.createVerticalBox();
 		add(box);
 
 		box.add(Box.createGlue());
 		box.add(Box.createVerticalStrut(20));
 
-		JLabel c1 = new JLabel("GeoKuk");
+		final JLabel c1 = new JLabel("GeoKuk");
 		c1.setAlignmentX(CENTER_ALIGNMENT);
 		c1.setFont(new Font("Arial", Font.BOLD, 30));
 		box.add(c1);
 
-		JLabel c2 = new JLabel("Verze " + FConst.VERSION);
+		final JLabel c2 = new JLabel("Verze " + FConst.VERSION);
 		c2.setAlignmentX(CENTER_ALIGNMENT);
 		box.add(c2);
 
 		box.add(Box.createVerticalStrut(10));
-		JLabel c3 = new JLabel("(c) 2009 Matin Veverka");
+		final JLabel c3 = new JLabel("(c) 2009 Matin Veverka");
 		c3.setAlignmentX(CENTER_ALIGNMENT);
 		box.add(c3);
 
-		JLabel c4 = new JLabel("Profil na GC.COM a GC.CZ: \"rodinka veverek\"");
+		final JLabel c4 = new JLabel("Profil na GC.COM a GC.CZ: \"rodinka veverek\"");
 
 		c4.setAlignmentX(CENTER_ALIGNMENT);
 		c4.setFont(new Font("Serif", Font.ITALIC, 12));
 		box.add(c4);
 
-		JButton bgccom = new JButton(ImageLoader.seekResIcon("gccom.png"));
+		final JButton bgccom = new JButton(ImageLoader.seekResIcon("gccom.png"));
 		bgccom.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				String urls = "http://www.geocaching.com/profile/?guid=22cad0c7-59a3-417c-99d1-7c9079e9ae27";
+			public void actionPerformed(final ActionEvent e) {
+				final String urls = "http://www.geocaching.com/profile/?guid=22cad0c7-59a3-417c-99d1-7c9079e9ae27";
 				try {
 					BrowserOpener.displayURL(new URL(urls));
-				} catch (MalformedURLException e1) { // to půjde
+				} catch (final MalformedURLException e1) { // to půjde
 				}
 			}
 		});
@@ -65,8 +65,8 @@ public class JOProgramuDialog extends JMyDialog0 {
 		box.add(bgccom);
 
 		box.add(Box.createVerticalStrut(10));
-		JLabel zdarma1 = new JLabel("Program GeoKuk můžete zdarma používat");
-		JLabel zdarma2 = new JLabel("pro nekomerční rekreační aktivity.");
+		final JLabel zdarma1 = new JLabel("Program GeoKuk můžete zdarma používat");
+		final JLabel zdarma2 = new JLabel("pro nekomerční rekreační aktivity.");
 		zdarma1.setFont(new Font("Serif", Font.ITALIC, 12));
 		zdarma1.setAlignmentX(CENTER_ALIGNMENT);
 		box.add(zdarma1);

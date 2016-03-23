@@ -30,14 +30,14 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 
 	@Override
 	protected void initComponents() {
-		Box box = Box.createVerticalBox();
+		final Box box = Box.createVerticalBox();
 
 		jTable = new JXTreeTable(new Model());
 		// jTable.setPreferredScrollableViewportSize(new Dimension(600, 70));
 		jTable.setFillsViewportHeight(true);
 
 		// Create the scroll pane and add the table to it.
-		JScrollPane scrollPane = new JScrollPane(jTable);
+		final JScrollPane scrollPane = new JScrollPane(jTable);
 
 		nastavVlastnostiSloupcu();
 		box.add(scrollPane);
@@ -79,13 +79,13 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 		}
 
 		@Override
-		public boolean isCellEditable(Object node, int column) {
+		public boolean isCellEditable(final Object node, final int column) {
 			return column == 1;
 		}
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see javax.swing.table.TableModel#getColumnCount()
 		 */
 		@Override
@@ -95,11 +95,11 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see javax.swing.table.AbstractTableModel#getColumnName(int)
 		 */
 		@Override
-		public String getColumnName(int col) {
+		public String getColumnName(final int col) {
 			String r = "";
 			switch (col) {
 			case 0:
@@ -119,11 +119,11 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 		}
 
 		@Override
-		public Object getValueAt(Object o, int i) {
+		public Object getValueAt(final Object o, final int i) {
 			if (o == null) {
 				return null;
 			}
-			InformaceOZdroji ioz = (InformaceOZdroji) o;
+			final InformaceOZdroji ioz = (InformaceOZdroji) o;
 
 			switch (i) {
 			case 0:
@@ -140,11 +140,11 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
 		 */
 		@Override
-		public Class<?> getColumnClass(int col) {
+		public Class<?> getColumnClass(final int col) {
 			Class<?> r = String.class;
 			switch (col) {
 			case 1:
@@ -164,32 +164,32 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 		}
 
 		@Override
-		public Object getChild(Object parent, int index) {
-			InformaceOZdroji p = (InformaceOZdroji) parent;
+		public Object getChild(final Object parent, final int index) {
+			final InformaceOZdroji p = (InformaceOZdroji) parent;
 			return p.getChildren().get(index);
 		}
 
 		@Override
-		public int getChildCount(Object parent) {
+		public int getChildCount(final Object parent) {
 			return ((InformaceOZdroji) parent).getChildren().size();
 		}
 
 		@Override
-		public int getIndexOfChild(Object parent, Object child) {
+		public int getIndexOfChild(final Object parent, final Object child) {
 			return ((InformaceOZdroji) parent).getChildren().indexOf(child);
 		}
 
-		public void setValueAt(Object value, Object node, int col) {
-			InformaceOZdroji ioz = (InformaceOZdroji) node;
+		public void setValueAt(final Object value, final Object node, final int col) {
+			final InformaceOZdroji ioz = (InformaceOZdroji) node;
 			kesoidModel.setNacitatSoubor(ioz.jmenoZdroje, (Boolean) value);
 		}
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 
-	public void onEvent(KeskyNactenyEvent event) {
+	public void onEvent(final KeskyNactenyEvent event) {
 		vsechny = event.getVsechny();
 		invalidate();
 		if (jTable != null)
@@ -197,14 +197,14 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 		pack();
 	}
 
-	public void onEvent(KesoidUmisteniSouboruChangedEvent event) {
+	public void onEvent(final KesoidUmisteniSouboruChangedEvent event) {
 		// Není to pravda, když jich míme více
 		// setTitle("Přehled zdrojů kešoidů: \""+event.getUmisteniSouboru().getKesDir().getEffectiveFile()+ "\"");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override

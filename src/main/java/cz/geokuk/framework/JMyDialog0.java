@@ -22,12 +22,12 @@ public abstract class JMyDialog0 extends JDialog {
 
 	protected final void init() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		JButton jZavri = new JButton("Zavřít");
-		JButton jNapoveda = new JButton("Nápověda");
-		CancelAction cancelAction = new CancelAction();
+		final JButton jZavri = new JButton("Zavřít");
+		final JButton jNapoveda = new JButton("Nápověda");
+		final CancelAction cancelAction = new CancelAction();
 		jZavri.setAction(cancelAction);
 		jNapoveda.setAction(napovedaAction);
-		JPanel jDolniCudly = new JPanel();
+		final JPanel jDolniCudly = new JPanel();
 		jDolniCudly.add(jZavri);
 		if (getTemaNapovedyDialogu() != null) {
 			jDolniCudly.add(jNapoveda);
@@ -37,23 +37,23 @@ public abstract class JMyDialog0 extends JDialog {
 		pack();
 
 		final Toolkit toolkit = getToolkit();
-		Dimension screenSize = toolkit.getScreenSize();
-		Dimension frmSize = frame.getSize();
-		Dimension mySize = getSize();
-		int xo = (frmSize.width - mySize.width) / 2;
-		int yo = (frmSize.height - mySize.height) / 2;
-		Point loc = frame.getLocation();
-		Point p = new Point(loc.x + xo, loc.y + yo);
+		final Dimension screenSize = toolkit.getScreenSize();
+		final Dimension frmSize = frame.getSize();
+		final Dimension mySize = getSize();
+		final int xo = (frmSize.width - mySize.width) / 2;
+		final int yo = (frmSize.height - mySize.height) / 2;
+		final Point loc = frame.getLocation();
+		final Point p = new Point(loc.x + xo, loc.y + yo);
 		p.x = Math.max(Math.min(p.x, screenSize.width - mySize.width), 0);
 		p.y = Math.max(Math.min(p.y, screenSize.height - mySize.height), 0);
-		Dimension novy = new Dimension(Math.min(mySize.width, screenSize.width - p.x), Math.min(mySize.height, screenSize.height - p.y)
+		final Dimension novy = new Dimension(Math.min(mySize.width, screenSize.width - p.x), Math.min(mySize.height, screenSize.height - p.y)
 
 		);
 		setLocation(p);
 		setSize(novy);
 
-		InputMap im = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-		ActionMap am = getRootPane().getActionMap();
+		final InputMap im = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		final ActionMap am = getRootPane().getActionMap();
 		im.put(KeyStroke.getKeyStroke("ESCAPE"), CANCEL_ACTION);
 		am.put(CANCEL_ACTION, cancelAction);
 
@@ -62,7 +62,7 @@ public abstract class JMyDialog0 extends JDialog {
 
 		addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowClosed(WindowEvent aE) {
+			public void windowClosed(final WindowEvent aE) {
 				if (eventManager != null) { // jen když byl tento dialog registrován a tak má event managera
 					eventManager.unregister(this);
 					odregistrujUdalosti();
@@ -77,11 +77,11 @@ public abstract class JMyDialog0 extends JDialog {
 
 	}
 
-	private void odregistrujUdalosti(Component comp) {
+	private void odregistrujUdalosti(final Component comp) {
 		eventManager.unregister(this);
 		if (comp instanceof Container) {
-			Container container = (Container) comp;
-			for (Component c : container.getComponents()) {
+			final Container container = (Container) comp;
+			for (final Component c : container.getComponents()) {
 				odregistrujUdalosti(c);
 			}
 		}
@@ -97,17 +97,17 @@ public abstract class JMyDialog0 extends JDialog {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			dispose();
 		}
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 		factory.init(napovedaAction);
 	}
 
-	public void inject(EventManager eventManager) {
+	public void inject(final EventManager eventManager) {
 		this.eventManager = eventManager;
 	}
 

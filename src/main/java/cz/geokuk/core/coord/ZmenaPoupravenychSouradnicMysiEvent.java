@@ -12,7 +12,7 @@ import cz.geokuk.core.coordinates.Mou;
 public class ZmenaPoupravenychSouradnicMysiEvent {
 	public Mou cur;
 
-	public ZmenaPoupravenychSouradnicMysiEvent(Mou cur) {
+	public ZmenaPoupravenychSouradnicMysiEvent(final Mou cur) {
 		super();
 		this.cur = cur;
 	}

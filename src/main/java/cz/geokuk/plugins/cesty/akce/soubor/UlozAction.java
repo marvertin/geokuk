@@ -21,13 +21,13 @@ public class UlozAction extends SouboeCestaAction0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 
 		ulozit();
 	}
 
-	public void onEvent(CestyChangedEvent event) {
-		Doc doc = event.getDoc();
+	public void onEvent(final CestyChangedEvent event) {
+		final Doc doc = event.getDoc();
 		setEnabled(doc != null && doc.isChanged());
 	}
 

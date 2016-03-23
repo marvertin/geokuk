@@ -7,7 +7,7 @@ import cz.geokuk.util.lang.FObject;
 
 /**
  * GUI model pro výáběr nějakých objektů.
- * 
+ *
  * @author tatinek
  *
  * @param <T>
@@ -24,23 +24,23 @@ public class SelectionModel<T> {
 	// this.map.putAll(map);
 	// }
 
-	public void add(T item, String displayText) {
+	public void add(final T item, final String displayText) {
 		items.add(new Item<>(item, displayText, items.size()));
 	}
 
-	public void addListener(SelectionListener<T> listener) {
+	public void addListener(final SelectionListener<T> listener) {
 		listeners.add(listener);
 	}
 
-	private void fire(SelectionEvent<T> event) {
-		for (SelectionListener<T> listener : listeners) {
+	private void fire(final SelectionEvent<T> event) {
+		for (final SelectionListener<T> listener : listeners) {
 			listener.selectionChanged(event);
 		}
 
 	}
 
-	public void setSelected(T value) {
-		for (Item<T> item : items) {
+	public void setSelected(final T value) {
+		for (final Item<T> item : items) {
 			if (FObject.isEqual(value, item.value)) {
 				setSelectedItem(item);
 				return;
@@ -55,7 +55,7 @@ public class SelectionModel<T> {
 		}
 	}
 
-	void setSelectedItem(Item<T> item) {
+	void setSelectedItem(final Item<T> item) {
 		if (selectedItem != item) { // mohu přímo porovnávat, protože je to jeden z našeho
 			selectedItem = item;
 			fire(new SelectionEvent<>(this, selectedItem));
@@ -67,7 +67,7 @@ public class SelectionModel<T> {
 		String	displayText;
 		int		poradi;
 
-		public Item(T value, String displayText, int poradi) {
+		public Item(final T value, final String displayText, final int poradi) {
 			this.value = value;
 			this.displayText = displayText;
 			this.poradi = poradi;

@@ -18,7 +18,7 @@ public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
 	/**
 	 * @param aBoard
 	 */
-	public IkonNacitacSwingWorker(IkonNacitacLoader multiNacitac, boolean prenacti, KesoidModel kesoidModel) {
+	public IkonNacitacSwingWorker(final IkonNacitacLoader multiNacitac, final boolean prenacti, final KesoidModel kesoidModel) {
 		this.ikonNacitac = multiNacitac;
 		iPrenacti = prenacti;
 		this.kesoidModel = kesoidModel;
@@ -26,7 +26,7 @@ public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
@@ -37,14 +37,14 @@ public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
 		if (isCancelled())
 			return;
-		IkonBag result = get();
+		final IkonBag result = get();
 		if (result == null)
 			return; // asi zkanclváno
 		// System.out.printf("Loaded %d caches, %d=%d waypoints: \n",

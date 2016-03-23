@@ -7,7 +7,7 @@ public class KeFile {
 	public final Root			root;
 	public final FileAndTime	fat;
 
-	public KeFile(FileAndTime aFat, Root aRoot) {
+	public KeFile(final FileAndTime aFat, final Root aRoot) {
 		super();
 		fat = aFat;
 		root = aRoot;
@@ -23,17 +23,17 @@ public class KeFile {
 	}
 
 	public KeFile getParent() {
-		Path relativePath = getRelativePath();
+		final Path relativePath = getRelativePath();
 		if (relativePath.toString().isEmpty()) {
 			return null;
 		}
-		File parent = getFile().getParentFile();
+		final File parent = getFile().getParentFile();
 		return new KeFile(new FileAndTime(parent, 0), root);
 
 	}
 
 	public Path getRelativePath() {
-		Path relativeFile = root.dir.toPath().relativize(fat.file.toPath());
+		final Path relativeFile = root.dir.toPath().relativize(fat.file.toPath());
 		if (relativeFile.startsWith("..")) {
 			throw new XRelativizeDubleDot("Vysledek relativizace leze zpet: " + this + " => " + relativeFile);
 		}
@@ -43,7 +43,7 @@ public class KeFile {
 	public static class XRelativizeDubleDot extends RuntimeException {
 		private static final long serialVersionUID = 7735880115004590777L;
 
-		private XRelativizeDubleDot(String aMessage) {
+		private XRelativizeDubleDot(final String aMessage) {
 			super(aMessage);
 		}
 
@@ -55,14 +55,14 @@ public class KeFile {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		KeFile other = (KeFile) obj;
+		final KeFile other = (KeFile) obj;
 		return getFile().equals(other.getFile()) && root.dir.equals(other.root.dir);
 	}
 

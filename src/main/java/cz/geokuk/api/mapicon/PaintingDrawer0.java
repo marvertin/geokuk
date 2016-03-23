@@ -9,7 +9,7 @@ import java.util.Deque;
 
 /**
  * Předek vykreslujívcí obrázky.
- * 
+ *
  * @author veverka
  *
  */
@@ -17,14 +17,14 @@ public abstract class PaintingDrawer0 extends Drawer0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see geokuk.mapicon.Vykreslovac#draw(geokuk.mapicon.VykreslovaciKontext, java.util.List)
 	 */
 	@Override
-	public final void draw(Deque<Imagant> aImaganti) {
+	public final void draw(final Deque<Imagant> aImaganti) {
 
-		BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = bi.createGraphics();
+		final BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+		final Graphics2D g = bi.createGraphics();
 		try {
 			drawImage(g);
 			aImaganti.add(new Imagant(bi));

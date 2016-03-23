@@ -13,11 +13,11 @@ public abstract class ShapeDrawer extends PaintingDrawer0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see geokuk.mapicon.Vykreslovac#draw(geokuk.mapicon.VykreslovaciKontext, java.util.List)
 	 */
 	@Override
-	protected void drawImage(Graphics2D g) {
+	protected void drawImage(final Graphics2D g) {
 
 		g.setColor(getFillColor());
 		fill(g);

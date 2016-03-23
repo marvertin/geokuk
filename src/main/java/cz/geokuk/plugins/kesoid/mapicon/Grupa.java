@@ -5,12 +5,12 @@ import java.util.*;
 import cz.geokuk.util.lang.FString;
 
 public class Grupa {
-	static final String		IMPLICITNI_GRUPA_NAME	= "other!";
+	static final String			IMPLICITNI_GRUPA_NAME	= "other!";
 
-	private final String	grupaName;
-	private String			displayName;
+	private final String		grupaName;
+	private String				displayName;
 
-	private Set<Alela>		alely					= new LinkedHashSet<>();
+	private final Set<Alela>	alely					= new LinkedHashSet<>();
 
 	/**
 	 * @return the alely
@@ -19,8 +19,8 @@ public class Grupa {
 		return Collections.unmodifiableSet(alely);
 	}
 
-	public synchronized void add(Alela alela) {
-		Grupa puvodniGrupa = alela.getGrupa();
+	public synchronized void add(final Alela alela) {
+		final Grupa puvodniGrupa = alela.getGrupa();
 		if (puvodniGrupa != this) {
 			// System.out.printf("Prerazovani alely mezi grupami %s: %s -> %s\n", alela, puvodniGrupa, this);
 			// new RuntimeException().printStackTrace();
@@ -32,7 +32,7 @@ public class Grupa {
 		}
 	}
 
-	public Grupa(String grupaName) {
+	public Grupa(final String grupaName) {
 		this.grupaName = grupaName;
 		this.displayName = grupaName;
 	}
@@ -45,7 +45,7 @@ public class Grupa {
 		return IMPLICITNI_GRUPA_NAME.equals(grupaName);
 	}
 
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(final String displayName) {
 		this.displayName = displayName;
 	}
 

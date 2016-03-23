@@ -13,7 +13,7 @@ public class FError {
 
 	private static JErrorDialog jErrorDialog;
 
-	public static void report(String text) {
+	public static void report(final String text) {
 		report(text, null);
 	}
 

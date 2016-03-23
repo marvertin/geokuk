@@ -12,7 +12,7 @@ public class OdebratZCestyAction extends CestyActionIndividual0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public OdebratZCestyAction(Uchopenec uchopenec) {
+	public OdebratZCestyAction(final Uchopenec uchopenec) {
 		super(uchopenec);
 		putValue(NAME, "Odebrat z cesty");
 		putValue(SHORT_DESCRIPTION, "Odstraní bod z cesty.");
@@ -22,7 +22,7 @@ public class OdebratZCestyAction extends CestyActionIndividual0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		cestyModel.odeberBod(effectiveMouable());
 	}
 

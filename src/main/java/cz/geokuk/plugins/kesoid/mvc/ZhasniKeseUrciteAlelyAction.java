@@ -30,31 +30,31 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 	/**
 	 *
 	 */
-	public ZhasniKeseUrciteAlelyAction(Alela alela) {
+	public ZhasniKeseUrciteAlelyAction(final Alela alela) {
 		this.alela = alela;
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		kesoidModel.filtrujDleAlely(alela.toString(), false);
 	}
 
-	public void onEvent(IkonyNactenyEvent event) {
+	public void onEvent(final IkonyNactenyEvent event) {
 		ikonBag = event.getBag();
 	}
 
-	public void onEvent(KeskyNactenyEvent event) {
+	public void onEvent(final KeskyNactenyEvent event) {
 		vsechny = event.getVsechny();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -69,7 +69,7 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 		return String.format("<html>%s: <b>%s</b> <i>(%d)</i>", alela.getGen().getDisplayName(), alela.getDisplayName(), vsechny.getPoctyAlel().count(alela));
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 
@@ -80,17 +80,17 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 		/**
 		 * @param image
 		 */
-		public PreskrtnutaIkona(Icon icon) {
+		public PreskrtnutaIkona(final Icon icon) {
 			this.icon = icon;
 		}
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see javax.swing.ImageIcon#paintIcon(java.awt.Component, java.awt.Graphics, int, int)
 		 */
 		@Override
-		public synchronized void paintIcon(Component c, Graphics g, int x, int y) {
+		public synchronized void paintIcon(final Component c, final Graphics g, final int x, final int y) {
 			if (icon != null) {
 				icon.paintIcon(c, g, x, y);
 			}

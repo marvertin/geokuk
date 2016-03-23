@@ -11,7 +11,7 @@ public class MrizkaDdMmSsAction extends MrizkaAction0 {
 	}
 
 	@BeanSubtype("DdMmSs")
-	public void inject(MrizkaModel mrizkaModel) {
+	public void inject(final MrizkaModel mrizkaModel) {
 		this.mrizkaModel = mrizkaModel;
 	}
 

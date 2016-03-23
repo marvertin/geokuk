@@ -32,12 +32,12 @@ public class CloseAction extends Action0 {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (ulozAction.ulozitSDotazem()) {
 			profileModel.ulozJenKdyzJeulozPreferenceDoSouboruJenKdyzSeUklaatMaji();
 			getMainFrame().dispose();
@@ -45,11 +45,11 @@ public class CloseAction extends Action0 {
 		}
 	}
 
-	public void inject(UlozAction ulozAction) {
+	public void inject(final UlozAction ulozAction) {
 		this.ulozAction = ulozAction;
 	}
 
-	public void inject(ProfileModel profileModel) {
+	public void inject(final ProfileModel profileModel) {
 		this.profileModel = profileModel;
 	}
 

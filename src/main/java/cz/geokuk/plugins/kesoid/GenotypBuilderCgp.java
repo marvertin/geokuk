@@ -17,12 +17,12 @@ class GenotypBuilderCgp {
 	/**
 	 *
 	 */
-	public GenotypBuilderCgp(Genom genom, Genotyp g) {
+	public GenotypBuilderCgp(final Genom genom, final Genotyp g) {
 		this.genom = genom;
 		this.g = g;
 	}
 
-	public void build(CzechGeodeticPoint cgp) {
+	public void build(final CzechGeodeticPoint cgp) {
 		g.put(genom.ALELA_gb);
 		switch (cgp.getVztah()) {
 		case NORMAL:

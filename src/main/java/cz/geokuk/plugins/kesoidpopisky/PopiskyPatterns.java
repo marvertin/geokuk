@@ -16,15 +16,15 @@ import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 @Preferenceble
 public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 
-	private String	kesPattern				= "{info} - {nazev} ({wpt})";
-	private String	waymarkPattern			= "{nazev} ({wpt})";
-	private String	cgpPattern				= "{wpt}";
-	private String	simplewaypointPattern	= "{nazev} ({wpt})";
-	private String	munzeePattern			= "{nazev} ({wpt})";
-	private String	photoPattern			= "{wpt}";
+	private String			kesPattern				= "{info} - {nazev} ({wpt})";
+	private String			waymarkPattern			= "{nazev} ({wpt})";
+	private String			cgpPattern				= "{wpt}";
+	private String			simplewaypointPattern	= "{nazev} ({wpt})";
+	private final String	munzeePattern			= "{nazev} ({wpt})";
+	private final String	photoPattern			= "{wpt}";
 
 	public EnumMap<EKesoidKind, String> asMap() {
-		EnumMap<EKesoidKind, String> map = new EnumMap<>(EKesoidKind.class);
+		final EnumMap<EKesoidKind, String> map = new EnumMap<>(EKesoidKind.class);
 		map.put(EKesoidKind.KES, kesPattern);
 		map.put(EKesoidKind.WAYMARK, waymarkPattern);
 		map.put(EKesoidKind.CGP, cgpPattern);
@@ -45,7 +45,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	 * @param kesPattern
 	 *            the kesPattern to set
 	 */
-	public void setKesPattern(String kesPattern) {
+	public void setKesPattern(final String kesPattern) {
 		this.kesPattern = kesPattern;
 	}
 
@@ -60,7 +60,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	 * @param waymarkPattern
 	 *            the waymarkPattern to set
 	 */
-	public void setWaymarkPattern(String waymarkPattern) {
+	public void setWaymarkPattern(final String waymarkPattern) {
 		this.waymarkPattern = waymarkPattern;
 	}
 
@@ -75,7 +75,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	 * @param cgpPattern
 	 *            the cgpPattern to set
 	 */
-	public void setCgpPattern(String cgpPattern) {
+	public void setCgpPattern(final String cgpPattern) {
 		this.cgpPattern = cgpPattern;
 	}
 
@@ -90,13 +90,13 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	 * @param simplewaypointPattern
 	 *            the simplewaypointPattern to set
 	 */
-	public void setSimplewaypointPattern(String simplewaypointPattern) {
+	public void setSimplewaypointPattern(final String simplewaypointPattern) {
 		this.simplewaypointPattern = simplewaypointPattern;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -106,7 +106,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -122,18 +122,18 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PopiskyPatterns other = (PopiskyPatterns) obj;
+		final PopiskyPatterns other = (PopiskyPatterns) obj;
 		if (cgpPattern == null) {
 			if (other.cgpPattern != null)
 				return false;
@@ -161,7 +161,7 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	public PopiskyPatterns copy() {
 		try {
 			return (PopiskyPatterns) super.clone();
-		} catch (CloneNotSupportedException e) {
+		} catch (final CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 	}

@@ -20,17 +20,17 @@ public class KruhyOnoffAction extends ToggleAction0 {
 
 	}
 
-	public void inject(KruhyModel model) {
+	public void inject(final KruhyModel model) {
 		this.model = model;
 	}
 
-	public void onEvent(KruhyPreferencesChangeEvent event) {
+	public void onEvent(final KruhyPreferencesChangeEvent event) {
 		setSelected(event.kruhy.isOnoff());
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
-		KruhySettings data = model.getData();
+	protected void onSlectedChange(final boolean nastaveno) {
+		final KruhySettings data = model.getData();
 		data.setOnoff(nastaveno);
 		model.setData(data);
 	}

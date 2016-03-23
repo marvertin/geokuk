@@ -22,12 +22,12 @@ public class PoziceSeMaMenitEvent extends Event0<PoziceModel> {
 	 * @param aPozice
 	 * @param aMeloBySeCentrovat
 	 */
-	PoziceSeMaMenitEvent(Mou mou) {
+	PoziceSeMaMenitEvent(final Mou mou) {
 		assert mou != null;
 		this.mou = mou;
 	}
 
-	public void add(Uchopenec uchopenec, int priorita) {
+	public void add(final Uchopenec uchopenec, final int priorita) {
 		assert uchopenec.getMou().equals(mou);
 		if (priorita > this.priorita) {
 			this.uchopenec = uchopenec;

@@ -11,8 +11,8 @@ import javax.swing.JComponent;
  *
  */
 final class ScrollRectToVisibleListener extends MouseMotionAdapter {
-	public void mouseDragged(MouseEvent e) {
-		Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
+	public void mouseDragged(final MouseEvent e) {
+		final Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
 		((JComponent) e.getSource()).scrollRectToVisible(r);
 	}
 }

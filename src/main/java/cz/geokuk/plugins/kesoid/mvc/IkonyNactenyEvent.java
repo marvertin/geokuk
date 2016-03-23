@@ -15,7 +15,7 @@ public class IkonyNactenyEvent extends Event0<KesoidModel> {
 	private final IkonBag	vsechny;
 	private final ASada		jmenoAktualniSady;
 
-	public IkonyNactenyEvent(IkonBag vsechny, ASada jmenoAktualniSady) {
+	public IkonyNactenyEvent(final IkonBag vsechny, final ASada jmenoAktualniSady) {
 		super();
 		this.vsechny = vsechny;
 		this.jmenoAktualniSady = jmenoAktualniSady;

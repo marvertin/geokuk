@@ -5,7 +5,7 @@ public class SelectionEvent<T> {
 	private final SelectionModel<T>	model;
 	final SelectionModel.Item<T>	item;
 
-	public SelectionEvent(SelectionModel<T> model, SelectionModel.Item<T> item) {
+	public SelectionEvent(final SelectionModel<T> model, final SelectionModel.Item<T> item) {
 		this.model = model;
 		this.item = item;
 	}

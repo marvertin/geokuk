@@ -20,10 +20,10 @@ public class Event0<T extends Model0> implements BeanSubtypable {
 	 * @param model
 	 *            the model to set
 	 */
-	public void setModel(Model0 model) {
+	public void setModel(final Model0 model) {
 		checkLocked();
 		@SuppressWarnings("unchecked")
-		T m = (T) model;
+		final T m = (T) model;
 		this.model = m;
 	}
 
@@ -32,7 +32,7 @@ public class Event0<T extends Model0> implements BeanSubtypable {
 		return subType;
 	}
 
-	public void setEventFirer(EventFirer eventFirer) {
+	public void setEventFirer(final EventFirer eventFirer) {
 		if (this.eventFirer == eventFirer)
 			return;
 		checkLocked();

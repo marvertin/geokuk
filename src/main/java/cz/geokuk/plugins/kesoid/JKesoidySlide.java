@@ -319,7 +319,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -402,7 +402,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -486,7 +486,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	/**
 	 * Vrátí pozici nmyši, pokud je v blízkosti kříže
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -572,7 +572,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 		/**
 		 * Asynchronně volaná metoda provýpočet sklivce
-		 * 
+		 *
 		 * @param wpt
 		 */
 		private void spocitejSklivece(final Wpt wpt, final JKesoidySlide jKesoidy) {
@@ -621,7 +621,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -631,7 +631,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.core.coord.JSingleSlide0#render(java.awt.Graphics)
 	 */
 	@Override
@@ -641,7 +641,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.core.coord.JSingleSlide0#createRenderableSlide()
 	 */
 	@Override

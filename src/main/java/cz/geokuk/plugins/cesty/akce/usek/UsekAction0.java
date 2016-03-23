@@ -14,7 +14,7 @@ public abstract class UsekAction0 extends BousekAction0 implements AfterInjectIn
 	private final Usek			usek;
 	private final Mou			mou;
 
-	public UsekAction0(Usek usek, Mou mouMysi) {
+	public UsekAction0(final Usek usek, final Mou mouMysi) {
 		this.usek = usek;
 		mou = usek.getNejblizsiBodKPrimce(mouMysi);
 	}
@@ -40,7 +40,7 @@ public abstract class UsekAction0 extends BousekAction0 implements AfterInjectIn
 	}
 
 	@Override
-	public final void actionPerformed(ActionEvent aE) {
+	public final void actionPerformed(final ActionEvent aE) {
 		provedProUsek(usek, mou);
 	}
 

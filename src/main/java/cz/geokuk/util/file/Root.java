@@ -7,7 +7,7 @@ public class Root {
 	public final File	dir;
 	public final Def	def;
 
-	public Root(File aRoot, Def aDef) {
+	public Root(final File aRoot, final Def aDef) {
 		super();
 		dir = aRoot;
 		def = aDef;
@@ -24,7 +24,7 @@ public class Root {
 		final Pattern	patternIncludes;
 		final Pattern	patternExcludes;
 
-		public Def(int aMaxDepth, Pattern aPatternIncludes, Pattern aPatternExcludes) {
+		public Def(final int aMaxDepth, final Pattern aPatternIncludes, final Pattern aPatternExcludes) {
 			super();
 			maxDepth = aMaxDepth;
 			patternIncludes = aPatternIncludes;
@@ -47,14 +47,14 @@ public class Root {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Root other = (Root) obj;
+		final Root other = (Root) obj;
 		if (dir == null) {
 			if (other.dir != null)
 				return false;

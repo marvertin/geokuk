@@ -26,10 +26,10 @@ public class PosouvejSipkamiAction extends Action0 {
 	/**
 	 *
 	 */
-	public PosouvejSipkamiAction(ESmer smer, boolean daleko) {
+	public PosouvejSipkamiAction(final ESmer smer, final boolean daleko) {
 		this.daleko = daleko;
 
-		String zrychlovac = daleko ? "ctrl " : "";
+		final String zrychlovac = daleko ? "ctrl " : "";
 		switch (smer) {
 		case SEVER:
 			putValue(NAME, "Severně");
@@ -67,21 +67,21 @@ public class PosouvejSipkamiAction extends Action0 {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		Coord moord = vyrezModel.getMoord();
-		Mou mou = moord.getMoustred();
+	public void actionPerformed(final ActionEvent e) {
+		final Coord moord = vyrezModel.getMoord();
+		final Mou mou = moord.getMoustred();
 
-		Moud dd = moord.transformShift(dx * (daleko ? moord.getWidth() / 2 : KROK_MALY), dy * (daleko ? moord.getHeight() / 2 : KROK_MALY));
-		Mou moustred = mou.add(dd);
+		final Moud dd = moord.transformShift(dx * (daleko ? moord.getWidth() / 2 : KROK_MALY), dy * (daleko ? moord.getHeight() / 2 : KROK_MALY));
+		final Mou moustred = mou.add(dd);
 		vyrezModel.presunMapuNaMoustred(moustred);
 	}
 
-	public void onEvent(VyrezChangedEvent event) {
+	public void onEvent(final VyrezChangedEvent event) {
 		// setEnabled (! event.getModel().jeNejvzdaLenejsiMeritko());
 	}
 

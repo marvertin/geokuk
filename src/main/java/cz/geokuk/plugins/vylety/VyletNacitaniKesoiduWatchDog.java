@@ -13,11 +13,11 @@ public class VyletNacitaniKesoiduWatchDog {
 
 	private VyletModel vyletModel;
 
-	public void onEvent(KeskyNactenyEvent aEvent) {
+	public void onEvent(final KeskyNactenyEvent aEvent) {
 		vyletModel.startLoadingVylet(aEvent.getVsechny());
 	}
 
-	public void inject(VyletModel vyletModel) {
+	public void inject(final VyletModel vyletModel) {
 		this.vyletModel = vyletModel;
 	}
 

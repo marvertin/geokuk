@@ -25,7 +25,7 @@ public class JSlide0 extends JComponent implements MySlideListener {
 
 	private JSlide0							nextChained;
 
-	void addChained(JSlide0 slide) {
+	void addChained(final JSlide0 slide) {
 		JSlide0 ch;
 		for (ch = this; ch.nextChained != null; ch = ch.nextChained) {
 		}
@@ -42,92 +42,92 @@ public class JSlide0 extends JComponent implements MySlideListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseClicked(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseClicked(final MouseEvent e, final MouseGestureContext ctx) {
 		chain().mouseClicked(e, ctx);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseEntered(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseEntered(final MouseEvent e, final MouseGestureContext ctx) {
 		chain().mouseEntered(e, ctx);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseExited(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseExited(final MouseEvent e, final MouseGestureContext ctx) {
 		chain().mouseExited(e, ctx);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mousePressed(MouseEvent e, MouseGestureContext ctx) {
+	public void mousePressed(final MouseEvent e, final MouseGestureContext ctx) {
 		chain().mousePressed(e, ctx);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseReleased(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseReleased(final MouseEvent e, final MouseGestureContext ctx) {
 		chain().mouseReleased(e, ctx);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseDragged(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
 		chain().mouseDragged(e, ctx);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseMoved(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseMoved(final MouseEvent e, final MouseGestureContext ctx) {
 		chain().mouseMoved(e, ctx);
 	}
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent e, MouseGestureContext ctx) {
+	public void mouseWheelMoved(final MouseWheelEvent e, final MouseGestureContext ctx) {
 		chain().mouseWheelMoved(e, ctx);
 	}
 
 	@Override
-	public void ctrlKeyPressed(MouseGestureContext ctx) {
+	public void ctrlKeyPressed(final MouseGestureContext ctx) {
 		chain().ctrlKeyPressed(ctx);
 	}
 
 	@Override
-	public void ctrlKeyReleased(MouseGestureContext ctx) {
+	public void ctrlKeyReleased(final MouseGestureContext ctx) {
 		chain().ctrlKeyReleased(ctx);
 	}
 
 	@Override
 	public Mouable getUpravenaMys() {
-		Mouable upravenaMys = chain().getUpravenaMys();
+		final Mouable upravenaMys = chain().getUpravenaMys();
 		// if (upravenaMys == null) {
 		// new Throwable().printStackTrace();
 		// }
@@ -135,7 +135,7 @@ public class JSlide0 extends JComponent implements MySlideListener {
 	}
 
 	@Override
-	public void addPopouItems(JPopupMenu popupMenu, MouseGestureContext ctx) {
+	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
 		chain().addPopouItems(popupMenu, ctx);
 	}
 
@@ -145,12 +145,12 @@ public class JSlide0 extends JComponent implements MySlideListener {
 	}
 
 	@Override
-	public Cursor getMouseCursor(boolean pressed) {
+	public Cursor getMouseCursor(final boolean pressed) {
 		return chain().getMouseCursor(pressed);
 	}
 
 	@Override
-	public void zjistiBlizkost(MouseGestureContext ctx) {
+	public void zjistiBlizkost(final MouseGestureContext ctx) {
 		chain().zjistiBlizkost(ctx);
 	}
 

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Title: Evidence exemplářů a dodávek Description: V první fázi zde bude implementace přidání dodávky a jejích exemplářů Copyright: Copyright (c) 2001 Company: TurboConsult s.r.o.
- * 
+ *
  * @author
  * @version 1.0
  */
@@ -22,47 +22,47 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 
 	/**
 	 * Inkrtementuje o jedničku čítač specifikovaný zadaným klíčem
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, který má být počítán.
 	 * @return Hodnota čítače před provedením operace.
 	 */
-	public int inc(T aKey) {
+	public int inc(final T aKey) {
 		return add(aKey, 1);
 	}
 
 	/**
 	 * Dekrementuje o jedničku čítač specifikovaný zadaným klíčem
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, který má být počítán.
 	 * @return Hodnota čítače před provedením operace.
 	 */
-	public int dec(T aKey) {
+	public int dec(final T aKey) {
 		return add(aKey, -1);
 	}
 
 	/**
 	 * Vrátí hodnotu čítače pro daný objekt.
-	 * 
+	 *
 	 * @parame aKey(Object aKey)
 	 * @return Hodnota čítače pro daný objekt. Vrací nulu, pokud objekt není v mapě evidován. Nikdy nevrátí zápornou hodnotu. Je to vlastně také hodnota před provedením operace.
 	 */
-	public int count(T aKey) {
-		Citac c = _citac(aKey);
+	public int count(final T aKey) {
+		final Citac c = _citac(aKey);
 		return c == null ? 0 : c.get();
 	}
 
 	/**
 	 * Přičte zadanou hodnotu k čítači pro daný objekt.
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, který má být čítán.
 	 * @param aOKolik
 	 *            O jkolik má být čítač změněn. Může být kladné, záporné nebo 0.
 	 * @return Hodnota čítače před provedením operace.
 	 */
-	public int add(T aKey, int aOKolik) {
+	public int add(final T aKey, int aOKolik) {
 		Citac c = _citac(aKey);
 		int minule;
 		if (c != null) // je něco evidováno
@@ -87,14 +87,14 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 
 	/**
 	 * Přičte zadanou hodnotu k čítači pro daný objekt.
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, který má být čítán.
 	 * @param aOKolik
 	 *            O jkolik má být čítač změněn. Může být kladné, záporné nebo 0. Pokud je hodnota záporná a snížení čítače by vedlo k záporným hodnotám, je čítač nastaven na nulu.
 	 * @return Hodnota čítače před provedením operace.
 	 */
-	public int set(T aKey, int aNaKolik) {
+	public int set(final T aKey, int aNaKolik) {
 		if (aNaKolik < 0)
 			aNaKolik = 0;
 		Citac c = _citac(aKey);
@@ -119,23 +119,23 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 
 	/**
 	 * Resetuje čítač daného objektu
-	 * 
+	 *
 	 * @param aKey
 	 *            Objekt, jehož čítač má být resetován.
 	 * @return Hodnota čítače před provedením operace. Pokud je záporná, je považována za nulu.
 	 */
-	public int reset(T aKey) {
+	public int reset(final T aKey) {
 		return set(aKey, 0);
 	}
 
 	/**
 	 * Vrátí nemodifikovatelnou mapu objektů na objekty Integer
-	 * 
+	 *
 	 * @return Naplněný objekt implementující rozhraní Map jako mapa na čítače. Objekt není
 	 */
 	public Map<T, Integer> getMap() {
-		Map<T, Integer> m = new HashMap<>();
-		for (Map.Entry<T, Citac> entry : iCitace.entrySet()) {
+		final Map<T, Integer> m = new HashMap<>();
+		for (final Map.Entry<T, Citac> entry : iCitace.entrySet()) {
 			m.put(entry.getKey(), entry.getValue().get());
 		}
 		return m;
@@ -150,11 +150,11 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 
 	/**
 	 * Vynuluje všechny čítače.
-	 * 
+	 *
 	 * @return Součet všech čítačů před vynulováním.
 	 */
 	public int reset() {
-		int minule = iAllCount;
+		final int minule = iAllCount;
 		iCitace.clear();
 		iAllCount = 0;
 		return minule;
@@ -164,7 +164,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		// zjistit velikost nejdelšího klíče i hodnoty
 		int strlen = 0;
 		int maxvalue = 0;
-		for (Map.Entry<T, Citac> entry : iCitace.entrySet()) {
+		for (final Map.Entry<T, Citac> entry : iCitace.entrySet()) {
 			strlen = Math.max(strlen, (entry.getKey() + "").length());
 			maxvalue = Math.max(maxvalue, (entry.getValue()).get());
 		}
@@ -174,10 +174,10 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 			maxvalue /= 10;
 			pocetmist++;
 		}
-		StringBuilder sb = new StringBuilder();
-		for (Map.Entry<T, Citac> entry : iCitace.entrySet()) {
+		final StringBuilder sb = new StringBuilder();
+		for (final Map.Entry<T, Citac> entry : iCitace.entrySet()) {
 			// String klic = (String)entry.getKey();
-			int hodnota = entry.getValue().get();
+			final int hodnota = entry.getValue().get();
 			sb.append(FString.alignRight(entry.getKey() + " ", strlen + 4, '.'));
 			sb.append(FString.truncateLeft("............................... " + hodnota, pocetmist + 1));
 
@@ -186,7 +186,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		return sb.toString();
 	}
 
-	private Citac _citac(Object aKey) {
+	private Citac _citac(final Object aKey) {
 		return iCitace.get(aKey);
 	}
 
@@ -194,7 +194,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		static final long	serialVersionUID	= 9077120911716375382L;
 		private int			iPocet;
 
-		void add(int aPocet) {
+		void add(final int aPocet) {
 			iPocet += aPocet; // posunout
 			iAllCount += aPocet; // celkový posunout
 			if (iPocet < 0) {
@@ -208,9 +208,9 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		}
 	}
 
-	private int _addsub(CounterMap<T> aMap, int aZnamenko) {
-		int minule = iAllCount;
-		for (Map.Entry<T, Integer> me : aMap.getMap().entrySet()) {
+	private int _addsub(final CounterMap<T> aMap, final int aZnamenko) {
+		final int minule = iAllCount;
+		for (final Map.Entry<T, Integer> me : aMap.getMap().entrySet()) {
 			this.add(me.getKey(), me.getValue() * aZnamenko); // přičíst hodnotu ze zpracovávaného mapu
 			// System.err.p rintln(" " + me.getKey() + ": " + me.getValue() + " " + aMap.count(me.getKey()));
 		}
@@ -219,43 +219,43 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 
 	/**
 	 * Přičte odpovídající hodnoty čítačů ze zadané mapy.
-	 * 
+	 *
 	 * @param aMap
 	 *            mapa, která se má přičíst.
 	 * @return Celková suma čítačů teéto mapy před přičtěním.
 	 */
-	public int add(CounterMap<T> aMap) {
+	public int add(final CounterMap<T> aMap) {
 		return _addsub(aMap, 1);
 	}
 
 	/**
 	 * Odečte odpovídající hodnoty čítačů ze zadané mapy.
-	 * 
+	 *
 	 * @param aMap
 	 *            mapa, která se má přičíst.
 	 * @return Celková suma čítačů teéto mapy před přičtěním.
 	 */
-	public int sub(CounterMap<T> aMap) {
+	public int sub(final CounterMap<T> aMap) {
 		return _addsub(aMap, -1);
 	}
 
-	private static <T> void _testVypis(CounterMap<T> aMap) {
-		Map<T, Integer> m = aMap.getMap();
+	private static <T> void _testVypis(final CounterMap<T> aMap) {
+		final Map<T, Integer> m = aMap.getMap();
 		log.debug("Vypis mavy citacu");
-		for (Map.Entry<T, Integer> me : m.entrySet()) {
+		for (final Map.Entry<T, Integer> me : m.entrySet()) {
 			log.debug("  " + me.getKey() + ": " + me.getValue() + "  " + aMap.count(me.getKey()));
 		}
 		log.debug("     Celkovy pocet = " + aMap.count());
 	}
 
-	public static void main(String args[]) {
+	public static void main(final String args[]) {
 		// TODO : test?
-		CounterMap<String> cm2 = new CCounterMap<>();
+		final CounterMap<String> cm2 = new CCounterMap<>();
 		cm2.set("martin", 1200);
 		cm2.set("helena", 1400);
 		cm2.set("aneta", 1500);
 
-		CounterMap<String> cm = new CCounterMap<>();
+		final CounterMap<String> cm = new CCounterMap<>();
 		_testVypis(cm);
 
 		log.debug(cm.add("adam", 3));

@@ -9,7 +9,7 @@ import cz.geokuk.util.index2d.BoundingRect;
 
 /**
  * Objekt je immuitable.
- * 
+ *
  * @author veverka
  *
  */
@@ -210,7 +210,7 @@ public class Coord {
 
 	/**
 	 * Je vždy v levém dlolním oruhu okna, na rozdíl od ostatních.
-	 * 
+	 *
 	 * @return
 	 */
 	public Mou getMouJZ() {
@@ -249,7 +249,7 @@ public class Coord {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -286,7 +286,7 @@ public class Coord {
 
 	/**
 	 * Vypočítá obdélník vyhovující souřadnicovému obdélníku a přidá nějaké pixly na stranách podle incestu.
-	 * 
+	 *
 	 * @param mourect
 	 * @param insets
 	 * @return
@@ -303,7 +303,7 @@ public class Coord {
 
 	/**
 	 * Úhel, o který je mapa v daném bodě pootočena oproti normálnímu směru na sever.
-	 * 
+	 *
 	 * @return
 	 */
 	public double computNataceciUhel() {
@@ -403,7 +403,7 @@ public class Coord {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -421,7 +421,7 @@ public class Coord {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

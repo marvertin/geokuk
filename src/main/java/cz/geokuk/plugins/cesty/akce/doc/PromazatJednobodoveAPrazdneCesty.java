@@ -10,7 +10,7 @@ public class PromazatJednobodoveAPrazdneCesty extends DocAction0 {
 
 	private static final long serialVersionUID = -7547868179813232769L;
 
-	public PromazatJednobodoveAPrazdneCesty(Doc doc) {
+	public PromazatJednobodoveAPrazdneCesty(final Doc doc) {
 		super(doc);
 		putValue(NAME, "Promazat jednobodové cesty");
 		putValue(SHORT_DESCRIPTION, "Promaže bšechny jednobodové a prázdné vesty, pokud však nejsou nad waypointy.");
@@ -18,24 +18,24 @@ public class PromazatJednobodoveAPrazdneCesty extends DocAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProDoc(Doc doc) {
+	protected boolean mamPovolitProDoc(final Doc doc) {
 		return doc.getPocetJednobodovychCest() + doc.getPocetPrazdnychCest() > 0;
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Doc doc, boolean aZKontextovehoMenu) {
+	protected void nastavJmenoAkce(final Doc doc, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "Promazat jednobodové cesty (" + (doc.getPocetJednobodovychCest() + doc.getPocetPrazdnychCest()) + ")");
 	}
 
 	@Override
-	protected void provedProDoc(Doc doc) {
+	protected void provedProDoc(final Doc doc) {
 		final List<Cesta> cesty = new ArrayList<>();
-		for (Cesta cesta : doc) {
+		for (final Cesta cesta : doc) {
 			if (cesta.isEmpty() || cesta.isJednobodova()) {
 				cesty.add(cesta);
 			}
 		}
-		for (Cesta cesta : cesty) {
+		for (final Cesta cesta : cesty) {
 			cestyModel.removeCestu(cesta);
 		}
 	}

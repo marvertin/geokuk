@@ -25,11 +25,11 @@ public class HledaciPodminka extends HledaciPodminka0 {
 	 * @param aRegularniVyraz
 	 *            the regularniVyraz to set
 	 */
-	public void setRegularniVyraz(boolean aRegularniVyraz) {
+	public void setRegularniVyraz(final boolean aRegularniVyraz) {
 		regularniVyraz = aRegularniVyraz;
 	}
 
-	public void setJenVZobrazenych(boolean selected) {
+	public void setJenVZobrazenych(final boolean selected) {
 		jenVZobrazenych = selected;
 	}
 

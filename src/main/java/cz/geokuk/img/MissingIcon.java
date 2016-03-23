@@ -11,13 +11,13 @@ import javax.swing.Icon;
  */
 public class MissingIcon implements Icon {
 
-	private int			width	= 32;
-	private int			height	= 32;
+	private final int			width	= 32;
+	private final int			height	= 32;
 
-	private BasicStroke	stroke	= new BasicStroke(4);
+	private final BasicStroke	stroke	= new BasicStroke(4);
 
-	public void paintIcon(Component c, Graphics g, int x, int y) {
-		Graphics2D g2d = (Graphics2D) g.create();
+	public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
+		final Graphics2D g2d = (Graphics2D) g.create();
 
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(x + 1, y + 1, width - 2, height - 2);

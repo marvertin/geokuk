@@ -24,7 +24,7 @@ public class OpenStreetViewAction extends Action0 {
 	private Poziceq				poziceq					= new Poziceq();
 	private final Mouable		mouable;
 
-	public OpenStreetViewAction(Mouable mouable) {
+	public OpenStreetViewAction(final Mouable mouable) {
 		super(null);
 		this.mouable = mouable;
 		putValue(NAME, "Otevřít StreetView");
@@ -33,12 +33,12 @@ public class OpenStreetViewAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		Mouable m = mouable;
 		if (m == null) {
 			m = poziceq.getPoziceMouable();
@@ -46,25 +46,25 @@ public class OpenStreetViewAction extends Action0 {
 				return;
 			}
 		}
-		Wgs wgs = mouable.getMou().toWgs();
+		final Wgs wgs = mouable.getMou().toWgs();
 		openBrowserWithStreetView(wgs);
 	}
 
-	private static URI getStreetViewUri(Wgs wgs) {
+	private static URI getStreetViewUri(final Wgs wgs) {
 		try {
 			return new URI(String.format(Locale.US, STREET_VIEW_TEMPLATE, wgs.lat, wgs.lon));
-		} catch (URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 			throw new AssertionError("Someone has messed up the URI!", e);
 		}
 	}
 
-	private static void openBrowserWithStreetView(Wgs coordinates) {
+	private static void openBrowserWithStreetView(final Wgs coordinates) {
 		if (Desktop.isDesktopSupported()) {
-			Desktop desktop = Desktop.getDesktop();
+			final Desktop desktop = Desktop.getDesktop();
 			if (desktop.isSupported(Desktop.Action.BROWSE)) {
 				try {
 					desktop.browse(getStreetViewUri(coordinates));
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					log.error("Desktop environment doesn't support browsing actions!", e);
 				}
 			} else {
@@ -75,7 +75,7 @@ public class OpenStreetViewAction extends Action0 {
 		}
 	}
 
-	public void onEvent(PoziceChangedEvent event) {
+	public void onEvent(final PoziceChangedEvent event) {
 		poziceq = event.poziceq;
 		setEnabled(mouable != null || !poziceq.isNoPosition());
 	}

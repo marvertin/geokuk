@@ -20,7 +20,7 @@ public class UmisteniSouboruAction extends DialogOpeningAction0 {
 	/**
 	 * @param aBoard
 	 */
-	public UmisteniSouboruAction(ESouborPanelName souborPanelName) {
+	public UmisteniSouboruAction(final ESouborPanelName souborPanelName) {
 		super("Umístění souborů...");
 		this.souborPanelName = souborPanelName;
 		putValue(SHORT_DESCRIPTION, "Nastavení umístění souborů a složek, které program používá.");
@@ -29,12 +29,12 @@ public class UmisteniSouboruAction extends DialogOpeningAction0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
 	public JMyDialog0 createDialog() {
-		JUmisteniSouboruDialog jPrehledSouboruDialog = new JUmisteniSouboruDialog();
+		final JUmisteniSouboruDialog jPrehledSouboruDialog = new JUmisteniSouboruDialog();
 		if (souborPanelName != null) {
 			jPrehledSouboruDialog.fokusni(souborPanelName);
 		}

@@ -49,7 +49,7 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 		// Board.eveman.registerWeakly(this);
 	}
 
-	public void onEvent(PoziceChangedEvent aEvent) {
+	public void onEvent(final PoziceChangedEvent aEvent) {
 		if (FUtil.equalsa(poziceq, aEvent.poziceq))
 			return;
 		poziceq = aEvent.poziceq;
@@ -57,15 +57,15 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 		repaint();
 	}
 
-	public void onEvent(ZmenaSouradnicMysiEvent aEvent) {
+	public void onEvent(final ZmenaSouradnicMysiEvent aEvent) {
 		pointcur = aEvent.pointcur;
 		prepocitatBlizkostKrize();
 	}
 
 	private void prepocitatBlizkostKrize() {
 		if (!poziceq.isNoPosition() && pointcur != null) {
-			double dalka = getSoord().pixleDalka(getSoord().transform(pointcur), poziceq.getWgs().toMou());
-			boolean pobliz = dalka < 20;
+			final double dalka = getSoord().pixleDalka(getSoord().transform(pointcur), poziceq.getWgs().toMou());
+			final boolean pobliz = dalka < 20;
 			if (pobliz != mysJePoblizKrize) {
 				mysJePoblizKrize = pobliz;
 				repaintKriz();
@@ -79,23 +79,23 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 	private void repaintKriz() {
 		if (poziceq.isNoPosition())
 			return; // není co kreslit
-		Mou mou = poziceq.getPoziceMou();
-		Point p = getSoord().transform(mou);
+		final Mou mou = poziceq.getPoziceMou();
+		final Point p = getSoord().transform(mou);
 		repaint(p.x - R_KRIZE, p.y - R_KRIZE, R_KRIZE * 2, R_KRIZE * 2);
 	}
 
 	@Override
-	public void paintComponent(Graphics aG) {
+	public void paintComponent(final Graphics aG) {
 
 		if (poziceq.isNoPosition())
 			return; // není co kreslit
-		Mou mou = poziceq.getPoziceMou();
-		Point p = getSoord().transform(mou);
-		int ra = R_VNITRNI_KRUZNICE;
-		int rb = R_VNEJSI_KRUZNICE;
-		int rk = R_KRIZE;
+		final Mou mou = poziceq.getPoziceMou();
+		final Point p = getSoord().transform(mou);
+		final int ra = R_VNITRNI_KRUZNICE;
+		final int rb = R_VNEJSI_KRUZNICE;
+		final int rk = R_KRIZE;
 
-		Graphics2D g = (Graphics2D) aG;
+		final Graphics2D g = (Graphics2D) aG;
 		g.setStroke(new BasicStroke(mysJePoblizKrize ? 3 : 1));
 		g.setColor(Color.RED);
 		g.drawLine(p.x - rk, p.y, p.x + rk, p.y);
@@ -106,7 +106,7 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 
 	/**
 	 * Vrátí pozici nmyši, pokud je v blízkosti kříže
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -122,7 +122,7 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 	 * Invoked when the mouse has been clicked on a component.
 	 */
 	@Override
-	public void mouseClicked(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseClicked(final MouseEvent e, final MouseGestureContext ctx) {
 		// System.out.println("UDALOST " + e);
 		// kesky.mouseClicked(e);
 		// if (e.isConsumed()) return;
@@ -131,7 +131,7 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 			poziceModel.clearPozice();
 		} else {
 			if ((e.getModifiers() & Event.CTRL_MASK) == 0) { // jen když není stisknut control
-				boolean vystredovat = e.getClickCount() >= 2;
+				final boolean vystredovat = e.getClickCount() >= 2;
 				poziceModel.setPozice(getSoord().transform(e.getPoint()).toWgs());
 				if (vystredovat) {
 					vyrezModel.vystredovatNaPozici();
@@ -142,12 +142,12 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 	}
 
 	@Override
-	public void addPopouItems(JPopupMenu popupMenu, MouseGestureContext ctx) {
+	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
 		if (mysJePoblizKrize) {
-			Wgs wgs = poziceq.getWgs();
+			final Wgs wgs = poziceq.getWgs();
 			// add(new ZoomKesAction(kesoid));
 			if (wgs != null) {
-				JMenuItem item = new JMenuItem(factory.init(new CenterPoziceAction()));
+				final JMenuItem item = new JMenuItem(factory.init(new CenterPoziceAction()));
 				// item.setText("Centruj");
 				// TODO Dát ikonu středování
 				// item.setIcon(null);
@@ -165,16 +165,16 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 		chain().addPopouItems(popupMenu, ctx);
 	}
 
-	public void inject(PoziceModel poziceModel) {
+	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
 
-	public void inject(VyrezModel vyrezModel) {
+	public void inject(final VyrezModel vyrezModel) {
 		this.vyrezModel = vyrezModel;
 	}
 
 	@Override
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 

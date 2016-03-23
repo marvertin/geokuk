@@ -23,7 +23,7 @@ public class CenterWaypointAction extends Action0 implements AfterEventReceiverR
 	/**
 	 *
 	 */
-	public CenterWaypointAction(Wpt wpt) {
+	public CenterWaypointAction(final Wpt wpt) {
 		this.wpt = wpt;
 		// putValue(MNEMONIC_KEY, InputEvent.)
 		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
@@ -31,23 +31,23 @@ public class CenterWaypointAction extends Action0 implements AfterEventReceiverR
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		poziceModel.setPozice(wpt);
 		vyrezModel.vystredovatNaPozici();
 	}
 
-	public void onEvent(IkonyNactenyEvent event) {
+	public void onEvent(final IkonyNactenyEvent event) {
 		ikonBag = event.getBag();
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override

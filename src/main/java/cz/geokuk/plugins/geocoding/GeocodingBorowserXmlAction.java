@@ -12,7 +12,7 @@ public class GeocodingBorowserXmlAction extends Action0 {
 	private static final long	serialVersionUID	= -5194259213320265512L;
 	private final Wgs			wgs;
 
-	public GeocodingBorowserXmlAction(Wgs wgs) {
+	public GeocodingBorowserXmlAction(final Wgs wgs) {
 		super("Geocoding ...");
 		putValue(SHORT_DESCRIPTION, "Zobrazí Internetový prohlížeč s detetailními informacemi o vybraném místě. Dokument je ve formátu XML, tak jak je vracen příslušnou službou.");
 		// putValue(MNEMONIC_KEY, KeyEvent.VK_A);
@@ -22,11 +22,11 @@ public class GeocodingBorowserXmlAction extends Action0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		HledaciPodminka podm = new HledaciPodminka();
+	public void actionPerformed(final ActionEvent e) {
+		final HledaciPodminka podm = new HledaciPodminka();
 		podm.setStredHledani(wgs);
 		podm.setVzorek(wgs.lat + "," + wgs.lon);
-		URL url = podm.computeUrl();
+		final URL url = podm.computeUrl();
 		BrowserOpener.displayURL(url);
 
 	}

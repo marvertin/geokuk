@@ -19,10 +19,10 @@ public class IkonNacitacManager {
 	private Filex					lastThirdParty;
 	private Filex					lastMyOwn;
 
-	public void startLoad(boolean prenacti) {
-		KesoidUmisteniSouboru umisteniSouboru = kesoidModel.getUmisteniSouboru();
-		Filex thirdParty = umisteniSouboru.getImage3rdPartyDir();
-		Filex myDir = umisteniSouboru.getImageMyDir();
+	public void startLoad(final boolean prenacti) {
+		final KesoidUmisteniSouboru umisteniSouboru = kesoidModel.getUmisteniSouboru();
+		final Filex thirdParty = umisteniSouboru.getImage3rdPartyDir();
+		final Filex myDir = umisteniSouboru.getImageMyDir();
 
 		if (prenacti || !Objects.equals(lastThirdParty, thirdParty) || !Objects.equals(lastMyOwn, myDir)) {
 			lastMyOwn = myDir;
@@ -36,13 +36,13 @@ public class IkonNacitacManager {
 		}
 	}
 
-	public IkonNacitacManager(KesoidModel kesoidModel) {
+	public IkonNacitacManager(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 		ikonNacitacLoader = new IkonNacitacLoader();
 
 		new Timer(10000, new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				startLoad(false);
 			}
 		}).start();

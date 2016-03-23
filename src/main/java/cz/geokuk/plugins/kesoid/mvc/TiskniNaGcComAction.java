@@ -23,7 +23,7 @@ public class TiskniNaGcComAction extends AbstractAction {
 	/**
 	 *
 	 */
-	public TiskniNaGcComAction(Kesoid kesoid) {
+	public TiskniNaGcComAction(final Kesoid kesoid) {
 		super("Tisk na webu", kesoid.getUrlIcon());
 		url = kesoid.getUrlPrint();
 		putValue(SHORT_DESCRIPTION, "Zobrazí listing keše na geocaching COM v tisknutelné podobě.");
@@ -33,11 +33,11 @@ public class TiskniNaGcComAction extends AbstractAction {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		BrowserOpener.displayURL(url);
 	}
 

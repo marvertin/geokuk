@@ -8,7 +8,7 @@ import cz.geokuk.plugins.cesty.data.Usek;
 
 /**
  * Jde na vybranou pozici
- * 
+ *
  * @author veverka
  *
  */
@@ -20,7 +20,7 @@ public class UriznoutCestuVUsekuAction extends UsekAction0 {
 	/**
 	 * @param aBoard
 	 */
-	public UriznoutCestuVUsekuAction(Usek usek, Mou mouMysi) {
+	public UriznoutCestuVUsekuAction(final Usek usek, final Mou mouMysi) {
 		super(usek, mouMysi);
 		putValue(NAME, "Uříznout cestu");
 		putValue(SHORT_DESCRIPTION, "Uřízne konec od daného místa na úseku a vyhodí pryč.");
@@ -29,17 +29,17 @@ public class UriznoutCestuVUsekuAction extends UsekAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProUsek(Usek usek, Mou mou) {
+	protected boolean mamPovolitProUsek(final Usek usek, final Mou mou) {
 		return true;
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Usek usek, Mou mou) {
+	protected void nastavJmenoAkce(final Usek usek, final Mou mou) {
 		putValue(NAME, "<html>Uříznout cestu" + usek.getCesta().getNazevHtml() + " " + usek.dalkaCestaRozdelenoHtml(mou));
 	}
 
 	@Override
-	protected void provedProUsek(Usek usek, Mou mou) {
+	protected void provedProUsek(final Usek usek, final Mou mou) {
 		cestyModel.rozdelCestuVUseku(usek, mou, true);
 	}
 

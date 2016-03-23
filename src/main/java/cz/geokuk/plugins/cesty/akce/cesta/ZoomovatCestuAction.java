@@ -8,7 +8,7 @@ public class ZoomovatCestuAction extends CestaAction0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public ZoomovatCestuAction(Cesta cesta) {
+	public ZoomovatCestuAction(final Cesta cesta) {
 		super(cesta);
 		// putValue(NAME, "<html>Odstraň cestu <i>" + jCestaMenu.getNazev() + "</i> " + (jCestaMenu.getMouDelkaCesta() + " mou"));
 		putValue(NAME, "Zoomovat cestu");
@@ -19,19 +19,19 @@ public class ZoomovatCestuAction extends CestaAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProCestu(Cesta cesta) {
+	protected boolean mamPovolitProCestu(final Cesta cesta) {
 		return !cesta.isEmpty();
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Cesta cesta, boolean aZKontextovehoMenu) {
+	protected void nastavJmenoAkce(final Cesta cesta, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "<html>Zoom cestu" + cesta.getNazevADalkaHtml());
 	}
 
 	@Override
-	protected void provedProCestu(Cesta cesta) {
-		MouRect mourect = new MouRect();
-		for (Bod bod : cesta.getBody()) {
+	protected void provedProCestu(final Cesta cesta) {
+		final MouRect mourect = new MouRect();
+		for (final Bod bod : cesta.getBody()) {
 			mourect.add(bod.getMou());
 		}
 		mourect.resize(1.2);

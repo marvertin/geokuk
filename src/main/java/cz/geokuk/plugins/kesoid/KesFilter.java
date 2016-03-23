@@ -54,22 +54,22 @@ public class KesFilter {
 	 * @param jmenaNechtenychAlel
 	 *            the jmenaNechtenychAlel to set
 	 */
-	public void setJmenaNechtenychAlel(Set<String> jmenaNechtenychAlel) {
+	public void setJmenaNechtenychAlel(final Set<String> jmenaNechtenychAlel) {
 		this.jmenaNechtenychAlel = jmenaNechtenychAlel;
 		nechteneAlely = null;
 	}
 
-	public boolean isFiltered(Wpt aWpt, Genom genom, Genotyp genotyp) {
+	public boolean isFiltered(final Wpt aWpt, final Genom genom, Genotyp genotyp) {
 		try {
 			if (genotyp == null) { // to je zde jen z důvodu optimalizace
 				genotyp = aWpt.getGenotyp(genom);
 			}
-			Set<Alela> alelygenotypu = genotyp.getAlely();
+			final Set<Alela> alelygenotypu = genotyp.getAlely();
 			if (jmenaNechtenychAlel != null) {
 				if (nechteneAlely == null) {
 					nechteneAlely = genom.namesToAlelyIgnorujNeexistujici(jmenaNechtenychAlel);
 				}
-				Set<Alela> alely = new HashSet<>(nechteneAlely);
+				final Set<Alela> alely = new HashSet<>(nechteneAlely);
 				alely.retainAll(alelygenotypu);
 				if (alely.size() > 0)
 					return false;
@@ -77,7 +77,7 @@ public class KesFilter {
 
 			// if (aWpt.getType() != AWptType.CACHE && ! wptTypes.contains(aWpt.getType())) return false;
 
-			Kesoid kesoid = aWpt.getKesoid();
+			final Kesoid kesoid = aWpt.getKesoid();
 
 			if (filterDefinition.isJenFinalUNalezenych()) {
 				if (kesoid.getVztah() == EKesVztah.FOUND || kesoid.getVztah() == EKesVztah.OWN) {
@@ -87,7 +87,7 @@ public class KesFilter {
 			}
 
 			if (kesoid instanceof Kes) {
-				Kes kes = (Kes) kesoid;
+				final Kes kes = (Kes) kesoid;
 
 				if (kes.getVztah() == EKesVztah.NORMAL) { // jen u nenalezených
 					if (kes.getFinal() != null && filterDefinition.isJenDoTerenuUNenalezenych() && (!aWpt.nutnyKLusteni()) && !Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym()))
@@ -108,13 +108,13 @@ public class KesFilter {
 				}
 			}
 			if (vyletModel != null) {
-				EVylet evylKes = vyletModel.get(kesoid);
-				EVylet evylPrah = filterDefinition.getPrahVyletu();
+				final EVylet evylKes = vyletModel.get(kesoid);
+				final EVylet evylPrah = filterDefinition.getPrahVyletu();
 				if (evylKes.ordinal() < evylPrah.ordinal())
 					return false;
 			}
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Filtrovani waypointu: " + aWpt, e);
 
 		}
@@ -151,11 +151,11 @@ public class KesFilter {
 	 * @param filterDefinition
 	 *            the filterDefinition to set
 	 */
-	public void setFilterDefinition(FilterDefinition filterDefinition) {
+	public void setFilterDefinition(final FilterDefinition filterDefinition) {
 		this.filterDefinition = filterDefinition;
 	}
 
-	public void inject(VyletModel vyletModel) {
+	public void inject(final VyletModel vyletModel) {
 		this.vyletModel = vyletModel;
 	}
 

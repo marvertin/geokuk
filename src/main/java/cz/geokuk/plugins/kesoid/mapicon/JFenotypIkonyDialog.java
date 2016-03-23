@@ -38,17 +38,17 @@ public class JFenotypIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 		jvse.setPreferredSize(new Dimension(500, 600));
 	}
 
-	public void onEvent(IkonyNactenyEvent event) {
+	public void onEvent(final IkonyNactenyEvent event) {
 		ikonBag = event.getBag();
 		resetIfVse();
 	}
 
-	public void onEvent(KeskyVyfiltrovanyEvent event) {
+	public void onEvent(final KeskyVyfiltrovanyEvent event) {
 		filtrovaneKesBag = event.getFiltrovane();
 		resetIfVse();
 	}
 
-	public void onEvent(FenotypPreferencesChangedEvent event) {
+	public void onEvent(final FenotypPreferencesChangedEvent event) {
 		if (event.getJmenaNefenotypovanychAlel().equals(jmenaVybranychAlel))
 			return;
 		jmenaVybranychAlel = event.getJmenaNefenotypovanychAlel();

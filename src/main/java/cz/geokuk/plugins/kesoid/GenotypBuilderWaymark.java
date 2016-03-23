@@ -17,12 +17,12 @@ class GenotypBuilderWaymark {
 	/**
 	 *
 	 */
-	public GenotypBuilderWaymark(Genom genom, Genotyp g) {
+	public GenotypBuilderWaymark(final Genom genom, final Genotyp g) {
 		this.genom = genom;
 		this.g = g;
 	}
 
-	public void build(Waymark waymark) {
+	public void build(final Waymark waymark) {
 		g.put(genom.ALELA_wm);
 		switch (waymark.getVztah()) {
 		case NORMAL:

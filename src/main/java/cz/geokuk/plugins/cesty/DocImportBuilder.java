@@ -20,13 +20,13 @@ public class DocImportBuilder implements IImportBuilder {
 	}
 
 	@Override
-	public void addGpxWpt(GpxWpt gpxwpt) {
+	public void addGpxWpt(final GpxWpt gpxwpt) {
 	}
 
 	@Override
-	public void addTrackWpt(GpxWpt wpt) {
-		Bod bod = updator.pridejNaKonec(cesta, wpt.wgs.toMou());
-		Usek usek = bod.getUvzad(); // právě přidaný úsek, pokud nějaký
+	public void addTrackWpt(final GpxWpt wpt) {
+		final Bod bod = updator.pridejNaKonec(cesta, wpt.wgs.toMou());
+		final Usek usek = bod.getUvzad(); // právě přidaný úsek, pokud nějaký
 		if (usek != null && zacatekSegmentu) {
 			updator.setVzdusny(usek, true);
 		}
@@ -57,17 +57,17 @@ public class DocImportBuilder implements IImportBuilder {
 		return cesty;
 	}
 
-	void setCesty(List<Cesta> cesty) {
+	void setCesty(final List<Cesta> cesty) {
 		this.cesty = cesty;
 	}
 
 	@Override
-	public void setTrackName(String aTrackName) {
+	public void setTrackName(final String aTrackName) {
 		updator.setNazev(cesta, aTrackName);
 	}
 
 	@Override
-	public GpxWpt get(String aName) {
+	public GpxWpt get(final String aName) {
 		throw new RuntimeException("Neimplementovano");
 	}
 

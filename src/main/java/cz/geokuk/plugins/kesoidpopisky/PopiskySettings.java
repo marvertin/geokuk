@@ -121,7 +121,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -139,7 +139,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -193,7 +193,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

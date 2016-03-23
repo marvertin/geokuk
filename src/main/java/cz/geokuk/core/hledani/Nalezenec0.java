@@ -18,7 +18,7 @@ public abstract class Nalezenec0 {
 	 * @param aVzdalenost
 	 *            the vzdalenost to set
 	 */
-	public void setVzdalenost(double aVzdalenost) {
+	public void setVzdalenost(final double aVzdalenost) {
 		vzdalenost = aVzdalenost;
 	}
 
@@ -33,7 +33,7 @@ public abstract class Nalezenec0 {
 	 * @param aAzimut
 	 *            the azimut to set
 	 */
-	public void setAzimut(double aAzimut) {
+	public void setAzimut(final double aAzimut) {
 		azimut = aAzimut;
 	}
 

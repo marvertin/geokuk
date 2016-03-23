@@ -29,26 +29,26 @@ public abstract class Nacitac0 {
 
 	abstract boolean umiNacist(File file);
 
-	protected final void nactiBezVyjimky(File file, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) {
+	protected final void nactiBezVyjimky(final File file, final IImportBuilder builder, final Future<?> future, final ProgressModel aProgressModel) {
 		try {
 			try {
 				nacti(file, builder, future, aProgressModel);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new RuntimeException("Problem reading \"" + file + "\"", e);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Problem při načítání kešek, ale jedeme dál");
 		}
 	}
 
-	protected final void nactiBezVyjimky(ZipFile zipFile, ZipEntry zipEntry, IImportBuilder builder, Future<?> future, ProgressModel aProgressModel) {
+	protected final void nactiBezVyjimky(final ZipFile zipFile, final ZipEntry zipEntry, final IImportBuilder builder, final Future<?> future, final ProgressModel aProgressModel) {
 		try {
 			try {
 				nacti(zipFile, zipEntry, builder, future, aProgressModel);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new RuntimeException("Problem reading \"" + zipEntry + "\"", e);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Problem při načítání kešek, ale jedeme dál");
 		}
 	}
@@ -63,17 +63,17 @@ public abstract class Nacitac0 {
 			return 0;
 		try {
 			return Integer.parseInt(s);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Problem s parsrovanim cisla \"" + s + "\" pri cteni hodnoceni nebo bestofu");
 			return 0; // je to španě, vrátíme nuli
 		}
 	}
 
-	protected InputStream wrapByProgressor(InputStream istm, String sourceName, ProgressModel aProgressModel) {
+	protected InputStream wrapByProgressor(final InputStream istm, final String sourceName, final ProgressModel aProgressModel) {
 		return new BufferedInputStream(new ProgressorInputStream(aProgressModel, "Loading: " + sourceName, istm));
 	}
 
-	protected String intern(String aString) {
+	protected String intern(final String aString) {
 		return FString.intern(aString);
 	}
 }

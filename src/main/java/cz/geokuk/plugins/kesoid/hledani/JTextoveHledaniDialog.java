@@ -103,11 +103,11 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		jButtonCentruj.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 
-				Nalezenec nalezenec = jKeskovaciTabulka.getCurrent();
+				final Nalezenec nalezenec = jKeskovaciTabulka.getCurrent();
 				if (nalezenec != null) {
-					Kesoid kes = nalezenec.getKes();
+					final Kesoid kes = nalezenec.getKes();
 					poziceModel.setPozice(kes.getMainWpt());
 					vyrezModel.vystredovatNaPozici();
 					// Board.eveman.fire(new PoziceChangedEvent(kes.getMainWpt(), true) );
@@ -122,21 +122,21 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		jKeskovaciTabulka.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
-			public void valueChanged(ListSelectionEvent aE) {
+			public void valueChanged(final ListSelectionEvent aE) {
 				jButtonCentruj.setEnabled(jKeskovaciTabulka.getCurrent() != null);
 			}
 		});
 	}
 
-	public void onEvent(KeskyVyfiltrovanyEvent aEvent) {
+	public void onEvent(final KeskyVyfiltrovanyEvent aEvent) {
 		setFiltrovane(aEvent.getFiltrovane());
 	}
 
-	public void onEvent(KeskyNactenyEvent aEvent) {
+	public void onEvent(final KeskyNactenyEvent aEvent) {
 		setVsechny(aEvent.getVsechny());
 	}
 
-	public void onEvent(ReferencniBodSeZmenilEvent aEvent) {
+	public void onEvent(final ReferencniBodSeZmenilEvent aEvent) {
 		setReferencniBod(aEvent.wgs);
 	}
 
@@ -155,7 +155,7 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Najdi keš");
 
-		JKesTable kesTable = new JKesTable();
+		final JKesTable kesTable = new JKesTable();
 		// jKeskovaciTabulka = new JScrollPane(textArea);
 		jKeskovaciTabulka = kesTable;
 
@@ -164,8 +164,8 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		jJenVZobrazenych = new JCheckBox("Jen v zobrazených keších");
 		jRegularniVyrazy = new JCheckBox("Regulární výraz");
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
+		final JPanel panel = new JPanel();
+		final GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 		add(panel);
 
@@ -191,17 +191,17 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		pack();
 	}
 
-	public void setVsechny(KesBag vsechny) {
+	public void setVsechny(final KesBag vsechny) {
 		this.vsechny = vsechny;
 		search();
 	}
 
-	public void setFiltrovane(KesBag filtrovane) {
+	public void setFiltrovane(final KesBag filtrovane) {
 		this.filtrovane = filtrovane;
 		search();
 	}
 
-	protected void setReferencniBod(Wgs wgs) {
+	protected void setReferencniBod(final Wgs wgs) {
 		if (wgs.equals(referencniBod))
 			return;
 		referencniBod = wgs;
@@ -212,34 +212,34 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		if (vsechny == null || filtrovane == null || referencniBod == null)
 			return;
 		message("Hleda se ...");
-		String s = entry.getText();
-		HledaciPodminka podm = new HledaciPodminka();
+		final String s = entry.getText();
+		final HledaciPodminka podm = new HledaciPodminka();
 		podm.setStredHledani(referencniBod);
 		podm.setVzorek(s);
 		podm.setRegularniVyraz(jRegularniVyrazy.isSelected());
 		podm.setJenVZobrazenych(jJenVZobrazenych.isSelected());
-		KesBag kde = jJenVZobrazenych.isSelected() ? filtrovane : vsechny;
+		final KesBag kde = jJenVZobrazenych.isSelected() ? filtrovane : vsechny;
 		hledaciSluzba.spustHledani(new Hledac(kde), podm, this);
 	}
 
-	void message(String msg) {
+	void message(final String msg) {
 		status.setText(msg);
 	}
 
 	// DocumentListener methods
 
 	@Override
-	public void insertUpdate(DocumentEvent ev) {
+	public void insertUpdate(final DocumentEvent ev) {
 		search();
 	}
 
 	@Override
-	public void removeUpdate(DocumentEvent ev) {
+	public void removeUpdate(final DocumentEvent ev) {
 		search();
 	}
 
 	@Override
-	public void changedUpdate(DocumentEvent ev) {
+	public void changedUpdate(final DocumentEvent ev) {
 	}
 
 	private final class SpousteniVyhledavace implements ChangeListener {
@@ -247,8 +247,8 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		private boolean bylVybran;
 
 		@Override
-		public void stateChanged(ChangeEvent e) {
-			JCheckBox chb = (JCheckBox) e.getSource();
+		public void stateChanged(final ChangeEvent e) {
+			final JCheckBox chb = (JCheckBox) e.getSource();
 			if (bylVybran != chb.isSelected()) {
 				bylVybran = chb.isSelected();
 				search();
@@ -260,7 +260,7 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		private static final long serialVersionUID = -480129891208539096L;
 
 		@Override
-		public void actionPerformed(ActionEvent ev) {
+		public void actionPerformed(final ActionEvent ev) {
 			// hilit.removeAllHighlights();
 			entry.setText("");
 			entry.setBackground(entryBg);
@@ -268,7 +268,7 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 	}
 
 	@Override
-	public void refreshVysledekHledani(VysledekHledani<Nalezenec> vysledekHledani) {
+	public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {
 		// if (nalezenci.size() == 0) {
 		// jButtonCentruj.setEnabled(false);
 		// } else {
@@ -284,29 +284,29 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 				message("Žádná shoda, stiskni ESC k výmazu hledacího pole.");
 			}
 		}
-		Exception xexception = vysledekHledani.exception;
+		final Exception xexception = vysledekHledani.exception;
 		if (xexception instanceof PatternSyntaxException) {
-			PatternSyntaxException exception = (PatternSyntaxException) xexception;
+			final PatternSyntaxException exception = (PatternSyntaxException) xexception;
 			entry.setBackground(entryBg);
 			message(exception.getDescription() + " na pozici " + exception.getIndex());
 		}
 	}
 
-	public void inject(PoziceModel poziceModel) {
+	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
 
-	public void inject(VyrezModel vyrezModel) {
+	public void inject(final VyrezModel vyrezModel) {
 		this.vyrezModel = vyrezModel;
 	}
 
-	public void inject(HledaciSluzba hledaciSluzba) {
+	public void inject(final HledaciSluzba hledaciSluzba) {
 		this.hledaciSluzba = hledaciSluzba;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
 	 */
 	@Override

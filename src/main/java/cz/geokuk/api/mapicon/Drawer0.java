@@ -15,13 +15,13 @@ public abstract class Drawer0 {
 	 * @param aIdp
 	 *            the idp to set
 	 */
-	public void setIdp(IkonDrawingProperties aIdp) {
+	public void setIdp(final IkonDrawingProperties aIdp) {
 		idp = aIdp;
 	}
 
 	/**
 	 * Vykreslí zdrojový obrázek do dané vrstvy. Obrázek přidá do seznamu,
-	 * 
+	 *
 	 * @param src
 	 * @param dest
 	 */
@@ -52,51 +52,51 @@ public abstract class Drawer0 {
 		return idp.properties;
 	}
 
-	protected final String getString(String propname, String def) {
-		String s = (String) idp.properties.get(propname);
+	protected final String getString(final String propname, final String def) {
+		final String s = (String) idp.properties.get(propname);
 		return s == null ? def : s;
 	}
 
-	protected final int getInt(String propname, int def) {
+	protected final int getInt(final String propname, final int def) {
 		return Integer.parseInt(getString(propname, def + "").trim());
 	}
 
-	protected final float getFloat(String propname, float def) {
+	protected final float getFloat(final String propname, final float def) {
 		return Float.parseFloat(getString(propname, def + ""));
 	}
 
-	protected final String[] getStrings(String propname, String[] def) {
-		String s = getString(propname, null);
+	protected final String[] getStrings(final String propname, final String[] def) {
+		final String s = getString(propname, null);
 		if (s == null)
 			return def;
-		String[] ss = s.split(" *, *");
+		final String[] ss = s.split(" *, *");
 		return ss;
 	}
 
-	protected final int[] getInts(String propname, int[] def) {
-		String[] ss = getStrings(propname, null);
+	protected final int[] getInts(final String propname, final int[] def) {
+		final String[] ss = getStrings(propname, null);
 		if (ss == null)
 			return def;
-		int[] ii = new int[ss.length];
+		final int[] ii = new int[ss.length];
 		for (int i = 0; i < ss.length; i++) {
 			ii[i] = Integer.parseInt(ss[i]);
 		}
 		return ii;
 	}
 
-	protected final float[] getFloats(String propname, float[] def) {
-		String[] ss = getStrings(propname, null);
+	protected final float[] getFloats(final String propname, final float[] def) {
+		final String[] ss = getStrings(propname, null);
 		if (ss == null)
 			return def;
-		float[] ff = new float[ss.length];
+		final float[] ff = new float[ss.length];
 		for (int i = 0; i < ss.length; i++) {
 			ff[i] = Float.parseFloat(ss[i]);
 		}
 		return ff;
 	}
 
-	protected final Color getColor(String propname, Color def) {
-		int[] ii = getInts(propname, null);
+	protected final Color getColor(final String propname, final Color def) {
+		final int[] ii = getInts(propname, null);
 		if (ii == null || ii.length == 0)
 			return def;
 		if (ii.length < 3) {

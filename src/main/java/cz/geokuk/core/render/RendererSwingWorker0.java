@@ -16,22 +16,22 @@ public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, 
 	protected Factory		factory;
 	protected Progressor	progressor;
 
-	public void inject(RenderModel renderModel) {
+	public void inject(final RenderModel renderModel) {
 		this.renderModel = renderModel;
 	}
 
-	public void inject(ProgressModel progressModel) {
+	public void inject(final ProgressModel progressModel) {
 		this.progressModel = progressModel;
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
 	 */
 	@Override
@@ -41,7 +41,7 @@ public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.MySwingWorker0#donex()
 	 */
 	@Override

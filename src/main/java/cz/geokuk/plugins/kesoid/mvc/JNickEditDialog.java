@@ -40,10 +40,10 @@ public class JNickEditDialog extends JMyDialog0 {
 		// box.add(jNickName);
 		// box.add(jNickId);
 		// box.add(jUlozit, BorderLayout.SOUTH);
-		JLabel upozorneni = new JLabel("Po změně nicku nutno program znovu spustit.");
+		final JLabel upozorneni = new JLabel("Po změně nicku nutno program znovu spustit.");
 		upozorneni.setAlignmentX(CENTER_ALIGNMENT);
 		// box.add(upozorneni);
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		add(panel);
 
 		grlay(panel);
@@ -51,11 +51,11 @@ public class JNickEditDialog extends JMyDialog0 {
 		jUlozit.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				int gccomNIckId;
 				try {
 					gccomNIckId = Integer.parseInt(jNickId.getText());
-				} catch (NumberFormatException e1) {
+				} catch (final NumberFormatException e1) {
 					Dlg.error("Owner ID \"" + jNickId.getText() + "\" musí číslem býti!");
 					return;
 				}
@@ -65,8 +65,8 @@ public class JNickEditDialog extends JMyDialog0 {
 		});
 	}
 
-	private void grlay(JPanel panel) {
-		GroupLayout layout = new GroupLayout(panel);
+	private void grlay(final JPanel panel) {
+		final GroupLayout layout = new GroupLayout(panel);
 		// panel.setBorder(BorderFactory.createTitledBorder("Nastvit nickVzorky popisků: " + SestavovacPopisku.getNahrazovaceDisplay()));
 		panel.setLayout(layout);
 		layout.setAutoCreateGaps(true);
@@ -94,12 +94,12 @@ public class JNickEditDialog extends JMyDialog0 {
 						.addComponent(jUlozit)));
 	}
 
-	public void onEvent(GccomNickChangedEvent event) {
+	public void onEvent(final GccomNickChangedEvent event) {
 		jNickName.setText(event.getGccomNick().name);
 		jNickId.setText(event.getGccomNick().id + "");
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 

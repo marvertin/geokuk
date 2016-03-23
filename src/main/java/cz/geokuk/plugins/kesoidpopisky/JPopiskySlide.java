@@ -33,28 +33,28 @@ public class JPopiskySlide extends JSingleSlide0 {
 
 	private void initComponents() {
 		setLayout(new BorderLayout());
-		Box box = Box.createVerticalBox();
+		final Box box = Box.createVerticalBox();
 
 		add(box, BorderLayout.WEST);
 	}
 
-	public void onEvent(KeskyVyfiltrovanyEvent event) {
+	public void onEvent(final KeskyVyfiltrovanyEvent event) {
 		iIndexator = event.getFiltrovane().getIndexator();
 		repaint();
 	}
 
-	public void onEvent(PopiskyPreferencesChangeEvent event) {
+	public void onEvent(final PopiskyPreferencesChangeEvent event) {
 		pose = event.pose;
 		repaint();
 	}
 
-	public void onEvent(PopiskyOnoffEvent event) {
+	public void onEvent(final PopiskyOnoffEvent event) {
 		setVisible(event.isOnoff());
 		repaint();
 	}
 
 	@Override
-	public void paintComponent(Graphics aG) {
+	public void paintComponent(final Graphics aG) {
 		if (iIndexator == null)
 			return;
 		if (pose == null)
@@ -75,25 +75,25 @@ public class JPopiskySlide extends JSingleSlide0 {
 		final int height2 = fontMetrics.getHeight();
 		final int posuny = fontMetrics.getDescent() - height2;
 		final EnumMap<EKesoidKind, SestavovacPopisku> sestavmapa = new EnumMap<>(EKesoidKind.class);
-		for (Map.Entry<EKesoidKind, String> entry : popiskyModel.getData().getPatterns().asMap().entrySet()) {
+		for (final Map.Entry<EKesoidKind, String> entry : popiskyModel.getData().getPatterns().asMap().entrySet()) {
 			sestavmapa.put(entry.getKey(), new SestavovacPopisku(entry.getValue()));
 		}
 
 		iIndexator.visit(getSoord().getBoundingRect(), new FlatVisitor<Wpt>() {
 
 			@Override
-			public void visit(Sheet<Wpt> aSheet) {
-				Wpt wpt = aSheet.get();
+			public void visit(final Sheet<Wpt> aSheet) {
+				final Wpt wpt = aSheet.get();
 				if (!wpt.isMainWpt())
 					return;
-				Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
-				Point p = getSoord().transform(mou);
+				final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
+				final Point p = getSoord().transform(mou);
 				p.x -= 10;
 				p.y += 25;
 				g.setColor(barvaPodkladu);
-				String[] popisky = sestavmapa.get(wpt.getKesoid().getKesoidKind()).sestavPopisek(wpt);
+				final String[] popisky = sestavmapa.get(wpt.getKesoid().getKesoidKind()).sestavPopisek(wpt);
 				int stringWidth = 0;
-				for (String popisek : popisky) {
+				for (final String popisek : popisky) {
 					stringWidth = Math.max(fontMetrics.stringWidth(popisek), stringWidth);
 				}
 				g.fillRect(p.x + pose.posuX, p.y + posuny + pose.posuY, stringWidth, height2 * popisky.length);
@@ -102,7 +102,7 @@ public class JPopiskySlide extends JSingleSlide0 {
 				g.setBackground(Color.YELLOW);
 				g.setColor(barvaTextu);
 				int yOffset = pose.posuY;
-				for (String popisek : popisky) {
+				for (final String popisek : popisky) {
 					g.drawString(popisek, p.x + pose.posuX, p.y + yOffset);
 					yOffset += height2;
 				}
@@ -122,7 +122,7 @@ public class JPopiskySlide extends JSingleSlide0 {
 		return EJakOtacetPriRendrovani.COORD;
 	}
 
-	public void inject(PopiskyModel popiskyModel) {
+	public void inject(final PopiskyModel popiskyModel) {
 		this.popiskyModel = popiskyModel;
 	}
 }

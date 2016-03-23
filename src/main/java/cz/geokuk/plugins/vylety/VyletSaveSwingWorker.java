@@ -20,14 +20,14 @@ public class VyletSaveSwingWorker extends MySwingWorker0<Vylet, Void> {
 	private final VyletovyZperzistentnovac	vyletovyZperzistentnovac;
 	private final Vylet						vylet;
 
-	public VyletSaveSwingWorker(VyletovyZperzistentnovac vyletovyZperzistentnovac, Vylet vylet) {
+	public VyletSaveSwingWorker(final VyletovyZperzistentnovac vyletovyZperzistentnovac, final Vylet vylet) {
 		this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;
 		this.vylet = vylet;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#doInBackground()
 	 */
 	@Override
@@ -38,14 +38,14 @@ public class VyletSaveSwingWorker extends MySwingWorker0<Vylet, Void> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.SwingWorker#done()
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
 		if (isCancelled())
 			return;
-		Vylet result = get();
+		final Vylet result = get();
 		if (result == null)
 			return; // asi zkanclváno
 		log.info("Nahran vylet, %d lovenych a %d ignorovanych: \n", result.get(EVylet.ANO).size(), result.get(EVylet.NE).size());

@@ -20,7 +20,7 @@ public class KachleCacheFolderHolder {
 	/**
 	 * @param kachleCacheDir
 	 */
-	public void setKachleCacheDir(Filex kachleCacheDir) {
+	public void setKachleCacheDir(final Filex kachleCacheDir) {
 		this.kachleCacheDir = kachleCacheDir;
 	}
 }

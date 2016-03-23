@@ -11,26 +11,26 @@ public class DefaultVykreslovac extends Drawer0 {
 
 	private final ImagantCache imagantCache;
 
-	public DefaultVykreslovac(ImagantCache imagantCache) {
+	public DefaultVykreslovac(final ImagantCache imagantCache) {
 		this.imagantCache = imagantCache;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see geokuk.mapicon.Vykreslovac#draw(geokuk.mapicon.VykreslovaciKontext, java.util.List)
 	 */
 	@Override
-	public void draw(Deque<Imagant> aImaganti) {
+	public void draw(final Deque<Imagant> aImaganti) {
 		/**
 		 * Načte obrázek, mělo by to jít, když je voláno.
-		 * 
+		 *
 		 * @return
 		 */
-		URL url = getUrl();
-		BufferedImage image = imagantCache.getImage(url);
+		final URL url = getUrl();
+		final BufferedImage image = imagantCache.getImage(url);
 		assert image != null;
-		Imagant imagant = new Imagant(image);
+		final Imagant imagant = new Imagant(image);
 		imagant.setXoffset(getXoffset());
 		imagant.setYoffset(getYoffset());
 

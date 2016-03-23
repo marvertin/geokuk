@@ -22,26 +22,26 @@ import java.io.*;
 
 public class TPumpReaderToWriter extends Thread {
 
-	private Reader		iRdr;
-	private Writer		iWrt;
-	private boolean		iCloseWriter			= false;
-	private boolean		iCloseReader			= true;
-	private int			iBufferSize				= 1024;
-	private Object		iNotificationReceiver	= this;
-	private IOException	iException				= null;	// bude obsahovat výjimku, pokud nějaká bude
-	private boolean		iIsFinished				= false;
+	private final Reader	iRdr;
+	private final Writer	iWrt;
+	private boolean			iCloseWriter			= false;
+	private boolean			iCloseReader			= true;
+	private int				iBufferSize				= 1024;
+	private Object			iNotificationReceiver	= this;
+	private IOException		iException				= null;	// bude obsahovat výjimku, pokud nějaká bude
+	private boolean			iIsFinished				= false;
 
-	public TPumpReaderToWriter(Reader aRdr, Writer aWrt) {
+	public TPumpReaderToWriter(final Reader aRdr, final Writer aWrt) {
 		iRdr = aRdr;
 		iWrt = aWrt;
 	}
 
 	public void run() {
 		try {
-			char[] buf = new char[iBufferSize];
+			final char[] buf = new char[iBufferSize];
 
 			for (;;) {
-				int len = iRdr.read(buf);
+				final int len = iRdr.read(buf);
 				if (len <= 0)
 					break; // dočteno
 				// System.out.p rint(buf);
@@ -53,7 +53,7 @@ public class TPumpReaderToWriter extends Thread {
 			if (iCloseWriter)
 				iWrt.close();
 			iIsFinished = true;
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			synchronized (this) {
 				iException = ex;
 				iIsFinished = true;
@@ -81,11 +81,11 @@ public class TPumpReaderToWriter extends Thread {
 		return iCloseWriter;
 	}
 
-	public void setCloseWriter(boolean closeWriter) {
+	public void setCloseWriter(final boolean closeWriter) {
 		this.iCloseWriter = closeWriter;
 	}
 
-	public void setCloseReader(boolean closeReader) {
+	public void setCloseReader(final boolean closeReader) {
 		this.iCloseReader = closeReader;
 	}
 
@@ -103,7 +103,7 @@ public class TPumpReaderToWriter extends Thread {
 		return iBufferSize;
 	}
 
-	public void setNotificationReceiver(Object notificationReceiver) {
+	public void setNotificationReceiver(final Object notificationReceiver) {
 		this.iNotificationReceiver = notificationReceiver;
 	}
 

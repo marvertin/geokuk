@@ -24,13 +24,13 @@ public class JVybiracVyletu extends JComboBox<EVylet> implements AfterEventRecei
 		setToolTipText("Filtr dle zařazení keší do výletu. Vybírá se, zda se zobrazí všechny keše nebo všechny bez ignorovaných nebo jen vybrané");
 	}
 
-	public void onEvent(FilterDefinitionChangedEvent event) {
+	public void onEvent(final FilterDefinitionChangedEvent event) {
 		model.setSelectedItem(event.getFilterDefinition().getPrahVyletu());
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
 	 */
 	@Override
@@ -38,29 +38,29 @@ public class JVybiracVyletu extends JComboBox<EVylet> implements AfterEventRecei
 		model.addListDataListener(new ListDataListener() {
 
 			@Override
-			public void intervalRemoved(ListDataEvent e) {
+			public void intervalRemoved(final ListDataEvent e) {
 				nastavto();
 			}
 
 			@Override
-			public void intervalAdded(ListDataEvent e) {
+			public void intervalAdded(final ListDataEvent e) {
 				nastavto();
 			}
 
 			@Override
-			public void contentsChanged(ListDataEvent e) {
+			public void contentsChanged(final ListDataEvent e) {
 				nastavto();
 			}
 
 			private void nastavto() {
-				FilterDefinition definition = kesoidModel.getDefinition();
+				final FilterDefinition definition = kesoidModel.getDefinition();
 				definition.setPrahVyletu((EVylet) model.getSelectedItem());
 				kesoidModel.setDefinition(definition);
 			}
 		});
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 

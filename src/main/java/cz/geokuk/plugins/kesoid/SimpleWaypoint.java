@@ -11,12 +11,12 @@ public class SimpleWaypoint extends Kesoid {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.Kesoid#buildGenotyp(cz.geokuk.mapicon.Genom, cz.geokuk.mapicon.Genotyp)
 	 */
 	@Override
-	public void buildGenotyp(Genom genom, Genotyp g) {
-		GenotypBuilderSimpleWaypoint genotypBuilder = new GenotypBuilderSimpleWaypoint(genom, g);
+	public void buildGenotyp(final Genom genom, final Genotyp g) {
+		final GenotypBuilderSimpleWaypoint genotypBuilder = new GenotypBuilderSimpleWaypoint(genom, g);
 		genotypBuilder.build(this);
 	}
 
@@ -27,11 +27,11 @@ public class SimpleWaypoint extends Kesoid {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.kes.Kesoid#prispejDoTooltipu(java.lang.StringBuilder)
 	 */
 	@Override
-	public void prispejDoTooltipu(StringBuilder sb, Wpt wpt) {
+	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
 		sb.append("<b>");
 		sb.append(getNazev());
 		sb.append("</b>");

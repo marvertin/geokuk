@@ -11,18 +11,18 @@ public abstract class Atom implements Comparable<Atom> {
 	int													ordinal;
 
 	@SafeVarargs
-	public static <E extends Atom> Set<E> of(E... types) {
+	public static <E extends Atom> Set<E> of(final E... types) {
 		return new HashSet<>(Arrays.asList(types));
 	}
 
-	public static <E extends Atom> E valueOf(Class<E> clazz, String jmeno) {
+	public static <E extends Atom> E valueOf(final Class<E> clazz, final String jmeno) {
 		clazz.getFields();
 		try {
 			Class.forName(clazz.getName(), true, clazz.getClassLoader());
-		} catch (ClassNotFoundException e) { // to urcite uspeje
+		} catch (final ClassNotFoundException e) { // to urcite uspeje
 		}
 		// AWptType fINALLOCATION = AWptType.FINAL_LOCATION;
-		TypAtomu<E> ta = dejTyp(clazz);
+		final TypAtomu<E> ta = dejTyp(clazz);
 		E atom = ta.mapa.get(jmeno);
 		if (atom == null) {
 			atom = vytvorInstanci(clazz);
@@ -41,19 +41,19 @@ public abstract class Atom implements Comparable<Atom> {
 		return ordinal;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
-	public void setOrdinal(int ordinal) {
+	public void setOrdinal(final int ordinal) {
 		this.ordinal = ordinal;
 	}
 
-	public static <E> Set<E> noneOf(Class<E> e) {
+	public static <E> Set<E> noneOf(final Class<E> e) {
 		return new HashSet<>();
 	}
 
-	private static <E extends Atom> E vytvorInstanci(Class<E> clazz) {
+	private static <E extends Atom> E vytvorInstanci(final Class<E> clazz) {
 		try {
 			return clazz.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -61,7 +61,7 @@ public abstract class Atom implements Comparable<Atom> {
 		}
 	}
 
-	private static <E extends Atom> TypAtomu<E> dejTyp(Class<? extends Atom> typ) {
+	private static <E extends Atom> TypAtomu<E> dejTyp(final Class<? extends Atom> typ) {
 		@SuppressWarnings("unchecked")
 		TypAtomu<E> typAtomu = repo.get(typ);
 		if (typAtomu == null) {
@@ -82,11 +82,11 @@ public abstract class Atom implements Comparable<Atom> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public int compareTo(Atom o) {
+	public int compareTo(final Atom o) {
 		return name.compareTo(o.name);
 	}
 }

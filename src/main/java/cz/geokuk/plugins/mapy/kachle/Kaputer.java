@@ -21,27 +21,27 @@ public class Kaputer {
 	public static final int	KACHLE_PIXELS	= 1 << KACHLE_BITS;		// 256
 	public static final int	KACHLE_MASKA	= KACHLE_PIXELS - 1;	// 255
 
-	private Coord			soord;
+	private final Coord		soord;
 
 	private final Point		p0;
 
 	private final int		pocetKachliX;
 	private final int		pocetKachliY;
 
-	public Kaputer(Coord aCoord) {
+	public Kaputer(final Coord aCoord) {
 		soord = aCoord;
 
-		int xn = soord.getWidth();
-		int yn = soord.getHeight();
+		final int xn = soord.getWidth();
+		final int yn = soord.getHeight();
 
-		Mou moustred = soord.getMoustred();
-		int moumer = soord.getMoumer();
+		final Mou moustred = soord.getMoustred();
+		final int moumer = soord.getMoumer();
 		// int moukrok = getMoukrok(); // o kolik mou je to od kachle ke kachli (pro moumer=0 je to 2^32, tedy v integeru 0, což odpovídá, že se stále zobrazuje stejná kachle)
 		// int maskaHorni = ~ (moukrok - 1);
 		// int xx0 = moustred.xx & maskaHorni; // posuneme od středu nalevo na nejbližší hranici kachlí
 		// int yy0 = moustred.yy & maskaHorni; // posuneme od středu dolů na nejbližší hranici kachlí
-		int xd = (moustred.xx >> (Coord.MAX_MOUMER - moumer)) & KACHLE_MASKA; // o tolik pixlů nalevo od středu bude svislá hranice kachlí
-		int yd = (moustred.yy >> (Coord.MAX_MOUMER - moumer)) & KACHLE_MASKA; // o tolik pixklů dolů od středu bude vodorovná hranice kachlí
+		final int xd = (moustred.xx >> (Coord.MAX_MOUMER - moumer)) & KACHLE_MASKA; // o tolik pixlů nalevo od středu bude svislá hranice kachlí
+		final int yd = (moustred.yy >> (Coord.MAX_MOUMER - moumer)) & KACHLE_MASKA; // o tolik pixklů dolů od středu bude vodorovná hranice kachlí
 		assert xd >= 0 && xd < KACHLE_PIXELS;
 		assert yd >= 0 && yd < KACHLE_PIXELS;
 		// if (log.isTraceEnabled()) {
@@ -84,7 +84,7 @@ public class Kaputer {
 
 	/**
 	 * Počet kachlí ve směru osy X, které zasahují do daného výřezu.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getPocetKachliX() {
@@ -93,7 +93,7 @@ public class Kaputer {
 
 	/**
 	 * Počet kachlí ve směru osy X, které zasahují do daného výřezu.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getPocetKachliY() {
@@ -102,39 +102,39 @@ public class Kaputer {
 
 	/**
 	 * Bod, na který se má vykreslit levý horní roh kachle pro zadané indexy uvnitř výřezu. Kachle [0,0] vždy postihne levý horní roh výřezu. Kachle [pocetKachliX - 1, pocetKachliY -1 ] vždy postihne pravý dolní roh výřezu.
-	 * 
+	 *
 	 * @param xi
 	 *            index kachle ve vřezu 0 .. pocetKachliX-1
 	 * @param yi
 	 *            index kachle ve vřezu 0 .. pocetKachliY-1
 	 */
-	public Point getKachlePoint(int xi, int yi) {
+	public Point getKachlePoint(final int xi, final int yi) {
 		return new Point(p0.x + xi * KACHLE_PIXELS, p0.y + yi * KACHLE_PIXELS);
 	}
 
 	/**
 	 * Mouřadnice levého horního rohu kachle, které má být umístěna na daném indexu.
-	 * 
+	 *
 	 * @param xi
 	 *            index kachle ve vřezu 0 .. pocetKachliX-1
 	 * @param yi
 	 *            index kachle ve vřezu 0 .. pocetKachliY-1
 	 * @return
 	 */
-	public Mou getKachleMou(int xi, int yi) {
+	public Mou getKachleMou(final int xi, final int yi) {
 		return soord.transform(getKachlePoint(xi, yi));
 	}
 
 	/**
 	 * Lokace kachle, která má být zobrazena na daném indexu ve výřezu.
-	 * 
+	 *
 	 * @param xi
 	 *            index kachle ve vřezu 0 .. pocetKachliX-1
 	 * @param yi
 	 *            index kachle ve vřezu 0 .. pocetKachliY-1
 	 * @return
 	 */
-	public KaLoc getKaloc(int xi, int yi) {
+	public KaLoc getKaloc(final int xi, final int yi) {
 		return KaLoc.ofSZ(getKachleMou(xi, yi), soord.getMoumer());
 	}
 

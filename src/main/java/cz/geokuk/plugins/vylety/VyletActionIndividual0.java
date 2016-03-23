@@ -12,14 +12,14 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
 	private final Kesoid		kespevna;
 	private Kesoid				kesdocasna;
 
-	public VyletActionIndividual0(String string, Kesoid kes) {
+	public VyletActionIndividual0(final String string, final Kesoid kes) {
 		super(string);
 		kespevna = kes;
 		setEnabled(false);
 	}
 
-	public void onEvent(PoziceChangedEvent aEvent) {
-		Wpt wpt = aEvent.poziceq.getWpt();
+	public void onEvent(final PoziceChangedEvent aEvent) {
+		final Wpt wpt = aEvent.poziceq.getWpt();
 		if (wpt != null) {
 			kesdocasna = wpt.getKesoid();
 			enablujPokudMaSmysl();
@@ -41,7 +41,7 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.AfterInjectInit#initAfterInject()
 	 */
 	@Override

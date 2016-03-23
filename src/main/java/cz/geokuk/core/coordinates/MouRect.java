@@ -14,11 +14,11 @@ public class MouRect {
 	public MouRect() {
 	}
 
-	public MouRect(Mou mou) {
+	public MouRect(final Mou mou) {
 		add(mou);
 	}
 
-	public MouRect(Mou roh1, Mou roh2) {
+	public MouRect(final Mou roh1, final Mou roh2) {
 		add(roh1);
 		add(roh2);
 		sstre = new Mou((roh1.xx + roh2.xx) / 2, (roh1.yy + roh2.yy) / 2);
@@ -84,7 +84,7 @@ public class MouRect {
 		return new BoundingRect(xx1, yy1, xx2, yy2);
 	}
 
-	public void add(Mou mou) {
+	public void add(final Mou mou) {
 		if (isEmpty()) { // tak jsou všechny nulové
 			xx1 = mou.xx;
 			xx2 = mou.xx;
@@ -115,14 +115,14 @@ public class MouRect {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MouRect other = (MouRect) obj;
+		final MouRect other = (MouRect) obj;
 		if (xx1 != other.xx1)
 			return false;
 		if (xx2 != other.xx2)
@@ -142,9 +142,9 @@ public class MouRect {
 	/**
 	 * Zvětší nebo zmenší velikost v daném poměru
 	 */
-	public void resize(double pomer) {
-		int dx = (int) ((getMouWidth() * pomer - getMouWidth()) / 2);
-		int dy = (int) ((getMouHeight() * pomer - getMouHeight()) / 2);
+	public void resize(final double pomer) {
+		final int dx = (int) ((getMouWidth() * pomer - getMouWidth()) / 2);
+		final int dy = (int) ((getMouHeight() * pomer - getMouHeight()) / 2);
 		xx1 -= dx;
 		xx2 += dx;
 		yy1 -= dy;

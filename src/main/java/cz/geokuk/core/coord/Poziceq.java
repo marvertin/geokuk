@@ -20,7 +20,7 @@ public class Poziceq {
 
 	/**
 	 */
-	public Poziceq(Mouable mouable) {
+	public Poziceq(final Mouable mouable) {
 		this.mouable = mouable;
 		originalMou = mouable.getMou();
 		assert this.mouable != null;
@@ -38,30 +38,30 @@ public class Poziceq {
 	}
 
 	public Mou getPoziceMou() {
-		Mouable poziceMouable = getPoziceMouable();
+		final Mouable poziceMouable = getPoziceMouable();
 		return poziceMouable == null ? null : poziceMouable.getMou();
 	}
 
 	public Wpt getWpt() {
-		Mouable mouable = getPoziceMouable();
+		final Mouable mouable = getPoziceMouable();
 		if (mouable instanceof Wpt) {
-			Wpt wpt = (Wpt) mouable;
+			final Wpt wpt = (Wpt) mouable;
 			return wpt;
 		}
 		return null;
 	}
 
 	public Bod getBod() {
-		Mouable mouable = getPoziceMouable();
+		final Mouable mouable = getPoziceMouable();
 		if (mouable instanceof Bod) {
-			Bod bod = (Bod) mouable;
+			final Bod bod = (Bod) mouable;
 			return bod;
 		}
 		return null;
 	}
 
 	public Kesoid getKesoid() {
-		Wpt wpt = getWpt();
+		final Wpt wpt = getWpt();
 		if (wpt == null)
 			return null;
 		return wpt.getKesoid();
@@ -71,13 +71,13 @@ public class Poziceq {
 		// Here, if the underlying mouable has latitude and longitude, simply return its Wgs, because it's more accurate
 		// than converting the coordinates many times. At the moment, only waypoints satisfy this condition, but if other
 		// mouables are introduced, this should be adjusted and an interface should be introduced
-		Wpt wpt = getWpt();
+		final Wpt wpt = getWpt();
 		if (wpt != null) {
 			return wpt.getWgs();
 		}
 
 		// if not, just do it the old way
-		Mou mou = getPoziceMou();
+		final Mou mou = getPoziceMou();
 		return mou == null ? null : mou.toWgs();
 	}
 

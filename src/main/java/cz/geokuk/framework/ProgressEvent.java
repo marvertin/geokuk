@@ -16,7 +16,7 @@ public class ProgressEvent extends Event0<ProgressModel> {
 	 * @param text
 	 * @param tooltip
 	 */
-	public ProgressEvent(Progressor progressor, boolean visible, int progress, int max, String text, String tooltip) {
+	public ProgressEvent(final Progressor progressor, final boolean visible, final int progress, final int max, final String text, final String tooltip) {
 		super();
 		this.progressor = progressor;
 		this.visible = visible;

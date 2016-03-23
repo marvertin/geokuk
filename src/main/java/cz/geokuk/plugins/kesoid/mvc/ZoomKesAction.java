@@ -22,7 +22,7 @@ public class ZoomKesAction extends Action0 {
 	/**
 	 *
 	 */
-	public ZoomKesAction(Kesoid kes) {
+	public ZoomKesAction(final Kesoid kes) {
 		super("Zoom keš (" + kes.getWptsCount() + ")");
 		iKes = kes;
 		putValue(SHORT_DESCRIPTION, "Nastaví výřez a měřítko mapy tak ,aby na ní byla celá keška včetně všech multin. V záborce je počet waypointů keše.");
@@ -32,13 +32,13 @@ public class ZoomKesAction extends Action0 {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
-	public void actionPerformed(ActionEvent e) {
-		MouRect mourect = new MouRect();
-		for (Wpt wpt : iKes.getWpts()) {
+	public void actionPerformed(final ActionEvent e) {
+		final MouRect mourect = new MouRect();
+		for (final Wpt wpt : iKes.getWpts()) {
 			mourect.add(wpt.getWgs().toMou());
 		}
 		if (!mourect.isEmpty()) {

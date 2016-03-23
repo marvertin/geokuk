@@ -5,7 +5,7 @@ public enum EVylet {
 
 	private final String doKomboBoxu;
 
-	EVylet(String doKomboBoxu) {
+	EVylet(final String doKomboBoxu) {
 		this.doKomboBoxu = doKomboBoxu;
 	}
 

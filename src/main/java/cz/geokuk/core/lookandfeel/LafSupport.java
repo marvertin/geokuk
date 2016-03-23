@@ -46,13 +46,13 @@ public class LafSupport {
 	}
 
 	private static void createLafMenu() {
-		JMenuItem miMetal = null;
+		final JMenuItem miMetal = null;
 		// Create these menu items for the first SwingSet only.
 		// ***** create laf switcher menu
 		lafMenu = new JMenu("Skin");
 		lafMenu.setMnemonic('N');
 
-		for (LafItem li : lafitems) {
+		for (final LafItem li : lafitems) {
 			li.mi = lafMenu.add(new JRadioButtonMenuItem(li.info.getName()));
 			lafMenuGroup.add(li.mi);
 			li.mi.addActionListener(new ChangeLookAndFeelAction(li));
@@ -66,7 +66,7 @@ public class LafSupport {
 		themesMenu.setMnemonic('T');
 
 		// *** now back to adding color/font themes to the theme menu
-		JMenuItem mi = createThemesMenuItem(themesMenu, "Ocean", 'O', new OceanTheme());
+		final JMenuItem mi = createThemesMenuItem(themesMenu, "Ocean", 'O', new OceanTheme());
 		mi.setSelected(miMetal != null && miMetal.isSelected()); // This is the default theme
 
 		createThemesMenuItem(themesMenu, "Steel", 'S', new DefaultMetalTheme());
@@ -86,10 +86,10 @@ public class LafSupport {
 
 	private static void createLafList() {
 
-		String prefferencedLookAndFeel = getPrefferencedLookAndFeel();
-		UIManager.LookAndFeelInfo[] lafInfos = UIManager.getInstalledLookAndFeels();
-		for (UIManager.LookAndFeelInfo lafInfo : lafInfos) {
-			LafItem li = new LafItem();
+		final String prefferencedLookAndFeel = getPrefferencedLookAndFeel();
+		final UIManager.LookAndFeelInfo[] lafInfos = UIManager.getInstalledLookAndFeels();
+		for (final UIManager.LookAndFeelInfo lafInfo : lafInfos) {
+			final LafItem li = new LafItem();
 			li.info = lafInfo;
 			if (lafInfo.getClassName().equals(prefferencedLookAndFeel)) {
 				current = li;
@@ -114,8 +114,8 @@ public class LafSupport {
 	/**
 	 * Creates a JRadioButtonMenuItem for the Themes menu
 	 */
-	private static JMenuItem createThemesMenuItem(JMenu menu, String label, char mnemonic, MetalTheme theme) {
-		JRadioButtonMenuItem mi = (JRadioButtonMenuItem) menu.add(new JRadioButtonMenuItem(label));
+	private static JMenuItem createThemesMenuItem(final JMenu menu, final String label, final char mnemonic, final MetalTheme theme) {
+		final JRadioButtonMenuItem mi = (JRadioButtonMenuItem) menu.add(new JRadioButtonMenuItem(label));
 		themesMenuGroup.add(mi);
 		mi.addActionListener(new ChangeThemeAction(theme));
 		mi.setMnemonic(mnemonic);
@@ -129,7 +129,7 @@ public class LafSupport {
 	/**
 	 * Stores the current L&F, and calls updateLookAndFeel, below
 	 */
-	private static void setLookAndFeel(LafItem li) {
+	private static void setLookAndFeel(final LafItem li) {
 		if (current == li)
 			return;
 		current = li;
@@ -156,18 +156,18 @@ public class LafSupport {
 			UIManager.setLookAndFeel(current.info.getClassName());
 			updateThisSwingSet();
 			MyPreferences.current().put(LOOK_AND_FEEL, current.info.getClassName());
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			FExceptionDumper.dump(ex, EExceptionSeverity.WORKARROUND, "Failed loading L&F: " + current.info.getClassName());
 		}
 	}
 
 	private static String getPrefferencedLookAndFeel() {
 		try {
-			String s = MyPreferences.current().get(LOOK_AND_FEEL, null);
+			final String s = MyPreferences.current().get(LOOK_AND_FEEL, null);
 			if (s == null)
 				return metal;
 			return s;
-		} catch (Throwable e) {
+		} catch (final Throwable e) {
 			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Když nejde nastavit skin, tak nejde!");
 			return metal;
 		}
@@ -177,13 +177,13 @@ public class LafSupport {
 		private static final long	serialVersionUID	= -910826756747137014L;
 		private final LafItem		laf;
 
-		protected ChangeLookAndFeelAction(LafItem laf) {
+		protected ChangeLookAndFeelAction(final LafItem laf) {
 			super("ChangeTheme");
 			this.laf = laf;
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			setLookAndFeel(laf);
 		}
 	}
@@ -192,13 +192,13 @@ public class LafSupport {
 		private static final long	serialVersionUID	= -910826756747137014L;
 		MetalTheme					theme;
 
-		protected ChangeThemeAction(MetalTheme theme) {
+		protected ChangeThemeAction(final MetalTheme theme) {
 			super("ChangeTheme");
 			this.theme = theme;
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			MetalLookAndFeel.setCurrentTheme(theme);
 			updateLookAndFeel();
 		}
@@ -210,7 +210,7 @@ public class LafSupport {
 
 	}
 
-	public static void setFrame(JFrame frame) {
+	public static void setFrame(final JFrame frame) {
 		LafSupport.frame = frame;
 	}
 

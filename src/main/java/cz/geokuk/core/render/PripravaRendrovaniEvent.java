@@ -10,7 +10,7 @@ public class PripravaRendrovaniEvent extends Event0<RenderModel> {
 	/**
 	 * @param renderSettings
 	 */
-	public PripravaRendrovaniEvent(RenderSettings renderSettings, EStavRendrovani stavRendrovani) {
+	public PripravaRendrovaniEvent(final RenderSettings renderSettings, final EStavRendrovani stavRendrovani) {
 		super();
 		this.renderSettings = renderSettings;
 		this.stavRendrovani = stavRendrovani;

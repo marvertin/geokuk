@@ -22,13 +22,13 @@ public class CestyZperzistentnovac {
 
 	private final Updator		updator	= new Updator();
 
-	private Ggt loadGgt(File file) throws IOException {
+	private Ggt loadGgt(final File file) throws IOException {
 		FileReader filere = null;
 		try {
 			filere = new FileReader(file);
-			BufferedReader br = new BufferedReader(filere);
+			final BufferedReader br = new BufferedReader(filere);
 			return loadGgt(br);
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			// FExceptionDumper.dump(e, EExceptionSeverity.CATCHE, "Nacitani vyletu.");
 			return new Ggt(new HashSet<String>());
 		} finally {
@@ -38,9 +38,9 @@ public class CestyZperzistentnovac {
 		}
 	}
 
-	private Ggt loadGgt(BufferedReader reader) throws IOException {
+	private Ggt loadGgt(final BufferedReader reader) throws IOException {
 		String line;
-		Set<String> set = new HashSet<>();
+		final Set<String> set = new HashSet<>();
 		while ((line = reader.readLine()) != null) {
 			line = line.trim();
 			if (line.length() == 0) {
@@ -48,32 +48,32 @@ public class CestyZperzistentnovac {
 			}
 			set.add(line);
 		}
-		Ggt vyletPul = new Ggt(set);
+		final Ggt vyletPul = new Ggt(set);
 		return vyletPul;
 	}
 
-	void zapisGgt(Doc doc, File file) {
+	void zapisGgt(final Doc doc, final File file) {
 		BufferedWriter wrt = null;
 		smimCist++;
-		Set<String> exportovano = new HashSet<>();
+		final Set<String> exportovano = new HashSet<>();
 		try {
 			try {
 				wrt = new BufferedWriter(new FileWriter(file));
-				for (Bod bod : doc.getBody()) {
-					Mouable mouable = bod.getMouable();
+				for (final Bod bod : doc.getBody()) {
+					final Mouable mouable = bod.getMouable();
 					if (mouable instanceof Wpt) {
-						Wpt wpt = (Wpt) mouable;
+						final Wpt wpt = (Wpt) mouable;
 						zapisKdyzNeni(wrt, wpt.getName(), exportovano);
 						zapisKdyzNeni(wrt, wpt.getKesoid().getIdentifier(), exportovano);
 					}
 
 				}
 				wrt.close();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				if (wrt != null) {
 					try {
 						wrt.close();
-					} catch (IOException e1) { // co s tím jiného
+					} catch (final IOException e1) { // co s tím jiného
 					}
 				}
 				throw new RuntimeException(e);
@@ -83,7 +83,7 @@ public class CestyZperzistentnovac {
 		}
 	}
 
-	private void zapisKdyzNeni(BufferedWriter wrt, String kod, Set<String> exportovano) throws IOException {
+	private void zapisKdyzNeni(final BufferedWriter wrt, final String kod, final Set<String> exportovano) throws IOException {
 		if (kod == null)
 			return;
 		if (exportovano.add(kod)) {
@@ -93,24 +93,24 @@ public class CestyZperzistentnovac {
 		}
 	}
 
-	List<Cesta> nacti(List<File> files, KesBag kesBag) {
-		List<Cesta> cesty = new ArrayList<>();
-		for (File file : files) {
+	List<Cesta> nacti(final List<File> files, final KesBag kesBag) {
+		final List<Cesta> cesty = new ArrayList<>();
+		for (final File file : files) {
 			try {
 				log.debug("Nacitam z: " + file);
-				String pureName = file.getName().toLowerCase();
+				final String pureName = file.getName().toLowerCase();
 				if (pureName.endsWith(".ggt")) {
-					Ggt ggt = loadGgt(file);
-					Cesta cesta = zbuildujCestuZGgt(ggt, kesBag);
+					final Ggt ggt = loadGgt(file);
+					final Cesta cesta = zbuildujCestuZGgt(ggt, kesBag);
 					cesty.add(cesta);
 				} else if (pureName.endsWith(".gpx")) {
-					DocImportBuilder builder = new DocImportBuilder();
-					InputStream istm = new BufferedInputStream(new FileInputStream(file));
-					NacitacGpx nacitac = new NacitacGpx();
+					final DocImportBuilder builder = new DocImportBuilder();
+					final InputStream istm = new BufferedInputStream(new FileInputStream(file));
+					final NacitacGpx nacitac = new NacitacGpx();
 					nacitac.nacti(istm, file.toString(), builder, null);
 					cesty.addAll(builder.getCesty());
 				}
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				throw new RuntimeException("Problém se souborem: \"" + file + "\"", e);
 			}
 		}
@@ -118,10 +118,10 @@ public class CestyZperzistentnovac {
 		return cesty;
 	}
 
-	private Cesta zbuildujCestuZGgt(Ggt ggt, KesBag kesBag) {
-		Cesta cesta = Cesta.create();
+	private Cesta zbuildujCestuZGgt(final Ggt ggt, final KesBag kesBag) {
+		final Cesta cesta = Cesta.create();
 		if (kesBag != null) {
-			for (Kesoid kesoid : kesBag.getKesoidy()) {
+			for (final Kesoid kesoid : kesBag.getKesoidy()) {
 				if (ggt.kesides.contains(kesoid.getIdentifier())) {
 					updator.pridejNaMisto(cesta, kesoid.getMainWpt());
 				}
@@ -130,11 +130,11 @@ public class CestyZperzistentnovac {
 		return cesta;
 	}
 
-	void pripniNaWayponty(Iterable<Cesta> cesty, KesBag kesBag) {
-		for (Cesta cesta : cesty) {
-			for (Bod bod : cesta.getBody()) {
-				Mou mou = bod.getMou();
-				Wpt wpt = najdiExtremneBlizouckyWpt(mou, kesBag);
+	void pripniNaWayponty(final Iterable<Cesta> cesty, final KesBag kesBag) {
+		for (final Cesta cesta : cesty) {
+			for (final Bod bod : cesta.getBody()) {
+				final Mou mou = bod.getMou();
+				final Wpt wpt = najdiExtremneBlizouckyWpt(mou, kesBag);
 				updator.setMouableButNoChange(bod, wpt != null ? wpt : mou);
 				if (wpt != null) {
 					wpt.invalidate();
@@ -143,12 +143,12 @@ public class CestyZperzistentnovac {
 		}
 	}
 
-	private Wpt najdiExtremneBlizouckyWpt(Mou mou, KesBag kesBag) {
+	private Wpt najdiExtremneBlizouckyWpt(final Mou mou, final KesBag kesBag) {
 		if (kesBag == null)
 			return null;
-		Indexator<Wpt> indexator = kesBag.getIndexator();
-		BoundingRect br = new BoundingRect(mou.xx, mou.yy, mou.xx, mou.yy).rozsir(100);
-		Sheet<Wpt> sheet = indexator.locateAnyOne(br);
+		final Indexator<Wpt> indexator = kesBag.getIndexator();
+		final BoundingRect br = new BoundingRect(mou.xx, mou.yy, mou.xx, mou.yy).rozsir(100);
+		final Sheet<Wpt> sheet = indexator.locateAnyOne(br);
 		if (sheet == null)
 			return null;
 		return sheet.get();

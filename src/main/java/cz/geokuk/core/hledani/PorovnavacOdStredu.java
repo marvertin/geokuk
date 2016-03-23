@@ -7,13 +7,13 @@ public class PorovnavacOdStredu implements Comparator<Nalezenec0> {
 
 	private final Future<?> future;
 
-	public PorovnavacOdStredu(Future<?> future) {
+	public PorovnavacOdStredu(final Future<?> future) {
 		super();
 		this.future = future;
 	}
 
 	@Override
-	public int compare(Nalezenec0 w1, Nalezenec0 w2) {
+	public int compare(final Nalezenec0 w1, final Nalezenec0 w2) {
 		if (future.isCancelled())
 			throw new XZaknclovanoRazeni();
 
@@ -22,7 +22,7 @@ public class PorovnavacOdStredu implements Comparator<Nalezenec0> {
 		// double kvadrat2 = (utm2.ux - stredHledani.ux) * (utm2.ux - stredHledani.ux)
 		// + (utm2.uy - stredHledani.uy) * (utm2.uy - stredHledani.uy);
 
-		double result = Math.signum(w1.getVzdalenost() - w2.getVzdalenost());
+		final double result = Math.signum(w1.getVzdalenost() - w2.getVzdalenost());
 		return (int) result;
 	}
 

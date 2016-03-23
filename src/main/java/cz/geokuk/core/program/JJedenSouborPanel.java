@@ -42,7 +42,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 	 * @param souborPanelName
 	 *            identifikátor panelu. Je jen proto, aby se podle něj mohl panel najít.
 	 */
-	public JJedenSouborPanel(ESouborPanelName souborPanelName, String label, final boolean jenAdresare, boolean editovatelne, boolean lzeDeaktivovat) {
+	public JJedenSouborPanel(final ESouborPanelName souborPanelName, final String label, final boolean jenAdresare, final boolean editovatelne, final boolean lzeDeaktivovat) {
 		this.souborPanelName = souborPanelName;
 		this.label = label;
 		this.jenAdresare = jenAdresare;
@@ -53,8 +53,8 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 	}
 
 	private void initComponents() {
-		TitledBorder border = BorderFactory.createTitledBorder(label);
-		Font titleFont = border.getTitleFont();
+		final TitledBorder border = BorderFactory.createTitledBorder(label);
+		final Font titleFont = border.getTitleFont();
 		if (titleFont != null) {
 			border.setTitleFont(titleFont.deriveFont(Font.BOLD));
 		}
@@ -74,11 +74,11 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		// jtext.setText(defalt.getFile().getPath());
 		jtext.setColumns(50);
 		if (editovatelne) {
-			Box box2 = Box.createHorizontalBox();
+			final Box box2 = Box.createHorizontalBox();
 			box2.setAlignmentX(LEFT_ALIGNMENT);
 			box2.add(jtext);
 			box2.add(jbut);
-			Box panel3 = Box.createHorizontalBox();
+			final Box panel3 = Box.createHorizontalBox();
 			if (FConst.JAR_DIR_EXISTUJE) {
 				panel3.add(jRelativneKProgramu);
 			}
@@ -100,7 +100,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 			private JFileChooser fc;
 
 			@Override
-			public void actionPerformed(ActionEvent ae) {
+			public void actionPerformed(final ActionEvent ae) {
 				if (fc == null) { // dlouho to trvá, tak vytvoříme vždy nový
 					fc = new JFileChooser();
 				}
@@ -108,7 +108,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 				if (jenAdresare) {
 					fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				}
-				int result = fc.showDialog(JJedenSouborPanel.this, "Vybrat");
+				final int result = fc.showDialog(JJedenSouborPanel.this, "Vybrat");
 				if (result == JFileChooser.APPROVE_OPTION) {
 					jtext.setText(fc.getSelectedFile().getPath());
 				}
@@ -120,13 +120,13 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 
 		jRelativneKProgramu.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				prepocitej();
 			}
 		});
 		jActive.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				prepocitej();
 			}
 		});
@@ -141,7 +141,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		}
 		if (dir.isDirectory() && dir.canRead())
 			return filex;
-		boolean vysl = dir.mkdirs();
+		final boolean vysl = dir.mkdirs();
 		if (!vysl)
 			throw new JPrehledSouboru.YNejdeTo("Složku \"" + dir + "\" se nepodařilo stvořit pro \"" + label + "\"");
 		return filex;
@@ -151,7 +151,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		prepocitej();
 	}
 
-	public void setFilex(Filex filex) {
+	public void setFilex(final Filex filex) {
 		jtext.setText(filex.getFile().getPath());
 		jRelativneKProgramu.setSelected(filex.isRelativeToProgram());
 		jActive.setSelected(filex.isActive() || !lzeDeaktivovat);
@@ -166,17 +166,17 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 	}
 
 	@Override
-	public void changedUpdate(DocumentEvent e) {
+	public void changedUpdate(final DocumentEvent e) {
 		zmemniliNamTo();
 	}
 
 	@Override
-	public void insertUpdate(DocumentEvent e) {
+	public void insertUpdate(final DocumentEvent e) {
 		zmemniliNamTo();
 	}
 
 	@Override
-	public void removeUpdate(DocumentEvent e) {
+	public void removeUpdate(final DocumentEvent e) {
 		zmemniliNamTo();
 	}
 
@@ -184,7 +184,7 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		Container panel = null;
 		for (Container comp = this; comp != null; comp = comp.getParent()) {
 			if (comp instanceof JTabbedPane) {
-				JTabbedPane tabpane = (JTabbedPane) comp;
+				final JTabbedPane tabpane = (JTabbedPane) comp;
 				tabpane.setSelectedComponent(panel);
 				break;
 			}

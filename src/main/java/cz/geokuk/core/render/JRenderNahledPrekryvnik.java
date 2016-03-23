@@ -28,12 +28,12 @@ public class JRenderNahledPrekryvnik extends JCoordPrekryvnik0 {
 
 	}
 
-	public void onEvent(PripravaRendrovaniEvent event) {
+	public void onEvent(final PripravaRendrovaniEvent event) {
 		renderedMoumer = event.getRenderSettings().getRenderedMoumer();
 		nastavto();
 	}
 
-	public void onEvent(ReferencniBodSeZmenilEvent event) {
+	public void onEvent(final ReferencniBodSeZmenilEvent event) {
 		moustred = event.wgs.toMou();
 		moord = event.getMoord();
 		nastavto();

@@ -16,8 +16,8 @@ public class DirScanner {
 	private List<Root>		roots;
 	private List<KeFile>	lastScaned	= null;
 
-	public void seRootDirs(boolean prenacti, Root... roots) {
-		List<Root> newRoots = Arrays.asList(roots);
+	public void seRootDirs(final boolean prenacti, final Root... roots) {
+		final List<Root> newRoots = Arrays.asList(roots);
 		if (!prenacti && newRoots.equals(this.roots)) {
 			return;
 		}
@@ -31,23 +31,23 @@ public class DirScanner {
 
 	/**
 	 * Vrátí null, pokud není co načítat, protože nedošlo ke změně. Prázdný seznam je něco jiného, to ke změně došlo takové, že zmizely všechny soubory. Když se změní byť jediný soubor, je to změna a načítá se.
-	 * 
+	 *
 	 * @return
 	 */
 	public synchronized List<KeFile> coMamNacist() {
-		Set<KeFile> set = new HashSet<>();
-		for (Root dir : roots) {
-			List<KeFile> li = scanDir(dir);
+		final Set<KeFile> set = new HashSet<>();
+		for (final Root dir : roots) {
+			final List<KeFile> li = scanDir(dir);
 			set.addAll(li);
 		}
-		List<KeFile> list = new ArrayList<>(set);
+		final List<KeFile> list = new ArrayList<>(set);
 		if (list.equals(lastScaned))
 			return null; // nezměnilo se nic
 		lastScaned = list;
 		return list;
 	}
 
-	private boolean matches(String fileName, Root.Def def) {
+	private boolean matches(final String fileName, final Root.Def def) {
 		if (def.patternExcludes != null) {
 			if (def.patternExcludes.matcher(fileName).matches()) {
 				return false;
@@ -68,7 +68,7 @@ public class DirScanner {
 			final List<KeFile> list = new ArrayList<>();
 			Files.walkFileTree(root.dir.toPath(), EnumSet.of(FileVisitOption.FOLLOW_LINKS), root.def.maxDepth, new SimpleFileVisitor<Path>() {
 				@Override
-				public FileVisitResult visitFile(Path path, BasicFileAttributes aAttrs) throws IOException {
+				public FileVisitResult visitFile(final Path path, final BasicFileAttributes aAttrs) throws IOException {
 
 					if (matches(path.getFileName().toString(), root.def)) {
 						list.add(new KeFile(new FileAndTime(path.toFile()), root));
@@ -77,7 +77,7 @@ public class DirScanner {
 				}
 			});
 			return list;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Skenovani od " + root, e);
 		}
 	}

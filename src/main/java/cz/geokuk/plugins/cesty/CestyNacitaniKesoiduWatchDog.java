@@ -13,11 +13,11 @@ public class CestyNacitaniKesoiduWatchDog {
 
 	private CestyModel cestyModel;
 
-	public void onEvent(KeskyNactenyEvent aEvent) {
+	public void onEvent(final KeskyNactenyEvent aEvent) {
 		cestyModel.znovuVsechnoPripni();
 	}
 
-	public void inject(CestyModel cestyModel) {
+	public void inject(final CestyModel cestyModel) {
 		this.cestyModel = cestyModel;
 	}
 

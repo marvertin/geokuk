@@ -9,7 +9,7 @@ import cz.geokuk.framework.Event0;
 
 /**
  * Pokud se změní bod, od kterého se cosi odvozuje. Buď je to aktuální pozice nebo střed mapy.
- * 
+ *
  * @author veverka
  *
  */
@@ -21,7 +21,7 @@ public class ReferencniBodSeZmenilEvent extends Event0<RefbodyModel> {
 	/**
 	 * @param aWgs
 	 */
-	public ReferencniBodSeZmenilEvent(Wgs aWgs, Coord moord) {
+	public ReferencniBodSeZmenilEvent(final Wgs aWgs, final Coord moord) {
 		wgs = aWgs;
 		this.moord = moord;
 	}

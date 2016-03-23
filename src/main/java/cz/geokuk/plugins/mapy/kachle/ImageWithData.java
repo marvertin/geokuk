@@ -4,7 +4,7 @@ import java.awt.Image;
 
 /**
  * Obsahuje obrázek a vedle něho binární data tohoto obrázku.
- * 
+ *
  * @author tatinek
  *
  */

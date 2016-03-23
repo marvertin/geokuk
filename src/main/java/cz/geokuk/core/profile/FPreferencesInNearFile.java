@@ -32,7 +32,7 @@ public final class FPreferencesInNearFile {
 	}
 
 	public static File saveNearToProgramAndSwitchOn() {
-		File file = saveNearToProgram();
+		final File file = saveNearToProgram();
 		ukladatDoSouboru = true;
 		return file;
 	}
@@ -44,7 +44,7 @@ public final class FPreferencesInNearFile {
 			updateLastModified();
 			ukladatDoSouboru = true;
 			System.out.printf("FPreferencesInNearFile: Ulozena vesera nastaveni do souboru \"%s\"\n", FConst.PREFERENCES_FILE);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Problem while saving preferences to \"" + FConst.PREFERENCES_FILE + "\"", e);
 		}
 		return FConst.PREFERENCES_FILE;
@@ -54,8 +54,8 @@ public final class FPreferencesInNearFile {
 	 * Nový soubor dotáhne do preferences, pokud
 	 */
 	public static void loadNearToProgramIfNewer() {
-		long lastModifiedSoubor = FConst.PREFERENCES_FILE.lastModified();
-		long lastModifiedFromPreferences = MyPreferences.root().getLong("lastModified", 0);
+		final long lastModifiedSoubor = FConst.PREFERENCES_FILE.lastModified();
+		final long lastModifiedFromPreferences = MyPreferences.root().getLong("lastModified", 0);
 		if (lastModifiedSoubor > 0) {
 			if (lastModifiedSoubor > lastModifiedFromPreferences) {
 				loadNearToProgram();
@@ -70,13 +70,13 @@ public final class FPreferencesInNearFile {
 			bis.close();
 			updateLastModified();
 			System.out.printf("FPreferencesInNearFile: Nactena vesera nastaveni do souboru \"%s\"\n", FConst.PREFERENCES_FILE);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Problem while saving preferences to \"" + FConst.PREFERENCES_FILE + "\"", e);
 		}
 	}
 
 	private static void updateLastModified() {
-		long lastModified = FConst.PREFERENCES_FILE.lastModified();
+		final long lastModified = FConst.PREFERENCES_FILE.lastModified();
 		MyPreferences.root().putLong("lastModified", lastModified);
 	}
 

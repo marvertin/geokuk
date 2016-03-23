@@ -12,7 +12,7 @@ public interface KachleManager {
 
 	/**
 	 * Checks whether the requested tile exists in the storage.
-	 * 
+	 *
 	 * @param ki
 	 *            The identifier of the tile.
 	 * @return True if it can be retrieved from the storage, false otherwise
@@ -21,7 +21,7 @@ public interface KachleManager {
 
 	/**
 	 * Loads the requested tile from the storage.
-	 * 
+	 *
 	 * @param ki
 	 *            The identifier of the tile.
 	 * @return The requested tile as Image or null if the tile couldn't be loaded or isn't present in the storage.
@@ -30,7 +30,7 @@ public interface KachleManager {
 
 	/**
 	 * Save many tiles to the storage. Should be atomic ("all or nothing")
-	 * 
+	 *
 	 * @param itemsToSave
 	 *            Collection of items (identifier of the tile -> image dump)
 	 * @return true if the saving of ALL items was successful, false otherwise

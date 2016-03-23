@@ -19,11 +19,11 @@ public class IkonBag {
 		return jmenaSad;
 	}
 
-	public void setJmenaSad(Set<String> jmenaSad) {
+	public void setJmenaSad(final Set<String> jmenaSad) {
 		this.jmenaSad = jmenaSad;
 	}
 
-	public void setSada(Sada sada) {
+	public void setSada(final Sada sada) {
 		this.sada = sada;
 	}
 
@@ -33,7 +33,7 @@ public class IkonBag {
 
 	public void print() {
 		System.out.println("Sady: " + jmenaSad);
-		for (SkloAplikant skloAplikant : sada.skloAplikanti) {
+		for (final SkloAplikant skloAplikant : sada.skloAplikanti) {
 			System.out.println("   *** sklo: " + skloAplikant.aplikaceSkla);
 			// for (Vrstva vrstva : skloAplikant.sklo.vrstvy) {
 			System.out.println("        ### vrstva");
@@ -48,14 +48,14 @@ public class IkonBag {
 		return genom;
 	}
 
-	public Sklivec getSklivec(Genotyp genotyp) {
+	public Sklivec getSklivec(final Genotyp genotyp) {
 		return sada.getSklivec(genotyp);
 
 	}
 
-	public Icon seekIkon(Genotyp genotyp) {
-		Sklivec sklivec = getSklivec(genotyp);
-		Imagant imagant = Sklo.prekresliNaSebe(sklivec.imaganti);
+	public Icon seekIkon(final Genotyp genotyp) {
+		final Sklivec sklivec = getSklivec(genotyp);
+		final Imagant imagant = Sklo.prekresliNaSebe(sklivec.imaganti);
 		if (imagant == null)
 			return null;
 		return new ImageIcon(imagant.getImage());
@@ -64,7 +64,7 @@ public class IkonBag {
 	/**
 	 * @param aNactiIkonySad
 	 */
-	public void setJmenaAIkonySad(Map<ASada, Icon> aJmenaAIkonySad) {
+	public void setJmenaAIkonySad(final Map<ASada, Icon> aJmenaAIkonySad) {
 		iJmenaAIkonySad = aJmenaAIkonySad;
 	}
 

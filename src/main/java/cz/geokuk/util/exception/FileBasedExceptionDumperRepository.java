@@ -12,57 +12,57 @@ import cz.geokuk.util.file.FileManager;
 
 /**
  * Repositoř výjime realizovaná na filesystému.
- * 
+ *
  * @author veverka
  */
 public class FileBasedExceptionDumperRepository implements ExceptionDumperRepositorySpi {
 
-	private static Pattern	pat	= Pattern.compile(ExceptionDumperRepositorySpi.EXC_PREFIX + "([0-9]+)([a-z]+)([0-9]+)");
+	private static Pattern		pat	= Pattern.compile(ExceptionDumperRepositorySpi.EXC_PREFIX + "([0-9]+)([a-z]+)([0-9]+)");
 
 	/**
 	 * APrověřený adresář
 	 */
-	private final File		iDir;
+	private final File			iDir;
 
 	/**
 	 * Číslo spuštění
 	 */
-	private int				iRunNumber;
+	private int					iRunNumber;
 
-	private FileManager		fm	= FileManager.getInstance(4096);
+	private final FileManager	fm	= FileManager.getInstance(4096);
 
 	/**
 	 *
 	 */
-	public FileBasedExceptionDumperRepository(File aDir) {
+	public FileBasedExceptionDumperRepository(final File aDir) {
 		try {
 			if (aDir == null) {
 				throw new IllegalArgumentException("The parameter aDir is null");
 			}
-			File dir = aDir.getCanonicalFile();
+			final File dir = aDir.getCanonicalFile();
 			initDir(dir);
 			iDir = dir;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Cannot use directory \"" + aDir + "\" as exception repository directory becouse: ", e);
 		}
 	}
 
 	/**
 	 * Zapíše text výjimky někam na základě zadaného kódu. Vyhodí výjimku, pokud se zápis z libovolného důvodu nepodaří.
-	 * 
+	 *
 	 * @param aCode
 	 * @param aExceptionData
 	 * @throws IOException
 	 */
-	public void write(AExcId aCode, String aExceptionData) throws IOException {
-		File file = toFile(aCode);
+	public void write(final AExcId aCode, final String aExceptionData) throws IOException {
+		final File file = toFile(aCode);
 		file.getParentFile().mkdirs();
 		fm.writeStringToFile(file, aExceptionData);
 	}
 
 	/**
 	 * Vrátí číslo spuštění výjimky.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getRunNumber() {
@@ -76,7 +76,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 		return iDir;
 	}
 
-	private void initDir(File aDir) throws IOException {
+	private void initDir(final File aDir) throws IOException {
 		if (aDir.exists()) {
 			if (!aDir.isDirectory())
 				throw new RuntimeException("The file \"" + aDir + "\" exists, it is file, not folder!");
@@ -91,7 +91,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 			throw new RuntimeException("Cannot write to the directory \"" + aDir + "\"");
 		// nyní víme, že z adresáře můžeme číst a můžeme tam i zapisovat
 		// nyní inkrementneme číslo spuštění
-		File spusteniFile = new File(aDir, "runNumber.txt");
+		final File spusteniFile = new File(aDir, "runNumber.txt");
 
 		// Natáhne číslo spuštění, bude to vždy nové číslo
 		iRunNumber = loadAndIncrementNumberInFile(spusteniFile);
@@ -104,11 +104,11 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 	 * @param aDir
 	 * @throws IOException
 	 */
-	private void zkusitPraciVAdresari(File aDir) throws IOException {
+	private void zkusitPraciVAdresari(final File aDir) throws IOException {
 		// A zkusíme, že umíme vytvořid adresář i soubor (k randomům přičítáme číslo, aby nevylezlo moc malé číslo, jenž bude mít exponenciální vyjádření
-		File pokusdir = new File(aDir, "dir" + (Math.random() + 20));
+		final File pokusdir = new File(aDir, "dir" + (Math.random() + 20));
 		pokusdir.mkdir();
-		File pokusfile = new File(pokusdir, "filex" + (Math.random() + 30));
+		final File pokusfile = new File(pokusdir, "filex" + (Math.random() + 30));
 		fm.writeStringToFile(pokusfile, "Pokusný řetězec zapisovaný do souboru");
 		pokusfile.delete();
 		pokusdir.delete();
@@ -118,7 +118,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static int loadAndIncrementNumberInFile(File aFile) throws IOException {
+	public static int loadAndIncrementNumberInFile(final File aFile) throws IOException {
 		aFile.getCanonicalFile().getParentFile().mkdirs();
 		int runNumber = 0;
 		try (RandomAccessFile raf = new RandomAccessFile(aFile, "rw")) {
@@ -126,7 +126,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 
 				// Use the file channel to create a lock on the file.
 				// This method blocks until it can retrieve the lock.
-				FileLock lock = channel.lock();
+				final FileLock lock = channel.lock();
 				try {
 					int c;
 					while ((c = raf.read()) >= 0) {
@@ -149,25 +149,25 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 
 	/**
 	 * Převede kód přímo na soubor.
-	 * 
+	 *
 	 * @param aCode
 	 * @return
 	 */
-	private File toFile(AExcId aCode) {
+	private File toFile(final AExcId aCode) {
 		return new File(iDir, toRelativePath(aCode));
 	}
 
 	/**
 	 * Převede kód výjimky do relativní cesty, kde bude uložena
-	 * 
+	 *
 	 * @param aCode
 	 * @return
 	 */
-	private String toRelativePath(AExcId aCode) {
+	private String toRelativePath(final AExcId aCode) {
 		// pokud začíná kódem lokace, tah ho odstraníme
-		String code = aCode.toString().trim().toLowerCase();
-		StringBuilder sb = new StringBuilder();
-		Matcher matcher = pat.matcher(code);
+		final String code = aCode.toString().trim().toLowerCase();
+		final StringBuilder sb = new StringBuilder();
+		final Matcher matcher = pat.matcher(code);
 		if (matcher.matches()) {
 			sb.append(matcher.group(1)); // pořadové číslo
 			sb.append('/'); // oddělovač adresářů
@@ -177,7 +177,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 			while (cislo.length() < 4) {
 				cislo = '0' + cislo;
 			}
-			int rozdel = cislo.length() - 2; // aby byla stovka na složku
+			final int rozdel = cislo.length() - 2; // aby byla stovka na složku
 			sb.append(cislo.substring(0, rozdel));
 		} else {
 			sb.append("podivini");
@@ -191,7 +191,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
@@ -211,14 +211,14 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 	//
 	// }
 
-	public URL getUrl(AExcId aCode) {
+	public URL getUrl(final AExcId aCode) {
 		try {
-			File toFile = toFile(aCode);
+			final File toFile = toFile(aCode);
 			if (!toFile.canRead())
 				return null; // nemohu číst
 			// Přes URI se jde do URL proto, aby se rozumně zakódovaly mezery
 			return toFile.toURI().toURL();
-		} catch (MalformedURLException e) {
+		} catch (final MalformedURLException e) {
 			throw new RuntimeException("Číslo chybové hlášky " + aCode + " nelze konvertovat na URL", e);
 		}
 	}

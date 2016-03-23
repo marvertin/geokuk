@@ -16,23 +16,23 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 
 	public JPapirMeritkoComboBox() {
 		setEditable(true);
-		for (int mer : MERITKA) {
+		for (final int mer : MERITKA) {
 			addItem(formatuj(mer));
 		}
 
 		addItemListener(new ItemListener() {
 			@Override
-			public void itemStateChanged(ItemEvent event) {
+			public void itemStateChanged(final ItemEvent event) {
 				// pokud zadal blbost tak tam dát,. co tam bylo
 				if (event.getStateChange() == ItemEvent.SELECTED) {
-					int mer = parser((String) getSelectedItem());
+					final int mer = parser((String) getSelectedItem());
 					setMeritko(mer);
 				}
 			}
 		});
 	}
 
-	public void setMeritko(int mer) {
+	public void setMeritko(final int mer) {
 		if (mer == 0)
 			return;
 		naposledZadana = mer;
@@ -43,14 +43,14 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 		return parser((String) getSelectedItem());
 	}
 
-	private String formatuj(int mer) {
-		String result = String.format("1 : %,d", mer);
+	private String formatuj(final int mer) {
+		final String result = String.format("1 : %,d", mer);
 		return result;
 	}
 
-	private int parser(String s) {
-		StringBuilder sb = new StringBuilder();
-		for (char c : s.toCharArray()) {
+	private int parser(final String s) {
+		final StringBuilder sb = new StringBuilder();
+		for (final char c : s.toCharArray()) {
 			if (c == ':') {
 				sb.setLength(0);
 			}
@@ -60,7 +60,7 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 		}
 		try {
 			return Integer.parseInt(sb.toString());
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			// když to nejde, tak to nejde
 			setMeritko(naposledZadana);
 			return naposledZadana;

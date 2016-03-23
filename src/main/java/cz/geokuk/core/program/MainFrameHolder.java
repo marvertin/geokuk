@@ -13,7 +13,7 @@ public class MainFrameHolder implements SlideListProvider {
 	private JMainFrame	mainFrame;
 	private Factory		factory;
 
-	public void setMainFrame(JMainFrame mainFrame) {
+	public void setMainFrame(final JMainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		factory.init(this.mainFrame);
 	}
@@ -22,13 +22,13 @@ public class MainFrameHolder implements SlideListProvider {
 		return mainFrame;
 	}
 
-	public void inject(Factory factory) {
+	public void inject(final Factory factory) {
 		this.factory = factory;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.core.coord.SlideListProvider#getSlides()
 	 */
 	@Override

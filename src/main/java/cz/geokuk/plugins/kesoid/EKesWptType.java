@@ -15,16 +15,16 @@ public enum EKesWptType {
 	@SuppressWarnings("unused")
 	private static final Logger log = LogManager.getLogger(EKesWptType.class.getSimpleName());
 
-	public static EKesWptType decode(String aKesWptTpeStr) {
+	public static EKesWptType decode(final String aKesWptTpeStr) {
 		try {
 			return EKesWptType.valueOf(upravNaVyctovec(aKesWptTpeStr));
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			// log.warn("Unknown waypoint type : {}", aKesWptTpeStr);
 			return null;
 		}
 	}
 
-	private static String upravNaVyctovec(String pp) {
+	private static String upravNaVyctovec(final String pp) {
 		if (pp == null)
 			return null;
 		return pp.replace(' ', '_').replace('-', '_').toUpperCase();

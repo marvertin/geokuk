@@ -17,12 +17,12 @@ class GenotypBuilderKes {
 	/**
 	 *
 	 */
-	public GenotypBuilderKes(Genom genom, Genotyp g) {
+	public GenotypBuilderKes(final Genom genom, final Genotyp g) {
 		this.genom = genom;
 		this.g = g;
 	}
 
-	public void build(Kes kes) {
+	public void build(final Kes kes) {
 		g.put(genom.ALELA_gc);
 		switch (kes.getVztah()) {
 		case NORMAL:

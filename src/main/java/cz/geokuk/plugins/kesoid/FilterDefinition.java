@@ -25,7 +25,7 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
 		return prahFavorit;
 	}
 
-	public void setPrahFavorit(int prahFavorit) {
+	public void setPrahFavorit(final int prahFavorit) {
 		this.prahFavorit = prahFavorit;
 	}
 
@@ -40,7 +40,7 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
 	 * @param prahHodnoceni
 	 *            the prahHodnoceni to set
 	 */
-	public void setPrahHodnoceni(int prahHodnoceni) {
+	public void setPrahHodnoceni(final int prahHodnoceni) {
 		this.prahHodnoceni = prahHodnoceni;
 	}
 
@@ -55,7 +55,7 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
 	 * @param prahBestOf
 	 *            the prahBestOf to set
 	 */
-	public void setPrahBestOf(int prahBestOf) {
+	public void setPrahBestOf(final int prahBestOf) {
 		this.prahBestOf = prahBestOf;
 	}
 
@@ -72,7 +72,7 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
 	 *            the prahVyletu to set
 	 */
 	@PreferencebleIgnore
-	public void setPrahVyletu(EVylet prahVyletu) {
+	public void setPrahVyletu(final EVylet prahVyletu) {
 		this.prahVyletu = prahVyletu;
 	}
 
@@ -89,7 +89,7 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
 	 *            the jenDoTerenuUNenalezenych to set
 	 */
 	@PreferencebleProperty(name = "jenFinal")
-	public void setJenDoTerenuUNenalezenych(boolean jenDoTerenuUNenalezenych) {
+	public void setJenDoTerenuUNenalezenych(final boolean jenDoTerenuUNenalezenych) {
 		this.jenDoTerenuUNenalezenych = jenDoTerenuUNenalezenych;
 	}
 
@@ -106,20 +106,20 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
 	 *            the jenFinalUNalezenych to set
 	 */
 	@PreferencebleProperty(name = "jenJedenUNalezenych")
-	public void setJenFinalUNalezenych(boolean jenFinalUNalezenych) {
+	public void setJenFinalUNalezenych(final boolean jenFinalUNalezenych) {
 		this.jenFinalUNalezenych = jenFinalUNalezenych;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.Copyable#copy()
 	 */
 	@Override
 	public FilterDefinition copy() {
 		try {
 			return (FilterDefinition) super.clone();
-		} catch (CloneNotSupportedException e) {
+		} catch (final CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 	}

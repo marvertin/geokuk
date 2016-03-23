@@ -10,7 +10,7 @@ public abstract class DocAction0 extends PositionedAction0 {
 	private static final long	serialVersionUID	= 1L;
 	private final Doc			kontextovyDoc;
 
-	public DocAction0(Doc kontextovyDoc) {
+	public DocAction0(final Doc kontextovyDoc) {
 		this.kontextovyDoc = kontextovyDoc;
 		if (kontextovyDoc != null) {
 			kontextovyDoc.kontrolaKonzistence();
@@ -23,7 +23,7 @@ public abstract class DocAction0 extends PositionedAction0 {
 	}
 
 	private void vyhodnotitPovolenost() {
-		Doc doc = getDoc();
+		final Doc doc = getDoc();
 		if (doc == null) {
 			setEnabled(false);
 		} else {
@@ -37,8 +37,8 @@ public abstract class DocAction0 extends PositionedAction0 {
 	}
 
 	@Override
-	public final void actionPerformed(ActionEvent aE) {
-		Doc doc = getDoc();
+	public final void actionPerformed(final ActionEvent aE) {
+		final Doc doc = getDoc();
 		if (doc != null) {
 			provedProDoc(doc);
 		}
@@ -46,7 +46,7 @@ public abstract class DocAction0 extends PositionedAction0 {
 
 	/**
 	 * Pokud je daný Cesta, tak se nechá natavit jméno. Natavovací metoda také ví, zda je akce z kontexotvého menu nebo z hlavního
-	 * 
+	 *
 	 * @param Cesta
 	 * @param aZKontextovehoMenu
 	 */
@@ -54,7 +54,7 @@ public abstract class DocAction0 extends PositionedAction0 {
 
 	/**
 	 * Zda se pro dany Cesta ma akce povolit.
-	 * 
+	 *
 	 * @param Cesta
 	 *            Nikdy nebude predano null
 	 * @return
@@ -63,7 +63,7 @@ public abstract class DocAction0 extends PositionedAction0 {
 
 	/**
 	 * Provedení akce pro daný Cesta.
-	 * 
+	 *
 	 * @param Cesta
 	 */
 	protected abstract void provedProDoc(Doc doc);

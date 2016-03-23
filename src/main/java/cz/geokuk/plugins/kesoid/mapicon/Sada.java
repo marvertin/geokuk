@@ -12,7 +12,7 @@ import cz.geokuk.util.pocitadla.*;
 
 public class Sada {
 
-	private Pocitadlo			pocitSklivcu		= new PocitadloMalo("Sklivce - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
+	private final Pocitadlo		pocitSklivcu		= new PocitadloMalo("Sklivce - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
 	private static Pocitadlo	pocitSklivcuZasah	= new PocitadloRoste("Sklivce - zásah cache", "");
 
 	List<SkloAplikant>			skloAplikanti		= new ArrayList<>();
@@ -21,13 +21,13 @@ public class Sada {
 
 	private final String		name;
 
-	private Repaintanger		repaintanger		= new Repaintanger();
+	private final Repaintanger	repaintanger		= new Repaintanger();
 
 	private Set<Alela>			pouziteAlely;
 	private Set<Gen>			pouziteGeny;
 	private Icon				icon;
 
-	public Sada(String name) {
+	public Sada(final String name) {
 		this.name = name;
 	}
 
@@ -44,13 +44,13 @@ public class Sada {
 	 * @param genotyp
 	 * @return
 	 */
-	public synchronized Sklivec getSklivec(Genotyp genotyp) {
+	public synchronized Sklivec getSklivec(final Genotyp genotyp) {
 		zuzNaObrazkove(genotyp); // aby se nekešovalo pro alely, ke kterým nic nemáme
-		Otisk otisk = genotyp.getOtisk();
+		final Otisk otisk = genotyp.getOtisk();
 		Sklivec sklivec = cache.get(otisk);
 		if (sklivec == null) {
 			sklivec = new Sklivec();
-			for (SkloAplikant skloAplikant : skloAplikanti) {
+			for (final SkloAplikant skloAplikant : skloAplikanti) {
 				sklivec.imaganti.add(getRenderedImage(genotyp, skloAplikant));
 			}
 			cache.put(otisk, sklivec);
@@ -63,9 +63,9 @@ public class Sada {
 		return sklivec;
 	}
 
-	private void zuzNaObrazkove(Genotyp genotyp) {
-		Set<Alela> pouziteAlely2 = getPouziteAlely();
-		for (Alela alela : new ArrayList<>(genotyp.getAlely())) {
+	private void zuzNaObrazkove(final Genotyp genotyp) {
+		final Set<Alela> pouziteAlely2 = getPouziteAlely();
+		for (final Alela alela : new ArrayList<>(genotyp.getAlely())) {
 			if (!pouziteAlely2.contains(alela)) {
 				if (!pouziteAlely2.contains(alela.getGen().getVychoziAlela())) {
 					genotyp.remove(alela);
@@ -83,8 +83,8 @@ public class Sada {
 	 * @param skloAplikant
 	 * @return
 	 */
-	private Imagant getRenderedImage(Genotyp genotyp, SkloAplikant skloAplikant) {
-		Imagant imagant = skloAplikant.sklo.getRenderedImage(genotyp);
+	private Imagant getRenderedImage(final Genotyp genotyp, final SkloAplikant skloAplikant) {
+		final Imagant imagant = skloAplikant.sklo.getRenderedImage(genotyp);
 		return imagant;
 	}
 
@@ -97,9 +97,9 @@ public class Sada {
 	 */
 	public Set<Alela> getPouziteAlely() {
 		if (pouziteAlely == null) {
-			Set<Alela> alely = new HashSet<>();
-			for (SkloAplikant skloAplikant : skloAplikanti) {
-				for (Vrstva vrstva : skloAplikant.sklo.vrstvy) {
+			final Set<Alela> alely = new HashSet<>();
+			for (final SkloAplikant skloAplikant : skloAplikanti) {
+				for (final Vrstva vrstva : skloAplikant.sklo.vrstvy) {
 					alely.addAll(vrstva.getPouziteAlely());
 				}
 			}
@@ -110,9 +110,9 @@ public class Sada {
 
 	public Set<Gen> getPouziteGeny() {
 		if (pouziteGeny == null) {
-			Set<Gen> geny = new HashSet<>();
-			Set<Alela> pouziteAlely = getPouziteAlely();
-			for (Alela alela : pouziteAlely) {
+			final Set<Gen> geny = new HashSet<>();
+			final Set<Alela> pouziteAlely = getPouziteAlely();
+			for (final Alela alela : pouziteAlely) {
 				geny.add(alela.getGen());
 			}
 			pouziteGeny = geny;
@@ -123,7 +123,7 @@ public class Sada {
 	/**
 	 * @param aImageIcon
 	 */
-	public void setIcon(Icon icon) {
+	public void setIcon(final Icon icon) {
 		this.icon = icon;
 	}
 

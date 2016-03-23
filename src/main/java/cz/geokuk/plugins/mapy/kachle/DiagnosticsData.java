@@ -2,7 +2,7 @@ package cz.geokuk.plugins.mapy.kachle;
 
 /**
  * Sbírá postupně diagnostická data, je možné přibalovat. Ni nevyhodnocuje, tkže je rychlé, vyhonocuje až toString při vypisování.
- * 
+ *
  * @author tatinek
  *
  */
@@ -25,7 +25,7 @@ public class DiagnosticsData {
 
 	/**
 	 * Přidá další položku do diagnostickýc dat.
-	 * 
+	 *
 	 * @param nazev
 	 * @param dato
 	 * @return
@@ -108,7 +108,7 @@ public class DiagnosticsData {
 
 	/**
 	 * Pošle diagnostiku do listenera
-	 * 
+	 *
 	 * @param faze
 	 */
 	public void send(final String faze) {

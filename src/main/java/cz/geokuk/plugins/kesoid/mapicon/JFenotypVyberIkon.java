@@ -22,44 +22,44 @@ public class JFenotypVyberIkon extends JVyberIkon0 {
 		super(false, true);
 	}
 
-	public void resetBag(IkonBag bag, KesBag kesBag, Set<String> aJmenaVybranychAlel) {
+	public void resetBag(final IkonBag bag, final KesBag kesBag, final Set<String> aJmenaVybranychAlel) {
 		this.bag = bag;
 		pouziteAlely = kesBag.getPouziteAlely();
 		refresh(bag, aJmenaVybranychAlel, kesBag.getPoctyAlel());
 	}
 
 	@Override
-	protected void zmenaVyberu(Set<Alela> aAlely) {
+	protected void zmenaVyberu(final Set<Alela> aAlely) {
 		System.out.println("Vyber alel, které se nefenotypují: " + aAlely);
 		kesoidModel.setJmenaNefenotypovanychAlel(Alela.alelyToNames(aAlely));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Alela)
 	 */
 	@Override
-	protected boolean shouldRender(Alela alela) {
+	protected boolean shouldRender(final Alela alela) {
 		return !alela.isVychozi() && bag.getSada().getPouziteAlely().contains(alela) && (pouziteAlely == null || pouziteAlely.contains(alela));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see geokuk.mapicon.JVyberIkon0#shouldRender(geokuk.mapicon.Gen)
 	 */
 	@Override
-	protected boolean shouldRender(Gen gen) {
+	protected boolean shouldRender(final Gen gen) {
 		return bag.getSada().getPouziteGeny().contains(gen);
 	}
 
 	@Override
-	protected boolean shouldEnable(Alela alela) {
+	protected boolean shouldEnable(final Alela alela) {
 		return true;
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 

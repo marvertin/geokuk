@@ -23,15 +23,15 @@ public class UlozKopiiAction extends SouboeCestaAction0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 
-		JFileChooser fc = new JFileChooser();
+		final JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(new GpxFilter());
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setSelectedFile(cestyModel.getImplicitniVyletSaveCopyNovyFile());
-		int result = fc.showDialog(Dlg.parentFrame(), "Uložit kopii");
+		final int result = fc.showDialog(Dlg.parentFrame(), "Uložit kopii");
 		if (result == JFileChooser.APPROVE_OPTION) {
-			File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
+			final File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
 			if (selectedFile.exists()) { // dtaz na přepsání
 				if (!Dlg.prepsatSoubor(selectedFile))
 					return;
@@ -41,7 +41,7 @@ public class UlozKopiiAction extends SouboeCestaAction0 {
 		}
 	}
 
-	public void onEvent(CestyChangedEvent event) {
+	public void onEvent(final CestyChangedEvent event) {
 		doc = event.getDoc();
 		setEnabled(doc != null && (!doc.isEmpty() || doc.isChanged()));
 	}

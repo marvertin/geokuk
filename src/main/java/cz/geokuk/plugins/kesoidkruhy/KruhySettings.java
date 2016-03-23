@@ -110,7 +110,7 @@ public class KruhySettings implements Copyable<KruhySettings> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

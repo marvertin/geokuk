@@ -12,7 +12,7 @@ public class VyletAnoAction extends VyletActionIndividual0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public VyletAnoAction(Kesoid kes) {
+	public VyletAnoAction(final Kesoid kes) {
 		super("Lovím", kes);
 
 		putValue(SHORT_DESCRIPTION, "Zařadí keš mezi favority, které chci lovit.");
@@ -22,7 +22,7 @@ public class VyletAnoAction extends VyletActionIndividual0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		vyletModel.add(EVylet.ANO, kesoid());
 	}
 

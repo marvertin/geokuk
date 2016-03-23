@@ -20,36 +20,36 @@ public class JMvComboBox<T> extends JComboBox<Item<T>> {
 		this.model = model;
 		final DefaultComboBoxModel<Item<T>> defmod = new DefaultComboBoxModel<>();
 		setModel(defmod);
-		List<Item<T>> items = model.items;
-		for (Item<T> item : items) {
+		final List<Item<T>> items = model.items;
+		for (final Item<T> item : items) {
 			defmod.addElement(item);
 		}
 		defmod.addListDataListener(new ListDataListener() {
 
 			@Override
-			public void intervalRemoved(ListDataEvent e) {
+			public void intervalRemoved(final ListDataEvent e) {
 				nastavto();
 			}
 
 			@Override
-			public void intervalAdded(ListDataEvent e) {
+			public void intervalAdded(final ListDataEvent e) {
 				nastavto();
 			}
 
 			@Override
-			public void contentsChanged(ListDataEvent e) {
+			public void contentsChanged(final ListDataEvent e) {
 				nastavto();
 			}
 
 			private void nastavto() {
 				@SuppressWarnings("unchecked")
-				Item<T> item = ((Item<T>) defmod.getSelectedItem());
+				final Item<T> item = ((Item<T>) defmod.getSelectedItem());
 				model.setSelectedItem(item);
 			}
 		});
 		model.addListener(new SelectionListener<T>() {
 			@Override
-			public void selectionChanged(SelectionEvent<T> event) {
+			public void selectionChanged(final SelectionEvent<T> event) {
 				defmod.setSelectedItem(event.item);
 			}
 		});

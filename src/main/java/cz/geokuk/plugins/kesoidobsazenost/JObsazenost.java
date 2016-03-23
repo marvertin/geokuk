@@ -53,24 +53,24 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		iSlidovnik.addChangeListener(new ChangeListenerImplementation());
 	}
 
-	public void onEvent(KeskyNactenyEvent event) {
+	public void onEvent(final KeskyNactenyEvent event) {
 		iIndexator = event.getVsechny().getIndexator();
 		repaint();
 	}
 
-	public void onEvent(ObsazenostPreferencesChangeEvent event) {
+	public void onEvent(final ObsazenostPreferencesChangeEvent event) {
 		obsazenost = event.obsazenost;
 		iSlidovnik.setColor(obsazenost.getColor());
 		repaint();
 	}
 
-	public void onEvent(ObsazenostOnoffEvent event) {
+	public void onEvent(final ObsazenostOnoffEvent event) {
 		setVisible(event.isOnoff());
 		repaint();
 	}
 
 	@Override
-	public void paintComponent(Graphics aG) {
+	public void paintComponent(final Graphics aG) {
 		if (iIndexator == null)
 			return;
 		final Graphics2D g = (Graphics2D) aG;
@@ -80,18 +80,18 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 			return; // nemá smysl kreslit malé kroužky
 		// obsazenost.setColor(new Color(128,128,128,128));
 		g.setColor(obsazenost.getColor());
-		int mouokraj = (int) (getSoord().getMouboduNaMetr() * POLOMER_OBSAZENOSTI);
-		BoundingRect boundingRect = getSoord().getBoundingRect().rozsir(mouokraj);
+		final int mouokraj = (int) (getSoord().getMouboduNaMetr() * POLOMER_OBSAZENOSTI);
+		final BoundingRect boundingRect = getSoord().getBoundingRect().rozsir(mouokraj);
 		// final Area area = new Area();
 		iIndexator.visit(boundingRect, new FlatVisitor<Wpt>() {
 
 			@Override
-			public void visit(Sheet<Wpt> aSheet) {
-				Wpt wpt = aSheet.get();
+			public void visit(final Sheet<Wpt> aSheet) {
+				final Wpt wpt = aSheet.get();
 				if (!wpt.obsazujeOblast())
 					return;
-				Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
-				Point p = getSoord().transform(mou);
+				final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
+				final Point p = getSoord().transform(mou);
 				// Ellipse2D kruh = new Ellipse2D.Float(p.x -r, p.y - r, d, d);
 				// Area areakruh = new Area(kruh);
 				// area.add(areakruh);
@@ -116,8 +116,8 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 	 */
 	private final class ChangeListenerImplementation implements ChangeListener {
 		@Override
-		public void stateChanged(ChangeEvent aArg0) {
-			ObsazenostSettings data = obsazenostModel.getData();
+		public void stateChanged(final ChangeEvent aArg0) {
+			final ObsazenostSettings data = obsazenostModel.getData();
 			data.setColor(iSlidovnik.getColor());
 			obsazenostModel.setData(data);
 		}
@@ -128,7 +128,7 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		registerEvents();
 	}
 
-	public void inject(ObsazenostModel obsazenostModel) {
+	public void inject(final ObsazenostModel obsazenostModel) {
 		this.obsazenostModel = obsazenostModel;
 	}
 
@@ -138,7 +138,7 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e, MouseGestureContext ctx) {
+	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
 		// ctx.setMouseCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		super.mouseDragged(e, ctx);
 	}

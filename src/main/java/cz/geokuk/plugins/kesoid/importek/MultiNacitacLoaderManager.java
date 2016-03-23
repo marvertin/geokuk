@@ -18,7 +18,7 @@ public class MultiNacitacLoaderManager {
 
 	private final KesoidModel		kesoidModel;
 
-	public void startLoad(boolean prenacti, Genom genom) {
+	public void startLoad(final boolean prenacti, final Genom genom) {
 		if (iTimer != null)
 			iTimer.stop();
 		multiNacitac.setRootDirs(prenacti, kesoidModel.getUmisteniSouboru().getKesDir().getEffectiveFileIfActive(), kesoidModel.getUmisteniSouboru().getGeogetDataDir().getEffectiveFileIfActive());
@@ -29,7 +29,7 @@ public class MultiNacitacLoaderManager {
 		startTimer(genom);
 	}
 
-	public MultiNacitacLoaderManager(KesoidModel kesoidModel) {
+	public MultiNacitacLoaderManager(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 		multiNacitac = new MultiNacitac(kesoidModel);
 	}
@@ -37,7 +37,7 @@ public class MultiNacitacLoaderManager {
 	private void startTimer(final Genom genom) {
 		iTimer = new Timer(10000, new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				startLoad(false, genom);
 			}
 		});

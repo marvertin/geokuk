@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * Jménovací uzel podle vzoru composite.
- * 
+ *
  * @author veverka
  */
 public class KeyNode<K, D> {
@@ -15,19 +15,19 @@ public class KeyNode<K, D> {
 	private D									data;
 	private final SortedMap<K, KeyNode<K, D>>	items	= new TreeMap<>();
 
-	public KeyNode<K, D> locate(List<K> keys) {
+	public KeyNode<K, D> locate(final List<K> keys) {
 		if (keys.isEmpty()) {
 			return this;
 		} else {
-			K key = keys.get(0);
-			KeyNode<K, D> node = items.get(key);
+			final K key = keys.get(0);
+			final KeyNode<K, D> node = items.get(key);
 			if (node == null)
 				return null;
 			return node.locate(keys.subList(1, keys.size())); // a s o jedno míň zařaď
 		}
 	}
 
-	public KeyNode<K, D> locate(K key) {
+	public KeyNode<K, D> locate(final K key) {
 		return locate(Collections.singletonList(key));
 	}
 
@@ -44,11 +44,11 @@ public class KeyNode<K, D> {
 		return items.keySet();
 	}
 
-	void add(D data, List<K> keys) {
+	void add(final D data, final List<K> keys) {
 		if (keys.isEmpty()) {
 			this.data = data;
 		} else {
-			K key = keys.get(0);
+			final K key = keys.get(0);
 			KeyNode<K, D> node = items.get(key);
 			if (node == null) {
 				node = new KeyNode<>();
@@ -58,13 +58,13 @@ public class KeyNode<K, D> {
 		}
 	}
 
-	void remove(List<K> keys) {
+	void remove(final List<K> keys) {
 		if (keys.isEmpty()) {
 			this.data = null;
 			items.clear();
 		} else {
-			K key = keys.get(0);
-			KeyNode<K, D> node = items.get(key);
+			final K key = keys.get(0);
+			final KeyNode<K, D> node = items.get(key);
 			if (node == null)
 				return; // není tam
 			node.remove(keys.subList(1, keys.size()));
@@ -73,9 +73,9 @@ public class KeyNode<K, D> {
 		}
 	}
 
-	void print(String prefix) {
+	void print(final String prefix) {
 		System.out.println(data);
-		for (K key : items.keySet()) {
+		for (final K key : items.keySet()) {
 			System.out.print(prefix + key + ": ");
 			items.get(key).print(prefix + "     ");
 		}
@@ -83,7 +83,7 @@ public class KeyNode<K, D> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -97,11 +97,11 @@ public class KeyNode<K, D> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -109,7 +109,7 @@ public class KeyNode<K, D> {
 		if (getClass() != obj.getClass())
 			return false;
 		@SuppressWarnings({ "rawtypes" })
-		KeyNode other = (KeyNode) obj;
+		final KeyNode other = (KeyNode) obj;
 		if (data == null) {
 			if (other.data != null)
 				return false;

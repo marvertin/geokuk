@@ -12,7 +12,7 @@ import cz.geokuk.framework.Event0;
 public class PrekrocenLimitWaypointuVeVyrezuEvent extends Event0<KesoidModel> {
 	private final boolean prekrocen;
 
-	PrekrocenLimitWaypointuVeVyrezuEvent(boolean prekrocen) {
+	PrekrocenLimitWaypointuVeVyrezuEvent(final boolean prekrocen) {
 		this.prekrocen = prekrocen;
 	}
 

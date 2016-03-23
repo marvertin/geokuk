@@ -14,18 +14,18 @@ public class JenFinalUNalezenychAction extends ToggleAction0 {
 		putValue(SHORT_DESCRIPTION, "U nalezenýc a mých keší skrýt všechny waypointy kromě kromě finálního smailíka.");
 	}
 
-	public void onEvent(FilterDefinitionChangedEvent event) {
+	public void onEvent(final FilterDefinitionChangedEvent event) {
 		setSelected(event.getFilterDefinition().isJenFinalUNalezenych());
 	}
 
 	@Override
-	protected void onSlectedChange(boolean onoff) {
-		FilterDefinition definition = model.getDefinition();
+	protected void onSlectedChange(final boolean onoff) {
+		final FilterDefinition definition = model.getDefinition();
 		definition.setJenFinalUNalezenych(onoff);
 		model.setDefinition(definition);
 	}
 
-	public void inject(KesoidModel model) {
+	public void inject(final KesoidModel model) {
 		this.model = model;
 	}
 

@@ -7,7 +7,7 @@ public class VyletPul {
 
 	public Set<String> kesides = new HashSet<>();
 
-	public VyletPul(Set<String> kesides) {
+	public VyletPul(final Set<String> kesides) {
 		this.kesides = kesides;
 	}
 }

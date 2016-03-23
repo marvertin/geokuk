@@ -7,7 +7,7 @@ import cz.geokuk.plugins.cesty.data.Bod;
 
 /**
  * Jde na vybranou pozici
- * 
+ *
  * @author veverka
  *
  */
@@ -19,7 +19,7 @@ public class ZnovuSpojitCestyAction extends BodAction0 {
 	/**
 	 * @param aBoard
 	 */
-	public ZnovuSpojitCestyAction(Bod bod) {
+	public ZnovuSpojitCestyAction(final Bod bod) {
 		super(bod);
 		putValue(NAME, "Znovu spojit cesty");
 		putValue(SHORT_DESCRIPTION, "Pokud došlo v některém bodě k rozdělení cest, je možné je zde znovu spojit.");
@@ -28,17 +28,17 @@ public class ZnovuSpojitCestyAction extends BodAction0 {
 	}
 
 	@Override
-	protected boolean mamPovolitProBod(Bod bod) {
+	protected boolean mamPovolitProBod(final Bod bod) {
 		return bod.getKoncovyBodDruheCestyVhodnyProSpojeni() != null;
 	}
 
 	@Override
-	protected void nastavJmenoAkce(Bod bod, boolean aZKontextovehoMenu) {
+	protected void nastavJmenoAkce(final Bod bod, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "<html>Znovu spojit cesty" + bod.getCesta().getNazevHtml() + " " + bod.getCesta().getNazevADalkaHtml());
 	}
 
 	@Override
-	protected void provedProBod(Bod bod) {
+	protected void provedProBod(final Bod bod) {
 		cestyModel.spojCestyVPrekryvnemBode(bod);
 	}
 

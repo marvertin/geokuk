@@ -8,25 +8,25 @@ public abstract class MrizkaAction0 extends ToggleAction0 implements BeanSubtypa
 
 	protected MrizkaModel		mrizkaModel;
 
-	public MrizkaAction0(String name) {
+	public MrizkaAction0(final String name) {
 		super(name);
 	}
 
 	@Override
-	protected void onSlectedChange(boolean nastaveno) {
+	protected void onSlectedChange(final boolean nastaveno) {
 		mrizkaModel.setOnoff(nastaveno);
 	}
 
 	private String kterouMamMrizku() {
-		String kn = getClass().getName();
-		int poz1 = kn.indexOf(".Mrizka");
-		int poz2 = kn.indexOf("Action");
-		String result = kn.substring(poz1 + ".Mrizka".length(), poz2);
+		final String kn = getClass().getName();
+		final int poz1 = kn.indexOf(".Mrizka");
+		final int poz2 = kn.indexOf("Action");
+		final String result = kn.substring(poz1 + ".Mrizka".length(), poz2);
 		return result;
 	}
 
 	@BeanSubtype
-	public void onEvent(MrizkaEvent event) {
+	public void onEvent(final MrizkaEvent event) {
 		setSelected(event.onoff);
 	}
 

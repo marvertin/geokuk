@@ -8,17 +8,17 @@ public class MapyCzUrlBuilder implements KachleUrlBuilder {
 	private static final String	URLBASE1	= "http://m1.mapserver.mapy.cz/";
 	private final String		kategorie;
 
-	public MapyCzUrlBuilder(String kategorie) {
+	public MapyCzUrlBuilder(final String kategorie) {
 		this.kategorie = kategorie;
 
 	}
 
 	@Override
-	public URL buildUrl(KaOne kaOne) throws MalformedURLException {
+	public URL buildUrl(final KaOne kaOne) throws MalformedURLException {
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(URLBASE1);
-		KaLoc kaloc = kaOne.getLoc();
+		final KaLoc kaloc = kaOne.getLoc();
 		sb.append(kategorie);
 		sb.append('/');
 		sb.append(kaloc.getMoumer());
@@ -26,7 +26,7 @@ public class MapyCzUrlBuilder implements KachleUrlBuilder {
 		sb.append(kaloc.getFromSzUnsignedX());
 		sb.append('-');
 		sb.append(kaloc.getFromSzUnsignedY());
-		URL url = new URL(sb.toString());
+		final URL url = new URL(sb.toString());
 		return url;
 	}
 

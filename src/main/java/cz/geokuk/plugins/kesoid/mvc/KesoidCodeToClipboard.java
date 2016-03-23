@@ -24,7 +24,7 @@ public class KesoidCodeToClipboard extends Action0 {
 	/**
 	 *
 	 */
-	public KesoidCodeToClipboard(Kesoid aKesoid) {
+	public KesoidCodeToClipboard(final Kesoid aKesoid) {
 		super("<html>Identifikátor <i>" + aKesoid.getIdentifier() + "</i> do schráky");
 		kesoid = aKesoid;
 		putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží kód kešoidu.");
@@ -34,12 +34,12 @@ public class KesoidCodeToClipboard extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		Kesoid kes = kesoid;
 		if (kes == null) {
 			kes = poziceq.getKesoid();
@@ -49,12 +49,12 @@ public class KesoidCodeToClipboard extends Action0 {
 		kesoidModel.pridejKodKesoiduDoClipboardu(kes);
 	}
 
-	public void onEvent(PoziceChangedEvent event) {
+	public void onEvent(final PoziceChangedEvent event) {
 		poziceq = event.poziceq;
 		setEnabled(kesoid != null || poziceq.getWpt() != null);
 	}
 
-	public void inject(KesoidModel kesoidModel) {
+	public void inject(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;
 	}
 }

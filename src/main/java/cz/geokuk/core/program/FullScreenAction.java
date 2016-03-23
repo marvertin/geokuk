@@ -27,26 +27,26 @@ public class FullScreenAction extends Action0 {
 	public FullScreenAction() {
 		super("Celá obrazovka");
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		final GraphicsDevice gs = ge.getDefaultScreenDevice();
 		setEnabled(gs.isFullScreenSupported());
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent aE) {
+	public void actionPerformed(final ActionEvent aE) {
 
 		// System.out.println("Stisknouto F11");
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		final GraphicsDevice gs = ge.getDefaultScreenDevice();
-		boolean jsmeVeFulu = gs.getFullScreenWindow() != null;
+		final boolean jsmeVeFulu = gs.getFullScreenWindow() != null;
 
 		// LATER Tady předpokládáme JMainFrame a nevím, zda je to úplně správně
-		JMainFrame mainFrame = (JMainFrame) getMainFrame();
+		final JMainFrame mainFrame = (JMainFrame) getMainFrame();
 
 		// mainFrame.setVisible(false);
 		// mainFrame.dispose();

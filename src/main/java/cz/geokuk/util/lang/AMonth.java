@@ -78,7 +78,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Kolik měsíců se má přičíst. Záporné číslo odčítá.
 	 * @return Objekt měsíce zvýšený o patřičný počet měsíců.
 	 */
-	public AMonth add(int aKolik) {
+	public AMonth add(final int aKolik) {
 		return new AMonth(iRokMes + aKolik);
 	}
 
@@ -89,7 +89,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Kolik roků se má přičíst. Záporné číslo odčítá.
 	 * @return Objekt měsíce snížený o příslušný počet roků.
 	 */
-	public AMonth addYears(int aKolik) {
+	public AMonth addYears(final int aKolik) {
 		return new AMonth(iRokMes + aKolik * MINY);
 	}
 
@@ -118,7 +118,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Číslo dne v intervalu 1..31, pro některé měsíce musí být menší.
 	 * @return Datum odpovídající číslu měsíce.
 	 */
-	public ADate dateOf(int aDay) {
+	public ADate dateOf(final int aDay) {
 		return ADate.from(getYearNumber(), getMonthNumber(), aDay);
 	}
 
@@ -128,7 +128,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 * @return tOTÉŽ CO FUNKCE BEZ PARAMETRŮ.
 	 * @deprecated Použij metodu bez parametru, stejně parametr nemá na nic vliv, je to chyba.
 	 */
-	public ADate firstDate(int aDay) {
+	public ADate firstDate(final int aDay) {
 		return dateOf(1);
 	}
 
@@ -156,7 +156,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 * @return Počet dnů v měsíci, číslo z intervalu 28..31
 	 */
 	public int daysIn() {
-		Calendar cal = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
+		final Calendar cal = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
 		cal.set(getYearNumber() - 1, getMonthNumber(), 1); // proč je tam to - není vůbec jasné
 		cal.add(Calendar.MONTH, 12);
 		cal.add(Calendar.DAY_OF_MONTH, -1);
@@ -165,7 +165,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 
 	/**
 	 * Rozdíl zadaných měsíců. Příklad:
-	 * 
+	 *
 	 * <pre>
 	 *   5, AMonth.from(2003, 8).diff(AMonth.from(2003,3)) == 5
 	 *  11, AMonth.from(2003,12).diff(AMonth.from(2003,1)) == 11
@@ -178,31 +178,31 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Měsíc, který má být odečten.
 	 * @return Počet měsíců mezi zadanými měsíci, může být i záportný.
 	 */
-	public int diff(AMonth aMonth) {
+	public int diff(final AMonth aMonth) {
 		return iRokMes - aMonth.iRokMes;
 	}
 
-	public boolean isLess(AMonth b) {
+	public boolean isLess(final AMonth b) {
 		return compareTo(b) < 0;
 	}
 
-	public boolean isLessOrEqual(AMonth b) {
+	public boolean isLessOrEqual(final AMonth b) {
 		return compareTo(b) <= 0;
 	}
 
-	public boolean isGreater(AMonth b) {
+	public boolean isGreater(final AMonth b) {
 		return compareTo(b) > 0;
 	}
 
-	public boolean isGreaterOrEqual(AMonth b) {
+	public boolean isGreaterOrEqual(final AMonth b) {
 		return compareTo(b) >= 0;
 	}
 
-	public boolean isEqual(AMonth b) {
+	public boolean isEqual(final AMonth b) {
 		return compareTo(b) == 0;
 	}
 
-	public boolean isNotEqual(AMonth b) {
+	public boolean isNotEqual(final AMonth b) {
 		return compareTo(b) != 0;
 	}
 
@@ -213,7 +213,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Objekt se, kterým porovnávat.
 	 * @return -1, pokud je menší než argument, 0, při rovnosti, 1, pokud je větší než argument
 	 */
-	public int compareTo(AMonth aObj) {
+	public int compareTo(final AMonth aObj) {
 		return iRokMes == aObj.iRokMes ? 0 : iRokMes < aObj.iRokMes ? -1 : 1;
 	}
 
@@ -224,10 +224,10 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Objekt, se kterým se porovnává.
 	 * @return true, pokud se rovnají. False pokud se nerovnají, argument je null nebo jiný typ než AMonth.
 	 */
-	public boolean equals(Object aObject) {
+	public boolean equals(final Object aObject) {
 		if (!(aObject instanceof AMonth))
 			return false;
-		AMonth obj = (AMonth) aObject;
+		final AMonth obj = (AMonth) aObject;
 		return iRokMes == obj.iRokMes;
 	}
 
@@ -247,7 +247,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Pořadové číslo měsíce. Blíže viz {@link #asInt())
 	 * @return Zkosntruovaný objekt AMonth
 	 */
-	public static AMonth from(int aRokMes) {
+	public static AMonth from(final int aRokMes) {
 		return new AMonth(aRokMes);
 	}
 
@@ -258,7 +258,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Rok a měsíc ve tvaru RRRR-MM.
 	 * @return odpovídající hodnota
 	 */
-	public static AMonth from(String aRokMes) {
+	public static AMonth from(final String aRokMes) {
 		return aRokMes == null ? null : new AMonth(parseMonth(aRokMes));
 	}
 
@@ -271,7 +271,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Měsíc 1..12
 	 * @return Zkosntruovaný objekt AMonth
 	 */
-	public static AMonth from(int aRok, int aMes) {
+	public static AMonth from(final int aRok, final int aMes) {
 		return new AMonth(fromItems(aRok, aMes));
 	}
 
@@ -281,11 +281,11 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 * @param aRokMes
 	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
 	 */
-	public static boolean canFrom(int aRokMes) {
+	public static boolean canFrom(final int aRokMes) {
 		try {
 			from(aRokMes);
 			return true;
-		} catch (XCreateElement e) {
+		} catch (final XCreateElement e) {
 			return false;
 		}
 	}
@@ -297,11 +297,11 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            V řetězcovém tvaru rok a měsíc.
 	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
 	 */
-	public static boolean canFrom(String aRokMes) {
+	public static boolean canFrom(final String aRokMes) {
 		try {
 			from(aRokMes);
 			return true;
-		} catch (XCreateElement e) {
+		} catch (final XCreateElement e) {
 			return false;
 		}
 	}
@@ -315,11 +315,11 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Měsíc v intervalu 1..12
 	 * @return true, pokud odpovídající volání from by vyhodilo výjimku, jinak false.
 	 */
-	public static boolean canFrom(int aRok, int aMes) {
+	public static boolean canFrom(final int aRok, final int aMes) {
 		try {
 			from(aRok, aMes);
 			return true;
-		} catch (XCreateElement e) {
+		} catch (final XCreateElement e) {
 			return false;
 		}
 	}
@@ -331,7 +331,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Počet měsíců o kolik posunout.
 	 * @return Instance AMonth s posunutým měsícem.
 	 */
-	public AMonth getAnother(long aNthObject) {
+	public AMonth getAnother(final long aNthObject) {
 		if (Math.abs(aNthObject) > Integer.MAX_VALUE - 2)
 			throw new IllegalArgumentException("Počtu měsíců o něž posouvat je " + aNthObject + " a to je na mě v absolutní hodnotě moc!");
 		return add((int) aNthObject);
@@ -344,7 +344,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Objekt, který se odečítá.
 	 * @return Počet měsíců rozdílu.
 	 */
-	public long getDistance(AMonth aObject) {
+	public long getDistance(final AMonth aObject) {
 		if (aObject == null) {
 			throw new IllegalArgumentException("aObject is null!");
 		}
@@ -352,13 +352,13 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	}
 
 	////////////////////////////////////////////
-	private static int parseMonth(String aString) {
+	private static int parseMonth(final String aString) {
 		if (sPattern == null)
 			sPattern = Pattern.compile("\\s*(\\d{4})[ -./]?(\\d\\d?)\\s*");
-		Matcher mat = sPattern.matcher(aString);
+		final Matcher mat = sPattern.matcher(aString);
 		if (mat.matches()) {
-			int rok = Integer.parseInt(mat.group(1));
-			int mes = Integer.parseInt(mat.group(2));
+			final int rok = Integer.parseInt(mat.group(1));
+			final int mes = Integer.parseInt(mat.group(2));
 			return fromItems(rok, mes);
 		} else {
 			throw new XCreateElement("Syntakticka chyba v roku a mesici '" + aString + "'");
@@ -366,7 +366,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 
 	}
 
-	private static int fromItems(int aRok, int aMes) {
+	private static int fromItems(final int aRok, final int aMes) {
 		if (aRok < 1000 || aRok > 9999)
 			throw new XCreateElement("Rok " + aRok + " neni ctyrmistny");
 		if (aMes < 1 || aMes > 12)
@@ -375,7 +375,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	}
 
 	// Kontrola rozsahu.
-	private AMonth(int aRokMes) {
+	private AMonth(final int aRokMes) {
 		iRokMes = aRokMes;
 		checkRange();
 	}

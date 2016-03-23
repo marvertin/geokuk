@@ -14,15 +14,15 @@ public class PopiskyOnAction extends Action0 {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		popiskyModel.visible.setOnoff(true);
 	}
 
-	public void inject(PopiskyModel popiskyModel) {
+	public void inject(final PopiskyModel popiskyModel) {
 		this.popiskyModel = popiskyModel;
 	}
 
-	public void onEvent(PopiskyOnoffEvent event) {
+	public void onEvent(final PopiskyOnoffEvent event) {
 		setEnabled(!event.isOnoff());
 	}
 

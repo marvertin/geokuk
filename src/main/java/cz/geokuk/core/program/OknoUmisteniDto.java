@@ -30,13 +30,13 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 	 * @param velikost
 	 *            the velikost to set
 	 */
-	public void setVelikost(Dimension velikost) {
+	public void setVelikost(final Dimension velikost) {
 		this.velikost = velikost;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -50,18 +50,18 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		OknoUmisteniDto other = (OknoUmisteniDto) obj;
+		final OknoUmisteniDto other = (OknoUmisteniDto) obj;
 		if (pozice == null) {
 			if (other.pozice != null)
 				return false;
@@ -77,7 +77,7 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -89,7 +89,7 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 	 * @param pozice
 	 *            the pozice to set
 	 */
-	public void setPozice(Point pozice) {
+	public void setPozice(final Point pozice) {
 		this.pozice = pozice;
 	}
 
@@ -101,7 +101,7 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.framework.Copyable#copy()
 	 */
 
@@ -109,7 +109,7 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 	public OknoUmisteniDto copy() {
 		try {
 			return (OknoUmisteniDto) super.clone();
-		} catch (CloneNotSupportedException e) {
+		} catch (final CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 	}

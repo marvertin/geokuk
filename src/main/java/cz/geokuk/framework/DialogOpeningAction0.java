@@ -18,31 +18,31 @@ public abstract class DialogOpeningAction0 extends Action0 {
 	/**
 	 * @param string
 	 */
-	public DialogOpeningAction0(String name) {
+	public DialogOpeningAction0(final String name) {
 		super(name);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public final void actionPerformed(ActionEvent e) {
+	public final void actionPerformed(final ActionEvent e) {
 		if (mydialog == null) {
-			JMyDialog0 dialog = createDialog();
+			final JMyDialog0 dialog = createDialog();
 			if (factory == null)
 				throw new RuntimeException("Neinicializovana akce: " + this.getClass());
 			factory.init(dialog);
 			mydialog = dialog;
 			dialog.addWindowListener(new WindowAdapter() {
 				@Override
-				public void windowClosing(WindowEvent e) {
+				public void windowClosing(final WindowEvent e) {
 					mydialog = null;
 				}
 
 				@Override
-				public void windowClosed(WindowEvent e) {
+				public void windowClosed(final WindowEvent e) {
 					mydialog = null;
 				}
 			});

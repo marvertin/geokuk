@@ -57,18 +57,18 @@ public class ProfileModel extends Model0 {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see javax.swing.SwingWorker#doInBackground()
 		 */
 		@Override
 		public File doInBackground() throws Exception {
-			File file = FPreferencesInNearFile.saveNearToProgramAndSwitchOn();
+			final File file = FPreferencesInNearFile.saveNearToProgramAndSwitchOn();
 			return file;
 		}
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see javax.swing.SwingWorker#done()
 		 */
 		@Override
@@ -76,7 +76,7 @@ public class ProfileModel extends Model0 {
 			profileUkladacSwingWorker = null;
 			if (isCancelled())
 				return;
-			File file = get();
+			final File file = get();
 			fire(new NastaveniUkladatDoSouboruEvent());
 			Dlg.info("Nastavení byla uložena do souboru \"" + file + "\",\n" + "při příštím spuštění budou těmito nastaveními nahrazeny nastavení v Java preferences,\n"
 					+ "pokud budou nastavení v souboru novější a naopak bude soubor automaticky aktualizován,\n" + "pokud budou novější data v Java preferences", "Oznámení");

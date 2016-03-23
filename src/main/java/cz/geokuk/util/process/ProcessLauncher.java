@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Třída spouštějící process korektním způsobem. Doporučuji si pročíst odkaz.
- * 
+ *
  * @author http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html?page=3
  * @author polakm
  * @since 2008-06-04
@@ -17,7 +17,7 @@ public class ProcessLauncher {
 		private final InputStream		is;
 		private final List<ResultItem>	content;
 
-		StreamGobbler(InputStream aIs) {
+		StreamGobbler(final InputStream aIs) {
 			is = aIs;
 			content = new ArrayList<>();
 		}
@@ -25,12 +25,12 @@ public class ProcessLauncher {
 		@Override
 		public void run() {
 			try {
-				BufferedReader br = new BufferedReader(new InputStreamReader(is));
+				final BufferedReader br = new BufferedReader(new InputStreamReader(is));
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					content.add(new ResultItem(System.currentTimeMillis(), line));
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -42,7 +42,7 @@ public class ProcessLauncher {
 
 	/**
 	 * Dvojice časová známka, řádek textu
-	 * 
+	 *
 	 * @author polakm
 	 */
 	public static class ResultItem {
@@ -50,7 +50,7 @@ public class ProcessLauncher {
 		private final long		timeStamp;
 		private final String	text;
 
-		ResultItem(long aTs, String aText) {
+		ResultItem(final long aTs, final String aText) {
 
 			timeStamp = aTs;
 			text = aText;
@@ -67,7 +67,7 @@ public class ProcessLauncher {
 
 	/**
 	 * Výsledek spuštění.
-	 * 
+	 *
 	 * @author polakm
 	 */
 	public static class Result {
@@ -77,7 +77,7 @@ public class ProcessLauncher {
 		private final List<ResultItem>	output;
 		private final int				exitValue;
 
-		Result(String aExecutedCommand, int aExitValue, List<ResultItem> aError, List<ResultItem> aOutput) {
+		Result(final String aExecutedCommand, final int aExitValue, final List<ResultItem> aError, final List<ResultItem> aOutput) {
 
 			executedCommand = aExecutedCommand;
 			exitValue = aExitValue;
@@ -85,11 +85,11 @@ public class ProcessLauncher {
 			output = aOutput;
 		}
 
-		private List<String> _textFromResItem(List<ResultItem> aData) {
+		private List<String> _textFromResItem(final List<ResultItem> aData) {
 
-			List<String> result = new ArrayList<>();
+			final List<String> result = new ArrayList<>();
 			if (aData != null) {
-				for (ResultItem item : aData) {
+				for (final ResultItem item : aData) {
 
 					result.add(item.getText());
 				}
@@ -125,24 +125,24 @@ public class ProcessLauncher {
 
 	/**
 	 * Spustí daný program s parametry
-	 * 
+	 *
 	 * @param aPrgFileName
 	 * @param aParams
 	 * @return
 	 * @exception RuntimeException
 	 *                při libovolné chybě
 	 */
-	public static Result exec(String aPrgFileName, String... aParams) {
+	public static Result exec(final String aPrgFileName, final String... aParams) {
 
-		StringBuilder cmd = new StringBuilder();
+		final StringBuilder cmd = new StringBuilder();
 		cmd.append(aPrgFileName.trim());
-		String delimiter = " ";
-		for (String s : aParams) {
+		final String delimiter = " ";
+		for (final String s : aParams) {
 
 			if (s == null) {
 				continue;
 			}
-			String arg = s.trim();
+			final String arg = s.trim();
 			if (arg.equals("")) {
 				continue;
 			}
@@ -150,22 +150,22 @@ public class ProcessLauncher {
 			cmd.append(arg);
 		}
 		try {
-			Runtime rt = Runtime.getRuntime();
+			final Runtime rt = Runtime.getRuntime();
 
-			String command = cmd.toString();
-			Process proc = rt.exec(command);
+			final String command = cmd.toString();
+			final Process proc = rt.exec(command);
 
-			StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream());
-			StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream());
+			final StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream());
+			final StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream());
 
 			errorGobbler.start();
 			outputGobbler.start();
 
-			int exitVal = proc.waitFor();
+			final int exitVal = proc.waitFor();
 
-			Result r = new Result(command, exitVal, errorGobbler.getContent(), outputGobbler.getContent());
+			final Result r = new Result(command, exitVal, errorGobbler.getContent(), outputGobbler.getContent());
 			return r;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 

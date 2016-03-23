@@ -32,17 +32,17 @@ public class BezDomuAction extends Action0 {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent aE) {
-		Wgs hc = refbodyModel.getHc();
+	public void actionPerformed(final ActionEvent aE) {
+		final Wgs hc = refbodyModel.getHc();
 		poziceModel.setPozice(hc);
 		vyrezModel.vystredovatNaPozici();
 	}
 
-	public void inject(RefbodyModel refbodyModel) {
+	public void inject(final RefbodyModel refbodyModel) {
 		this.refbodyModel = refbodyModel;
 	}
 

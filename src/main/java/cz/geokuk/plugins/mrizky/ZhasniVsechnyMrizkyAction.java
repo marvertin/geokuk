@@ -14,8 +14,8 @@ import cz.geokuk.framework.MultiInjection;
  */
 public class ZhasniVsechnyMrizkyAction extends Action0 {
 
-	private static final long	serialVersionUID	= -8054017274338240706L;
-	private List<MrizkaModel>	mrizkaModels		= new ArrayList<>();
+	private static final long		serialVersionUID	= -8054017274338240706L;
+	private final List<MrizkaModel>	mrizkaModels		= new ArrayList<>();
 
 	/**
 	 *
@@ -27,19 +27,19 @@ public class ZhasniVsechnyMrizkyAction extends Action0 {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		for (MrizkaModel mrizkaModel : mrizkaModels) {
+	public void actionPerformed(final ActionEvent e) {
+		for (final MrizkaModel mrizkaModel : mrizkaModels) {
 			mrizkaModel.setOnoff(false);
 		}
 	}
 
 	@MultiInjection
-	public void inject(MrizkaModel mrizkaModel) {
+	public void inject(final MrizkaModel mrizkaModel) {
 		if (!"Meritkovnik".equals(mrizkaModel.getSubType())) {
 			this.mrizkaModels.add(mrizkaModel); // jenom přížky se zhasínají
 		}

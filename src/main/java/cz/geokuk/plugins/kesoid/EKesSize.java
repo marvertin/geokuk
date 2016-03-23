@@ -7,15 +7,15 @@ public enum EKesSize {
 
 	VIRTUAL,;
 
-	public static EKesSize decode(String aKesSizeStr) {
+	public static EKesSize decode(final String aKesSizeStr) {
 		try {
 			return EKesSize.valueOf(upravNaVyctovec(aKesSizeStr));
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			return UNKNOWN;
 		}
 	}
 
-	private static String upravNaVyctovec(String pp) {
+	private static String upravNaVyctovec(final String pp) {
 		return pp.replace(' ', '_').replace('-', '_').toUpperCase();
 	}
 

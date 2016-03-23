@@ -40,24 +40,24 @@ public class VyrezModel extends Model0 {
 	}
 
 	public void vystredovatNaPozici() {
-		Mou mou = poziceModel.getPoziceq().getPoziceMou();
+		final Mou mou = poziceModel.getPoziceq().getPoziceMou();
 		if (mou != null) {
 			presunMapuNaMoustred(mou);
 		}
 	}
 
 	public boolean isPoziceUprostred() {
-		Mou mouPozice = poziceModel.getPoziceq().getPoziceMou();
-		Mou mouStred = moord.getMoustred();
-		boolean b = mouPozice.equals(mouStred);
+		final Mou mouPozice = poziceModel.getPoziceq().getPoziceMou();
+		final Mou mouStred = moord.getMoustred();
+		final boolean b = mouPozice.equals(mouStred);
 
 		log.debug(mouPozice);
 		log.debug(mouStred);
 		return b;
 	}
 
-	public void zoomTo(MouRect mourect) {
-		Mou moustred = mourect.getStred();
+	public void zoomTo(final MouRect mourect) {
+		final Mou moustred = mourect.getStred();
 		poziceModel.setPozice(moustred.toWgs());
 		vystredovatNaPozici();
 		// coord.setMoustred(moustred);
@@ -65,7 +65,7 @@ public class VyrezModel extends Model0 {
 		// odspodu hledáme měřítko, které tam vleze
 		int mer = 20;
 		for (;; mer--) {
-			int pom = 1 << (20 - mer); // pomer pro toto meritko
+			final int pom = 1 << (20 - mer); // pomer pro toto meritko
 			if (mourect.getMouWidth() / pom <= moord.getDim().getWidth() && mourect.getMouHeight() / pom <= moord.getDim().getHeight()) {
 				break; // hledáme nejbližší nejlepší
 			}
@@ -73,12 +73,12 @@ public class VyrezModel extends Model0 {
 		setMeritkoMapyAutomaticky(mer);
 	}
 
-	public void setMeritkoMapy(int moumer) {
+	public void setMeritkoMapy(final int moumer) {
 		setMoumer(nastavitelneMeritkoZChteneho(moumer, false));
 	}
 
-	public void zoomByGivenPoint(int moumer, Mou zoomMouStred) {
-		int skutecnyMoumer = nastavitelneMeritkoZChteneho(moumer, false);
+	public void zoomByGivenPoint(final int moumer, final Mou zoomMouStred) {
+		final int skutecnyMoumer = nastavitelneMeritkoZChteneho(moumer, false);
 		setMoord(moord.derive(skutecnyMoumer, moord.computeZoom(skutecnyMoumer, zoomMouStred)));
 	}
 
@@ -87,15 +87,15 @@ public class VyrezModel extends Model0 {
 	 *
 	 * @param moumer
 	 */
-	public void setMeritkoMapyAutomaticky(int moumer) {
+	public void setMeritkoMapyAutomaticky(final int moumer) {
 		setMoumer(nastavitelneMeritkoZChteneho(moumer, true));
 	}
 
-	public int omezMeritko(int moumer) {
+	public int omezMeritko(final int moumer) {
 		return nastavitelneMeritkoZChteneho(moumer, false);
 	}
 
-	private int nastavitelneMeritkoZChteneho(int moumer, boolean autoMeritko) {
+	private int nastavitelneMeritkoZChteneho(int moumer, final boolean autoMeritko) {
 		moumer = FMath.fit(moumer, podkladMap.getMinMoumer(), autoMeritko ? podkladMap.getMaxAutoMoumer() : podkladMap.getMaxMoumer());
 		return moumer;
 	}
@@ -116,40 +116,40 @@ public class VyrezModel extends Model0 {
 		return nastavitelneMeritkoZChteneho(moord.getMoumer() - 1, false) == moord.getMoumer();
 	}
 
-	public void inject(PoziceModel poziceModel) {
+	public void inject(final PoziceModel poziceModel) {
 		this.poziceModel = poziceModel;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cz.geokuk.program.Model0#initAndFire()
 	 */
 	@Override
 	protected void initAndFire() {
-		int moumer = currPrefe().node(FPref.UVODNI_SOURADNICE_node).getInt(FPref.MOUMER_value, 6);
-		Mou moustred = currPrefe().node(FPref.UVODNI_SOURADNICE_node).getMou(FPref.MOUSTRED_value, DEFAULTNI_DOMACI_SOURADNICE.toMou());
+		final int moumer = currPrefe().node(FPref.UVODNI_SOURADNICE_node).getInt(FPref.MOUMER_value, 6);
+		final Mou moustred = currPrefe().node(FPref.UVODNI_SOURADNICE_node).getMou(FPref.MOUSTRED_value, DEFAULTNI_DOMACI_SOURADNICE.toMou());
 		setMoord(moord.derive(moumer, moustred));
 	}
 
-	public void setMoumer(int moumer) {
+	public void setMoumer(final int moumer) {
 		setMoord(moord.derive(moumer));
 	}
 
-	public void presunMapuNaMoustred(Mou moustred) {
+	public void presunMapuNaMoustred(final Mou moustred) {
 		setMoord(moord.derive(moustred));
 	}
 
-	public void onEvent(ZmenaMapNastalaEvent event) {
+	public void onEvent(final ZmenaMapNastalaEvent event) {
 		podkladMap = event.getKaSet().getPodklad();
 		setMoumer(FMath.fit(moord.getMoumer(), podkladMap.getMinMoumer(), podkladMap.getMaxMoumer()));
 	}
 
-	public void setVelikost(int width, int height) {
+	public void setVelikost(final int width, final int height) {
 		setMoord(moord.derive(new Dimension(width, height)));
 	}
 
-	public void setMoord(Coord moord) {
+	public void setMoord(final Coord moord) {
 		if (moord.equals(this.moord))
 			return;
 		this.moord = moord;
