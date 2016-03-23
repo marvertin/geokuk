@@ -75,10 +75,8 @@ public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 		final Coord roord = p.roord;
 		// TODO kontrola souřadnic zde býti musí, zjištění chyby, případné průměrování
 		final Mou SZ = roord.transform(new Point(0, 0));
-		@SuppressWarnings("unused")
-		final Mou SV = roord.transform(new Point(p.roord.getWidth(), 0));
-		@SuppressWarnings("unused")
-		final Mou JZ = roord.transform(new Point(0, p.roord.getHeight()));
+		roord.transform(new Point(p.roord.getWidth(), 0));
+		roord.transform(new Point(0, p.roord.getHeight()));
 		final Mou JV = roord.transform(new Point(p.roord.getWidth(), p.roord.getHeight()));
 		kmzpar.sever = SZ.toWgs().lat;
 		kmzpar.jih = JV.toWgs().lat;

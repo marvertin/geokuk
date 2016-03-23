@@ -205,12 +205,12 @@ public class JFontChooser extends JComponent {
 	private Font buildFont() {
 		// Font labelFont = previewLabel.getFont();
 
-		final String fontName = (String) fontList.getSelectedValue();
+		final String fontName = fontList.getSelectedValue();
 		if (fontName == null) {
 			return null;
 			// fontName = labelFont.getName();
 		}
-		final Integer sizeInt = (Integer) sizeList.getSelectedValue();
+		final Integer sizeInt = sizeList.getSelectedValue();
 		if (sizeInt == null) {
 			// size = labelFont.getSize();
 			return null;

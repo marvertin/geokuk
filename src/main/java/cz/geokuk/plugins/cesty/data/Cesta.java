@@ -571,15 +571,12 @@ public class Cesta implements Iterable<Bousek0> {
 		kon(start.getUvzad() == null);
 		kon(cil.getUvpred() == null);
 
-		@SuppressWarnings("unused")
-		int pocetBousku = 0;
 		for (Bousek0 bousek = start; bousek != null; bousek = bousek.getBousekVpred()) {
 			kon(bousek.getCesta() == this);
 			bousek.kontrolaKonzistence();
 			if (bousek.getBousekVpred() == null) {
 				kon(bousek.equals(cil));
 			}
-			pocetBousku++;
 		}
 
 		for (Bousek0 bousek = cil; bousek != null; bousek = bousek.getBousekVzad()) {
