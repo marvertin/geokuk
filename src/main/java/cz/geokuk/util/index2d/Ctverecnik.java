@@ -72,8 +72,9 @@ public class Ctverecnik<T> extends Node0<T> {
 	public void visit(final BoundingRect rect, final Visitor<T> visitor) {
 		if (rect != null) {
 			final boolean jeToMimo = xx1 >= rect.xx2 || xx2 <= rect.xx1 || yy1 >= rect.yy2 || yy2 <= rect.yy1;
-			if (jeToMimo)
+			if (jeToMimo) {
 				return;
+			}
 
 			final boolean jeToKompletUvnitr = xx1 >= rect.xx1 && xx2 <= rect.xx2 && yy1 >= rect.yy1 && yy2 <= rect.yy2;
 
@@ -93,14 +94,18 @@ public class Ctverecnik<T> extends Node0<T> {
 	 * @param visitor
 	 */
 	private void visitPodrizene(final BoundingRect rect, final Visitor<T> visitor) {
-		if (jz != null)
+		if (jz != null) {
 			jz.visit(rect, visitor);
-		if (jv != null)
+		}
+		if (jv != null) {
 			jv.visit(rect, visitor);
-		if (sz != null)
+		}
+		if (sz != null) {
 			sz.visit(rect, visitor);
-		if (sv != null)
+		}
+		if (sv != null) {
 			sv.visit(rect, visitor);
+		}
 	}
 
 	public void vloz(final Sheet<T> sheet, final DuplikHlidac dh) {

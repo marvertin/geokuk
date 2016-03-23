@@ -25,9 +25,10 @@ public class HledaciSluzba {
 
 		{
 			final HledaciRunnableSwingWorker<?> hledaciRunnableNaKancl = map.remove(refreshor); // zrušit a když to tam je tak zkanclovat
-			if (hledaciRunnableNaKancl != null)
+			if (hledaciRunnableNaKancl != null) {
 				hledaciRunnableNaKancl.cancel(true); // zkanclovat, když se hledalo
-			// System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnableNaKancl) + ": CANCEL");
+				// System.out.println("HLEDACISLUZBA " + System.identityHashCode(hledaciRunnableNaKancl) + ": CANCEL");
+			}
 		}
 		final HledaciRunnableSwingWorker<T> hledaciRunnable = new HledaciRunnableSwingWorker<>(new Finishor<>(refreshor), podm, hledac);
 		map.put(refreshor, hledaciRunnable);

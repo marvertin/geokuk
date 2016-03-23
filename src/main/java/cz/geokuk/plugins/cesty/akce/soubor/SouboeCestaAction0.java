@@ -36,8 +36,9 @@ public abstract class SouboeCestaAction0 extends Action0 {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				final File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
 				if (selectedFile.exists()) { // dtaz na přepsání
-					if (!Dlg.prepsatSoubor(selectedFile))
+					if (!Dlg.prepsatSoubor(selectedFile)) {
 						return false;
+					}
 				}
 				xdoc.setFile(selectedFile);
 			} else {
@@ -51,8 +52,9 @@ public abstract class SouboeCestaAction0 extends Action0 {
 	}
 
 	public boolean ulozitSDotazem() {
-		if (!cestyModel.getDoc().isChanged())
+		if (!cestyModel.getDoc().isChanged()) {
 			return true; // nezměna znamená uloženo
+		}
 		final Object[] options = { "Uložit změny", "Zahodit změny", "Zrušit" };
 		final String hlaska = cestyModel.getDoc().getFile() != null ? "<html>Soubor s výletem byl změněn <b>" + cestyModel.getDoc().getFile() + "</b> "
 				: "Byl vytvořen nový výlet, ale nebyl doposud uložen do souboru." + ".";
@@ -67,18 +69,22 @@ public abstract class SouboeCestaAction0 extends Action0 {
 	}
 
 	File doplnGpxPriponuProUkladani(final File file) {
-		if (file == null)
+		if (file == null) {
 			return null;
-		if (file.getName().toLowerCase().endsWith(".gpx"))
+		}
+		if (file.getName().toLowerCase().endsWith(".gpx")) {
 			return file;
+		}
 		return new File(file.getPath() + ".gpx");
 	}
 
 	File doplnGgtPriponuProUkladani(final File file) {
-		if (file == null)
+		if (file == null) {
 			return null;
-		if (file.getName().toLowerCase().endsWith(".ggt"))
+		}
+		if (file.getName().toLowerCase().endsWith(".ggt")) {
 			return file;
+		}
 		return new File(file.getPath() + ".ggt");
 	}
 

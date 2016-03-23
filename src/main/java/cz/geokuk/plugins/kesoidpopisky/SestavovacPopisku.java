@@ -43,8 +43,9 @@ public class SestavovacPopisku {
 	}
 
 	private void vytvorNahrazovace(final List<Nahrazovac> nahrazovace, final String vzorek) {
-		if (vzorek.length() == 0)
+		if (vzorek.length() == 0) {
 			return;
+		}
 		for (final Map.Entry<String, Nahrazovac> entry : sNahrazovace.entrySet()) {
 			final int delka = entry.getKey().length();
 			final int poz = vzorek.indexOf(entry.getKey());
@@ -259,8 +260,9 @@ public class SestavovacPopisku {
 		 *
 		 */
 		private void resolveKesoidType() {
-			if (kesoidTypeResolved)
+			if (kesoidTypeResolved) {
 				return;
+			}
 			kesoid = wpt.getKesoid();
 			if (kesoid instanceof Kes) {
 				kes = (Kes) kesoid;

@@ -130,8 +130,9 @@ public class LafSupport {
 	 * Stores the current L&F, and calls updateLookAndFeel, below
 	 */
 	private static void setLookAndFeel(final LafItem li) {
-		if (current == li)
+		if (current == li) {
 			return;
+		}
 		current = li;
 		current.mi.setSelected(true);
 		themesMenu.setEnabled(current == metalli);
@@ -164,8 +165,9 @@ public class LafSupport {
 	private static String getPrefferencedLookAndFeel() {
 		try {
 			final String s = MyPreferences.current().get(LOOK_AND_FEEL, null);
-			if (s == null)
+			if (s == null) {
 				return metal;
+			}
 			return s;
 		} catch (final Throwable e) {
 			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Když nejde nastavit skin, tak nejde!");

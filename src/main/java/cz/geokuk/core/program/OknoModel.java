@@ -28,8 +28,9 @@ public class OknoModel extends Model0 {
 	 *            the stavOkna to set
 	 */
 	public void setStavOkna(final int stavOkna) {
-		if (stavOkna == this.stavOkna)
+		if (stavOkna == this.stavOkna) {
 			return;
+		}
 		this.stavOkna = stavOkna;
 		currPrefe().node(FPref.OKNO_structure_node).putInt(FPref.STAV_OKNA_value, stavOkna);
 	}
@@ -39,8 +40,9 @@ public class OknoModel extends Model0 {
 	 *            the oknoStatus to set
 	 */
 	public void setOknoUmisteni(final OknoUmisteniDto oknoUmisteni) {
-		if (oknoUmisteni.equals(this.oknoUmisteni))
+		if (oknoUmisteni.equals(this.oknoUmisteni)) {
 			return;
+		}
 		this.oknoUmisteni = oknoUmisteni;
 		currPrefe().putStructure(FPref.OKNO_structure_node, oknoUmisteni);
 	}
@@ -61,8 +63,9 @@ public class OknoModel extends Model0 {
 	protected void initAndFire() {
 		setOknoUmisteni(currPrefe().getStructure(FPref.OKNO_structure_node, new OknoUmisteniDto()));
 		int stav = currPrefe().node(FPref.OKNO_structure_node).getInt(FPref.STAV_OKNA_value, Frame.NORMAL);
-		if (stav == Frame.ICONIFIED)
+		if (stav == Frame.ICONIFIED) {
 			stav = Frame.NORMAL; // není moc dobré otvírat program ikonizovaně
+		}
 		setStavOkna(stav);
 		fire(new OknoStatusChangedEvent(stavOkna, oknoUmisteni));
 	}

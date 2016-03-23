@@ -25,8 +25,9 @@ public enum EKesWptType {
 	}
 
 	private static String upravNaVyctovec(final String pp) {
-		if (pp == null)
+		if (pp == null) {
 			return null;
+		}
 		return pp.replace(' ', '_').replace('-', '_').toUpperCase();
 	}
 

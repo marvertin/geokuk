@@ -30,8 +30,9 @@ public class PrintingSwingWorker extends RendererSwingWorker0 implements Printab
 				jedem[0] = pj.printDialog();
 			}
 		});
-		if (!jedem[0])
+		if (!jedem[0]) {
 			return null;
+		}
 		pj.print();
 		// System.out.printf("Zapis obrazku [%d,%d] do souboru \"%s\"%n", image.getWidth(), image.getHeight(), imagePathName);
 
@@ -43,12 +44,13 @@ public class PrintingSwingWorker extends RendererSwingWorker0 implements Printab
 	@Override
 	public int print(final Graphics graphics, final PageFormat pf, final int pageIndex) throws PrinterException {
 		System.out.println("TISK STRANY " + pageIndex + " - " + graphics.getClipBounds());
-		if (pageIndex > 0)
+		if (pageIndex > 0) {
 			return NO_SUCH_PAGE;
-		// if (posledneTistenaStrana == pageIndex) return PAGE_EXISTS;
-		// posledneTistenaStrana = pageIndex;
-		// pocetPokusu --;
-		// if (pocetPokusu < 0) return PAGE_EXISTS;
+			// if (posledneTistenaStrana == pageIndex) return PAGE_EXISTS;
+			// posledneTistenaStrana = pageIndex;
+			// pocetPokusu --;
+			// if (pocetPokusu < 0) return PAGE_EXISTS;
+		}
 
 		Graphics2D g = (Graphics2D) graphics;
 		final Rendrovadlo rendrovadlo = factory.init(new Rendrovadlo(this));

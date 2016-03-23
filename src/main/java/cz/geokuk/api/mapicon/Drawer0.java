@@ -67,16 +67,18 @@ public abstract class Drawer0 {
 
 	protected final String[] getStrings(final String propname, final String[] def) {
 		final String s = getString(propname, null);
-		if (s == null)
+		if (s == null) {
 			return def;
+		}
 		final String[] ss = s.split(" *, *");
 		return ss;
 	}
 
 	protected final int[] getInts(final String propname, final int[] def) {
 		final String[] ss = getStrings(propname, null);
-		if (ss == null)
+		if (ss == null) {
 			return def;
+		}
 		final int[] ii = new int[ss.length];
 		for (int i = 0; i < ss.length; i++) {
 			ii[i] = Integer.parseInt(ss[i]);
@@ -86,8 +88,9 @@ public abstract class Drawer0 {
 
 	protected final float[] getFloats(final String propname, final float[] def) {
 		final String[] ss = getStrings(propname, null);
-		if (ss == null)
+		if (ss == null) {
 			return def;
+		}
 		final float[] ff = new float[ss.length];
 		for (int i = 0; i < ss.length; i++) {
 			ff[i] = Float.parseFloat(ss[i]);
@@ -97,8 +100,9 @@ public abstract class Drawer0 {
 
 	protected final Color getColor(final String propname, final Color def) {
 		final int[] ii = getInts(propname, null);
-		if (ii == null || ii.length == 0)
+		if (ii == null || ii.length == 0) {
 			return def;
+		}
 		if (ii.length < 3) {
 			return new Color(ii[0], ii[0], ii[0]);
 		} else if (ii.length == 3) {

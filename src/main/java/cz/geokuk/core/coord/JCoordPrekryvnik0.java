@@ -63,8 +63,9 @@ public class JCoordPrekryvnik0 extends JPrekryvnik {
 	 * @param newSoord
 	 */
 	protected void setSoord(final Coord newSoord) {
-		if (newSoord.equals(soord))
+		if (newSoord.equals(soord)) {
 			return; // je to to samé
+		}
 		soord = newSoord;
 		reinicializujVyrezy();
 	}

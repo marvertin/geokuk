@@ -29,8 +29,9 @@ public class NacitacGeokuk extends NacitacInputStream0 {
 			hlavicka = hlavicka.substring(1);
 		}
 		System.out.println(Integer.toHexString(hlavicka.charAt(0)));
-		if (!HLAVICKA.equals(hlavicka))
+		if (!HLAVICKA.equals(hlavicka)) {
 			throw new RuntimeException("Přečtena hlavička: \"" + hlavicka + "\", ale má tam být\"" + HLAVICKA + "\"");
+		}
 		String line;
 		int linenumber = 1; // máme přeci přečtnou hlavičku
 		int ncaches = 0;
@@ -40,8 +41,9 @@ public class NacitacGeokuk extends NacitacInputStream0 {
 
 		GpxWpt gpxwpt = null;
 		while ((line = rdr.readLine()) != null) {
-			if (future != null && future.isCancelled())
+			if (future != null && future.isCancelled()) {
 				return;
+			}
 			try {
 				linenumber++;
 				line = line.trim();

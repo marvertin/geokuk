@@ -55,23 +55,30 @@ public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final OknoUmisteniDto other = (OknoUmisteniDto) obj;
 		if (pozice == null) {
-			if (other.pozice != null)
+			if (other.pozice != null) {
 				return false;
-		} else if (!pozice.equals(other.pozice))
+			}
+		} else if (!pozice.equals(other.pozice)) {
 			return false;
+		}
 		if (velikost == null) {
-			if (other.velikost != null)
+			if (other.velikost != null) {
 				return false;
-		} else if (!velikost.equals(other.velikost))
+			}
+		} else if (!velikost.equals(other.velikost)) {
 			return false;
+		}
 		return true;
 	}
 

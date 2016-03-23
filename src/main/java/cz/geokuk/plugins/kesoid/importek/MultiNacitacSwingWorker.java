@@ -52,11 +52,13 @@ public class MultiNacitacSwingWorker extends MySwingWorker0<KesBag, Void> {
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
-		if (isCancelled())
+		if (isCancelled()) {
 			return;
+		}
 		final KesBag result = get();
-		if (result == null)
+		if (result == null) {
 			return; // asi zkanclváno
+		}
 		log.info("Loaded {} caches, {}={} waypoints.", result.getKesoidy().size(), result.getWpts().size(), result.getIndexator().count(BoundingRect.ALL));
 		final long cas = System.currentTimeMillis();
 		kesoidModel.setVsechnyKesoidy(result);

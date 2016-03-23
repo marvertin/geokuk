@@ -48,18 +48,23 @@ public class Root {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final Root other = (Root) obj;
 		if (dir == null) {
-			if (other.dir != null)
+			if (other.dir != null) {
 				return false;
-		} else if (!dir.equals(other.dir))
+			}
+		} else if (!dir.equals(other.dir)) {
 			return false;
+		}
 		return true;
 	}
 

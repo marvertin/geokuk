@@ -147,8 +147,9 @@ public final class FExceptionDumper {
 		try {
 			// očekáváme defaultní kódování
 			final URL url = repository.getUrl(aCode);
-			if (url == null)
+			if (url == null) {
 				return null;
+			}
 			final InputStreamReader reader = new InputStreamReader(url.openConnection().getInputStream());
 			final StringWriter writer = new StringWriter();
 			final TPumpReaderToWriter pumpa = new TPumpReaderToWriter(reader, writer);

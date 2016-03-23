@@ -57,8 +57,9 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * @return {@link Date}se stejným významem jako ATimestamp.
 	 */
 	public Date asJavaDate() {
-		if (iJavaDate == null)
+		if (iJavaDate == null) {
 			throw new IllegalStateException("INTERNAL ERROR - iJavaDate cannot be null.");
+		}
 		final Date date = new Date(this.asLong());
 		return date;
 	}
@@ -71,8 +72,9 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * @return java.util.Date se stejným významem jako <tt>ts</tt> nebo <b>null </b>, pokud je <tt>ts</tt> <b>null </b>.
 	 */
 	public static Date asJavaDate(final ATimestamp ts) {
-		if (ts == null)
+		if (ts == null) {
 			return null;
+		}
 		return ts.asJavaDate();
 	}
 
@@ -250,9 +252,10 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	}
 
 	private static long fromFormatedStringByRegexp(final String aDatStr, final TimeZone aDefaultTimeZone) {
-		if (sPattern == null)
+		if (sPattern == null) {
 			sPattern = Pattern.compile(
 					"\\s*(\\d\\d\\d\\d)[-./](\\d\\d?)(?:[-./](\\d\\d?)(?:[ tT]+(\\d\\d?)(?::(\\d\\d)(?::(\\d\\d)(?:\\.(\\d+))?)?)?)?)? *(UTC|Z|(?:GMT)?[+-]\\d\\d?(?::)?\\d\\d|(?:GMT)?[+-]\\d{1,3})?\\s*");
+		}
 		final Matcher mat = sPattern.matcher(aDatStr);
 		// System.out.p rint("*** >" + aDatStr + "< ");
 		if (mat.matches()) {
@@ -264,14 +267,16 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 			String zonastr = mat.group(8);
 			if (zonastr != null) { // je naplněna časová zóna
 				final char prvni = zonastr.charAt(0);
-				if (prvni == '+' || prvni == '-')
+				if (prvni == '+' || prvni == '-') {
 					zonastr = "GMT" + zonastr;
+				}
 				zona = TimeZone.getTimeZone(zonastr);
 			} else {
 				zona = aDefaultTimeZone;
 			}
-			if (zona == null)
+			if (zona == null) {
 				throw new XCreateElement("Pokus o vytvoreni ATimestamp z '" + aDatStr + "', v retezci neni uvedena casova zona a ve volani neni casova zona specifikovana");
+			}
 			// zpracovat milisekundy
 			String smilis = mat.group(7); // milisekundy
 			int milis = 0;
@@ -279,8 +284,9 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 				while (smilis.length() < 3) {
 					smilis += "0"; // nevýkonné, ale nebude se dělat často
 				}
-				if (smilis.length() > 3)
+				if (smilis.length() > 3) {
 					smilis = smilis.substring(0, 3);
+				}
 				milis = Integer.parseInt(smilis);
 			}
 
@@ -405,8 +411,9 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 */
 	@Override
 	public boolean equals(final Object aObject) {
-		if (!(aObject instanceof ATimestamp))
+		if (!(aObject instanceof ATimestamp)) {
 			return false;
+		}
 		final ATimestamp obj = (ATimestamp) aObject;
 		return asLong() == obj.asLong();
 	}
@@ -700,8 +707,9 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 
 		private String offsetStr() {
 			long offset = getOffset();
-			if (offset == 0)
+			if (offset == 0) {
 				return "Z";
+			}
 			final char sign = offset < 0 ? '-' : '+';
 			offset = Math.abs(offset);
 			offset = offset / (1000 * 60); // a je to v minutách

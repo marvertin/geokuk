@@ -20,8 +20,9 @@ public abstract class BodAction0 extends BousekAction0 {
 
 	@Override
 	protected final void vyletChanged() {
-		if (poziceq == null)
+		if (poziceq == null) {
 			return; // ještě je čas
+		}
 		vyhodnotitPovolenost();
 	}
 

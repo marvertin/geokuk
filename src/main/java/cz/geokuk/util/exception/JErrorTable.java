@@ -127,8 +127,9 @@ public class JErrorTable extends JPanel {
 
 	public Problem getCurrent() {
 		final int selectedRow = table.getSelectedRow();
-		if (selectedRow < 0 || selectedRow >= tableModel.getProblemlist().size())
+		if (selectedRow < 0 || selectedRow >= tableModel.getProblemlist().size()) {
 			return null;
+		}
 		final Problem nalezenec = tableModel.getProblemlist().get(selectedRow);
 		return nalezenec;
 	}

@@ -20,11 +20,12 @@ public class JIkonkaPapiru extends JComponent {
 
 	@Override
 	protected void paintComponent(final Graphics aG) {
-		if (metrika == null)
+		if (metrika == null) {
 			return;
-		// System.out.println();
-		// System.out.printf("METRIKA- sirka:%.0f vyska:%.0f \n",
-		// metrika.xsize *1000, metrika.ysize *1000);
+			// System.out.println();
+			// System.out.printf("METRIKA- sirka:%.0f vyska:%.0f \n",
+			// metrika.xsize *1000, metrika.ysize *1000);
+		}
 
 		final Graphics2D g = (Graphics2D) aG.create();
 		final double kvoc = getWidth() / metrika.getDelsiStrana() * 0.8;

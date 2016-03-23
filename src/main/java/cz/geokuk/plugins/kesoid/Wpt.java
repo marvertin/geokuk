@@ -113,8 +113,9 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 
 	public Kesoid getKesoid() {
 		for (Weikoid0 weik = next;; weik = weik.next) {
-			if (weik instanceof Kesoid)
+			if (weik instanceof Kesoid) {
 				return (Kesoid) weik;
+			}
 		}
 	}
 

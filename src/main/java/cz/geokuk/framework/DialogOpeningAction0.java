@@ -31,8 +31,9 @@ public abstract class DialogOpeningAction0 extends Action0 {
 	public final void actionPerformed(final ActionEvent e) {
 		if (mydialog == null) {
 			final JMyDialog0 dialog = createDialog();
-			if (factory == null)
+			if (factory == null) {
 				throw new RuntimeException("Neinicializovana akce: " + this.getClass());
+			}
 			factory.init(dialog);
 			mydialog = dialog;
 			dialog.addWindowListener(new WindowAdapter() {

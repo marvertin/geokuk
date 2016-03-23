@@ -68,8 +68,9 @@ public class JZoomovaciObdelnik extends JSingleSlide0 {
 	}
 
 	private Rectangle getRectangle() {
-		if (pocatek == null || konec == null)
+		if (pocatek == null || konec == null) {
 			return null;
+		}
 		return new Rectangle(Math.min(pocatek.x, konec.x), Math.min(pocatek.y, konec.y), Math.abs(pocatek.x - konec.x), Math.abs(pocatek.y - konec.y));
 	}
 

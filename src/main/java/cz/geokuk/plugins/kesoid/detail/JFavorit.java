@@ -42,8 +42,9 @@ public class JFavorit extends JComponent {
 	}
 
 	public void setKolik(final int kolik) {
-		if (kolik == this.kolik)
+		if (kolik == this.kolik) {
 			return;
+		}
 		this.kolik = kolik;
 		final String ss = String.valueOf(kolik);
 		final int stringWidth = super.getFontMetrics(sFont).stringWidth(ss);

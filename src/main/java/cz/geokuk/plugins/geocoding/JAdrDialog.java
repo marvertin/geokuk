@@ -121,10 +121,12 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 
 	private boolean naVstupuJsouSouradkyNeboNic() {
 		final String text = entry.getText();
-		if (text.trim().length() == 0)
+		if (text.trim().length() == 0) {
 			return true;
-		if (text.matches("-?\\d+(\\.\\d+),-?\\d+(\\.\\d+)"))
+		}
+		if (text.matches("-?\\d+(\\.\\d+),-?\\d+(\\.\\d+)")) {
 			return true;
+		}
 		return false;
 	}
 
@@ -174,15 +176,17 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 	}
 
 	protected void setReferencniBod(final Wgs wgs) {
-		if (wgs.equals(referencniBod))
+		if (wgs.equals(referencniBod)) {
 			return;
+		}
 		referencniBod = wgs;
 		search();
 	}
 
 	public void search() {
-		if (referencniBod == null)
+		if (referencniBod == null) {
 			return;
+		}
 		message("Hleda se ...");
 		final String s = entry.getText();
 		geocodingModel.spustHledani(s, this);

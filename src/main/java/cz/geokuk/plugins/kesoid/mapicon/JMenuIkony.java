@@ -46,10 +46,12 @@ public class JMenuIkony extends JMenu {
 			menu.insert(item, pocetSad);
 			bg.add(item);
 			pocetSad++;
-			if (sada == aktualniSada)
+			if (sada == aktualniSada) {
 				akce.setSelected(true);
-			if (sada == ASada.STANDARD)
+			}
+			if (sada == ASada.STANDARD) {
 				standard = akce;
+			}
 		}
 		if (aktualniSada == null && standard != null) {
 			standard.setSelected(true);

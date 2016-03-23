@@ -25,8 +25,9 @@ public class OtevriAction extends SouboeCestaAction0 {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		if (!super.ulozitSDotazem())
+		if (!super.ulozitSDotazem()) {
 			return; // mělo se ukládat a řeklo se, že ne
+		}
 		if (fc == null) { // dlouho to trvá, tak vytvoříme vždy nový
 			fc = new JFileChooser();
 			fc.addChoosableFileFilter(new GpxFilter());
@@ -51,10 +52,12 @@ public class OtevriAction extends SouboeCestaAction0 {
 
 		@Override
 		public boolean accept(final File pathname) {
-			if (pathname.isDirectory())
+			if (pathname.isDirectory()) {
 				return true;
-			if (pathname.getName().toLowerCase().endsWith(".gpx"))
+			}
+			if (pathname.getName().toLowerCase().endsWith(".gpx")) {
 				return true;
+			}
 			return false;
 		}
 

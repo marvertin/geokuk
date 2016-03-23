@@ -167,20 +167,26 @@ public class Filex {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final Filex other = (Filex) obj;
 		if (file == null) {
-			if (other.file != null)
+			if (other.file != null) {
 				return false;
-		} else if (!file.equals(other.file))
+			}
+		} else if (!file.equals(other.file)) {
 			return false;
-		if (relativeToProgram != other.relativeToProgram)
+		}
+		if (relativeToProgram != other.relativeToProgram) {
 			return false;
+		}
 		return true;
 	}
 

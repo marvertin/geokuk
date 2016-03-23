@@ -78,8 +78,9 @@ class GenotypBuilderKes {
 			g.put(genom.ALELA_other);
 			break;
 		}
-		if (kes.getFinal() != null)
+		if (kes.getFinal() != null) {
 			g.put(genom.ALELA_vylusteno);
+		}
 
 		g.put(genom.seekAlela("ter" + kes.getTerrain().to2DigitNumberString()));
 		g.put(genom.seekAlela("dif" + kes.getDifficulty().to2DigitNumberString()));

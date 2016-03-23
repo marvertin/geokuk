@@ -22,16 +22,18 @@ public class MapyModel extends Model0 {
 	private EnumSet<EKaType> dekorace;
 
 	public void setPodklad(final EKaType podklad) {
-		if (podklad == this.podklad)
+		if (podklad == this.podklad) {
 			return;
+		}
 		this.podklad = podklad;
 		currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnum(FPref.VALUE_MAPOVE_PODKLADY_value, podklad);
 		fajruj();
 	}
 
 	public void setDekorace(final EnumSet<EKaType> dekorace) {
-		if (dekorace.equals(this.dekorace))
+		if (dekorace.equals(this.dekorace)) {
 			return;
+		}
 		this.dekorace = dekorace.clone();
 		currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnumSet(FPref.VALUE_MAPOVE_DEKORACE_value, dekorace);
 		fajruj();

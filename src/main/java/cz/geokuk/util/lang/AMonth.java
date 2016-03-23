@@ -231,8 +231,9 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 */
 	@Override
 	public boolean equals(final Object aObject) {
-		if (!(aObject instanceof AMonth))
+		if (!(aObject instanceof AMonth)) {
 			return false;
+		}
 		final AMonth obj = (AMonth) aObject;
 		return iRokMes == obj.iRokMes;
 	}
@@ -340,8 +341,9 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 */
 	@Override
 	public AMonth getAnother(final long aNthObject) {
-		if (Math.abs(aNthObject) > Integer.MAX_VALUE - 2)
+		if (Math.abs(aNthObject) > Integer.MAX_VALUE - 2) {
 			throw new IllegalArgumentException("Počtu měsíců o něž posouvat je " + aNthObject + " a to je na mě v absolutní hodnotě moc!");
+		}
 		return add((int) aNthObject);
 	}
 
@@ -362,8 +364,9 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 
 	////////////////////////////////////////////
 	private static int parseMonth(final String aString) {
-		if (sPattern == null)
+		if (sPattern == null) {
 			sPattern = Pattern.compile("\\s*(\\d{4})[ -./]?(\\d\\d?)\\s*");
+		}
 		final Matcher mat = sPattern.matcher(aString);
 		if (mat.matches()) {
 			final int rok = Integer.parseInt(mat.group(1));
@@ -376,10 +379,12 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	}
 
 	private static int fromItems(final int aRok, final int aMes) {
-		if (aRok < 1000 || aRok > 9999)
+		if (aRok < 1000 || aRok > 9999) {
 			throw new XCreateElement("Rok " + aRok + " neni ctyrmistny");
-		if (aMes < 1 || aMes > 12)
+		}
+		if (aMes < 1 || aMes > 12) {
 			throw new XCreateElement("Mesic " + aMes + " neni v intervalu 1..12");
+		}
 		return aRok * MINY + aMes - 1; // aby uvnitř měsíce byly od nuly
 	}
 
@@ -393,8 +398,9 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 * Kontrola rozsahu. Metoda se volá z konstruktoru a kontroluje rozsah.
 	 */
 	protected final void checkRange() {
-		if (!(MINVALUE <= iRokMes && iRokMes <= MAXVALUE))
+		if (!(MINVALUE <= iRokMes && iRokMes <= MAXVALUE)) {
 			throw new XCreateElement("Hodnota " + iRokMes + " není v požadovaném intervalu <" + MINVALUE + "," + MAXVALUE + ">");
+		}
 	}
 
 	/**

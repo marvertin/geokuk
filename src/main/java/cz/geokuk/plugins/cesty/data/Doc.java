@@ -24,8 +24,9 @@ public class Doc implements Iterable<Cesta> {
 
 	public boolean hasWpt(final Wpt wpt) {
 		for (final Cesta cesta : cesty) {
-			if (cesta.hasWpt(wpt))
+			if (cesta.hasWpt(wpt)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -48,8 +49,9 @@ public class Doc implements Iterable<Cesta> {
 	}
 
 	public Cesta getPrvniCesta() {
-		if (cesty.size() == 0)
+		if (cesty.size() == 0) {
 			return null;
+		}
 		return cesty.get(0);
 	}
 
@@ -76,8 +78,9 @@ public class Doc implements Iterable<Cesta> {
 		for (final Cesta cesta : cesty) {
 			final SearchResult sr = cesta.locateNejblizsiDoKvadratuVzdalenosi(mou, kvadratMaximalniVzdalenosti, aDatPrednostBoduPredUsekem);
 			if (sr.bousek != null) { // když je z preferované cesty není co řešit
-				if (sr.bousek.getCesta() == preferovanaCesta)
+				if (sr.bousek.getCesta() == preferovanaCesta) {
 					return sr.bousek;
+				}
 			}
 			if (aDatPrednostBoduPredUsekem && (srmin.bousek instanceof Usek) && (sr.bousek instanceof Bod)) {
 				srmin = sr; // tentokrát přišel bod, tak mu dáme přednost
@@ -136,13 +139,16 @@ public class Doc implements Iterable<Cesta> {
 	 * @return
 	 */
 	public Bod findBod(final Mouable mouable) {
-		if (mouable == null)
+		if (mouable == null) {
 			return null;
-		if (mouable instanceof Bod)
+		}
+		if (mouable instanceof Bod) {
 			return (Bod) mouable;
+		}
 		for (final Bod bod : getBody()) {
-			if (mouable.getMou().equals(bod.getMou()))
+			if (mouable.getMou().equals(bod.getMou())) {
 				return bod;
+			}
 		}
 		return null;
 
@@ -193,15 +199,17 @@ public class Doc implements Iterable<Cesta> {
 	}
 
 	private void kon(final boolean podm) {
-		if (!podm)
+		if (!podm) {
 			throw new RuntimeException("Selhala kontrola konzistence cesty");
+		}
 	}
 
 	public void kontrolaKonzistence() {
 		boolean assertsEnabled = false;
 		assert assertsEnabled = true;
-		if (!assertsEnabled)
+		if (!assertsEnabled) {
 			return;
+		}
 
 		for (final Cesta cesta : getCesty()) {
 			kon(cesta.getDoc() == this);

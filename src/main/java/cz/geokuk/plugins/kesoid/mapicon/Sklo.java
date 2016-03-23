@@ -87,8 +87,9 @@ public class Sklo implements ImagantCache {
 	}
 
 	public static Imagant prekresliNaSebe(final List<Imagant> imaganti) {
-		if (imaganti.isEmpty())
+		if (imaganti.isEmpty()) {
 			return null;
+		}
 		final BoundingRect br = Sklo.sjednoceni(imaganti);
 
 		if (br == null) {
@@ -135,8 +136,9 @@ public class Sklo implements ImagantCache {
 		// Spočítat hranice
 		int xx1 = 0, xx2 = 0, yy1 = 0, yy2 = 0;
 		for (final Imagant imagant : imaganti) {
-			if (imagant == null)
+			if (imagant == null) {
 				continue;
+			}
 			final int x1 = imagant.getXpos();
 			final int y1 = imagant.getYpos();
 			final int x2 = x1 + imagant.getImage().getWidth();
@@ -146,8 +148,9 @@ public class Sklo implements ImagantCache {
 			yy1 = Math.min(yy1, y1);
 			yy2 = Math.max(yy2, y2);
 		}
-		if (xx2 - xx1 == 0 || yy2 - yy1 == 0)
+		if (xx2 - xx1 == 0 || yy2 - yy1 == 0) {
 			return null;
+		}
 		final BoundingRect br = new BoundingRect(xx1, yy1, xx2, yy2);
 		return br;
 	}

@@ -120,18 +120,23 @@ public class MultiFolder {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final MultiFolder other = (MultiFolder) obj;
 		if (tree == null) {
-			if (other.tree != null)
+			if (other.tree != null) {
 				return false;
-		} else if (!tree.equals(other.tree))
+			}
+		} else if (!tree.equals(other.tree)) {
 			return false;
+		}
 		return true;
 	}
 

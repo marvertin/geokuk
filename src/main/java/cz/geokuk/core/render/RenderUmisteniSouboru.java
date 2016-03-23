@@ -57,28 +57,37 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final RenderUmisteniSouboru other = (RenderUmisteniSouboru) obj;
 		if (kmzDir == null) {
-			if (other.kmzDir != null)
+			if (other.kmzDir != null) {
 				return false;
-		} else if (!kmzDir.equals(other.kmzDir))
+			}
+		} else if (!kmzDir.equals(other.kmzDir)) {
 			return false;
+		}
 		if (oziDir == null) {
-			if (other.oziDir != null)
+			if (other.oziDir != null) {
 				return false;
-		} else if (!oziDir.equals(other.oziDir))
+			}
+		} else if (!oziDir.equals(other.oziDir)) {
 			return false;
+		}
 		if (pictureDir == null) {
-			if (other.pictureDir != null)
+			if (other.pictureDir != null) {
 				return false;
-		} else if (!pictureDir.equals(other.pictureDir))
+			}
+		} else if (!pictureDir.equals(other.pictureDir)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -86,8 +95,9 @@ public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 	 * @param aKesDir
 	 */
 	private void check(final Filex file) {
-		if (file == null)
+		if (file == null) {
 			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
+		}
 	}
 
 	/**

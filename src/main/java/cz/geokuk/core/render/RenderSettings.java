@@ -64,48 +64,67 @@ public class RenderSettings implements Copyable<RenderSettings> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final RenderSettings other = (RenderSettings) obj;
-		if (imageType != other.imageType)
+		if (imageType != other.imageType) {
 			return false;
-		if (kalibrBodu != other.kalibrBodu)
+		}
+		if (kalibrBodu != other.kalibrBodu) {
 			return false;
-		if (kalibracniZnackyProTisk != other.kalibracniZnackyProTisk)
+		}
+		if (kalibracniZnackyProTisk != other.kalibracniZnackyProTisk) {
 			return false;
-		if (kmzDrawOrder != other.kmzDrawOrder)
+		}
+		if (kmzDrawOrder != other.kmzDrawOrder) {
 			return false;
+		}
 		if (kmzFolder == null) {
-			if (other.kmzFolder != null)
+			if (other.kmzFolder != null) {
 				return false;
-		} else if (!kmzFolder.equals(other.kmzFolder))
+			}
+		} else if (!kmzFolder.equals(other.kmzFolder)) {
 			return false;
+		}
 		if (kmzFolderDescription == null) {
-			if (other.kmzFolderDescription != null)
+			if (other.kmzFolderDescription != null) {
 				return false;
-		} else if (!kmzFolderDescription.equals(other.kmzFolderDescription))
+			}
+		} else if (!kmzFolderDescription.equals(other.kmzFolderDescription)) {
 			return false;
-		if (kmzMaxDlazdiceX != other.kmzMaxDlazdiceX)
+		}
+		if (kmzMaxDlazdiceX != other.kmzMaxDlazdiceX) {
 			return false;
-		if (kmzMaxDlazdiceY != other.kmzMaxDlazdiceY)
+		}
+		if (kmzMaxDlazdiceY != other.kmzMaxDlazdiceY) {
 			return false;
-		if (papiroveMeritko != other.papiroveMeritko)
+		}
+		if (papiroveMeritko != other.papiroveMeritko) {
 			return false;
+		}
 		if (pureFileName == null) {
-			if (other.pureFileName != null)
+			if (other.pureFileName != null) {
 				return false;
-		} else if (!pureFileName.equals(other.pureFileName))
+			}
+		} else if (!pureFileName.equals(other.pureFileName)) {
 			return false;
-		if (renderedMoumer != other.renderedMoumer)
+		}
+		if (renderedMoumer != other.renderedMoumer) {
 			return false;
-		if (srovnatDoSeveru != other.srovnatDoSeveru)
+		}
+		if (srovnatDoSeveru != other.srovnatDoSeveru) {
 			return false;
-		if (whatRender != other.whatRender)
+		}
+		if (whatRender != other.whatRender) {
 			return false;
+		}
 		return true;
 	}
 
@@ -369,28 +388,37 @@ public class RenderSettings implements Copyable<RenderSettings> {
 		 */
 		@Override
 		public boolean equals(final Object obj) {
-			if (this == obj)
+			if (this == obj) {
 				return true;
-			if (obj == null)
+			}
+			if (obj == null) {
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (getClass() != obj.getClass()) {
 				return false;
+			}
 			final Patterned other = (Patterned) obj;
 			if (patternNumberCilovy == null) {
-				if (other.patternNumberCilovy != null)
+				if (other.patternNumberCilovy != null) {
 					return false;
-			} else if (!patternNumberCilovy.equals(other.patternNumberCilovy))
+				}
+			} else if (!patternNumberCilovy.equals(other.patternNumberCilovy)) {
 				return false;
+			}
 			if (patternNumberPredbezny == null) {
-				if (other.patternNumberPredbezny != null)
+				if (other.patternNumberPredbezny != null) {
 					return false;
-			} else if (!patternNumberPredbezny.equals(other.patternNumberPredbezny))
+				}
+			} else if (!patternNumberPredbezny.equals(other.patternNumberPredbezny)) {
 				return false;
+			}
 			if (text == null) {
-				if (other.text != null)
+				if (other.text != null) {
 					return false;
-			} else if (!text.equals(other.text))
+				}
+			} else if (!text.equals(other.text)) {
 				return false;
+			}
 			return true;
 		}
 

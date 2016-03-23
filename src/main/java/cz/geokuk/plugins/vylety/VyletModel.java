@@ -52,8 +52,9 @@ public class VyletModel extends Model0 {
 	}
 
 	private void onChange(final Kesoid kes, final EVylet evylPuvodni, final EVylet evyl) {
-		if (!SwingUtilities.isEventDispatchThread())
+		if (!SwingUtilities.isEventDispatchThread()) {
 			return;
+		}
 		fire(new VyletChangeEvent(this, kes, evyl, evylPuvodni));
 	}
 

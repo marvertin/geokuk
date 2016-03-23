@@ -56,8 +56,9 @@ public abstract class Action0 extends AbstractAction {
 	 * Spustí akci
 	 */
 	public void fire() {
-		if (!isEnabled())
+		if (!isEnabled()) {
 			return; // žádná akce, pokud je zakázána
+		}
 		int modifiers = 0;
 		final AWTEvent currentEvent = EventQueue.getCurrentEvent();
 		if (currentEvent instanceof InputEvent) {

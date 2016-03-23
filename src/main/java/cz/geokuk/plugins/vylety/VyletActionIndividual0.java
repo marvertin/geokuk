@@ -52,8 +52,9 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
 	}
 
 	protected Kesoid kesoid() {
-		if (kespevna != null)
+		if (kespevna != null) {
 			return kespevna;
+		}
 		return kesdocasna;
 	}
 }

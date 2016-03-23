@@ -48,11 +48,13 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	 * @return the url
 	 */
 	public String getUrl() {
-		if (zbytekUrl == null || zbytekUrl.length() == 0)
+		if (zbytekUrl == null || zbytekUrl.length() == 0) {
 			return zbytekUrl;
+		}
 		final char c = zbytekUrl.charAt(0);
-		if (c == '-')
+		if (c == '-') {
 			return zbytekUrl.substring(1);
+		}
 		final int index = c - '0';
 		return urlPrefixes[index] + zbytekUrl.substring(1);
 	}
@@ -146,10 +148,12 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	}
 
 	public void promoteVztah(final EKesVztah vztah) {
-		if (this.vztah == null)
+		if (this.vztah == null) {
 			this.vztah = vztah;
-		if (vztah.ordinal() > this.vztah.ordinal())
+		}
+		if (vztah.ordinal() > this.vztah.ordinal()) {
 			this.vztah = vztah;
+		}
 	}
 
 	public String getIdentifier() {
@@ -161,8 +165,9 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 	}
 
 	public void addWpt(final Wpt wpt) {
-		if (wpt == null)
+		if (wpt == null) {
 			return;
+		}
 		// najít konec
 		Weikoid0 weik = this;
 		while (weik.next instanceof Wpt) {

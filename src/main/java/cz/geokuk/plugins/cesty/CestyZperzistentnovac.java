@@ -84,8 +84,9 @@ public class CestyZperzistentnovac {
 	}
 
 	private void zapisKdyzNeni(final BufferedWriter wrt, final String kod, final Set<String> exportovano) throws IOException {
-		if (kod == null)
+		if (kod == null) {
 			return;
+		}
 		if (exportovano.add(kod)) {
 			wrt.write(String.format("%s%s", kod, FConst.NL));
 			// } else {
@@ -144,13 +145,15 @@ public class CestyZperzistentnovac {
 	}
 
 	private Wpt najdiExtremneBlizouckyWpt(final Mou mou, final KesBag kesBag) {
-		if (kesBag == null)
+		if (kesBag == null) {
 			return null;
+		}
 		final Indexator<Wpt> indexator = kesBag.getIndexator();
 		final BoundingRect br = new BoundingRect(mou.xx, mou.yy, mou.xx, mou.yy).rozsir(100);
 		final Sheet<Wpt> sheet = indexator.locateAnyOne(br);
-		if (sheet == null)
+		if (sheet == null) {
 			return null;
+		}
 		return sheet.get();
 	}
 

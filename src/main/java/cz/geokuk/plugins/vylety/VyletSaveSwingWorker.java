@@ -43,11 +43,13 @@ public class VyletSaveSwingWorker extends MySwingWorker0<Vylet, Void> {
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
-		if (isCancelled())
+		if (isCancelled()) {
 			return;
+		}
 		final Vylet result = get();
-		if (result == null)
+		if (result == null) {
 			return; // asi zkanclváno
+		}
 		log.info("Nahran vylet, %d lovenych a %d ignorovanych: \n", result.get(EVylet.ANO).size(), result.get(EVylet.NE).size());
 		// Board.eveman.fire(new VyletChangeEvent(result, null, null, null));
 	}

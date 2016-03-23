@@ -67,27 +67,32 @@ public class ExceptionDumper {
 	 * @since 4.8.2006 10:43:04
 	 */
 	public synchronized AExcId dump(Throwable[] aThrowables, EExceptionSeverity aExceptionSeverity, String[] aCircumstances, final ExceptionDumperRepositorySpi aRepository) {
-		if (aThrowables == null)
+		if (aThrowables == null) {
 			aThrowables = new Throwable[0];
-		if (aCircumstances == null)
+		}
+		if (aCircumstances == null) {
 			aCircumstances = new String[0];
+		}
 		// Odstranění null
 		// Nejdříve zjistíme, kolik je jich v oli nenulových
 		int pocetNeNull = 0;
 		for (final Throwable aThrowable : aThrowables) {
-			if (aThrowable != null)
+			if (aThrowable != null) {
 				pocetNeNull++;
+			}
 		}
 		// Teď vše zkopírujeme do menšího pole
 		Throwable[] throwables = new Throwable[pocetNeNull];
 		String[] circumstances = new String[pocetNeNull];
 		int k = 0;
 		for (int i = 0; i < aThrowables.length; i++) {
-			if (aThrowables[i] == null)
+			if (aThrowables[i] == null) {
 				continue;
+			}
 			throwables[k] = aThrowables[i];
-			if (i < aCircumstances.length)
+			if (i < aCircumstances.length) {
 				circumstances[k] = aCircumstances[i];
+			}
 			k++;
 		}
 		assert k == throwables.length;
@@ -97,8 +102,9 @@ public class ExceptionDumper {
 			circumstances = new String[] { "This exception was added by exception dumper, becouse no exception was passed to dump" };
 		}
 		try {
-			if (aExceptionSeverity == null)
+			if (aExceptionSeverity == null) {
 				aExceptionSeverity = EExceptionSeverity.DISPLAY;
+			}
 			final int exceptionNumber = FThrowable.getExceptionNumber(throwables[0]);
 			final AExcId id = AExcId.from(ExceptionDumperRepositorySpi.EXC_PREFIX + aRepository.getRunNumber() + aExceptionSeverity.getCode() + exceptionNumber);
 

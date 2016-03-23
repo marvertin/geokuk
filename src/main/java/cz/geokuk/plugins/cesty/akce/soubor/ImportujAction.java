@@ -54,12 +54,15 @@ public class ImportujAction extends Action0 {
 
 		@Override
 		public boolean accept(final File pathname) {
-			if (pathname.isDirectory())
+			if (pathname.isDirectory()) {
 				return true;
-			if (pathname.getName().toLowerCase().endsWith(".gpx"))
+			}
+			if (pathname.getName().toLowerCase().endsWith(".gpx")) {
 				return true;
-			if (pathname.getName().toLowerCase().endsWith(".ggt"))
+			}
+			if (pathname.getName().toLowerCase().endsWith(".ggt")) {
 				return true;
+			}
 			return false;
 		}
 

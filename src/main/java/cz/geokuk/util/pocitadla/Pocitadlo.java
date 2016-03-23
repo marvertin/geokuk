@@ -54,8 +54,9 @@ public abstract class Pocitadlo {
 
 	public synchronized void set(final int val) {
 		synchronized (this) {
-			if (this.val == val)
+			if (this.val == val) {
 				return;
+			}
 			this.val = val;
 		}
 		if (callback != null) {

@@ -150,8 +150,9 @@ public class VyrezModel extends Model0 {
 	}
 
 	public void setMoord(final Coord moord) {
-		if (moord.equals(this.moord))
+		if (moord.equals(this.moord)) {
 			return;
+		}
 		this.moord = moord;
 		currPrefe().node(FPref.UVODNI_SOURADNICE_node).putInt(FPref.MOUMER_value, moord.getMoumer());
 		currPrefe().node(FPref.UVODNI_SOURADNICE_node).putMou(FPref.MOUSTRED_value, moord.getMoustred());

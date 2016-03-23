@@ -43,16 +43,19 @@ public class TPumpReaderToWriter extends Thread {
 
 			for (;;) {
 				final int len = iRdr.read(buf);
-				if (len <= 0)
+				if (len <= 0) {
 					break; // dočteno
+				}
 				// System.out.p rint(buf);
 				iWrt.write(buf, 0, len);
 			}
 			iWrt.flush();
-			if (iCloseReader)
+			if (iCloseReader) {
 				iRdr.close();
-			if (iCloseWriter)
+			}
+			if (iCloseWriter) {
 				iWrt.close();
+			}
 			iIsFinished = true;
 		} catch (final IOException ex) {
 			synchronized (this) {
@@ -95,8 +98,9 @@ public class TPumpReaderToWriter extends Thread {
 	}
 
 	public void setBufferSize(int bufferSize) {
-		if (bufferSize < 1)
+		if (bufferSize < 1) {
 			bufferSize = 1;
+		}
 		this.iBufferSize = bufferSize;
 	}
 

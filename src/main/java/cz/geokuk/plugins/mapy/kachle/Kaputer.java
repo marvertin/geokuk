@@ -50,10 +50,12 @@ public class Kaputer {
 		int x0, y0;
 		// for (x0 = xn / 2 - xd; x0 > 0; x0 -= KACHLE_PIXELS, xx0-=moukrok); // nastavit x0 i xx zleva před kreslenou plochu (- je zde, protože nalevo od středu)
 		// for (y0 = yn / 2 + yd; y0 > 0; y0 -= KACHLE_PIXELS, yy0+=moukrok); // nastavit x0 i yy shora před kreslenou plochu (+ je zde, protože dolů od středu, druhé plus, ptotož mouy jde sdola nahoru)
-		for (x0 = xn / 2 - xd; x0 > 0; x0 -= KACHLE_PIXELS)
+		for (x0 = xn / 2 - xd; x0 > 0; x0 -= KACHLE_PIXELS) {
 			; // nastavit x0 i xx zleva před kreslenou plochu (- je zde, protože nalevo od středu)
-		for (y0 = yn / 2 + yd; y0 > 0; y0 -= KACHLE_PIXELS)
+		}
+		for (y0 = yn / 2 + yd; y0 > 0; y0 -= KACHLE_PIXELS) {
 			; // nastavit x0 i yy shora před kreslenou plochu (+ je zde, protože dolů od středu, druhé plus, ptotož mouy jde sdola nahoru)
+		}
 		assert x0 <= 0 && y0 <= 0;
 		// nyní máme [x0,y0] a [xx0, yy0] souřadnice styku čtyř kachlí. S tím, že kachle, která od tohoto bodu jde
 		// dolů (jižně) a vpravo (východně) zasáhne nejméně jedním pixlem do levého horního roku okna.

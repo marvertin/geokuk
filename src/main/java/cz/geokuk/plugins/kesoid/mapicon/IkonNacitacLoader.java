@@ -35,18 +35,22 @@ public class IkonNacitacLoader {
 	private static final String	MAPUZEL		= "map";
 
 	public IkonBag nacti(final Future<?> future, final boolean aPrenacti, final ASada jmenoSady) throws IOException {
-		if (aPrenacti)
+		if (aPrenacti) {
 			lastScan = null;
+		}
 		// Nejdříve skenovat, čímž také zjistíme, zda došlo ke změně
 		final MultiFolder mf = new MultiFolder();
 		mf.addResourceTree("img");
-		if (imageMyDir != null)
+		if (imageMyDir != null) {
 			mf.addFolderTree(imageMyDir);
-		if (image3rdPartyDir != null)
+		}
+		if (image3rdPartyDir != null) {
 			mf.addFolderTree(image3rdPartyDir);
+		}
 
-		if (mf.equals(lastScan))
+		if (mf.equals(lastScan)) {
 			return null; // nedošlo ke změně
+		}
 		lastScan = mf;
 
 		final IkonBag ikonBag = new IkonBag();

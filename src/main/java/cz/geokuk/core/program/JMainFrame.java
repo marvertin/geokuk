@@ -199,18 +199,24 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		final Dimension screenSize = toolkit.getScreenSize();
 		final Dimension velikost = u.getVelikost();
 		final Point pozice = u.getPozice();
-		if (velikost.width < 200 || velikost.width >= screenSize.width)
+		if (velikost.width < 200 || velikost.width >= screenSize.width) {
 			return false; // moc uzke nebo siroke
-		if (velikost.height < 200 || velikost.height >= screenSize.height)
+		}
+		if (velikost.height < 200 || velikost.height >= screenSize.height) {
 			return false; // moc nizke nebo vysoke
-		if (pozice.x + velikost.width < 200)
+		}
+		if (pozice.x + velikost.width < 200) {
 			return false; // prilis vlevo
-		if (screenSize.width - pozice.x < 200)
+		}
+		if (screenSize.width - pozice.x < 200) {
 			return false; // prilis vpravo
-		if (pozice.y < 0)
+		}
+		if (pozice.y < 0) {
 			return false; // prilis nahore
-		if (screenSize.height - pozice.y < 200)
+		}
+		if (screenSize.height - pozice.y < 200) {
 			return false; // prilis dole
+		}
 		return true;
 
 	}

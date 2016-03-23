@@ -146,8 +146,9 @@ public class JKesTable extends JPanel {
 
 	public Nalezenec getCurrent() {
 		final int selectedRow = table.getSelectedRow();
-		if (selectedRow < 0 || selectedRow >= tableModel.getKeslist().size())
+		if (selectedRow < 0 || selectedRow >= tableModel.getKeslist().size()) {
 			return null;
+		}
 		final Nalezenec nalezenec = tableModel.getKeslist().get(selectedRow);
 		return nalezenec;
 	}
@@ -240,14 +241,16 @@ public class JKesTable extends JPanel {
 		private Object formatuj(final Nalezenec nal, final String s) {
 			// TODO : ??
 			// Zde je správně použito porovnání referencí, protože řetězec zde jen identifikuje, kde přesně došlo k nálezu
-			if (nal.getKdeNalezeno() != s)
+			if (nal.getKdeNalezeno() != s) {
 				return s;
+			}
 			return "<html>" + s.substring(0, nal.getPoc()) + "<b bgcolor='yellow'>" + s.substring(nal.getPoc(), nal.getKon()) + "</b>" + s.substring(nal.getKon()) + "</html>";
 		}
 
 		private Icon kesIkona(final Kesoid kes) {
-			if (ikonBag == null)
+			if (ikonBag == null) {
 				return null;
+			}
 			return ikonBag.seekIkon(kes.getMainWpt().getGenotyp(ikonBag.getGenom()));
 		}
 

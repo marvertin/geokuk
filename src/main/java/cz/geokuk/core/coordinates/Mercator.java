@@ -76,17 +76,22 @@ public class Mercator extends Misto0 {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final Mercator other = (Mercator) obj;
-		if (Double.doubleToLongBits(mx) != Double.doubleToLongBits(other.mx))
+		if (Double.doubleToLongBits(mx) != Double.doubleToLongBits(other.mx)) {
 			return false;
-		if (Double.doubleToLongBits(my) != Double.doubleToLongBits(other.my))
+		}
+		if (Double.doubleToLongBits(my) != Double.doubleToLongBits(other.my)) {
 			return false;
+		}
 		return true;
 	}
 

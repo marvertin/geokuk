@@ -16,8 +16,9 @@ public class Onoff<T extends Model0> {
 
 	public void setOnoff(final boolean onoff) {
 		try {
-			if (this.onoff != null && this.onoff == onoff)
+			if (this.onoff != null && this.onoff == onoff) {
 				return;
+			}
 			this.onoff = onoff;
 			onSetOnOff(onoff); // nastavit do modelu, pokud model toto požaduje, například za čelem zperzostentnění
 			if (clazz != null) {

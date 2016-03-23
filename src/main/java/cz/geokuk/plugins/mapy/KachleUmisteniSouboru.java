@@ -32,8 +32,9 @@ public class KachleUmisteniSouboru extends UmisteniSouboru0 {
 	 * @param aKesDir
 	 */
 	private void check(final Filex file) {
-		if (file == null)
+		if (file == null) {
 			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
+		}
 	}
 
 	/**
@@ -65,18 +66,23 @@ public class KachleUmisteniSouboru extends UmisteniSouboru0 {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final KachleUmisteniSouboru other = (KachleUmisteniSouboru) obj;
 		if (kachleCacheDir == null) {
-			if (other.kachleCacheDir != null)
+			if (other.kachleCacheDir != null) {
 				return false;
-		} else if (!kachleCacheDir.equals(other.kachleCacheDir))
+			}
+		} else if (!kachleCacheDir.equals(other.kachleCacheDir)) {
 			return false;
+		}
 		return true;
 	}
 

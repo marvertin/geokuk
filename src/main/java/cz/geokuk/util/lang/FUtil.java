@@ -21,8 +21,9 @@ public final class FUtil {
 				break;
 			}
 		}
-		if (i == n)
+		if (i == n) {
 			return s; // není čeština
+		}
 		final StringBuilder sb = new StringBuilder(n);
 		sb.append(s.substring(0, i));
 		for (; i < n; i++) {
@@ -114,8 +115,9 @@ public final class FUtil {
 	}
 
 	public static String vycistiJmenoSouboru(final String s) {
-		if (s == null)
+		if (s == null) {
 			return null;
+		}
 		StringBuilder sb = null;
 		for (int i = 0; i < s.length(); i++) {
 			final char c = s.charAt(i);

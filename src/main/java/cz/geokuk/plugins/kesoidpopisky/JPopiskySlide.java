@@ -55,13 +55,16 @@ public class JPopiskySlide extends JSingleSlide0 {
 
 	@Override
 	public void paintComponent(final Graphics aG) {
-		if (iIndexator == null)
+		if (iIndexator == null) {
 			return;
-		if (pose == null)
+		}
+		if (pose == null) {
 			return;
+		}
 		final boolean prekrocenLimit = iIndexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
-		if (prekrocenLimit)
+		if (prekrocenLimit) {
 			return;
+		}
 
 		final Graphics2D g = (Graphics2D) aG;
 		// final Color barvaTextu = iSlidovnikText.getColor();
@@ -84,8 +87,9 @@ public class JPopiskySlide extends JSingleSlide0 {
 			@Override
 			public void visit(final Sheet<Wpt> aSheet) {
 				final Wpt wpt = aSheet.get();
-				if (!wpt.isMainWpt())
+				if (!wpt.isMainWpt()) {
 					return;
+				}
 				final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
 				final Point p = getSoord().transform(mou);
 				p.x -= 10;

@@ -55,8 +55,9 @@ public class RefinedWhiteWriter extends Writer {
 
 	@Override
 	public void close() throws IOException {
-		if (iPotrebaUkoncitRadek)
+		if (iPotrebaUkoncitRadek) {
 			ukonciRadek(); // ukonči poslední řádek, pokud nebyl ukončen explicitně
+		}
 		iWriter.flush();
 		iWriter.close(); // a uzavři stream
 	}
@@ -68,8 +69,9 @@ public class RefinedWhiteWriter extends Writer {
 	}
 
 	private void zpracujZnak(char c) throws IOException {
-		if (c == '\t')
+		if (c == '\t') {
 			c = ' '; // tabulátory tvrdě nahradit za mezeru a teprve potom pokračovat
+		}
 		if (c == ' ') {
 			iLfNeukoncuje = false;
 			iCitacMezer++; // započítat ji, ale nikam neposílat
@@ -77,8 +79,9 @@ public class RefinedWhiteWriter extends Writer {
 			ukonciRadek(); // ukončí vžy, ale následné LF pak ne
 			iLfNeukoncuje = true;
 		} else if (c == '\n') {
-			if (!iLfNeukoncuje)
+			if (!iLfNeukoncuje) {
 				ukonciRadek();
+			}
 			iLfNeukoncuje = false;
 		} else // je to nebílý znak
 		{

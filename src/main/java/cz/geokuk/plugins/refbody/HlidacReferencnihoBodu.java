@@ -37,8 +37,9 @@ public class HlidacReferencnihoBodu {
 
 	private void fairujSpolecnou(final EventFirer eventFirer) {
 		final Wgs referencniBod = getReferencniBod();
-		if (minulyStredHledani != null && minulyStredHledani.equals(referencniBod))
+		if (minulyStredHledani != null && minulyStredHledani.equals(referencniBod)) {
 			return;
+		}
 		eventFirer.fire(new ReferencniBodSeZmenilEvent(referencniBod, moord));
 		minulyStredHledani = referencniBod;
 	}

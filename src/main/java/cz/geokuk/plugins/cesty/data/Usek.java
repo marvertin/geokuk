@@ -25,8 +25,9 @@ public class Usek extends Bousek0 {
 	 */
 	@Override
 	boolean jeVOpsanemObdelniku(final Mou mou) {
-		if (mou == null)
+		if (mou == null) {
 			return false;
+		}
 		final Mou mou1 = bvzad.getMou();
 		final Mou mou2 = bvpred.getMou();
 		final boolean jex = mou1.xx <= mou.xx && mou.xx <= mou2.xx || mou1.xx >= mou.xx && mou.xx >= mou2.xx;
@@ -41,8 +42,9 @@ public class Usek extends Bousek0 {
 	 * @return null, když je pata kolmice mimo úsečku.
 	 */
 	public Mou getNejblizsiBodKolmoKUsecce(final Mou mou) {
-		if (mou == null)
+		if (mou == null) {
 			return null;
+		}
 		final Mou m = prusecikKolmice(bvzad.getMou(), bvpred.getMou(), mou);
 		if (jeVOpsanemObdelniku(m)) {
 			return m;
@@ -66,8 +68,9 @@ public class Usek extends Bousek0 {
 
 	public long computeKvadratVzdalenostiBoduKUsecce(final Mou mou) {
 		final Mou m = getNejblizsiBodKolmoKUsecce(mou);
-		if (m == null)
+		if (m == null) {
 			return Long.MAX_VALUE;
+		}
 		final long kvadrat = mou.getKvadratVzdalenosti(m);
 		return kvadrat;
 	}
@@ -197,15 +200,17 @@ public class Usek extends Bousek0 {
 	}
 
 	public double getMouDelkaVpred(final Mou aMou) {
-		if (isVzdusny())
+		if (isVzdusny()) {
 			return 0;
+		}
 		final Mou mou = getNejblizsiBodKPrimce(aMou);
 		return FGeoKonvertor.dalka(mou, bvpred);
 	}
 
 	public double getMouDelkaVzad(final Mou aMou) {
-		if (isVzdusny())
+		if (isVzdusny()) {
 			return 0;
+		}
 		final Mou mou = getNejblizsiBodKPrimce(aMou);
 		return FGeoKonvertor.dalka(mou, bvzad);
 	}
@@ -224,8 +229,9 @@ public class Usek extends Bousek0 {
 
 	@Override
 	public double dalka() {
-		if (isVzdusny())
+		if (isVzdusny()) {
 			return 0;
+		}
 		if (dalka < 0) {
 			dalka = FGeoKonvertor.dalka(bvpred, bvzad);
 		}
@@ -247,8 +253,9 @@ public class Usek extends Bousek0 {
 	}
 
 	private void kon(final boolean podm) {
-		if (!podm)
+		if (!podm) {
 			throw new RuntimeException("Selhala kontrola konzistence useku");
+		}
 	}
 
 	@Override

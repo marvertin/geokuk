@@ -139,11 +139,13 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		if (!jenAdresare) {
 			dir = dir.getParentFile();
 		}
-		if (dir.isDirectory() && dir.canRead())
+		if (dir.isDirectory() && dir.canRead()) {
 			return filex;
+		}
 		final boolean vysl = dir.mkdirs();
-		if (!vysl)
+		if (!vysl) {
 			throw new JPrehledSouboru.YNejdeTo("Složku \"" + dir + "\" se nepodařilo stvořit pro \"" + label + "\"");
+		}
 		return filex;
 	}
 

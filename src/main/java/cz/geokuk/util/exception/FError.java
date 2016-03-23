@@ -21,8 +21,9 @@ public class FError {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				if (jErrorDialog == null)
+				if (jErrorDialog == null) {
 					jErrorDialog = new JErrorDialog();
+				}
 				jErrorDialog.setVisible(true);
 				jErrorDialog.addProblem(text, excid);
 			}

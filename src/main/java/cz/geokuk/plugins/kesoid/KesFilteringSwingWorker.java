@@ -70,8 +70,9 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 						int citac = 0;
 						// System.out.println("VSECHNY: " + vsechny2);
 						for (final Wpt wpt : vsechny2.getWpts()) {
-							if (isCancelled())
+							if (isCancelled()) {
 								return;
+							}
 							final Genotyp genotyp = wpt.getGenotyp(iGenom);
 							// TEn genotyp se předává jen z důvodu optimalizace
 							if (kesfilter.isFiltered(wpt, iGenom, genotyp)) {
@@ -93,8 +94,9 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 			}, "Filtrovani kesoidu").start();
 			for (;;) {
 				final Dvojka dvojka = queue.take();
-				if (dvojka == ZARAZKA)
+				if (dvojka == ZARAZKA) {
 					break;
+				}
 				kesbag.add(dvojka.wpt, dvojka.genotyp);
 			}
 			kesfilter.done();
@@ -120,8 +122,9 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 			return;
 		}
 		final KesBag result = get();
-		if (result == null)
+		if (result == null) {
 			return; // asi zkanclváno
+		}
 		// TODO řešit progresy nějak ssematicky
 		kesoidModel.fire(new KeskyVyfiltrovanyEvent(result, vsechny));
 		log.debug("FILTERING {} - finished, filtered {} caches, {}={} waypoints, {} ms.\n", cisloFiltrovani, result.getKesoidy().size(), result.getWpts().size(),

@@ -15,23 +15,27 @@ public class Genotyp {
 	}
 
 	public void put(final Alela alela) {
-		if (alela == null)
+		if (alela == null) {
 			return;
+		}
 		alely.removeAll(alela.getGen().getAlely());
 		alely.add(alela);
 	}
 
 	public void remove(final Alela alela) {
-		if (!alely.contains(alela))
+		if (!alely.contains(alela)) {
 			return;
-		if (alela.getGen().getVychoziAlela() == alela)
+		}
+		if (alela.getGen().getVychoziAlela() == alela) {
 			return; // vychozo neodstranujeme
+		}
 		put(alela.getGen().getVychoziAlela()); // a prdneme tam vyhozi
 	}
 
 	public void removeAll(final Set<Alela> alely) {
-		if (alely == null)
+		if (alely == null) {
 			return;
+		}
 		for (final Alela alela : alely) {
 			remove(alela);
 		}
@@ -73,18 +77,23 @@ public class Genotyp {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final Genotyp other = (Genotyp) obj;
 		if (alely == null) {
-			if (other.alely != null)
+			if (other.alely != null) {
 				return false;
-		} else if (!alely.equals(other.alely))
+			}
+		} else if (!alely.equals(other.alely)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -104,12 +113,15 @@ public class Genotyp {
 
 		@Override
 		public boolean equals(final Object obj) {
-			if (obj == null)
+			if (obj == null) {
 				return false;
-			if (obj == this)
+			}
+			if (obj == this) {
 				return true;
-			if (!(obj instanceof Otisk))
+			}
+			if (!(obj instanceof Otisk)) {
 				return false;
+			}
 			final Otisk otisk = (Otisk) obj;
 			return gege().equals(otisk.gege());
 		}

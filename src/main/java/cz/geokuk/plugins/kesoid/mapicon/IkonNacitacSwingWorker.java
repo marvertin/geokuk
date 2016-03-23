@@ -42,11 +42,13 @@ public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
 	 */
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
-		if (isCancelled())
+		if (isCancelled()) {
 			return;
+		}
 		final IkonBag result = get();
-		if (result == null)
+		if (result == null) {
 			return; // asi zkanclváno
+		}
 		// System.out.printf("Loaded %d caches, %d=%d waypoints: \n",
 		// result.getKesky().size(),
 		// result.getWpts().size(),

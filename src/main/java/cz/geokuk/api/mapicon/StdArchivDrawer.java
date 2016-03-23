@@ -20,11 +20,13 @@ public class StdArchivDrawer extends Drawer0 {
 	 */
 	@Override
 	public void draw(final Deque<Imagant> imaganti) {
-		if (imaganti.peekFirst() == null)
+		if (imaganti.peekFirst() == null) {
 			return;
+		}
 		final Imagant puvodni = imaganti.removeFirst();
-		if (puvodni == null)
+		if (puvodni == null) {
 			return;
+		}
 		final Imagant imagant1 = puvodni.cloneEmpty();
 		final ColorConvertOp colorConvertOp = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
 		imagant1.getImage().createGraphics().drawImage(puvodni.getImage(), colorConvertOp, 0, 0);

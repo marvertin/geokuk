@@ -226,8 +226,9 @@ public class JPrehledSouboru extends JPanel {
 
 	public void fokusni(final ESouborPanelName panelName) {
 		final JJedenSouborPanel panel = mapaProFokusovani.get(panelName);
-		if (panel == null)
+		if (panel == null) {
 			return;
+		}
 		panel.fokusniSe();
 	}
 

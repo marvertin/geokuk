@@ -49,8 +49,9 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	 * @param aKesDir
 	 */
 	private void check(final Filex file) {
-		if (file == null)
+		if (file == null) {
 			throw new RuntimeException("Jmena souboru jeste nebyla inicializovana.");
+		}
 	}
 
 	/**
@@ -155,27 +156,36 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if (o == null || getClass() != o.getClass()) {
 			return false;
+		}
 
 		final KesoidUmisteniSouboru that = (KesoidUmisteniSouboru) o;
 
-		if (anoGgtFile != null ? !anoGgtFile.equals(that.anoGgtFile) : that.anoGgtFile != null)
+		if (anoGgtFile != null ? !anoGgtFile.equals(that.anoGgtFile) : that.anoGgtFile != null) {
 			return false;
-		if (cestyDir != null ? !cestyDir.equals(that.cestyDir) : that.cestyDir != null)
+		}
+		if (cestyDir != null ? !cestyDir.equals(that.cestyDir) : that.cestyDir != null) {
 			return false;
-		if (geogetDataDir != null ? !geogetDataDir.equals(that.geogetDataDir) : that.geogetDataDir != null)
+		}
+		if (geogetDataDir != null ? !geogetDataDir.equals(that.geogetDataDir) : that.geogetDataDir != null) {
 			return false;
-		if (image3rdPartyDir != null ? !image3rdPartyDir.equals(that.image3rdPartyDir) : that.image3rdPartyDir != null)
+		}
+		if (image3rdPartyDir != null ? !image3rdPartyDir.equals(that.image3rdPartyDir) : that.image3rdPartyDir != null) {
 			return false;
-		if (imageMyDir != null ? !imageMyDir.equals(that.imageMyDir) : that.imageMyDir != null)
+		}
+		if (imageMyDir != null ? !imageMyDir.equals(that.imageMyDir) : that.imageMyDir != null) {
 			return false;
-		if (kesDir != null ? !kesDir.equals(that.kesDir) : that.kesDir != null)
+		}
+		if (kesDir != null ? !kesDir.equals(that.kesDir) : that.kesDir != null) {
 			return false;
-		if (neGgtFile != null ? !neGgtFile.equals(that.neGgtFile) : that.neGgtFile != null)
+		}
+		if (neGgtFile != null ? !neGgtFile.equals(that.neGgtFile) : that.neGgtFile != null) {
 			return false;
+		}
 
 		return true;
 	}

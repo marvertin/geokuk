@@ -17,8 +17,9 @@ public class SystemovaPocitadla {
 
 	public synchronized static void spustPocitani() {
 		// final List<Object> zroutPameti = new ArrayList<Object>();
-		if (tm != null)
+		if (tm != null) {
 			return;
+		}
 		tm = new Timer(100, new ActionListener() {
 
 			@Override

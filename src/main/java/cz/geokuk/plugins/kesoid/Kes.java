@@ -51,8 +51,9 @@ public class Kes extends Kesoid {
 	 */
 	@Override
 	public Wpt getMainWpt() {
-		if (mainWpt != null)
+		if (mainWpt != null) {
 			return mainWpt;
+		}
 		return super.getMainWpt();
 	}
 
@@ -181,8 +182,9 @@ public class Kes extends Kesoid {
 	@Override
 	public void addWpt(final Wpt wpt) {
 		super.addWpt(wpt);
-		if (wpt == null)
+		if (wpt == null) {
 			return;
+		}
 		if (EKesWptType.FINAL_LOCATION == wpt.getType()) {
 			finalWpt = wpt;
 		}
@@ -273,8 +275,9 @@ public class Kes extends Kesoid {
 	 */
 	public char getOneLetterType() {
 		final String sym = getMainWpt().getSym();
-		if (sym == null || sym.length() == 0)
+		if (sym == null || sym.length() == 0) {
 			return '?';
+		}
 		return sym.charAt(0);
 	}
 

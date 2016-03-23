@@ -50,8 +50,9 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 	}
 
 	public void onEvent(final PoziceChangedEvent aEvent) {
-		if (FUtil.equalsa(poziceq, aEvent.poziceq))
+		if (FUtil.equalsa(poziceq, aEvent.poziceq)) {
 			return;
+		}
 		poziceq = aEvent.poziceq;
 		prepocitatBlizkostKrize();
 		repaint();
@@ -77,8 +78,9 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 	 *
 	 */
 	private void repaintKriz() {
-		if (poziceq.isNoPosition())
+		if (poziceq.isNoPosition()) {
 			return; // není co kreslit
+		}
 		final Mou mou = poziceq.getPoziceMou();
 		final Point p = getSoord().transform(mou);
 		repaint(p.x - R_KRIZE, p.y - R_KRIZE, R_KRIZE * 2, R_KRIZE * 2);
@@ -87,8 +89,9 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 	@Override
 	public void paintComponent(final Graphics aG) {
 
-		if (poziceq.isNoPosition())
+		if (poziceq.isNoPosition()) {
 			return; // není co kreslit
+		}
 		final Mou mou = poziceq.getPoziceMou();
 		final Point p = getSoord().transform(mou);
 		final int ra = R_VNITRNI_KRUZNICE;

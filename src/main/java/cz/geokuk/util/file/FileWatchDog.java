@@ -49,16 +49,18 @@ public class FileWatchDog<R> {
 		BufferedReader rdr = null;
 		try {
 			final long lm = wasModified();
-			if (lm < 0)
+			if (lm < 0) {
 				return null;
+			}
 			rdr = open();
 			final R result = callback.load(rdr);
 			lastmodified = lm; // tepre až se povede načíst, můžeme změni
 			return result;
 		} finally {
 			try {
-				if (rdr != null)
+				if (rdr != null) {
 					rdr.close();
+				}
 			} catch (final IOException e) { // s tím nic nenadělám
 			}
 		}
@@ -76,8 +78,9 @@ public class FileWatchDog<R> {
 		} else {
 			lm = 0;
 		}
-		if (lm == lastmodified)
+		if (lm == lastmodified) {
 			return -1;
+		}
 		return lm;
 	}
 
@@ -86,8 +89,9 @@ public class FileWatchDog<R> {
 	}
 
 	public void setGroup(final WatchDogGroup watchDogGroup) {
-		if (this.watchDogGroup == watchDogGroup)
+		if (this.watchDogGroup == watchDogGroup) {
 			return;
+		}
 		this.watchDogGroup = watchDogGroup;
 		watchDogGroup.add(this);
 	}

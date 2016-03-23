@@ -96,8 +96,9 @@ public class IconDefNacitac {
 	 * @return
 	 */
 	private String odstranZazavorkovaneNesouboroviteZnaky(String s) {
-		if (s.indexOf('[') < 0)
+		if (s.indexOf('[') < 0) {
 			return s;
+		}
 		s = s.replace("[lomitko]", "/");
 		s = s.replace("[hvezdicka]", "*");
 		s = s.replace("[uvozovky]", "*");
@@ -120,8 +121,9 @@ public class IconDefNacitac {
 				final String alelaName = s.substring(pozminus + 1);
 				final String genName = s.substring(0, pozminus);
 				alela = genom.alela(alelaName, genName);
-				if (alela == null)
+				if (alela == null) {
 					continue;
+				}
 			}
 			alely.add(alela);
 		}
@@ -129,14 +131,16 @@ public class IconDefNacitac {
 	}
 
 	private int zpracujNaPrioritu(final String zadano) {
-		if (zadano == null)
+		if (zadano == null) {
 			return 5;
+		}
 		return Integer.parseInt(zadano.substring(2));
 	}
 
 	private int zpracujNaOffsete(final String zadano) {
-		if (zadano == null)
+		if (zadano == null) {
 			return 0;
+		}
 		final int zadanapozice = Integer.parseInt(zadano.substring(2));
 		return zadanapozice;
 	}

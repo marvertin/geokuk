@@ -25,8 +25,9 @@ public class BeanBag implements Factory {
 	 */
 	@Override
 	public <T> T create(final Class<T> klasa, final Object... params) {
-		if (!initialized)
+		if (!initialized) {
 			throw new RuntimeException("Kontejner jeste nebyl inicializovan");
+		}
 		final Class<?>[] types = new Class<?>[params.length];
 		for (int i = 0; i < params.length; i++) {
 			final Object param = params[i];
@@ -70,10 +71,12 @@ public class BeanBag implements Factory {
 	}
 
 	public <T> T registerSigleton(final T object) {
-		if (initialized)
+		if (initialized) {
 			throw new RuntimeException("Kontejner uz byl inicializovan");
-		if (object == null)
+		}
+		if (object == null) {
 			throw new RuntimeException("Nelze inicializvat null objekt");
+		}
 		beans.add(object);
 		return object;
 	}
@@ -147,8 +150,9 @@ public class BeanBag implements Factory {
 				for (final Object injectedBeanCandidate : beans) {
 					final BeanType injectedBeanType = BeanType.createForInjectedBean(injectedBeanCandidate);
 					if (targetBeanType.canInjectFrom(injectedBeanType)) {
-						if (injectedBean != null)
+						if (injectedBean != null) {
 							throw new RuntimeException("Prilis mnoho implementaci pro " + method + " v " + injectedBean.getClass() + " a " + injectedBeanCandidate.getClass());
+						}
 						if (multiInjection) {
 							callInjection(method, targetBean, injectedBeanCandidate);
 							pocetInjekci++;
@@ -161,8 +165,9 @@ public class BeanBag implements Factory {
 					callInjection(method, targetBean, injectedBean);
 					pocetInjekci++;
 				}
-				if (pocetInjekci == 0)
+				if (pocetInjekci == 0) {
 					throw new RuntimeException(String.format("Nenalena injekce targetBean=%s ... targetBeanType=%s ... method=%s", targetBean, targetBeanType, method));
+				}
 			}
 		}
 	}

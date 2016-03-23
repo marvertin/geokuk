@@ -202,15 +202,17 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 	}
 
 	protected void setReferencniBod(final Wgs wgs) {
-		if (wgs.equals(referencniBod))
+		if (wgs.equals(referencniBod)) {
 			return;
+		}
 		referencniBod = wgs;
 		search();
 	}
 
 	public void search() {
-		if (vsechny == null || filtrovane == null || referencniBod == null)
+		if (vsechny == null || filtrovane == null || referencniBod == null) {
 			return;
+		}
 		message("Hleda se ...");
 		final String s = entry.getText();
 		final HledaciPodminka podm = new HledaciPodminka();

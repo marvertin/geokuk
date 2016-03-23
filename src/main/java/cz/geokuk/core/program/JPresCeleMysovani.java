@@ -163,8 +163,9 @@ public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInput
 	@Override
 	public void mouseWheelMoved(final MouseWheelEvent e) {
 		final Mouable upravenaMys = getUpravenaMys();
-		if (upravenaMys == null)
+		if (upravenaMys == null) {
 			return; // to by nemělo nastat, protože pokud jsme nad slidem, tak musím mít myš, ale co kdyby
+		}
 		final int rotation = e.getWheelRotation();
 		// System.out.println("Rotace: " + rotation);
 		final int moumer = getSoord().getMoumer() - rotation;

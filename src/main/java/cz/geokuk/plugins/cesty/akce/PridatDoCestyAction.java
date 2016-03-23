@@ -55,19 +55,23 @@ public class PridatDoCestyAction extends CestyAction0 {
 	 * @return
 	 */
 	private Mouable proPridaniDoVyletu(final Mouable mouable) {
-		if (mouable instanceof Wpt)
+		if (mouable instanceof Wpt) {
 			return mouable;
-		if (mouable instanceof Bod)
+		}
+		if (mouable instanceof Bod) {
 			return null; // připojovat na bod se nebudeme
+		}
 		return mouable.getMou(); // a ke všemu ostatnímu se připojíme, což je zřejmě notmální bod
 	}
 
 	private Mouable effectiveMouable() {
-		if (kontextoveMouable != null)
+		if (kontextoveMouable != null) {
 			return proPridaniDoVyletu(kontextoveMouable);
+		}
 		// jinak se musíme spolehnout na pozici
-		if (!poziceq.isNoPosition())
+		if (!poziceq.isNoPosition()) {
 			return proPridaniDoVyletu(poziceq.getPoziceMouable());
+		}
 		return null;
 	}
 

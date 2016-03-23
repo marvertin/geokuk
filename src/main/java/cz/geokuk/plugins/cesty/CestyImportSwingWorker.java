@@ -53,8 +53,9 @@ public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
 		final List<Cesta> cesty = get();
-		if (cesty == null)
+		if (cesty == null) {
 			return; // asi zkanclváno
+		}
 		log.info("Načteny cesty %d: \n", cesty.size());
 		cestyModel.prevezmiImportovaneCesty(cesty);
 	}

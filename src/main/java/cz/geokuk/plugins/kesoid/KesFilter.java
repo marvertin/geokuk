@@ -71,8 +71,9 @@ public class KesFilter {
 				}
 				final Set<Alela> alely = new HashSet<>(nechteneAlely);
 				alely.retainAll(alelygenotypu);
-				if (alely.size() > 0)
+				if (alely.size() > 0) {
 					return false;
+				}
 			}
 
 			// if (aWpt.getType() != AWptType.CACHE && ! wptTypes.contains(aWpt.getType())) return false;
@@ -81,8 +82,9 @@ public class KesFilter {
 
 			if (filterDefinition.isJenFinalUNalezenych()) {
 				if (kesoid.getVztah() == EKesVztah.FOUND || kesoid.getVztah() == EKesVztah.OWN) {
-					if (aWpt != kesoid.getMainWpt())
+					if (aWpt != kesoid.getMainWpt()) {
 						return false;
+					}
 				}
 			}
 
@@ -90,28 +92,33 @@ public class KesFilter {
 				final Kes kes = (Kes) kesoid;
 
 				if (kes.getVztah() == EKesVztah.NORMAL) { // jen u nenalezených
-					if (kes.getFinal() != null && filterDefinition.isJenDoTerenuUNenalezenych() && (!aWpt.nutnyKLusteni()) && !Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym()))
+					if (kes.getFinal() != null && filterDefinition.isJenDoTerenuUNenalezenych() && (!aWpt.nutnyKLusteni()) && !Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())) {
 						return false;
+					}
 				}
 
 				if (kes.getHodnoceni() != Kes.NENI_HODNOCENI) {
-					if (kes.getHodnoceni() < filterDefinition.getPrahHodnoceni())
+					if (kes.getHodnoceni() < filterDefinition.getPrahHodnoceni()) {
 						return false;
+					}
 				}
 				if (kes.getBestOf() != Kes.NENI_HODNOCENI) {
-					if (kes.getBestOf() < filterDefinition.getPrahBestOf())
+					if (kes.getBestOf() < filterDefinition.getPrahBestOf()) {
 						return false;
+					}
 				}
 				if (kes.getFavorit() != Kes.NENI_HODNOCENI) {
-					if (kes.getFavorit() < filterDefinition.getPrahFavorit())
+					if (kes.getFavorit() < filterDefinition.getPrahFavorit()) {
 						return false;
+					}
 				}
 			}
 			if (vyletModel != null) {
 				final EVylet evylKes = vyletModel.get(kesoid);
 				final EVylet evylPrah = filterDefinition.getPrahVyletu();
-				if (evylKes.ordinal() < evylPrah.ordinal())
+				if (evylKes.ordinal() < evylPrah.ordinal()) {
 					return false;
+				}
 			}
 			return true;
 		} catch (final Exception e) {

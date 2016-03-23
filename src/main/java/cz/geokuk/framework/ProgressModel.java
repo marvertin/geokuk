@@ -72,8 +72,9 @@ public class ProgressModel extends Model0 {
 		 */
 		@Override
 		public void setMax(final int aMax) {
-			if (max == aMax)
+			if (max == aMax) {
 				return;
+			}
 			max = aMax;
 			firex(false);
 		}
@@ -130,8 +131,9 @@ public class ProgressModel extends Model0 {
 		 */
 		@Override
 		public void setText(final String aText) {
-			if (text.equals(aText))
+			if (text.equals(aText)) {
 				return;
+			}
 			text = aText;
 			firex(true);
 		}
@@ -143,8 +145,9 @@ public class ProgressModel extends Model0 {
 		 */
 		@Override
 		public void setTooltip(final String aTooltip) {
-			if (tooltip.equals(aTooltip))
+			if (tooltip.equals(aTooltip)) {
 				return;
+			}
 			tooltip = aTooltip;
 			firex(true);
 		}

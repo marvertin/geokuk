@@ -41,8 +41,9 @@ public class Gen {
 	}
 
 	public synchronized void add(final Alela alela, final String jmenoGrupy) {
-		if (locked)
+		if (locked) {
 			throw new RuntimeException("Nemozne pridavat alely " + alela + " k zamcenemu genu " + this);
+		}
 		final Gen puvodniGen = alela.hasGen() ? alela.getGen() : null;
 		if (puvodniGen != this) {
 			if (puvodniGen != null) {
@@ -70,8 +71,9 @@ public class Gen {
 	}
 
 	public synchronized Grupa grupa(final String grupaName) {
-		if (FString.isEmpty(grupaName))
+		if (FString.isEmpty(grupaName)) {
 			return IMPLICITNI_GRUPA;
+		}
 		Grupa grupa = grupy.get(grupaName);
 		if (grupa == null) {
 			grupa = new Grupa(grupaName);

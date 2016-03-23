@@ -185,8 +185,9 @@ public class NacitacGpx extends NacitacInputStream0 {
 	public void load(final XMLStreamReader rdr, final IImportBuilder builder, final Future<?> future) throws XMLStreamException {
 		// nejdrive naplnit tim co uz mame
 		while (rdr.hasNext()) {
-			if (future != null && future.isCancelled())
+			if (future != null && future.isCancelled()) {
 				return;
+			}
 			if (rdr.isStartElement()) {
 				if (rdr.getName().getLocalPart().equals("gpx")) {
 					initNamesTopografic(rdr.getNamespaceURI());

@@ -84,8 +84,9 @@ public class EventManager implements EventFirer {
 			log("FIRE beg: " + event);
 		}
 		try {
-			if (!SwingUtilities.isEventDispatchThread())
+			if (!SwingUtilities.isEventDispatchThread()) {
 				throw new RuntimeException("Event " + event + "poslan mimo eventove vlakno");
+			}
 			final BeanType beanType = BeanType.createForInjectedBean(event);
 			_fire(beanType, event);
 			if (beanType.hasSubtype()) {
@@ -202,8 +203,9 @@ public class EventManager implements EventFirer {
 				continue;
 			}
 			final Class<?>[] parameterTypes = m.getParameterTypes();
-			if (parameterTypes.length != 1)
+			if (parameterTypes.length != 1) {
 				return;
+			}
 			register(observer, m, aOnlyInvoke);
 		}
 	}

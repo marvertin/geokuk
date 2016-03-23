@@ -149,8 +149,9 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 			// Pozor, Calendar ma mesice od nuly !!
 			c.set(rok, mesic - 1, den, 0, 0, 0);
 
-			if (c.get(Calendar.YEAR) != rok || c.get(Calendar.MONTH) != mesic - 1 || c.get(Calendar.DAY_OF_MONTH) != den)
+			if (c.get(Calendar.YEAR) != rok || c.get(Calendar.MONTH) != mesic - 1 || c.get(Calendar.DAY_OF_MONTH) != den) {
 				throw new IllegalArgumentException(den + "." + mesic + "." + rok);
+			}
 
 			c.set(Calendar.MILLISECOND, 0);
 			return c.getTime();
@@ -173,22 +174,27 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 			DatePart = Datum;
 			String odd;
 			odd = "";
-			if (DatePart.indexOf('.') > 0)
+			if (DatePart.indexOf('.') > 0) {
 				odd = ".";
-			if (DatePart.indexOf(',') > 0)
+			}
+			if (DatePart.indexOf(',') > 0) {
 				odd = ",";
-			if (DatePart.indexOf('-') > 0)
+			}
+			if (DatePart.indexOf('-') > 0) {
 				odd = "-";
-			if (DatePart.indexOf('/') > 0)
+			}
+			if (DatePart.indexOf('/') > 0) {
 				odd = "/";
+			}
 			DatePart = DatePart + odd;
 			int poradi = 0;
 			final String Parts[] = new String[3];
 			for (int i = 0; i < 3; i++) {
 				Parts[i] = DatePart.substring(0, DatePart.indexOf(odd));
 				DatePart = DatePart.substring(DatePart.indexOf(odd) + 1);
-				if (Parts[i].length() > 2)
+				if (Parts[i].length() > 2) {
 					poradi = i;
+				}
 			}
 
 			final int iDateParts[] = new int[3];
@@ -492,8 +498,9 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 */
 	@Override
 	public boolean equals(final Object aDatum) {
-		if (!(aDatum instanceof ADate))
+		if (!(aDatum instanceof ADate)) {
 			return false;
+		}
 		final ADate obj = (ADate) aDatum;
 		return iJavaDatum.equals(obj.iJavaDatum);
 	}
@@ -528,12 +535,15 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 
 	@Override
 	public int compareTo(final ADate aObj) {
-		if (iJavaDatum.equals(aObj.iJavaDatum))
+		if (iJavaDatum.equals(aObj.iJavaDatum)) {
 			return 0;
-		if (aObj.iJavaDatum.after(iJavaDatum))
+		}
+		if (aObj.iJavaDatum.after(iJavaDatum)) {
 			return -1;
-		if (iJavaDatum.after(aObj.iJavaDatum))
+		}
+		if (iJavaDatum.after(aObj.iJavaDatum)) {
 			return 1;
+		}
 		throw new RuntimeException("Interni chyba porovnavani ADate");
 	}
 
@@ -637,8 +647,9 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 */
 	@Override
 	public ADate getAnother(final long aNthObject) {
-		if (Math.abs(aNthObject) > Integer.MAX_VALUE - 2)
+		if (Math.abs(aNthObject) > Integer.MAX_VALUE - 2) {
 			throw new IllegalArgumentException("Počtu dnů o něž posouvat je " + aNthObject + " a to je na mě v absolutní hodnotě moc!");
+		}
 		return addDays((int) aNthObject);
 	}
 

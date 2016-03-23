@@ -58,14 +58,16 @@ public class CestyModel extends Model0 {
 	}
 
 	public boolean isOnVylet(final Mouable mouable) {
-		if (mouable == null)
+		if (mouable == null) {
 			return false;
+		}
 		if (mouable instanceof Wpt) {
 			final Wpt wpt = (Wpt) mouable;
 			return doc.hasWpt(wpt);
 		}
-		if (mouable instanceof Bod)
+		if (mouable instanceof Bod) {
 			return true;
+		}
 		return false;
 	}
 
@@ -177,8 +179,9 @@ public class CestyModel extends Model0 {
 
 	public void odeberBod(final Mouable mouable) {
 		final Bod bod = doc.findBod(mouable);
-		if (bod == null)
+		if (bod == null) {
 			return;
+		}
 		removeBod(bod);
 		fireCesta();
 	}
@@ -231,19 +234,22 @@ public class CestyModel extends Model0 {
 	}
 
 	private void invalidate(final Doc doc) {
-		if (doc == null)
+		if (doc == null) {
 			return;
+		}
 		for (final Bod bod : doc.getBody()) {
 			invalidate(bod);
 		}
 	}
 
 	private void cleanCurta() {
-		if (curta == null)
+		if (curta == null) {
 			return;
+		}
 		for (final Cesta cesta : doc.getCesty()) {
-			if (cesta == curta)
+			if (cesta == curta) {
 				return;
+			}
 		}
 		curta = null;
 	}
@@ -303,15 +309,17 @@ public class CestyModel extends Model0 {
 	}
 
 	void setCurta(final Cesta curta) {
-		if (this.curta == curta)
+		if (this.curta == curta) {
 			return;
+		}
 		this.curta = curta;
 		fireCesta();
 	}
 
 	public void prepniVzdusnostUseku(final Usek usek, final boolean vzdusny) {
-		if (usek.isVzdusny() == vzdusny)
+		if (usek.isVzdusny() == vzdusny) {
 			return;
+		}
 		updator.setVzdusny(usek, vzdusny);
 		fireCesta();
 	}
@@ -382,8 +390,9 @@ public class CestyModel extends Model0 {
 		final String extension = mat.group(2);
 		for (int i = 0;; i++) {
 			final File file = new File(dir, baseName + (i == 0 ? "" : " (" + i + ")") + extension);
-			if (!file.exists())
+			if (!file.exists()) {
 				return file;
+			}
 		}
 
 	}
@@ -432,8 +441,9 @@ public class CestyModel extends Model0 {
 		if (cesta == null) {
 			cesta = doc.findNejblizsiCesta(moord.getMoustred());
 		}
-		if (cesta == null)
+		if (cesta == null) {
 			return;
+		}
 		curta = cesta;
 		poziceModel.setPozice(cesta.getStart());
 	}
@@ -442,8 +452,9 @@ public class CestyModel extends Model0 {
 		if (cesta == null) {
 			cesta = doc.findNejblizsiCesta(moord.getMoustred());
 		}
-		if (cesta == null)
+		if (cesta == null) {
 			return;
+		}
 		curta = cesta;
 		poziceModel.setPozice(cesta.getCil());
 	}
@@ -497,8 +508,9 @@ public class CestyModel extends Model0 {
 	}
 
 	public void uzavriCestu(final Cesta cesta) {
-		if (cesta.isKruh())
+		if (cesta.isKruh()) {
 			return;
+		}
 		updator.pridejNaKonec(cesta, cesta.getStart().getMouable());
 		fireCesta();
 	}
@@ -527,8 +539,9 @@ public class CestyModel extends Model0 {
 
 	public void spojCestyVPrekryvnemBode(final Bod bod) {
 		final Bod druhyBod = bod.getKoncovyBodDruheCestyVhodnyProSpojeni();
-		if (druhyBod == null)
+		if (druhyBod == null) {
 			return;
+		}
 		if (bod.isCil()) {
 			updator.pipojitCestuZa(bod.getCesta(), druhyBod.getCesta());
 		} else if (bod.isStart()) {
@@ -587,8 +600,9 @@ public class CestyModel extends Model0 {
 	}
 
 	public void setPridavaniBodu(final boolean probihaPridavani) {
-		if (this.probihaPridavani == probihaPridavani)
+		if (this.probihaPridavani == probihaPridavani) {
 			return;
+		}
 		this.probihaPridavani = probihaPridavani;
 		fire(new PridavaniBoduEvent(probihaPridavani));
 	}

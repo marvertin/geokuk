@@ -57,11 +57,13 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 
 	@Override
 	public void paintComponent(final Graphics aG) {
-		if (iIndexator == null)
+		if (iIndexator == null) {
 			return;
+		}
 		final boolean prekrocenLimit = iIndexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
-		if (prekrocenLimit)
+		if (prekrocenLimit) {
 			return;
+		}
 
 		final Graphics2D g = (Graphics2D) aG;
 		final int r;

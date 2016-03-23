@@ -87,8 +87,9 @@ public abstract class JVyberIkon0 extends Box {
 							rb.setEnabled(shouldEnable(alelax));
 							radiosikonou.add(rb);
 							radiosikonou.add(Box.createHorizontalGlue());
-							if (iRadioButton)
+							if (iRadioButton) {
 								bg.add(rb);
+							}
 							boxgen.add(radiosikonou);
 							if (jmenaVybranychAlel.contains(alela.name())) {
 								rb.setSelected(!iOdskrtnutiVybira);
@@ -124,8 +125,9 @@ public abstract class JVyberIkon0 extends Box {
 					bg.getElements().nextElement().setSelected(true);
 				}
 			} else {
-				if (iRadioButton)
+				if (iRadioButton) {
 					vybraneAlely.add(gen.getVychoziAlela());
+				}
 			}
 		}
 		// }

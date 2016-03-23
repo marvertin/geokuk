@@ -46,8 +46,9 @@ public class UrlToListingForGeogetAction extends Action0 {
 		Kesoid kes = iKes;
 		if (kes == null) {
 			kes = poziceq.getKesoid();
-			if (kes == null)
+			if (kes == null) {
 				return;
+			}
 		}
 		kesoidModel.otevriListingVGeogetu(kes);
 	}

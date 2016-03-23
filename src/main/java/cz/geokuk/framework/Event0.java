@@ -33,8 +33,9 @@ public class Event0<T extends Model0> implements BeanSubtypable {
 	}
 
 	public void setEventFirer(final EventFirer eventFirer) {
-		if (this.eventFirer == eventFirer)
+		if (this.eventFirer == eventFirer) {
 			return;
+		}
 		checkLocked();
 		this.eventFirer = eventFirer;
 	}
@@ -49,8 +50,9 @@ public class Event0<T extends Model0> implements BeanSubtypable {
 	}
 
 	private void checkLocked() {
-		if (locked)
+		if (locked) {
 			throw new RuntimeException("Locked event: " + getClass().getName() + " - " + this);
+		}
 	}
 
 }

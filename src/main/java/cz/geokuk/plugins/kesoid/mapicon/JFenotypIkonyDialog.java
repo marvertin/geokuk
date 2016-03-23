@@ -49,19 +49,23 @@ public class JFenotypIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 	}
 
 	public void onEvent(final FenotypPreferencesChangedEvent event) {
-		if (event.getJmenaNefenotypovanychAlel().equals(jmenaVybranychAlel))
+		if (event.getJmenaNefenotypovanychAlel().equals(jmenaVybranychAlel)) {
 			return;
+		}
 		jmenaVybranychAlel = event.getJmenaNefenotypovanychAlel();
 		resetIfVse();
 	}
 
 	private void resetIfVse() {
-		if (jmenaVybranychAlel == null)
+		if (jmenaVybranychAlel == null) {
 			return;
-		if (ikonBag == null)
+		}
+		if (ikonBag == null) {
 			return;
-		if (filtrovaneKesBag == null)
+		}
+		if (filtrovaneKesBag == null) {
 			return;
+		}
 		fenotypVyberIkon.resetBag(ikonBag, filtrovaneKesBag, jmenaVybranychAlel);
 		jvse.revalidate();
 	}

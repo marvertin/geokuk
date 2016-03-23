@@ -186,16 +186,21 @@ public class CornerLayoutManager implements LayoutManager2 {
 	 */
 	@Override
 	public void removeLayoutComponent(final Component c) {
-		if (sz == c)
+		if (sz == c) {
 			sz = null;
-		if (sv == c)
+		}
+		if (sv == c) {
 			sv = null;
-		if (jz == c)
+		}
+		if (jz == c) {
 			jz = null;
-		if (jv == c)
+		}
+		if (jv == c) {
 			jv = null;
-		if (podklad == c)
+		}
+		if (podklad == c) {
 			podklad = null;
+		}
 	}
 
 }

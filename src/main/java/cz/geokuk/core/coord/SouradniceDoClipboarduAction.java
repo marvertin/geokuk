@@ -41,8 +41,9 @@ public class SouradniceDoClipboarduAction extends Action0 {
 		Mouable m = mouable;
 		if (m == null) {
 			m = poziceq.getPoziceMouable();
-			if (m == null)
+			if (m == null) {
 				return;
+			}
 		}
 		poziceModel.souradniceDoClipboardu(m.getMou());
 	}

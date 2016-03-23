@@ -63,19 +63,24 @@ public class KeyTree<K, D> {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		@SuppressWarnings({ "rawtypes" })
 		final KeyTree other = (KeyTree) obj;
 		if (root == null) {
-			if (other.root != null)
+			if (other.root != null) {
 				return false;
-		} else if (!root.equals(other.root))
+			}
+		} else if (!root.equals(other.root)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -38,19 +38,23 @@ public abstract class CestyActionIndividual0 extends CestyAction0 {
 	 * @return
 	 */
 	private Mouable proOdstraneniZVyletu(final Mouable mouable) {
-		if (mouable instanceof Wpt)
+		if (mouable instanceof Wpt) {
 			return mouable;
-		if (mouable instanceof Bod)
+		}
+		if (mouable instanceof Bod) {
 			return mouable; // připojovat na bod se nebudeme
+		}
 		return null; // a nic jiného nelze odstranit
 	}
 
 	protected Mouable effectiveMouable() {
-		if (kontextoveMouable != null)
+		if (kontextoveMouable != null) {
 			return proOdstraneniZVyletu(kontextoveMouable);
+		}
 		// jinak se musíme spolehnout na pozici
-		if (!poziceq.isNoPosition())
+		if (!poziceq.isNoPosition()) {
 			return proOdstraneniZVyletu(poziceq.getPoziceMouable());
+		}
 		return null;
 	}
 

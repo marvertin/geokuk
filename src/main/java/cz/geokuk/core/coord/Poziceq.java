@@ -32,8 +32,9 @@ public class Poziceq {
 	}
 
 	public Mouable getPoziceMouable() {
-		if (isNoPosition())
+		if (isNoPosition()) {
 			return null;
+		}
 		return mouable.getMou().equals(originalMou) ? mouable : originalMou;
 	}
 
@@ -62,8 +63,9 @@ public class Poziceq {
 
 	public Kesoid getKesoid() {
 		final Wpt wpt = getWpt();
-		if (wpt == null)
+		if (wpt == null) {
 			return null;
+		}
 		return wpt.getKesoid();
 	}
 

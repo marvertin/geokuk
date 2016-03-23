@@ -56,8 +56,9 @@ public class KesoidModel extends Model0 {
 	 *            the umisteniSouboru to set
 	 */
 	public void setUmisteniSouboru(final KesoidUmisteniSouboru umisteniSouboru) {
-		if (umisteniSouboru.equals(this.umisteniSouboru))
+		if (umisteniSouboru.equals(this.umisteniSouboru)) {
 			return;
+		}
 		final boolean nacistIkony = this.umisteniSouboru == null || this.umisteniSouboru.getImageMyDir().equals(umisteniSouboru.getImageMyDir())
 				|| this.umisteniSouboru.getImage3rdPartyDir().equals(umisteniSouboru.getImage3rdPartyDir());
 		final boolean nacistKese = this.umisteniSouboru == null || this.umisteniSouboru.getKesDir().equals(umisteniSouboru.getKesDir());
@@ -83,8 +84,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	public void setJmenaNefenotypovanychAlel(final Set<String> jmenaNefenotypovanychAlel) {
-		if (jmenaNefenotypovanychAlel.equals(this.jmenaNefenotypovanychAlel))
+		if (jmenaNefenotypovanychAlel.equals(this.jmenaNefenotypovanychAlel)) {
 			return;
+		}
 		this.jmenaNefenotypovanychAlel = jmenaNefenotypovanychAlel;
 		currPrefe().node(FPref.MAPICON_FENOTYP_node).putStringSet(jmenoSady, jmenaNefenotypovanychAlel);
 		fire(new FenotypPreferencesChangedEvent(jmenaNefenotypovanychAlel));
@@ -99,8 +101,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	public void setDefinition(final FilterDefinition filterDefinition) {
-		if (filterDefinition.equals(filter.getFilterDefinition()))
+		if (filterDefinition.equals(filter.getFilterDefinition())) {
 			return;
+		}
 		filter.setFilterDefinition(filterDefinition);
 		currPrefe().putStructure(FPref.KESFILTER_structure_node, filterDefinition);
 		currPrefe().node(FPref.KESFILTER_structure_node).putInt("prahVyletu", filterDefinition.getPrahVyletu().ordinal());
@@ -168,8 +171,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	public void spustFiltrovani() {
-		if (vsechny == null)
+		if (vsechny == null) {
 			return;
+		}
 		if (filteringSwingWorker != null) {
 			filteringSwingWorker.cancel(true);
 		}
@@ -185,8 +189,9 @@ public class KesoidModel extends Model0 {
 		} else {
 			zmena = jmena.add(alelaName);
 		}
-		if (!zmena)
+		if (!zmena) {
 			return; // není změna
+		}
 		setJmenaNechtenychAlel(jmena);
 	}
 
@@ -200,8 +205,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	public void setJmenaAlelNaToolbaru(final Set<String> jmenaAlelNaToolbaru) {
-		if (jmenaAlelNaToolbaru.equals(filter.getJmenaNechtenychAlel()))
+		if (jmenaAlelNaToolbaru.equals(filter.getJmenaNechtenychAlel())) {
 			return;
+		}
 		this.jmenaAlelNaToolbaru = jmenaAlelNaToolbaru;
 		currPrefe().node(FPref.KESOID_FILTR_node).putStringSet(FPref.KESOID_FILTER_NATOOLBARU_value, jmenaAlelNaToolbaru);
 		fajruj();
@@ -219,8 +225,9 @@ public class KesoidModel extends Model0 {
 
 	private void vycistiBlokovaneZdroje(final InformaceOZdrojich informaceOZdrojich) {
 		final boolean zmena = blokovaneZdroje.retainAll(informaceOZdrojich.getJmenaZdroju());
-		if (!zmena)
+		if (!zmena) {
 			return;
+		}
 		currPrefe().node(FPref.KESOID_node).putFileCollection(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
 	}
 
@@ -247,8 +254,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	public void setGccomNick(final GccomNick gccomNick) {
-		if (gccomNick.equals(this.gccomNick))
+		if (gccomNick.equals(this.gccomNick)) {
 			return;
+		}
 		this.gccomNick = gccomNick;
 		currPrefe().node(FPref.NASTAVENI_node).put(FPref.GEOCACHING_COM_NICK_value, gccomNick.name);
 		currPrefe().node(FPref.NASTAVENI_node).putInt(FPref.GEOCACHING_COM_NICK_ID_value, gccomNick.id);
@@ -261,8 +269,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	public void setJmenoAktualniSadyIkon(final ASada jmenoAktualniSadyIkon) {
-		if (jmenoAktualniSadyIkon.equals(jmenaAlelNaToolbaru))
+		if (jmenoAktualniSadyIkon.equals(jmenaAlelNaToolbaru)) {
 			return;
+		}
 		this.jmenoAktualniSadyIkon = jmenoAktualniSadyIkon;
 		currPrefe().node(FPref.JMENO_VYBRANE_SADY_IKON_node).putAtom(FPref.JMENO_VYBRANE_SADY_IKON_value, jmenoAktualniSadyIkon);
 		fire(new JmenoAktualniSadyIkonChangeEvent(jmenoAktualniSadyIkon));
@@ -274,8 +283,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	public void otevriListingVGeogetu(final Kesoid kes) {
-		if (kes == null)
+		if (kes == null) {
 			return;
+		}
 		final Clipboard scl = getSystemClipboard();
 		final StringSelection ss = new StringSelection(kes.getUrlPrint().toExternalForm());
 		try {
@@ -286,8 +296,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	public void pridejDoSeznamuVGeogetu(final Kesoid kes) {
-		if (kes == null)
+		if (kes == null) {
 			return;
+		}
 		final Clipboard scl = getSystemClipboard();
 		final StringSelection ss = new StringSelection(kes.getUrlShow().toExternalForm());
 		try {
@@ -298,8 +309,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	public void pridejKodKesoiduDoClipboardu(final Kesoid kes) {
-		if (kes == null)
+		if (kes == null) {
 			return;
+		}
 		final Clipboard scl = getSystemClipboard();
 		final StringSelection ss = new StringSelection(kes.getIdentifier());
 		try {
@@ -341,15 +353,17 @@ public class KesoidModel extends Model0 {
 			System.out.println("----XNASTAVENI " + changedFiles);
 			zmena = blokovaneZdroje.addAll(changedFiles);
 		}
-		if (!zmena)
+		if (!zmena) {
 			return;
+		}
 		currPrefe().node(FPref.KESOID_node).putFileCollection(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
 		startKesLoading();
 	}
 
 	public void setOnoff(final boolean onoff) {
-		if (this.onoff != null && this.onoff == onoff)
+		if (this.onoff != null && this.onoff == onoff) {
 			return;
+		}
 		this.onoff = onoff;
 		currPrefe().node(FPref.KESOID_node).putBoolean(FPref.KESOID_VISIBLE_value, onoff);
 		fire(new KesoidOnoffEvent(onoff));

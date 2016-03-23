@@ -74,8 +74,9 @@ public class ProfileModel extends Model0 {
 		@Override
 		protected void donex() throws InterruptedException, ExecutionException {
 			profileUkladacSwingWorker = null;
-			if (isCancelled())
+			if (isCancelled()) {
 				return;
+			}
 			final File file = get();
 			fire(new NastaveniUkladatDoSouboruEvent());
 			Dlg.info("Nastavení byla uložena do souboru \"" + file + "\",\n" + "při příštím spuštění budou těmito nastaveními nahrazeny nastavení v Java preferences,\n"

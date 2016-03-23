@@ -46,10 +46,12 @@ public class Vylet {
 	}
 
 	public EVylet get(final Kesoid kes) {
-		if (ano.contains(kes))
+		if (ano.contains(kes)) {
 			return EVylet.ANO;
-		if (ne.contains(kes))
+		}
+		if (ne.contains(kes)) {
 			return EVylet.NE;
+		}
 		return EVylet.NEVIM;
 	}
 

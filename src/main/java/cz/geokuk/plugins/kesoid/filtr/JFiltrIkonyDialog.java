@@ -51,19 +51,23 @@ public class JFiltrIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 	}
 
 	public void onEvent(final FilterDefinitionChangedEvent event) {
-		if (event.getJmenaNechtenychAlel().equals(jmenaAlelFiltr))
+		if (event.getJmenaNechtenychAlel().equals(jmenaAlelFiltr)) {
 			return;
+		}
 		jmenaAlelFiltr = event.getJmenaNechtenychAlel();
 		resetIfVse();
 	}
 
 	private void resetIfVse() {
-		if (jmenaAlelFiltr == null)
+		if (jmenaAlelFiltr == null) {
 			return;
-		if (bag == null)
+		}
+		if (bag == null) {
 			return;
-		if (kesBag == null)
+		}
+		if (kesBag == null) {
 			return;
+		}
 		filtrVyberIkon.resetBag(bag, kesBag, jmenaAlelFiltr);
 		jvse.revalidate();
 	}

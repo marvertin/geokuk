@@ -63,8 +63,9 @@ public class ProgressorInputStream extends FilterInputStream {
 	@Override
 	public int read() throws IOException {
 		final int c = in.read();
-		if (c >= 0)
+		if (c >= 0) {
 			progressor.setProgress(++nread);
+		}
 		return c;
 	}
 
@@ -74,8 +75,9 @@ public class ProgressorInputStream extends FilterInputStream {
 	@Override
 	public int read(final byte b[]) throws IOException {
 		final int nr = in.read(b);
-		if (nr > 0)
+		if (nr > 0) {
 			progressor.setProgress(nread += nr);
+		}
 		return nr;
 	}
 
@@ -85,8 +87,9 @@ public class ProgressorInputStream extends FilterInputStream {
 	@Override
 	public int read(final byte b[], final int off, final int len) throws IOException {
 		final int nr = in.read(b, off, len);
-		if (nr > 0)
+		if (nr > 0) {
 			progressor.setProgress(nread += nr);
+		}
 		return nr;
 	}
 
@@ -96,8 +99,9 @@ public class ProgressorInputStream extends FilterInputStream {
 	@Override
 	public long skip(final long n) throws IOException {
 		final long nr = in.skip(n);
-		if (nr > 0)
+		if (nr > 0) {
 			progressor.setProgress(nread += nr);
+		}
 		return nr;
 	}
 

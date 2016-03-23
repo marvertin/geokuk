@@ -3,10 +3,12 @@ package cz.geokuk.util.lang;
 public class FMath {
 
 	public static int fit(int x, final int a, final int b) {
-		if (x < a)
+		if (x < a) {
 			x = a;
-		if (x > b)
+		}
+		if (x > b) {
 			x = b;
+		}
 		return x;
 	}
 }

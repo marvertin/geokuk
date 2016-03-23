@@ -43,8 +43,9 @@ public class KesoidCodeToClipboard extends Action0 {
 		Kesoid kes = kesoid;
 		if (kes == null) {
 			kes = poziceq.getKesoid();
-			if (kes == null)
+			if (kes == null) {
 				return;
+			}
 		}
 		kesoidModel.pridejKodKesoiduDoClipboardu(kes);
 	}

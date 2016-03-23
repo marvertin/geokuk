@@ -21,8 +21,9 @@ public class KeyNode<K, D> {
 		} else {
 			final K key = keys.get(0);
 			final KeyNode<K, D> node = items.get(key);
-			if (node == null)
+			if (node == null) {
 				return null;
+			}
 			return node.locate(keys.subList(1, keys.size())); // a s o jedno míň zařaď
 		}
 	}
@@ -65,11 +66,13 @@ public class KeyNode<K, D> {
 		} else {
 			final K key = keys.get(0);
 			final KeyNode<K, D> node = items.get(key);
-			if (node == null)
+			if (node == null) {
 				return; // není tam
+			}
 			node.remove(keys.subList(1, keys.size()));
-			if (node.data == null && node.items.isEmpty())
+			if (node.data == null && node.items.isEmpty()) {
 				items.remove(key);
+			}
 		}
 	}
 
@@ -102,24 +105,31 @@ public class KeyNode<K, D> {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		@SuppressWarnings({ "rawtypes" })
 		final KeyNode other = (KeyNode) obj;
 		if (data == null) {
-			if (other.data != null)
+			if (other.data != null) {
 				return false;
-		} else if (!data.equals(other.data))
+			}
+		} else if (!data.equals(other.data)) {
 			return false;
+		}
 		if (items == null) {
-			if (other.items != null)
+			if (other.items != null) {
 				return false;
-		} else if (!items.equals(other.items))
+			}
+		} else if (!items.equals(other.items)) {
 			return false;
+		}
 		return true;
 	}
 

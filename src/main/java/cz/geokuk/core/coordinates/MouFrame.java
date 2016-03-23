@@ -32,23 +32,30 @@ public class MouFrame {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final MouFrame other = (MouFrame) obj;
 		if (moujz == null) {
-			if (other.moujz != null)
+			if (other.moujz != null) {
 				return false;
-		} else if (!moujz.equals(other.moujz))
+			}
+		} else if (!moujz.equals(other.moujz)) {
 			return false;
+		}
 		if (mousv == null) {
-			if (other.mousv != null)
+			if (other.mousv != null) {
 				return false;
-		} else if (!mousv.equals(other.mousv))
+			}
+		} else if (!mousv.equals(other.mousv)) {
 			return false;
+		}
 		return true;
 	}
 

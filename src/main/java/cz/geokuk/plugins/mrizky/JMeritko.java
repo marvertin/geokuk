@@ -51,8 +51,9 @@ public class JMeritko extends JPanel {
 		g = g.create();
 		final Insets insets = getInsets();
 		g.translate(insets.left, insets.top);
-		if (pixluNaMetr <= 0 || Double.isNaN(pixluNaMetr))
+		if (pixluNaMetr <= 0 || Double.isNaN(pixluNaMetr)) {
 			return;
+		}
 		g.setFont(font);
 
 		final int offset = (getWidth() - sirka) / 2;
@@ -120,8 +121,9 @@ public class JMeritko extends JPanel {
 	}
 
 	public void setPixluNaMetr(final double pixluNaMetr) {
-		if (pixluNaMetr == this.pixluNaMetr)
+		if (pixluNaMetr == this.pixluNaMetr) {
 			return;
+		}
 		this.pixluNaMetr = pixluNaMetr;
 		spocitejMetriky();
 		revalidate();
@@ -129,8 +131,9 @@ public class JMeritko extends JPanel {
 	}
 
 	public void setMaximalniSirkaMeritka(final double maximalniSirkaMeritka) {
-		if (this.maximalniSirkaMeritka == maximalniSirkaMeritka)
+		if (this.maximalniSirkaMeritka == maximalniSirkaMeritka) {
 			return;
+		}
 		this.maximalniSirkaMeritka = maximalniSirkaMeritka;
 		spocitejMetriky();
 		revalidate();

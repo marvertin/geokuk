@@ -8,10 +8,12 @@ class GgtFilter extends FileFilter {
 
 	@Override
 	public boolean accept(final File pathname) {
-		if (pathname.isDirectory())
+		if (pathname.isDirectory()) {
 			return true;
-		if (pathname.getName().toLowerCase().endsWith(".ggt"))
+		}
+		if (pathname.getName().toLowerCase().endsWith(".ggt")) {
 			return true;
+		}
 		return false;
 	}
 

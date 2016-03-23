@@ -33,8 +33,9 @@ public class UlozJakoAction extends SouboeCestaAction0 {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			final File selectedFile = doplnGpxPriponuProUkladani(fc.getSelectedFile());
 			if (selectedFile.exists()) { // dtaz na přepsání
-				if (!Dlg.prepsatSoubor(selectedFile))
+				if (!Dlg.prepsatSoubor(selectedFile)) {
 					return;
+				}
 			}
 			doc.setFile(selectedFile);
 			cestyModel.uloz(doc.getFile(), doc, true);

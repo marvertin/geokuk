@@ -40,8 +40,9 @@ public class JRenderNahledPrekryvnik extends JCoordPrekryvnik0 {
 	}
 
 	private void nastavto() {
-		if (renderedMoumer < 0 || moord == null)
+		if (renderedMoumer < 0 || moord == null) {
 			return;
+		}
 		setSoord(moord.derive(renderedMoumer, moustred));
 	}
 

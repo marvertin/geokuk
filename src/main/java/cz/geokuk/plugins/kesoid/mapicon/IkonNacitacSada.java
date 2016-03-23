@@ -33,8 +33,9 @@ public class IkonNacitacSada {
 			final Map<String, Sklo> nactenaSkla = new HashMap<>();
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
-				if (line.length() == 0)
+				if (line.length() == 0) {
 					continue;
+				}
 				final String[] dvoj = line.split("\\.", 2);
 				final String skloName = dvoj[0];
 				final String aplikaceSklaName = dvoj[1];

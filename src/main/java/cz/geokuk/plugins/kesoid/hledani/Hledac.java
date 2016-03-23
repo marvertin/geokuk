@@ -36,15 +36,17 @@ public class Hledac extends Hledac0<Nalezenec> {
 		final Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());
 		final List<Nalezenec> list = new ArrayList<>();
 		for (final Kesoid kesoid : kesBag.getKesoidy()) {
-			if (getFuture() != null && getFuture().isCancelled())
+			if (getFuture() != null && getFuture().isCancelled()) {
 				return null;
+			}
 			final String[] prohledavanci = kesoid.getProhledavanci();
 			Nalezenec nal = null;
 			for (final String prohledavanec : prohledavanci) {
 				if (prohledavanec != null) {
 					nal = poro.porovnej(prohledavanec);
-					if (nal != null)
+					if (nal != null) {
 						break;
+					}
 				}
 			}
 			if (nal != null) {

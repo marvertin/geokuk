@@ -59,8 +59,9 @@ public abstract class Nacitac0 {
 	 */
 	protected int parseCislo(String s) {
 		s = osetriCislo.matcher(s).replaceAll("").trim();
-		if (s.length() == 0)
+		if (s.length() == 0) {
 			return 0;
+		}
 		try {
 			return Integer.parseInt(s);
 		} catch (final NumberFormatException e) {

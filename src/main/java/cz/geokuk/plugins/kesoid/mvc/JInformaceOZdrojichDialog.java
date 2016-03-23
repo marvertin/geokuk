@@ -193,8 +193,9 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 	public void onEvent(final KeskyNactenyEvent event) {
 		vsechny = event.getVsechny();
 		invalidate();
-		if (jTable != null)
+		if (jTable != null) {
 			jTable.repaint();
+		}
 		pack();
 	}
 

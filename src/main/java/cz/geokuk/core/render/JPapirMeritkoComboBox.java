@@ -33,8 +33,9 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 	}
 
 	public void setMeritko(final int mer) {
-		if (mer == 0)
+		if (mer == 0) {
 			return;
+		}
 		naposledZadana = mer;
 		setSelectedItem(formatuj(mer));
 	}

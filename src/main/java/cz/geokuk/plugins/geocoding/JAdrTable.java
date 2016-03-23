@@ -134,8 +134,9 @@ public class JAdrTable extends JPanel {
 
 	public Nalezenec getCurrent() {
 		final int selectedRow = table.getSelectedRow();
-		if (selectedRow < 0 || selectedRow >= tableModel.getAdressList().size())
+		if (selectedRow < 0 || selectedRow >= tableModel.getAdressList().size()) {
 			return null;
+		}
 		final Nalezenec nalezenec = tableModel.getAdressList().get(selectedRow);
 		return nalezenec;
 	}

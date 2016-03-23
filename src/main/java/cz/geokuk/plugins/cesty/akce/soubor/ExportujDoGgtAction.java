@@ -38,8 +38,9 @@ public class ExportujDoGgtAction extends SouboeCestaAction0 {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			final File selectedFile = doplnGgtPriponuProUkladani(fc.getSelectedFile());
 			if (selectedFile.exists()) { // dtaz na přepsání
-				if (!Dlg.prepsatSoubor(selectedFile))
+				if (!Dlg.prepsatSoubor(selectedFile)) {
 					return;
+				}
 			}
 			cestyModel.exportujDoGgt(selectedFile, doc);
 			log.info("Uložena cesta do: " + doc.getFile());

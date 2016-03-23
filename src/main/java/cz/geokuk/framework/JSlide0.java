@@ -34,8 +34,9 @@ public class JSlide0 extends JComponent implements MySlideListener {
 
 	protected MySlideListener chain() {
 		for (JSlide0 ch = nextChained; ch != null; ch = ch.nextChained) {
-			if (ch.isVisible())
+			if (ch.isVisible()) {
 				return ch; // na tomto voláme
+			}
 		}
 		return KONEC; // už není nic v řetězu
 	}

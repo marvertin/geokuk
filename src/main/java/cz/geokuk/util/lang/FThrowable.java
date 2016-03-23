@@ -21,8 +21,9 @@ public final class FThrowable {
 	private static final Map<Throwable, Integer>	sVýjimkaNaČíslo		= new WeakHashMap<>();
 
 	public static int getExceptionNumber(final Throwable aTh) {
-		if (aTh == null)
+		if (aTh == null) {
 			return 0;
+		}
 		// získat řetěz výjimek
 		final ThrowableAndSourceMethod[] throwableChain = getThrowableChain(aTh);
 		assert throwableChain.length > 0; // protože nějakou výjimku máme, tak musí být i včejnu
@@ -46,8 +47,9 @@ public final class FThrowable {
 	 * @return Pole obsahující řetězec výjimek a zdojových metod. Pod indexem nula je nejvyšší výjimka, tedy výjimka předaná jako parameter a metoda je null.
 	 */
 	public static ThrowableAndSourceMethod[] getThrowableChain(final Throwable thr) {
-		if (thr == null)
+		if (thr == null) {
 			return new ThrowableAndSourceMethod[0]; // prázdné pole, pokud žádná výjimka není.
+		}
 		final ThrowableAndSourceMethod[] vazy = ThrowableChainPicker.from(thr).poskládejŘetězVýjimek();
 		return vazy;
 	}
@@ -93,12 +95,14 @@ public final class FThrowable {
 	 * Vyhledání konkrétní výjimky v seznamu výjimek. Hledá první výjimku, která je zadaná nebo její následník. Vrací null, pokud se taková výjimka nenajde. Může vrátit i kořen výjimek, pokud je to již ona.
 	 */
 	public static Throwable findThrowableType(final Throwable thr, final Class<? extends Throwable> aExcType) {
-		if (!Throwable.class.isAssignableFrom(aExcType))
+		if (!Throwable.class.isAssignableFrom(aExcType)) {
 			throw new XRuntime("findExceptionType: třída " + aExcType + " není výjimka");
+		}
 		final ThrowableAndSourceMethod[] vazy = getThrowableChain(thr);
 		for (final ThrowableAndSourceMethod vaz : vazy) {
-			if (aExcType.isAssignableFrom(vaz.iThrowable.getClass()))
+			if (aExcType.isAssignableFrom(vaz.iThrowable.getClass())) {
 				return vaz.iThrowable; // aby se zabránilo cyklů, pokudb by nějaká vjimka odkazovala na sebe
+			}
 		}
 		return null; // nic se nenašlo
 	}
@@ -237,8 +241,9 @@ public final class FThrowable {
 				System.err.println("!!!!!!!! ORIGINAL EXCEPTION IS !!!!!!!!!!!!!!");
 				th.printStackTrace();
 				System.err.println("!!!!!!!! EXCEPTION WHILE PRINTING EXCEPTION - END !!!!!!!!!!!!!!");
-				if (e instanceof ThreadDeath)
+				if (e instanceof ThreadDeath) {
 					throw (ThreadDeath) e;
+				}
 				return "?!?"; // opravdu nevím co vrátit, ale to je asi jedno
 			}
 		}
@@ -256,12 +261,15 @@ public final class FThrowable {
 		 *            Pořadové číslo řetězené výjimky, které se také vypíše.
 		 */
 		private void printOnlyStackTrace(final PrintWriter pwrt, final StackTraceElement[] trace, int aKolikNezobrazit, final int aPoradoveCislo, final Set<String> aVypsanci) {
-			if (aKolikNezobrazit < 0)
+			if (aKolikNezobrazit < 0) {
 				aKolikNezobrazit = 0;
-			if (aKolikNezobrazit >= trace.length && trace.length > 0)
+			}
+			if (aKolikNezobrazit >= trace.length && trace.length > 0) {
 				aKolikNezobrazit = trace.length - 1;
-			if (trace == null || trace.length - aKolikNezobrazit <= 0)
+			}
+			if (trace == null || trace.length - aKolikNezobrazit <= 0) {
 				return;
+			}
 			for (int i = 0; i < trace.length - aKolikNezobrazit; i++) {
 				final String vypsanec = trace[i] == null ? "neznamy" : (trace[i].getClassName() + "." + trace[i].getMethodName() + "-" + (trace.length - i));
 				pwrt.println("    " + (aPoradoveCislo == 0 ? "render" : Integer.toString(aPoradoveCislo)) + "." + (trace.length - i) + (aVypsanci.contains(vypsanec) ? " * " : " - ")
@@ -281,8 +289,9 @@ public final class FThrowable {
 		 * @return
 		 */
 		private int compareStackTraces(final StackTraceElement[] aTrace1, final StackTraceElement[] aTrace2) {
-			if (aTrace1 == null || aTrace2 == null)
+			if (aTrace1 == null || aTrace2 == null) {
 				return 0; // nemají společnou část, pokud jsou null
+			}
 			int m = aTrace1.length - 1, n = aTrace2.length - 1;
 			while (m >= 0 && n >= 0 && aTrace1[m].equals(aTrace2[n])) {
 				m--;
@@ -345,8 +354,9 @@ public final class FThrowable {
 		 *            Výjimka pro zařazení do řetězu.
 		 */
 		private void poskládejŘetězVýjimek(final List<ThrowableAndSourceMethod> aList, final Throwable th, final Method aZdrojMetoda) {
-			if (iJizZarazeneVyjimkyx.contains(th))
+			if (iJizZarazeneVyjimkyx.contains(th)) {
 				return; // tato výjimky již v řetězu je
+			}
 			iJizZarazeneVyjimkyx.add(th);
 			final ThrowableAndSourceMethod vaz1x = new ThrowableAndSourceMethod();
 			vaz1x.iThrowable = th;
@@ -382,14 +392,18 @@ public final class FThrowable {
 			}
 			final Method[] mets = thr.getClass().getMethods();
 			for (final Method method : mets) {
-				if (method.getParameterTypes().length != 0)
+				if (method.getParameterTypes().length != 0) {
 					continue; // metoda není bezparametrická
-				if (Modifier.isStatic(method.getModifiers()))
+				}
+				if (Modifier.isStatic(method.getModifiers())) {
 					continue;
-				if ("fillInStackTrace".equals(method.getName()))
+				}
+				if ("fillInStackTrace".equals(method.getName())) {
 					continue; // nesmíme volat tuto metodu
-				if (!Throwable.class.isAssignableFrom(method.getReturnType()) && !Throwable[].class.isAssignableFrom(method.getReturnType()))
+				}
+				if (!Throwable.class.isAssignableFrom(method.getReturnType()) && !Throwable[].class.isAssignableFrom(method.getReturnType())) {
 					continue; // metoda nevrací throwable ani potomka
+				}
 				// tak teď víme, že metoda vrací buď přímo výjimku nebo pole výjimek
 				try {
 					// System.out.p rintln("Volam metodu " + method.getName() + " na " + thr);

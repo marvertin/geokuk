@@ -72,11 +72,13 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		if (c != null) // je něco evidováno
 		{
 			minule = c.get();
-			if (minule + aOKolik < 0)
+			if (minule + aOKolik < 0) {
 				aOKolik = -minule; // aby nepodlezlo pod nulu
+			}
 			c.add(aOKolik); // důležité, i když se nastavuje na nula, aby se nastavil před zrušním
-			if (c.get() == 0)
+			if (c.get() == 0) {
 				iCitace.remove(aKey); // zrušit, pokud docházíme k nule
+			}
 		} else // objekt není
 		{
 			minule = 0;
@@ -100,16 +102,18 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 */
 	@Override
 	public int set(final T aKey, int aNaKolik) {
-		if (aNaKolik < 0)
+		if (aNaKolik < 0) {
 			aNaKolik = 0;
+		}
 		Citac c = _citac(aKey);
 		int minule;
 		if (c != null) // je něco evidováno
 		{
 			minule = c.get();
 			c.add(aNaKolik - minule); // důležité, i když se nastavuje na nula, aby se nastavil před zrušním
-			if (c.get() == 0)
+			if (c.get() == 0) {
 				iCitace.remove(aKey); // zrušit, pokud docházíme k nule
+			}
 		} else // objekt není
 		{
 			minule = 0;

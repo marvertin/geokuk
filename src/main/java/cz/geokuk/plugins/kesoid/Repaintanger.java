@@ -27,15 +27,17 @@ public class Repaintanger {
 	}
 
 	public void include(final Imagant imagant) {
-		if (imagant == null)
+		if (imagant == null) {
 			return;
+		}
 		final Insets insets = new Insets(-imagant.getYpos(), -imagant.getXpos(), imagant.getYpos() + imagant.getImage().getHeight(), imagant.getXpos() + imagant.getImage().getWidth());
 		include(insets);
 	}
 
 	public void include(final Sklivec sklivec) {
-		if (sklivec == null)
+		if (sklivec == null) {
 			return;
+		}
 		for (final Imagant imagant : sklivec.imaganti) {
 			if (imagant != null) {
 				include(imagant);

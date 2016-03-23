@@ -67,8 +67,9 @@ public class Malovadlo {
 	}
 
 	private void paintPridavaciUsecka() {
-		if (pridavanyBod1 == null || pridavanyBod2 == null)
+		if (pridavanyBod1 == null || pridavanyBod2 == null) {
 			return;
+		}
 		final Point p1 = soord.transform(pridavanyBod1);
 		// Point p2 = getSoord().transform(semSePridava.getMou());
 		// Point p2 = getSoord().transform(moucur);

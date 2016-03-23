@@ -46,8 +46,9 @@ public class UrlToClipboardForGeogetAction extends Action0 {
 		Kesoid kes = kesoid;
 		if (kes == null) {
 			kes = poziceq.getKesoid();
-			if (kes == null)
+			if (kes == null) {
 				return;
+			}
 		}
 		kesoidModel.pridejDoSeznamuVGeogetu(kes);
 	}

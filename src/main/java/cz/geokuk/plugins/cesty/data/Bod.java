@@ -27,8 +27,9 @@ public class Bod extends Bousek0 implements Uchopenec {
 
 	@Override
 	public long computeKvadratVzdalenosti(final Mou mou) {
-		if (mou == null)
+		if (mou == null) {
 			return Long.MAX_VALUE;
+		}
 		final Mou m = getMou();
 		final long dx = m.xx - mou.xx;
 		final long dy = m.yy - mou.yy;
@@ -42,8 +43,9 @@ public class Bod extends Bousek0 implements Uchopenec {
 	 * @return
 	 */
 	public long computeKvadratOdklonu() {
-		if (uvpred == null || uvzad == null)
+		if (uvpred == null || uvzad == null) {
 			return Long.MAX_VALUE; // moc odkloneno, kdyz neurcime
+		}
 		final Bod b1 = uvzad.getBvzad();
 		final Bod b2 = uvpred.getBvpred();
 		final Usek pomUsek = getCesta().createUsek();
@@ -103,10 +105,12 @@ public class Bod extends Bousek0 implements Uchopenec {
 	 * @return
 	 */
 	public Usek getKrajovyUsek() {
-		if (!isKrajovy())
+		if (!isKrajovy()) {
 			return null;
-		if (uvzad != null)
+		}
+		if (uvzad != null) {
 			return uvzad;
+		}
 		return uvpred;
 	}
 
@@ -124,10 +128,12 @@ public class Bod extends Bousek0 implements Uchopenec {
 			return usek;
 		}
 		final Usek usek = getKrajovyUsek();
-		if (usek == null)
+		if (usek == null) {
 			return null; // tak uz to muze byt jen samsotatny bod
-		if (usek.getNejblizsiBodKolmoKUsecce(mou) != null)
+		}
+		if (usek.getNejblizsiBodKolmoKUsecce(mou) != null) {
 			return usek; // kdyz je kolmo k úsečce, je to ten úsek
+		}
 		return null; // jinak null, protože to není bližší úsek
 
 	}
@@ -168,8 +174,9 @@ public class Bod extends Bousek0 implements Uchopenec {
 	}
 
 	public boolean isNaHraniciSegmentu() {
-		if (isKrajovy())
+		if (isKrajovy()) {
 			return true;
+		}
 		final boolean result = getUvzad().isVzdusny() || getUvpred().isVzdusny();
 		return result;
 	}
@@ -247,16 +254,18 @@ public class Bod extends Bousek0 implements Uchopenec {
 	}
 
 	private void kon(final boolean podm) {
-		if (!podm)
+		if (!podm) {
 			throw new RuntimeException("Selhala kontrola konzistence bodu");
+		}
 	}
 
 	@Override
 	protected void kontrolaKonzistence() {
 		boolean assertsEnabled = false;
 		assert assertsEnabled = true;
-		if (!assertsEnabled)
+		if (!assertsEnabled) {
 			return;
+		}
 		if (uvpred == null) {
 			kon(cesta.getCil() == this);
 		} else {
@@ -271,10 +280,12 @@ public class Bod extends Bousek0 implements Uchopenec {
 
 	@Override
 	public Bod getKoncovyBodDruheCestyVhodnyProSpojeni() {
-		if (cesta.isKruh())
+		if (cesta.isKruh()) {
 			return null;
-		if (!isKrajovy())
+		}
+		if (!isKrajovy()) {
 			return null;
+		}
 		final Mou myMou = getMou();
 		// System.out.println("MOZNOST SPOJENI proverujeme ");
 
@@ -296,8 +307,9 @@ public class Bod extends Bousek0 implements Uchopenec {
 				continue;
 			}
 			// System.out.println(" MOUKY: " + tenDruhy.getMou() + " - " + myMou);
-			if (tenDruhy.getMou().equals(myMou))
+			if (tenDruhy.getMou().equals(myMou)) {
 				return tenDruhy;
+			}
 
 		}
 		return null;

@@ -23,8 +23,9 @@ public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 	protected RenderResult doInBackground() throws Exception {
 		System.out.println("Ukladam KMZ");
 		final File file = computeFileName();
-		if (!Dlg.prepsatSoubor(file))
+		if (!Dlg.prepsatSoubor(file)) {
 			return null;
+		}
 		try {
 			final KmzWriter kmzwrt = new KmzWriter(file, renderModel.getRenderSettings().getKmzFolder().getText(), renderModel.getRenderSettings().getKmzFolderDescription());
 			final RenderParams pp = new RenderParams();

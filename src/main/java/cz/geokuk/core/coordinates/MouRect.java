@@ -91,14 +91,18 @@ public class MouRect {
 			yy1 = mou.yy;
 			yy2 = mou.yy;
 		} else {
-			if (mou.xx < xx1)
+			if (mou.xx < xx1) {
 				xx1 = mou.xx;
-			if (mou.xx > xx2)
+			}
+			if (mou.xx > xx2) {
 				xx2 = mou.xx;
-			if (mou.yy < yy1)
+			}
+			if (mou.yy < yy1) {
 				yy1 = mou.yy;
-			if (mou.yy > yy2)
+			}
+			if (mou.yy > yy2) {
 				yy2 = mou.yy;
+			}
 		}
 
 	}
@@ -116,21 +120,28 @@ public class MouRect {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final MouRect other = (MouRect) obj;
-		if (xx1 != other.xx1)
+		if (xx1 != other.xx1) {
 			return false;
-		if (xx2 != other.xx2)
+		}
+		if (xx2 != other.xx2) {
 			return false;
-		if (yy1 != other.yy1)
+		}
+		if (yy1 != other.yy1) {
 			return false;
-		if (yy2 != other.yy2)
+		}
+		if (yy2 != other.yy2) {
 			return false;
+		}
 		return true;
 	}
 

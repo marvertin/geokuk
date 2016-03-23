@@ -30,8 +30,9 @@ public class Indexator<T> {
 	}
 
 	public void vloz(final int xx, final int yy, final T mapobj) {
-		if (!checkRozsah(xx, yy))
+		if (!checkRozsah(xx, yy)) {
 			throw new RuntimeException("Hodnoty " + xx + " " + yy + " jsou mimo rozsah " + root);
+		}
 
 		Sheet<T> sheet = new Sheet<>(xx, yy, mapobj);
 		DuplikHlidac duplikHlidac = new Ctverecnik.DuplikHlidac();

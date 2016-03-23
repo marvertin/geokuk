@@ -76,8 +76,9 @@ public class PoziceModel extends Model0 implements AfterInjectInit {
 	}
 
 	public void souradniceDoClipboardu(final Mouable mouable) {
-		if (mouable == null)
+		if (mouable == null) {
 			return;
+		}
 		final Clipboard scl = getSystemClipboard();
 		final Wgs wgs = mouable.getMou().toWgs();
 		final StringSelection ss = new StringSelection(wgs.toString());

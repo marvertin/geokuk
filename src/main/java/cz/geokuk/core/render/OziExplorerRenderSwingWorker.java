@@ -41,11 +41,13 @@ public class OziExplorerRenderSwingWorker extends RendererSwingWorker0 {
 		final String imageShortName = imageFileName + "." + imageType;
 		final File imagePathName = new File(dir, imageShortName);
 		final File mapPathName = new File(dir, imageFileName + ".map");
-		if (!Dlg.prepsatSoubor(imagePathName))
+		if (!Dlg.prepsatSoubor(imagePathName)) {
 			return null;
+		}
 		if (whatRender == EWhatRender.OZI_EXPLORER) {
-			if (!Dlg.prepsatSoubor(mapPathName))
+			if (!Dlg.prepsatSoubor(mapPathName)) {
 				return null;
+			}
 		}
 
 		progressor.setTooltip("Probíhá rendrování pro " + whatRender + " do soubor: \"" + imagePathName + "\"");

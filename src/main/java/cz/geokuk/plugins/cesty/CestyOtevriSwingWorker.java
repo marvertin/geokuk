@@ -60,8 +60,9 @@ public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
 		final Doc doc = get();
-		if (doc == null)
+		if (doc == null) {
 			return; // asi zkanclváno
+		}
 		log.info("Načten dokument {}.", doc.getFile());
 		cestyModel.prevezmiNoveOtevrenyDokument(doc);
 	}

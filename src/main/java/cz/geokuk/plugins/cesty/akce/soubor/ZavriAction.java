@@ -21,8 +21,9 @@ public class ZavriAction extends SouboeCestaAction0 {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		if (!super.ulozitSDotazem())
+		if (!super.ulozitSDotazem()) {
 			return; // mělo se ukládat a řeklo se, že ne
+		}
 		cestyModel.zavri();
 		// if (doc.getFile() == null) { // ještě nebyl určen soubor, musíme se zeptat
 		// JFileChooser fc = new JFileChooser();

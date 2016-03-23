@@ -101,14 +101,16 @@ public class KesBag {
 	}
 
 	public List<Wpt> getWpts() {
-		if (kesoidy == null)
+		if (kesoidy == null) {
 			throw new RuntimeException("Jeste neni kesBag vytvoren");
+		}
 		return wpts;
 	}
 
 	public List<Kesoid> getKesoidy() {
-		if (kesoidy == null)
+		if (kesoidy == null) {
 			throw new RuntimeException("Jeste neni kesBag vytvoren");
+		}
 		return kesoidy;
 	}
 

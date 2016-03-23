@@ -64,8 +64,9 @@ public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 	}
 
 	public void setAlfa(final int aAlfa) {
-		if (alfa == aAlfa)
+		if (alfa == aAlfa) {
 			return;
+		}
 		alfa = aAlfa;
 		log.debug("MODEL-setAlfa: " + alfa);
 		fireStateChanged();

@@ -115,8 +115,9 @@ public class JRenderSlide extends JSingleSlide0 {
 	 * @param d
 	 */
 	private void drawDlazdice(final Graphics ag, final Dvoj d) {
-		if (renderModel.getRenderSettings().getWhatRender() != EWhatRender.GOOGLE_EARTH)
+		if (renderModel.getRenderSettings().getWhatRender() != EWhatRender.GOOGLE_EARTH) {
 			return;
+		}
 		final Graphics g = ag.create();
 		// g.translate(- getWidth()/2, -getHeight()/2);
 		final DlazdicovaMetrikaXY dlas = renderModel.spoctiDlazdicovouMetriku();
@@ -125,10 +126,12 @@ public class JRenderSlide extends JSingleSlide0 {
 
 		final double quotX = d.a / dlas.xx.sizeCele;
 		final double quotY = d.b / dlas.yy.sizeCele;
-		if (quotX * dlas.xx.dlaSize < 5 || quotY * dlas.yy.dlaSize < 5)
+		if (quotX * dlas.xx.dlaSize < 5 || quotY * dlas.yy.dlaSize < 5) {
 			return;
-		if (quotX * dlas.xx.dlaRoztec < 5 || quotY * dlas.yy.dlaRoztec < 5)
+		}
+		if (quotX * dlas.xx.dlaRoztec < 5 || quotY * dlas.yy.dlaRoztec < 5) {
 			return;
+		}
 
 		for (final DlazdicovaMetrikaXY.Dlazdice dla : dlas) {
 			// System.out.println("DLA: " + dla.xn + " " + dla.yn + " " + dla.xs + " " + dla.ys);

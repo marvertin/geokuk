@@ -73,14 +73,17 @@ public class BeanType {
 	}
 
 	public boolean canInjectFrom(final BeanType injectedBeanType) {
-		if (!cls.isAssignableFrom(injectedBeanType.cls))
+		if (!cls.isAssignableFrom(injectedBeanType.cls)) {
 			return false; // při nekompatibilních třídách vůbec neuvažujma injektování
+		}
 		// teď už víme, že třídy jsou kompatibilní a že by to šlo rozhodnou subtypy
-		if (subType == null)
+		if (subType == null) {
 			return true; // bez subtypů jse cíl, takže mu nezáleží na to, co do něj přijde, čili injektujeme
+		}
 		// teď už víme, že cíl definuje subtyp
-		if (subType.equals(injectedBeanType.subType))
+		if (subType.equals(injectedBeanType.subType)) {
 			return true; // tak ten musí mít zdroj úplně stejný
+		}
 		return false; // tak to ono není nic pro injektování
 	}
 
@@ -95,23 +98,30 @@ public class BeanType {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final BeanType other = (BeanType) obj;
 		if (cls == null) {
-			if (other.cls != null)
+			if (other.cls != null) {
 				return false;
-		} else if (!cls.equals(other.cls))
+			}
+		} else if (!cls.equals(other.cls)) {
 			return false;
+		}
 		if (subType == null) {
-			if (other.subType != null)
+			if (other.subType != null) {
 				return false;
-		} else if (!subType.equals(other.subType))
+			}
+		} else if (!subType.equals(other.subType)) {
 			return false;
+		}
 		return true;
 	}
 

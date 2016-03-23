@@ -43,8 +43,9 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	 * @param podklad
 	 */
 	public void setPodkladMap(final EKaType podklad) {
-		if (podkladMap == podklad)
+		if (podkladMap == podklad) {
 			return;
+		}
 		podkladMap = podklad;
 		final S p = load(podklad);
 		setData(p);
@@ -56,8 +57,9 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	}
 
 	public void setData(final S structure) {
-		if (structure.equals(this.structure))
+		if (structure.equals(this.structure)) {
 			return;
+		}
 		this.structure = structure;
 		save(podkladMap, structure);
 		fire(createEvent(structure));

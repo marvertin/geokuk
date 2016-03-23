@@ -33,10 +33,12 @@ public class Moud {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == this)
+		if (obj == this) {
 			return true;
-		if (!(obj instanceof Moud))
+		}
+		if (!(obj instanceof Moud)) {
 			return false;
+		}
 		final Moud m = (Moud) obj;
 		return dxx == m.dxx && dyy == m.dyy;
 	}

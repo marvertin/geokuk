@@ -20,8 +20,9 @@ public class Ikonizer {
 
 	public Icon seekIcon(final String path) {
 		final Image bi = ImageLoader.locateResImage(path);
-		if (bi != null)
+		if (bi != null) {
 			return new ImageIcon(bi);
+		}
 		return new MissingIcon();
 	}
 

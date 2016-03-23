@@ -46,8 +46,9 @@ public class JGeocodingComboBox extends JComboBox<String> {
 	 *            the patterned to set
 	 */
 	public void setPatterned(final RenderSettings.Patterned patterned) {
-		if (patterned.equals(this.patterned))
+		if (patterned.equals(this.patterned)) {
 			return;
+		}
 		this.patterned = patterned.copy();
 		if (getSelectedIndex() >= 0) { // něco bylo vybráno, ne text, tak to novu vybrat, ale ponovu
 			final int index = urciCoMabytVybrano();
@@ -114,20 +115,25 @@ public class JGeocodingComboBox extends JComboBox<String> {
 	}
 
 	private String urciVybranyKlic() {
-		if (allPatterns.size() == 0)
+		if (allPatterns.size() == 0) {
 			return null;
-		if (patterned.getPatternNumberCilovy() != null && allPatterns.containsKey(patterned.getPatternNumberCilovy()))
+		}
+		if (patterned.getPatternNumberCilovy() != null && allPatterns.containsKey(patterned.getPatternNumberCilovy())) {
 			return patterned.getPatternNumberCilovy();
-		if (patterned.getPatternNumberCilovy() == null && implicitnGeotaggingKey != null)
+		}
+		if (patterned.getPatternNumberCilovy() == null && implicitnGeotaggingKey != null) {
 			return implicitnGeotaggingKey;
-		if (patterned.getPatternNumberPredbezny() != null && allPatterns.containsKey(patterned.getPatternNumberPredbezny()))
+		}
+		if (patterned.getPatternNumberPredbezny() != null && allPatterns.containsKey(patterned.getPatternNumberPredbezny())) {
 			return patterned.getPatternNumberPredbezny();
+		}
 		return allPatterns.firstKey();
 	}
 
 	private void nastavPatterned() {
-		if (blokujEventy)
+		if (blokujEventy) {
 			return;
+		}
 		final RenderSettings.Patterned p = patterned.copy();
 		final int index = getSelectedIndex();
 		// aby tam vůbec vešel

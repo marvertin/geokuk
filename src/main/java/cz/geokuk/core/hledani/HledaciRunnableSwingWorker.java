@@ -28,16 +28,18 @@ class HledaciRunnableSwingWorker<T extends Nalezenec0> extends MySwingWorker0<Vy
 		} catch (final PatternSyntaxException e) {
 			result.exception = e;
 		}
-		if (isCancelled())
+		if (isCancelled()) {
 			return null;
+		}
 		return result;
 	}
 
 	@Override
 	protected void donex() throws InterruptedException, ExecutionException {
 		VysledekHledani<T> vysledekHledani = null;
-		if (!isCancelled())
+		if (!isCancelled()) {
 			vysledekHledani = get();
+		}
 		finishor.finish(vysledekHledani);
 	}
 

@@ -36,8 +36,9 @@ public abstract class LineDecorationWriter extends FilterWriter {
 		int lastWrited = off;
 		for (int i = off; i < off + len; i++) { // pro každý znak
 			final char c = cbuf[i];
-			if (iIgnoreLf && c == '\n')
+			if (iIgnoreLf && c == '\n') {
 				continue; // ignorujeme lf, takže normálně zpracováváme
+			}
 			iIgnoreLf = c == '\r'; // příští LF budeme ignorovat
 			final boolean endOfLine = c == '\r' || c == '\n'; // právě přišel znak ukončující řádek
 			if (!iProcessingLine) { // právě přišel nějaký znak dalšího řádku, může to být i znak ukončovací

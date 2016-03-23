@@ -57,8 +57,9 @@ public final class FString {
 		}
 
 		final Class<?> c = aPole.getClass();
-		if (!c.isArray())
+		if (!c.isArray()) {
 			throw new IllegalArgumentException("Argument aPole typu " + c + " není pole.");
+		}
 
 		final StringBuilder result = new StringBuilder(300);
 		final int len = Array.getLength(aPole);
@@ -86,18 +87,21 @@ public final class FString {
 	 * @return Zadaný řetězec doplněný zprava na požadovanou délku určený vyplňovacím řetězcem.
 	 */
 	public static String alignRight(final String s, final int len, String fill) {
-		if (s.length() == len)
+		if (s.length() == len) {
 			return s;
+		}
 		if (s.length() < len) {
-			if (isVoid(fill))
+			if (isVoid(fill)) {
 				fill = " ";
+			}
 			final StringBuilder sb = new StringBuilder(len);
 			sb.append(s);
 			while (sb.length() < len) {
 				sb.append(fill);
 			}
-			if (sb.length() == len)
+			if (sb.length() == len) {
 				return sb.toString();
+			}
 			return truncateRight(sb.toString(), len);
 		}
 		return truncateRight(s, len);

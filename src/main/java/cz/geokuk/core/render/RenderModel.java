@@ -79,8 +79,9 @@ public class RenderModel extends Model0 {
 	}
 
 	public double getOKolikNatacet() {
-		if (!getRenderSettings().isSrovnatDoSeveru())
+		if (!getRenderSettings().isSrovnatDoSeveru()) {
 			return 0;
+		}
 		return -getNatoceni();
 	}
 
@@ -195,8 +196,9 @@ public class RenderModel extends Model0 {
 	// }
 
 	private void spocitejVelikost() {
-		if (moord == null)
+		if (moord == null) {
 			return;
+		}
 		int moumera = moord.getMoumer(); // aktuální měřítko
 		int widthSurove = moord.getWidth();
 		int heightSurove = moord.getHeight();
@@ -258,8 +260,9 @@ public class RenderModel extends Model0 {
 	 *            the umisteniSouboru to set
 	 */
 	public void setUmisteniSouboru(final RenderUmisteniSouboru umisteniSouboru) {
-		if (umisteniSouboru.equals(this.umisteniSouboru))
+		if (umisteniSouboru.equals(this.umisteniSouboru)) {
 			return;
+		}
 		this.umisteniSouboru = umisteniSouboru;
 		final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
 		pref.putFilex(FPref.RENDER_KMZ_DIR_value, umisteniSouboru.getKmzDir());
@@ -278,8 +281,9 @@ public class RenderModel extends Model0 {
 	 *            the renderSettings to set
 	 */
 	public void setRenderSettings(final RenderSettings renderSettings) {
-		if (renderSettings.equals(this.renderSettings))
+		if (renderSettings.equals(this.renderSettings)) {
 			return;
+		}
 		this.renderSettings = renderSettings;
 		spocitejVelikost();
 		currPrefe().putStructure(FPref.RENDER_structure_node, renderSettings);

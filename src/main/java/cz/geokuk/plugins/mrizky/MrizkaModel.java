@@ -21,8 +21,9 @@ public class MrizkaModel extends Model0 implements BeanSubtypable {
 	}
 
 	public void setOnoff(final boolean onoff) {
-		if (this.onoff != null && onoff == this.onoff)
+		if (this.onoff != null && onoff == this.onoff) {
 			return;
+		}
 		this.onoff = onoff;
 		currPrefe().node(FPref.MRIZKA_node).putBoolean(FPref.ZOBRAZIT_MMRIZKU_valuePrefix + kteraMrizka, onoff);
 		fire(new MrizkaEvent(kteraMrizka, onoff));

@@ -21,8 +21,9 @@ public class Vrstva {
 				pocet++;
 			} else {
 				Seznamec seznamec = icondefsProSymbol.get(alelaSym);
-				if (seznamec == null)
+				if (seznamec == null) {
 					seznamec = hlavickaObecnych;
+				}
 				seznamecPredNeho.next = seznamec;
 				icondefsProSymbol.put(alelaSym, seznamecPredNeho);
 				pocet++;
@@ -49,8 +50,9 @@ public class Vrstva {
 
 		for (Seznamec seznamec = najdiPocatek(genotyp); seznamec != null; seznamec = seznamec.next) {
 			final IconDef iconDef = seznamec.iconDef;
-			if (iconDef == null)
+			if (iconDef == null) {
 				continue; // to bude určtitě v hlavičce obecných
+			}
 			for (final IconSubDef subDef : iconDef.getSubdefs()) {
 				if (hledaneAlely.containsAll(subDef.alely)) { // je to kandidát
 					if (iconDef.priorita > maxPriorita) { // vysoka priorita, přebíjí všechny jiné
@@ -80,8 +82,9 @@ public class Vrstva {
 		}
 		// nyní máme vybrané podle jednoduchého kritéria, pokud je jich zde moc, nelze jednoduše určit
 		// vezmeme tedy jeden z nich
-		if (vybrane.isEmpty())
+		if (vybrane.isEmpty()) {
 			return null; // nic jsme nenašli
+		}
 		if (vybrane.size() > 1) {
 			error("Naslo se toho moc", genotyp, vybrane);
 		}

@@ -80,17 +80,20 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 
 	private void initDir(final File aDir) throws IOException {
 		if (aDir.exists()) {
-			if (!aDir.isDirectory())
+			if (!aDir.isDirectory()) {
 				throw new RuntimeException("The file \"" + aDir + "\" exists, it is file, not folder!");
+			}
 		} else { // adresář neexistuje, jdeme ho vytvořit
 			aDir.mkdirs(); // vytvoříme všechny adresáře na cestě
 		}
 		// takže víme, že máme existující adresář
 		// musíme zkontrolovat, zda do něj lze zapisovat.
-		if (!aDir.canRead())
+		if (!aDir.canRead()) {
 			throw new RuntimeException("Cannot read from the directory \"" + aDir + "\"");
-		if (!aDir.canWrite())
+		}
+		if (!aDir.canWrite()) {
 			throw new RuntimeException("Cannot write to the directory \"" + aDir + "\"");
+		}
 		// nyní víme, že z adresáře můžeme číst a můžeme tam i zapisovat
 		// nyní inkrementneme číslo spuštění
 		final File spusteniFile = new File(aDir, "runNumber.txt");
@@ -218,8 +221,9 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 	public URL getUrl(final AExcId aCode) {
 		try {
 			final File toFile = toFile(aCode);
-			if (!toFile.canRead())
+			if (!toFile.canRead()) {
 				return null; // nemohu číst
+			}
 			// Přes URI se jde do URL proto, aby se rozumně zakódovaly mezery
 			return toFile.toURI().toURL();
 		} catch (final MalformedURLException e) {

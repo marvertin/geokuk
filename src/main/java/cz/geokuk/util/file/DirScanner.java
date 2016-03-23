@@ -41,8 +41,9 @@ public class DirScanner {
 			set.addAll(li);
 		}
 		final List<KeFile> list = new ArrayList<>(set);
-		if (list.equals(lastScaned))
+		if (list.equals(lastScaned)) {
 			return null; // nezměnilo se nic
+		}
 		lastScaned = list;
 		return list;
 	}

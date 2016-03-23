@@ -28,8 +28,9 @@ public class RefbodyModel extends Model0 {
 	private KesoidModel			kesoidModel;
 
 	public void setHc(final Wgs hc) {
-		if (hc.equals(this.hc))
+		if (hc.equals(this.hc)) {
 			return;
+		}
 		this.hc = hc;
 		currPrefe().node(FPref.DOMACI_SOURADNICE_node).putWgs(FPref.HC_value, hc);
 		fire(new DomaciSouradniceSeZmenilyEvent(hc));
@@ -47,8 +48,9 @@ public class RefbodyModel extends Model0 {
 	public List<NaKonkretniBodAction> nacti() {
 		// TODO Předělat načítání z Geogetu, nevhodně se zde kombinuje model a controlery
 		final List<NaKonkretniBodAction> list = new ArrayList<>();
-		if (!kesoidModel.getUmisteniSouboru().getGeogetDataDir().isActive())
+		if (!kesoidModel.getUmisteniSouboru().getGeogetDataDir().isActive()) {
 			return list;
+		}
 		final File file = new File(kesoidModel.getUmisteniSouboru().getGeogetDataDir().getEffectiveFile(), "geohome.ini");
 		try {
 			if (file.canRead()) {

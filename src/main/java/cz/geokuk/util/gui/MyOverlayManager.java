@@ -59,10 +59,12 @@ public class MyOverlayManager implements LayoutManager2 {
 		final Dimension dim = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		for (final Component cc : c.getComponents()) {
 			final Dimension size = cc.getMinimumSize();
-			if (size.width < dim.width)
+			if (size.width < dim.width) {
 				dim.width = size.width;
-			if (size.height < dim.width)
+			}
+			if (size.height < dim.width) {
 				dim.height = size.height;
+			}
 		}
 		pridejInsets(dim, c);
 		return dim;
@@ -103,10 +105,12 @@ public class MyOverlayManager implements LayoutManager2 {
 		final Dimension dim = new Dimension();
 		for (final Component cc : c.getComponents()) {
 			final Dimension size = cc.getMinimumSize();
-			if (size.width > dim.width)
+			if (size.width > dim.width) {
 				dim.width = size.width;
-			if (size.height > dim.width)
+			}
+			if (size.height > dim.width) {
 				dim.height = size.height;
+			}
 		}
 		pridejInsets(dim, c);
 		return dim;
@@ -122,10 +126,12 @@ public class MyOverlayManager implements LayoutManager2 {
 		final Dimension dim = new Dimension();
 		for (final Component cc : c.getComponents()) {
 			final Dimension size = cc.getPreferredSize();
-			if (size.width > dim.width)
+			if (size.width > dim.width) {
 				dim.width = size.width;
-			if (size.height > dim.width)
+			}
+			if (size.height > dim.width) {
 				dim.height = size.height;
+			}
 		}
 		pridejInsets(dim, c);
 		return dim;

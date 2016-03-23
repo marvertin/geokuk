@@ -127,33 +127,44 @@ public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final PopiskyPatterns other = (PopiskyPatterns) obj;
 		if (cgpPattern == null) {
-			if (other.cgpPattern != null)
+			if (other.cgpPattern != null) {
 				return false;
-		} else if (!cgpPattern.equals(other.cgpPattern))
+			}
+		} else if (!cgpPattern.equals(other.cgpPattern)) {
 			return false;
+		}
 		if (kesPattern == null) {
-			if (other.kesPattern != null)
+			if (other.kesPattern != null) {
 				return false;
-		} else if (!kesPattern.equals(other.kesPattern))
+			}
+		} else if (!kesPattern.equals(other.kesPattern)) {
 			return false;
+		}
 		if (simplewaypointPattern == null) {
-			if (other.simplewaypointPattern != null)
+			if (other.simplewaypointPattern != null) {
 				return false;
-		} else if (!simplewaypointPattern.equals(other.simplewaypointPattern))
+			}
+		} else if (!simplewaypointPattern.equals(other.simplewaypointPattern)) {
 			return false;
+		}
 		if (waymarkPattern == null) {
-			if (other.waymarkPattern != null)
+			if (other.waymarkPattern != null) {
 				return false;
-		} else if (!waymarkPattern.equals(other.waymarkPattern))
+			}
+		} else if (!waymarkPattern.equals(other.waymarkPattern)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -14,8 +14,9 @@ public class PorovnavacOdStredu implements Comparator<Nalezenec0> {
 
 	@Override
 	public int compare(final Nalezenec0 w1, final Nalezenec0 w2) {
-		if (future.isCancelled())
+		if (future.isCancelled()) {
 			throw new XZaknclovanoRazeni();
+		}
 
 		// double kvadrat1 = (utm1.ux - stredHledani.ux) * (utm1.ux - stredHledani.ux)
 		// + (utm1.uy - stredHledani.uy) * (utm1.uy - stredHledani.uy);

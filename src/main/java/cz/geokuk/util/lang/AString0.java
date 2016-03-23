@@ -19,8 +19,9 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 
 	protected AString0(final String aValue) {
 		iValue = aValue.trim();
-		if (iValue == null)
+		if (iValue == null) {
 			throw new NullPointerException("Cannot use null value as constructor parameter of tw elementary types " + getClass());
+		}
 		checkRange();
 		validate();
 	}
@@ -43,8 +44,9 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 	 * Kontrola rozsahu. Metoda se volá z konstruktoru a kontroluje rozsah.
 	 */
 	protected final void checkRange() {
-		if (!(minLength() <= iValue.length() && iValue.length() <= maxLength()))
+		if (!(minLength() <= iValue.length() && iValue.length() <= maxLength())) {
 			throw new XCreateElement("Hodnota \"" + iValue + "\" není v požadovaném intervalu <" + minLength() + "," + maxLength() + ">");
+		}
 	}
 
 	/**
@@ -59,10 +61,12 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 	 */
 	@Override
 	public boolean equals(final Object aObject) {
-		if (aObject == this)
+		if (aObject == this) {
 			return true; // pokud porovnávám se sebou, tak se rovnají
-		if (!(aObject instanceof AString0))
+		}
+		if (!(aObject instanceof AString0)) {
 			return false; // s jiným typem se nerovnají
+		}
 		final AString0 obj = (AString0) aObject;
 		return iValue.equals(obj.iValue); // porovnat přímo řetězce
 	}

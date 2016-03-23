@@ -32,17 +32,22 @@ public class Wgsd {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final Wgsd other = (Wgsd) obj;
-		if (Double.doubleToLongBits(lat) != Double.doubleToLongBits(other.lat))
+		if (Double.doubleToLongBits(lat) != Double.doubleToLongBits(other.lat)) {
 			return false;
-		if (Double.doubleToLongBits(lon) != Double.doubleToLongBits(other.lon))
+		}
+		if (Double.doubleToLongBits(lon) != Double.doubleToLongBits(other.lon)) {
 			return false;
+		}
 		return true;
 	}
 

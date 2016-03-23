@@ -71,13 +71,15 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 
 	@Override
 	public void paintComponent(final Graphics aG) {
-		if (iIndexator == null)
+		if (iIndexator == null) {
 			return;
+		}
 		final Graphics2D g = (Graphics2D) aG;
 		final int r = polomerObsazenosti();
 		final int d = 2 * r;
-		if (d < 4)
+		if (d < 4) {
 			return; // nemá smysl kreslit malé kroužky
+		}
 		// obsazenost.setColor(new Color(128,128,128,128));
 		g.setColor(obsazenost.getColor());
 		final int mouokraj = (int) (getSoord().getMouboduNaMetr() * POLOMER_OBSAZENOSTI);
@@ -88,8 +90,9 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 			@Override
 			public void visit(final Sheet<Wpt> aSheet) {
 				final Wpt wpt = aSheet.get();
-				if (!wpt.obsazujeOblast())
+				if (!wpt.obsazujeOblast()) {
 					return;
+				}
 				final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
 				final Point p = getSoord().transform(mou);
 				// Ellipse2D kruh = new Ellipse2D.Float(p.x -r, p.y - r, d, d);

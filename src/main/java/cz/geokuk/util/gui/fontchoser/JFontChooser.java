@@ -430,8 +430,9 @@ class FontChooserDialog extends JDialog {
 
 	@Override
 	public void setVisible(final boolean visible) {
-		if (visible)
+		if (visible) {
 			initialFont = chooserPane.getFont();
+		}
 		super.setVisible(visible);
 	}
 

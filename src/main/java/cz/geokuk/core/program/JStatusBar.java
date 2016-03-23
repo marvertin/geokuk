@@ -208,8 +208,9 @@ public class JStatusBar extends JPanel {
 	}
 
 	public void onEvent(final ZmenaSouradnicMysiEvent event) {
-		if (cur != null && cur.equals(event.moucur))
+		if (cur != null && cur.equals(event.moucur)) {
 			return;
+		}
 		cur = event.moucur;
 		souradnice.setText(cur == null ? "?" : cur.toWgs().toString());
 		prepocitejVzdalenostAAzimut();
@@ -341,8 +342,9 @@ public class JStatusBar extends JPanel {
 	}
 
 	private String veVyrezu(final KesBag bag) {
-		if (bag == null)
+		if (bag == null) {
 			return null;
+		}
 		final int count = bag.getIndexator().count(moord.getBoundingRect());
 		final String s = count + "";
 		return s;
@@ -419,8 +421,9 @@ public class JStatusBar extends JPanel {
 		private boolean				skrtnuto			= true;
 
 		public void setSkrtnuto(final boolean skrtnuto) {
-			if (this.skrtnuto == skrtnuto)
+			if (this.skrtnuto == skrtnuto) {
 				return;
+			}
 			this.skrtnuto = skrtnuto;
 			repaint();
 		}
