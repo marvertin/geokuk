@@ -8,10 +8,10 @@ import cz.geokuk.plugins.kesoid.Wpt;
 public class Poziceq {
 
 	/** Sem pozice vede */
-	private final Mouable	mouable;
+	private final Mouable mouable;
 
 	/** Tak sem to bylo dáno bez ohledu na to, jak se MOu mění v mouabblu */
-	private final Mou		originalMou;
+	private final Mou originalMou;
 
 	public Poziceq() {
 		mouable = null;

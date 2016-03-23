@@ -12,9 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 
-	private static final Logger	log					= LogManager.getLogger(AlfaColorSelectionModel.class.getSimpleName());
-	private static final long	serialVersionUID	= -1718047742587104573L;
-	private int					alfa;
+	private static final Logger log = LogManager.getLogger(AlfaColorSelectionModel.class.getSimpleName());
+	private static final long serialVersionUID = -1718047742587104573L;
+	private int alfa;
 
 	@Override
 	public void fireStateChanged() {

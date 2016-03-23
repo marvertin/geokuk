@@ -6,8 +6,8 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 
 public class Vylet {
 
-	private final Set<Kesoid>	ano	= new HashSet<>();
-	private final Set<Kesoid>	ne	= new HashSet<>();
+	private final Set<Kesoid> ano = new HashSet<>();
+	private final Set<Kesoid> ne = new HashSet<>();
 
 	public Set<Kesoid> get(final EVylet evyl) {
 		Set<Kesoid> set;

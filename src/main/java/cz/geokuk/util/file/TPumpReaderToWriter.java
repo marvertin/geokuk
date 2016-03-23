@@ -22,14 +22,14 @@ import java.io.*;
 
 public class TPumpReaderToWriter extends Thread {
 
-	private final Reader	iRdr;
-	private final Writer	iWrt;
-	private boolean			iCloseWriter			= false;
-	private boolean			iCloseReader			= true;
-	private int				iBufferSize				= 1024;
-	private Object			iNotificationReceiver	= this;
-	private IOException		iException				= null;	// bude obsahovat výjimku, pokud nějaká bude
-	private boolean			iIsFinished				= false;
+	private final Reader iRdr;
+	private final Writer iWrt;
+	private boolean iCloseWriter = false;
+	private boolean iCloseReader = true;
+	private int iBufferSize = 1024;
+	private Object iNotificationReceiver = this;
+	private IOException iException = null; // bude obsahovat výjimku, pokud nějaká bude
+	private boolean iIsFinished = false;
 
 	public TPumpReaderToWriter(final Reader aRdr, final Writer aWrt) {
 		iRdr = aRdr;

@@ -16,10 +16,10 @@ import cz.geokuk.core.program.MainFrameHolder;
  */
 public abstract class Model0 implements AfterInjectInit {
 
-	private EventFirer		ef;
-	private Prefe			prefe;
-	private MainFrameHolder	mainFrameHolder;
-	private Factory			factory;
+	private EventFirer ef;
+	private Prefe prefe;
+	private MainFrameHolder mainFrameHolder;
+	private Factory factory;
 
 	// TODO udělat zase protected, aže se nebude vyhazovat KeskyVyfiltrovanyEvent
 	public void fire(final Event0<?> event) {

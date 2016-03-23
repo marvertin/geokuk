@@ -4,10 +4,10 @@ import cz.geokuk.core.coordinates.*;
 
 public class Usek extends Bousek0 {
 
-	private Bod		bvpred;
-	private Bod		bvzad;
-	private boolean	vzdusny	= false;
-	private double	dalka	= -1;
+	private Bod bvpred;
+	private Bod bvzad;
+	private boolean vzdusny = false;
+	private double dalka = -1;
 
 	/**
 	 * Spočítá bod, který leží na přímce m1m2 a je nejblíže m3. To je průsečík kolmice.

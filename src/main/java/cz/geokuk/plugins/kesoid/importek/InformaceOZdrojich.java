@@ -84,15 +84,15 @@ public class InformaceOZdrojich {
 	}
 
 	private static class Strom {
-		InformaceOZdroji				root;
-		Map<KeFile, InformaceOZdroji>	map	= new LinkedHashMap<>();
+		InformaceOZdroji root;
+		Map<KeFile, InformaceOZdroji> map = new LinkedHashMap<>();
 	}
 
-	private static final Logger		log		= LogManager.getLogger(GeogetLoader.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(GeogetLoader.class.getSimpleName());
 
-	private final Map<Root, Strom>	stromy	= new LinkedHashMap<>();
+	private final Map<Root, Strom> stromy = new LinkedHashMap<>();
 
-	private InformaceOZdroji		root;
+	private InformaceOZdroji root;
 
 	public static Builder builder() {
 		return new InformaceOZdrojich().new Builder();

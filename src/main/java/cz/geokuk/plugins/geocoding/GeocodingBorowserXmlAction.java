@@ -9,8 +9,8 @@ import cz.geokuk.util.process.BrowserOpener;
 
 public class GeocodingBorowserXmlAction extends Action0 {
 
-	private static final long	serialVersionUID	= -5194259213320265512L;
-	private final Wgs			wgs;
+	private static final long serialVersionUID = -5194259213320265512L;
+	private final Wgs wgs;
 
 	public GeocodingBorowserXmlAction(final Wgs wgs) {
 		super("Geocoding ...");

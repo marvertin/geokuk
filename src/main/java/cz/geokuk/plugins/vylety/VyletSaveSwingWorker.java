@@ -15,10 +15,10 @@ import cz.geokuk.framework.MySwingWorker0;
  */
 public class VyletSaveSwingWorker extends MySwingWorker0<Vylet, Void> {
 
-	private static final Logger				log	= LogManager.getLogger(VyletSaveSwingWorker.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(VyletSaveSwingWorker.class.getSimpleName());
 
-	private final VyletovyZperzistentnovac	vyletovyZperzistentnovac;
-	private final Vylet						vylet;
+	private final VyletovyZperzistentnovac vyletovyZperzistentnovac;
+	private final Vylet vylet;
 
 	public VyletSaveSwingWorker(final VyletovyZperzistentnovac vyletovyZperzistentnovac, final Vylet vylet) {
 		this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;

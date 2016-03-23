@@ -2,8 +2,8 @@ package cz.geokuk.core.coordinates;
 
 public class Moud {
 
-	public int	dxx;
-	public int	dyy;
+	public int dxx;
+	public int dyy;
 
 	public Moud() {}
 

@@ -5,11 +5,11 @@ import org.junit.Test;
 
 public class FGeoKonvertorTest {
 
-	private static final double	PRESNOST_WGS		= 1e-5;
-	private static final double	PRESNOST_MERKATOR	= 0.01;
+	private static final double PRESNOST_WGS = 1e-5;
+	private static final double PRESNOST_MERKATOR = 0.01;
 
-	private static double		RZ					= 6378137;
-	private static double		OZ					= 2 * Math.PI * RZ;
+	private static double RZ = 6378137;
+	private static double OZ = 2 * Math.PI * RZ;
 
 	@Test
 	public void t0a() {

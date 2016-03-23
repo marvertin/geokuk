@@ -17,9 +17,9 @@ public class JWaymarkDetail extends JKesoidDetail0 {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -3323887260932949747L;
+	private static final long serialVersionUID = -3323887260932949747L;
 
-	private Waymark				waym;
+	private Waymark waym;
 
 	public JWaymarkDetail() {
 		initComponents();

@@ -20,10 +20,10 @@ import cz.geokuk.util.gui.MouseKonecListener;
  */
 public class JSlide0 extends JComponent implements MySlideListener {
 
-	private static final MySlideListener	KONEC				= new MouseKonecListener();
-	private static final long				serialVersionUID	= 1L;
+	private static final MySlideListener KONEC = new MouseKonecListener();
+	private static final long serialVersionUID = 1L;
 
-	private JSlide0							nextChained;
+	private JSlide0 nextChained;
 
 	@Override
 	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {

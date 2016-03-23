@@ -10,10 +10,10 @@ import org.apache.logging.log4j.Logger;
 public class Mou extends Misto0 {
 
 	@SuppressWarnings("unused")
-	private static final Logger	log	= LogManager.getLogger(Mou.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(Mou.class.getSimpleName());
 
-	public final int			xx;
-	public final int			yy;
+	public final int xx;
+	public final int yy;
 
 	public Mou(final int xx, final int yy) {
 		this.xx = xx;

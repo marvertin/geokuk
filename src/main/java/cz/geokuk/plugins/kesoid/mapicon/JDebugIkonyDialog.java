@@ -11,11 +11,11 @@ import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
 
 public class JDebugIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 
-	private static final long	serialVersionUID	= -6496737194139718970L;
-	private JComponent			jvse;
-	private JComponent			jskelneikony;
+	private static final long serialVersionUID = -6496737194139718970L;
+	private JComponent jvse;
+	private JComponent jskelneikony;
 
-	private JDebugVyberIkon		debugVyberIkon;
+	private JDebugVyberIkon debugVyberIkon;
 
 	public JDebugIkonyDialog() {
 		setTitle("Ladění ikon");

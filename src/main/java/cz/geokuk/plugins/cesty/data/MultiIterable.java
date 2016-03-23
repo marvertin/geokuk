@@ -15,8 +15,8 @@ public abstract class MultiIterable<T, M> implements Iterable<T> {
 	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
-			Iterator<M>	ceit	= list.iterator();
-			Iterator<T>	boit	= new EmptyIterator<>();
+			Iterator<M> ceit = list.iterator();
+			Iterator<T> boit = new EmptyIterator<>();
 
 			{
 				najezd();

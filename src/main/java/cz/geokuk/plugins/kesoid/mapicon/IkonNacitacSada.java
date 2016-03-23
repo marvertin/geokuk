@@ -8,11 +8,11 @@ import cz.geokuk.util.file.LamUrl;
 
 public class IkonNacitacSada {
 
-	private static final String	SKLA_TXT			= "skla.txt";
-	private static final String	GROUPS_PROPERTIES	= "groups.properties";
+	private static final String SKLA_TXT = "skla.txt";
+	private static final String GROUPS_PROPERTIES = "groups.properties";
 
-	private final Genom			genom;
-	private final Properties	groupDisplayNames	= new Properties();
+	private final Genom genom;
+	private final Properties groupDisplayNames = new Properties();
 
 	public IkonNacitacSada(final Genom genom) {
 		this.genom = genom;

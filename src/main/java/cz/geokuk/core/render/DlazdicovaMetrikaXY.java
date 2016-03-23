@@ -14,16 +14,16 @@ import cz.geokuk.core.render.DlazdicovaMetrikaXY.Dlazdice;
  */
 public class DlazdicovaMetrikaXY implements Iterable<Dlazdice> {
 	class Dlazdice {
-		int			xn;	// pořadové číslo na ose x počítáme od nuly
-		int			yn;	// ořadové číslo na ose y počítáme od nly
-		int			xs;	// stred x
-		int			ys;	// stred y
-		Dimension	dim;
+		int xn; // pořadové číslo na ose x počítáme od nuly
+		int yn; // ořadové číslo na ose y počítáme od nly
+		int xs; // stred x
+		int ys; // stred y
+		Dimension dim;
 	}
 
-	final DlazdicovaMetrika	xx;
+	final DlazdicovaMetrika xx;
 
-	final DlazdicovaMetrika	yy;
+	final DlazdicovaMetrika yy;
 
 	/**
 	 * @param x
@@ -57,11 +57,11 @@ public class DlazdicovaMetrikaXY implements Iterable<Dlazdice> {
 	public Iterator<Dlazdice> iterator() {
 		return new Iterator<DlazdicovaMetrikaXY.Dlazdice>() {
 
-			private int	x	= xx.dlaSize / 2;
-			private int	y	= yy.dlaSize / 2;
-			private int	xn	= 0;
-			private int	yn	= 0;
-			boolean		projeto;
+			private int x = xx.dlaSize / 2;
+			private int y = yy.dlaSize / 2;
+			private int xn = 0;
+			private int yn = 0;
+			boolean projeto;
 
 			@Override
 			public boolean hasNext() {

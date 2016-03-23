@@ -17,12 +17,12 @@ public class JCgpDetail extends JKesoidDetail0 {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -3323887260932949747L;
+	private static final long serialVersionUID = -3323887260932949747L;
 
-	private CzechGeodeticPoint	cgp;
+	private CzechGeodeticPoint cgp;
 
-	private JLabel				jXjtsk;
-	private JLabel				jYjtsk;
+	private JLabel jXjtsk;
+	private JLabel jYjtsk;
 
 	public JCgpDetail() {
 		initComponents();

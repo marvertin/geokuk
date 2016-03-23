@@ -15,11 +15,11 @@ import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
  */
 public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long	serialVersionUID	= -8054017274338240706L;
-	private IkonBag				ikonBag;
-	private final Alela			alela;
-	private KesoidModel			kesoidModel;
-	private KesBag				vsechny;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private IkonBag ikonBag;
+	private final Alela alela;
+	private KesoidModel kesoidModel;
+	private KesBag vsechny;
 
 	/**
 	 *

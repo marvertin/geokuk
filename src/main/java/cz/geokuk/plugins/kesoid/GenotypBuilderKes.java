@@ -11,8 +11,8 @@ class GenotypBuilderKes {
 	/**
 	 *
 	 */
-	private final Genotyp	g;
-	private final Genom		genom;
+	private final Genotyp g;
+	private final Genom genom;
 
 	/**
 	 *

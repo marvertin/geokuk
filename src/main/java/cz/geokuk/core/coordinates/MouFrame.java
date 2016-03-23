@@ -7,8 +7,8 @@ package cz.geokuk.core.coordinates;
  *
  */
 public class MouFrame {
-	public Mou	moujz;
-	public Mou	mousv;
+	public Mou moujz;
+	public Mou mousv;
 
 	public MouFrame(final Mou moujz, final Mou mousv) {
 		super();

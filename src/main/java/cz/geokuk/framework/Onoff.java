@@ -9,10 +9,10 @@ package cz.geokuk.framework;
  */
 public class Onoff<T extends Model0> {
 
-	private final Class<? extends OnoffEvent0<T>>	clazz;
-	private final T									model;
+	private final Class<? extends OnoffEvent0<T>> clazz;
+	private final T model;
 
-	private Boolean									onoff;
+	private Boolean onoff;
 
 	/**
 	 * @param model

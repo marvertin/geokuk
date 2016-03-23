@@ -7,8 +7,8 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public abstract class DocAction0 extends PositionedAction0 {
 
-	private static final long	serialVersionUID	= 1L;
-	private final Doc			kontextovyDoc;
+	private static final long serialVersionUID = 1L;
+	private final Doc kontextovyDoc;
 
 	public DocAction0(final Doc kontextovyDoc) {
 		this.kontextovyDoc = kontextovyDoc;

@@ -6,10 +6,10 @@ import java.awt.event.ItemEvent;
 import javax.swing.*;
 
 public abstract class ToggleAction0 extends Action0 {
-	private static final long	serialVersionUID	= 3747754572841745541L;
+	private static final long serialVersionUID = 3747754572841745541L;
 
-	private ButtonModel			bm;											// = new DefaultButtonModel();
-	private boolean				iOnoff;
+	private ButtonModel bm; // = new DefaultButtonModel();
+	private boolean iOnoff;
 
 	public ToggleAction0(final String name) {
 		super(name);

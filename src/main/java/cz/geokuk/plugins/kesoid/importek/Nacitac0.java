@@ -18,8 +18,8 @@ import cz.geokuk.util.lang.FString;
  */
 public abstract class Nacitac0 {
 
-	protected static final String	PREFIX_USERDEFINOANYCH_GENU	= "geokuk_";
-	static Pattern					osetriCislo					= Pattern.compile("[^0-9]");
+	protected static final String PREFIX_USERDEFINOANYCH_GENU = "geokuk_";
+	static Pattern osetriCislo = Pattern.compile("[^0-9]");
 
 	protected String intern(final String aString) {
 		return FString.intern(aString);

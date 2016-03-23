@@ -31,17 +31,17 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		}
 	}
 
-	private static final int	POLOMER_OBSAZENOSTI	= 161;
+	private static final int POLOMER_OBSAZENOSTI = 161;
 
-	private static final long	serialVersionUID	= -5858146658366237217L;
+	private static final long serialVersionUID = -5858146658366237217L;
 
-	private ObsazenostSettings	obsazenost;
+	private ObsazenostSettings obsazenost;
 
-	private Indexator<Wpt>		iIndexator;
+	private Indexator<Wpt> iIndexator;
 
-	private JBarvovyDvojSlider	iSlidovnik;
+	private JBarvovyDvojSlider iSlidovnik;
 
-	private ObsazenostModel		obsazenostModel;
+	private ObsazenostModel obsazenostModel;
 
 	public JObsazenost() {
 		setOpaque(false);

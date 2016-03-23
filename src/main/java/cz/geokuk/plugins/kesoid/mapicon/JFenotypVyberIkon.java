@@ -7,13 +7,13 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 public class JFenotypVyberIkon extends JVyberIkon0 {
 
-	private static final long	serialVersionUID	= -6496737194139718970L;
+	private static final long serialVersionUID = -6496737194139718970L;
 
-	private IkonBag				bag;
+	private IkonBag bag;
 
-	private Set<Alela>			pouziteAlely;
+	private Set<Alela> pouziteAlely;
 
-	private KesoidModel			kesoidModel;
+	private KesoidModel kesoidModel;
 
 	/**
 	 * @param aJskelneikony

@@ -17,13 +17,13 @@ import cz.geokuk.util.index2d.*;
 
 public class JPopiskySlide extends JSingleSlide0 {
 
-	private static final long	serialVersionUID	= -5858146658366237217L;
+	private static final long serialVersionUID = -5858146658366237217L;
 
-	private Indexator<Wpt>		iIndexator;
+	private Indexator<Wpt> iIndexator;
 
-	private PopiskySettings		pose;
+	private PopiskySettings pose;
 
-	private PopiskyModel		popiskyModel;
+	private PopiskyModel popiskyModel;
 
 	public JPopiskySlide() {
 		setOpaque(false);

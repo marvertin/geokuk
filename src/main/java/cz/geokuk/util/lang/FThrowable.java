@@ -16,9 +16,9 @@ import cz.geokuk.util.file.LineWrappingDecorationWriter;
 public final class FThrowable {
 	public static class ThrowableAndSourceMethod {
 		// Vnořená výjimka
-		Throwable	iThrowable;
+		Throwable iThrowable;
 		// Jméno metody, která nás pouští k vnořené výjimkce
-		Method		iSourceMethod;
+		Method iSourceMethod;
 
 		/**
 		 * @return Returns the sourceMethod. metoda, pomocí které se z výjimky získala tato podvýjimka.,
@@ -186,7 +186,7 @@ public final class FThrowable {
 			for (int i = 0; i < trace.length - aKolikNezobrazit; i++) {
 				final String vypsanec = trace[i] == null ? "neznamy" : trace[i].getClassName() + "." + trace[i].getMethodName() + "-" + (trace.length - i);
 				pwrt.println("    " + (aPoradoveCislo == 0 ? "render" : Integer.toString(aPoradoveCislo)) + "." + (trace.length - i) + (aVypsanci.contains(vypsanec) ? " * " : " - ")
-						+ (trace[i] + "").replace('\t', ' '));
+				        + (trace[i] + "").replace('\t', ' '));
 				aVypsanci.add(vypsanec);
 			}
 			if (aKolikNezobrazit > 0) {
@@ -230,8 +230,8 @@ public final class FThrowable {
 	 * @author veverka
 	 */
 	private static class ThrowableChainPicker {
-		private final Set<Throwable>	iJizZarazeneVyjimkyx	= new HashSet<>();
-		private final Throwable			iThr;
+		private final Set<Throwable> iJizZarazeneVyjimkyx = new HashSet<>();
+		private final Throwable iThr;
 
 		/*
 		 * Sestrojí picker nad určitou výjimkou.
@@ -500,9 +500,9 @@ public final class FThrowable {
 		}
 	}
 
-	private static int								sČítačVypisovačů	= 0;
+	private static int sČítačVypisovačů = 0;
 
-	private static final Map<Throwable, Integer>	sVýjimkaNaČíslo		= new WeakHashMap<>();
+	private static final Map<Throwable, Integer> sVýjimkaNaČíslo = new WeakHashMap<>();
 
 	/**
 	 * @deprecated Použij findThrowableType;

@@ -16,12 +16,12 @@ import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 @Preferenceble
 public class PopiskyPatterns implements Copyable<PopiskyPatterns> {
 
-	private String			kesPattern				= "{info} - {nazev} ({wpt})";
-	private String			waymarkPattern			= "{nazev} ({wpt})";
-	private String			cgpPattern				= "{wpt}";
-	private String			simplewaypointPattern	= "{nazev} ({wpt})";
-	private final String	munzeePattern			= "{nazev} ({wpt})";
-	private final String	photoPattern			= "{wpt}";
+	private String kesPattern = "{info} - {nazev} ({wpt})";
+	private String waymarkPattern = "{nazev} ({wpt})";
+	private String cgpPattern = "{wpt}";
+	private String simplewaypointPattern = "{nazev} ({wpt})";
+	private final String munzeePattern = "{nazev} ({wpt})";
+	private final String photoPattern = "{wpt}";
 
 	public EnumMap<EKesoidKind, String> asMap() {
 		final EnumMap<EKesoidKind, String> map = new EnumMap<>(EKesoidKind.class);

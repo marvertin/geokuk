@@ -9,12 +9,12 @@ import cz.geokuk.framework.*;
  * @author veverka
  *
  */
-public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, Void> implements AfterInjectInit {
+public abstract class RendererSwingWorker0 extends MySwingWorker0<RenderResult, Void>implements AfterInjectInit {
 
-	protected RenderModel	renderModel;
-	private ProgressModel	progressModel;
-	protected Factory		factory;
-	protected Progressor	progressor;
+	protected RenderModel renderModel;
+	private ProgressModel progressModel;
+	protected Factory factory;
+	protected Progressor progressor;
 
 	/*
 	 * (non-Javadoc)

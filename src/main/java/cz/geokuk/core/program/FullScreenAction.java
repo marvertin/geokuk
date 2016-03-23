@@ -17,9 +17,9 @@ import cz.geokuk.framework.Action0;
 
 public class FullScreenAction extends Action0 {
 
-	private static final Logger	log					= LogManager.getLogger(FullScreenAction.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(FullScreenAction.class.getSimpleName());
 
-	private static final long	serialVersionUID	= 1948998108984785016L;
+	private static final long serialVersionUID = 1948998108984785016L;
 
 	/**
 	 *

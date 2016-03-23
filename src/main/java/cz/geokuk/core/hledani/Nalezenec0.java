@@ -4,8 +4,8 @@ import cz.geokuk.core.coordinates.Wgs;
 
 public abstract class Nalezenec0 {
 
-	protected double	vzdalenost;
-	protected double	azimut;
+	protected double vzdalenost;
+	protected double azimut;
 
 	/**
 	 * @return the azimut

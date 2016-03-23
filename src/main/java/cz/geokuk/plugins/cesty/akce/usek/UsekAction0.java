@@ -9,10 +9,10 @@ import cz.geokuk.plugins.cesty.data.Usek;
 
 public abstract class UsekAction0 extends BousekAction0 implements AfterInjectInit {
 
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
-	private final Usek			usek;
-	private final Mou			mou;
+	private final Usek usek;
+	private final Mou mou;
 
 	public UsekAction0(final Usek usek, final Mou mouMysi) {
 		this.usek = usek;

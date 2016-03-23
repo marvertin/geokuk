@@ -37,10 +37,10 @@ public class ImportujAction extends Action0 {
 
 	}
 
-	private static final long	serialVersionUID	= 1L;
-	private CestyModel			cestyModel;
+	private static final long serialVersionUID = 1L;
+	private CestyModel cestyModel;
 
-	private JFileChooser		fc;
+	private JFileChooser fc;
 
 	public ImportujAction() {
 		super("Importovat cesty (gpx, ggt)");

@@ -5,9 +5,9 @@ import cz.geokuk.plugins.mapy.kachle.EKaType;
 
 public abstract class MapyAction0 extends ToggleAction0 {
 
-	private static final long	serialVersionUID	= 8106696486908484270L;
-	private MapyModel			mapyModel;
-	private final EKaType		katype;
+	private static final long serialVersionUID = 8106696486908484270L;
+	private MapyModel mapyModel;
+	private final EKaType katype;
 
 	public MapyAction0(final EKaType katype) {
 		super(katype.getNazev());

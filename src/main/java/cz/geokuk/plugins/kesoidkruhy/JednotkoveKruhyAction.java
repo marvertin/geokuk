@@ -8,8 +8,8 @@ import cz.geokuk.framework.ToggleAction0;
 
 public class JednotkoveKruhyAction extends ToggleAction0 {
 
-	private static final long	serialVersionUID	= -7547868179813232769L;
-	private KruhyModel			model;
+	private static final long serialVersionUID = -7547868179813232769L;
+	private KruhyModel model;
 
 	public JednotkoveKruhyAction() {
 		super("Jednotokové kruhy");

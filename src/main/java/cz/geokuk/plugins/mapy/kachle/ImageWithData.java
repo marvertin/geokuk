@@ -9,6 +9,6 @@ import java.awt.Image;
  *
  */
 class ImageWithData {
-	public Image	img;
-	public byte[]	data;
+	public Image img;
+	public byte[] data;
 }

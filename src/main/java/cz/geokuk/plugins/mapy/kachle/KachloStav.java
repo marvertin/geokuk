@@ -10,11 +10,11 @@ public class KachloStav {
 		RESULT_ALL_POSLEDNI,;
 	}
 
-	public final EFaze		faze;
-	public final Image		img;
-	public final Throwable	thr;
+	public final EFaze faze;
+	public final Image img;
+	public final Throwable thr;
 
-	public final byte[]		imageData;
+	public final byte[] imageData;
 
 	public KachloStav(final EFaze faze, final Image img) {
 		this(faze, img, null, null);

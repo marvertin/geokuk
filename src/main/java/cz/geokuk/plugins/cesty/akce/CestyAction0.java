@@ -11,10 +11,10 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public abstract class CestyAction0 extends Action0 implements AfterInjectInit {
 
-	private static final long	serialVersionUID	= -2637836928166450446L;
+	private static final long serialVersionUID = -2637836928166450446L;
 
-	protected CestyModel		cestyModel;
-	private String				puvodniJednoducheJmeno;
+	protected CestyModel cestyModel;
+	private String puvodniJednoducheJmeno;
 
 	public CestyAction0() {
 		setEnabled(false);

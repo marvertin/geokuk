@@ -26,23 +26,23 @@ import cz.geokuk.util.file.KeFile;
 public class KesoidModel extends Model0 {
 
 	// Datamodelu
-	private KesFilter						filter;
-	private Set<String>						jmenaAlelNaToolbaru;
-	private Set<String>						jmenaNefenotypovanychAlel;
-	private String							jmenoSady					= "neznama-sada";
-	private IkonBag							ikonBag;
-	private KesBag							vsechny;
-	private GccomNick						gccomNick;
-	private ASada							jmenoAktualniSadyIkon;
-	private KesoidUmisteniSouboru			umisteniSouboru;
-	private Set<File>						blokovaneZdroje;
+	private KesFilter filter;
+	private Set<String> jmenaAlelNaToolbaru;
+	private Set<String> jmenaNefenotypovanychAlel;
+	private String jmenoSady = "neznama-sada";
+	private IkonBag ikonBag;
+	private KesBag vsechny;
+	private GccomNick gccomNick;
+	private ASada jmenoAktualniSadyIkon;
+	private KesoidUmisteniSouboru umisteniSouboru;
+	private Set<File> blokovaneZdroje;
 
 	// injektovanci
-	private final MultiNacitacLoaderManager	multiNacitacLoaderManager	= new MultiNacitacLoaderManager(this);
-	private final IkonNacitacManager		ikonNacitacLoaderManager	= new IkonNacitacManager(this);
-	private KesFilteringSwingWorker			filteringSwingWorker;
-	private ProgressModel					progressModel;
-	private Boolean							onoff;
+	private final MultiNacitacLoaderManager multiNacitacLoaderManager = new MultiNacitacLoaderManager(this);
+	private final IkonNacitacManager ikonNacitacLoaderManager = new IkonNacitacManager(this);
+	private KesFilteringSwingWorker filteringSwingWorker;
+	private ProgressModel progressModel;
+	private Boolean onoff;
 
 	public void filtrujDleAlely(final String alelaName, final boolean zobrazit) {
 		final Set<String> jmena = new HashSet<>(filter.getJmenaNechtenychAlel());
@@ -250,7 +250,7 @@ public class KesoidModel extends Model0 {
 			return;
 		}
 		final boolean nacistIkony = this.umisteniSouboru == null || this.umisteniSouboru.getImageMyDir().equals(umisteniSouboru.getImageMyDir())
-				|| this.umisteniSouboru.getImage3rdPartyDir().equals(umisteniSouboru.getImage3rdPartyDir());
+		        || this.umisteniSouboru.getImage3rdPartyDir().equals(umisteniSouboru.getImage3rdPartyDir());
 		final boolean nacistKese = this.umisteniSouboru == null || this.umisteniSouboru.getKesDir().equals(umisteniSouboru.getKesDir());
 		this.umisteniSouboru = umisteniSouboru;
 		final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);

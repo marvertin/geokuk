@@ -13,17 +13,17 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 public class PridatDoCestyAction extends CestyAction0 {
 
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
-	private final Mouable		kontextoveMouable;
-	private Poziceq				poziceq;
+	private final Mouable kontextoveMouable;
+	private Poziceq poziceq;
 
 	public PridatDoCestyAction(final Mouable kontextoveMouable) {
 		this.kontextoveMouable = kontextoveMouable;
 
 		putValue(NAME, "Přidat do cesty");
 		putValue(SHORT_DESCRIPTION, "Zařadí waypoint nebo pozici vybrané cesty, pokud žádná cesta není vybraná, vybere se automaticky nejbližší cesta. Když však žádná cesta neexistuje, je založena."
-				+ " Pokud se jedná o waypoint keše, která byla je na ignore listu, je z ignore listu odstraněna.");
+		        + " Pokud se jedná o waypoint keše, která byla je na ignore listu, je z ignore listu odstraněna.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_L);
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("INSERT"));
 	}

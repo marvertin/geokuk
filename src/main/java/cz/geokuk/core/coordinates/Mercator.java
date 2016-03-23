@@ -54,8 +54,8 @@ package cz.geokuk.core.coordinates;
 public class Mercator extends Misto0 {
 
 	/** Poloměr země v metrech */
-	public final double	mx;
-	public final double	my;
+	public final double mx;
+	public final double my;
 
 	public Mercator(final double aMx, final double aMy) {
 		mx = aMx;

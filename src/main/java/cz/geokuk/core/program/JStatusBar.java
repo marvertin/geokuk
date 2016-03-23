@@ -31,9 +31,9 @@ public class JStatusBar extends JPanel {
 
 	private class JSkrtnutaValue extends JValue {
 
-		private static final long	serialVersionUID	= 4571833579561872745L;
+		private static final long serialVersionUID = 4571833579561872745L;
 
-		private boolean				skrtnuto			= true;
+		private boolean skrtnuto = true;
 
 		public void setSkrtnuto(final boolean skrtnuto) {
 			if (this.skrtnuto == skrtnuto) {
@@ -94,51 +94,51 @@ public class JStatusBar extends JPanel {
 
 	}
 
-	private static final long					serialVersionUID				= -6267502844907253041L;
+	private static final long serialVersionUID = -6267502844907253041L;
 
-	private Mou									cur								= new Mou(0, 0);
+	private Mou cur = new Mou(0, 0);
 
-	private Poziceq								poziceq							= new Poziceq();
-	private final JValue						souradnice						= new JValue();
-	private final JValue						celkovePoctyVsude				= new JValue();
-	private final JValue						filtrovanePocetyVsude			= new JValue();
+	private Poziceq poziceq = new Poziceq();
+	private final JValue souradnice = new JValue();
+	private final JValue celkovePoctyVsude = new JValue();
+	private final JValue filtrovanePocetyVsude = new JValue();
 
-	private final JSkrtnutaValue				celkovePoctyVyrez				= new JSkrtnutaValue();
-	private final JSkrtnutaValue				filtrovanePocetyVyrez			= new JSkrtnutaValue();
-	private final JValue						vzdalenost						= new JValue();
+	private final JSkrtnutaValue celkovePoctyVyrez = new JSkrtnutaValue();
+	private final JSkrtnutaValue filtrovanePocetyVyrez = new JSkrtnutaValue();
+	private final JValue vzdalenost = new JValue();
 
-	private final JLabel						azimutSmer						= new JLabel();
-	private final JValue						azimutCislo						= new JValue();
+	private final JLabel azimutSmer = new JLabel();
+	private final JValue azimutCislo = new JValue();
 
-	private final JValue						vyletAno						= new JValue();
-	private final JValue						vyletNe							= new JValue();
+	private final JValue vyletAno = new JValue();
+	private final JValue vyletNe = new JValue();
 
-	private final JValue						souradnicePozice				= new JValue();
+	private final JValue souradnicePozice = new JValue();
 
-	private final JValue						meritkoMapy						= new JValue();
+	private final JValue meritkoMapy = new JValue();
 
-	private final JLabel						varovaniPoctuPrekrocenych		= new JLabel();
-	private JPanel								odPozice;
+	private final JLabel varovaniPoctuPrekrocenych = new JLabel();
+	private JPanel odPozice;
 
-	private final Map<Progressor, JProgressBar>	jFilterProgressMap				= new HashMap<>();
-	private JPanel								jFilterProgressPanel;
-	private final JValue						jZdrojeKesoiduPocetNactenych	= new JValue();
+	private final Map<Progressor, JProgressBar> jFilterProgressMap = new HashMap<>();
+	private JPanel jFilterProgressPanel;
+	private final JValue jZdrojeKesoiduPocetNactenych = new JValue();
 
-	private final JSkrtnutaValue				jZdrojeKesoiduPocetNenactenych	= new JSkrtnutaValue();
-	private final JValue						jZdrojeKesoiduCas				= new JValue();
+	private final JSkrtnutaValue jZdrojeKesoiduPocetNenactenych = new JSkrtnutaValue();
+	private final JValue jZdrojeKesoiduCas = new JValue();
 
-	private final JValue						jSouborSVyletem					= new JValue();
-	private final JLabel						jSouborSVyletemPotrebujeUlozit	= new JLabel();
+	private final JValue jSouborSVyletem = new JValue();
+	private final JLabel jSouborSVyletemPotrebujeUlozit = new JLabel();
 
-	private KesBag								filtrovane;
+	private KesBag filtrovane;
 
-	private KesBag								vsechny;
+	private KesBag vsechny;
 
-	private Coord								moord;
+	private Coord moord;
 
-	private Akce								akce;
+	private Akce akce;
 
-	private final JValue						jPocetKesiVCestach				= new JValue();
+	private final JValue jPocetKesiVCestach = new JValue();
 
 	public JStatusBar() {
 		initComponents();

@@ -22,12 +22,12 @@ import cz.geokuk.plugins.kesoid.KesBag;
  */
 public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
 
-	private static final Logger			log	= LogManager.getLogger(CestyOtevriSwingWorker.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(CestyOtevriSwingWorker.class.getSimpleName());
 
-	private final CestyZperzistentnovac	cestyZperzistentnovac;
-	private final KesBag				kesBag;
-	private final CestyModel			cestyModel;
-	private final File					file;
+	private final CestyZperzistentnovac cestyZperzistentnovac;
+	private final KesBag kesBag;
+	private final CestyModel cestyModel;
+	private final File file;
 
 	public CestyOtevriSwingWorker(final CestyZperzistentnovac cestyZperzistentnovac, final KesBag vsechny, final CestyModel cestyModel, final File file) {
 		this.cestyZperzistentnovac = cestyZperzistentnovac;

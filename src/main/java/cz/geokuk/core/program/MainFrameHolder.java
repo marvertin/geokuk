@@ -10,8 +10,8 @@ import cz.geokuk.framework.Factory;
 
 public class MainFrameHolder implements SlideListProvider {
 
-	private JMainFrame	mainFrame;
-	private Factory		factory;
+	private JMainFrame mainFrame;
+	private Factory factory;
 
 	public JFrame getMainFrame() {
 		return mainFrame;

@@ -7,8 +7,8 @@ import javax.swing.JComponent;
 
 public class JIkonkaPapiru extends JComponent {
 
-	private static final long	serialVersionUID	= 8533258621624761103L;
-	private PapirovaMetrika		metrika;
+	private static final long serialVersionUID = 8533258621624761103L;
+	private PapirovaMetrika metrika;
 
 	public JIkonkaPapiru() {
 		final Dimension dim = new Dimension(80, 80);

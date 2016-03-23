@@ -19,17 +19,17 @@ import cz.geokuk.plugins.mapy.kachle.JKachlovnikRendrovaci;
  */
 public class Rendrovadlo {
 
-	private static int			citac;
-	static final int			KOLIK_PROGRESUJEME_NA_KACHLICH	= 10000;
+	private static int citac;
+	static final int KOLIK_PROGRESUJEME_NA_KACHLICH = 10000;
 
 	// Používané služby
-	private Factory				factory;
+	private Factory factory;
 
 	// pracovní oblast
 
 	// parametry
-	private List<JSingleSlide0>	slides;
-	private final Future<?>		future;
+	private List<JSingleSlide0> slides;
+	private final Future<?> future;
 
 	public Rendrovadlo(final Future<?> future) {
 		this.future = future;

@@ -34,16 +34,16 @@ public class InformaceOZdroji {
 		}
 	}
 
-	public final KeFile						jmenoZdroje;
-	public int								pocetWaypointuCelkem;
-	public int								pocetWaypointuBranych;
-	public int								pocetWaypointuCelkemChildren;
-	public int								pocetWaypointuBranychChildren;
-	public final boolean					nacteno;
+	public final KeFile jmenoZdroje;
+	public int pocetWaypointuCelkem;
+	public int pocetWaypointuBranych;
+	public int pocetWaypointuCelkemChildren;
+	public int pocetWaypointuBranychChildren;
+	public final boolean nacteno;
 
-	private final List<InformaceOZdroji>	children	= new ArrayList<>();
+	private final List<InformaceOZdroji> children = new ArrayList<>();
 
-	public InformaceOZdroji					parent;
+	public InformaceOZdroji parent;
 
 	public InformaceOZdroji(final KeFile jmenoZdroje, final boolean nacteno) {
 		this.jmenoZdroje = jmenoZdroje;

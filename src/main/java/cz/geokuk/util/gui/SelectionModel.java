@@ -15,9 +15,9 @@ import cz.geokuk.util.lang.FObject;
 public class SelectionModel<T> {
 
 	static class Item<T> {
-		T		value;
-		String	displayText;
-		int		poradi;
+		T value;
+		String displayText;
+		int poradi;
 
 		public Item(final T value, final String displayText, final int poradi) {
 			this.value = value;
@@ -32,15 +32,15 @@ public class SelectionModel<T> {
 
 	}
 
-	final List<Item<T>>							items		= new ArrayList<>();
+	final List<Item<T>> items = new ArrayList<>();
 
-	private Item<T>								selectedItem;
+	private Item<T> selectedItem;
 
 	// public void add(Map<? extends T, String> map) {
 	// this.map.putAll(map);
 	// }
 
-	private final List<SelectionListener<T>>	listeners	= new ArrayList<>();
+	private final List<SelectionListener<T>> listeners = new ArrayList<>();
 
 	public void add(final T item, final String displayText) {
 		items.add(new Item<>(item, displayText, items.size()));

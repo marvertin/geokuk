@@ -16,9 +16,9 @@ import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
  */
 public class CenterWaypointAction extends Action0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long	serialVersionUID	= -8054017274338240706L;
-	private final Wpt			wpt;
-	private IkonBag				ikonBag;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private final Wpt wpt;
+	private IkonBag ikonBag;
 
 	/**
 	 *

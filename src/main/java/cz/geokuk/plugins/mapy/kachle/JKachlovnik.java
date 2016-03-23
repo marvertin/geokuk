@@ -19,33 +19,33 @@ import cz.geokuk.util.pocitadla.*;
 
 public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
 
-	private static final Logger		log										= LogManager.getLogger(JKachlovnik.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(JKachlovnik.class.getSimpleName());
 
-	private static final long		serialVersionUID						= -6300199882447791157L;
+	private static final long serialVersionUID = -6300199882447791157L;
 
-	private static Pocitadlo		pocitZustalychKachli					= new PocitadloRoste("Počet zůstalých kachlí",
-			"Počet kachlí jKachle, které jako kompoenty zůstaly a jen se změnila její lokace, protože po reinicializaci "
-					+ "byly na svém místě (obvykle posun) a nebylo je tudíž nutné znovu vytvářet");
+	private static Pocitadlo pocitZustalychKachli = new PocitadloRoste("Počet zůstalých kachlí",
+	        "Počet kachlí jKachle, které jako kompoenty zůstaly a jen se změnila její lokace, protože po reinicializaci "
+	                + "byly na svém místě (obvykle posun) a nebylo je tudíž nutné znovu vytvářet");
 
-	private static Pocitadlo		pocitReinicializaceKachlovniku			= new PocitadloRoste("Kolikrát bylo nuceno reinicializovat " + "celý kachlovník",
-			"Říká, kolikrát byla zavolána metoda init pro reinicializaci celého kachlovníku v důsledku posunu, změnu " + "velikosti, zůůmování atd.");
+	private static Pocitadlo pocitReinicializaceKachlovniku = new PocitadloRoste("Kolikrát bylo nuceno reinicializovat " + "celý kachlovník",
+	        "Říká, kolikrát byla zavolána metoda init pro reinicializaci celého kachlovníku v důsledku posunu, změnu " + "velikosti, zůůmování atd.");
 
-	private static Pocitadlo		pocitVynuceneNepouzitiExistujiciKachle	= new PocitadloRoste("Vynucené použití neexistující " + "kachle",
-			"Kolikrát do JKachlovnik.ini() přišlo z venku, že JKachle komponenty nesmím použít");
+	private static Pocitadlo pocitVynuceneNepouzitiExistujiciKachle = new PocitadloRoste("Vynucené použití neexistující " + "kachle",
+	        "Kolikrát do JKachlovnik.ini() přišlo z venku, že JKachle komponenty nesmím použít");
 
-	private static final Pocitadlo	pocitKachliVKachlovniku2				= new PocitadloMalo("#kachlí v kachlovníku", "");
+	private static final Pocitadlo pocitKachliVKachlovniku2 = new PocitadloMalo("#kachlí v kachlovníku", "");
 
-	private KaSet					kachloTypesSet							= new KaSet(EnumSet.noneOf(EKaType.class));
+	private KaSet kachloTypesSet = new KaSet(EnumSet.noneOf(EKaType.class));
 
-	private KachleModel				kachleModel;
+	private KachleModel kachleModel;
 
 	// TODO musí to být private a musí být na tru nastaveno jen při rendrování
-	protected boolean				vykreslovatokamzite;
+	protected boolean vykreslovatokamzite;
 
 	/** Jen pro ladící účely */
-	public final String				nazevKachlovniku;
+	public final String nazevKachlovniku;
 
-	private final Priority			priorita;
+	private final Priority priorita;
 
 	// je to jen kvuli garbage collectoru, aby nezrusil, NERUSIT PROMENNU i kdyz zdanlive je to na nic
 	public JKachlovnik(final String nazevKachlovniku, final Priority priority) {

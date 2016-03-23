@@ -14,9 +14,9 @@ import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
  */
 public class JSimpleWaypointDetail extends JKesoidDetail0 {
 
-	private static final long	serialVersionUID	= -3323887260932949747L;
+	private static final long serialVersionUID = -3323887260932949747L;
 
-	private SimpleWaypoint		simwpt;
+	private SimpleWaypoint simwpt;
 
 	public JSimpleWaypointDetail() {
 		initComponents();

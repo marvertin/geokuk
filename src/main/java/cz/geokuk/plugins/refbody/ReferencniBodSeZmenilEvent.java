@@ -15,8 +15,8 @@ import cz.geokuk.framework.Event0;
  */
 public class ReferencniBodSeZmenilEvent extends Event0<RefbodyModel> {
 
-	public final Wgs	wgs;
-	private final Coord	moord;
+	public final Wgs wgs;
+	private final Coord moord;
 
 	/**
 	 * @param aWgs

@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
  * @author tatinek
  */
 public enum EKesWptType {
-	// CACHE,
+    // CACHE,
 	FINAL_LOCATION, STAGES_OF_A_MULTICACHE, QUESTION_TO_ANSWER, REFERENCE_POINT, PARKING_AREA, TRAILHEAD;
 
 	@SuppressWarnings("unused")

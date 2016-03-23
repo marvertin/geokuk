@@ -13,21 +13,21 @@ import cz.geokuk.plugins.kesoid.mapicon.*;
 
 public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
-	private static String[]	urlPrefixes	= new String[] { "http://www.geocaching.com/seek/cache_details.aspx?guid=", "http://www.waymarking.com/waymarks/", "http://dataz.cuzk.cz/gu/ztl", };
+	private static String[] urlPrefixes = new String[] { "http://www.geocaching.com/seek/cache_details.aspx?guid=", "http://www.waymarking.com/waymarks/", "http://dataz.cuzk.cz/gu/ztl", };
 	// protected static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
 
 	/** Jednoznacna identifikace jako GC124X4 nebo WM4587 */
-	private String			identifier;
+	private String identifier;
 
-	private EKesVztah		vztah		= EKesVztah.NORMAL;
-	private EKesStatus		status		= EKesStatus.ACTIVE;
+	private EKesVztah vztah = EKesVztah.NORMAL;
+	private EKesStatus status = EKesStatus.ACTIVE;
 
-	private String			author;
-	private String			hidden;
+	private String author;
+	private String hidden;
 
-	private String			zbytekUrl;
+	private String zbytekUrl;
 
-	private Set<Alela>		userDefinedAlelas;
+	private Set<Alela> userDefinedAlelas;
 
 	public void addWpt(final Wpt wpt) {
 		if (wpt == null) {

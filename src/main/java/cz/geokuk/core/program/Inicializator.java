@@ -31,8 +31,8 @@ import cz.geokuk.plugins.vylety.*;
  */
 public class Inicializator {
 
-	private final MainFrameHolder	mainFrameHolder	= new MainFrameHolder();
-	private NapovedaModel			napovedaModel;
+	private final MainFrameHolder mainFrameHolder = new MainFrameHolder();
+	private NapovedaModel napovedaModel;
 
 	public void inicializace() {
 		final BeanBag bb = new BeanBag();

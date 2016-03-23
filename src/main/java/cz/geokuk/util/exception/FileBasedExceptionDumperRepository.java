@@ -17,19 +17,19 @@ import cz.geokuk.util.file.FileManager;
  */
 public class FileBasedExceptionDumperRepository implements ExceptionDumperRepositorySpi {
 
-	private static Pattern		pat	= Pattern.compile(ExceptionDumperRepositorySpi.EXC_PREFIX + "([0-9]+)([a-z]+)([0-9]+)");
+	private static Pattern pat = Pattern.compile(ExceptionDumperRepositorySpi.EXC_PREFIX + "([0-9]+)([a-z]+)([0-9]+)");
 
 	/**
 	 * APrověřený adresář
 	 */
-	private final File			iDir;
+	private final File iDir;
 
 	/**
 	 * Číslo spuštění
 	 */
-	private int					iRunNumber;
+	private int iRunNumber;
 
-	private final FileManager	fm	= FileManager.getInstance(4096);
+	private final FileManager fm = FileManager.getInstance(4096);
 
 	/**
 	 * @throws FileNotFoundException

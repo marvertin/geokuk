@@ -16,8 +16,8 @@ import cz.geokuk.util.lang.FThrowable;
  */
 public class LineWrappingDecorationWriter extends LineDecorationWriter {
 
-	private String	iPrefix;
-	private String	iSuffix;
+	private String iPrefix;
+	private String iSuffix;
 
 	public static void main(final String[] args) {
 		System.out.println("JEDU");

@@ -14,10 +14,10 @@ import java.util.*;
  * @author veverka
  */
 public class MultiFolder {
-	private static final String				REMOVE_SUFFIX	= ".remove";
-	private static final String				CONTENT_TXT		= "content.txt";
+	private static final String REMOVE_SUFFIX = ".remove";
+	private static final String CONTENT_TXT = "content.txt";
 
-	private final KeyTree<String, LamUrl>	tree			= new KeyTree<>();
+	private final KeyTree<String, LamUrl> tree = new KeyTree<>();
 
 	public static void main(final String[] args) {
 

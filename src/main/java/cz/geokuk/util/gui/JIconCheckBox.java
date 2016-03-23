@@ -56,9 +56,9 @@ public class JIconCheckBox extends JCheckBox {
 
 	}
 
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
-	private Icon				icon;
+	private Icon icon;
 
 	public JIconCheckBox() {}
 

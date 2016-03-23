@@ -86,27 +86,27 @@ public class CestyModel extends Model0 {
 
 	}
 
-	private static final Logger		log				= LogManager.getLogger(CestyModel.class.getSimpleName());
-	private static final String		MUJ_VYLET		= "Můj výlet";
+	private static final Logger log = LogManager.getLogger(CestyModel.class.getSimpleName());
+	private static final String MUJ_VYLET = "Můj výlet";
 
-	public static final String		VYLET_EXTENSION	= "gpx";
-	private Doc						doc				= new Doc();
+	public static final String VYLET_EXTENSION = "gpx";
+	private Doc doc = new Doc();
 
-	private final Updator			updator			= new Updator();
+	private final Updator updator = new Updator();
 
 	/** Aktivní cesta, vždy je nějaká aktivní, když ne platí bod číslo 1 */
-	private Cesta					curta;
-	private CestyZperzistentnovac	cestyZperzistentnovac;
+	private Cesta curta;
+	private CestyZperzistentnovac cestyZperzistentnovac;
 
-	private Worker					worker;
+	private Worker worker;
 
-	private KesBag					kesBag;
-	private KesoidModel				kesoidModel;
-	private PoziceModel				poziceModel;
+	private KesBag kesBag;
+	private KesoidModel kesoidModel;
+	private PoziceModel poziceModel;
 
-	private Coord					moord;
+	private Coord moord;
 
-	private boolean					probihaPridavani;
+	private boolean probihaPridavani;
 
 	// public EVylet get(Wpt wpt) {
 	// boolean onIgnoreList = vylet.isOnIgnoreList(wpt.getKesoid());

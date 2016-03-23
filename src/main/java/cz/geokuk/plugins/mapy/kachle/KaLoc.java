@@ -5,9 +5,9 @@ import cz.geokuk.core.coordinates.Mou;
 
 public class KaLoc {
 
-	private final int	moumer;
-	private final int	ksx;
-	private final int	ksy;
+	private final int moumer;
+	private final int ksx;
+	private final int ksy;
 
 	public static void main(final String[] args) {
 

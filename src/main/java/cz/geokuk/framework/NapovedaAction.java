@@ -8,9 +8,9 @@ import javax.swing.KeyStroke;
 import cz.geokuk.core.napoveda.NapovedaModel;
 
 public class NapovedaAction extends AbstractAction {
-	private static final long	serialVersionUID	= -4843379055570361691L;
-	private NapovedaModel		napovedaModel;
-	private final String		tema;
+	private static final long serialVersionUID = -4843379055570361691L;
+	private NapovedaModel napovedaModel;
+	private final String tema;
 
 	public NapovedaAction(final String tema) {
 		super("Nápověda");

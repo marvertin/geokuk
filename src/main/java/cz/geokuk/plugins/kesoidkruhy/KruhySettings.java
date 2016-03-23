@@ -8,10 +8,10 @@ import cz.geokuk.framework.Preferenceble;
 @Preferenceble
 public class KruhySettings implements Copyable<KruhySettings> {
 
-	private boolean	onoff				= false;
-	private Color	barva				= new Color(153, 0, 220, 70);
-	private int		velikost			= 20;
-	private boolean	jednotkovaVelikost	= false;
+	private boolean onoff = false;
+	private Color barva = new Color(153, 0, 220, 70);
+	private int velikost = 20;
+	private boolean jednotkovaVelikost = false;
 
 	@Override
 	public KruhySettings copy() {

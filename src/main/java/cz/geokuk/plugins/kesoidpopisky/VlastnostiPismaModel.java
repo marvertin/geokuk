@@ -16,17 +16,17 @@ import com.google.common.base.Objects;
  *
  */
 public class VlastnostiPismaModel {
-	private Font				font			= new Font(Font.SANS_SERIF, Font.PLAIN, 12);
-	private Color				foreground		= Color.BLACK;
-	private Color				background		= Color.WHITE;
+	private Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+	private Color foreground = Color.BLACK;
+	private Color background = Color.WHITE;
 
-	private int					posuX			= 0;
-	private int					posuY			= 0;
+	private int posuX = 0;
+	private int posuY = 0;
 
 	/**
 	 * The list of ChangeListeners for this model. Subclasses may store their own listeners here.
 	 */
-	protected EventListenerList	listenerList	= new EventListenerList();
+	protected EventListenerList listenerList = new EventListenerList();
 
 	/**
 	 * Adds a ChangeListener to the model's listener list. The ChangeListeners must be notified when the models value changes.

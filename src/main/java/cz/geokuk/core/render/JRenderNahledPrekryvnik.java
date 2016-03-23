@@ -13,10 +13,10 @@ import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
  *
  */
 public class JRenderNahledPrekryvnik extends JCoordPrekryvnik0 {
-	private static final long	serialVersionUID	= -5996655830197513951L;
-	private int					renderedMoumer		= -1;
-	private Mou					moustred;
-	private Coord				moord;
+	private static final long serialVersionUID = -5996655830197513951L;
+	private int renderedMoumer = -1;
+	private Mou moustred;
+	private Coord moord;
 
 	/**
 	 *

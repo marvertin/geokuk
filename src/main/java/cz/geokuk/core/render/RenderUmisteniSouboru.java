@@ -15,17 +15,17 @@ import cz.geokuk.util.file.Filex;
  */
 public class RenderUmisteniSouboru extends UmisteniSouboru0 {
 
-	public static final Filex	KMZ_DIR		= new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "kmz"), false, true);
+	public static final Filex KMZ_DIR = new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "kmz"), false, true);
 
-	public static final Filex	OZI_DIR		= new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "ozi"), false, true);
+	public static final Filex OZI_DIR = new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "ozi"), false, true);
 
-	public static final Filex	PICURE_DIR	= new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "picture"), false, true);
+	public static final Filex PICURE_DIR = new Filex(new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "picture"), false, true);
 
-	private Filex				kmzDir;
+	private Filex kmzDir;
 
-	private Filex				oziDir;
+	private Filex oziDir;
 
-	private Filex				pictureDir;
+	private Filex pictureDir;
 
 	@Override
 	public boolean equals(final Object obj) {

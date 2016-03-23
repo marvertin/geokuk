@@ -12,10 +12,10 @@ import cz.geokuk.core.coordinates.Wgs;
  */
 public abstract class JMrizkaWgs extends JMrizka0 {
 
-	protected static final double	MINUTA				= 1.0 / 60;
-	protected static final double	VTERINA				= MINUTA / 60;
+	protected static final double MINUTA = 1.0 / 60;
+	protected static final double VTERINA = MINUTA / 60;
 
-	private static final long		serialVersionUID	= 4558815639199835559L;
+	private static final long serialVersionUID = 4558815639199835559L;
 
 	/*
 	 * (non-Javadoc)

@@ -47,21 +47,21 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long	serialVersionUID			= 7087453419069194768L;
+	private static final long serialVersionUID = 7087453419069194768L;
 
-	private JTextField			jKesPatternEdit;
-	private JTextField			jWaymarkPatternEdit;
-	private JTextField			jCgpPatternEdit;
-	private JTextField			jSimplewaypontPatternEdit;
+	private JTextField jKesPatternEdit;
+	private JTextField jWaymarkPatternEdit;
+	private JTextField jCgpPatternEdit;
+	private JTextField jSimplewaypontPatternEdit;
 
-	private final JLabel		jKesPatternLabel			= new JLabel("Keš:");
-	private final JLabel		jWaymarkPatternLabel		= new JLabel("Waymark:");
-	private final JLabel		jCgpPatternLabel			= new JLabel("Czech geodetic point:");
-	private final JLabel		jSimplewaypontPatternLabel	= new JLabel("Simple waypoint:");
+	private final JLabel jKesPatternLabel = new JLabel("Keš:");
+	private final JLabel jWaymarkPatternLabel = new JLabel("Waymark:");
+	private final JLabel jCgpPatternLabel = new JLabel("Czech geodetic point:");
+	private final JLabel jSimplewaypontPatternLabel = new JLabel("Simple waypoint:");
 
-	private PopiskyModel		popiskyModel;
+	private PopiskyModel popiskyModel;
 
-	private JVlastnostiPisma	jVlastnostiPisma			= new JVlastnostiPisma();
+	private JVlastnostiPisma jVlastnostiPisma = new JVlastnostiPisma();
 
 	public JPopiskyDialog() {
 		setTitle("Nastavení paramtrů popisek keší na mapě");
@@ -138,19 +138,19 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 		// panel.add(jSimplewaypontPatternEdit);
 
 		layout.setHorizontalGroup(layout.createSequentialGroup() // hroup
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jKesPatternLabel).addComponent(jWaymarkPatternLabel).addComponent(jCgpPatternLabel).addComponent(jSimplewaypontPatternLabel))
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jKesPatternEdit).addComponent(jWaymarkPatternEdit).addComponent(jCgpPatternEdit).addComponent(jSimplewaypontPatternEdit)));
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jKesPatternLabel).addComponent(jWaymarkPatternLabel).addComponent(jCgpPatternLabel).addComponent(jSimplewaypontPatternLabel))
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jKesPatternEdit).addComponent(jWaymarkPatternEdit).addComponent(jCgpPatternEdit).addComponent(jSimplewaypontPatternEdit)));
 		layout.setVerticalGroup(layout.createSequentialGroup() // hroup
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jKesPatternLabel).addComponent(jKesPatternEdit))
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jWaymarkPatternLabel).addComponent(jWaymarkPatternEdit))
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jCgpPatternLabel).addComponent(jCgpPatternEdit))
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jSimplewaypontPatternLabel).addComponent(jSimplewaypontPatternEdit)));
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jKesPatternLabel).addComponent(jKesPatternEdit))
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jWaymarkPatternLabel).addComponent(jWaymarkPatternEdit))
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jCgpPatternLabel).addComponent(jCgpPatternEdit))
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jSimplewaypontPatternLabel).addComponent(jSimplewaypontPatternEdit)));
 	}
 
 	// private JPanel obalRameckem(JComponent com, String title) {

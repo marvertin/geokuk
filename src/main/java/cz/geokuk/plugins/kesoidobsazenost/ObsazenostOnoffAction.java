@@ -8,8 +8,8 @@ import cz.geokuk.framework.ToggleAction0;
 
 public class ObsazenostOnoffAction extends ToggleAction0 {
 
-	private static final long	serialVersionUID	= -7547868179813232769L;
-	private ObsazenostModel		popiskyModel;
+	private static final long serialVersionUID = -7547868179813232769L;
+	private ObsazenostModel popiskyModel;
 
 	public ObsazenostOnoffAction() {
 		super("Obsazenost 161 m");

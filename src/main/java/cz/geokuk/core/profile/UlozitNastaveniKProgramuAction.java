@@ -12,8 +12,8 @@ import cz.geokuk.framework.ToggleAction0;
  */
 public class UlozitNastaveniKProgramuAction extends ToggleAction0 {
 
-	private static final long	serialVersionUID	= -2882817111560336824L;
-	private ProfileModel		profileModel;
+	private static final long serialVersionUID = -2882817111560336824L;
+	private ProfileModel profileModel;
 
 	/**
 	 * @param aBoard
@@ -21,7 +21,7 @@ public class UlozitNastaveniKProgramuAction extends ToggleAction0 {
 	public UlozitNastaveniKProgramuAction() {
 		super("Ukládat nastavení k programu");
 		putValue(SHORT_DESCRIPTION, "Zapne ukládání nastavení k programu do souboru \"" + FConst.PREFERENCES_FILE
-				+ ", při příštím spuštění budou těmito nastaveními nahrazeny nastavení v Java preferences, pokud budou nastavení v souboru novější");
+		        + ", při příštím spuštění budou těmito nastaveními nahrazeny nastavení v Java preferences, pokud budou nastavení v souboru novější");
 	}
 
 	public void inject(final ProfileModel profileModel) {

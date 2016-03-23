@@ -46,14 +46,14 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long	serialVersionUID	= 7087453419069194768L;
+	private static final long serialVersionUID = 7087453419069194768L;
 
-	private JLabel				velikostLabel;
-	private JSlider				velikostSlider;
-	private JColorChooser		alfaColorChooser;
-	private JCheckBox			jJednotkoveKruhy;
+	private JLabel velikostLabel;
+	private JSlider velikostSlider;
+	private JColorChooser alfaColorChooser;
+	private JCheckBox jJednotkoveKruhy;
 
-	private KruhyModel			kruhyModel;
+	private KruhyModel kruhyModel;
 
 	public JKruhyDialog() {
 		setTitle("Nastavení parametrů zvýrazňovaích kruhů");

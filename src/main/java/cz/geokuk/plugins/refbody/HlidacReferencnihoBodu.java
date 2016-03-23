@@ -15,10 +15,10 @@ import cz.geokuk.framework.EventFirer;
  */
 public class HlidacReferencnihoBodu {
 
-	private Poziceq	poziceq	= new Poziceq();
-	private Wgs		stredMapy;
-	private Object	minulyStredHledani;
-	private Coord	moord;
+	private Poziceq poziceq = new Poziceq();
+	private Wgs stredMapy;
+	private Object minulyStredHledani;
+	private Coord moord;
 
 	public void onEvent(final PoziceChangedEvent aEvent) {
 		poziceq = aEvent.poziceq;

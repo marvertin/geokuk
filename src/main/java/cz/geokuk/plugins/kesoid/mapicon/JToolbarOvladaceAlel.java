@@ -19,16 +19,16 @@ import cz.geokuk.util.gui.JIconCheckBox;
  */
 public class JToolbarOvladaceAlel extends JPanel {
 
-	private static final long					serialVersionUID	= 2858792073950044988L;
+	private static final long serialVersionUID = 2858792073950044988L;
 
-	private Genom								genom;
-	protected Factory							factory;
+	private Genom genom;
+	protected Factory factory;
 
-	private final JToolbarOvladaceAlel			tb;
+	private final JToolbarOvladaceAlel tb;
 
 	//////////////////////////////////////////
 	// TODO Celkově nějak refactorovat
-	private final Map<String, JIconCheckBox>	mapka				= new HashMap<>();
+	private final Map<String, JIconCheckBox> mapka = new HashMap<>();
 
 	/**
 	 *

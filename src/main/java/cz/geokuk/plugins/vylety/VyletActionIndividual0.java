@@ -7,10 +7,10 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 public abstract class VyletActionIndividual0 extends VyletAction0 implements AfterInjectInit {
 
-	private static final long	serialVersionUID	= -649900052004328014L;
+	private static final long serialVersionUID = -649900052004328014L;
 
-	private final Kesoid		kespevna;
-	private Kesoid				kesdocasna;
+	private final Kesoid kespevna;
+	private Kesoid kesdocasna;
 
 	public VyletActionIndividual0(final String string, final Kesoid kes) {
 		super(string);

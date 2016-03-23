@@ -13,9 +13,9 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 public class VyletovyZperzistentnovac {
 
-	private static final Logger	log	= LogManager.getLogger(VyletovyZperzistentnovac.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(VyletovyZperzistentnovac.class.getSimpleName());
 
-	private KesoidModel			kesoidModel;
+	private KesoidModel kesoidModel;
 
 	public Vylet immediatlyNactiVylet(final KesBag vsechny) {
 		try {

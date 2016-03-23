@@ -62,38 +62,38 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		}
 	}
 
-	private static final Double	SPATNY_FORMAT		= Double.NEGATIVE_INFINITY;
+	private static final Double SPATNY_FORMAT = Double.NEGATIVE_INFINITY;
 
-	private static final long	serialVersionUID	= 7087453419069194768L;
+	private static final long serialVersionUID = 7087453419069194768L;
 	// TODO skutečnou hodnotu maximální šířky sem dát
-	private static final double	SIRKA_MAX			= 80;
+	private static final double SIRKA_MAX = 80;
 
-	private static final double	SIRKA_MIN			= -80;
-	private static final double	DELKA_MIN			= -180;
+	private static final double SIRKA_MIN = -80;
+	private static final double DELKA_MIN = -180;
 
-	private static final double	DELKA_MAX			= 180;
-	final static Color			HILIT_COLOR			= Color.LIGHT_GRAY;
-	final static Color			ERROR_COLOR			= Color.PINK;
-	final static String			CANCEL_ACTION		= "cancel-search";
-	private JTextField			jSouEdit;
-	private JLabel				jSouEditLabel;
+	private static final double DELKA_MAX = 180;
+	final static Color HILIT_COLOR = Color.LIGHT_GRAY;
+	final static Color ERROR_COLOR = Color.PINK;
+	final static String CANCEL_ACTION = "cancel-search";
+	private JTextField jSouEdit;
+	private JLabel jSouEditLabel;
 
-	private JButton				jButtonCentruj;
-	private JLabel				jHotovaSirka;
-	private JLabel				jHotovaDelka;
+	private JButton jButtonCentruj;
+	private JLabel jHotovaSirka;
+	private JLabel jHotovaDelka;
 
-	private JLabel				jUtm;
+	private JLabel jUtm;
 
-	private Color				entryBg;
-	private Wgs					souradniceEditovane;
+	private Color entryBg;
+	private Wgs souradniceEditovane;
 
-	private Wgs					souradniceReferencni;
+	private Wgs souradniceReferencni;
 
-	private PoziceModel			poziceModel;
+	private PoziceModel poziceModel;
 
-	private VyrezModel			vyrezModel;
+	private VyrezModel vyrezModel;
 
-	private boolean				souradniceNastavenyRukama;
+	private boolean souradniceNastavenyRukama;
 
 	public JSouradnicovyFrame() {
 		setTitle("Zadání souřadnic");
@@ -163,8 +163,8 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 	@Override
 	protected void initComponents() {
 		final String tooltip = "Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny),"
-				+ " jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. "
-				+ " Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
+		        + " jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. "
+		        + " Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
 		jSouEdit = new JTextField();
 		jSouEdit.setToolTipText(tooltip);
 
@@ -200,19 +200,19 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(GroupLayout.Alignment.TRAILING,
-						layout.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jSouEditLabel))
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jSouEdit)))
-				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jHotovaSirka).addComponent(jHotovaDelka))
-						.addComponent(jButtonCentruj))
-				.addComponent(jUtm));
+		        .addGroup(GroupLayout.Alignment.TRAILING,
+		                layout.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jSouEditLabel))
+		                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jSouEdit)))
+		        .addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jHotovaSirka).addComponent(jHotovaDelka))
+		                .addComponent(jButtonCentruj))
+		        .addComponent(jUtm));
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup().addComponent(jSouEditLabel).addComponent(jSouEdit))))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addGroup(layout.createSequentialGroup().addComponent(jHotovaSirka).addComponent(jHotovaDelka))
-						.addComponent(jButtonCentruj))
-				.addComponent(jUtm));
+		        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+		                .addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup().addComponent(jSouEditLabel).addComponent(jSouEdit))))
+		        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addGroup(layout.createSequentialGroup().addComponent(jHotovaSirka).addComponent(jHotovaDelka))
+		                .addComponent(jButtonCentruj))
+		        .addComponent(jUtm));
 		jSouEdit.setPreferredSize(new Dimension(150, jSouEdit.getPreferredSize().height));
 		jSouEdit.setText("");
 		entryBg = jSouEdit.getBackground();

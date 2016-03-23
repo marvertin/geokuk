@@ -20,15 +20,15 @@ import cz.geokuk.framework.MouseGestureContext;
  */
 public final class JPresCeleMysovani extends JSingleSlide0 implements MouseInputListener, MouseWheelListener, KeyListener {
 
-	private static final long	serialVersionUID	= 4979888007463850390L;
+	private static final long serialVersionUID = 4979888007463850390L;
 
-	private boolean				posouvameMapu;
+	private boolean posouvameMapu;
 
-	private Point				bod;
+	private Point bod;
 
-	private VyrezModel			vyrezModel;
-	private Point				cur;
-	private PoziceModel			poziceModel;
+	private VyrezModel vyrezModel;
+	private Point cur;
+	private PoziceModel poziceModel;
 
 	/**
 	 * @param jKachlovnik

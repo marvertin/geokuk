@@ -9,9 +9,9 @@ import cz.geokuk.plugins.mapy.kachle.KaSet;
 
 public class MapyModel extends Model0 {
 
-	private EKaType				podklad;
+	private EKaType podklad;
 
-	private EnumSet<EKaType>	dekorace;
+	private EnumSet<EKaType> dekorace;
 
 	public EnumSet<EKaType> getDekorace() {
 		return dekorace.clone();

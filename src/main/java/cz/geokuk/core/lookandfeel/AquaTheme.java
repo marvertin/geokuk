@@ -51,10 +51,10 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  */
 public class AquaTheme extends DefaultMetalTheme {
 
-	private final ColorUIResource	primary1	= new ColorUIResource(102, 153, 153);
+	private final ColorUIResource primary1 = new ColorUIResource(102, 153, 153);
 
-	private final ColorUIResource	primary2	= new ColorUIResource(128, 192, 192);
-	private final ColorUIResource	primary3	= new ColorUIResource(159, 235, 235);
+	private final ColorUIResource primary2 = new ColorUIResource(128, 192, 192);
+	private final ColorUIResource primary3 = new ColorUIResource(159, 235, 235);
 
 	@Override
 	public String getName() {

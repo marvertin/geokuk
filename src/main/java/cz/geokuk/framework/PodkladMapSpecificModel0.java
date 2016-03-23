@@ -8,20 +8,20 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	/**
 	 *
 	 */
-	protected MyPreferences	prefNode;
-	private EKaType			podkladMap;
+	protected MyPreferences prefNode;
+	private EKaType podkladMap;
 
-	private S				structure;
+	private S structure;
 
 	@SuppressWarnings("unchecked")
-	private final T			tthis	= (T) this;
+	private final T tthis = (T) this;
 
-	public final Onoff<T>	visible	= new Onoff<T>(tthis, getOnoffEventClass()) {
-										@Override
-										protected void onSetOnOff(final boolean onoff) {
-											putVisibleToPreferences(onoff);
-										}
-									};
+	public final Onoff<T> visible = new Onoff<T>(tthis, getOnoffEventClass()) {
+		@Override
+		protected void onSetOnOff(final boolean onoff) {
+			putVisibleToPreferences(onoff);
+		}
+	};
 
 	public S getData() {
 		final S result = structure.copy();

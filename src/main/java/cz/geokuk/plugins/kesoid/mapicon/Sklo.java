@@ -15,17 +15,17 @@ import cz.geokuk.util.pocitadla.*;
 
 public class Sklo implements ImagantCache {
 
-	private static Pocitadlo					pocitImangantuZasah		= new PocitadloRoste("Imagant - zásahy cache", "");
-	private static Pocitadlo					pocitSourceImaguZasah	= new PocitadloRoste("Zdrojové obrázky - zásah cache", "");
-	private final Pocitadlo						pocitImangantu			= new PocitadloMalo("Imagant - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
-	private final Pocitadlo						pocitSourceImagu		= new PocitadloMalo("Zdrojové obrázky - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
+	private static Pocitadlo pocitImangantuZasah = new PocitadloRoste("Imagant - zásahy cache", "");
+	private static Pocitadlo pocitSourceImaguZasah = new PocitadloRoste("Zdrojové obrázky - zásah cache", "");
+	private final Pocitadlo pocitImangantu = new PocitadloMalo("Imagant - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
+	private final Pocitadlo pocitSourceImagu = new PocitadloMalo("Zdrojové obrázky - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
 
-	List<Vrstva>								vrstvy					= new ArrayList<>();
+	List<Vrstva> vrstvy = new ArrayList<>();
 
-	private final Map<Genotyp.Otisk, Imagant>	cache					= new HashMap<>();
-	private final Map<URL, BufferedImage>		sourceImageCache		= Collections.synchronizedMap(new HashMap<URL, BufferedImage>());
+	private final Map<Genotyp.Otisk, Imagant> cache = new HashMap<>();
+	private final Map<URL, BufferedImage> sourceImageCache = Collections.synchronizedMap(new HashMap<URL, BufferedImage>());
 
-	private final String						iName;
+	private final String iName;
 
 	public static Imagant prekresliNaSebe(final List<Imagant> imaganti) {
 		if (imaganti.isEmpty()) {

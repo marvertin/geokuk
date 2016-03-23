@@ -55,39 +55,39 @@ public class JFontChooser extends JComponent {
 	/**
 	 *
 	 */
-	private static final long		serialVersionUID	= -3412974969117820342L;
+	private static final long serialVersionUID = -3412974969117820342L;
 
 	/** The list of possible font sizes. */
-	private static final Integer[]	SIZES				= { 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 24, 26, 28, 32, 36, 40, 48, 56, 64, 72 };
+	private static final Integer[] SIZES = { 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 24, 26, 28, 32, 36, 40, 48, 56, 64, 72 };
 
 	/** The list of possible fonts. */
-	private static final String[]	FONTS				= GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+	private static final String[] FONTS = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
-	private FontSelectionModel		selectionModel;
+	private FontSelectionModel selectionModel;
 
-	private JList<String>			fontList;
+	private JList<String> fontList;
 
-	private JList<Integer>			sizeList;
+	private JList<Integer> sizeList;
 
-	private JCheckBox				boldCheckBox;
+	private JCheckBox boldCheckBox;
 
-	private JCheckBox				italicCheckBox;
+	private JCheckBox italicCheckBox;
 
-	private JLabel					previewLabel;
+	private JLabel previewLabel;
 
 	/** The preview text, if null the font name will be the preview text. */
-	private String					previewText;
+	private String previewText;
 
 	/** Listener used to update the font of the selection model. */
-	private final SelectionUpdater	selectionUpdater	= new SelectionUpdater();
+	private final SelectionUpdater selectionUpdater = new SelectionUpdater();
 
 	/**
 	 * Listener used to update the font in the components. This should be registered with the selection model.
 	 */
-	private final LabelUpdater		labelUpdater		= new LabelUpdater();
+	private final LabelUpdater labelUpdater = new LabelUpdater();
 
 	/** True if the components are being updated and no event should be generated. */
-	private boolean					updatingComponents	= false;
+	private boolean updatingComponents = false;
 
 	/**
 	 * Creates a color chooser pane with an initial font which is the same font as the default font for labels.
@@ -333,13 +333,13 @@ public class JFontChooser extends JComponent {
 class DefaultFontSelectionModel implements FontSelectionModel {
 
 	/** The default selected font. */
-	private static final Font		DEFAULT_INITIAL_FONT	= new Font("Dialog", Font.PLAIN, 12);
+	private static final Font DEFAULT_INITIAL_FONT = new Font("Dialog", Font.PLAIN, 12);
 
 	/** The selected font. */
-	private Font					selectedFont;
+	private Font selectedFont;
 
 	/** The change listeners notified by a change in this model. */
-	private final EventListenerList	listeners				= new EventListenerList();
+	private final EventListenerList listeners = new EventListenerList();
 
 	/**
 	 * Creates a <code>DefaultFontSelectionModel</code> with the current font set to <code>Dialog, 12</code>. This is the default constructor.
@@ -423,11 +423,11 @@ class FontChooserDialog extends JDialog {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -7376253355818496076L;
+	private static final long serialVersionUID = -7376253355818496076L;
 
-	private Font				initialFont;
+	private Font initialFont;
 
-	private final JFontChooser	chooserPane;
+	private final JFontChooser chooserPane;
 
 	public FontChooserDialog(final Component c, final String title, final boolean modal, final JFontChooser chooserPane, final ActionListener okListener, final ActionListener cancelListener) {
 		super(JOptionPane.getFrameForComponent(c), title, modal);
@@ -519,9 +519,9 @@ class FontChooserDialog extends JDialog {
 }
 
 class FontTracker implements ActionListener, Serializable {
-	private static final long	serialVersionUID	= -969244282397272192L;
-	JFontChooser				chooser;
-	Font						color;
+	private static final long serialVersionUID = -969244282397272192L;
+	JFontChooser chooser;
+	Font color;
 
 	public FontTracker(final JFontChooser c) {
 		chooser = c;

@@ -9,15 +9,15 @@ import cz.geokuk.plugins.mapy.kachle.EKaType;
 
 public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventReceiverRegistrationInit {
 
-	private static final long		serialVersionUID	= -484273090975902036L;
+	private static final long serialVersionUID = -484273090975902036L;
 
-	public final SpinnerNumberModel	iModel				= new SpinnerNumberModel(10, 10, 10000, 1);
+	public final SpinnerNumberModel iModel = new SpinnerNumberModel(10, 10, 10000, 1);
 
-	private RenderModel				renderModel;
+	private RenderModel renderModel;
 
-	private JSpinner				jMaximalniVelikost;
-	private JTextField				jSkutecnaVelikost;
-	private JTextField				jPocetDlazdic;
+	private JSpinner jMaximalniVelikost;
+	private JTextField jSkutecnaVelikost;
+	private JTextField jPocetDlazdic;
 
 	/**
 	 *

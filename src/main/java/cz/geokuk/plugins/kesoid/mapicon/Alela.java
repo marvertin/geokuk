@@ -11,11 +11,11 @@ import java.util.Set;
  */
 public class Alela {
 
-	private final String	alelaName;
-	private String			displayName;
-	private Gen				gen;
-	private Grupa			grupa;
-	private final int		celkovePoradi;
+	private final String alelaName;
+	private String displayName;
+	private Gen gen;
+	private Grupa grupa;
+	private final int celkovePoradi;
 
 	public static Set<String> alelyToNames(final Set<Alela> alely) {
 		final Set<String> jmenaAlel = new HashSet<>(alely.size());

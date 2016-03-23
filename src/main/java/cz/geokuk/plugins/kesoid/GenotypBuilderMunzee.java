@@ -5,8 +5,8 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 
 class GenotypBuilderMunzee {
 
-	private final Genotyp	g;
-	private final Genom		genom;
+	private final Genotyp g;
+	private final Genom genom;
 
 	public GenotypBuilderMunzee(final Genom genom, final Genotyp g) {
 		this.genom = genom;

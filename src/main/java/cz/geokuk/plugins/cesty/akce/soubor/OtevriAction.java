@@ -32,9 +32,9 @@ public class OtevriAction extends SouboeCestaAction0 {
 
 	}
 
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
-	private JFileChooser		fc;
+	private JFileChooser fc;
 
 	public OtevriAction() {
 		super("Otevřít cesty (gpx)");

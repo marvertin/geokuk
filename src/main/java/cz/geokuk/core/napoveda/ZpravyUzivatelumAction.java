@@ -15,8 +15,8 @@ import cz.geokuk.framework.JMyDialog0;
  */
 public class ZpravyUzivatelumAction extends DialogOpeningAction0 {
 
-	private static final long		serialVersionUID	= -2882817111560336824L;
-	private List<ZpravaUzivateli>	zpravyUzivatelum;
+	private static final long serialVersionUID = -2882817111560336824L;
+	private List<ZpravaUzivateli> zpravyUzivatelum;
 
 	/**
 	 * @param aBoard

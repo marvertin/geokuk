@@ -13,21 +13,21 @@ public class ProgressModel extends Model0 {
 
 	private class SimpleNotParalelProgressor implements Progressor {
 
-		private static final long	millisToDecideToPopup						= 500;
-		private static final long	millisToPopup								= 2000;
+		private static final long millisToDecideToPopup = 500;
+		private static final long millisToPopup = 2000;
 		/**
 		 *
 		 */
-		private static final int	MINIMALNI_DOBA_MEZI_DVEVA_POSUNY_PROGRESORU	= 101;
-		private int					progress;
-		private int					max;
-		private String				text										= "";
+		private static final int MINIMALNI_DOBA_MEZI_DVEVA_POSUNY_PROGRESORU = 101;
+		private int progress;
+		private int max;
+		private String text = "";
 
-		private String				tooltip										= "";
-		private boolean				visible;
+		private String tooltip = "";
+		private boolean visible;
 
-		private final long			startTime									= System.currentTimeMillis();
-		private long				lastFireTime;
+		private final long startTime = System.currentTimeMillis();
+		private long lastFireTime;
 
 		/*
 		 * (non-Javadoc)

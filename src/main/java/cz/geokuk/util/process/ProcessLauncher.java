@@ -20,10 +20,10 @@ public class ProcessLauncher {
 	 */
 	public static class Result {
 
-		private final String			executedCommand;
-		private final List<ResultItem>	error;
-		private final List<ResultItem>	output;
-		private final int				exitValue;
+		private final String executedCommand;
+		private final List<ResultItem> error;
+		private final List<ResultItem> output;
+		private final int exitValue;
 
 		Result(final String aExecutedCommand, final int aExitValue, final List<ResultItem> aError, final List<ResultItem> aOutput) {
 
@@ -78,8 +78,8 @@ public class ProcessLauncher {
 	 */
 	public static class ResultItem {
 
-		private final long		timeStamp;
-		private final String	text;
+		private final long timeStamp;
+		private final String text;
 
 		ResultItem(final long aTs, final String aText) {
 
@@ -97,8 +97,8 @@ public class ProcessLauncher {
 	}
 
 	private static class StreamGobbler extends Thread {
-		private final InputStream		is;
-		private final List<ResultItem>	content;
+		private final InputStream is;
+		private final List<ResultItem> content;
 
 		StreamGobbler(final InputStream aIs) {
 			is = aIs;

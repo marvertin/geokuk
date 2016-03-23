@@ -5,10 +5,10 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 public class Bod extends Bousek0 implements Uchopenec {
 
-	Mouable			mouable;
+	Mouable mouable;
 
-	private Usek	uvpred;
-	private Usek	uvzad;
+	private Usek uvpred;
+	private Usek uvzad;
 
 	Bod(final Cesta cesta, final Mouable mouable) {
 		super(cesta);

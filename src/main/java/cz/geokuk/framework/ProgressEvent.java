@@ -2,12 +2,12 @@ package cz.geokuk.framework;
 
 public class ProgressEvent extends Event0<ProgressModel> {
 
-	private final boolean		visible;
-	private final int			progress;
-	private final int			max;
-	private final String		text;
-	private final String		tooltip;
-	private final Progressor	progressor;
+	private final boolean visible;
+	private final int progress;
+	private final int max;
+	private final String text;
+	private final String tooltip;
+	private final Progressor progressor;
 
 	/**
 	 * @param visible

@@ -13,8 +13,8 @@ import cz.geokuk.core.coord.*;
  *
  */
 public class JPresCelePrekryvnik extends JCoordPrekryvnik0 implements AfterEventReceiverRegistrationInit {
-	private static final long	serialVersionUID	= -5996655830197513951L;
-	private VyrezModel			vyrezModel;
+	private static final long serialVersionUID = -5996655830197513951L;
+	private VyrezModel vyrezModel;
 
 	@Override
 	public void initAfterEventReceiverRegistration() {

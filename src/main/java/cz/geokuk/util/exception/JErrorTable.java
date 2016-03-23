@@ -50,13 +50,13 @@ import javax.swing.table.TableColumn;
  */
 public class JErrorTable extends JPanel {
 	class MyTableModel extends AbstractTableModel {
-		private static final long	serialVersionUID	= -1777521413836209700L;
+		private static final long serialVersionUID = -1777521413836209700L;
 
-		private final List<Problem>	problemlist			= new ArrayList<>();
+		private final List<Problem> problemlist = new ArrayList<>();
 
-		private final String[]		columnNames			= { "Závažnost", "Výjimka", "Popis",
+		private final String[] columnNames = { "Závažnost", "Výjimka", "Popis",
 
-															};
+		};
 
 		/*
 		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
@@ -130,9 +130,9 @@ public class JErrorTable extends JPanel {
 	}
 
 	static class Problem {
-		String	zavaznost;
-		String	popis;
-		AExcId	excId;
+		String zavaznost;
+		String popis;
+		AExcId excId;
 
 		public AExcId getExcId() {
 			return excId;
@@ -160,11 +160,11 @@ public class JErrorTable extends JPanel {
 
 	}
 
-	private static final long	serialVersionUID	= 7687619215661046034L;
+	private static final long serialVersionUID = 7687619215661046034L;
 
-	MyTableModel				tableModel;
+	MyTableModel tableModel;
 
-	JTable						table;
+	JTable table;
 
 	public JErrorTable() {
 		super(new GridLayout(1, 0));

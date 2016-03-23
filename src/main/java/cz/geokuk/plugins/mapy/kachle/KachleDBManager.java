@@ -22,33 +22,33 @@ import org.tmatesoft.sqljet.core.table.*;
  */
 public class KachleDBManager implements KachleManager {
 
-	private static final Logger						log					= LogManager.getLogger(KachleDBManager.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(KachleDBManager.class.getSimpleName());
 
 	/**
 	 * The name of the SQLite file
 	 */
-	private static final String						FILE_NAME			= "tiles.sqlite";
+	private static final String FILE_NAME = "tiles.sqlite";
 
 	/**
 	 * The name of the table with tiles
 	 */
-	private static final String						TABLE_NAME			= "tiles";
+	private static final String TABLE_NAME = "tiles";
 
 	/**
 	 * A query to create the appropriate table
 	 */
-	private static final String						TABLE_CREATE_QUERY	= String.format("CREATE TABLE %s (x int, y int, " + "z int, s varchar(10), image blob, PRIMARY KEY(x, y, z, s))", TABLE_NAME);
+	private static final String TABLE_CREATE_QUERY = String.format("CREATE TABLE %s (x int, y int, " + "z int, s varchar(10), image blob, PRIMARY KEY(x, y, z, s))", TABLE_NAME);
 
 	/**
 	 * Since we've got multiple threads that can write to the database, using a single connection is hardly possible (would require synchronization on code level, which is not the way to go). We also want to avoid exposing the implementation details further. Since the number of threads is small
 	 * enough, we don't need a connection pool and instead we've got a connection for each thread.
 	 */
-	final Map<Map.Entry<Thread, File>, SqlJetDb>	connections			= new ConcurrentHashMap<>();
+	final Map<Map.Entry<Thread, File>, SqlJetDb> connections = new ConcurrentHashMap<>();
 
 	/**
 	 * The DB file.
 	 */
-	final KachleCacheFolderHolder					folderHolder;
+	final KachleCacheFolderHolder folderHolder;
 
 	/**
 	 * Constructs a new instance of the DB Manager.

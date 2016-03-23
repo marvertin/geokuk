@@ -36,10 +36,10 @@ import java.nio.channels.FileChannel;
  */
 
 public class FileManager {
-	private static final int	MIN_BUFFER_SIZE	= 1024 * 4;
-	private static final int	MAX_BUFFER_SIZE	= 1024 * 1024 * 32;
+	private static final int MIN_BUFFER_SIZE = 1024 * 4;
+	private static final int MAX_BUFFER_SIZE = 1024 * 1024 * 32;
 
-	private int					iBufferSize;
+	private int iBufferSize;
 
 	/**
 	 * Vytvoří isntanci file manageru. Parametrem je velikost bufferu, který bude použit při kopírování. Nutno vhodně zvolit podle velikosti kopírovaných souborů, jejich počtu, množství paměti, požadované odezvy.

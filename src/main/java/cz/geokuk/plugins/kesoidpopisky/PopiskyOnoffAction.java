@@ -8,8 +8,8 @@ import cz.geokuk.framework.ToggleAction0;
 
 public class PopiskyOnoffAction extends ToggleAction0 {
 
-	private static final long	serialVersionUID	= -7547868179813232769L;
-	private PopiskyModel		popiskyModel;
+	private static final long serialVersionUID = -7547868179813232769L;
+	private PopiskyModel popiskyModel;
 
 	public PopiskyOnoffAction() {
 		super("Popisky na mapě");

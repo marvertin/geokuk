@@ -17,8 +17,8 @@ import cz.geokuk.framework.Action0;
  */
 public class BezDomuAction extends Action0 {
 
-	private static final long	serialVersionUID	= -2882817111560336824L;
-	private RefbodyModel		refbodyModel;
+	private static final long serialVersionUID = -2882817111560336824L;
+	private RefbodyModel refbodyModel;
 
 	/**
 	 * @param aBoard

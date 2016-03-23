@@ -9,9 +9,9 @@ package cz.geokuk.plugins.kesoid.importek;
  */
 public class GpxLink {
 
-	public String	href;
-	public String	text;
-	public String	type;
+	public String href;
+	public String text;
+	public String type;
 
 	/*
 	 * (non-Javadoc)

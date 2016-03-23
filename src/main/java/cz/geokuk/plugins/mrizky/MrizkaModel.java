@@ -6,9 +6,9 @@ import cz.geokuk.framework.Model0;
 
 public class MrizkaModel extends Model0 implements BeanSubtypable {
 
-	private Boolean			onoff;
-	private final String	kteraMrizka;
-	private final boolean	defaultZobrazeni;
+	private Boolean onoff;
+	private final String kteraMrizka;
+	private final boolean defaultZobrazeni;
 
 	public MrizkaModel(final String kteraMrizka, final boolean defaultZobrazeni) {
 		super();

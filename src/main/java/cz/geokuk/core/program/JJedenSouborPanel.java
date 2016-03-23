@@ -18,25 +18,25 @@ import cz.geokuk.util.file.Filex;
 
 public class JJedenSouborPanel extends JPanel implements DocumentListener {
 
-	private static final Logger		log					= LogManager.getLogger(JJedenSouborPanel.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(JJedenSouborPanel.class.getSimpleName());
 
-	private static final long		serialVersionUID	= -3579395922979423765L;
+	private static final long serialVersionUID = -3579395922979423765L;
 
-	private final boolean			jenAdresare;
+	private final boolean jenAdresare;
 
-	private final String			label;
-	private JTextField				jtext;
-	private JCheckBox				jRelativneKProgramu;
-	private JCheckBox				jActive;
-	private JTextField				jCurrVal;
+	private final String label;
+	private JTextField jtext;
+	private JCheckBox jRelativneKProgramu;
+	private JCheckBox jActive;
+	private JTextField jCurrVal;
 
-	private Filex					filex;
+	private Filex filex;
 
-	private final boolean			editovatelne;
+	private final boolean editovatelne;
 
-	private final boolean			lzeDeaktivovat;
+	private final boolean lzeDeaktivovat;
 
-	private final ESouborPanelName	souborPanelName;
+	private final ESouborPanelName souborPanelName;
 
 	/**
 	 * @param souborPanelName

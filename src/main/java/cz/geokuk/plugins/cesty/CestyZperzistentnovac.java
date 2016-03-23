@@ -16,11 +16,11 @@ import cz.geokuk.util.index2d.*;
 
 public class CestyZperzistentnovac {
 
-	private static final Logger	log		= LogManager.getLogger(CestyZperzistentnovac.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(CestyZperzistentnovac.class.getSimpleName());
 
-	private int					smimCist;
+	private int smimCist;
 
-	private final Updator		updator	= new Updator();
+	private final Updator updator = new Updator();
 
 	public boolean smimCist() {
 		return smimCist == 0;

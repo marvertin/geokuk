@@ -12,11 +12,11 @@ import cz.geokuk.plugins.cesty.data.Cesta;
 
 public class JCestaTooltip extends JComponent {
 
-	private static final long	serialVersionUID	= -7455935457383912752L;
+	private static final long serialVersionUID = -7455935457383912752L;
 
-	private final JLabel		jVpred				= new JLabel("xxxxxxxx");
-	private final JLabel		jVzad				= new JLabel("yyyyyyyy");
-	private final JLabel		jNazevCesty			= new JLabel("yyyyyyyy");
+	private final JLabel jVpred = new JLabel("xxxxxxxx");
+	private final JLabel jVzad = new JLabel("yyyyyyyy");
+	private final JLabel jNazevCesty = new JLabel("yyyyyyyy");
 
 	public JCestaTooltip() {
 		setLayout(new FlowLayout());

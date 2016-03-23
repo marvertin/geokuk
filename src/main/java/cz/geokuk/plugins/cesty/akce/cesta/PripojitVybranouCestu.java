@@ -38,7 +38,7 @@ public class PripojitVybranouCestu extends CestaAction0 {
 	@Override
 	protected void nastavJmenoAkce(final Cesta cesta, final boolean aZKontextovehoMenu) {
 		putValue(NAME, "<html>Připojit k" + cesta.getNazevADalkaHtml() + " vybranou cestu" + curta().getNazevADalkaHtml() + " usekem "
-				+ Cesta.dalkaHtml(FGeoKonvertor.dalka(cesta.getCil(), curta().getStart()), Color.BLACK));
+		        + Cesta.dalkaHtml(FGeoKonvertor.dalka(cesta.getCil(), curta().getStart()), Color.BLACK));
 	}
 
 	@Override

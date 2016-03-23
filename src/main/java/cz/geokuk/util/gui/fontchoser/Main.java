@@ -17,8 +17,8 @@ public class Main extends JFrame {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= 258357579389164969L;
-	private final JLabel		ukazovyText			= new JLabel("tak toto fontujeme");
+	private static final long serialVersionUID = 258357579389164969L;
+	private final JLabel ukazovyText = new JLabel("tak toto fontujeme");
 
 	/**
 	 * @param args

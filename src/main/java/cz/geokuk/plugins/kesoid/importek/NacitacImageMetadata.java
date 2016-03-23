@@ -22,9 +22,9 @@ import cz.geokuk.core.coordinates.Wgs;
 
 public class NacitacImageMetadata extends NacitacInputStream0 {
 
-	private static final Logger					log							= LogManager.getLogger(NacitacImageMetadata.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(NacitacImageMetadata.class.getSimpleName());
 
-	private static final ImmutableSet<String>	SUPPORTED_FILE_EXTENSIONS	= ImmutableSet.of("jpg", "raw", "tif");
+	private static final ImmutableSet<String> SUPPORTED_FILE_EXTENSIONS = ImmutableSet.of("jpg", "raw", "tif");
 
 	@Override
 	protected void nacti(final InputStream istm, final String name, final IImportBuilder builder, final Future<?> future) throws IOException {

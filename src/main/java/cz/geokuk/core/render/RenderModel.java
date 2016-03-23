@@ -19,29 +19,29 @@ import cz.geokuk.util.file.Filex;
 public class RenderModel extends Model0 {
 
 	static class Dvoj {
-		double	a;
-		double	b;
+		double a;
+		double b;
 	}
 
 	// private static final double OKRAJ_CENTIMETR = 0.01;
-	private static final double		OKRAJ_CENTIMETR	= 0;
+	private static final double OKRAJ_CENTIMETR = 0;
 
-	private double					natoceni;
+	private double natoceni;
 
 	// rendrované hodnoty, to jsou ty, jejichž obrázky se budou staovat a rendrovat
-	private Coord					moord;
+	private Coord moord;
 
 	// Nastavované během přípravy na rendrování
-	private Dimension				dim;
+	private Dimension dim;
 
-	private RenderUmisteniSouboru	umisteniSouboru;
+	private RenderUmisteniSouboru umisteniSouboru;
 
-	private RenderSettings			renderSettings;
+	private RenderSettings renderSettings;
 
-	private RendererSwingWorker0	koswx;
+	private RendererSwingWorker0 koswx;
 
 	// Je true, pokud jsme v dialogu, kde se nastavuje rendrování
-	private boolean					jsmeVRendrovani;
+	private boolean jsmeVRendrovani;
 
 	// public Mou SZ;
 	//

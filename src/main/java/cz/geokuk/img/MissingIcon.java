@@ -11,10 +11,10 @@ import javax.swing.Icon;
  */
 public class MissingIcon implements Icon {
 
-	private final int			width	= 32;
-	private final int			height	= 32;
+	private final int width = 32;
+	private final int height = 32;
 
-	private final BasicStroke	stroke	= new BasicStroke(4);
+	private final BasicStroke stroke = new BasicStroke(4);
 
 	@Override
 	public int getIconHeight() {

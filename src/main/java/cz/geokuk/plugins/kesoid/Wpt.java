@@ -12,52 +12,52 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		OTHER, KESWPT, FIRST, FINAL,
 	}
 
-	public static final String			TRADITIONAL_CACHE	= "Traditional Cache";
+	public static final String TRADITIONAL_CACHE = "Traditional Cache";
 
-	private static Map<String, String>	wptMapping			= new HashMap<>();
+	private static Map<String, String> wptMapping = new HashMap<>();
 
 	static {
 		wptMapping.put("Virtual Stage", "Question to Answer");
 		wptMapping.put("Physical Stage", "Stages of a Multicache");
 	}
 
-	private static int	currentSklivecValidityCode;
+	private static int currentSklivecValidityCode;
 
 	/**
 	 * Jmené vejpointu, z GPS tag name
 	 */
-	private String		name;
+	private String name;
 
 	/**
 	 * symbol waypointu, zároveˇje jeho typem, určuje, co se zobrazí na napě, není to přímo <sym>
 	 */
-	private String		sym;
+	private String sym;
 
 	/**
 	 * Sožadnice
 	 */
-	private int			elevation;
+	private int elevation;
 
 	// private String prefix;
 
-	private boolean		rucnePridany;
+	private boolean rucnePridany;
 	/**
 	 * Název waypointu, je to nějaký delší název z GPS to bud <cmt> nebo <desc>, podle toho, co tam je
 	 */
-	private String		nazev;
+	private String nazev;
 
 	// Podpora vykreslování
-	private Sklivec		sklivec;
+	private Sklivec sklivec;
 
-	private int			sklivecValidityCode;
-	public double		lat;
+	private int sklivecValidityCode;
+	public double lat;
 
-	public double		lon;
-	private int			xx		= -1;
+	public double lon;
+	private int xx = -1;
 
-	private int			yy		= -1;
+	private int yy = -1;
 
-	private EZOrder		zorder	= EZOrder.OTHER;
+	private EZOrder zorder = EZOrder.OTHER;
 
 	public static void invalidateAllSklivec() {
 		currentSklivecValidityCode++;

@@ -16,8 +16,8 @@ import cz.geokuk.framework.Preferenceble;
 @Preferenceble
 public class OknoUmisteniDto implements Copyable<OknoUmisteniDto> {
 
-	private Point		pozice		= new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
-	private Dimension	velikost	= new Dimension(Integer.MIN_VALUE, Integer.MIN_VALUE);
+	private Point pozice = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+	private Dimension velikost = new Dimension(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
 	@Override
 	public OknoUmisteniDto copy() {

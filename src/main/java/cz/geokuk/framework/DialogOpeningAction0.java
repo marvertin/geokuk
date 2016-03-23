@@ -11,9 +11,9 @@ import java.awt.event.*;
  */
 public abstract class DialogOpeningAction0 extends Action0 {
 
-	private static final long	serialVersionUID	= 1736854705007384645L;
+	private static final long serialVersionUID = 1736854705007384645L;
 
-	private JMyDialog0			mydialog;
+	private JMyDialog0 mydialog;
 
 	/**
 	 * @param string

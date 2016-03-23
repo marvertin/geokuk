@@ -16,11 +16,11 @@ import cz.geokuk.plugins.cesty.akce.soubor.UlozAction;
  */
 public class CloseAction extends Action0 {
 
-	private static final long	serialVersionUID	= -8054017274338240706L;
+	private static final long serialVersionUID = -8054017274338240706L;
 
-	private UlozAction			ulozAction;
+	private UlozAction ulozAction;
 
-	private ProfileModel		profileModel;
+	private ProfileModel profileModel;
 
 	/**
 	 *

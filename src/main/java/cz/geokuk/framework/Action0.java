@@ -19,13 +19,13 @@ import cz.geokuk.core.program.MainFrameHolder;
  *
  */
 public abstract class Action0 extends AbstractAction {
-	private static final long	serialVersionUID	= -8430830975286039793L;
+	private static final long serialVersionUID = -8430830975286039793L;
 
-	protected Factory			factory;
-	protected PoziceModel		poziceModel;
-	protected VyrezModel		vyrezModel;
+	protected Factory factory;
+	protected PoziceModel poziceModel;
+	protected VyrezModel vyrezModel;
 
-	private MainFrameHolder		mainFrameHolder;
+	private MainFrameHolder mainFrameHolder;
 
 	/**
 	 *

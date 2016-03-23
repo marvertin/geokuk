@@ -8,15 +8,15 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JNickEditDialog extends JMyDialog0 {
 
-	private static final long	serialVersionUID	= 5215923043342722378L;
+	private static final long serialVersionUID = 5215923043342722378L;
 
-	JLabel						jNickNameLabel		= new JLabel("Nick: ");
-	JLabel						jNickIdLabel		= new JLabel("Id: ");
-	JTextField					jNickName;
-	JTextField					jNickId;
-	JButton						jUlozit;
+	JLabel jNickNameLabel = new JLabel("Nick: ");
+	JLabel jNickIdLabel = new JLabel("Id: ");
+	JTextField jNickName;
+	JTextField jNickId;
+	JButton jUlozit;
 
-	private KesoidModel			kesoidModel;
+	private KesoidModel kesoidModel;
 
 	public JNickEditDialog() {
 		setTitle("Nick na geocaching.com (přihlašovací jméno");
@@ -85,20 +85,20 @@ public class JNickEditDialog extends JMyDialog0 {
 		// panel.add(jSimplewaypontPatternEdit);
 
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.CENTER)
-				.addGroup(layout.createSequentialGroup() // hroup
-						.addGroup(layout.createParallelGroup() // h1
-								.addComponent(jNickNameLabel).addComponent(jNickIdLabel))
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jNickName).addComponent(jNickId)))
+		        .addGroup(layout.createSequentialGroup() // hroup
+		                .addGroup(layout.createParallelGroup() // h1
+		                        .addComponent(jNickNameLabel).addComponent(jNickIdLabel))
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jNickName).addComponent(jNickId)))
 
-				.addComponent(jUlozit));
+		.addComponent(jUlozit));
 		layout.setVerticalGroup(layout.createSequentialGroup() // hroup
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jNickNameLabel).addComponent(jNickName))
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jNickIdLabel).addComponent(jNickId))
-				.addGroup(layout.createParallelGroup() // h1
-						.addComponent(jUlozit)));
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jNickNameLabel).addComponent(jNickName))
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jNickIdLabel).addComponent(jNickId))
+		        .addGroup(layout.createParallelGroup() // h1
+		                .addComponent(jUlozit)));
 	}
 
 }

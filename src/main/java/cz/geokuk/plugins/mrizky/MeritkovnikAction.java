@@ -6,9 +6,9 @@ import cz.geokuk.framework.BeanSubtype;
 import cz.geokuk.framework.ToggleAction0;
 
 public class MeritkovnikAction extends ToggleAction0 {
-	private static final long	serialVersionUID	= -3631232428454275961L;
+	private static final long serialVersionUID = -3631232428454275961L;
 
-	public MrizkaModel			mrizkaModel;
+	public MrizkaModel mrizkaModel;
 
 	public MeritkovnikAction() {
 		super("Zobrazit měřítko");

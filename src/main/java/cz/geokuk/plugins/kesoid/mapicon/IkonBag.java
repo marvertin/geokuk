@@ -10,10 +10,10 @@ import cz.geokuk.api.mapicon.Imagant;
 
 public class IkonBag {
 
-	private Set<String>			jmenaSad;
-	private Sada				sada;
-	private final Genom			genom	= new Genom();
-	private Map<ASada, Icon>	iJmenaAIkonySad;
+	private Set<String> jmenaSad;
+	private Sada sada;
+	private final Genom genom = new Genom();
+	private Map<ASada, Icon> iJmenaAIkonySad;
 
 	public Genom getGenom() {
 		return genom;

@@ -12,8 +12,8 @@ import java.util.*;
  */
 public class KeyNode<K, D> {
 
-	private D									data;
-	private final SortedMap<K, KeyNode<K, D>>	items	= new TreeMap<>();
+	private D data;
+	private final SortedMap<K, KeyNode<K, D>> items = new TreeMap<>();
 
 	/*
 	 * (non-Javadoc)

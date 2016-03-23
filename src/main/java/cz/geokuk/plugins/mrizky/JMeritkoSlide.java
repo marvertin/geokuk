@@ -12,8 +12,8 @@ import cz.geokuk.framework.BeanSubtype;
 
 public class JMeritkoSlide extends JSingleSlide0 implements AfterInjectInit {
 
-	private static final long	serialVersionUID	= -5858146658366237217L;
-	private JMeritko			meritko;
+	private static final long serialVersionUID = -5858146658366237217L;
+	private JMeritko meritko;
 
 	public JMeritkoSlide() {
 		setOpaque(false);

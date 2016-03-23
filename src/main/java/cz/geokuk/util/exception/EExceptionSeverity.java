@@ -6,10 +6,10 @@ package cz.geokuk.util.exception;
  * @author veverka
  */
 public enum EExceptionSeverity {
-	/**
-	 * Jsou dvě možnosti: 1. Identifikace výjimky je právě zobrazována koncovému uživateli 2. Identifikace předávána dál přes vzdálená volání, protože prohazovat výjimky vzdálenými voláními není moc dobrý nápad. Na klientské straně totiž nemusí být deseriaizovatelné. Oba případy jsou rovnocenné,
-	 * protože ani vdruhém případě nezvývá klientskému systému nic jiného, než zobrazit hlášku.
-	 */
+    /**
+     * Jsou dvě možnosti: 1. Identifikace výjimky je právě zobrazována koncovému uživateli 2. Identifikace předávána dál přes vzdálená volání, protože prohazovat výjimky vzdálenými voláními není moc dobrý nápad. Na klientské straně totiž nemusí být deseriaizovatelné. Oba případy jsou rovnocenné,
+     * protože ani vdruhém případě nezvývá klientskému systému nic jiného, než zobrazit hlášku.
+     */
 	DISPLAY("a"),
 
 	/**

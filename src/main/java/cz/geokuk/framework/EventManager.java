@@ -24,9 +24,9 @@ import cz.geokuk.util.pocitadla.*;
 public class EventManager implements EventFirer {
 
 	private class ObserverInvocation extends WeakReference<Object> {
-		Method									observerOnEventMethod;
-		private final List<ObserverInvocation>	iParentList;
-		private final Class<?>					observerClass;
+		Method observerOnEventMethod;
+		private final List<ObserverInvocation> iParentList;
+		private final Class<?> observerClass;
 
 		/**
 		 * @param aObserverObject
@@ -62,25 +62,24 @@ public class EventManager implements EventFirer {
 	}
 
 	private class Observry {
-		List<ObserverInvocation>	listo	= new LinkedList<>();
-		private Object				lastEvent;
+		List<ObserverInvocation> listo = new LinkedList<>();
+		private Object lastEvent;
 	}
 
-	private static final Logger		log							= LogManager.getLogger(EventManager.class.getSimpleName());
-	private static Pocitadlo		pocitTypy					= new PocitadloMalo("Počet typů registrovaných eventů",
-			"Kolik registrovaných typů eventů (tříd) je ve třídě Eventmanager, mělo by to být v v jednotkách či malých desítkách a nemělo by narůstat.");
-	private static Pocitadlo		pocitObservery				= new PocitadloMalo("Počet observerů za všechny typy dohromady",
-			"Kolik celkem observerů je regostrováno pro události. Musí být v desítkách a nesmí růst.");
+	private static final Logger log = LogManager.getLogger(EventManager.class.getSimpleName());
+	private static Pocitadlo pocitTypy = new PocitadloMalo("Počet typů registrovaných eventů",
+	        "Kolik registrovaných typů eventů (tříd) je ve třídě Eventmanager, mělo by to být v v jednotkách či malých desítkách a nemělo by narůstat.");
+	private static Pocitadlo pocitObservery = new PocitadloMalo("Počet observerů za všechny typy dohromady", "Kolik celkem observerů je regostrováno pro události. Musí být v desítkách a nesmí růst.");
 
-	private static Pocitadlo		pocitReistraceOdregistrace	= new PocitadloRoste("Počet registrací observerů",
-			"Kolikrát se registrovaly a odregistrovávaly observery (dohromady), číslo stále roste, ale nesmí moc rychle, neboť registrace a deregistrace nemusí být laciná,"
-					+ " ale pravděpodobně poroste s otvíráním a zavíráním různých oken.");
+	private static Pocitadlo pocitReistraceOdregistrace = new PocitadloRoste("Počet registrací observerů",
+	        "Kolikrát se registrovaly a odregistrovávaly observery (dohromady), číslo stále roste, ale nesmí moc rychle, neboť registrace a deregistrace nemusí být laciná,"
+	                + " ale pravděpodobně poroste s otvíráním a zavíráním různých oken.");
 
-	public ReferenceQueue<Object>	referencequeue				= new ReferenceQueue<>();
+	public ReferenceQueue<Object> referencequeue = new ReferenceQueue<>();
 
-	Map<BeanType, Observry>			mapaclsobs					= new HashMap<>();
+	Map<BeanType, Observry> mapaclsobs = new HashMap<>();
 
-	private int						urovenZanoreni;
+	private int urovenZanoreni;
 
 	public EventManager() {
 		final Thread thread = new Thread(new Runnable() {

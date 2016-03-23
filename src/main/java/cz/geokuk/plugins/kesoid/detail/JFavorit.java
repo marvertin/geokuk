@@ -9,9 +9,9 @@ import cz.geokuk.img.ImageLoader;
 
 public class JFavorit extends JComponent {
 
-	private static final long	serialVersionUID	= 8991499244324360406L;
-	private static final Font	sFont				= new Font("SansSerif", Font.BOLD, 18);
-	private int					kolik				= Integer.MIN_VALUE;
+	private static final long serialVersionUID = 8991499244324360406L;
+	private static final Font sFont = new Font("SansSerif", Font.BOLD, 18);
+	private int kolik = Integer.MIN_VALUE;
 
 	public static void main(final String[] args) {
 		final JFrame frm = new JFrame();

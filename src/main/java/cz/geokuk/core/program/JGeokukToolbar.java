@@ -16,8 +16,8 @@ import cz.geokuk.plugins.kesoid.mapicon.JToolbarOvladaceAlel;
  */
 public class JGeokukToolbar extends JToolBar {
 
-	private static final long	serialVersionUID	= -1467720799951484011L;
-	private Factory				factory;
+	private static final long serialVersionUID = -1467720799951484011L;
+	private Factory factory;
 
 	/**
 	 *

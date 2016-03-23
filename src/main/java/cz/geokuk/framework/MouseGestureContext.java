@@ -20,9 +20,9 @@ public class MouseGestureContext {
 	// void setMouseCursorTogle(Cursor cursor);
 	//
 	// void finish();
-	public Wpt		blizkyWpt;
+	public Wpt blizkyWpt;
 
-	public Bousek0	blizkyBousek;
+	public Bousek0 blizkyBousek;
 
-	public Mouable	blizkaPozice;
+	public Mouable blizkaPozice;
 }

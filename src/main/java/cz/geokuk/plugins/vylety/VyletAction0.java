@@ -6,9 +6,9 @@ import cz.geokuk.framework.Action0;
 
 public abstract class VyletAction0 extends Action0 {
 
-	private static final long	serialVersionUID	= -2637836928166450446L;
+	private static final long serialVersionUID = -2637836928166450446L;
 
-	protected VyletModel		vyletModel;
+	protected VyletModel vyletModel;
 
 	public VyletAction0(final String string) {
 		super(string);

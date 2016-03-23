@@ -30,11 +30,11 @@ public class KachloDownloader {
 		}
 	}
 
-	private static final Logger						log						= LogManager.getLogger(KachloDownloader.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(KachloDownloader.class.getSimpleName());
 
-	private final Pocitadlo							pocitDownloadleDlazdice	= new PocitadloRoste("Downloadlé dlaždice", "Počet dlaždic, které byly downloadovány.");
+	private final Pocitadlo pocitDownloadleDlazdice = new PocitadloRoste("Downloadlé dlaždice", "Počet dlaždic, které byly downloadovány.");
 
-	private final EnumMap<EPraznyObrazek, Image>	prazdneObrazky			= new EnumMap<>(EPraznyObrazek.class);
+	private final EnumMap<EPraznyObrazek, Image> prazdneObrazky = new EnumMap<>(EPraznyObrazek.class);
 
 	public KachloDownloader() {}
 

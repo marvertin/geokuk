@@ -2,12 +2,12 @@ package cz.geokuk.core.coordinates;
 
 public class Utm extends Misto0 {
 
-	public final double	ux;
+	public final double ux;
 
-	public final double	uy;
+	public final double uy;
 
-	public final int	polednikovaZona;
-	public final char	rovnobezkovaZona;
+	public final int polednikovaZona;
+	public final char rovnobezkovaZona;
 
 	public Utm(final double ux, final double uy, final int polednikovaZona, final char rovnobezkovaZona) {
 		this.ux = ux;

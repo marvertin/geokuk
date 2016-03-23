@@ -4,9 +4,9 @@ import cz.geokuk.framework.*;
 
 public abstract class MrizkaAction0 extends ToggleAction0 implements BeanSubtypable {
 
-	private static final long	serialVersionUID	= -8064505014609316205L;
+	private static final long serialVersionUID = -8064505014609316205L;
 
-	protected MrizkaModel		mrizkaModel;
+	protected MrizkaModel mrizkaModel;
 
 	public MrizkaAction0(final String name) {
 		super(name);

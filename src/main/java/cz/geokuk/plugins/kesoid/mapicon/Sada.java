@@ -12,20 +12,20 @@ import cz.geokuk.util.pocitadla.*;
 
 public class Sada {
 
-	private static Pocitadlo	pocitSklivcuZasah	= new PocitadloRoste("Sklivce - zásah cache", "");
-	private final Pocitadlo		pocitSklivcu		= new PocitadloMalo("Sklivce - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
+	private static Pocitadlo pocitSklivcuZasah = new PocitadloRoste("Sklivce - zásah cache", "");
+	private final Pocitadlo pocitSklivcu = new PocitadloMalo("Sklivce - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
 
-	List<SkloAplikant>			skloAplikanti		= new ArrayList<>();
+	List<SkloAplikant> skloAplikanti = new ArrayList<>();
 
-	Map<Genotyp.Otisk, Sklivec>	cache				= new HashMap<>();
+	Map<Genotyp.Otisk, Sklivec> cache = new HashMap<>();
 
-	private final String		name;
+	private final String name;
 
-	private final Repaintanger	repaintanger		= new Repaintanger();
+	private final Repaintanger repaintanger = new Repaintanger();
 
-	private Set<Alela>			pouziteAlely;
-	private Set<Gen>			pouziteGeny;
-	private Icon				icon;
+	private Set<Alela> pouziteAlely;
+	private Set<Gen> pouziteGeny;
+	private Icon icon;
 
 	public Sada(final String name) {
 		this.name = name;

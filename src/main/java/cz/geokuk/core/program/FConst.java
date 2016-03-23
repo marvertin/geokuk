@@ -12,34 +12,34 @@ import com.jcabi.manifests.Manifests;
 
 public class FConst {
 
-	private static final String	NOT_VERSION_I_AM_IN_DEVELOP			= "develop";
+	private static final String NOT_VERSION_I_AM_IN_DEVELOP = "develop";
 
-	private static final Logger	log									= LogManager.getLogger(FConst.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(FConst.class.getSimpleName());
 
-	public static final boolean	ZAKAZAT_PRIPRAVOVANOU_FUNKCIONALITU	= false;
+	public static final boolean ZAKAZAT_PRIPRAVOVANOU_FUNKCIONALITU = false;
 
-	public static final boolean	JAR_DIR_EXISTUJE;
+	public static final boolean JAR_DIR_EXISTUJE;
 
-	public static final String	VERSION;
+	public static final String VERSION;
 
-	public static final boolean	I_AM_IN_DEVELOPMENT_ENVIRONMENT;
+	public static final boolean I_AM_IN_DEVELOPMENT_ENVIRONMENT;
 
-	public static final File	JAR_DIR;
+	public static final File JAR_DIR;
 
-	public static final File	PREFERENCES_FILE;
+	public static final File PREFERENCES_FILE;
 
-	public static final String	LATEST_RELEASE_URL					= "https://github.com/marvertin/geokuk/releases/latest";
-	public static final String	POST_PROBLEM_URL					= "https://github.com/marvertin/geokuk/issues/new";
+	public static final String LATEST_RELEASE_URL = "https://github.com/marvertin/geokuk/releases/latest";
+	public static final String POST_PROBLEM_URL = "https://github.com/marvertin/geokuk/issues/new";
 
-	public static final String	WEB_PAGE_URL						= "http://geokuk.cz/";
+	public static final String WEB_PAGE_URL = "http://geokuk.cz/";
 
-	public static final String	WEB_PAGE_WIKI						= "  http://wiki.geocaching.cz/wiki/Geokuk";
+	public static final String WEB_PAGE_WIKI = "  http://wiki.geocaching.cz/wiki/Geokuk";
 
-	public static final int		MAX_POC_WPT_NA_MAPE					= 30000;
+	public static final int MAX_POC_WPT_NA_MAPE = 30000;
 
-	public static final File	HOME_DIR							= new File(System.getProperty("user.home"));
+	public static final File HOME_DIR = new File(System.getProperty("user.home"));
 
-	private static final URL	zarazkatxt;
+	private static final URL zarazkatxt;
 
 	static {
 		final String ZARAZKA_TXT = "zarazka.txt";

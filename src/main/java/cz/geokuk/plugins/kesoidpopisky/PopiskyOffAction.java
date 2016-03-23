@@ -6,8 +6,8 @@ import cz.geokuk.framework.Action0;
 
 public class PopiskyOffAction extends Action0 {
 
-	private static final long	serialVersionUID	= -7547868179813232769L;
-	private PopiskyModel		popiskyModel;
+	private static final long serialVersionUID = -7547868179813232769L;
+	private PopiskyModel popiskyModel;
 
 	public PopiskyOffAction() {
 		super("Vypnout popisky");

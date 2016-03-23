@@ -50,10 +50,10 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  */
 public class EmeraldTheme extends DefaultMetalTheme {
 
-	private final ColorUIResource	primary1	= new ColorUIResource(51, 142, 71);
+	private final ColorUIResource primary1 = new ColorUIResource(51, 142, 71);
 
-	private final ColorUIResource	primary2	= new ColorUIResource(102, 193, 122);
-	private final ColorUIResource	primary3	= new ColorUIResource(153, 244, 173);
+	private final ColorUIResource primary2 = new ColorUIResource(102, 193, 122);
+	private final ColorUIResource primary3 = new ColorUIResource(153, 244, 173);
 
 	@Override
 	public String getName() {

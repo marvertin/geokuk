@@ -15,9 +15,9 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
  */
 public class SwitchSadaAction extends ToggleAction0 {
 
-	private static final long	serialVersionUID	= -8054017274338240706L;
-	private KesoidModel			kesoidModel;
-	private final ASada			sada;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private KesoidModel kesoidModel;
+	private final ASada sada;
 
 	/**
 	 *

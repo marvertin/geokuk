@@ -14,8 +14,8 @@ import java.io.Serializable;
  * @see "$Header: /Zakazky/TWare/Distribuce/TW0139/Util/cz/tconsult/tw/data/ATwStringBase.java 6     27.07.00 6:14 Veverka $"
  */
 public abstract class AString0 extends AObject0 implements Serializable, Comparable<AString0> {
-	private static final long	serialVersionUID	= -3816615837981907372L;
-	protected final String		iValue;
+	private static final long serialVersionUID = -3816615837981907372L;
+	protected final String iValue;
 
 	protected AString0(final String aValue) {
 		iValue = aValue.trim();

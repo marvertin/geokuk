@@ -15,10 +15,10 @@ import javax.swing.event.ChangeListener;
  */
 public class JBarvovyDvojSlider extends JPanel {
 
-	private static final long	serialVersionUID	= 5956221175094609896L;
+	private static final long serialVersionUID = 5956221175094609896L;
 
-	private JSlider				iBarvovnik;
-	private JSlider				iPruhlednik;
+	private JSlider iBarvovnik;
+	private JSlider iPruhlednik;
 
 	public JBarvovyDvojSlider() {
 		initComponents();

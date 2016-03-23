@@ -20,12 +20,12 @@ import cz.geokuk.plugins.kesoid.KesBag;
  */
 public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
 
-	private static final Logger			log	= LogManager.getLogger(CestyImportSwingWorker.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(CestyImportSwingWorker.class.getSimpleName());
 
-	private final CestyZperzistentnovac	cestyZperzistentnovac;
-	private final KesBag				kesBag;
-	private final CestyModel			cestyModel;
-	private final List<File>			files;
+	private final CestyZperzistentnovac cestyZperzistentnovac;
+	private final KesBag kesBag;
+	private final CestyModel cestyModel;
+	private final List<File> files;
 
 	public CestyImportSwingWorker(final CestyZperzistentnovac cestyZperzistentnovac, final KesBag vsechny, final CestyModel cestyModel, final List<File> files) {
 		this.cestyZperzistentnovac = cestyZperzistentnovac;

@@ -14,8 +14,8 @@ import org.apache.logging.log4j.Logger;
 
 public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	private class Citac implements java.io.Serializable {
-		static final long	serialVersionUID	= 9077120911716375382L;
-		private int			iPocet;
+		static final long serialVersionUID = 9077120911716375382L;
+		private int iPocet;
 
 		void add(final int aPocet) {
 			iPocet += aPocet; // posunout
@@ -31,12 +31,12 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		}
 	}
 
-	private static final Logger	log					= LogManager.getLogger(CCounterMap.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(CCounterMap.class.getSimpleName());
 
-	static final long			serialVersionUID	= 4829239030839775643L;
-	private final Map<T, Citac>	iCitace				= new LinkedHashMap<>();
+	static final long serialVersionUID = 4829239030839775643L;
+	private final Map<T, Citac> iCitace = new LinkedHashMap<>();
 
-	private int					iAllCount;																		// počet všech čítání
+	private int iAllCount; // počet všech čítání
 
 	public static void main(final String args[]) {
 		// TODO : test?

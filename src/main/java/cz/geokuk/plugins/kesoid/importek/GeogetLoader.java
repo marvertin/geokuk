@@ -28,37 +28,34 @@ import cz.geokuk.util.lang.ATimestamp;
  */
 public class GeogetLoader extends Nacitac0 {
 
-	private static final Logger							log							= LogManager.getLogger(GeogetLoader.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(GeogetLoader.class.getSimpleName());
 
-	private static int									PROGRESS_VAHA_CACHES		= 1;
-	private static int									PROGRESS_VAHA_WAYPOINTS		= 16;
-	private static int									PROGRESS_VAHA_TAGS			= 18;
+	private static int PROGRESS_VAHA_CACHES = 1;
+	private static int PROGRESS_VAHA_WAYPOINTS = 16;
+	private static int PROGRESS_VAHA_TAGS = 18;
 
-	private static final String							GEOGET_CACHES_QUERY			= Joiner.on('\n').join("SELECT", "  geocache.id as id,", "  geocache.x as lat,", "  geocache.y as lon,",
-			"  geocache.name as name,", "  geocache.author as author,", "  geocache.cachetype as cachetype,", "  geocache.cachesize as cachesize,", "  geocache.difficulty as difficulty,",
-			"  geocache.terrain as terrain,", "  geocache.cachestatus as cachestatus,", "  geocache.gs_ownerid as gs_ownerid,", "  geocache.dthidden as dthidden,", "  geocache.country as country,",
-			"  geocache.state as state,", "  geocache.dtfound as dtfound,", "  geolist.shortdesc as shortdesc,", "  geolist.hint as hint", "FROM geocache", "LEFT JOIN geolist",
-			"  ON geocache.id = geolist.id");
+	private static final String GEOGET_CACHES_QUERY = Joiner.on('\n').join("SELECT", "  geocache.id as id,", "  geocache.x as lat,", "  geocache.y as lon,", "  geocache.name as name,",
+	        "  geocache.author as author,", "  geocache.cachetype as cachetype,", "  geocache.cachesize as cachesize,", "  geocache.difficulty as difficulty,", "  geocache.terrain as terrain,",
+	        "  geocache.cachestatus as cachestatus,", "  geocache.gs_ownerid as gs_ownerid,", "  geocache.dthidden as dthidden,", "  geocache.country as country,", "  geocache.state as state,",
+	        "  geocache.dtfound as dtfound,", "  geolist.shortdesc as shortdesc,", "  geolist.hint as hint", "FROM geocache", "LEFT JOIN geolist", "  ON geocache.id = geolist.id");
 
-	private static final String							GEOGET_CACHES_COUNT			= "SELECT count(*) FROM geocache";
+	private static final String GEOGET_CACHES_COUNT = "SELECT count(*) FROM geocache";
 
-	private static final String							GEOGET_WAYPOINTS_QUERY		= "SELECT id, x as lat, y as lon, prefixid, wpttype, name" + " FROM waypoint";
+	private static final String GEOGET_WAYPOINTS_QUERY = "SELECT id, x as lat, y as lon, prefixid, wpttype, name" + " FROM waypoint";
 
-	private static final String							GEOGET_WAYPOINTS_COUNT		= "SELECT count(*) FROM waypoint";
+	private static final String GEOGET_WAYPOINTS_COUNT = "SELECT count(*) FROM waypoint";
 
-	private static final String							DATE_FORMAT_TEMPLATE		= "%d-%02d-%02dT00:00:00.000";
+	private static final String DATE_FORMAT_TEMPLATE = "%d-%02d-%02dT00:00:00.000";
 
-	private static final ImmutableSet<String>			SUPPORTED_FILE_EXTENSIONS	= ImmutableSet.of("db3");
+	private static final ImmutableSet<String> SUPPORTED_FILE_EXTENSIONS = ImmutableSet.of("db3");
 
-	private static final ImmutableMap<String, String>	ID_PREFIX_TO_SYM			= ImmutableMap.of("GC", "Geocache", "WM", "Waymark", "MU", "Geocache");
+	private static final ImmutableMap<String, String> ID_PREFIX_TO_SYM = ImmutableMap.of("GC", "Geocache", "WM", "Waymark", "MU", "Geocache");
 
-	private static final String							GEOGET_TAGS_QUERY_FRAGMENT	= Joiner.on('\n').join("FROM geotag t ", "LEFT JOIN geotagcategory c ", "  ON t.ptrkat = c.key ",
-			"LEFT JOIN geotagvalue v ", "  ON t.ptrvalue = v.key ",
-			"WHERE (c.value IN ('favorites', 'Elevation', 'Hodnoceni-Pocet', 'Hodnoceni', 'BestOf', 'Znamka') or c.value like '" + PREFIX_USERDEFINOANYCH_GENU + "%')");
+	private static final String GEOGET_TAGS_QUERY_FRAGMENT = Joiner.on('\n').join("FROM geotag t ", "LEFT JOIN geotagcategory c ", "  ON t.ptrkat = c.key ", "LEFT JOIN geotagvalue v ",
+	        "  ON t.ptrvalue = v.key ", "WHERE (c.value IN ('favorites', 'Elevation', 'Hodnoceni-Pocet', 'Hodnoceni', 'BestOf', 'Znamka') or c.value like '" + PREFIX_USERDEFINOANYCH_GENU + "%')");
 
-	private static final String							GEOGET_TAGS_COUNT			= "SELECT count(*) " + GEOGET_TAGS_QUERY_FRAGMENT;
-	private static final String							GEOGET_TAGS_QUERY			= Joiner.on('\n').join("SELECT", "  t.id as id,", "  c.value as category,", "  v.value as value ")
-			+ GEOGET_TAGS_QUERY_FRAGMENT;
+	private static final String GEOGET_TAGS_COUNT = "SELECT count(*) " + GEOGET_TAGS_QUERY_FRAGMENT;
+	private static final String GEOGET_TAGS_QUERY = Joiner.on('\n').join("SELECT", "  t.id as id,", "  c.value as category,", "  v.value as value ") + GEOGET_TAGS_QUERY_FRAGMENT;
 
 	@Override
 	protected void nacti(final File file, final IImportBuilder builder, final Future<?> future, final ProgressModel aProgressModel) throws IOException {
@@ -67,7 +64,7 @@ public class GeogetLoader extends Nacitac0 {
 		}
 		try (Connection c = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath()); Statement statement = c.createStatement()) {
 			final int pocet = count(statement, GEOGET_CACHES_COUNT) * PROGRESS_VAHA_CACHES + count(statement, GEOGET_WAYPOINTS_COUNT) * PROGRESS_VAHA_WAYPOINTS
-					+ count(statement, GEOGET_TAGS_COUNT) * PROGRESS_VAHA_TAGS;
+			        + count(statement, GEOGET_TAGS_COUNT) * PROGRESS_VAHA_TAGS;
 			final Progressor progressor = aProgressModel.start(pocet, "Loading " + file.toString());
 			loadCaches(statement, builder, future, progressor);
 			loadWaypoints(statement, builder, future, progressor);

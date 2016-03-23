@@ -16,12 +16,12 @@ import cz.geokuk.framework.Action0;
  */
 public class PosouvejSipkamiAction extends Action0 {
 
-	private static final long	serialVersionUID	= -8054017274338240706L;
-	private static final int	KROK_MALY			= 10;
-	private final boolean		daleko;
-	private final int			dx;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private static final int KROK_MALY = 10;
+	private final boolean daleko;
+	private final int dx;
 
-	private final int			dy;
+	private final int dy;
 
 	/**
 	 *

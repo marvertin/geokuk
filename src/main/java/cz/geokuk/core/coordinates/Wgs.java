@@ -2,8 +2,8 @@ package cz.geokuk.core.coordinates;
 
 public class Wgs extends Misto0 {
 
-	public final double	lat;
-	public final double	lon;
+	public final double lat;
+	public final double lon;
 
 	public static double azimut(final Wgs odkud, final Wgs bod) {
 		final Mou ucur = bod.toMou();

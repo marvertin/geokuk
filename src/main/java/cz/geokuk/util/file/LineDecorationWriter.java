@@ -15,9 +15,9 @@ import java.io.*;
  */
 public abstract class LineDecorationWriter extends FilterWriter {
 
-	private boolean	iIgnoreLf;
-	private boolean	iProcessingLine;
-	private boolean	iEmptyLine;
+	private boolean iIgnoreLf;
+	private boolean iProcessingLine;
+	private boolean iEmptyLine;
 
 	/**
 	 * @param out

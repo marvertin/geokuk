@@ -7,10 +7,10 @@ import javax.swing.border.TitledBorder;
 
 public class JTwoColumnsPanel extends JPanel {
 
-	private static final long	serialVersionUID	= 1201157823732225635L;
+	private static final long serialVersionUID = 1201157823732225635L;
 
-	GridBagConstraints			gbc;
-	int							radek;
+	GridBagConstraints gbc;
+	int radek;
 
 	public JTwoColumnsPanel(final String titleText) {
 		final TitledBorder border = BorderFactory.createTitledBorder(titleText);

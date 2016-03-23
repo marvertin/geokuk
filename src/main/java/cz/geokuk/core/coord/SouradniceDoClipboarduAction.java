@@ -14,10 +14,10 @@ import cz.geokuk.framework.Action0;
  */
 public class SouradniceDoClipboarduAction extends Action0 {
 
-	private static final long	serialVersionUID	= -8054017274338240706L;
-	private Poziceq				poziceq				= new Poziceq();
-	private final Mouable		mouable;
-	private PoziceModel			poziceModel;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private Poziceq poziceq = new Poziceq();
+	private final Mouable mouable;
+	private PoziceModel poziceModel;
 
 	/**
 	 *

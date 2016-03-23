@@ -5,8 +5,8 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JUmisteniSouboruDialog extends JMyDialog0 implements AfterInjectInit {
 
-	private static final long	serialVersionUID	= 7180968190465321695L;
-	private JPrehledSouboru		jPrehledSoubor;
+	private static final long serialVersionUID = 7180968190465321695L;
+	private JPrehledSouboru jPrehledSoubor;
 
 	public JUmisteniSouboruDialog() {
 		setTitle("Přehled souborů a složek");

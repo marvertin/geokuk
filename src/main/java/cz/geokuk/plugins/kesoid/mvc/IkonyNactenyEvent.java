@@ -12,8 +12,8 @@ import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
  *
  */
 public class IkonyNactenyEvent extends Event0<KesoidModel> {
-	private final IkonBag	vsechny;
-	private final ASada		jmenoAktualniSady;
+	private final IkonBag vsechny;
+	private final ASada jmenoAktualniSady;
 
 	public IkonyNactenyEvent(final IkonBag vsechny, final ASada jmenoAktualniSady) {
 		super();

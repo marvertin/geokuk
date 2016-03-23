@@ -42,97 +42,97 @@ public class Genom {
 
 	// public static Genom G = new Genom();
 
-	private static final Logger			log					= LogManager.getLogger(Genom.class.getSimpleName());
-	public static final String			NEZARAZENY_GEN		= "<Nezařazení>";
-	private final Map<String, Alela>	alely				= new LinkedHashMap<>();
-	private final Map<String, Gen>		geny				= new LinkedHashMap<>();
+	private static final Logger log = LogManager.getLogger(Genom.class.getSimpleName());
+	public static final String NEZARAZENY_GEN = "<Nezařazení>";
+	private final Map<String, Alela> alely = new LinkedHashMap<>();
+	private final Map<String, Gen> geny = new LinkedHashMap<>();
 
-	private final List<Gen>				genyList			= new ArrayList<>();
+	private final List<Gen> genyList = new ArrayList<>();
 
-	private Gen							symGen;
+	private Gen symGen;
 
 	// TODO : refactor this so the alelas are loaded from an external file (-> possibility of user addition of new alelas
 	// easily).
 
-	private Gen							currentGen;
+	private Gen currentGen;
 
-	public Alela						ALELA_Waypoint		= coale("Waypoint", "Obecný waypoint");
-	public Alela						ALELA_h				= coale("h", "Hlavní waypoint");
+	public Alela ALELA_Waypoint = coale("Waypoint", "Obecný waypoint");
+	public Alela ALELA_h = coale("h", "Hlavní waypoint");
 
-	public Alela						ALELA_v				= coale("v", "Vedlejší waypoint");
-	public Alela						ALELA_00			= coale("00", "Neznámý");
-	public Alela						ALELA_gc			= coale("gc", "Keš");
-	public Alela						ALELA_wm			= coale("wm", "Waymark");
-	public Alela						ALELA_gb			= coale("gb", "Český geodetický bod");
-	public Alela						ALELA_wp			= coale("wp", "Obecný waypoint");
-	public Alela						ALELA_mz			= coale("mz", "Munzee");
+	public Alela ALELA_v = coale("v", "Vedlejší waypoint");
+	public Alela ALELA_00 = coale("00", "Neznámý");
+	public Alela ALELA_gc = coale("gc", "Keš");
+	public Alela ALELA_wm = coale("wm", "Waymark");
+	public Alela ALELA_gb = coale("gb", "Český geodetický bod");
+	public Alela ALELA_wp = coale("wp", "Obecný waypoint");
+	public Alela ALELA_mz = coale("mz", "Munzee");
 
-	public Alela						ALELA_pic			= coale("pic", "Obrázek");
-	public Alela						ALELA_hnf			= coale("hnf", "Nehledané");
-	public Alela						ALELA_fnd			= coale("fnd", "Nalezené");
-	public Alela						ALELA_own			= coale("own", "Moje vlastní");
-	public Alela						ALELA_not			= coale("not", "Neexistující");
-	public Alela						ALELA_cpt			= coale("cpt", "Captured");
+	public Alela ALELA_pic = coale("pic", "Obrázek");
+	public Alela ALELA_hnf = coale("hnf", "Nehledané");
+	public Alela ALELA_fnd = coale("fnd", "Nalezené");
+	public Alela ALELA_own = coale("own", "Moje vlastní");
+	public Alela ALELA_not = coale("not", "Neexistující");
+	public Alela ALELA_cpt = coale("cpt", "Captured");
 
-	public Alela						ALELA_dpl			= coale("dpl", "Deployed");
-	public Alela						ALELA_actv			= coale("actv", "Aktivmí");
-	public Alela						ALELA_dsbl			= coale("dsbl", "Disablovaná");
+	public Alela ALELA_dpl = coale("dpl", "Deployed");
+	public Alela ALELA_actv = coale("actv", "Aktivmí");
+	public Alela ALELA_dsbl = coale("dsbl", "Disablovaná");
 
-	public Alela						ALELA_arch			= coale("arch", "Archivovaný");
-	public Alela						ALELA_00000			= coale("00000", "Neznámá");
-	public Alela						ALELA_nlist			= coale("nlist", "Not listed");
-	public Alela						ALELA_micro			= coale("micro", "Micro");
-	public Alela						ALELA_small			= coale("small", "Small");
-	public Alela						ALELA_regul			= coale("regul", "Regular");
-	public Alela						ALELA_large			= coale("large", "Large");
-	public Alela						ALELA_hugex			= coale("hugex", "Huge");
-	public Alela						ALELA_virtu			= coale("virtu", "Virtual");
+	public Alela ALELA_arch = coale("arch", "Archivovaný");
+	public Alela ALELA_00000 = coale("00000", "Neznámá");
+	public Alela ALELA_nlist = coale("nlist", "Not listed");
+	public Alela ALELA_micro = coale("micro", "Micro");
+	public Alela ALELA_small = coale("small", "Small");
+	public Alela ALELA_regul = coale("regul", "Regular");
+	public Alela ALELA_large = coale("large", "Large");
+	public Alela ALELA_hugex = coale("hugex", "Huge");
+	public Alela ALELA_virtu = coale("virtu", "Virtual");
 
-	public Alela						ALELA_other			= coale("other", "Other");
-	public Alela						ALELA_nevime		= coale("nevime", "Nerozhodnuto");
-	public Alela						ALELA_lovime		= coale("lovime", "Jdeme lovit");
+	public Alela ALELA_other = coale("other", "Other");
+	public Alela ALELA_nevime = coale("nevime", "Nerozhodnuto");
+	public Alela ALELA_lovime = coale("lovime", "Jdeme lovit");
 
-	public Alela						ALELA_ignoru		= coale("ignoru", "Budeme ignorovat");
-	public Alela						ALELA_nomouse		= coale("nomouse", "Žádná myš");
-	public Alela						ALELA_mousean		= coale("mousean", "Myš nad jiným wpt kešoidu");
+	public Alela ALELA_ignoru = coale("ignoru", "Budeme ignorovat");
+	public Alela ALELA_nomouse = coale("nomouse", "Žádná myš");
+	public Alela ALELA_mousean = coale("mousean", "Myš nad jiným wpt kešoidu");
 
-	public Alela						ALELA_mouseon		= coale("mouseon", "Myš nad tímto wpt");
-	public Alela						ALELA_noselect		= coale("noselect", "Nevybraný");
+	public Alela ALELA_mouseon = coale("mouseon", "Myš nad tímto wpt");
+	public Alela ALELA_noselect = coale("noselect", "Nevybraný");
 
-	public Alela						ALELA_selected		= coale("selected", "Vybraný");
-	public Alela						ALELA_nevyluste		= coale("nevyluste", "Není vyluštěno");
+	public Alela ALELA_selected = coale("selected", "Vybraný");
+	public Alela ALELA_nevyluste = coale("nevyluste", "Není vyluštěno");
 
-	public Alela						ALELA_vylusteno		= coale("vylusteno", "Je vyluštěno");
-	public Alela						ALELA_pqimported	= coale("pqimported", "Imporotvané z PQ");
+	public Alela ALELA_vylusteno = coale("vylusteno", "Je vyluštěno");
+	public Alela ALELA_pqimported = coale("pqimported", "Imporotvané z PQ");
 
-	public Alela						ALELA_handedited	= coale("handedited", "Ručně přidané");
-	public Alela						ALELA_mimocesticu	= coale("mimocesticu", "Mimo cestu");
+	public Alela ALELA_handedited = coale("handedited", "Ručně přidané");
+	public Alela ALELA_mimocesticu = coale("mimocesticu", "Mimo cestu");
 
-	public Alela						ALELA_nacestejsou	= coale("nacestejsou", "Na cestě");
-	public Alela						ALELA_ter0			= coale("ter0", "Nespecifikovaný");
-	public Alela						ALELA_ter10			= coale("ter10", "1");
-	public Alela						ALELA_ter15			= coale("ter15", "1,5");
-	public Alela						ALELA_ter20			= coale("ter20", "2");
-	public Alela						ALELA_ter25			= coale("ter25", "2,5");
-	public Alela						ALELA_ter30			= coale("ter30", "3");
-	public Alela						ALELA_ter35			= coale("ter35", "3,5");
-	public Alela						ALELA_ter40			= coale("ter40", "4");
-	public Alela						ALELA_ter45			= coale("ter45", "4,5");
+	public Alela ALELA_nacestejsou = coale("nacestejsou", "Na cestě");
+	public Alela ALELA_ter0 = coale("ter0", "Nespecifikovaný");
+	public Alela ALELA_ter10 = coale("ter10", "1");
+	public Alela ALELA_ter15 = coale("ter15", "1,5");
+	public Alela ALELA_ter20 = coale("ter20", "2");
+	public Alela ALELA_ter25 = coale("ter25", "2,5");
+	public Alela ALELA_ter30 = coale("ter30", "3");
+	public Alela ALELA_ter35 = coale("ter35", "3,5");
+	public Alela ALELA_ter40 = coale("ter40", "4");
+	public Alela ALELA_ter45 = coale("ter45", "4,5");
 
-	public Alela						ALELA_ter50			= coale("ter50", "5");
-	public Alela						ALELA_def0			= coale("dif0", "Nespecifikovaná");
-	public Alela						ALELA_dif10			= coale("dif10", "1");
-	public Alela						ALELA_dif15			= coale("dif15", "1,5");
-	public Alela						ALELA_dif20			= coale("dif20", "2");
-	public Alela						ALELA_dif25			= coale("dif25", "2,5");
-	public Alela						ALELA_dif30			= coale("dif30", "3");
-	public Alela						ALELA_dif35			= coale("dif35", "3,5");
-	public Alela						ALELA_dif40			= coale("dif40", "4");
-	public Alela						ALELA_dif45			= coale("dif45", "4,5");
-	public Alela						ALELA_dif50			= coale("dif50", "5");
-	public Grupa						GRUPA_gcawp;
+	public Alela ALELA_ter50 = coale("ter50", "5");
+	public Alela ALELA_def0 = coale("dif0", "Nespecifikovaná");
+	public Alela ALELA_dif10 = coale("dif10", "1");
+	public Alela ALELA_dif15 = coale("dif15", "1,5");
+	public Alela ALELA_dif20 = coale("dif20", "2");
+	public Alela ALELA_dif25 = coale("dif25", "2,5");
+	public Alela ALELA_dif30 = coale("dif30", "3");
+	public Alela ALELA_dif35 = coale("dif35", "3,5");
+	public Alela ALELA_dif40 = coale("dif40", "4");
+	public Alela ALELA_dif45 = coale("dif45", "4,5");
+	public Alela ALELA_dif50 = coale("dif50", "5");
+	public Grupa GRUPA_gcawp;
 
-	public Grupa						GRUPA_gc;
+	public Grupa GRUPA_gc;
 
 	{
 		symGen = gen("Typ waypointu", true);

@@ -31,46 +31,46 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	/**
 	 *
 	 */
-	private static final long							serialVersionUID	= -3323887260932949747L;
+	private static final long serialVersionUID = -3323887260932949747L;
 
-	private Kesoid										kesoid;
+	private Kesoid kesoid;
 
-	private JLabel										jKesoidCode;
-	private JLabel										jKesoidNazev;
-	private JLabel										jKesoidSym;
+	private JLabel jKesoidCode;
+	private JLabel jKesoidNazev;
+	private JLabel jKesoidSym;
 
-	private JLabel										jWptName;
-	private JLabel										jWptNazev;
-	private JLabel										jWptSym;
+	private JLabel jWptName;
+	private JLabel jWptNazev;
+	private JLabel jWptSym;
 
-	private JLabel										jElevation;
+	private JLabel jElevation;
 
-	private JLabel										jType;
-	private JLabel										jAuthor;
-	private JLabel										jHiddenTime;
-	private JLabel										jVztah;
+	private JLabel jType;
+	private JLabel jAuthor;
+	private JLabel jHiddenTime;
+	private JLabel jVztah;
 
-	private JLabel										jVzdalenost;
-	private JLabel										jAzimut;
+	private JLabel jVzdalenost;
+	private JLabel jAzimut;
 
-	private JSmallPictureButton							jOtevriUrl;
-	private JSmallPictureButton							vyletAnoButton;
-	private JSmallPictureButton							vyletNeButton;
-	private JSmallPictureButton							vyletNevimButton;
+	private JSmallPictureButton jOtevriUrl;
+	private JSmallPictureButton vyletAnoButton;
+	private JSmallPictureButton vyletNeButton;
+	private JSmallPictureButton vyletNevimButton;
 
-	private final EnumMap<EKesoidKind, JKesoidDetail0>	jDetailyKesoidu		= new EnumMap<>(EKesoidKind.class);
+	private final EnumMap<EKesoidKind, JKesoidDetail0> jDetailyKesoidu = new EnumMap<>(EKesoidKind.class);
 
-	private IkonBag										ikonBag;
+	private IkonBag ikonBag;
 
-	private Wpt											wpt;
+	private Wpt wpt;
 
-	private JLabel										jRucnePridany;
+	private JLabel jRucnePridany;
 
-	private Akce										akce;
+	private Akce akce;
 
-	private Factory										factory;
+	private Factory factory;
 
-	private RefbodyModel								refbodyModel;
+	private RefbodyModel refbodyModel;
 
 	private static String formatuj(final String s, final EKesStatus status) {
 		final StringBuilder sb = new StringBuilder();

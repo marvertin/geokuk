@@ -12,13 +12,13 @@ public class JMenuIkony extends JMenu {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -1589308487736315040L;
+	private static final long serialVersionUID = -1589308487736315040L;
 
-	private int					pocetSad;
+	private int pocetSad;
 
-	private final JMenu			menu;
+	private final JMenu menu;
 
-	private Factory				factory;
+	private Factory factory;
 
 	public JMenuIkony() {
 		super("Ikony");

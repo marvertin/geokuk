@@ -19,12 +19,12 @@ public abstract class Pocitadlo {
 		public void onChange();
 	}
 
-	public static Callback	callback;
-	private int				val;
-	private final String	name;
-	private final String	description;
+	public static Callback callback;
+	private int val;
+	private final String name;
+	private final String description;
 
-	private final String	textovyPopisTypu;
+	private final String textovyPopisTypu;
 
 	/**
 	 * @param aName

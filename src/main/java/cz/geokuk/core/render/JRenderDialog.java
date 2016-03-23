@@ -25,63 +25,63 @@ import cz.geokuk.util.lang.FUtil;
 
 public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterEventReceiverRegistrationInit {
 
-	private static final long			serialVersionUID	= 7180968190465321695L;
+	private static final long serialVersionUID = 7180968190465321695L;
 
-	static int							citacUlozeni;
+	static int citacUlozeni;
 
-	private RenderModel					renderModel;
-	private JButton						jSpustitButton;
+	private RenderModel renderModel;
+	private JButton jSpustitButton;
 
-	private JButton						jPrerusitButton;
+	private JButton jPrerusitButton;
 
-	private JProgressBar				jProgressBar;
-	private JMvRadioPanel<EWhatRender>	jWhatRenderRadioPanel;
+	private JProgressBar jProgressBar;
+	private JMvRadioPanel<EWhatRender> jWhatRenderRadioPanel;
 
 	// private JTextField jRendrovaneMeritko;
 
-	private JMvRadioPanel<EImageType>	jImgTypeRadioPanel;
+	private JMvRadioPanel<EImageType> jImgTypeRadioPanel;
 
-	private JButton						jNastaveniAktualnihoMeritkaButton;
+	private JButton jNastaveniAktualnihoMeritkaButton;
 
-	private JNastavovecMeritka			jNastavovecMeritka;
-	private JGeocodingComboBox			jPureJmenoSouboruCombo;
-	private JGeocodingComboBox			jKmzFolderNazevCombo;
+	private JNastavovecMeritka jNastavovecMeritka;
+	private JGeocodingComboBox jPureJmenoSouboruCombo;
+	private JGeocodingComboBox jKmzFolderNazevCombo;
 
-	private JNastavovacVelikostiDlazdic	jNastavovacVelikostiDlazdicX;
+	private JNastavovacVelikostiDlazdic jNastavovacVelikostiDlazdicX;
 
-	private JNastavovacVelikostiDlazdic	jNastavovacVelikostiDlazdicY;
+	private JNastavovacVelikostiDlazdic jNastavovacVelikostiDlazdicY;
 
-	private JLabel						jJakouHustotuLabel;
-	private JSpinner					jKmzDrawOrder;
-	private JCheckBox					jSrovnatDoSeveru;
+	private JLabel jJakouHustotuLabel;
+	private JSpinner jKmzDrawOrder;
+	private JCheckBox jSrovnatDoSeveru;
 
-	private JTextField					jKmzFolderDescription;
-	private JPapirMeritkoComboBox		jPapirMeritkoComboBox;
+	private JTextField jKmzFolderDescription;
+	private JPapirMeritkoComboBox jPapirMeritkoComboBox;
 
-	private JKalibrBoduSpinner			jKalibrBodu;
+	private JKalibrBoduSpinner jKalibrBodu;
 
-	private JLabel						jPriponaSouboruLabel;
+	private JLabel jPriponaSouboruLabel;
 
-	private GeocodingModel				geocodingModel;
+	private GeocodingModel geocodingModel;
 
-	protected SortedMap<String, String>	geotagingPatterns;
+	protected SortedMap<String, String> geotagingPatterns;
 
-	private Wgs							referecniBod;
+	private Wgs referecniBod;
 
-	private JTwoColumnsPanel			jOziPanel;
+	private JTwoColumnsPanel jOziPanel;
 
-	private JTwoColumnsPanel			jKmzPanel;
+	private JTwoColumnsPanel jKmzPanel;
 
-	private JLabel						jOutputFolderLabel;
-	private JButton						jChangeOutputFolderButton;
+	private JLabel jOutputFolderLabel;
+	private JButton jChangeOutputFolderButton;
 
-	private JIkonkaPapiru				jIkonkaPapiru;
+	private JIkonkaPapiru jIkonkaPapiru;
 
-	private JTextField					jTerenniRozmerField;
+	private JTextField jTerenniRozmerField;
 
-	private JLabel						jVystupniSouborLabel;
+	private JLabel jVystupniSouborLabel;
 
-	private JLabel						jVystupniSlozkaLabel;
+	private JLabel jVystupniSlozkaLabel;
 
 	static Border createBorder(final String titleText) {
 		final TitledBorder border = BorderFactory.createTitledBorder(titleText);
@@ -140,7 +140,7 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 		final long pametMiB = renderModel.odhadniMnozstviZabranePameti() / 1024 / 1024 + 1;
 		// jSpustit.setEnabled(true);
 		jSpustitButton.setText(String.format("<html>%s <b>%d * %d px</b> - (%d MiB)", renderSettings.getWhatRender() != EWhatRender.TISK ? "Rendrovat " : "Tisknout", renderModel.getDim().width,
-				renderModel.getDim().height, pametMiB));
+		        renderModel.getDim().height, pametMiB));
 		jPrerusitButton.setText(renderSettings.getWhatRender() != EWhatRender.TISK ? "Přerušit rendrování" : "Přerušit tisk");
 		// jRendrovaneMeritko.setText(renderModel.getRenderedMoumer() + "");
 		jNastaveniAktualnihoMeritkaButton.setText("Nastav na meritko: " + renderModel.getCurrentMoumer());
@@ -162,7 +162,7 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 		final double vzdalenostBodu = 1000 / pixluNaMilimetrMapy;
 		final PapirovaMetrika papirovaMetrika = renderModel.getPapirovaMetrika();
 		jJakouHustotuLabel.setText(
-				String.format("<html>%.0f * %.0f mm - %.0f DPI = %.2f px/mm = %.1f \u03BCm/px", papirovaMetrika.xsize * 1000, papirovaMetrika.ysize * 1000, dpi, pixluNaMilimetrMapy, vzdalenostBodu));
+		        String.format("<html>%.0f * %.0f mm - %.0f DPI = %.2f px/mm = %.1f \u03BCm/px", papirovaMetrika.xsize * 1000, papirovaMetrika.ysize * 1000, dpi, pixluNaMilimetrMapy, vzdalenostBodu));
 
 		jTerenniRozmerField.setText(String.format("%.1f * %.1f km", roord.getWidth() / pixluNaMetr / 100, roord.getHeight() / pixluNaMetr / 100));
 
@@ -199,8 +199,8 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 		nastavZakladyDoComboboxu(true);
 		geocodingModel.spustHledani(event.wgs, new RefreshorVysledkuHledani<Nalezenec>() {
 
-			private SortedMap<String, String>	patsPureFileName;
-			private SortedMap<String, String>	patsFolderName;
+			private SortedMap<String, String> patsPureFileName;
+			private SortedMap<String, String> patsFolderName;
 
 			@Override
 			public void refreshVysledekHledani(final VysledekHledani<Nalezenec> vysledekHledani) {

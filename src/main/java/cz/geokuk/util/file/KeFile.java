@@ -13,9 +13,9 @@ public class KeFile {
 
 	}
 
-	public final Root			root;
+	public final Root root;
 
-	public final FileAndTime	fat;
+	public final FileAndTime fat;
 
 	public KeFile(final FileAndTime aFat, final Root aRoot) {
 		super();

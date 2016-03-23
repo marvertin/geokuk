@@ -16,15 +16,15 @@ import cz.geokuk.plugins.kesoid.Repaintanger;
  */
 public class Imagant {
 
-	private final BufferedImage	image;
+	private final BufferedImage image;
 
 	/** Pozice, o kolik je řečeno, že se má obrázek posunout od středu */
-	private int					xoffset;
-	private int					yoffset;
+	private int xoffset;
+	private int yoffset;
 
 	/** Pozice středu obrázku bez aplikace offsetu */
-	private final int			x0;
-	private final int			y0;
+	private final int x0;
+	private final int y0;
 
 	/**
 	 * @param aBi

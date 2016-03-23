@@ -19,11 +19,11 @@ public class JRenderSlide extends JSingleSlide0 {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -4370714043446396996L;
+	private static final long serialVersionUID = -4370714043446396996L;
 
-	private RenderModel			renderModel;
+	private RenderModel renderModel;
 
-	private Coord				moord;
+	private Coord moord;
 
 	public JRenderSlide() {
 

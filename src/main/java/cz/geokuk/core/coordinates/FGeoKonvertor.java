@@ -10,16 +10,16 @@ import static java.lang.Math.*;
  */
 public class FGeoKonvertor {
 
-	public static final double			RZ							= 6378137;
-	public static final double			OBVOD_ZEME					= 2 * PI * RZ;					// v metrech
-	public static final double			OBVOD_ZEME_V_MOU			= 0x1_0000_0000l;
+	public static final double RZ = 6378137;
+	public static final double OBVOD_ZEME = 2 * PI * RZ; // v metrech
+	public static final double OBVOD_ZEME_V_MOU = 0x1_0000_0000l;
 
 	/** Merkátoryvy metry, skutečné metry jsou to jen na rovníku */
-	public static final double			Q_METRY_NA_MOU				= OBVOD_ZEME / OBVOD_ZEME_V_MOU;
+	public static final double Q_METRY_NA_MOU = OBVOD_ZEME / OBVOD_ZEME_V_MOU;
 
-	public static final double			STUPEN_NA_ROVNIKU_V_METRECH	= PI / 180 * RZ;
+	public static final double STUPEN_NA_ROVNIKU_V_METRECH = PI / 180 * RZ;
 
-	private static UtmMgrsWgsConvertor	utmWgsConvertor				= new UtmMgrsWgsConvertor();
+	private static UtmMgrsWgsConvertor utmWgsConvertor = new UtmMgrsWgsConvertor();
 
 	public static double dalka(final Mouable mouable1, final Mouable mouable2) {
 		return FGeoKonvertor.dalka(mouable1.getMou().toWgs(), mouable2.getMou().toWgs());

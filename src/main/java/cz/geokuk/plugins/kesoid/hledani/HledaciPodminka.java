@@ -11,8 +11,8 @@ import cz.geokuk.core.hledani.HledaciPodminka0;
  */
 public class HledaciPodminka extends HledaciPodminka0 {
 
-	private boolean	regularniVyraz;
-	private boolean	jenVZobrazenych;
+	private boolean regularniVyraz;
+	private boolean jenVZobrazenych;
 
 	public boolean isJenVZobrazenych() {
 		return jenVZobrazenych;

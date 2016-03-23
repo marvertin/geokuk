@@ -52,11 +52,11 @@ import cz.geokuk.plugins.kesoid.Ikonizer;
  */
 public class JAdrTable extends JPanel {
 	class MyTableModel extends AbstractTableModel {
-		private static final long	serialVersionUID	= -1777521413836209700L;
+		private static final long serialVersionUID = -1777521413836209700L;
 
-		private List<Nalezenec>		adressList			= new ArrayList<>();
+		private List<Nalezenec> adressList = new ArrayList<>();
 
-		private final String[]		columnNames			= { "Přesnost", "Vzdálenost", "Azimut", "Adresa" };
+		private final String[] columnNames = { "Přesnost", "Vzdálenost", "Azimut", "Adresa" };
 
 		/**
 		 * @return the keslist
@@ -129,11 +129,11 @@ public class JAdrTable extends JPanel {
 
 	}
 
-	private static final long	serialVersionUID	= 7687619215661046034L;
+	private static final long serialVersionUID = 7687619215661046034L;
 
-	private final MyTableModel	tableModel;
+	private final MyTableModel tableModel;
 
-	private final JTable		table;
+	private final JTable table;
 
 	public JAdrTable() {
 		super(new GridLayout(1, 0));

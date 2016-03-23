@@ -9,14 +9,14 @@ import cz.geokuk.framework.Preferenceble;
 @Preferenceble
 public class PopiskySettings implements Copyable<PopiskySettings> {
 
-	public Font				font		= new Font(Font.SANS_SERIF, Font.PLAIN, 12);
-	public Color			foreground	= Color.BLACK;
-	public Color			background	= new Color(255, 255, 255, 70);
+	public Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+	public Color foreground = Color.BLACK;
+	public Color background = new Color(255, 255, 255, 70);
 
-	public int				posuX		= 0;
-	public int				posuY		= 0;
+	public int posuX = 0;
+	public int posuY = 0;
 
-	public PopiskyPatterns	patterns	= new PopiskyPatterns();
+	public PopiskyPatterns patterns = new PopiskyPatterns();
 
 	@Override
 	public PopiskySettings copy() {

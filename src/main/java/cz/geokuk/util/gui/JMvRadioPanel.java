@@ -9,10 +9,10 @@ import cz.geokuk.util.gui.SelectionModel.Item;
 
 public class JMvRadioPanel<T> extends JPanel {
 
-	private static final long			serialVersionUID	= -4181105935856103641L;
+	private static final long serialVersionUID = -4181105935856103641L;
 
-	private SelectionModel<T>			model				= new SelectionModel<>();
-	private final List<JRadioButton>	buttons				= new ArrayList<>();
+	private SelectionModel<T> model = new SelectionModel<>();
+	private final List<JRadioButton> buttons = new ArrayList<>();
 
 	public JMvRadioPanel(final String title) {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));

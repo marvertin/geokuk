@@ -40,12 +40,12 @@ public class FKurzory {
 	}
 
 	private abstract static class KurzorovyMatlak0 {
-		BufferedImage	img;
-		Graphics2D		g;
-		int				w;
-		int				h;
-		int				ws;	// stře
-		int				hs;	// střed
+		BufferedImage img;
+		Graphics2D g;
+		int w;
+		int h;
+		int ws; // stře
+		int hs; // střed
 
 		protected final void vystreduj() {
 			g.translate(w / 2, h / 2);
@@ -98,8 +98,8 @@ public class FKurzory {
 
 	private static class PridavaniBodu extends KurzorovyMatlak0 {
 
-		private final Color		vnitrek;
-		private final boolean	zamernyKriz;
+		private final Color vnitrek;
+		private final boolean zamernyKriz;
 
 		public PridavaniBodu(final Color vnitrek, final boolean zamernyKriz) {
 			this.vnitrek = vnitrek;
@@ -137,30 +137,30 @@ public class FKurzory {
 
 	/// Kurzory bez nějaké akce, jen jsem nad něčím
 
-	public static final Cursor	TEXTOVY_KURZOR					= Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
+	public static final Cursor TEXTOVY_KURZOR = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
 
-	public static final Cursor	KAM_SE_DA_KLIKNOUT				= Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+	public static final Cursor KAM_SE_DA_KLIKNOUT = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
 
-	public static final Cursor	POSOUVANI_MAPY					= new PohybMapou().createCursor();
+	public static final Cursor POSOUVANI_MAPY = new PohybMapou().createCursor();
 
-	public static final Cursor	PRIDAVANI_BODU					= new PridavaniBodu(Color.WHITE, true).createCursor();
+	public static final Cursor PRIDAVANI_BODU = new PridavaniBodu(Color.WHITE, true).createCursor();
 
-	public static final Cursor	STANDARDNI_MAPOVY_KRIZ			= Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
+	public static final Cursor STANDARDNI_MAPOVY_KRIZ = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 
 	/** Stojím nad waypointem jen tak s myší */
-	public static final Cursor	NAD_WAYPOINTEM					= Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+	public static final Cursor NAD_WAYPOINTEM = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
 
 	/** Když draguje bod Bod nějaké cesty tak jsem vždy blízko */
-	public static final Cursor	BLIZKO_BOUSKU_NORMAL			= Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+	public static final Cursor BLIZKO_BOUSKU_NORMAL = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
 
 	/// Dragovací či jinak akční kurzory
 	/** Jsem blízko bousku a nemám stisknuto */
-	public static final Cursor	BLIZKO_BOUSKU_DRAGOVANI			= Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
+	public static final Cursor BLIZKO_BOUSKU_DRAGOVANI = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
 
 	/** Táhnu bod a jsem nad waypointem, takže když ho pustím, spadne na něj */
-	public static final Cursor	NAD_WAYPOINTEM_DRAGOVANI_BODU	= new CtyrSipka().createCursor();
+	public static final Cursor NAD_WAYPOINTEM_DRAGOVANI_BODU = new CtyrSipka().createCursor();
 
 	/** Přidávám bod (držím CTRL, takže když sem spadne bude bod */
-	public static final Cursor	NAD_WAYPOINTEM_PRIDAVANI_BODU	= new PridavaniBodu(Color.GREEN, false).createCursor();
+	public static final Cursor NAD_WAYPOINTEM_PRIDAVANI_BODU = new PridavaniBodu(Color.GREEN, false).createCursor();
 
 }

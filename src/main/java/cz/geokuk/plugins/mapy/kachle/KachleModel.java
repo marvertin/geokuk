@@ -16,15 +16,15 @@ import cz.geokuk.plugins.mapy.KachleUmisteniSouboruChangedEvent;
  */
 public class KachleModel extends Model0 {
 
-	private final KachleCacheFolderHolder	kachleCacheFolderHolder	= new KachleCacheFolderHolder();
+	private final KachleCacheFolderHolder kachleCacheFolderHolder = new KachleCacheFolderHolder();
 
-	public KachloDownloader					kachloDownloader;
+	public KachloDownloader kachloDownloader;
 
-	private Object							umisteniSouboru;
+	private Object umisteniSouboru;
 
-	private KachleZiskavac					ziskavac;
+	private KachleZiskavac ziskavac;
 
-	public final KachleManager				kachleManager;
+	public final KachleManager kachleManager;
 
 	/**
 	 * @param bb

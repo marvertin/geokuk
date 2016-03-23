@@ -22,16 +22,16 @@ import cz.geokuk.util.file.*;
  */
 public class MultiNacitac {
 
-	private static final Logger		log							= LogManager.getLogger(MultiNacitac.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(MultiNacitac.class.getSimpleName());
 
-	private static final Root.Def	FILE_NAME_REGEX_GEOKUK_DIR	= new Root.Def(Integer.MAX_VALUE, Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"), null);
+	private static final Root.Def FILE_NAME_REGEX_GEOKUK_DIR = new Root.Def(Integer.MAX_VALUE, Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"), null);
 
-	private static final Root.Def	FILE_NAME_REGEX_GEOGET_DIR	= new Root.Def(1, Pattern.compile("(?i).*\\.db3"), Pattern.compile("(?i).*\\.[0-9]{8}\\.db3"));
+	private static final Root.Def FILE_NAME_REGEX_GEOGET_DIR = new Root.Def(1, Pattern.compile("(?i).*\\.db3"), Pattern.compile("(?i).*\\.[0-9]{8}\\.db3"));
 
-	private final DirScanner		ds;
+	private final DirScanner ds;
 
-	private final List<Nacitac0>	nacitace					= new ArrayList<>();
-	private final KesoidModel		kesoidModel;
+	private final List<Nacitac0> nacitace = new ArrayList<>();
+	private final KesoidModel kesoidModel;
 
 	// private static final String CACHE_SUFFIX = ".cache.serialized";
 

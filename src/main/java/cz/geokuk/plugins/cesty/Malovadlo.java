@@ -11,12 +11,12 @@ import cz.geokuk.plugins.cesty.data.*;
 public class Malovadlo {
 	class MalovadloCesty {
 
-		private final Cesta		cesta;
-		private final boolean	jeCurta;
-		private final boolean	jeBlizkyBousekVTetoCeste;
+		private final Cesta cesta;
+		private final boolean jeCurta;
+		private final boolean jeBlizkyBousekVTetoCeste;
 
-		private final Color		barvaCestyPredKurzorem;
-		private final Color		barvaCestyZaKurzorem;
+		private final Color barvaCestyPredKurzorem;
+		private final Color barvaCestyZaKurzorem;
 
 		public MalovadloCesty(final Cesta cesta) {
 			this.cesta = cesta;
@@ -229,31 +229,31 @@ public class Malovadlo {
 
 	} // MalovadloCesty
 
-	private static final int		SIRKA_CARY_VYBRANE	= 6;
+	private static final int SIRKA_CARY_VYBRANE = 6;
 
-	private static final Polygon	bodovaSipecka		= new Polygon(new int[] { -3, 2, 5, 2, -3 }, new int[] { 3, 3, 0, -3, -3 }, 5);
+	private static final Polygon bodovaSipecka = new Polygon(new int[] { -3, 2, 5, 2, -3 }, new int[] { 3, 3, 0, -3, -3 }, 5);
 
-	private static final Ellipse2D	bodStartocilu		= new Ellipse2D.Float(-10, -10, 20, 20);
+	private static final Ellipse2D bodStartocilu = new Ellipse2D.Float(-10, -10, 20, 20);
 
-	private final Graphics2D		g;
+	private final Graphics2D g;
 
-	private final Stroke			strokeVzdusny		= new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3, 3 }, 0);
+	private final Stroke strokeVzdusny = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3, 3 }, 0);
 
-	private final Doc				doc;
-	private final Bousek0			blizkyBousek;
+	private final Doc doc;
+	private final Bousek0 blizkyBousek;
 
-	private final Coord				soord;
+	private final Coord soord;
 
 	/** Obsahuje bod, který je přidáván, pak se kreslí k němu přidávací čára */
-	private final Mou				pridavanyBod1;
+	private final Mou pridavanyBod1;
 
-	private final Mou				pridavanyBod2;
+	private final Mou pridavanyBod2;
 
-	private final Mou				mouDeliciNaBlizkemBousku;
+	private final Mou mouDeliciNaBlizkemBousku;
 
-	private final Cesta				curta;
+	private final Cesta curta;
 
-	private final Mouable			poziceMouable;
+	private final Mouable poziceMouable;
 
 	public Malovadlo(final Graphics2D g2, final MalovadloParams params) {
 		g = g2;

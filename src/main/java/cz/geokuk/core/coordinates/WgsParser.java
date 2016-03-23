@@ -45,8 +45,8 @@ public class WgsParser {
 	}
 
 	private static class PovolenaVariacePismen {
-		final char	p1;
-		final char	p2;
+		final char p1;
+		final char p2;
 
 		public PovolenaVariacePismen(final char p1, final char p2) {
 			this.p1 = p1;
@@ -55,11 +55,11 @@ public class WgsParser {
 	}
 
 	private static class Souradky {
-		String	prefix;
-		Cislo	stupne;
-		Cislo	minuty;
-		Cislo	vteriny;
-		String	suffix;
+		String prefix;
+		Cislo stupne;
+		Cislo minuty;
+		Cislo vteriny;
+		String suffix;
 
 		/*
 		 * Vrací null, pokud je to špatně, co se týče písmen, ' ' pokud písmeno není uvedeno nebo N, E, S, W pro světové strany případně X, když se neví zda sever nebo jih.
@@ -152,8 +152,8 @@ public class WgsParser {
 	// }
 
 	private class Vzorek {
-		Souradky	sou1;
-		Souradky	sou2;
+		Souradky sou1;
+		Souradky sou2;
 
 		@Override
 		public String toString() {
@@ -174,9 +174,9 @@ public class WgsParser {
 		}
 	}
 
-	private static final List<PovolenaVariacePismen>	povoleneVariace	= new ArrayList<>();
+	private static final List<PovolenaVariacePismen> povoleneVariace = new ArrayList<>();
 
-	private static final Pattern						pat				= Pattern.compile("([0-9]+[.,]?[0-9]*) *°? *(?:([0-9]+[.,]?[0-9]*) *'? *(?:([0-9]+[.,]?[0-9]*) *\"? *)?)?");
+	private static final Pattern pat = Pattern.compile("([0-9]+[.,]?[0-9]*) *°? *(?:([0-9]+[.,]?[0-9]*) *'? *(?:([0-9]+[.,]?[0-9]*) *\"? *)?)?");
 
 	static {
 		povolVariaci(' ', ' ');

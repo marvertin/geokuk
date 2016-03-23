@@ -8,8 +8,8 @@ public class JKachleRendrovaci extends JKachle {
 	/**
 	 * Celá tato třída je jen kvůli zmenšení paměti při rendrování na polovinu, jinak by nebyla potřeba.
 	 */
-	private static final long	serialVersionUID	= -4855904714968272822L;
-	private Graphics			grf;
+	private static final long serialVersionUID = -4855904714968272822L;
+	private Graphics grf;
 
 	public JKachleRendrovaci(final JKachlovnik jKachlovnik, final KaAll kaall) {
 		super(jKachlovnik, kaall);

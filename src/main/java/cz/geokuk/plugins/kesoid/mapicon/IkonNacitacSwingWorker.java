@@ -11,9 +11,9 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
  */
 public class IkonNacitacSwingWorker extends MySwingWorker0<IkonBag, Void> {
 
-	private final IkonNacitacLoader	ikonNacitac;
-	private final boolean			iPrenacti;
-	private final KesoidModel		kesoidModel;
+	private final IkonNacitacLoader ikonNacitac;
+	private final boolean iPrenacti;
+	private final KesoidModel kesoidModel;
 
 	/**
 	 * @param aBoard

@@ -10,9 +10,9 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JKachleOflinerPocetStazenychDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
-	private static final long	serialVersionUID	= 7180968190465321695L;
+	private static final long serialVersionUID = 7180968190465321695L;
 
-	private JLabel				pocetStazenychKachli;
+	private JLabel pocetStazenychKachli;
 
 	public JKachleOflinerPocetStazenychDialog() {
 		setTitle("Průběh hrromadného dotažení mapových dlaždic");

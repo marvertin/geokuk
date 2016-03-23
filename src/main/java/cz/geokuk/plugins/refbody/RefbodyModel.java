@@ -17,15 +17,15 @@ import cz.geokuk.util.exception.FExceptionDumper;
 
 public class RefbodyModel extends Model0 {
 
-	private static final Logger	log							= LogManager.getLogger(RefbodyModel.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(RefbodyModel.class.getSimpleName());
 
-	private static final Wgs	DEFAULTNI_DOMACI_SOURADNICE	= new Wgs(49.8, 15.5);
+	private static final Wgs DEFAULTNI_DOMACI_SOURADNICE = new Wgs(49.8, 15.5);
 
-	private Wgs					hc;
+	private Wgs hc;
 
-	private Factory				factory;
+	private Factory factory;
 
-	private KesoidModel			kesoidModel;
+	private KesoidModel kesoidModel;
 
 	public Wgs getHc() {
 		return hc;

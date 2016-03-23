@@ -64,31 +64,31 @@ public class JCestySlide extends JSingleSlide0 {
 		}
 	}
 
-	private static final long			serialVersionUID				= -5858146658366237217L;
+	private static final long serialVersionUID = -5858146658366237217L;
 
-	private static final int			MIRA_VZDALENOSTI_PRO_ZVYRAZNENI	= 7;
+	private static final int MIRA_VZDALENOSTI_PRO_ZVYRAZNENI = 7;
 
-	private Doc							doc;
-	private Mou							moucur;
+	private Doc doc;
+	private Mou moucur;
 
-	private boolean						dragujeme;
+	private boolean dragujeme;
 
 	/** Nejbližší bod nebo śek cesty ke kurozru myši, pokud nějaký vůbec blízko je */
-	private Bousek0						blizkyBousek;
+	private Bousek0 blizkyBousek;
 
-	private CestyModel					cestyModel;
+	private CestyModel cestyModel;
 
-	private final JCestaTooltip			cestaToolTip					= new JCestaTooltip();
+	private final JCestaTooltip cestaToolTip = new JCestaTooltip();
 	/** Pokud je stisknut CTRL tak přidáváme body, to také znamená, že kreslíme čáru od posledního bodu cesty k aktuálnímu */
-	private Mouable						pridavanyBod1;
+	private Mouable pridavanyBod1;
 
-	private Mouable						pridavanyBod2;
+	private Mouable pridavanyBod2;
 
-	private PoziceModel					poziceModel;
+	private PoziceModel poziceModel;
 
-	private Poziceq						poziceq							= new Poziceq();
+	private Poziceq poziceq = new Poziceq();
 
-	private final PropojovaciAutomat	propojovaciAutmomat				= new PropojovaciAutomat();
+	private final PropojovaciAutomat propojovaciAutmomat = new PropojovaciAutomat();
 
 	public JCestySlide() {
 		setOpaque(false);

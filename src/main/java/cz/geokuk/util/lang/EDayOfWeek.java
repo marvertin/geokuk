@@ -13,9 +13,9 @@ import java.util.Calendar;
 public enum EDayOfWeek {
 	MONDAY(Calendar.MONDAY), TUESDAY(Calendar.TUESDAY), WEDNESDAY(Calendar.WEDNESDAY), THURSDAY(Calendar.THURSDAY), FRIDAY(Calendar.FRIDAY), SATURDAY(Calendar.SATURDAY), SUNDAY(Calendar.SUNDAY);
 
-	private static EDayOfWeek[]	sCalendarNaNas;
+	private static EDayOfWeek[] sCalendarNaNas;
 
-	private final int			iDayOfWeakAsCalendar;
+	private final int iDayOfWeakAsCalendar;
 
 	/**
 	 * Vrátí honodu dne v týdnu na základě kalendáře.

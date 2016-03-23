@@ -6,8 +6,8 @@ import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
 
 public class JenFinalUNalezenychAction extends ToggleAction0 {
 
-	private static final long	serialVersionUID	= -7547868179813232769L;
-	private KesoidModel			model;
+	private static final long serialVersionUID = -7547868179813232769L;
+	private KesoidModel model;
 
 	public JenFinalUNalezenychAction() {
 		super("Jen final u nalezených");

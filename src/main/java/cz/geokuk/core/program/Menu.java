@@ -15,9 +15,9 @@ import cz.geokuk.util.gui.MenuStrujce;
 
 public class Menu extends MenuStrujce {
 
-	private Akce				akce;
-	private RefbodyModel		refbodyModel;
-	private final JMainFrame	jMainFrame;
+	private Akce akce;
+	private RefbodyModel refbodyModel;
+	private final JMainFrame jMainFrame;
 
 	public Menu(final JMainFrame jMainFrame, final JGeokukToolbar geokukToolbar) {
 		super(new JMenuBar(), geokukToolbar);

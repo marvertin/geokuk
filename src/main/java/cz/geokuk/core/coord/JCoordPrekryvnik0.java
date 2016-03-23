@@ -14,11 +14,11 @@ import cz.geokuk.framework.JPrekryvnik;
  */
 public class JCoordPrekryvnik0 extends JPrekryvnik {
 
-	private static final long			serialVersionUID	= -4498307548625868036L;
+	private static final long serialVersionUID = -4498307548625868036L;
 
-	private Coord						soord				= Coord.prozatimniInicializacni();
+	private Coord soord = Coord.prozatimniInicializacni();
 
-	private final List<JSingleSlide0>	slides				= new ArrayList<>();
+	private final List<JSingleSlide0> slides = new ArrayList<>();
 
 	public JCoordPrekryvnik0() {
 		registerEvents();

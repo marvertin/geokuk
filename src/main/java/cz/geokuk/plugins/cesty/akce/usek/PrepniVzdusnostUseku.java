@@ -25,11 +25,11 @@ public class PrepniVzdusnostUseku extends UsekAction0 {
 		if (usek.isVzdusny()) {
 			putValue(NAME, "<html>Přepni úsek " + dalkas + " na běžný");
 			putValue(SHORT_DESCRIPTION,
-					"Vybraný vzdušný úsek přepne na úsek běžný, což způsobí že bude vykreslen plnou čarou a že se tak sousední stávající segmenty trasy spojí. Běžný úsek se na rozdíl od vzdušného počítá do délky trasy.");
+			        "Vybraný vzdušný úsek přepne na úsek běžný, což způsobí že bude vykreslen plnou čarou a že se tak sousední stávající segmenty trasy spojí. Běžný úsek se na rozdíl od vzdušného počítá do délky trasy.");
 		} else {
 			putValue(NAME, "<html>Přepni úsek " + dalkas + " na vzdušný");
 			putValue(SHORT_DESCRIPTION,
-					"Vybraný úsek přepne na úsek vzdušný, což způsobí že bude vykreslen přerušovanou čarou a že tak stávající segment rozdělí na dva nové segmenty trasy. Vzdušné úseky se nezapočítávají do délky cesty.");
+			        "Vybraný úsek přepne na úsek vzdušný, což způsobí že bude vykreslen přerušovanou čarou a že tak stávající segment rozdělí na dva nové segmenty trasy. Vzdušné úseky se nezapočítávají do délky cesty.");
 		}
 	}
 

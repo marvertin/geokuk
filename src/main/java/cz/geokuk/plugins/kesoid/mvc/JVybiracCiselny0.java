@@ -11,14 +11,14 @@ import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
 
 public abstract class JVybiracCiselny0 extends JPanel implements AfterEventReceiverRegistrationInit {
 
-	private static final long		serialVersionUID	= -484273090975902036L;
+	private static final long serialVersionUID = -484273090975902036L;
 
-	public final SpinnerNumberModel	iModel				= new SpinnerNumberModel(0, 0, 100, 1);
+	public final SpinnerNumberModel iModel = new SpinnerNumberModel(0, 0, 100, 1);
 
-	private final JSpinner			jSpinner;
-	private final JLabel			jLabel;
+	private final JSpinner jSpinner;
+	private final JLabel jLabel;
 
-	private KesoidModel				kesoidModel;
+	private KesoidModel kesoidModel;
 
 	/**
 	 *
@@ -77,9 +77,9 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 		layout.setAutoCreateGaps(false);
 		layout.setAutoCreateContainerGaps(false);
 		layout.setHorizontalGroup(layout.createSequentialGroup() // hroup
-				.addGap(3).addComponent(jLabel).addGap(3).addComponent(jSpinner).addGap(3));
+		        .addGap(3).addComponent(jLabel).addGap(3).addComponent(jSpinner).addGap(3));
 		layout.setVerticalGroup(layout.createParallelGroup() // hroup
-				.addComponent(jLabel, GroupLayout.Alignment.CENTER).addComponent(jSpinner, GroupLayout.Alignment.CENTER));
+		        .addComponent(jLabel, GroupLayout.Alignment.CENTER).addComponent(jSpinner, GroupLayout.Alignment.CENTER));
 
 	}
 

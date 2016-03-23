@@ -8,10 +8,10 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 public abstract class CestyActionIndividual0 extends CestyAction0 {
 
-	private static final long	serialVersionUID	= -649900052004328014L;
+	private static final long serialVersionUID = -649900052004328014L;
 
-	private final Mouable		kontextoveMouable;
-	private Poziceq				poziceq;
+	private final Mouable kontextoveMouable;
+	private Poziceq poziceq;
 
 	public CestyActionIndividual0(final Mouable kontextoveMouable) {
 		this.kontextoveMouable = kontextoveMouable;

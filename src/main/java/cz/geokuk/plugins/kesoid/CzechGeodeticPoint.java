@@ -9,8 +9,8 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
 
 public class CzechGeodeticPoint extends Kesoid {
 
-	private double	xjtsk;
-	private double	yjtsk;
+	private double xjtsk;
+	private double yjtsk;
 
 	@Override
 	public void buildGenotyp(final Genom genom, final Genotyp g) {

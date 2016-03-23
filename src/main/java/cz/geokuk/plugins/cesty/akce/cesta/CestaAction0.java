@@ -7,8 +7,8 @@ import cz.geokuk.plugins.cesty.data.Cesta;
 
 public abstract class CestaAction0 extends PositionedAction0 {
 
-	private static final long	serialVersionUID	= 1L;
-	private final Cesta			kontextovaCesta;
+	private static final long serialVersionUID = 1L;
+	private final Cesta kontextovaCesta;
 
 	public CestaAction0(final Cesta kontextovaCesta) {
 		// System.out.println(System.identityHashCode(kontextovaCesta) + ": CestaAction0-konstruktor " + getClass());

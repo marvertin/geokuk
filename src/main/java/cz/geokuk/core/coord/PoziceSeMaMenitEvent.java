@@ -13,10 +13,10 @@ import cz.geokuk.framework.Event0;
  */
 public class PoziceSeMaMenitEvent extends Event0<PoziceModel> {
 
-	public final Mou	mou;
+	public final Mou mou;
 	// private final List<Uchopenec> uchopenci = new ArrayList<Uchopenec>();
-	private Uchopenec	uchopenec;
-	private int			priorita;
+	private Uchopenec uchopenec;
+	private int priorita;
 
 	/**
 	 * @param aPozice

@@ -45,8 +45,8 @@ public class MyExceptionHandler implements UncaughtExceptionHandler {
 		final AExcId excId = FExceptionDumper.dump(oome, EExceptionSeverity.DISPLAY, "Málo paměti odchyceno.");
 		System.err.println("Exception: " + excId);
 		JOptionPane.showMessageDialog(null,
-				excId + ": došla paměť, total=" + totalMemory + " KiB, free=" + freeMemory + " KiB, proces bude ukončen, zkus: \"java -Xmx256m -jar geokuk.jar\"; " + oome.toString(), "Chyba",
-				JOptionPane.ERROR_MESSAGE);
+		        excId + ": došla paměť, total=" + totalMemory + " KiB, free=" + freeMemory + " KiB, proces bude ukončen, zkus: \"java -Xmx256m -jar geokuk.jar\"; " + oome.toString(), "Chyba",
+		        JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
 	}
 

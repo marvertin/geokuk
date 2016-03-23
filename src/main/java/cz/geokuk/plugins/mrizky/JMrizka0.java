@@ -16,17 +16,17 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
 	protected class Vykreslovac {
 
-		private static final int	PIXLMEZ	= 50;
+		private static final int PIXLMEZ = 50;
 
-		private double				x0;
-		private double				y0;
-		private double				xkrok;
-		private double				ykrok;
+		private double x0;
+		private double y0;
+		private double xkrok;
+		private double ykrok;
 
-		private int					tlustsiX;
-		private int					tlustsiY;
+		private int tlustsiX;
+		private int tlustsiY;
 
-		private Color				color	= Color.BLACK;
+		private Color color = Color.BLACK;
 
 		protected final void rastr(final double krok, final int tlustsi) {
 			if (xkrok > 0) {
@@ -196,12 +196,12 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
 	}
 
-	private static final Logger	log					= LogManager.getLogger(JMrizka0.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(JMrizka0.class.getSimpleName());
 
-	private static final long	serialVersionUID	= -5858146658366237217L;
-	private final Stroke		slabe				= new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, new float[] { 2.0f, 4.0f }, 0.0f);
+	private static final long serialVersionUID = -5858146658366237217L;
+	private final Stroke slabe = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, new float[] { 2.0f, 4.0f }, 0.0f);
 
-	private final Stroke		silne				= new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, null, 0.0f);
+	private final Stroke silne = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, null, 0.0f);
 
 	public JMrizka0() {
 		setOpaque(false);

@@ -111,8 +111,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	private static class WptPaintRequest {
 
-		private final Wpt	wpt;
-		private final Mou	mou;
+		private final Wpt wpt;
+		private final Mou mou;
 
 		public WptPaintRequest(final Wpt wpt, final Mou mou) {
 			this.wpt = wpt;
@@ -122,45 +122,45 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	}
 
 	// static int POLOMER_KESE = 15; // je to v pixlech
-	private static final int						POLOMER_CITLIVOSTI				= 10;
+	private static final int POLOMER_CITLIVOSTI = 10;
 
-	private static final PocitadloNula				pocitVelikostFrontyWaypointu	= new PocitadloNula("Velikost vykreslovací waypointové fronty", "Kolik waypointů čeká na vykreslení.");
+	private static final PocitadloNula pocitVelikostFrontyWaypointu = new PocitadloNula("Velikost vykreslovací waypointové fronty", "Kolik waypointů čeká na vykreslení.");
 
-	private static final long						serialVersionUID				= -5858146658366237217L;
+	private static final long serialVersionUID = -5858146658366237217L;
 
-	private static final double						scale							= 1;
+	private static final double scale = 1;
 
-	private final BlockingQueue<WptPaintRequest>	frontaWaypointu					= new LinkedBlockingQueue<>();
-	private Indexator<Wpt>							indexator;
+	private final BlockingQueue<WptPaintRequest> frontaWaypointu = new LinkedBlockingQueue<>();
+	private Indexator<Wpt> indexator;
 
-	private CestyModel								cestyModel;
+	private CestyModel cestyModel;
 
 	// private List<Rectangle> repaintovaneCtverce = new ArrayList<Rectangle>();
 	// private List<Rectangle> klipovanci = new ArrayList<Rectangle>();
 
-	private Kesoid									kesoidPodMysi;
+	private Kesoid kesoidPodMysi;
 
-	private Wpt										wptPodMysi;
+	private Wpt wptPodMysi;
 
-	private final JLabel							jakoTooltip						= new JLabel();
+	private final JLabel jakoTooltip = new JLabel();
 
-	private IkonBag									ikonBag;
+	private IkonBag ikonBag;
 
-	private Set<Alela>								fenotypoveZakazaneAlely;
+	private Set<Alela> fenotypoveZakazaneAlely;
 
-	private Set<String>								iJmenaAlel;
+	private Set<String> iJmenaAlel;
 
-	private Factory									factory;
+	private Factory factory;
 
-	private PoziceModel								poziceModel;
+	private PoziceModel poziceModel;
 
-	private KesoidModel								kesoidModel;
+	private KesoidModel kesoidModel;
 
-	private final boolean							vykreslovatOkamtiteAleDlouho;
+	private final boolean vykreslovatOkamtiteAleDlouho;
 
-	private KesBag									vsechny;
+	private KesBag vsechny;
 
-	private VyletModel								vyletModel;
+	private VyletModel vyletModel;
 
 	public static double getScale() {
 		return scale;

@@ -29,12 +29,12 @@ import java.io.*;
 
 public class RefinedWhiteWriter extends Writer {
 
-	private static final String	NL						= System.getProperty("line.separator");
+	private static final String NL = System.getProperty("line.separator");
 
-	private final Writer		iWriter;
-	private int					iCitacMezer				= 0;
-	private boolean				iLfNeukoncuje			= false;
-	private boolean				iPotrebaUkoncitRadek	= false;
+	private final Writer iWriter;
+	private int iCitacMezer = 0;
+	private boolean iLfNeukoncuje = false;
+	private boolean iPotrebaUkoncitRadek = false;
 
 	public static void main(final String[] args) throws IOException {
 		final PrintWriter pwr = new PrintWriter(new RefinedWhiteWriter(new FileWriter("test_RefineWhiteWriter.txt")));

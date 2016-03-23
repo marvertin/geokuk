@@ -18,10 +18,10 @@ import cz.geokuk.util.process.BrowserOpener;
 
 public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVerze, Void> {
 
-	private static final Logger	log	= LogManager.getLogger(ZkontrolovatAktualizaceSwingWorker.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(ZkontrolovatAktualizaceSwingWorker.class.getSimpleName());
 
-	private final boolean		zobrazitDialogPriPosledniVerzi;
-	private final NapovedaModel	napovedaModel;
+	private final boolean zobrazitDialogPriPosledniVerzi;
+	private final NapovedaModel napovedaModel;
 
 	public ZkontrolovatAktualizaceSwingWorker(final boolean zobrazitDialogPriPosledniVerzi, final NapovedaModel napovedaModel) {
 		this.zobrazitDialogPriPosledniVerzi = zobrazitDialogPriPosledniVerzi;
@@ -65,8 +65,8 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
 		} else {
 			final Object[] options = { "Zobrazit web", "Stáhnout nejnovější verzi", "Připomenout příště" };
 			final int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
-					"<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " + "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + vysledek.lastVersion + ".",
-					"Spuštění nové verze", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+			        "<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " + "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + vysledek.lastVersion + ".",
+			        "Spuštění nové verze", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 			switch (n) {
 			case 0:
 				zobrazitWeb();

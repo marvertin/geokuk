@@ -17,31 +17,31 @@ public class JPozicovnikSlide extends JSingleSlide0 {
 	/**
 	 *
 	 */
-	private static final int	R_KRIZE				= 50;
+	private static final int R_KRIZE = 50;
 
 	/**
 	 *
 	 */
-	private static final int	R_VNEJSI_KRUZNICE	= 30;
+	private static final int R_VNEJSI_KRUZNICE = 30;
 
 	/**
 	 *
 	 */
-	private static final int	R_VNITRNI_KRUZNICE	= 20;
+	private static final int R_VNITRNI_KRUZNICE = 20;
 
-	private static final long	serialVersionUID	= -5858146658366237217L;
+	private static final long serialVersionUID = -5858146658366237217L;
 
-	private Poziceq				poziceq				= new Poziceq();
+	private Poziceq poziceq = new Poziceq();
 
-	private boolean				mysJePoblizKrize;
+	private boolean mysJePoblizKrize;
 
-	private PoziceModel			poziceModel;
+	private PoziceModel poziceModel;
 
-	private VyrezModel			vyrezModel;
+	private VyrezModel vyrezModel;
 
-	private Factory				factory;
+	private Factory factory;
 
-	private Point				pointcur;
+	private Point pointcur;
 
 	public JPozicovnikSlide() {
 		setOpaque(false);

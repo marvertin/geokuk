@@ -20,13 +20,13 @@ public abstract class JMyDialog0 extends JDialog {
 		}
 	}
 
-	private static final long		serialVersionUID	= 1L;
-	private static final Object		CANCEL_ACTION		= "kanclujToVsecko";
-	protected Factory				factory;
-	private EventManager			eventManager;
-	private final JFrame			frame;
+	private static final long serialVersionUID = 1L;
+	private static final Object CANCEL_ACTION = "kanclujToVsecko";
+	protected Factory factory;
+	private EventManager eventManager;
+	private final JFrame frame;
 
-	private final NapovedaAction	napovedaAction		= new NapovedaAction("Dialog/" + getTemaNapovedyDialogu());
+	private final NapovedaAction napovedaAction = new NapovedaAction("Dialog/" + getTemaNapovedyDialogu());
 
 	public JMyDialog0() {
 		super(Dlg.parentFrame());

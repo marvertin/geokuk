@@ -21,12 +21,12 @@ import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 public class SestavovacPopisku {
 
 	private static class Context {
-		private final Wpt	wpt;
+		private final Wpt wpt;
 
-		private boolean		kesoidTypeResolved;
+		private boolean kesoidTypeResolved;
 
-		public Kesoid		kesoid;
-		private Kes			kes;
+		public Kesoid kesoid;
+		private Kes kes;
 
 		Context(final Wpt wpt) {
 			this.wpt = wpt;
@@ -100,9 +100,9 @@ public class SestavovacPopisku {
 
 	}
 
-	private static Map<String, Nahrazovac>	sNahrazovace	= new TreeMap<>();
+	private static Map<String, Nahrazovac> sNahrazovace = new TreeMap<>();
 
-	private static final NahrBr				NAHRBR			= new NahrBr();
+	private static final NahrBr NAHRBR = new NahrBr();
 
 	static {
 		def("{wpt}", (sb, ctx) -> sb.append(ctx.wpt.getName()));
@@ -170,9 +170,9 @@ public class SestavovacPopisku {
 
 	}
 
-	private final Nahrazovac[]	nahrazky;
+	private final Nahrazovac[] nahrazky;
 
-	private final int			pocetRadku;
+	private final int pocetRadku;
 
 	public static String computeByvalyPopisek(final Wpt wpt) {
 		final Kesoid kesoid = wpt.getKesoid();

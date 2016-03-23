@@ -9,11 +9,11 @@ import cz.geokuk.plugins.vylety.VyletModel;
 
 public class KesFilter {
 
-	private FilterDefinition	filterDefinition;
-	private Set<Alela>			nechteneAlely;
-	private Set<String>			jmenaNechtenychAlel;
+	private FilterDefinition filterDefinition;
+	private Set<Alela> nechteneAlely;
+	private Set<String> jmenaNechtenychAlel;
 
-	private VyletModel			vyletModel;
+	private VyletModel vyletModel;
 
 	public KesFilter() {}
 

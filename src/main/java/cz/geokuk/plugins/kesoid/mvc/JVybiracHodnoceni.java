@@ -7,9 +7,9 @@ import cz.geokuk.plugins.kesoid.KesBag;
 
 public class JVybiracHodnoceni extends JVybiracCiselny0 {
 
-	private static final long		serialVersionUID	= 2417664157609045262L;
+	private static final long serialVersionUID = 2417664157609045262L;
 
-	public final SpinnerNumberModel	model				= new SpinnerNumberModel(0, 0, 100, 1);
+	public final SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 100, 1);
 
 	public JVybiracHodnoceni() {
 		super("Hodnocení:");

@@ -15,11 +15,11 @@ import cz.geokuk.util.file.Filex;
  */
 public class KachleUmisteniSouboru extends UmisteniSouboru0 {
 
-	public static final File	PRCHAVE_DIR			= new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "prchave");	// keš, kterou je vždymožno smazat
+	public static final File PRCHAVE_DIR = new File(KesoidUmisteniSouboru.GEOKUK_DATA_DIR.getFile(), "prchave"); // keš, kterou je vždymožno smazat
 
-	public static final Filex	KACHLE_CACHE_DIR	= new Filex(new File(PRCHAVE_DIR, "kachle"), false, true);
+	public static final Filex KACHLE_CACHE_DIR = new Filex(new File(PRCHAVE_DIR, "kachle"), false, true);
 
-	private Filex				kachleCacheDir;
+	private Filex kachleCacheDir;
 
 	/*
 	 * (non-Javadoc)

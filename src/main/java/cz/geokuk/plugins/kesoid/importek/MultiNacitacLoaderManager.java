@@ -7,13 +7,13 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 public class MultiNacitacLoaderManager {
 
-	private final MultiNacitac		multiNacitac;
+	private final MultiNacitac multiNacitac;
 
-	private MultiNacitacSwingWorker	klsw;
+	private MultiNacitacSwingWorker klsw;
 
-	private Timer					iTimer;
+	private Timer iTimer;
 
-	private final KesoidModel		kesoidModel;
+	private final KesoidModel kesoidModel;
 
 	public MultiNacitacLoaderManager(final KesoidModel kesoidModel) {
 		this.kesoidModel = kesoidModel;

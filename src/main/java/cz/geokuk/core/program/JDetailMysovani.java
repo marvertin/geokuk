@@ -14,9 +14,9 @@ import cz.geokuk.core.coord.PoziceModel;
  */
 public final class JDetailMysovani extends JSingleSlide0 implements MouseInputListener, MouseWheelListener {
 
-	private static final long	serialVersionUID	= 4979888007463850390L;
+	private static final long serialVersionUID = 4979888007463850390L;
 
-	private PoziceModel			poziceModel;
+	private PoziceModel poziceModel;
 
 	/**
 	 * @param jKachlovnik

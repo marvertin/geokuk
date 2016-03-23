@@ -8,9 +8,9 @@ import cz.geokuk.framework.MySwingWorker0;
 
 class HledaciRunnableSwingWorker<T extends Nalezenec0> extends MySwingWorker0<VysledekHledani<T>, Void> {
 
-	private final HledaciPodminka0	podminka;
-	private final Hledac0<T>		hledac;
-	private final Finishor<T>		finishor;
+	private final HledaciPodminka0 podminka;
+	private final Hledac0<T> hledac;
+	private final Finishor<T> finishor;
 
 	public HledaciRunnableSwingWorker(final Finishor<T> finishor, final HledaciPodminka0 podminka, final Hledac0<T> hledac) {
 		super();

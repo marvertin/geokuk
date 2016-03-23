@@ -22,11 +22,11 @@ import org.w3c.dom.*;
  */
 public class KmzWriter {
 
-	private final ZipOutputStream	zos;
-	private final Document			xmldoc;
-	private final Element			eFolder;
+	private final ZipOutputStream zos;
+	private final Document xmldoc;
+	private final Element eFolder;
 
-	private int						citacSouboru;
+	private int citacSouboru;
 
 	/**
 	 * @throws FileNotFoundException

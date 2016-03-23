@@ -17,9 +17,9 @@ import cz.geokuk.framework.Action0;
  */
 public class NaKonkretniBodAction extends Action0 {
 
-	private static int			citac;
-	private static final long	serialVersionUID	= -2882817111560336824L;
-	private final Wgs			wgs;
+	private static int citac;
+	private static final long serialVersionUID = -2882817111560336824L;
+	private final Wgs wgs;
 
 	/**
 	 * @param aBoard

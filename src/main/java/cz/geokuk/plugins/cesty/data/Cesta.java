@@ -14,17 +14,17 @@ import cz.geokuk.util.lang.FUtil;
 public class Cesta implements Iterable<Bousek0> {
 
 	public static class SearchResult {
-		public Bousek0	bousek;
-		public long		kvadradVzdalenosti	= Long.MAX_VALUE;
+		public Bousek0 bousek;
+		public long kvadradVzdalenosti = Long.MAX_VALUE;
 	}
 
-	private static final Logger	log	= LogManager.getLogger(Cesta.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(Cesta.class.getSimpleName());
 	/// prazdna cesta ma prazdny start i cil, ale snad by ani nemala byt
-	private Bod					start;
-	private Bod					cil;
-	private Doc					doc;
+	private Bod start;
+	private Bod cil;
+	private Doc doc;
 
-	private String				nazev;
+	private String nazev;
 
 	public static Cesta create() {
 		return new Cesta();

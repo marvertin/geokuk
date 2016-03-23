@@ -11,8 +11,8 @@ import java.util.Collection;
 public interface KachleManager {
 
 	public static class ItemToSave {
-		public final Ka0	key;
-		public final byte[]	imageData;
+		public final Ka0 key;
+		public final byte[] imageData;
 
 		public ItemToSave(final Ka0 key, final byte[] imageData) {
 			super();

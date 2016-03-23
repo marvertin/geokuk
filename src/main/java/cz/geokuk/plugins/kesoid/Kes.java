@@ -19,25 +19,25 @@ import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
  */
 public class Kes extends Kesoid {
 
-	private static String		URL_PREFIX_PRINT	= "http://www.geocaching.com/seek/cdpf.aspx?guid=";
-	private static String		URL_PREFIX_SHOW		= "http://www.geocaching.com/seek/cache_details.aspx?guid=";
-	public static final int		NENI_HODNOCENI		= -1;
-	private int					bestOf				= Kes.NENI_HODNOCENI;
-	private int					hodnoceni			= Kes.NENI_HODNOCENI;
+	private static String URL_PREFIX_PRINT = "http://www.geocaching.com/seek/cdpf.aspx?guid=";
+	private static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
+	public static final int NENI_HODNOCENI = -1;
+	private int bestOf = Kes.NENI_HODNOCENI;
+	private int hodnoceni = Kes.NENI_HODNOCENI;
 
-	private int					hodnoceniPocet		= Kes.NENI_HODNOCENI;
-	private int					znamka				= Kes.NENI_HODNOCENI;
-	private int					favorit				= Kes.NENI_HODNOCENI;
-	private String				hint;
-	private EKesSize			size;
-	private EKesDiffTerRating	difficulty;
-	private EKesDiffTerRating	terrain;
+	private int hodnoceniPocet = Kes.NENI_HODNOCENI;
+	private int znamka = Kes.NENI_HODNOCENI;
+	private int favorit = Kes.NENI_HODNOCENI;
+	private String hint;
+	private EKesSize size;
+	private EKesDiffTerRating difficulty;
+	private EKesDiffTerRating terrain;
 	// private String guid;
-	private Wpt					finalWpt;
+	private Wpt finalWpt;
 
-	private String				iFountTime;
+	private String iFountTime;
 
-	private Wpt					mainWpt;
+	private Wpt mainWpt;
 
 	@Override
 	public void addWpt(final Wpt wpt) {

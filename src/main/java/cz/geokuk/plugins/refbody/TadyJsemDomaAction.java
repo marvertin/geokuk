@@ -17,11 +17,11 @@ import cz.geokuk.framework.Dlg;
  */
 public class TadyJsemDomaAction extends Action0 {
 
-	private static final long	serialVersionUID	= -2882817111560336824L;
+	private static final long serialVersionUID = -2882817111560336824L;
 
-	private Wgs					hc;
+	private Wgs hc;
 
-	private RefbodyModel		refbodyModel;
+	private RefbodyModel refbodyModel;
 
 	/**
 	 * @param aBoard
@@ -29,7 +29,7 @@ public class TadyJsemDomaAction extends Action0 {
 	public TadyJsemDomaAction() {
 		super("Jsem doma...");
 		putValue(SHORT_DESCRIPTION,
-				"Nastaví aktuální pozici jako domácí souřadnice." + " Na takto uložená nastavení se dostanete volbou \"Domů\", od těchto souřadnic se počítá vzdálenost a pozice keší.");
+		        "Nastaví aktuální pozici jako domácí souřadnice." + " Na takto uložená nastavení se dostanete volbou \"Domů\", od těchto souřadnic se počítá vzdálenost a pozice keší.");
 		// putValue(MNEMONIC_KEY, KeyEvent.VK_D);
 
 	}

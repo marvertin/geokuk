@@ -14,8 +14,8 @@ import cz.geokuk.framework.JMyDialog0;
  */
 public class UmisteniSouboruAction extends DialogOpeningAction0 {
 
-	private static final long		serialVersionUID	= -2882817111560336824L;
-	private final ESouborPanelName	souborPanelName;
+	private static final long serialVersionUID = -2882817111560336824L;
+	private final ESouborPanelName souborPanelName;
 
 	/**
 	 * @param aBoard

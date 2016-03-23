@@ -5,9 +5,9 @@ import java.util.regex.Pattern;
 
 public class Root {
 	public static class Def {
-		final int		maxDepth;
-		final Pattern	patternIncludes;
-		final Pattern	patternExcludes;
+		final int maxDepth;
+		final Pattern patternIncludes;
+		final Pattern patternExcludes;
 
 		public Def(final int aMaxDepth, final Pattern aPatternIncludes, final Pattern aPatternExcludes) {
 			super();
@@ -23,9 +23,9 @@ public class Root {
 
 	}
 
-	public final File	dir;
+	public final File dir;
 
-	public final Def	def;
+	public final Def def;
 
 	public Root(final File aRoot, final Def aDef) {
 		super();

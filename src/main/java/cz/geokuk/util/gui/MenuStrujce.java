@@ -8,13 +8,13 @@ import cz.geokuk.framework.ToggleAction0;
 
 public abstract class MenuStrujce {
 
-	protected final JMenuBar		menuBar;
-	protected JMenu					menu;
-	protected JMenuItem				item;
+	protected final JMenuBar menuBar;
+	protected JMenu menu;
+	protected JMenuItem item;
 
-	protected final JGeokukToolbar	tb;
+	protected final JGeokukToolbar tb;
 
-	protected Factory				factory;
+	protected Factory factory;
 
 	public MenuStrujce(final JMenuBar menuBar, final JGeokukToolbar toolBar) {
 		this.menuBar = menuBar;

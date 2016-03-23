@@ -13,11 +13,11 @@ import cz.geokuk.framework.JSlide0;
  */
 public abstract class JSingleSlide0 extends JSlide0 {
 
-	private static final long	serialVersionUID	= 8758817189971703053L;
+	private static final long serialVersionUID = 8758817189971703053L;
 
-	private Coord				soord;
+	private Coord soord;
 
-	protected Factory			factory;
+	protected Factory factory;
 
 	/**
 	 * Potomek musí vytvořit novou instanci slidu, který bude rendrovatelný. Obvykle postačí, když vytvoří prázdnou instanci své vlastní třídy. Pokud vrátí null, nic se rendrovat nebude

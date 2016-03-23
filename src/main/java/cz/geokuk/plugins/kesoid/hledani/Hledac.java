@@ -21,10 +21,10 @@ import cz.geokuk.util.lang.FUtil;
 public class Hledac extends Hledac0<Nalezenec> {
 
 	private class Porovnavac {
-		private final String	vzorek;
-		private final boolean	regularniVyraz;
+		private final String vzorek;
+		private final boolean regularniVyraz;
 
-		private final Pattern	pat;
+		private final Pattern pat;
 
 		/**
 		 * @param aVzorek

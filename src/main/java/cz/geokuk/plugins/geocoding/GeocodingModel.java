@@ -16,10 +16,10 @@ import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
  */
 public class GeocodingModel extends Model0 {
 
-	private final Hledac	hledac	= new Hledac();
-	private HledaciSluzba	hledaciSluzba;
-	private boolean			onlineMode;
-	private Wgs				referencniBod;
+	private final Hledac hledac = new Hledac();
+	private HledaciSluzba hledaciSluzba;
+	private boolean onlineMode;
+	private Wgs referencniBod;
 
 	public void inject(final HledaciSluzba hledaciSluzba) {
 		this.hledaciSluzba = hledaciSluzba;

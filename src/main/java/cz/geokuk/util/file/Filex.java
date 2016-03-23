@@ -7,9 +7,9 @@ import java.util.StringTokenizer;
 import cz.geokuk.core.program.FConst;
 
 public class Filex {
-	private final File		file;
-	private final boolean	relativeToProgram;
-	private final boolean	active;
+	private final File file;
+	private final boolean relativeToProgram;
+	private final boolean active;
 
 	/**
 	 * Kanonizuj danou cestu. Pokud je cesta relativní, nejdříve ji zabsolutni.

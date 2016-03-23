@@ -15,14 +15,14 @@ import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.Action0;
 
 public class OpenStreetViewAction extends Action0 {
-	private static final Logger	log						= LogManager.getLogger(OpenStreetViewAction.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(OpenStreetViewAction.class.getSimpleName());
 
-	private static final long	serialVersionUID		= -8054017274338240706L;
+	private static final long serialVersionUID = -8054017274338240706L;
 
-	private static final String	STREET_VIEW_TEMPLATE	= "http://maps.google.com/maps?layer=c&cbll=%.6f,%.6f";
+	private static final String STREET_VIEW_TEMPLATE = "http://maps.google.com/maps?layer=c&cbll=%.6f,%.6f";
 
-	private Poziceq				poziceq					= new Poziceq();
-	private final Mouable		mouable;
+	private Poziceq poziceq = new Poziceq();
+	private final Mouable mouable;
 
 	private static URI getStreetViewUri(final Wgs wgs) {
 		try {

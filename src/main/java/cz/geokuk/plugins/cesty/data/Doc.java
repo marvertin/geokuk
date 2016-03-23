@@ -17,10 +17,10 @@ import cz.geokuk.plugins.kesoid.Wpt;
 public class Doc implements Iterable<Cesta> {
 
 	/** Soubor ze kterého byla cesta načtena a do kterého se bude ukládat, null pokud ještě neuloženo */
-	private File				file;
-	private boolean				changed;
+	private File file;
+	private boolean changed;
 
-	private final List<Cesta>	cesty	= new ArrayList<>();
+	private final List<Cesta> cesty = new ArrayList<>();
 
 	/**
 	 * Propojí dvě cesty do jiné nové cesty. Původní dvě cesty jsou odteď prázdné, ale další atributy jako jméo zůstanou netčeny.
@@ -30,8 +30,8 @@ public class Doc implements Iterable<Cesta> {
 	 * @return
 	 */
 	static Cesta propojCestyDoJine(final Cesta c1, final Cesta c2) {
-		assert !c2.isEmpty();
-		assert !c1.isEmpty();
+		assert!c2.isEmpty();
+		assert!c1.isEmpty();
 		final Cesta cesta = Cesta.create();
 		final Bod vaznyBod = c1.getCil();
 		if (vaznyBod.getMou().equals(c2.getStart().getMou())) {

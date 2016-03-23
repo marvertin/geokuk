@@ -50,10 +50,10 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  */
 public class RubyTheme extends DefaultMetalTheme {
 
-	private final ColorUIResource	primary1	= new ColorUIResource(80, 10, 22);
+	private final ColorUIResource primary1 = new ColorUIResource(80, 10, 22);
 
-	private final ColorUIResource	primary2	= new ColorUIResource(193, 10, 44);
-	private final ColorUIResource	primary3	= new ColorUIResource(244, 10, 66);
+	private final ColorUIResource primary2 = new ColorUIResource(193, 10, 44);
+	private final ColorUIResource primary3 = new ColorUIResource(244, 10, 66);
 
 	@Override
 	public String getName() {

@@ -20,18 +20,18 @@ public class IconDefNacitac {
 	 *
 	 */
 
-	private static final Logger		log	= LogManager.getLogger(IconDefNacitac.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(IconDefNacitac.class.getSimpleName());
 
 	// TODO : The alelas should have a more generic name
-	private static Pattern			pat	= Pattern.compile("([a-z0-9]+!)*([^_]*)((?:_[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮa-zA-z -]+)*)(_x-?[0-9]+)*(_y-?[0-9]+)*(_p[0-9])*\\.([a-z]+)");
+	private static Pattern pat = Pattern.compile("([a-z0-9]+!)*([^_]*)((?:_[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮa-zA-z -]+)*)(_x-?[0-9]+)*(_y-?[0-9]+)*(_p[0-9])*\\.([a-z]+)");
 
-	private final String			jmenoSPriponou;
+	private final String jmenoSPriponou;
 	// private IconDef iconDef;
-	IkonDrawingProperties			idp;
-	private final URL				url;
+	IkonDrawingProperties idp;
+	private final URL url;
 
-	private final Genom				genom;
-	private final IkonNacitacSada	iIkonNacitacSada;
+	private final Genom genom;
+	private final IkonNacitacSada iIkonNacitacSada;
 
 	public IconDefNacitac(final Genom genom, final String jmenoSPriponou, final URL url, final IkonNacitacSada aIkonNacitacSada) {
 		this.jmenoSPriponou = jmenoSPriponou;

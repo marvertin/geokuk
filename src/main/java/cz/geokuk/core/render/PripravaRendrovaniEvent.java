@@ -4,8 +4,8 @@ import cz.geokuk.framework.Event0;
 
 public class PripravaRendrovaniEvent extends Event0<RenderModel> {
 
-	private final RenderSettings	renderSettings;
-	private final EStavRendrovani	stavRendrovani;
+	private final RenderSettings renderSettings;
+	private final EStavRendrovani stavRendrovani;
 
 	/**
 	 * @param renderSettings

@@ -12,11 +12,11 @@ import cz.geokuk.util.lang.CounterMap;
 
 public abstract class JVyberIkon0 extends Box {
 
-	private static final long	serialVersionUID	= -6496737194139718970L;
-	private JComponent			jvyber1;
-	private JComponent			jvyber2;
-	private final boolean		iOdskrtnutiVybira;
-	private final boolean		iRadioButton;
+	private static final long serialVersionUID = -6496737194139718970L;
+	private JComponent jvyber1;
+	private JComponent jvyber2;
+	private final boolean iOdskrtnutiVybira;
+	private final boolean iRadioButton;
 
 	public JVyberIkon0(final boolean aRadioButton, final boolean aOdskrtnutiVybira) {
 		super(BoxLayout.LINE_AXIS);

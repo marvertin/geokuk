@@ -12,16 +12,16 @@ import cz.geokuk.util.lang.FString;
  */
 public class Gen {
 
-	private final String				displayName;
-	private final Set<Alela>			alely				= new LinkedHashSet<>();
-	private final Map<String, Grupa>	grupy				= new HashMap<>();
+	private final String displayName;
+	private final Set<Alela> alely = new LinkedHashSet<>();
+	private final Map<String, Grupa> grupy = new HashMap<>();
 
-	private Alela						vychoziAlela;
-	private boolean						locked;
-	private final Genom					genom;
+	private Alela vychoziAlela;
+	private boolean locked;
+	private final Genom genom;
 
-	private final Grupa					IMPLICITNI_GRUPA	= grupa(Grupa.IMPLICITNI_GRUPA_NAME);
-	private final boolean				vypsatelnyVeZhasinaci;
+	private final Grupa IMPLICITNI_GRUPA = grupa(Grupa.IMPLICITNI_GRUPA_NAME);
+	private final boolean vypsatelnyVeZhasinaci;
 
 	public Gen(final String displayName, final Genom genom, final boolean vypsatelnyVeZhasinaci) {
 		this.displayName = displayName;

@@ -64,29 +64,29 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		}
 	}
 
-	private static final long	serialVersionUID	= 7087453419069194768L;
-	final static Color			HILIT_COLOR			= Color.LIGHT_GRAY;
-	final static Color			ERROR_COLOR			= Color.PINK;
-	final static String			CANCEL_ACTION		= "cancel-adr-hled";
-	private JTextField			entry;
+	private static final long serialVersionUID = 7087453419069194768L;
+	final static Color HILIT_COLOR = Color.LIGHT_GRAY;
+	final static Color ERROR_COLOR = Color.PINK;
+	final static String CANCEL_ACTION = "cancel-adr-hled";
+	private JTextField entry;
 
-	private JLabel				jLabel1;
-	private JButton				jButtonCentruj;
-	private JAdrTable			jAdrTabulka;
+	private JLabel jLabel1;
+	private JButton jButtonCentruj;
+	private JAdrTable jAdrTabulka;
 
-	private JLabel				status;
+	private JLabel status;
 
-	final Color					entryBg;
+	final Color entryBg;
 	// final Highlighter hilit;
 	// final Highlighter.HighlightPainter painter;
 
-	private Wgs					referencniBod;
+	private Wgs referencniBod;
 
-	private PoziceModel			poziceModel;
+	private PoziceModel poziceModel;
 
-	private VyrezModel			vyrezModel;
+	private VyrezModel vyrezModel;
 
-	private GeocodingModel		geocodingModel;
+	private GeocodingModel geocodingModel;
 
 	public JAdrDialog() {
 		init();
@@ -192,18 +192,18 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // hroup
-				.addGroup(GroupLayout.Alignment.TRAILING,
-						layout.createSequentialGroup() // h1
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // h2
-										.addComponent(jAdrTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-										.addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE).addGroup(layout.createSequentialGroup() // h3
-												.addComponent(jLabel1).addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE).addComponent(jButtonCentruj)))));
+		        .addGroup(GroupLayout.Alignment.TRAILING,
+		                layout.createSequentialGroup() // h1
+		                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // h2
+		                                .addComponent(jAdrTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+		                                .addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE).addGroup(layout.createSequentialGroup() // h3
+		                                        .addComponent(jLabel1).addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE).addComponent(jButtonCentruj)))));
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // vGrou
-				.addGroup(layout.createSequentialGroup() // v1
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE) // v2
-								.addComponent(jLabel1).addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jButtonCentruj))
-						.addComponent(status).addComponent(jAdrTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)));
+		        .addGroup(layout.createSequentialGroup() // v1
+		                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE) // v2
+		                        .addComponent(jLabel1).addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jButtonCentruj))
+		                .addComponent(status).addComponent(jAdrTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)));
 
 		pack();
 	}

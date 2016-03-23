@@ -6,9 +6,9 @@ import cz.geokuk.util.gui.MyOverlayManager;
 
 public abstract class JPrekryvnik extends JSlide0 {
 
-	private static final long	serialVersionUID	= 6666523437492021231L;
+	private static final long serialVersionUID = 6666523437492021231L;
 
-	private JSlide0				lastAddedSlide;
+	private JSlide0 lastAddedSlide;
 
 	/**
 	 *

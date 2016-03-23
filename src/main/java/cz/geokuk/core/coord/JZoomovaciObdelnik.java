@@ -15,13 +15,13 @@ import cz.geokuk.framework.MouseGestureContext;
  */
 public class JZoomovaciObdelnik extends JSingleSlide0 {
 
-	private static final long	serialVersionUID	= -4801191981059574701L;
+	private static final long serialVersionUID = -4801191981059574701L;
 
-	private Point				pocatek;
+	private Point pocatek;
 
-	private Point				konec;
+	private Point konec;
 
-	private VyrezModel			vyrezModel;
+	private VyrezModel vyrezModel;
 
 	public JZoomovaciObdelnik() {
 		setPreferredSize(new Dimension(1600, 40));

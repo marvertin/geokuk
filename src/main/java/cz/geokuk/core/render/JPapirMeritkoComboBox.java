@@ -7,11 +7,11 @@ import javax.swing.JComboBox;
 
 public class JPapirMeritkoComboBox extends JComboBox<String> {
 
-	private static final long	serialVersionUID	= -3121505662505169240L;
+	private static final long serialVersionUID = -3121505662505169240L;
 
-	private static final int[]	MERITKA				= { 10000, 15000, 20000, 25000, 50000, 100000 };
+	private static final int[] MERITKA = { 10000, 15000, 20000, 25000, 50000, 100000 };
 
-	private int					naposledZadana;
+	private int naposledZadana;
 
 	public JPapirMeritkoComboBox() {
 		setEditable(true);

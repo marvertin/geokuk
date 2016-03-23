@@ -5,17 +5,17 @@ import java.util.*;
 public class Vrstva {
 
 	private class Seznamec {
-		Seznamec	next;	// další položka. "Seznam má mnoho vrcholů v mapě dle symbolové alely a nakonec vždy jede dolů do seznamu spolčných icondefů.
-		IconDef		iconDef;
+		Seznamec next; // další položka. "Seznam má mnoho vrcholů v mapě dle symbolové alely a nakonec vždy jede dolů do seznamu spolčných icondefů.
+		IconDef iconDef;
 
 	}
 
-	private final Map<Alela, Seznamec>	icondefsProSymbol	= new HashMap<>();
-	private final Seznamec				hlavickaObecnych	= new Seznamec();
+	private final Map<Alela, Seznamec> icondefsProSymbol = new HashMap<>();
+	private final Seznamec hlavickaObecnych = new Seznamec();
 
-	private final Set<Alela>			pouziteAlely		= new HashSet<>();
+	private final Set<Alela> pouziteAlely = new HashSet<>();
 
-	private int							pocet;
+	private int pocet;
 
 	public Set<Alela> getPouziteAlely() {
 		return pouziteAlely;

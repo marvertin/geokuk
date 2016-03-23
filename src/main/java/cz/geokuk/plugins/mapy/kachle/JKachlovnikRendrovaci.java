@@ -12,12 +12,12 @@ public class JKachlovnikRendrovaci extends JKachlovnik {
 		void setProgress(int value, int maxlue);
 	}
 
-	private static final Logger	log					= LogManager.getLogger(JKachlovnikRendrovaci.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(JKachlovnikRendrovaci.class.getSimpleName());
 
-	private static final long	serialVersionUID	= -3170605712662727739L;
-	private Progressor			progressor;
-	private int					citacZpracovanychKachli;
-	private int					celkovyPocetKachliKtereRendruejeme;
+	private static final long serialVersionUID = -3170605712662727739L;
+	private Progressor progressor;
+	private int citacZpracovanychKachli;
+	private int celkovyPocetKachliKtereRendruejeme;
 
 	public JKachlovnikRendrovaci() {
 		super("Renderovací kachlovník", Priority.STAHOVANI);

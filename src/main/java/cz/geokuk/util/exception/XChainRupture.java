@@ -8,9 +8,9 @@ package cz.geokuk.util.exception;
  */
 public class XChainRupture extends RuntimeException {
 
-	static final long		serialVersionUID	= -1113131046499029970L;
-	private final AExcId	iExceptionId;
-	private final String	iCircumstance;
+	static final long serialVersionUID = -1113131046499029970L;
+	private final AExcId iExceptionId;
+	private final String iCircumstance;
 
 	public XChainRupture(final AExcId aExceptionId, final String aCircumstance) {
 		iExceptionId = aExceptionId;

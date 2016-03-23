@@ -5,9 +5,9 @@ import java.awt.event.KeyEvent;
 import cz.geokuk.framework.ToggleAction0;
 
 public class UkladatMapyNaDiskAction extends ToggleAction0 {
-	private static final long	serialVersionUID	= -3631232428454275961L;
+	private static final long serialVersionUID = -3631232428454275961L;
 
-	public KachleModel			kachleModel;
+	public KachleModel kachleModel;
 
 	public UkladatMapyNaDiskAction() {
 		super("Ukládat mapy");

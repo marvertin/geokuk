@@ -11,11 +11,11 @@ public class DiagnosticsData {
 		public void send(DiagnosticsData data, String faze);
 	}
 
-	private final DiagnosticsData	parent;
-	private final String			nazev;
-	private final Object			dato;
+	private final DiagnosticsData parent;
+	private final String nazev;
+	private final Object dato;
 
-	private final Listener			listener;
+	private final Listener listener;
 
 	public static DiagnosticsData create(final String nazev, final Object dato, final Listener listener) {
 		return new DiagnosticsData(null, nazev, dato, listener);

@@ -74,8 +74,8 @@ public class Indexator<T> {
 
 	public Sheet<T> locateNearestOne(final BoundingRect br, final int xx, final int yy) {
 		class Drzak {
-			Sheet<T>	tt;
-			long		d2	= Long.MAX_VALUE;
+			Sheet<T> tt;
+			long d2 = Long.MAX_VALUE;
 		}
 		final Drzak drzak = new Drzak();
 		visit(br, new FlatVisitor<T>() {

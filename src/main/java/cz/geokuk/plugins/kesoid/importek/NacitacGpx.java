@@ -21,71 +21,71 @@ import cz.geokuk.core.coordinates.Wgs;
  */
 public class NacitacGpx extends NacitacInputStream0 {
 
-	private static final Logger	log							= LogManager.getLogger(NacitacGpx.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(NacitacGpx.class.getSimpleName());
 
-	private static String		TOPOGRAFIC_NAMESPACE_1_0	= "http://www.topografix.com/GPX/1/0";
-	private static String		TOPOGRAFIC_NAMESPACE_1_1	= "http://www.topografix.com/GPX/1/1";
-	private static String		GROUNSPEAK_NAMESPACE_1_0	= "http://www.groundspeak.com/cache/1/0";
-	private static String		GROUNSPEAK_NAMESPACE_1_0_1	= "http://www.groundspeak.com/cache/1/0/1";
-	private static String		GPXG_NAMESPACE				= "http://geoget.ararat.cz/GpxExtensions/v2";
+	private static String TOPOGRAFIC_NAMESPACE_1_0 = "http://www.topografix.com/GPX/1/0";
+	private static String TOPOGRAFIC_NAMESPACE_1_1 = "http://www.topografix.com/GPX/1/1";
+	private static String GROUNSPEAK_NAMESPACE_1_0 = "http://www.groundspeak.com/cache/1/0";
+	private static String GROUNSPEAK_NAMESPACE_1_0_1 = "http://www.groundspeak.com/cache/1/0/1";
+	private static String GPXG_NAMESPACE = "http://geoget.ararat.cz/GpxExtensions/v2";
 
-	private static QName		URL							= new QName(TOPOGRAFIC_NAMESPACE_1_0, "url");
+	private static QName URL = new QName(TOPOGRAFIC_NAMESPACE_1_0, "url");
 
-	private static QName		LINK						= new QName(TOPOGRAFIC_NAMESPACE_1_1, "link");
-	private static QName		LINK_TEXT					= new QName(TOPOGRAFIC_NAMESPACE_1_1, "text");
-	private static QName		LINK_TYPE					= new QName(TOPOGRAFIC_NAMESPACE_1_1, "type");
+	private static QName LINK = new QName(TOPOGRAFIC_NAMESPACE_1_1, "link");
+	private static QName LINK_TEXT = new QName(TOPOGRAFIC_NAMESPACE_1_1, "text");
+	private static QName LINK_TYPE = new QName(TOPOGRAFIC_NAMESPACE_1_1, "type");
 	// <gpxg:GeogetExtension xmlns:gpxg="http://geoget.ararat.cz/GpxExtensions/v2">
-	private static QName		GPXG_GEOGET_EXTENSION		= new QName(GPXG_NAMESPACE, "GeogetExtension");
+	private static QName GPXG_GEOGET_EXTENSION = new QName(GPXG_NAMESPACE, "GeogetExtension");
 	// <gpxg:Found>2009-10-30T16:16:00.000</gpxg:Found>
-	private static QName		GPXG_FOUND					= new QName(GPXG_NAMESPACE, "Found");
+	private static QName GPXG_FOUND = new QName(GPXG_NAMESPACE, "Found");
 	// <gpxg:Tag Category="attribute"><![CDATA[quads-no]]></gpxg:Tag>
-	private static QName		GPXG_TAG					= new QName(GPXG_NAMESPACE, "Tag");
+	private static QName GPXG_TAG = new QName(GPXG_NAMESPACE, "Tag");
 	// <gpxg:Flag>1</gpxg:Flag>
-	private static QName		GPXG_FLAG					= new QName(GPXG_NAMESPACE, "Flag");
+	private static QName GPXG_FLAG = new QName(GPXG_NAMESPACE, "Flag");
 	// pro cesty
-	private static QName		TRK;
+	private static QName TRK;
 
-	private static QName		TRKSEG;
+	private static QName TRKSEG;
 
-	private static QName		TRKPT;
+	private static QName TRKPT;
 
-	private QName				WPT;
+	private QName WPT;
 
-	private QName				TYPE;
+	private QName TYPE;
 
-	private QName				TIME;
+	private QName TIME;
 
-	private QName				NAME;
+	private QName NAME;
 
-	private QName				DESC;
+	private QName DESC;
 
-	private QName				CMT;
+	private QName CMT;
 
-	private QName				URLNAME;
+	private QName URLNAME;
 
-	private QName				SYM;
+	private QName SYM;
 
-	private QName				ELE;
+	private QName ELE;
 
-	private QName				GS_CACHE;
+	private QName GS_CACHE;
 
 	// <groundspeak:name>Vyroba vapna</groundspeak:name>
-	private QName				GS_NAME;
+	private QName GS_NAME;
 	// <groundspeak:placed_by>rodinka veverek</groundspeak:placed_by>
-	private QName				GS_PLACED_BY;
+	private QName GS_PLACED_BY;
 	// <groundspeak:owner id;
-	private QName				GS_OWNER;
+	private QName GS_OWNER;
 	// <groundspeak:type>Unknown Cache</groundspeak:type>
-	private QName				GS_TYPE;
+	private QName GS_TYPE;
 
 	// <groundspeak:container>Regular</groundspeak:container>
-	private QName				GS_CONTAINER;
+	private QName GS_CONTAINER;
 
 	// <groundspeak:difficulty>2.5</groundspeak:difficulty>
-	private QName				GS_DIFFICULTY;
+	private QName GS_DIFFICULTY;
 
 	// <groundspeak:terrain>4</groundspeak:terrain>
-	private QName				GS_TERREAIN;
+	private QName GS_TERREAIN;
 
 	// <gpxg:Tag Category="attribute"><![CDATA[available-yes]]></gpxg:Tag>
 	// <gpxg:Tag Category="attribute"><![CDATA[bicycles-yes]]></gpxg:Tag>
@@ -106,14 +106,14 @@ public class NacitacGpx extends NacitacInputStream0 {
 	// </gpxg:GeogetExtension>
 
 	// <groundspeak:country>Czech Republic</groundspeak:country>
-	private QName				GS_COUNTRY;
+	private QName GS_COUNTRY;
 
 	// <groundspeak:state>Jihomoravsky kraj</groundspeak:state>
-	private QName				GS_STATE;
+	private QName GS_STATE;
 	// <groundspeak:encoded_hints>U balvanu. Hluboko zastrcit levou ruku a doprava.</groundspeak:encoded_hints>
-	private QName				GS_ENCODED_HINTS;
+	private QName GS_ENCODED_HINTS;
 	// <groundspeak:short_description html;
-	private QName				GS_SHORT_DESCRIPTION;
+	private QName GS_SHORT_DESCRIPTION;
 
 	// priloudne do waypointu
 	public void load(final XMLStreamReader rdr, final IImportBuilder builder, final Future<?> future) throws XMLStreamException {

@@ -20,9 +20,9 @@ import cz.geokuk.util.pocitadla.*;
  */
 public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 
-	private static final long				serialVersionUID	= 5761908785083097975L;
+	private static final long serialVersionUID = 5761908785083097975L;
 
-	private final Map<Pocitadlo, JLabel>	hodmap				= new WeakHashMap<>();
+	private final Map<Pocitadlo, JLabel> hodmap = new WeakHashMap<>();
 
 	public static void main(final String[] args) {
 		final JServiceFrame serviceFrame = new JServiceFrame();
@@ -169,7 +169,7 @@ public class JServiceFrame extends JMyDialog0 implements Pocitadlo.Callback {
 		int i = 0;
 		// hodnoty.clear();
 		final List<Pocitadlo> pocitadlaFiltrovanaSerazena = pocitadla.stream().filter(p -> p.getTextovyPopisTypu().equals(typPocitadla)).sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
-				.collect(Collectors.toList());
+		        .collect(Collectors.toList());
 		for (final Pocitadlo p : pocitadlaFiltrovanaSerazena) {
 			final JLabel label = new JLabel(p.getName() + ": ");
 			label.setToolTipText(p.getDescription());

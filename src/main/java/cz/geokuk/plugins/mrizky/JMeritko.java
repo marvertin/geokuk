@@ -16,23 +16,23 @@ import javax.swing.JPanel;
  */
 public class JMeritko extends JPanel {
 
-	private static final int	MINIMALNI_SIRKA_DILKU	= 20;
-	private static final int	ODSTUP_POPISKU_OD_CARKY	= 3;
+	private static final int MINIMALNI_SIRKA_DILKU = 20;
+	private static final int ODSTUP_POPISKU_OD_CARKY = 3;
 	// private static final int MINIMALNI_SIRKA_DILKU = 50;
 
-	private final static int	tloustka				= 6;
-	private final static int	vyskaCarky				= 6;
+	private final static int tloustka = 6;
+	private final static int vyskaCarky = 6;
 
-	private static final long	serialVersionUID		= -4801191981059574701L;
-	private double				pixluNaMetr				= 1;
-	private double				metruNaDilek;
-	private int					pixluNaDilek;
-	private int					pocetDilku;
-	private int					sirka;
-	private int					vyska;
-	private double				maximalniSirkaMeritka	= 400;
-	private Font				font;
-	private FontMetrics			fontMetrics;
+	private static final long serialVersionUID = -4801191981059574701L;
+	private double pixluNaMetr = 1;
+	private double metruNaDilek;
+	private int pixluNaDilek;
+	private int pocetDilku;
+	private int sirka;
+	private int vyska;
+	private double maximalniSirkaMeritka = 400;
+	private Font font;
+	private FontMetrics fontMetrics;
 
 	public JMeritko() {
 		// setPreferredSize(new Dimension(1600, 40));

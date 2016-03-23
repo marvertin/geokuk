@@ -16,8 +16,8 @@ import cz.geokuk.plugins.kesoid.Wpt;
  */
 public class ZoomKesAction extends Action0 {
 
-	private static final long	serialVersionUID	= -8054017274338240706L;
-	private final Kesoid		iKes;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private final Kesoid iKes;
 
 	/**
 	 *

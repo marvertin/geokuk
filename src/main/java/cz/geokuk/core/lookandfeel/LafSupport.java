@@ -24,8 +24,8 @@ import cz.geokuk.util.exception.FExceptionDumper;
 public class LafSupport {
 
 	static class ChangeLookAndFeelAction extends AbstractAction {
-		private static final long	serialVersionUID	= -910826756747137014L;
-		private final LafItem		laf;
+		private static final long serialVersionUID = -910826756747137014L;
+		private final LafItem laf;
 
 		protected ChangeLookAndFeelAction(final LafItem laf) {
 			super("ChangeTheme");
@@ -39,8 +39,8 @@ public class LafSupport {
 	}
 
 	static class ChangeThemeAction extends AbstractAction {
-		private static final long	serialVersionUID	= -910826756747137014L;
-		MetalTheme					theme;
+		private static final long serialVersionUID = -910826756747137014L;
+		MetalTheme theme;
 
 		protected ChangeThemeAction(final MetalTheme theme) {
 			super("ChangeTheme");
@@ -55,27 +55,27 @@ public class LafSupport {
 	}
 
 	private static class LafItem {
-		UIManager.LookAndFeelInfo	info;
-		JMenuItem					mi;
+		UIManager.LookAndFeelInfo info;
+		JMenuItem mi;
 
 	}
 
-	private static final String		LOOK_AND_FEEL	= "lookAndFeel";
+	private static final String LOOK_AND_FEEL = "lookAndFeel";
 
-	private static final String		metal			= "javax.swing.plaf.metal.MetalLookAndFeel";
-	private static LafItem			current;
-	private static LafItem			metalli;
-	private static JMenu			lafMenu			= null;
+	private static final String metal = "javax.swing.plaf.metal.MetalLookAndFeel";
+	private static LafItem current;
+	private static LafItem metalli;
+	private static JMenu lafMenu = null;
 
-	private static JMenu			themesMenu		= null;
-	private static ButtonGroup		lafMenuGroup	= new ButtonGroup();
+	private static JMenu themesMenu = null;
+	private static ButtonGroup lafMenuGroup = new ButtonGroup();
 
-	private static ButtonGroup		themesMenuGroup	= new ButtonGroup();
+	private static ButtonGroup themesMenuGroup = new ButtonGroup();
 
-	private static List<LafItem>	lafitems		= new ArrayList<>();
+	private static List<LafItem> lafitems = new ArrayList<>();
 
 	// Used only if swingset is an application
-	private static JFrame			frame;
+	private static JFrame frame;
 
 	static {
 		createLafList(); // vytvořit seznam a vybrat aktuální

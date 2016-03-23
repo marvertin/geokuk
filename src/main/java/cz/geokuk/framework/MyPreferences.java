@@ -28,17 +28,17 @@ import cz.geokuk.util.file.Filex;
 public class MyPreferences extends Preferences {
 
 	private static final class Duo {
-		Method		get;
-		Method		put;
-		Class<?>	cls;
+		Method get;
+		Method put;
+		Class<?> cls;
 	}
 
-	private static final Map<Class<?>, Duo>	sMetody					= new HashMap<>();
-	private static final String				NULL					= "<{<[NULL]>}>";
-	private static final char				LIST_DELIMITER_CHAR		= ';';
-	private static final char				ESCAPE_CHAR				= '\\';
-	private static final String				PART_PATTERN			= ";cont";
-	private static final String				NUMBERED_PART_PATTERN	= PART_PATTERN + "%d";
+	private static final Map<Class<?>, Duo> sMetody = new HashMap<>();
+	private static final String NULL = "<{<[NULL]>}>";
+	private static final char LIST_DELIMITER_CHAR = ';';
+	private static final char ESCAPE_CHAR = '\\';
+	private static final String PART_PATTERN = ";cont";
+	private static final String NUMBERED_PART_PATTERN = PART_PATTERN + "%d";
 
 	static {
 		final Method[] methods = MyPreferences.class.getMethods();

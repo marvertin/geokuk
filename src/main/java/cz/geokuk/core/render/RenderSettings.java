@@ -15,9 +15,9 @@ public class RenderSettings implements Copyable<RenderSettings> {
 
 	@Preferenceble
 	public static class Patterned implements Copyable<Patterned> {
-		private String	patternNumberCilovy;	// číslo patteru ciloveho, kdyz je hotov geocoding
-		private String	patternNumberPredbezny;	// cislo patternu predbezneho, kdyz jedte neni hotov geocoding
-		private String	text	= "";			// neukládá se do preferencí, musí uživatel zadat nebo se generuje
+		private String patternNumberCilovy; // číslo patteru ciloveho, kdyz je hotov geocoding
+		private String patternNumberPredbezny; // cislo patternu predbezneho, kdyz jedte neni hotov geocoding
+		private String text = ""; // neukládá se do preferencí, musí uživatel zadat nebo se generuje
 
 		@Override
 		public Patterned copy() {
@@ -142,23 +142,23 @@ public class RenderSettings implements Copyable<RenderSettings> {
 
 	}
 
-	private int			renderedMoumer			= 12;
-	private EImageType	imageType				= EImageType.png;
+	private int renderedMoumer = 12;
+	private EImageType imageType = EImageType.png;
 
-	private EWhatRender	whatRender				= EWhatRender.GOOGLE_EARTH;
-	private Patterned	pureFileName;										// pure jméno souboru
+	private EWhatRender whatRender = EWhatRender.GOOGLE_EARTH;
+	private Patterned pureFileName; // pure jméno souboru
 
-	private Patterned	kmzFolder;											// jméno foldru v KMZ souboru
-	private String		kmzFolderDescription;
-	private int			kmzMaxDlazdiceX			= 800;						// maximální velikost dlaždice v pixlech
-	private int			kmzMaxDlazdiceY			= 800;						// maximální velikost dlaždice v pixlech
+	private Patterned kmzFolder; // jméno foldru v KMZ souboru
+	private String kmzFolderDescription;
+	private int kmzMaxDlazdiceX = 800; // maximální velikost dlaždice v pixlech
+	private int kmzMaxDlazdiceY = 800; // maximální velikost dlaždice v pixlech
 
-	private int			kmzDrawOrder			= 0;						// pořadí rendrování
-	private int			kalibrBodu				= 2;						// pro OI případně i jiné systémy
-	private boolean		srovnatDoSeveru			= true;
-	private int			papiroveMeritko			= 50000;					// 50000 znamená 1:50000
+	private int kmzDrawOrder = 0; // pořadí rendrování
+	private int kalibrBodu = 2; // pro OI případně i jiné systémy
+	private boolean srovnatDoSeveru = true;
+	private int papiroveMeritko = 50000; // 50000 znamená 1:50000
 
-	private boolean		kalibracniZnackyProTisk	= false;
+	private boolean kalibracniZnackyProTisk = false;
 
 	@Override
 	public RenderSettings copy() {
@@ -461,7 +461,7 @@ public class RenderSettings implements Copyable<RenderSettings> {
 	@Override
 	public String toString() {
 		return "RenderSettings [renderedMoumer=" + renderedMoumer + ", imageType=" + imageType + ", whatRender=" + whatRender + ", pureFileName=" + pureFileName + ", kmzFolder=" + kmzFolder
-				+ ", kmzFolderDescription=" + kmzFolderDescription + ", kmzMaxDlazdiceX=" + kmzMaxDlazdiceX + ", kmzMaxDlazdiceY=" + kmzMaxDlazdiceY + ", kmzDrawOrder=" + kmzDrawOrder
-				+ ", kalibrBodu=" + kalibrBodu + ", srovnatDoSeveru=" + srovnatDoSeveru + ", papiroveMeritko=" + papiroveMeritko + ", kalibracniZnackyProTisk=" + kalibracniZnackyProTisk + "]";
+		        + ", kmzFolderDescription=" + kmzFolderDescription + ", kmzMaxDlazdiceX=" + kmzMaxDlazdiceX + ", kmzMaxDlazdiceY=" + kmzMaxDlazdiceY + ", kmzDrawOrder=" + kmzDrawOrder
+		        + ", kalibrBodu=" + kalibrBodu + ", srovnatDoSeveru=" + srovnatDoSeveru + ", papiroveMeritko=" + papiroveMeritko + ", kalibracniZnackyProTisk=" + kalibracniZnackyProTisk + "]";
 	}
 }

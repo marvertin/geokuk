@@ -15,7 +15,7 @@ public class RenderAction extends DialogOpeningAction0 {
 		super("Tisknout/Rendrovat...");
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl P"));
 		putValue(SHORT_DESCRIPTION,
-				"Zobrazí dialog s možností vyrendrovat mapový podklad libovolné velikosti i s kešemi a mřížkami s možností kalibrací pro GoogleEarth, OziExplorer a jiné programy.");
+		        "Zobrazí dialog s možností vyrendrovat mapový podklad libovolné velikosti i s kešemi a mřížkami s možností kalibrací pro GoogleEarth, OziExplorer a jiné programy.");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("x16/printer.jpg"));
 
 	}

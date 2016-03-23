@@ -29,17 +29,17 @@ import cz.geokuk.util.gui.ERoh;
 
 public class JMainFrame extends JFrame implements SlideListProvider {
 
-	private static final long	serialVersionUID	= 1L;
-	private JStatusBar			statusbar;
-	private JToolBar			toolBar;
-	private Factory				factory;
-	private KesoidModel			kesoidModel;
-	private FullScreenAction	fullScreenAction;
-	private OknoModel			oknoModel;
-	private Menu				menux;
+	private static final long serialVersionUID = 1L;
+	private JStatusBar statusbar;
+	private JToolBar toolBar;
+	private Factory factory;
+	private KesoidModel kesoidModel;
+	private FullScreenAction fullScreenAction;
+	private OknoModel oknoModel;
+	private Menu menux;
 
-	private List<JSingleSlide0>	slideList;
-	private CloseAction			closeAction;
+	private List<JSingleSlide0> slideList;
+	private CloseAction closeAction;
 
 	JMainFrame() {
 		// To je do globální proměnné kbůli dialogům a jen kvůli nim

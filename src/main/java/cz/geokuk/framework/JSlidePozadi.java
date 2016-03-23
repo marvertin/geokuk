@@ -19,8 +19,8 @@ public class JSlidePozadi extends JSlide0 {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -595069134117796569L;
-	private Mou					moumys;
+	private static final long serialVersionUID = -595069134117796569L;
+	private Mou moumys;
 
 	/**
 	 *

@@ -17,16 +17,16 @@ public class Kaputer {
 
 	// private static final Logger log = LogManager.getLogger(Kaputer.class.getSimpleName());
 
-	public static final int	KACHLE_BITS		= Coord.MOUMER_0_BITS;
-	public static final int	KACHLE_PIXELS	= 1 << KACHLE_BITS;		// 256
-	public static final int	KACHLE_MASKA	= KACHLE_PIXELS - 1;	// 255
+	public static final int KACHLE_BITS = Coord.MOUMER_0_BITS;
+	public static final int KACHLE_PIXELS = 1 << KACHLE_BITS; // 256
+	public static final int KACHLE_MASKA = KACHLE_PIXELS - 1; // 255
 
-	private final Coord		soord;
+	private final Coord soord;
 
-	private final Point		p0;
+	private final Point p0;
 
-	private final int		pocetKachliX;
-	private final int		pocetKachliY;
+	private final int pocetKachliX;
+	private final int pocetKachliY;
 
 	public Kaputer(final Coord aCoord) {
 		soord = aCoord;

@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class BeanBag implements Factory {
 
-	private boolean				initialized;
+	private boolean initialized;
 
-	private final List<Object>	beans	= new ArrayList<>();
+	private final List<Object> beans = new ArrayList<>();
 
-	private EventManager		eveman;
+	private EventManager eveman;
 
 	/*
 	 * (non-Javadoc)

@@ -2,12 +2,12 @@ package cz.geokuk.framework;
 
 public class Event0<T extends Model0> implements BeanSubtypable {
 
-	protected String	subType;
-	private T			model;
+	protected String subType;
+	private T model;
 	/** Firer, který poslal událost, vhodné pro účelypřeposlání dál nebo vygenerování následné události */
-	private EventFirer	eventFirer;
+	private EventFirer eventFirer;
 
-	private boolean		locked;
+	private boolean locked;
 
 	public EventFirer getEventFirer() {
 		return eventFirer;

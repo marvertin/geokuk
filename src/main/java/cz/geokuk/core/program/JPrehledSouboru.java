@@ -29,31 +29,31 @@ public class JPrehledSouboru extends JPanel {
 		}
 	}
 
-	private static final long									serialVersionUID	= -2491414463002815835L;
-	private JJedenSouborPanel									jKesDir;
-	private JJedenSouborPanel									jCestyDir;
-	private JJedenSouborPanel									jNeGgtFile;
-	private JJedenSouborPanel									jAnoGgtFile;
+	private static final long serialVersionUID = -2491414463002815835L;
+	private JJedenSouborPanel jKesDir;
+	private JJedenSouborPanel jCestyDir;
+	private JJedenSouborPanel jNeGgtFile;
+	private JJedenSouborPanel jAnoGgtFile;
 
-	private JJedenSouborPanel									jKachleCacheDir;
-	private JJedenSouborPanel									jGeogetDataDir;
-	private JJedenSouborPanel									jImage3rdPartyDir;
+	private JJedenSouborPanel jKachleCacheDir;
+	private JJedenSouborPanel jGeogetDataDir;
+	private JJedenSouborPanel jImage3rdPartyDir;
 
-	private JJedenSouborPanel									jImageMyDir;
-	private JJedenSouborPanel									jOziDir;
-	private JJedenSouborPanel									jKmzDir;
+	private JJedenSouborPanel jImageMyDir;
+	private JJedenSouborPanel jOziDir;
+	private JJedenSouborPanel jKmzDir;
 
-	private JJedenSouborPanel									jPictureDir;
+	private JJedenSouborPanel jPictureDir;
 
-	private KesoidModel											kesoidModel;
+	private KesoidModel kesoidModel;
 
-	private KachleModel											kachleModel;
+	private KachleModel kachleModel;
 
-	private RenderModel											renderModel;
+	private RenderModel renderModel;
 
-	private JTabbedPane											jTabbedPane;
+	private JTabbedPane jTabbedPane;
 
-	private final EnumMap<ESouborPanelName, JJedenSouborPanel>	mapaProFokusovani	= new EnumMap<>(ESouborPanelName.class);
+	private final EnumMap<ESouborPanelName, JJedenSouborPanel> mapaProFokusovani = new EnumMap<>(ESouborPanelName.class);
 
 	public JPrehledSouboru(final Void v) {
 		initComponents();

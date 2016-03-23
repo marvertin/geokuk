@@ -17,9 +17,9 @@ public class JMunzeeDetail extends JKesoidDetail0 {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -3323887260932949747L;
+	private static final long serialVersionUID = -3323887260932949747L;
 
-	private Munzee				munzee;
+	private Munzee munzee;
 
 	public JMunzeeDetail() {
 		initComponents();

@@ -10,15 +10,15 @@ import java.util.*;
  */
 public class IconDef {
 	/** URL s definičním souborem, může to být obrázek, ale i properties s definicí */
-	IkonDrawingProperties	idp;
-	public int				priorita;
+	IkonDrawingProperties idp;
+	public int priorita;
 
 	// Jen jedna je nastavena. Před rozbalením je to alelyx, po rozbalení subdefs
-	private Set<Alela>		alelyx;
-	private Set<IconSubDef>	subdefs;
+	private Set<Alela> alelyx;
+	private Set<IconSubDef> subdefs;
 
 	// Alela symbolu. Je to redundantní informace, pomůže však pro zkrácení vykreslovací fronty.
-	private Alela			alelaSym;
+	private Alela alelaSym;
 
 	public Alela getAlelaSym() {
 		return alelaSym;

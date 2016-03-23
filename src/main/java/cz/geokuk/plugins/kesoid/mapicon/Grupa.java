@@ -5,12 +5,12 @@ import java.util.*;
 import cz.geokuk.util.lang.FString;
 
 public class Grupa {
-	static final String			IMPLICITNI_GRUPA_NAME	= "other!";
+	static final String IMPLICITNI_GRUPA_NAME = "other!";
 
-	private final String		grupaName;
-	private String				displayName;
+	private final String grupaName;
+	private String displayName;
 
-	private final Set<Alela>	alely					= new LinkedHashSet<>();
+	private final Set<Alela> alely = new LinkedHashSet<>();
 
 	public Grupa(final String grupaName) {
 		this.grupaName = grupaName;

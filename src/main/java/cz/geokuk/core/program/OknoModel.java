@@ -13,8 +13,8 @@ import cz.geokuk.framework.Model0;
  */
 public class OknoModel extends Model0 {
 
-	private OknoUmisteniDto	oknoUmisteni;
-	private int				stavOkna;
+	private OknoUmisteniDto oknoUmisteni;
+	private int stavOkna;
 
 	/**
 	 * @return the oknoStatus

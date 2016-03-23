@@ -13,12 +13,12 @@ import cz.geokuk.plugins.kesoid.Wpt;
 
 public class JDebugVyberIkon extends JVyberIkon0 {
 
-	private static final long	serialVersionUID	= -6496737194139718970L;
-	private final JComponent	jskelneikony;
+	private static final long serialVersionUID = -6496737194139718970L;
+	private final JComponent jskelneikony;
 
-	private IkonBag				bag;
-	private Set<String>			jmenaVybranychAlel;
-	private boolean				zobrazovatVse;
+	private IkonBag bag;
+	private Set<String> jmenaVybranychAlel;
+	private boolean zobrazovatVse;
 
 	/**
 	 * @param aJskelneikony

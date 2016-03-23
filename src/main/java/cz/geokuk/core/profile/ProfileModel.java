@@ -37,7 +37,7 @@ public class ProfileModel extends Model0 {
 			final File file = get();
 			fire(new NastaveniUkladatDoSouboruEvent());
 			Dlg.info("Nastavení byla uložena do souboru \"" + file + "\",\n" + "při příštím spuštění budou těmito nastaveními nahrazeny nastavení v Java preferences,\n"
-					+ "pokud budou nastavení v souboru novější a naopak bude soubor automaticky aktualizován,\n" + "pokud budou novější data v Java preferences", "Oznámení");
+			        + "pokud budou nastavení v souboru novější a naopak bude soubor automaticky aktualizován,\n" + "pokud budou novější data v Java preferences", "Oznámení");
 		}
 
 	}

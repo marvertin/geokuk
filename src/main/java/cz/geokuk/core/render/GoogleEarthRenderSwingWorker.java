@@ -75,7 +75,7 @@ public class GoogleEarthRenderSwingWorker extends RendererSwingWorker0 {
 	}
 
 	private void renderDlazdice(final KmzWriter kmzwrt, final RenderParams p, final int xDlazdice, final int yDlazdice, final Progressor progressor)
-			throws InterruptedException, IOException, ParserConfigurationException, TransformerException {
+	        throws InterruptedException, IOException, ParserConfigurationException, TransformerException {
 		final KmzParams kmzpar = new KmzParams();
 		kmzpar.imageType = renderModel.getRenderSettings().getImageType();
 

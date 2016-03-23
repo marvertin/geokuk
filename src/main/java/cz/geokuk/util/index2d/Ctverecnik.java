@@ -9,17 +9,17 @@ public class Ctverecnik<T> extends Node0<T> {
 		boolean duplicita = false;
 	}
 
-	private static final Logger	log	= LogManager.getLogger(Ctverecnik.class.getSimpleName());
-	private Node0<T>			jz;
-	private Node0<T>			jv;
-	private Node0<T>			sz;
+	private static final Logger log = LogManager.getLogger(Ctverecnik.class.getSimpleName());
+	private Node0<T> jz;
+	private Node0<T> jv;
+	private Node0<T> sz;
 
-	private Node0<T>			sv;
-	private final int			xx1;
-	private final int			yy1;
-	private final int			xx2;
+	private Node0<T> sv;
+	private final int xx1;
+	private final int yy1;
+	private final int xx2;
 
-	private final int			yy2;
+	private final int yy2;
 
 	/**
 	 * @param aXx1

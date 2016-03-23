@@ -9,17 +9,17 @@ import cz.geokuk.util.gui.fontchoser.JFontChooser;
 
 public class JVlastnostiPisma extends JPanel {
 
-	private static final long			serialVersionUID				= 6845731953052027169L;
+	private static final long serialVersionUID = 6845731953052027169L;
 
-	public static final String			VLASTNOSI_PISMA_MODEL_PROPERTY	= "vlastnostiPismaModel";
+	public static final String VLASTNOSI_PISMA_MODEL_PROPERTY = "vlastnostiPismaModel";
 
-	private final VlastnostiPismaModel	vlastnostiPismaModel;
+	private final VlastnostiPismaModel vlastnostiPismaModel;
 
-	private JSpinner					xspinner;
-	private JSpinner					yspinner;
-	private JColorChooser				foregroundChooser;
-	private JFontChooser				fontChooser;
-	private JColorChooser				backgroudChooser;
+	private JSpinner xspinner;
+	private JSpinner yspinner;
+	private JColorChooser foregroundChooser;
+	private JFontChooser fontChooser;
+	private JColorChooser backgroudChooser;
 
 	public JVlastnostiPisma() {
 		this(new VlastnostiPismaModel());

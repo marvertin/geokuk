@@ -24,15 +24,15 @@ import cz.geokuk.util.file.*;
  */
 public class IkonNacitacLoader {
 
-	private static final String	IKONA_SADY	= "iconofsada.";
+	private static final String IKONA_SADY = "iconofsada.";
 
-	private static final String	MAPUZEL		= "map";
+	private static final String MAPUZEL = "map";
 
-	private File				imageMyDir;
+	private File imageMyDir;
 
-	private File				image3rdPartyDir;
+	private File image3rdPartyDir;
 
-	private MultiFolder			lastScan;
+	private MultiFolder lastScan;
 
 	public IkonBag nacti(final Future<?> future, final boolean aPrenacti, final ASada jmenoSady) throws IOException {
 		if (aPrenacti) {

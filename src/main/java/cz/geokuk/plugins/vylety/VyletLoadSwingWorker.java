@@ -16,11 +16,11 @@ import cz.geokuk.plugins.kesoid.KesBag;
  */
 public class VyletLoadSwingWorker extends MySwingWorker0<Vylet, Void> {
 
-	private static final Logger				log	= LogManager.getLogger(VyletLoadSwingWorker.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(VyletLoadSwingWorker.class.getSimpleName());
 
-	private final VyletovyZperzistentnovac	vyletovyZperzistentnovac;
-	private final KesBag					vsechny;
-	private final VyletModel				vyletModel;
+	private final VyletovyZperzistentnovac vyletovyZperzistentnovac;
+	private final KesBag vsechny;
+	private final VyletModel vyletModel;
 
 	public VyletLoadSwingWorker(final VyletovyZperzistentnovac vyletovyZperzistentnovac2, final KesBag vsechny, final VyletModel vyletModel) {
 		vyletovyZperzistentnovac = vyletovyZperzistentnovac2;

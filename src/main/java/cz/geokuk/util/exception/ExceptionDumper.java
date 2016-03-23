@@ -17,10 +17,10 @@ import cz.geokuk.util.lang.FThrowable.ThrowableAndSourceMethod;
 public class ExceptionDumper {
 
 	private class AditionalInfoEntry {
-		private AditionalInfoProvider	iProvider;
-		private String					iDescription;
-		private Class<?>				iPushingClass;
-		private int						iNumber;
+		private AditionalInfoProvider iProvider;
+		private String iDescription;
+		private Class<?> iPushingClass;
+		private int iNumber;
 
 		/**
 		 * @param pwrt
@@ -55,12 +55,12 @@ public class ExceptionDumper {
 		}
 	}
 
-	private static final Logger				log		= LogManager.getLogger(ExceptionDumper.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(ExceptionDumper.class.getSimpleName());
 	/** Signleton proměnná pri implicitní repozitoř */
 
-	private final List<AditionalInfoEntry>	iStackx	= new ArrayList<>();
+	private final List<AditionalInfoEntry> iStackx = new ArrayList<>();
 
-	private int								iStackSize;
+	private int iStackSize;
 
 	/**
 	 * Vydumpuje předanou výjimku do lokality k tomu určené. Poté vrátí identifikátor, pod kterým může být vydumpovaná podoba výjimky nalezena za účelem zobrazení.
@@ -298,8 +298,8 @@ public class ExceptionDumper {
 			final FThrowable.ThrowableAndSourceMethod method = throwableChain[i];
 			final String prefix = "EXC-" + FThrowable.getExceptionNumber(aThrowable) + ": ";
 			pwrt.println("    " + prefix + "<span style='color: green'>" + (i + 1) + "/" + throwableChain.length + "</span> "
-					+ (method.getSourceMethod() == null ? "" : "<span style='color: darkmagenta'>" + method.getSourceMethod().getName() + "()" + "</span>: ") + "<span style='color: blue'>"
-					+ method.getThrowable().getClass().getName() + "</span> : <span style='color: red'>" + method.getThrowable().getMessage() + "</span>");
+			        + (method.getSourceMethod() == null ? "" : "<span style='color: darkmagenta'>" + method.getSourceMethod().getName() + "()" + "</span>: ") + "<span style='color: blue'>"
+			        + method.getThrowable().getClass().getName() + "</span> : <span style='color: red'>" + method.getThrowable().getMessage() + "</span>");
 		}
 	}
 

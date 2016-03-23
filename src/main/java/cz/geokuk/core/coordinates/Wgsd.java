@@ -2,8 +2,8 @@ package cz.geokuk.core.coordinates;
 
 public class Wgsd {
 
-	public double	lat;
-	public double	lon;
+	public double lat;
+	public double lon;
 
 	public Wgsd() {}
 

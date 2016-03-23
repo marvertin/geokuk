@@ -5,11 +5,11 @@ import cz.geokuk.plugins.kesoid.Kesoid;
 
 public class VyletChangeEvent extends Event0<VyletModel> {
 
-	private final VyletModel	vyletModel;
+	private final VyletModel vyletModel;
 
-	private final Kesoid		kes;
-	private final EVylet		evyl;
-	private final EVylet		evylPuvodni;
+	private final Kesoid kes;
+	private final EVylet evyl;
+	private final EVylet evylPuvodni;
 
 	VyletChangeEvent(final VyletModel vylet, final Kesoid kes, final EVylet evyl, final EVylet evylPuvodni) {
 		super();

@@ -11,10 +11,10 @@ import cz.geokuk.core.coord.Coord;
  */
 public class RenderParams {
 	// vstupy
-	Coord	roord;
-	boolean	pruhledne;
-	boolean	natacetDoSeveru	= true;
-	int		drawOrder;
+	Coord roord;
+	boolean pruhledne;
+	boolean natacetDoSeveru = true;
+	int drawOrder;
 
 	RenderParams() {
 

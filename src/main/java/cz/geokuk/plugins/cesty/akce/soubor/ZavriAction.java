@@ -8,8 +8,8 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public class ZavriAction extends SouboeCestaAction0 {
 
-	private static final long	serialVersionUID	= 1L;
-	private Doc					doc;
+	private static final long serialVersionUID = 1L;
+	private Doc doc;
 
 	public ZavriAction() {
 		super("Zavři cesty (gpx)");

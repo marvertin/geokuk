@@ -55,23 +55,23 @@ import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
  */
 public class JKesTable extends JPanel {
 	class MyTableModel extends AbstractTableModel {
-		private static final long	serialVersionUID	= -1777521413836209700L;
+		private static final long serialVersionUID = -1777521413836209700L;
 
-		private List<Nalezenec>		keslist				= new ArrayList<>();
+		private List<Nalezenec> keslist = new ArrayList<>();
 
-		private final String[]		columnNames			= { "Typ", "Vzdálenost", "Azimut", "Id", "Jméno", "Autor" };
-														// private Object[][] data = {
-														// {"Mary", "Campione",
-														// "Snowboarding", new Integer(5), new Boolean(false)},
-														// {"Alison", "Huml",
-														// "Rowing", new Integer(3), new Boolean(true)},
-														// {"Kathy", "Walrath",
-														// "Knitting", new Integer(2), new Boolean(false)},
-														// {"Sharon", "Zakhour",
-														// "Speed reading", new Integer(20), new Boolean(true)},
-														// {"Philip", "Milne",
-														// "Pool", new Integer(10), new Boolean(false)},
-														// };
+		private final String[] columnNames = { "Typ", "Vzdálenost", "Azimut", "Id", "Jméno", "Autor" };
+		// private Object[][] data = {
+		// {"Mary", "Campione",
+		// "Snowboarding", new Integer(5), new Boolean(false)},
+		// {"Alison", "Huml",
+		// "Rowing", new Integer(3), new Boolean(true)},
+		// {"Kathy", "Walrath",
+		// "Knitting", new Integer(2), new Boolean(false)},
+		// {"Sharon", "Zakhour",
+		// "Speed reading", new Integer(20), new Boolean(true)},
+		// {"Philip", "Milne",
+		// "Pool", new Integer(10), new Boolean(false)},
+		// };
 
 		/*
 		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
@@ -173,13 +173,13 @@ public class JKesTable extends JPanel {
 
 	}
 
-	private static final long	serialVersionUID	= 7687619215661046034L;
+	private static final long serialVersionUID = 7687619215661046034L;
 
-	private final MyTableModel	tableModel;
+	private final MyTableModel tableModel;
 
-	private final JTable		table;
+	private final JTable table;
 
-	private IkonBag				ikonBag;
+	private IkonBag ikonBag;
 
 	public JKesTable() {
 		super(new GridLayout(1, 0));

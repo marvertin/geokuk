@@ -4,8 +4,8 @@ import java.io.File;
 
 public class FileAndTime implements Comparable<FileAndTime> {
 
-	final File	file;
-	final long	lastmodify;
+	final File file;
+	final long lastmodify;
 
 	public FileAndTime(final File aFile) {
 		this(aFile, aFile.lastModified());

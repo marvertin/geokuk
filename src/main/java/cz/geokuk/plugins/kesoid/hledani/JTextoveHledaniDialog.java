@@ -82,34 +82,34 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		}
 	}
 
-	private static final long	serialVersionUID	= 7087453419069194768L;
-	final static Color			HILIT_COLOR			= Color.LIGHT_GRAY;
-	final static Color			ERROR_COLOR			= Color.PINK;
-	final static String			CANCEL_ACTION		= "cancel-search";
-	private JTextField			entry;
-	private JLabel				jLabel1;
+	private static final long serialVersionUID = 7087453419069194768L;
+	final static Color HILIT_COLOR = Color.LIGHT_GRAY;
+	final static Color ERROR_COLOR = Color.PINK;
+	final static String CANCEL_ACTION = "cancel-search";
+	private JTextField entry;
+	private JLabel jLabel1;
 
-	private JButton				jButtonCentruj;
-	private JKesTable			jKeskovaciTabulka;
-	private JLabel				status;
+	private JButton jButtonCentruj;
+	private JKesTable jKeskovaciTabulka;
+	private JLabel status;
 
-	private JCheckBox			jRegularniVyrazy;
-	private JCheckBox			jJenVZobrazenych;
-	final Color					entryBg;
+	private JCheckBox jRegularniVyrazy;
+	private JCheckBox jJenVZobrazenych;
+	final Color entryBg;
 
 	// final Highlighter hilit;
 	// final Highlighter.HighlightPainter painter;
-	private KesBag				vsechny;
+	private KesBag vsechny;
 
-	private KesBag				filtrovane;
+	private KesBag filtrovane;
 
-	private Wgs					referencniBod;
+	private Wgs referencniBod;
 
-	private PoziceModel			poziceModel;
+	private PoziceModel poziceModel;
 
-	private VyrezModel			vyrezModel;
+	private VyrezModel vyrezModel;
 
-	private HledaciSluzba		hledaciSluzba;
+	private HledaciSluzba hledaciSluzba;
 
 	public JTextoveHledaniDialog() {
 		init();
@@ -257,21 +257,21 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // hroup
-				.addGroup(GroupLayout.Alignment.TRAILING,
-						layout.createSequentialGroup() // h1
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // h2
-										.addComponent(jKeskovaciTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-										.addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-										.addGroup(layout.createSequentialGroup() // h3
-												.addComponent(jLabel1).addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE).addComponent(jButtonCentruj))
-								.addGroup(layout.createSequentialGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)))));
+		        .addGroup(GroupLayout.Alignment.TRAILING,
+		                layout.createSequentialGroup() // h1
+		                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // h2
+		                                .addComponent(jKeskovaciTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+		                                .addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+		                                .addGroup(layout.createSequentialGroup() // h3
+		                                        .addComponent(jLabel1).addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE).addComponent(jButtonCentruj))
+		                        .addGroup(layout.createSequentialGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)))));
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // vGrou
-				.addGroup(layout.createSequentialGroup() // v1
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE) // v2
-								.addComponent(jLabel1).addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jButtonCentruj))
-						.addGroup(layout.createParallelGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)).addComponent(status)
-						.addComponent(jKeskovaciTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)));
+		        .addGroup(layout.createSequentialGroup() // v1
+		                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE) // v2
+		                        .addComponent(jLabel1).addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jButtonCentruj))
+		                .addGroup(layout.createParallelGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)).addComponent(status)
+		                .addComponent(jKeskovaciTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)));
 
 		pack();
 	}

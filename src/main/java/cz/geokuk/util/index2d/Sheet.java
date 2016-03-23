@@ -2,9 +2,9 @@ package cz.geokuk.util.index2d;
 
 public class Sheet<T> extends Node0<T> {
 
-	final int	xx;
-	final int	yy;
-	final T		obj;
+	final int xx;
+	final int yy;
+	final T obj;
 
 	/**
 	 * @param aMapobj

@@ -13,38 +13,37 @@ import cz.geokuk.util.pocitadla.PocitadloMalo;
 
 public class JKachle extends JComponent {
 
-	private static final boolean		ZOBRAZOVAT_NA_KACHLICH_DIAGNOSTICKE_INFORMACE	= false;
-																						// Staré mapy.cz. Takto to tam bylo:
-																						// (2) ad mapy.cz: jejich vnitřní XY souřadnice jsou odvozeninou UTM souřadnic.
-																						// čtverec s nejzápadnějčím bodem ČR je na http://m4.mapserver.mapy.cz/turist/13_79D8000_8250000
-																						// sX = dec(79D8000) = 127762432
-																						// sY = dec(8250000) = 136642560
-																						// 13 je měřítko mapy
-																						//
-																						// X_UTM=(sX*0,03125)-3700000 = 292576
-																						// Y_UTM=(sY*0,03125)+1300000 = 5570080
-																						//
-																						// a pak už jen stačí převést UTM na WGS :-) a máš souřadnice levého dolního rohu každé dlaždice těch jejich bitmap.
+	private static final boolean ZOBRAZOVAT_NA_KACHLICH_DIAGNOSTICKE_INFORMACE = false;
+	// Staré mapy.cz. Takto to tam bylo:
+	// (2) ad mapy.cz: jejich vnitřní XY souřadnice jsou odvozeninou UTM souřadnic.
+	// čtverec s nejzápadnějčím bodem ČR je na http://m4.mapserver.mapy.cz/turist/13_79D8000_8250000
+	// sX = dec(79D8000) = 127762432
+	// sY = dec(8250000) = 136642560
+	// 13 je měřítko mapy
+	//
+	// X_UTM=(sX*0,03125)-3700000 = 292576
+	// Y_UTM=(sY*0,03125)+1300000 = 5570080
+	//
+	// a pak už jen stačí převést UTM na WGS :-) a máš souřadnice levého dolního rohu každé dlaždice těch jejich bitmap.
 
 	// http://www.mapy.cz/#x=127762400@y=136642528@z=13@mm=TP@sa=s@st=s@ssq=50.246422,12.090604@sss=1@ssp=1
-	public static int					KACHLE_WIDTH									= 256;
-	public static int					KACHLE_HEIGHT									= 256;
+	public static int KACHLE_WIDTH = 256;
+	public static int KACHLE_HEIGHT = 256;
 
-	private static final long			serialVersionUID								= -5445121736003161730L;
+	private static final long serialVersionUID = -5445121736003161730L;
 
-	private static final PocitadloMalo	pocitJKAchle									= new PocitadloMalo("#JKachle",
-			"Počet kompomnent JKachle přes hlavní okno, okno v rohu, rendry, stahování, prostě všude.");
-	private final JKachlovnik			jKachlovnik;
+	private static final PocitadloMalo pocitJKAchle = new PocitadloMalo("#JKachle", "Počet kompomnent JKachle přes hlavní okno, okno v rohu, rendry, stahování, prostě všude.");
+	private final JKachlovnik jKachlovnik;
 	// private static int cictac;
-	private final KaAll					kaall;
+	private final KaAll kaall;
 
-	private Kanceler					kanceler;
-	private Image						image;
+	private Kanceler kanceler;
+	private Image image;
 
-	private boolean						jeTamUzCelyObrazek;
-	private final Set<DiagnosticsData>	diagnosticsDatas								= Collections.synchronizedSet(new LinkedHashSet<>());
+	private boolean jeTamUzCelyObrazek;
+	private final Set<DiagnosticsData> diagnosticsDatas = Collections.synchronizedSet(new LinkedHashSet<>());
 
-	private String						diagnosticesFazeStr;
+	private String diagnosticesFazeStr;
 	// Point mou = new Point(); // souřadnice roho
 
 	private static int ordinalIndexOf(final String str, final char c, int n) {

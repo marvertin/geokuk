@@ -24,7 +24,7 @@ public class BezNaBodVzadAction extends CestyAction0 {
 	public BezNaBodVzadAction() {
 		putValue(NAME, "Na další bod vzad");
 		putValue(SHORT_DESCRIPTION,
-				"Přesune mapu o jeden bod vzad na vybrané cestě. Pokud není vybraný žádný bod, přesune na začátek cesty, pokud neí vybraná žádná cesta, vybere nejbližší cestu a přesunena její konec.");
+		        "Přesune mapu o jeden bod vzad na vybrané cestě. Pokud není vybraný žádný bod, přesune na začátek cesty, pokud neí vybraná žádná cesta, vybere nejbližší cestu a přesunena její konec.");
 		// putValue(MNEMONIC_KEY, KeyEvent.VK_P);
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("alt LEFT"));
 	}

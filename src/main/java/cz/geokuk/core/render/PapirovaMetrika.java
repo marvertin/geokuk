@@ -3,19 +3,19 @@ package cz.geokuk.core.render;
 public class PapirovaMetrika {
 
 	// strany A0 papíru
-	final double	odmocnina2		= Math.sqrt(2);
-	final double	A0u				= Math.sqrt(odmocnina2);	// delsi strana
-	final double	A0v				= 1 / A0u;					// kratsi strana
-	final double	logOdmocniny2	= Math.log(odmocnina2);
+	final double odmocnina2 = Math.sqrt(2);
+	final double A0u = Math.sqrt(odmocnina2); // delsi strana
+	final double A0v = 1 / A0u; // kratsi strana
+	final double logOdmocniny2 = Math.log(odmocnina2);
 
 	// velikosti jsou v metrech
-	final double	xsize;
-	final double	ysize;
-	final double	okraj;
+	final double xsize;
+	final double ysize;
+	final double okraj;
 
-	final int		format;
-	final boolean	naSirku;
-	final boolean	naVysku;
+	final int format;
+	final boolean naSirku;
+	final boolean naVysku;
 
 	public PapirovaMetrika(final double xsize, final double ysize, final double okraj) {
 		this.xsize = xsize;

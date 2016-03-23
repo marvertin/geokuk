@@ -127,15 +127,15 @@ public class JInformaceOZdrojichDialog extends JMyDialog0 implements AfterEventR
 		}
 	}
 
-	private static final long	serialVersionUID	= 5215923043342722378L;
+	private static final long serialVersionUID = 5215923043342722378L;
 
 	// private final InformaceOZdrojich iInformaceOZdrojich;
 
-	private JXTreeTable			jTable;
+	private JXTreeTable jTable;
 
-	private KesoidModel			kesoidModel;
+	private KesoidModel kesoidModel;
 
-	private KesBag				vsechny;
+	private KesBag vsechny;
 
 	public JInformaceOZdrojichDialog() {
 		setTitle("Přehled zdrojů kešoidů");

@@ -20,17 +20,17 @@ import cz.geokuk.util.lang.FMath;
  */
 public class VyrezModel extends Model0 {
 
-	private static final Logger	log							= LogManager.getLogger(VyrezModel.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(VyrezModel.class.getSimpleName());
 
-	public static final Wgs		DEFAULTNI_DOMACI_SOURADNICE	= new Wgs(49.8, 15.5);
+	public static final Wgs DEFAULTNI_DOMACI_SOURADNICE = new Wgs(49.8, 15.5);
 
 	// private EventFirer ef;
 
-	private PoziceModel			poziceModel;
+	private PoziceModel poziceModel;
 
-	private EKaType				podkladMap;
+	private EKaType podkladMap;
 
-	private Coord				moord						= Coord.prozatimniInicializacni();
+	private Coord moord = Coord.prozatimniInicializacni();
 
 	/**
 	 * @return the moord

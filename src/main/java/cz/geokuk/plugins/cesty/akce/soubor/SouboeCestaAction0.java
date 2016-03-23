@@ -12,9 +12,9 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public abstract class SouboeCestaAction0 extends Action0 {
 
-	private static final long	serialVersionUID	= -2637836928166450446L;
+	private static final long serialVersionUID = -2637836928166450446L;
 
-	protected CestyModel		cestyModel;
+	protected CestyModel cestyModel;
 
 	public SouboeCestaAction0(final String string) {
 		super(string);
@@ -31,7 +31,7 @@ public abstract class SouboeCestaAction0 extends Action0 {
 		}
 		final Object[] options = { "Uložit změny", "Zahodit změny", "Zrušit" };
 		final String hlaska = cestyModel.getDoc().getFile() != null ? "<html>Soubor s výletem byl změněn <b>" + cestyModel.getDoc().getFile() + "</b> "
-				: "Byl vytvořen nový výlet, ale nebyl doposud uložen do souboru." + ".";
+		        : "Byl vytvořen nový výlet, ale nebyl doposud uložen do souboru." + ".";
 		final int n = JOptionPane.showOptionDialog(Dlg.parentFrame(), hlaska, "Uložení změn ve výletu", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 		System.out.println(n);
 		if (n == 0) {

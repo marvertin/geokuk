@@ -51,17 +51,17 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  */
 public class CharcoalTheme extends DefaultMetalTheme {
 
-	private final ColorUIResource	primary1	= new ColorUIResource(66, 33, 66);
+	private final ColorUIResource primary1 = new ColorUIResource(66, 33, 66);
 
-	private final ColorUIResource	primary2	= new ColorUIResource(90, 86, 99);
-	private final ColorUIResource	primary3	= new ColorUIResource(99, 99, 99);
-	private final ColorUIResource	secondary1	= new ColorUIResource(0, 0, 0);
+	private final ColorUIResource primary2 = new ColorUIResource(90, 86, 99);
+	private final ColorUIResource primary3 = new ColorUIResource(99, 99, 99);
+	private final ColorUIResource secondary1 = new ColorUIResource(0, 0, 0);
 
-	private final ColorUIResource	secondary2	= new ColorUIResource(51, 51, 51);
-	private final ColorUIResource	secondary3	= new ColorUIResource(102, 102, 102);
-	private final ColorUIResource	black		= new ColorUIResource(222, 222, 222);
+	private final ColorUIResource secondary2 = new ColorUIResource(51, 51, 51);
+	private final ColorUIResource secondary3 = new ColorUIResource(102, 102, 102);
+	private final ColorUIResource black = new ColorUIResource(222, 222, 222);
 
-	private final ColorUIResource	white		= new ColorUIResource(0, 0, 0);
+	private final ColorUIResource white = new ColorUIResource(0, 0, 0);
 
 	@Override
 	public String getName() {

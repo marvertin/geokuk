@@ -131,7 +131,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		 */
 		public String toIsoString() {
 			final String result = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00}T{3,number,00}:{4,number,00}:{5,number,00}.{6,number,000}", getYearNumber(), getMonthNumber(),
-					getDayNumber(), getHour(), getMinute(), getSecond(), getMilisecond());
+			        getDayNumber(), getHour(), getMinute(), getSecond(), getMilisecond());
 			return result + offsetStr();
 		}
 
@@ -143,7 +143,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		public String toString() {
 			final long offset = getOffset();
 			String vysl = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00} {3,number,00}:{4,number,00}:{5,number,00}.{6,number,000} GMT{7,number,+00;-00}", getYearNumber(),
-					getMonthNumber(), getDayNumber(), getHour(), getMinute(), getSecond(), getMilisecond(), offset / 3600000);
+			        getMonthNumber(), getDayNumber(), getHour(), getMinute(), getSecond(), getMilisecond(), offset / 3600000);
 			if (offset % 3600000 != 0) {
 				vysl += ":" + offset / 60000;
 			}
@@ -162,12 +162,12 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		}
 	}
 
-	private static final long		serialVersionUID	= -4333541321205520147L;
+	private static final long serialVersionUID = -4333541321205520147L;
 
 	/* Patern regulárního výrazu, dosazovaný při prvním použití */
-	private static Pattern			sPattern;
+	private static Pattern sPattern;
 
-	private final java.util.Date	iJavaDate;
+	private final java.util.Date iJavaDate;
 
 	/**
 	 * Koonstruuje datum z double cisla tohoto formátu: před desetinou čárkou: počet dnů od 1.1.1900 za desetinnou čárkou: část dne od půlnoci public ATimestamp(double cislo){ this((long)(cislo*getMillisecondsPerDay())); checkRange(); }
@@ -419,7 +419,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	private static long fromFormatedStringByRegexp(final String aDatStr, final TimeZone aDefaultTimeZone) {
 		if (sPattern == null) {
 			sPattern = Pattern.compile(
-					"\\s*(\\d\\d\\d\\d)[-./](\\d\\d?)(?:[-./](\\d\\d?)(?:[ tT]+(\\d\\d?)(?::(\\d\\d)(?::(\\d\\d)(?:\\.(\\d+))?)?)?)?)? *(UTC|Z|(?:GMT)?[+-]\\d\\d?(?::)?\\d\\d|(?:GMT)?[+-]\\d{1,3})?\\s*");
+			        "\\s*(\\d\\d\\d\\d)[-./](\\d\\d?)(?:[-./](\\d\\d?)(?:[ tT]+(\\d\\d?)(?::(\\d\\d)(?::(\\d\\d)(?:\\.(\\d+))?)?)?)?)? *(UTC|Z|(?:GMT)?[+-]\\d\\d?(?::)?\\d\\d|(?:GMT)?[+-]\\d{1,3})?\\s*");
 		}
 		final Matcher mat = sPattern.matcher(aDatStr);
 		// System.out.p rint("*** >" + aDatStr + "< ");
@@ -456,7 +456,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 			}
 
 			return fromItems(_rezezNaCislo(mat.group(1), 0), _rezezNaCislo(mat.group(2), 1), _rezezNaCislo(mat.group(3), 1), _rezezNaCislo(mat.group(4), 0), _rezezNaCislo(mat.group(5), 0),
-					_rezezNaCislo(mat.group(6), 0), milis, zona);
+			        _rezezNaCislo(mat.group(6), 0), milis, zona);
 		} else {
 			throw new XCreateElement("Pokus o vytvoreni ATimestamp z '" + aDatStr + "', retezec ma spatnou syntaxi");
 		}

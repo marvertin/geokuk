@@ -11,15 +11,15 @@ import java.awt.*;
  */
 public class CornerLayoutManager implements LayoutManager2 {
 
-	private static final float	ratiox	= 0.25f;
-	private static final float	ratioy	= 0.33f;
+	private static final float ratiox = 0.25f;
+	private static final float ratioy = 0.33f;
 
-	private Component			sz;
-	private Component			sv;
-	private Component			jz;
-	private Component			jv;
+	private Component sz;
+	private Component sv;
+	private Component jz;
+	private Component jv;
 
-	private Component			podklad;
+	private Component podklad;
 
 	/*
 	 * (non-Javadoc)

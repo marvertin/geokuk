@@ -33,9 +33,9 @@ import javax.swing.ProgressMonitor;
  * @version 1.20 11/17/05
  */
 public class ProgressorInputStream extends FilterInputStream {
-	private final Progressor	progressor;
-	private int					nread	= 0;
-	private int					size	= 0;
+	private final Progressor progressor;
+	private int nread = 0;
+	private int size = 0;
 
 	/**
 	 * Constructs an object to monitor the progress of an input stream.

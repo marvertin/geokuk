@@ -6,7 +6,7 @@ import javax.swing.KeyStroke;
 
 public enum EKaType {
 
-	// Mapové podklady, dále neprůhledné
+    // Mapové podklady, dále neprůhledné
 	BASE_M(true, false, 0, 16, 16, "Základní", "Základní mapa se silnicemi.", KeyEvent.VK_Z, KeyStroke.getKeyStroke('z'), new MapyCzUrlBuilder("base-m")),
 	TURIST_M(true, false, 0, 16, 16, "Turistická", "Turistická mapa.", KeyEvent.VK_T, KeyStroke.getKeyStroke('t'), new MapyCzUrlBuilder("turist-m")),
 	OPHOTO_M(true, true, 0, 18, 16, "Letecká", "Letecká ortho foto mapa", KeyEvent.VK_L, KeyStroke.getKeyStroke('f'), new MapyCzUrlBuilder("ophoto-m")),
@@ -47,15 +47,15 @@ public enum EKaType {
 	// putValue(MNEMONIC_KEY, KeyEvent.VK_U);
 	// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('u'));
 
-	private final boolean		podklad;
-	private final int			minMoumer;
-	private final int			maxMoumer;
-	private final int			maxAutoMoumer;
-	private final String		nazev;
-	private final String		popis;
-	private final int			klavesa;
-	private final KeyStroke		keyStroke;
-	private KachleUrlBuilder	urlBuilder;
+	private final boolean podklad;
+	private final int minMoumer;
+	private final int maxMoumer;
+	private final int maxAutoMoumer;
+	private final String nazev;
+	private final String popis;
+	private final int klavesa;
+	private final KeyStroke keyStroke;
+	private KachleUrlBuilder urlBuilder;
 
 	/**
 	 * @param podklad
@@ -80,7 +80,7 @@ public enum EKaType {
 	 *            Implementace třídy, která sestaví URL pro zobrazení mapy.
 	 */
 	private EKaType(final boolean podklad, final boolean jeMozneNavrsitTexty, final int minMoumer, final int maxMoumer, final int maxAutoMoumer, final String nazev, final String popis,
-			final int klavesa, final KeyStroke keyStroke, final KachleUrlBuilder urlBuilder) {
+	        final int klavesa, final KeyStroke keyStroke, final KachleUrlBuilder urlBuilder) {
 		this.podklad = podklad;
 		this.minMoumer = minMoumer;
 		this.maxMoumer = maxMoumer;

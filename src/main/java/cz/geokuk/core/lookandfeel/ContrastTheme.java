@@ -55,14 +55,14 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
 
 public class ContrastTheme extends DefaultMetalTheme {
 
-	private final ColorUIResource	primary1			= new ColorUIResource(0, 0, 0);
+	private final ColorUIResource primary1 = new ColorUIResource(0, 0, 0);
 
-	private final ColorUIResource	primary2			= new ColorUIResource(204, 204, 204);
-	private final ColorUIResource	primary3			= new ColorUIResource(255, 255, 255);
-	private final ColorUIResource	primaryHighlight	= new ColorUIResource(102, 102, 102);
-	private final ColorUIResource	secondary2			= new ColorUIResource(204, 204, 204);
+	private final ColorUIResource primary2 = new ColorUIResource(204, 204, 204);
+	private final ColorUIResource primary3 = new ColorUIResource(255, 255, 255);
+	private final ColorUIResource primaryHighlight = new ColorUIResource(102, 102, 102);
+	private final ColorUIResource secondary2 = new ColorUIResource(204, 204, 204);
 
-	private final ColorUIResource	secondary3			= new ColorUIResource(255, 255, 255);
+	private final ColorUIResource secondary3 = new ColorUIResource(255, 255, 255);
 
 	// private final ColorUIResource controlHighlight = new ColorUIResource(102,102,102);
 	@Override

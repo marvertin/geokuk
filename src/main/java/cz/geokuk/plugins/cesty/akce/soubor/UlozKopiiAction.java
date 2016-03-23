@@ -12,8 +12,8 @@ import cz.geokuk.plugins.cesty.data.Doc;
 
 public class UlozKopiiAction extends SouboeCestaAction0 {
 
-	private static final long	serialVersionUID	= 1L;
-	private Doc					doc;
+	private static final long serialVersionUID = 1L;
+	private Doc doc;
 
 	public UlozKopiiAction() {
 		super("Uložit kopii cest (gpx) ...");

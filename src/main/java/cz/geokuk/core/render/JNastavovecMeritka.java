@@ -11,11 +11,11 @@ import cz.geokuk.plugins.mapy.kachle.EKaType;
 
 public class JNastavovecMeritka extends JSpinner implements AfterEventReceiverRegistrationInit {
 
-	private static final long		serialVersionUID	= -484273090975902036L;
+	private static final long serialVersionUID = -484273090975902036L;
 
-	public final SpinnerNumberModel	iModel				= new SpinnerNumberModel(0, 0, 100, 1);
+	public final SpinnerNumberModel iModel = new SpinnerNumberModel(0, 0, 100, 1);
 
-	private RenderModel				renderModel;
+	private RenderModel renderModel;
 
 	/**
 	 *

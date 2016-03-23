@@ -18,11 +18,11 @@ import cz.geokuk.core.coordinates.Utm;
  */
 public class JMrizkaUtm extends JMrizka0 {
 
-	private static final Logger		log					= LogManager.getLogger(JMrizkaUtm.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(JMrizkaUtm.class.getSimpleName());
 
-	protected static final double	MINUTA				= 1.0 / 60;
+	protected static final double MINUTA = 1.0 / 60;
 
-	private static final long		serialVersionUID	= 4558815639199835559L;
+	private static final long serialVersionUID = 4558815639199835559L;
 
 	/*
 	 * (non-Javadoc)

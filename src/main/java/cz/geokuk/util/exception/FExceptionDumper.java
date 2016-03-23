@@ -14,19 +14,19 @@ import cz.geokuk.util.lang.StringUtils;
  * @since 15.9.2006 8:18:58
  */
 public final class FExceptionDumper {
-	public static final File					EXCEPTION_DIR			= new File(new File(System.getProperty("java.io.tmpdir"), "geokuk"), "excrep");
+	public static final File EXCEPTION_DIR = new File(new File(System.getProperty("java.io.tmpdir"), "geokuk"), "excrep");
 
 	// private static final String EXCREP = "excrep";
-	private static final String					TC_EXCREP_DIR_PROPERTY	= "tc.excrep.dir";
+	private static final String TC_EXCREP_DIR_PROPERTY = "tc.excrep.dir";
 
-	private static ExceptionDumperRepositorySpi	sDefaultRepository;
+	private static ExceptionDumperRepositorySpi sDefaultRepository;
 
-	private static ThreadLocal<ExceptionDumper>	tExceptinDumper			= new ThreadLocal<ExceptionDumper>() {
-																			@Override
-																			protected ExceptionDumper initialValue() {
-																				return new ExceptionDumper();																		// pokud žádný dumper není nastaven, tak se vrací jakýsi implicitní
-																			}
-																		};
+	private static ThreadLocal<ExceptionDumper> tExceptinDumper = new ThreadLocal<ExceptionDumper>() {
+		@Override
+		protected ExceptionDumper initialValue() {
+			return new ExceptionDumper(); // pokud žádný dumper není nastaven, tak se vrací jakýsi implicitní
+		}
+	};
 
 	/**
 	 * Vydampuje výjimku do repozitoře a vrátí její identifikaci. Dumpuje do implicitní repozitoře.
@@ -121,7 +121,7 @@ public final class FExceptionDumper {
 
 	public static void main(final String[] args) throws IOException {
 		System.out.println(
-				dump(new RuntimeException("prvnička", new RuntimeException("druhačka", new NullPointerException("třeťačka"))), EExceptionSeverity.DISPLAY, "Tak tady neco napíšu\na dva řádky"));
+		        dump(new RuntimeException("prvnička", new RuntimeException("druhačka", new NullPointerException("třeťačka"))), EExceptionSeverity.DISPLAY, "Tak tady neco napíšu\na dva řádky"));
 
 		System.out.println(dump(new Throwable[] { null, new RuntimeException("prvnička", new RuntimeException("druhačka", new NullPointerException("třeťačka")
 

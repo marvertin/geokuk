@@ -11,18 +11,18 @@ import cz.geokuk.framework.JMyDialog0;
 
 public class JZpravyUzivatelumDialog extends JMyDialog0 {
 
-	private static final long			serialVersionUID	= 5215923043342722378L;
+	private static final long serialVersionUID = 5215923043342722378L;
 
-	JScrollPane							jZpravy;
-	JButton								jPrecteno;
-	JButton								jDalsi;
-	JButton								jPredchozi;
+	JScrollPane jZpravy;
+	JButton jPrecteno;
+	JButton jDalsi;
+	JButton jPredchozi;
 
-	private final List<ZpravaUzivateli>	zpravyUzivatelum;
-	private int							ukazatel;
-	private JEditorPane					editorPane;
+	private final List<ZpravaUzivateli> zpravyUzivatelum;
+	private int ukazatel;
+	private JEditorPane editorPane;
 
-	private NapovedaModel				napovedaModel;
+	private NapovedaModel napovedaModel;
 
 	public JZpravyUzivatelumDialog(final List<ZpravaUzivateli> zpravyUzivatelum) {
 		this.zpravyUzivatelum = zpravyUzivatelum;
@@ -101,9 +101,9 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
 		// panel.add(jSimplewaypontPatternEdit);
 
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.CENTER).addGroup(layout.createParallelGroup() // hroup
-				.addComponent(jZpravy).addGroup(layout.createSequentialGroup().addComponent(jPredchozi).addComponent(jDalsi).addComponent(jPrecteno))));
+		        .addComponent(jZpravy).addGroup(layout.createSequentialGroup().addComponent(jPredchozi).addComponent(jDalsi).addComponent(jPrecteno))));
 		layout.setVerticalGroup(layout.createSequentialGroup() // hroup
-				.addComponent(jZpravy).addGroup(layout.createParallelGroup().addComponent(jDalsi).addComponent(jPredchozi).addComponent(jPrecteno)));
+		        .addComponent(jZpravy).addGroup(layout.createParallelGroup().addComponent(jDalsi).addComponent(jPredchozi).addComponent(jPrecteno)));
 	}
 
 	private void naplndaty() {

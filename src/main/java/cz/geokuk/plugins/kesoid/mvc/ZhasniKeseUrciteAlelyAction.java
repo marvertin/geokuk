@@ -65,12 +65,12 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 		}
 	}
 
-	private static final long	serialVersionUID	= -8054017274338240706L;
-	private IkonBag				ikonBag;
-	private final Alela			alela;
-	private KesoidModel			kesoidModel;
+	private static final long serialVersionUID = -8054017274338240706L;
+	private IkonBag ikonBag;
+	private final Alela alela;
+	private KesoidModel kesoidModel;
 
-	private KesBag				vsechny;
+	private KesBag vsechny;
 
 	/**
 	 *

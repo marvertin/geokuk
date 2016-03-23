@@ -13,8 +13,8 @@ public class DirScanner {
 	// case insensitive, TODO : other image formats than JPG, raw and tif
 
 	// TODO : Use file watchers
-	private List<Root>		roots;
-	private List<KeFile>	lastScaned	= null;
+	private List<Root> roots;
+	private List<KeFile> lastScaned = null;
 
 	/**
 	 * Vrátí null, pokud není co načítat, protože nedošlo ke změně. Prázdný seznam je něco jiného, to ke změně došlo takové, že zmizely všechny soubory. Když se změní byť jediný soubor, je to změna a načítá se.

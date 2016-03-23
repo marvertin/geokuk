@@ -10,8 +10,8 @@ import cz.geokuk.framework.Event0;
  *
  */
 public class OknoStatusChangedEvent extends Event0<OknoModel> {
-	private final int				stavOkna;
-	private final OknoUmisteniDto	oknoUmisteni;
+	private final int stavOkna;
+	private final OknoUmisteniDto oknoUmisteni;
 
 	/**
 	 * @param oknoUmisteni

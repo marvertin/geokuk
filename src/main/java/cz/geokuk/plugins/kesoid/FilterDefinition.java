@@ -13,13 +13,13 @@ import cz.geokuk.plugins.vylety.EVylet;
 @Preferenceble
 public class FilterDefinition implements Copyable<FilterDefinition> {
 
-	private int		prahHodnoceni				= 0;
-	private int		prahBestOf					= 0;
-	private int		prahFavorit					= 0;
+	private int prahHodnoceni = 0;
+	private int prahBestOf = 0;
+	private int prahFavorit = 0;
 
-	private EVylet	prahVyletu					= EVylet.NEVIM;
-	private boolean	jenDoTerenuUNenalezenych	= true;
-	private boolean	jenFinalUNalezenych			= true;
+	private EVylet prahVyletu = EVylet.NEVIM;
+	private boolean jenDoTerenuUNenalezenych = true;
+	private boolean jenFinalUNalezenych = true;
 
 	/*
 	 * (non-Javadoc)

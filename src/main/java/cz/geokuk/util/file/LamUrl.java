@@ -6,9 +6,9 @@ package cz.geokuk.util.file;
 import java.net.URL;
 
 public class LamUrl {
-	public URL		url;
-	public long		lastModified;
-	public String	name;			// kousek jména a to ten poslední
+	public URL url;
+	public long lastModified;
+	public String name; // kousek jména a to ten poslední
 
 	/*
 	 * (non-Javadoc)

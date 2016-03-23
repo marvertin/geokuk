@@ -4,12 +4,12 @@ import cz.geokuk.util.index2d.BoundingRect;
 
 public class MouRect {
 
-	private int	xx1;
-	private int	yy1;
-	private int	xx2;
-	private int	yy2;
+	private int xx1;
+	private int yy1;
+	private int xx2;
+	private int yy2;
 
-	public Mou	sstre;
+	public Mou sstre;
 
 	public MouRect() {}
 

@@ -6,8 +6,8 @@ import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
 
 public class JenDoTerenuUNenalezenychAction extends ToggleAction0 {
 
-	private static final long	serialVersionUID	= -7547868179813232769L;
-	private KesoidModel			model;
+	private static final long serialVersionUID = -7547868179813232769L;
+	private KesoidModel model;
 
 	// moaOldCheck("Jen final u NEnalezených", null, "U ještě nenalezených vyluštěných mysterek a multin zhasne úvodní souřadnice a všechny stage." +
 	// " Zobrazí jen finálku, parkoviště a trailheady, takže vidíte jen to, co budete potřebovat při odlovu.");

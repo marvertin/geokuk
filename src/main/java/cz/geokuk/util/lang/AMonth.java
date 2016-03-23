@@ -13,18 +13,18 @@ import java.util.regex.Pattern;
  * @see "$Header: /Zakazky/TWare/Distribuce/TW0139/Util/cz/tconsult/tw/data/AMonth.java 3     30.03.01 11:52 Veverka $"
  */
 public final class AMonth extends AObject0 implements IElementInt, Comparable<AMonth>, Ordinable<AMonth> {
-	private static final long	serialVersionUID	= 6216726658054355928L;
+	private static final long serialVersionUID = 6216726658054355928L;
 
-	private static final int	MINY				= 12;						// Months IN Year
-	private static final int	MINVALUE			= 1000 * MINY;
-	private static final int	MAXVALUE			= 9999 * MINY + MINY - 1;
+	private static final int MINY = 12; // Months IN Year
+	private static final int MINVALUE = 1000 * MINY;
+	private static final int MAXVALUE = 9999 * MINY + MINY - 1;
 
-	private static Pattern		sPattern;
+	private static Pattern sPattern;
 
 	/**
 	 * Hodnota
 	 */
-	private final int			iRokMes;
+	private final int iRokMes;
 
 	/**
 	 * Otestuje, zda je možné vytvořit instanci z roku a měsíce.

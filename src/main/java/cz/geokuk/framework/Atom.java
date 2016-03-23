@@ -9,10 +9,10 @@ public abstract class Atom implements Comparable<Atom> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static Map<Class<? extends Atom>, TypAtomu>	repo	= new HashMap<>();
-	String												name;
+	private static Map<Class<? extends Atom>, TypAtomu> repo = new HashMap<>();
+	String name;
 
-	int													ordinal;
+	int ordinal;
 
 	public static <E> Set<E> noneOf(final Class<E> e) {
 		return new HashSet<>();

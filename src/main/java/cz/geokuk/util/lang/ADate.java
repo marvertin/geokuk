@@ -31,14 +31,14 @@ import java.util.*;
  */
 public final class ADate extends AObject0 implements Serializable, Comparable<ADate>, IElement, Ordinable<ADate>, ADateComparable {
 
-	private static final long		serialVersionUID	= -5930101122857422133L;
+	private static final long serialVersionUID = -5930101122857422133L;
 
 	// LATER [veverka?] vnitřní držbu udělej pomocí den,měsíc,ruk a metody stav nad kalendářem
 	/**
 	 * Drží datum. Je reprezentováno půlnocí v GMT čase.
 	 */
 	// final jsem musel odstranit kvůli _clone()
-	private final java.util.Date	iJavaDatum;
+	private final java.util.Date iJavaDatum;
 
 	public static boolean canFrom(final int aRok, final int aMesic, final int aDen) {
 		try {

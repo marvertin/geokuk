@@ -14,24 +14,24 @@ import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.lang.CounterMap;
 
 public class KesBag {
-	private static final Logger		log				= LogManager.getLogger(KesBag.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(KesBag.class.getSimpleName());
 
-	private final List<Wpt>			wpts			= new ArrayList<>();
-	private Set<Kesoid>				kesoidyset;
-	private List<Kesoid>			kesoidy;
+	private final List<Wpt> wpts = new ArrayList<>();
+	private Set<Kesoid> kesoidyset;
+	private List<Kesoid> kesoidy;
 
-	private CounterMap<Alela>		poctyAlel;
+	private CounterMap<Alela> poctyAlel;
 
-	private final Indexator<Wpt>	indexator;
+	private final Indexator<Wpt> indexator;
 
-	private int						maximalniBestOf	= 0;
-	private int						maximalniHodnoceni;
-	private int						maximalniFavorit;
-	private final Genom				genom;
+	private int maximalniBestOf = 0;
+	private int maximalniHodnoceni;
+	private int maximalniFavorit;
+	private final Genom genom;
 
-	private final CitacAlel			citacAlel;
+	private final CitacAlel citacAlel;
 
-	private InformaceOZdrojich		iInformaceOZdrojich;
+	private InformaceOZdrojich iInformaceOZdrojich;
 
 	public KesBag(final Genom genom) {
 		this.genom = genom;

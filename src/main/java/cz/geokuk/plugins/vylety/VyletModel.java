@@ -48,11 +48,11 @@ public class VyletModel extends Model0 {
 
 	}
 
-	private Vylet						vylet;
+	private Vylet vylet;
 
-	private VyletovyZperzistentnovac	vyletovyZperzistentnovac;
+	private VyletovyZperzistentnovac vyletovyZperzistentnovac;
 
-	private Worker						worker;
+	private Worker worker;
 
 	public void add(final EVylet evyl, final Kesoid kes) {
 		final EVylet evylPuvodni = vylet.add(evyl, kes);

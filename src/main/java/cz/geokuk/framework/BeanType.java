@@ -4,9 +4,9 @@ import java.lang.reflect.Method;
 
 public class BeanType {
 
-	private final Class<?>	cls;
-	private final String	subType;
-	private final boolean	multinInjectionSupported;
+	private final Class<?> cls;
+	private final String subType;
+	private final boolean multinInjectionSupported;
 
 	public static BeanType createForInjectedBean(final Object injectedBean) {
 		String subType;

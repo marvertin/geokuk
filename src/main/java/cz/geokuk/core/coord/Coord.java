@@ -16,37 +16,37 @@ import cz.geokuk.util.index2d.BoundingRect;
 public class Coord {
 
 	/** Počet bitů mou 2^MOU_BITS obtáčí rovník kolem dokola (odpovídá 40 000 km */
-	public static final int	MOU_BITS		= 32;
+	public static final int MOU_BITS = 32;
 
 	/**
 	 * Počet bitů, na kterém je zobrazena celá země v merkátoru, když je nejmenší možné měřítko a to. 0 2^ MOUMER_0_BITS je hrana čtverce nejmenší kachle (ale, o kachlích se zde mluvi nesmí). Takže je to počet pixlů, do kterého se vejde celá země při měřítkui 0.
 	 */
-	public static final int	MOUMER_0_BITS	= 8;
+	public static final int MOUMER_0_BITS = 8;
 
 	/**
 	 * Teoreticky možné největší měřítko, kdy jedomu pixlu odpovídá jedna mouřadnice.
 	 */
-	public static final int	MAX_MOUMER		= MOU_BITS - MOUMER_0_BITS;	// 24
+	public static final int MAX_MOUMER = MOU_BITS - MOUMER_0_BITS; // 24
 
 	// X_UTM=(sX*0,03125)-3700000 = 292576
 	// Y_UTM=(sY*0,03125)+1300000 = 5570080
 
 	// Základní parametry
-	private final int		moumer;										// měřítko
-	private final Mou		moustred;									// střed
-	private final Dimension	dim;										// velikost
-	private final double	natoceni;									// natočení v radiánech
+	private final int moumer; // měřítko
+	private final Mou moustred; // střed
+	private final Dimension dim; // velikost
+	private final double natoceni; // natočení v radiánech
 
 	// odvozené
 	// poměr mezi mou a pixlama, kolik mou souřadnic je na pixel. U teoreticky nejvyššího měřítka 24 to bude 1:1.
 	// Jinak vždy jsou mou drobnější než pisly a jeden z pixl se kládá z mnoha mou (mocniny dvou).
 	// Vždy to bude rozumné číslo v intu (maximálně 16 milionů, takže se s tím dá normálně počítat)
-	private final int		mouNaPixl;
+	private final int mouNaPixl;
 
-	private final int		mpShift;
+	private final int mpShift;
 
-	private AffineTransform	tam;
-	private AffineTransform	zpet;
+	private AffineTransform tam;
+	private AffineTransform zpet;
 
 	public static Coord prozatimniInicializacni() {
 		return new Coord(0, new Mou(0x0800_000, 0x0800_000), new Dimension(100, 100), 0.0);

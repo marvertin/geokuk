@@ -35,22 +35,22 @@ public class JKesDetail extends JKesoidDetail0 {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -3323887260932949747L;
+	private static final long serialVersionUID = -3323887260932949747L;
 
-	private Kes					kes;
-	private JLabel				size;
-	private JLabel				difficulty;
+	private Kes kes;
+	private JLabel size;
+	private JLabel difficulty;
 
-	private JLabel				terrain;
-	private final JLabel		bestOf				= new JLabel();
-	private final JLabel		hodnoceni			= new JLabel();
-	private final JLabel		hodnoceniPocet		= new JLabel();
-	private final JLabel		znamka				= new JLabel();
-	private JFavorit			jFavorit;
+	private JLabel terrain;
+	private final JLabel bestOf = new JLabel();
+	private final JLabel hodnoceni = new JLabel();
+	private final JLabel hodnoceniPocet = new JLabel();
+	private final JLabel znamka = new JLabel();
+	private JFavorit jFavorit;
 
-	private JLabel				jFoundTime;
+	private JLabel jFoundTime;
 
-	private JSmallPictureButton	zobrazHint;
+	private JSmallPictureButton zobrazHint;
 
 	private static Icon hvezdicky(final String kolik) {
 		// TODO : revisit this...

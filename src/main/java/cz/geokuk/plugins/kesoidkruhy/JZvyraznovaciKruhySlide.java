@@ -12,13 +12,13 @@ import cz.geokuk.plugins.mapy.kachle.EKaType;
 import cz.geokuk.util.index2d.*;
 
 public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
-	private static final long	serialVersionUID			= -5858146658366237217L;
-	private static final int	MINIMALNI_JEDNOTKOVY_KRUH	= 25;
+	private static final long serialVersionUID = -5858146658366237217L;
+	private static final int MINIMALNI_JEDNOTKOVY_KRUH = 25;
 
-	private Indexator<Wpt>		iIndexator;
+	private Indexator<Wpt> iIndexator;
 
-	private EKaType				podklad;
-	private KruhySettings		kruhy;
+	private EKaType podklad;
+	private KruhySettings kruhy;
 
 	public JZvyraznovaciKruhySlide() {
 		setOpaque(false);

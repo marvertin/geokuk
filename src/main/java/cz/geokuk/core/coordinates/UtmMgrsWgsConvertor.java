@@ -11,13 +11,13 @@ import java.util.Map;
 class UtmMgrsWgsConvertor {
 
 	private class Digraphs {
-		private final Map<Integer, String>	digraph1		= new Hashtable<>();
+		private final Map<Integer, String> digraph1 = new Hashtable<>();
 
-		private final Map<Integer, String>	digraph2		= new Hashtable<>();
+		private final Map<Integer, String> digraph2 = new Hashtable<>();
 
-		private final String[]				digraph1Array	= { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+		private final String[] digraph1Array = { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 
-		private final String[]				digraph2Array	= { "V", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V" };
+		private final String[] digraph2Array = { "V", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V" };
 
 		public Digraphs() {
 			for (int i = 0; i < digraph1Array.length; ++i) {
@@ -75,19 +75,19 @@ class UtmMgrsWgsConvertor {
 	}
 
 	private class LatBands {
-		private final char[]	letters		= { 'A', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Z' };
+		private final char[] letters = { 'A', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Z' };
 
-		private final int[]		degrees		= { -90, -84, -72, -64, -56, -48, -40, -32, -24, -16, -8, 0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 84 };
+		private final int[] degrees = { -90, -84, -72, -64, -56, -48, -40, -32, -24, -16, -8, 0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 84 };
 
-		private final char[]	negLetters	= { 'A', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M' };
+		private final char[] negLetters = { 'A', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M' };
 
-		private final int[]		negDegrees	= { -90, -84, -72, -64, -56, -48, -40, -32, -24, -16, -8 };
+		private final int[] negDegrees = { -90, -84, -72, -64, -56, -48, -40, -32, -24, -16, -8 };
 
-		private final char[]	posLetters	= { 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Z' };
+		private final char[] posLetters = { 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Z' };
 
-		private final int[]		posDegrees	= { 0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 84 };
+		private final int[] posDegrees = { 0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 84 };
 
-		private final int		arrayLength	= 22;
+		private final int arrayLength = 22;
 
 		public LatBands() {}
 
@@ -196,27 +196,27 @@ class UtmMgrsWgsConvertor {
 	private class LatLon2UTM {
 
 		// equatorial radius
-		double	equatorialRadius	= 6378137;
+		double equatorialRadius = 6378137;
 
 		// polar radius
-		double	polarRadius			= 6356752.314;
+		double polarRadius = 6356752.314;
 
 		// scale factor
-		double	k0					= 0.9996;
+		double k0 = 0.9996;
 
 		// eccentricity
-		double	e					= Math.sqrt(1 - POW(polarRadius / equatorialRadius, 2));
+		double e = Math.sqrt(1 - POW(polarRadius / equatorialRadius, 2));
 
-		double	e1sq				= e * e / (1 - e * e);
+		double e1sq = e * e / (1 - e * e);
 
 		// Lat Lon to UTM variables
 
 		// r curv 2
-		double	nu					= 6389236.914;
+		double nu = 6389236.914;
 
 		// Calculate Meridional Arc Length
 		// Meridional Arc
-		double	S					= 5103266.421;
+		double S = 5103266.421;
 
 		// flattening
 		// double flattening = 0.00335281066474748;// (equatorialRadius-polarRadius)/equatorialRadius;
@@ -227,11 +227,11 @@ class UtmMgrsWgsConvertor {
 		// Mean radius
 		// double rm = POW(equatorialRadius * polarRadius, 1 / 2.0);
 
-		double	A0					= 6367449.146;
+		double A0 = 6367449.146;
 
-		double	B0					= 16038.42955;
+		double B0 = 16038.42955;
 
-		double	C0					= 16.83261333;
+		double C0 = 16.83261333;
 
 		// double n = (equatorialRadius - polarRadius)
 		// / (equatorialRadius + polarRadius);
@@ -239,26 +239,26 @@ class UtmMgrsWgsConvertor {
 		// r curv 1
 		// double rho = 6368573.744;
 
-		double	D0					= 0.021984404;
+		double D0 = 0.021984404;
 
-		double	E0					= 0.000312705;
+		double E0 = 0.000312705;
 
 		// Calculation Constants
 		// Delta Long
-		double	p					= -0.483084;
+		double p = -0.483084;
 
-		double	sin1				= 4.84814E-06;
+		double sin1 = 4.84814E-06;
 
 		// Coefficients for UTM Coordinates
-		double	K1					= 5101225.115;
+		double K1 = 5101225.115;
 
-		double	K2					= 3750.291596;
+		double K2 = 3750.291596;
 
-		double	K3					= 1.397608151;
+		double K3 = 1.397608151;
 
-		double	K4					= 214839.3105;
+		double K4 = 214839.3105;
 
-		double	K5					= -2.995382942;
+		double K5 = -2.995382942;
 
 		public String convertLatLonToUTM(final double latitude, final double longitude) {
 			validate(latitude, longitude);
@@ -329,7 +329,7 @@ class UtmMgrsWgsConvertor {
 			K1 = S * k0;
 			K2 = nu * SIN(latitude) * COS(latitude) * POW(sin1, 2) * k0 * 100000000 / 2;
 			K3 = POW(sin1, 4) * nu * SIN(latitude) * Math.pow(COS(latitude), 3) / 24 * (5 - POW(TAN(latitude), 2) + 9 * e1sq * POW(COS(latitude), 2) + 4 * POW(e1sq, 2) * POW(COS(latitude), 4)) * k0
-					* 10000000000000000L;
+			        * 10000000000000000L;
 
 			K4 = nu * COS(latitude) * sin1 * k0 * 10000;
 
@@ -409,71 +409,71 @@ class UtmMgrsWgsConvertor {
 	}
 
 	private class UTM2LatLon {
-		double	easting;
+		double easting;
 
-		double	northing;
+		double northing;
 
-		int		zone;
+		int zone;
 
-		String	southernHemisphere	= "ACDEFGHJKLM";
+		String southernHemisphere = "ACDEFGHJKLM";
 
-		double	arc;
+		double arc;
 
-		double	mu;
+		double mu;
 
-		double	ei;
+		double ei;
 
-		double	ca;
+		double ca;
 
-		double	cb;
+		double cb;
 
-		double	cc;
+		double cc;
 
-		double	cd;
+		double cd;
 
-		double	n0;
+		double n0;
 
-		double	r0;
+		double r0;
 
-		double	_a1;
+		double _a1;
 
-		double	dd0;
+		double dd0;
 
-		double	t0;
+		double t0;
 
-		double	Q0;
+		double Q0;
 
-		double	lof1;
+		double lof1;
 
-		double	lof2;
+		double lof2;
 
-		double	lof3;
+		double lof3;
 
-		double	_a2;
+		double _a2;
 
-		double	phi1;
+		double phi1;
 
-		double	fact1;
+		double fact1;
 
-		double	fact2;
+		double fact2;
 
-		double	fact3;
+		double fact3;
 
-		double	fact4;
+		double fact4;
 
-		double	zoneCM;
+		double zoneCM;
 
-		double	_a3;
+		double _a3;
 
-		double	a					= 6378137;
+		double a = 6378137;
 
-		double	e					= 0.081819191;
+		double e = 0.081819191;
 
-		double	e1sq				= 0.006739497;
+		double e1sq = 0.006739497;
 
 		// double b = 6356752.314;
 
-		double	k0					= 0.9996;
+		double k0 = 0.9996;
 
 		public double[] convertUTMToLatLong(final String UTM) {
 			final double[] latlon = { 0.0, 0.0 };

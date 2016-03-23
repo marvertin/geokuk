@@ -20,33 +20,33 @@ import cz.geokuk.util.file.KeFile;
 
 public class KesoidImportBuilder implements IImportBuilder {
 
-	private static final Logger					log								= LogManager.getLogger(KesoidImportBuilder.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(KesoidImportBuilder.class.getSimpleName());
 
-	private static final String					PREFIX_BEZEJMENNYCH_WAYPOINTU	= "Geokuk";
-	private static final String					DEFAULT_SYM						= "Waypoint";
-	private static final String					WAYMARK							= "Waymark";
-	private static final String					WM								= "WM";
-	private static final String					GC								= "GC";
-	private static final String					MZ								= "MZ";
-	private static final String					MU								= "MU";
-	private static final String					PIC								= "pic";
-	static final String							GEOCACHE						= "Geocache";
-	static final String							GEOCACHE_FOUND					= "Geocache Found";
+	private static final String PREFIX_BEZEJMENNYCH_WAYPOINTU = "Geokuk";
+	private static final String DEFAULT_SYM = "Waypoint";
+	private static final String WAYMARK = "Waymark";
+	private static final String WM = "WM";
+	private static final String GC = "GC";
+	private static final String MZ = "MZ";
+	private static final String MU = "MU";
+	private static final String PIC = "pic";
+	static final String GEOCACHE = "Geocache";
+	static final String GEOCACHE_FOUND = "Geocache Found";
 
-	private static Pattern						patExtrakceCislaCgp;
-	private static Pattern						patExtrakceSouradnicJtsk;
+	private static Pattern patExtrakceCislaCgp;
+	private static Pattern patExtrakceSouradnicJtsk;
 
-	private final Map<String, GpxWpt>			gpxwpts							= new HashMap<>(1023);
+	private final Map<String, GpxWpt> gpxwpts = new HashMap<>(1023);
 
-	private Genom								genom;
-	private KesBag								kesBag;
+	private Genom genom;
+	private KesBag kesBag;
 
-	private int									citacBezejmennychWaypintu;
-	private InformaceOZdroji					infoOCurrentnimZdroji;
-	private final InformaceOZdrojich.Builder	informaceOZdrojichBuilder		= InformaceOZdrojich.builder();
+	private int citacBezejmennychWaypintu;
+	private InformaceOZdroji infoOCurrentnimZdroji;
+	private final InformaceOZdrojich.Builder informaceOZdrojichBuilder = InformaceOZdrojich.builder();
 
-	private final GccomNick						gccomNick;
-	private final ProgressModel					progressModel;
+	private final GccomNick gccomNick;
+	private final ProgressModel progressModel;
 
 	public KesoidImportBuilder(final GccomNick gccomNick, final ProgressModel progressModel) {
 		this.gccomNick = gccomNick;
@@ -149,7 +149,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 						final Kes kes = (Kes) kesoid;
 						if (Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym()) && Math.abs(kes.getFirstWpt().lat - wpt.lat) < 0.001 && Math.abs(kes.getFirstWpt().lon - wpt.lon) < 0.001) {
 							log.debug("Vypouštíme finální waypointy tradičních keší na úvodních souřadnicích: {} {} {} {} {}", kes.getNazev(), kes.getFirstWpt().lat, wpt.lat, kes.getFirstWpt().lon,
-									wpt.lon);
+							        wpt.lon);
 						} else {
 							kes.setMainWpt(wpt);
 							kesoid.addWpt(wpt);

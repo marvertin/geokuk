@@ -13,14 +13,14 @@ import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 
 public class JFenotypIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 
-	private static final long	serialVersionUID	= -6496737194139718970L;
-	private JComponent			jvse;
+	private static final long serialVersionUID = -6496737194139718970L;
+	private JComponent jvse;
 
-	private JFenotypVyberIkon	fenotypVyberIkon;
+	private JFenotypVyberIkon fenotypVyberIkon;
 
-	private IkonBag				ikonBag;
-	private Set<String>			jmenaVybranychAlel;
-	private KesBag				filtrovaneKesBag;
+	private IkonBag ikonBag;
+	private Set<String> jmenaVybranychAlel;
+	private KesBag filtrovaneKesBag;
 
 	public JFenotypIkonyDialog() {
 		setTitle("Výběr fenotypu");

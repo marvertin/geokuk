@@ -16,8 +16,8 @@ import cz.geokuk.framework.Action0;
  */
 public class BezNaStredAction extends Action0 {
 
-	private static final long	serialVersionUID	= -2882817111560336824L;
-	private Mou					moustred;
+	private static final long serialVersionUID = -2882817111560336824L;
+	private Mou moustred;
 
 	/**
 	 * @param aBoard

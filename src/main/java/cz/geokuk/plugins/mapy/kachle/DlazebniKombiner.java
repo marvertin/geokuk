@@ -37,8 +37,8 @@ class DlazebniKombiner {
 	// }
 
 	private static class ImageOrException {
-		final Image		image;
-		final Throwable	throwable;
+		final Image image;
+		final Throwable throwable;
 
 		ImageOrException(final Image image) {
 			this.image = image;
@@ -52,20 +52,20 @@ class DlazebniKombiner {
 
 	}
 
-	private static final Logger					log					= LogManager.getLogger(DlazebniKombiner.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(DlazebniKombiner.class.getSimpleName());
 
-	private static Pocitadlo					pocitadloInstanci	= new PocitadloMalo("Počet dlažebních kombinérů.", "Počítá, kolik máme instancí " + DlazebniKombiner.class.getName() + ".");
-	private EnumSet<EKaType>					coCekam;																																		// co čekám, že nakombinuju
+	private static Pocitadlo pocitadloInstanci = new PocitadloMalo("Počet dlažebních kombinérů.", "Počítá, kolik máme instancí " + DlazebniKombiner.class.getName() + ".");
+	private EnumSet<EKaType> coCekam; // co čekám, že nakombinuju
 
-	private final EnumSet<EKaType>				coMam				= EnumSet.noneOf(EKaType.class);																							// co už mám nakombinováno
+	private final EnumSet<EKaType> coMam = EnumSet.noneOf(EKaType.class); // co už mám nakombinováno
 
-	private BufferedImage						kombinedImage;
+	private BufferedImage kombinedImage;
 
-	private boolean								hotovo;
+	private boolean hotovo;
 
-	private EnumMap<EKaType, ImageOrException>	imgs				= new EnumMap<>(EKaType.class);
+	private EnumMap<EKaType, ImageOrException> imgs = new EnumMap<>(EKaType.class);
 
-	private Throwable							firstException;
+	private Throwable firstException;
 
 	/**
 	 * Nová instance bude kombinovat kachle daných mapových podkladů. Až nakombinuje, vrací. Ale vrátit dokáže i postupně.

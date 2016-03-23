@@ -20,11 +20,11 @@ import cz.geokuk.util.index2d.BoundingRect;
  */
 public class MultiNacitacSwingWorker extends MySwingWorker0<KesBag, Void> {
 
-	private static final Logger	log	= LogManager.getLogger(MultiNacitacSwingWorker.class.getSimpleName());
+	private static final Logger log = LogManager.getLogger(MultiNacitacSwingWorker.class.getSimpleName());
 
-	private final MultiNacitac	multiNacitac;
-	private final Genom			iGenom;
-	private final KesoidModel	kesoidModel;
+	private final MultiNacitac multiNacitac;
+	private final Genom iGenom;
+	private final KesoidModel kesoidModel;
 
 	/**
 	 * @param aBoard

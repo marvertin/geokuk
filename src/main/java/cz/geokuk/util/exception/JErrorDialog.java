@@ -46,12 +46,12 @@ import cz.geokuk.util.process.BrowserOpener;
 
 public class JErrorDialog extends JMyDialog0 {
 
-	private static final long	serialVersionUID	= 7087453419069194768L;
+	private static final long serialVersionUID = 7087453419069194768L;
 
-	private JErrorTable			jErrorTable;
-	private JButton				jVymaz;
-	private JButton				jOtviracVyjimky;
-	private AExcId				currentExcId;
+	private JErrorTable jErrorTable;
+	private JButton jVymaz;
+	private JButton jOtviracVyjimky;
+	private AExcId currentExcId;
 
 	public static void main(final String args[]) {
 

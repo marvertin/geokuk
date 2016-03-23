@@ -9,10 +9,10 @@ import cz.geokuk.plugins.cesty.data.Bod;
 
 public abstract class BodAction0 extends BousekAction0 {
 
-	private static final long	serialVersionUID	= -7263554527636792222L;
-	protected Poziceq			poziceq;
+	private static final long serialVersionUID = -7263554527636792222L;
+	protected Poziceq poziceq;
 
-	private final Bod			kontextovyBod;
+	private final Bod kontextovyBod;
 
 	public BodAction0(final Bod kontextovyBod) {
 		this.kontextovyBod = kontextovyBod;

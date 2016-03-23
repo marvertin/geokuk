@@ -11,8 +11,8 @@ class GenotypBuilderWpt {
 	/**
 	 *
 	 */
-	final Genotyp		g;
-	private final Genom	genom;
+	final Genotyp g;
+	private final Genom genom;
 
 	/**
 	 *

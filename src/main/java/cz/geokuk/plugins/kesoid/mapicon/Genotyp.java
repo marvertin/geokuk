@@ -30,15 +30,15 @@ public class Genotyp {
 		}
 	}
 
-	private final Set<Alela>	alely	= new HashSet<>();
+	private final Set<Alela> alely = new HashSet<>();
 
-	private final Genom			genom;
+	private final Genom genom;
 
 	/**
 	 * @param aAlely
 	 */
 	public Genotyp(final Set<Alela> aAlely, final Genom genom) {
-		assert !aAlely.contains(null);
+		assert!aAlely.contains(null);
 		this.genom = genom;
 		alely.addAll(aAlely);
 	}

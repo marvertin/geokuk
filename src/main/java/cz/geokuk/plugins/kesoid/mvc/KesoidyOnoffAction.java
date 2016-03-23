@@ -4,8 +4,8 @@ import cz.geokuk.framework.ToggleAction0;
 
 public class KesoidyOnoffAction extends ToggleAction0 {
 
-	private static final long	serialVersionUID	= -7547868179813232769L;
-	private KesoidModel			kesoidModel;
+	private static final long serialVersionUID = -7547868179813232769L;
+	private KesoidModel kesoidModel;
 
 	public KesoidyOnoffAction() {
 		super("Zobrazovat kešoidy");

@@ -6,12 +6,12 @@ import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.plugins.cesty.data.*;
 
 public class MalovadloParams {
-	Doc			doc;
-	Cesta		curta;
-	Bousek0		blizkyBousek;
-	Coord		soord;
-	Mou			mouDeliciNaBlizkemBousku;
-	Mouable		poziceMouable;
-	public Mou	mouPridavanyBod1;
-	public Mou	mouPridavanyBod2;
+	Doc doc;
+	Cesta curta;
+	Bousek0 blizkyBousek;
+	Coord soord;
+	Mou mouDeliciNaBlizkemBousku;
+	Mouable poziceMouable;
+	public Mou mouPridavanyBod1;
+	public Mou mouPridavanyBod2;
 }

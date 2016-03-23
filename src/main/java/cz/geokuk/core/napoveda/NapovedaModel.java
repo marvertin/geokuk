@@ -12,9 +12,9 @@ import cz.geokuk.util.process.BrowserOpener;
 
 public class NapovedaModel extends Model0 {
 
-	private List<ZpravaUzivateli>	zpravyUzivatelum;
-	private int						lastViewedMsgNum;
-	private boolean					onlineMode;
+	private List<ZpravaUzivateli> zpravyUzivatelum;
+	private int lastViewedMsgNum;
+	private boolean onlineMode;
 
 	public int getLastViewedMsgNum() {
 		return lastViewedMsgNum;

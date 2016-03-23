@@ -9,11 +9,11 @@ public class FileWatchDog<R> {
 		R load(BufferedReader reader) throws IOException;
 	}
 
-	private final File		file;
+	private final File file;
 
-	private long			lastmodified;
+	private long lastmodified;
 
-	private WatchDogGroup	watchDogGroup;
+	private WatchDogGroup watchDogGroup;
 
 	public FileWatchDog(final File file) {
 		super();

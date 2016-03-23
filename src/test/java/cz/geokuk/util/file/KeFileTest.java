@@ -10,9 +10,9 @@ import cz.geokuk.util.file.KeFile.XRelativizeDubleDot;
 
 public class KeFileTest {
 
-	private static long		NOW			= System.currentTimeMillis();
-	private static Root.Def	PATTERN		= new Root.Def(0, null, null);
-	private static Root.Def	PATTERN2	= new Root.Def(1, null, null);
+	private static long NOW = System.currentTimeMillis();
+	private static Root.Def PATTERN = new Root.Def(0, null, null);
+	private static Root.Def PATTERN2 = new Root.Def(1, null, null);
 
 	@Test(expected = NullPointerException.class)
 	public void tesNull1() {
