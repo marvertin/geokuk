@@ -3,7 +3,6 @@ package cz.geokuk.plugins.kesoidpopisky;
 import java.awt.Color;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cz.geokuk.util.gui.fontchoser.JFontChooser;
@@ -64,30 +63,22 @@ public class JVlastnostiPisma extends JPanel {
 	 *
 	 */
 	private void registerEvents() {
-		final ChangeListener chlistenerGui2Model = new ChangeListener() {
-
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final VlastnostiPismaModel m = getVlastnostiPismaModel();
-				m.setForeground(foregroundChooser.getSelectionModel().getSelectedColor());
-				m.setPosuX((Integer) xspinner.getValue());
-				m.setPosuY((Integer) yspinner.getValue());
-				m.setBackground(backgroudChooser.getSelectionModel().getSelectedColor());
-				m.setFont(fontChooser.getFont());
-			}
+		final ChangeListener chlistenerGui2Model = e -> {
+			final VlastnostiPismaModel m = getVlastnostiPismaModel();
+			m.setForeground(foregroundChooser.getSelectionModel().getSelectedColor());
+			m.setPosuX((Integer) xspinner.getValue());
+			m.setPosuY((Integer) yspinner.getValue());
+			m.setBackground(backgroudChooser.getSelectionModel().getSelectedColor());
+			m.setFont(fontChooser.getFont());
 		};
 
-		final ChangeListener chlistenerModel2Gui = new ChangeListener() {
-
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final VlastnostiPismaModel m = getVlastnostiPismaModel();
-				foregroundChooser.getSelectionModel().setSelectedColor(m.getForeground());
-				backgroudChooser.getSelectionModel().setSelectedColor(m.getBackground());
-				fontChooser.getSelectionModel().setSelectedFont(m.getFont());
-				xspinner.setValue(m.getPosuX());
-				yspinner.setValue(m.getPosuY());
-			}
+		final ChangeListener chlistenerModel2Gui = e -> {
+			final VlastnostiPismaModel m = getVlastnostiPismaModel();
+			foregroundChooser.getSelectionModel().setSelectedColor(m.getForeground());
+			backgroudChooser.getSelectionModel().setSelectedColor(m.getBackground());
+			fontChooser.getSelectionModel().setSelectedFont(m.getFont());
+			xspinner.setValue(m.getPosuX());
+			yspinner.setValue(m.getPosuY());
 		};
 
 		foregroundChooser.getSelectionModel().addChangeListener(chlistenerGui2Model);

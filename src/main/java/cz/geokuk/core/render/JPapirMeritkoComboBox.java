@@ -2,7 +2,6 @@ package cz.geokuk.core.render;
 
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
 
@@ -20,14 +19,11 @@ public class JPapirMeritkoComboBox extends JComboBox<String> {
 			addItem(formatuj(mer));
 		}
 
-		addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(final ItemEvent event) {
-				// pokud zadal blbost tak tam dát,. co tam bylo
-				if (event.getStateChange() == ItemEvent.SELECTED) {
-					final int mer = parser((String) getSelectedItem());
-					setMeritko(mer);
-				}
+		addItemListener(event -> {
+			// pokud zadal blbost tak tam dát,. co tam bylo
+			if (event.getStateChange() == ItemEvent.SELECTED) {
+				final int mer = parser((String) getSelectedItem());
+				setMeritko(mer);
 			}
 		});
 	}

@@ -5,14 +5,14 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.util.*;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
-import cz.geokuk.plugins.kesoid.importek.*;
+import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
+import cz.geokuk.plugins.kesoid.importek.MultiNacitacLoaderManager;
 import cz.geokuk.plugins.kesoid.mapicon.*;
 import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.util.exception.EExceptionSeverity;
@@ -340,12 +340,7 @@ public class KesoidModel extends Model0 {
 	public void setNacitatSoubor(final KeFile jmenoZDroje, final boolean nacitat) {
 		// TODO : speed up
 		boolean zmena;
-		final Collection<File> changedFiles = Collections2.transform(vsechny.getInformaceOZdrojich().getSubtree(jmenoZDroje), new Function<InformaceOZdroji, File>() {
-			@Override
-			public File apply(final InformaceOZdroji informaceOZdroji) {
-				return informaceOZdroji.jmenoZdroje.getFile();
-			}
-		});
+		final Collection<File> changedFiles = Collections2.transform(vsechny.getInformaceOZdrojich().getSubtree(jmenoZDroje), informaceOZdroji -> informaceOZdroji.jmenoZdroje.getFile());
 		if (nacitat) {
 			System.out.println("++++XNASTAVENI " + changedFiles);
 			zmena = blokovaneZdroje.removeAll(changedFiles);

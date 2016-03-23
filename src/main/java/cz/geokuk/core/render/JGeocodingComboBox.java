@@ -5,7 +5,6 @@ package cz.geokuk.core.render;
 
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.*;
 
 import javax.swing.JComboBox;
@@ -159,13 +158,9 @@ public class JGeocodingComboBox extends JComboBox<String> {
 	 *
 	 */
 	private void registerEvents() {
-		addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(final ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					nastavPatterned();
-				}
+		addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				nastavPatterned();
 			}
 		});
 

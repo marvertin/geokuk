@@ -1,14 +1,13 @@
 package cz.geokuk.core.render;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coordinates.Wgs;
@@ -16,8 +15,6 @@ import cz.geokuk.core.hledani.RefreshorVysledkuHledani;
 import cz.geokuk.core.hledani.VysledekHledani;
 import cz.geokuk.core.program.ESouborPanelName;
 import cz.geokuk.core.program.UmisteniSouboruAction;
-import cz.geokuk.core.render.JGeocodingComboBox.Listener;
-import cz.geokuk.core.render.RenderSettings.Patterned;
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.geocoding.GeocodingModel;
 import cz.geokuk.plugins.geocoding.Nalezenec;
@@ -284,22 +281,14 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 
 	private void registerEvents() {
 
-		jSpustitButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				final RenderSettings ss = renderModel.getRenderSettings().copy();
-				ss.setKmzFolderDescription(jKmzFolderDescription.getText());
-				renderModel.setRenderSettings(ss);
-				renderModel.spustRendrovani();
-			}
+		jSpustitButton.addActionListener(e -> {
+			final RenderSettings ss = renderModel.getRenderSettings().copy();
+			ss.setKmzFolderDescription(jKmzFolderDescription.getText());
+			renderModel.setRenderSettings(ss);
+			renderModel.spustRendrovani();
 		});
 
-		jPrerusitButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				renderModel.prerusRendrovani();
-			}
-		});
+		jPrerusitButton.addActionListener(e -> renderModel.prerusRendrovani());
 
 		addWindowListener(new WindowAdapter() {
 
@@ -314,87 +303,57 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 			}
 		});
 
-		jNastaveniAktualnihoMeritkaButton.addActionListener(new ActionListener() {
+		jNastaveniAktualnihoMeritkaButton.addActionListener(e -> renderModel.uschovejAktualniMeritko());
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				// int renderedMoumer = renderModel.getRenderedMoumer();
-				renderModel.uschovejAktualniMeritko();
-				// jRendrovaneMeritko.setText(renderedMoumer + "");
-
-			}
+		jWhatRenderRadioPanel.getSelectionModel().addListener(event -> {
+			System.out.println("Vybrano: " + event.getSelected());
+			final RenderSettings ss = renderModel.getRenderSettings().copy();
+			ss.setWhatRender(event.getSelected());
+			renderModel.setRenderSettings(ss);
 		});
 
-		jWhatRenderRadioPanel.getSelectionModel().addListener(new SelectionListener<EWhatRender>() {
-			@Override
-			public void selectionChanged(final SelectionEvent<EWhatRender> event) {
-				System.out.println("Vybrano: " + event.getSelected());
-				final RenderSettings ss = renderModel.getRenderSettings().copy();
-				ss.setWhatRender(event.getSelected());
-				renderModel.setRenderSettings(ss);
-			}
+		jImgTypeRadioPanel.getSelectionModel().addListener(event -> {
+			System.out.println("Vybrano: " + event.getSelected());
+			final RenderSettings ss = renderModel.getRenderSettings().copy();
+			ss.setImageType(event.getSelected());
+			renderModel.setRenderSettings(ss);
 		});
 
-		jImgTypeRadioPanel.getSelectionModel().addListener(new SelectionListener<EImageType>() {
-			@Override
-			public void selectionChanged(final SelectionEvent<EImageType> event) {
-				System.out.println("Vybrano: " + event.getSelected());
-				final RenderSettings ss = renderModel.getRenderSettings().copy();
-				ss.setImageType(event.getSelected());
-				renderModel.setRenderSettings(ss);
-			}
+		jKmzFolderNazevCombo.addListener(patterned -> {
+			final RenderSettings rs = renderModel.getRenderSettings();
+			System.out.println("pattern 1: " + rs.getKmzFolder());
+			System.out.println("pattern 2: " + patterned);
+			rs.setKmzFolder(patterned);
+			renderModel.setRenderSettings(rs);
 		});
 
-		jKmzFolderNazevCombo.addListener(new Listener() {
-			@Override
-			public void patternChanged(final Patterned patterned) {
-				final RenderSettings rs = renderModel.getRenderSettings();
-				System.out.println("pattern 1: " + rs.getKmzFolder());
-				System.out.println("pattern 2: " + patterned);
-				rs.setKmzFolder(patterned);
-				renderModel.setRenderSettings(rs);
+		jPureJmenoSouboruCombo.addListener(patterned -> {
+			final RenderSettings rs = renderModel.getRenderSettings();
+			final String vycisteneJmeno = FUtil.vycistiJmenoSouboru(patterned.getText());
+			if (!patterned.getText().equals(vycisteneJmeno)) {
+				patterned.setText(vycisteneJmeno);
+				jPureJmenoSouboruCombo.setSelectedItem(vycisteneJmeno);
 			}
+			rs.setPureFileName(patterned);
+			renderModel.setRenderSettings(rs);
 		});
 
-		jPureJmenoSouboruCombo.addListener(new Listener() {
-			@Override
-			public void patternChanged(final Patterned patterned) {
-				final RenderSettings rs = renderModel.getRenderSettings();
-				final String vycisteneJmeno = FUtil.vycistiJmenoSouboru(patterned.getText());
-				if (!patterned.getText().equals(vycisteneJmeno)) {
-					patterned.setText(vycisteneJmeno);
-					jPureJmenoSouboruCombo.setSelectedItem(vycisteneJmeno);
-				}
-				rs.setPureFileName(patterned);
-				renderModel.setRenderSettings(rs);
-			}
+		jNastavovacVelikostiDlazdicX.addChangeListener(e -> {
+			final RenderSettings settings = renderModel.getRenderSettings();
+			settings.setKmzMaxDlazdiceX(jNastavovacVelikostiDlazdicX.getMaximalniVelikost());
+			renderModel.setRenderSettings(settings);
 		});
 
-		jNastavovacVelikostiDlazdicX.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final RenderSettings settings = renderModel.getRenderSettings();
-				settings.setKmzMaxDlazdiceX(jNastavovacVelikostiDlazdicX.getMaximalniVelikost());
-				renderModel.setRenderSettings(settings);
-			}
+		jNastavovacVelikostiDlazdicY.addChangeListener(e -> {
+			final RenderSettings settings = renderModel.getRenderSettings();
+			settings.setKmzMaxDlazdiceY(jNastavovacVelikostiDlazdicY.getMaximalniVelikost());
+			renderModel.setRenderSettings(settings);
 		});
 
-		jNastavovacVelikostiDlazdicY.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final RenderSettings settings = renderModel.getRenderSettings();
-				settings.setKmzMaxDlazdiceY(jNastavovacVelikostiDlazdicY.getMaximalniVelikost());
-				renderModel.setRenderSettings(settings);
-			}
-		});
-
-		jSrovnatDoSeveru.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final RenderSettings settings = renderModel.getRenderSettings();
-				settings.setSrovnatDoSeveru(jSrovnatDoSeveru.isSelected());
-				renderModel.setRenderSettings(settings);
-			}
+		jSrovnatDoSeveru.addChangeListener(e -> {
+			final RenderSettings settings = renderModel.getRenderSettings();
+			settings.setSrovnatDoSeveru(jSrovnatDoSeveru.isSelected());
+			renderModel.setRenderSettings(settings);
 		});
 
 		// jKmzFolderDescription.addChangeListener(new ChangeListener() {
@@ -406,32 +365,22 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 		// }
 		// });
 
-		jKmzDrawOrder.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final RenderSettings settings = renderModel.getRenderSettings();
-				settings.setKmzDrawOrder((Integer) jKmzDrawOrder.getValue());
-				renderModel.setRenderSettings(settings);
-			}
+		jKmzDrawOrder.addChangeListener(e -> {
+			final RenderSettings settings = renderModel.getRenderSettings();
+			settings.setKmzDrawOrder((Integer) jKmzDrawOrder.getValue());
+			renderModel.setRenderSettings(settings);
 		});
 
-		jPapirMeritkoComboBox.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(final ItemEvent e) {
-				final RenderSettings settings = renderModel.getRenderSettings();
-				settings.setPapiroveMeritko(jPapirMeritkoComboBox.getMeritko());
-				renderModel.setRenderSettings(settings);
-			}
+		jPapirMeritkoComboBox.addItemListener(e -> {
+			final RenderSettings settings = renderModel.getRenderSettings();
+			settings.setPapiroveMeritko(jPapirMeritkoComboBox.getMeritko());
+			renderModel.setRenderSettings(settings);
 		});
 
-		jKalibrBodu.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final RenderSettings settings = renderModel.getRenderSettings();
-				settings.setKalibrBodu((Integer) jKalibrBodu.getValue());
-				renderModel.setRenderSettings(settings);
-			}
+		jKalibrBodu.addChangeListener(e -> {
+			final RenderSettings settings = renderModel.getRenderSettings();
+			settings.setKalibrBodu((Integer) jKalibrBodu.getValue());
+			renderModel.setRenderSettings(settings);
 		});
 
 	}

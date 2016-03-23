@@ -1,7 +1,5 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 
 import javax.swing.Timer;
@@ -40,12 +38,7 @@ public class IkonNacitacManager {
 		this.kesoidModel = kesoidModel;
 		ikonNacitacLoader = new IkonNacitacLoader();
 
-		new Timer(10000, new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				startLoad(false);
-			}
-		}).start();
+		new Timer(10000, e -> startLoad(false)).start();
 	}
 
 }

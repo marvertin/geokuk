@@ -136,12 +136,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 		// Nevykresluju. kdyz je prekrocen limit, ale jen kdyz kreslim na obrazovku
 		final boolean prekrocenLimit = !vykreslovatOkamtiteAleDlouho && indexator.count(getSoord().getBoundingRect()) > FConst.MAX_POC_WPT_NA_MAPE;
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				kesoidModel.setPrekrocenLimitWaypointuVeVyrezu(prekrocenLimit);
-			}
-		});
+		SwingUtilities.invokeLater(() -> kesoidModel.setPrekrocenLimitWaypointuVeVyrezu(prekrocenLimit));
 
 		// vytvoření prázdných seznamů
 		final EnumMap<Wpt.EZOrder, List<Sheet<Wpt>>> mapa = new EnumMap<>(Wpt.EZOrder.class);
@@ -583,13 +578,10 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 			if (aMouRect.isEmpty()) {
 				return;
 			}
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					final Insets bigiestIconInsets = jKesoidy.ikonBag.getSada().getBigiestIconInsets();
-					final Rectangle rect = jKesoidy.getSoord().transform(aMouRect, bigiestIconInsets);
-					jKesoidy.repaint(rect);
-				}
+			SwingUtilities.invokeLater(() -> {
+				final Insets bigiestIconInsets = jKesoidy.ikonBag.getSada().getBigiestIconInsets();
+				final Rectangle rect = jKesoidy.getSoord().transform(aMouRect, bigiestIconInsets);
+				jKesoidy.repaint(rect);
 			});
 		}
 

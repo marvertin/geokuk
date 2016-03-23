@@ -1,8 +1,5 @@
 package cz.geokuk.plugins.kesoid.mvc;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 
@@ -48,20 +45,16 @@ public class JNickEditDialog extends JMyDialog0 {
 
 		grlay(panel);
 
-		jUlozit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				int gccomNIckId;
-				try {
-					gccomNIckId = Integer.parseInt(jNickId.getText());
-				} catch (final NumberFormatException e1) {
-					Dlg.error("Owner ID \"" + jNickId.getText() + "\" musí číslem býti!");
-					return;
-				}
-				kesoidModel.setGccomNick(new GccomNick(jNickName.getText(), gccomNIckId));
-				dispose();
+		jUlozit.addActionListener(e -> {
+			int gccomNIckId;
+			try {
+				gccomNIckId = Integer.parseInt(jNickId.getText());
+			} catch (final NumberFormatException e1) {
+				Dlg.error("Owner ID \"" + jNickId.getText() + "\" musí číslem býti!");
+				return;
 			}
+			kesoidModel.setGccomNick(new GccomNick(jNickName.getText(), gccomNIckId));
+			dispose();
 		});
 	}
 

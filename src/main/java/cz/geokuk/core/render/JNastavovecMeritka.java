@@ -4,8 +4,6 @@ import java.awt.Dimension;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
@@ -40,13 +38,10 @@ public class JNastavovecMeritka extends JSpinner implements AfterEventReceiverRe
 
 	@Override
 	public void initAfterEventReceiverRegistration() {
-		iModel.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final RenderSettings settings = renderModel.getRenderSettings();
-				settings.setRenderedMoumer((Integer) iModel.getNumber());
-				renderModel.setRenderSettings(settings);
-			}
+		iModel.addChangeListener(e -> {
+			final RenderSettings settings = renderModel.getRenderSettings();
+			settings.setRenderedMoumer((Integer) iModel.getNumber());
+			renderModel.setRenderSettings(settings);
 		});
 	}
 

@@ -38,7 +38,6 @@ package cz.geokuk.plugins.kesoid.hledani;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.regex.PatternSyntaxException;
 
 import javax.swing.*;
@@ -100,32 +99,22 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		jRegularniVyrazy.addChangeListener(new SpousteniVyhledavace());
 		jJenVZobrazenych.addChangeListener(new SpousteniVyhledavace());
 
-		jButtonCentruj.addActionListener(new ActionListener() {
+		jButtonCentruj.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-
-				final Nalezenec nalezenec = jKeskovaciTabulka.getCurrent();
-				if (nalezenec != null) {
-					final Kesoid kes = nalezenec.getKes();
-					poziceModel.setPozice(kes.getMainWpt());
-					vyrezModel.vystredovatNaPozici();
-					// Board.eveman.fire(new PoziceChangedEvent(kes.getMainWpt(), true) );
-				}
-				// System.out.println("NEJBLIZSI KES: " + nejblizsiKes);
+			final Nalezenec nalezenec = jKeskovaciTabulka.getCurrent();
+			if (nalezenec != null) {
+				final Kesoid kes = nalezenec.getKes();
+				poziceModel.setPozice(kes.getMainWpt());
+				vyrezModel.vystredovatNaPozici();
+				// Board.eveman.fire(new PoziceChangedEvent(kes.getMainWpt(), true) );
 			}
+			// System.out.println("NEJBLIZSI KES: " + nejblizsiKes);
 		});
 
 		// Board.eveman.registerWeakly(this);
 
 		// jKeskovaciTabulka.getMod
-		jKeskovaciTabulka.addListSelectionListener(new ListSelectionListener() {
-
-			@Override
-			public void valueChanged(final ListSelectionEvent aE) {
-				jButtonCentruj.setEnabled(jKeskovaciTabulka.getCurrent() != null);
-			}
-		});
+		jKeskovaciTabulka.addListSelectionListener(aE -> jButtonCentruj.setEnabled(jKeskovaciTabulka.getCurrent() != null));
 	}
 
 	public void onEvent(final KeskyVyfiltrovanyEvent aEvent) {

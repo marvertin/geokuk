@@ -110,20 +110,16 @@ public class Rendrovadlo {
 		// final Progressor prgs = progressModel.start(500, "Rendrování map");
 		if (slide instanceof JKachlovnikRendrovaci) {
 			final JKachlovnikRendrovaci kach = (JKachlovnikRendrovaci) slide;
-			kach.setProgressor(new JKachlovnikRendrovaci.Progressor() {
+			kach.setProgressor((value, maxlue) -> {
+				// System.out.println("PROGRESEK: " + value + "/" + maxlue);
+				// prgs.setMax(maxlue);
 
-				@Override
-				public void setProgress(final int value, final int maxlue) {
-					// System.out.println("PROGRESEK: " + value + "/" + maxlue);
-					// prgs.setMax(maxlue);
-
-					if (maxlue != 0) {
-						// Může se stát, že bude načten obrázek nějaké dlaždice ještě dřív, než budou vydány požadavky na všechny dlaždice,
-						// v tom případě se neví, kolik máme dlaždic a přijde nula. Lepší je pak neprogresovat.
-						progressor.setProgress(progressPocatek + value * KOLIK_PROGRESUJEME_NA_KACHLICH / maxlue);
-					}
-					// progressor.setText("Mapiska " + citac);
+				if (maxlue != 0) {
+					// Může se stát, že bude načten obrázek nějaké dlaždice ještě dřív, než budou vydány požadavky na všechny dlaždice,
+					// v tom případě se neví, kolik máme dlaždic a přijde nula. Lepší je pak neprogresovat.
+					progressor.setProgress(progressPocatek + value * KOLIK_PROGRESUJEME_NA_KACHLICH / maxlue);
 				}
+				// progressor.setText("Mapiska " + citac);
 			});
 
 		}

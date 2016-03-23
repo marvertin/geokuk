@@ -155,12 +155,7 @@ public class MyPreferences extends Preferences {
 		if (s == null) {
 			return def;
 		}
-		return unpack(s, new Function<String, File>() {
-			@Override
-			public File apply(final String s) {
-				return new File(s);
-			}
-		});
+		return unpack(s, s1 -> new File(s1));
 	}
 
 	public void putEnum(final String key, final Enum<?> e) {
@@ -252,12 +247,7 @@ public class MyPreferences extends Preferences {
 			return def;
 		}
 		try {
-			final List<E> atoms = unpack(ss, new Function<String, E>() {
-				@Override
-				public E apply(final String s) {
-					return Atom.valueOf(cls, s);
-				}
-			});
+			final List<E> atoms = unpack(ss, s -> Atom.valueOf(cls, s));
 			final Set<E> set = Atom.noneOf(cls);
 			set.addAll(atoms);
 			return set;
@@ -274,12 +264,7 @@ public class MyPreferences extends Preferences {
 			return def;
 		}
 		try {
-			final List<E> enums = unpack(ss, new Function<String, E>() {
-				@Override
-				public E apply(final String s) {
-					return Enum.valueOf(cls, s);
-				}
-			});
+			final List<E> enums = unpack(ss, s -> Enum.valueOf(cls, s));
 			final EnumSet<E> set = EnumSet.noneOf(cls);
 			set.addAll(enums);
 			return set;

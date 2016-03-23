@@ -61,14 +61,11 @@ public abstract class Pocitadlo {
 		}
 		if (callback != null) {
 			// System.out.println("Pocitani");
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					// To řpiřazení zde musí být, neboď callback může být jiným vláknem kdykoli smazán
-					final Callback c = callback;
-					if (c != null) {
-						c.onChange();
-					}
+			SwingUtilities.invokeLater(() -> {
+				// To řpiřazení zde musí být, neboď callback může být jiným vláknem kdykoli smazán
+				final Callback c = callback;
+				if (c != null) {
+					c.onChange();
 				}
 			});
 		}

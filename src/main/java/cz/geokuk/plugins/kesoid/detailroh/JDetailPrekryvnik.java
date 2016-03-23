@@ -3,9 +3,6 @@
  */
 package cz.geokuk.plugins.kesoid.detailroh;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.Timer;
 
 import cz.geokuk.core.coord.*;
@@ -67,13 +64,10 @@ public class JDetailPrekryvnik extends JCoordPrekryvnik0 {
 		if (zpozdovaciTimer != null) {
 			zpozdovaciTimer.stop();
 		}
-		zpozdovaciTimer = new Timer(SPOZDENI_ZOBRAZENI_DETAILU, new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				zpozdovaciTimer = null;
-				if (moucur != null) {
-					setSoord(getSoord().derive(DETAIL_MOUMER, moucur));
-				}
+		zpozdovaciTimer = new Timer(SPOZDENI_ZOBRAZENI_DETAILU, e -> {
+			zpozdovaciTimer = null;
+			if (moucur != null) {
+				setSoord(getSoord().derive(DETAIL_MOUMER, moucur));
 			}
 		});
 		zpozdovaciTimer.setRepeats(false);

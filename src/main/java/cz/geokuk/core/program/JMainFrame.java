@@ -169,13 +169,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F11"), "fullscreen");
 		getRootPane().getActionMap().put("fullscreen", fullScreenAction);
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				mysovani.requestFocus();
-			}
-		});
+		SwingUtilities.invokeLater(() -> mysovani.requestFocus());
 	}
 
 	public void onEvent(final OknoStatusChangedEvent event) {
@@ -272,12 +266,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			}
 		});
 
-		addWindowStateListener(new WindowStateListener() {
-			@Override
-			public void windowStateChanged(final WindowEvent e) {
-				ulozeStav();
-			}
-		});
+		addWindowStateListener(e -> ulozeStav());
 
 		addWindowListener(new WindowListener() {
 			@Override

@@ -38,10 +38,10 @@ package cz.geokuk.plugins.geocoding;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import cz.geokuk.core.coord.PoziceModel;
 import cz.geokuk.core.coord.VyrezModel;
@@ -85,30 +85,20 @@ public class JAdrDialog extends JMyDialog0 implements RefreshorVysledkuHledani<N
 	}
 
 	private void registerEvents() {
-		jButtonCentruj.addActionListener(new ActionListener() {
+		jButtonCentruj.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-
-				final Nalezenec nalezenec = jAdrTabulka.getCurrent();
-				if (nalezenec != null) {
-					poziceModel.setPozice(nalezenec.wgs);
-					vyrezModel.vystredovatNaPozici();
-					// Board.eveman.fire(new PoziceChangedEvent(nalezenec.wgs, true) );
-				}
+			final Nalezenec nalezenec = jAdrTabulka.getCurrent();
+			if (nalezenec != null) {
+				poziceModel.setPozice(nalezenec.wgs);
+				vyrezModel.vystredovatNaPozici();
+				// Board.eveman.fire(new PoziceChangedEvent(nalezenec.wgs, true) );
 			}
 		});
 
 		// Board.eveman.registerWeakly(this);
 
 		// jKeskovaciTabulka.getMod
-		jAdrTabulka.addListSelectionListener(new ListSelectionListener() {
-
-			@Override
-			public void valueChanged(final ListSelectionEvent aE) {
-				jButtonCentruj.setEnabled(jAdrTabulka.getCurrent() != null);
-			}
-		});
+		jAdrTabulka.addListSelectionListener(aE -> jButtonCentruj.setEnabled(jAdrTabulka.getCurrent() != null));
 	}
 
 	public void onEvent(final ReferencniBodSeZmenilEvent aEvent) {

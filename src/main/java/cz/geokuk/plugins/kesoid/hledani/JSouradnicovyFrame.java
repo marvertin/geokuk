@@ -37,7 +37,6 @@ package cz.geokuk.plugins.kesoid.hledani;
  */
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -96,12 +95,9 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
 	private void registerEvents() {
 
-		jButtonCentruj.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				poziceModel.setPozice(souradniceEditovane);
-				vyrezModel.vystredovatNaPozici();
-			}
+		jButtonCentruj.addActionListener(e -> {
+			poziceModel.setPozice(souradniceEditovane);
+			vyrezModel.vystredovatNaPozici();
 		});
 	}
 

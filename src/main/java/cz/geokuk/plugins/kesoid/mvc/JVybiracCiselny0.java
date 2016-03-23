@@ -3,8 +3,6 @@ package cz.geokuk.plugins.kesoid.mvc;
 import java.awt.Dimension;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.kesoid.FilterDefinition;
@@ -67,15 +65,11 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 
 	@Override
 	public void initAfterEventReceiverRegistration() {
-		iModel.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final FilterDefinition definition = kesoidModel.getDefinition();
-				final Integer prah = (Integer) iModel.getNumber();
-				setPrah(definition, prah);
-				kesoidModel.setDefinition(definition);
-			}
-
+		iModel.addChangeListener(e -> {
+			final FilterDefinition definition = kesoidModel.getDefinition();
+			final Integer prah = (Integer) iModel.getNumber();
+			setPrah(definition, prah);
+			kesoidModel.setDefinition(definition);
 		});
 	}
 

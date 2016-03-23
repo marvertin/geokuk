@@ -1,8 +1,6 @@
 package cz.geokuk.core.napoveda;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.*;
@@ -56,33 +54,21 @@ public class JZpravyUzivatelumDialog extends JMyDialog0 {
 		grlay(panel);
 		naplndaty();
 
-		jPrecteno.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				napovedaModel.setLastViewedMsgNum(zpravyUzivatelum.get(ukazatel).msgnum);
-				dispose();
-			}
+		jPrecteno.addActionListener(e -> {
+			napovedaModel.setLastViewedMsgNum(zpravyUzivatelum.get(ukazatel).msgnum);
+			dispose();
 		});
 
-		jPredchozi.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				// TODO Zapamoatovat si, že zprávy jsou přečteny
-				ukazatel--;
-				naplndaty();
-			}
+		jPredchozi.addActionListener(e -> {
+			// TODO Zapamoatovat si, že zprávy jsou přečteny
+			ukazatel--;
+			naplndaty();
 		});
 
-		jDalsi.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				// TODO Zapamoatovat si, že zprávy jsou přečteny
-				ukazatel++;
-				naplndaty();
-			}
+		jDalsi.addActionListener(e -> {
+			// TODO Zapamoatovat si, že zprávy jsou přečteny
+			ukazatel++;
+			naplndaty();
 		});
 
 	}

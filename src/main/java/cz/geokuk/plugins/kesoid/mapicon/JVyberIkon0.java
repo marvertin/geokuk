@@ -1,7 +1,6 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -98,22 +97,18 @@ public abstract class JVyberIkon0 extends Box {
 								rb.setSelected(iOdskrtnutiVybira);
 							}
 							// nastavit listener
-							rb.getModel().addItemListener(new ItemListener() {
-
-								@Override
-								public void itemStateChanged(final ItemEvent e) {
-									if (e.getStateChange() == ItemEvent.DESELECTED ^ iOdskrtnutiVybira) {
-										vybraneAlely.remove(alelax);
-									}
-									if (e.getStateChange() == ItemEvent.SELECTED ^ iOdskrtnutiVybira) {
-										vybraneAlely.add(alelax);
-									}
-									// jen když máme správný počet alel
-									if (!iRadioButton || genom.getGeny().size() == vybraneAlely.size()) {
-										zmenaVyberu(vybraneAlely);
-									}
-									// System.out.println(alelax + " -- " + );
+							rb.getModel().addItemListener(e -> {
+								if (e.getStateChange() == ItemEvent.DESELECTED ^ iOdskrtnutiVybira) {
+									vybraneAlely.remove(alelax);
 								}
+								if (e.getStateChange() == ItemEvent.SELECTED ^ iOdskrtnutiVybira) {
+									vybraneAlely.add(alelax);
+								}
+								// jen když máme správný počet alel
+								if (!iRadioButton || genom.getGeny().size() == vybraneAlely.size()) {
+									zmenaVyberu(vybraneAlely);
+								}
+								// System.out.println(alelax + " -- " + );
 							});
 						}
 					}

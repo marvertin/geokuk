@@ -1,7 +1,6 @@
 package cz.geokuk.core.render;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
@@ -85,13 +84,10 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 	 *
 	 */
 	private void registerEvents() {
-		iModel.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final RenderSettings settings = renderModel.getRenderSettings();
-				settings.setKmzMaxDlazdiceX((Integer) iModel.getNumber());
-				renderModel.setRenderSettings(settings);
-			}
+		iModel.addChangeListener(e -> {
+			final RenderSettings settings = renderModel.getRenderSettings();
+			settings.setKmzMaxDlazdiceX((Integer) iModel.getNumber());
+			renderModel.setRenderSettings(settings);
 		});
 	}
 

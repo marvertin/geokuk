@@ -1,8 +1,6 @@
 package cz.geokuk.plugins.mapy.stahovac;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -50,20 +48,16 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 
 	private void registerEvents() {
 
-		spustit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				if (kosw != null) {
-					kosw.cancel(true);
-				}
-				zobrazServisniOknoAction.actionPerformed(null);
-				dispose();
-				jVysledek = factory.init(new JKachleOflinerPocetStazenychDialog());
-				jVysledek.setVisible(true);
-				kosw = new KachleOflinerSwingWorker(true);
-				kosw.execute();
+		spustit.addActionListener(e -> {
+			if (kosw != null) {
+				kosw.cancel(true);
 			}
+			zobrazServisniOknoAction.actionPerformed(null);
+			dispose();
+			jVysledek = factory.init(new JKachleOflinerPocetStazenychDialog());
+			jVysledek.setVisible(true);
+			kosw = new KachleOflinerSwingWorker(true);
+			kosw.execute();
 		});
 
 	}

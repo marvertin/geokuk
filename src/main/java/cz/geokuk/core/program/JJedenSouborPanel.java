@@ -118,18 +118,8 @@ public class JJedenSouborPanel extends JPanel implements DocumentListener {
 		prepocitej();
 		jtext.getDocument().addDocumentListener(this);
 
-		jRelativneKProgramu.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				prepocitej();
-			}
-		});
-		jActive.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				prepocitej();
-			}
-		});
+		jRelativneKProgramu.addActionListener(e -> prepocitej());
+		jActive.addActionListener(e -> prepocitej());
 	}
 
 	public Filex vezmiSouborAProver() throws YNejdeTo {

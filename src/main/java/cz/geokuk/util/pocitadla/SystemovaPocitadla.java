@@ -1,8 +1,5 @@
 package cz.geokuk.util.pocitadla;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.Timer;
 
 public class SystemovaPocitadla {
@@ -20,22 +17,18 @@ public class SystemovaPocitadla {
 		if (tm != null) {
 			return;
 		}
-		tm = new Timer(100, new ActionListener() {
+		tm = new Timer(100, e -> {
+			final Runtime runtime = Runtime.getRuntime();
+			volnaPamet.set((int) (runtime.freeMemory() / 1024));
+			celkovaPamet.set((int) (runtime.totalMemory() / 1024));
+			dostupnychProcesoru.set(runtime.availableProcessors());
+			pocetVzorkuSytemovych.inc();
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				final Runtime runtime = Runtime.getRuntime();
-				volnaPamet.set((int) (runtime.freeMemory() / 1024));
-				celkovaPamet.set((int) (runtime.totalMemory() / 1024));
-				dostupnychProcesoru.set(runtime.availableProcessors());
-				pocetVzorkuSytemovych.inc();
-
-				// System.gc();
-				// if (runtime.freeMemory() > 2048 * 1000) {
-				// zroutPameti.add(new byte[1024*1000]);
-				// System.out.println("Odežráno paměti: " + (zroutPameti.size() * 1000) + " KiB");
-				// }
-			}
+			// System.gc();
+			// if (runtime.freeMemory() > 2048 * 1000) {
+			// zroutPameti.add(new byte[1024*1000]);
+			// System.out.println("Odežráno paměti: " + (zroutPameti.size() * 1000) + " KiB");
+			// }
 		});
 		tm.setRepeats(true);
 		tm.start();

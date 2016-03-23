@@ -160,13 +160,7 @@ public class ProgressModel extends Model0 {
 			if (allways || T - lastFireTime > MINIMALNI_DOBA_MEZI_DVEVA_POSUNY_PROGRESORU) {
 				final ProgressEvent event = new ProgressEvent(this, visible, progress, max, text, tooltip);
 				lastFireTime = T;
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						// System.out.println("PROEVE " + event);
-						fire(event);
-					}
-				});
+				SwingUtilities.invokeLater(() -> fire(event));
 			}
 		}
 

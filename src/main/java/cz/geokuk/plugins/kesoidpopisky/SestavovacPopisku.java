@@ -114,115 +114,66 @@ public class SestavovacPopisku {
 	}
 
 	static {
-		def("{wpt}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				sb.append(ctx.wpt.getName());
+		def("{wpt}", (sb, ctx) -> sb.append(ctx.wpt.getName()));
+
+		def("{typ1}", (sb, ctx) -> {
+			if (ctx.isKes()) {
+				sb.append(ctx.kes.getOneLetterType());
 			}
 		});
 
-		def("{typ1}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				if (ctx.isKes()) {
-					sb.append(ctx.kes.getOneLetterType());
-				}
+		def("{velikost}", (sb, ctx) -> {
+			if (ctx.isKes()) {
+				sb.append(ctx.kes.getSize());
 			}
 		});
 
-		def("{velikost}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				if (ctx.isKes()) {
-					sb.append(ctx.kes.getSize());
-				}
+		def("{velikost1}", (sb, ctx) -> {
+			if (ctx.isKes()) {
+				sb.append(ctx.kes.getOneLetterSize());
 			}
 		});
 
-		def("{velikost1}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				if (ctx.isKes()) {
-					sb.append(ctx.kes.getOneLetterSize());
-				}
+		def("{obtiznost}", (sb, ctx) -> {
+			if (ctx.isKes()) {
+				sb.append(ctx.kes.getDifficulty());
 			}
 		});
 
-		def("{obtiznost}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				if (ctx.isKes()) {
-					sb.append(ctx.kes.getDifficulty());
-				}
+		def("{obtiznost1}", (sb, ctx) -> {
+			if (ctx.isKes()) {
+				sb.append(ctx.kes.getOneLetterDifficulty());
 			}
 		});
 
-		def("{obtiznost1}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				if (ctx.isKes()) {
-					sb.append(ctx.kes.getOneLetterDifficulty());
-				}
+		def("{teren}", (sb, ctx) -> {
+			if (ctx.isKes()) {
+				sb.append(ctx.kes.getTerrain());
 			}
 		});
 
-		def("{teren}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				if (ctx.isKes()) {
-					sb.append(ctx.kes.getTerrain());
-				}
+		def("{teren1}", (sb, ctx) -> {
+			if (ctx.isKes()) {
+				sb.append(ctx.kes.getOneLetterTerrain());
 			}
 		});
 
-		def("{teren1}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				if (ctx.isKes()) {
-					sb.append(ctx.kes.getOneLetterTerrain());
-				}
-			}
-		});
+		def("{autor}", (sb, ctx) -> sb.append(ctx.getKesoid().getAuthor()));
 
-		def("{autor}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				sb.append(ctx.getKesoid().getAuthor());
-			}
-		});
+		def("{nazev}", (sb, ctx) -> sb.append(ctx.wpt.getNazev()));
 
-		def("{nazev}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				sb.append(ctx.wpt.getNazev());
-			}
-		});
-
-		def("{zalozeno}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				sb.append(ctx.getKesoid().getHidden());
-			}
-		});
+		def("{zalozeno}", (sb, ctx) -> sb.append(ctx.getKesoid().getHidden()));
 		def("{nbsp}", new NahrKonstantni(" "));
 
 		def("{br}", NAHRBR);
 
-		def("{puvodnipotvora}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				sb.append(computeByvalyPopisek(ctx.wpt));
-			}
-		});
+		def("{puvodnipotvora}", (sb, ctx) -> sb.append(computeByvalyPopisek(ctx.wpt)));
 
 		// a nové, které nejsou na geocaching.cz
 
-		def("{info}", new Nahrazovac() {
-			@Override
-			public void pridej(final StringBuilder sb, final Context ctx) {
-				if (ctx.isKes()) {
-					sb.append(ctx.kes.getInfo());
-				}
+		def("{info}", (sb, ctx) -> {
+			if (ctx.isKes()) {
+				sb.append(ctx.kes.getInfo());
 			}
 		});
 

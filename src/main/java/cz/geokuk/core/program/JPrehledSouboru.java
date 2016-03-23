@@ -1,8 +1,6 @@
 package cz.geokuk.core.program;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.EnumMap;
 
@@ -123,42 +121,38 @@ public class JPrehledSouboru extends JPanel {
 	}
 
 	private void registerEvents(final JButton ulozit) {
-		ulozit.addActionListener(new ActionListener() {
+		ulozit.addActionListener(aE -> {
+			try {
+				{
+					final KesoidUmisteniSouboru u1 = new KesoidUmisteniSouboru();
+					u1.setKesDir(jKesDir.vezmiSouborAProver());
+					u1.setCestyDir(jCestyDir.vezmiSouborAProver());
 
-			@Override
-			public void actionPerformed(final ActionEvent aE) {
-				try {
-					{
-						final KesoidUmisteniSouboru u = new KesoidUmisteniSouboru();
-						u.setKesDir(jKesDir.vezmiSouborAProver());
-						u.setCestyDir(jCestyDir.vezmiSouborAProver());
-
-						u.setGeogetDataDir(jGeogetDataDir.vezmiSouborAProver());
-						u.setImage3rdPartyDir(jImage3rdPartyDir.vezmiSouborAProver());
-						u.setImageMyDir(jImageMyDir.vezmiSouborAProver());
-						u.setNeGgtFile(jNeGgtFile.vezmiSouborAProver());
-						u.setAnoGgtFile(jAnoGgtFile.vezmiSouborAProver());
-						kesoidModel.setUmisteniSouboru(u);
-					}
-					{
-						final KachleUmisteniSouboru u = new KachleUmisteniSouboru();
-						u.setKachleCacheDir(jKachleCacheDir.vezmiSouborAProver());
-						kachleModel.setUmisteniSouboru(u);
-					}
-					{
-						final RenderUmisteniSouboru u = new RenderUmisteniSouboru();
-						u.setOziDir(jOziDir.vezmiSouborAProver());
-						u.setKmzDir(jKmzDir.vezmiSouborAProver());
-						u.setPictureDir(jPictureDir.vezmiSouborAProver());
-						renderModel.setUmisteniSouboru(u);
-					}
-
-					// Board.multiNacitacLoaderManager.startLoad(true);
-
-					((JUmisteniSouboruDialog) SwingUtilities.getRoot(JPrehledSouboru.this)).dispose();
-				} catch (final YNejdeTo e) {
-					Dlg.error(e.getMessage());
+					u1.setGeogetDataDir(jGeogetDataDir.vezmiSouborAProver());
+					u1.setImage3rdPartyDir(jImage3rdPartyDir.vezmiSouborAProver());
+					u1.setImageMyDir(jImageMyDir.vezmiSouborAProver());
+					u1.setNeGgtFile(jNeGgtFile.vezmiSouborAProver());
+					u1.setAnoGgtFile(jAnoGgtFile.vezmiSouborAProver());
+					kesoidModel.setUmisteniSouboru(u1);
 				}
+				{
+					final KachleUmisteniSouboru u2 = new KachleUmisteniSouboru();
+					u2.setKachleCacheDir(jKachleCacheDir.vezmiSouborAProver());
+					kachleModel.setUmisteniSouboru(u2);
+				}
+				{
+					final RenderUmisteniSouboru u3 = new RenderUmisteniSouboru();
+					u3.setOziDir(jOziDir.vezmiSouborAProver());
+					u3.setKmzDir(jKmzDir.vezmiSouborAProver());
+					u3.setPictureDir(jPictureDir.vezmiSouborAProver());
+					renderModel.setUmisteniSouboru(u3);
+				}
+
+				// Board.multiNacitacLoaderManager.startLoad(true);
+
+				((JUmisteniSouboruDialog) SwingUtilities.getRoot(JPrehledSouboru.this)).dispose();
+			} catch (final YNejdeTo e) {
+				Dlg.error(e.getMessage());
 			}
 		});
 	}

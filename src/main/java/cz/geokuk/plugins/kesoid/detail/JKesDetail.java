@@ -2,8 +2,6 @@ package cz.geokuk.plugins.kesoid.detail;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
@@ -117,13 +115,7 @@ public class JKesDetail extends JKesoidDetail0 {
 		// box5.add(zobrazHint);
 		// hlav.add(box5);
 
-		zobrazHint.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				Dlg.info(kes.getHint(), "Hint");
-			}
-		});
+		zobrazHint.addActionListener(e -> Dlg.info(kes.getHint(), "Hint"));
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package cz.geokuk.framework;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 
 import javax.swing.*;
 
@@ -35,14 +36,11 @@ public abstract class ToggleAction0 extends Action0 {
 	}
 
 	private void registerEvents() {
-		bm.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(final ItemEvent event) {
-				final boolean onoff = event.getStateChange() == ItemEvent.SELECTED;
-				if (iOnoff != onoff) {
-					iOnoff = onoff;
-					onSlectedChange(iOnoff);
-				}
+		bm.addItemListener(event -> {
+			final boolean onoff = event.getStateChange() == ItemEvent.SELECTED;
+			if (iOnoff != onoff) {
+				iOnoff = onoff;
+				onSlectedChange(iOnoff);
 			}
 		});
 	}

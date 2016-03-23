@@ -47,12 +47,7 @@ public class JMvComboBox<T> extends JComboBox<Item<T>> {
 				model.setSelectedItem(item);
 			}
 		});
-		model.addListener(new SelectionListener<T>() {
-			@Override
-			public void selectionChanged(final SelectionEvent<T> event) {
-				defmod.setSelectedItem(event.item);
-			}
-		});
+		model.addListener(event -> defmod.setSelectedItem(event.item));
 
 	}
 

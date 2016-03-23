@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import cz.geokuk.util.gui.SelectionModel.Item;
 
@@ -31,21 +29,13 @@ public class JMvRadioPanel<T> extends JPanel {
 			buttons.add(rb);
 			bg.add(rb);
 			add(rb);
-			rb.addChangeListener(new ChangeListener() {
-				@Override
-				public void stateChanged(final ChangeEvent e) {
-					if (rb.isSelected()) {
-						model.setSelectedItem(item);
-					}
+			rb.addChangeListener(e -> {
+				if (rb.isSelected()) {
+					model.setSelectedItem(item);
 				}
 			});
 		}
-		model.addListener(new SelectionListener<T>() {
-			@Override
-			public void selectionChanged(final SelectionEvent<T> event) {
-				buttons.get(event.item.poradi).setSelected(true);
-			}
-		});
+		model.addListener(event -> buttons.get(event.item.poradi).setSelected(true));
 
 	}
 

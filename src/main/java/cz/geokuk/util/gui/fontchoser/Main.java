@@ -7,8 +7,6 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
  * @author veverka
@@ -27,13 +25,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		final JFontChooser fc = new JFontChooser();
-		fc.getSelectionModel().addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(final ChangeEvent aE) {
-				ukazovyText.setFont(fc.getFont());
-			}
-		});
+		fc.getSelectionModel().addChangeListener(aE -> ukazovyText.setFont(fc.getFont()));
 		add(fc);
 		add(ukazovyText, BorderLayout.SOUTH);
 		pack();

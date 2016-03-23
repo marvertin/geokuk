@@ -23,13 +23,7 @@ public class PrintingSwingWorker extends RendererSwingWorker0 implements Printab
 		pj.setJobName("Geokuk tisk");
 		pj.setPrintable(this);
 		final boolean[] jedem = new boolean[1];
-		SwingUtilities.invokeAndWait(new Runnable() {
-
-			@Override
-			public void run() {
-				jedem[0] = pj.printDialog();
-			}
-		});
+		SwingUtilities.invokeAndWait(() -> jedem[0] = pj.printDialog());
 		if (!jedem[0]) {
 			return null;
 		}

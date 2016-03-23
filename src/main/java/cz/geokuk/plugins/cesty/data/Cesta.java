@@ -203,31 +203,25 @@ public class Cesta implements Iterable<Bousek0> {
 	 * @return
 	 */
 	public Iterable<Usek> getUseky() {
-		return new Iterable<Usek>() {
+		return () -> new Iterator<Usek>() {
+
+			private Usek currUsek = start == null ? null : start.getUvpred();
 
 			@Override
-			public Iterator<Usek> iterator() {
-				return new Iterator<Usek>() {
+			public void remove() {
+				throw new RuntimeException("Usek nelze odstranit, co se temi body");
+			}
 
-					private Usek currUsek = start == null ? null : start.getUvpred();
+			@Override
+			public Usek next() {
+				final Usek result = currUsek;
+				currUsek = currUsek.getBvpred().getUvpred();
+				return result;
+			}
 
-					@Override
-					public void remove() {
-						throw new RuntimeException("Usek nelze odstranit, co se temi body");
-					}
-
-					@Override
-					public Usek next() {
-						final Usek result = currUsek;
-						currUsek = currUsek.getBvpred().getUvpred();
-						return result;
-					}
-
-					@Override
-					public boolean hasNext() {
-						return currUsek != null;
-					}
-				};
+			@Override
+			public boolean hasNext() {
+				return currUsek != null;
 			}
 		};
 	}
@@ -238,32 +232,26 @@ public class Cesta implements Iterable<Bousek0> {
 	 * @return
 	 */
 	public Iterable<Bod> getBody() {
-		return new Iterable<Bod>() {
+		return () -> new Iterator<Bod>() {
+
+			private Bod nextBod = start;
 
 			@Override
-			public Iterator<Bod> iterator() {
-				return new Iterator<Bod>() {
+			public void remove() {
 
-					private Bod nextBod = start;
+				throw new RuntimeException("Bod nelze odstranit, protože to není implementováno");
+			}
 
-					@Override
-					public void remove() {
+			@Override
+			public Bod next() {
+				final Bod result = nextBod;
+				nextBod = nextBod.getUvpred() == null ? null : nextBod.getUvpred().getBvpred();
+				return result;
+			}
 
-						throw new RuntimeException("Bod nelze odstranit, protože to není implementováno");
-					}
-
-					@Override
-					public Bod next() {
-						final Bod result = nextBod;
-						nextBod = nextBod.getUvpred() == null ? null : nextBod.getUvpred().getBvpred();
-						return result;
-					}
-
-					@Override
-					public boolean hasNext() {
-						return nextBod != null;
-					}
-				};
+			@Override
+			public boolean hasNext() {
+				return nextBod != null;
 			}
 		};
 	}
@@ -274,32 +262,26 @@ public class Cesta implements Iterable<Bousek0> {
 	 * @return
 	 */
 	public Iterable<Bousek0> getBousky() {
-		return new Iterable<Bousek0>() {
+		return () -> new Iterator<Bousek0>() {
+
+			private Bousek0 nextBousek = start;
 
 			@Override
-			public Iterator<Bousek0> iterator() {
-				return new Iterator<Bousek0>() {
+			public void remove() {
 
-					private Bousek0 nextBousek = start;
+				throw new RuntimeException("Bod nelze odstranit, protože to není implementováno");
+			}
 
-					@Override
-					public void remove() {
+			@Override
+			public Bousek0 next() {
+				final Bousek0 result = nextBousek;
+				nextBousek = nextBousek.getBousekVpred() == null ? null : nextBousek.getBousekVpred();
+				return result;
+			}
 
-						throw new RuntimeException("Bod nelze odstranit, protože to není implementováno");
-					}
-
-					@Override
-					public Bousek0 next() {
-						final Bousek0 result = nextBousek;
-						nextBousek = nextBousek.getBousekVpred() == null ? null : nextBousek.getBousekVpred();
-						return result;
-					}
-
-					@Override
-					public boolean hasNext() {
-						return nextBousek != null;
-					}
-				};
+			@Override
+			public boolean hasNext() {
+				return nextBousek != null;
 			}
 		};
 	}

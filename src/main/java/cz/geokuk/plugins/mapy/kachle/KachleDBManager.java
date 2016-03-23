@@ -123,12 +123,9 @@ public class KachleDBManager implements KachleManager {
 		if (!isDbInitialized(connection)) {
 			// load and initialize the new DB
 			try {
-				connection.runWriteTransaction(new ISqlJetTransaction() {
-					@Override
-					public Object run(final SqlJetDb sqlJetDb) throws SqlJetException {
-						sqlJetDb.createTable(TABLE_CREATE_QUERY);
-						return true;
-					}
+				connection.runWriteTransaction(sqlJetDb -> {
+					sqlJetDb.createTable(TABLE_CREATE_QUERY);
+					return true;
 				});
 			} catch (final SqlJetException e) {
 				log.error("A database error has occurred!", e);

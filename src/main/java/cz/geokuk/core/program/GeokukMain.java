@@ -29,17 +29,14 @@ public class GeokukMain {
 		promazPreferencePokudJeToPrikazano(args);
 		FPreferencesInNearFile.loadNearToProgramIfNewer(); // Načíst ze souboru preferencový sobor, pokud došlo k jeho změně od minula
 
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				final Inicializator inicializator = new Inicializator();
-				inicializator.inicializace();
-				final JMainFrame mainFrame = new JMainFrame();
-				inicializator.setMainFrame(mainFrame);
-				mainFrame.init();
-				mainFrame.setVisible(true);
-				inicializator.zkontrolovatAktualizace();
-			}
+		SwingUtilities.invokeLater(() -> {
+			final Inicializator inicializator = new Inicializator();
+			inicializator.inicializace();
+			final JMainFrame mainFrame = new JMainFrame();
+			inicializator.setMainFrame(mainFrame);
+			mainFrame.init();
+			mainFrame.setVisible(true);
+			inicializator.zkontrolovatAktualizace();
 		});
 	}
 

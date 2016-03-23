@@ -39,7 +39,6 @@ package cz.geokuk.plugins.kesoidkruhy;
 import java.awt.Color;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
@@ -65,21 +64,17 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 	 *
 	 */
 	private void registerEvents() {
-		final ChangeListener chlist = new ChangeListener() {
-
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				// Board.mainFrame.parametryZvyraznovaceKruhuSeZmenily();
-				final KruhySettings kruhy = new KruhySettings();
-				final Color barva = alfaColorChooser.getSelectionModel().getSelectedColor();
-				System.out.println("KRUHY1: " + barva + barva.getAlpha());
-				kruhy.setBarva(barva);
-				System.out.println("KRUHY2: " + barva + barva.getAlpha());
-				kruhy.setVelikost(velikostSlider.getValue());
-				kruhy.setJednotkovaVelikost(jJednotkoveKruhy.isSelected());
-				System.out.println("KRUHY3: " + barva + barva.getAlpha());
-				kruhyModel.setData(kruhy);
-			}
+		final ChangeListener chlist = e -> {
+			// Board.mainFrame.parametryZvyraznovaceKruhuSeZmenily();
+			final KruhySettings kruhy = new KruhySettings();
+			final Color barva = alfaColorChooser.getSelectionModel().getSelectedColor();
+			System.out.println("KRUHY1: " + barva + barva.getAlpha());
+			kruhy.setBarva(barva);
+			System.out.println("KRUHY2: " + barva + barva.getAlpha());
+			kruhy.setVelikost(velikostSlider.getValue());
+			kruhy.setJednotkovaVelikost(jJednotkoveKruhy.isSelected());
+			System.out.println("KRUHY3: " + barva + barva.getAlpha());
+			kruhyModel.setData(kruhy);
 		};
 		velikostSlider.getModel().addChangeListener(chlist);
 		alfaColorChooser.getSelectionModel().addChangeListener(chlist);

@@ -39,7 +39,8 @@ package cz.geokuk.plugins.kesoidpopisky;
 import java.awt.BorderLayout;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
@@ -147,19 +148,15 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 	 */
 	private void registerEvents() {
 
-		jVlastnostiPisma.getVlastnostiPismaModel().addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final VlastnostiPismaModel vlastnostiPismaModel = jVlastnostiPisma.getVlastnostiPismaModel();
-				final PopiskySettings data = popiskyModel.getData();
-				data.background = vlastnostiPismaModel.getBackground();
-				data.foreground = vlastnostiPismaModel.getForeground();
-				data.font = vlastnostiPismaModel.getFont();
-				data.posuX = vlastnostiPismaModel.getPosuX();
-				data.posuY = vlastnostiPismaModel.getPosuY();
-				popiskyModel.setData(data);
-			}
+		jVlastnostiPisma.getVlastnostiPismaModel().addChangeListener(e -> {
+			final VlastnostiPismaModel vlastnostiPismaModel = jVlastnostiPisma.getVlastnostiPismaModel();
+			final PopiskySettings data = popiskyModel.getData();
+			data.background = vlastnostiPismaModel.getBackground();
+			data.foreground = vlastnostiPismaModel.getForeground();
+			data.font = vlastnostiPismaModel.getFont();
+			data.posuX = vlastnostiPismaModel.getPosuX();
+			data.posuY = vlastnostiPismaModel.getPosuY();
+			popiskyModel.setData(data);
 		});
 
 		jKesPatternEdit.getDocument().addDocumentListener(new DocumentListener() {

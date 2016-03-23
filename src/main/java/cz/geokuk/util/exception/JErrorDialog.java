@@ -37,13 +37,9 @@ package cz.geokuk.util.exception;
  */
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URL;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.util.process.BrowserOpener;
@@ -96,45 +92,33 @@ public class JErrorDialog extends JMyDialog0 {
 		box.add(Box.createHorizontalGlue());
 		box.add(jVymaz);
 
-		jVymaz.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				jErrorTable.getProblemList().clear();
-				jErrorTable.revalidate();
-				jErrorTable.repaint();
-				jOtviracVyjimky.setText("Tabulka problemu vymazana");
-				jOtviracVyjimky.setEnabled(false);
-			}
+		jVymaz.addActionListener(e -> {
+			jErrorTable.getProblemList().clear();
+			jErrorTable.revalidate();
+			jErrorTable.repaint();
+			jOtviracVyjimky.setText("Tabulka problemu vymazana");
+			jOtviracVyjimky.setEnabled(false);
 		});
 
 		final ListSelectionModel lsm = jErrorTable.table.getSelectionModel();
-		lsm.addListSelectionListener(new ListSelectionListener() {
-
-			@Override
-			public void valueChanged(final ListSelectionEvent event) {
-				if (!event.getValueIsAdjusting()) {
-					final int row = lsm.getLeadSelectionIndex();
-					currentExcId = jErrorTable.tableModel.getProblemlist().get(row).excId;
-					if (currentExcId != null) {
-						jOtviracVyjimky.setText("Zobraz " + currentExcId + "");
-						jOtviracVyjimky.setEnabled(true);
-					} else {
-						jOtviracVyjimky.setText("Není výjimka");
-						jOtviracVyjimky.setEnabled(false);
-					}
-
+		lsm.addListSelectionListener(event -> {
+			if (!event.getValueIsAdjusting()) {
+				final int row = lsm.getLeadSelectionIndex();
+				currentExcId = jErrorTable.tableModel.getProblemlist().get(row).excId;
+				if (currentExcId != null) {
+					jOtviracVyjimky.setText("Zobraz " + currentExcId + "");
+					jOtviracVyjimky.setEnabled(true);
+				} else {
+					jOtviracVyjimky.setText("Není výjimka");
+					jOtviracVyjimky.setEnabled(false);
 				}
+
 			}
 		});
 
-		jOtviracVyjimky.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent aE) {
-				final URL url = FExceptionDumper.getExceptionUrl(currentExcId);
-				BrowserOpener.displayURL(url);
-			}
+		jOtviracVyjimky.addActionListener(aE -> {
+			final URL url = FExceptionDumper.getExceptionUrl(currentExcId);
+			BrowserOpener.displayURL(url);
 		});
 
 		pack();
@@ -153,13 +137,9 @@ public class JErrorDialog extends JMyDialog0 {
 		final JFrame frm = new JFrame();
 		frm.setVisible(true);
 
-		new Timer(1000, new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent aE) {
-				System.out.println("LOPU");
-				FError.report("To je teda texytik " + System.currentTimeMillis());
-			}
+		new Timer(1000, aE -> {
+			System.out.println("LOPU");
+			FError.report("To je teda texytik " + System.currentTimeMillis());
 		}).start();
 
 		// SwingUtilities.invokeLater(new Runnable() {

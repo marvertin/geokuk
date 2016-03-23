@@ -1,8 +1,6 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
 import java.awt.Dimension;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -93,12 +91,9 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		jZobrazovaniVseho.setSelected(zobrazovatVse);
 		jskelneikony.add(jZobrazovaniVseho);
 
-		jZobrazovaniVseho.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(final ItemEvent e) {
-				zobrazovatVse = jZobrazovaniVseho.isSelected();
-				resetBag(bag);
-			}
+		jZobrazovaniVseho.addItemListener(e -> {
+			zobrazovatVse = jZobrazovaniVseho.isSelected();
+			resetBag(bag);
 		});
 
 		// a teď vyrendrovat vše přes sebe

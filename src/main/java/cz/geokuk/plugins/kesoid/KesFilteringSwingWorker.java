@@ -63,35 +63,32 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 			log.debug("FILTERING {} - start, source: {} caches, {}={} waypoints.", cisloFiltrovani, vsechny2.getKesoidy().size(), pocetvsech, vsechny2.getIndexator().count(BoundingRect.ALL));
 			startTime = System.currentTimeMillis();
 			kesfilter.init();
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						int citac = 0;
-						// System.out.println("VSECHNY: " + vsechny2);
-						for (final Wpt wpt : vsechny2.getWpts()) {
-							if (isCancelled()) {
-								return;
-							}
-							final Genotyp genotyp = wpt.getGenotyp(iGenom);
-							// TEn genotyp se předává jen z důvodu optimalizace
-							if (kesfilter.isFiltered(wpt, iGenom, genotyp)) {
-								final Dvojka dvojka = new Dvojka();
-								dvojka.wpt = wpt;
-								dvojka.genotyp = genotyp;
-								queue.put(dvojka);
-							}
-							citac++;
-							if (citac % 1000 == 0) {
-								progressor.setProgress(citac);
-							}
-
+			new Thread((Runnable) () -> {
+				try {
+					int citac = 0;
+					// System.out.println("VSECHNY: " + vsechny2);
+					for (final Wpt wpt : vsechny2.getWpts()) {
+						if (isCancelled()) {
+							return;
 						}
-						queue.put(ZARAZKA);
-					} catch (final InterruptedException ignored) {
+						final Genotyp genotyp = wpt.getGenotyp(iGenom);
+						// TEn genotyp se předává jen z důvodu optimalizace
+						if (kesfilter.isFiltered(wpt, iGenom, genotyp)) {
+							final Dvojka dvojka = new Dvojka();
+							dvojka.wpt = wpt;
+							dvojka.genotyp = genotyp;
+							queue.put(dvojka);
+						}
+						citac++;
+						if (citac % 1000 == 0) {
+							progressor.setProgress(citac);
+						}
+
 					}
+					queue.put(ZARAZKA);
+				} catch (final InterruptedException ignored) {
 				}
-			}, "Filtrovani kesoidu").start();
+			} , "Filtrovani kesoidu").start();
 			for (;;) {
 				final Dvojka dvojka = queue.take();
 				if (dvojka == ZARAZKA) {

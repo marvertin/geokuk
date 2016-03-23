@@ -1,8 +1,6 @@
 package cz.geokuk.core.program;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -50,15 +48,11 @@ public class JOProgramuDialog extends JMyDialog0 {
 		box.add(c4);
 
 		final JButton bgccom = new JButton(ImageLoader.seekResIcon("gccom.png"));
-		bgccom.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				final String urls = "http://www.geocaching.com/profile/?guid=22cad0c7-59a3-417c-99d1-7c9079e9ae27";
-				try {
-					BrowserOpener.displayURL(new URL(urls));
-				} catch (final MalformedURLException e1) { // to půjde
-				}
+		bgccom.addActionListener(e -> {
+			final String urls = "http://www.geocaching.com/profile/?guid=22cad0c7-59a3-417c-99d1-7c9079e9ae27";
+			try {
+				BrowserOpener.displayURL(new URL(urls));
+			} catch (final MalformedURLException e1) { // to půjde
 			}
 		});
 		bgccom.setAlignmentX(CENTER_ALIGNMENT);

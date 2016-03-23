@@ -357,12 +357,7 @@ class FontChooserDialog extends JDialog {
 		if (okListener != null) {
 			okButton.addActionListener(okListener);
 		}
-		okButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				setVisible(false);
-			}
-		});
+		okButton.addActionListener(e -> setVisible(false));
 		buttonPane.add(okButton);
 
 		final JButton cancelButton = new JButton(cancelString);
@@ -394,21 +389,11 @@ class FontChooserDialog extends JDialog {
 		if (cancelListener != null) {
 			cancelButton.addActionListener(cancelListener);
 		}
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				setVisible(false);
-			}
-		});
+		cancelButton.addActionListener(e -> setVisible(false));
 		buttonPane.add(cancelButton);
 
 		final JButton resetButton = new JButton(resetString);
-		resetButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				reset();
-			}
-		});
+		resetButton.addActionListener(e -> reset());
 		final int mnemonic = UIManager.getInt("ColorChooser.resetMnemonic");
 		if (mnemonic != -1) {
 			resetButton.setMnemonic(mnemonic);
