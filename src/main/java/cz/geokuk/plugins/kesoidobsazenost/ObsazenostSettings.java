@@ -8,9 +8,9 @@ import cz.geokuk.framework.Preferenceble;
 @Preferenceble
 public class ObsazenostSettings implements Copyable<ObsazenostSettings> {
 
-  private Color color = Color.BLACK;
+  private Color color = new Color(128, 128, 128, 50);
 
-  
+
 
   public Color getColor() {
     return color;
@@ -18,7 +18,7 @@ public class ObsazenostSettings implements Copyable<ObsazenostSettings> {
 
 
 
-  public void setColor(Color color) {
+  public void setColor(final Color color) {
     this.color = color;
   }
 
@@ -28,26 +28,31 @@ public class ObsazenostSettings implements Copyable<ObsazenostSettings> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((color == null) ? 0 : color.hashCode());
+    result = prime * result + (color == null ? 0 : color.hashCode());
     return result;
   }
 
 
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    ObsazenostSettings other = (ObsazenostSettings) obj;
+    }
+    final ObsazenostSettings other = (ObsazenostSettings) obj;
     if (color == null) {
-      if (other.color != null)
+      if (other.color != null) {
         return false;
-    } else if (!color.equals(other.color))
+      }
+    } else if (!color.equals(other.color)) {
       return false;
+    }
     return true;
   }
 
@@ -64,10 +69,10 @@ public class ObsazenostSettings implements Copyable<ObsazenostSettings> {
   public ObsazenostSettings copy() {
     try {
       return (ObsazenostSettings) super.clone();
-    } catch (CloneNotSupportedException e) {
+    } catch (final CloneNotSupportedException e) {
       throw new RuntimeException(e);
     }
   }
-    
+
 
 }

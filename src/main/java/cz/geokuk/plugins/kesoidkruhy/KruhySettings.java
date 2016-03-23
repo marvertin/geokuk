@@ -8,15 +8,15 @@ import cz.geokuk.framework.Preferenceble;
 @Preferenceble
 public class KruhySettings implements Copyable<KruhySettings> {
 
-  private boolean onoff = true;
-  private Color barva = new Color(153, 0, 220, 150);
-  private int velikost = 100;
+  private boolean onoff = false;
+  private Color barva = new Color(153, 0, 220, 70);
+  private int velikost = 20;
   private boolean jednotkovaVelikost = false;
 
   public boolean isOnoff() {
     return onoff;
   }
-  public void setOnoff(boolean onoff) {
+  public void setOnoff(final boolean onoff) {
     this.onoff = onoff;
   }
 
@@ -30,7 +30,7 @@ public class KruhySettings implements Copyable<KruhySettings> {
   /**
    * @param barva the barva to set
    */
-  public void setBarva(Color barva) {
+  public void setBarva(final Color barva) {
     this.barva = barva;
   }
   /**
@@ -42,7 +42,7 @@ public class KruhySettings implements Copyable<KruhySettings> {
   /**
    * @param velikost the velikost to set
    */
-  public void setVelikost(int velikost) {
+  public void setVelikost(final int velikost) {
     this.velikost = velikost;
   }
   /**
@@ -54,41 +54,49 @@ public class KruhySettings implements Copyable<KruhySettings> {
   /**
    * @param jednotkovaVelikost the jednotkovaVelikost to set
    */
-  public void setJednotkovaVelikost(boolean jednotkovaVelikost) {
+  public void setJednotkovaVelikost(final boolean jednotkovaVelikost) {
     this.jednotkovaVelikost = jednotkovaVelikost;
   }
 
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((barva == null) ? 0 : barva.hashCode());
+    result = prime * result + (barva == null ? 0 : barva.hashCode());
     result = prime * result + (jednotkovaVelikost ? 1231 : 1237);
     result = prime * result + (onoff ? 1231 : 1237);
     result = prime * result + velikost;
     return result;
   }
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    KruhySettings other = (KruhySettings) obj;
+    }
+    final KruhySettings other = (KruhySettings) obj;
     if (barva == null) {
-      if (other.barva != null)
+      if (other.barva != null) {
         return false;
-    } else if (!barva.equals(other.barva))
+      }
+    } else if (!barva.equals(other.barva)) {
       return false;
-    if (jednotkovaVelikost != other.jednotkovaVelikost)
+    }
+    if (jednotkovaVelikost != other.jednotkovaVelikost) {
       return false;
-    if (onoff != other.onoff)
+    }
+    if (onoff != other.onoff) {
       return false;
-    if (velikost != other.velikost)
+    }
+    if (velikost != other.velikost) {
       return false;
+    }
     return true;
   }
 
@@ -103,10 +111,10 @@ public class KruhySettings implements Copyable<KruhySettings> {
   public KruhySettings copy() {
     try {
       return (KruhySettings) super.clone();
-    } catch (CloneNotSupportedException e) {
+    } catch (final CloneNotSupportedException e) {
       throw new RuntimeException(e);
     }
   }
-    
-  
+
+
 }

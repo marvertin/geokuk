@@ -11,7 +11,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
 
   public Font font= new Font(Font.SANS_SERIF, Font.PLAIN, 12);
   public Color foreground = Color.BLACK;
-  public Color background = Color.WHITE;
+  public Color background = new Color(255,255,255,70);
 
   public int posuX = 0;
   public int posuY = 0;
@@ -29,7 +29,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
   /**
    * @param font the font to set
    */
-  public void setFont(Font font) {
+  public void setFont(final Font font) {
     this.font = font;
   }
 
@@ -43,7 +43,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
   /**
    * @param foreground the foreground to set
    */
-  public void setForeground(Color foreground) {
+  public void setForeground(final Color foreground) {
     this.foreground = foreground;
   }
 
@@ -57,7 +57,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
   /**
    * @param background the background to set
    */
-  public void setBackground(Color background) {
+  public void setBackground(final Color background) {
     this.background = background;
   }
 
@@ -71,7 +71,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
   /**
    * @param posuX the posuX to set
    */
-  public void setPosuX(int posuX) {
+  public void setPosuX(final int posuX) {
     this.posuX = posuX;
   }
 
@@ -85,7 +85,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
   /**
    * @param posuY the posuY to set
    */
-  public void setPosuY(int posuY) {
+  public void setPosuY(final int posuY) {
     this.posuY = posuY;
   }
 
@@ -94,10 +94,10 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
   @Override
   public PopiskySettings copy() {
     try {
-      PopiskySettings klon = (PopiskySettings) super.clone();
+      final PopiskySettings klon = (PopiskySettings) super.clone();
       klon.setPatterns(klon.getPatterns().copy());
       return klon;
-    } catch (CloneNotSupportedException e) {
+    } catch (final CloneNotSupportedException e) {
       throw new RuntimeException(e);
     }
   }
@@ -112,7 +112,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
   /**
    * @param patterns the patterns to set
    */
-  public void setPatterns(PopiskyPatterns patterns) {
+  public void setPatterns(final PopiskyPatterns patterns) {
     this.patterns = patterns;
   }
 
@@ -123,10 +123,10 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((background == null) ? 0 : background.hashCode());
-    result = prime * result + ((font == null) ? 0 : font.hashCode());
-    result = prime * result + ((foreground == null) ? 0 : foreground.hashCode());
-    result = prime * result + ((patterns == null) ? 0 : patterns.hashCode());
+    result = prime * result + (background == null ? 0 : background.hashCode());
+    result = prime * result + (font == null ? 0 : font.hashCode());
+    result = prime * result + (foreground == null ? 0 : foreground.hashCode());
+    result = prime * result + (patterns == null ? 0 : patterns.hashCode());
     result = prime * result + posuX;
     result = prime * result + posuY;
     return result;
@@ -136,38 +136,51 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    PopiskySettings other = (PopiskySettings) obj;
+    }
+    final PopiskySettings other = (PopiskySettings) obj;
     if (background == null) {
-      if (other.background != null)
+      if (other.background != null) {
         return false;
-    } else if (!background.equals(other.background))
+      }
+    } else if (!background.equals(other.background)) {
       return false;
+    }
     if (font == null) {
-      if (other.font != null)
+      if (other.font != null) {
         return false;
-    } else if (!font.equals(other.font))
+      }
+    } else if (!font.equals(other.font)) {
       return false;
+    }
     if (foreground == null) {
-      if (other.foreground != null)
+      if (other.foreground != null) {
         return false;
-    } else if (!foreground.equals(other.foreground))
+      }
+    } else if (!foreground.equals(other.foreground)) {
       return false;
+    }
     if (patterns == null) {
-      if (other.patterns != null)
+      if (other.patterns != null) {
         return false;
-    } else if (!patterns.equals(other.patterns))
+      }
+    } else if (!patterns.equals(other.patterns)) {
       return false;
-    if (posuX != other.posuX)
+    }
+    if (posuX != other.posuX) {
       return false;
-    if (posuY != other.posuY)
+    }
+    if (posuY != other.posuY) {
       return false;
+    }
     return true;
   }
 
@@ -177,7 +190,7 @@ public class PopiskySettings implements Copyable<PopiskySettings> {
   @Override
   public String toString() {
     return "PopiskySettings [font=" + font + ", foreground=" + foreground + ", background=" + background + ", posuX=" + posuX + ", posuY=" + posuY
-    + ", patterns=" + patterns + "]";
+        + ", patterns=" + patterns + "]";
   }
 
 
