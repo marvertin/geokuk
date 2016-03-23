@@ -30,6 +30,7 @@ public class RefreshIkonAction extends Action0 {
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
+	@Override
 	public void actionPerformed(final ActionEvent e) {
 		setEnabled(false);
 		kesoidModel.startIkonLoad(true);

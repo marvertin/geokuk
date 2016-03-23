@@ -20,6 +20,7 @@ public abstract class AObject0 implements Serializable, IAtomString {
 	 *
 	 * @return Předek vrací true, potomek musí případně přepsat.
 	 */
+	@Override
 	public boolean isValid() {
 		return true;
 	}

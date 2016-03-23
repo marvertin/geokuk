@@ -51,6 +51,7 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  */
 public class AquaTheme extends DefaultMetalTheme {
 
+	@Override
 	public String getName() {
 		return "Aqua";
 	}
@@ -59,14 +60,17 @@ public class AquaTheme extends DefaultMetalTheme {
 	private final ColorUIResource	primary2	= new ColorUIResource(128, 192, 192);
 	private final ColorUIResource	primary3	= new ColorUIResource(159, 235, 235);
 
+	@Override
 	protected ColorUIResource getPrimary1() {
 		return primary1;
 	}
 
+	@Override
 	protected ColorUIResource getPrimary2() {
 		return primary2;
 	}
 
+	@Override
 	protected ColorUIResource getPrimary3() {
 		return primary3;
 	}

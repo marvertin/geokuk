@@ -152,6 +152,7 @@ public class Sklo implements ImagantCache {
 		return br;
 	}
 
+	@Override
 	public BufferedImage getImage(final URL url) {
 		try {
 			BufferedImage bi = sourceImageCache.get(url);

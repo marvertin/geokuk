@@ -149,18 +149,22 @@ public class JErrorTable extends JPanel {
 			return problemlist;
 		}
 
+		@Override
 		public int getColumnCount() {
 			return columnNames.length;
 		}
 
+		@Override
 		public int getRowCount() {
 			return problemlist.size();
 		}
 
+		@Override
 		public String getColumnName(final int col) {
 			return columnNames[col];
 		}
 
+		@Override
 		public Object getValueAt(final int row, final int col) {
 			final Problem nalezenec = problemlist.get(row);
 			Object s = null;
@@ -182,6 +186,7 @@ public class JErrorTable extends JPanel {
 		/*
 		 * JTable uses this method to determine the default renderer/ editor for each cell. If we didn't implement this method, then the last column would contain text ("true"/"false"), rather than a check box.
 		 */
+		@Override
 		public Class<?> getColumnClass(final int col) {
 			Class<?> cls = null;
 			switch (col) {
@@ -201,6 +206,7 @@ public class JErrorTable extends JPanel {
 		/*
 		 * Don't need to implement this method unless your table's editable.
 		 */
+		@Override
 		public boolean isCellEditable(final int row, final int col) {
 			return false;
 		}

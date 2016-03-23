@@ -28,6 +28,7 @@ public class Object0 {
 	 *
 	 * @deprecated To byla špatná myšlenka
 	 */
+	@Deprecated
 	protected final Object checkEquals(final Object aObject) {
 		return aObject;
 		/*
@@ -41,6 +42,7 @@ public class Object0 {
 	 *
 	 * @deprecated To byla špatná myšlenka
 	 */
+	@Deprecated
 	protected final Object checkEquals(final Object aObject, final Class<?> aStartFrom) {
 		return aObject;
 		/*

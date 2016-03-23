@@ -27,6 +27,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 *            Objekt, který má být počítán.
 	 * @return Hodnota čítače před provedením operace.
 	 */
+	@Override
 	public int inc(final T aKey) {
 		return add(aKey, 1);
 	}
@@ -38,6 +39,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 *            Objekt, který má být počítán.
 	 * @return Hodnota čítače před provedením operace.
 	 */
+	@Override
 	public int dec(final T aKey) {
 		return add(aKey, -1);
 	}
@@ -48,6 +50,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 * @parame aKey(Object aKey)
 	 * @return Hodnota čítače pro daný objekt. Vrací nulu, pokud objekt není v mapě evidován. Nikdy nevrátí zápornou hodnotu. Je to vlastně také hodnota před provedením operace.
 	 */
+	@Override
 	public int count(final T aKey) {
 		final Citac c = _citac(aKey);
 		return c == null ? 0 : c.get();
@@ -62,6 +65,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 *            O jkolik má být čítač změněn. Může být kladné, záporné nebo 0.
 	 * @return Hodnota čítače před provedením operace.
 	 */
+	@Override
 	public int add(final T aKey, int aOKolik) {
 		Citac c = _citac(aKey);
 		int minule;
@@ -94,6 +98,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 *            O jkolik má být čítač změněn. Může být kladné, záporné nebo 0. Pokud je hodnota záporná a snížení čítače by vedlo k záporným hodnotám, je čítač nastaven na nulu.
 	 * @return Hodnota čítače před provedením operace.
 	 */
+	@Override
 	public int set(final T aKey, int aNaKolik) {
 		if (aNaKolik < 0)
 			aNaKolik = 0;
@@ -124,6 +129,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 *            Objekt, jehož čítač má být resetován.
 	 * @return Hodnota čítače před provedením operace. Pokud je záporná, je považována za nulu.
 	 */
+	@Override
 	public int reset(final T aKey) {
 		return set(aKey, 0);
 	}
@@ -133,6 +139,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 *
 	 * @return Naplněný objekt implementující rozhraní Map jako mapa na čítače. Objekt není
 	 */
+	@Override
 	public Map<T, Integer> getMap() {
 		final Map<T, Integer> m = new HashMap<>();
 		for (final Map.Entry<T, Citac> entry : iCitace.entrySet()) {
@@ -144,6 +151,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	/**
 	 * Vrátí sumu všech čítačů
 	 */
+	@Override
 	public int count() {
 		return iAllCount;
 	}
@@ -153,6 +161,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 *
 	 * @return Součet všech čítačů před vynulováním.
 	 */
+	@Override
 	public int reset() {
 		final int minule = iAllCount;
 		iCitace.clear();
@@ -160,6 +169,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		return minule;
 	}
 
+	@Override
 	public String toString() {
 		// zjistit velikost nejdelšího klíče i hodnoty
 		int strlen = 0;
@@ -224,6 +234,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 *            mapa, která se má přičíst.
 	 * @return Celková suma čítačů teéto mapy před přičtěním.
 	 */
+	@Override
 	public int add(final CounterMap<T> aMap) {
 		return _addsub(aMap, 1);
 	}
@@ -235,6 +246,7 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	 *            mapa, která se má přičíst.
 	 * @return Celková suma čítačů teéto mapy před přičtěním.
 	 */
+	@Override
 	public int sub(final CounterMap<T> aMap) {
 		return _addsub(aMap, -1);
 	}

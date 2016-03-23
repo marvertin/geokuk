@@ -51,6 +51,7 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  */
 public class CharcoalTheme extends DefaultMetalTheme {
 
+	@Override
 	public String getName() {
 		return "Charcoal";
 	}
@@ -66,34 +67,42 @@ public class CharcoalTheme extends DefaultMetalTheme {
 	private final ColorUIResource	black		= new ColorUIResource(222, 222, 222);
 	private final ColorUIResource	white		= new ColorUIResource(0, 0, 0);
 
+	@Override
 	protected ColorUIResource getPrimary1() {
 		return primary1;
 	}
 
+	@Override
 	protected ColorUIResource getPrimary2() {
 		return primary2;
 	}
 
+	@Override
 	protected ColorUIResource getPrimary3() {
 		return primary3;
 	}
 
+	@Override
 	protected ColorUIResource getSecondary1() {
 		return secondary1;
 	}
 
+	@Override
 	protected ColorUIResource getSecondary2() {
 		return secondary2;
 	}
 
+	@Override
 	protected ColorUIResource getSecondary3() {
 		return secondary3;
 	}
 
+	@Override
 	protected ColorUIResource getBlack() {
 		return black;
 	}
 
+	@Override
 	protected ColorUIResource getWhite() {
 		return white;
 	}

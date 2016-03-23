@@ -57,6 +57,7 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 	/**
 	 * Porovnání dvou elementárních typů.
 	 */
+	@Override
 	public boolean equals(final Object aObject) {
 		if (aObject == this)
 			return true; // pokud porovnávám se sebou, tak se rovnají
@@ -69,6 +70,7 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 	/**
 	 * Heškód je vracen podle zastrčeného řetězce.
 	 */
+	@Override
 	public int hashCode() {
 		return iValue.hashCode();
 	}
@@ -76,6 +78,7 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 	/**
 	 * Standardní toString je implementován voláním asString. Může být pochopitelně přepsán.
 	 */
+	@Override
 	public String toString() {
 		return iValue;
 	}
@@ -85,6 +88,7 @@ public abstract class AString0 extends AObject0 implements Serializable, Compara
 	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+	@Override
 	public int compareTo(final AString0 aObject) {
 		if (aObject == null) {
 			throw new IllegalArgumentException("Cannot compare with null");

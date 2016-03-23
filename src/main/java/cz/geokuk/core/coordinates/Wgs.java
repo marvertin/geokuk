@@ -154,14 +154,17 @@ public class Wgs extends Misto0 {
 		return this;
 	}
 
+	@Override
 	public Mercator toMercator() {
 		return FGeoKonvertor.toMercator(this);
 	}
 
+	@Override
 	public Mou toMou() {
 		return FGeoKonvertor.toMou(this);
 	}
 
+	@Override
 	public Utm toUtm() {
 		return FGeoKonvertor.toUtm(this);
 	}

@@ -95,6 +95,7 @@ public class Mercator extends Misto0 {
 		return String.format("Mercator[%f ; %f]", mx, my);
 	}
 
+	@Override
 	public Wgs toWgs() {
 		return FGeoKonvertor.toWgs(this);
 	}

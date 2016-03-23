@@ -64,6 +64,7 @@ public class JFontChooser extends JComponent {
 	 */
 	private class LabelUpdater implements ChangeListener {
 
+		@Override
 		public void stateChanged(final ChangeEvent e) {
 			updateComponents();
 		}
@@ -73,12 +74,14 @@ public class JFontChooser extends JComponent {
 	/** Listener class used to update the font of the preview label. */
 	private class SelectionUpdater implements ChangeListener, ListSelectionListener {
 
+		@Override
 		public void stateChanged(final ChangeEvent e) {
 			if (!updatingComponents) {
 				setFont(buildFont());
 			}
 		}
 
+		@Override
 		public void valueChanged(final ListSelectionEvent e) {
 			if (!updatingComponents) {
 				setFont(buildFont());
@@ -282,6 +285,7 @@ public class JFontChooser extends JComponent {
 	 *
 	 * @return the current font value of the font chooser
 	 */
+	@Override
 	public Font getFont() {
 		return selectionModel.getSelectedFont();
 	}
@@ -293,6 +297,7 @@ public class JFontChooser extends JComponent {
 	 *            the font to be set in the font chooser
 	 * @see JComponent#addPropertyChangeListener
 	 */
+	@Override
 	public void setFont(final Font font) {
 		selectionModel.setSelectedFont(font);
 	}
@@ -353,6 +358,7 @@ class FontChooserDialog extends JDialog {
 			okButton.addActionListener(okListener);
 		}
 		okButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				setVisible(false);
 			}
@@ -365,6 +371,7 @@ class FontChooserDialog extends JDialog {
 		final Action cancelKeyAction = new AbstractAction() {
 			private static final long serialVersionUID = -2840323139867668049L;
 
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// todo make it in 1.3
 				// ActionListener[] listeners
@@ -388,6 +395,7 @@ class FontChooserDialog extends JDialog {
 			cancelButton.addActionListener(cancelListener);
 		}
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				setVisible(false);
 			}
@@ -396,6 +404,7 @@ class FontChooserDialog extends JDialog {
 
 		final JButton resetButton = new JButton(resetString);
 		resetButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				reset();
 			}
@@ -419,6 +428,7 @@ class FontChooserDialog extends JDialog {
 		setLocationRelativeTo(c);
 	}
 
+	@Override
 	public void setVisible(final boolean visible) {
 		if (visible)
 			initialFont = chooserPane.getFont();
@@ -432,6 +442,7 @@ class FontChooserDialog extends JDialog {
 	static class Closer extends WindowAdapter implements Serializable {
 		private static final long serialVersionUID = 5235126599151412593L;
 
+		@Override
 		public void windowClosing(final WindowEvent e) {
 			final Window w = e.getWindow();
 			w.setVisible(false);
@@ -441,6 +452,7 @@ class FontChooserDialog extends JDialog {
 	static class DisposeOnClose extends ComponentAdapter implements Serializable {
 		private static final long serialVersionUID = 7570289535006656935L;
 
+		@Override
 		public void componentHidden(final ComponentEvent e) {
 			final Window w = (Window) e.getComponent();
 			w.dispose();
@@ -458,6 +470,7 @@ class FontTracker implements ActionListener, Serializable {
 		chooser = c;
 	}
 
+	@Override
 	public void actionPerformed(final ActionEvent e) {
 		color = chooser.getFont();
 	}
@@ -503,10 +516,12 @@ class DefaultFontSelectionModel implements FontSelectionModel {
 		this.selectedFont = selectedFont;
 	}
 
+	@Override
 	public Font getSelectedFont() {
 		return selectedFont;
 	}
 
+	@Override
 	public void setSelectedFont(final Font selectedFont) {
 		if (selectedFont != null) {
 			this.selectedFont = selectedFont;
@@ -514,10 +529,12 @@ class DefaultFontSelectionModel implements FontSelectionModel {
 		}
 	}
 
+	@Override
 	public void addChangeListener(final ChangeListener listener) {
 		listeners.add(ChangeListener.class, listener);
 	}
 
+	@Override
 	public void removeChangeListener(final ChangeListener listener) {
 		listeners.remove(ChangeListener.class, listener);
 	}

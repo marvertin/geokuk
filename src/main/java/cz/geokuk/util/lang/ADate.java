@@ -107,6 +107,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *
 	 * @return yyyy-mm-dd
 	 */
+	@Override
 	public String toString() {
 		return asString();
 	}
@@ -114,6 +115,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	/**
 	 * @deprecated Tato metoda je jen pro ladící účely, normálně nepoužívat!
 	 */
+	@Deprecated
 	public long asLong() {
 		return iJavaDatum.getTime();
 	}
@@ -129,6 +131,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *             <p/>
 	 *             Skutečnost, že vrací Date v nějakém locale znemená, že vrací čst
 	 */
+	@Deprecated
 	public java.sql.Date asSqlDate() {
 		return new java.sql.Date(iJavaDatum.getTime());
 	}
@@ -218,6 +221,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *
 	 * @return yyyy-mm-dd
 	 */
+	@Override
 	public String asString() {
 		return MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00}", getYearNumber(), getMonthNumber(), getDayNumber());
 	}
@@ -247,6 +251,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return boolean Zda je po
 	 * @deprecated Použij isGreater
 	 */
+	@Deprecated
 	public boolean after(final ADate adatum) {
 		return isGreater(adatum);
 	}
@@ -257,6 +262,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return boolean Zda je po nebo dnes
 	 * @deprecated Použij isGreaterOrEqual
 	 */
+	@Deprecated
 	public boolean afterOrThis(final ADate adatum) {
 		return isGreaterOrEqual(adatum);
 	}
@@ -267,6 +273,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return boolean Zda je před
 	 * @deprecated Použij isLess
 	 */
+	@Deprecated
 	public boolean before(final ADate adatum) {
 		return isLess(adatum);
 	}
@@ -277,6 +284,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return boolean Zda je před nebo dnes
 	 * @deprecated Použij isLessOrEqual
 	 */
+	@Deprecated
 	public boolean beforeOrThis(final ADate adatum) {
 		return isLessOrEqual(adatum);
 	}
@@ -289,6 +297,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return den v týdnu
 	 * @deprecated JP měla by se použít funkce s naším výčtovým typem, see getWeekDay
 	 */
+	@Deprecated
 	public int getDayInWeekNumber() {
 		return actcal().get(Calendar.DAY_OF_WEEK);
 	}
@@ -346,6 +355,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return ADate Datum
 	 * @deprecated Použij metodu getAMonth, nextMonth, prevMonth a třídu AMonth
 	 */
+	@Deprecated
 	public ADate getLastDayInMonth() {
 		return getMonth().lastDate();
 	}
@@ -356,6 +366,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return ADate Datum
 	 * @deprecated Použij metodu getAMonth, nextMonth, prevMonth a třídu AMonth
 	 */
+	@Deprecated
 	public ADate getFirstDayInMonth() {
 		return getMonth().firstDate();
 	}
@@ -397,6 +408,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @return ADate Datum
 	 * @deprecated (JP) vrací sobotu, měla by být naimplementována až v národních potomcích, např v @see ADateRelativeCz.
 	 */
+	@Deprecated
 	public ADate getLastDayInWeek() {
 		return addWeeks(1).addDays(-actcal().get(Calendar.DAY_OF_WEEK));
 	}
@@ -478,6 +490,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            aDatum
 	 * @return boolean Výsledek. Pokud byl argument null, je vráceno false.
 	 */
+	@Override
 	public boolean equals(final Object aDatum) {
 		if (!(aDatum instanceof ADate))
 			return false;
@@ -485,18 +498,22 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 		return iJavaDatum.equals(obj.iJavaDatum);
 	}
 
+	@Override
 	public boolean isLess(final ADate b) {
 		return compareTo(b) < 0;
 	}
 
+	@Override
 	public boolean isLessOrEqual(final ADate b) {
 		return compareTo(b) <= 0;
 	}
 
+	@Override
 	public boolean isGreater(final ADate b) {
 		return compareTo(b) > 0;
 	}
 
+	@Override
 	public boolean isGreaterOrEqual(final ADate b) {
 		return compareTo(b) >= 0;
 	}
@@ -509,6 +526,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 		return compareTo(b) != 0;
 	}
 
+	@Override
 	public int compareTo(final ADate aObj) {
 		if (iJavaDatum.equals(aObj.iJavaDatum))
 			return 0;
@@ -524,6 +542,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *
 	 * @return Heškód agregovaného java.util.date.
 	 */
+	@Override
 	public int hashCode() {
 		return iJavaDatum.hashCode();
 	}
@@ -595,6 +614,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 * @deprecated Metoda nedělá to, co chceš. Může mosunout datum o jedničku. Doporučuji použít kalendář, vytáhnout SQL date jednotlivé složky a zkonstruovat datum. Pozor na časovou zuónu.
 	 */
 
+	@Deprecated
 	public static boolean canFrom(final java.sql.Date aSqlDatum) {
 		return true;
 	}
@@ -615,6 +635,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            Počet dnů o kolik posunout.
 	 * @return Instance ADate s posunutým měsícem.
 	 */
+	@Override
 	public ADate getAnother(final long aNthObject) {
 		if (Math.abs(aNthObject) > Integer.MAX_VALUE - 2)
 			throw new IllegalArgumentException("Počtu dnů o něž posouvat je " + aNthObject + " a to je na mě v absolutní hodnotě moc!");
@@ -628,6 +649,7 @@ public final class ADate extends AObject0 implements Serializable, Comparable<AD
 	 *            Objekt, který se odečítá.
 	 * @return Počet dnů rozdílu.
 	 */
+	@Override
 	public long getDistance(final ADate aObject) {
 		if (aObject == null) {
 			throw new IllegalArgumentException("aObject is null!");

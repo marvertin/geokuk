@@ -31,6 +31,7 @@ public abstract class LineDecorationWriter extends FilterWriter {
 	 *
 	 * @see java.io.Writer#write(char[], int, int)
 	 */
+	@Override
 	public void write(final char[] cbuf, final int off, final int len) throws IOException {
 		int lastWrited = off;
 		for (int i = off; i < off + len; i++) { // pro každý znak
@@ -72,6 +73,7 @@ public abstract class LineDecorationWriter extends FilterWriter {
 	 *
 	 * @see java.io.Writer#write(java.lang.String, int, int)
 	 */
+	@Override
 	public void write(final String str, final int off, final int len) throws IOException {
 		write(str.toCharArray(), off, len);
 	}

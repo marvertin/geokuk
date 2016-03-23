@@ -26,6 +26,7 @@ public class NacitacImageMetadata extends NacitacInputStream0 {
 
 	private static final ImmutableSet<String>	SUPPORTED_FILE_EXTENSIONS	= ImmutableSet.of("jpg", "raw", "tif");
 
+	@Override
 	protected void nacti(final InputStream istm, final String name, final IImportBuilder builder, final Future<?> future) throws IOException {
 		if (future.isCancelled()) {
 			return;

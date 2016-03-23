@@ -31,6 +31,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *
 	 * @return Hodnota udávající počet měsíců, které uplynuly od začátku našeho letopočtu. Přitom Leden hypotetického roku 0 má hodnotu 0, čili leden roku 1 má hodnotu 12.
 	 */
+	@Override
 	public int asInt() {
 		return iRokMes;
 	}
@@ -40,6 +41,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *
 	 * @return Měsíc jako řetězec vždy na 7 znaků ve tvaru RRRR-MM.
 	 */
+	@Override
 	public String asString() {
 		return MessageFormat.format("{0,number,0000}-{1,number,00}", iRokMes / MINY, iRokMes % MINY + 1);
 	}
@@ -49,6 +51,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *
 	 * @return Rok a měsíc v čitelném formátu.
 	 */
+	@Override
 	public String toString() {
 		return asString();
 	}
@@ -128,6 +131,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 * @return tOTÉŽ CO FUNKCE BEZ PARAMETRŮ.
 	 * @deprecated Použij metodu bez parametru, stejně parametr nemá na nic vliv, je to chyba.
 	 */
+	@Deprecated
 	public ADate firstDate(final int aDay) {
 		return dateOf(1);
 	}
@@ -213,6 +217,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Objekt se, kterým porovnávat.
 	 * @return -1, pokud je menší než argument, 0, při rovnosti, 1, pokud je větší než argument
 	 */
+	@Override
 	public int compareTo(final AMonth aObj) {
 		return iRokMes == aObj.iRokMes ? 0 : iRokMes < aObj.iRokMes ? -1 : 1;
 	}
@@ -224,6 +229,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Objekt, se kterým se porovnává.
 	 * @return true, pokud se rovnají. False pokud se nerovnají, argument je null nebo jiný typ než AMonth.
 	 */
+	@Override
 	public boolean equals(final Object aObject) {
 		if (!(aObject instanceof AMonth))
 			return false;
@@ -236,6 +242,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *
 	 * @return heškód odvozený z roku a měsíce.
 	 */
+	@Override
 	public int hashCode() {
 		return Integer.valueOf(iRokMes).hashCode();
 	}
@@ -331,6 +338,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Počet měsíců o kolik posunout.
 	 * @return Instance AMonth s posunutým měsícem.
 	 */
+	@Override
 	public AMonth getAnother(final long aNthObject) {
 		if (Math.abs(aNthObject) > Integer.MAX_VALUE - 2)
 			throw new IllegalArgumentException("Počtu měsíců o něž posouvat je " + aNthObject + " a to je na mě v absolutní hodnotě moc!");
@@ -344,6 +352,7 @@ public final class AMonth extends AObject0 implements IElementInt, Comparable<AM
 	 *            Objekt, který se odečítá.
 	 * @return Počet měsíců rozdílu.
 	 */
+	@Override
 	public long getDistance(final AMonth aObject) {
 		if (aObject == null) {
 			throw new IllegalArgumentException("aObject is null!");

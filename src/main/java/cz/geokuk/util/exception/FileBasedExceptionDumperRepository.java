@@ -54,6 +54,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 	 * @param aExceptionData
 	 * @throws IOException
 	 */
+	@Override
 	public void write(final AExcId aCode, final String aExceptionData) throws IOException {
 		final File file = toFile(aCode);
 		file.getParentFile().mkdirs();
@@ -65,6 +66,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 	 *
 	 * @return
 	 */
+	@Override
 	public int getRunNumber() {
 		return iRunNumber;
 	}
@@ -194,6 +196,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 	 *
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
 		return iDir.getAbsolutePath();
 	}
@@ -211,6 +214,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 	//
 	// }
 
+	@Override
 	public URL getUrl(final AExcId aCode) {
 		try {
 			final File toFile = toFile(aCode);
@@ -227,6 +231,7 @@ public class FileBasedExceptionDumperRepository implements ExceptionDumperReposi
 	 * @return true
 	 * @see cz.geokuk.util.exception.ExceptionDumperRepositorySpi#isReadable()
 	 */
+	@Override
 	public boolean isReadable() {
 		return true;
 	}

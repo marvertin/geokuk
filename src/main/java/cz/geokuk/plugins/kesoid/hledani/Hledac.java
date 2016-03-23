@@ -30,6 +30,7 @@ public class Hledac extends Hledac0<Nalezenec> {
 		this.kesBag = kesBag;
 	}
 
+	@Override
 	public List<Nalezenec> hledej(final HledaciPodminka0 podm) {
 		System.out.println("Hledy, hledy, hledy: " + kesBag.getKesoidy().size() + " " + podm.getVzorek());
 		final Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());

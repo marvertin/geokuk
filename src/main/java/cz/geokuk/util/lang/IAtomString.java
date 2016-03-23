@@ -16,6 +16,7 @@ public interface IAtomString extends IAtom {
 	 *
 	 * @return
 	 */
+	@Override
 	public String toString();
 
 }

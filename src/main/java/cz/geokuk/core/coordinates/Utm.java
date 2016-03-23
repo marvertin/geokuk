@@ -74,6 +74,7 @@ public class Utm extends Misto0 {
 		return polednikovaZona + " " + rovnobezkovaZona + " " + ux + " " + uy;
 	}
 
+	@Override
 	public Wgs toWgs() {
 		return FGeoKonvertor.toWgs(this);
 	}
@@ -83,6 +84,7 @@ public class Utm extends Misto0 {
 		return FGeoKonvertor.toMercator(this);
 	}
 
+	@Override
 	public Mou toMou() {
 		// Takto to bylo v seznamových mapách
 		// double xx = (ux + 3700000) / MOU_FACTOR;

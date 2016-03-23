@@ -37,6 +37,7 @@ public class TiskniNaGcComAction extends AbstractAction {
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
+	@Override
 	public void actionPerformed(final ActionEvent e) {
 		BrowserOpener.displayURL(url);
 	}

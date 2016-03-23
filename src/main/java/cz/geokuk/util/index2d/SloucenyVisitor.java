@@ -14,6 +14,7 @@ public abstract class SloucenyVisitor<T> implements Visitor<T> {
 	 *
 	 * @see objekty.Visitor#visit(objekty.Sheet)
 	 */
+	@Override
 	public final void visit(final Sheet<T> aSheet) {
 		visitNod(aSheet);
 	}
@@ -25,6 +26,7 @@ public abstract class SloucenyVisitor<T> implements Visitor<T> {
 	 *
 	 * @see objekty.Visitor#visit(objekty.Ctverecnik)
 	 */
+	@Override
 	public final void visit(final Ctverecnik<T> aCtver) {
 		visitNod(aCtver);
 	}

@@ -36,6 +36,7 @@ public class TPumpReaderToWriter extends Thread {
 		iWrt = aWrt;
 	}
 
+	@Override
 	public void run() {
 		try {
 			final char[] buf = new char[iBufferSize];

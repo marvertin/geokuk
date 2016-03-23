@@ -16,6 +16,7 @@ public abstract class FlatVisitor<T> implements Visitor<T> {
 	 *
 	 * @see objekty.Visitor#visit(objekty.Ctverecnik)
 	 */
+	@Override
 	public final void visit(final Ctverecnik<T> ctver) {
 		// dovisitnout to, co nadřízený nevisitnoul
 		ctver.visit(null, this);

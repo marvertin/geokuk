@@ -35,6 +35,7 @@ public class CenterWaypointAction extends Action0 implements AfterEventReceiverR
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 
+	@Override
 	public void actionPerformed(final ActionEvent e) {
 		poziceModel.setPozice(wpt);
 		vyrezModel.vystredovatNaPozici();

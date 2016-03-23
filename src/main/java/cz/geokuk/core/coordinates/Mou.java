@@ -70,6 +70,7 @@ public class Mou extends Misto0 {
 		return sub(mou).getKvadratVzdalenosti();
 	}
 
+	@Override
 	public Wgs toWgs() {
 		return FGeoKonvertor.toWgs(this);
 	}

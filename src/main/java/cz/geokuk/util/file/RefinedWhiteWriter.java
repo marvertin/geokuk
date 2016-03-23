@@ -40,6 +40,7 @@ public class RefinedWhiteWriter extends Writer {
 		iWriter = aWriter;
 	}
 
+	@Override
 	public void write(final char[] aZnaky, final int aOd, final int aPocet) throws IOException {
 		final int xxdo = aOd + aPocet;
 		for (int i = aOd; i < xxdo; i++) { // všechny znaky po jednom zpracovat
@@ -47,10 +48,12 @@ public class RefinedWhiteWriter extends Writer {
 		}
 	}
 
+	@Override
 	public void flush() throws IOException {
 		iWriter.flush(); // jednoduchýž přenos
 	}
 
+	@Override
 	public void close() throws IOException {
 		if (iPotrebaUkoncitRadek)
 			ukonciRadek(); // ukonči poslední řádek, pokud nebyl ukončen explicitně

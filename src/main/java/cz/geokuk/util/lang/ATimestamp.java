@@ -44,6 +44,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *
 	 * @return yyyy-mm-dd hh:mm:ss.ttt
 	 */
+	@Override
 	public String asString() {
 		return "" + asLong();
 	}
@@ -86,6 +87,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *
 	 * @return long Datum
 	 */
+	@Override
 	public long asLong() {
 		// return this.getTime() + _getBulgarian1970Constant();
 		return iJavaDate.getTime();
@@ -133,6 +135,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 * Vrátí v pro člověka čitelném formátu. Obsahuje úplné informace, které jsou k dispozici. Takto vracené hodnoty slouží k zobrazení za účelem logování, testování a podobně, v žádné, případě by se přijatá data neměla parsrovat a něco z nich odvozovat. Pokud potřebujete konkrétní formát využijte
 	 * metody info.., získejte odpovídající poliožky a využijte formátovače.
 	 */
+	@Override
 	public String toString() {
 		return infoUtc().toString();
 	}
@@ -198,6 +201,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *
 	 * @deprecated Metoda nemusí vracet, co chceš. Použij některou z metod info a na ní zjisti potřebné informace.
 	 */
+	@Deprecated
 	public long getZoneOffset() {
 		final Calendar cal = new GregorianCalendar();
 		cal.setTime(iJavaDate);
@@ -209,6 +213,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *
 	 * @deprecated Metoda nemusí vracet, co chceš. Použij některou z metod info a na ní zjisti potřebné informace.
 	 */
+	@Deprecated
 	public long getDstOffset() {
 		final Calendar cal = new GregorianCalendar();
 		cal.setTime(iJavaDate);
@@ -398,6 +403,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            aDatum
 	 * @return boolean Výsledek
 	 */
+	@Override
 	public boolean equals(final Object aObject) {
 		if (!(aObject instanceof ATimestamp))
 			return false;
@@ -405,6 +411,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		return asLong() == obj.asLong();
 	}
 
+	@Override
 	public int compareTo(final ATimestamp aObj) {
 		final long a = this.asLong();
 		final long b = ((ATimestamp) checkCompare(aObj)).asLong(); // vyhodí výjimku,
@@ -417,6 +424,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *
 	 * @return Heškód agregovaného java.util.date.
 	 */
+	@Override
 	public int hashCode() {
 		return iJavaDate.hashCode();
 	}
@@ -515,6 +523,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	/**
 	 * @deprecated Newní důvod pro existenci takové metody. Použij stejnojmennou metodu přijímající long a ze svého timestampu, který máš si vytáhni long, aspon budeš vědět, co děláš. Ujisiti, se, že předávaný argument je opravdu správný a ne posunutý nepochopením významu timestampu.
 	 */
+	@Deprecated
 	public static ATimestamp from(final java.sql.Timestamp ts) {
 		return ts == null ? null : new ATimestamp(ts.getTime());
 	}
@@ -535,6 +544,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	/**
 	 * @deprecated Newní důvod pro existenci takové metody. Použij stejnojmennou metodu přijímající long a ze svého timestampu, který máš si vytáhni long, aspon budeš vědět, co děláš. Ujisiti, se, že předávaný argument je opravdu správný a ne posunutý nepochopením významu timestampu.
 	 */
+	@Deprecated
 	public static boolean canFrom(final java.sql.Timestamp ts) {
 		return true;
 	}
@@ -668,6 +678,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 		 * Vrátí v pro člověka čitelném formátu. Obsahuje úplné informace, které jsou k dispozici. Takto vracené hodnoty slouží k zobrazení za účelem logování, testování a podobně, v žádné, případě by se přijatá data neměla parsrovat a něco z nich odvozovat. Pokud potřebujete konkrétní formát
 		 * využijte metody info.., získejte odpovídající poliožky a využijte formátovače.
 		 */
+		@Override
 		public String toString() {
 			final long offset = getOffset();
 			String vysl = MessageFormat.format("{0,number,0000}-{1,number,00}-{2,number,00} {3,number,00}:{4,number,00}:{5,number,00}.{6,number,000} GMT{7,number,+00;-00}", getYearNumber(),
@@ -705,6 +716,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Počet milisekund o kolik posunout.
 	 * @return Instance ATimestamp s posunutým měsícem.
 	 */
+	@Override
 	public ATimestamp getAnother(final long aNthObject) {
 		return this.add(aNthObject);
 	}
@@ -716,6 +728,7 @@ public final class ATimestamp extends Object0 implements IElement, IElementLong,
 	 *            Objekt, který se odečítá.
 	 * @return Počet milisekund rozdílu.
 	 */
+	@Override
 	public long getDistance(final ATimestamp aObject) {
 		if (aObject == null) {
 			throw new IllegalArgumentException();

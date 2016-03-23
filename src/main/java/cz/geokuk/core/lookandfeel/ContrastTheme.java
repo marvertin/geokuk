@@ -55,6 +55,7 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
 
 public class ContrastTheme extends DefaultMetalTheme {
 
+	@Override
 	public String getName() {
 		return "Contrast";
 	}
@@ -68,62 +69,77 @@ public class ContrastTheme extends DefaultMetalTheme {
 	private final ColorUIResource	secondary3			= new ColorUIResource(255, 255, 255);
 	// private final ColorUIResource controlHighlight = new ColorUIResource(102,102,102);
 
+	@Override
 	protected ColorUIResource getPrimary1() {
 		return primary1;
 	}
 
+	@Override
 	protected ColorUIResource getPrimary2() {
 		return primary2;
 	}
 
+	@Override
 	protected ColorUIResource getPrimary3() {
 		return primary3;
 	}
 
+	@Override
 	public ColorUIResource getPrimaryControlHighlight() {
 		return primaryHighlight;
 	}
 
+	@Override
 	protected ColorUIResource getSecondary2() {
 		return secondary2;
 	}
 
+	@Override
 	protected ColorUIResource getSecondary3() {
 		return secondary3;
 	}
 
+	@Override
 	public ColorUIResource getControlHighlight() {
 		return super.getSecondary3();
 	}
 
+	@Override
 	public ColorUIResource getFocusColor() {
 		return getBlack();
 	}
 
+	@Override
 	public ColorUIResource getTextHighlightColor() {
 		return getBlack();
 	}
 
+	@Override
 	public ColorUIResource getHighlightedTextColor() {
 		return getWhite();
 	}
 
+	@Override
 	public ColorUIResource getMenuSelectedBackground() {
 		return getBlack();
 	}
 
+	@Override
 	public ColorUIResource getMenuSelectedForeground() {
 		return getWhite();
 	}
 
+	@Override
 	public ColorUIResource getAcceleratorForeground() {
 		return getBlack();
 	}
 
+	@Override
 	public ColorUIResource getAcceleratorSelectedForeground() {
 		return getWhite();
 	}
 
+	@Override
 	public void addCustomEntriesToTable(final UIDefaults table) {
 
 		final Border blackLineBorder = new BorderUIResource(new LineBorder(getBlack()));
