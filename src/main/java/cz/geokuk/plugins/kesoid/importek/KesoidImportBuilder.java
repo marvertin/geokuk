@@ -60,7 +60,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 	 */
 	@Override
 	public void addGpxWpt(final GpxWpt gpxwpt) {
-		if (gpxwpt.wgs == null || gpxwpt.wgs.lat < 8 || gpxwpt.wgs.lat > 80 || gpxwpt.wgs.lon < 1 || gpxwpt.wgs.lon > 30) {
+		if (gpxwpt.wgs == null || gpxwpt.wgs.lat < -85 || gpxwpt.wgs.lat > 85) {
 			log.debug("Souradnice jsou mimo povoleny rozsah: {} - {}", gpxwpt.wgs, gpxwpt);
 			return;
 		}

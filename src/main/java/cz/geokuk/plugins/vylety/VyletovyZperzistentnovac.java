@@ -75,7 +75,7 @@ public class VyletovyZperzistentnovac {
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			return loadGgt(br);
 		} catch (final FileNotFoundException e) {
-			return new VyletPul(new HashSet<String>());
+			return new VyletPul(new HashSet<>());
 		}
 	}
 

@@ -3,9 +3,6 @@
  */
 package cz.geokuk.util.index2d;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cz.geokuk.util.index2d.Ctverecnik.DuplikHlidac;
 
 /**
@@ -16,14 +13,7 @@ import cz.geokuk.util.index2d.Ctverecnik.DuplikHlidac;
  */
 public class Indexator<T> {
 
-	/**
-	 *
-	 */
-	Ctverecnik<T> root;
-
-	public Indexator() {
-		this(new BoundingRect(0, 0, Integer.MAX_VALUE / 2, Integer.MAX_VALUE / 2));
-	}
+	private Ctverecnik<T> root;
 
 	public Indexator(final BoundingRect br) {
 		root = new Ctverecnik<>(br.xx1, br.yy1, br.xx2, br.yy2);
@@ -38,17 +28,6 @@ public class Indexator<T> {
 			}
 		});
 		return counta[0];
-	}
-
-	public List<Sheet<T>> deepList(final BoundingRect boundingRect) {
-		final List<Sheet<T>> list = new ArrayList<>(100);
-		root.visit(boundingRect, new FlatVisitor<T>() {
-			@Override
-			public void visit(final Sheet<T> aSheet) {
-				list.add(aSheet);
-			}
-		});
-		return list;
 	}
 
 	public boolean checkRozsah(final int xx, final int yy) {
@@ -91,18 +70,6 @@ public class Indexator<T> {
 			}
 		});
 		return drzak.tt;
-
-	}
-
-	public List<Node0<T>> shallowList(final BoundingRect boundingRect) {
-		final List<Node0<T>> list = new ArrayList<>(100);
-		root.visit(boundingRect, new SloucenyVisitor<T>() {
-			@Override
-			protected void visitNod(final Node0<T> aNode) {
-				list.add(aNode);
-			}
-		});
-		return list;
 	}
 
 	public void visit(final BoundingRect boundingRect, final Visitor<T> visitor) {
