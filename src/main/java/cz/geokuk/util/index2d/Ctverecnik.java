@@ -25,12 +25,6 @@ public class Ctverecnik<T> extends Node0<T> {
 	private final int xMid;
 	private final int yMid;
 
-	/**
-	 * @param aXx1
-	 * @param aXx2
-	 * @param aYy1
-	 * @param aYy2
-	 */
 	public Ctverecnik(final int aXx1, final int aYy1, final int aXx2, final int aYy2) {
 		xx1 = aXx1;
 		yy1 = aYy1;
