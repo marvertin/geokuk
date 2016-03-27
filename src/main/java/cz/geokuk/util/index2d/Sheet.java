@@ -1,10 +1,15 @@
 package cz.geokuk.util.index2d;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Sheet<T> extends Node0<T> {
 
-	final int xx;
-	final int yy;
-	final T obj;
+	private static final Logger log = LogManager.getLogger(Sheet.class.getSimpleName());
+
+	private final int xx;
+	private final int yy;
+	private final T obj;
 
 	/**
 	 * @param aMapobj
@@ -34,21 +39,11 @@ public class Sheet<T> extends Node0<T> {
 		return yy;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see objekty.Node0#isSheet()
-	 */
 	@Override
 	boolean isSheet() {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see objekty.Node0#visit(objekty.BoundingRect, objekty.Visitor)
-	 */
 	@Override
 	void visit(final BoundingRect rect, final Visitor<T> aVisitor) {
 		if (rect == null || xx >= rect.xx1 && xx < rect.xx2 & yy >= rect.yy1 && yy < rect.yy2) {
@@ -57,15 +52,14 @@ public class Sheet<T> extends Node0<T> {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see objekty.Node0#vypis(java.lang.String, int)
-	 */
 	@Override
 	void vypis(final String aPrefix, final int aLevel) {
 		final String mezery = String.format("%" + aLevel * 2 + "s", " ");
-		System.out.printf("%s%s: [%d,%d] %s\n", mezery, aPrefix, xx, yy, obj);
+		log.debug("{}{}: [{},{}] {}", mezery, aPrefix, xx, yy, obj);
 	}
 
+	@Override
+	public String toString() {
+		return "{" + xx + " " + yy + " " + obj + "}";
+	}
 }
