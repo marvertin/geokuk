@@ -28,8 +28,6 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	public static final Filex IMAGE_3RDPARTY_DIR = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "images3rdParty"), false, false);
 	public static final Filex IMAGE_MY_DIR = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "imagesMy"), false, false);
 
-	public static final File PRCHAVE_DIR = new File(GEOKUK_DATA_DIR.getFile(), "prchave"); // keš, kterou je vždymožno smazat
-
 	// public static final Filex KESOID_CACHE_DIR = new Filex(new File(PRCHAVE_DIR, "kesoids"), false, true);
 
 	public static final Filex ANO_GGT = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "lovim.ggt"), false, true);
