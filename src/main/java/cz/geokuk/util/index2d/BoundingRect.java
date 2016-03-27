@@ -9,7 +9,7 @@ package cz.geokuk.util.index2d;
  */
 public class BoundingRect {
 
-	public static final BoundingRect ALL = new BoundingRect(0, 0, Integer.MAX_VALUE, Integer.MAX_VALUE);
+	public static final BoundingRect ALL = new BoundingRect(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
 	public final int xx1;
 	public final int yy1;

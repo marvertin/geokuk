@@ -120,9 +120,7 @@ public class Ctverecnik<T> extends Node0<T> {
 		}
 	}
 
-	private static <T> Node0<T> vlozDoPodctverce(
-			final Node0<T> node, final Sheet<T> aSheet, final int xx1, final int yy1, final int xx2, final int yy2,
-			final AtomicBoolean duplicityGuard) {
+	private static <T> Node0<T> vlozDoPodctverce(final Node0<T> node, final Sheet<T> aSheet, final int xx1, final int yy1, final int xx2, final int yy2, final AtomicBoolean duplicityGuard) {
 		if (node == null) { // vlozit se tam
 			return aSheet;
 		} else if (node instanceof Ctverecnik) {
@@ -145,15 +143,13 @@ public class Ctverecnik<T> extends Node0<T> {
 	}
 
 	/**
-	 * Calculates the middle point between {@code a} and {@code b}. If the difference is odd, the lower bound is
-	 * returned.
-     */
+	 * Calculates the middle point between {@code a} and {@code b}. If the difference is odd, the lower bound is returned.
+	 */
 	private static long calculateMid(long a, long b) {
 		return LongMath.checkedAdd(a, b) / 2;
 	}
 
 	private void checkRozsah(final int xx, final int yy) {
-		checkArgument(!(xx < xx1 || xx >= xx2 || yy < yy1 || yy >= yy2),
-		    "Hodnoty %s %s jsou mimo rozsah %s", xx, yy, this);
+		checkArgument(!(xx < xx1 || xx >= xx2 || yy < yy1 || yy >= yy2), "Hodnoty %s %s jsou mimo rozsah %s", xx, yy, this);
 	}
 }
