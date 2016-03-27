@@ -1,6 +1,3 @@
-/**
- *
- */
 package cz.geokuk.util.index2d;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -88,5 +85,4 @@ public class Indexator<T> {
 	public void vypis() {
 		root.vypis("root", 1);
 	}
-
 }
