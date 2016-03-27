@@ -45,6 +45,11 @@ public class KesBag {
 			genotyp = wpt.getGenotyp(genom);
 		}
 		final Mou mou = wpt.getMou();
+		if (mou.xx < 0 || mou.yy < 0) {
+			//// TODO [veverka] Řešit rozsah [25.11.2009 9:45:59; veverka]
+			log.error("Nelze přidat takový waypoint: " + mou + " / " + mou.xx + ":" + mou.yy + " / " + wpt + " --- " + wpt.getKesoid());
+			return;
+		}
 		indexator.vloz(mou.xx, mou.yy, wpt);
 		final Kesoid kesoid = wpt.getKesoid();
 		kesoidyset.add(kesoid);
