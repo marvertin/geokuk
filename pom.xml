@@ -126,6 +126,15 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- testing: Mockito -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+
+
 		<!-- manifest version reading -->
 		<dependency>
 			<groupId>com.jcabi</groupId>
