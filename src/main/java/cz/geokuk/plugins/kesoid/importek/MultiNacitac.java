@@ -28,6 +28,8 @@ public class MultiNacitac {
 
 	private static final Root.Def FILE_NAME_REGEX_GEOGET_DIR = new Root.Def(1, Pattern.compile("(?i).*\\.db3"), Pattern.compile("(?i).*\\.[0-9]{8}\\.db3"));
 
+	private static final Root.Def FILE_NAME_REGEX_GSAK_DIR = new Root.Def(2, Pattern.compile("sqlite.db3"), null);
+
 	private final DirScanner ds;
 
 	private final List<Nacitac0> nacitace = new ArrayList<>();
@@ -60,6 +62,7 @@ public class MultiNacitac {
 		nacitace.add(new NacitacGpx());
 		nacitace.add(new NacitacImageMetadata());
 		nacitace.add(new GeogetLoader());
+		nacitace.add(new GsakDbLoader());
 	}
 
 	public KesBag nacti(final Future<?> future, final Genom genom) throws IOException {
@@ -88,13 +91,16 @@ public class MultiNacitac {
 		// TODO Auto-generated method stub
 	}
 
-	public void setRootDirs(final boolean prenacti, final File kesDir, final File geogetDir) {
+	public void setRootDirs(final boolean prenacti, final File kesDir, final File geogetDir, final File gsakDir) {
 		final List<Root> roots = new ArrayList<>();
 		if (kesDir != null) {
 			roots.add(new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR));
 		}
 		if (geogetDir != null) {
 			roots.add(new Root(geogetDir, FILE_NAME_REGEX_GEOGET_DIR));
+		}
+		if (gsakDir != null) {
+			roots.add(new Root(gsakDir, FILE_NAME_REGEX_GSAK_DIR));
 		}
 		ds.seRootDirs(prenacti, roots.toArray(new Root[roots.size()]));
 	}

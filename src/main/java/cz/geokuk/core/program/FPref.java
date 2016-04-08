@@ -14,6 +14,7 @@ public class FPref {
 	public static final String GEOCACHING_COM_NICK_value = "geocachingComNick";
 	public static final String GEOCACHING_COM_NICK_ID_value = "geocachingComNickId";
 	public static final String GEOGET_DATA_DIR_value = "geogetDataDir";
+	public static final String GSAK_DATA_DIR_value = "gsakDataDir";
 	// Hodnoty
 	public static final String HC_value = "hc";
 	public static final String IMAGE_3RD_PARTY_DIR_value = "image3rdPartyDir";
@@ -73,4 +74,8 @@ public class FPref {
 	public static final String JE_OTEVRENY_VYLET_value = "jeOtevrenyVylet";
 	public static final String CESTY_DIR_value = "cesty-dir";
 
+	// Specifická nastavení pro GSAK:
+	public static final String GSAK_node = "gsak";
+	public static final String GSAK_CAS_NALEZU_value = "casNalezu";
+	public static final String GSAK_CAS_NENALEZU_value = "casNenalezu";
 }

@@ -24,6 +24,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	public static final Filex GEOKUK_DATA_DIR = new Filex(new File(FConst.HOME_DIR, "geokuk"), false, true);
 	public static final Filex CESTY_DIR = new Filex(new File(FConst.HOME_DIR, "geokuk/cesty"), false, true);
 	public static final Filex GEOGET_DATA_DIR = new Filex(new File("C:\\geoget\\data"), false, true);
+	public static final Filex GSAK_DATA_DIR = new Filex(new File(FConst.HOME_DIR, "AppData/Roaming/gsak/data"), false, true);
 
 	public static final Filex IMAGE_3RDPARTY_DIR = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "images3rdParty"), false, false);
 	public static final Filex IMAGE_MY_DIR = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "imagesMy"), false, false);
@@ -37,6 +38,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	private Filex cestyDir;
 
 	private Filex geogetDataDir;
+	private Filex gsakDataDir;
 	private Filex image3rdPartyDir;
 	private Filex imageMyDir;
 
@@ -96,6 +98,10 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 		return geogetDataDir;
 	}
 
+	public Filex getGsakDataDir() {
+		return gsakDataDir;
+	}
+
 	public Filex getImage3rdPartyDir() {
 		return image3rdPartyDir;
 	}
@@ -153,6 +159,10 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 
 	public void setGeogetDataDir(final Filex geogetDir) {
 		geogetDataDir = geogetDir;
+	}
+
+	public void setGsakDataDir(final Filex gsakDir) {
+		gsakDataDir = gsakDir;
 	}
 
 	public void setImage3rdPartyDir(final Filex image3rdPartyDir) {

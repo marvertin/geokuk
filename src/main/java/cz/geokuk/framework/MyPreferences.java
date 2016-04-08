@@ -466,13 +466,13 @@ public class MyPreferences extends Preferences {
 		return unpack(ss);
 	}
 
-	public Set<String> getStringSet(final String key, final Set<String> defval) {
+	public Set<String> getStringSet(final String key, final Collection<String> defval) {
 		final List<String> stringList = getStringList(key, null);
-		if (stringList == null) {
-			return defval;
-		} else {
-			return new HashSet<>(stringList);
+		if (stringList == null && defval == null) {
+			return null;
 		}
+		// [ISSUE#48, 2016-04-08, Bohusz] Snad nikomu nebude vadit, když bude zachováno pořadí.
+		return new LinkedHashSet<>(stringList != null ? stringList : defval);
 	}
 
 	public <T> T getStructure(final String name, final T defautStructure) {

@@ -24,7 +24,8 @@ public class MultiNacitacLoaderManager {
 		if (iTimer != null) {
 			iTimer.stop();
 		}
-		multiNacitac.setRootDirs(prenacti, kesoidModel.getUmisteniSouboru().getKesDir().getEffectiveFileIfActive(), kesoidModel.getUmisteniSouboru().getGeogetDataDir().getEffectiveFileIfActive());
+		multiNacitac.setRootDirs(prenacti, kesoidModel.getUmisteniSouboru().getKesDir().getEffectiveFileIfActive(), kesoidModel.getUmisteniSouboru().getGeogetDataDir().getEffectiveFileIfActive(),
+		        kesoidModel.getUmisteniSouboru().getGsakDataDir().getEffectiveFileIfActive());
 		if (klsw == null || klsw.isDone()) {
 			klsw = new MultiNacitacSwingWorker(multiNacitac, genom, kesoidModel);
 			klsw.execute();
