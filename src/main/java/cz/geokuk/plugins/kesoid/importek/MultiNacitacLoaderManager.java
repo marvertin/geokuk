@@ -1,9 +1,13 @@
 package cz.geokuk.plugins.kesoid.importek;
 
+import java.util.List;
+
 import javax.swing.Timer;
 
 import cz.geokuk.plugins.kesoid.mapicon.Genom;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
+import cz.geokuk.util.file.Filex;
+import cz.geokuk.util.file.KeFile;
 
 public class MultiNacitacLoaderManager {
 
@@ -37,6 +41,10 @@ public class MultiNacitacLoaderManager {
 		iTimer = new Timer(10000, e -> startLoad(false, genom));
 		iTimer.start();
 
+	}
+
+	public List<KeFile> gsakSoubory(final Filex aDataDir) {
+		return multiNacitac.gsakSoubory(aDataDir);
 	}
 
 }

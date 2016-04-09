@@ -21,8 +21,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 
 import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.framework.ProgressModel;
-import cz.geokuk.framework.Progressor;
+import cz.geokuk.framework.*;
 import cz.geokuk.plugins.kesoid.EKesType;
 import cz.geokuk.util.lang.ATimestamp;
 import cz.geokuk.util.lang.StringUtils;
@@ -67,6 +66,12 @@ public class GsakDbLoader extends Nacitac0 {
 			loadCustomValues(dao, aBuilder, aFuture, progressor);
 			progressor.finish();
 		} catch (final SQLException e) {
+			if (e.getMessage().contains("no such collation sequence:")) {
+				// TODO: Nějak lépe zakomunikovat s uživatelem, nelíbí se mi, že že v BIZ třídě je interakce, ale nevím jak jinak. [ISSUE#48, 2016-04-09, Bohusz]
+				Dlg.info("Databázový soubor \"" + aDbFile + "\" obsahuje nestandardní řazení.\n\nMělo by postačit databázi na chvíli vybrat jako aktivní, GSAK ji automaticky opraví.",
+				        "GSAK soubor je zastaralý");
+				return;
+			}
 			throw new IOException("Unable to load from " + aDbFile, e);
 		}
 	}
@@ -218,13 +223,19 @@ public class GsakDbLoader extends Nacitac0 {
 			}
 			aProgressor.addProgress(PROGRESS_VAHA_TAGS);
 			//
-			final GpxWpt gpxWpt = aBuilder.get(record.get(GsakDao.CACHE_CODE_KEY));
-			if (gpxWpt == null) {
-				//System.out.println(record.get(GsakDao.CACHE_CODE_KEY) + ": " + gpxWpt);
-				//FIXME
+			final GpxWpt cache = aBuilder.get(record.get(GsakDao.CACHE_CODE_KEY));
+			if (cache == null) {
+				// Nějaká nekonzistence databáze, custom hodnoty existují, ale keš k nim ne. Asi se to někdy GSAK stane.
 				return true;
 			}
-			record.entrySet().stream().forEach(e -> gpxWpt.gpxg.putUserTag(e.getKey(), Objects.toString(e.getValue())));
+			record.entrySet().stream().forEach(e -> cache.gpxg.putUserTag(e.getKey(), Objects.toString(e.getValue())));
+			//
+			if (!StringUtils.isBlank(cache.gpxg.found) && !cache.gpxg.found.contains("T")) {
+				final String time = _getFoundByMeTimeField(record);
+				if (!StringUtils.isBlank(time)) {
+					cache.gpxg.found += "T" + time;
+				}
+			}
 			//
 			čítač.inc();
 			return true;
@@ -247,7 +258,7 @@ public class GsakDbLoader extends Nacitac0 {
 		return !aCurrentCoordinates.equals(aOriginalCoordinates);
 	}
 
-	private String _getFoundByMeTimeField(final Map<String, Object> values) {
+	private String _getFoundByMeTimeField(final Map<String, ?> values) {
 		final Pattern time = Pattern.compile(ISO_TIME_FORMAT_REGEXP);
 		for (final String name : cfg.getCasNalezu()) {
 			final Object value = values.get(name);

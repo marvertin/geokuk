@@ -241,12 +241,13 @@ public class Genom {
 		if (gen.getAlely().size() == 0) {
 			gen.add(makeAlela(":" + genName), null);
 		}
-		final Alela alela = makeAlela(alelaName);
+		// TODO Zkontrolovat: Doplnil jsem kvalifikaci jménem genu, protože jinak se mi generovalo obrovské množství těch errorů dole. Nevím, co to může všechno způsobit, ale stejné řetězce přece musí být možné použít jako alely různých genů, ne? [ISSUE#48, 2016-04-09, Bohusz]
+		final Alela alela = makeAlela(alelaName + ":" + genName);
 		if (alela.hasGen()) {
 			if (alela.getGen() == gen) {
 				return alela; // tak vrátíme tu alelu
 			} else {
-				log.error(String.format("Je pozadovana alela %s v genu %s, ale tato alela jiz existuje v genu %s", alelaName, genName, gen));
+				log.error(String.format("Je pozadovana alela '%s' v genu %s, ale tato alela jiz existuje v genu %s", alelaName, genName, alela.getGen()));
 				return null;
 			}
 		} else {

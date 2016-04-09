@@ -78,4 +78,5 @@ public class FPref {
 	public static final String GSAK_node = "gsak";
 	public static final String GSAK_CAS_NALEZU_value = "casNalezu";
 	public static final String GSAK_CAS_NENALEZU_value = "casNenalezu";
+	public static final String GSAK_NACITAT_VSECHNO = "nacitatHnedVsechnyDatabaze";
 }
