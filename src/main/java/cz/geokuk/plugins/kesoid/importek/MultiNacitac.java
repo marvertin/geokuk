@@ -60,7 +60,7 @@ public class MultiNacitac {
 		nacitace.add(new NacitacGpx());
 		nacitace.add(new NacitacImageMetadata());
 		nacitace.add(new GeogetLoader());
-		nacitace.add(new GsakDbLoader());
+		nacitace.add(new GsakDbLoader(kesoidModel.getGsakParametryNacitani()));
 	}
 
 	public List<KeFile> gsakSoubory(final Filex aDataDir) {

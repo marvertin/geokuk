@@ -23,6 +23,7 @@ import com.google.common.io.Files;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.kesoid.EKesType;
+import cz.geokuk.plugins.kesoid.mvc.GsakParametryNacitani;
 import cz.geokuk.util.lang.ATimestamp;
 import cz.geokuk.util.lang.StringUtils;
 
@@ -50,9 +51,13 @@ public class GsakDbLoader extends Nacitac0 {
 
 	private static final ImmutableMap<String, String> ID_PREFIX_TO_SYM = ImmutableMap.of("GC", "Geocache", "WM", "Waymark", "MU", "Geocache");
 
-	private final GsakConfig cfg = new GsakConfig();
+	private final GsakParametryNacitani parametryNačítání;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////  Public  /////
+	public GsakDbLoader(final GsakParametryNacitani aGsakParametryNacitani) {
+		parametryNačítání = aGsakParametryNacitani;
+	}
+
 	@Override
 	protected void nacti(final File aDbFile, final IImportBuilder aBuilder, final Future<?> aFuture, final ProgressModel aProgressModel) throws IOException {
 		try (GsakDao dao = new GsakDao(aDbFile)) {
@@ -260,7 +265,7 @@ public class GsakDbLoader extends Nacitac0 {
 
 	private String _getFoundByMeTimeField(final Map<String, ?> values) {
 		final Pattern time = Pattern.compile(ISO_TIME_FORMAT_REGEXP);
-		for (final String name : cfg.getCasNalezu()) {
+		for (final String name : parametryNačítání.getCasNalezu()) {
 			final Object value = values.get(name);
 			final Matcher matcher = time.matcher(Objects.toString(value, ""));
 			if (matcher.find()) {
