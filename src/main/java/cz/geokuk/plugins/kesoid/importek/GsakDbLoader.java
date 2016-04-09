@@ -16,7 +16,6 @@ import java.util.zip.ZipFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 
@@ -49,12 +48,10 @@ public class GsakDbLoader extends Nacitac0 {
 	private static final ImmutableSet<String> EXPECTED_TABLES = ImmutableSet.of("Attributes", "CacheImages", "CacheMemo", "Caches", "Corrected", "Custom", "Filter", "Ignore", "LogImages", "LogMemo",
 	        "Logs");
 
-	private static final ImmutableMap<String, String> ID_PREFIX_TO_SYM = ImmutableMap.of("GC", "Geocache", "WM", "Waymark", "MU", "Geocache");
-
-	private final GsakParametryNacitani parametryNačítání;
+	private final Supplier<GsakParametryNacitani> parametryNačítání;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////  Public  /////
-	public GsakDbLoader(final GsakParametryNacitani aGsakParametryNacitani) {
+	public GsakDbLoader(final Supplier<GsakParametryNacitani> aGsakParametryNacitani) {
 		parametryNačítání = aGsakParametryNacitani;
 	}
 
@@ -113,6 +110,7 @@ public class GsakDbLoader extends Nacitac0 {
 			aProgressor.addProgress(PROGRESS_VAHA_CACHES);
 			//
 			// Příprava dat:
+			final EGsakCacheType cacheType = EGsakCacheType.fromGsakCode(record.CacheType);
 			final Wgs coordinates = record.Latitude == 0.0 && record.Longitude == 0.0 ? null : new Wgs(record.Latitude, record.Longitude);
 			final Wgs original = record.LatOriginal == 0.0 && record.LonOriginal == 0.0 ? null : new Wgs(record.LatOriginal, record.LonOriginal);
 			//
@@ -120,13 +118,7 @@ public class GsakDbLoader extends Nacitac0 {
 			final GpxWpt cache = new GpxWpt();
 			{
 				cache.name = record.Code;
-				if (cache.name != null && cache.name.length() > 1) {
-					final String prefix = cache.name.substring(0, 2);
-					final String sym = ID_PREFIX_TO_SYM.get(prefix);
-					if (sym != null) {
-						cache.sym = sym;
-					}
-				}
+				cache.sym = cacheType.getGeokukSymbol();
 				cache.wgs = isCorrected(original, coordinates) ? original : coordinates;
 				cache.time = record.PlacedDate;
 
@@ -136,7 +128,7 @@ public class GsakDbLoader extends Nacitac0 {
 					groundspeak.name = record.Name;
 					groundspeak.owner = intern(record.OwnerName);
 					groundspeak.placedBy = intern(record.PlacedBy);
-					groundspeak.type = GsakCacheType.fromGsakCode(record.CacheType).toGroundspeakName();
+					groundspeak.type = cacheType.toGroundspeakName();
 					groundspeak.container = intern(record.Container);
 					groundspeak.difficulty = intern(record.Difficulty);
 					groundspeak.terrain = intern(record.Terrain);
@@ -265,7 +257,7 @@ public class GsakDbLoader extends Nacitac0 {
 
 	private String _getFoundByMeTimeField(final Map<String, ?> values) {
 		final Pattern time = Pattern.compile(ISO_TIME_FORMAT_REGEXP);
-		for (final String name : parametryNačítání.getCasNalezu()) {
+		for (final String name : parametryNačítání.get().getCasNalezu()) {
 			final Object value = values.get(name);
 			final Matcher matcher = time.matcher(Objects.toString(value, ""));
 			if (matcher.find()) {
@@ -275,13 +267,6 @@ public class GsakDbLoader extends Nacitac0 {
 		return null;
 	}
 
-//	private String formatDateTime(final int yyyymmddDate) {
-//		final int day = yyyymmddDate % 100;
-//		final int month = yyyymmddDate / 100 % 100;
-//		final int year = yyyymmddDate / 10000;
-//		return String.format(DATE_FORMAT_TEMPLATE, year, month, day);
-//	}
-//
 	private void logResult(final String nazev, final ATimestamp startTime, final int pocet) {
 		final double trvani = ATimestamp.now().diff(startTime);
 		log.info("{} {} loaded in {} s, it is {} items/s. ", pocet, nazev, trvani / 1000.0, pocet * 1000 / trvani);
@@ -321,35 +306,21 @@ public class GsakDbLoader extends Nacitac0 {
 	private static final EKesType EKESTYPE_LF_CELEBRATION = OTHER;
 	private static final EKesType EKESTYPE_PROJECT_APE = OTHER;
 
-	private enum GsakCacheType {
+	private enum EWaypointType {
+		GEOCACHE("Geocache"), WAYMARK("Waymark"), MUNZEE("Munzee"), FLAGSTACK("Flagstack"), OTHER(null);
+		private String geokukSymbol;
+
+		private EWaypointType(final String aGeokukSymbol) {
+			geokukSymbol = aGeokukSymbol;
+		}
+
+		public String getGeokukSymbol() {
+			return geokukSymbol;
+		};
+	}
+
+	private enum EGsakCacheType {
 		// @formatter:off
-		A(EKESTYPE_PROJECT_APE,					"Project APE Cache"),
-		B(EKesType.LETTERBOX_HYBRID,			"Letterbox Hybrid"),
-		C(EKesType.CACHE_IN_TRASH_OUT_EVENT,	"Cache In Trash Out Event"),
-		D(EKESTYPE_LF_CELEBRATION,				"Groundspeak Lost and Found Celebration"),
-		E(EKesType.EVENT,						"Event Cache"),
-		F(EKESTYPE_LF_EVENT,					"Lost and Found Event Caches"),
-		G(EKESTYPE_BENCHMARK,					"Benchmark"),
-		H(EKESTYPE_GROUNDSPEAK_HQ,				"Groundspeak HQ Cache"),
-		I(EKesType.WHERIGO,						"Wherigo Cache"),
-		J(EKESTYPE_GIGA_EVENT,					"Giga-Event Cache"),
-		L(EKesType.LOCATIONLESS_REVERSE,		"Locationless (Reverse) Cache"),
-		M(EKesType.MULTI,						"Multi-cache"),
-		O(EKESTYPE_OTHER,						"Other"),
-		P(EKESTYPE_BLOCK_PARTY,					"Groundspeak Block Party"),
-		Q(EKESTYPE_LAB_CACHE,					"Lab Cache"),
-		R(EKesType.EARTHCACHE,					"Earthcache"),
-		T(EKesType.TRADITIONAL,					"Traditional Cache"),
-		U(EKesType.UNKNOWN,						"Unknown Cache"),
-		V(EKesType.VIRTUAL,						"Virtual Cache"),
-		W(EKesType.WEBCAM,						"Webcam Cache"),
-		X(EKESTYPE_MAZE_EXHIBIT,				"GPS Adventures Exhibit"),
-		Y(EKESTYPE_WAYMARK,						"Waymark"),
-		Z(EKesType.MEGA_EVENT,					"Mega-Event Cache"),
-		;
-
-		private static final GsakCacheType UNRECOGNIZED = L;
-
 		/*
 		   <groundspeak:type>Traditional Cache</groundspeak:type>
 		   <groundspeak:type>Multi-cache</groundspeak:type>
@@ -374,18 +345,46 @@ public class GsakDbLoader extends Nacitac0 {
 		   <groundspeak:type>Groundspeak Block Party</groundspeak:type>
 		   <groundspeak:type>Giga-Event Cache</groundspeak:type>
 		   <groundspeak:type>Lab Cache</groundspeak:type>
-		   */
+		 */
+		A(EKESTYPE_PROJECT_APE,					"Project APE Cache",                     	EWaypointType.GEOCACHE),
+		B(EKesType.LETTERBOX_HYBRID,			"Letterbox Hybrid",                     	EWaypointType.GEOCACHE),
+		C(EKesType.CACHE_IN_TRASH_OUT_EVENT,	"Cache In Trash Out Event",                 EWaypointType.GEOCACHE),
+		D(EKESTYPE_LF_CELEBRATION,				"Groundspeak Lost and Found Celebration",	EWaypointType.GEOCACHE),
+		E(EKesType.EVENT,						"Event Cache",                     			EWaypointType.GEOCACHE),
+		F(EKESTYPE_LF_EVENT,					"Lost and Found Event Caches",              EWaypointType.GEOCACHE),
+		G(EKESTYPE_BENCHMARK,					"Benchmark",                       	        EWaypointType.GEOCACHE),
+		H(EKESTYPE_GROUNDSPEAK_HQ,				"Groundspeak HQ Cache",                     EWaypointType.GEOCACHE),
+		I(EKesType.WHERIGO,						"Wherigo Cache",                            EWaypointType.GEOCACHE),
+		J(EKESTYPE_GIGA_EVENT,					"Giga-Event Cache",                      	EWaypointType.GEOCACHE),
+		L(EKesType.LOCATIONLESS_REVERSE,		"Locationless (Reverse) Cache",             EWaypointType.GEOCACHE),
+		M(EKesType.MULTI,						"Multi-cache",                              EWaypointType.GEOCACHE),
+		O(EKESTYPE_OTHER,						"Other",                                    EWaypointType.OTHER),
+		P(EKESTYPE_BLOCK_PARTY,					"Groundspeak Block Party",                  EWaypointType.GEOCACHE),
+		Q(EKESTYPE_LAB_CACHE,					"Lab Cache",                                EWaypointType.GEOCACHE),
+		R(EKesType.EARTHCACHE,					"Earthcache",                               EWaypointType.GEOCACHE),
+		T(EKesType.TRADITIONAL,					"Traditional Cache",                        EWaypointType.GEOCACHE),
+		U(EKesType.UNKNOWN,						"Unknown Cache",                            EWaypointType.GEOCACHE),
+		V(EKesType.VIRTUAL,						"Virtual Cache",                            EWaypointType.GEOCACHE),
+		W(EKesType.WEBCAM,						"Webcam Cache",                             EWaypointType.GEOCACHE),
+		X(EKESTYPE_MAZE_EXHIBIT,				"GPS Adventures Exhibit",                   EWaypointType.GEOCACHE),
+		Y(EKESTYPE_WAYMARK,						"Waymark",                                  EWaypointType.WAYMARK),
+		Z(EKesType.MEGA_EVENT,					"Mega-Event Cache",                         EWaypointType.GEOCACHE),
+		;
 		// @formatter:off
+
+		private static final EGsakCacheType UNRECOGNIZED = O;
 
 		private final EKesType iGeokukCacheType;
 		private final String iGroundspeakName;
+		private EWaypointType iWaypointType;
 
-		private GsakCacheType(final EKesType aGeokukCacheType, final String aGroundspeakName) {
+		private EGsakCacheType(final EKesType aGeokukCacheType, final String aGroundspeakName, final EWaypointType aWaypointType) {
 			iGeokukCacheType = aGeokukCacheType;
 			iGroundspeakName = aGroundspeakName;
+			iWaypointType=aWaypointType;
 		}
-		public static GsakCacheType fromGsakCode(final String aGsakCode) {
-			return Arrays.stream(GsakCacheType.values())//
+		public static EGsakCacheType fromGsakCode(final String aGsakCode) {
+			return Arrays.stream(EGsakCacheType.values())//
 			.filter(v -> v.name().equalsIgnoreCase(aGsakCode))//
 			.findFirst()
 			.orElse(UNRECOGNIZED)
@@ -398,6 +397,9 @@ public class GsakDbLoader extends Nacitac0 {
 		public String toGroundspeakName() {
 			return iGroundspeakName;
 		}
+		public String getGeokukSymbol() {
+			return iWaypointType.getGeokukSymbol();
+		};
 	}
 
 	//---------------------------------------------------------------------------------------------------------  data access  -----
