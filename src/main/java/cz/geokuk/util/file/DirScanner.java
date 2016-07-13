@@ -6,7 +6,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
 /**
- * Třída je zodpověd na projití zadaných rootu a držení informací o tom, zda nedošlo ke změně.
+ * Třída je zodpovědna projití zadaných rootu a držení informací o tom, zda nedošlo ke změně.
  */
 public class DirScanner {
 
@@ -59,6 +59,10 @@ public class DirScanner {
 		} else {
 			return true; // není matcher tak mečuje vše
 		}
+	}
+
+	public List<KeFile> scan(final Root root) {
+		return scanDir(root);
 	}
 
 	private List<KeFile> scanDir(final Root root) {

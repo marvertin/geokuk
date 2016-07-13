@@ -48,6 +48,7 @@ public class GeogetLoader extends Nacitac0 {
 	private static final String DATE_FORMAT_TEMPLATE = "%d-%02d-%02dT00:00:00.000";
 
 	private static final ImmutableSet<String> SUPPORTED_FILE_EXTENSIONS = ImmutableSet.of("db3");
+	private static final ImmutableSet<String> EXPECTED_TABLES = ImmutableSet.of("geolist", "geocache", "waypoint", "geotag", "geotagcategory", "geotagvalue");
 
 	private static final ImmutableMap<String, String> ID_PREFIX_TO_SYM = ImmutableMap.of("GC", "Geocache", "WM", "Waymark", "MU", "Geocache");
 
@@ -82,7 +83,11 @@ public class GeogetLoader extends Nacitac0 {
 
 	@Override
 	boolean umiNacist(final File file) {
-		return SUPPORTED_FILE_EXTENSIONS.contains(Files.getFileExtension(file.getAbsolutePath().toLowerCase()));
+		if (SUPPORTED_FILE_EXTENSIONS.contains(Files.getFileExtension(file.getAbsolutePath().toLowerCase()))) {
+			// LATER: Metodu by chtělo dát někem jinam, pro minimalizaci zásahů do cizího kódu zatím řeším takto. [2016-04-05, BRoz]
+			return GsakDbLoader.dbFileContains(file, EXPECTED_TABLES);
+		}
+		return false;
 	}
 
 	@Override

@@ -2,7 +2,8 @@ package cz.geokuk.core.program;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.util.EnumMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 
@@ -14,6 +15,7 @@ import cz.geokuk.plugins.mapy.KachleUmisteniSouboruChangedEvent;
 import cz.geokuk.plugins.mapy.kachle.KachleModel;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.Filex;
+import cz.geokuk.util.lang.StringUtils;
 
 public class JPrehledSouboru extends JPanel {
 
@@ -38,6 +40,11 @@ public class JPrehledSouboru extends JPanel {
 	private JJedenSouborPanel jKachleCacheDir;
 	private JJedenSouborPanel jGeogetDataDir;
 	private JJedenSouborPanel jImage3rdPartyDir;
+
+	private JJedenSouborPanel jGsakDataDir;
+	private JCheckBox jGsakNacitatAzPoVybrani;
+	private JTextField jGsakCasNalezu;
+	private JTextField jGsakCasNenalezu;
 
 	private JJedenSouborPanel jImageMyDir;
 	private JJedenSouborPanel jOziDir;
@@ -89,11 +96,19 @@ public class JPrehledSouboru extends JPanel {
 		jKesDir.setFilex(u.getKesDir());
 		jCestyDir.setFilex(u.getCestyDir());
 		jGeogetDataDir.setFilex(u.getGeogetDataDir());
+		jGsakDataDir.setFilex(u.getGsakDataDir());
 
 		jNeGgtFile.setFilex(u.getNeGgtFile());
 		jAnoGgtFile.setFilex(u.getAnoGgtFile());
 		jImage3rdPartyDir.setFilex(u.getImage3rdPartyDir());
 		jImageMyDir.setFilex(u.getImageMyDir());
+	}
+
+	public void onEvent(final GsakParametryNacitaniChangedEvent event) {
+		final GsakParametryNacitani g = event.getGsakParametryNacitani();
+		jGsakCasNalezu.setText(_join(g.getCasNalezu()));
+		jGsakCasNenalezu.setText(_join(g.getCasNenalezu()));
+		jGsakNacitatAzPoVybrani.setSelected(!g.isNacistVsechnyDatabaze());
 	}
 
 	public void onEvent(final RenderUmisteniSouboruChangedEvent event) {
@@ -119,6 +134,8 @@ public class JPrehledSouboru extends JPanel {
 
 		final JComponent tab1 = createTab();
 		jTabbedPane.addTab("Data", null, tab1, "Základní datové složky.");
+		final JComponent tab1a = createTab();
+		jTabbedPane.addTab("Data 2", null, tab1a, "Další datové složky.");
 		final JComponent tab2 = createTab();
 		jTabbedPane.addTab("Ikony", null, tab2, "Složky s uživatelskými ikonami.");
 		final JComponent tab3 = createTab();
@@ -132,7 +149,28 @@ public class JPrehledSouboru extends JPanel {
 		jGeogetDataDir = pridejJednuPolozkuproEdit(null, tab1, "Datová složka geogetu.", true, true);
 
 		jNeGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, na které teď na výlet nepůjdeme (GGT pro Geoget).", false, false);
-		jAnoGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, které se chysáme jít lovit (GGT pro Geoget).", false, false);
+		jAnoGgtFile = pridejJednuPolozkuproEdit(null, tab1, "Seznam keší, které se chystáme jít lovit (GGT pro Geoget).", false, false);
+
+		jGsakDataDir = pridejJednuPolozkuproEdit(null, tab1a, "Datová složka GSAK.", true, true);
+		jGsakNacitatAzPoVybrani = pridejLogickePole(jGsakDataDir, "Načítat až po vybrání",
+		        "<html>" //
+		                + "Po změně datové složky GSAK budou všechny databáze označeny jako blokované." //
+		                + "<br/>Mohou být dost velké a stejně asi budete chtít zobrazit jen několik málo z nich" //
+		                + "<br/>vyberte si je vpravo dole, kliknutím na \"zdroje\"." //
+		                + "</html>");
+		jGsakCasNalezu = pridejTextovePole(jGsakDataDir, "Čas nálezu",
+		        "<html>" //
+		                + "Vestavěné nebo vlastní políčko v GSAK, které obsahuje čas nálezu keše ve tvaru <tt>HH:MM</tt>." //
+		                + "<br/>Pokud obsahuje kromě časového údaje i další text, bude použit jen časový údaj." //
+		                + "<br/>Můžete uvést více políček, použije se první časový údaj, který bude nalezen." //
+		                + "</html>");
+		jGsakCasNenalezu = pridejTextovePole(jGsakDataDir, "Čas nenálezu",
+		        "<html>" //
+		                + "Vestavěné nebo vlastní políčko v GSAK, které obsahuje čas nenalezení (DNF) keše ve tvaru <tt>HH:MM</tt>." //
+		                + "<br/>Pokud obsahuje kromě časového údaje i další text, bude použit jen časový údaj." //
+		                + "<br/>Můžete uvést více políček, použije se první časový údaj, který bude nalezen." //
+		                + "</html>");
+
 		jImage3rdPartyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s rozšiřujícími obrázky jiných geokolegů.", true, true);
 		jImageMyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s mými vlastními rozšiřujícími obrázky.", true, true);
 
@@ -148,6 +186,7 @@ public class JPrehledSouboru extends JPanel {
 		}
 		pridejJednuPolozkuProCteni(null, tab4, "Aktuální složka", new Filex(new File("").getAbsoluteFile(), false, true), true);
 		ukonciPanel(tab1);
+		ukonciPanel(tab1a);
 		ukonciPanel(tab2);
 		ukonciPanel(tab3);
 		ukonciPanel(tab4);
@@ -196,6 +235,29 @@ public class JPrehledSouboru extends JPanel {
 		return panel;
 	}
 
+	private JTextField pridejTextovePole(final JComponent aParent, final String aLabel, final String aHint) {
+		final JTextField input = new JTextField();
+		input.setToolTipText(aHint);
+
+		final JLabel label = new JLabel(aLabel);
+		label.setToolTipText(aHint);
+		label.setLabelFor(input);
+
+		aParent.add(label);
+		aParent.add(input);
+
+		return input;
+	}
+
+	private JCheckBox pridejLogickePole(final JComponent aParent, final String aLabel, final String aHint) {
+		final JCheckBox input = new JCheckBox(aLabel);
+		input.setToolTipText(aHint);
+
+		aParent.add(input);
+
+		return input;
+	}
+
 	private void registerEvents(final JButton ulozit) {
 		ulozit.addActionListener(aE -> {
 			try {
@@ -205,11 +267,19 @@ public class JPrehledSouboru extends JPanel {
 					u1.setCestyDir(jCestyDir.vezmiSouborAProver());
 
 					u1.setGeogetDataDir(jGeogetDataDir.vezmiSouborAProver());
+					u1.setGsakDataDir(jGsakDataDir.vezmiSouborAProver());
 					u1.setImage3rdPartyDir(jImage3rdPartyDir.vezmiSouborAProver());
 					u1.setImageMyDir(jImageMyDir.vezmiSouborAProver());
 					u1.setNeGgtFile(jNeGgtFile.vezmiSouborAProver());
 					u1.setAnoGgtFile(jAnoGgtFile.vezmiSouborAProver());
 					kesoidModel.setUmisteniSouboru(u1);
+				}
+				{
+					final GsakParametryNacitani g = new GsakParametryNacitani();
+					g.setCasNalezu(_split(jGsakCasNalezu.getText()));
+					g.setCasNenalezu(_split(jGsakCasNenalezu.getText()));
+					g.setNacistVsechnyDatabaze(!jGsakNacitatAzPoVybrani.isSelected());
+					kesoidModel.setGsakParametryNacitani(g);
 				}
 				{
 					final KachleUmisteniSouboru u2 = new KachleUmisteniSouboru();
@@ -231,6 +301,18 @@ public class JPrehledSouboru extends JPanel {
 				Dlg.error(e.getMessage());
 			}
 		});
+	}
+
+	private String _join(final Collection<String> aValues) {
+		return aValues.stream().collect(Collectors.joining(";"));
+	}
+
+	private Collection<String> _split(final String text) {
+		return Arrays.stream((text == null ? "" : text).split("[;:,]"))//
+		        .filter(s -> !StringUtils.isBlank(s))//
+		        .map(s -> s.trim())//
+		        .collect(Collectors.toList())//
+		;
 	}
 
 	private void ukonciPanel(final JComponent tab) {

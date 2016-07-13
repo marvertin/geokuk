@@ -21,12 +21,12 @@ import cz.geokuk.util.file.*;
  * @author Martin Veverka
  */
 public class MultiNacitac {
-
 	private static final Logger log = LogManager.getLogger(MultiNacitac.class.getSimpleName());
 
+	// TODO: Doporučuji přejmenovat na GEOKUK_ROOTDIR_DEF resp. GEOGET_ROOTDIR_DEF. Už dávno nejde jen o jméno souboru/složky. [2016-04-09, Bohusz]
 	private static final Root.Def FILE_NAME_REGEX_GEOKUK_DIR = new Root.Def(Integer.MAX_VALUE, Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"), null);
-
 	private static final Root.Def FILE_NAME_REGEX_GEOGET_DIR = new Root.Def(1, Pattern.compile("(?i).*\\.db3"), Pattern.compile("(?i).*\\.[0-9]{8}\\.db3"));
+	private static final Root.Def GSAK_ROOTDIR_DEF = new Root.Def(2, Pattern.compile("sqlite.db3"), null);
 
 	private final DirScanner ds;
 
@@ -60,6 +60,11 @@ public class MultiNacitac {
 		nacitace.add(new NacitacGpx());
 		nacitace.add(new NacitacImageMetadata());
 		nacitace.add(new GeogetLoader());
+		nacitace.add(new GsakDbLoader(kesoidModel::getGsakParametryNacitani));
+	}
+
+	public List<KeFile> gsakSoubory(final Filex aDataDir) {
+		return ds.scan(new Root(aDataDir.getFile(), GSAK_ROOTDIR_DEF));
 	}
 
 	public KesBag nacti(final Future<?> future, final Genom genom) throws IOException {
@@ -84,17 +89,17 @@ public class MultiNacitac {
 		return builder.getKesBag();
 	}
 
-	public void setGeogetDataDir(final File aEffectiveFile, final boolean aPrenacti) {
-		// TODO Auto-generated method stub
-	}
-
-	public void setRootDirs(final boolean prenacti, final File kesDir, final File geogetDir) {
+	// TODO Proč jsou tu ty File parametry, když máme k dispozici kesoidModel, odkud se jejich hodnoty vždy berou? [2016-04-09, Bohusz]
+	public void setRootDirs(final boolean prenacti, final File kesDir, final File geogetDir, final File gsakDir) {
 		final List<Root> roots = new ArrayList<>();
 		if (kesDir != null) {
 			roots.add(new Root(kesDir, FILE_NAME_REGEX_GEOKUK_DIR));
 		}
 		if (geogetDir != null) {
 			roots.add(new Root(geogetDir, FILE_NAME_REGEX_GEOGET_DIR));
+		}
+		if (gsakDir != null) {
+			roots.add(new Root(gsakDir, GSAK_ROOTDIR_DEF));
 		}
 		ds.seRootDirs(prenacti, roots.toArray(new Root[roots.size()]));
 	}
@@ -130,5 +135,4 @@ public class MultiNacitac {
 			}
 		}
 	}
-
 }

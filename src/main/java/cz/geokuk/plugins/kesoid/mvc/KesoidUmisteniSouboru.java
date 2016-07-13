@@ -4,6 +4,7 @@
 package cz.geokuk.plugins.kesoid.mvc;
 
 import java.io.File;
+import java.util.Objects;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +25,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	public static final Filex GEOKUK_DATA_DIR = new Filex(new File(FConst.HOME_DIR, "geokuk"), false, true);
 	public static final Filex CESTY_DIR = new Filex(new File(FConst.HOME_DIR, "geokuk/cesty"), false, true);
 	public static final Filex GEOGET_DATA_DIR = new Filex(new File("C:\\geoget\\data"), false, true);
+	public static final Filex GSAK_DATA_DIR = new Filex(new File(FConst.HOME_DIR, "AppData/Roaming/gsak/data"), false, true);
 
 	public static final Filex IMAGE_3RDPARTY_DIR = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "images3rdParty"), false, false);
 	public static final Filex IMAGE_MY_DIR = new Filex(new File(GEOKUK_DATA_DIR.getFile(), "imagesMy"), false, false);
@@ -37,6 +39,7 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 	private Filex cestyDir;
 
 	private Filex geogetDataDir;
+	private Filex gsakDataDir;
 	private Filex image3rdPartyDir;
 	private Filex imageMyDir;
 
@@ -51,31 +54,51 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-
 		final KesoidUmisteniSouboru that = (KesoidUmisteniSouboru) o;
+		return equalsDataLocations(that) && equalsImageLocations(that) && equalsGgtLocations(that) && equalsPathLocations(that);
+	}
 
-		if (anoGgtFile != null ? !anoGgtFile.equals(that.anoGgtFile) : that.anoGgtFile != null) {
+	/** Porovná, zda se shodují umístění datových složek. */
+	public boolean equalsDataLocations(final KesoidUmisteniSouboru that) {
+		if (!Objects.equals(kesDir, that == null ? null : that.kesDir)) {
 			return false;
 		}
-		if (cestyDir != null ? !cestyDir.equals(that.cestyDir) : that.cestyDir != null) {
+		if (!Objects.equals(geogetDataDir, that == null ? null : that.geogetDataDir)) {
 			return false;
 		}
-		if (geogetDataDir != null ? !geogetDataDir.equals(that.geogetDataDir) : that.geogetDataDir != null) {
+		if (!Objects.equals(gsakDataDir, that == null ? null : that.gsakDataDir)) {
 			return false;
 		}
-		if (image3rdPartyDir != null ? !image3rdPartyDir.equals(that.image3rdPartyDir) : that.image3rdPartyDir != null) {
-			return false;
-		}
-		if (imageMyDir != null ? !imageMyDir.equals(that.imageMyDir) : that.imageMyDir != null) {
-			return false;
-		}
-		if (kesDir != null ? !kesDir.equals(that.kesDir) : that.kesDir != null) {
-			return false;
-		}
-		if (neGgtFile != null ? !neGgtFile.equals(that.neGgtFile) : that.neGgtFile != null) {
-			return false;
-		}
+		return true;
+	}
 
+	/** Porovná, zda se shodují umístění složek s obrázky (ikonami). */
+	public boolean equalsImageLocations(final KesoidUmisteniSouboru that) {
+		if (!Objects.equals(image3rdPartyDir, that == null ? null : that.image3rdPartyDir)) {
+			return false;
+		}
+		if (!Objects.equals(imageMyDir, that == null ? null : that.imageMyDir)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Porovná, zda se shodují umístění dat výletů. */
+	public boolean equalsGgtLocations(final KesoidUmisteniSouboru that) {
+		if (!Objects.equals(anoGgtFile, that == null ? null : that.anoGgtFile)) {
+			return false;
+		}
+		if (!Objects.equals(neGgtFile, that == null ? null : that.neGgtFile)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Porovná, zda se shodují umístění složek s cestami. */
+	public boolean equalsPathLocations(final KesoidUmisteniSouboru that) {
+		if (!Objects.equals(cestyDir, that == null ? null : that.cestyDir)) {
+			return false;
+		}
 		return true;
 	}
 
@@ -94,6 +117,10 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 
 	public Filex getGeogetDataDir() {
 		return geogetDataDir;
+	}
+
+	public Filex getGsakDataDir() {
+		return gsakDataDir;
 	}
 
 	public Filex getImage3rdPartyDir() {
@@ -153,6 +180,10 @@ public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 
 	public void setGeogetDataDir(final Filex geogetDir) {
 		geogetDataDir = geogetDir;
+	}
+
+	public void setGsakDataDir(final Filex gsakDir) {
+		gsakDataDir = gsakDir;
 	}
 
 	public void setImage3rdPartyDir(final Filex image3rdPartyDir) {

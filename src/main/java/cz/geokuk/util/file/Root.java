@@ -17,10 +17,51 @@ public class Root {
 		}
 
 		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + maxDepth;
+			result = prime * result + (patternExcludes == null ? 0 : patternExcludes.hashCode());
+			result = prime * result + (patternIncludes == null ? 0 : patternIncludes.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(final Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final Def other = (Def) obj;
+			if (maxDepth != other.maxDepth) {
+				return false;
+			}
+			if (patternExcludes == null) {
+				if (other.patternExcludes != null) {
+					return false;
+				}
+			} else if (!patternExcludes.equals(other.patternExcludes)) {
+				return false;
+			}
+			if (patternIncludes == null) {
+				if (other.patternIncludes != null) {
+					return false;
+				}
+			} else if (!patternIncludes.equals(other.patternIncludes)) {
+				return false;
+			}
+			return true;
+		}
+
+		@Override
 		public String toString() {
 			return "Def [maxDepth=" + maxDepth + ", patternIncludes=" + patternIncludes + ", patternExcludes=" + patternExcludes + "]";
 		}
-
 	}
 
 	public final File dir;
@@ -32,10 +73,10 @@ public class Root {
 		dir = aRoot;
 		def = aDef;
 		if (def == null) {
-			throw new NullPointerException();
+			throw new NullPointerException("aDef not specified");
 		}
 		if (dir == null) {
-			throw new NullPointerException();
+			throw new NullPointerException("aRoot not specified");
 		}
 	}
 

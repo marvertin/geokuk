@@ -4,6 +4,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Collections2;
 
@@ -36,6 +37,7 @@ public class KesoidModel extends Model0 {
 	private ASada jmenoAktualniSadyIkon;
 	private KesoidUmisteniSouboru umisteniSouboru;
 	private Set<File> blokovaneZdroje;
+	private GsakParametryNacitani gsakParametryNacitani;
 
 	// injektovanci
 	private final MultiNacitacLoaderManager multiNacitacLoaderManager = new MultiNacitacLoaderManager(this);
@@ -83,6 +85,10 @@ public class KesoidModel extends Model0 {
 	 */
 	public KesoidUmisteniSouboru getUmisteniSouboru() {
 		return umisteniSouboru;
+	}
+
+	public GsakParametryNacitani getGsakParametryNacitani() {
+		return gsakParametryNacitani;
 	}
 
 	public void inject(final KesFilter filter) {
@@ -210,22 +216,15 @@ public class KesoidModel extends Model0 {
 		startIkonLoad(true);
 	}
 
-	public void setNacitatSoubor(final KeFile jmenoZDroje, final boolean nacitat) {
+	public void setNacitatSoubor(final KeFile jmenoZdroje, final boolean nacitat) {
 		// TODO : speed up
-		boolean zmena;
-		final Collection<File> changedFiles = Collections2.transform(vsechny.getInformaceOZdrojich().getSubtree(jmenoZDroje), informaceOZdroji -> informaceOZdroji.jmenoZdroje.getFile());
-		if (nacitat) {
-			System.out.println("++++XNASTAVENI " + changedFiles);
-			zmena = blokovaneZdroje.removeAll(changedFiles);
-		} else {
-			System.out.println("----XNASTAVENI " + changedFiles);
-			zmena = blokovaneZdroje.addAll(changedFiles);
+		final Collection<File> changedFiles = Collections2.transform(vsechny.getInformaceOZdrojich().getSubtree(jmenoZdroje), informaceOZdroji -> informaceOZdroji.jmenoZdroje.getFile());
+		System.out.println((nacitat ? "++++" : "----") + "XNASTAVENI " + changedFiles);
+		final boolean zmena = nacitat ? blokovaneZdroje.removeAll(changedFiles) : blokovaneZdroje.addAll(changedFiles);
+		if (zmena) {
+			currPrefe().node(FPref.KESOID_node).putFileCollection(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
+			startKesLoading();
 		}
-		if (!zmena) {
-			return;
-		}
-		currPrefe().node(FPref.KESOID_node).putFileCollection(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
-		startKesLoading();
 	}
 
 	public void setOnoff(final boolean onoff) {
@@ -241,36 +240,59 @@ public class KesoidModel extends Model0 {
 		fire(new PrekrocenLimitWaypointuVeVyrezuEvent(prekrocenLimit));
 	}
 
+	public void setGsakParametryNacitani(final GsakParametryNacitani aGsakParametryNacitani) {
+		gsakParametryNacitani = aGsakParametryNacitani;
+		final MyPreferences pref = currPrefe().node(FPref.GSAK_node);
+		pref.putStringSet(FPref.GSAK_CAS_NALEZU_value, aGsakParametryNacitani.getCasNalezu());
+		pref.putStringSet(FPref.GSAK_CAS_NENALEZU_value, aGsakParametryNacitani.getCasNenalezu());
+		pref.putBoolean(FPref.GSAK_NACITAT_VSECHNO, aGsakParametryNacitani.isNacistVsechnyDatabaze());
+		fire(new GsakParametryNacitaniChangedEvent(gsakParametryNacitani));
+	}
+
 	/**
-	 * @param umisteniSouboru
+	 * @param aUmisteniSouboru
 	 *            the umisteniSouboru to set
 	 */
-	public void setUmisteniSouboru(final KesoidUmisteniSouboru umisteniSouboru) {
-		if (umisteniSouboru.equals(this.umisteniSouboru)) {
+	public void setUmisteniSouboru(final KesoidUmisteniSouboru aUmisteniSouboru) {
+		if (aUmisteniSouboru.equals(this.umisteniSouboru)) {
 			return;
 		}
-		final boolean nacistIkony = this.umisteniSouboru == null || this.umisteniSouboru.getImageMyDir().equals(umisteniSouboru.getImageMyDir())
-		        || this.umisteniSouboru.getImage3rdPartyDir().equals(umisteniSouboru.getImage3rdPartyDir());
-		final boolean nacistKese = this.umisteniSouboru == null || this.umisteniSouboru.getKesDir().equals(umisteniSouboru.getKesDir());
-		this.umisteniSouboru = umisteniSouboru;
+		final boolean nacistIkony = !aUmisteniSouboru.equalsImageLocations(umisteniSouboru);
+		final boolean nacistKese = !aUmisteniSouboru.equalsDataLocations(umisteniSouboru);
+		final Set<File> zakázat = gsakSouboryKZakazání(umisteniSouboru, aUmisteniSouboru);
+		umisteniSouboru = aUmisteniSouboru;
+
 		final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
-		pref.putFilex(FPref.KES_DIR_value, umisteniSouboru.getKesDir());
-		pref.putFilex(FPref.CESTY_DIR_value, umisteniSouboru.getCestyDir());
-		pref.putFilex(FPref.GEOGET_DATA_DIR_value, umisteniSouboru.getGeogetDataDir());
-		pref.putFilex(FPref.IMAGE_3RD_PARTY_DIR_value, umisteniSouboru.getImage3rdPartyDir());
-		pref.putFilex(FPref.IMAGE_MY_DIR_value, umisteniSouboru.getImageMyDir());
-		pref.putFilex(FPref.ANO_GGT_FILE_value, umisteniSouboru.getAnoGgtFile());
-		pref.putFilex(FPref.NE_GGT_FILE_value, umisteniSouboru.getNeGgtFile());
-		pref.remove("vyjimkyDir"); // mazat ze starych verzi
+		pref.putFilex(FPref.KES_DIR_value, aUmisteniSouboru.getKesDir());
+		pref.putFilex(FPref.CESTY_DIR_value, aUmisteniSouboru.getCestyDir());
+		pref.putFilex(FPref.GEOGET_DATA_DIR_value, aUmisteniSouboru.getGeogetDataDir());
+		pref.putFilex(FPref.GSAK_DATA_DIR_value, aUmisteniSouboru.getGsakDataDir());
+		pref.putFilex(FPref.IMAGE_3RD_PARTY_DIR_value, aUmisteniSouboru.getImage3rdPartyDir());
+		pref.putFilex(FPref.IMAGE_MY_DIR_value, aUmisteniSouboru.getImageMyDir());
+		pref.putFilex(FPref.ANO_GGT_FILE_value, aUmisteniSouboru.getAnoGgtFile());
+		pref.putFilex(FPref.NE_GGT_FILE_value, aUmisteniSouboru.getNeGgtFile());
+		pref.remove("vyjimkyDir"); // mazat ze starých verzí
 		blokovaneZdroje = new HashSet<>(currPrefe().node(FPref.KESOID_node).getFileCollection(FPref.BLOKOVANE_ZDROJE_value, new HashSet<File>()));
-		fire(new KesoidUmisteniSouboruChangedEvent(umisteniSouboru));
+		blokovaneZdroje.addAll(zakázat);
+		fire(new KesoidUmisteniSouboruChangedEvent(aUmisteniSouboru));
 		if (nacistIkony) {
 			startIkonLoad(true);
-		} else { // když se ančítají ikony, tak se vždy potom čtou keše
+		} else { // když se načítají ikony, tak se vždy potom čtou keše
 			if (nacistKese) {
 				startKesLoading();
 			}
 		}
+	}
+
+	private Set<File> gsakSouboryKZakazání(final KesoidUmisteniSouboru aAktuální, final KesoidUmisteniSouboru aNové) {
+		if (gsakParametryNacitani.isNacistVsechnyDatabaze() || /* Tohle se stává jen při startu programu. */ aAktuální == null) {
+			return Collections.emptySet();
+		}
+		final Set<File> nové = multiNacitacLoaderManager.gsakSoubory(aNové.getGsakDataDir()).stream().map(f -> f.getFile()).collect(Collectors.toSet());
+		final Set<File> stávající = multiNacitacLoaderManager.gsakSoubory(aAktuální.getGsakDataDir()).stream().map(f -> f.getFile()).collect(Collectors.toSet());
+		// Pokud totiž některé stávající v seznamu blokovaných nejsou, tak je někdo předtím povolil. A tak je nebudeme znovu zakazovat, že.
+		nové.removeAll(stávající);
+		return nové;
 	}
 
 	public void setVsechnyKesoidy(final KesBag vsechnyKesoidy) {
@@ -326,6 +348,7 @@ public class KesoidModel extends Model0 {
 		fire(new JmenoAktualniSadyIkonChangeEvent(jmenoAktualniSadyIkon));
 		// fire(new GccomNickChangedEvent(gccomNick));
 		// loadUmisteniSouboru();
+		setGsakParametryNacitani(loadGsakParametryNacitani());
 		setUmisteniSouboru(loadUmisteniSouboru());
 
 		setOnoff(currPrefe().node(FPref.KESOID_node).getBoolean(FPref.KESOID_VISIBLE_value, true));
@@ -343,11 +366,21 @@ public class KesoidModel extends Model0 {
 		u.setKesDir(pref.getFilex("kesDir", KesoidUmisteniSouboru.GEOKUK_DATA_DIR));
 		u.setCestyDir(pref.getFilex(FPref.CESTY_DIR_value, KesoidUmisteniSouboru.CESTY_DIR));
 		u.setGeogetDataDir(pref.getFilex("geogetDataDir", KesoidUmisteniSouboru.GEOGET_DATA_DIR));
+		u.setGsakDataDir(pref.getFilex("gsakDataDir", KesoidUmisteniSouboru.GSAK_DATA_DIR));
 		u.setImage3rdPartyDir(pref.getFilex("image3rdPartyDir", KesoidUmisteniSouboru.IMAGE_3RDPARTY_DIR));
 		u.setImageMyDir(pref.getFilex("imageMyDir", KesoidUmisteniSouboru.IMAGE_MY_DIR));
 		u.setAnoGgtFile(pref.getFilex(FPref.ANO_GGT_FILE_value, KesoidUmisteniSouboru.ANO_GGT));
 		u.setNeGgtFile(pref.getFilex(FPref.NE_GGT_FILE_value, KesoidUmisteniSouboru.NE_GGT));
 		return u;
+	}
+
+	private GsakParametryNacitani loadGsakParametryNacitani() {
+		final GsakParametryNacitani g = new GsakParametryNacitani();
+		final MyPreferences pref = currPrefe().node(FPref.GSAK_node);
+		g.setCasNalezu(pref.getStringList(FPref.GSAK_CAS_NALEZU_value, Arrays.asList("UserData")));
+		g.setCasNenalezu(pref.getStringList(FPref.GSAK_CAS_NENALEZU_value, Arrays.asList("UserData")));
+		g.setNacistVsechnyDatabaze(pref.getBoolean(FPref.GSAK_NACITAT_VSECHNO, true));
+		return g;
 	}
 
 	private void startKesLoading() {
@@ -357,11 +390,9 @@ public class KesoidModel extends Model0 {
 	}
 
 	private void vycistiBlokovaneZdroje(final InformaceOZdrojich informaceOZdrojich) {
-		final boolean zmena = blokovaneZdroje.retainAll(informaceOZdrojich.getJmenaZdroju());
-		if (!zmena) {
-			return;
+		if (blokovaneZdroje.retainAll(informaceOZdrojich.getJmenaZdroju())) {
+			currPrefe().node(FPref.KESOID_node).putFileCollection(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
 		}
-		currPrefe().node(FPref.KESOID_node).putFileCollection(FPref.BLOKOVANE_ZDROJE_value, blokovaneZdroje);
 	}
 
 }

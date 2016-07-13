@@ -492,10 +492,12 @@ public class KesoidImportBuilder implements IImportBuilder {
 	}
 
 	private boolean isCzechGeodeticPoint(final GpxWpt gpxWpt) {
+		// TODO: Je špatné rozpoznávat geokeše podle prefixu GC - jsou systémy (Geocaching.su, OpenCaching, ...) které tento prefix nemají a přitom to jsou keše! [2016-04-09, Bohusz]
 		return gpxWpt.groundspeak != null && (gpxWpt.name.startsWith(GC) && gpxWpt.name.length() == 8 || gpxWpt.name.matches("^(TrB_|ZhB_|BTP_|ZGS_).*$") || "DATAZ".equals(gpxWpt.groundspeak.owner));
 	}
 
 	private boolean isGeocache(final GpxWpt gpxWpt) {
+		// TODO: Je špatné rozpoznávat geokeše podle prefixu GC - jsou systémy (Geocaching.su, OpenCaching, ...) které tento prefix nemají a přitom to jsou keše! [2016-04-09, Bohusz]
 		return (GEOCACHE.equals(gpxWpt.sym) || GEOCACHE_FOUND.equals(gpxWpt.sym)) && gpxWpt.groundspeak != null && gpxWpt.name.startsWith(GC);
 	}
 
