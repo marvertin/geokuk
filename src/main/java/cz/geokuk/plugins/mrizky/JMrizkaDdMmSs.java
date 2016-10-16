@@ -19,12 +19,12 @@ public class JMrizkaDdMmSs extends JMrizkaWgs {
 
 	@Override
 	public String getTextX(final double x) {
-		return Wgs.toDdMmSsFormat(x);
+		return (x < 0 ? "-" : "") + Wgs.toDdMmSsFormat(Math.abs(x));
 	}
 
 	@Override
 	public String getTextY(final double y) {
-		return Wgs.toDdMmSsFormat(y);
+		return (y < 0 ? "-" : "") + Wgs.toDdMmSsFormat(Math.abs(y));
 	}
 
 	/*

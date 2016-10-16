@@ -89,13 +89,17 @@ public class WgsParser {
 
 		double toDouble() {
 			final double x = stupne.toDouble() + minuty.toDouble() / 60 + vteriny.toDouble() / 3600;
+			final Character c = pismenoSvetovychStran();
+			if ("-SW".indexOf(c) >= 0) {  // tehdy jsou souřadnice záporné
+				return -x;
+			}
 			return x;
 		}
 
 		private Character extrahujJedinePovolenePismeno(final String s) {
 			Character pismeno = ' '; // to znamená žádné písmeno tam nebylo
 			for (int i = 0; i < s.length(); i++) {
-				if (Character.isLetter(s.charAt(i))) {
+				if (Character.isLetter(s.charAt(i)) || s.charAt(i) == '-') {
 					if (pismeno != ' ' && pismeno != s.charAt(i)) {
 						return null; // je tam druhé písmeno
 					}
@@ -108,9 +112,10 @@ public class WgsParser {
 			case 'E':
 			case 'S':
 			case 'W':
-			case 'V':
+			case '-': // povoluje se také mínus pro záporné souřadnice
+/*			case 'V':
 			case 'J':
-			case 'Z':
+			case 'Z':  */
 				return pismeno; // to tam smí být
 			}
 			return null; // je tam špatné písmeno
@@ -186,19 +191,24 @@ public class WgsParser {
 		povolVariaci('S', 'E');
 		povolVariaci('S', 'W');
 
+		povolVariaci('-', ' ');
+		povolVariaci(' ', '-');
+		povolVariaci('-', '-');
+
 		// české
-		povolVariaci('S', 'V');
+/*		povolVariaci('S', 'V');
 		povolVariaci('S', 'Z');
 		povolVariaci('J', 'V');
-		povolVariaci('J', 'Z');
+		povolVariaci('J', 'Z');  */
 
 		// jednostranné
 		povolVariaci('N', ' ');
+		povolVariaci('S', ' ');
 		povolVariaci(' ', 'E');
 		povolVariaci(' ', 'W');
-		povolVariaci('J', ' ');
+/*		povolVariaci('J', ' ');
 		povolVariaci(' ', 'Z');
-		povolVariaci(' ', 'V');
+		povolVariaci(' ', 'V');  */
 	}
 
 	public static void main(final String[] args) {
@@ -330,17 +340,24 @@ public class WgsParser {
 			return null;
 		}
 
+		boolean vymenitSouradnice = false;
+
 		for (final PovolenaVariacePismen povapi : povoleneVariace) {
 			if (povapi.p1 == pismeno1 && povapi.p2 == pismeno2) {
 				return v; // je to OK
 			}
 			if (povapi.p1 == pismeno2 && povapi.p2 == pismeno1) {
-				final Souradky pom = v.sou1;
-				v.sou1 = v.sou2;
-				v.sou2 = pom;
-				return v; // je to OK, ale msueli jsme vyměnit strany
+				vymenitSouradnice = true;
 			}
 		}
+
+		if (vymenitSouradnice) {
+			final Souradky pom = v.sou1;
+			v.sou1 = v.sou2;
+			v.sou2 = pom;
+			return v; // je to OK, ale museli jsme vyměnit strany
+		}
+
 		return null; // neprošlo sítem písmen
 	}
 

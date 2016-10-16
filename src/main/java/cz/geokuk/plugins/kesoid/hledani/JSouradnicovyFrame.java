@@ -162,9 +162,9 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
 	@Override
 	protected void initComponents() {
-		final String tooltip = "Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny),"
-		        + " jako oddělovač použijte mezeru nebo odpovídající značky °'\". Jako oddělovač desetin můžete použít tečku nebo čárku. "
-		        + " Písmena N nebo E můžete uvést na začátku, na knoci nebo je vynechat. (Nelze zadávat jižní šířku, či západní délku.)";
+		final String tooltip = "<html>Šířku i délku zadáváte jak jedno až tři celá nebo desetinná čísla (stupně, minuty, vteřiny),"
+		        + "<br/>jako oddělovač použijte mezeru nebo odpovídající značky °'\".<br/>Jako oddělovač desetin můžete použít tečku nebo čárku."
+		        + "<br/>Písmena N nebo E můžete uvést na začátku, na konci nebo je vynechat.<br/>Pro jižní šířku zadejte S, pro západní délku zadejte W.</html>";
 		jSouEdit = new JTextField();
 		jSouEdit.setToolTipText(tooltip);
 
@@ -220,7 +220,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 
 	}
 
-	private boolean aplikuj(final JLabel jHotova, final JTextField editacni, final double val, final double min, final double max) {
+	private boolean aplikuj(final JLabel jHotova, final JTextField editacni, final double val, final double min, final double max, final String pismena) {
 		boolean ok;
 		if (val == SPATNY_FORMAT) {
 			jHotova.setText("Grrrr!");
@@ -228,7 +228,7 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 			editacni.setBackground(ERROR_COLOR);
 			ok = false;
 		} else {
-			jHotova.setText(Wgs.toGeoFormat(val));
+			jHotova.setText(pismena.charAt(val >= 0 ? 0 : 1) + Wgs.toGeoFormat(Math.abs(val)));
 			if (val >= min && val <= max) {
 				jHotova.setBackground(Color.GREEN);
 				editacni.setBackground(Color.WHITE);
@@ -265,8 +265,8 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		}
 		final double lat = wgs == null ? SPATNY_FORMAT : wgs.lat;
 		final double lon = wgs == null ? SPATNY_FORMAT : wgs.lon;
-		final boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, lat, SIRKA_MIN, SIRKA_MAX);
-		final boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, lon, DELKA_MIN, DELKA_MAX);
+		final boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, lat, SIRKA_MIN, SIRKA_MAX, "NS");
+		final boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, lon, DELKA_MIN, DELKA_MAX, "EW");
 		ok = okSirka && okDelka;
 		if (ok) {
 			souradniceEditovane = wgs;
@@ -312,7 +312,8 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		}
 		souradniceReferencni = wgs;
 		if (!souradniceNastavenyRukama) {
-			jSouEdit.setText(Wgs.toGeoFormat(wgs.lat) + " ; " + Wgs.toGeoFormat(wgs.lon));
+			jSouEdit.setText(wgs.toString());
+//			jSouEdit.setText(Wgs.toGeoFormat(wgs.lat) + " ; " + Wgs.toGeoFormat(wgs.lon));
 			jSouEdit.selectAll();
 			souradniceNastavenyRukama = false; // toto se může zdát zbytečné, ale řádky před tím to změní
 		}
