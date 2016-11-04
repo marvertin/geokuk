@@ -61,6 +61,8 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 			jSouEdit.setBackground(entryBg);
 		}
 	}
+	private static final String NS = "NS";
+	private static final String EW = "EW";
 
 	private static final Double SPATNY_FORMAT = Double.NEGATIVE_INFINITY;
 
@@ -265,8 +267,8 @@ public class JSouradnicovyFrame extends JMyDialog0 implements AfterEventReceiver
 		}
 		final double lat = wgs == null ? SPATNY_FORMAT : wgs.lat;
 		final double lon = wgs == null ? SPATNY_FORMAT : wgs.lon;
-		final boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, lat, SIRKA_MIN, SIRKA_MAX, "NS");
-		final boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, lon, DELKA_MIN, DELKA_MAX, "EW");
+		final boolean okSirka = aplikuj(jHotovaSirka, jSouEdit, lat, SIRKA_MIN, SIRKA_MAX, NS);
+		final boolean okDelka = aplikuj(jHotovaDelka, jSouEdit, lon, DELKA_MIN, DELKA_MAX, EW);
 		ok = okSirka && okDelka;
 		if (ok) {
 			souradniceEditovane = wgs;

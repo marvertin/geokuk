@@ -195,20 +195,11 @@ public class WgsParser {
 		povolVariaci(' ', '-');
 		povolVariaci('-', '-');
 
-		// české
-/*		povolVariaci('S', 'V');
-		povolVariaci('S', 'Z');
-		povolVariaci('J', 'V');
-		povolVariaci('J', 'Z');  */
-
 		// jednostranné
 		povolVariaci('N', ' ');
 		povolVariaci('S', ' ');
 		povolVariaci(' ', 'E');
 		povolVariaci(' ', 'W');
-/*		povolVariaci('J', ' ');
-		povolVariaci(' ', 'Z');
-		povolVariaci(' ', 'V');  */
 	}
 
 	public static void main(final String[] args) {
