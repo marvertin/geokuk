@@ -521,15 +521,19 @@ public class JRenderDialog extends JMyDialog0 implements AfterInjectInit, AfterE
 			final SortedMap<String, String> pats = new TreeMap<>();
 			pats.put("C1-wgs", wgs + " z" + moumer);
 			pats.put("C2-utm", wgs.toUtm().toString() + " z" + moumer);
-			pats.put("C3-vter", "N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer);
+			pats.put("C3-vter", (wgs.lat >= 0 ? "N" : "S") + Wgs.toDdMmSsFormat(Math.abs(wgs.lat)) + " " + (wgs.lon >= 0 ? "E" : "W") + Wgs.toDdMmSsFormat(Math.abs(wgs.lon)) + " z" + moumer);
 			jKmzFolderNazevCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
 		}
 		{
 			final SortedMap<String, String> pats = new TreeMap<>();
-			pats.put("C0-compact", String.format(Locale.ENGLISH, "n%7fe%7fz%d", wgs.lat, wgs.lon, moumer).replace(".", ""));
+			pats.put("C0-compact", String.format(Locale.ENGLISH, "%c%7f%c%7fz%d",
+					(wgs.lat >= 0 ? 'n' : 's'), Math.abs(wgs.lat), 
+					(wgs.lon >= 0 ? 'e' : 'w'), Math.abs(wgs.lon), moumer).replace(".", ""));
 			pats.put("C1-wgs", wgs + " z" + moumer);
 			pats.put("C2-utm", wgs.toUtm().toString());
-			pats.put("C3-vter", FUtil.vycistiJmenoSouboru("N" + Wgs.toDdMmSsFormat(wgs.lat) + " E" + Wgs.toDdMmSsFormat(wgs.lon) + " z" + moumer));
+			pats.put("C3-vter", FUtil.vycistiJmenoSouboru(
+			        (wgs.lat >= 0 ? "N" : "S") + Wgs.toDdMmSsFormat(Math.abs(wgs.lat)) + " " + 
+			        (wgs.lon >= 0 ? "E" : "W") + Wgs.toDdMmSsFormat(Math.abs(wgs.lon)) + " z" + moumer));
 			jPureJmenoSouboruCombo.addPatterns(pats, smazatGeocodingPatterns ? JGeocodingComboBox.PRAZDNE_GEOTAGGINGG_PATTERNS : null);
 		}
 	}
