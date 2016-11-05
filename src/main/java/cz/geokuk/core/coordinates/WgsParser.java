@@ -113,9 +113,6 @@ public class WgsParser {
 			case 'S':
 			case 'W':
 			case '-': // povoluje se také mínus pro záporné souřadnice
-/*			case 'V':
-			case 'J':
-			case 'Z':  */
 				return pismeno; // to tam smí být
 			}
 			return null; // je tam špatné písmeno
