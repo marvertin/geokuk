@@ -78,7 +78,7 @@ class GenotypBuilderKes {
 			g.put(genom.ALELA_other);
 			break;
 		}
-		if (kes.getFinal() != null) {
+		if (kes.hasValidFinal()) {
 			g.put(genom.ALELA_vylusteno);
 		}
 

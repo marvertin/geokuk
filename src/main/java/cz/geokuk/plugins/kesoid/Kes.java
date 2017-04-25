@@ -211,6 +211,13 @@ public class Kes extends Kesoid {
 		return znamka;
 	}
 
+	/**
+	 * @return
+	 */
+	public Boolean hasValidFinal() {
+		return finalWpt != null && !finalWpt.hasEmptyCoords();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -300,7 +307,9 @@ public class Kes extends Kesoid {
 	 *            the mainWpt to set
 	 */
 	public void setMainWpt(final Wpt aMainWpt) {
-		mainWpt = aMainWpt;
+		if (!aMainWpt.hasEmptyCoords()) {
+			mainWpt = aMainWpt;
+		}
 	}
 
 	public void setSize(final EKesSize size) {

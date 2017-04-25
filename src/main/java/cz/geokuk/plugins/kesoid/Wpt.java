@@ -153,6 +153,10 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return zorder;
 	}
 
+	public boolean hasEmptyCoords() {
+		return getMou().xx == 0 && getMou().yy == 0;
+	}
+
 	/**
 	 *
 	 */
