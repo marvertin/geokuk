@@ -251,8 +251,7 @@ public class Coord {
 	 * @return
 	 */
 	public Mou getMouJZ() {
-		// ta minus jednička je zde proto, že jdeme od středu, je to vlastně dělení dvěma.
-		final Moud d = new Moud(dim.width << mpShift - 1, dim.height << mpShift - 1);
+		final Moud d = new Moud(dim.width / 2 << mpShift, dim.height / 2 << mpShift);
 		final Mou mou = moustred.sub(d);
 		// System.out.printf("mpShift=%d, dim=%s | moustred=%s=%s + %s = moujz=%s=%s%n", mpShift, dim, moustred, moustred.toWgs(), d, mou, mou.toWgs());
 		return mou;
