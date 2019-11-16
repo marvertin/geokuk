@@ -18,7 +18,7 @@ import cz.geokuk.core.program.UmisteniSouboruAction;
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.geocoding.GeocodingModel;
 import cz.geokuk.plugins.geocoding.Nalezenec;
-import cz.geokuk.plugins.mapy.kachle.JKachlovnik;
+import cz.geokuk.plugins.mapy.kachle.gui.JKachlovnik;
 import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
 import cz.geokuk.util.gui.*;
 import cz.geokuk.util.lang.FUtil;

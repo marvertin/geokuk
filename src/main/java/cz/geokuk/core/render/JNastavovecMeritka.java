@@ -7,7 +7,7 @@ import javax.swing.SpinnerNumberModel;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 
 public class JNastavovecMeritka extends JSpinner implements AfterEventReceiverRegistrationInit {
 
@@ -49,7 +49,7 @@ public class JNastavovecMeritka extends JSpinner implements AfterEventReceiverRe
 	}
 
 	public void onEvent(final ZmenaMapNastalaEvent event) {
-		final EKaType podklad = event.getKaSet().getPodklad();
+		final EKaType podklad = event.getKatype();
 		iModel.setMinimum(podklad.getMinMoumer());
 		iModel.setMaximum(podklad.getMaxMoumer());
 		iModel.setValue(podklad.fitMoumer((Integer) iModel.getValue()));

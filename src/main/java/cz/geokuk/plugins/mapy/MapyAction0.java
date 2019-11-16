@@ -1,7 +1,7 @@
 package cz.geokuk.plugins.mapy;
 
 import cz.geokuk.framework.ToggleAction0;
-import cz.geokuk.plugins.mapy.kachle.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 
 public abstract class MapyAction0 extends ToggleAction0 {
 

@@ -11,7 +11,7 @@ import java.util.concurrent.Future;
 
 import cz.geokuk.core.coord.*;
 import cz.geokuk.framework.*;
-import cz.geokuk.plugins.mapy.kachle.JKachlovnikRendrovaci;
+import cz.geokuk.plugins.mapy.kachle.gui.JKachlovnikRendrovaci;
 
 /**
  * @author Martin Veverka

@@ -12,7 +12,7 @@ import cz.geokuk.core.coordinates.*;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 import cz.geokuk.util.lang.FMath;
 
 /**
@@ -74,7 +74,7 @@ public class VyrezModel extends Model0 {
 	}
 
 	public void onEvent(final ZmenaMapNastalaEvent event) {
-		podkladMap = event.getKaSet().getPodklad();
+		podkladMap = event.getKatype();
 		setMoumer(FMath.fit(moord.getMoumer(), podkladMap.getMinMoumer(), podkladMap.getMaxMoumer()));
 	}
 

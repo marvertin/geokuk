@@ -1,6 +1,6 @@
 package cz.geokuk.plugins.mapy;
 
-import cz.geokuk.plugins.mapy.kachle.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 
 public class PodkladAction extends MapyAction0 {
 

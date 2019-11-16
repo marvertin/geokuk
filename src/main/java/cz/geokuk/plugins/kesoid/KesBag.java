@@ -2,9 +2,6 @@ package cz.geokuk.plugins.kesoid;
 
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
 import cz.geokuk.plugins.kesoid.mapicon.*;
@@ -14,7 +11,7 @@ import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.lang.CounterMap;
 
 public class KesBag {
-	private static final Logger log = LogManager.getLogger(KesBag.class.getSimpleName());
+	//private static final Logger log = LogManager.getLogger(KesBag.class.getSimpleName());
 
 	private final List<Wpt> wpts = new ArrayList<>();
 	private Set<Kesoid> kesoidyset;

@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import cz.geokuk.core.coordinates.Mou;
+import cz.geokuk.plugins.mapy.kachle.data.KaLoc;
 
 public class KaLocTest {
 

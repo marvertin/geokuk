@@ -38,7 +38,9 @@ public final class FExceptionDumper {
 	 */
 	public static AExcId dump(final Throwable aThrowable, final EExceptionSeverity aExceptionSeverity, final String aCircumstance) {
 		final AExcId excid = getExceptionDumper().dump(aThrowable, aExceptionSeverity, aCircumstance, getDefaultRepository());
-		FError.report(aThrowable.getMessage(), excid);
+		if (aExceptionSeverity == EExceptionSeverity.DISPLAY || aExceptionSeverity == EExceptionSeverity.WORKARROUND) {
+			FError.report(aThrowable.getMessage(), excid);
+		}
 		return excid;
 	}
 

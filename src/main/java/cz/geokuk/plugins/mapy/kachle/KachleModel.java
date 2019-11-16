@@ -9,6 +9,7 @@ import cz.geokuk.framework.Model0;
 import cz.geokuk.framework.MyPreferences;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboru;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboruChangedEvent;
+import cz.geokuk.plugins.mapy.kachle.podklady.*;
 
 /**
  * @author Martin Veverka

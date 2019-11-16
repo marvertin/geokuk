@@ -26,7 +26,7 @@ import cz.geokuk.plugins.kesoidobsazenost.ObsazenostOnoffAction;
 import cz.geokuk.plugins.kesoidpopisky.*;
 import cz.geokuk.plugins.mapy.MapyAction0;
 import cz.geokuk.plugins.mapy.kachle.OnlineModeAction;
-import cz.geokuk.plugins.mapy.kachle.UkladatMapyNaDiskAction;
+import cz.geokuk.plugins.mapy.kachle.podklady.UkladatMapyNaDiskAction;
 import cz.geokuk.plugins.mapy.stahovac.KachleOflinerAction;
 import cz.geokuk.plugins.mrizky.*;
 import cz.geokuk.plugins.refbody.BezDomuAction;

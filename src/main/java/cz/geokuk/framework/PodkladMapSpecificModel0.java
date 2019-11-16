@@ -1,7 +1,7 @@
 package cz.geokuk.framework;
 
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 
 public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copyable<S>> extends Model0 {
 
@@ -29,7 +29,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	}
 
 	public void onEvent(final ZmenaMapNastalaEvent event) {
-		final EKaType podklad = event.getKaSet().getPodklad();
+		final EKaType podklad = event.getKatype();
 		setPodkladMap(podklad);
 	}
 

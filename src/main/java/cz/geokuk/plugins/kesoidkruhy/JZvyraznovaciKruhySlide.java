@@ -8,7 +8,7 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 import cz.geokuk.util.index2d.*;
 
 public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
@@ -43,7 +43,7 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 	}
 
 	public void onEvent(final ZmenaMapNastalaEvent event) {
-		podklad = event.getKaSet().getPodklad();
+		podklad = event.getKatype();
 		provazModely();
 	}
 

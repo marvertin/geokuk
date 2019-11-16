@@ -20,6 +20,9 @@ import cz.geokuk.plugins.kesoidobsazenost.ObsazenostModel;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyModel;
 import cz.geokuk.plugins.mapy.*;
 import cz.geokuk.plugins.mapy.kachle.*;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.podklady.KachleZiskavac;
+import cz.geokuk.plugins.mapy.kachle.podklady.KachloDownloader;
 import cz.geokuk.plugins.mrizky.MrizkaModel;
 import cz.geokuk.plugins.refbody.HlidacReferencnihoBodu;
 import cz.geokuk.plugins.refbody.RefbodyModel;
@@ -96,7 +99,7 @@ public class Inicializator {
 
 	public void intMapAkce(final BeanBag bb, final Akce akce) {
 		for (final EKaType ka : EKaType.values()) {
-			final MapyAction0 jednamapoakce = ka.isPodklad() ? new PodkladAction(ka) : new DekoraceAction(ka);
+			final MapyAction0 jednamapoakce = new PodkladAction(ka);
 			akce.mapoakce.add(jednamapoakce);
 			bb.registerSigleton(jednamapoakce);
 

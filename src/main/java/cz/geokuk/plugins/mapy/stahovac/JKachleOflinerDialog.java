@@ -13,6 +13,11 @@ import cz.geokuk.core.program.ZobrazServisniOknoAction;
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.plugins.mapy.kachle.*;
+import cz.geokuk.plugins.mapy.kachle.data.*;
+import cz.geokuk.plugins.mapy.kachle.gui.JKachle;
+import cz.geokuk.plugins.mapy.kachle.gui.Kaputer;
+import cz.geokuk.plugins.mapy.kachle.podklady.KaOneReq;
+import cz.geokuk.plugins.mapy.kachle.podklady.Priority;
 
 public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
@@ -29,7 +34,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 			if (zafrontovati) {
 				new Thread(() -> {
 					postahovatNeboSpocitat(true);
-				} , "pro-offline").start();
+				}, "pro-offline").start();
 				return 0;
 			} else {
 				return postahovatNeboSpocitat(false);
@@ -72,15 +77,15 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 					log.trace(" .... řádek", coco);
 					for (int xi = 0; xi < kaputer.getPocetKachliX(); xi++) {
 						final KaLoc kaloc = kaputer.getKaloc(xi, yi);
-						pocetKachli += totoSeTaha.kaSet.getKts().size(); // po každý podklad jedna kachle
+						pocetKachli += 1;
 						if (zafrontovat) {
-							final KaAll kaall = new KaAll(kaloc, totoSeTaha.kaSet);
+							final Ka kaall = new Ka(kaloc, totoSeTaha.katype);
 							final DiagnosticsData.Listener diagListener = (diagnosticsData, diagnosticesFazeStr) -> {
 								log.trace("Stahování offline kache: {}: {}", diagnosticesFazeStr, diagnosticsData);
 							};
-							final KaAllReq req = new KaAllReq(kaall, kastat -> {
+							final KaOneReq req = new KaOneReq(kaall, kastat -> {
 								log.debug("Stahování offline kache: STAŽENO: {} -> {}", kastat);
-							} , Priority.STAHOVANI);
+							}, Priority.STAHOVANI);
 							// kachleModel.getZiskavac().hloupěČekejAžNebudeZabránoMocZdrojů();
 							kachleModel.getZiskavac().ziskejObsah(req, DiagnosticsData.create(null, "Stathování pro offline", diagListener).with("kaAllReq", req));
 							// kachleModel.getZiskavac().hloupěČekejAžNebudeZabránoMocZdrojů();
@@ -103,7 +108,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 	private class TotoSeTaha {
 		private int minmoumer;
 		private int maxmoumer;
-		private KaSet kaSet;
+		private EKaType katype;
 	}
 
 	private static final long serialVersionUID = 7180968190465321695L;
@@ -123,7 +128,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 
 	private KachleModel kachleModel;
 
-	private KaSet xkaSet;
+	private EKaType katype;
 
 	private int xminmoumer;
 
@@ -146,7 +151,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 		totoSeTaha = new TotoSeTaha();
 		totoSeTaha.maxmoumer = moord.getMoumer(); // zapamatovat si měřítko, do něj budeme kachlovat
 		totoSeTaha.minmoumer = xminmoumer;
-		totoSeTaha.kaSet = xkaSet;
+		totoSeTaha.katype = katype;
 		registerEvents();
 		prepocetKachli();
 		uvod.setText(pokecani());
@@ -166,8 +171,8 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 	}
 
 	public void onEvent(final ZmenaMapNastalaEvent event) {
-		xkaSet = event.getKaSet();
-		xminmoumer = xkaSet.getPodklad().getMinMoumer();
+		katype = event.getKatype();
+		xminmoumer = katype.getMinMoumer();
 		prepocetKachli();
 	}
 
@@ -220,7 +225,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 		return String.format("<html>Budou stahovány dlaždice mapových pokladů <b>%s</b> v rozmění měřítek " + " <b>&lt;%d,%d&gt;</b>"
 		        + " nyní natavte v hlavním okně výřez mapy který chcete stáhnout. Výřez můžete" + " nastavit v libovolném měřítku a v na libovolném mapovém podkladu. "
 		        + " Pak spusťte stahování tlačítkem. Stahování poběží na pozadí. V servisním okně lze sledovat," + " jak se zkracují frony. Stahování nelze zastavit jinak než ukončením programu.",
-		        totoSeTaha.kaSet.getKts(), totoSeTaha.minmoumer, totoSeTaha.maxmoumer);
+		        totoSeTaha.katype, totoSeTaha.minmoumer, totoSeTaha.maxmoumer);
 	}
 
 	private void prepocetKachli() {

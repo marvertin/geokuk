@@ -13,7 +13,7 @@ import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 import cz.geokuk.util.file.Filex;
 
 public class RenderModel extends Model0 {
@@ -246,7 +246,7 @@ public class RenderModel extends Model0 {
 	}
 
 	public void onEvent(final ZmenaMapNastalaEvent event) {
-		final EKaType podklad = event.getKaSet().getPodklad();
+		final EKaType podklad = event.getKatype();
 		final RenderSettings rs = renderSettings.copy();
 		rs.setRenderedMoumer(podklad.fitMoumer(rs.getRenderedMoumer()));
 		setRenderSettings(rs);

@@ -3,7 +3,6 @@ package cz.geokuk.core.program;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 import javax.swing.*;
@@ -22,7 +21,8 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoidkruhy.JZvyraznovaciKruhySlide;
 import cz.geokuk.plugins.kesoidobsazenost.JObsazenost;
 import cz.geokuk.plugins.kesoidpopisky.JPopiskySlide;
-import cz.geokuk.plugins.mapy.kachle.*;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.gui.*;
 import cz.geokuk.plugins.mrizky.*;
 import cz.geokuk.util.gui.CornerLayoutManager;
 import cz.geokuk.util.gui.ERoh;
@@ -340,7 +340,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 		detailRoh.add(detailKachlovnik);
 		factory.init(detailKachlovnik);
 		factory.init(mysovani);
-		detailKachlovnik.setKachloTypes(new KaSet(EnumSet.of(EKaType.OPHOTO_M)));
+		detailKachlovnik.setKachloType(EKaType.OPHOTO_M);
 		detailRoh.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		return detailRoh;
 	}
