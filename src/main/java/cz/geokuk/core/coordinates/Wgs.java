@@ -148,7 +148,8 @@ public class Wgs extends Misto0 {
 
 	@Override
 	public String toString() {
-		return "N" + toGeoFormat(lat) + " E" + toGeoFormat(lon);
+		// Úprava pro záporné souřadnice
+		return (lat >= 0 ? "N" : "S") + toGeoFormat(Math.abs(lat)) + " " + (lon >= 0 ? "E" : "W") + toGeoFormat(Math.abs(lon));
 	}
 
 	@Override

@@ -22,12 +22,12 @@ public class JMrizkaDdMmMmm extends JMrizkaWgs {
 
 	@Override
 	public String getTextX(final double x) {
-		return Wgs.toGeoFormat(x);
+		return (x < 0 ? "-" : "") + Wgs.toGeoFormat(Math.abs(x));
 	}
 
 	@Override
 	public String getTextY(final double y) {
-		return Wgs.toGeoFormat(y);
+		return (y < 0 ? "-" : "") + Wgs.toGeoFormat(Math.abs(y));
 	}
 
 	/*
