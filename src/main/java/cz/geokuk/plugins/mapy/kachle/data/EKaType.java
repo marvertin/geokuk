@@ -7,24 +7,27 @@ import javax.swing.KeyStroke;
 public enum EKaType {
 
     // Mapové podklady, dále neprůhledné
-	BASE_M(false, 0, 16, 16, "Základní", "Základní mapa se silnicemi.", KeyEvent.VK_Z, KeyStroke.getKeyStroke('z'), new MapyCzUrlBuilder("base-m")),
-	TURIST_M(false, 0, 16, 16, "Turistická", "Turistická mapa.", KeyEvent.VK_T, KeyStroke.getKeyStroke('t'), new MapyCzUrlBuilder("turist-m")),
-	OPHOTO_M(true, 0, 18, 16, "Letecká", "Letecká ortho foto mapa", KeyEvent.VK_L, KeyStroke.getKeyStroke('f'), new MapyCzUrlBuilder("ophoto-m")),
-	WTURIST_WINTER_M(false, 0, 16, 16, "Turistická zimní", "Zimní turistická mapa.", KeyEvent.VK_M, KeyStroke.getKeyStroke('w'), new MapyCzUrlBuilder("wturist_winter-m")),
-	TURIST_AQUATIC_M(false, 0, 16, 16, "Letní", "Letní turistická mapa s koupalištěmi", KeyEvent.VK_F, KeyStroke.getKeyStroke('f'), new MapyCzUrlBuilder("wturist_aquatic-m")),
-	OPHOTO1012_M(true, 0, 18, 16, "Letecká 2012", "Starší fotomapa", 0, null, new MapyCzUrlBuilder("ophoto1012-m")),
-	OPHOTO0406_M(true, 0, 18, 16, "Letecká 2006", "Starší fotomapa", KeyEvent.VK_6, null, new MapyCzUrlBuilder("ophoto0406-m")),
-	OPHOTO0203_M(true, 0, 16, 16, "Letecká 2003", "Starší fotomapa", KeyEvent.VK_3, null, new MapyCzUrlBuilder("ophoto0203-m")),
-	ZEMEPIS_M(false, 0, 16, 16, "Zeměpisná", "Zeměpisná mapa", KeyEvent.VK_G, KeyStroke.getKeyStroke('g'), new MapyCzUrlBuilder("zemepis-m")),
-	ARMY2_M(true, 0, 13, 13, "Historická", "Historická mapa z let 1836-52", KeyEvent.VK_H, KeyStroke.getKeyStroke('h'), new MapyCzUrlBuilder("army2-m")),
+	BASE_M(false, 0, 19, 19, "Základní", "Základní mapa se silnicemi.", KeyEvent.VK_Z, KeyStroke.getKeyStroke('z'), new MapyCzUrlBuilder("base-m")),
+	TURIST_M(false, 0, 19, 19, "Turistická", "Turistická mapa.", KeyEvent.VK_T, KeyStroke.getKeyStroke('t'), new MapyCzUrlBuilder("turist-m")),
+	OPHOTO_M(true, 0, 20, 20, "Letecká", "Letecká ortho foto mapa", KeyEvent.VK_L, KeyStroke.getKeyStroke('f'), new MapyCzUrlBuilder("ophoto-m")),
+	WTURIST_WINTER_M(false, 0, 19, 19, "Turistická zimní", "Zimní turistická mapa.", KeyEvent.VK_M, KeyStroke.getKeyStroke('w'), new MapyCzUrlBuilder("wturist_winter-m")),
+	OPHOTO1415_M(true, 0, 20, 20, "Letecká 2015", "Starší fotomapa", 0, null, new MapyCzUrlBuilder("ophoto1415-m")),
+	OPHOTO1012_M(true, 0, 19, 19, "Letecká 2012", "Starší fotomapa", 0, null, new MapyCzUrlBuilder("ophoto1012-m")),
+	OPHOTO0406_M(true, 0, 19, 19, "Letecká 2006", "Starší fotomapa", KeyEvent.VK_6, null, new MapyCzUrlBuilder("ophoto0406-m")),
+	OPHOTO0203_M(true, 0, 18, 18, "Letecká 2003", "Starší fotomapa", KeyEvent.VK_3, null, new MapyCzUrlBuilder("ophoto0203-m")),
+	ZEMEPIS_M(false, 0, 18, 18, "Zeměpisná", "Zeměpisná mapa", KeyEvent.VK_G, KeyStroke.getKeyStroke('g'), new MapyCzUrlBuilder("zemepis-m")),
+	BASE_M_TRAF_DOWN(false, 0, 19, 19, "Dopravní", "Dopravní mapa taková vyšedlá.", 0, null, new MapyCzUrlBuilder("base-m-traf-down")),
+	ARMY2_M(true, 0, 15, 15, "Historická", "Historická mapa z let 1836-52", KeyEvent.VK_H, KeyStroke.getKeyStroke('h'), new MapyCzUrlBuilder("army2-m")),
 
-	OPEN_STREAT(false, 0, 18, 18, "Openstreetmap", "Openstreetmap.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o'), new OpenStreatMapUrlBuilder("https://b.tile.openstreetmap.org/")),
-    // http://otile{switch:1,2,3,4}.mqcdn.com/tiles/1.0.0/osm/{zoom}/{x}/{y}.png
-	MAPBOX(false, 0, 18, 18, "Map box", "Open streat map box.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o'), new OpenStreatMapUrlBuilder("http://otile1.mqcdn.com/tiles/1.0.0/osm/")),
-	TUR_FREEMAP_SK_T(false, 0, 18, 18, "Slovensko turistická", "turistika.freemap.sk - turisktická mapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/T/")),
-	TUR_FREEMAP_SK_A(false, 0, 18, 18, "Slovensko automapa", "turistika.freemap.sk - automapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/A/")),
-	TUR_FREEMAP_SK_C(false, 0, 18, 18, "Slovensko cyklomapa", "turistika.freemap.sk - cyklomapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/C/")),
-	TUR_FREEMAP_SK_K(false, 0, 18, 18, "Slovensko lyžařská  ", "turistika.freemap.sk - lyžařská mapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/K/")),
+// Nefunkční mapy k 16.11.2019
+//	OPEN_STREAT(false, 0, 18, 18, "Openstreetmap", "Openstreetmap.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o'), new OpenStreatMapUrlBuilder("https://b.tile.openstreetmap.org/")),
+//    // http://otile{switch:1,2,3,4}.mqcdn.com/tiles/1.0.0/osm/{zoom}/{x}/{y}.png
+//	MAPBOX(false, 0, 18, 18, "Map box", "Open streat map box.", KeyEvent.VK_O, KeyStroke.getKeyStroke('o'), new OpenStreatMapUrlBuilder("http://otile1.mqcdn.com/tiles/1.0.0/osm/")),
+//	TUR_FREEMAP_SK_T(false, 0, 18, 18, "Slovensko turistická", "turistika.freemap.sk - turisktická mapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/T/")),
+//	TUR_FREEMAP_SK_A(false, 0, 18, 18, "Slovensko automapa", "turistika.freemap.sk - automapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/A/")),
+//	TUR_FREEMAP_SK_C(false, 0, 18, 18, "Slovensko cyklomapa", "turistika.freemap.sk - cyklomapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/C/")),
+//	TUR_FREEMAP_SK_K(false, 0, 18, 18, "Slovensko lyžařská  ", "turistika.freemap.sk - lyžařská mapa", 0, null, new OpenStreatMapUrlBuilder("http://c.freemap.sk/K/")),
+//
 
 	// Nefunguje, jakási ochrana přes kukačku
 	// HIKING_SK_TOPO (true, false, 0, 18, 18, "Slovensko turistická ", "mapy.hiking.sk - topo", 0, null, new OpenStreatMapUrlBuilder("http://mapy.hiking.sk/layers/topo/")),
