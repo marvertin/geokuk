@@ -9,3 +9,4 @@ Geokuk/bin
 *.war
 *.ear
 *.exe
+!buildSupport/*
