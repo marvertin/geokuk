@@ -107,7 +107,7 @@ public class KesFilter {
 				final Kes kes = (Kes) kesoid;
 
 				if (kes.getVztah() == EKesVztah.NORMAL) { // jen u nenalezených
-					if (kes.getFinal() != null && filterDefinition.isJenDoTerenuUNenalezenych() && !aWpt.nutnyKLusteni() && !Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())) {
+					if (kes.hasValidFinal() && filterDefinition.isJenDoTerenuUNenalezenych() && !aWpt.nutnyKLusteni() && !Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())) {
 						return false;
 					}
 				}
