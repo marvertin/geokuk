@@ -32,7 +32,7 @@ public class StdArchivDrawer extends Drawer0 {
 		imagant1.getImage().createGraphics().drawImage(puvodni.getImage(), colorConvertOp, 0, 0);
 		final RescaleOp rescaleOp = new RescaleOp(new float[] { 1.3f, 1.1f, 0.7f, 0.6f }, new float[] { 0f, 0f, 0f, 0f }, null);
 		final BufferedImage img2 = rescaleOp.filter(imagant1.getImage(), null);
-		imaganti.addFirst(new Imagant(img2));
+		imaganti.addFirst(new Imagant(img2, 0, 0));
 	}
 
 }

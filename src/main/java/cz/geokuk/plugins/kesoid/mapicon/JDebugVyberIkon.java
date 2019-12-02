@@ -87,7 +87,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 			final JButton jLabel = new JButton();
 			jLabel.setAlignmentX(CENTER_ALIGNMENT);
 			// jLabel.setText("všechna skla přes sebe");
-			final Imagant imagant = Sklo.prekresliNaSebe(sklivec.imaganti);
+			final Imagant imagant = Imagant.prekresliNaSebe(sklivec.imaganti);
 			if (imagant != null) {
 				jLabel.setIcon(new ImageIcon(imagant.getImage()));
 			}

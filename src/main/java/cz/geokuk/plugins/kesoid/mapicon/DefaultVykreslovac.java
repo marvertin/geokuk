@@ -30,9 +30,7 @@ public class DefaultVykreslovac extends Drawer0 {
 		final URL url = getUrl();
 		final BufferedImage image = imagantCache.getImage(url);
 		assert image != null;
-		final Imagant imagant = new Imagant(image);
-		imagant.setXoffset(getXoffset());
-		imagant.setYoffset(getYoffset());
+		final Imagant imagant = new Imagant(image, getXoffset(), getYoffset());
 
 		aImaganti.addFirst(imagant);
 

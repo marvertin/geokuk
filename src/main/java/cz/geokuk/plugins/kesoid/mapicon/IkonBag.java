@@ -54,7 +54,7 @@ public class IkonBag {
 
 	public Icon seekIkon(final Genotyp genotyp) {
 		final Sklivec sklivec = getSklivec(genotyp);
-		final Imagant imagant = Sklo.prekresliNaSebe(sklivec.imaganti);
+		final Imagant imagant = Imagant.prekresliNaSebe(sklivec.imaganti);
 		if (imagant == null) {
 			return null;
 		}
