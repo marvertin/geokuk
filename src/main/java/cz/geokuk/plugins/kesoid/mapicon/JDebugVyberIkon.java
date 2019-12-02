@@ -10,6 +10,7 @@ import javax.swing.border.TitledBorder;
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.genetika.*;
 
 public class JDebugVyberIkon extends JVyberIkon0 {
 

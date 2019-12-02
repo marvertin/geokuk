@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.swing.Icon;
 
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
+import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.plugins.kesoid.mapicon.*;
 
 public abstract class Kesoid extends Weikoid0 implements Cloneable {

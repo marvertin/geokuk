@@ -6,7 +6,7 @@ package cz.geokuk.plugins.kesoid.mvc;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.ToggleAction0;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mapicon.Alela;
+import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 
 /**

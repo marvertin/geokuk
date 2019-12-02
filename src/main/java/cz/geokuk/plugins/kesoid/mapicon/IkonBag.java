@@ -7,6 +7,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import cz.geokuk.api.mapicon.Imagant;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
 public class IkonBag {
 

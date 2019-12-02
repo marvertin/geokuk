@@ -9,8 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cz.geokuk.framework.*;
-import cz.geokuk.plugins.kesoid.mapicon.Genom;
-import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.index2d.BoundingRect;
@@ -91,8 +91,9 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
 					}
 					queue.put(ZARAZKA);
-				} catch (final InterruptedException ignored) {}
-			} , "Filtrovani kesoidu").start();
+				} catch (final InterruptedException ignored) {
+				}
+			}, "Filtrovani kesoidu").start();
 			for (;;) {
 				final Dvojka dvojka = queue.take();
 				if (dvojka == ZARAZKA) {

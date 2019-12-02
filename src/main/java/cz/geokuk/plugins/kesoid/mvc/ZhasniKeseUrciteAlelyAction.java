@@ -12,7 +12,7 @@ import javax.swing.Icon;
 import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mapicon.Alela;
+import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 
 /**

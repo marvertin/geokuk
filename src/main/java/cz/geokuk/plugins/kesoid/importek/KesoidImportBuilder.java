@@ -13,8 +13,8 @@ import cz.geokuk.framework.ProgressModel;
 import cz.geokuk.framework.Progressor;
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.Wpt.EZOrder;
-import cz.geokuk.plugins.kesoid.mapicon.Alela;
-import cz.geokuk.plugins.kesoid.mapicon.Genom;
+import cz.geokuk.plugins.kesoid.genetika.Alela;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.mvc.GccomNick;
 import cz.geokuk.util.file.KeFile;
 

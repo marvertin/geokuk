@@ -9,6 +9,8 @@ import javax.swing.*;
 
 import cz.geokuk.framework.Factory;
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.genetika.Alela;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.SwitchKesoidUrciteAlelyAction;
 import cz.geokuk.util.gui.JIconCheckBox;

@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.kesoid.mapicon;
+package cz.geokuk.plugins.kesoid.genetika;
 
 import java.util.*;
 

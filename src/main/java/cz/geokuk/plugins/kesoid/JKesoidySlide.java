@@ -19,6 +19,7 @@ import cz.geokuk.framework.*;
 import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.cesty.akce.OdebratZCestyAction;
 import cz.geokuk.plugins.cesty.akce.PridatDoCestyAction;
+import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.plugins.kesoid.mapicon.*;
 import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.vylety.*;

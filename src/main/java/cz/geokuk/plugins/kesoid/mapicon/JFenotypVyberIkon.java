@@ -3,6 +3,8 @@ package cz.geokuk.plugins.kesoid.mapicon;
 import java.util.Set;
 
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.genetika.Alela;
+import cz.geokuk.plugins.kesoid.genetika.Gen;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 public class JFenotypVyberIkon extends JVyberIkon0 {

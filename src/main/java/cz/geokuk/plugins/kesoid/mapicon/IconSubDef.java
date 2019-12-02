@@ -2,6 +2,8 @@ package cz.geokuk.plugins.kesoid.mapicon;
 
 import java.util.Set;
 
+import cz.geokuk.plugins.kesoid.genetika.Alela;
+
 /**
  * Definice ikony.
  *

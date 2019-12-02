@@ -7,7 +7,8 @@ import javax.swing.Icon;
 
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.plugins.kesoid.Repaintanger;
-import cz.geokuk.plugins.kesoid.mapicon.Genotyp.Otisk;
+import cz.geokuk.plugins.kesoid.genetika.*;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp.Otisk;
 import cz.geokuk.util.pocitadla.*;
 
 public class Sada {

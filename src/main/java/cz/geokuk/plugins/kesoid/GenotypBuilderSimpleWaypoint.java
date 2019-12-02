@@ -3,8 +3,8 @@
  */
 package cz.geokuk.plugins.kesoid;
 
-import cz.geokuk.plugins.kesoid.mapicon.Genom;
-import cz.geokuk.plugins.kesoid.mapicon.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
 class GenotypBuilderSimpleWaypoint {
 

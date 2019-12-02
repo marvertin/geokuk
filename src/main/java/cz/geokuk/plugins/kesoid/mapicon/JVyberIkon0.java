@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
+import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.util.gui.FComponent;
 import cz.geokuk.util.lang.CounterMap;
 

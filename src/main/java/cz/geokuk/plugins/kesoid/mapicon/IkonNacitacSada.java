@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid.mapicon;
 import java.io.*;
 import java.util.*;
 
+import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.util.file.KeyNode;
 import cz.geokuk.util.file.LamUrl;
 

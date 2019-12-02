@@ -3,7 +3,8 @@ package cz.geokuk.plugins.kesoid.mapicon;
 import java.util.*;
 
 import cz.geokuk.api.mapicon.Imagant;
-import cz.geokuk.plugins.kesoid.mapicon.Genotyp.Otisk;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp.Otisk;
 import cz.geokuk.util.pocitadla.*;
 
 public class Sklo {

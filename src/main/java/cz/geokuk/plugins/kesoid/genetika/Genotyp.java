@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.kesoid.mapicon;
+package cz.geokuk.plugins.kesoid.genetika;
 
 import java.util.*;
 
@@ -38,7 +38,7 @@ public class Genotyp {
 	 * @param aAlely
 	 */
 	public Genotyp(final Set<Alela> aAlely, final Genom genom) {
-		assert!aAlely.contains(null);
+		assert !aAlely.contains(null);
 		this.genom = genom;
 		alely.addAll(aAlely);
 	}
@@ -133,7 +133,7 @@ public class Genotyp {
 	}
 
 	// najde alelu, která odpovídá symbolu, pokud tam nějaká taková je
-	Alela getAlelaSym() {
+	public Alela getAlelaSym() {
 		for (final Alela alela : alely) {
 			if (alela.isSym()) {
 				return alela;

@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mapicon.Genom;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.index2d.BoundingRect;
 
