@@ -84,17 +84,17 @@ public class IkonNacitacSada {
 	private Sklo loadSklo(final KeyNode<String, LamUrl> skloNode) {
 		final Sklo sklo = new Sklo(skloNode.getData().name);
 		for (final KeyNode<String, LamUrl> vrstvaNode : skloNode.getSubNodes()) {
-			final Vrstva vrstva = loadVrstva(vrstvaNode, sklo);
+			final Vrstva vrstva = loadVrstva(vrstvaNode, sklo.getImageProvider());
 			sklo.vrstvy.add(vrstva);
 		}
 		return sklo;
 	}
 
-	private Vrstva loadVrstva(final KeyNode<String, LamUrl> vrstvaNode, final ImagantCache imagantCache) {
+	private Vrstva loadVrstva(final KeyNode<String, LamUrl> vrstvaNode, final ImageProvider imageProvider) {
 		final Vrstva vrstva = new Vrstva();
 		for (final Map.Entry<String, KeyNode<String, LamUrl>> entry : vrstvaNode.getItems().entrySet()) {
 			final IconDefNacitac idn = new IconDefNacitac(genom, entry.getKey(), entry.getValue().getData().url, this);
-			final IconDef iconDef = idn.loadIconDef(imagantCache);
+			final IconDef iconDef = idn.loadIconDef(imageProvider);
 			vrstva.add(iconDef);
 		}
 		return vrstva;

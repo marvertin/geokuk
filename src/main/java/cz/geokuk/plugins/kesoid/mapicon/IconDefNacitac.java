@@ -40,9 +40,9 @@ public class IconDefNacitac {
 		iIkonNacitacSada = aIkonNacitacSada;
 	}
 
-	public IconDef loadIconDef(final ImagantCache imagantCache) {
+	public IconDef loadIconDef(final ImageProvider imageProvider) {
 		try {
-			return load(imagantCache);
+			return load(imageProvider);
 		} catch (final IOException e) {
 			FExceptionDumper.dump(e, EExceptionSeverity.WORKARROUND, "Selhalo čtení obrázku ikony, tak obrázek nemůžeme použít");
 			log.error("Selhalo čtení obrázku ikony, tak obrázek nemůžeme použít", e);
@@ -54,7 +54,7 @@ public class IconDefNacitac {
 		return sufix.equals("properties");
 	}
 
-	private IconDef load(final ImagantCache imagantCache) throws IOException {
+	private IconDef load(final ImageProvider imageProvider) throws IOException {
 		idp = new IkonDrawingProperties();
 		idp.url = url;
 		final String machovanec = jmenoSPriponou.startsWith("_.") ? jmenoSPriponou.substring(1) : jmenoSPriponou;
@@ -79,7 +79,7 @@ public class IconDefNacitac {
 		if (isProperties(sufix)) {
 			nactiObrazekDefinovanyVPropertach();
 		} else { // zkusíme to považovat za obrázek
-			otestujAVydefinujSkutecnyObrazek(imagantCache);
+			otestujAVydefinujSkutecnyObrazek(imageProvider);
 		}
 
 		idp.xoffset = zpracujNaOffsete(mat.group(4));
@@ -156,13 +156,13 @@ public class IconDefNacitac {
 		return s;
 	}
 
-	private void otestujAVydefinujSkutecnyObrazek(final ImagantCache imagantCache) throws IOException {
+	private void otestujAVydefinujSkutecnyObrazek(final ImageProvider imageProvider) throws IOException {
 		// @SuppressWarnings("unused") // jen pro kontrolu
 		// BufferedImage bi = ImageIO.read(idp.url);
 		// idp.width = bi.getWidth();
 		// idp.height = bi.getHeight();
 		idp.properties = new Properties();
-		idp.vykreslovac = new DefaultVykreslovac(imagantCache);
+		idp.vykreslovac = new DefaultVykreslovac(imageProvider);
 		naplnVykreslovac(idp.vykreslovac);
 	}
 

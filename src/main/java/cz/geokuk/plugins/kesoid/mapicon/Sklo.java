@@ -1,53 +1,30 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.*;
-
-import javax.imageio.ImageIO;
 
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.plugins.kesoid.mapicon.Genotyp.Otisk;
 import cz.geokuk.util.pocitadla.*;
 
-public class Sklo implements ImagantCache {
+public class Sklo {
 
 	private static Pocitadlo pocitImangantuZasah = new PocitadloRoste("Imagant - zásahy cache", "");
-	private static Pocitadlo pocitSourceImaguZasah = new PocitadloRoste("Zdrojové obrázky - zásah cache", "");
 	private final Pocitadlo pocitImangantu = new PocitadloMalo("Imagant - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
-	private final Pocitadlo pocitSourceImagu = new PocitadloMalo("Zdrojové obrázky - počet", "Kolik vlastně máme typů konkrétních vzhledů ikon");
 
 	List<Vrstva> vrstvy = new ArrayList<>();
 
 	private final Map<Genotyp.Otisk, Imagant> cache = new HashMap<>();
-	private final Map<URL, BufferedImage> sourceImageCache = Collections.synchronizedMap(new HashMap<URL, BufferedImage>());
 
 	private final String iName;
+
+	// TODO zjistit proč je keš definována ve skle. Cožpak je ji nutno uvolňovat?
+	private final ImageProvider imageProvider = new ImageProviderCached();
 
 	/**
 	 *
 	 */
 	public Sklo(final String name) {
 		iName = name;
-	}
-
-	@Override
-	public BufferedImage getImage(final URL url) {
-		try {
-			BufferedImage bi = sourceImageCache.get(url);
-			if (bi == null) {
-				bi = ImageIO.read(url);
-				sourceImageCache.put(url, bi);
-				pocitSourceImagu.set(sourceImageCache.size());
-			} else {
-				pocitSourceImaguZasah.inc();
-			}
-			return bi;
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
-
 	}
 
 	/**
@@ -109,6 +86,10 @@ public class Sklo implements ImagantCache {
 	private void render(final IkonDrawingProperties idp, final Deque<Imagant> aImaganti) {
 
 		idp.vykreslovac.draw(aImaganti);
+	}
+
+	public ImageProvider getImageProvider() {
+		return imageProvider;
 	}
 
 }
