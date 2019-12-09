@@ -1,6 +1,5 @@
 package cz.geokuk.util.index2d;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -11,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Indexator<T> {
 
-	private Ctverecnik<T> root;
+	private final Ctverecnik<T> root;
 
 	public Indexator(final BoundingRect br) {
 		root = new Ctverecnik<>(br.xx1, br.yy1, br.xx2, br.yy2);
@@ -70,16 +69,8 @@ public class Indexator<T> {
 	}
 
 	public void vloz(final int xx, final int yy, final T mapobj) {
-		Sheet<T> sheet = new Sheet<>(xx, yy, mapobj);
-		AtomicBoolean duplicateIndicator = new AtomicBoolean(false);
-		root.vloz(sheet, duplicateIndicator);
-		while (duplicateIndicator.get()) {
-			// throw new RuntimeException("Duplicita");
-			sheet = new Sheet<>(sheet.getXx() + 3, sheet.getYy() + 7, mapobj);
-			duplicateIndicator.set(false);
-			root.vloz(sheet, duplicateIndicator);
-			// System.out.println("Duplicita resena " + mapobj);
-		}
+		final Sheet<T> sheet = new Sheet<>(xx, yy, mapobj);
+		root.vloz(sheet);
 	}
 
 	public void vypis() {

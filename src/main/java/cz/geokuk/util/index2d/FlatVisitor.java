@@ -22,4 +22,10 @@ public abstract class FlatVisitor<T> implements Visitor<T> {
 		ctver.visit(null, this);
 	}
 
+	@Override
+	public void visit(final SheetList<T> sheetList) {
+		// když flatujeme, tak visitujeme sheety.
+		sheetList.getObjs().forEach(obj -> visit(new Sheet<T>(sheetList.xx, sheetList.yy, obj)));
+	}
+
 }
