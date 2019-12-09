@@ -1,7 +1,6 @@
 package cz.geokuk.plugins.kesoid.ALELNATA_PRIPRAVA;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Druh {
 
@@ -12,12 +11,17 @@ public class Druh {
 	private String displayName;
 	final int poradiVDruzich;
 	/* Je to počet genů v druhu, tedy i lokus nad poslením lokusem */
-	private int soucasnaVelikostDna;
+	private Gen firstGen;
 
 	/**
 	 * Geny, které jsou zařazeny v druhu, délka je stejné jako počet genů v genomu. Indexy v poli odpovídají pořadí genu v genomu. Data jsou lokusy gentů vb dna příslušného druhu. Čísla jsou v pli vždy různá.
 	 */
 	private final List<Integer> lokusy = new ArrayList<>();
+
+	/**
+	 * Seznam genů v druhu. Indexy jsou lokusu genu v druhu. Použije se pro zjištění výchozích alel jedince.
+	 */
+	final List<Gen> geny = new ArrayList<>();
 
 	Druh(final String nazev, final int poradiVDruzich, final Genom genom) {
 		this.nazev = nazev;
@@ -36,8 +40,12 @@ public class Druh {
 		}
 		int lokus = lokusy.get(gen.poradiVGenomu);
 		if (lokus == Druh.NEEXISTUJICI_LOKUS) {
-			lokus = soucasnaVelikostDna++;
-			lokusy.set(gen.poradiVGenomu, lokus);
+			lokus = geny.size();
+			geny.add(gen); // a zároveň dát do genů
+			lokusy.set(gen.poradiVGenomu, lokus); // a zároveň do lokusů
+		}
+		if (firstGen == null) {
+			firstGen = gen; // první přidaný gen je první
 		}
 		return lokus;
 
@@ -78,6 +86,32 @@ public class Druh {
 	 * Zrodí se nový jedinec. Zrodí se s výchozími alelami.
 	 */
 	public Jedinec zrozeni() {
-		return new Jedinec(this, soucasnaVelikostDna);
+		return new Jedinec(this, geny.size()); // to je současná velikost DNA
+	}
+
+	/**
+	 * Zrodí se nový jedinec. Zrodí se s výchozími alelami.
+	 */
+	public Jedinec zrozeni(final Set<Alela> alelas) {
+		final Jedinec jedinec = zrozeni();
+		jedinec.put(alelas);
+		return jedinec;
+	}
+
+	/**
+	 * Vrátí první gen
+	 *
+	 * @return
+	 */
+	public Gen getFirstGen() {
+		if (firstGen == null) {
+			throw new NullPointerException("Druhn " + this + " ještě nemá žádný gen");
+		}
+		return firstGen;
+	}
+
+	@Override
+	public String toString() {
+		return nazev;
 	}
 }
