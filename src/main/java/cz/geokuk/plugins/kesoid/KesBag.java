@@ -38,6 +38,9 @@ public class KesBag {
 	}
 
 	public void add(final Wpt wpt, Genotyp genotyp) {
+		if (wpt.hasEmptyCoords()) {
+			return;
+		}
 		if (genotyp == null) { // to je zde jen z důvodu optimalizace
 			genotyp = wpt.getGenotyp(genom);
 		}
