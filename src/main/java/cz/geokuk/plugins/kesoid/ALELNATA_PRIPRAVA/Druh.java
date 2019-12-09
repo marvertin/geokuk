@@ -19,6 +19,11 @@ public class Druh {
 	private final List<Integer> lokusy = new ArrayList<>();
 
 	/**
+	 * Všechny genotypy, které se objevili.
+	 */
+	private final Map<Set<Alela>, Genotyp> genotypy = new HashMap<>();
+
+	/**
 	 * Seznam genů v druhu. Indexy jsou lokusu genu v druhu. Použije se pro zjištění výchozích alel jedince.
 	 */
 	final List<Gen> geny = new ArrayList<>();
@@ -27,6 +32,19 @@ public class Druh {
 		this.nazev = nazev;
 		this.poradiVDruzich = poradiVDruzich;
 		this.genom = genom;
+	}
+
+	public Genotyp genotypVychozi() {
+		return genotyp(Collections.emptySet());
+	}
+
+	/**
+	 * Vrátí existující nebo stvoří nový genotyp. Zajistí, že pro danou množinu ale vznikne jedinečný genotyp.
+	 *
+	 * @param alely
+	 */
+	Genotyp genotyp(final Set<Alela> alely) {
+		return genotypy.computeIfAbsent(alely, a -> new Genotyp(this, alely, genotypy.size()));
 	}
 
 	/** zařadí gen do druhu, pokud už tam není */
@@ -76,6 +94,16 @@ public class Druh {
 			return Druh.NEEXISTUJICI_LOKUS;
 		}
 		return lokusy.get(poradiVGenomu); // podle pořadí v genomu získáme lokus genu
+	}
+
+	/**
+	 * Zda má druh daný gen
+	 * 
+	 * @param gen
+	 * @return
+	 */
+	public boolean hasGen(final Gen gen) {
+		return getLokus(gen) != Druh.NEEXISTUJICI_LOKUS;
 	}
 
 	public String getNazev() {

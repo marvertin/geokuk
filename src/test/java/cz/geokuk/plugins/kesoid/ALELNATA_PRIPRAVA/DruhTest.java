@@ -56,4 +56,13 @@ public class DruhTest {
 		Assert.assertEquals(1, genom.getDruhy().size());
 	}
 
+	@Test
+	public void test9() {
+		// už teď tam bude univerzální druh
+		final Druh druh = genom.druh("blbec");
+		final Gen gen = genom.gen("mujgen");
+		Assert.assertFalse(druh.hasGen(gen));
+		druh.addGen(gen);
+		Assert.assertTrue(druh.hasGen(gen));
+	}
 }
