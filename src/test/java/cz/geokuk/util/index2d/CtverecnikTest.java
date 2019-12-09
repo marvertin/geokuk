@@ -38,8 +38,8 @@ public class CtverecnikTest {
 		ctverecnik.vloz(THIRD_QUADRANT);
 
 		ctverecnik.visit(new BoundingRect(23, 23, 28, 28), visitor);
-		verify(visitor).visit(eq(FIRST_QUADRANT_ONE));
-		verify(visitor).visit(eq(FIRST_QUADRANT_TWO));
+		verify(visitor).visitSheet(eq(FIRST_QUADRANT_ONE));
+		verify(visitor).visitSheet(eq(FIRST_QUADRANT_TWO));
 		verifyNoMoreInteractions(visitor);
 	}
 }

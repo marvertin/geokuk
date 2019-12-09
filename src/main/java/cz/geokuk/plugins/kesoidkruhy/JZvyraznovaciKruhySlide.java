@@ -72,7 +72,7 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		iIndexator.visit(getSoord().getBoundingRect(), new FlatVisitor<Wpt>() {
 
 			@Override
-			public void visit(final Sheet<Wpt> aSheet) {
+			public void visitSheet(final Sheet<Wpt> aSheet) {
 				final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
 				final Point p = getSoord().transform(mou);
 				g.setStroke(prerus);

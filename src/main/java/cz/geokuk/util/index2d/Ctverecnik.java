@@ -49,7 +49,7 @@ public class Ctverecnik<T> extends Node0<T> {
 			final boolean jeToKompletUvnitr = xx1 >= rect.xx1 && xx2 <= rect.xx2 && yy1 >= rect.yy1 && yy2 <= rect.yy2;
 
 			if (jeToKompletUvnitr) {
-				visitor.visit(this);
+				visitor.visitCtverecnik(this);
 			} else {
 				visitPodrizene(rect, visitor);
 			}

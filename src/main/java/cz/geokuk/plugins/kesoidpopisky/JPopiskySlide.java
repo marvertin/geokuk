@@ -92,7 +92,7 @@ public class JPopiskySlide extends JSingleSlide0 {
 		iIndexator.visit(getSoord().getBoundingRect(), new FlatVisitor<Wpt>() {
 
 			@Override
-			public void visit(final Sheet<Wpt> aSheet) {
+			public void visitSheet(final Sheet<Wpt> aSheet) {
 				final Wpt wpt = aSheet.get();
 				if (!wpt.isMainWpt()) {
 					return;

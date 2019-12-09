@@ -104,7 +104,7 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		iIndexator.visit(boundingRect, new FlatVisitor<Wpt>() {
 
 			@Override
-			public void visit(final Sheet<Wpt> aSheet) {
+			public void visitSheet(final Sheet<Wpt> aSheet) {
 				final Wpt wpt = aSheet.get();
 				if (!wpt.obsazujeOblast()) {
 					return;

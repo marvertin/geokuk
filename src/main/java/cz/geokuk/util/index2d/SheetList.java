@@ -32,7 +32,7 @@ public class SheetList<T> extends Sheet0<T> {
 	void visit(final BoundingRect rect, final Visitor<T> aVisitor) {
 		if (rect == null || xx >= rect.xx1 && xx < rect.xx2 & yy >= rect.yy1 && yy < rect.yy2) {
 			// jsem uvnitr
-			aVisitor.visit(this);
+			aVisitor.visitSheetList(this);
 		}
 	}
 

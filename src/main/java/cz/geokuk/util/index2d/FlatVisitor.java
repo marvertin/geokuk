@@ -17,15 +17,15 @@ public abstract class FlatVisitor<T> implements Visitor<T> {
 	 * @see objekty.Visitor#visit(objekty.Ctverecnik)
 	 */
 	@Override
-	public final void visit(final Ctverecnik<T> ctver) {
+	public final void visitCtverecnik(final Ctverecnik<T> ctver) {
 		// dovisitnout to, co nadřízený nevisitnoul
 		ctver.visit(null, this);
 	}
 
 	@Override
-	public void visit(final SheetList<T> sheetList) {
+	public void visitSheetList(final SheetList<T> sheetList) {
 		// když flatujeme, tak visitujeme sheety.
-		sheetList.getObjs().forEach(obj -> visit(new Sheet<T>(sheetList.xx, sheetList.yy, obj)));
+		sheetList.getObjs().forEach(obj -> visitSheet(new Sheet<T>(sheetList.xx, sheetList.yy, obj)));
 	}
 
 }

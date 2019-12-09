@@ -31,7 +31,7 @@ public class Indexator<T> {
 		try {
 			visit(br, new FlatVisitor<T>() {
 				@Override
-				public void visit(final Sheet<T> sheet) {
+				public void visitSheet(final Sheet<T> sheet) {
 					throw new XNalezeno(sheet);
 				}
 			});
@@ -51,7 +51,7 @@ public class Indexator<T> {
 		final Drzak drzak = new Drzak();
 		visit(br, new FlatVisitor<T>() {
 			@Override
-			public void visit(final Sheet<T> sheet) {
+			public void visitSheet(final Sheet<T> sheet) {
 				final long dx = sheet.getXx() - xx;
 				final long dy = sheet.getYy() - yy;
 				final long d2 = dx * dx + dy * dy;

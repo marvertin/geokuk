@@ -413,7 +413,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 			final BoundingRect hranice = coVykreslovat(gg);
 			indexator.visit(hranice, new FlatVisitor<Wpt>() {
 				@Override
-				public void visit(final Sheet<Wpt> aSheet) {
+				public void visitSheet(final Sheet<Wpt> aSheet) {
 					final Wpt wpt = aSheet.get();
 					mapa.get(wpt.getZorder()).add(aSheet);
 				}
