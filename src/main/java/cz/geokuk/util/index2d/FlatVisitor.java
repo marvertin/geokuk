@@ -9,7 +9,8 @@ package cz.geokuk.util.index2d;
  * @author Martin Veverka
  *
  */
-public abstract class FlatVisitor<T> implements Visitor<T> {
+@FunctionalInterface
+public interface FlatVisitor<T> extends Visitor<T> {
 
 	/*
 	 * (non-Javadoc)
@@ -17,13 +18,13 @@ public abstract class FlatVisitor<T> implements Visitor<T> {
 	 * @see objekty.Visitor#visit(objekty.Ctverecnik)
 	 */
 	@Override
-	public final void visitCtverecnik(final Ctverecnik<T> ctver) {
+	public default void visitCtverecnik(final Ctverecnik<T> ctver) {
 		// dovisitnout to, co nadřízený nevisitnoul
 		ctver.visit(null, this);
 	}
 
 	@Override
-	public void visitSheetList(final SheetList<T> sheetList) {
+	public default void visitSheetList(final SheetList<T> sheetList) {
 		// když flatujeme, tak visitujeme sheety.
 		sheetList.getObjs().forEach(obj -> visitSheet(new Sheet<T>(sheetList.xx, sheetList.yy, obj)));
 	}

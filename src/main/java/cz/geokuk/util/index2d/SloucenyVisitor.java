@@ -7,23 +7,24 @@ package cz.geokuk.util.index2d;
  * @author Martin Veverka
  *
  */
-public abstract class SloucenyVisitor<T> implements Visitor<T> {
+@FunctionalInterface
+public interface SloucenyVisitor<T> extends Visitor<T> {
 
 	@Override
-	public final void visitCtverecnik(final Ctverecnik<T> aCtver) {
+	public default void visitCtverecnik(final Ctverecnik<T> aCtver) {
 		visitNod(aCtver);
 	}
 
 	@Override
-	public final void visitSheet(final Sheet<T> aSheet) {
+	public default void visitSheet(final Sheet<T> aSheet) {
 		visitNod(aSheet);
 	}
 
 	@Override
-	public final void visitSheetList(final SheetList<T> aSheetList) {
+	public default void visitSheetList(final SheetList<T> aSheetList) {
 		visitNod(aSheetList);
 	}
 
-	protected abstract void visitNod(Node0<T> node);
+	void visitNod(Node0<T> node);
 
 }

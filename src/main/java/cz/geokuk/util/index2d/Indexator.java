@@ -18,22 +18,14 @@ public class Indexator<T> {
 
 	public int count(final BoundingRect boundingRect) {
 		final AtomicInteger counter = new AtomicInteger();
-		root.visit(boundingRect, new SloucenyVisitor<T>() {
-			@Override
-			protected void visitNod(final Node0<T> aNode) {
-				counter.addAndGet(aNode.count);
-			}
-		});
+		root.visit(boundingRect, (SloucenyVisitor<T>) aNode -> counter.addAndGet(aNode.count));
 		return counter.get();
 	}
 
 	public Sheet<T> locateAnyOne(final BoundingRect br) {
 		try {
-			visit(br, new FlatVisitor<T>() {
-				@Override
-				public void visitSheet(final Sheet<T> sheet) {
-					throw new XNalezeno(sheet);
-				}
+			visit(br, (FlatVisitor<T>) sheet -> {
+				throw new XNalezeno(sheet);
 			});
 			return null; // nevypadla výjimka, nebylo nalezeno
 		} catch (final XNalezeno e) { // bylo něco nalezeno
@@ -49,16 +41,13 @@ public class Indexator<T> {
 			long d2 = Long.MAX_VALUE;
 		}
 		final Drzak drzak = new Drzak();
-		visit(br, new FlatVisitor<T>() {
-			@Override
-			public void visitSheet(final Sheet<T> sheet) {
-				final long dx = sheet.getXx() - xx;
-				final long dy = sheet.getYy() - yy;
-				final long d2 = dx * dx + dy * dy;
-				if (d2 < drzak.d2) {
-					drzak.d2 = d2;
-					drzak.tt = sheet;
-				}
+		visit(br, (FlatVisitor<T>) sheet -> {
+			final long dx = sheet.getXx() - xx;
+			final long dy = sheet.getYy() - yy;
+			final long d2 = dx * dx + dy * dy;
+			if (d2 < drzak.d2) {
+				drzak.d2 = d2;
+				drzak.tt = sheet;
 			}
 		});
 		return drzak.tt;
