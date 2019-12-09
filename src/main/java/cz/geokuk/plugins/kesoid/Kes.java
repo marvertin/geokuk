@@ -11,7 +11,7 @@ import javax.swing.Icon;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Jedinec;
 
 /**
  * @author Martin Veverka
@@ -51,7 +51,7 @@ public class Kes extends Kesoid {
 	}
 
 	@Override
-	public void buildGenotyp(final Genom genom, final Genotyp g) {
+	public void buildGenotyp(final Genom genom, final Jedinec g) {
 		final GenotypBuilderKes genotypBuilder = new GenotypBuilderKes(genom, g);
 		genotypBuilder.build(this);
 	}

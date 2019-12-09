@@ -7,7 +7,7 @@ import javax.swing.Icon;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Jedinec;
 
 /**
  * Kesoid representing coordinates loaded from EXIF of a picture.
@@ -15,7 +15,7 @@ import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 public class Photo extends Kesoid {
 
 	@Override
-	public void buildGenotyp(final Genom genom, final Genotyp genotyp) {
+	public void buildGenotyp(final Genom genom, final Jedinec genotyp) {
 		final GenotypBuilderPhoto genotypBuilder = new GenotypBuilderPhoto(genom, genotyp);
 		genotypBuilder.build(this);
 	}

@@ -14,13 +14,13 @@ public class Gen {
 
 	private final String displayName;
 	private final Set<Alela> alely = new LinkedHashSet<>();
-	private final Map<String, Grupa> grupy = new HashMap<>();
+	private final Map<String, GrupaImpl> grupy = new HashMap<>();
 
 	private Alela vychoziAlela;
 	private boolean locked;
 	private final Genom genom;
 
-	private final Grupa IMPLICITNI_GRUPA = grupa(Grupa.IMPLICITNI_GRUPA_NAME);
+	private final GrupaImpl IMPLICITNI_GRUPA = grupa(GrupaImpl.IMPLICITNI_GRUPA_NAME);
 	private final boolean vypsatelnyVeZhasinaci;
 
 	public Gen(final String displayName, final Genom genom, final boolean vypsatelnyVeZhasinaci) {
@@ -41,7 +41,7 @@ public class Gen {
 			alely.add(alela);
 			alela.setGen(this);
 		}
-		final Grupa grupa = grupa(jmenoGrupy);
+		final GrupaImpl grupa = grupa(jmenoGrupy);
 		if (alela.getGrupa() == null || grupa != IMPLICITNI_GRUPA) {
 			grupa.add(alela);
 		}
@@ -65,7 +65,7 @@ public class Gen {
 	/**
 	 * @return the grupy
 	 */
-	public Map<String, Grupa> getGrupy() {
+	public Map<String, GrupaImpl> getGrupy() {
 		return grupy;
 	}
 
@@ -74,13 +74,13 @@ public class Gen {
 		return vychoziAlela;
 	}
 
-	public synchronized Grupa grupa(final String grupaName) {
+	public synchronized GrupaImpl grupa(final String grupaName) {
 		if (FString.isEmpty(grupaName)) {
 			return IMPLICITNI_GRUPA;
 		}
-		Grupa grupa = grupy.get(grupaName);
+		GrupaImpl grupa = grupy.get(grupaName);
 		if (grupa == null) {
-			grupa = new Grupa(grupaName);
+			grupa = new GrupaImpl(grupaName);
 			if ("gcawp!".equals(grupaName)) {
 				genom.GRUPA_gcawp = grupa;
 			}

@@ -38,7 +38,7 @@ public class KesBag {
 		citacAlel = genom.createCitacAlel();
 	}
 
-	public void add(final Wpt wpt, Genotyp genotyp) {
+	public void add(final Wpt wpt, Jedinec genotyp) {
 		if (genotyp == null) { // to je zde jen z důvodu optimalizace
 			genotyp = wpt.getGenotyp(genom);
 		}

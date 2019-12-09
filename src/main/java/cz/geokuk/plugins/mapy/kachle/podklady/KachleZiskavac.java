@@ -62,7 +62,7 @@ public class KachleZiskavac {
 			this.ka = ka;
 			this.des = des;
 			this.diagnosticsData = diagnosticsData;
-			System.out.println("Vytvořena kachlice pro: " + ka);
+			//System.out.println("Vytvořena kachlice pro: " + ka);
 		}
 
 		synchronized void ziskej(final ImageReceiver ir) {

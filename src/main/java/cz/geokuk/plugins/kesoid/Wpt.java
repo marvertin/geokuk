@@ -5,7 +5,7 @@ import java.util.Map;
 
 import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Jedinec;
 import cz.geokuk.plugins.kesoid.mapicon.*;
 
 public class Wpt extends Weikoid0 implements Uchopenec {
@@ -81,10 +81,10 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	// this.prefix = prefix.intern();
 	// }
 
-	public Genotyp getGenotyp(final Genom genom) {
+	public Jedinec getGenotyp(final Genom genom) {
 		// if (__ != null) return __;
 		//
-		final Genotyp g = genom.getGenotypVychozi();
+		final Jedinec g = genom.getGenotypVychozi();
 		buildGenotyp(genom, g);
 		getKesoid().doBuildGenotyp(genom, g);
 		// __ = g;
@@ -288,7 +288,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return "Wpt [name=" + nazev + ", type=" + getType() + ", wgs=" + getWgs() + "] " + (getKesoid() == null ? "" : getKesoid().getIdentifier());
 	}
 
-	private void buildGenotyp(final Genom genom, final Genotyp g) {
+	private void buildGenotyp(final Genom genom, final Jedinec g) {
 		final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom, g);
 		genotypBuilder.build(this);
 	}

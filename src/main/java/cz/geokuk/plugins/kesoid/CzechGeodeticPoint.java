@@ -5,7 +5,7 @@ import javax.swing.Icon;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Jedinec;
 
 public class CzechGeodeticPoint extends Kesoid {
 
@@ -13,7 +13,7 @@ public class CzechGeodeticPoint extends Kesoid {
 	private double yjtsk;
 
 	@Override
-	public void buildGenotyp(final Genom genom, final Genotyp g) {
+	public void buildGenotyp(final Genom genom, final Jedinec g) {
 		final GenotypBuilderCgp genotypBuilder = new GenotypBuilderCgp(genom, g);
 		genotypBuilder.build(this);
 	}

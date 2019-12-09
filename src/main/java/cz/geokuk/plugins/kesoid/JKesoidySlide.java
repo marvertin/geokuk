@@ -444,9 +444,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 	}
 
-	private Genotyp computeGenotyp(final Wpt wpt) {
+	private Jedinec computeGenotyp(final Wpt wpt) {
 		final Genom genom = ikonBag.getGenom();
-		final Genotyp g = wpt.getGenotyp(genom);
+		final Jedinec g = wpt.getGenotyp(genom);
 		// switch (cestyModel.get(wpt.getKesoid())) {
 		// // case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
 		// case NE: g.put(ikonBag.getGenom().ALELA_ignoru); break;
@@ -500,7 +500,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		// Přidat zhasínače
 		final JMenu zhasinace = new JMenu("Zhasni");
 		p.add(zhasinace);
-		final Genotyp genotyp = mysNadWpt.getGenotyp(vsechny.getGenom());
+		final Jedinec genotyp = mysNadWpt.getGenotyp(vsechny.getGenom());
 		for (final Alela alela : genotyp.getAlely()) {
 			if (alela.getGen().isVypsatelnyVeZhasinaci() && !alela.isVychozi()) {
 				zhasinace.add(factory.init(new ZhasniKeseUrciteAlelyAction(alela)));

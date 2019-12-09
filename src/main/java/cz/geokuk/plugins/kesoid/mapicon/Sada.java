@@ -8,7 +8,6 @@ import javax.swing.Icon;
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.plugins.kesoid.Repaintanger;
 import cz.geokuk.plugins.kesoid.genetika.*;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp.Otisk;
 import cz.geokuk.util.pocitadla.*;
 
 public class Sada {
@@ -18,7 +17,7 @@ public class Sada {
 
 	List<SkloAplikant> skloAplikanti = new ArrayList<>();
 
-	Map<Genotyp.Otisk, Sklivec> cache = new HashMap<>();
+	Map<Jedinec, Sklivec> cache = new HashMap<>();
 
 	private final String name;
 
@@ -81,16 +80,15 @@ public class Sada {
 	 * @param genotyp
 	 * @return
 	 */
-	public synchronized Sklivec getSklivec(final Genotyp genotyp) {
+	public synchronized Sklivec getSklivec(final Jedinec genotyp) {
 		zuzNaObrazkove(genotyp); // aby se nekešovalo pro alely, ke kterým nic nemáme
-		final Otisk otisk = genotyp.getOtisk();
-		Sklivec sklivec = cache.get(otisk);
+		Sklivec sklivec = cache.get(genotyp);
 		if (sklivec == null) {
 			sklivec = new Sklivec();
 			for (final SkloAplikant skloAplikant : skloAplikanti) {
 				sklivec.imaganti.add(getRenderedImage(genotyp, skloAplikant));
 			}
-			cache.put(otisk, sklivec);
+			cache.put(genotyp, sklivec);
 			repaintanger.include(sklivec);
 			pocitSklivcu.set(cache.size());
 			// System.out.println("REPREPA: " + repaintanger);
@@ -119,12 +117,12 @@ public class Sada {
 	 * @param skloAplikant
 	 * @return
 	 */
-	private Imagant getRenderedImage(final Genotyp genotyp, final SkloAplikant skloAplikant) {
+	private Imagant getRenderedImage(final Jedinec genotyp, final SkloAplikant skloAplikant) {
 		final Imagant imagant = skloAplikant.sklo.getRenderedImage(genotyp);
 		return imagant;
 	}
 
-	private void zuzNaObrazkove(final Genotyp genotyp) {
+	private void zuzNaObrazkove(final Jedinec genotyp) {
 		final Set<Alela> pouziteAlely2 = getPouziteAlely();
 		for (final Alela alela : new ArrayList<>(genotyp.getAlely())) {
 			if (!pouziteAlely2.contains(alela)) {

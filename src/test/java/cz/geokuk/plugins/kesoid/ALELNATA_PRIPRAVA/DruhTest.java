@@ -5,7 +5,8 @@ import org.junit.*;
 public class DruhTest {
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {}
+	public static void setUpBeforeClass() throws Exception {
+	}
 
 	private Genom genom;
 
@@ -39,8 +40,20 @@ public class DruhTest {
 		genom.druh("1");
 		genom.druh("2");
 		genom.druh("2");
+		genom.druh("2");
+		genom.druh("2");
+		genom.druh("2");
 		genom.druh("3");
-		Assert.assertEquals(3, genom.getDruhy().size());
+		genom.druh("3");
+		genom.druh("3");
+		// je zde i univerzální druh
+		Assert.assertEquals(3 + 1, genom.getDruhy().size());
+	}
+
+	@Test
+	public void test8() {
+		// už teď tam bude univerzální druh
+		Assert.assertEquals(1, genom.getDruhy().size());
 	}
 
 }

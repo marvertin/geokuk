@@ -2,33 +2,7 @@ package cz.geokuk.plugins.kesoid.genetika;
 
 import java.util.*;
 
-public class Genotyp {
-
-	public class Otisk {
-		@Override
-		public boolean equals(final Object obj) {
-			if (obj == null) {
-				return false;
-			}
-			if (obj == this) {
-				return true;
-			}
-			if (!(obj instanceof Otisk)) {
-				return false;
-			}
-			final Otisk otisk = (Otisk) obj;
-			return gege().equals(otisk.gege());
-		}
-
-		@Override
-		public int hashCode() {
-			return Genotyp.this.hashCode();
-		}
-
-		Genotyp gege() {
-			return Genotyp.this;
-		}
-	}
+public class Jedinec {
 
 	private final Set<Alela> alely = new HashSet<>();
 
@@ -37,16 +11,14 @@ public class Genotyp {
 	/**
 	 * @param aAlely
 	 */
-	public Genotyp(final Set<Alela> aAlely, final Genom genom) {
+	public Jedinec(final Set<Alela> aAlely, final Genom genom) {
 		assert !aAlely.contains(null);
 		this.genom = genom;
 		alely.addAll(aAlely);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * Jedinci se rovnají jen když mají shodné alely.
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -59,7 +31,7 @@ public class Genotyp {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final Genotyp other = (Genotyp) obj;
+		final Jedinec other = (Jedinec) obj;
 		if (alely == null) {
 			if (other.alely != null) {
 				return false;
@@ -81,14 +53,8 @@ public class Genotyp {
 		return genom;
 	}
 
-	public Otisk getOtisk() {
-		return new Otisk();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * Hash code se počítá jen z alel.
 	 */
 	@Override
 	public int hashCode() {

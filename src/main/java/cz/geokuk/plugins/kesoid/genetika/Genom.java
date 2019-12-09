@@ -256,8 +256,12 @@ public class Genom {
 		}
 	}
 
-	public Alela alelaSym(final String wptsym, final String jmenoGrupy) {
-		return alela(wptsym, symGen, jmenoGrupy);
+	public Alela alelaSym(final String wptsym, final String jmenoGrupy, final String grupaDisplayName) {
+		final Alela alela = alela(wptsym, symGen, jmenoGrupy);
+		if (alela.getGrupa() != null) {
+			alela.getGrupa().setDisplayName(grupaDisplayName);
+		}
+		return alela;
 	}
 
 	public CitacAlel createCitacAlel() {
@@ -268,7 +272,7 @@ public class Genom {
 		return geny.containsKey(displayName);
 	}
 
-	public Genotyp getGenotypProAlelu(final Alela alela) {
+	public Jedinec getGenotypProAlelu(final Alela alela) {
 		final Set<Alela> alely = new HashSet<>();
 		for (final Gen gen : genyList) {
 			if (gen.getAlely().contains(alela)) {
@@ -277,16 +281,16 @@ public class Genom {
 				alely.add(gen.getVychoziAlela());
 			}
 		}
-		return new Genotyp(alely, this);
+		return new Jedinec(alely, this);
 	}
 
-	public Genotyp getGenotypVychozi() {
+	public Jedinec getGenotypVychozi() {
 		final Set<Alela> alely = new HashSet<>();
 		for (final Gen gen : genyList) {
 			assert gen != null;
 			alely.add(gen.getVychoziAlela());
 		}
-		return new Genotyp(alely, this);
+		return new Jedinec(alely, this);
 	}
 
 	public List<Gen> getGeny() {
@@ -373,5 +377,15 @@ public class Genom {
 			alely.put(alelaName, alela);
 		}
 		return alela;
+	}
+
+	/**
+	 * Vytvořeno jen pro hladný přechod na novou genetiku.
+	 *
+	 * @param aAlelyx
+	 * @return
+	 */
+	public Jedinec jakysiNovyJedinec(final Set<Alela> aAlelyx) {
+		return new Jedinec(aAlelyx, this);
 	}
 }

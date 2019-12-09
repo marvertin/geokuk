@@ -43,9 +43,9 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		weik.next = wpt;
 	}
 
-	public abstract void buildGenotyp(Genom genom, Genotyp g);
+	public abstract void buildGenotyp(Genom genom, Jedinec g);
 
-	public final void doBuildGenotyp(final Genom genom, final Genotyp g) {
+	public final void doBuildGenotyp(final Genom genom, final Jedinec g) {
 		buildGenotyp(genom, g);
 		if (userDefinedAlelas != null) {
 			for (final Alela alela : userDefinedAlelas) {

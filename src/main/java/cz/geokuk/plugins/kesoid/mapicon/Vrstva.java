@@ -3,7 +3,7 @@ package cz.geokuk.plugins.kesoid.mapicon;
 import java.util.*;
 
 import cz.geokuk.plugins.kesoid.genetika.Alela;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Jedinec;
 
 public class Vrstva {
 
@@ -30,7 +30,7 @@ public class Vrstva {
 	 * @param genotyp
 	 * @return
 	 */
-	public IconDef locate(final Genotyp genotyp) {
+	public IconDef locate(final Jedinec genotyp) {
 
 		final Set<Alela> hledaneAlely = genotyp.getAlely();
 		final List<IconDef> vybrane = new ArrayList<>(pocet);
@@ -111,14 +111,14 @@ public class Vrstva {
 	 * @param genotyp
 	 * @param vybrane
 	 */
-	private void error(final String aString, final Genotyp genotyp, final List<IconDef> vybrane) {
+	private void error(final String aString, final Jedinec genotyp, final List<IconDef> vybrane) {
 		System.err.println("Našlo se toho moc na zobrazení pro: " + genotyp);
 		for (final IconDef iconDef : vybrane) {
 			System.err.println("    " + iconDef.getSubdefs() + "  -  " + iconDef.idp.url);
 		}
 	}
 
-	private Seznamec najdiPocatek(final Genotyp genotyp) {
+	private Seznamec najdiPocatek(final Jedinec genotyp) {
 		final Alela alelaSym = genotyp.getAlelaSym();
 		Seznamec pocatek;
 		if (alelaSym == null) {

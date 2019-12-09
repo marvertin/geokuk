@@ -1,14 +1,14 @@
 package cz.geokuk.plugins.kesoid;
 
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Jedinec;
 
 class GenotypBuilderMunzee {
 
-	private final Genotyp g;
+	private final Jedinec g;
 	private final Genom genom;
 
-	public GenotypBuilderMunzee(final Genom genom, final Genotyp g) {
+	public GenotypBuilderMunzee(final Genom genom, final Jedinec g) {
 		this.genom = genom;
 		this.g = g;
 	}

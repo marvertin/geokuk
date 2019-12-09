@@ -3,8 +3,7 @@ package cz.geokuk.plugins.kesoid.mapicon;
 import java.util.*;
 
 import cz.geokuk.api.mapicon.Imagant;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp.Otisk;
+import cz.geokuk.plugins.kesoid.genetika.Jedinec;
 import cz.geokuk.util.pocitadla.*;
 
 public class Sklo {
@@ -14,7 +13,7 @@ public class Sklo {
 
 	List<Vrstva> vrstvy = new ArrayList<>();
 
-	private final Map<Genotyp.Otisk, Imagant> cache = new HashMap<>();
+	private final Map<Jedinec, Imagant> cache = new HashMap<>();
 
 	private final String iName;
 
@@ -41,12 +40,11 @@ public class Sklo {
 	 * @param genotyp
 	 * @return
 	 */
-	public synchronized Imagant getRenderedImage(final Genotyp genotyp) {
-		final Otisk otisk = genotyp.getOtisk();
-		Imagant imagant = cache.get(otisk);
-		if (!cache.containsKey(otisk)) { // může tam být totiž null
+	public synchronized Imagant getRenderedImage(final Jedinec genotyp) {
+		Imagant imagant = cache.get(genotyp);
+		if (!cache.containsKey(genotyp)) { // může tam být totiž null
 			imagant = render(genotyp);
-			cache.put(otisk, imagant);
+			cache.put(genotyp, imagant);
 			pocitImangantu.set(cache.size());
 		} else {
 			pocitImangantuZasah.inc();
@@ -60,7 +58,7 @@ public class Sklo {
 	 * @param genotyp
 	 * @return
 	 */
-	Imagant render(final Genotyp genotyp) {
+	Imagant render(final Jedinec genotyp) {
 		// Vyrendrovat jednotlivé vrstvy samostatně
 		final Deque<Imagant> imaganti = new ArrayDeque<>();
 		for (final Vrstva vrstva : vrstvy) {

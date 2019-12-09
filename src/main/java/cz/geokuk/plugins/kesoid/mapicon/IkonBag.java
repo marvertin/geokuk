@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Jedinec;
 
 public class IkonBag {
 
@@ -36,7 +36,7 @@ public class IkonBag {
 		return jmenaSad;
 	}
 
-	public Sklivec getSklivec(final Genotyp genotyp) {
+	public Sklivec getSklivec(final Jedinec genotyp) {
 		return sada.getSklivec(genotyp);
 
 	}
@@ -54,7 +54,7 @@ public class IkonBag {
 		}
 	}
 
-	public Icon seekIkon(final Genotyp genotyp) {
+	public Icon seekIkon(final Jedinec genotyp) {
 		final Sklivec sklivec = getSklivec(genotyp);
 		final Imagant imagant = Imagant.prekresliNaSebe(sklivec.imaganti);
 		if (imagant == null) {

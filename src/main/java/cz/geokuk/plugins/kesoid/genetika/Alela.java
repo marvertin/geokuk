@@ -14,7 +14,7 @@ public class Alela {
 	private final String alelaName;
 	private String displayName;
 	private Gen gen;
-	private Grupa grupa;
+	private GrupaImpl grupa;
 	private final int celkovePoradi;
 
 	public static Set<String> alelyToNames(final Set<Alela> alely) {
@@ -53,7 +53,7 @@ public class Alela {
 	/**
 	 * @return the grupa
 	 */
-	public Grupa getGrupa() {
+	GrupaImpl getGrupa() {
 		return grupa;
 	}
 
@@ -85,7 +85,7 @@ public class Alela {
 	 * @param aGrupa
 	 *            the grupa to set
 	 */
-	public void setGrupa(final Grupa aGrupa) {
+	void setGrupa(final GrupaImpl aGrupa) {
 		grupa = aGrupa;
 	}
 

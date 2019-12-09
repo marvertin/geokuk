@@ -1,16 +1,16 @@
 package cz.geokuk.plugins.kesoid;
 
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.Jedinec;
 
 /**
  * Created by dan on 16.3.15.
  */
 public class GenotypBuilderPhoto {
-	private final Genotyp g;
+	private final Jedinec g;
 	private final Genom genom;
 
-	public GenotypBuilderPhoto(final Genom genom, final Genotyp g) {
+	public GenotypBuilderPhoto(final Genom genom, final Jedinec g) {
 		this.genom = genom;
 		this.g = g;
 	}
