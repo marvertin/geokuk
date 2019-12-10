@@ -4,7 +4,7 @@ import java.util.*;
 
 import cz.geokuk.util.lang.FString;
 
-public class GrupaImpl implements Grupa {
+public class GrupaSym implements Grupa {
 	static final String IMPLICITNI_GRUPA_NAME = "other!";
 
 	private final String grupaName;
@@ -12,22 +12,23 @@ public class GrupaImpl implements Grupa {
 
 	private final Set<Alela> alely = new LinkedHashSet<>();
 
-	public GrupaImpl(final String grupaName) {
+	public GrupaSym(final String grupaName) {
 		this.grupaName = grupaName;
 		displayName = grupaName;
 	}
 
 	public synchronized void add(final Alela alela) {
-		final GrupaImpl puvodniGrupa = alela.getGrupa();
-		if (puvodniGrupa != this) {
-			// System.out.printf("Prerazovani alely mezi grupami %s: %s -> %s\n", alela, puvodniGrupa, this);
-			// new RuntimeException().printStackTrace();
-			if (puvodniGrupa != null) {
-				puvodniGrupa.alely.remove(alela);
-			}
-			alely.add(alela);
-			alela.setGrupa(this);
-		}
+//		final Grupa puvodniGrupa = alela.getGrupa();
+//		if (puvodniGrupa != this) {
+//			// System.out.printf("Prerazovani alely mezi grupami %s: %s -> %s\n", alela, puvodniGrupa, this);
+//			// new RuntimeException().printStackTrace();
+//			if (puvodniGrupa != null) {
+//				puvodniGrupa.alely.remove(alela);
+//			}
+//			alely.add(alela);
+//			alela.setGrupa(this);
+//		}
+		alely.add(alela);
 	}
 
 	/**
@@ -41,11 +42,6 @@ public class GrupaImpl implements Grupa {
 	@Override
 	public String getDisplayName() {
 		return FString.isEmpty(displayName) ? grupaName : displayName;
-	}
-
-	@Override
-	public boolean isOther() {
-		return IMPLICITNI_GRUPA_NAME.equals(grupaName);
 	}
 
 	public String name() {

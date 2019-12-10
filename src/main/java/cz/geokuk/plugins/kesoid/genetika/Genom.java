@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.kesoid.genetika;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +11,325 @@ import cz.geokuk.util.lang.CounterMap;
 
 public class Genom {
 
+	private static final Logger log = LogManager.getLogger(Genom.class.getSimpleName());
+
+	private final Map<String, Alela> alely = new LinkedHashMap<>();
+
+	// Geny jsou v mapš ui v seznamu pro snadný přístup
+	private final Map<String, Gen> geny = new LinkedHashMap<>();
+	private final List<Gen> genyList = new ArrayList<>();
+
+	private final Map<String, Druh> druhy = new LinkedHashMap<>();
+
+	public final Druh UNIVERZALNI_DRUH = druh("unidruh").displayName("Univerzální dočasný druh");
+	/**
+	 * Zde jsou zveřejněné alely a geny, které se používají v kódu. Řetězce uvedené pro jejich definici se nikde jinde v programu nesmějí vykytnout.
+	 */
+
+	// Má jen jednu alelu, neboť alely přicházejí dynamicky, jak se nahrávají ikony nebo data
+	public final Gen symGen = genu("Typ waypointu", true); // spoléháme se na to, že symgen je první
+	public final Alela ALELA_Waypoint = symGen.alela("Waypoint").displayName("Obecný waypoint");
+
+	public final Gen GEN_postavenikMysi = genu("Postavení k myši", false);
+	public final Alela ALELA_nomouse = GEN_postavenikMysi.alela("nomouse").displayName("Žádná myš");
+	public final Alela ALELA_mousean = GEN_postavenikMysi.alela("mousean").displayName("Myš nad jiným wpt kešoidu");
+	public final Alela ALELA_mouseon = GEN_postavenikMysi.alela("mouseon").displayName("Myš nad tímto wpt");
+
+	public final Gen GEN_Postaveni = genu("Postavení", true);
+	public final Alela ALELA_h = GEN_Postaveni.alela("h").displayName("Hlavní waypoint");
+	public final Alela ALELA_v = GEN_Postaveni.alela("v").displayName("Vedlejší waypoint");
+
+	public final Gen GEN_druhKesoidu = genu("Druh kešoidu", true);
+	public final Alela ALELA_00 = GEN_druhKesoidu.alela("00").displayName("Neznámý");
+	public final Alela ALELA_gc = GEN_druhKesoidu.alela("gc").displayName("Keš");
+	public final Alela ALELA_wm = GEN_druhKesoidu.alela("wm").displayName("Waymark");
+	public final Alela ALELA_mz = GEN_druhKesoidu.alela("mz").displayName("Munzee");
+	public final Alela ALELA_pic = GEN_druhKesoidu.alela("pic").displayName("Obrázek");
+	public final Alela ALELA_gb = GEN_druhKesoidu.alela("gb").displayName("Český geodetický bod");
+	public final Alela ALELA_wp = GEN_druhKesoidu.alela("wp").displayName("Obecný waypoint");
+
+	public final Gen GEN_vztah = genu("Vztah", true);
+	public final Alela ALELA_hnf = GEN_vztah.alela("hnf").displayName("Nehledané");
+	public final Alela ALELA_fnd = GEN_vztah.alela("fnd").displayName("Nalezené");
+	public final Alela ALELA_own = GEN_vztah.alela("own").displayName("Moje vlastní");
+	public final Alela ALELA_not = GEN_vztah.alela("not").displayName("Neexistující");
+	public final Alela ALELA_cpt = GEN_vztah.alela("cpt").displayName("Captured");
+	public final Alela ALELA_dpl = GEN_vztah.alela("dpl").displayName("Deployed");
+
+	public final Gen GEN_stav = genu("Stav", true);
+	public final Alela ALELA_actv = GEN_stav.alela("actv").displayName("Aktivmí");
+	public final Alela ALELA_dsbl = GEN_stav.alela("dsbl").displayName("Disablovaná");
+	public final Alela ALELA_arch = GEN_stav.alela("arch").displayName("Archivovaný");
+
+	public final Gen GEN_velikost = genu("Velikost", false);
+	public final Alela ALELA_00000 = GEN_velikost.alela("00000").displayName("Neznámá");
+	public final Alela ALELA_nlist = GEN_velikost.alela("nlist").displayName("Not listed");
+	public final Alela ALELA_micro = GEN_velikost.alela("micro").displayName("Micro");
+	public final Alela ALELA_small = GEN_velikost.alela("small").displayName("Small");
+	public final Alela ALELA_regul = GEN_velikost.alela("regul").displayName("Regular");
+	public final Alela ALELA_large = GEN_velikost.alela("large").displayName("Large");
+	public final Alela ALELA_hugex = GEN_velikost.alela("hugex").displayName("Huge");
+	public final Alela ALELA_virtu = GEN_velikost.alela("virtu").displayName("Virtual");
+	public final Alela ALELA_other = GEN_velikost.alela("other").displayName("Other");
+
+	public final Gen GEN_vylet = genu("Výlet", false);
+	public final Alela ALELA_nevime = GEN_vylet.alela("nevime").displayName("Nerozhodnuto");
+	public final Alela ALELA_lovime = GEN_vylet.alela("lovime").displayName("Jdeme lovit");
+	public final Alela ALELA_ignoru = GEN_vylet.alela("ignoru").displayName("Budeme ignorovat");
+
+	public final Gen GEN_cesty = genu("Cesty", true);
+	public final Alela ALELA_mimocesticu = GEN_cesty.alela("mimocesticu").displayName("Mimo cestu");
+	public final Alela ALELA_nacestejsou = GEN_cesty.alela("nacestejsou").displayName("Na cestě");
+
+	public final Gen GEN_Vybranost = genu("Vybranost", false);
+	public final Alela ALELA_noselect = GEN_Vybranost.alela("noselect").displayName("Nevybraný");
+	public final Alela ALELA_selected = GEN_Vybranost.alela("selected").displayName("Vybraný");
+
+	public final Gen GEN_vylustenost = genu("Vyluštěnost", false);
+	public final Alela ALELA_nevyluste = GEN_vylustenost.alela("nevyluste").displayName("Není vyluštěno");
+	public final Alela ALELA_vylusteno = GEN_vylustenost.alela("vylusteno").displayName("Je vyluštěno");
+
+	public final Gen GEN_zdroj = genu("Zdroj", false);
+	public final Alela ALELA_pqimported = GEN_zdroj.alela("pqimported").displayName("Imporotvané z PQ");
+	public final Alela ALELA_handedited = GEN_zdroj.alela("handedited").displayName("Ručně přidané");
+
+	public final Gen GEN_teren = genu("Terén", false);
+	public final Alela ALELA_ter0 = GEN_teren.alela("ter0").displayName("Nespecifikovaný");
+	public final Alela ALELA_ter10 = GEN_teren.alela("ter10").displayName("1");
+	public final Alela ALELA_ter15 = GEN_teren.alela("ter15").displayName("1,5");
+	public final Alela ALELA_ter20 = GEN_teren.alela("ter20").displayName("2");
+	public final Alela ALELA_ter25 = GEN_teren.alela("ter25").displayName("2,5");
+	public final Alela ALELA_ter30 = GEN_teren.alela("ter30").displayName("3");
+	public final Alela ALELA_ter35 = GEN_teren.alela("ter35").displayName("3,5");
+	public final Alela ALELA_ter40 = GEN_teren.alela("ter40").displayName("4");
+	public final Alela ALELA_ter45 = GEN_teren.alela("ter45").displayName("4,5");
+	public final Alela ALELA_ter50 = GEN_teren.alela("ter50").displayName("5");
+
+	public final Gen GEN_obtiznost = genu("Obtížnost", false);
+	public final Alela ALELA_def0 = GEN_obtiznost.alela("dif0").displayName("Nespecifikovaná");
+	public final Alela ALELA_dif10 = GEN_obtiznost.alela("dif10").displayName("1");
+	public final Alela ALELA_dif15 = GEN_obtiznost.alela("dif15").displayName("1,5");
+	public final Alela ALELA_dif20 = GEN_obtiznost.alela("dif20").displayName("2");
+	public final Alela ALELA_dif25 = GEN_obtiznost.alela("dif25").displayName("2,5");
+	public final Alela ALELA_dif30 = GEN_obtiznost.alela("dif30").displayName("3");
+	public final Alela ALELA_dif35 = GEN_obtiznost.alela("dif35").displayName("3,5");
+	public final Alela ALELA_dif40 = GEN_obtiznost.alela("dif40").displayName("4");
+	public final Alela ALELA_dif45 = GEN_obtiznost.alela("dif45").displayName("4,5");
+	public final Alela ALELA_dif50 = GEN_obtiznost.alela("dif50").displayName("5");
+
+	/**
+	 * @deprecated Grupy nechceme, použijeme druhy.
+	 */
+	@Deprecated
+	public Grupa GRUPA_gcawp;
+
+	/**
+	 * @deprecated Grupy nechceme, použijeme druhy.
+	 */
+	@Deprecated
+	public Grupa GRUPA_gc;
+
+	/**
+	 * Vrátí nebo zřídí alelu. Pokud vzniká nová alela, není přiřazena ke genu.
+	 */
+	public synchronized Alela alela(final String alelaName) {
+		return alely.computeIfAbsent(alelaName, name -> new Alela(name, alely.size()));
+	}
+
+	/** Vrátí nebo zřídí druh */
+	public synchronized final Druh druh(final String nazev) {
+		Druh druh = druhy.get(nazev);
+		if (druh == null) {
+			druh = new Druh(nazev, druhy.size(), this);
+			druhy.put(nazev, druh);
+		}
+		return druh;
+	}
+
+	boolean existsGen(final String nazev) {
+		return geny.containsKey(nazev);
+	}
+
+	/**
+	 * Vrátí nebo zřídí gen.
+	 *
+	 * @param nazev
+	 * @return
+	 */
+	public synchronized Gen gen(final String nazev) {
+		Gen gen = geny.get(nazev);
+		if (gen == null) {
+			gen = new Gen(nazev, geny.size(), this);
+			genyList.add(gen);
+			geny.put(nazev, gen);
+		}
+		return gen;
+	}
+
+	/**
+	 * Vrátí nebo zřídí gen a přidá ho do univerzálního druhu.
+	 *
+	 * @param nazev
+	 * @return
+	 */
+	public synchronized Gen genu(final String nazev, final boolean vypsatelnyVeZhasinaci) {
+		final Gen gen = gen(nazev);
+		gen.vypsatelnyVeZhasinaci = vypsatelnyVeZhasinaci;
+		UNIVERZALNI_DRUH.addGen(gen);
+		return gen;
+	}
+
+	public Collection<Alela> getAlely() {
+		return Collections.unmodifiableCollection(alely.values());
+	}
+
+	public Collection<Druh> getDruhy() {
+		return Collections.unmodifiableCollection(druhy.values());
+	}
+
+	/**
+	 * Seznam všech registrovaných genů.
+	 *
+	 * @return
+	 */
+	public List<Gen> getGeny() {
+		return Collections.unmodifiableList(genyList);
+	}
+
+	Alela locateAlela(final String alelaName) {
+		return alely.get(alelaName);
+	}
+
+	/**
+	 * FIXME genetika: revidovat volání seekAlela, mají existovat či ne?
+	 *
+	 * @param jmenaAlel
+	 * @return
+	 */
+	public Set<Alela> namesToAlely(final Set<String> jmenaAlel) {
+		return jmenaAlel.stream().filter(jmeno -> jmeno != null && jmeno.length() > 0).map(jmeno -> {
+			return seekAlela(jmeno);
+		}).collect(Collectors.toSet());
+	}
+
+	/**
+	 * FIXME genetika: revidovat volání seekAlela, mají existovat či ne?
+	 *
+	 * @param jmenaAlel
+	 * @return
+	 */
+	public Set<Alela> namesToAlelyIgnorujNeexistujici(final Set<String> jmenaAlel) {
+		return jmenaAlel.stream().filter(jmeno -> jmeno != null && jmeno.length() > 0).map(jmeno -> {
+			return seekAlela(jmeno);
+		}).filter(alela -> alela != null).collect(Collectors.toSet());
+	}
+
+	/**
+	 * FIXME genetika: neodpovídá sekku, jen varuje.
+	 *
+	 * @param alelaName
+	 * @return
+	 */
+	public Alela seekAlela(final String alelaName) {
+		Alela alela = alely.get(alelaName);
+		if (alela == null) {
+			Genom.log.warn("Alela [{}] neni definovana!", alelaName);
+			alela = alela(alelaName);
+		}
+		return alela;
+	}
+
+	@Deprecated
+	public Gen getSymGen() {
+		return symGen;
+	}
+
+	/**
+	 * @deprecated Zatracená metoda, použít přímo druhy.
+	 * @return
+	 */
+	@Deprecated
+	public Jedinec getGenotypVychozi() {
+		return UNIVERZALNI_DRUH.zrozeni();
+	}
+
+	/**
+	 * @deprecated Zatracená metoda, použij druhy
+	 * @param alela
+	 * @return
+	 */
+	@Deprecated
+	public Jedinec getGenotypProAlelu(final Alela alela) {
+		final Jedinec jedinec = UNIVERZALNI_DRUH.zrozeni();
+		jedinec.put(alela);
+		return jedinec;
+	}
+
+	/**
+	 * Vytvořeno jen pro hladný přechod na novou genetiku.
+	 *
+	 * @deprecated Nějak lépe s použitím druhů.
+	 * @param aAlelyx
+	 * @return
+	 */
+	@Deprecated
+	public Jedinec jakysiNovyJedinec(final Set<Alela> aAlelyx) {
+		final Jedinec jedinec = UNIVERZALNI_DRUH.zrozeni();
+		jedinec.put(aAlelyx);
+		return jedinec;
+	}
+
+	/**
+	 * Pro alely z venku, kde se automaticky do genu zadefinuje výchzí alela.
+	 *
+	 * @deprecated Volat přímo, co je zde voláno asi ne, něco s tím udělat, ať je to jasnějěí.
+	 * @param alelaName
+	 * @param genName
+	 * @return
+	 */
+	@Deprecated
+	public Alela alela(final String alelaName, final String genName) {
+		final Gen gen = gen(genName);
+		if (gen.getAlely().size() == 0) {
+			gen.alela(":" + genName); // první, tedy výchozí alela budiž zřízena.
+		}
+		final Alela alela = gen.alela(alelaName + ":" + genName);
+		return alela; // a teď ta naše alela
+	}
+
+	/**
+	 * @deprecated Nějak rozebrat metodu na nepoužívat grupy.
+	 * @param wptsym
+	 * @param jmenoGrupy
+	 * @param grupaDisplayName
+	 * @return
+	 */
+	@Deprecated
+	public Alela alelaSym(final String wptsym, final String jmenoGrupy, final String grupaDisplayName) {
+		final Alela alela = symGen.alela(wptsym);
+		final GrupaSym grupa = symGen.grupa(jmenoGrupy);
+		if (grupa != null) {
+			grupa.setDisplayName(grupaDisplayName);
+			grupa.add(alela);
+		}
+		return alela;
+	}
+
+	/**
+	 * Vytvoří čítač alel s nulama a umožňuje explicitně počítat alely.
+	 *
+	 * @return
+	 */
+	public CitacAlel createCitacAlel() {
+		return new CitacAlel();
+	}
+
+	/**
+	 * Umožnuje počítat alely rychlým způsobem bez mapy.
+	 *
+	 * @author veverka
+	 *
+	 */
 	public class CitacAlel {
 
 		private int[] pocty;
@@ -38,354 +358,5 @@ public class Genom {
 			}
 			return cm;
 		}
-	}
-
-	// public static Genom G = new Genom();
-
-	private static final Logger log = LogManager.getLogger(Genom.class.getSimpleName());
-	public static final String NEZARAZENY_GEN = "<Nezařazení>";
-	private final Map<String, Alela> alely = new LinkedHashMap<>();
-	private final Map<String, Gen> geny = new LinkedHashMap<>();
-
-	private final List<Gen> genyList = new ArrayList<>();
-
-	private Gen symGen;
-
-	// TODO : refactor this so the alelas are loaded from an external file (-> possibility of user addition of new alelas
-	// easily).
-
-	private Gen currentGen;
-
-	public Alela ALELA_Waypoint = coale("Waypoint", "Obecný waypoint");
-	public Alela ALELA_h = coale("h", "Hlavní waypoint");
-
-	public Alela ALELA_v = coale("v", "Vedlejší waypoint");
-	public Alela ALELA_00 = coale("00", "Neznámý");
-	public Alela ALELA_gc = coale("gc", "Keš");
-	public Alela ALELA_wm = coale("wm", "Waymark");
-	public Alela ALELA_gb = coale("gb", "Český geodetický bod");
-	public Alela ALELA_wp = coale("wp", "Obecný waypoint");
-	public Alela ALELA_mz = coale("mz", "Munzee");
-
-	public Alela ALELA_pic = coale("pic", "Obrázek");
-	public Alela ALELA_hnf = coale("hnf", "Nehledané");
-	public Alela ALELA_fnd = coale("fnd", "Nalezené");
-	public Alela ALELA_own = coale("own", "Moje vlastní");
-	public Alela ALELA_not = coale("not", "Neexistující");
-	public Alela ALELA_cpt = coale("cpt", "Captured");
-
-	public Alela ALELA_dpl = coale("dpl", "Deployed");
-	public Alela ALELA_actv = coale("actv", "Aktivmí");
-	public Alela ALELA_dsbl = coale("dsbl", "Disablovaná");
-
-	public Alela ALELA_arch = coale("arch", "Archivovaný");
-	public Alela ALELA_00000 = coale("00000", "Neznámá");
-	public Alela ALELA_nlist = coale("nlist", "Not listed");
-	public Alela ALELA_micro = coale("micro", "Micro");
-	public Alela ALELA_small = coale("small", "Small");
-	public Alela ALELA_regul = coale("regul", "Regular");
-	public Alela ALELA_large = coale("large", "Large");
-	public Alela ALELA_hugex = coale("hugex", "Huge");
-	public Alela ALELA_virtu = coale("virtu", "Virtual");
-
-	public Alela ALELA_other = coale("other", "Other");
-	public Alela ALELA_nevime = coale("nevime", "Nerozhodnuto");
-	public Alela ALELA_lovime = coale("lovime", "Jdeme lovit");
-
-	public Alela ALELA_ignoru = coale("ignoru", "Budeme ignorovat");
-	public Alela ALELA_nomouse = coale("nomouse", "Žádná myš");
-	public Alela ALELA_mousean = coale("mousean", "Myš nad jiným wpt kešoidu");
-
-	public Alela ALELA_mouseon = coale("mouseon", "Myš nad tímto wpt");
-	public Alela ALELA_noselect = coale("noselect", "Nevybraný");
-
-	public Alela ALELA_selected = coale("selected", "Vybraný");
-	public Alela ALELA_nevyluste = coale("nevyluste", "Není vyluštěno");
-
-	public Alela ALELA_vylusteno = coale("vylusteno", "Je vyluštěno");
-	public Alela ALELA_pqimported = coale("pqimported", "Imporotvané z PQ");
-
-	public Alela ALELA_handedited = coale("handedited", "Ručně přidané");
-	public Alela ALELA_mimocesticu = coale("mimocesticu", "Mimo cestu");
-
-	public Alela ALELA_nacestejsou = coale("nacestejsou", "Na cestě");
-	public Alela ALELA_ter0 = coale("ter0", "Nespecifikovaný");
-	public Alela ALELA_ter10 = coale("ter10", "1");
-	public Alela ALELA_ter15 = coale("ter15", "1,5");
-	public Alela ALELA_ter20 = coale("ter20", "2");
-	public Alela ALELA_ter25 = coale("ter25", "2,5");
-	public Alela ALELA_ter30 = coale("ter30", "3");
-	public Alela ALELA_ter35 = coale("ter35", "3,5");
-	public Alela ALELA_ter40 = coale("ter40", "4");
-	public Alela ALELA_ter45 = coale("ter45", "4,5");
-
-	public Alela ALELA_ter50 = coale("ter50", "5");
-	public Alela ALELA_def0 = coale("dif0", "Nespecifikovaná");
-	public Alela ALELA_dif10 = coale("dif10", "1");
-	public Alela ALELA_dif15 = coale("dif15", "1,5");
-	public Alela ALELA_dif20 = coale("dif20", "2");
-	public Alela ALELA_dif25 = coale("dif25", "2,5");
-	public Alela ALELA_dif30 = coale("dif30", "3");
-	public Alela ALELA_dif35 = coale("dif35", "3,5");
-	public Alela ALELA_dif40 = coale("dif40", "4");
-	public Alela ALELA_dif45 = coale("dif45", "4,5");
-	public Alela ALELA_dif50 = coale("dif50", "5");
-	public Grupa GRUPA_gcawp;
-
-	public Grupa GRUPA_gc;
-
-	{
-		symGen = gen("Typ waypointu", true);
-		ale(ALELA_Waypoint);
-
-		gen("Postavení", true);
-		// ale(ALELA_0);
-		ale(ALELA_h);
-		ale(ALELA_v);
-
-		gen("Druh kešoidu", true);
-		ale(ALELA_00);
-		ale(ALELA_gc);
-		ale(ALELA_wm);
-		ale(ALELA_mz);
-		ale(ALELA_pic);
-		ale(ALELA_gb);
-		ale(ALELA_wp);
-
-		gen("Vztah", true);
-		ale(ALELA_hnf);
-		ale(ALELA_fnd);
-		ale(ALELA_own);
-		ale(ALELA_not);
-		ale(ALELA_cpt);
-		ale(ALELA_dpl);
-
-		gen("Stav", true);
-		ale(ALELA_actv);
-		ale(ALELA_dsbl);
-		ale(ALELA_arch);
-
-		gen("Velikost", false);
-		ale(ALELA_00000);
-		ale(ALELA_nlist);
-		ale(ALELA_micro);
-		ale(ALELA_small);
-		ale(ALELA_regul);
-		ale(ALELA_large);
-		ale(ALELA_hugex);
-		ale(ALELA_virtu);
-		ale(ALELA_other);
-
-		gen("Výlet", false);
-		ale(ALELA_nevime);
-		ale(ALELA_lovime);
-		ale(ALELA_ignoru);
-
-		gen("Cesty", true);
-		ale(ALELA_mimocesticu);
-		ale(ALELA_nacestejsou);
-
-		gen("Postavení k myši", false);
-		ale(ALELA_nomouse);
-		ale(ALELA_mousean);
-		ale(ALELA_mouseon);
-
-		gen("Vybranost", false);
-		ale(ALELA_noselect);
-		ale(ALELA_selected);
-
-		gen("Vyluštěnost", false);
-		ale(ALELA_nevyluste);
-		ale(ALELA_vylusteno);
-
-		gen("Zdroj", false);
-		ale(ALELA_pqimported);
-		ale(ALELA_handedited);
-
-		gen("Terén", false);
-		ale(ALELA_ter0);
-		ale(ALELA_ter10);
-		ale(ALELA_ter15);
-		ale(ALELA_ter20);
-		ale(ALELA_ter25);
-		ale(ALELA_ter30);
-		ale(ALELA_ter35);
-		ale(ALELA_ter40);
-		ale(ALELA_ter45);
-		ale(ALELA_ter50);
-
-		gen("Obtížnost", false);
-		ale(ALELA_def0);
-		ale(ALELA_dif10);
-		ale(ALELA_dif15);
-		ale(ALELA_dif20);
-		ale(ALELA_dif25);
-		ale(ALELA_dif30);
-		ale(ALELA_dif35);
-		ale(ALELA_dif40);
-		ale(ALELA_dif45);
-		ale(ALELA_dif50);
-
-		currentGen = null;
-	}
-
-	/**
-	 * Určeno pro defince genů a alel externích. Pro každý nový gen se musí vytvořit též implicitní alela.
-	 *
-	 * @param alelaName
-	 * @param genName
-	 * @return
-	 */
-	public Alela alela(final String alelaName, final String genName) {
-		final Gen gen = gen(genName, false);
-		if (gen.getAlely().size() == 0) {
-			gen.add(makeAlela(":" + genName), null);
-		}
-		// TODO Zkontrolovat: Doplnil jsem kvalifikaci jménem genu, protože jinak se mi generovalo obrovské množství těch errorů dole. Nevím, co to může všechno způsobit, ale stejné řetězce přece musí být možné použít jako alely různých genů, ne? [ISSUE#48, 2016-04-09, Bohusz]
-		final Alela alela = makeAlela(alelaName + ":" + genName);
-		if (alela.hasGen()) {
-			if (alela.getGen() == gen) {
-				return alela; // tak vrátíme tu alelu
-			} else {
-				log.error(String.format("Je pozadovana alela '%s' v genu %s, ale tato alela jiz existuje v genu %s", alelaName, genName, alela.getGen()));
-				return null;
-			}
-		} else {
-			gen.add(alela, null);
-			return alela;
-		}
-	}
-
-	public Alela alelaSym(final String wptsym, final String jmenoGrupy, final String grupaDisplayName) {
-		final Alela alela = alela(wptsym, symGen, jmenoGrupy);
-		if (alela.getGrupa() != null) {
-			alela.getGrupa().setDisplayName(grupaDisplayName);
-		}
-		return alela;
-	}
-
-	public CitacAlel createCitacAlel() {
-		return new CitacAlel();
-	}
-
-	public boolean existsGen(final String displayName) {
-		return geny.containsKey(displayName);
-	}
-
-	public Jedinec getGenotypProAlelu(final Alela alela) {
-		final Set<Alela> alely = new HashSet<>();
-		for (final Gen gen : genyList) {
-			if (gen.getAlely().contains(alela)) {
-				alely.add(alela);
-			} else {
-				alely.add(gen.getVychoziAlela());
-			}
-		}
-		return new Jedinec(alely, this);
-	}
-
-	public Jedinec getGenotypVychozi() {
-		final Set<Alela> alely = new HashSet<>();
-		for (final Gen gen : genyList) {
-			assert gen != null;
-			alely.add(gen.getVychoziAlela());
-		}
-		return new Jedinec(alely, this);
-	}
-
-	public List<Gen> getGeny() {
-		return genyList;
-	}
-
-	public Gen getSymGen() {
-		return symGen;
-	}
-
-	public Alela locateAlela(final String alelaName) {
-		return alely.get(alelaName);
-	}
-
-	public Set<Alela> namesToAlely(final Set<String> jmenaAlel) {
-		final Set<Alela> alely = new HashSet<>();
-		for (final String jmeno : jmenaAlel) {
-			if (jmeno != null && jmeno.length() > 0) {
-				final Alela alela = seekAlela(jmeno);
-				alely.add(alela);
-			}
-		}
-		return alely;
-	}
-
-	public Set<Alela> namesToAlelyIgnorujNeexistujici(final Set<String> jmenaAlel) {
-		final Set<Alela> alely = new HashSet<>();
-		for (final String jmeno : jmenaAlel) {
-			if (jmeno != null && jmeno.length() > 0) {
-				final Alela alela = locateAlela(jmeno);
-				if (alela != null) {
-					alely.add(alela);
-				}
-			}
-		}
-		return alely;
-	}
-
-	public Alela seekAlela(final String alelaName) {
-		Alela alela = alely.get(alelaName);
-		if (alela == null) {
-			log.warn("Alela [{}] neni definovana!", alelaName);
-			alela = makeAlela(alelaName);
-		}
-
-		return alela;
-	}
-
-	boolean isAlelaSym(final Alela alela) {
-		return alela.getGen() == symGen;
-	}
-
-	private void ale(final Alela alela) {
-		currentGen.add(alela, null);
-	}
-
-	private synchronized Alela alela(final String alelaName, final Gen gen, final String jmenoGrupy) {
-		final Alela alela = makeAlela(alelaName);
-		gen.add(alela, jmenoGrupy);
-		return alela;
-	}
-
-	private Alela coale(final String alelaName, final String displayName) {
-		final Alela alela = makeAlela(alelaName);
-		alela.setDisplayName(displayName);
-		return alela;
-	}
-
-	private synchronized Gen gen(final String displayName, final boolean vypsatelnyVeZhasinaci) {
-		Gen gen = geny.get(displayName);
-		if (gen == null) {
-			gen = new Gen(displayName, this, vypsatelnyVeZhasinaci);
-			genyList.add(gen);
-			geny.put(displayName, gen);
-		}
-		currentGen = gen;
-		return gen;
-	}
-
-	private synchronized Alela makeAlela(final String alelaName) {
-		Alela alela = alely.get(alelaName);
-		if (alela == null) {
-			alela = new Alela(alelaName, alely.size());
-			alely.put(alelaName, alela);
-		}
-		return alela;
-	}
-
-	/**
-	 * Vytvořeno jen pro hladný přechod na novou genetiku.
-	 *
-	 * @param aAlelyx
-	 * @return
-	 */
-	public Jedinec jakysiNovyJedinec(final Set<Alela> aAlelyx) {
-		return new Jedinec(aAlelyx, this);
 	}
 }

@@ -11,6 +11,9 @@ public interface Grupa {
 
 	String getDisplayName();
 
-	boolean isOther();
+	// Vždy je to false, zajištěno jinak
+	default boolean isOther() {
+		return false;
+	}
 
 }
