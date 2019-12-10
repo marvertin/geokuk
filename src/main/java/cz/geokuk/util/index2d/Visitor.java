@@ -11,7 +11,10 @@ package cz.geokuk.util.index2d;
  */
 public interface Visitor<T> {
 
-	void visit(Ctverecnik<T> ctver);
+	void visitSheet(Sheet<T> sheet);
 
-	void visit(Sheet<T> sheet);
+	void visitSheetList(SheetList<T> sheetList);
+
+	void visitCtverecnik(Ctverecnik<T> ctver);
+
 }

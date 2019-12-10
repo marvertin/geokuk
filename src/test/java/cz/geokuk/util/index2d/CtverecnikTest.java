@@ -1,18 +1,15 @@
 package cz.geokuk.util.index2d;
 
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  * Unit tests for {@link Ctverecnik}.
@@ -34,19 +31,15 @@ public class CtverecnikTest {
 
 	@Test
 	public void testCtverecnik_basicFunctionality() {
-		AtomicBoolean duplicityGuard = new AtomicBoolean(false);
 
-		Ctverecnik<String> ctverecnik = new Ctverecnik<>(10, 10, 30, 30);
-		ctverecnik.vloz(FIRST_QUADRANT_ONE, duplicityGuard);
-		assertThat(duplicityGuard.get()).isFalse();
-		ctverecnik.vloz(FIRST_QUADRANT_TWO, duplicityGuard);
-		assertThat(duplicityGuard.get()).isFalse();
-		ctverecnik.vloz(THIRD_QUADRANT, duplicityGuard);
-		assertThat(duplicityGuard.get()).isFalse();
+		final Ctverecnik<String> ctverecnik = new Ctverecnik<>(10, 10, 30, 30);
+		ctverecnik.vloz(FIRST_QUADRANT_ONE);
+		ctverecnik.vloz(FIRST_QUADRANT_TWO);
+		ctverecnik.vloz(THIRD_QUADRANT);
 
 		ctverecnik.visit(new BoundingRect(23, 23, 28, 28), visitor);
-		verify(visitor).visit(eq(FIRST_QUADRANT_ONE));
-		verify(visitor).visit(eq(FIRST_QUADRANT_TWO));
+		verify(visitor).visitSheet(eq(FIRST_QUADRANT_ONE));
+		verify(visitor).visitSheet(eq(FIRST_QUADRANT_TWO));
 		verifyNoMoreInteractions(visitor);
 	}
 }

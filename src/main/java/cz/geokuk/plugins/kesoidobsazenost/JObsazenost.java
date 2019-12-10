@@ -101,21 +101,17 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		final int mouokraj = (int) (getSoord().getMouboduNaMetr() * POLOMER_OBSAZENOSTI);
 		final BoundingRect boundingRect = getSoord().getBoundingRect().rozsir(mouokraj);
 		// final Area area = new Area();
-		iIndexator.visit(boundingRect, new FlatVisitor<Wpt>() {
-
-			@Override
-			public void visit(final Sheet<Wpt> aSheet) {
-				final Wpt wpt = aSheet.get();
-				if (!wpt.obsazujeOblast()) {
-					return;
-				}
-				final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
-				final Point p = getSoord().transform(mou);
-				// Ellipse2D kruh = new Ellipse2D.Float(p.x -r, p.y - r, d, d);
-				// Area areakruh = new Area(kruh);
-				// area.add(areakruh);
-				g.fillOval(p.x - r, p.y - r, d, d);
+		iIndexator.visit(boundingRect, (FlatVisitor<Wpt>) aSheet -> {
+			final Wpt wpt = aSheet.get();
+			if (!wpt.obsazujeOblast()) {
+				return;
 			}
+			final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
+			final Point p = getSoord().transform(mou);
+			// Ellipse2D kruh = new Ellipse2D.Float(p.x -r, p.y - r, d, d);
+			// Area areakruh = new Area(kruh);
+			// area.add(areakruh);
+			g.fillOval(p.x - r, p.y - r, d, d);
 		});
 
 		// g.fill(area);

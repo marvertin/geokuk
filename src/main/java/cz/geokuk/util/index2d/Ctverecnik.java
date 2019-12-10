@@ -1,13 +1,12 @@
 package cz.geokuk.util.index2d;
 
-import com.google.common.math.LongMath;
-import com.google.common.primitives.Ints;
+import static com.google.common.base.Preconditions.checkArgument;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.google.common.base.Preconditions.checkArgument;
+import com.google.common.math.LongMath;
+import com.google.common.primitives.Ints;
 
 public class Ctverecnik<T> extends Node0<T> {
 
@@ -50,7 +49,7 @@ public class Ctverecnik<T> extends Node0<T> {
 			final boolean jeToKompletUvnitr = xx1 >= rect.xx1 && xx2 <= rect.xx2 && yy1 >= rect.yy1 && yy2 <= rect.yy2;
 
 			if (jeToKompletUvnitr) {
-				visitor.visit(this);
+				visitor.visitCtverecnik(this);
 			} else {
 				visitPodrizene(rect, visitor);
 			}
@@ -60,25 +59,23 @@ public class Ctverecnik<T> extends Node0<T> {
 		}
 	}
 
-	public void vloz(final Sheet<T> sheet, final AtomicBoolean duplicityGuard) {
+	public void vloz(final Sheet0<T> sheet) {
 		final int xx = sheet.getXx();
 		final int yy = sheet.getYy();
 		checkRozsah(xx, yy);
 
 		if (xx < xMid && yy < yMid) {
-			jz = vlozDoPodctverce(jz, sheet, xx1, yy1, xMid, yMid, duplicityGuard);
+			jz = vlozDoPodctverce(jz, sheet, xx1, yy1, xMid, yMid);
 		} else if (xx >= xMid && yy < yMid) {
-			jv = vlozDoPodctverce(jv, sheet, xMid, yy1, xx2, yMid, duplicityGuard);
+			jv = vlozDoPodctverce(jv, sheet, xMid, yy1, xx2, yMid);
 		} else if (xx < xMid && yy >= yMid) {
-			sz = vlozDoPodctverce(sz, sheet, xx1, yMid, xMid, yy2, duplicityGuard);
+			sz = vlozDoPodctverce(sz, sheet, xx1, yMid, xMid, yy2);
 		} else if (xx >= xMid && yy >= yMid) {
-			sv = vlozDoPodctverce(sv, sheet, xMid, yMid, xx2, yy2, duplicityGuard);
+			sv = vlozDoPodctverce(sv, sheet, xMid, yMid, xx2, yy2);
 		} else {
 			throw new AssertionError("Ani jedna podminka nezabrala, podivne: " + this);
 		}
-		if (!duplicityGuard.get()) {
-			count++; // pokud jsem opravdu vložil
-		}
+		count++; // pokud jsem opravdu vložil
 	}
 
 	@Override
@@ -120,23 +117,35 @@ public class Ctverecnik<T> extends Node0<T> {
 		}
 	}
 
-	private static <T> Node0<T> vlozDoPodctverce(final Node0<T> node, final Sheet<T> aSheet, final int xx1, final int yy1, final int xx2, final int yy2, final AtomicBoolean duplicityGuard) {
+	private static <T> Node0<T> vlozDoPodctverce(final Node0<T> node, final Sheet0<T> aSheet, final int xx1, final int yy1, final int xx2, final int yy2) {
 		if (node == null) { // vlozit se tam
-			return aSheet;
+			return aSheet; // bezezměny
 		} else if (node instanceof Ctverecnik) {
 			final Ctverecnik<T> ctver = (Ctverecnik<T>) node;
-			ctver.vloz(aSheet, duplicityGuard);
+			ctver.vloz(aSheet);
 			return node;
-		} else if (node instanceof Sheet) {
-			final Sheet<T> sheet = (Sheet<T>) node;
-			if (sheet.getXx() == aSheet.getXx() && sheet.getYy() == aSheet.getYy()) {
-				duplicityGuard.set(true); // takovy uz tam mame
-				return node; // beze zmeny
+		} else if (node instanceof Sheet0) {
+			final Sheet0<T> sheet0 = (Sheet0<T>) node;
+			if (sheet0.getXx() == aSheet.getXx() && sheet0.getYy() == aSheet.getYy()) {
+				// je to stejná pozice musíme dát do seznamu
+				if (sheet0 instanceof Sheet) {
+					final Sheet<T> sheetx = (Sheet<T>) sheet0;
+					final SheetList<T> sl = new SheetList<T>(sheetx);
+					return sl;
+				} else if (sheet0 instanceof SheetList) {
+					final SheetList<T> sheetList = (SheetList<T>) sheet0;
+					// tady to můžeme castovat, protože vhledem k logice vkládání nemůže dojít, že by se vkládal SheetList.
+					sheetList.add((Sheet<T>) aSheet);
+					return sheetList; // měníme na shetlist
+				} else {
+					throw new RuntimeException("Podivny node: " + node.getClass().getName());
+				}
+			} else {
+				final Ctverecnik<T> ctver = new Ctverecnik<>(xx1, yy1, xx2, yy2);
+				ctver.vloz(sheet0);
+				ctver.vloz(aSheet);
+				return ctver; // měníme na čtverečník
 			}
-			final Ctverecnik<T> ctver = new Ctverecnik<>(xx1, yy1, xx2, yy2);
-			ctver.vloz(sheet, duplicityGuard);
-			ctver.vloz(aSheet, duplicityGuard);
-			return ctver;
 		} else { // item je objektakem
 			throw new RuntimeException("Podivny node: " + node.getClass().getName());
 		}
@@ -145,7 +154,7 @@ public class Ctverecnik<T> extends Node0<T> {
 	/**
 	 * Calculates the middle point between {@code a} and {@code b}. If the difference is odd, the lower bound is returned.
 	 */
-	private static long calculateMid(long a, long b) {
+	private static long calculateMid(final long a, final long b) {
 		return LongMath.checkedAdd(a, b) / 2;
 	}
 

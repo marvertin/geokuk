@@ -1,6 +1,5 @@
 package cz.geokuk.util.index2d;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -11,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Indexator<T> {
 
-	private Ctverecnik<T> root;
+	private final Ctverecnik<T> root;
 
 	public Indexator(final BoundingRect br) {
 		root = new Ctverecnik<>(br.xx1, br.yy1, br.xx2, br.yy2);
@@ -19,22 +18,14 @@ public class Indexator<T> {
 
 	public int count(final BoundingRect boundingRect) {
 		final AtomicInteger counter = new AtomicInteger();
-		root.visit(boundingRect, new SloucenyVisitor<T>() {
-			@Override
-			protected void visitNod(final Node0<T> aNode) {
-				counter.addAndGet(aNode.count);
-			}
-		});
+		root.visit(boundingRect, (SloucenyVisitor<T>) aNode -> counter.addAndGet(aNode.count));
 		return counter.get();
 	}
 
 	public Sheet<T> locateAnyOne(final BoundingRect br) {
 		try {
-			visit(br, new FlatVisitor<T>() {
-				@Override
-				public void visit(final Sheet<T> sheet) {
-					throw new XNalezeno(sheet);
-				}
+			visit(br, (FlatVisitor<T>) sheet -> {
+				throw new XNalezeno(sheet);
 			});
 			return null; // nevypadla výjimka, nebylo nalezeno
 		} catch (final XNalezeno e) { // bylo něco nalezeno
@@ -50,16 +41,13 @@ public class Indexator<T> {
 			long d2 = Long.MAX_VALUE;
 		}
 		final Drzak drzak = new Drzak();
-		visit(br, new FlatVisitor<T>() {
-			@Override
-			public void visit(final Sheet<T> sheet) {
-				final long dx = sheet.getXx() - xx;
-				final long dy = sheet.getYy() - yy;
-				final long d2 = dx * dx + dy * dy;
-				if (d2 < drzak.d2) {
-					drzak.d2 = d2;
-					drzak.tt = sheet;
-				}
+		visit(br, (FlatVisitor<T>) sheet -> {
+			final long dx = sheet.getXx() - xx;
+			final long dy = sheet.getYy() - yy;
+			final long d2 = dx * dx + dy * dy;
+			if (d2 < drzak.d2) {
+				drzak.d2 = d2;
+				drzak.tt = sheet;
 			}
 		});
 		return drzak.tt;
@@ -70,16 +58,8 @@ public class Indexator<T> {
 	}
 
 	public void vloz(final int xx, final int yy, final T mapobj) {
-		Sheet<T> sheet = new Sheet<>(xx, yy, mapobj);
-		AtomicBoolean duplicateIndicator = new AtomicBoolean(false);
-		root.vloz(sheet, duplicateIndicator);
-		while (duplicateIndicator.get()) {
-			// throw new RuntimeException("Duplicita");
-			sheet = new Sheet<>(sheet.getXx() + 3, sheet.getYy() + 7, mapobj);
-			duplicateIndicator.set(false);
-			root.vloz(sheet, duplicateIndicator);
-			// System.out.println("Duplicita resena " + mapobj);
-		}
+		final Sheet<T> sheet = new Sheet<>(xx, yy, mapobj);
+		root.vloz(sheet);
 	}
 
 	public void vypis() {

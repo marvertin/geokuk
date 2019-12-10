@@ -412,12 +412,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		// Roztřídit waypointy podle pořadí vykreslování
 		if (!prekrocenLimit) {
 			final BoundingRect hranice = coVykreslovat(gg);
-			indexator.visit(hranice, new FlatVisitor<Wpt>() {
-				@Override
-				public void visit(final Sheet<Wpt> aSheet) {
-					final Wpt wpt = aSheet.get();
-					mapa.get(wpt.getZorder()).add(aSheet);
-				}
+			indexator.visit(hranice, (FlatVisitor<Wpt>) aSheet -> {
+				final Wpt wpt = aSheet.get();
+				mapa.get(wpt.getZorder()).add(aSheet);
 			});
 		}
 
@@ -609,7 +606,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	/**
 	 *
 	 */
-	private void registerEvents() {}
+	private void registerEvents() {
+	}
 
 	private void repaintIfVse() {
 		if (iJmenaAlel == null) {

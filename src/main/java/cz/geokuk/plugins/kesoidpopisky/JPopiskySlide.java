@@ -13,7 +13,8 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
-import cz.geokuk.util.index2d.*;
+import cz.geokuk.util.index2d.FlatVisitor;
+import cz.geokuk.util.index2d.Indexator;
 
 public class JPopiskySlide extends JSingleSlide0 {
 
@@ -89,36 +90,32 @@ public class JPopiskySlide extends JSingleSlide0 {
 			sestavmapa.put(entry.getKey(), new SestavovacPopisku(entry.getValue()));
 		}
 
-		iIndexator.visit(getSoord().getBoundingRect(), new FlatVisitor<Wpt>() {
-
-			@Override
-			public void visit(final Sheet<Wpt> aSheet) {
-				final Wpt wpt = aSheet.get();
-				if (!wpt.isMainWpt()) {
-					return;
-				}
-				final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
-				final Point p = getSoord().transform(mou);
-				p.x -= 10;
-				p.y += 25;
-				g.setColor(barvaPodkladu);
-				final String[] popisky = sestavmapa.get(wpt.getKesoid().getKesoidKind()).sestavPopisek(wpt);
-				int stringWidth = 0;
-				for (final String popisek : popisky) {
-					stringWidth = Math.max(fontMetrics.stringWidth(popisek), stringWidth);
-				}
-				g.fillRect(p.x + pose.posuX, p.y + posuny + pose.posuY, stringWidth, height2 * popisky.length);
-
-				// g.drawString(str, x, y)
-				g.setBackground(Color.YELLOW);
-				g.setColor(barvaTextu);
-				int yOffset = pose.posuY;
-				for (final String popisek : popisky) {
-					g.drawString(popisek, p.x + pose.posuX, p.y + yOffset);
-					yOffset += height2;
-				}
-				// g.fillOval(p.x -r, p.y - r, d, d);
+		iIndexator.visit(getSoord().getBoundingRect(), (FlatVisitor<Wpt>) aSheet -> {
+			final Wpt wpt = aSheet.get();
+			if (!wpt.isMainWpt()) {
+				return;
 			}
+			final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
+			final Point p = getSoord().transform(mou);
+			p.x -= 10;
+			p.y += 25;
+			g.setColor(barvaPodkladu);
+			final String[] popisky = sestavmapa.get(wpt.getKesoid().getKesoidKind()).sestavPopisek(wpt);
+			int stringWidth = 0;
+			for (final String popisek1 : popisky) {
+				stringWidth = Math.max(fontMetrics.stringWidth(popisek1), stringWidth);
+			}
+			g.fillRect(p.x + pose.posuX, p.y + posuny + pose.posuY, stringWidth, height2 * popisky.length);
+
+			// g.drawString(str, x, y)
+			g.setBackground(Color.YELLOW);
+			g.setColor(barvaTextu);
+			int yOffset = pose.posuY;
+			for (final String popisek2 : popisky) {
+				g.drawString(popisek2, p.x + pose.posuX, p.y + yOffset);
+				yOffset += height2;
+			}
+			// g.fillOval(p.x -r, p.y - r, d, d);
 		});
 
 	}
