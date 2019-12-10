@@ -27,19 +27,19 @@ public class Genom {
 	 */
 
 	// Má jen jednu alelu, neboť alely přicházejí dynamicky, jak se nahrávají ikony nebo data
-	public final Gen symGen = genu("Typ waypointu", true); // spoléháme se na to, že symgen je první
+	public final Gen symGen = genu("sym", "Typ waypointu", true); // spoléháme se na to, že symgen je první
 	public final Alela ALELA_Waypoint = symGen.alela("Waypoint").displayName("Obecný waypoint");
 
-	public final Gen GEN_postavenikMysi = genu("Postavení k myši", false);
+	public final Gen GEN_postavenikMysi = genu("mouse", "Postavení k myši", false);
 	public final Alela ALELA_nomouse = GEN_postavenikMysi.alela("nomouse").displayName("Žádná myš");
 	public final Alela ALELA_mousean = GEN_postavenikMysi.alela("mousean").displayName("Myš nad jiným wpt kešoidu");
 	public final Alela ALELA_mouseon = GEN_postavenikMysi.alela("mouseon").displayName("Myš nad tímto wpt");
 
-	public final Gen GEN_Postaveni = genu("Postavení", true);
+	public final Gen GEN_Postaveni = genu("postaveni", "Postavení", true);
 	public final Alela ALELA_h = GEN_Postaveni.alela("h").displayName("Hlavní waypoint");
 	public final Alela ALELA_v = GEN_Postaveni.alela("v").displayName("Vedlejší waypoint");
 
-	public final Gen GEN_druhKesoidu = genu("Druh kešoidu", true);
+	public final Gen GEN_druhKesoidu = genu("druh", "Druh kešoidu", true);
 	public final Alela ALELA_00 = GEN_druhKesoidu.alela("00").displayName("Neznámý");
 	public final Alela ALELA_gc = GEN_druhKesoidu.alela("gc").displayName("Keš");
 	public final Alela ALELA_wm = GEN_druhKesoidu.alela("wm").displayName("Waymark");
@@ -48,7 +48,7 @@ public class Genom {
 	public final Alela ALELA_gb = GEN_druhKesoidu.alela("gb").displayName("Český geodetický bod");
 	public final Alela ALELA_wp = GEN_druhKesoidu.alela("wp").displayName("Obecný waypoint");
 
-	public final Gen GEN_vztah = genu("Vztah", true);
+	public final Gen GEN_vztah = genu("vztah", "Vztah", true);
 	public final Alela ALELA_hnf = GEN_vztah.alela("hnf").displayName("Nehledané");
 	public final Alela ALELA_fnd = GEN_vztah.alela("fnd").displayName("Nalezené");
 	public final Alela ALELA_own = GEN_vztah.alela("own").displayName("Moje vlastní");
@@ -56,12 +56,12 @@ public class Genom {
 	public final Alela ALELA_cpt = GEN_vztah.alela("cpt").displayName("Captured");
 	public final Alela ALELA_dpl = GEN_vztah.alela("dpl").displayName("Deployed");
 
-	public final Gen GEN_stav = genu("Stav", true);
+	public final Gen GEN_stav = genu("stav", "Stav", true);
 	public final Alela ALELA_actv = GEN_stav.alela("actv").displayName("Aktivmí");
 	public final Alela ALELA_dsbl = GEN_stav.alela("dsbl").displayName("Disablovaná");
 	public final Alela ALELA_arch = GEN_stav.alela("arch").displayName("Archivovaný");
 
-	public final Gen GEN_velikost = genu("Velikost", false);
+	public final Gen GEN_velikost = genu("velikost", "Velikost", false);
 	public final Alela ALELA_00000 = GEN_velikost.alela("00000").displayName("Neznámá");
 	public final Alela ALELA_nlist = GEN_velikost.alela("nlist").displayName("Not listed");
 	public final Alela ALELA_micro = GEN_velikost.alela("micro").displayName("Micro");
@@ -72,28 +72,28 @@ public class Genom {
 	public final Alela ALELA_virtu = GEN_velikost.alela("virtu").displayName("Virtual");
 	public final Alela ALELA_other = GEN_velikost.alela("other").displayName("Other");
 
-	public final Gen GEN_vylet = genu("Výlet", false);
+	public final Gen GEN_vylet = genu("vylet", "Výlet", false);
 	public final Alela ALELA_nevime = GEN_vylet.alela("nevime").displayName("Nerozhodnuto");
 	public final Alela ALELA_lovime = GEN_vylet.alela("lovime").displayName("Jdeme lovit");
 	public final Alela ALELA_ignoru = GEN_vylet.alela("ignoru").displayName("Budeme ignorovat");
 
-	public final Gen GEN_cesty = genu("Cesty", true);
+	public final Gen GEN_cesty = genu("cesty", "Cesty", true);
 	public final Alela ALELA_mimocesticu = GEN_cesty.alela("mimocesticu").displayName("Mimo cestu");
 	public final Alela ALELA_nacestejsou = GEN_cesty.alela("nacestejsou").displayName("Na cestě");
 
-	public final Gen GEN_Vybranost = genu("Vybranost", false);
+	public final Gen GEN_Vybranost = genu("vybranost", "Vybranost", false);
 	public final Alela ALELA_noselect = GEN_Vybranost.alela("noselect").displayName("Nevybraný");
 	public final Alela ALELA_selected = GEN_Vybranost.alela("selected").displayName("Vybraný");
 
-	public final Gen GEN_vylustenost = genu("Vyluštěnost", false);
+	public final Gen GEN_vylustenost = genu("vylustenost", "Vyluštěnost", false);
 	public final Alela ALELA_nevyluste = GEN_vylustenost.alela("nevyluste").displayName("Není vyluštěno");
 	public final Alela ALELA_vylusteno = GEN_vylustenost.alela("vylusteno").displayName("Je vyluštěno");
 
-	public final Gen GEN_zdroj = genu("Zdroj", false);
+	public final Gen GEN_zdroj = genu("zdroj", "Zdroj", false);
 	public final Alela ALELA_pqimported = GEN_zdroj.alela("pqimported").displayName("Imporotvané z PQ");
 	public final Alela ALELA_handedited = GEN_zdroj.alela("handedited").displayName("Ručně přidané");
 
-	public final Gen GEN_teren = genu("Terén", false);
+	public final Gen GEN_teren = genu("ter", "Terén", false);
 	public final Alela ALELA_ter0 = GEN_teren.alela("ter0").displayName("Nespecifikovaný");
 	public final Alela ALELA_ter10 = GEN_teren.alela("ter10").displayName("1");
 	public final Alela ALELA_ter15 = GEN_teren.alela("ter15").displayName("1,5");
@@ -105,7 +105,7 @@ public class Genom {
 	public final Alela ALELA_ter45 = GEN_teren.alela("ter45").displayName("4,5");
 	public final Alela ALELA_ter50 = GEN_teren.alela("ter50").displayName("5");
 
-	public final Gen GEN_obtiznost = genu("Obtížnost", false);
+	public final Gen GEN_obtiznost = genu("dif", "Obtížnost", false);
 	public final Alela ALELA_def0 = GEN_obtiznost.alela("dif0").displayName("Nespecifikovaná");
 	public final Alela ALELA_dif10 = GEN_obtiznost.alela("dif10").displayName("1");
 	public final Alela ALELA_dif15 = GEN_obtiznost.alela("dif15").displayName("1,5");
@@ -180,7 +180,7 @@ public class Genom {
 	 * @param nazev
 	 * @return
 	 */
-	public synchronized Gen genu(final String nazev, final boolean vypsatelnyVeZhasinaci) {
+	public synchronized Gen genu(final String nazev, final String displayName, final boolean vypsatelnyVeZhasinaci) {
 		final Gen gen = gen(nazev);
 		gen.vypsatelnyVeZhasinaci = vypsatelnyVeZhasinaci;
 		UNIVERZALNI_DRUH.addGen(gen);
@@ -215,9 +215,11 @@ public class Genom {
 	 * @return
 	 */
 	public Set<Alela> namesToAlely(final Set<String> jmenaAlel) {
-		return jmenaAlel.stream().filter(jmeno -> jmeno != null && jmeno.length() > 0).map(jmeno -> {
-			return seekAlela(jmeno);
-		}).collect(Collectors.toSet());
+		System.out.println("Prevadime jmena na alely: " + jmenaAlel);
+		return jmenaAlel.stream()
+				.filter(jmeno -> jmeno != null && jmeno.length() > 0)
+				.map(jmeno -> seekAlela(jmeno))
+				.collect(Collectors.toSet());
 	}
 
 	/**
@@ -227,6 +229,7 @@ public class Genom {
 	 * @return
 	 */
 	public Set<Alela> namesToAlelyIgnorujNeexistujici(final Set<String> jmenaAlel) {
+		System.out.println("Prevadime jmena na alely: " + jmenaAlel);
 		return jmenaAlel.stream().filter(jmeno -> jmeno != null && jmeno.length() > 0).map(jmeno -> {
 			return seekAlela(jmeno);
 		}).filter(alela -> alela != null).collect(Collectors.toSet());
@@ -265,7 +268,8 @@ public class Genom {
 		if (gen.getAlely().size() == 0) {
 			gen.alela(":" + genName); // první, tedy výchozí alela budiž zřízena.
 		}
-		final Alela alela = gen.alela(alelaName + ":" + genName);
+		//final Alela alela = gen.alela(alelaName + ":" + genName);
+		final Alela alela = gen.alela(alelaName);
 		return alela; // a teď ta naše alela
 	}
 

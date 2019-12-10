@@ -98,14 +98,15 @@ public class IconDefNacitac {
 
 	private Set<Alela> nactiAlely(final String alelygroup) {
 		final Set<Alela> alely = new HashSet<>();
-		for (final String s : alelygroup.split("_")) {
-			if (s.isEmpty()) {
+		for (final String sa : alelygroup.split("_")) {
+			if (sa.isEmpty()) {
 				continue;
 			}
 			Alela alela;
+			final String s = LegacyAlelaNames.preloz(sa); // přeložíme staré názvy na nové kvalifikované
 			final int pozminus = s.indexOf('-');
 			if (pozminus < 0) { // žádné mínus, alela musí existovat
-				alela = genom.seekAlela(s);
+				throw new IllegalArgumentException("Nemůe nastat, mínus tam dává překlad vždy");
 			} else {
 				final String alelaName = s.substring(pozminus + 1);
 				final String genName = s.substring(0, pozminus);
