@@ -281,7 +281,7 @@ public class Genom {
 
 	/**
 	 * Pro alely z venku, kde se automaticky do genu zadefinuje výchzí alela.
-	 * 
+	 *
 	 * @deprecated Volat přímo, co je zde voláno asi ne, něco s tím udělat, ať je to jasnějěí.
 	 * @param alelaName
 	 * @param genName
@@ -293,25 +293,8 @@ public class Genom {
 		if (gen.getAlely().size() == 0) {
 			gen.alela(":" + genName); // první, tedy výchozí alela budiž zřízena.
 		}
-		return gen.alela(alelaName); // a teď ta naše alela
-
-//		final Gen gen = gen(genName, false);
-//		if (gen.getAlely().size() == 0) {
-//			gen.add(makeAlela(":" + genName), null);
-//		}
-//		// TODO Zkontrolovat: Doplnil jsem kvalifikaci jménem genu, protože jinak se mi generovalo obrovské množství těch errorů dole. Nevím, co to může všechno způsobit, ale stejné řetězce přece musí být možné použít jako alely různých genů, ne? [ISSUE#48, 2016-04-09, Bohusz]
-//		final Alela alela = makeAlela(alelaName + ":" + genName);
-//		if (alela.hasGen()) {
-//			if (alela.getGen() == gen) {
-//				return alela; // tak vrátíme tu alelu
-//			} else {
-//				log.error(String.format("Je pozadovana alela '%s' v genu %s, ale tato alela jiz existuje v genu %s", alelaName, genName, alela.getGen()));
-//				return null;
-//			}
-//		} else {
-//			gen.add(alela, null);
-//			return alela;
-//		}
+		final Alela alela = gen.alela(alelaName + ":" + genName);
+		return alela; // a teď ta naše alela
 	}
 
 	/**
