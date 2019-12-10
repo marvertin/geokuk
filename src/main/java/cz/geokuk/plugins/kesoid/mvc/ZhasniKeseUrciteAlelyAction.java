@@ -97,7 +97,7 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 	@Override
 	public void initAfterEventReceiverRegistration() {
 		super.putValue(NAME, sestavJmeno());
-		super.putValue(SMALL_ICON, new PreskrtnutaIkona(ikonBag.seekIkon(ikonBag.getGenom().getGenotypProAlelu(alela))));
+		super.putValue(SMALL_ICON, new PreskrtnutaIkona(ikonBag.seekIkon(ikonBag.getGenom().UNIVERZALNI_DRUH.genotypVychozi().with(alela))));
 		super.putValue(SHORT_DESCRIPTION, "Zhasne waypointy daného typu.");
 
 	}

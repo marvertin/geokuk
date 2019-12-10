@@ -104,15 +104,17 @@ public class Genotyp {
 	}
 
 	/**
-	 * Vrátí alelu pro daný gen. null, pokud gen není v druhu, ke kterému je jedinec
+	 * Vrátí alelu pro daný gen. Gen musí být v druhu, ve kterém je jedinec.
+	 * Výsledky metody se mohou lišit pro stejný jedinec, pokud byl přidán gen do druhu později. liší se, ale pouze v tom,
+	 * že přestanou vyhazovat výjimku.
 	 */
 	public Alela getAlela(final Gen gen) {
 		if (gen == null) { // pro negen není alela
-			return null;
+			throw new NullPointerException("Gen musí být dán");
 		}
 		final int lokus = druh.getLokus(gen);
 		if (lokus < 0) {
-			return null;
+			throw new NullPointerException("Druh " + druh + " nemá gen " + gen);
 		} else if (lokus >= dna.length) { // pole je kratš, ale to je z implementačních důvodů, znamená to, že máme co činit s výchozí alelou
 			return gen.getVychoziAlela();
 		} else {
@@ -166,7 +168,7 @@ public class Genotyp {
 	private Set<Alela> vymenAlelu(final Alela alela) {
 		if (!druh.hasGen(alela.getGen())) {
 			druh.addGen(alela.getGen());
-			throw new RuntimeException("Pri vymene alely " + alela + " v genotypu " + this + " bylo zjisteno, ze v hjeho druhu neni gen " + alela.getGen());
+			System.err.println("Pri vymene alely " + alela + " v genotypu " + this + " bylo zjisteno, ze v hjeho druhu neni gen " + alela.getGen());
 		}
 		final Set<Alela> alely = getNevychoziAlely(); // stávající alely
 		alely.remove(getAlela(alela.getGen())); // pokud tam byla alela tohoto genu, zahubíme ji
@@ -190,6 +192,7 @@ public class Genotyp {
 	}
 
 	private Set<Alela> alely;
+	private int minulyPocetGenu;
 
 	/**
 	 * @deprecated Určitě neceme dělat seznam alel, ale cheme něco výkonnějšího nejlépe přímo zde určovat zda má gen ty dané alely. Je to totiž jediná funkce, která nevrací pro jedince konstantí hodnotu, protože když druh dostane další gen bude vracet i jeho výchozí alelu.
@@ -197,7 +200,7 @@ public class Genotyp {
 	 */
 	@Deprecated
 	public Set<Alela> getAlely() {
-		if (alely == null) {
+		if (alely == null || minulyPocetGenu != druh.geny.size()) {
 			final int genySize = druh.geny.size();
 			final HashSet<Alela> set = new HashSet<Alela>();
 			for (int i = 0; i < genySize; i++) {
@@ -215,6 +218,7 @@ public class Genotyp {
 				}
 			}
 			alely = set;
+			minulyPocetGenu = druh.geny.size();
 		}
 		return alely;
 	}

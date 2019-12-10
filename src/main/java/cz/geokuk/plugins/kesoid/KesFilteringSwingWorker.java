@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Jedinec;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.index2d.BoundingRect;
@@ -22,7 +22,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
 	private static class Dvojka {
 		Wpt wpt;
-		Jedinec genotyp;
+		Genotyp genotyp;
 	}
 
 	private static final Logger log = LogManager.getLogger(KesFilteringSwingWorker.class.getSimpleName());
@@ -76,7 +76,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 						if (isCancelled()) {
 							return;
 						}
-						final Jedinec genotyp = wpt.getGenotyp(iGenom);
+						final Genotyp genotyp = wpt.getGenotyp(iGenom);
 						// TEn genotyp se předává jen z důvodu optimalizace
 						if (kesfilter.isFiltered(wpt, iGenom, genotyp)) {
 							final Dvojka dvojka = new Dvojka();

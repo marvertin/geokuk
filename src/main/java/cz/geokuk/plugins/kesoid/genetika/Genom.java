@@ -117,6 +117,13 @@ public class Genom {
 	public final Alela ALELA_dif45 = GEN_obtiznost.alela("dif45").displayName("4,5");
 	public final Alela ALELA_dif50 = GEN_obtiznost.alela("dif50").displayName("5");
 
+	// Toto jen dočasně, protože nefunguje vytváření uživatelských alel až za pochodu, nefunguje pak filtr.
+//	public final Gen GEN_mysterstav = genu("mysterstav", true);
+//	public final Alela ALELA_nic = GEN_mysterstav.alela(":mysterstav").displayName("Nic");
+//	public final Alela ALELA_teren = GEN_mysterstav.alela("teren:mysterstav").displayName("Terén");
+//	public final Alela ALELA_zasek = GEN_mysterstav.alela("zasek:mysterstav").displayName("Zásek");
+//	public final Alela ALELA_lusteni = GEN_mysterstav.alela("lusteni:mysterstav").displayName("Luštění");
+
 	/**
 	 * @deprecated Grupy nechceme, použijeme druhy.
 	 */
@@ -242,41 +249,6 @@ public class Genom {
 	@Deprecated
 	public Gen getSymGen() {
 		return symGen;
-	}
-
-	/**
-	 * @deprecated Zatracená metoda, použít přímo druhy.
-	 * @return
-	 */
-	@Deprecated
-	public Jedinec getGenotypVychozi() {
-		return UNIVERZALNI_DRUH.zrozeni();
-	}
-
-	/**
-	 * @deprecated Zatracená metoda, použij druhy
-	 * @param alela
-	 * @return
-	 */
-	@Deprecated
-	public Jedinec getGenotypProAlelu(final Alela alela) {
-		final Jedinec jedinec = UNIVERZALNI_DRUH.zrozeni();
-		jedinec.put(alela);
-		return jedinec;
-	}
-
-	/**
-	 * Vytvořeno jen pro hladný přechod na novou genetiku.
-	 *
-	 * @deprecated Nějak lépe s použitím druhů.
-	 * @param aAlelyx
-	 * @return
-	 */
-	@Deprecated
-	public Jedinec jakysiNovyJedinec(final Set<Alela> aAlelyx) {
-		final Jedinec jedinec = UNIVERZALNI_DRUH.zrozeni();
-		jedinec.put(aAlelyx);
-		return jedinec;
 	}
 
 	/**

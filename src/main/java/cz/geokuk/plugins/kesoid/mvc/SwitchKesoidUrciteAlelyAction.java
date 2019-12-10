@@ -45,7 +45,7 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 	@Override
 	public void initAfterEventReceiverRegistration() {
 		super.putValue(NAME, sestavJmeno());
-		super.putValue(SMALL_ICON, ikonBag.seekIkon(ikonBag.getGenom().getGenotypProAlelu(alela)));
+		super.putValue(SMALL_ICON, ikonBag.seekIkon(ikonBag.getGenom().UNIVERZALNI_DRUH.genotypVychozi().with(alela)));
 		super.putValue(SHORT_DESCRIPTION, sestavJmeno());
 	}
 

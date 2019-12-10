@@ -45,7 +45,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 	public void resetBag(final IkonBag aBag) {
 		bag = aBag;
 		if (jmenaVybranychAlel == null) {
-			final Jedinec genotypVychozi = bag.getGenom().getGenotypVychozi();
+			final Genotyp genotypVychozi = bag.getGenom().UNIVERZALNI_DRUH.genotypVychozi();
 			jmenaVybranychAlel = Alela.alelyToNames(genotypVychozi.getAlely());
 		}
 		refresh(aBag, jmenaVybranychAlel, null);
@@ -79,7 +79,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 	@Override
 	protected void zmenaVyberu(final Set<Alela> aAlelyx) {
 		jmenaVybranychAlel = Alela.alelyToNames(aAlelyx);
-		final Jedinec genotyp = bag.getGenom().jakysiNovyJedinec(aAlelyx);
+		final Genotyp genotyp = bag.getGenom().UNIVERZALNI_DRUH.genotypVychozi().with(aAlelyx);
 		final Sklivec sklivec = bag.getSklivec(genotyp);
 		jskelneikony.removeAll();
 		// BoundingRect br = Imagant.sjednoceni(sklivec.imaganti);

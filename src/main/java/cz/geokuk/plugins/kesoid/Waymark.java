@@ -4,15 +4,14 @@ import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Jedinec;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
 public class Waymark extends Kesoid {
 
 	@Override
-	public void buildGenotyp(final Genom genom, final Jedinec g) {
-		final GenotypBuilderWaymark genotypBuilder = new GenotypBuilderWaymark(genom, g);
-		genotypBuilder.build(this);
+	public Genotyp buildGenotyp(final Genotyp g) {
+		final GenotypBuilderWaymark genotypBuilder = new GenotypBuilderWaymark(g.getGenom());
+		return genotypBuilder.build(this, g);
 	}
 
 	@Override

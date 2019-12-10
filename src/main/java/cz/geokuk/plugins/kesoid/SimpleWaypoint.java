@@ -4,8 +4,7 @@ import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Jedinec;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
 public class SimpleWaypoint extends Kesoid {
 
@@ -15,9 +14,9 @@ public class SimpleWaypoint extends Kesoid {
 	 * @see cz.geokuk.kes.Kesoid#buildGenotyp(cz.geokuk.mapicon.Genom, cz.geokuk.mapicon.Genotyp)
 	 */
 	@Override
-	public void buildGenotyp(final Genom genom, final Jedinec g) {
-		final GenotypBuilderSimpleWaypoint genotypBuilder = new GenotypBuilderSimpleWaypoint(genom, g);
-		genotypBuilder.build(this);
+	public Genotyp buildGenotyp(final Genotyp g) {
+		final GenotypBuilderSimpleWaypoint genotypBuilder = new GenotypBuilderSimpleWaypoint(g.getGenom());
+		return genotypBuilder.build(this, g);
 	}
 
 	@Override

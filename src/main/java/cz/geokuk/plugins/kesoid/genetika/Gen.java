@@ -45,7 +45,7 @@ public class Gen implements Grupa {
 		if (puvodniGen != this) {
 			if (puvodniGen != null) {
 				//puvodniGen.alely.remove(alela);
-				throw new RuntimeException("Alela už měla gen, nelze přehazovat alely" + alela + " " + puvodniGen);
+				throw new RuntimeException("Alela už měla gen, nelze přehazovat alely " + alela + " " + puvodniGen);
 			}
 			alely.add(alela);
 			alela.setGen(this);

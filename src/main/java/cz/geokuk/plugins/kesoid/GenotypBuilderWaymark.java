@@ -4,39 +4,34 @@
 package cz.geokuk.plugins.kesoid;
 
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Jedinec;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
 class GenotypBuilderWaymark {
 
 	/**
 	 *
 	 */
-	private final Jedinec g;
 	private final Genom genom;
 
 	/**
 	 *
 	 */
-	public GenotypBuilderWaymark(final Genom genom, final Jedinec g) {
+	public GenotypBuilderWaymark(final Genom genom) {
 		this.genom = genom;
-		this.g = g;
 	}
 
-	public void build(final Waymark waymark) {
-		g.put(genom.ALELA_wm);
+	public Genotyp build(final Waymark waymark, final Genotyp g0) {
+		final Genotyp g = g0 .with(genom.ALELA_wm);
 		switch (waymark.getVztah()) {
 		case NORMAL:
-			g.put(genom.ALELA_hnf);
-			break;
+			return g.with(genom.ALELA_hnf);
 		case FOUND:
-			g.put(genom.ALELA_fnd);
-			break;
+			return g.with(genom.ALELA_fnd);
 		case OWN:
-			g.put(genom.ALELA_own);
-			break;
+			return g.with(genom.ALELA_own);
 		case NOT:
-			g.put(genom.ALELA_not);
-			break;
+			return g.with(genom.ALELA_not);
+		default: return g;
 		}
 	}
 

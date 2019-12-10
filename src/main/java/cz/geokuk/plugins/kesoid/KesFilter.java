@@ -75,7 +75,7 @@ public class KesFilter {
 		this.vyletModel = vyletModel;
 	}
 
-	public boolean isFiltered(final Wpt aWpt, final Genom genom, Jedinec genotyp) {
+	public boolean isFiltered(final Wpt aWpt, final Genom genom, Genotyp genotyp) {
 		try {
 			if (genotyp == null) { // to je zde jen z důvodu optimalizace
 				genotyp = aWpt.getGenotyp(genom);

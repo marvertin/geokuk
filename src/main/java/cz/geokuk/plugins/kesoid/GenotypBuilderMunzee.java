@@ -1,33 +1,28 @@
 package cz.geokuk.plugins.kesoid;
 
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Jedinec;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
 class GenotypBuilderMunzee {
 
-	private final Jedinec g;
 	private final Genom genom;
 
-	public GenotypBuilderMunzee(final Genom genom, final Jedinec g) {
+	public GenotypBuilderMunzee(final Genom genom) {
 		this.genom = genom;
-		this.g = g;
 	}
 
-	public void build(final Munzee munzee) {
-		g.put(genom.ALELA_mz);
+	public Genotyp build(final Munzee munzee, final Genotyp g0) {
+		final Genotyp g = g0.with(genom.ALELA_mz);
 		switch (munzee.getVztah()) {
 		case NORMAL:
-			g.put(genom.ALELA_hnf);
-			break;
+			return g.with(genom.ALELA_hnf);
 		case FOUND:
-			g.put(genom.ALELA_cpt);
-			break;
+			return g.with(genom.ALELA_cpt);
 		case OWN:
-			g.put(genom.ALELA_dpl);
-			break;
+			return g.with(genom.ALELA_dpl);
 		case NOT:
-			g.put(genom.ALELA_not);
-			break;
+			return g.with(genom.ALELA_not);
+		default: return g;
 		}
 	}
 }

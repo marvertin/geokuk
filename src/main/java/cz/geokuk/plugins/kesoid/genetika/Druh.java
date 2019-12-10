@@ -98,7 +98,7 @@ public class Druh {
 
 	/**
 	 * Zda má druh daný gen
-	 * 
+	 *
 	 * @param gen
 	 * @return
 	 */
@@ -110,21 +110,6 @@ public class Druh {
 		return nazev;
 	}
 
-	/**
-	 * Zrodí se nový jedinec. Zrodí se s výchozími alelami.
-	 */
-	public Jedinec zrozeni() {
-		return new Jedinec(this, geny.size()); // to je současná velikost DNA
-	}
-
-	/**
-	 * Zrodí se nový jedinec. Zrodí se s výchozími alelami.
-	 */
-	public Jedinec zrozeni(final Set<Alela> alelas) {
-		final Jedinec jedinec = zrozeni();
-		jedinec.put(alelas);
-		return jedinec;
-	}
 
 	/**
 	 * Vrátí první gen

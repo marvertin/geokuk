@@ -17,7 +17,7 @@ public class Sada {
 
 	List<SkloAplikant> skloAplikanti = new ArrayList<>();
 
-	Map<Jedinec, Sklivec> cache = new HashMap<>();
+	Map<Genotyp, Sklivec> cache = new HashMap<>();
 
 	private final String name;
 
@@ -80,8 +80,8 @@ public class Sada {
 	 * @param genotyp
 	 * @return
 	 */
-	public synchronized Sklivec getSklivec(final Jedinec genotyp) {
-		zuzNaObrazkove(genotyp); // aby se nekešovalo pro alely, ke kterým nic nemáme
+	public synchronized Sklivec getSklivec(final Genotyp genotypx) {
+		final Genotyp genotyp = zuzNaObrazkovex(genotypx); // aby se nekešovalo pro alely, ke kterým nic nemáme
 		Sklivec sklivec = cache.get(genotyp);
 		if (sklivec == null) {
 			sklivec = new Sklivec();
@@ -117,20 +117,22 @@ public class Sada {
 	 * @param skloAplikant
 	 * @return
 	 */
-	private Imagant getRenderedImage(final Jedinec genotyp, final SkloAplikant skloAplikant) {
+	private Imagant getRenderedImage(final Genotyp genotyp, final SkloAplikant skloAplikant) {
 		final Imagant imagant = skloAplikant.sklo.getRenderedImage(genotyp);
 		return imagant;
 	}
 
-	private void zuzNaObrazkove(final Jedinec genotyp) {
+	private Genotyp zuzNaObrazkovex(final Genotyp g0) {
+		Genotyp g = g0;
 		final Set<Alela> pouziteAlely2 = getPouziteAlely();
-		for (final Alela alela : new ArrayList<>(genotyp.getAlely())) {
+		for (final Alela alela : new ArrayList<>(g0.getAlely())) {
 			if (!pouziteAlely2.contains(alela)) {
 				if (!pouziteAlely2.contains(alela.getGen().getVychoziAlela())) {
-					genotyp.remove(alela);
+					g = g.without(alela);
 				}
 			}
 		}
+		return g;
 	}
 
 }

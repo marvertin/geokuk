@@ -441,32 +441,32 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 	}
 
-	private Jedinec computeGenotyp(final Wpt wpt) {
+	private Genotyp computeGenotyp(final Wpt wpt) {
 		final Genom genom = ikonBag.getGenom();
-		final Jedinec g = wpt.getGenotyp(genom);
+		Genotyp g = wpt.getGenotyp(genom);
 		// switch (cestyModel.get(wpt.getKesoid())) {
-		// // case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
-		// case NE: g.put(ikonBag.getGenom().ALELA_ignoru); break;
+		// // case ANO: g = g.with(ikonBag.getGenom().ALELA_lovime); break;
+		// case NE: g = g.with(ikonBag.getGenom().ALELA_ignoru); break;
 		// }
 		switch (vyletModel.get(wpt.getKesoid())) {
 		case ANO:
-			g.put(genom.ALELA_lovime);
+			g = g.with(genom.ALELA_lovime);
 			break;
 		case NE:
-			g.put(genom.ALELA_ignoru);
+			g = g.with(genom.ALELA_ignoru);
 			break;
 		case NEVIM:
 			break;
 		}
-		g.put(cestyModel.isOnVylet(wpt) ? genom.ALELA_nacestejsou : genom.ALELA_mimocesticu);
+		g = g.with(cestyModel.isOnVylet(wpt) ? genom.ALELA_nacestejsou : genom.ALELA_mimocesticu);
 
 		if (wpt == wptPodMysi) {
-			g.put(genom.ALELA_mouseon);
+			g = g.with(genom.ALELA_mouseon);
 		}
 		if (wpt.getKesoid() == kesoidPodMysi) {
-			g.put(genom.ALELA_mousean);
+			g = g.with(genom.ALELA_mousean);
 		}
-		g.removeAll(fenotypoveZakazaneAlely);
+		g = g.without(fenotypoveZakazaneAlely);
 		return g;
 	}
 
@@ -497,7 +497,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		// Přidat zhasínače
 		final JMenu zhasinace = new JMenu("Zhasni");
 		p.add(zhasinace);
-		final Jedinec genotyp = mysNadWpt.getGenotyp(vsechny.getGenom());
+		final Genotyp genotyp = mysNadWpt.getGenotyp(vsechny.getGenom());
 		for (final Alela alela : genotyp.getAlely()) {
 			if (alela.getGen().isVypsatelnyVeZhasinaci() && !alela.isVychozi()) {
 				zhasinace.add(factory.init(new ZhasniKeseUrciteAlelyAction(alela)));

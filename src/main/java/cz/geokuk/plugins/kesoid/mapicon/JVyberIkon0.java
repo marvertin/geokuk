@@ -165,7 +165,7 @@ public abstract class JVyberIkon0 extends Box {
 	}
 
 	private Icon najdiIkonu(final Alela alela, final IkonBag bag) {
-		final Jedinec genotypProAlelu = bag.getGenom().getGenotypProAlelu(alela);
+		final Genotyp genotypProAlelu = bag.getGenom().UNIVERZALNI_DRUH.genotypVychozi().with(alela);
 		// genotypProAlelu.put(bag.getGenom().ALELA_H);
 		return bag.seekIkon(genotypProAlelu);
 	}

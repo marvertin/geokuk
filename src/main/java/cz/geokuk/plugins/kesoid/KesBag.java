@@ -38,7 +38,7 @@ public class KesBag {
 		citacAlel = genom.createCitacAlel();
 	}
 
-	public void add(final Wpt wpt, Jedinec genotyp) {
+	public void add(final Wpt wpt, Genotyp genotyp) {
 		if (wpt.hasEmptyCoords()) {
 			return;
 		}

@@ -4,39 +4,34 @@
 package cz.geokuk.plugins.kesoid;
 
 import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Jedinec;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
 class GenotypBuilderCgp {
 
 	/**
 	 *
 	 */
-	private final Jedinec g;
 	private final Genom genom;
 
 	/**
 	 *
 	 */
-	public GenotypBuilderCgp(final Genom genom, final Jedinec g) {
+	public GenotypBuilderCgp(final Genom genom) {
 		this.genom = genom;
-		this.g = g;
 	}
 
-	public void build(final CzechGeodeticPoint cgp) {
-		g.put(genom.ALELA_gb);
+	public Genotyp build(final CzechGeodeticPoint cgp, final Genotyp g0) {
+		final Genotyp g = g0.with(genom.ALELA_gb);
 		switch (cgp.getVztah()) {
 		case NORMAL:
-			g.put(genom.ALELA_hnf);
-			break;
+			return g.with(genom.ALELA_hnf);
 		case FOUND:
-			g.put(genom.ALELA_fnd);
-			break;
+			return g.with(genom.ALELA_fnd);
 		case OWN:
-			g.put(genom.ALELA_own);
-			break;
+			return g.with(genom.ALELA_own);
 		case NOT:
-			g.put(genom.ALELA_not);
-			break;
+			return g.with(genom.ALELA_not);
+		default: return g;
 		}
 	}
 

@@ -4,8 +4,7 @@ import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.genetika.Jedinec;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
 public class Munzee extends Kesoid {
 
@@ -15,9 +14,9 @@ public class Munzee extends Kesoid {
 	 * @see cz.geokuk.kes.Kesoid#buildGenotyp(cz.geokuk.mapicon.Genom, cz.geokuk.mapicon.Genotyp)
 	 */
 	@Override
-	public void buildGenotyp(final Genom genom, final Jedinec g) {
-		final GenotypBuilderMunzee genotypBuilder = new GenotypBuilderMunzee(genom, g);
-		genotypBuilder.build(this);
+	public Genotyp buildGenotyp(final Genotyp g) {
+		final GenotypBuilderMunzee genotypBuilder = new GenotypBuilderMunzee(g.getGenom());
+		return genotypBuilder.build(this, g);
 	}
 
 	@Override
