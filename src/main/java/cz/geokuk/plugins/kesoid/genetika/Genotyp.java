@@ -146,7 +146,7 @@ public class Genotyp {
 		if (alela == null) { // nemůže mít neexistující alelu
 			return false;
 		}
-		return alela.hasGen() && getAlela(alela.getGen()) == alela;
+		return getAlela(alela.getGen()) == alela;
 	}
 
 	/**

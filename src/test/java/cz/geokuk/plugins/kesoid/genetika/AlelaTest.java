@@ -5,9 +5,6 @@ import java.util.Collection;
 
 import org.junit.*;
 
-import cz.geokuk.plugins.kesoid.genetika.Alela;
-import cz.geokuk.plugins.kesoid.genetika.Genom;
-
 public class AlelaTest {
 
 	@BeforeClass
@@ -24,40 +21,31 @@ public class AlelaTest {
 
 	@Test
 	public void test1() {
-		Assert.assertEquals("ahoj", genom.alela("ahoj").getDisplayName());
+		Assert.assertEquals("ahoj", genom.gen("ha").alela("ahoj").getDisplayName());
 	}
 
 	@Test
 	public void test2() {
-		Assert.assertEquals("kukuč to je", genom.alela("ahoj").displayName("kukuč to je").getDisplayName());
+		Assert.assertEquals("kukuč to je", genom.gen("ha").alela("ahoj").displayName("kukuč to je").getDisplayName());
 	}
 
 	@Test
 	public void test3() {
-		Assert.assertSame(genom.alela("ahoj"), genom.alela("ahoj"));
+		Assert.assertSame(genom.gen("ha").alela("ahoj"), genom.gen("ha").alela("ahoj"));
 	}
 
 	@Test
 	public void test4() {
-		Assert.assertNotSame(genom.alela("ahoj"), genom.alela("ahojx"));
-	}
-
-	@Test(expected = NullPointerException.class)
-	public void test5() {
-		Assert.assertNull(genom.alela("ahoj").getGen());
-	}
-
-	@Test
-	public void test6() {
-		Assert.assertFalse(genom.alela("ahoj").hasGen());
+		final Alela alela = genom.gen("ha").alela("ahoj");
+		Assert.assertNotSame(alela, genom.gen("ha").alela("ahojx"));
 	}
 
 	@Test
 	public void test7() {
-		genom.alela("1");
-		genom.alela("2");
-		genom.alela("2");
-		genom.alela("3");
+		genom.gen("x").alela("1");
+		genom.gen("x").alela("2");
+		genom.gen("x").alela("2");
+		genom.gen("x").alela("3");
 		Assert.assertEquals(alelyPred.size() + 3, genom.getAlely().size());
 	}
 

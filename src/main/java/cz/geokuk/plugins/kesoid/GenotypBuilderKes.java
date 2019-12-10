@@ -81,8 +81,8 @@ class GenotypBuilderKes {
 		}
 
 		g = g
-				.with(genom.seekAlela("ter" + kes.getTerrain().to2DigitNumberString()))
-				.with(genom.seekAlela("dif" + kes.getDifficulty().to2DigitNumberString()));
+				.with(genom.GEN_teren.alela("ter" + kes.getTerrain().to2DigitNumberString()))
+				.with(genom.GEN_obtiznost.alela("dif" + kes.getDifficulty().to2DigitNumberString()));
 		return g;
 	}
 }

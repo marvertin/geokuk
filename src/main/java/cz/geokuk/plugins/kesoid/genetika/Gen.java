@@ -37,19 +37,11 @@ public class Gen implements Grupa {
 	 * @param alela
 	 *            Přidávaná alela.
 	 */
-	public synchronized void add(final Alela alela) {
+	synchronized void addy(final Alela alela) {
 		if (locked) {
 			throw new RuntimeException("Nemozne pridavat alely " + alela + " k zamcenemu genu " + this);
 		}
-		final Gen puvodniGen = alela.hasGen() ? alela.getGen() : null;
-		if (puvodniGen != this) {
-			if (puvodniGen != null) {
-				//puvodniGen.alely.remove(alela);
-				throw new RuntimeException("Alela už měla gen, nelze přehazovat alely " + alela + " " + puvodniGen);
-			}
-			alely.add(alela);
-			alela.setGen(this);
-		}
+		alely.add(alela);
 		if (vychoziAlela == null) {
 			// první alela, která přijde se stává výchozí alelou a už se to nezmění
 			vychoziAlela = alela;
@@ -68,8 +60,7 @@ public class Gen implements Grupa {
 	 * @return Přidaná alela.
 	 */
 	public Alela alela(final String nazev) {
-		final Alela alela = genom.alela(nazev);
-		add(alela);
+		final Alela alela = genom.getOrCreateAlela(nazev, this);
 		return alela;
 	}
 

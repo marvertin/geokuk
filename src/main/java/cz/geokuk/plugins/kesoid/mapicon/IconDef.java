@@ -63,9 +63,6 @@ public class IconDef {
 		// Set<Set<Alela>> sese = new HashSet<Set<Alela>>();
 		final Map<Gen, Alela> geny = new HashMap<>();
 		for (final Alela alela : set) {
-			if (!alela.hasGen()) {
-				continue;
-			}
 			final Gen gen = alela.getGen();
 			final Alela lastAlela = geny.get(gen);
 			if (lastAlela != null) { // duplicita

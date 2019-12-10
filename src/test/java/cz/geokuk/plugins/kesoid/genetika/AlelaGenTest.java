@@ -2,8 +2,6 @@ package cz.geokuk.plugins.kesoid.genetika;
 
 import org.junit.*;
 
-import cz.geokuk.plugins.kesoid.genetika.*;
-
 public class AlelaGenTest {
 
 	@BeforeClass
@@ -18,20 +16,8 @@ public class AlelaGenTest {
 
 	@Test
 	public void test1() {
-		genom.gen("genik").add(genom.alela("alik"));
-		Assert.assertSame(genom.alela("alik").getGen(), genom.gen("genik"));
-	}
-
-	@Test
-	public void test2() {
-		final Alela alela = genom.gen("genik").alela("alik");
-		genom.gen("genik").add(alela);
-	}
-
-	@Test(expected = RuntimeException.class)
-	public void test2a() {
-		final Alela alela = genom.gen("genik").alela("alik");
-		genom.gen("genikaaa").add(alela);
+		genom.gen("genik").alela("alik");
+		Assert.assertSame(genom.seekAlela("alik").getGen(), genom.gen("genik"));
 	}
 
 	@Test

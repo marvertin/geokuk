@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Alela is a value of a property (i.e. a value of {@link Gen}. Alela reprezentuje alelu libovolného genu. Všechny alely jsou zřizovány centrálně v {@link Genom}. Nově vzniklá alela nemá gen, jakmile je alela přiřazena do genu má ho navždy, gen v alele už nelze změnit.
+ * Alela is a value of a property (i.e. a value of {@link Gen}.
+ * Alela reprezentuje alelu libovolného genu. Všechny alely jsou evidovány centrálně v {@link Genom},
+ * ale vznikají na genu voláním alela. Alela má gen od svého počátku a nemůže ho změnit.
  *
  * Alela přidaná do genu jako první se stává alelou výchozí.
  *
@@ -22,15 +24,17 @@ public class Alela {
 	}
 
 	private final String nazev;
+	private final Gen gen;
 	private String displayName;
-	private Gen gen;
 
 	// Indexuje alely, aby se dal rychleji realizovat čítač alel, stačí indexovat v poli
 	private final int celkovePoradi;
 
-	Alela(final String nazev, final int celkovePoradi) {
+	Alela(final String nazev, final Gen gen, final int celkovePoradi) {
 		this.nazev = nazev;
+		this.gen = gen;
 		this.celkovePoradi = celkovePoradi;
+		gen.addy(this);
 	}
 
 	public Alela displayName(final String displayName) {
@@ -58,10 +62,6 @@ public class Alela {
 		return getGen().getGenom();
 	}
 
-	public boolean hasGen() {
-		return gen != null;
-	}
-
 	/**
 	 * Výchozí alela je alela přidána ke genu jako první. Pokud jedinci není přiřazena v nějakém genu alela, má alelu výchozí.
 	 *
@@ -78,10 +78,6 @@ public class Alela {
 	 */
 	public String name() {
 		return nazev;
-	}
-
-	void setGen(final Gen gen) {
-		this.gen = gen;
 	}
 
 	@Override

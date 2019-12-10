@@ -139,8 +139,9 @@ public class Genom {
 	/**
 	 * Vrátí nebo zřídí alelu. Pokud vzniká nová alela, není přiřazena ke genu.
 	 */
-	public synchronized Alela alela(final String alelaName) {
-		return alely.computeIfAbsent(alelaName, name -> new Alela(name, alely.size()));
+	synchronized Alela getOrCreateAlela(final String alelaName, final Gen gen) {
+		final Alela alela = alely.computeIfAbsent(alelaName, name -> new Alela(name, gen, alely.size()));
+		return alela;
 	}
 
 	/** Vrátí nebo zřídí druh */
@@ -238,10 +239,9 @@ public class Genom {
 	 * @return
 	 */
 	public Alela seekAlela(final String alelaName) {
-		Alela alela = alely.get(alelaName);
+		final Alela alela = alely.get(alelaName);
 		if (alela == null) {
-			Genom.log.warn("Alela [{}] neni definovana!", alelaName);
-			alela = alela(alelaName);
+			throw new IllegalArgumentException("Alela " + alelaName + " neni definovana, metodu lze volat jen v situaci, kdy vime, ze alela existuje!");
 		}
 		return alela;
 	}
