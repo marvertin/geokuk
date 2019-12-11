@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.kesoid.genetika;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,15 +64,6 @@ public class Alela {
 		return gen.getVychoziAlela() == this;
 	}
 
-	/**
-	 * Jméno alely.
-	 *
-	 * @return
-	 */
-	public String name() {
-		return nazev;
-	}
-
 	public String simpleName() {
 		return nazev;
 	}
@@ -91,24 +81,12 @@ public class Alela {
 
 	@Override
 	public String toString() {
-		return nazev;
+		throw new RuntimeException("Volan toString na Alele a to může být špatný, moc špatný");
+		//return nazev;
 	}
 
 	int getCelkovePoradi() {
 		return celkovePoradi;
-	}
-
-	/**
-	 *
-	 * @param alely
-	 * @return
-	 */
-	public static Set<String> alelyToNames(final Set<Alela> alely) {
-		final Set<String> jmenaAlel = new HashSet<>(alely.size());
-		for (final Alela alela : alely) {
-			jmenaAlel.add(alela.name());
-		}
-		return jmenaAlel;
 	}
 
 	/**

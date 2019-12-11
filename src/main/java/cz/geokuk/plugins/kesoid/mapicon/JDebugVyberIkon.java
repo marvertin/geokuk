@@ -18,7 +18,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 	private final JComponent jskelneikony;
 
 	private IkonBag bag;
-	private Set<String> jmenaVybranychAlel;
+	private QualAlelaNames jmenaVybranychAlel;
 	private boolean zobrazovatVse;
 
 	/**
@@ -37,7 +37,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		if (bag == null) {
 			return;
 		}
-		jmenaVybranychAlel = Alela.alelyToNames(wpt.getGenotyp(bag.getGenom()).getAlely());
+		jmenaVybranychAlel = Alela.alelyToQualNames(wpt.getGenotyp(bag.getGenom()).getAlely());
 		zobrazovatVse = true;
 		refresh(bag, jmenaVybranychAlel, null);
 	}
@@ -46,7 +46,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		bag = aBag;
 		if (jmenaVybranychAlel == null) {
 			final Genotyp genotypVychozi = bag.getGenom().UNIVERZALNI_DRUH.genotypVychozi();
-			jmenaVybranychAlel = Alela.alelyToNames(genotypVychozi.getAlely());
+			jmenaVybranychAlel = Alela.alelyToQualNames(genotypVychozi.getAlely());
 		}
 		refresh(aBag, jmenaVybranychAlel, null);
 	}
@@ -78,7 +78,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 
 	@Override
 	protected void zmenaVyberu(final Set<Alela> aAlelyx) {
-		jmenaVybranychAlel = Alela.alelyToNames(aAlelyx);
+		jmenaVybranychAlel = Alela.alelyToQualNames(aAlelyx);
 		final Genotyp genotyp = bag.getGenom().UNIVERZALNI_DRUH.genotypVychozi().with(aAlelyx);
 		final Sklivec sklivec = bag.getSklivec(genotyp);
 		jskelneikony.removeAll();

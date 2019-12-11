@@ -86,7 +86,7 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		kesoidModel.filtrujDleAlely(alela.toString(), false);
+		kesoidModel.filtrujDleAlely(alela.qualName(), false);
 	}
 
 	/*

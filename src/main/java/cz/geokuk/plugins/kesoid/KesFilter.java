@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import cz.geokuk.plugins.kesoid.genetika.*;
-import cz.geokuk.plugins.kesoid.mapicon.*;
 import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.plugins.vylety.VyletModel;
 
@@ -12,7 +11,7 @@ public class KesFilter {
 
 	private FilterDefinition filterDefinition;
 	private Set<Alela> nechteneAlely;
-	private Set<String> jmenaNechtenychAlel;
+	private QualAlelaNames jmenaNechtenychAlel;
 
 	private VyletModel vyletModel;
 
@@ -60,7 +59,7 @@ public class KesFilter {
 	/**
 	 * @return the jmenaNechtenychAlel
 	 */
-	public Set<String> getJmenaNechtenychAlel() {
+	public QualAlelaNames getJmenaNechtenychAlel() {
 		return jmenaNechtenychAlel;
 	}
 
@@ -83,7 +82,7 @@ public class KesFilter {
 			final Set<Alela> alelygenotypu = genotyp.getAlely();
 			if (jmenaNechtenychAlel != null) {
 				if (nechteneAlely == null) {
-					nechteneAlely = genom.namesToAlelyIgnorujNeexistujici(jmenaNechtenychAlel);
+					nechteneAlely = genom.searchAlelasByQualNames(jmenaNechtenychAlel);
 				}
 				final Set<Alela> alely = new HashSet<>(nechteneAlely);
 				alely.retainAll(alelygenotypu);
@@ -161,7 +160,7 @@ public class KesFilter {
 	 * @param jmenaNechtenychAlel
 	 *            the jmenaNechtenychAlel to set
 	 */
-	public void setJmenaNechtenychAlel(final Set<String> jmenaNechtenychAlel) {
+	public void setJmenaNechtenychAlel(final QualAlelaNames jmenaNechtenychAlel) {
 		this.jmenaNechtenychAlel = jmenaNechtenychAlel;
 		nechteneAlely = null;
 	}

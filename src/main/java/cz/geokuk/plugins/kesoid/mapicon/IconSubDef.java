@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import cz.geokuk.plugins.kesoid.genetika.Alela;
 
@@ -19,7 +20,7 @@ public class IconSubDef {
 
 	@Override
 	public String toString() {
-		return alely.toString();
+		return "[" + alely.stream().map(Alela::qualName).collect(Collectors.joining(", ")) + "]";
 	}
 
 }

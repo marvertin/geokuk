@@ -111,14 +111,14 @@ public class JToolbarOvladaceAlel extends JPanel {
 	}
 
 	private void ovladac(final KesBag vsechny, final Alela alela) {
-		JIconCheckBox cb = mapka.get(alela.toString());
+		JIconCheckBox cb = mapka.get(alela.qualName());
 		if (cb == null) {
 			final SwitchKesoidUrciteAlelyAction action = factory.init(new SwitchKesoidUrciteAlelyAction(alela));
 			cb = new JIconCheckBox();
 			action.join(cb);
 			tb.add(cb);
 			cb.setText(null);
-			mapka.put(alela.toString(), cb);
+			mapka.put(alela.qualName(), cb);
 		}
 		final boolean jetam = vsechny.getPouziteAlely().contains(alela);
 		cb.setVisible(jetam);

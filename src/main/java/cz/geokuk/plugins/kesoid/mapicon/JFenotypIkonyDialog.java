@@ -1,13 +1,13 @@
 package cz.geokuk.plugins.kesoid.mapicon;
 
 import java.awt.Dimension;
-import java.util.Set;
 
 import javax.swing.*;
 
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.genetika.QualAlelaNames;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 
@@ -19,7 +19,7 @@ public class JFenotypIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 	private JFenotypVyberIkon fenotypVyberIkon;
 
 	private IkonBag ikonBag;
-	private Set<String> jmenaVybranychAlel;
+	private QualAlelaNames jmenaVybranychAlel;
 	private KesBag filtrovaneKesBag;
 
 	public JFenotypIkonyDialog() {

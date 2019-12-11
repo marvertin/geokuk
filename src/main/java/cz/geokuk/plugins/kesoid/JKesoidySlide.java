@@ -149,7 +149,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	private Set<Alela> fenotypoveZakazaneAlely;
 
-	private Set<String> iJmenaAlel;
+	private QualAlelaNames iJmenaAlel;
 
 	private Factory factory;
 
@@ -616,7 +616,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		if (ikonBag == null) {
 			return;
 		}
-		fenotypoveZakazaneAlely = ikonBag.getGenom().namesToAlely(iJmenaAlel);
+		fenotypoveZakazaneAlely = ikonBag.getGenom().searchAlelasByQualNames(iJmenaAlel);
 		Wpt.invalidateAllSklivec();
 		repaint();
 	}

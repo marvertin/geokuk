@@ -206,39 +206,6 @@ public class Genom {
 		return Collections.unmodifiableList(genyList);
 	}
 
-	Alela locateAlela(final String alelaName) {
-		return alely.get(alelaName);
-	}
-
-	/**
-	 * FIXME genetika: revidovat volání seekAlela, mají existovat či ne?
-	 *
-	 * @param jmenaAlel
-	 * @return
-	 */
-	public Set<Alela> namesToAlely(final Set<String> jmenaAlel) {
-		System.out.println("Prevadime jmena na alely1: " + jmenaAlel);
-		return jmenaAlel.stream()
-				.filter(jmeno -> jmeno != null && jmeno.length() > 0)
-				.map(jmeno -> seekAlela(jmeno))
-				.collect(Collectors.toSet());
-	}
-
-	/**
-	 * FIXME genetika: revidovat volání seekAlela, mají existovat či ne?
-	 *
-	 * @param jmenaAlel
-	 * @return
-	 */
-	public Set<Alela> namesToAlelyIgnorujNeexistujici(final Set<String> jmenaAlel) {
-		System.out.println("Prevadime jmena na alely2: " + jmenaAlel);
-		return jmenaAlel.stream()
-				.filter(jmeno -> jmeno != null && jmeno.length() > 0)
-				.map(jmeno -> seekAlela(jmeno))
-				.filter(alela -> alela != null)
-				.collect(Collectors.toSet());
-	}
-
 	/**
 	 * Převede kvalifikovaná jména alel na alely s tím, že ignoruje neexistující alely.
 	 * @param qualNames KValifikovaná jména ale.
@@ -253,19 +220,6 @@ public class Genom {
 				.collect(Collectors.toSet());
 	}
 
-	/**
-	 * Převede kvalifikovaná jména alel na alely s tím, že spadneme, pokud některá z alel neexistuje.
-	 * @param qualNames KValifikovaná jména ale.
-	 * @return
-	 */
-	public Set<Alela> qualNamesToAlely(final QualAlelaNames qualNames) {
-		System.out.println("Prevadime jmena na alely3: " + qualNames);
-		return qualNames.getQualNames().stream()
-				.filter(jmeno -> jmeno != null && jmeno.length() > 0)
-				.map(this::locateQualAlela)    // najdeme alelu
-				.map(a -> a.orElseThrow(() -> new IllegalArgumentException("Neexistujici alela v " + qualNames)))            // a uz vime, ze existuje
-				.collect(Collectors.toSet());
-	}
 	/**
 	 * FIXME genetika: neodpovídá sekku, jen varuje.
 	 *

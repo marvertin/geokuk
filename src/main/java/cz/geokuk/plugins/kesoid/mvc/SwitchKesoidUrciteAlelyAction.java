@@ -63,14 +63,16 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 
 	public void onEvent(final KeskyVyfiltrovanyEvent event) {
 		vsechny = event.getVsechny();
-		final boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().contains(alela.toString());
+		// TODO [veverka] Tydy původne bylo tot, ale to není dobře užít toString, zkontrolovat, že to finguje. -- 11. 12. 2019 9:35:23 veverka
+		// final boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().contains(alela.toString());
+		final boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().getQualNames().contains(alela.qualName());
 		setSelected(!nechtena);
 		super.putValue(SHORT_DESCRIPTION, sestavJmeno());
 	}
 
 	@Override
 	protected void onSlectedChange(final boolean nastaveno) {
-		kesoidModel.filtrujDleAlely(alela.toString(), nastaveno);
+		kesoidModel.filtrujDleAlely(alela.qualName(), nastaveno);
 	}
 
 	private String sestavJmeno() {

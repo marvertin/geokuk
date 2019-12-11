@@ -12,6 +12,7 @@ import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
+import cz.geokuk.plugins.kesoid.genetika.QualAlelaNames;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
 import cz.geokuk.plugins.kesoid.importek.MultiNacitacLoaderManager;
 import cz.geokuk.plugins.kesoid.mapicon.*;
@@ -28,8 +29,8 @@ public class KesoidModel extends Model0 {
 
 	// Datamodelu
 	private KesFilter filter;
-	private Set<String> jmenaAlelNaToolbaru;
-	private Set<String> jmenaNefenotypovanychAlel;
+	private QualAlelaNames jmenaAlelNaToolbaru;
+	private QualAlelaNames jmenaNefenotypovanychAlel;
 	private String jmenoSady = "neznama-sada";
 	private IkonBag ikonBag;
 	private KesBag vsechny;
@@ -47,7 +48,8 @@ public class KesoidModel extends Model0 {
 	private Boolean onoff;
 
 	public void filtrujDleAlely(final String alelaName, final boolean zobrazit) {
-		final Set<String> jmena = new HashSet<>(filter.getJmenaNechtenychAlel());
+		System.out.println("filtrujDleAlely: " + alelaName);
+		final Set<String> jmena = new HashSet<>(filter.getJmenaNechtenychAlel().getQualNames());
 		boolean zmena;
 		if (zobrazit) {
 			zmena = jmena.remove(alelaName);
@@ -57,7 +59,7 @@ public class KesoidModel extends Model0 {
 		if (!zmena) {
 			return; // není změna
 		}
-		setJmenaNechtenychAlel(jmena);
+		setJmenaNechtenychAlel(new QualAlelaNames(jmena));
 	}
 
 	public FilterDefinition getDefinition() {
@@ -105,7 +107,7 @@ public class KesoidModel extends Model0 {
 
 	public void onEvent(final IkonyNactenyEvent event) {
 		jmenoSady = event.getBag().getSada().getName();
-		setJmenaNefenotypovanychAlel(currPrefe().node(FPref.MAPICON_FENOTYP_node).getStringSet(jmenoSady, new HashSet<String>()));
+		setJmenaNefenotypovanychAlel(currPrefe().node(FPref.MAPICON_FENOTYP_node).getQualAlelaNames(jmenoSady, QualAlelaNames.EMPTY));
 	}
 
 	public void onEvent(final KeskyNactenyEvent aEvent) {
@@ -179,30 +181,30 @@ public class KesoidModel extends Model0 {
 		startKesLoading();
 	}
 
-	public void setJmenaAlelNaToolbaru(final Set<String> jmenaAlelNaToolbaru) {
+	public void setJmenaAlelNaToolbaru(final QualAlelaNames jmenaAlelNaToolbaru) {
 		if (jmenaAlelNaToolbaru.equals(filter.getJmenaNechtenychAlel())) {
 			return;
 		}
 		this.jmenaAlelNaToolbaru = jmenaAlelNaToolbaru;
-		currPrefe().node(FPref.KESOID_FILTR_node).putStringSet(FPref.KESOID_FILTER_NATOOLBARU_value, jmenaAlelNaToolbaru);
+		currPrefe().node(FPref.KESOID_FILTR_node).putQualAlelaNames(FPref.KESOID_FILTER_NATOOLBARU_value, jmenaAlelNaToolbaru);
 		fajruj();
 	}
 
-	public void setJmenaNefenotypovanychAlel(final Set<String> jmenaNefenotypovanychAlel) {
+	public void setJmenaNefenotypovanychAlel(final QualAlelaNames jmenaNefenotypovanychAlel) {
 		if (jmenaNefenotypovanychAlel.equals(this.jmenaNefenotypovanychAlel)) {
 			return;
 		}
 		this.jmenaNefenotypovanychAlel = jmenaNefenotypovanychAlel;
-		currPrefe().node(FPref.MAPICON_FENOTYP_node).putStringSet(jmenoSady, jmenaNefenotypovanychAlel);
+		currPrefe().node(FPref.MAPICON_FENOTYP_node).putQualAlelaNames(jmenoSady, jmenaNefenotypovanychAlel);
 		fire(new FenotypPreferencesChangedEvent(jmenaNefenotypovanychAlel));
 	}
 
-	public void setJmenaNechtenychAlel(final Set<String> jmenaNechtenychAlel) {
+	public void setJmenaNechtenychAlel(final QualAlelaNames jmenaNechtenychAlel) {
 		if (jmenaNechtenychAlel.equals(filter.getJmenaNechtenychAlel())) {
 			return;
 		}
 		filter.setJmenaNechtenychAlel(jmenaNechtenychAlel);
-		currPrefe().node(FPref.KESOID_FILTR_node).putStringSet(FPref.KESOID_FILTER_ALELY_value, jmenaNechtenychAlel);
+		currPrefe().node(FPref.KESOID_FILTR_node).putQualAlelaNames(FPref.KESOID_FILTER_ALELY_value, jmenaNechtenychAlel);
 		fajruj();
 	}
 
@@ -336,12 +338,11 @@ public class KesoidModel extends Model0 {
 		}
 		filter.setFilterDefinition(filterDefinition);
 
-		final Set<String> defval = new HashSet<>();
-		defval.add("fnd");
-		defval.add("dsbl");
-		defval.add("arch");
-		filter.setJmenaNechtenychAlel(currPrefe().node(FPref.KESOID_FILTR_node).getStringSet(FPref.KESOID_FILTER_ALELY_value, defval));
-		jmenaAlelNaToolbaru = currPrefe().node(FPref.KESOID_FILTR_node).getStringSet(FPref.KESOID_FILTER_NATOOLBARU_value, defval);
+		// FIXME tady nemohou být takovéto konstant, mohou se změnit
+		final QualAlelaNames defval = new QualAlelaNames("fnd", "dsbl", "arch");
+
+		filter.setJmenaNechtenychAlel(currPrefe().node(FPref.KESOID_FILTR_node).getQualAlelaNames(FPref.KESOID_FILTER_ALELY_value, defval));
+		jmenaAlelNaToolbaru = currPrefe().node(FPref.KESOID_FILTR_node).getQualAlelaNames(FPref.KESOID_FILTER_NATOOLBARU_value, defval);
 
 		final ASada jmenoAktualniSadyIkon = currPrefe().node(FPref.JMENO_VYBRANE_SADY_IKON_node).getAtom(FPref.JMENO_VYBRANE_SADY_IKON_value, ASada.STANDARD, ASada.class);
 		this.jmenoAktualniSadyIkon = jmenoAktualniSadyIkon;
