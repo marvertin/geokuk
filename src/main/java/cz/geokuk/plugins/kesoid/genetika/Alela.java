@@ -2,6 +2,7 @@ package cz.geokuk.plugins.kesoid.genetika;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Alela is a value of a property (i.e. a value of {@link Gen}.
@@ -15,13 +16,6 @@ import java.util.Set;
  */
 public class Alela {
 
-	public static Set<String> alelyToNames(final Set<Alela> alely) {
-		final Set<String> jmenaAlel = new HashSet<>(alely.size());
-		for (final Alela alela : alely) {
-			jmenaAlel.add(alela.name());
-		}
-		return jmenaAlel;
-	}
 
 	private final String nazev;
 	private final Gen gen;
@@ -80,6 +74,21 @@ public class Alela {
 		return nazev;
 	}
 
+	public String simpleName() {
+		return nazev;
+	}
+
+	/**
+	 * Vrací kvalifikované jméno alely, je kvalifikované jménem genu, takže je unikátní v celém genomu.
+	 * Je úplně jedno, jak se kvalifikace provede, důležité je větět, že takto získané jméno vstupuje do
+	 * matod, které mají v názvech parametru qualName.
+	 *
+	 * @return Kvalifikované jméno. Jen ta mezi námi: je to "alela:gen".
+	 */
+	public String qualName() {
+		return simpleName() + getGenom().ODDELOVAC_KVALIFOVANY + gen.getNazev();
+	}
+
 	@Override
 	public String toString() {
 		return nazev;
@@ -87,6 +96,30 @@ public class Alela {
 
 	int getCelkovePoradi() {
 		return celkovePoradi;
+	}
+
+	/**
+	 *
+	 * @param alely
+	 * @return
+	 */
+	public static Set<String> alelyToNames(final Set<Alela> alely) {
+		final Set<String> jmenaAlel = new HashSet<>(alely.size());
+		for (final Alela alela : alely) {
+			jmenaAlel.add(alela.name());
+		}
+		return jmenaAlel;
+	}
+
+	/**
+	 *
+	 * @param alely
+	 * @return
+	 */
+	public static QualAlelaNames alelyToQualNames(final Set<Alela> alely) {
+		return new QualAlelaNames(alely.stream()
+				.map(Alela::qualName)
+				.collect(Collectors.toSet()));
 	}
 
 }

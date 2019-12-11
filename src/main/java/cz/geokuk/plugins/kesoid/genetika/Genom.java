@@ -11,6 +11,8 @@ import cz.geokuk.util.lang.CounterMap;
 
 public class Genom {
 
+	final String ODDELOVAC_KVALIFOVANY = ":";
+
 	private static final Logger log = LogManager.getLogger(Genom.class.getSimpleName());
 
 	private final Map<String, Alela> alely = new LinkedHashMap<>();
@@ -215,7 +217,7 @@ public class Genom {
 	 * @return
 	 */
 	public Set<Alela> namesToAlely(final Set<String> jmenaAlel) {
-		System.out.println("Prevadime jmena na alely: " + jmenaAlel);
+		System.out.println("Prevadime jmena na alely1: " + jmenaAlel);
 		return jmenaAlel.stream()
 				.filter(jmeno -> jmeno != null && jmeno.length() > 0)
 				.map(jmeno -> seekAlela(jmeno))
@@ -229,12 +231,41 @@ public class Genom {
 	 * @return
 	 */
 	public Set<Alela> namesToAlelyIgnorujNeexistujici(final Set<String> jmenaAlel) {
-		System.out.println("Prevadime jmena na alely: " + jmenaAlel);
-		return jmenaAlel.stream().filter(jmeno -> jmeno != null && jmeno.length() > 0).map(jmeno -> {
-			return seekAlela(jmeno);
-		}).filter(alela -> alela != null).collect(Collectors.toSet());
+		System.out.println("Prevadime jmena na alely2: " + jmenaAlel);
+		return jmenaAlel.stream()
+				.filter(jmeno -> jmeno != null && jmeno.length() > 0)
+				.map(jmeno -> seekAlela(jmeno))
+				.filter(alela -> alela != null)
+				.collect(Collectors.toSet());
 	}
 
+	/**
+	 * Převede kvalifikovaná jména alel na alely s tím, že ignoruje neexistující alely.
+	 * @param qualNames KValifikovaná jména ale.
+	 * @return Nalezené alely. Nevrací null. Pokud nějaká alela není nalezena dle jména, tak je jméno ignorováno.
+	 */
+	public Set<Alela> searchAlelasByQualNames(final QualAlelaNames qualNames) {
+		return qualNames.getQualNames().stream()
+				.filter(jmeno -> jmeno != null && jmeno.length() > 0)
+				.map(this::locateQualAlela)    // najdeme alelu
+				.filter(Optional::isPresent)   // jen pokud existuje daneho jmena
+				.map(Optional::get)            // a uz vime, ze existuje
+				.collect(Collectors.toSet());
+	}
+
+	/**
+	 * Převede kvalifikovaná jména alel na alely s tím, že spadneme, pokud některá z alel neexistuje.
+	 * @param qualNames KValifikovaná jména ale.
+	 * @return
+	 */
+	public Set<Alela> qualNamesToAlely(final QualAlelaNames qualNames) {
+		System.out.println("Prevadime jmena na alely3: " + qualNames);
+		return qualNames.getQualNames().stream()
+				.filter(jmeno -> jmeno != null && jmeno.length() > 0)
+				.map(this::locateQualAlela)    // najdeme alelu
+				.map(a -> a.orElseThrow(() -> new IllegalArgumentException("Neexistujici alela v " + qualNames)))            // a uz vime, ze existuje
+				.collect(Collectors.toSet());
+	}
 	/**
 	 * FIXME genetika: neodpovídá sekku, jen varuje.
 	 *
@@ -248,6 +279,29 @@ public class Genom {
 		}
 		return alela;
 	}
+
+
+	/**
+	 * Vyhledá alelu podle kvalifikovaného jména.
+	 *
+	 * @param alelaName
+	 * @return Nalezenou alelu nebo empty, pokud alela není nalezena. Totéž vrátí pro nekvalifikvoané jméno neboď dle něho nemůže být nalezena.
+	 */
+	public Optional<Alela> locateQualAlela(final String qualName) {
+		final int poz = qualName.lastIndexOf(ODDELOVAC_KVALIFOVANY);
+		if (poz < 0) {
+			return Optional.empty();
+		}
+		final String genName = qualName.substring(poz+ ODDELOVAC_KVALIFOVANY.length());
+		final String alelaName = qualName.substring(0, poz);
+		final Gen gen = geny.get(genName);
+		if (gen == null) {
+			return Optional.empty();
+		} else {
+			return gen.locateAlela(alelaName);
+		}
+	}
+
 
 	@Deprecated
 	public Gen getSymGen() {

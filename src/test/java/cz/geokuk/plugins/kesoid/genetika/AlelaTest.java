@@ -49,4 +49,45 @@ public class AlelaTest {
 		Assert.assertEquals(alelyPred.size() + 3, genom.getAlely().size());
 	}
 
+	@Test
+	public void testName1() {
+		final Alela xqq_189 = genom.gen("xqq").alela("189");
+		Assert.assertEquals("189", xqq_189.simpleName());
+	}
+
+	@Test
+	public void testName2() {
+		final Alela xqq_189 = genom.gen("xqq").alela("189");
+		Assert.assertEquals("189:xqq", xqq_189.qualName());
+		Assert.assertNotEquals("x189:xqq", xqq_189.qualName());
+	}
+
+	public void locate0() {
+		Assert.assertEquals(":", genom.ODDELOVAC_KVALIFOVANY);
+	}
+
+	@Test
+	public void locate1() {
+		final Alela alela = genom.gen("xx").alela("11");
+		Assert.assertSame(alela, genom.locateQualAlela("11:xx").get());
+	}
+
+	@Test
+	public void locate2() {
+		genom.gen("xx").alela("11");
+		Assert.assertFalse(genom.locateQualAlela("11:xy").isPresent());
+	}
+
+	@Test
+	public void locate3() {
+		genom.gen("xx").alela("11");
+		Assert.assertFalse(genom.locateQualAlela("12:xx").isPresent());
+	}
+
+	@Test
+	public void locate4() {
+		genom.gen("xx").alela("11");
+		Assert.assertFalse(genom.locateQualAlela("12xx").isPresent());
+	}
+
 }

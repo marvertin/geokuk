@@ -5,9 +5,6 @@ import java.util.Collection;
 
 import org.junit.*;
 
-import cz.geokuk.plugins.kesoid.genetika.Gen;
-import cz.geokuk.plugins.kesoid.genetika.Genom;
-
 public class GenTest {
 
 	@BeforeClass
@@ -49,6 +46,12 @@ public class GenTest {
 		genom.gen("2");
 		genom.gen("3");
 		Assert.assertEquals(genyPred.size() + 3, genom.getGeny().size());
+	}
+
+	@Test
+	public void test8() {
+		final Gen gen = genom.gen("gujin");
+		Assert.assertEquals("gujin", gen.getNazev());
 	}
 
 }

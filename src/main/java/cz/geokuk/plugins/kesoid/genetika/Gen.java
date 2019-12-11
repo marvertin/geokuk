@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.kesoid.genetika;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import cz.geokuk.util.lang.FString;
 
@@ -16,6 +17,7 @@ public class Gen implements Grupa {
 
 	private final String nazev;
 	private final Set<Alela> alely = new LinkedHashSet<>();
+	private final Map<String, Alela> alelyMap = new LinkedHashMap<>();
 	private Alela vychoziAlela;
 	private boolean locked;
 	private final Genom genom;
@@ -41,6 +43,8 @@ public class Gen implements Grupa {
 		if (locked) {
 			throw new RuntimeException("Nemozne pridavat alely " + alela + " k zamcenemu genu " + this);
 		}
+
+		alelyMap.put(alela.simpleName(), alela);
 		alely.add(alela);
 		if (vychoziAlela == null) {
 			// první alela, která přijde se stává výchozí alelou a už se to nezmění
@@ -69,6 +73,9 @@ public class Gen implements Grupa {
 		return this;
 	}
 
+	/**
+	 * Vrací seznam všech alel genu.
+	 */
 	@Override
 	public Set<Alela> getAlely() {
 		return alely;
@@ -101,7 +108,12 @@ public class Gen implements Grupa {
 
 	@Override
 	public String toString() {
-		return "Gen [displayName=" + nazev + ", alely=" + alely + ", vychoziAlela=" + vychoziAlela + "]";
+		final String alelyNamesStr = alely.stream()
+				.filter(x -> x != null)
+				.map(Alela::simpleName)
+				.collect(Collectors.joining(", "));
+
+		return "Gen [nazev=" + nazev + ", alely=[" + alelyNamesStr + "], vychoziAlela=\"" + vychoziAlela.simpleName() + "\"]";
 	}
 
 	/**
@@ -161,6 +173,19 @@ public class Gen implements Grupa {
 			throw new IllegalStateException("Jen symgen smí mít grupy, ne " + nazev + " - " + displayName);
 		}
 		return is;
+	}
+
+	/**
+	 * Vyhledá alelu podle jednoduchéh jména v genu. Je to jméno vracené v simpleName()
+	 * @param alelaName
+	 * @return
+	 */
+	public Optional<Alela> locateAlela(final String alelaName) {
+		return Optional.ofNullable(alelyMap.get(alelaName));
+	}
+
+	String getNazev() {
+		return nazev;
 	}
 
 }

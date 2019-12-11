@@ -4,6 +4,7 @@
 package cz.geokuk.plugins.kesoid.genetika;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Genotyp jako množina alel. Typ je immutable, různé instance mají různou množinu alel.
@@ -168,7 +169,7 @@ public class Genotyp {
 	private Set<Alela> vymenAlelu(final Alela alela) {
 		if (!druh.hasGen(alela.getGen())) {
 			druh.addGen(alela.getGen());
-			System.err.println("Pri vymene alely " + alela + " v genotypu " + this + " bylo zjisteno, ze v hjeho druhu neni gen " + alela.getGen());
+			System.err.println("Pri vymene alely " + alela.qualName() + " v genotypu " + this + " bylo zjisteno, ze v hjeho druhu neni gen " + alela.getGen());
 		}
 		final Set<Alela> alely = getNevychoziAlely(); // stávající alely
 		alely.remove(getAlela(alela.getGen())); // pokud tam byla alela tohoto genu, zahubíme ji
@@ -225,7 +226,12 @@ public class Genotyp {
 
 	@Override
 	public String toString() {
-		return "Genotyp [druh=" + druh + ", index=" + index + ", dna=" + Arrays.toString(dna) + "]";
+		final String alelyNamesStr = Arrays.stream(dna)
+				.filter(x -> x != null)
+				.map(Alela::qualName)
+				.collect(Collectors.joining(", "));
+
+		return "Genotyp [druh=" + druh + ", index=" + index + ", dna=[" + alelyNamesStr + "]]";
 	}
 
 }
