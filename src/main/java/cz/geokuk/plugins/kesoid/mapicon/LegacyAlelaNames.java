@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid.mapicon;
 import java.util.HashMap;
 import java.util.Map;
 
+import cz.geokuk.plugins.kesoid.genetika.Alela;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -16,7 +17,7 @@ public class LegacyAlelaNames {
 	private static Map<String, String> prekladMap = new HashMap<>();
 
 
-	private static String V = "";
+	private static String V = Alela.VYCHOZI_ALELA_NAME;
 
 	static {
 		gen("sym")
@@ -49,7 +50,7 @@ public class LegacyAlelaNames {
 		.alela("dpl");
 
 		gen("stav")
-		.alela("actv")
+		.alela(V, "actv")
 		.alela("dsbl")
 		.alela("arch");
 
@@ -112,6 +113,7 @@ public class LegacyAlelaNames {
 
 	public static String preloz(final String nazev) {
 		if (nazev.contains("-")) {
+			System.out.println("Uz prellozeno: " + nazev);
 			return nazev;
 		} else {
 			final String novy = prekladMap.get(nazev);
@@ -133,8 +135,8 @@ public class LegacyAlelaNames {
 		}
 
 		public X alela(final String novyNazevAlely, final String staryNazev) {
-			// TODO připojit nový název alely, až budou nové názvy všude promítnuty
-			prekladMap.put(staryNazev, nazevGenu + "-" + staryNazev);
+			prekladMap.put(staryNazev, nazevGenu + "-" + novyNazevAlely);
+			System.out.println("Preklad: " + staryNazev + " ==> " + preloz(staryNazev));
 			return this;
 		}
 

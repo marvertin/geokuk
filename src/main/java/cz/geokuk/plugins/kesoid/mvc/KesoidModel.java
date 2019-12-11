@@ -339,7 +339,7 @@ public class KesoidModel extends Model0 {
 		filter.setFilterDefinition(filterDefinition);
 
 		// FIXME tady nemohou být takovéto konstant, mohou se změnit
-		final QualAlelaNames defval = new QualAlelaNames("fnd", "dsbl", "arch");
+		final QualAlelaNames defval = new QualAlelaNames("fnd:vztah", "dsbl:stav", "arch:stav");
 
 		filter.setJmenaNechtenychAlel(currPrefe().node(FPref.KESOID_FILTR_node).getQualAlelaNames(FPref.KESOID_FILTER_ALELY_value, defval));
 		jmenaAlelNaToolbaru = currPrefe().node(FPref.KESOID_FILTR_node).getQualAlelaNames(FPref.KESOID_FILTER_NATOOLBARU_value, defval);

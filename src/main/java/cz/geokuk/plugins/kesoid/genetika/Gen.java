@@ -18,7 +18,7 @@ public class Gen implements Grupa {
 	private final String nazev;
 	private final Set<Alela> alely = new LinkedHashSet<>();
 	private final Map<String, Alela> alelyMap = new LinkedHashMap<>();
-	private Alela vychoziAlela;
+	private final Alela vychoziAlela;
 	private boolean locked;
 	private final Genom genom;
 	boolean vypsatelnyVeZhasinaci;
@@ -29,6 +29,7 @@ public class Gen implements Grupa {
 		this.nazev = nazev;
 		this.poradiVGenomu = poradiVGenomu;
 		this.genom = genom;
+		vychoziAlela = alela(Alela.VYCHOZI_ALELA_NAME);
 	}
 
 	/**
@@ -46,10 +47,6 @@ public class Gen implements Grupa {
 
 		alelyMap.put(alela.simpleName(), alela);
 		alely.add(alela);
-		if (vychoziAlela == null) {
-			// první alela, která přijde se stává výchozí alelou a už se to nezmění
-			vychoziAlela = alela;
-		}
 	}
 
 	/**

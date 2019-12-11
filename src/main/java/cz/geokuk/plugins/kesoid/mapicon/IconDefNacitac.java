@@ -110,7 +110,7 @@ public class IconDefNacitac {
 			} else {
 				final String alelaName = s.substring(pozminus + 1);
 				final String genName = s.substring(0, pozminus);
-				alela = genom.alela(alelaName, genName);
+				alela = genom.gen(genName).alela(alelaName);
 				if (alela == null) {
 					continue;
 				}

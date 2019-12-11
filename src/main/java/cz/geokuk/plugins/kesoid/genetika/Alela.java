@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  */
 public class Alela {
 
+	public static String VYCHOZI_ALELA_NAME = "~~";
 
 	private final String nazev;
 	private final Gen gen;
