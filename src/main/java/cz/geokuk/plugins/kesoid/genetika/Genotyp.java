@@ -35,7 +35,7 @@ public class Genotyp implements Indexable {
 	 * @return Nový genetyp s vyměněou alelou.
 	 */
 	public Genotyp with(final Alela alela) {
-		return prechod.computeIfAbsent(alela, () -> druh.genotyp(vymenAlelu(alela)));
+		return prechod.computeIfAbsent(alela, a -> druh.genotyp(vymenAlelu(a)));
 	}
 
 	/**
@@ -225,6 +225,24 @@ public class Genotyp implements Indexable {
 				.collect(Collectors.joining(", "));
 
 		return "Genotyp [druh=" + druh + ", index=" + index + ", dna=[" + alelyNamesStr + "]]";
+	}
+
+	/**
+	 * Zjistí, zda má aspoň jednu alelu.
+	 * @param nechteneAlely
+	 * @return
+	 */
+	public boolean hasAny(final Set<Alela> alely) {
+		return alely.stream().anyMatch(this::has);
+	}
+
+	/**
+	 * Zjistí, zda má všechny požadované alely.
+	 * @param nechteneAlely
+	 * @return
+	 */
+	public boolean hasAll(final Set<Alela> alely) {
+		return alely.stream().allMatch(this::has);
 	}
 
 }

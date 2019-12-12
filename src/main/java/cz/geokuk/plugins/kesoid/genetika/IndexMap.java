@@ -1,6 +1,6 @@
 package cz.geokuk.plugins.kesoid.genetika;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * Pole, které roste jak je indexováno, Pole nemá velikost, každý kladný index má hodnotu
@@ -58,12 +58,19 @@ public class IndexMap<K extends Indexable, T> {
 	 *            Funkce pro výpočet, když nic nemáme.
 	 * @return Hodnota, která tam byla nebo nově vnořená.
 	 */
-	public T computeIfAbsent(final K key, final Supplier<T> fce) {
+	public T computeIfAbsent(final K key, final Function<K, T> fce) {
 		T udaj = get(key);
 		if (udaj == null) {
-			udaj = fce.get();
+			udaj = fce.apply(key);
 			put(key, udaj);
 		}
 		return udaj;
 	}
+
+	@Override
+	public String toString() {
+		return "IndexMap [datalength=" + data.length + "]";
+	}
+
+
 }

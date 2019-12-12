@@ -41,7 +41,6 @@ public class Vrstva {
 	 */
 	public IconDef locate(final Genotyp genotyp) {
 
-		final Set<Alela> hledaneAlely = genotyp.getAlely();
 		final List<IconDef> vybrane = new ArrayList<>(pocet);
 		int maxPriorita = -1;
 
@@ -52,7 +51,7 @@ public class Vrstva {
 					continue; // to bude určtitě v hlavičce obecných
 				}
 				for (final IconSubDef subDef : iconDef.getSubdefs()) {
-					if (hledaneAlely.containsAll(subDef.alely)) { // je to kandidát
+					if (genotyp.hasAll(subDef.alely)) { // je to kandidát
 						if (iconDef.priorita > maxPriorita) { // vysoka priorita, přebíjí všechny jiné
 							vybrane.clear();
 							vybrane.add(iconDef);

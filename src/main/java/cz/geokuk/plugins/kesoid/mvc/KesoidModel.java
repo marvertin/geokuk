@@ -48,7 +48,6 @@ public class KesoidModel extends Model0 {
 	private Boolean onoff;
 
 	public void filtrujDleAlely(final String alelaName, final boolean zobrazit) {
-		System.out.println("filtrujDleAlely: " + alelaName);
 		final Set<String> jmena = new HashSet<>(filter.getJmenaNechtenychAlel().getQualNames());
 		boolean zmena;
 		if (zobrazit) {

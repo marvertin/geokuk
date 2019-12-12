@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.kesoid;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import cz.geokuk.plugins.kesoid.genetika.*;
@@ -17,6 +16,7 @@ public class KesFilter {
 
 	public KesFilter() {}
 
+	private IndexMap<Genotyp, Boolean> uzFiltrovane;
 	// public void onEvent(IgnoreListChangedEvent event) {
 	// if (filterDefinition.getPrahVyletu() != EVylet.VSECHNY) {
 	// kesoidModel.spustFiltrovani();
@@ -46,7 +46,9 @@ public class KesFilter {
 	 *
 	 */
 	public void done() {
+		System.out.println("CICI: " + citac1 + "/" + citac2 + " " + uzFiltrovane);
 		nechteneAlely = null;
+		uzFiltrovane = null;
 	}
 
 	/**
@@ -63,30 +65,40 @@ public class KesFilter {
 		return jmenaNechtenychAlel;
 	}
 
+	int citac1;
+	int citac2;
 	/**
 	 *
 	 */
 	public void init() {
 		nechteneAlely = null;
+		uzFiltrovane = new IndexMap<>();
+		citac1 = 0;
+		citac2 = 0;
 	}
 
 	public void inject(final VyletModel vyletModel) {
 		this.vyletModel = vyletModel;
 	}
 
+
+
 	public boolean isFiltered(final Wpt aWpt, final Genom genom, Genotyp genotyp) {
 		try {
 			if (genotyp == null) { // to je zde jen z důvodu optimalizace
 				genotyp = aWpt.getGenotyp(genom);
 			}
-			final Set<Alela> alelygenotypu = genotyp.getAlely();
 			if (jmenaNechtenychAlel != null) {
+				citac1 ++;
 				if (nechteneAlely == null) {
 					nechteneAlely = genom.searchAlelasByQualNames(jmenaNechtenychAlel);
 				}
-				final Set<Alela> alely = new HashSet<>(nechteneAlely);
-				alely.retainAll(alelygenotypu);
-				if (alely.size() > 0) {
+				final boolean chceme = uzFiltrovane.computeIfAbsent(genotyp, g -> {
+					// zbytečně se nepočítá znovu a znovu pro každý stejný genotyp
+					citac2 ++;
+					return ! g.hasAny(nechteneAlely);
+				});
+				if (!chceme) {
 					return false;
 				}
 			}
