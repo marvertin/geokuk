@@ -13,7 +13,7 @@ import cz.geokuk.util.lang.FString;
  * <p>
  * For example, gen can be {@code size of the cache} or {@code type of the waypoint}.
  */
-public class Gen implements Grupa {
+public class Gen implements Grupa, Indexable {
 
 	private final String nazev;
 	private final Set<Alela> alely = new LinkedHashSet<>();
@@ -183,6 +183,11 @@ public class Gen implements Grupa {
 
 	String getNazev() {
 		return nazev;
+	}
+
+	@Override
+	public int getIndex() {
+		return poradiVGenomu;
 	}
 
 }

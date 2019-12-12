@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * <p>
  * For example, Gen {@code size of cache} has alelas {@code micro}, {@code small}, {@code regular}...
  */
-public class Alela {
+public class Alela implements Indexable {
 
 	public static String VYCHOZI_ALELA_NAME = "~~";
 
@@ -22,12 +22,12 @@ public class Alela {
 	private String displayName;
 
 	// Indexuje alely, aby se dal rychleji realizovat čítač alel, stačí indexovat v poli
-	private final int celkovePoradi;
+	private final int index;
 
-	Alela(final String nazev, final Gen gen, final int celkovePoradi) {
+	Alela(final String nazev, final Gen gen, final int index) {
 		this.nazev = nazev;
 		this.gen = gen;
-		this.celkovePoradi = celkovePoradi;
+		this.index = index;
 		gen.addy(this);
 	}
 
@@ -86,8 +86,9 @@ public class Alela {
 		return qualName();
 	}
 
-	int getCelkovePoradi() {
-		return celkovePoradi;
+	@Override
+	public int getIndex() {
+		return index;
 	}
 
 	/**

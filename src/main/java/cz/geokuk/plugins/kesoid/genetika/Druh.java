@@ -2,7 +2,7 @@ package cz.geokuk.plugins.kesoid.genetika;
 
 import java.util.*;
 
-public class Druh {
+public class Druh implements Indexable {
 
 	static int NEEXISTUJICI_LOKUS = -1;
 
@@ -126,5 +126,10 @@ public class Druh {
 	@Override
 	public String toString() {
 		return nazev;
+	}
+
+	@Override
+	public int getIndex() {
+		return poradiVDruzich;
 	}
 }

@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 /**
  * Genotyp jako množina alel. Typ je immutable, různé instance mají různou množinu alel.
  */
-public class Genotyp {
+public class Genotyp implements Indexable {
 
 	private final Druh druh;
 	private final Alela[] dna;
 	private final int index;
 
 	/** prechody na jiny genotyp */
-	private final Pole<Genotyp> prechod = new Pole<>();
+	private final IndexMap<Alela, Genotyp> prechod = new IndexMap<>();
 
 	Genotyp(final Druh druh, final Set<Alela> alely, final int index) {
 		this.druh = druh;
@@ -35,7 +35,7 @@ public class Genotyp {
 	 * @return Nový genetyp s vyměněou alelou.
 	 */
 	public Genotyp with(final Alela alela) {
-		return prechod.computeIfAbsent(alela.getCelkovePoradi(), () -> druh.genotyp(vymenAlelu(alela)));
+		return prechod.computeIfAbsent(alela, () -> druh.genotyp(vymenAlelu(alela)));
 	}
 
 	/**
@@ -179,6 +179,7 @@ public class Genotyp {
 		return alely;
 	}
 
+	@Override
 	public int getIndex() {
 		return index;
 	}

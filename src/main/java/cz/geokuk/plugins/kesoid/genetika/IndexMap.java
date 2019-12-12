@@ -8,7 +8,7 @@ import java.util.function.Supplier;
  * @author Martin
  *
  */
-public class Pole<T> {
+public class IndexMap<K extends Indexable, T> {
 
 	@SuppressWarnings("unchecked")
 	private T[] data = (T[]) new Object[0];
@@ -19,7 +19,8 @@ public class Pole<T> {
 	 * @param i
 	 * @return
 	 */
-	public T get(final int i) {
+	public T get(final K key) {
+		final int i = key.getIndex();
 		return i < data.length ? data[i] : null;
 	}
 
@@ -32,7 +33,8 @@ public class Pole<T> {
 	 *            Ukládaný údaj.
 	 * @return Původní hodnota.
 	 */
-	public T put(final int i, final T udaj) {
+	public T put(final K key, final T udaj) {
+		final int i = key.getIndex();
 		if (udaj == null && i <= data.length) {
 			data[i] = null;
 		}
@@ -49,18 +51,18 @@ public class Pole<T> {
 
 	/**
 	 * Pokud na daném místě nic není, zavolá funkci, spočítá to a vloží to tam
-	 * 
+	 *
 	 * @param i
 	 *            Index v poli
 	 * @param fce
 	 *            Funkce pro výpočet, když nic nemáme.
 	 * @return Hodnota, která tam byla nebo nově vnořená.
 	 */
-	public T computeIfAbsent(final int i, final Supplier<T> fce) {
-		T udaj = get(i);
+	public T computeIfAbsent(final K key, final Supplier<T> fce) {
+		T udaj = get(key);
 		if (udaj == null) {
 			udaj = fce.get();
-			put(i, udaj);
+			put(key, udaj);
 		}
 		return udaj;
 	}

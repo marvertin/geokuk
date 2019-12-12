@@ -322,7 +322,7 @@ public class Genom {
 
 		public void add(final Alela alela) {
 			assert alela != null;
-			final int poradi = alela.getCelkovePoradi();
+			final int poradi = alela.getIndex();
 			if (poradi >= pocty.length) {
 				final int[] p = pocty;
 				pocty = new int[poradi + 1000];
@@ -335,7 +335,7 @@ public class Genom {
 		public CounterMap<Alela> getCounterMap() {
 			final CounterMap<Alela> cm = new CCounterMap<>();
 			for (final Alela alela : alely.values()) {
-				final int celkovePoradi = alela.getCelkovePoradi();
+				final int celkovePoradi = alela.getIndex();
 				cm.set(alela, celkovePoradi >= pocty.length ? 0 : pocty[celkovePoradi]);
 			}
 			return cm;
