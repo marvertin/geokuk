@@ -6,7 +6,7 @@ import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.*;
 
 /**
  * Kesoid representing coordinates loaded from EXIF of a picture.
@@ -43,4 +43,10 @@ public class Photo extends Kesoid {
 	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
 		sb.append("<b>").append(wpt.getName()).append("<b>");
 	}
+
+	@Override
+	public Gen genProSymbol(final Genom genom, Wpt wpt) {
+		return genom.GEN_pic;
+	}
+
 }

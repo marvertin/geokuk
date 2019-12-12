@@ -72,7 +72,9 @@ public class IconDefNacitac {
 		final Set<Alela> alely = nactiAlely(mat.group(3));
 		Alela alelaSym = null;
 		if (wptsym != null && wptsym.trim().length() > 0) {
-			alelaSym = genom.alelaSym(wptsym, grupaName, iIkonNacitacSada.getGroupDisplayName(grupaName));
+			//alelaSym = genom.alelaSym(wptsym, grupaName, iIkonNacitacSada.getGroupDisplayName(grupaName));
+			alelaSym = genom.gen(grupaName.substring(0, grupaName.length()-1)).alela(wptsym);
+			System.out.println("MAMEGEN: " + alelaSym);
 			alely.add(alelaSym);
 		}
 		// rozmnoz(alely, sese);

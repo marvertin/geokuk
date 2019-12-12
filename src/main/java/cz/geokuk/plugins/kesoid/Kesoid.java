@@ -9,8 +9,7 @@ import java.util.Set;
 import javax.swing.Icon;
 
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.genetika.Alela;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.*;
 
 public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
@@ -227,4 +226,5 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		this.vztah = vztah;
 	}
 
+	public abstract Gen genProSymbol(Genom genom, Wpt wpt);
 }

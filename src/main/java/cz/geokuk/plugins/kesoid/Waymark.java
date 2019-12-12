@@ -4,7 +4,7 @@ import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.*;
 
 public class Waymark extends Kesoid {
 
@@ -56,6 +56,11 @@ public class Waymark extends Kesoid {
 			sb.append("  (").append(wpt.getName()).append(")");
 			sb.append("</small>");
 		}
+	}
+
+	@Override
+	public Gen genProSymbol(final Genom genom, Wpt wpt) {
+		return genom.GEN_wm;
 	}
 
 }

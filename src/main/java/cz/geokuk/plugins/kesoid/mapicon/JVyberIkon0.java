@@ -115,7 +115,7 @@ public abstract class JVyberIkon0 extends Box {
 						}
 					}
 					if (boxgen.getComponentCount() > 0) {
-						(genom.getSymGen() == gen ? jvyber1 : jvyber2).add(boxgen);
+						(true ? jvyber1 : jvyber2).add(boxgen);
 					}
 				}
 				if (iRadioButton && bg.getSelection() == null) {

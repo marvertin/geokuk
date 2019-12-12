@@ -4,7 +4,7 @@ import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.*;
 
 public class CzechGeodeticPoint extends Kesoid {
 
@@ -60,6 +60,11 @@ public class CzechGeodeticPoint extends Kesoid {
 
 	public void setYjtsk(final double yjtsk) {
 		this.yjtsk = yjtsk;
+	}
+
+	@Override
+	public Gen genProSymbol(final Genom genom, Wpt wpt) {
+		return genom.GEN_cgp;
 	}
 
 }

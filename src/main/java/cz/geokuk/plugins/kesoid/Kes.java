@@ -10,7 +10,7 @@ import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.genetika.*;
 
 /**
  * @author Martin Veverka
@@ -330,6 +330,15 @@ public class Kes extends Kesoid {
 	@Override
 	public String toString() {
 		return "Kes [mainWpt=" + mainWpt + ", finalWpt=" + finalWpt + "]";
+	}
+
+	@Override
+	public Gen genProSymbol(final Genom genom, final Wpt wpt) {
+		// TODO odstranit
+		if (! wpt.isMainWpt()) {
+			//System.out.println("PRO SYMBOL: " + wpt.getSym() + " /// " + wpt.isMainWpt());
+		}
+		return wpt.isMainWpt() ? genom.GEN_gc : genom.GEN_gcawp;
 	}
 
 }

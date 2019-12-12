@@ -21,8 +21,12 @@ class GenotypBuilderWpt {
 	}
 
 	Genotyp build(final Wpt wpt, final Genotyp g) {
+		System.out.println("KEKESOI: " + wpt.getKesoid().getIdentifier());
+		for (final Wpt w: wpt.getKesoid().getWpts()) {
+			System.out.println("   " + w.getSym() + " " + w.isMainWpt() + " " + w.getName() + " " + w.getNazev());
+		}
 		return g
-				.with(genom.alelaSym(wpt.getSym(), null, null))
+				.with(wpt.getKesoid().genProSymbol(genom, wpt).alela(wpt.getSym()))
 				.with(wpt.isMainWpt() ? genom.ALELA_h : genom.ALELA_v);
 	}
 

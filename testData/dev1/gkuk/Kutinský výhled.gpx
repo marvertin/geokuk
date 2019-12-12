@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="GeoGet 2.10.4.804" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xsi:schemaLocation="https://www.geoget.cz/GpxExtensions/v2 https://www.geoget.cz/GpxExtensions/v2/geoget.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd">
+ <metadata>
+   <desc>Geoget data file</desc>
+   <time>2019-12-12T11:53:10.817</time>
+ </metadata>
+
+ <wpt lat="49.3567" lon="16.293917">
+  <time>2018-03-15T00:00:00.000</time>
+  <name>GC7KJGM</name>
+  <desc><![CDATA[T5 -Kutinský výhled by Peťan75 (3/5)]]></desc>
+  <link href="https://www.geocaching.com/seek/cache_details.aspx?guid=d93d6995-785a-4503-a671-b268b00e674d">
+    <text><![CDATA[T5 -Kutinský výhled by Peťan75]]></text>
+  </link>
+  <sym>Geocache</sym>
+  <type>Geocache|Unknown Cache</type>
+  <extensions>
+   <groundspeak:cache id="6637370" available="True" archived="False" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0">
+    <groundspeak:name><![CDATA[T5 -Kutinský výhled]]></groundspeak:name>
+    <groundspeak:placed_by><![CDATA[Peťan75]]></groundspeak:placed_by>
+    <groundspeak:owner id="8642497"><![CDATA[Peťan75]]></groundspeak:owner>
+    <groundspeak:type>Unknown Cache</groundspeak:type>
+    <groundspeak:container>Small</groundspeak:container>
+    <groundspeak:difficulty>3</groundspeak:difficulty>
+    <groundspeak:terrain>5</groundspeak:terrain>
+    <groundspeak:country>Czechia</groundspeak:country>
+    <groundspeak:state>Jihomoravský kraj</groundspeak:state>
+
+   </groundspeak:cache>
+ 
+  </extensions>
+ </wpt>
+
+ <wpt lat="49.3567" lon="16.2939166666667">
+  <time>2018-03-15T00:00:00.000</time>
+  <name>FN7KJGM</name>
+  <cmt><![CDATA[]]></cmt>
+  <desc><![CDATA[Final Location]]></desc>
+  <link href="https://www.geocaching.com/seek/wpt.aspx?WID=d2925ac1-3ef1-4456-b7bd-ee65c4cb4c34">
+    <text><![CDATA[Final Location]]></text>
+  </link>
+  <sym>Final Location</sym>
+  <type>Waypoint|Final Location</type>
+ </wpt>
+
+ <wpt lat="49.35819" lon="16.2913558333333">
+  <time>2018-03-15T00:00:00.000</time>
+  <name>P07KJGM</name>
+  <cmt><![CDATA[Zde se dá velmi pohodlně zaparkovat....]]></cmt>
+  <desc><![CDATA[Parking]]></desc>
+  <link href="https://www.geocaching.com/seek/wpt.aspx?WID=3bba9c5a-2623-4ac2-9f49-f95abcbda4f5">
+    <text><![CDATA[Parking]]></text>
+  </link>
+  <sym>Parking Area</sym>
+  <type>Waypoint|Parking Area</type>
+ </wpt>
+
+</gpx>

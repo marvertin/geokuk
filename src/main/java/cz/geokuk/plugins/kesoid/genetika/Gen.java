@@ -3,8 +3,6 @@ package cz.geokuk.plugins.kesoid.genetika;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import cz.geokuk.util.lang.FString;
-
 /**
  * Gen je součástí genomu. Gen může být v některých druzích, ale v některých ne. Gen musí mít nejméně jednu alelu a to alelu výchozí. Po svém zřízení je však bez alely a očekává se, že alelu brzy získá. Geny se zřizují centálně z genomu,
  *
@@ -119,57 +117,13 @@ public class Gen implements Grupa {
 	@Deprecated
 	private Map<String, GrupaSym> grupy;
 
-	/**
-	 * @deprecated Žádní grupy
-	 */
-	@Deprecated
-	synchronized GrupaSym grupa(final String grupaName) {
-		if (FString.isEmpty(grupaName)) {
-			//throw new IllegalArgumentException("Chybi jmeno grupy");
-			return null;
-		}
-		if (!isSymGen()) {
-			throw new IllegalStateException("Jen symgen smí mít grupy, ne " + nazev + " - " + displayName);
-		}
-		if (grupy == null) {
-			grupy = new HashMap<>();
-		}
-		GrupaSym grupa = grupy.get(grupaName);
-		if (grupa == null) {
-			grupa = new GrupaSym(grupaName);
-			if ("gcawp!".equals(grupaName)) {
-				genom.GRUPA_gcawp = grupa;
-			}
-			if ("gc!".equals(grupaName)) {
-				genom.GRUPA_gc = grupa;
-			}
-			grupy.put(grupaName, grupa);
-		}
-		return grupa;
-	}
 
 	/**
 	 * @deprecated Žádní grupy
 	 */
 	@Deprecated
 	public Map<String, ? extends Grupa> getGrupy() {
-		if (isSymGen()) {
-			return grupy;
-		} else {
-			return Collections.singletonMap(GrupaSym.IMPLICITNI_GRUPA_NAME, this);
-		}
-
-	}
-
-	private boolean isSymGen() {
-		final boolean is = genom.symGen == this;
-		if (is && poradiVGenomu != 0) {
-			throw new IllegalStateException("Symgen musí mít pořadí v genomu 0");
-		}
-		if (!is && grupy != null) {
-			throw new IllegalStateException("Jen symgen smí mít grupy, ne " + nazev + " - " + displayName);
-		}
-		return is;
+		return Collections.singletonMap(GrupaSym.IMPLICITNI_GRUPA_NAME, this);
 	}
 
 	/**

@@ -28,10 +28,20 @@ public class Genom {
 	 * Zde jsou zveřejněné alely a geny, které se používají v kódu. Řetězce uvedené pro jejich definici se nikde jinde v programu nesmějí vykytnout.
 	 */
 
+	// symbolové geny
+	public final Gen GEN_gc = genu("gc", "Typ kešky", "Není keš", true);
+	public final Gen GEN_gcawp = genu("gcawp", "Dodatečné waypointy", "Není dodapoint", true);
+	public final Gen GEN_cgp = genu("cgp", "Chech Geodetic Point", "", true);
+	public final Gen GEN_wm = genu("wm", "Waymark", "Není waymark", true);
+	public final Gen GEN_mz = genu("mz", "Munzee", "Není munzee", true);
+	public final Gen GEN_pic = genu("pic", "Fotka", "Není fotka", true);
+
+	public final Gen GEN_simpleWaypoint = genu("waypoint", "Obyčejný waypoint", "Není obyčejný waypoint", true);
+
 	// Má jen jednu alelu, neboť alely přicházejí dynamicky, jak se nahrávají ikony nebo data
-	public final Gen symGen = genu("sym", "Typ waypointu", "Obecný waypoint", true); // spoléháme se na to, že symgen je první
+	//public final Gen symGen = genu("sym", "Typ waypointu", "Obecný waypoint", true); // spoléháme se na to, že symgen je první
 	//public final Alela ALELA_Waypoint = symGen.alela("Waypoint").displayName("Obecný waypoint");
-	public final Alela ALELA_Waypoint = symGen.getVychoziAlela();
+	//public final Alela ALELA_Waypoint = symGen.getVychoziAlela();
 
 	public final Gen GEN_postavenikMysi = genu("mouse", "Postavení k myši", "Žádná myš", false);
 	//public final Alela ALELA_nomouse = GEN_postavenikMysi.alela("nomouse").displayName("Žádná myš");
@@ -151,6 +161,7 @@ public class Genom {
 	 */
 	@Deprecated
 	public Grupa GRUPA_gc;
+
 
 	/**
 	 * Vrátí nebo zřídí alelu. Pokud vzniká nová alela, není přiřazena ke genu.
@@ -272,30 +283,6 @@ public class Genom {
 		}
 	}
 
-
-	@Deprecated
-	public Gen getSymGen() {
-		return symGen;
-	}
-
-
-	/**
-	 * @deprecated Nějak rozebrat metodu na nepoužívat grupy.
-	 * @param wptsym
-	 * @param jmenoGrupy
-	 * @param grupaDisplayName
-	 * @return
-	 */
-	@Deprecated
-	public Alela alelaSym(final String wptsym, final String jmenoGrupy, final String grupaDisplayName) {
-		final Alela alela = symGen.alela(wptsym);
-		final GrupaSym grupa = symGen.grupa(jmenoGrupy);
-		if (grupa != null) {
-			grupa.setDisplayName(grupaDisplayName);
-			grupa.add(alela);
-		}
-		return alela;
-	}
 
 	/**
 	 * Vytvoří čítač alel s nulama a umožňuje explicitně počítat alely.
