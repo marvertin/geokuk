@@ -4,6 +4,7 @@ import java.util.*;
 
 import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.genetika.Gen;
+import lombok.Getter;
 
 /**
  * Definice ikony.
@@ -21,15 +22,11 @@ public class IconDef {
 	private Set<IconSubDef> subdefs;
 
 	// Alela symbolu. Je to redundantní informace, pomůže však pro zkrácení vykreslovací fronty.
-	private Alela alelaSym;
+	// Selektivní Alela musí být obsažena v alelách.
+	@Getter
+	private Alela selektivniAlela;
 
-	public Alela getAlelaSym() {
-		return alelaSym;
-	}
 
-	public void setAlelaSym(final Alela alelaSym) {
-		this.alelaSym = alelaSym;
-	}
 
 	@Override
 	public String toString() {
@@ -78,5 +75,10 @@ public class IconDef {
 		// Nebyly zjištěny žádné duplicity
 		sese.add(new IconSubDef(set));
 
+	}
+
+	void setSelektivniAlela(final Alela selektivniAlela) {
+		assert selektivniAlela == null || alelyx.contains(selektivniAlela) : "Alela neni mezi ostatnimi: " +selektivniAlela + alelyx;
+		this.selektivniAlela = selektivniAlela;
 	}
 }

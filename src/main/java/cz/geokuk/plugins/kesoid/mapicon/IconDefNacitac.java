@@ -89,7 +89,7 @@ public class IconDefNacitac {
 
 		final IconDef iconDef = new IconDef();
 		iconDef.setAlelyx(alely);
-		iconDef.setAlelaSym(alelaSym); // nastavit, aby se podle ní dalo rychle filtrovat, může být i null, pak je to bez alely a filtruje se vždy.
+		iconDef.setSelektivniAlela(alelaSym); // nastavit, aby se podle ní dalo rychle filtrovat, může být i null, pak je to bez alely a filtruje se vždy.
 		iconDef.idp = idp;
 		iconDef.priorita = priorita;
 

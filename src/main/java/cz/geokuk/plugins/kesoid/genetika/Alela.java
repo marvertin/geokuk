@@ -82,8 +82,8 @@ public class Alela {
 
 	@Override
 	public String toString() {
-		throw new RuntimeException("Volan toString na Alele a to může být špatný, moc špatný");
-		//return nazev;
+		//throw new RuntimeException("Volan toString na Alele a to může být špatný, moc špatný");
+		return qualName();
 	}
 
 	int getCelkovePoradi() {

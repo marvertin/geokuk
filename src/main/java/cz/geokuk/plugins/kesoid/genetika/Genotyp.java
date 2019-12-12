@@ -183,14 +183,6 @@ public class Genotyp {
 		return index;
 	}
 
-	/**
-	 * @deprecated Mělo by se jít přes druhy.
-	 * @return
-	 */
-	@Deprecated
-	public Alela getAlelaSym() {
-		return getAlela(druh.getGenom().getSymGen());
-	}
 
 	private Set<Alela> alely;
 	private int minulyPocetGenu;
