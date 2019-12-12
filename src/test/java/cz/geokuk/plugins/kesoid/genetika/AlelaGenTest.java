@@ -14,17 +14,25 @@ public class AlelaGenTest {
 		genom = new Genom();
 	}
 
-	@Test
-	public void test1() {
-		genom.gen("genik").alela("alik");
-		Assert.assertSame(genom.seekAlela("alik").getGen(), genom.gen("genik"));
-	}
 
 	@Test
 	public void test3() {
 		final Gen gen = genom.gen("genik");
 		gen.alela("1");
 		gen.alela("2");
-		Assert.assertEquals(2, gen.getAlely().size());
+		Assert.assertEquals(2+1, gen.getAlely().size());
+	}
+
+	@Test
+	public void test4() {
+		final Gen gen = genom.gen("genik");
+		Assert.assertEquals(1, gen.getAlely().size());
+	}
+
+
+	@Test
+	public void test5() {
+		final Gen gen = genom.gen("genik");
+		Assert.assertTrue(gen.alela("~~").isVychozi());
 	}
 }

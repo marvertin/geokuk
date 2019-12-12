@@ -46,7 +46,7 @@ public class AlelaTest {
 		genom.gen("x").alela("2");
 		genom.gen("x").alela("2");
 		genom.gen("x").alela("3");
-		Assert.assertEquals(alelyPred.size() + 3, genom.getAlely().size());
+		Assert.assertEquals(alelyPred.size() + 3+1, genom.getAlely().size());
 	}
 
 	@Test

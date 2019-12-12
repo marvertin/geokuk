@@ -140,6 +140,22 @@ public class Genom {
 //	public final Alela ALELA_zasek = GEN_mysterstav.alela("zasek:mysterstav").displayName("Zásek");
 //	public final Alela ALELA_lusteni = GEN_mysterstav.alela("lusteni:mysterstav").displayName("Luštění");
 
+	{
+		GEN_postavenikMysi.lock();
+		GEN_Postaveni.lock();
+		GEN_druhKesoidu.lock();
+		GEN_vztah.lock();
+		GEN_stav.lock();
+		GEN_velikost.lock();
+		GEN_vylet.lock();
+		GEN_cesty.lock();
+		GEN_Vybranost.lock();
+		GEN_vylustenost.lock();
+		GEN_zdroj.lock();
+		GEN_teren.lock();
+		GEN_obtiznost.lock();
+
+	}
 	/**
 	 * @deprecated Grupy nechceme, použijeme druhy.
 	 */
@@ -197,8 +213,8 @@ public class Genom {
 	 * @param vychoziAlelaDisplayName
 	 * @return
 	 */
-	public synchronized Gen genu(final String nazev, final String displayName, final String vychoziAlelaDisplayName, final boolean vypsatelnyVeZhasinaci) {
-		final Gen gen = gen(nazev);
+	public synchronized Gen genu(final String nazev, final String genDisplayName, final String vychoziAlelaDisplayName, final boolean vypsatelnyVeZhasinaci) {
+		final Gen gen = gen(nazev).displayName(genDisplayName);
 		gen.getVychoziAlela().displayName(vychoziAlelaDisplayName);
 		gen.vypsatelnyVeZhasinaci = vypsatelnyVeZhasinaci;
 		UNIVERZALNI_DRUH.addGen(gen);
@@ -236,19 +252,6 @@ public class Genom {
 				.collect(Collectors.toSet());
 	}
 
-	/**
-	 * FIXME genetika: neodpovídá sekku, jen varuje.
-	 *
-	 * @param alelaName
-	 * @return
-	 */
-	public Alela seekAlela(final String alelaName) {
-		final Alela alela = alely.get(alelaName);
-		if (alela == null) {
-			throw new IllegalArgumentException("Alela " + alelaName + " neni definovana, metodu lze volat jen v situaci, kdy vime, ze alela existuje!");
-		}
-		return alela;
-	}
 
 
 	/**

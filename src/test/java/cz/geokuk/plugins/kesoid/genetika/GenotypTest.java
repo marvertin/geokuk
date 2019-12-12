@@ -2,8 +2,6 @@ package cz.geokuk.plugins.kesoid.genetika;
 
 import org.junit.*;
 
-import cz.geokuk.plugins.kesoid.genetika.*;
-
 public class GenotypTest {
 
 	@BeforeClass
@@ -34,17 +32,17 @@ public class GenotypTest {
 	public void setUp() throws Exception {
 		genom = new Genom();
 		A = genom.gen("AA");
-		a = A.alela("aa");
+		a = A.getVychoziAlela();
 		b = A.alela("bb");
 		c = A.alela("cc");
 
 		P = genom.gen("PP");
-		p = P.alela("pp");
+		p = P.getVychoziAlela();
 		q = P.alela("qq");
 		r = P.alela("rr");
 
 		X = genom.gen("XX");
-		x = X.alela("xx");
+		x = X.getVychoziAlela();
 		y = X.alela("yy");
 		z = X.alela("zz");
 
