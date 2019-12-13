@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="GeoGet 2.10.4.804" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xsi:schemaLocation="https://www.geoget.cz/GpxExtensions/v2 https://www.geoget.cz/GpxExtensions/v2/geoget.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd">
+ <metadata>
+   <desc>Geoget data file</desc>
+   <time>2019-12-13T11:59:19.329</time>
+ </metadata>
+
+ <wpt lat="50.2386111111" lon="16.4086111111">
+  <time>2018-01-13T00:00:00.000</time>
+  <name>TA0027ab</name>
+  <desc><![CDATA[TZ27 Zdobnice by ORLICKÉ HORY (1/1)]]></desc>
+  <link href="">
+    <text><![CDATA[TZ27 Zdobnice by ORLICKÉ HORY]]></text>
+  </link>
+  <sym>Geocache</sym>
+  <type>Geocache|Project APE Cache</type>
+  <extensions>
+   <groundspeak:cache id="110002712" available="True" archived="False" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0">
+    <groundspeak:name><![CDATA[TZ27 Zdobnice]]></groundspeak:name>
+    <groundspeak:placed_by><![CDATA[ORLICKÉ HORY]]></groundspeak:placed_by>
+    <groundspeak:owner id="3"><![CDATA[ORLICKÉ HORY]]></groundspeak:owner>
+    <groundspeak:type>Project APE Cache</groundspeak:type>
+    <groundspeak:container>Not Chosen</groundspeak:container>
+    <groundspeak:difficulty>1</groundspeak:difficulty>
+    <groundspeak:terrain>1</groundspeak:terrain>
+    <groundspeak:country>Czech Republic</groundspeak:country>
+    <groundspeak:state>Královehradecký</groundspeak:state>
+    <groundspeak:short_description html="True"><![CDATA[<b><a href="http://www.turisticke-znamky.cz/znamky/-c27">Oficiální stránky</a><br><a href="http://k8.kreteni.eu/tz/md.php?tz=cz&id=27">Neoficiální stránky</a></b>]]></groundspeak:short_description>
+    <groundspeak:long_description html="True"><![CDATA[<b>Prodejní místa:</b><br>
+<li><a href="http://hotel-zdobnice.cz/">Hotel Zdobnice, Zdobnice 9, tel. 607 714 270, 608 011 104</a></li>
+<li>Prodejna Suvenýr, Deštné v Orlických horách</li>
+<p><b>Rarity:</b><br>
+<b>aa</b> - jiné grafické zpracování <a href="http://k8.kreteni.eu/tz/zobraz.php?stat=1&rarita=648">Link...</a><br> <img src="http://k8.kreteni.eu/tz/rarita-648.jpg"><br>]]></groundspeak:long_description>
+    <groundspeak:encoded_hints><![CDATA[meli 21.8.2012]]></groundspeak:encoded_hints>
+    <groundspeak:logs>
+     <groundspeak:log id="12910">
+      <groundspeak:date>2006-07-25T00:00:00.000</groundspeak:date>
+      <groundspeak:type>Write note</groundspeak:type>
+      <groundspeak:finder id="1"><![CDATA[Anonym]]></groundspeak:finder>
+      <groundspeak:text encoded="False"><![CDATA[Ve Zdobnici jsme strávili 14 dní a je tady nádherně..Putovní známka na chatě Slunečná - kde je velice příjemný pan vedoucí (ironicky)...Jinak zajímavá je i chata Emauzy kde mají výborné pivko, a hospa jako taková je naprosto unikátní :-))]]></groundspeak:text>
+     </groundspeak:log>
+     <groundspeak:log id="12639">
+      <groundspeak:date>2006-07-09T00:00:00.000</groundspeak:date>
+      <groundspeak:type>Write note</groundspeak:type>
+      <groundspeak:finder id="1"><![CDATA[Anonym]]></groundspeak:finder>
+      <groundspeak:text encoded="False"><![CDATA[Putovní TZ mají i na Slunečné]]></groundspeak:text>
+     </groundspeak:log>
+     <groundspeak:log id="12216">
+      <groundspeak:date>2006-05-21T00:00:00.000</groundspeak:date>
+      <groundspeak:type>Write note</groundspeak:type>
+      <groundspeak:finder id="1"><![CDATA[Anonym]]></groundspeak:finder>
+      <groundspeak:text encoded="False"><![CDATA[Jak základní tak putovní na Jitřence bez problému.]]></groundspeak:text>
+     </groundspeak:log>
+     <groundspeak:log id="11801">
+      <groundspeak:date>2006-04-17T00:00:00.000</groundspeak:date>
+      <groundspeak:type>Write note</groundspeak:type>
+      <groundspeak:finder id="1"><![CDATA[Anonym]]></groundspeak:finder>
+      <groundspeak:text encoded="False"><![CDATA[Na chatě Slunečná putovní známka stále není,pouze na
+chatě Jitřenka.Nevím čím si toto místo putovní známku
+zasloužilo.]]></groundspeak:text>
+     </groundspeak:log>
+     <groundspeak:log id="11501">
+      <groundspeak:date>2006-02-13T00:00:00.000</groundspeak:date>
+      <groundspeak:type>Write note</groundspeak:type>
+      <groundspeak:finder id="1"><![CDATA[Radek]]></groundspeak:finder>
+      <groundspeak:text encoded="False"><![CDATA[9.2. měli TZ 27 + putovní známku v chatě Jitřenka. V chatě Slunečná pouze TZ 27 a o putovní vůbec nevěděli. Změna ve strategii motivu putovní známky-poprvé zobrazuje téma, které se váže k prodejnímu místu. A také mně překvapilo, že na putovní známce poprvé není uveden rok!]]></groundspeak:text>
+     </groundspeak:log>
+    </groundspeak:logs>
+   </groundspeak:cache>
+   <gpxg:GeogetExtension xmlns:gpxg="https://www.geoget.cz/GpxExtensions/v2">
+     <gpxg:Tags>
+       <gpxg:Tag Category="CZ kraj"><![CDATA[Královehradecký]]></gpxg:Tag>
+       <gpxg:Tag Category="CZ Mestska cast"><![CDATA[-]]></gpxg:Tag>
+       <gpxg:Tag Category="CZ okres"><![CDATA[Rychnov nad Kněžnou]]></gpxg:Tag>
+       <gpxg:Tag Category="CZ Povereny urad"><![CDATA[Rychnov nad Kněžnou]]></gpxg:Tag>
+       <gpxg:Tag Category="Elevation"><![CDATA[660]]></gpxg:Tag>
+       <gpxg:Tag Category="gcimage"><![CDATA[<a href="http://k8.kreteni.eu/tz/rarita-648.jpg">Verze aa</a>]]></gpxg:Tag>
+       <gpxg:Tag Category="import"><![CDATA[tz.gpx]]></gpxg:Tag>
+       <gpxg:Tag Category="PocketQuery"><![CDATA[TZCZ]]></gpxg:Tag>
+       <gpxg:Tag Category="timezone"><![CDATA[Europe/Prague]]></gpxg:Tag>
+     </gpxg:Tags>
+   </gpxg:GeogetExtension>
+   <gpxx:WaypointExtension>
+     <gpxx:DisplayMode>SymbolOnly</gpxx:DisplayMode>
+   </gpxx:WaypointExtension>
+  </extensions>
+ </wpt>
+
+ <wpt lat="50.2461505556" lon="16.4073397222">
+  <time>2018-01-13T00:00:00.000</time>
+  <name>010027ab</name>
+  <cmt><![CDATA[Hotel Zdobnice, Zdobnice 9, tel. 607 714 270, 608 011 104]]></cmt>
+  <desc><![CDATA[Hotel Zdobnice, Zdobnice 9, tel. 607 714 270, 608 011 104]]></desc>
+  <link href="">
+    <text><![CDATA[Hotel Zdobnice, Zdobnice 9, tel. 607 714 270, 608 011 104]]></text>
+  </link>
+  <sym>Reference Point</sym>
+  <type>Waypoint|Reference Point</type>
+  <extensions>
+   <gpxg:GeogetExtension xmlns:gpxg="https://www.geoget.cz/GpxExtensions/v2">
+     <gpxg:Flag>1</gpxg:Flag>
+   </gpxg:GeogetExtension>
+   <gpxx:WaypointExtension>
+     <gpxx:DisplayMode>SymbolOnly</gpxx:DisplayMode>
+   </gpxx:WaypointExtension>
+  </extensions>
+ </wpt>
+
+ <wpt lat="50.3057666667" lon="16.3497916667">
+  <time>2018-01-13T00:00:00.000</time>
+  <name>020027ab</name>
+  <cmt><![CDATA[Prodejna Suvenýr, Deštné v Orlických horách]]></cmt>
+  <desc><![CDATA[Prodejna Suvenýr, Deštné v Orlických horách]]></desc>
+  <link href="">
+    <text><![CDATA[Prodejna Suvenýr, Deštné v Orlických horách]]></text>
+  </link>
+  <sym>Reference Point</sym>
+  <type>Waypoint|Reference Point</type>
+  <extensions>
+   <gpxg:GeogetExtension xmlns:gpxg="https://www.geoget.cz/GpxExtensions/v2">
+     <gpxg:Flag>1</gpxg:Flag>
+   </gpxg:GeogetExtension>
+   <gpxx:WaypointExtension>
+     <gpxx:DisplayMode>SymbolOnly</gpxx:DisplayMode>
+   </gpxx:WaypointExtension>
+  </extensions>
+ </wpt>
+
+</gpx>

@@ -37,7 +37,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		if (bag == null) {
 			return;
 		}
-		jmenaVybranychAlel = Alela.alelyToQualNames(wpt.getGenotyp().getAlely());
+		jmenaVybranychAlel = wpt.getGenotyp().getQualAlelaNames();
 		zobrazovatVse = true;
 		refresh(bag, jmenaVybranychAlel, null);
 	}
@@ -46,7 +46,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		bag = aBag;
 		if (jmenaVybranychAlel == null) {
 			final Genotyp genotypVychozi = bag.getGenom().UNIVERZALNI_DRUH.genotypVychozi();
-			jmenaVybranychAlel = Alela.alelyToQualNames(genotypVychozi.getAlely());
+			jmenaVybranychAlel = genotypVychozi.getQualAlelaNames();
 		}
 		refresh(aBag, jmenaVybranychAlel, null);
 	}

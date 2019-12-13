@@ -38,7 +38,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 
 	private final Map<String, GpxWpt> gpxwpts = new HashMap<>(1023);
 
-	private Genom genom;
+	private final Genom genom;
 	private KesBag kesBag;
 
 	private int citacBezejmennychWaypintu;
@@ -48,7 +48,8 @@ public class KesoidImportBuilder implements IImportBuilder {
 	private final GccomNick gccomNick;
 	private final ProgressModel progressModel;
 
-	public KesoidImportBuilder(final GccomNick gccomNick, final ProgressModel progressModel) {
+	public KesoidImportBuilder(final Genom genom, final GccomNick gccomNick, final ProgressModel progressModel) {
+		this.genom = genom;
 		this.gccomNick = gccomNick;
 		this.progressModel = progressModel;
 	}
@@ -103,8 +104,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 	 *
 	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#done(cz.geokuk.plugins.kesoid.mapicon.Genom)
 	 */
-	public void done(final Genom genom) {
-		this.genom = genom;
+	public void done() {
 		final InformaceOZdrojich informaceOZdrojich = informaceOZdrojichBuilder.done();
 		final int delkaTasku = gpxwpts.size();
 		Progressor progressor = progressModel.start(delkaTasku, "Vytvářím waypointy");

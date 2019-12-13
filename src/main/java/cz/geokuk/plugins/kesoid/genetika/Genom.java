@@ -221,6 +221,9 @@ public class Genom {
 		return gen;
 	}
 
+	/**
+	 * @return Věechny alely genomu.
+	 */
 	public Collection<Alela> getAlely() {
 		return Collections.unmodifiableCollection(alely.values());
 	}

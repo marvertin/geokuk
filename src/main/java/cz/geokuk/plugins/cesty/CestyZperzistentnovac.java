@@ -38,9 +38,11 @@ public class CestyZperzistentnovac {
 					cesty.add(cesta);
 				} else if (pureName.endsWith(".gpx")) {
 					final DocImportBuilder builder = new DocImportBuilder();
+					builder.init();
 					final InputStream istm = new BufferedInputStream(new FileInputStream(file));
 					final NacitacGpx nacitac = new NacitacGpx();
 					nacitac.nacti(istm, file.toString(), builder, null);
+					builder.done();
 					cesty.addAll(builder.getCesty());
 				}
 			} catch (final Exception e) {

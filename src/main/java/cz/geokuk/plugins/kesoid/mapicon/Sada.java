@@ -81,7 +81,7 @@ public class Sada {
 	 * @return
 	 */
 	public synchronized Sklivec getSklivec(final Genotyp genotypx) {
-		final Genotyp genotyp = zuzNaObrazkovex(genotypx); // aby se nekešovalo pro alely, ke kterým nic nemáme
+		final Genotyp genotyp = genotypx.zuzNaObrazkove(getPouziteAlely()); // aby se nekešovalo pro alely, ke kterým nic nemáme
 		Sklivec sklivec = cache.get(genotyp);
 		if (sklivec == null) {
 			sklivec = new Sklivec();
@@ -122,17 +122,6 @@ public class Sada {
 		return imagant;
 	}
 
-	private Genotyp zuzNaObrazkovex(final Genotyp g0) {
-		Genotyp g = g0;
-		final Set<Alela> pouziteAlely2 = getPouziteAlely();
-		for (final Alela alela : new ArrayList<>(g0.getAlely())) {
-			if (!pouziteAlely2.contains(alela)) {
-				if (!pouziteAlely2.contains(alela.getGen().getVychoziAlela())) {
-					g = g.without(alela);
-				}
-			}
-		}
-		return g;
-	}
+
 
 }

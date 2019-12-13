@@ -6,6 +6,8 @@ package cz.geokuk.plugins.kesoid.genetika;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import cz.geokuk.plugins.kesoid.genetika.Genom.CitacAlel;
+
 /**
  * Genotyp jako množina alel. Typ je immutable, různé instance mají různou množinu alel.
  */
@@ -159,6 +161,8 @@ public class Genotyp implements Indexable {
 		return set;
 	}
 
+
+
 	/**
 	 * Vrátí množinu alel s tím, že jedna je vyměněná. Vyhodí alelu stejného genu, která tam byla místo toho se přidá zadaná alela. Pokud je to výchozí alela, tak se npřidává.
 	 *
@@ -189,10 +193,11 @@ public class Genotyp implements Indexable {
 	private int minulyPocetGenu;
 
 	/**
-	 * @deprecated Určitě neceme dělat seznam alel, ale cheme něco výkonnějšího nejlépe přímo zde určovat zda má gen ty dané alely. Je to totiž jediná funkce, která nevrací pro jedince konstantí hodnotu, protože když druh dostane další gen bude vracet i jeho výchozí alelu.
+	 * @return Sezanm všech alel aktuálně přiřazených ke genu všetně defaultních alel.
+	 * Pokud je přidán do druhu existujícího genotuypu gen, má to vliv na výsledek této funkce, bude vracena jeho defaultní alela.
+	 * Používejme jen tam, kde opravdu alely potřebujeme, existují funkce na testování, zda mám potřebné alely, jenž jso rychlejší.
 	 * @return
 	 */
-	@Deprecated
 	public Set<Alela> getAlely() {
 		if (alely == null || minulyPocetGenu != druh.geny.size()) {
 			final int genySize = druh.geny.size();
@@ -216,6 +221,16 @@ public class Genotyp implements Indexable {
 		}
 		return alely;
 	}
+
+
+	/**
+	 * Pokud je přidán do druhu existujícího genotuypu gen, má to vliv na výsledek této funkce, bude vracena jeho defaultní alela.
+	 * @return Vrátí kvalifikovaná jména všech alel všetně výchozích.
+	 */
+	public QualAlelaNames getQualAlelaNames() {
+		return Alela.alelyToQualNames(getAlely());
+	}
+
 
 	@Override
 	public String toString() {
@@ -243,6 +258,32 @@ public class Genotyp implements Indexable {
 	 */
 	public boolean hasAll(final Set<Alela> alely) {
 		return alely.stream().allMatch(this::has);
+	}
+
+	public void countTo(final CitacAlel citacAlel) {
+		for (final Alela alela : getAlely()) {
+			assert alela != null;
+			citacAlel.add(alela);
+		}
+
+	}
+
+	/**
+	 *
+	 * @param alely
+	 * @return
+	 */
+	public Genotyp zuzNaObrazkove(final Set<Alela> alely) {
+		// TODO [veverka] Prozkoumat co to dělá. -- 13. 12. 2019 14:12:14 veverka
+		Genotyp g = this;
+		for (final Alela a : getAlely()) {
+			if (! alely.contains(a)) {
+				if (! alely.contains(a.getGen().getVychoziAlela())) {
+					g = g.without(a);
+				}
+			}
+		}
+		return g;
 	}
 
 }

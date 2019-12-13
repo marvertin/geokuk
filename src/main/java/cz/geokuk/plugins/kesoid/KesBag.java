@@ -87,10 +87,7 @@ public class KesBag {
 			maximalniHodnoceni = Math.max(maximalniHodnoceni, kes.getHodnoceni());
 			maximalniFavorit = Math.max(maximalniFavorit, kes.getFavorit());
 		}
-		for (final Alela alela : genotyp.getAlely()) {
-			assert alela != null;
-			citacAlel.add(alela);
-		}
+		genotyp.countTo(citacAlel);
 	}
 
 	public void done() {
