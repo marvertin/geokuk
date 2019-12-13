@@ -185,7 +185,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 		try {
 			for (final Kesoid kesoid : resultKesoidsByName.values()) {
 				for (final Wpt wpt : kesoid.getWpts()) {
-					kesBag.add(wpt, null);
+					kesBag.add(wpt);
 				}
 				if (citac++ % 1000 == 0) {
 					progressor.setProgress(citac);

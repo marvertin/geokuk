@@ -159,8 +159,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	private final boolean vykreslovatOkamtiteAleDlouho;
 
-	private KesBag vsechny;
-
 	private VyletModel vyletModel;
 
 	public static double getScale() {
@@ -185,7 +183,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	@Override
 	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
 		if (wptPodMysi != null) {
-			initPopupMenuItems(popupMenu, wptPodMysi, vsechny);
+			initPopupMenuItems(popupMenu, wptPodMysi);
 		}
 		chain().addPopouItems(popupMenu, ctx);
 	}
@@ -341,7 +339,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	}
 
 	public void onEvent(final KeskyNactenyEvent event) {
-		vsechny = event.getVsechny();
 	}
 
 	public void onEvent(final KeskyVyfiltrovanyEvent aEvent) {
@@ -442,8 +439,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	}
 
 	private Genotyp computeGenotyp(final Wpt wpt) {
-		final Genom genom = ikonBag.getGenom();
-		Genotyp g = wpt.getGenotyp(genom);
+		Genotyp g = wpt.getGenotyp();
+		final Genom genom = g.getGenom();
 		// switch (cestyModel.get(wpt.getKesoid())) {
 		// // case ANO: g = g.with(ikonBag.getGenom().ALELA_lovime); break;
 		// case NE: g = g.with(ikonBag.getGenom().ALELA_ignoru); break;
@@ -492,12 +489,12 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		return br;
 	}
 
-	private void initPopupMenuItems(final JPopupMenu p, final Wpt mysNadWpt, final KesBag vsechny) {
+	private void initPopupMenuItems(final JPopupMenu p, final Wpt mysNadWpt) {
 		// TODO : these should be based on the waypoint type
 		// Přidat zhasínače
 		final JMenu zhasinace = new JMenu("Zhasni");
 		p.add(zhasinace);
-		final Genotyp genotyp = mysNadWpt.getGenotyp(vsechny.getGenom());
+		final Genotyp genotyp = mysNadWpt.getGenotyp();
 		for (final Alela alela : genotyp.getAlely()) {
 			if (alela.getGen().isVypsatelnyVeZhasinaci() && !alela.isVychozi()) {
 				zhasinace.add(factory.init(new ZhasniKeseUrciteAlelyAction(alela)));

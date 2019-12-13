@@ -309,7 +309,7 @@ public class KesoidModel extends Model0 {
 		if (filteringSwingWorker != null) {
 			filteringSwingWorker.cancel(true);
 		}
-		filteringSwingWorker = new KesFilteringSwingWorker(vsechny, vsechny.getGenom(), filter, this, getProgressModel());
+		filteringSwingWorker = new KesFilteringSwingWorker(vsechny, filter, this, getProgressModel());
 		filteringSwingWorker.execute();
 	}
 

@@ -83,11 +83,10 @@ public class KesFilter {
 
 
 
-	public boolean isFiltered(final Wpt aWpt, final Genom genom, Genotyp genotyp) {
+	public boolean isFiltered(final Wpt aWpt) {
 		try {
-			if (genotyp == null) { // to je zde jen z důvodu optimalizace
-				genotyp = aWpt.getGenotyp(genom);
-			}
+			final Genotyp genotyp = aWpt.getGenotyp();
+			final Genom genom = genotyp.getGenom();
 			if (jmenaNechtenychAlel != null) {
 				citac1 ++;
 				if (nechteneAlely == null) {

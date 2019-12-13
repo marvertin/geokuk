@@ -37,7 +37,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		if (bag == null) {
 			return;
 		}
-		jmenaVybranychAlel = Alela.alelyToQualNames(wpt.getGenotyp(bag.getGenom()).getAlely());
+		jmenaVybranychAlel = Alela.alelyToQualNames(wpt.getGenotyp().getAlely());
 		zobrazovatVse = true;
 		refresh(bag, jmenaVybranychAlel, null);
 	}
