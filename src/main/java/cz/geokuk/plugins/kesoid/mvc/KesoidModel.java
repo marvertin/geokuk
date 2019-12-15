@@ -15,6 +15,7 @@ import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
 import cz.geokuk.plugins.kesoid.genetika.QualAlelaNames;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
 import cz.geokuk.plugins.kesoid.importek.MultiNacitacLoaderManager;
+import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mapicon.*;
 import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.util.exception.EExceptionSeverity;
@@ -46,6 +47,7 @@ public class KesoidModel extends Model0 {
 	private KesFilteringSwingWorker filteringSwingWorker;
 	private ProgressModel progressModel;
 	private Boolean onoff;
+	private KesoidPluginManager kesopidPluginManager;
 
 	public void filtrujDleAlely(final String alelaName, final boolean zobrazit) {
 		final Set<String> jmena = new HashSet<>(filter.getJmenaNechtenychAlel().getQualNames());
@@ -98,6 +100,10 @@ public class KesoidModel extends Model0 {
 
 	public void inject(final ProgressModel progressModel) {
 		this.progressModel = progressModel;
+	}
+
+	public void inject(final KesoidPluginManager kesopidPluginManager) {
+		this.kesopidPluginManager = kesopidPluginManager;
 	}
 
 	public boolean maSeNacist(final KeFile jmenoZdroje) {
