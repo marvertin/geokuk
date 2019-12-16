@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid;
 import java.util.Set;
 
 import cz.geokuk.plugins.kesoid.genetika.*;
+import cz.geokuk.plugins.kesoid.kind.kes.Kes;
 import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.plugins.vylety.VyletModel;
 

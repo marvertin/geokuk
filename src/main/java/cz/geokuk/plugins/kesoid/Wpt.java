@@ -6,6 +6,7 @@ import java.util.Map;
 import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.kind.kes.EKesWptType;
 import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
 
 public class Wpt extends Weikoid0 implements Uchopenec {

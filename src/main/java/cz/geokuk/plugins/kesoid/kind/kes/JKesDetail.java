@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.kesoid.detail;
+package cz.geokuk.plugins.kesoid.kind.kes;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,6 +9,7 @@ import javax.swing.*;
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.*;
+import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 import cz.geokuk.util.gui.JSmallPictureButton;
 

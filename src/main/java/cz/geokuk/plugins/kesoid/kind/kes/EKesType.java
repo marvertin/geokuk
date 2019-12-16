@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.kesoid;
+package cz.geokuk.plugins.kesoid.kind.kes;
 
 /**
  * @todo 1. Doplnit všechny známé typy keší. [ISSUE#48, 2016-04-09, Bohusz]

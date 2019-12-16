@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.kesoid;
+package cz.geokuk.plugins.kesoid.kind.munzee;
 
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;

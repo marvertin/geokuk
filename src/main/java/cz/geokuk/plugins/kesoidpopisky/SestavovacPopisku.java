@@ -7,6 +7,7 @@ import java.util.*;
 
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
+import cz.geokuk.plugins.kesoid.kind.kes.Kes;
 
 /**
  * Třída, která sestavuje popisky. Její stvoření může trvat, ale její provádění nikoli

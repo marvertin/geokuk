@@ -15,6 +15,12 @@ import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.Wpt.EZOrder;
 import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
+import cz.geokuk.plugins.kesoid.kind.cgp.CzechGeodeticPoint;
+import cz.geokuk.plugins.kesoid.kind.kes.*;
+import cz.geokuk.plugins.kesoid.kind.munzee.Munzee;
+import cz.geokuk.plugins.kesoid.kind.photo.Photo;
+import cz.geokuk.plugins.kesoid.kind.simplewaypoint.SimpleWaypoint;
+import cz.geokuk.plugins.kesoid.kind.waymark.Waymark;
 import cz.geokuk.plugins.kesoid.mvc.GccomNick;
 import cz.geokuk.util.file.KeFile;
 

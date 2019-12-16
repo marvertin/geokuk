@@ -1,10 +1,12 @@
-package cz.geokuk.plugins.kesoid;
+package cz.geokuk.plugins.kesoid.kind.photo;
 
 import java.io.File;
 
 import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
+import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 

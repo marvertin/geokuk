@@ -1,9 +1,9 @@
-package cz.geokuk.plugins.kesoid.detail;
+package cz.geokuk.plugins.kesoid.kind.waymark;
 
 import javax.swing.Box;
 
-import cz.geokuk.plugins.kesoid.Waymark;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 
 /**

@@ -21,7 +21,7 @@ import com.google.common.io.Files;
 
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.*;
-import cz.geokuk.plugins.kesoid.EKesType;
+import cz.geokuk.plugins.kesoid.kind.kes.EKesType;
 import cz.geokuk.plugins.kesoid.mvc.GsakParametryNacitani;
 import cz.geokuk.util.lang.ATimestamp;
 import cz.geokuk.util.lang.StringUtils;

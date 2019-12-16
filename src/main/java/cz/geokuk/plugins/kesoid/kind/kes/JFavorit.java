@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.kesoid.detail;
+package cz.geokuk.plugins.kesoid.kind.kes;
 
 import java.awt.*;
 import java.awt.event.*;

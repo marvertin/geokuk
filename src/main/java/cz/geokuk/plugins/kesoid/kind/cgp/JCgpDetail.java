@@ -1,10 +1,10 @@
-package cz.geokuk.plugins.kesoid.detail;
+package cz.geokuk.plugins.kesoid.kind.cgp;
 
 import javax.swing.Box;
 import javax.swing.JLabel;
 
-import cz.geokuk.plugins.kesoid.CzechGeodeticPoint;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 
 /**
  * Detailní informace o vybrané keši.

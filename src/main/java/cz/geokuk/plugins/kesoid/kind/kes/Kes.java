@@ -1,7 +1,7 @@
 /**
  *
  */
-package cz.geokuk.plugins.kesoid;
+package cz.geokuk.plugins.kesoid.kind.kes;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,6 +9,7 @@ import java.net.URL;
 import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 

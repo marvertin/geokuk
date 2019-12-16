@@ -1,8 +1,9 @@
-package cz.geokuk.plugins.kesoid;
+package cz.geokuk.plugins.kesoid.kind.waymark;
 
 import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 

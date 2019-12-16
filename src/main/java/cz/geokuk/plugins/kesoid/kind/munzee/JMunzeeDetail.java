@@ -1,9 +1,9 @@
-package cz.geokuk.plugins.kesoid.detail;
+package cz.geokuk.plugins.kesoid.kind.munzee;
 
 import javax.swing.Box;
 
-import cz.geokuk.plugins.kesoid.Munzee;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 
 /**

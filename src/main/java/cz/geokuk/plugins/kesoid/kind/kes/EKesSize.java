@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.kesoid;
+package cz.geokuk.plugins.kesoid.kind.kes;
 
 public enum EKesSize {
 	MICRO,

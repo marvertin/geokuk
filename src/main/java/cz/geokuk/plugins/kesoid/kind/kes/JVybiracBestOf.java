@@ -1,8 +1,9 @@
-package cz.geokuk.plugins.kesoid.mvc;
+package cz.geokuk.plugins.kesoid.kind.kes;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.mvc.JVybiracCiselny0;
 
 public class JVybiracBestOf extends JVybiracCiselny0 implements AfterEventReceiverRegistrationInit {
 

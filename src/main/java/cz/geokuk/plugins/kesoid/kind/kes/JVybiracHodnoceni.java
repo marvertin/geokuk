@@ -1,9 +1,10 @@
-package cz.geokuk.plugins.kesoid.mvc;
+package cz.geokuk.plugins.kesoid.kind.kes;
 
 import javax.swing.SpinnerNumberModel;
 
 import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.mvc.JVybiracCiselny0;
 
 public class JVybiracHodnoceni extends JVybiracCiselny0 {
 

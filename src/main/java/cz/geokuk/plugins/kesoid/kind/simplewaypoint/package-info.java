@@ -1,0 +1,1 @@
+package cz.geokuk.plugins.kesoid.kind.simplewaypoint;

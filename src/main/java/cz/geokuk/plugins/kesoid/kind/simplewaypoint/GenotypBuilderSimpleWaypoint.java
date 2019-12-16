@@ -1,7 +1,7 @@
 /**
  *
  */
-package cz.geokuk.plugins.kesoid;
+package cz.geokuk.plugins.kesoid.kind.simplewaypoint;
 
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;

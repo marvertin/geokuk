@@ -6,6 +6,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom.CitacAlel;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
+import cz.geokuk.plugins.kesoid.kind.kes.Kes;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.lang.CounterMap;

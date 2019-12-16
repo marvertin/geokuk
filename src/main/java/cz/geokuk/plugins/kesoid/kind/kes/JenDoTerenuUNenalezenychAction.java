@@ -1,8 +1,9 @@
-package cz.geokuk.plugins.kesoid.mvc;
+package cz.geokuk.plugins.kesoid.kind.kes;
 
 import cz.geokuk.framework.ToggleAction0;
 import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
+import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 public class JenDoTerenuUNenalezenychAction extends ToggleAction0 {
 

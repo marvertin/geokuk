@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.kesoid;
+package cz.geokuk.plugins.kesoid.kind.kes;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
