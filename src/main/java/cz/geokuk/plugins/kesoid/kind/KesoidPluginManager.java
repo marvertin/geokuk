@@ -22,13 +22,28 @@ import lombok.Getter;
 public class KesoidPluginManager {
 
 	@Getter
+	private  final MunzeePlugin munzeePlugin = new MunzeePlugin();
+
+	@Getter
+	private  final WaymarkPlugin waymarkPlugin = new WaymarkPlugin();
+
+	@Getter
+	private  final CgpPlugin cgpLugin = new CgpPlugin();
+
+	@Getter
+	private  final PhotoPlugin photoPlugin = new PhotoPlugin();
+
+	@Getter
+	private final KesPlugin kesPlugin = new KesPlugin();
+
+	@Getter
 	private final List<KesoidPlugin> plugins
 	= Lists.newArrayList(
-			new KesPlugin(),
-			new PhotoPlugin(),
-			new CgpPlugin(),
-			new WaymarkPlugin(),
-			new MunzeePlugin()
+			kesPlugin,
+			photoPlugin,
+			cgpLugin,
+			waymarkPlugin,
+			munzeePlugin
 			);
 
 

@@ -15,6 +15,7 @@ import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.Wpt.EZOrder;
 import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
+import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.kind.cgp.CzechGeodeticPoint;
 import cz.geokuk.plugins.kesoid.kind.kes.*;
 import cz.geokuk.plugins.kesoid.kind.munzee.Munzee;
@@ -53,6 +54,8 @@ public class KesoidImportBuilder implements IImportBuilder {
 
 	private final GccomNick gccomNick;
 	private final ProgressModel progressModel;
+
+	private KesoidPluginManager kpm;
 
 	public KesoidImportBuilder(final Genom genom, final GccomNick gccomNick, final ProgressModel progressModel) {
 		this.genom = genom;
@@ -110,6 +113,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 	 *
 	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#done(cz.geokuk.plugins.kesoid.mapicon.Genom)
 	 */
+	@Override
 	public void done() {
 		final InformaceOZdrojich informaceOZdrojich = informaceOZdrojichBuilder.done();
 		final int delkaTasku = gpxwpts.size();
@@ -230,6 +234,7 @@ public class KesoidImportBuilder implements IImportBuilder {
 	 *
 	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#init()
 	 */
+	@Override
 	public void init() {}
 
 	public synchronized void setCurrentlyLoading(final KeFile aJmenoZdroje, final boolean nacteno) {
@@ -804,4 +809,10 @@ public class KesoidImportBuilder implements IImportBuilder {
 		cgp.setHidden(wm.getHidden());
 		return true;
 	}
+
+	public void inject(final KesoidPluginManager kpm) {
+		this.kpm = kpm;
+	}
+
+
 }
