@@ -13,7 +13,6 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
-import cz.geokuk.util.index2d.FlatVisitor;
 import cz.geokuk.util.index2d.Indexator;
 
 public class JPopiskySlide extends JSingleSlide0 {
@@ -90,12 +89,11 @@ public class JPopiskySlide extends JSingleSlide0 {
 			sestavmapa.put(entry.getKey(), new SestavovacPopisku(entry.getValue()));
 		}
 
-		iIndexator.visit(getSoord().getBoundingRect(), (FlatVisitor<Wpt>) aSheet -> {
-			final Wpt wpt = aSheet.get();
+		iIndexator.bound(getSoord().getBoundingRect()).stream().forEach(wpt -> {
 			if (!wpt.isMainWpt()) {
 				return;
 			}
-			final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
+			final Mou mou = wpt.getMou();
 			final Point p = getSoord().transform(mou);
 			p.x -= 10;
 			p.y += 25;

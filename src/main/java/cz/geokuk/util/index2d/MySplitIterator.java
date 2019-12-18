@@ -1,4 +1,4 @@
-package cz.geokuk.util.yndex2d;
+package cz.geokuk.util.index2d;
 
 import java.util.Spliterator;
 import java.util.function.Consumer;

@@ -23,7 +23,8 @@ import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.plugins.kesoid.mapicon.*;
 import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.vylety.*;
-import cz.geokuk.util.index2d.*;
+import cz.geokuk.util.index2d.BoundingRect;
+import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.pocitadla.PocitadloNula;
 import cz.geokuk.util.process.BrowserOpener;
 
@@ -355,8 +356,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		final int polomerCitlivosi = POLOMER_CITLIVOSTI;
 		final Point p = getSoord().transform(event.mou);
 		final Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi, polomerCitlivosi * 2, polomerCitlivosi * 2);
-		final Sheet<Wpt> swpt = indexator == null ? null : indexator.locateNearestOne(getSoord().transforToBounding(rect), event.mou.xx, event.mou.yy);
-		final Wpt wpt = swpt == null ? null : swpt.get();
+
+		final Wpt wpt = indexator == null ? null : indexator.bound(getSoord().transforToBounding(rect)).locateNearestOne(event.mou.xx, event.mou.yy).orElse(null);
 		if (wpt != null && wpt.getMou().equals(event.mou)) { // je to přesně on
 			int priorita = 40;
 			if (wpt.isMainWpt()) {
@@ -401,17 +402,16 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		SwingUtilities.invokeLater(() -> kesoidModel.setPrekrocenLimitWaypointuVeVyrezu(prekrocenLimit));
 
 		// vytvoření prázdných seznamů
-		final EnumMap<Wpt.EZOrder, List<Sheet<Wpt>>> mapa = new EnumMap<>(Wpt.EZOrder.class);
+		final EnumMap<Wpt.EZOrder, List<Wpt>> mapa = new EnumMap<>(Wpt.EZOrder.class);
 		for (final Wpt.EZOrder zorder : Wpt.EZOrder.values()) {
-			mapa.put(zorder, new ArrayList<Sheet<Wpt>>(10000));
+			mapa.put(zorder, new ArrayList<Wpt>(10000));
 		}
 
 		// Roztřídit waypointy podle pořadí vykreslování
 		if (!prekrocenLimit) {
 			final BoundingRect hranice = coVykreslovat(gg);
-			indexator.visit(hranice, (FlatVisitor<Wpt>) aSheet -> {
-				final Wpt wpt = aSheet.get();
-				mapa.get(wpt.getZorder()).add(aSheet);
+			indexator.bound(hranice).stream().forEach(wpt -> {
+				mapa.get(wpt.getZorder()).add(wpt);
 			});
 		}
 
@@ -420,10 +420,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 			final SkloAplikant skloAplikant = skloAplikanti.get(i);
 			if (skloAplikant.aplikaceSkla == EAplikaceSkla.VSE) { // jen na skla, na kterych je vsechno
 				if (!prekrocenLimit) {
-					for (final List<Sheet<Wpt>> list : mapa.values()) {
-						for (final Sheet<Wpt> swpt : list) {
-							final Wpt wpt = swpt.get();
-							final Mou mou = new Mou(swpt.getXx(), swpt.getYy());
+					for (final List<Wpt> list : mapa.values()) {
+						for (final Wpt wpt : list) {
+							final Mou mou = wpt.getMou();
 							paintWaypoint(gg, wpt, mou, i);
 						}
 					}
@@ -545,8 +544,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		// System.out.println("POSUNOVACKA TO ASI BUDE: " + e);
 		final int polomerCitlivosi = POLOMER_CITLIVOSTI;
 		final Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi, polomerCitlivosi * 2, polomerCitlivosi * 2);
-		final Sheet<Wpt> swpt = indexator == null ? null : indexator.locateAnyOne(getSoord().transforToBounding(rect));
-		final Wpt wpt = swpt == null ? null : swpt.get();
+		final Wpt wpt = indexator == null ? null : indexator.bound(getSoord().transforToBounding(rect)).locateAnyOne().orElse(null);
 		return wpt;
 	}
 

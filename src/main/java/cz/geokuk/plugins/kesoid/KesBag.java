@@ -44,7 +44,8 @@ public class KesBag {
 
 	private CounterMap<Alela> poctyAlel;
 
-	private final Indexator<Wpt> indexator;
+	private Indexator<Wpt> indexator;
+
 
 	private int maximalniBestOf = 0;
 	private int maximalniHodnoceni;
@@ -55,6 +56,8 @@ public class KesBag {
 
 	private InformaceOZdrojich iInformaceOZdrojich;
 
+	private boolean indexatorOdevzdan = false;
+
 	public KesBag(final Genom genom) {
 		this.genom = genom;
 		indexator = new Indexator<>(BoundingRect.ALL);
@@ -63,6 +66,9 @@ public class KesBag {
 	}
 
 	public void add(final Wpt wpt) {
+		if (indexatorOdevzdan) {
+			throw new IllegalStateException("Indexator uz byl odevztdan");
+		}
 		// Následné volání má vedlejší efekt spočívající ve výpočtu genotypu a schování ve Wpt.
 		// Přitom ovšem může docházet ke vniku alel, genů a přidávání genů do druhů.
 		// Tento efekt je důležitý, dělat to líně by bylo divné.
@@ -78,7 +84,7 @@ public class KesBag {
 		final Genotyp genotyp = wpt.getGenotyp();
 
 		final Mou mou = wpt.getMou();
-		indexator.vloz(mou.xx, mou.yy, wpt);
+		indexator = indexator.add(mou.xx, mou.yy, wpt);
 		final Kesoid kesoid = wpt.getKesoid();
 		kesoidyset.add(kesoid);
 		wpts.add(wpt);
@@ -107,6 +113,7 @@ public class KesBag {
 	}
 
 	public Indexator<Wpt> getIndexator() {
+		indexatorOdevzdan = true;
 		return indexator;
 	}
 

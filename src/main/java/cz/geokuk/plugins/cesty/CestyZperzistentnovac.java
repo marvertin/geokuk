@@ -12,7 +12,8 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.cesty.data.*;
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.importek.NacitacGpx;
-import cz.geokuk.util.index2d.*;
+import cz.geokuk.util.index2d.BoundingRect;
+import cz.geokuk.util.index2d.Indexator;
 
 public class CestyZperzistentnovac {
 
@@ -133,11 +134,7 @@ public class CestyZperzistentnovac {
 		}
 		final Indexator<Wpt> indexator = kesBag.getIndexator();
 		final BoundingRect br = new BoundingRect(mou.xx, mou.yy, mou.xx, mou.yy).rozsir(100);
-		final Sheet<Wpt> sheet = indexator.locateAnyOne(br);
-		if (sheet == null) {
-			return null;
-		}
-		return sheet.get();
+		return indexator.bound(br).locateAnyOne().orElse(null);
 	}
 
 	private void zapisKdyzNeni(final BufferedWriter wrt, final String kod, final Set<String> exportovano) throws IOException {

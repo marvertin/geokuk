@@ -13,7 +13,8 @@ import cz.geokuk.framework.MouseGestureContext;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.util.gui.JBarvovyDvojSlider;
-import cz.geokuk.util.index2d.*;
+import cz.geokuk.util.index2d.BoundingRect;
+import cz.geokuk.util.index2d.Indexator;
 
 public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
 
@@ -101,12 +102,11 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		final int mouokraj = (int) (getSoord().getMouboduNaMetr() * POLOMER_OBSAZENOSTI);
 		final BoundingRect boundingRect = getSoord().getBoundingRect().rozsir(mouokraj);
 		// final Area area = new Area();
-		iIndexator.visit(boundingRect, (FlatVisitor<Wpt>) aSheet -> {
-			final Wpt wpt = aSheet.get();
+		iIndexator.bound(boundingRect).stream().forEach(wpt -> {
 			if (!wpt.obsazujeOblast()) {
 				return;
 			}
-			final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
+			final Mou mou = wpt.getMou();
 			final Point p = getSoord().transform(mou);
 			// Ellipse2D kruh = new Ellipse2D.Float(p.x -r, p.y - r, d, d);
 			// Area areakruh = new Area(kruh);

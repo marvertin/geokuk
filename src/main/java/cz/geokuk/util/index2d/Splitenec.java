@@ -1,4 +1,4 @@
-package cz.geokuk.util.yndex2d;
+package cz.geokuk.util.index2d;
 
 import lombok.RequiredArgsConstructor;
 

@@ -10,6 +10,8 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
+import cz.geokuk.util.index2d.BoundingRect;
+import cz.geokuk.util.index2d.Indexator;
 import lombok.SneakyThrows;
 
 
