@@ -7,4 +7,5 @@ package cz.geokuk.plugins.kesoid.kind;
  */
 public interface KesoidPlugin {
 
+	public GpxWptProcak createGpxWptProcak(GpxToWptContext ctx, GpxToWptBuilder builder);
 }

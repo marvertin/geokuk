@@ -17,7 +17,7 @@ public class TestProcakAccum {
 	}
 
 	public void assertx(final String expected) {
-		assertEquals(expected + " <1> <2> <3>", sb.toString());
+		assertEquals(expected + " <1> <2> <3> <~> .1 .2 .3 .~", sb.toString());
 	}
 
 	public void asserty(final String expected) {

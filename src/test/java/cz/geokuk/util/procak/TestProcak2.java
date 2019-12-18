@@ -50,4 +50,9 @@ public class TestProcak2 implements Procak<String>{
 		accum.add("<2>");
 	}
 
+	@Override
+	public void allDone() {
+		accum.add(".2");
+	}
+
 }

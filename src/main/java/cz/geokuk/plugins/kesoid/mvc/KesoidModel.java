@@ -21,6 +21,7 @@ import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.KeFile;
+import lombok.Getter;
 
 /**
  * @author Martin Veverka
@@ -47,6 +48,8 @@ public class KesoidModel extends Model0 {
 	private KesFilteringSwingWorker filteringSwingWorker;
 	private ProgressModel progressModel;
 	private Boolean onoff;
+
+	@Getter
 	private KesoidPluginManager kesopidPluginManager;
 
 	public void filtrujDleAlely(final String alelaName, final boolean zobrazit) {

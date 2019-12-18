@@ -26,4 +26,9 @@ public class TestProcak1 implements Procak<String>{
 		accum.add("<1>");
 	}
 
+	@Override
+	public void allDone() {
+		accum.add(".1");
+	}
+
 }

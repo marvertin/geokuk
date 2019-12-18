@@ -14,7 +14,7 @@ public class ProcakDispatcherTest {
 	public void setUp() {
 		accum = new TestProcakAccum();
 		pd = new ProcakDispatcher<>(
-				Arrays.asList(new TestProcak1(accum), new TestProcak2(accum), new TestProcak3(accum)));
+				Arrays.asList(new TestProcak1(accum), new TestProcak2(accum), new TestProcak3(accum)), new TestSinkProcak(accum));
 
 	}
 
@@ -124,6 +124,13 @@ public class ProcakDispatcherTest {
 	}
 
 	@Test
+	public void test16a() {
+		pd.dispatch("3H-");
+		pd.done();
+		accum.assertx("y(3H-)a <1> <2> y(3H-)b z3H- <3>");
+	}
+
+	@Test
 	public void test17() {
 		pd.dispatch("3Hr");
 		pd.dispatch("3H+");
@@ -140,5 +147,23 @@ public class ProcakDispatcherTest {
 		pd.done();
 		accum.assertx("y(3Hr)a z3ji y(3H+)a y2ka <1> <2> y(3Hr)b z3Hr y(3H+)b y3H+ <3>");
 	}
+
+
+	@Test
+	public void testSink1() {
+		pd.dispatch("1a");
+		pd.dispatch("777");
+		pd.dispatch("2b");
+		pd.done();
+		accum.assertx("x1a ~777 y2b");
+	}
+
+	@Test
+	public void testSikn1() {
+		pd.dispatch("3H*");
+		pd.done();
+		accum.assertx("y(3H*)a <1> <2> y(3H*)b ~3H* <3>");
+	}
+
 
 }

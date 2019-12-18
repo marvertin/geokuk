@@ -6,8 +6,11 @@ import java.util.Map;
 import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.kind.KesoidPlugin;
 import cz.geokuk.plugins.kesoid.kind.kes.EKesWptType;
 import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Wpt extends Weikoid0 implements Uchopenec {
 
@@ -69,6 +72,11 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	private EZOrder zorder = EZOrder.OTHER;
 
 	private Genotyp genotyp;
+
+	/** Plugin pomocí něhož byl waypoint stvořen. Použije se při
+	 * pro polymorfismus chování různých kešoidů */
+	@Getter @Setter
+	private KesoidPlugin kesoidPlugin;
 
 	public static void invalidateAllSklivec() {
 		currentSklivecValidityCode++;
@@ -334,5 +342,6 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		// vynechat mě, když vím, že ukazuje na mě. Pokud jsme byl v kruhu sám, nestalo se nic.
 		weikoid.next = weikoid.next.next;
 	}
+
 
 }

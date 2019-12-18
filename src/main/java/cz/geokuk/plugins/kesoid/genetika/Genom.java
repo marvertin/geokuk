@@ -155,6 +155,8 @@ public class Genom {
 		GEN_teren.lock();
 		GEN_obtiznost.lock();
 
+		UNIVERZALNI_DRUH.addGen(gen("mysterstav"));
+
 	}
 	/**
 	 * @deprecated Grupy nechceme, použijeme druhy.

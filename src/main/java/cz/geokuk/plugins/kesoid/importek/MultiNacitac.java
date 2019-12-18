@@ -72,7 +72,7 @@ public class MultiNacitac {
 		if (list == null) {
 			return null;
 		}
-		final KesoidImportBuilder builder = new KesoidImportBuilder(genom, kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
+		final KesoidImportBuilder builder = new KesoidImportBuilder(genom, kesoidModel.getGccomNick(), kesoidModel.getProgressModel(), kesoidModel.getKesopidPluginManager());
 		builder.init();
 		for (final KeFile file : list) {
 			log.debug("Nacitam: " + file);

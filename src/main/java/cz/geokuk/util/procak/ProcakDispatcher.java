@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -17,6 +18,8 @@ public class ProcakDispatcher<T> {
 	/** Procáci, kterří budou zpracovávat v uvedeném pořadí */
 	private final List<Procak<T>> procaci;
 
+	private final Procak<T> sink;
+
 	private final Kolo kolo1;
 	/**
 	 * Klient dává objekt ke zpracování.
@@ -26,7 +29,8 @@ public class ProcakDispatcher<T> {
 		kolo1.dispatch( new Drzak(obj, procaci));
 	}
 
-	public ProcakDispatcher(final List<Procak<T>> procaci) {
+	public ProcakDispatcher(final List<Procak<T>> procaci, final Procak<T> sink) {
+		this.sink = sink;
 		this.procaci = Collections.unmodifiableList(procaci);
 		this.kolo1 = new Kolo();
 	}
@@ -52,7 +56,7 @@ public class ProcakDispatcher<T> {
 			Drzak drzak = null;
 			cyklus: for (final Procak<T> procak : aDrzak.procaci) {
 				if (drzak != null) {
-					// Když se nastavilo na null, znamená to, že do dalších procáků to nedáváme, ale evidujeme je na zpracování v daším kole
+					// Když se nastavilo na ne null, znamená to, že do dalších procáků to nedáváme, ale evidujeme je na zpracování v daším kole
 					drzak.zpracovatVPristimKole(procak);
 					pocet ++;
 					continue;
@@ -74,6 +78,11 @@ public class ProcakDispatcher<T> {
 			if (drzakx.procaci != null) {
 				drzaci.add(drzakx);
 				pocet += drzakx.getPocet();
+			} else {
+				// nikdo to nechtěl, pošleme to do výlevky
+				if (drzak == null) {
+					sink.process(aDrzak.obj); // výsledek z výlevky je nezajímavý.
+				}
 			}
 		}
 
@@ -112,12 +121,22 @@ public class ProcakDispatcher<T> {
 		}
 		while (koloB.pocet < koloA.pocet);
 
+		// a co zbylo tak do výlevky. Jsou to ty věci, které pořád dokola říkali příští kolo, příští kolo a nikdo to nevybral.
+		koloB.drzaci.stream()
+		.map(Drzak::getObj)
+		.forEach(sink::process);
+		sink.roundDone();
+
+		procaci.stream().forEach(Procak::allDone);
+		sink.allDone();
+
 	}
 
 
 	/** Drží objekt a procáky, které ho budoi zpracovávat další kolo. */
 	@RequiredArgsConstructor
 	private class Drzak {
+		@Getter
 		private final T obj;
 
 		private List<Procak<T>> procaci;

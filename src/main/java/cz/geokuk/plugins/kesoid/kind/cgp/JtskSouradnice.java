@@ -1,4 +1,4 @@
-package cz.geokuk.plugins.kesoid.importek;
+package cz.geokuk.plugins.kesoid.kind.cgp;
 
 public class JtskSouradnice {
 

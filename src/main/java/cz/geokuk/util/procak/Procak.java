@@ -8,6 +8,7 @@ package cz.geokuk.util.procak;
  */
 public interface Procak<T> {
 
+
 	/**
 	 * Implemetnace musí provést zpracování a vrátit jak si pochodila.
 	 * @param obj
@@ -19,4 +20,9 @@ public interface Procak<T> {
 	 * Označuje konec kola.
 	 */
 	public void roundDone();
+
+	/**
+	 * Úplně veškeré zpracování je hotovo.
+	 */
+	public void allDone();
 }
