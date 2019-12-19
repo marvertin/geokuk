@@ -2,22 +2,18 @@ package cz.geokuk.plugins.kesoid.detail;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.EnumMap;
+import java.util.Map;
 
 import javax.swing.*;
 
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.core.program.Akce;
 import cz.geokuk.framework.AfterInjectInit;
-import cz.geokuk.framework.Factory;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.kind.cgp.JCgpDetail;
-import cz.geokuk.plugins.kesoid.kind.kes.JKesDetail;
-import cz.geokuk.plugins.kesoid.kind.munzee.JMunzeeDetail;
-import cz.geokuk.plugins.kesoid.kind.simplewaypoint.JSimpleWaypointDetail;
-import cz.geokuk.plugins.kesoid.kind.waymark.JWaymarkDetail;
+import cz.geokuk.plugins.kesoid.kind.KesoidPlugin;
+import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.ZobrazNaGcComAction;
@@ -38,7 +34,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	 */
 	private static final long serialVersionUID = -3323887260932949747L;
 
-	private Kesoid kesoid;
+	//private Kesoid kesoid;
 
 	private JLabel jKesoidCode;
 	private JLabel jKesoidNazev;
@@ -63,7 +59,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	private JSmallPictureButton vyletNeButton;
 	private JSmallPictureButton vyletNevimButton;
 
-	private final EnumMap<EKesoidKind, JKesoidDetail0> jDetailyKesoidu = new EnumMap<>(EKesoidKind.class);
+	private Map<KesoidPlugin, JKesoidDetail0> jDetailyKesoidu;
 
 	private IkonBag ikonBag;
 
@@ -73,9 +69,10 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 
 	private Akce akce;
 
-	private Factory factory;
-
 	private RefbodyModel refbodyModel;
+
+
+	private KesoidPluginManager kesoidPluginManager;
 
 	private static String formatuj(final String s, final EKesStatus status) {
 		final StringBuilder sb = new StringBuilder();
@@ -127,12 +124,12 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		initComponents();
 	}
 
-	public void inject(final Akce akce) {
-		this.akce = akce;
+	public void inject(final KesoidPluginManager kesoidPluginManager) {
+		this.kesoidPluginManager = kesoidPluginManager;
 	}
 
-	public void inject(final Factory factory) {
-		this.factory = factory;
+	public void inject(final Akce akce) {
+		this.akce = akce;
 	}
 
 	public void inject(final RefbodyModel refbodyModel) {
@@ -140,7 +137,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	}
 
 	public void onEvent(final DomaciSouradniceSeZmenilyEvent aEvent) {
-		if (isVisible() && kesoid != null) {
+		if (isVisible() && wpt != null) {
 			napln();
 		}
 	}
@@ -154,22 +151,22 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		if (aEvent.poziceq.isNoPosition()) {
 			setVisible(false);
 		} else {
-			wpt = aEvent.poziceq.getWpt();
-			if (wpt == null) {
+			final Wpt w = aEvent.poziceq.getWpt();
+			if (w == null) {
 				setVisible(false);
 			} else {
-				final Kesoid k = wpt.getKesoid();
-				if (kesoid == null || k.getKesoidKind() != kesoid.getKesoidKind()) {
-					if (kesoid != null) {
-						jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(false);
+				if (wpt == null || w.getKesoidPlugin() != wpt.getKesoidPlugin()) {
+					if (wpt != null) {
+						jDetailyKesoidu.get(wpt.getKesoidPlugin()).setVisible(false);
 					}
-					kesoid = wpt.getKesoid();
-					jDetailyKesoidu.get(kesoid.getKesoidKind()).setVisible(true);
+					wpt = w;
+					jDetailyKesoidu.get(wpt.getKesoidPlugin()).setVisible(true);
 				} else {
-					kesoid = k;
+					wpt = w;
 				}
-				jDetailyKesoidu.get(kesoid.getKesoidKind()).napln(wpt);
+				jDetailyKesoidu.get(wpt.getKesoidPlugin()).napln(wpt);
 
+				final Kesoid kesoid = wpt.getKesoid();
 				if (kesoid.getUrlShow() != null) {
 					jOtevriUrl.setAction(new ZobrazNaGcComAction(kesoid));
 					jOtevriUrl.setVisible(true);
@@ -186,6 +183,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	}
 
 	protected void napln() {
+		final Kesoid kesoid = wpt.getKesoid();
 		jKesoidCode.setText(kesoid.getKesoidKind() == EKesoidKind.CGP ? wpt.getName() : kesoid.getIdentifier());
 		jKesoidNazev.setText(formatuj(kesoid.getNazev(), kesoid.getStatus()));
 		jKesoidSym.setText(kesoid.getFirstWpt().getSym());
@@ -311,23 +309,11 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 			hlav.add(box8);
 		}
 
-		jDetailyKesoidu.put(EKesoidKind.CGP, factory.init(new JCgpDetail()));
-		jDetailyKesoidu.put(EKesoidKind.KES, factory.init(new JKesDetail()));
-		jDetailyKesoidu.put(EKesoidKind.WAYMARK, factory.init(new JWaymarkDetail()));
-		jDetailyKesoidu.put(EKesoidKind.SIMPLEWAYPOINT, factory.init(new JSimpleWaypointDetail()));
-		jDetailyKesoidu.put(EKesoidKind.MUNZEE, factory.init(new JMunzeeDetail()));
-		// TODO : change this
-		jDetailyKesoidu.put(EKesoidKind.PHOTO, factory.init(new JKesoidDetail0() {
-			private static final long serialVersionUID = 7253981658581992444L;
-
-			@Override
-			public void napln(final Wpt wpt) {}
-		}));
-		for (final EKesoidKind kind : EKesoidKind.values()) {
-			final JKesoidDetail0 detail = jDetailyKesoidu.get(kind);
+		jDetailyKesoidu = kesoidPluginManager.createKesoidDetails();
+		jDetailyKesoidu.values().stream().forEach(detail -> {
 			detail.setVisible(false);
 			hlav.add(detail);
-		}
+		});
 	}
 
 	private String vzdalenost(final Wpt wpt) {

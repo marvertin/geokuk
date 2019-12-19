@@ -1,17 +1,20 @@
 package cz.geokuk.plugins.kesoid.kind;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
+import cz.geokuk.framework.Factory;
+import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.kind.cgp.CgpPlugin;
 import cz.geokuk.plugins.kesoid.kind.kes.KesPlugin;
 import cz.geokuk.plugins.kesoid.kind.munzee.MunzeePlugin;
 import cz.geokuk.plugins.kesoid.kind.photo.PhotoPlugin;
 import cz.geokuk.plugins.kesoid.kind.simplewaypoint.SimpleWaypointGpxWptProcak;
+import cz.geokuk.plugins.kesoid.kind.simplewaypoint.SimpleWaypointPlugin;
 import cz.geokuk.plugins.kesoid.kind.waymark.WaymarkPlugin;
 import cz.geokuk.util.procak.ProcakDispatcher;
 import lombok.Getter;
@@ -42,14 +45,20 @@ public class KesoidPluginManager {
 	private  final PhotoPlugin photoPlugin = new PhotoPlugin();
 
 	@Getter
+	private final SimpleWaypointPlugin simpleWaypointPlugin = new SimpleWaypointPlugin();
+
+	@Getter
 	private final List<KesoidPlugin> plugins
 	= Lists.newArrayList(
 			cgpPlugin,
 			kesPlugin,
 			waymarkPlugin,
 			munzeePlugin,
-			photoPlugin
+			photoPlugin,
+			simpleWaypointPlugin
 			);
+
+	private Factory factory;
 
 
 	/**
@@ -70,6 +79,16 @@ public class KesoidPluginManager {
 				new SimpleWaypointGpxWptProcak(ctx, builder)
 				);
 
+	}
+
+	public Map<KesoidPlugin, JKesoidDetail0> createKesoidDetails() {
+		return plugins.stream()
+				.collect(Collectors.toMap(Function.identity(), kesoidPlugin -> factory.init(kesoidPlugin.createDetail())));
+
+	}
+
+	public void inject(final Factory factory) {
+		this.factory = factory;
 	}
 
 }
