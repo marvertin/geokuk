@@ -5,9 +5,7 @@ package cz.geokuk.plugins.kesoidpopisky;
 
 import java.util.*;
 
-import cz.geokuk.plugins.kesoid.*;
-import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.kind.kes.Kes;
+import cz.geokuk.plugins.kesoid.Wpt;
 
 /**
  * Třída, která sestavuje popisky. Její stvoření může trvat, ale její provádění nikoli
@@ -21,54 +19,6 @@ import cz.geokuk.plugins.kesoid.kind.kes.Kes;
  */
 public class SestavovacPopisku {
 
-	private static class Context {
-		private final Wpt wpt;
-
-		private boolean kesoidTypeResolved;
-
-		public Kesoid kesoid;
-		private Kes kes;
-
-		Context(final Wpt wpt) {
-			this.wpt = wpt;
-		}
-
-		/**
-		 * @return
-		 */
-		public Kesoid getKesoid() {
-			resolveKesoidType();
-			return kesoid;
-		}
-
-		/**
-		 * @return
-		 */
-		public boolean isKes() {
-			resolveKesoidType();
-			return kes != null;
-		}
-
-		/**
-		 *
-		 */
-		private void resolveKesoidType() {
-			if (kesoidTypeResolved) {
-				return;
-			}
-			kesoid = wpt.getKesoid();
-			if (kesoid instanceof Kes) {
-				kes = (Kes) kesoid;
-			}
-			kesoidTypeResolved = true;
-		}
-
-	}
-
-	private static interface Nahrazovac {
-		void pridej(StringBuilder sb, Context ctx);
-
-	}
 
 	/**
 	 * Oddělovač řádků. Lze ho najít
@@ -76,14 +26,14 @@ public class SestavovacPopisku {
 	 * @author Martin Veverka
 	 *
 	 */
-	private static class NahrBr implements Nahrazovac {
+	private static class NahrBr implements PopiskyNahrazovac {
 
 		@Override
-		public void pridej(final StringBuilder sb, final Context ctx) {}
+		public void pridej(final StringBuilder sb, final Wpt wpt) {}
 
 	}
 
-	private static class NahrKonstantni implements Nahrazovac {
+	public static class NahrKonstantni implements PopiskyNahrazovac {
 
 		private final String konstatna;
 
@@ -95,129 +45,45 @@ public class SestavovacPopisku {
 		}
 
 		@Override
-		public void pridej(final StringBuilder sb, final Context ctx) {
+		public void pridej(final StringBuilder sb, final Wpt wpt) {
 			sb.append(konstatna);
 		}
 
 	}
 
-	private static Map<String, Nahrazovac> sNahrazovace = new TreeMap<>();
 
-	private static final NahrBr NAHRBR = new NahrBr();
+	public static final NahrBr NAHRBR = new NahrBr();
 
-	static {
-		def("{wpt}", (sb, ctx) -> sb.append(ctx.wpt.getName()));
 
-		def("{typ1}", (sb, ctx) -> {
-			if (ctx.isKes()) {
-				sb.append(ctx.kes.getOneLetterType());
-			}
-		});
-
-		def("{velikost}", (sb, ctx) -> {
-			if (ctx.isKes()) {
-				sb.append(ctx.kes.getSize());
-			}
-		});
-
-		def("{velikost1}", (sb, ctx) -> {
-			if (ctx.isKes()) {
-				sb.append(ctx.kes.getOneLetterSize());
-			}
-		});
-
-		def("{obtiznost}", (sb, ctx) -> {
-			if (ctx.isKes()) {
-				sb.append(ctx.kes.getDifficulty());
-			}
-		});
-
-		def("{obtiznost1}", (sb, ctx) -> {
-			if (ctx.isKes()) {
-				sb.append(ctx.kes.getOneLetterDifficulty());
-			}
-		});
-
-		def("{teren}", (sb, ctx) -> {
-			if (ctx.isKes()) {
-				sb.append(ctx.kes.getTerrain());
-			}
-		});
-
-		def("{teren1}", (sb, ctx) -> {
-			if (ctx.isKes()) {
-				sb.append(ctx.kes.getOneLetterTerrain());
-			}
-		});
-
-		def("{autor}", (sb, ctx) -> sb.append(ctx.getKesoid().getAuthor()));
-
-		def("{nazev}", (sb, ctx) -> sb.append(ctx.wpt.getNazev()));
-
-		def("{zalozeno}", (sb, ctx) -> sb.append(ctx.getKesoid().getHidden()));
-		def("{nbsp}", new NahrKonstantni(" "));
-
-		def("{br}", NAHRBR);
-
-		def("{puvodnipotvora}", (sb, ctx) -> sb.append(computeByvalyPopisek(ctx.wpt)));
-
-		// a nové, které nejsou na geocaching.cz
-
-		def("{info}", (sb, ctx) -> {
-			if (ctx.isKes()) {
-				sb.append(ctx.kes.getInfo());
-			}
-		});
-
-	}
-
-	private final Nahrazovac[] nahrazky;
+	private final PopiskyNahrazovac[] nahrazky;
 
 	private final int pocetRadku;
 
-	public static String computeByvalyPopisek(final Wpt wpt) {
-		final Kesoid kesoid = wpt.getKesoid();
-		final String nazev = kesoid.getKesoidKind() == EKesoidKind.CGP ? kesoid.getIdentifier() : kesoid.getNazev();
-		return nazev;
-
-	}
-
-	public static String getNahrazovaceDisplay() {
-		return sNahrazovace.keySet().toString();
-
-	}
-
-	/**
-	 * @param string
-	 * @param xXX2
-	 */
-	private static void def(final String key, final Nahrazovac nahrazovac) {
-		sNahrazovace.put(key, nahrazovac);
-	}
+	private final Map<String, PopiskyNahrazovac> iNahrazovace;
 
 	/**
 	 *
 	 */
-	public SestavovacPopisku(final String pattern) {
-		final List<Nahrazovac> nahrazovace = new ArrayList<>();
+	public SestavovacPopisku(final String pattern, final Map<String, PopiskyNahrazovac> aNahrazovace) {
+		this.iNahrazovace = aNahrazovace;
+		final List<PopiskyNahrazovac> nahrazovace = new ArrayList<>();
 		vytvorNahrazovace(nahrazovace, pattern);
 		int n = 1;
-		for (final Nahrazovac nahr : nahrazovace) {
+		for (final PopiskyNahrazovac nahr : nahrazovace) {
 			if (nahr == NAHRBR) {
 				n++;
 			}
 		}
 		pocetRadku = n;
-		nahrazky = nahrazovace.toArray(new Nahrazovac[nahrazovace.size()]);
+		nahrazky = nahrazovace.toArray(new PopiskyNahrazovac[nahrazovace.size()]);
 	}
 
 	public String[] sestavPopisek(final Wpt wpt) {
 		int n = 0;
-		final Context ctx = new Context(wpt);
 		final String[] popisky = new String[pocetRadku];
 		final StringBuilder sb = new StringBuilder();
-		for (final Nahrazovac nahr : nahrazky) {
-			nahr.pridej(sb, ctx);
+		for (final PopiskyNahrazovac nahr : nahrazky) {
+			nahr.pridej(sb, wpt);
 			if (nahr == NAHRBR) {
 				popisky[n] = sb.toString();
 				n++;
@@ -228,11 +94,11 @@ public class SestavovacPopisku {
 		return popisky;
 	}
 
-	private void vytvorNahrazovace(final List<Nahrazovac> nahrazovace, final String vzorek) {
+	private void vytvorNahrazovace(final List<PopiskyNahrazovac> nahrazovace, final String vzorek) {
 		if (vzorek.length() == 0) {
 			return;
 		}
-		for (final Map.Entry<String, Nahrazovac> entry : sNahrazovace.entrySet()) {
+		for (final Map.Entry<String, PopiskyNahrazovac> entry : iNahrazovace.entrySet()) {
 			final int delka = entry.getKey().length();
 			final int poz = vzorek.indexOf(entry.getKey());
 			if (poz >= 0) { // našli jsme některý

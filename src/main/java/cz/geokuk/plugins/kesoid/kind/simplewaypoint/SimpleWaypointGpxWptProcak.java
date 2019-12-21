@@ -13,17 +13,16 @@ public class SimpleWaypointGpxWptProcak implements GpxWptProcak {
 	private final GpxToWptContext ctx;
 	private final GpxToWptBuilder builder;
 
-
 	@Override
 	public EProcakResult process(final GpxWpt gpxwpt) {
-		builder.expose(createSimpleWaypoint(gpxwpt).getMainWpt());
+		ctx.expose(createSimpleWaypoint(gpxwpt).getMainWpt());
 		return EProcakResult.DONE; // funguje jako výlevka, je jedno co poleme, ale musíme to už zpracovat
 	}
 
 
 
 	private SimpleWaypoint createSimpleWaypoint(final GpxWpt gpxwpt) {
-		final Wpt wpt = ctx.createWpt(gpxwpt);
+		final Wpt wpt = builder.createWpt(gpxwpt, SimpleWaypointPlugin.SIMPLEWAYPOINT);
 		wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
 
 		final SimpleWaypoint simpleWaypoint = new SimpleWaypoint();

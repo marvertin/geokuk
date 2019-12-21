@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class KesGpxWptProcak implements GpxWptProcak {
 
+
 	private static final String GC = "GC";
 	static final String GEOCACHE = "Geocache";
 	static final String GEOCACHE_FOUND = "Geocache Found";
@@ -29,11 +30,10 @@ public class KesGpxWptProcak implements GpxWptProcak {
 
 	@Override
 	public EProcakResult process(final GpxWpt gpxwpt) {
-
 		if (isGeocache(gpxwpt)) {
 			final Kes kes = createKes(gpxwpt);
 			resultKesoidsByName.put(gpxwpt.name, kes);
-			builder.expose(kes.getFirstWpt());
+			ctx.expose(kes.getFirstWpt());
 			return EProcakResult.DONE;
 		} else {
 			// TODO dodatečné waypointy též pro waymarky
@@ -59,7 +59,7 @@ public class KesGpxWptProcak implements GpxWptProcak {
 				} else {
 					kesoid.addWpt(wpt);
 				}
-				builder.expose(wpt);
+				ctx.expose(wpt);
 				return EProcakResult.DONE;
 			} else {
 				return druheKolo ? EProcakResult.NEVER // když to neumíme teď, nebudeme to umět nikdy
@@ -115,7 +115,7 @@ public class KesGpxWptProcak implements GpxWptProcak {
 		kes.setFavorit(gpxwpt.gpxg.favorites);
 		kes.setFoundTime(gpxwpt.gpxg.found);
 
-		final Wpt wpt = ctx.createWpt(gpxwpt);
+		final Wpt wpt = builder.createWpt(gpxwpt, KesPlugin.KES);
 		wpt.setSym(gpxwpt.groundspeak.type);
 		wpt.setNazev(gpxwpt.groundspeak.name); // název hlavního waypointu shodný s názvem keše
 		wpt.setZorder(EZOrder.FIRST);
@@ -129,7 +129,7 @@ public class KesGpxWptProcak implements GpxWptProcak {
 
 
 	private Wpt createAditionalWpt(final GpxWpt gpxwpt) {
-		final Wpt wpt = ctx.createWpt(gpxwpt);
+		final Wpt wpt = builder.createWpt(gpxwpt, KesPlugin.KESADWPT);
 		wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
 		final boolean rucnePridany = (gpxwpt.gpxg.flag & 1) == 0;
 		wpt.setRucnePridany(rucnePridany);

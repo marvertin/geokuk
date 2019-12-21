@@ -34,6 +34,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		if (wpt == null) {
 			return;
 		}
+		//wpt.getKesoidPlugin(); // jen kontrola, zda tam je
 		// najít konec
 		Weikoid0 weik = this;
 		while (weik.next instanceof Wpt) {

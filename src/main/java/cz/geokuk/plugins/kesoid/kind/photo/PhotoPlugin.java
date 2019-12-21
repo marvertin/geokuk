@@ -1,11 +1,16 @@
 package cz.geokuk.plugins.kesoid.kind.photo;
 
-import cz.geokuk.plugins.kesoid.KesFilter;
-import cz.geokuk.plugins.kesoid.Wpt;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.kind.*;
 
 public class PhotoPlugin implements KesoidPlugin {
+
+	public static final Kepodr PHOTO = Kepodr.of("photo");
 
 	public void inject (final KesFilter kesFilter) {
 
@@ -26,4 +31,16 @@ public class PhotoPlugin implements KesoidPlugin {
 			}
 		};
 	}
+
+
+	@Override
+	public Set<Kepodr> getKepodrs() {
+		return ImmutableSet.of(PHOTO);
+	}
+
+	@Override
+	public PopiskyDef getPopiskyDef(final Kepodr kepodr) {
+		return new PhotoPopiskyDef().doInit().build();
+	}
+
 }

@@ -48,14 +48,14 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 			{
 				final CzechGeodeticPoint cgp = createCgp(gpxwpt);
 				mapaPredTeckou.put(extrahujPrefixPredTeckou(gpxwpt), cgp);
-				builder.expose(cgp.getMainWpt());
+				ctx.expose(cgp.getMainWpt());
 				return EProcakResult.DONE;
 			}
 			case EVENT:
 			case CACHE_IN_TRASH_OUT_EVENT:
 			case MEGA_EVENT:
 			{
-				builder.expose(createCgp(gpxwpt).getMainWpt());
+				ctx.expose(createCgp(gpxwpt).getMainWpt());
 				return EProcakResult.DONE;
 			}
 			case LETTERBOX_HYBRID:
@@ -64,9 +64,9 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 					final CzechGeodeticPoint cgp2 = mapaPredTeckou.get(extrahujPrefixPredTeckou(gpxwpt));
 					if (cgp2 != null) {
 						final Wpt wpt = pridruz(cgp2, gpxwpt);
-						builder.expose(wpt);
+						ctx.expose(wpt);
 					} else {
-						builder.expose(createCgp(gpxwpt).getMainWpt());
+						ctx.expose(createCgp(gpxwpt).getMainWpt());
 					}
 					return EProcakResult.DONE;
 				} else {
@@ -130,7 +130,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 			}
 		}
 
-		final Wpt wpt = ctx.createWpt(gpxwpt);
+		final Wpt wpt = builder.createWpt(gpxwpt, CgpPlugin.CGP);
 		wpt.setName(cisloBodu);
 		urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
 		wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));
@@ -146,7 +146,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 	 * @param aGpxwpt
 	 */
 	private Wpt pridruz(final CzechGeodeticPoint cgp, final GpxWpt gpxwpt) {
-		final Wpt wpt = ctx.createWpt(gpxwpt);
+		final Wpt wpt = builder.createWpt(gpxwpt, CgpPlugin.CGP);
 		wpt.setName(gpxwpt.groundspeak.name);
 		urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
 		wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));

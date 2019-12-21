@@ -1,7 +1,7 @@
 package cz.geokuk.plugins.kesoidpopisky;
 
 import java.awt.*;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.Box;
@@ -10,8 +10,8 @@ import cz.geokuk.core.coord.EJakOtacetPriRendrovani;
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.program.FConst;
+import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.Wpt;
-import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.util.index2d.Indexator;
 
@@ -84,11 +84,7 @@ public class JPopiskySlide extends JSingleSlide0 {
 		final FontMetrics fontMetrics = g.getFontMetrics();
 		final int height2 = fontMetrics.getHeight();
 		final int posuny = fontMetrics.getDescent() - height2;
-		final EnumMap<EKesoidKind, SestavovacPopisku> sestavmapa = new EnumMap<>(EKesoidKind.class);
-		for (final Map.Entry<EKesoidKind, String> entry : popiskyModel.getData().getPatterns().asMap().entrySet()) {
-			sestavmapa.put(entry.getKey(), new SestavovacPopisku(entry.getValue()));
-		}
-
+		final Map<Kepodr, SestavovacPopisku> sestavmapa = new HashMap<>();
 		iIndexator.bound(getSoord().getBoundingRect()).stream().forEach(wpt -> {
 			if (!wpt.isMainWpt()) {
 				return;
@@ -98,7 +94,14 @@ public class JPopiskySlide extends JSingleSlide0 {
 			p.x -= 10;
 			p.y += 25;
 			g.setColor(barvaPodkladu);
-			final String[] popisky = sestavmapa.get(wpt.getKesoid().getKesoidKind()).sestavPopisek(wpt);
+			sestavmapa.computeIfAbsent(wpt.getKepodr(), kepodr ->
+			new SestavovacPopisku(popiskyModel.getData().getPatterns().asMap().get(kepodr),
+					wpt
+					.getKesoidPlugin()
+					.getPopiskyDef(kepodr)
+					.getNahrazovace())
+					);
+			final String[] popisky = sestavmapa.get(wpt.getKepodr()).sestavPopisek(wpt);
 			int stringWidth = 0;
 			for (final String popisek1 : popisky) {
 				stringWidth = Math.max(fontMetrics.stringWidth(popisek1), stringWidth);

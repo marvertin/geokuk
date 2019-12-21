@@ -30,7 +30,7 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		} else {
 			return EProcakResult.NEVER;
 		}
-		builder.expose(wm.getMainWpt());
+		ctx.expose(wm.getMainWpt());
 		return EProcakResult.DONE;
 	}
 
@@ -60,7 +60,7 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		wm.setAuthor(gpxwpt.groundspeak.placedBy);
 		wm.setHidden(gpxwpt.time);
 
-		final Wpt wpt = ctx.createWpt(gpxwpt);
+		final Wpt wpt = createWpt(gpxwpt);
 		wpt.setNazev(gpxwpt.groundspeak.name);
 		wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
 
@@ -84,7 +84,7 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		}
 		wm.setUrl(gpxwpt.link.href);
 
-		final Wpt wpt = ctx.createWpt(gpxwpt);
+		final Wpt wpt = createWpt(gpxwpt);
 		wpt.setNazev(gpxwpt.link.text);
 		wpt.setSym(odstranNadbytecneMezery(gpxwpt.type));
 
@@ -92,6 +92,11 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		wm.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
 
 		return wm;
+	}
+
+
+	private Wpt createWpt(final GpxWpt gpxwpt) {
+		return builder.createWpt(gpxwpt, WaymarkPlugin.WAYMARK);
 	}
 
 	/**

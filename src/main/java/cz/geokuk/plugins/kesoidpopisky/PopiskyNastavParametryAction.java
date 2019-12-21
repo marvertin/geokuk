@@ -6,10 +6,12 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 
 import cz.geokuk.framework.Action0;
+import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 
 public class PopiskyNastavParametryAction extends Action0 {
 
 	private static final long serialVersionUID = -2637836928166450446L;
+	private KesoidPluginManager kesoidPluginManager;
 
 	public PopiskyNastavParametryAction(final Void v) {
 		super("Nastavení popisků...");
@@ -20,8 +22,13 @@ public class PopiskyNastavParametryAction extends Action0 {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		final JPopiskyDialog frame = factory.init(new JPopiskyDialog());
+		final JPopiskyDialog frame = factory.init(new JPopiskyDialog(kesoidPluginManager));
 		frame.setVisible(true);
 	}
+
+	public void inject(final KesoidPluginManager kesoidPluginManager) {
+		this.kesoidPluginManager = kesoidPluginManager;
+	}
+
 
 }

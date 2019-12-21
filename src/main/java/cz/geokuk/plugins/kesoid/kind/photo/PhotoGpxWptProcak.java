@@ -19,7 +19,7 @@ public class PhotoGpxWptProcak implements GpxWptProcak {
 	@Override
 	public EProcakResult process(final GpxWpt gpxwpt) {
 		if (isPhoto(gpxwpt)) {
-			builder.expose(createPhoto(gpxwpt).getMainWpt());
+			ctx.expose(createPhoto(gpxwpt).getMainWpt());
 			return EProcakResult.DONE;
 		} else {
 			return EProcakResult.NEVER;
@@ -34,7 +34,7 @@ public class PhotoGpxWptProcak implements GpxWptProcak {
 
 
 	private Photo createPhoto(final GpxWpt gpxwpt) {
-		final Wpt wpt = ctx.createWpt(gpxwpt);
+		final Wpt wpt = builder.createWpt(gpxwpt, PhotoPlugin.PHOTO);
 		wpt.setSym(gpxwpt.sym);
 
 		final Photo photo = new Photo();

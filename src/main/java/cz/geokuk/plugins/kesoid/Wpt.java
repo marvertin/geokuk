@@ -75,8 +75,12 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 
 	/** Plugin pomocí něhož byl waypoint stvořen. Použije se při
 	 * pro polymorfismus chování různých kešoidů */
-	@Getter @Setter
+	@Setter
 	private KesoidPlugin kesoidPlugin;
+
+	/** Poddruh kešoidu */
+	@Getter @Setter
+	private Kepodr kepodr;
 
 	public static void invalidateAllSklivec() {
 		currentSklivecValidityCode++;
@@ -341,6 +345,13 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		}
 		// vynechat mě, když vím, že ukazuje na mě. Pokud jsme byl v kruhu sám, nestalo se nic.
 		weikoid.next = weikoid.next.next;
+	}
+
+	public KesoidPlugin getKesoidPlugin() {
+		if (kesoidPlugin == null) {
+			throw new NullPointerException(this.getNazev() + " nemá kesoidPlugin");
+		}
+		return kesoidPlugin;
 	}
 
 

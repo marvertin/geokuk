@@ -16,5 +16,7 @@ public interface GpxToWptContext {
 
 	Set<Alela> definujUzivatslskeAlely(final GpxWpt gpxwpt);
 
-	Wpt createWpt(GpxWpt gpxwpt);
+	void expose(Wpt wpt);
+
+
 }

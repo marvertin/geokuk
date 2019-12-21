@@ -105,7 +105,16 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 	@Override
 	public void init() {
 		wpts = new LinkedList<Wpt>();
-		gpxWptDispatcher = kesoidPluginManager.createGpxWptProcakDispatcher(this, wpts::add);
+		gpxWptDispatcher = kesoidPluginManager.createGpxWptProcakDispatcher(this,
+				(gpxwpt, kepodr) -> {
+					final Wpt wpt = new Wpt();
+					wpt.setKepodr(kepodr);
+					wpt.setWgs(gpxwpt.wgs);
+					wpt.setElevation(urciElevation(gpxwpt));
+					wpt.setName(gpxwpt.name);
+					wpt.setNazev(vytvorNazev(gpxwpt));
+					return wpt;
+				});
 	}
 	/*
 	 * (non-Javadoc)
@@ -192,15 +201,6 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 	}
 
 
-	@Override
-	public Wpt createWpt(final GpxWpt gpxwpt) {
-		final Wpt wpt = new Wpt();
-		wpt.setWgs(gpxwpt.wgs);
-		wpt.setElevation(urciElevation(gpxwpt));
-		wpt.setName(gpxwpt.name);
-		wpt.setNazev(vytvorNazev(gpxwpt));
-		return wpt;
-	}
 
 	@Override
 	public Set<Alela> definujUzivatslskeAlely(final GpxWpt gpxwpt) {
@@ -274,6 +274,11 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 	@Override
 	public GpxWpt get(final String name) {
 		return gpxwpts.get(name);
+	}
+
+	@Override
+	public void expose(final Wpt wpt) {
+		wpts.add(wpt);
 	}
 
 

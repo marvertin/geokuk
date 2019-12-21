@@ -23,7 +23,7 @@ public class MunzeeGpxWptProcak implements GpxWptProcak {
 	public EProcakResult process(final GpxWpt gpxwpt) {
 		if (isMunzee(gpxwpt)) {
 			final Munzee munzee = createMunzee(gpxwpt);
-			builder.expose(munzee.getMainWpt());
+			ctx.expose(munzee.getMainWpt());
 			return EProcakResult.DONE;
 		} else {
 			return EProcakResult.NEVER;
@@ -51,7 +51,7 @@ public class MunzeeGpxWptProcak implements GpxWptProcak {
 		mz.setAuthor(gpxwpt.groundspeak.placedBy);
 		mz.setHidden(gpxwpt.time);
 
-		final Wpt wpt = ctx.createWpt(gpxwpt);
+		final Wpt wpt = builder.createWpt(gpxwpt, MunzeePlugin.MUNZEE);
 		wpt.setNazev(gpxwpt.groundspeak.name);
 		if (gpxwpt.name.startsWith(MZ)) {
 			wpt.setSym("MZ " + odstranNadbytecneMezery(gpxwpt.groundspeak.type));
