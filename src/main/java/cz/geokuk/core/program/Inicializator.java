@@ -13,7 +13,7 @@ import cz.geokuk.core.render.RenderModel;
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.cesty.*;
 import cz.geokuk.plugins.geocoding.GeocodingModel;
-import cz.geokuk.plugins.kesoid.KesFilter;
+import cz.geokuk.plugins.kesoid.KesoidFilterModel;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoidkruhy.KruhyModel;
@@ -54,7 +54,7 @@ public class Inicializator {
 		bb.registerSigleton(new VyletModel());
 		bb.registerSigleton(new CestyNacitaniKesoiduWatchDog());
 		bb.registerSigleton(new VyletNacitaniKesoiduWatchDog());
-		bb.registerSigleton(new KesFilter());
+		bb.registerSigleton(new KesoidFilterModel());
 		bb.registerSigleton(new PopiskyModel());
 		bb.registerSigleton(new KruhyModel());
 		bb.registerSigleton(new ObsazenostModel());

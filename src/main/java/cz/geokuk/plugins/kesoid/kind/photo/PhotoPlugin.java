@@ -4,17 +4,14 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-import cz.geokuk.plugins.kesoid.*;
+import cz.geokuk.plugins.kesoid.Kepodr;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.kind.*;
 
 public class PhotoPlugin implements KesoidPlugin {
 
 	public static final Kepodr PHOTO = Kepodr.of("photo");
-
-	public void inject (final KesFilter kesFilter) {
-
-	}
 
 	@Override
 	public GpxWptProcak createGpxWptProcak(final GpxToWptContext ctx, final GpxToWptBuilder builder) {

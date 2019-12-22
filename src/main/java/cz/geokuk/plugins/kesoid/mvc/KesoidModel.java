@@ -30,7 +30,7 @@ import lombok.Getter;
 public class KesoidModel extends Model0 {
 
 	// Datamodelu
-	private KesFilter filter;
+	private KesoidFilterModel filter;
 	private QualAlelaNames jmenaAlelNaToolbaru;
 	private QualAlelaNames jmenaNefenotypovanychAlel;
 	private String jmenoSady = "neznama-sada";
@@ -70,7 +70,7 @@ public class KesoidModel extends Model0 {
 		return filter.getFilterDefinition().copy();
 	}
 
-	public KesFilter getFilter() {
+	public KesoidFilterModel getFilter() {
 		return filter;
 	}
 
@@ -97,7 +97,7 @@ public class KesoidModel extends Model0 {
 		return gsakParametryNacitani;
 	}
 
-	public void inject(final KesFilter filter) {
+	public void inject(final KesoidFilterModel filter) {
 		this.filter = filter;
 	}
 

@@ -25,7 +25,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 	private final KesBag vsechny;
 	private final int cisloFiltrovani;
 	private long startTime;
-	private final KesFilter kesfilter;
+	private final KesoidFilterModel kesoidFilterModel;
 	private final ProgressModel progresModel;
 
 	private final KesoidModel kesoidModel;
@@ -34,9 +34,9 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 	 * @param aBoard
 	 * @param aKesList
 	 */
-	public KesFilteringSwingWorker(final KesBag vsechny, final KesFilter kesFilter, final KesoidModel kesoidModel, final ProgressModel progresModel) {
+	public KesFilteringSwingWorker(final KesBag vsechny, final KesoidFilterModel kesoidFilterModel, final KesoidModel kesoidModel, final ProgressModel progresModel) {
 		this.vsechny = vsechny;
-		kesfilter = kesFilter;
+		this.kesoidFilterModel = kesoidFilterModel;
 		this.kesoidModel = kesoidModel;
 		this.progresModel = progresModel;
 		cisloFiltrovani = ++citac;
@@ -58,7 +58,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 			final BlockingQueue<Wpt> queue = new LinkedBlockingDeque<>();
 			log.debug("FILTERING {} - start, source: {} caches, {}={} waypoints.", cisloFiltrovani, vsechny2.getKesoidy().size(), pocetvsech, vsechny2.getIndexator().count(BoundingRect.ALL));
 			startTime = System.currentTimeMillis();
-			kesfilter.init();
+			final KesoidFilter filter = kesoidFilterModel.createKesoidFilter();
 			new Thread((Runnable) () -> {
 				try {
 					int citac = 0;
@@ -67,8 +67,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 						if (isCancelled()) {
 							return;
 						}
-						// TEn genotyp se předává jen z důvodu optimalizace
-						if (kesfilter.isFiltered(wpt)) {
+						if (filter.isFiltered(wpt)) {
 							queue.put(wpt);
 						}
 						citac++;
@@ -88,7 +87,6 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 				}
 				kesbag.add(wpt);
 			}
-			kesfilter.done();
 			log.debug("FILTERING {} - prepared result, {} ms.", cisloFiltrovani, System.currentTimeMillis() - startTime);
 			kesbag.done();
 			progressor.finish();
