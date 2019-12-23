@@ -6,7 +6,6 @@
     <property name="launch4j.dir" location="C:\Program Files (x86)\Launch4j"/>
     <property name="backupsrcdir" location="a:\\backup\\geokuk"/>
 
-    <property name="imagesddir" location="${basedir}/src/main/resources/img"/>
     <property file="v:/users/tatinek/Heslo ke ftp.geokuk.cz na gigaserveru.properties"/>
 
     <tstamp>
@@ -140,19 +139,6 @@
 
     <target name="distrib" depends="build, ftp">
     </target>
-
-
-    <target name="imagesdirlist">
-        <pathconvert property="imgResourceList" pathsep="&#13;&#10;" dirsep="/">
-            <fileset dir="${imagesddir}/map"/>
-            <dirset dir="${imagesddir}/map" includes="*/**"/>
-            <map from="${imagesddir}/" to=""/>
-        </pathconvert>
-
-        <echo file="${imagesddir}/content.txt">${imgResourceList}</echo>
-        <echo>Vytvoren soubor "${imagesddir}/content.txt"</echo>
-    </target>
-
 
     <target name="exe" depends="ikony">
         <taskdef name="launch4j"

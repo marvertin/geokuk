@@ -40,7 +40,7 @@ public class IkonNacitacLoader {
 		}
 		// Nejdříve skenovat, čímž také zjistíme, zda došlo ke změně
 		final MultiFolder mf = new MultiFolder();
-		mf.addResourceTree("img");
+		mf.addResourceTree();
 		if (imageMyDir != null) {
 			mf.addFolderTree(imageMyDir);
 		}

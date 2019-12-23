@@ -158,7 +158,14 @@
 		    <version>1.18.10</version>
 		    <scope>provided</scope>
 		</dependency>
-		
+
+		<!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
+		<dependency>
+		    <groupId>org.reflections</groupId>
+		    <artifactId>reflections</artifactId>
+		    <version>0.9.10</version>
+		</dependency>
+				
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
