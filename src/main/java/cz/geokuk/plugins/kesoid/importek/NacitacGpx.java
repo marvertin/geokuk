@@ -10,12 +10,10 @@ import java.util.zip.ZipEntry;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.common.collect.Sets;
 
 import cz.geokuk.core.coordinates.Wgs;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -24,9 +22,10 @@ import cz.geokuk.core.coordinates.Wgs;
 /**
  * @author Martin Veverka
  */
+@Slf4j
 public class NacitacGpx extends NacitacInputStream0 {
 
-	private static final Logger log = LogManager.getLogger(NacitacGpx.class.getSimpleName());
+
 
 	private static String TOPOGRAFIC_NAMESPACE_1_0 = "http://www.topografix.com/GPX/1/0";
 	private static String TOPOGRAFIC_NAMESPACE_1_1 = "http://www.topografix.com/GPX/1/1";

@@ -3,9 +3,6 @@ package cz.geokuk.plugins.cesty;
 import java.io.*;
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.program.FConst;
@@ -14,10 +11,11 @@ import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.importek.NacitacGpx;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CestyZperzistentnovac {
 
-	private static final Logger log = LogManager.getLogger(CestyZperzistentnovac.class.getSimpleName());
 
 	private int smimCist;
 

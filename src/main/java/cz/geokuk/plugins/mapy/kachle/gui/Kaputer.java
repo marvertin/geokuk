@@ -16,7 +16,7 @@ import cz.geokuk.plugins.mapy.kachle.data.KaLoc;
  */
 public class Kaputer {
 
-	// private static final Logger log = LogManager.getLogger(Kaputer.class.getSimpleName());
+	// 
 
 	public static final int KACHLE_BITS = Coord.MOUMER_0_BITS;
 	public static final int KACHLE_PIXELS = 1 << KACHLE_BITS; // 256

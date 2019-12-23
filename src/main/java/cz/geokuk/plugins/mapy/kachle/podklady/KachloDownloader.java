@@ -8,12 +8,11 @@ import java.util.EnumMap;
 
 import javax.imageio.ImageIO;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.util.pocitadla.Pocitadlo;
 import cz.geokuk.util.pocitadla.PocitadloRoste;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class KachloDownloader {
 
 	/**
@@ -30,7 +29,7 @@ public class KachloDownloader {
 		}
 	}
 
-	private static final Logger log = LogManager.getLogger(KachloDownloader.class.getSimpleName());
+
 
 	private final Pocitadlo pocitDownloadleDlazdice = new PocitadloRoste("Downloadlé dlaždice", "Počet dlaždic, které byly downloadovány.");
 

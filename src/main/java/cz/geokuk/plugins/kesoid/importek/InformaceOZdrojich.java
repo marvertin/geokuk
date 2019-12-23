@@ -3,11 +3,10 @@ package cz.geokuk.plugins.kesoid.importek;
 import java.io.File;
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.util.file.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class InformaceOZdrojich {
 	public class Builder {
 		/**
@@ -88,7 +87,6 @@ public class InformaceOZdrojich {
 		Map<KeFile, InformaceOZdroji> map = new LinkedHashMap<>();
 	}
 
-	private static final Logger log = LogManager.getLogger(GeogetLoader.class.getSimpleName());
 
 	private final Map<Root, Strom> stromy = new LinkedHashMap<>();
 

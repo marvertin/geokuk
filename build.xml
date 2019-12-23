@@ -64,7 +64,7 @@
     </target>
 
 
-    <target name="clesses" depends="init, imagesdirlist">
+    <target name="clesses" depends="init">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" encoding="utf-8">
             <src path="src"/>

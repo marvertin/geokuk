@@ -3,17 +3,16 @@ package cz.geokuk.util.exception;
 import java.io.*;
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.util.file.RefinedWhiteWriter;
 import cz.geokuk.util.lang.ATimestamp;
 import cz.geokuk.util.lang.FThrowable;
 import cz.geokuk.util.lang.FThrowable.ThrowableAndSourceMethod;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Vypisovač výjimek. Velmi lehký objekt, který naformátuje výjimku a pošle ji do repozitoře.
  */
+@Slf4j
 public class ExceptionDumper {
 
 	private class AditionalInfoEntry {
@@ -55,7 +54,6 @@ public class ExceptionDumper {
 		}
 	}
 
-	private static final Logger log = LogManager.getLogger(ExceptionDumper.class.getSimpleName());
 	/** Signleton proměnná pri implicitní repozitoř */
 
 	private final List<AditionalInfoEntry> iStackx = new ArrayList<>();
@@ -192,7 +190,7 @@ public class ExceptionDumper {
 				pwrt.println();
 				pwrt.println();
 				// if (DeveloperSettingBase.cfg.isPrintDumpedExceptionMessageToStdErr()) {
-				log.error(Arrays.asList(aCircumstances));
+				log.error("{}", Arrays.asList(aCircumstances));
 				FThrowable.printStackTrace(throwable, System.err, "dump-" + id);
 				log.error("ERR");
 				log.error("OUT");
@@ -298,8 +296,8 @@ public class ExceptionDumper {
 			final FThrowable.ThrowableAndSourceMethod method = throwableChain[i];
 			final String prefix = "EXC-" + FThrowable.getExceptionNumber(aThrowable) + ": ";
 			pwrt.println("    " + prefix + "<span style='color: green'>" + (i + 1) + "/" + throwableChain.length + "</span> "
-			        + (method.getSourceMethod() == null ? "" : "<span style='color: darkmagenta'>" + method.getSourceMethod().getName() + "()" + "</span>: ") + "<span style='color: blue'>"
-			        + method.getThrowable().getClass().getName() + "</span> : <span style='color: red'>" + method.getThrowable().getMessage() + "</span>");
+					+ (method.getSourceMethod() == null ? "" : "<span style='color: darkmagenta'>" + method.getSourceMethod().getName() + "()" + "</span>: ") + "<span style='color: blue'>"
+					+ method.getThrowable().getClass().getName() + "</span> : <span style='color: red'>" + method.getThrowable().getMessage() + "</span>");
 		}
 	}
 

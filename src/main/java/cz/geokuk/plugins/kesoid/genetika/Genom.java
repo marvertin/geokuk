@@ -3,17 +3,14 @@ package cz.geokuk.plugins.kesoid.genetika;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.util.lang.CCounterMap;
 import cz.geokuk.util.lang.CounterMap;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Genom {
 
 	final String ODDELOVAC_KVALIFOVANY = ":";
-
-	private static final Logger log = LogManager.getLogger(Genom.class.getSimpleName());
 
 	private final Map<String, Alela> alely = new LinkedHashMap<>();
 

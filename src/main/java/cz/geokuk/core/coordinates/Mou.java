@@ -1,16 +1,10 @@
 package cz.geokuk.core.coordinates;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 /**
  * Mapy.cz coordinates.
  */
 
 public class Mou extends Misto0 {
-
-	@SuppressWarnings("unused")
-	private static final Logger log = LogManager.getLogger(Mou.class.getSimpleName());
 
 	public final int xx;
 	public final int yy;

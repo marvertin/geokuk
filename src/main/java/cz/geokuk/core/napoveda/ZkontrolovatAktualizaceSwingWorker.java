@@ -8,17 +8,16 @@ import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.util.process.BrowserOpener;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVerze, Void> {
 
-	private static final Logger log = LogManager.getLogger(ZkontrolovatAktualizaceSwingWorker.class.getSimpleName());
+
 
 	private final boolean zobrazitDialogPriPosledniVerzi;
 	private final NapovedaModel napovedaModel;
@@ -43,7 +42,7 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
 			final List<ZpravaUzivateli> zpravy = nactiSeznamZprav(br);
 			br.close();
 			for (final ZpravaUzivateli zpravaUzivateli : zpravy) {
-				log.debug(zpravaUzivateli);
+				log.debug("Zprava uzivateli: {}", zpravaUzivateli);
 			}
 			log.info("Posledni verze: '" + lastVersion + "' ");
 			return new ZpravyAVerze(zpravy, lastVersion);
@@ -65,8 +64,8 @@ public class ZkontrolovatAktualizaceSwingWorker extends MySwingWorker0<ZpravyAVe
 		} else {
 			final Object[] options = { "Zobrazit web", "Stáhnout nejnovější verzi", "Připomenout příště" };
 			final int n = JOptionPane.showOptionDialog(Dlg.parentFrame(),
-			        "<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " + "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + vysledek.lastVersion + ".",
-			        "Spuštění nové verze", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+					"<html></b>Používaná verze programu Geokuk <b>" + FConst.VERSION + "</b> " + "není poslední distribuovanou verzí. Poslední distribuovaná verze je " + vysledek.lastVersion + ".",
+					"Spuštění nové verze", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 			switch (n) {
 			case 0:
 				zobrazitWeb();

@@ -7,22 +7,21 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.api.mapicon.Drawer0;
 import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class IconDefNacitac {
 
 	/**
 	 *
 	 */
 
-	private static final Logger log = LogManager.getLogger(IconDefNacitac.class.getSimpleName());
+
 
 	// TODO : The alelas should have a more generic name
 	private static Pattern pat = Pattern.compile("([a-z0-9]+!)*([^_]*)((?:_[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮa-zA-z -]+)*)(_x-?[0-9]+)*(_y-?[0-9]+)*(_p[0-9])*\\.([a-z]+)");

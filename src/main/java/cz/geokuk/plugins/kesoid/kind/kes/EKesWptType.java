@@ -1,19 +1,19 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Typy waypoint. N2které předdefinované jsou zde. Není to ale výčet typů, protože mohou být nahrávány adhok typy.
  *
  * @author Martin Veverka
  */
+@Slf4j
 public enum EKesWptType {
-    // CACHE,
+	// CACHE,
 	FINAL_LOCATION, STAGES_OF_A_MULTICACHE, QUESTION_TO_ANSWER, REFERENCE_POINT, PARKING_AREA, TRAILHEAD;
 
 	@SuppressWarnings("unused")
-	private static final Logger log = LogManager.getLogger(EKesWptType.class.getSimpleName());
+
 
 	public static EKesWptType decode(final String aKesWptTpeStr) {
 		try {

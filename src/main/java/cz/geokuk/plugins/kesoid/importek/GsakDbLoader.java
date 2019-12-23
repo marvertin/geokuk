@@ -13,9 +13,6 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 
@@ -25,6 +22,7 @@ import cz.geokuk.plugins.kesoid.kind.kes.EKesType;
 import cz.geokuk.plugins.kesoid.mvc.GsakParametryNacitani;
 import cz.geokuk.util.lang.ATimestamp;
 import cz.geokuk.util.lang.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Loads data from a GSAK database.
@@ -33,8 +31,8 @@ import cz.geokuk.util.lang.StringUtils;
  *
  * @since ISSUE#48 [2016-04-01, Bohusz]
  */
+@Slf4j
 public class GsakDbLoader extends Nacitac0 {
-	private static final Logger log = LogManager.getLogger(GsakDbLoader.class.getSimpleName());
 
 	private static int PROGRESS_VAHA_CACHES = 1;
 	private static int PROGRESS_VAHA_WAYPOINTS = 16;
@@ -46,7 +44,7 @@ public class GsakDbLoader extends Nacitac0 {
 
 	private static final ImmutableSet<String> SUPPORTED_FILE_EXTENSIONS = ImmutableSet.of("db3");
 	private static final ImmutableSet<String> EXPECTED_TABLES = ImmutableSet.of("Attributes", "CacheImages", "CacheMemo", "Caches", "Corrected", "Custom", "Filter", "Ignore", "LogImages", "LogMemo",
-	        "Logs");
+			"Logs");
 
 	private final Supplier<GsakParametryNacitani> parametryNačítání;
 
@@ -71,7 +69,7 @@ public class GsakDbLoader extends Nacitac0 {
 			if (e.getMessage().contains("no such collation sequence:")) {
 				// TODO: Nějak lépe zakomunikovat s uživatelem, nelíbí se mi, že že v BIZ třídě je interakce, ale nevím jak jinak. [ISSUE#48, 2016-04-09, Bohusz]
 				Dlg.info("Databázový soubor \"" + aDbFile + "\" obsahuje nestandardní řazení.\n\nMělo by postačit databázi na chvíli vybrat jako aktivní, GSAK ji automaticky opraví.",
-				        "GSAK soubor je zastaralý");
+						"GSAK soubor je zastaralý");
 				return;
 			}
 			throw new IOException("Unable to load from " + aDbFile, e);
@@ -385,10 +383,10 @@ public class GsakDbLoader extends Nacitac0 {
 		}
 		public static EGsakCacheType fromGsakCode(final String aGsakCode) {
 			return Arrays.stream(EGsakCacheType.values())//
-			.filter(v -> v.name().equalsIgnoreCase(aGsakCode))//
-			.findFirst()
-			.orElse(UNRECOGNIZED)
-			;
+					.filter(v -> v.name().equalsIgnoreCase(aGsakCode))//
+					.findFirst()
+					.orElse(UNRECOGNIZED)
+					;
 		}
 		@SuppressWarnings("unused")
 		public EKesType toGeokukType() {
@@ -472,10 +470,10 @@ public class GsakDbLoader extends Nacitac0 {
 				}
 			}
 			final boolean tablesMissing = aExpectedTables.stream()//
-			        .filter(expected -> !tables.contains(expected))//
-			        .findFirst()//
-			        .isPresent()//
-			;
+					.filter(expected -> !tables.contains(expected))//
+					.findFirst()//
+					.isPresent()//
+					;
 			return !tablesMissing;
 		}
 
@@ -527,30 +525,30 @@ public class GsakDbLoader extends Nacitac0 {
 		private <T> void loadPojo(final ResultSet aResultSet, final T aPojo) throws SQLException {
 			//System.out.println("***** " + columnNames(aResultSet));
 			Arrays.stream(aPojo.getClass().getDeclaredFields()) //
-			        .filter(f -> Modifier.isPublic(f.getModifiers())) //
-			        .filter(f -> !Modifier.isStatic(f.getModifiers())) //
-			        .forEach(f -> {
-				        try {
-					        final String name = f.getName();
-					        final Class<?> type = f.getType();
+			.filter(f -> Modifier.isPublic(f.getModifiers())) //
+			.filter(f -> !Modifier.isStatic(f.getModifiers())) //
+			.forEach(f -> {
+				try {
+					final String name = f.getName();
+					final Class<?> type = f.getType();
 
-					        if (type == String.class) {
-						        f.set(aPojo, aResultSet.getString(name));
-					        } else if (type == boolean.class) {
-						        f.set(aPojo, aResultSet.getInt(name) == 1);
-					        } else if (type == int.class) {
-						        f.set(aPojo, aResultSet.getInt(name));
-					        } else if (type == double.class) {
-						        f.set(aPojo, aResultSet.getDouble(name));
-					        } else if (type == BigDecimal.class) {
-						        f.set(aPojo, aResultSet.getBigDecimal(name));
-					        } else {
-						        throw new IllegalStateException("Unknon type " + type.getSimpleName() + " of field " + name);
-					        }
-				        } catch (final IllegalAccessException | SQLException e) {
-					        throw new RuntimeException("Error reading " + aPojo.getClass().getSimpleName(), e);
-				        }
-			        });
+					if (type == String.class) {
+						f.set(aPojo, aResultSet.getString(name));
+					} else if (type == boolean.class) {
+						f.set(aPojo, aResultSet.getInt(name) == 1);
+					} else if (type == int.class) {
+						f.set(aPojo, aResultSet.getInt(name));
+					} else if (type == double.class) {
+						f.set(aPojo, aResultSet.getDouble(name));
+					} else if (type == BigDecimal.class) {
+						f.set(aPojo, aResultSet.getBigDecimal(name));
+					} else {
+						throw new IllegalStateException("Unknon type " + type.getSimpleName() + " of field " + name);
+					}
+				} catch (final IllegalAccessException | SQLException e) {
+					throw new RuntimeException("Error reading " + aPojo.getClass().getSimpleName(), e);
+				}
+			});
 		}
 
 		private List<String> columnNames(final ResultSet aResultSet) throws SQLException {
@@ -576,7 +574,7 @@ public class GsakDbLoader extends Nacitac0 {
 		public String CacheType;
 		//          public String Changed;
 		public String Container;
-		         public String County;
+		public String County;
 		public String Country;
 		//          public double Degrees;
 		public String Difficulty;
@@ -620,8 +618,8 @@ public class GsakDbLoader extends Nacitac0 {
 		//          public int UserSort;
 		//          public boolean Watch;
 		//          public boolean IsOwner;
-		          public double LatOriginal;
-		          public double LonOriginal;
+		public double LatOriginal;
+		public double LonOriginal;
 		//          public String Created;
 		//          public String Status;
 		//          public String Color;

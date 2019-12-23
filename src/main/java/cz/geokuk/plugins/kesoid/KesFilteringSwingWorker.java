@@ -5,21 +5,20 @@ package cz.geokuk.plugins.kesoid;
 
 import java.util.concurrent.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.index2d.BoundingRect;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  */
+@Slf4j
 public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 
 
-	private static final Logger log = LogManager.getLogger(KesFilteringSwingWorker.class.getSimpleName());
+
 
 	private static int citac;
 	private final KesBag vsechny;

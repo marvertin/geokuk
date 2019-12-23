@@ -1,15 +1,15 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by dan on 16.7.14.
  */
+@Slf4j
 public enum EKesDiffTerRating {
 	ONE, ONE_HALF, TWO, TWO_HALF, THREE, THREE_HALF, FOUR, FOUR_HALF, FIVE, UNKNOWN;
 
-	private static final Logger log = LogManager.getLogger(EKesDiffTerRating.class.getSimpleName());
+
 
 	public static EKesDiffTerRating parse(final String toParse) {
 		if (toParse == null) {

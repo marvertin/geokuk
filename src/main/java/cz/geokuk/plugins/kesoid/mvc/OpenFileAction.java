@@ -5,15 +5,13 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.framework.Action0;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class OpenFileAction extends Action0 {
 
 	private static final long serialVersionUID = 9155605907779458631L;
-
-	private final Logger log = org.apache.logging.log4j.LogManager.getLogger(OpenFileAction.class.getSimpleName());
 
 	private final File fileToOpen;
 

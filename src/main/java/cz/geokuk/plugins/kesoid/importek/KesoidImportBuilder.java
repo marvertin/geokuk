@@ -2,9 +2,6 @@ package cz.geokuk.plugins.kesoid.importek;
 
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.framework.ProgressModel;
 import cz.geokuk.framework.Progressor;
 import cz.geokuk.plugins.kesoid.*;
@@ -15,10 +12,12 @@ import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mvc.GccomNick;
 import cz.geokuk.util.file.KeFile;
 import cz.geokuk.util.procak.ProcakDispatcher;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 
-	private static final Logger log = LogManager.getLogger(KesoidImportBuilder.class.getSimpleName());
+
 
 	private static final String PREFIX_BEZEJMENNYCH_WAYPOINTU = "Geokuk";
 	static final String GEOCACHE = "Geocache";

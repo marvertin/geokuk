@@ -1,4 +1,4 @@
-/**
+/**next problem
  *
  */
 package cz.geokuk.plugins.cesty;
@@ -8,21 +8,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.cesty.data.Cesta;
 import cz.geokuk.plugins.cesty.data.Doc;
 import cz.geokuk.plugins.kesoid.KesBag;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  *
  */
+@Slf4j
 public class CestyOtevriSwingWorker extends MySwingWorker0<Doc, Void> {
 
-	private static final Logger log = LogManager.getLogger(CestyOtevriSwingWorker.class.getSimpleName());
+
 
 	private final CestyZperzistentnovac cestyZperzistentnovac;
 	private final KesBag kesBag;

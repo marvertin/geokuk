@@ -3,19 +3,17 @@ package cz.geokuk.plugins.mapy.kachle.gui;
 import java.awt.Component;
 import java.awt.Graphics;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.plugins.mapy.kachle.data.Ka;
 import cz.geokuk.plugins.mapy.kachle.podklady.Priority;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JKachlovnikRendrovaci extends JKachlovnik {
 
 	public interface Progressor {
 		void setProgress(int value, int maxlue);
 	}
 
-	private static final Logger log = LogManager.getLogger(JKachlovnikRendrovaci.class.getSimpleName());
 
 	private static final long serialVersionUID = -3170605712662727739L;
 	private Progressor progressor;

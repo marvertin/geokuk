@@ -6,8 +6,8 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -23,6 +23,7 @@ import cz.geokuk.plugins.mapy.kachle.podklady.KachloDownloader.EPraznyObrazek;
 import cz.geokuk.util.exception.*;
 import cz.geokuk.util.pocitadla.*;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * V novém pojetí zodpovídá za získávání kachlí z disku, paměti i downloadování.
@@ -30,6 +31,7 @@ import lombok.Data;
  * @author Martin Veverka
  *
  */
+@Slf4j
 public class KachleZiskavac {
 
 	/**
@@ -236,7 +238,7 @@ public class KachleZiskavac {
 		private final Priority priority;
 		private final ListeningExecutorService disk;
 		private final ListeningExecutorService web;
-		private final Logger log;
+		private final org.slf4j.Logger log;
 
 		private BlockingQueue<Runnable> diskQueue;
 		private BlockingQueue<Runnable> webQueue;
@@ -254,13 +256,13 @@ public class KachleZiskavac {
 		// ExecutorService nedekorovanyServisProZjisteni
 	}
 
-	private static final Logger log = LogManager.getLogger(KachleZiskavac.class.getSimpleName() + "_diskWrite");
+
 
 	private static Pocitadlo pocitPlneniImageDoZnicenychKachli = new PocitadloRoste("ka56 #duplicitně přijaté obrázky",
-	        "Počítá, kolikrát se stáhla kachle duplicitně, tedy když už díky plnění jiného poždavku byla naplněna a požadavek nebyl všas zkanclován.");
+			"Počítá, kolikrát se stáhla kachle duplicitně, tedy když už díky plnění jiného poždavku byla naplněna a požadavek nebyl všas zkanclován.");
 
 	private static Pocitadlo pocitBrzdeniOfflineKdyzJeOnline = new PocitadloRoste("ka61 #počet brzdení dávkového downloadu",
-	        "Počítá, kolikrát se o 100 ms zbrzdilo dávkové dotahování, protože běžel online.");
+			"Počítá, kolikrát se o 100 ms zbrzdilo dávkové dotahování, protože běžel online.");
 
 	private static final int MAXIMALNI_POCET_UKLADANYCH_KACHLI_V_JEDNOM_CHUNKU = 300;
 
@@ -277,50 +279,50 @@ public class KachleZiskavac {
 	private static final int NTHREADS_DISK = 2;
 
 	private final Pocitadlo pocitSubmitJednaDlazdice = new PocitadloRoste("ka01 Počet požadavků na jednu dlaždici",
-	        "Kolikrát byl nakonec zadán požadavek na získání jedné dlaždice z jedné vrstvy. Tedy pokud zobrazujeme mapu s turistickými trasami a cyklotrasami, je dlaždice na podklad, na turistickou i na cyklo počítána zvlášť.");
+			"Kolikrát byl nakonec zadán požadavek na získání jedné dlaždice z jedné vrstvy. Tedy pokud zobrazujeme mapu s turistickými trasami a cyklotrasami, je dlaždice na podklad, na turistickou i na cyklo počítána zvlášť.");
 
 	private final Pocitadlo pocitMemZasah = new PocitadloRoste("ka11 MEM cache #zásahů",
-	        "Kolikrát se podařilo hledanou dlaždici zasáhnout v paměti. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
+			"Kolikrát se podařilo hledanou dlaždici zasáhnout v paměti. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
 
 	private final Pocitadlo pocitMemMinuti = new PocitadloRoste("ka12 MEM cache #minutí",
-	        "Kolikrát se nepodařilo hledanou dlaždici v paměťové keši nalézt a co se dělo dál není tímto atributem určeno..");
+			"Kolikrát se nepodařilo hledanou dlaždici v paměťové keši nalézt a co se dělo dál není tímto atributem určeno..");
 
 	private final Pocitadlo pocitMemZameteni = new PocitadloRoste("ka13 MEM cache #zametených", "Počet obrázků, které garbage collector zametrl pryč a my díky tomu odstranili referenci z keše.");
 
 	private final PocitadloRoste pocitDiskLoadSubmit = new PocitadloRoste("ka21 DISK cache #požadovaných",
-	        "Kolikrát bylo požadováno číst dlaždici z disku. Obsahuje všechny zásahy, minutí, chyby a také skutečně zknclované čtení");
+			"Kolikrát bylo požadováno číst dlaždici z disku. Obsahuje všechny zásahy, minutí, chyby a také skutečně zknclované čtení");
 
 	private final PocitadloRoste pocitDiskLoadZasah = new PocitadloRoste("ka22 DISK cache #zásahů",
-	        "Kolikrát se podařilo hledanou dlaždici zasáhnout na disku, tedy naloadovat. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
+			"Kolikrát se podařilo hledanou dlaždici zasáhnout na disku, tedy naloadovat. Číslo stále roste a mělo by být ve srovnání s ostatními zásahy co největší.");
 
 	private final PocitadloRoste pocitDiskLoadMinuti = new PocitadloRoste("ka23 DISK cache #minutí",
-	        "Kolikrát se nepodařilo hledanou dlaždici v paměťové keši minout, co se dělo dál není tímto atributem určeno..");
+			"Kolikrát se nepodařilo hledanou dlaždici v paměťové keši minout, co se dělo dál není tímto atributem určeno..");
 
 	private final PocitadloRoste pocitDiskLoadError = new PocitadloRoste("ka24 DISK cache #chyb čtení", "Kolikrát selhalo čtení dlaždich z disku.");
 
 	private final PocitadloRoste pocitDownloadWebSubmit = new PocitadloRoste("ka31 WEB #požadovaných",
-	        "Kolikrát bylo požadováno číst dlaždici z webu. Vždy poté, co se nenašly na disku.disku. Obsahuje všechny úspěšně i neúspěšně načtené a také zkanclované");
+			"Kolikrát bylo požadováno číst dlaždici z webu. Vždy poté, co se nenašly na disku.disku. Obsahuje všechny úspěšně i neúspěšně načtené a také zkanclované");
 
 	private final PocitadloRoste pocitDownloadWebOk = new PocitadloRoste("ka32 WEB #načtených", "Kolikrát se muselo hledanou kachli stáhnout z webu a to úspěšně.");
 
 	private final PocitadloRoste pocitDownloadWebError = new PocitadloRoste("ka33 WEB #chyb", "Kolikrát downloadování dlaždice zahlásilo chybu.");
 
 	private final PocitadloRoste pocitZapsanoChunkuNaDisk = new PocitadloRoste("ka41 disk write #bloků",
-	        "V kolika diskovžch operacích byl prováděn zápis na disk. Z důvodu optimalizace se zápisy na disk združují do větších bloků.");
+			"V kolika diskovžch operacích byl prováděn zápis na disk. Z důvodu optimalizace se zápisy na disk združují do větších bloků.");
 
 	private final PocitadloRoste pocitZapsanoNaDisk = new PocitadloRoste("ka42 disk write #dlaždic", "Kolik dlaždic bylo úspěšně zapsáno na disk asynchronním zapisovačem.");
 
 	private final PocitadloRoste pocitCancelCelkem = new PocitadloRoste("ka51 #cancel celkem", "Celkový počet vydaných poždavaků na kanclování");
 
 	private final PocitadloRoste pocitCancelOdebranListener = new PocitadloRoste("ka52 #cancel jen odebrán listener",
-	        "Z celového počtu cancelů ty, kde byl jen odebrán listener a dál se nic nemusí řešit, protože ještě někdo jiný čeká.");
+			"Z celového počtu cancelů ty, kde byl jen odebrán listener a dál se nic nemusí řešit, protože ještě někdo jiný čeká.");
 	private final PocitadloRoste pocitCancelProvedenePokusy = new PocitadloRoste("ka53 #cance provedené pokusy", "Počet skutečně provedených pokusů o kanclování, tedy zavoláníá future.cancel");
 	private final PocitadloRoste pocitCancelNehotovePozadavky = new PocitadloRoste("ka54 #cance skutečné cancely ještě nedokončených požadavků",
-	        "Počet SKUTEČNÝCH cancelů ,tedy cancelů proti nehotovým požadavkům.");
+			"Počet SKUTEČNÝCH cancelů ,tedy cancelů proti nehotovým požadavkům.");
 	private final PocitadloRoste pocitCancelPozde = new PocitadloRoste("ka55 #cance pozdní, když už je kachle získána", "Počet tancelů, které přišly pozdě, kdy už jsou data načtena.");
 
 	private final Pocitadlo pocitVelikostPametoveKese = new PocitadloMalo("Počet dlaždic v memcache: ",
-	        "Počet závisí na velikosti pro Javu dostupné paměti (-Xmx) a měl by se ustálit na určité hodnotě, občas možná snížit, nikdy však nemůže být menší než počet dlaždic na mapě.");
+			"Počet závisí na velikosti pro Javu dostupné paměti (-Xmx) a měl by se ustálit na určité hodnotě, občas možná snížit, nikdy však nemůže být menší než počet dlaždic na mapě.");
 	private final PocitadloNula pocitVelikostDiskFrontyOnline = new PocitadloNula("ka1 velikost fronty čtení z disku (online)", "Kolik je ve frontě požadavků na čtení dlaždic z webu.");
 
 	private final PocitadloNula pocitVelikostDiskFrontyBatch = new PocitadloNula("ka2 velikost fronty čtení z disku (batch)", "Kolik je ve frontě požadavků na čtení dlaždic z webu.");
@@ -331,7 +333,7 @@ public class KachleZiskavac {
 	private final PocitadloNula pocitVelikostZapisoveFronty = new PocitadloNula("ka3 veliksot fronty zápisu na disk", "Kolik bloků dlaždic je ještě ve frontě a čeká na zápis na disk.");
 
 	private final PocitadloMalo pocitKachlice = new PocitadloMalo("#kachlic",
-	        "Počet tzv. kachlic, což je objekt určený k řízení získávání kachle z disku, z webu a pak ukládání. Kachlice také reprezentují MEM cache");
+			"Počet tzv. kachlic, což je objekt určený k řízení získávání kachle z disku, z webu a pak ukládání. Kachlice také reprezentují MEM cache");
 
 	private final EnumMap<Priority, DvojiceExekucnichSluzeb> exekucniSluzby = new EnumMap<>(Priority.class);
 
@@ -353,16 +355,16 @@ public class KachleZiskavac {
 	public KachleZiskavac() {
 
 		final DvojiceExekucnichSluzeb dvojiceOnline = new DvojiceExekucnichSluzeb(
-		        // Fronta je pro oonline přístup neomezená, protože nemůžeme nijak blokovat rsponsivnost UI */
-		        Priority.KACHLE, Executors.newFixedThreadPool(NTHREADS_DISK), Executors.newFixedThreadPool(NTHREADS_WEB_CORE_ONLINE),
-		        LogManager.getLogger(KachleZiskavac.class.getSimpleName() + "_online"));
+				// Fronta je pro oonline přístup neomezená, protože nemůžeme nijak blokovat rsponsivnost UI */
+				Priority.KACHLE, Executors.newFixedThreadPool(NTHREADS_DISK), Executors.newFixedThreadPool(NTHREADS_WEB_CORE_ONLINE),
+				LoggerFactory.getLogger(KachleZiskavac.class.getSimpleName() + "_online"));
 
 		final DvojiceExekucnichSluzeb dvojiceBatch = new DvojiceExekucnichSluzeb(Priority.STAHOVANI,
-		        // Pro background stahování. Jen jedno vlákno pro disk, krátká fronta a po přetížení nechat na volajícím */
-		        new ThreadPoolExecutor(1, 1, 1, TimeUnit.MINUTES, new ArrayBlockingQueue<>(BATCH_DISK_QUEUE_SIZE), new ThreadPoolExecutor.CallerRunsPolicy()),
-		        // Pokud bude fornta na web přetížená, vykonává stahování vlákno pro dotahování z disku, čímž se to zpomalí
-		        new ThreadPoolExecutor(NTHREADS_WEB_CORE_BATCH, NTHREADS_WEB_MAXIMUM_BACTH, 1, TimeUnit.MINUTES, new ArrayBlockingQueue<>(WEB_QUEUE_SIZE), new ThreadPoolExecutor.CallerRunsPolicy()),
-		        LogManager.getLogger(KachleZiskavac.class.getSimpleName() + "_batch"));
+				// Pro background stahování. Jen jedno vlákno pro disk, krátká fronta a po přetížení nechat na volajícím */
+				new ThreadPoolExecutor(1, 1, 1, TimeUnit.MINUTES, new ArrayBlockingQueue<>(BATCH_DISK_QUEUE_SIZE), new ThreadPoolExecutor.CallerRunsPolicy()),
+				// Pokud bude fornta na web přetížená, vykonává stahování vlákno pro dotahování z disku, čímž se to zpomalí
+				new ThreadPoolExecutor(NTHREADS_WEB_CORE_BATCH, NTHREADS_WEB_MAXIMUM_BACTH, 1, TimeUnit.MINUTES, new ArrayBlockingQueue<>(WEB_QUEUE_SIZE), new ThreadPoolExecutor.CallerRunsPolicy()),
+				LoggerFactory.getLogger(KachleZiskavac.class.getSimpleName() + "_batch"));
 
 		exekucniSluzby.put(Priority.KACHLE, dvojiceOnline);
 		exekucniSluzby.put(Priority.STAHOVANI, dvojiceBatch);

@@ -5,16 +5,15 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.jcabi.manifests.Manifests;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class FConst {
 
 	private static final String NOT_VERSION_I_AM_IN_DEVELOP = "develop";
 
-	private static final Logger log = LogManager.getLogger(FConst.class.getSimpleName());
 
 	public static final boolean ZAKAZAT_PRIPRAVOVANOU_FUNKCIONALITU = false;
 
@@ -59,7 +58,7 @@ public class FConst {
 			JAR_DIR = new File("").getAbsoluteFile();
 			JAR_DIR_EXISTUJE = false;
 		}
-		log.debug(JAR_DIR);
+		log.debug("Jar dir: {}", JAR_DIR);
 		// versionproperties.
 		String version;
 		boolean iamindevelopmentenvi;

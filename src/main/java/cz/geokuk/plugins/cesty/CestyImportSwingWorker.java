@@ -7,20 +7,17 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.cesty.data.Cesta;
 import cz.geokuk.plugins.kesoid.KesBag;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  *
  */
+@Slf4j
 public class CestyImportSwingWorker extends MySwingWorker0<List<Cesta>, Void> {
-
-	private static final Logger log = LogManager.getLogger(CestyImportSwingWorker.class.getSimpleName());
 
 	private final CestyZperzistentnovac cestyZperzistentnovac;
 	private final KesBag kesBag;

@@ -7,12 +7,11 @@ import java.awt.Color;
 
 import javax.swing.colorchooser.DefaultColorSelectionModel;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class AlfaColorSelectionModel extends DefaultColorSelectionModel {
 
-	private static final Logger log = LogManager.getLogger(AlfaColorSelectionModel.class.getSimpleName());
 	private static final long serialVersionUID = -1718047742587104573L;
 	private int alfa;
 

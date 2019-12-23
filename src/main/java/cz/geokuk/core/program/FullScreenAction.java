@@ -10,14 +10,12 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.framework.Action0;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class FullScreenAction extends Action0 {
 
-	private static final Logger log = LogManager.getLogger(FullScreenAction.class.getSimpleName());
 
 	private static final long serialVersionUID = 1948998108984785016L;
 

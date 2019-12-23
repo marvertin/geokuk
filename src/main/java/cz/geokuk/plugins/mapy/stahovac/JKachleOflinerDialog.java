@@ -4,21 +4,20 @@ import java.awt.Dimension;
 
 import javax.swing.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coord.VyrezChangedEvent;
 import cz.geokuk.core.program.ZobrazServisniOknoAction;
 import cz.geokuk.framework.*;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.*;
+import cz.geokuk.plugins.mapy.kachle.KachleModel;
 import cz.geokuk.plugins.mapy.kachle.data.*;
 import cz.geokuk.plugins.mapy.kachle.gui.JKachle;
 import cz.geokuk.plugins.mapy.kachle.gui.Kaputer;
 import cz.geokuk.plugins.mapy.kachle.podklady.KaOneReq;
 import cz.geokuk.plugins.mapy.kachle.podklady.Priority;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
 	public class KachleOflinerSwingWorker extends MySwingWorker0<Integer, JKachle> {
@@ -113,7 +112,6 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 
 	private static final long serialVersionUID = 7180968190465321695L;
 
-	private static final Logger log = LogManager.getLogger(JKachleOflinerDialog.class.getSimpleName());
 	private static final int LIMIT_DLAZDIC = 100000;
 
 	private JTextPane uvod;
@@ -223,9 +221,9 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 	 */
 	private String pokecani() {
 		return String.format("<html>Budou stahovány dlaždice mapových pokladů <b>%s</b> v rozmění měřítek " + " <b>&lt;%d,%d&gt;</b>"
-		        + " nyní natavte v hlavním okně výřez mapy který chcete stáhnout. Výřez můžete" + " nastavit v libovolném měřítku a v na libovolném mapovém podkladu. "
-		        + " Pak spusťte stahování tlačítkem. Stahování poběží na pozadí. V servisním okně lze sledovat," + " jak se zkracují frony. Stahování nelze zastavit jinak než ukončením programu.",
-		        totoSeTaha.katype, totoSeTaha.minmoumer, totoSeTaha.maxmoumer);
+				+ " nyní natavte v hlavním okně výřez mapy který chcete stáhnout. Výřez můžete" + " nastavit v libovolném měřítku a v na libovolném mapovém podkladu. "
+				+ " Pak spusťte stahování tlačítkem. Stahování poběží na pozadí. V servisním okně lze sledovat," + " jak se zkracují frony. Stahování nelze zastavit jinak než ukončením programu.",
+				totoSeTaha.katype, totoSeTaha.minmoumer, totoSeTaha.maxmoumer);
 	}
 
 	private void prepocetKachli() {

@@ -10,17 +10,16 @@ import java.util.*;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.pocitadla.*;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  *
  */
+@Slf4j
 public class EventManager implements EventFirer {
 
 	private class ObserverInvocation extends WeakReference<Object> {
@@ -66,14 +65,14 @@ public class EventManager implements EventFirer {
 		private Object lastEvent;
 	}
 
-	private static final Logger log = LogManager.getLogger(EventManager.class.getSimpleName());
+
 	private static Pocitadlo pocitTypy = new PocitadloMalo("Počet typů registrovaných eventů",
-	        "Kolik registrovaných typů eventů (tříd) je ve třídě Eventmanager, mělo by to být v v jednotkách či malých desítkách a nemělo by narůstat.");
+			"Kolik registrovaných typů eventů (tříd) je ve třídě Eventmanager, mělo by to být v v jednotkách či malých desítkách a nemělo by narůstat.");
 	private static Pocitadlo pocitObservery = new PocitadloMalo("Počet observerů za všechny typy dohromady", "Kolik celkem observerů je regostrováno pro události. Musí být v desítkách a nesmí růst.");
 
 	private static Pocitadlo pocitReistraceOdregistrace = new PocitadloRoste("Počet registrací observerů",
-	        "Kolikrát se registrovaly a odregistrovávaly observery (dohromady), číslo stále roste, ale nesmí moc rychle, neboť registrace a deregistrace nemusí být laciná,"
-	                + " ale pravděpodobně poroste s otvíráním a zavíráním různých oken.");
+			"Kolikrát se registrovaly a odregistrovávaly observery (dohromady), číslo stále roste, ale nesmí moc rychle, neboť registrace a deregistrace nemusí být laciná,"
+					+ " ale pravděpodobně poroste s otvíráním a zavíráním různých oken.");
 
 	public ReferenceQueue<Object> referencequeue = new ReferenceQueue<>();
 

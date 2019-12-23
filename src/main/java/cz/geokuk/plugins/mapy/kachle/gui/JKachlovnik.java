@@ -4,9 +4,6 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.common.collect.LinkedListMultimap;
 
 import cz.geokuk.core.coord.Coord;
@@ -14,26 +11,26 @@ import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.onoffline.OnofflineModelChangeEvent;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.*;
+import cz.geokuk.plugins.mapy.kachle.KachleModel;
 import cz.geokuk.plugins.mapy.kachle.data.*;
 import cz.geokuk.plugins.mapy.kachle.podklady.Priority;
 import cz.geokuk.util.pocitadla.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
-
-	private static final Logger log = LogManager.getLogger(JKachlovnik.class.getSimpleName());
 
 	private static final long serialVersionUID = -6300199882447791157L;
 
 	private static Pocitadlo pocitZustalychKachli = new PocitadloRoste("Počet zůstalých kachlí",
-	        "Počet kachlí jKachle, které jako kompoenty zůstaly a jen se změnila její lokace, protože po reinicializaci "
-	                + "byly na svém místě (obvykle posun) a nebylo je tudíž nutné znovu vytvářet");
+			"Počet kachlí jKachle, které jako kompoenty zůstaly a jen se změnila její lokace, protože po reinicializaci "
+					+ "byly na svém místě (obvykle posun) a nebylo je tudíž nutné znovu vytvářet");
 
 	private static Pocitadlo pocitReinicializaceKachlovniku = new PocitadloRoste("Kolikrát bylo nuceno reinicializovat " + "celý kachlovník",
-	        "Říká, kolikrát byla zavolána metoda init pro reinicializaci celého kachlovníku v důsledku posunu, změnu " + "velikosti, zůůmování atd.");
+			"Říká, kolikrát byla zavolána metoda init pro reinicializaci celého kachlovníku v důsledku posunu, změnu " + "velikosti, zůůmování atd.");
 
 	private static Pocitadlo pocitVynuceneNepouzitiExistujiciKachle = new PocitadloRoste("Vynucené použití neexistující " + "kachle",
-	        "Kolikrát do JKachlovnik.ini() přišlo z venku, že JKachle komponenty nesmím použít");
+			"Kolikrát do JKachlovnik.ini() přišlo z venku, že JKachle komponenty nesmím použít");
 
 	private static final Pocitadlo pocitKachliVKachlovniku2 = new PocitadloMalo("#kachlí v kachlovníku", "");
 

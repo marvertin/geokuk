@@ -3,22 +3,20 @@
  */
 package cz.geokuk.plugins.mrizky;
 
-import java.awt.Color;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.awt.Color;
 
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Utm;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  *
  */
+@Slf4j
 public class JMrizkaUtm extends JMrizka0 {
-
-	private static final Logger log = LogManager.getLogger(JMrizkaUtm.class.getSimpleName());
 
 	protected static final double MINUTA = 1.0 / 60;
 

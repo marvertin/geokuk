@@ -6,21 +6,20 @@ package cz.geokuk.plugins.kesoid.importek;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.framework.MySwingWorker0;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.index2d.BoundingRect;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  */
+@Slf4j
 public class MultiNacitacSwingWorker extends MySwingWorker0<KesBag, Void> {
 
-	private static final Logger log = LogManager.getLogger(MultiNacitacSwingWorker.class.getSimpleName());
+
 
 	private final MultiNacitac multiNacitac;
 	private final Genom iGenom;

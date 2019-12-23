@@ -36,7 +36,7 @@ import cz.geokuk.util.lang.CounterMap;
  *
  */
 public class KesBag {
-	//private static final Logger log = LogManager.getLogger(KesBag.class.getSimpleName());
+	//
 
 	private final List<Wpt> wpts = new ArrayList<>();
 	private Set<Kesoid> kesoidyset;
