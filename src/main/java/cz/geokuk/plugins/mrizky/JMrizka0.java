@@ -4,14 +4,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.framework.BeanSubtypable;
 import cz.geokuk.framework.BeanSubtype;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 
 	protected class Vykreslovac {
@@ -195,8 +194,6 @@ public abstract class JMrizka0 extends JSingleSlide0 implements BeanSubtypable {
 		}
 
 	}
-
-	private static final Logger log = LogManager.getLogger(JMrizka0.class.getSimpleName());
 
 	private static final long serialVersionUID = -5858146658366237217L;
 	private final Stroke slabe = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, new float[] { 2.0f, 4.0f }, 0.0f);

@@ -19,10 +19,12 @@ import cz.geokuk.framework.*;
 import cz.geokuk.plugins.cesty.CestyModel;
 import cz.geokuk.plugins.cesty.akce.OdebratZCestyAction;
 import cz.geokuk.plugins.cesty.akce.PridatDoCestyAction;
+import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.plugins.kesoid.mapicon.*;
 import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.vylety.*;
-import cz.geokuk.util.index2d.*;
+import cz.geokuk.util.index2d.BoundingRect;
+import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.pocitadla.PocitadloNula;
 import cz.geokuk.util.process.BrowserOpener;
 
@@ -148,7 +150,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	private Set<Alela> fenotypoveZakazaneAlely;
 
-	private Set<String> iJmenaAlel;
+	private QualAlelaNames iJmenaAlel;
 
 	private Factory factory;
 
@@ -157,8 +159,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	private KesoidModel kesoidModel;
 
 	private final boolean vykreslovatOkamtiteAleDlouho;
-
-	private KesBag vsechny;
 
 	private VyletModel vyletModel;
 
@@ -184,7 +184,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	@Override
 	public void addPopouItems(final JPopupMenu popupMenu, final MouseGestureContext ctx) {
 		if (wptPodMysi != null) {
-			initPopupMenuItems(popupMenu, wptPodMysi, vsechny);
+			initPopupMenuItems(popupMenu, wptPodMysi);
 		}
 		chain().addPopouItems(popupMenu, ctx);
 	}
@@ -340,7 +340,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	}
 
 	public void onEvent(final KeskyNactenyEvent event) {
-		vsechny = event.getVsechny();
 	}
 
 	public void onEvent(final KeskyVyfiltrovanyEvent aEvent) {
@@ -357,8 +356,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		final int polomerCitlivosi = POLOMER_CITLIVOSTI;
 		final Point p = getSoord().transform(event.mou);
 		final Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi, polomerCitlivosi * 2, polomerCitlivosi * 2);
-		final Sheet<Wpt> swpt = indexator == null ? null : indexator.locateNearestOne(getSoord().transforToBounding(rect), event.mou.xx, event.mou.yy);
-		final Wpt wpt = swpt == null ? null : swpt.get();
+
+		final Wpt wpt = indexator == null ? null : indexator.bound(getSoord().transforToBounding(rect)).locateNearestOne(event.mou.xx, event.mou.yy).orElse(null);
 		if (wpt != null && wpt.getMou().equals(event.mou)) { // je to přesně on
 			int priorita = 40;
 			if (wpt.isMainWpt()) {
@@ -403,17 +402,16 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		SwingUtilities.invokeLater(() -> kesoidModel.setPrekrocenLimitWaypointuVeVyrezu(prekrocenLimit));
 
 		// vytvoření prázdných seznamů
-		final EnumMap<Wpt.EZOrder, List<Sheet<Wpt>>> mapa = new EnumMap<>(Wpt.EZOrder.class);
+		final EnumMap<Wpt.EZOrder, List<Wpt>> mapa = new EnumMap<>(Wpt.EZOrder.class);
 		for (final Wpt.EZOrder zorder : Wpt.EZOrder.values()) {
-			mapa.put(zorder, new ArrayList<Sheet<Wpt>>(10000));
+			mapa.put(zorder, new ArrayList<Wpt>(10000));
 		}
 
 		// Roztřídit waypointy podle pořadí vykreslování
 		if (!prekrocenLimit) {
 			final BoundingRect hranice = coVykreslovat(gg);
-			indexator.visit(hranice, (FlatVisitor<Wpt>) aSheet -> {
-				final Wpt wpt = aSheet.get();
-				mapa.get(wpt.getZorder()).add(aSheet);
+			indexator.bound(hranice).stream().forEach(wpt -> {
+				mapa.get(wpt.getZorder()).add(wpt);
 			});
 		}
 
@@ -422,10 +420,9 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 			final SkloAplikant skloAplikant = skloAplikanti.get(i);
 			if (skloAplikant.aplikaceSkla == EAplikaceSkla.VSE) { // jen na skla, na kterych je vsechno
 				if (!prekrocenLimit) {
-					for (final List<Sheet<Wpt>> list : mapa.values()) {
-						for (final Sheet<Wpt> swpt : list) {
-							final Wpt wpt = swpt.get();
-							final Mou mou = new Mou(swpt.getXx(), swpt.getYy());
+					for (final List<Wpt> list : mapa.values()) {
+						for (final Wpt wpt : list) {
+							final Mou mou = wpt.getMou();
 							paintWaypoint(gg, wpt, mou, i);
 						}
 					}
@@ -441,31 +438,31 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	}
 
 	private Genotyp computeGenotyp(final Wpt wpt) {
-		final Genom genom = ikonBag.getGenom();
-		final Genotyp g = wpt.getGenotyp(genom);
+		Genotyp g = wpt.getGenotyp();
+		final Genom genom = g.getGenom();
 		// switch (cestyModel.get(wpt.getKesoid())) {
-		// // case ANO: g.put(ikonBag.getGenom().ALELA_lovime); break;
-		// case NE: g.put(ikonBag.getGenom().ALELA_ignoru); break;
+		// // case ANO: g = g.with(ikonBag.getGenom().ALELA_lovime); break;
+		// case NE: g = g.with(ikonBag.getGenom().ALELA_ignoru); break;
 		// }
 		switch (vyletModel.get(wpt.getKesoid())) {
 		case ANO:
-			g.put(genom.ALELA_lovime);
+			g = g.with(genom.ALELA_lovime);
 			break;
 		case NE:
-			g.put(genom.ALELA_ignoru);
+			g = g.with(genom.ALELA_ignoru);
 			break;
 		case NEVIM:
 			break;
 		}
-		g.put(cestyModel.isOnVylet(wpt) ? genom.ALELA_nacestejsou : genom.ALELA_mimocesticu);
+		g = g.with(cestyModel.isOnVylet(wpt) ? genom.ALELA_nacestejsou : genom.ALELA_mimocesticu);
 
 		if (wpt == wptPodMysi) {
-			g.put(genom.ALELA_mouseon);
+			g = g.with(genom.ALELA_mouseon);
 		}
 		if (wpt.getKesoid() == kesoidPodMysi) {
-			g.put(genom.ALELA_mousean);
+			g = g.with(genom.ALELA_mousean);
 		}
-		g.removeAll(fenotypoveZakazaneAlely);
+		g = g.without(fenotypoveZakazaneAlely);
 		return g;
 	}
 
@@ -491,12 +488,12 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		return br;
 	}
 
-	private void initPopupMenuItems(final JPopupMenu p, final Wpt mysNadWpt, final KesBag vsechny) {
+	private void initPopupMenuItems(final JPopupMenu p, final Wpt mysNadWpt) {
 		// TODO : these should be based on the waypoint type
 		// Přidat zhasínače
 		final JMenu zhasinace = new JMenu("Zhasni");
 		p.add(zhasinace);
-		final Genotyp genotyp = mysNadWpt.getGenotyp(vsechny.getGenom());
+		final Genotyp genotyp = mysNadWpt.getGenotyp();
 		for (final Alela alela : genotyp.getAlely()) {
 			if (alela.getGen().isVypsatelnyVeZhasinaci() && !alela.isVychozi()) {
 				zhasinace.add(factory.init(new ZhasniKeseUrciteAlelyAction(alela)));
@@ -547,8 +544,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		// System.out.println("POSUNOVACKA TO ASI BUDE: " + e);
 		final int polomerCitlivosi = POLOMER_CITLIVOSTI;
 		final Rectangle rect = new Rectangle(p.x - polomerCitlivosi, p.y - polomerCitlivosi, polomerCitlivosi * 2, polomerCitlivosi * 2);
-		final Sheet<Wpt> swpt = indexator == null ? null : indexator.locateAnyOne(getSoord().transforToBounding(rect));
-		final Wpt wpt = swpt == null ? null : swpt.get();
+		final Wpt wpt = indexator == null ? null : indexator.bound(getSoord().transforToBounding(rect)).locateAnyOne().orElse(null);
 		return wpt;
 	}
 
@@ -615,7 +611,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		if (ikonBag == null) {
 			return;
 		}
-		fenotypoveZakazaneAlely = ikonBag.getGenom().namesToAlely(iJmenaAlel);
+		fenotypoveZakazaneAlely = ikonBag.getGenom().searchAlelasByQualNames(iJmenaAlel);
 		Wpt.invalidateAllSklivec();
 		repaint();
 	}

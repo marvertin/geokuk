@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.*;
 
 import cz.geokuk.core.lookandfeel.LafSupport;
+import cz.geokuk.plugins.kesoid.kind.kes.*;
 import cz.geokuk.plugins.kesoid.mapicon.JMenuIkony;
 import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.mapy.MapyAction0;

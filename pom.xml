@@ -5,7 +5,7 @@
 
 	<groupId>cz.geokuk</groupId>
 	<artifactId>geokuk</artifactId>
-	<version>5.0.2</version>
+	<version>5.1.0</version>
 
 	<build>
 		<plugins>
@@ -63,6 +63,14 @@
 	</repositories>
 
 	<dependencies>
+	
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<!-- SQLJet -->
 		<dependency>
 			<groupId>org.tmatesoft.sqljet</groupId>
@@ -89,18 +97,6 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>19.0</version>
-		</dependency>
-
-		<!-- log4j -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.1</version>
 		</dependency>
 
 		<dependency>
@@ -150,7 +146,14 @@
 		    <version>1.18.10</version>
 		    <scope>provided</scope>
 		</dependency>
-		
+
+		<!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
+		<dependency>
+		    <groupId>org.reflections</groupId>
+		    <artifactId>reflections</artifactId>
+		    <version>0.9.10</version>
+		</dependency>
+				
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -3,6 +3,8 @@ package cz.geokuk.plugins.kesoid;
 import org.junit.Assert;
 import org.junit.Test;
 
+import cz.geokuk.plugins.kesoid.kind.kes.EKesDiffTerRating;
+
 public class EKesDiffTerRatingTest {
 
 	@Test

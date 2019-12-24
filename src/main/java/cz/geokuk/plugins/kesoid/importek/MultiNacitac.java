@@ -7,21 +7,20 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mapicon.Genom;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.*;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  */
+@Slf4j
 public class MultiNacitac {
-	private static final Logger log = LogManager.getLogger(MultiNacitac.class.getSimpleName());
+
 
 	// TODO: Doporučuji přejmenovat na GEOKUK_ROOTDIR_DEF resp. GEOGET_ROOTDIR_DEF. Už dávno nejde jen o jméno souboru/složky. [2016-04-09, Bohusz]
 	private static final Root.Def FILE_NAME_REGEX_GEOKUK_DIR = new Root.Def(Integer.MAX_VALUE, Pattern.compile("(?i).*\\.(geokuk|gpx|zip|jpg|raw|tif)"), null);
@@ -72,7 +71,7 @@ public class MultiNacitac {
 		if (list == null) {
 			return null;
 		}
-		final KesoidImportBuilder builder = new KesoidImportBuilder(kesoidModel.getGccomNick(), kesoidModel.getProgressModel());
+		final KesoidImportBuilder builder = new KesoidImportBuilder(genom, kesoidModel.getGccomNick(), kesoidModel.getProgressModel(), kesoidModel.getKesopidPluginManager());
 		builder.init();
 		for (final KeFile file : list) {
 			log.debug("Nacitam: " + file);
@@ -84,7 +83,7 @@ public class MultiNacitac {
 			}
 		}
 
-		builder.done(genom);
+		builder.done();
 
 		return builder.getKesBag();
 	}

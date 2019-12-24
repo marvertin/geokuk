@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.swing.Timer;
 
-import cz.geokuk.plugins.kesoid.mapicon.Genom;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.file.Filex;
 import cz.geokuk.util.file.KeFile;

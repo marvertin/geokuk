@@ -12,7 +12,7 @@ import javax.swing.Icon;
 import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mapicon.Alela;
+import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 
 /**
@@ -86,7 +86,7 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		kesoidModel.filtrujDleAlely(alela.toString(), false);
+		kesoidModel.filtrujDleAlely(alela.qualName(), false);
 	}
 
 	/*
@@ -97,7 +97,7 @@ public class ZhasniKeseUrciteAlelyAction extends Action0 implements AfterEventRe
 	@Override
 	public void initAfterEventReceiverRegistration() {
 		super.putValue(NAME, sestavJmeno());
-		super.putValue(SMALL_ICON, new PreskrtnutaIkona(ikonBag.seekIkon(ikonBag.getGenom().getGenotypProAlelu(alela))));
+		super.putValue(SMALL_ICON, new PreskrtnutaIkona(ikonBag.seekIkon(ikonBag.getGenom().UNIVERZALNI_DRUH.genotypVychozi().with(alela))));
 		super.putValue(SHORT_DESCRIPTION, "Zhasne waypointy daného typu.");
 
 	}

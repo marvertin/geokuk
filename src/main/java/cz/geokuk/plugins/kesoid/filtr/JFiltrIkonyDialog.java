@@ -1,13 +1,13 @@
 package cz.geokuk.plugins.kesoid.filtr;
 
 import java.awt.Dimension;
-import java.util.Set;
 
 import javax.swing.*;
 
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.genetika.QualAlelaNames;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
@@ -20,7 +20,7 @@ public class JFiltrIkonyDialog extends JMyDialog0 implements AfterInjectInit {
 	private JFiltrVyberIkon filtrVyberIkon;
 
 	private IkonBag bag;
-	private Set<String> jmenaAlelFiltr;
+	private QualAlelaNames jmenaAlelFiltr;
 	private KesBag kesBag;
 
 	public JFiltrIkonyDialog() {

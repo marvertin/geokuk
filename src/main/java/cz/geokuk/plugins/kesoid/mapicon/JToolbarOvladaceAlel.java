@@ -9,6 +9,8 @@ import javax.swing.*;
 
 import cz.geokuk.framework.Factory;
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.genetika.Alela;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.SwitchKesoidUrciteAlelyAction;
 import cz.geokuk.util.gui.JIconCheckBox;
@@ -109,14 +111,14 @@ public class JToolbarOvladaceAlel extends JPanel {
 	}
 
 	private void ovladac(final KesBag vsechny, final Alela alela) {
-		JIconCheckBox cb = mapka.get(alela.toString());
+		JIconCheckBox cb = mapka.get(alela.qualName());
 		if (cb == null) {
 			final SwitchKesoidUrciteAlelyAction action = factory.init(new SwitchKesoidUrciteAlelyAction(alela));
 			cb = new JIconCheckBox();
 			action.join(cb);
 			tb.add(cb);
 			cb.setText(null);
-			mapka.put(alela.toString(), cb);
+			mapka.put(alela.qualName(), cb);
 		}
 		final boolean jetam = vsechny.getPouziteAlely().contains(alela);
 		cb.setVisible(jetam);

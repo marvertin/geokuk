@@ -32,7 +32,40 @@ public class GpxWpt {
 	@Override
 	public String toString() {
 		return "GpxWpt [name=" + name + ", sym=" + sym + ", type=" + type + ", wgs=" + wgs + ", cmt=" + cmt + ", desc=" + desc + ", time=" + time + ", link=" + link + ", groundspeak=" + groundspeak
-		        + "]";
+				+ "]";
 	}
 
+	public String getEffectiveNazev() {
+		String s;
+		if (desc == null) {
+			if (cmt == null) {
+				s = "?";
+			} else {
+				s = cmt;
+			}
+		} else {
+			if (cmt == null) {
+				s = desc;
+			} else {
+				if (cmt.toLowerCase().contains(desc.toLowerCase())) {
+					s = desc;
+				} else {
+					s = desc + ", " + cmt;
+				}
+			}
+		}
+		return s;
+	}
+
+	public int getEffectiveElevation() {
+		if (ele != 0) {
+			return (int) ele;
+		} else {
+			if (gpxg != null) {
+				return gpxg.elevation;
+			} else {
+				return 0;
+			}
+		}
+	}
 }

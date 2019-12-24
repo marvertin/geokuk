@@ -27,7 +27,7 @@ public abstract class PaintingDrawer0 extends Drawer0 {
 		final Graphics2D g = bi.createGraphics();
 		try {
 			drawImage(g);
-			aImaganti.add(new Imagant(bi));
+			aImaganti.add(new Imagant(bi, 0, 0));
 		} finally {
 			g.dispose();
 		}

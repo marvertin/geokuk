@@ -18,6 +18,8 @@ import cz.geokuk.plugins.cesty.akce.doc.PromazatJednobodoveAPrazdneCesty;
 import cz.geokuk.plugins.cesty.akce.soubor.*;
 import cz.geokuk.plugins.geocoding.GeocodingAdrAction;
 import cz.geokuk.plugins.kesoid.filtr.FiltrIkonyAction;
+import cz.geokuk.plugins.kesoid.kind.kes.JenDoTerenuUNenalezenychAction;
+import cz.geokuk.plugins.kesoid.kind.kes.JenFinalUNalezenychAction;
 import cz.geokuk.plugins.kesoid.mapicon.*;
 import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.kesoidkruhy.KruhyOnoffAction;

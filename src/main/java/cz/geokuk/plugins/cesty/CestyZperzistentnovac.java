@@ -3,20 +3,19 @@ package cz.geokuk.plugins.cesty;
 import java.io.*;
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.cesty.data.*;
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.importek.NacitacGpx;
-import cz.geokuk.util.index2d.*;
+import cz.geokuk.util.index2d.BoundingRect;
+import cz.geokuk.util.index2d.Indexator;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CestyZperzistentnovac {
 
-	private static final Logger log = LogManager.getLogger(CestyZperzistentnovac.class.getSimpleName());
 
 	private int smimCist;
 
@@ -38,9 +37,11 @@ public class CestyZperzistentnovac {
 					cesty.add(cesta);
 				} else if (pureName.endsWith(".gpx")) {
 					final DocImportBuilder builder = new DocImportBuilder();
+					builder.init();
 					final InputStream istm = new BufferedInputStream(new FileInputStream(file));
 					final NacitacGpx nacitac = new NacitacGpx();
 					nacitac.nacti(istm, file.toString(), builder, null);
+					builder.done();
 					cesty.addAll(builder.getCesty());
 				}
 			} catch (final Exception e) {
@@ -131,11 +132,7 @@ public class CestyZperzistentnovac {
 		}
 		final Indexator<Wpt> indexator = kesBag.getIndexator();
 		final BoundingRect br = new BoundingRect(mou.xx, mou.yy, mou.xx, mou.yy).rozsir(100);
-		final Sheet<Wpt> sheet = indexator.locateAnyOne(br);
-		if (sheet == null) {
-			return null;
-		}
-		return sheet.get();
+		return indexator.bound(br).locateAnyOne().orElse(null);
 	}
 
 	private void zapisKdyzNeni(final BufferedWriter wrt, final String kod, final Set<String> exportovano) throws IOException {

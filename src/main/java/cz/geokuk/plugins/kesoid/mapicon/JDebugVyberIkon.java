@@ -10,6 +10,7 @@ import javax.swing.border.TitledBorder;
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.genetika.*;
 
 public class JDebugVyberIkon extends JVyberIkon0 {
 
@@ -17,7 +18,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 	private final JComponent jskelneikony;
 
 	private IkonBag bag;
-	private Set<String> jmenaVybranychAlel;
+	private QualAlelaNames jmenaVybranychAlel;
 	private boolean zobrazovatVse;
 
 	/**
@@ -36,7 +37,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 		if (bag == null) {
 			return;
 		}
-		jmenaVybranychAlel = Alela.alelyToNames(wpt.getGenotyp(bag.getGenom()).getAlely());
+		jmenaVybranychAlel = wpt.getGenotyp().getQualAlelaNames();
 		zobrazovatVse = true;
 		refresh(bag, jmenaVybranychAlel, null);
 	}
@@ -44,8 +45,8 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 	public void resetBag(final IkonBag aBag) {
 		bag = aBag;
 		if (jmenaVybranychAlel == null) {
-			final Genotyp genotypVychozi = bag.getGenom().getGenotypVychozi();
-			jmenaVybranychAlel = Alela.alelyToNames(genotypVychozi.getAlely());
+			final Genotyp genotypVychozi = bag.getGenom().UNIVERZALNI_DRUH.genotypVychozi();
+			jmenaVybranychAlel = genotypVychozi.getQualAlelaNames();
 		}
 		refresh(aBag, jmenaVybranychAlel, null);
 	}
@@ -77,8 +78,8 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 
 	@Override
 	protected void zmenaVyberu(final Set<Alela> aAlelyx) {
-		jmenaVybranychAlel = Alela.alelyToNames(aAlelyx);
-		final Genotyp genotyp = new Genotyp(aAlelyx, bag.getGenom());
+		jmenaVybranychAlel = Alela.alelyToQualNames(aAlelyx);
+		final Genotyp genotyp = bag.getGenom().UNIVERZALNI_DRUH.genotypVychozi().with(aAlelyx);
 		final Sklivec sklivec = bag.getSklivec(genotyp);
 		jskelneikony.removeAll();
 		// BoundingRect br = Imagant.sjednoceni(sklivec.imaganti);
@@ -87,7 +88,7 @@ public class JDebugVyberIkon extends JVyberIkon0 {
 			final JButton jLabel = new JButton();
 			jLabel.setAlignmentX(CENTER_ALIGNMENT);
 			// jLabel.setText("všechna skla přes sebe");
-			final Imagant imagant = Sklo.prekresliNaSebe(sklivec.imaganti);
+			final Imagant imagant = Imagant.prekresliNaSebe(sklivec.imaganti);
 			if (imagant != null) {
 				jLabel.setIcon(new ImageIcon(imagant.getImage()));
 			}

@@ -9,7 +9,8 @@ import java.util.Set;
 import javax.swing.Icon;
 
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.mapicon.*;
+import cz.geokuk.plugins.kesoid.genetika.Alela;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
 public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
@@ -33,6 +34,7 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		if (wpt == null) {
 			return;
 		}
+		//wpt.getKesoidPlugin(); // jen kontrola, zda tam je
 		// najít konec
 		Weikoid0 weik = this;
 		while (weik.next instanceof Wpt) {
@@ -42,16 +44,17 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		weik.next = wpt;
 	}
 
-	public abstract void buildGenotyp(Genom genom, Genotyp g);
+	public abstract Genotyp buildGenotyp(Genotyp g);
 
-	public final void doBuildGenotyp(final Genom genom, final Genotyp g) {
-		buildGenotyp(genom, g);
+	public final Genotyp doBuildGenotyp(final Genotyp g0) {
+		Genotyp g = buildGenotyp(g0);
 		if (userDefinedAlelas != null) {
 			for (final Alela alela : userDefinedAlelas) {
 				assert alela != null;
-				g.put(alela);
+				g = g.with(alela);
 			}
 		}
+		return g;
 	}
 
 	public String getAuthor() {

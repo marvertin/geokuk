@@ -2,8 +2,7 @@ package cz.geokuk.util.lang;
 
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Title: Evidence exemplářů a dodávek Description: V první fázi zde bude implementace přidání dodávky a jejích exemplářů Copyright: Copyright (c) 2001 Company: TurboConsult s.r.o.
@@ -12,6 +11,7 @@ import org.apache.logging.log4j.Logger;
  * @version 1.0
  */
 
+@Slf4j
 public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 	private class Citac implements java.io.Serializable {
 		static final long serialVersionUID = 9077120911716375382L;
@@ -31,7 +31,6 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		}
 	}
 
-	private static final Logger log = LogManager.getLogger(CCounterMap.class.getSimpleName());
 
 	static final long serialVersionUID = 4829239030839775643L;
 	private final Map<T, Citac> iCitace = new LinkedHashMap<>();
@@ -48,13 +47,13 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 		final CounterMap<String> cm = new CCounterMap<>();
 		_testVypis(cm);
 
-		log.debug(cm.add("adam", 3));
-		log.debug(cm.inc("adam"));
-		log.debug(cm.dec("marketa"));
-		log.debug(cm.add("marketa", 7));
-		log.debug(cm.dec("marketa"));
-		log.debug(cm.add("robert", 5));
-		log.debug(cm.add("robert", 8));
+		log.debug("{}", cm.add("adam", 3));
+		log.debug("{}", cm.inc("adam"));
+		log.debug("{}", cm.dec("marketa"));
+		log.debug("{}", cm.add("marketa", 7));
+		log.debug("{}", cm.dec("marketa"));
+		log.debug("{}", cm.add("robert", 5));
+		log.debug("{}", cm.add("robert", 8));
 
 		cm.add("robert", 264656);
 		cm.add("aneta", 4477);
@@ -62,34 +61,34 @@ public class CCounterMap<T> implements CounterMap<T>, java.io.Serializable {
 
 		log.debug("");
 		log.debug("");
-		log.debug(cm);
+		log.debug("{}", cm);
 
 		_testVypis(cm);
-		log.debug(cm.add("marketa", 4));
+		log.debug("{}", cm.add("marketa", 4));
 		_testVypis(cm);
-		log.debug(cm.add("marketa", -3));
+		log.debug("{}", cm.add("marketa", -3));
 		_testVypis(cm);
-		log.debug(cm.add("marketa", -11));
-		log.debug(cm.set("robert", 71));
-		log.debug(cm.set("aneta", 18));
+		log.debug("{}", cm.add("marketa", -11));
+		log.debug("{}", cm.set("robert", 71));
+		log.debug("{}", cm.set("aneta", 18));
 
 		_testVypis(cm);
-		log.debug(cm.add(cm2));
+		log.debug("{}", cm.add(cm2));
 		_testVypis(cm);
-		log.debug(cm.dec("adam"));
-		log.debug(cm.dec("adam"));
+		log.debug("{}", cm.dec("adam"));
+		log.debug("{}", cm.dec("adam"));
 
 		_testVypis(cm);
-		log.debug(cm.dec("adam"));
+		log.debug("{}", cm.dec("adam"));
 		_testVypis(cm);
-		log.debug(cm.dec("adam"));
-		log.debug(cm.add("aneta", -6));
+		log.debug("{}", cm.dec("adam"));
+		log.debug("{}", cm.add("aneta", -6));
 		_testVypis(cm);
-		log.debug(cm.dec("adam"));
-		log.debug(cm.reset("aneta"));
+		log.debug("{}", cm.dec("adam"));
+		log.debug("{}", cm.reset("aneta"));
 		_testVypis(cm);
 		log.debug("nikdo: " + cm.count("nikdo"));
-		log.debug(cm.reset());
+		log.debug("{}", cm.reset());
 		_testVypis(cm);
 
 	}

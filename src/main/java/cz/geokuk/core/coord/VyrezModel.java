@@ -5,22 +5,21 @@ package cz.geokuk.core.coord;
 
 import java.awt.Dimension;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.coordinates.*;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 import cz.geokuk.util.lang.FMath;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  */
+@Slf4j
 public class VyrezModel extends Model0 {
 
-	private static final Logger log = LogManager.getLogger(VyrezModel.class.getSimpleName());
+
 
 	public static final Wgs DEFAULTNI_DOMACI_SOURADNICE = new Wgs(49.8, 15.5);
 
@@ -48,8 +47,8 @@ public class VyrezModel extends Model0 {
 		final Mou mouStred = moord.getMoustred();
 		final boolean b = mouPozice.equals(mouStred);
 
-		log.debug(mouPozice);
-		log.debug(mouStred);
+		log.debug("Mou pozice: ", mouPozice);
+		log.debug("Mou stred: ", mouStred);
 		return b;
 	}
 

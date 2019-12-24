@@ -17,6 +17,7 @@ import com.google.common.collect.Collections2;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.plugins.kesoid.genetika.QualAlelaNames;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.Filex;
@@ -475,6 +476,12 @@ public class MyPreferences extends Preferences {
 		return new LinkedHashSet<>(stringList != null ? stringList : defval);
 	}
 
+	public QualAlelaNames getQualAlelaNames(final String key, final QualAlelaNames defval) {
+		final Set<String> set = getStringSet(key, defval == null ? null : defval.getQualNames());
+		return set == null ? null : new QualAlelaNames(set);
+	}
+
+
 	public <T> T getStructure(final String name, final T defautStructure) {
 		try {
 			@SuppressWarnings("unchecked")
@@ -683,6 +690,10 @@ public class MyPreferences extends Preferences {
 
 	public void putStringSet(final String key, final Set<String> val) {
 		put(key, pack(new ArrayList<>(val)));
+	}
+
+	public void putQualAlelaNames(final String key, final QualAlelaNames val) {
+		putStringSet(key, val.getQualNames());
 	}
 
 	public void putStructure(final String name, final Object structure) {

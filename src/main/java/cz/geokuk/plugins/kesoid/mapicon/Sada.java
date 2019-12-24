@@ -7,7 +7,7 @@ import javax.swing.Icon;
 
 import cz.geokuk.api.mapicon.Imagant;
 import cz.geokuk.plugins.kesoid.Repaintanger;
-import cz.geokuk.plugins.kesoid.mapicon.Genotyp.Otisk;
+import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.util.pocitadla.*;
 
 public class Sada {
@@ -17,7 +17,7 @@ public class Sada {
 
 	List<SkloAplikant> skloAplikanti = new ArrayList<>();
 
-	Map<Genotyp.Otisk, Sklivec> cache = new HashMap<>();
+	Map<Genotyp, Sklivec> cache = new HashMap<>();
 
 	private final String name;
 
@@ -80,16 +80,15 @@ public class Sada {
 	 * @param genotyp
 	 * @return
 	 */
-	public synchronized Sklivec getSklivec(final Genotyp genotyp) {
-		zuzNaObrazkove(genotyp); // aby se nekešovalo pro alely, ke kterým nic nemáme
-		final Otisk otisk = genotyp.getOtisk();
-		Sklivec sklivec = cache.get(otisk);
+	public synchronized Sklivec getSklivec(final Genotyp genotypx) {
+		final Genotyp genotyp = genotypx.zuzNaObrazkove(getPouziteAlely()); // aby se nekešovalo pro alely, ke kterým nic nemáme
+		Sklivec sklivec = cache.get(genotyp);
 		if (sklivec == null) {
 			sklivec = new Sklivec();
 			for (final SkloAplikant skloAplikant : skloAplikanti) {
 				sklivec.imaganti.add(getRenderedImage(genotyp, skloAplikant));
 			}
-			cache.put(otisk, sklivec);
+			cache.put(genotyp, sklivec);
 			repaintanger.include(sklivec);
 			pocitSklivcu.set(cache.size());
 			// System.out.println("REPREPA: " + repaintanger);
@@ -123,15 +122,6 @@ public class Sada {
 		return imagant;
 	}
 
-	private void zuzNaObrazkove(final Genotyp genotyp) {
-		final Set<Alela> pouziteAlely2 = getPouziteAlely();
-		for (final Alela alela : new ArrayList<>(genotyp.getAlely())) {
-			if (!pouziteAlely2.contains(alela)) {
-				if (!pouziteAlely2.contains(alela.getGen().getVychoziAlela())) {
-					genotyp.remove(alela);
-				}
-			}
-		}
-	}
+
 
 }

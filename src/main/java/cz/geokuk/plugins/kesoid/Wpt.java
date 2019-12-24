@@ -4,9 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cz.geokuk.core.coordinates.*;
-import cz.geokuk.plugins.kesoid.mapicon.*;
+import cz.geokuk.plugins.kesoid.genetika.Genom;
+import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import cz.geokuk.plugins.kesoid.kind.KesoidPlugin;
+import cz.geokuk.plugins.kesoid.kind.kes.EKesWptType;
+import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Wpt extends Weikoid0 implements Uchopenec {
+
+	/**
+	 * Umísťuje se do fronty, aby se poznalo, že je konec.
+	 * Nic se na tom nevolá, jen se porovnává na objektovou identitu.
+	 */
+	public static Wpt ZARAZKA = new Wpt();
 
 	public static enum EZOrder {
 		OTHER, KESWPT, FIRST, FINAL,
@@ -59,6 +71,17 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 
 	private EZOrder zorder = EZOrder.OTHER;
 
+	private Genotyp genotyp;
+
+	/** Plugin pomocí něhož byl waypoint stvořen. Použije se při
+	 * pro polymorfismus chování různých kešoidů */
+	@Setter
+	private KesoidPlugin kesoidPlugin;
+
+	/** Poddruh kešoidu */
+	@Getter @Setter
+	private Kepodr kepodr;
+
 	public static void invalidateAllSklivec() {
 		currentSklivecValidityCode++;
 	}
@@ -79,14 +102,39 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	// this.prefix = prefix.intern();
 	// }
 
-	public Genotyp getGenotyp(final Genom genom) {
-		// if (__ != null) return __;
-		//
-		final Genotyp g = genom.getGenotypVychozi();
-		buildGenotyp(genom, g);
-		getKesoid().doBuildGenotyp(genom, g);
-		// __ = g;
-		return g;
+	public Genotyp getGenotyp() {
+		if (genotyp == null) {
+			throw new IllegalStateException("Prázdný genotyp waypointu: " + this);
+		}
+		return genotyp;
+	}
+
+	/**
+	 * Pokud neexistuje gentotyp vypočte ho a schová.
+	 * @param genom
+	 */
+	private void computeGenotypIfNotExists(final Genom genom) {
+		if (genotyp == null) {
+			final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom);
+			final Genotyp g = genom.UNIVERZALNI_DRUH.genotypVychozi();
+			genotyp = getKesoid().doBuildGenotyp(genotypBuilder.build(this, g));
+			assert genotyp != null;
+		}
+	}
+
+	/**
+	 * Pokud neexistuje gentotyp vypočte ho a schová.
+	 * @param genom
+	 */
+	public void computeGenotypIfNotExistsForAllRing(final Genom genom) {
+		Weikoid0 weikoid = this;
+		do {
+			if (weikoid instanceof Wpt) {
+				final Wpt wpt = (Wpt) weikoid;
+				wpt.computeGenotypIfNotExists(genom);
+			}
+			weikoid = weikoid.next;
+		} while (weikoid != this);
 	}
 
 	// public String getPrefix() {
@@ -286,9 +334,25 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return "Wpt [name=" + nazev + ", type=" + getType() + ", wgs=" + getWgs() + "] " + (getKesoid() == null ? "" : getKesoid().getIdentifier());
 	}
 
-	private void buildGenotyp(final Genom genom, final Genotyp g) {
-		final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom, g);
-		genotypBuilder.build(this);
+	/**
+	 * Odstranění seve z kruhu waipointů. Je to divná metoda, použije se pokud má waypoint prázdné souřadnice.
+	 * Vůbewc by neměl takový waypoint v kruhu být.
+	 */
+	public void removeMeFromRing() {
+		Weikoid0 weikoid = this;
+		while (weikoid.next != this) { // najít v kruhu ten ukazující na mě
+			weikoid = weikoid.next;
+		}
+		// vynechat mě, když vím, že ukazuje na mě. Pokud jsme byl v kruhu sám, nestalo se nic.
+		weikoid.next = weikoid.next.next;
 	}
+
+	public KesoidPlugin getKesoidPlugin() {
+		if (kesoidPlugin == null) {
+			throw new NullPointerException(this.getNazev() + " nemá kesoidPlugin");
+		}
+		return kesoidPlugin;
+	}
+
 
 }

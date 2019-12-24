@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid.mapicon;
 import java.util.Set;
 
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 public class JFenotypVyberIkon extends JVyberIkon0 {
@@ -26,7 +27,7 @@ public class JFenotypVyberIkon extends JVyberIkon0 {
 		this.kesoidModel = kesoidModel;
 	}
 
-	public void resetBag(final IkonBag bag, final KesBag kesBag, final Set<String> aJmenaVybranychAlel) {
+	public void resetBag(final IkonBag bag, final KesBag kesBag, final QualAlelaNames aJmenaVybranychAlel) {
 		this.bag = bag;
 		pouziteAlely = kesBag.getPouziteAlely();
 		refresh(bag, aJmenaVybranychAlel, kesBag.getPoctyAlel());
@@ -59,8 +60,7 @@ public class JFenotypVyberIkon extends JVyberIkon0 {
 
 	@Override
 	protected void zmenaVyberu(final Set<Alela> aAlely) {
-		System.out.println("Vyber alel, které se nefenotypují: " + aAlely);
-		kesoidModel.setJmenaNefenotypovanychAlel(Alela.alelyToNames(aAlely));
+		kesoidModel.setJmenaNefenotypovanychAlel(Alela.alelyToQualNames(aAlely));
 	}
 
 }

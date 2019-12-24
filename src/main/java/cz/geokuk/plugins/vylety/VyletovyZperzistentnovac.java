@@ -3,17 +3,16 @@ package cz.geokuk.plugins.vylety;
 import java.io.*;
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class VyletovyZperzistentnovac {
 
-	private static final Logger log = LogManager.getLogger(VyletovyZperzistentnovac.class.getSimpleName());
+
 
 	private KesoidModel kesoidModel;
 

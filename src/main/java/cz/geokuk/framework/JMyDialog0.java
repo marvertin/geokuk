@@ -78,7 +78,7 @@ public abstract class JMyDialog0 extends JDialog {
 		p.y = Math.max(Math.min(p.y, screenSize.height - mySize.height), 0);
 		final Dimension novy = new Dimension(Math.min(mySize.width, screenSize.width - p.x), Math.min(mySize.height, screenSize.height - p.y)
 
-		);
+				);
 		setLocation(p);
 		setSize(novy);
 

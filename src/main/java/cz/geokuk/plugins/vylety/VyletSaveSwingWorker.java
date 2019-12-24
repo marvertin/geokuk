@@ -5,17 +5,16 @@ package cz.geokuk.plugins.vylety;
 
 import java.util.concurrent.ExecutionException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.framework.MySwingWorker0;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  */
+@Slf4j
 public class VyletSaveSwingWorker extends MySwingWorker0<Vylet, Void> {
 
-	private static final Logger log = LogManager.getLogger(VyletSaveSwingWorker.class.getSimpleName());
+
 
 	private final VyletovyZperzistentnovac vyletovyZperzistentnovac;
 	private final Vylet vylet;

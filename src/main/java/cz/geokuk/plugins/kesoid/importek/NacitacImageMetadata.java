@@ -6,9 +6,6 @@ import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
@@ -19,10 +16,12 @@ import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
 
 import cz.geokuk.core.coordinates.Wgs;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class NacitacImageMetadata extends NacitacInputStream0 {
 
-	private static final Logger log = LogManager.getLogger(NacitacImageMetadata.class.getSimpleName());
+
 
 	private static final ImmutableSet<String> SUPPORTED_FILE_EXTENSIONS = ImmutableSet.of("jpg", "raw", "tif");
 

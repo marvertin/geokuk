@@ -8,8 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.imageio.ImageIO;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.schema.SqlJetConflictAction;
@@ -17,15 +15,17 @@ import org.tmatesoft.sqljet.core.table.*;
 
 import cz.geokuk.plugins.mapy.kachle.data.Ka;
 import cz.geokuk.plugins.mapy.kachle.data.KaLoc;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * An implementation of KachleManager that stores the data to SQLite database.
  *
  * @author Danstahr
  */
+@Slf4j
 class KachleDBManager implements KachleManager {
 
-	private static final Logger log = LogManager.getLogger(KachleDBManager.class.getSimpleName());
+
 
 	/**
 	 * The name of the SQLite file

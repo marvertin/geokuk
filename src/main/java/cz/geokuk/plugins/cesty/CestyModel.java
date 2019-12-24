@@ -12,9 +12,6 @@ import java.util.regex.Pattern;
 
 import javax.swing.SwingWorker;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.coord.*;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
@@ -25,11 +22,13 @@ import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.lang.FUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  *
  */
+@Slf4j
 public class CestyModel extends Model0 {
 
 	private class InvalidacniPesek {
@@ -86,7 +85,7 @@ public class CestyModel extends Model0 {
 
 	}
 
-	private static final Logger log = LogManager.getLogger(CestyModel.class.getSimpleName());
+
 	private static final String MUJ_VYLET = "Můj výlet";
 
 	public static final String VYLET_EXTENSION = "gpx";

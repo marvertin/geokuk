@@ -1,5 +1,6 @@
 package cz.geokuk.core.program;
 
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,15 +11,14 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.program.JPrehledSouboru.YNejdeTo;
 import cz.geokuk.util.file.Filex;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JJedenSouborPanel extends JPanel implements DocumentListener {
 
-	private static final Logger log = LogManager.getLogger(JJedenSouborPanel.class.getSimpleName());
+
 
 	private static final long serialVersionUID = -3579395922979423765L;
 

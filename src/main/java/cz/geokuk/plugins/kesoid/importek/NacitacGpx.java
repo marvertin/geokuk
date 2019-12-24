@@ -1,16 +1,19 @@
 package cz.geokuk.plugins.kesoid.importek;
 
 import java.io.*;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.google.common.collect.Sets;
 
 import cz.geokuk.core.coordinates.Wgs;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -19,15 +22,16 @@ import cz.geokuk.core.coordinates.Wgs;
 /**
  * @author Martin Veverka
  */
+@Slf4j
 public class NacitacGpx extends NacitacInputStream0 {
 
-	private static final Logger log = LogManager.getLogger(NacitacGpx.class.getSimpleName());
+
 
 	private static String TOPOGRAFIC_NAMESPACE_1_0 = "http://www.topografix.com/GPX/1/0";
 	private static String TOPOGRAFIC_NAMESPACE_1_1 = "http://www.topografix.com/GPX/1/1";
 	private static String GROUNSPEAK_NAMESPACE_1_0 = "http://www.groundspeak.com/cache/1/0";
 	private static String GROUNSPEAK_NAMESPACE_1_0_1 = "http://www.groundspeak.com/cache/1/0/1";
-	private static String GPXG_NAMESPACE = "http://geoget.ararat.cz/GpxExtensions/v2";
+	private static Set<String> GPXG_NAMESPACES = Sets.newHashSet("https://www.geoget.cz/GpxExtensions/v2", "http://geoget.ararat.cz/GpxExtensions/v2");
 
 	private static QName URL = new QName(TOPOGRAFIC_NAMESPACE_1_0, "url");
 
@@ -35,13 +39,13 @@ public class NacitacGpx extends NacitacInputStream0 {
 	private static QName LINK_TEXT = new QName(TOPOGRAFIC_NAMESPACE_1_1, "text");
 	private static QName LINK_TYPE = new QName(TOPOGRAFIC_NAMESPACE_1_1, "type");
 	// <gpxg:GeogetExtension xmlns:gpxg="http://geoget.ararat.cz/GpxExtensions/v2">
-	private static QName GPXG_GEOGET_EXTENSION = new QName(GPXG_NAMESPACE, "GeogetExtension");
+	private static GpxgName GPXG_GEOGET_EXTENSION = new GpxgName("GeogetExtension");
 	// <gpxg:Found>2009-10-30T16:16:00.000</gpxg:Found>
-	private static QName GPXG_FOUND = new QName(GPXG_NAMESPACE, "Found");
+	private static GpxgName GPXG_FOUND = new GpxgName("Found");
 	// <gpxg:Tag Category="attribute"><![CDATA[quads-no]]></gpxg:Tag>
-	private static QName GPXG_TAG = new QName(GPXG_NAMESPACE, "Tag");
+	private static GpxgName GPXG_TAG = new GpxgName("Tag");
 	// <gpxg:Flag>1</gpxg:Flag>
-	private static QName GPXG_FLAG = new QName(GPXG_NAMESPACE, "Flag");
+	private static GpxgName GPXG_FLAG = new GpxgName("Flag");
 	// pro cesty
 	private static QName TRK;
 
@@ -240,15 +244,15 @@ public class NacitacGpx extends NacitacInputStream0 {
 	}
 
 	private void readGeogetExtension(final XMLStreamReader rdr, final GpxWpt wpt) throws XMLStreamException {
-		for (; !(rdr.isEndElement() && rdr.getName().equals(GPXG_GEOGET_EXTENSION)); rdr.next()) {
+		for (; !(rdr.isEndElement() && GPXG_GEOGET_EXTENSION.is(rdr.getName())); rdr.next()) {
 			if (!rdr.isStartElement()) {
 				continue;
 			}
 			final QName jmeno4 = rdr.getName();
-			if (jmeno4.equals(GPXG_FOUND)) {
+			if (GPXG_FOUND.is(jmeno4)) {
 				wpt.gpxg.found = rdr.getElementText();
 			}
-			if (jmeno4.equals(GPXG_TAG)) {
+			if (GPXG_TAG.is(jmeno4)) {
 				final String category = rdr.getAttributeValue(null, "Category");
 				final String value = rdr.getElementText();
 				if ("Hodnoceni".equals(category)) {
@@ -279,7 +283,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 					wpt.gpxg.putUserTag(category.substring(PREFIX_USERDEFINOANYCH_GENU.length()), value);
 				}
 			}
-			if (jmeno4.equals(GPXG_FLAG)) {
+			if (GPXG_FLAG.is(jmeno4)) {
 				wpt.gpxg.flag = parseCislo(rdr.getElementText());
 			}
 		}
@@ -414,7 +418,7 @@ public class NacitacGpx extends NacitacInputStream0 {
 				if (jmeno.equals(GS_CACHE)) {
 					readGroudspeak(rdr, wpt);
 				} // konec GROUND_SPEAK
-				if (jmeno.equals(GPXG_GEOGET_EXTENSION)) {
+				if (GPXG_GEOGET_EXTENSION.is(jmeno)) {
 					readGeogetExtension(rdr, wpt);
 				} // konec GPXG
 			} // start element
@@ -423,5 +427,18 @@ public class NacitacGpx extends NacitacInputStream0 {
 
 	private boolean umiNacist(final String resourceName) {
 		return resourceName.toLowerCase().trim().endsWith(".gpx");
+	}
+
+	private static class GpxgName {
+		private final List<QName> qNames;
+
+		GpxgName(final String name) {
+			qNames = GPXG_NAMESPACES.stream().map(ns -> new QName(ns, name)).collect(Collectors.toList());
+		}
+
+		private boolean is(final QName qname) {
+			return qNames.stream().anyMatch(q -> q.equals(qname));
+		}
+
 	}
 }

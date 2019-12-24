@@ -9,10 +9,10 @@ import cz.geokuk.api.mapicon.Imagant;
 
 public class DefaultVykreslovac extends Drawer0 {
 
-	private final ImagantCache imagantCache;
+	private final ImageProvider imageProvider;
 
-	public DefaultVykreslovac(final ImagantCache imagantCache) {
-		this.imagantCache = imagantCache;
+	public DefaultVykreslovac(final ImageProvider imageProvider) {
+		this.imageProvider = imageProvider;
 	}
 
 	/*
@@ -28,11 +28,9 @@ public class DefaultVykreslovac extends Drawer0 {
 		 * @return
 		 */
 		final URL url = getUrl();
-		final BufferedImage image = imagantCache.getImage(url);
+		final BufferedImage image = imageProvider.getImage(url);
 		assert image != null;
-		final Imagant imagant = new Imagant(image);
-		imagant.setXoffset(getXoffset());
-		imagant.setYoffset(getYoffset());
+		final Imagant imagant = new Imagant(image, getXoffset(), getYoffset());
 
 		aImaganti.addFirst(imagant);
 

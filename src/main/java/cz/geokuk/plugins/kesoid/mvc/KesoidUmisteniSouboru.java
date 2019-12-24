@@ -6,21 +6,20 @@ package cz.geokuk.plugins.kesoid.mvc;
 import java.io.File;
 import java.util.Objects;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.core.program.UmisteniSouboru0;
 import cz.geokuk.util.file.Filex;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  *
  */
+@Slf4j
 public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 
 	@SuppressWarnings("unused")
-	private static final Logger log = LogManager.getLogger(KesoidUmisteniSouboru.class.getSimpleName());
+
 
 	public static final Filex GEOKUK_DATA_DIR = new Filex(new File(FConst.HOME_DIR, "geokuk"), false, true);
 	public static final Filex CESTY_DIR = new Filex(new File(FConst.HOME_DIR, "geokuk/cesty"), false, true);

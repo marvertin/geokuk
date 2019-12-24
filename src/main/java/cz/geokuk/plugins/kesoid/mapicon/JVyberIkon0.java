@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
+import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.util.gui.FComponent;
 import cz.geokuk.util.lang.CounterMap;
 
@@ -44,11 +45,11 @@ public abstract class JVyberIkon0 extends Box {
 
 	}
 
-	protected final void refresh(final IkonBag bag, final Set<String> aJmenaVybranychAlel, final CounterMap<Alela> aPoctyVybranychAlel) {
+	protected final void refresh(final IkonBag bag, final QualAlelaNames aJmenaVybranychAlel, final CounterMap<Alela> aPoctyVybranychAlel) {
 		// onInitRefreshing();
 
 		final Genom genom = bag.getGenom();
-		final Set<String> jmenaVybranychAlel = new HashSet<>(aJmenaVybranychAlel);
+		final QualAlelaNames jmenaVybranychAlel = aJmenaVybranychAlel;
 		jvyber1.removeAll();
 		jvyber2.removeAll();
 		final Set<Alela> vybraneAlely = new HashSet<>();
@@ -74,14 +75,15 @@ public abstract class JVyberIkon0 extends Box {
 							// ikonilajbl.setAlignmentX(LEFT_ALIGNMENT);
 							radiosikonou.add(ikonilajbl);
 							final JToggleButton rb = createToggleButton();
-							if (alela.name().equals(alela.getDisplayName()) || !iRadioButton) {
+							// // FIXME [veverka] genetika: podivné porovnání, co se tady lastně porovnává a proč. Vysvětlit zde -- 11. 12. 2019 9:41:41 veverka
+							if (alela.simpleName().equals(alela.getDisplayName()) || !iRadioButton) {
 								if (aPoctyVybranychAlel != null) {
 									rb.setText("<html>" + alela.getDisplayName() + "  (<i>" + aPoctyVybranychAlel.count(alela) + "</i>)");
 								} else {
 									rb.setText(alela.getDisplayName());
 								}
 							} else {
-								rb.setText("<html>" + alela.getDisplayName() + "  (<b><tt>" + alela.name() + "</tt></b>)");
+								rb.setText("<html>" + alela.getDisplayName() + "  (<b><tt>" + alela.qualName() + "</tt></b>)");
 							}
 							rb.setEnabled(shouldEnable(alelax));
 							radiosikonou.add(rb);
@@ -90,7 +92,7 @@ public abstract class JVyberIkon0 extends Box {
 								bg.add(rb);
 							}
 							boxgen.add(radiosikonou);
-							if (jmenaVybranychAlel.contains(alela.name())) {
+							if (jmenaVybranychAlel.getQualNames().contains(alela.qualName())) {
 								rb.setSelected(!iOdskrtnutiVybira);
 								vybraneAlely.add(alela);
 							} else {
@@ -164,7 +166,7 @@ public abstract class JVyberIkon0 extends Box {
 	}
 
 	private Icon najdiIkonu(final Alela alela, final IkonBag bag) {
-		final Genotyp genotypProAlelu = bag.getGenom().getGenotypProAlelu(alela);
+		final Genotyp genotypProAlelu = bag.getGenom().UNIVERZALNI_DRUH.genotypVychozi().with(alela);
 		// genotypProAlelu.put(bag.getGenom().ALELA_H);
 		return bag.seekIkon(genotypProAlelu);
 	}

@@ -3,14 +3,13 @@ package cz.geokuk.plugins.cesty.data;
 import java.awt.Color;
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.cesty.FBarvy;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.util.lang.FUtil;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Cesta implements Iterable<Bousek0> {
 
 	public static class SearchResult {
@@ -18,7 +17,6 @@ public class Cesta implements Iterable<Bousek0> {
 		public long kvadradVzdalenosti = Long.MAX_VALUE;
 	}
 
-	private static final Logger log = LogManager.getLogger(Cesta.class.getSimpleName());
 	/// prazdna cesta ma prazdny start i cil, ale snad by ani nemala byt
 	private Bod start;
 	private Bod cil;

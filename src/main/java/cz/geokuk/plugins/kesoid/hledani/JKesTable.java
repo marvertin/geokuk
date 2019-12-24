@@ -128,7 +128,7 @@ public class JKesTable extends JPanel {
 			case 5:
 				s = formatuj(nalezenec, computeAutora(kesoid));
 				break;
-			// case 6: s = kes.getStatus() == EKesStatus.DISABLED; break;
+				// case 6: s = kes.getStatus() == EKesStatus.DISABLED; break;
 			}
 			return s;
 		}
@@ -168,7 +168,7 @@ public class JKesTable extends JPanel {
 			if (ikonBag == null) {
 				return null;
 			}
-			return ikonBag.seekIkon(kes.getMainWpt().getGenotyp(ikonBag.getGenom()));
+			return ikonBag.seekIkon(kes.getMainWpt().getGenotyp());
 		}
 
 	}

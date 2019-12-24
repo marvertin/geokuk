@@ -68,4 +68,12 @@ public class DocImportBuilder implements IImportBuilder {
 		this.cesty = cesty;
 	}
 
+	@Override
+	public void init() {
+	}
+
+	@Override
+	public void done() {
+	}
+
 }

@@ -6,7 +6,7 @@ package cz.geokuk.plugins.kesoid.mvc;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.ToggleAction0;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mapicon.Alela;
+import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 
 /**
@@ -45,7 +45,7 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 	@Override
 	public void initAfterEventReceiverRegistration() {
 		super.putValue(NAME, sestavJmeno());
-		super.putValue(SMALL_ICON, ikonBag.seekIkon(ikonBag.getGenom().getGenotypProAlelu(alela)));
+		super.putValue(SMALL_ICON, ikonBag.seekIkon(ikonBag.getGenom().UNIVERZALNI_DRUH.genotypVychozi().with(alela)));
 		super.putValue(SHORT_DESCRIPTION, sestavJmeno());
 	}
 
@@ -63,14 +63,16 @@ public class SwitchKesoidUrciteAlelyAction extends ToggleAction0 implements Afte
 
 	public void onEvent(final KeskyVyfiltrovanyEvent event) {
 		vsechny = event.getVsechny();
-		final boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().contains(alela.toString());
+		// TODO [veverka] Tydy původne bylo tot, ale to není dobře užít toString, zkontrolovat, že to finguje. -- 11. 12. 2019 9:35:23 veverka
+		// final boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().contains(alela.toString());
+		final boolean nechtena = event.getModel().getFilter().getJmenaNechtenychAlel().getQualNames().contains(alela.qualName());
 		setSelected(!nechtena);
 		super.putValue(SHORT_DESCRIPTION, sestavJmeno());
 	}
 
 	@Override
 	protected void onSlectedChange(final boolean nastaveno) {
-		kesoidModel.filtrujDleAlely(alela.toString(), nastaveno);
+		kesoidModel.filtrujDleAlely(alela.qualName(), nastaveno);
 	}
 
 	private String sestavJmeno() {

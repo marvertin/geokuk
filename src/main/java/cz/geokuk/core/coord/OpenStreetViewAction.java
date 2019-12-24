@@ -7,15 +7,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.Action0;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class OpenStreetViewAction extends Action0 {
-	private static final Logger log = LogManager.getLogger(OpenStreetViewAction.class.getSimpleName());
+
 
 	private static final long serialVersionUID = -8054017274338240706L;
 

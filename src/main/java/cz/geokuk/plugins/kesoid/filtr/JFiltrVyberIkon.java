@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mapicon.*;
+import cz.geokuk.plugins.kesoid.genetika.*;
+import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
+import cz.geokuk.plugins.kesoid.mapicon.JVyberIkon0;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 
 public class JFiltrVyberIkon extends JVyberIkon0 {
@@ -26,7 +28,7 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
 		this.kesoidModel = kesoidModel;
 	}
 
-	public void resetBag(final IkonBag bag, final KesBag kesBag, final Set<String> aJmenaVybranychAlel) {
+	public void resetBag(final IkonBag bag, final KesBag kesBag, final QualAlelaNames aJmenaVybranychAlel) {
 		this.kesBag = kesBag;
 		refresh(bag, aJmenaVybranychAlel, kesBag.getPoctyAlel());
 	}
@@ -60,8 +62,7 @@ public class JFiltrVyberIkon extends JVyberIkon0 {
 
 	@Override
 	protected void zmenaVyberu(final Set<Alela> aAlely) {
-		System.out.println("Vyber alel, které se Filtrují pryč: " + aAlely);
-		kesoidModel.setJmenaNechtenychAlel(Alela.alelyToNames(aAlely));
+		kesoidModel.setJmenaNechtenychAlel(Alela.alelyToQualNames(aAlely));
 	}
 
 }

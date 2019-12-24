@@ -9,7 +9,6 @@ import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.plugins.mapy.kachle.data.EKaType;
-import cz.geokuk.util.index2d.FlatVisitor;
 import cz.geokuk.util.index2d.Indexator;
 
 public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
@@ -70,8 +69,8 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		final Color barva = kruhy.getBarva();
 		final Stroke prerus = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[] { 5.0f, 5.0f }, 0);
 		g.setColor(barva);
-		iIndexator.visit(getSoord().getBoundingRect(), (FlatVisitor<Wpt>) aSheet -> {
-			final Mou mou = new Mou(aSheet.getXx(), aSheet.getYy());
+		iIndexator.bound(getSoord().getBoundingRect()).stream().forEach(wpt -> {
+			final Mou mou = wpt.getMou();
 			final Point p = getSoord().transform(mou);
 			g.setStroke(prerus);
 			g.setColor(barva);
