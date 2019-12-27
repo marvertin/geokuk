@@ -18,31 +18,6 @@ public class BeanBag implements Factory {
 
 	private EventManager eveman;
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.program.Factory#create(java.lang.Class, java.lang.Object)
-	 */
-	@Override
-	public <T> T create(final Class<T> klasa, final Object... params) {
-		if (!initialized) {
-			throw new RuntimeException("Kontejner jeste nebyl inicializovan");
-		}
-		final Class<?>[] types = new Class<?>[params.length];
-		for (int i = 0; i < params.length; i++) {
-			final Object param = params[i];
-			types[i] = param == null ? null : param.getClass();
-		}
-		try {
-			final Constructor<T> constructor = klasa.getConstructor(types);
-			final T obj = constructor.newInstance(params);
-			init(obj);
-			return obj;
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
-		}
-
-	}
 
 	public void init() {
 

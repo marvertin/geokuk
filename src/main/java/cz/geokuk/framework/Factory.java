@@ -9,8 +9,6 @@ package cz.geokuk.framework;
  */
 public interface Factory {
 
-	public abstract <T> T create(Class<T> klasa, Object... params);
-
 	/** Incializuje objekt a nechá mu posílat eventy i do příště */
 	public abstract <T> T init(T obj);
 
