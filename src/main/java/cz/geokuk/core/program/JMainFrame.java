@@ -95,6 +95,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			final JComponent renderSlide = new JRenderSlide();
 			final JComponent zoomovaciObdelnik = new JZoomovaciObdelnik();
 			final JComponent meritkovnik = new JMeritkoSlide();
+			final JComponent mrizkaDd = new JMrizkaDd();
 			final JComponent mrizkaDdMmMmm = new JMrizkaDdMmMmm();
 			final JComponent mrizkaDdMmSs = new JMrizkaDdMmSs();
 			final JComponent mrizkaUtm = new JMrizkaUtm();
@@ -114,6 +115,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			smrizema.add(renderSlide);
 			smrizema.add(zoomovaciObdelnik);
 			smrizema.add(meritkovnik);
+			smrizema.add(mrizkaDd);
 			smrizema.add(mrizkaDdMmMmm);
 			smrizema.add(mrizkaDdMmSs);
 			smrizema.add(mrizkaUtm);
@@ -134,6 +136,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			factory.init(renderSlide);
 			factory.init(zoomovaciObdelnik);
 			factory.init(meritkovnik);
+			factory.init(mrizkaDd);
 			factory.init(mrizkaDdMmMmm);
 			factory.init(mrizkaDdMmSs);
 			factory.init(mrizkaUtm);

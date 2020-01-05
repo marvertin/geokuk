@@ -58,6 +58,7 @@ public class Akce {
 	public final NastavParametryZvyraznovacichKruhuAction nastavParametryZvyraznovacichKruhuAction = new NastavParametryZvyraznovacichKruhuAction();
 	public final ObsazenostOnoffAction obsazenostOnoffAction = new ObsazenostOnoffAction();
 
+	public final MrizkaDdAction mrizkaDdAction = new MrizkaDdAction();
 	public final MrizkaDdMmMmmAction mrizkaDdMmMmmAction = new MrizkaDdMmMmmAction();
 	public final MrizkaDdMmSsAction mrizkaDdMmSsAction = new MrizkaDdMmSsAction();
 	public final MrizkaS42Action mrizkaS42Action = new MrizkaS42Action();

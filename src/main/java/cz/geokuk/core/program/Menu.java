@@ -8,7 +8,7 @@ import javax.swing.*;
 import cz.geokuk.core.lookandfeel.LafSupport;
 import cz.geokuk.plugins.kesoid.kind.kes.*;
 import cz.geokuk.plugins.kesoid.mapicon.JMenuIkony;
-import cz.geokuk.plugins.kesoid.mvc.*;
+import cz.geokuk.plugins.kesoid.mvc.JVybiracVyletu;
 import cz.geokuk.plugins.mapy.MapyAction0;
 import cz.geokuk.plugins.mapy.PodkladAction;
 import cz.geokuk.plugins.refbody.NaKonkretniBodAction;
@@ -215,6 +215,7 @@ public class Menu extends MenuStrujce {
 
 		separator();
 
+		item(akce.mrizkaDdAction);
 		item(akce.mrizkaDdMmMmmAction);
 		item(akce.mrizkaDdMmSsAction);
 
