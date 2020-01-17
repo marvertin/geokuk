@@ -33,7 +33,7 @@ public abstract class Test0 {
 
 	protected void add(final int x) {
 		expect.add(x);
-		tree = tree.insert(Mergers.onlyRight(), x);
+		tree = tree.insert(ValueMergers.onlyRight(), x);
 		//assertTrue(kontrolaVyvazenosti(tree));
 	}
 
@@ -45,7 +45,7 @@ public abstract class Test0 {
 
 	protected void addNekontrolujVyvazebost(final int x) {
 		expect.add(x);
-		tree = tree.insert(Mergers.onlyRight(), x);
+		tree = tree.insert(ValueMergers.onlyRight(), x);
 	}
 
 	protected void add(final int ... x) {

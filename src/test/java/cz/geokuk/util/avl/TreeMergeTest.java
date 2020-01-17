@@ -11,13 +11,13 @@ public class TreeMergeTest extends Test0 {
 	@Test
 	public void testMerge0() {
 
-		assertSame(Avl.empty(), Tree.merge(tree, Mergers.throwing(), Avl.empty()));
+		assertSame(Avl.empty(), Tree.union(tree, ValueMergers.throwing(), Avl.empty()));
 	}
 
 	@Test
 	public void testMerge0left() {
 		add(4, 56, 8, 99, 88);
-		tree =Tree.merge(tree, Mergers.throwing(), Avl.empty());
+		tree =Tree.union(tree, ValueMergers.throwing(), Avl.empty());
 		assertOk();
 	}
 
@@ -25,7 +25,7 @@ public class TreeMergeTest extends Test0 {
 	@Test
 	public void testMerge0right() {
 		add(4, 56, 8, 99, 88);
-		tree =Tree.merge(Avl.empty(), Mergers.throwing(), tree);
+		tree =Tree.union(Avl.empty(), ValueMergers.throwing(), tree);
 		assertOk();
 	}
 
@@ -35,7 +35,7 @@ public class TreeMergeTest extends Test0 {
 		add(1, 2, 3, 4, 5, 6);
 		final Tree<Integer> tree1 = tree; tree =Avl.empty();
 		add(100, 200, 300, 400, 500, 600);
-		tree = Tree.merge(tree1, Mergers.throwing(), tree);
+		tree = Tree.union(tree1, ValueMergers.throwing(), tree);
 		assertOk();
 	}
 
@@ -44,7 +44,7 @@ public class TreeMergeTest extends Test0 {
 		add(1, 3, 5, 7, 9);
 		final Tree<Integer> tree1 = tree; tree =Avl.empty();
 		add(2, 4, 6, 8, 10);
-		tree = Tree.merge(tree1, Mergers.throwing(), tree);
+		tree = Tree.union(tree1, ValueMergers.throwing(), tree);
 		assertOk();
 	}
 
@@ -54,7 +54,7 @@ public class TreeMergeTest extends Test0 {
 		add(1, 3, 5, 7, 9);
 		final Tree<Integer> tree1 = tree; tree =Avl.empty();
 		add(2, 4, 5, 8, 10);
-		tree = Tree.merge(tree1, Mergers.onlyLeft(), tree);
+		tree = Tree.union(tree1, ValueMergers.onlyLeft(), tree);
 		assertOk();
 	}
 
@@ -68,7 +68,7 @@ public class TreeMergeTest extends Test0 {
 		for (int i=0; i< 5000; i++) {
 			addNekontrolujVyvazebost(rnd.nextInt(100) + 50);
 		}
-		tree = Tree.merge(tree1, Mergers.onlyLeft(), tree);
+		tree = Tree.union(tree1, ValueMergers.onlyLeft(), tree);
 		assertOk();
 	}
 

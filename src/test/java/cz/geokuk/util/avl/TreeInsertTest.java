@@ -53,7 +53,7 @@ public class TreeInsertTest extends Test0 {
 		Tree<Double> xx = Tree.empty();
 		for (int i=0; i<100; i++) {
 			final double d = rnd.nextDouble();
-			xx = xx.insert(Mergers.onlyRight(), d);
+			xx = xx.insert(ValueMergers.onlyRight(), d);
 			assertTrue(kontrolaVyvazenosti(xx));
 		}
 	}

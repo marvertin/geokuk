@@ -39,7 +39,7 @@ public class TreeMergeTestX  {
 		final List<Dato> expect = new LinkedList<>(expectSet);
 
 
-		final Tree<Dato> tree = Tree.merge(da, Dato.MERGER, db);
+		final Tree<Dato> tree = Tree.union(da, Dato.MERGER, db);
 		final List<Dato> skutecne = new LinkedList<>();
 		tree.drainTo(skutecne);
 		System.out.println();
@@ -123,7 +123,7 @@ public class TreeMergeTestX  {
 
 	protected void addA(final int x) {
 		eda.put(da(x), da(x));
-		da = da.insert(Mergers.onlyRight(), da(x));
+		da = da.insert(ValueMergers.onlyRight(), da(x));
 	}
 
 
@@ -135,7 +135,7 @@ public class TreeMergeTestX  {
 
 	protected void addB(final int x) {
 		edb.put(db(x), db(x));
-		db = db.insert(Mergers.onlyRight(),db(x));
+		db = db.insert(ValueMergers.onlyRight(),db(x));
 	}
 
 

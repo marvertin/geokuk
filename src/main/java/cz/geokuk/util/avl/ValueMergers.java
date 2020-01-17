@@ -7,7 +7,7 @@ import java.util.function.BinaryOperator;
  * @author veverka
  *
  */
-public class Mergers {
+public class ValueMergers {
 
 	public static <T extends Comparable<T>> BinaryOperator<T> throwing() {
 		return (x, y) -> {

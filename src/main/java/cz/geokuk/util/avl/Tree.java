@@ -59,7 +59,8 @@ public abstract class Tree<T extends Comparable<T>> {
 
 	public abstract Splited<T> split(T t);
 
-	public static <T extends Comparable<T>> Tree<T> merge(final Tree<T> tree1, final BinaryOperator<T> valueMerger, final Tree<T> tree2) {
+
+	public static <T extends Comparable<T>> Tree<T> union(final Tree<T> tree1, final BinaryOperator<T> valueMerger, final Tree<T> tree2) {
 		if (tree1 == EMPTY) {
 			return tree2;
 		}
@@ -75,14 +76,32 @@ public abstract class Tree<T extends Comparable<T>> {
 			final T mergedValue = spl1.value.map(val1 -> merge2values(val1, valueMerger, central)).orElse(central);
 			//			assert mergedValue.compareTo(central) == 0 : "Value merger must return same comparable value: " + mergedValue + " != merge(" + spl1.v + ", " + val + ")";
 
-			return node(merge(spl1.left, valueMerger, node2.left), mergedValue, merge(spl1.right, valueMerger, node2.right));
+			return node(union(spl1.left, valueMerger, node2.left), mergedValue, union(spl1.right, valueMerger, node2.right));
 		} else {
 			final T central = node1.value;
 			final Splited<T> spl2 = node2.split(central);
 			final T mergedValue = spl2.value.map(val2 -> merge2values(central, valueMerger, val2)).orElse(central);
-			return node(merge(node1.left, valueMerger, spl2.left), mergedValue, merge(node1.right, valueMerger, spl2.right));
+			return node(union(node1.left, valueMerger, spl2.left), mergedValue, union(node1.right, valueMerger, spl2.right));
 		}
 	}
+
+	public static <T extends Comparable<T>> Tree<T> intersection(final Tree<T> tree1, final BinaryOperator<T> valueMerger, final Tree<T> tree2) {
+		return new TreeCombiner<T>(
+				() -> Avl.empty(),
+				(left, right) -> left.flatMap(l -> right.map(r -> valueMerger.apply(l, r) )),
+				() -> Avl.empty())
+				.combine(tree1,tree2);
+	}
+
+	public static <T extends Comparable<T>> Tree<T> difference(final Tree<T> tree1, final BinaryOperator<T> valueMerger, final Tree<T> tree2) {
+		return new TreeCombiner<T>(
+				() -> Avl.empty(),
+				(left, right) -> right.isPresent() ? Optional.empty() : left,
+						() -> tree1
+				)
+				.combine(tree1, tree2);
+	}
+
 
 	public static <T extends Comparable<T>> boolean equals(final Tree<T> tree1, final Tree<T> tree2) {
 		if (tree1 == EMPTY) {
