@@ -28,7 +28,6 @@ class TreeCombiner<T extends Comparable<T>> {
 		final Node<T> node2 = (Node<T>) tree2;
 		if  (node1.count < node2.count) { // optimalization, better is split lesser, it is more balanced
 			final T central = node2.value;
-			System.out.println("1central: " + central);
 			final Splited<T> spl1 = node1.split(central);
 			return join(
 					combine(spl1.left, node2.left),
@@ -36,7 +35,6 @@ class TreeCombiner<T extends Comparable<T>> {
 					combine(spl1.right, node2.right));
 		} else {
 			final T central = node1.value;
-			System.out.println("2central: " + central);
 			final Splited<T> spl2 = node2.split(central);
 			return join(
 					combine(node1.left, spl2.left),
@@ -46,8 +44,6 @@ class TreeCombiner<T extends Comparable<T>> {
 	}
 
 	public static <T extends Comparable<T>> Tree<T> join(final Tree<T> left, final Optional<T> value, final Tree<T> right) {
-		System.out.println(left + "<----" + value + "---->" + right);
-		assert value.isPresent();
 		return value.isPresent()
 				? Avl.node(left, value.get(), right)
 						: Tree.union(left, ValueMergers.throwing(), right);

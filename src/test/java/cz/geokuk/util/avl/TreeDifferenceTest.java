@@ -4,7 +4,7 @@ import java.util.SortedSet;
 
 import org.junit.Test;
 
-public class TreeIntersectionTest extends TreeCombineTest0 {
+public class TreeDifferenceTest extends TreeCombineTest0 {
 
 
 
@@ -28,6 +28,7 @@ public class TreeIntersectionTest extends TreeCombineTest0 {
 		addA(58);
 		assertOk();
 	}
+
 
 	@Test
 	public void testRuzne() {
@@ -88,13 +89,14 @@ public class TreeIntersectionTest extends TreeCombineTest0 {
 
 	@Override
 	protected void prikombinujExpected(final SortedSet<Integer> kam, final SortedSet<Integer> co) {
-		kam.retainAll(co);
+		kam.removeAll(co);
 	}
 
 
 	@Override
 	protected Tree<Integer> zkobinuj(final Tree<Integer> treeAA, final Tree<Integer> treeBB) {
-		return Tree.intersection(treeAA, ValueMergers.onlyLeft(), treeBB);
+		return Tree.difference(treeAA, ValueMergers.onlyLeft(), treeBB);
 	}
+
 
 }

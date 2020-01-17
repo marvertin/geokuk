@@ -1,93 +1,101 @@
 package cz.geokuk.util.avl;
 
-import static org.junit.Assert.assertSame;
-
-import java.util.Random;
-import java.util.function.BinaryOperator;
+import java.util.SortedSet;
 
 import org.junit.Test;
 
-public class TreeUnionTest extends Test0 {
+public class TreeUnionTest extends TreeCombineTest0 {
 
 
-	public static <T extends Comparable<T>> BinaryOperator<T> onlyLeftAndcomparing() {
-		return (x, y) -> {
-			assert x.equals(y) : x + "!=" + y;
-			return x;
-		};
-	}
+
 
 	@Test
-	public void testMerge0() {
-
-		assertSame(Avl.empty(), Tree.union(tree, ValueMergers.throwing(), Avl.empty()));
-	}
-
-	@Test
-	public void testMerge0left() {
-		add(4, 56, 8, 99, 88);
-		tree =Tree.union(tree, ValueMergers.throwing(), Avl.empty());
+	public void test0() {
 		assertOk();
 	}
 
 
 	@Test
-	public void testMerge0right() {
-		add(4, 56, 8, 99, 88);
-		tree =Tree.union(Avl.empty(), ValueMergers.throwing(), tree);
+	public void test01() {
+		addA(58);
+		assertOk();
+	}
+
+
+
+	@Test
+	public void test02() {
+		addA(58);
 		assertOk();
 	}
 
 
 	@Test
-	public void testMergeBothDistinct1() {
-		add(1, 2, 3, 4, 5, 6);
-		final Tree<Integer> tree1 = tree; tree =Avl.empty();
-		add(100, 200, 300, 400, 500, 600);
-		tree = Tree.union(tree1, ValueMergers.throwing(), tree);
-		assertOk();
-	}
-
-	@Test
-	public void testMergeBothDistinct2() {
-		add(1, 3, 5, 7, 9);
-		final Tree<Integer> tree1 = tree; tree =Avl.empty();
-		add(2, 4, 6, 8, 10);
-		tree = Tree.union(tree1, ValueMergers.throwing(), tree);
+	public void testRuzne() {
+		addA(13);
+		addB(17);
 		assertOk();
 	}
 
 
 	@Test
-	public void testMergeBoth() {
-		add(1, 3, 5, 7, 9);
-		final Tree<Integer> tree1 = tree; tree =Avl.empty();
-		add(2, 4, 5, 8, 10);
-		tree = Tree.union(tree1, onlyLeftAndcomparing(), tree);
+	public void testRuzne2() {
+		addA(10, 25, 60);
+		addB(17, 8, 14, 9);
 		assertOk();
 	}
 
+
 	@Test
-	public void testMergeBoth1() {
-		add(42);
-		final Tree<Integer> tree1 = tree; tree =Avl.empty();
-		add(42);
-		tree = Tree.union(tree1, onlyLeftAndcomparing(), tree);
+	public void testRuzne3() {
+		addA(4);
+		addB(17);
 		assertOk();
 	}
 
+
+
 	@Test
-	public void testMergeBig() {
-		final Random rnd = new Random(5469321l);
-		for (int i=0; i< 5000; i++) {
-			addNekontrolujVyvazebost(rnd.nextInt(100));
-		}
-		final Tree<Integer> tree1 = tree; tree = Avl.empty();
-		for (int i=0; i< 5000; i++) {
-			addNekontrolujVyvazebost(rnd.nextInt(100) + 50);
-		}
-		tree = Tree.union(tree1, ValueMergers.onlyLeft(), tree);
+	public void testStejne() {
+		addA(13);
+		addB(13);
 		assertOk();
+	}
+
+
+	@Test
+	public void testPodmA() {
+		addA(13, 30);
+		addB(5, 13, 30);
+		assertOk();
+	}
+
+
+	@Test
+	public void testPodmB() {
+		addA(4, 13, 30, 200);
+		addB(5, 13, 30);
+		assertOk();
+	}
+
+
+	@Test
+	public void testBoth() {
+		addA(1,2,3,4,5,6,7,8);
+		addB(25,2,3,5,17,49,86);
+		assertOk();
+	}
+
+
+	@Override
+	protected void prikombinujExpected(final SortedSet<Integer> kam, final SortedSet<Integer> co) {
+		kam.addAll(co);
+	}
+
+
+	@Override
+	protected Tree<Integer> zkobinuj(final Tree<Integer> treeAA, final Tree<Integer> treeBB) {
+		return Tree.union(treeAA, ValueMergers.onlyLeft(), treeBB);
 	}
 
 }
