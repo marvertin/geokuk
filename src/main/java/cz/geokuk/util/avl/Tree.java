@@ -61,43 +61,27 @@ public abstract class Tree<T extends Comparable<T>> {
 
 
 	public static <T extends Comparable<T>> Tree<T> union(final Tree<T> tree1, final BinaryOperator<T> valueMerger, final Tree<T> tree2) {
-		if (tree1 == EMPTY) {
-			return tree2;
-		}
-		if (tree2 == EMPTY) {
-			return tree1;
-		}
-		final Node<T> node1 = (Node<T>) tree1;
-		final Node<T> node2 = (Node<T>) tree2;
-
-		if  (node1.count < node2.count) { // optimalization, better is split lesser, it is more balanced
-			final T central = node2.value;
-			final Splited<T> spl1 = node1.split(central);
-			final T mergedValue = spl1.value.map(val1 -> merge2values(val1, valueMerger, central)).orElse(central);
-			//			assert mergedValue.compareTo(central) == 0 : "Value merger must return same comparable value: " + mergedValue + " != merge(" + spl1.v + ", " + val + ")";
-
-			return node(union(spl1.left, valueMerger, node2.left), mergedValue, union(spl1.right, valueMerger, node2.right));
-		} else {
-			final T central = node1.value;
-			final Splited<T> spl2 = node2.split(central);
-			final T mergedValue = spl2.value.map(val2 -> merge2values(central, valueMerger, val2)).orElse(central);
-			return node(union(node1.left, valueMerger, spl2.left), mergedValue, union(node1.right, valueMerger, spl2.right));
-		}
+		return new TreeCombiner<T>(
+				TreeCombiner.opositTree(),
+				(left, right) -> left.isPresent() ? right.isPresent() ? Optional.of(valueMerger.apply(left.get(), right.get())) : left : right,
+						TreeCombiner.opositTree()
+				)
+				.combine(tree1,tree2);
 	}
 
 	public static <T extends Comparable<T>> Tree<T> intersection(final Tree<T> tree1, final BinaryOperator<T> valueMerger, final Tree<T> tree2) {
 		return new TreeCombiner<T>(
-				() -> Avl.empty(),
+				TreeCombiner.emptyTree(),
 				(left, right) -> left.flatMap(l -> right.map(r -> valueMerger.apply(l, r) )),
-				() -> Avl.empty())
+				TreeCombiner.emptyTree())
 				.combine(tree1,tree2);
 	}
 
 	public static <T extends Comparable<T>> Tree<T> difference(final Tree<T> tree1, final BinaryOperator<T> valueMerger, final Tree<T> tree2) {
 		return new TreeCombiner<T>(
-				() -> Avl.empty(),
+				TreeCombiner.emptyTree(),
 				(left, right) -> right.isPresent() ? Optional.empty() : left,
-						() -> tree1
+						TreeCombiner.opositTree()
 				)
 				.combine(tree1, tree2);
 	}

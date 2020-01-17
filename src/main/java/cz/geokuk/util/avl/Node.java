@@ -6,9 +6,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
-@ToString
 class Node<T extends Comparable<T>> extends Tree<T> {
 	final Tree<T> left;
 	final T value;
@@ -143,4 +141,18 @@ class Node<T extends Comparable<T>> extends Tree<T> {
 		return right.hashCode(left.hashCode(accum) * 31 + value.hashCode());
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		if (left != Avl.empty()) {
+			sb.append(left);
+		}
+		sb.append(value);
+		if (right != Avl.empty()) {
+			sb.append(right);
+		}
+		sb.append("}");
+		return sb.toString();
+	}
 }

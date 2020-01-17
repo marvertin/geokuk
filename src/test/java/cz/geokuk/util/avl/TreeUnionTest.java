@@ -3,10 +3,19 @@ package cz.geokuk.util.avl;
 import static org.junit.Assert.assertSame;
 
 import java.util.Random;
+import java.util.function.BinaryOperator;
 
 import org.junit.Test;
 
-public class TreeMergeTest extends Test0 {
+public class TreeUnionTest extends Test0 {
+
+
+	public static <T extends Comparable<T>> BinaryOperator<T> onlyLeftAndcomparing() {
+		return (x, y) -> {
+			assert x.equals(y) : x + "!=" + y;
+			return x;
+		};
+	}
 
 	@Test
 	public void testMerge0() {
@@ -54,7 +63,16 @@ public class TreeMergeTest extends Test0 {
 		add(1, 3, 5, 7, 9);
 		final Tree<Integer> tree1 = tree; tree =Avl.empty();
 		add(2, 4, 5, 8, 10);
-		tree = Tree.union(tree1, ValueMergers.onlyLeft(), tree);
+		tree = Tree.union(tree1, onlyLeftAndcomparing(), tree);
+		assertOk();
+	}
+
+	@Test
+	public void testMergeBoth1() {
+		add(42);
+		final Tree<Integer> tree1 = tree; tree =Avl.empty();
+		add(42);
+		tree = Tree.union(tree1, onlyLeftAndcomparing(), tree);
 		assertOk();
 	}
 
