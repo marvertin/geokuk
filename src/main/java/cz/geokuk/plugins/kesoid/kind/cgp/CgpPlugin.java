@@ -32,4 +32,9 @@ public class CgpPlugin implements KesoidPlugin {
 		return new CgpPopiskyDef().doInit().build();
 	}
 
+	@Override
+	public int getOrder() {
+		return 1000;
+	}
+
 }

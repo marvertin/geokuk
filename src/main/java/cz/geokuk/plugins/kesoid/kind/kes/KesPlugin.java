@@ -39,4 +39,9 @@ public class KesPlugin implements KesoidPlugin {
 		return map.get(kepodr).build();
 	}
 
+	@Override
+	public int getOrder() {
+		return 2000;
+	}
+
 }

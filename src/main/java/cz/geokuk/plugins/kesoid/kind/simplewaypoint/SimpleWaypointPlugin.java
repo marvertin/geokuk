@@ -50,4 +50,9 @@ public class SimpleWaypointPlugin implements KesoidPlugin {
 		return new SimpleWaypointPopiskyDef().doInit().build();
 	}
 
+	@Override
+	public int getOrder() {
+		return 6000;
+	}
+
 }

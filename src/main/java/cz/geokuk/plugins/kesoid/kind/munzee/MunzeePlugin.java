@@ -32,4 +32,9 @@ public class MunzeePlugin implements KesoidPlugin {
 		return new MunzeePopiskyDef().doInit().build();
 	}
 
+	@Override
+	public int getOrder() {
+		return 4000;
+	}
+
 }

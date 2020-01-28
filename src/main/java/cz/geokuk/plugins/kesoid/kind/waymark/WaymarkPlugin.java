@@ -32,4 +32,9 @@ public class WaymarkPlugin implements KesoidPlugin {
 		return new WaymarkPopiskyDef().doInit().build();
 	}
 
+	@Override
+	public int getOrder() {
+		return 3000;
+	}
+
 }

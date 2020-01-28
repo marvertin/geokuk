@@ -5,23 +5,16 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Lists;
+import org.reflections.Reflections;
 
 import cz.geokuk.framework.Factory;
 import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
-import cz.geokuk.plugins.kesoid.kind.cgp.CgpPlugin;
-import cz.geokuk.plugins.kesoid.kind.kes.KesPlugin;
-import cz.geokuk.plugins.kesoid.kind.munzee.MunzeePlugin;
-import cz.geokuk.plugins.kesoid.kind.photo.PhotoPlugin;
 import cz.geokuk.plugins.kesoid.kind.simplewaypoint.SimpleWaypointGpxWptProcak;
-import cz.geokuk.plugins.kesoid.kind.simplewaypoint.SimpleWaypointPlugin;
-import cz.geokuk.plugins.kesoid.kind.waymark.WaymarkPlugin;
 import cz.geokuk.util.procak.ProcakDispatcher;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 /**
  * Manager kesouidových pluginů.
@@ -33,37 +26,25 @@ import lombok.Getter;
  */
 public class KesoidPluginManager {
 
-	@Getter
-	private  final CgpPlugin cgpPlugin = new CgpPlugin();
 
 	@Getter
-	private final KesPlugin kesPlugin = new KesPlugin();
-
-	@Getter
-	private  final WaymarkPlugin waymarkPlugin = new WaymarkPlugin();
-
-	@Getter
-	private  final MunzeePlugin munzeePlugin = new MunzeePlugin();
-
-	@Getter
-	private  final PhotoPlugin photoPlugin = new PhotoPlugin();
-
-	@Getter
-	private final SimpleWaypointPlugin simpleWaypointPlugin = new SimpleWaypointPlugin();
-
-	@Getter
-	private final List<KesoidPlugin> plugins
-	= Lists.newArrayList(
-			cgpPlugin,
-			kesPlugin,
-			waymarkPlugin,
-			munzeePlugin,
-			photoPlugin,
-			simpleWaypointPlugin
-			);
-
+	private final List<KesoidPlugin> plugins;
 	private Factory factory;
 
+	public KesoidPluginManager() {
+		System.out.println("Found kesoid plugins:");
+		plugins = new Reflections(this.getClass()).getSubTypesOf(KesoidPlugin.class).stream()
+				.map(this::newInstance)
+				.sorted( (p1, p2) -> p1.getOrder() - p2.getOrder())
+				.peek(plugin -> System.out.println("   " + plugin.getClass().getName()))
+				.collect(Collectors.toList());
+		System.out.println("Found " + plugins.size() + " kesoid plugins total.");
+	}
+
+	@SneakyThrows
+	private KesoidPlugin newInstance(final Class<? extends KesoidPlugin> clazz) {
+		return clazz.newInstance();
+	}
 
 	/**
 	 * Zřídíme procák dispatchera, který bude jednotlivými poskytovateli publikovat waypointy do buldera.
@@ -84,7 +65,7 @@ public class KesoidPluginManager {
 				new SimpleWaypointGpxWptProcak(ctx,
 						(gpxwpt, kepodr) -> {
 							final Wpt wpt = builder.createWpt(gpxwpt, kepodr);
-							wpt.setKesoidPlugin(simpleWaypointPlugin);
+							wpt.setKesoidPlugin(sinkPlugin());
 							return wpt;
 						})
 
@@ -92,7 +73,13 @@ public class KesoidPluginManager {
 
 	}
 
-
+	/**
+	 * Poslední z pluginů je sink plugin, do kterého se nasype to, co jiní nechtěli.
+	 * @return
+	 */
+	private KesoidPlugin sinkPlugin() {
+		return plugins.get(plugins.size() - 1);
+	}
 
 	/**
 	 * Vyrobí všechna okna do dolního rohu pro kešoidy.

@@ -40,4 +40,9 @@ public class PhotoPlugin implements KesoidPlugin {
 		return new PhotoPopiskyDef().doInit().build();
 	}
 
+	@Override
+	public int getOrder() {
+		return 5000;
+	}
+
 }
