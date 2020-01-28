@@ -2,7 +2,7 @@ package cz.geokuk.plugins.kesoid.genetika;
 
 import org.junit.*;
 
-import cz.geokuk.plugins.kesoid.genetika.*;
+
 
 public class DruhTest {
 

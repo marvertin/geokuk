@@ -9,13 +9,11 @@ import java.util.Objects;
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.core.program.UmisteniSouboru0;
 import cz.geokuk.util.file.Filex;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Martin Veverka
  *
  */
-@Slf4j
 public class KesoidUmisteniSouboru extends UmisteniSouboru0 {
 
 	@SuppressWarnings("unused")

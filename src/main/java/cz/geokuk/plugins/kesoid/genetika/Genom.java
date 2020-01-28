@@ -5,9 +5,7 @@ import java.util.stream.Collectors;
 
 import cz.geokuk.util.lang.CCounterMap;
 import cz.geokuk.util.lang.CounterMap;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class Genom {
 
 	final String ODDELOVAC_KVALIFOVANY = ":";

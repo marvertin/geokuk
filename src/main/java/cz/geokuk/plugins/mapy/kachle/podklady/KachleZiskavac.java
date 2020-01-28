@@ -256,11 +256,6 @@ public class KachleZiskavac {
 		// ExecutorService nedekorovanyServisProZjisteni
 	}
 
-
-
-	private static Pocitadlo pocitPlneniImageDoZnicenychKachli = new PocitadloRoste("ka56 #duplicitně přijaté obrázky",
-			"Počítá, kolikrát se stáhla kachle duplicitně, tedy když už díky plnění jiného poždavku byla naplněna a požadavek nebyl všas zkanclován.");
-
 	private static Pocitadlo pocitBrzdeniOfflineKdyzJeOnline = new PocitadloRoste("ka61 #počet brzdení dávkového downloadu",
 			"Počítá, kolikrát se o 100 ms zbrzdilo dávkové dotahování, protože běžel online.");
 
@@ -314,11 +309,6 @@ public class KachleZiskavac {
 
 	private final PocitadloRoste pocitCancelCelkem = new PocitadloRoste("ka51 #cancel celkem", "Celkový počet vydaných poždavaků na kanclování");
 
-	private final PocitadloRoste pocitCancelOdebranListener = new PocitadloRoste("ka52 #cancel jen odebrán listener",
-			"Z celového počtu cancelů ty, kde byl jen odebrán listener a dál se nic nemusí řešit, protože ještě někdo jiný čeká.");
-	private final PocitadloRoste pocitCancelProvedenePokusy = new PocitadloRoste("ka53 #cance provedené pokusy", "Počet skutečně provedených pokusů o kanclování, tedy zavoláníá future.cancel");
-	private final PocitadloRoste pocitCancelNehotovePozadavky = new PocitadloRoste("ka54 #cance skutečné cancely ještě nedokončených požadavků",
-			"Počet SKUTEČNÝCH cancelů ,tedy cancelů proti nehotovým požadavkům.");
 	private final PocitadloRoste pocitCancelPozde = new PocitadloRoste("ka55 #cance pozdní, když už je kachle získána", "Počet tancelů, které přišly pozdě, kdy už jsou data načtena.");
 
 	private final Pocitadlo pocitVelikostPametoveKese = new PocitadloMalo("Počet dlaždic v memcache: ",
