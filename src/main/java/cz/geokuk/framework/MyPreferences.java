@@ -476,6 +476,20 @@ public class MyPreferences extends Preferences {
 		return new LinkedHashSet<>(stringList != null ? stringList : defval);
 	}
 
+	public <K,V> Map<K, V> getMap(final String key, final Map<K, V> defval) {
+		final MyPreferences node = node(key);
+		final HashMap<K, V> result = new HashMap<K, V>();
+		for (final Map.Entry<K, V> entry : defval.entrySet()) {
+			final V defaultValue = entry.getValue();
+			@SuppressWarnings("unchecked")
+			final Class<V> valueType = (Class<V>) defaultValue.getClass();
+			final V newValue = node.getAnyElement(entry.getKey().toString(), defaultValue, valueType);
+			result.put(entry.getKey(), newValue);
+		}
+		return result;
+	}
+
+
 	public QualAlelaNames getQualAlelaNames(final String key, final QualAlelaNames defval) {
 		final Set<String> set = getStringSet(key, defval == null ? null : defval.getQualNames());
 		return set == null ? null : new QualAlelaNames(set);
@@ -691,6 +705,17 @@ public class MyPreferences extends Preferences {
 	public void putStringSet(final String key, final Set<String> val) {
 		put(key, pack(new ArrayList<>(val)));
 	}
+
+	public <V> void putMap(final String key, final Map<?, V> val) {
+		final MyPreferences node = node(key);
+		val.entrySet().forEach(entry -> {
+			final V v = entry.getValue();
+			@SuppressWarnings("unchecked")
+			final Class<V> vclass = (Class<V>) v.getClass();
+			node.putAnyElement(entry.getKey().toString(), v, vclass);
+		});
+	}
+
 
 	public void putQualAlelaNames(final String key, final QualAlelaNames val) {
 		putStringSet(key, val.getQualNames());
