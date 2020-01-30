@@ -8,7 +8,7 @@ import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.kind.*;
 
-public class WaymarkPlugin implements KesoidPlugin {
+public class WaymarkPlugin extends DefaultKesoidPlugin0 {
 
 	public static final Kepodr WAYMARK = Kepodr.of("waymark");
 

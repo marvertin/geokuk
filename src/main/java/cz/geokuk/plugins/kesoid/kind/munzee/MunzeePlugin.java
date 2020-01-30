@@ -8,7 +8,7 @@ import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.kind.*;
 
-public class MunzeePlugin implements KesoidPlugin {
+public class MunzeePlugin extends DefaultKesoidPlugin0 {
 
 	public static final Kepodr MUNZEE = Kepodr.of("munzee");
 

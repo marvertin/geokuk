@@ -9,7 +9,7 @@ import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.kind.*;
 
-public class PhotoPlugin implements KesoidPlugin {
+public class PhotoPlugin extends DefaultKesoidPlugin0 {
 
 	public static final Kepodr PHOTO = Kepodr.of("photo");
 

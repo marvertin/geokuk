@@ -1,9 +1,12 @@
 package cz.geokuk.plugins.kesoid.kind;
 
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.swing.JComponent;
 
 import org.reflections.Reflections;
 
@@ -34,6 +37,7 @@ public class KesoidPluginManager {
 	public KesoidPluginManager() {
 		System.out.println("Found kesoid plugins:");
 		plugins = new Reflections(this.getClass()).getSubTypesOf(KesoidPlugin.class).stream()
+				.filter(cls -> ! Modifier.isAbstract(cls.getModifiers()))
 				.map(this::newInstance)
 				.sorted( (p1, p2) -> p1.getOrder() - p2.getOrder())
 				.peek(plugin -> System.out.println("   " + plugin.getClass().getName()))
@@ -103,6 +107,15 @@ public class KesoidPluginManager {
 		return podplugins().collect(
 				Collectors.toMap(kp -> kp.getKepodr(), kp -> kp.getPlugin().getPopiskyDef(kp.kepodr))
 				);
+	}
+
+	/**
+	 * Z jednotlivých pluginů získá co dát na tollbar.
+	 * @return
+	 */
+	public List<JComponent> getSpecificToolbarComponents() {
+		return getPlugins().stream().flatMap(plugin -> plugin.getSpecificToolbarComponents().stream())
+				.collect(Collectors.toList());
 	}
 
 	private Stream<KesoidPodplugin> podplugins() {

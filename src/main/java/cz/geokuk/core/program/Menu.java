@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.*;
 
 import cz.geokuk.core.lookandfeel.LafSupport;
-import cz.geokuk.plugins.kesoid.kind.kes.*;
+import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mapicon.JMenuIkony;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracVyletu;
 import cz.geokuk.plugins.mapy.MapyAction0;
@@ -20,6 +20,7 @@ public class Menu extends MenuStrujce {
 	private Akce akce;
 	private RefbodyModel refbodyModel;
 	private final JMainFrame jMainFrame;
+	private KesoidPluginManager kesoidPluginManager;
 
 	public Menu(final JMainFrame jMainFrame, final JGeokukToolbar geokukToolbar) {
 		super(new JMenuBar(), geokukToolbar);
@@ -36,6 +37,10 @@ public class Menu extends MenuStrujce {
 
 	public void inject(final RefbodyModel refbodyModel) {
 		this.refbodyModel = refbodyModel;
+	}
+
+	public void inject(final KesoidPluginManager kesoidPluginManager) {
+		this.kesoidPluginManager = kesoidPluginManager;
 	}
 
 	public void makeMapSubmenuPart(final Akce akce) {
@@ -154,14 +159,11 @@ public class Menu extends MenuStrujce {
 		/////////////////////////////////////////////////////
 		JLabel lbl;
 
-		final JVybiracHodnoceni jVybiracHodnoceni = factory.init(new JVybiracHodnoceni());
-		tb.add(jVybiracHodnoceni);
+		// Přidat specifické věci z kesoid pluginů do toolbaru
+		kesoidPluginManager.getSpecificToolbarComponents().stream()
+		.map(factory::init)
+		.forEach(tb::add);
 
-		final JVybiracBestOf jVybiraceBestOf = factory.init(new JVybiracBestOf());
-		tb.add(jVybiraceBestOf);
-
-		final JVybiracFavorit jVybiraceFavorit = factory.init(new JVybiracFavorit());
-		tb.add(jVybiraceFavorit);
 
 		final JVybiracVyletu iVybiracVyletu = factory.init(new JVybiracVyletu());
 		lbl = new JLabel("Výlet: ");

@@ -8,7 +8,7 @@ import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.kind.*;
 
-public class CgpPlugin implements KesoidPlugin {
+public class CgpPlugin extends DefaultKesoidPlugin0 {
 
 	public static final Kepodr CGP = Kepodr.of("cgp");
 
