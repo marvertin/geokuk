@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.JComponent;
 
+import cz.geokuk.plugins.kesoid.Wpt;
+
 
 /**
  * Přináší některé defaulty pro kešoid pluginy, aby pluginy nemusely implemetnovat nepotřebné věci.
@@ -31,4 +33,22 @@ public abstract class DefaultKesoidPlugin0 implements KesoidPlugin {
 		return Collections.emptyList();
 	}
 
+	@Override
+	public <T> PluginFilter<T> getPluginFilter() {
+		// TODO Auto-generated method stub
+		return new PluginFilter<T>() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public T getDefaultFilterDefinition() {
+				return (T) new Object();
+			}
+
+			@Override
+			public boolean filter(final T definition, final Wpt waypoint) {
+				return true; // všechno tam bude
+			}
+
+		};
+	}
 }

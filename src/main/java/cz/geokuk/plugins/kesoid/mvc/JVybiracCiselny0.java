@@ -5,9 +5,7 @@ import java.awt.Dimension;
 import javax.swing.*;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
-import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
 
 public abstract class JVybiracCiselny0 extends JPanel implements AfterEventReceiverRegistrationInit {
 
@@ -17,8 +15,6 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 
 	private final JSpinner jSpinner;
 	private final JLabel jLabel;
-
-	private KesoidModel kesoidModel;
 
 	/**
 	 *
@@ -39,20 +35,9 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 	@Override
 	public void initAfterEventReceiverRegistration() {
 		iModel.addChangeListener(e -> {
-			final FilterDefinition definition = kesoidModel.getDefinition();
 			final Integer prah = (Integer) iModel.getNumber();
-			setPrah(definition, prah);
-			kesoidModel.setDefinition(definition);
+			setPrah(prah);
 		});
-	}
-
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
-	}
-
-	public void onEvent(final FilterDefinitionChangedEvent event) {
-		final FilterDefinition filterDefinition = event.getFilterDefinition();
-		iModel.setValue(getPrah(filterDefinition));
 	}
 
 	public void onEvent(final KeskyNactenyEvent aEvent) {
@@ -66,9 +51,9 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 
 	protected abstract int getMaximum(KesBag vsechny);
 
-	protected abstract int getPrah(FilterDefinition filterDefinition);
+	protected abstract int getPrah();
 
-	protected abstract void setPrah(FilterDefinition filterDefinition, int prah);
+	protected abstract void setPrah(int prah);
 
 	private void lejaut() {
 		final GroupLayout layout = new GroupLayout(this);
@@ -77,9 +62,9 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 		layout.setAutoCreateGaps(false);
 		layout.setAutoCreateContainerGaps(false);
 		layout.setHorizontalGroup(layout.createSequentialGroup() // hroup
-		        .addGap(3).addComponent(jLabel).addGap(3).addComponent(jSpinner).addGap(3));
+				.addGap(3).addComponent(jLabel).addGap(3).addComponent(jSpinner).addGap(3));
 		layout.setVerticalGroup(layout.createParallelGroup() // hroup
-		        .addComponent(jLabel, GroupLayout.Alignment.CENTER).addComponent(jSpinner, GroupLayout.Alignment.CENTER));
+				.addComponent(jLabel, GroupLayout.Alignment.CENTER).addComponent(jSpinner, GroupLayout.Alignment.CENTER));
 
 	}
 

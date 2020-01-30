@@ -3,9 +3,8 @@ package cz.geokuk.plugins.kesoid.kind.kes;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mvc.JVybiracCiselny0;
 
-public class JVybiracBestOf extends JVybiracCiselny0 implements AfterEventReceiverRegistrationInit {
+public class JVybiracBestOf extends JVybiracCiselnyRuznychHodnoceni0 implements AfterEventReceiverRegistrationInit {
 
 	private static final long serialVersionUID = -484273090975902036L;
 

@@ -4,9 +4,8 @@ import javax.swing.SpinnerNumberModel;
 
 import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.mvc.JVybiracCiselny0;
 
-public class JVybiracHodnoceni extends JVybiracCiselny0 {
+public class JVybiracHodnoceni extends JVybiracCiselnyRuznychHodnoceni0 {
 
 	private static final long serialVersionUID = 2417664157609045262L;
 

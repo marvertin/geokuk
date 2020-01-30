@@ -41,6 +41,13 @@ public interface KesoidPlugin {
 	public List<Action> getSpecificKesoidMenuActions();
 
 	/**
+	 * Objekt, která umožňuje, aby plugin dával k dispozici svoje filtrování.
+	 * @param <T> Filtrovací data.
+	 * @return Objekt zajišťující filtrování
+	 */
+	public <T> PluginFilter<T> getPluginFilter();
+
+	/**
 	 * Přiřadí pluginu relativní pořadí. Podle pořadí pluginů se určuje:
 	 *   - Pořadí načítání kešoidů, špatné pořadí může znehodnotit vyhodncení některých typů kešoidů. Například CGP musí být před waymarky.
 	 *   - V gui se prvky příslušející pluginům zobrazují v tomto pořadí.

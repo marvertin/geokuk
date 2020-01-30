@@ -49,12 +49,18 @@ public class KesPlugin implements KesoidPlugin {
 
 	@Override
 	public List<JComponent> getSpecificToolbarComponents() {
-		return Arrays.asList(new JVybiracHodnoceni(), new JVybiracBestOf(),new JVybiracHodnoceni());
+		return Arrays.asList(new JVybiracHodnoceni(), new JVybiracBestOf(),new JVybiracFavorit());
 	}
 
 	@Override
 	public List<Action> getSpecificKesoidMenuActions() {
 		return Arrays.asList(new JenDoTerenuUNenalezenychAction(), new JenFinalUNalezenychAction());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> PluginFilter<T> getPluginFilter() {
+		return (PluginFilter<T>) new KesFilter();
 	}
 
 }
