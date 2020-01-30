@@ -54,7 +54,6 @@ public class Akce {
 	public final OdebratZCestyAction odebratZCestyAction = new OdebratZCestyAction(null);
 	public final CestyPresClipboardDoGeogetuAction cestyPresClipboardDoGeogetuAction = new CestyPresClipboardDoGeogetuAction();
 	public final KruhyOnoffAction kruhyOnoffAction = new KruhyOnoffAction();
-	public final JenDoTerenuUNenalezenychAction jednotkoveKruhyAction = new JenDoTerenuUNenalezenychAction();
 	public final NastavParametryZvyraznovacichKruhuAction nastavParametryZvyraznovacichKruhuAction = new NastavParametryZvyraznovacichKruhuAction();
 	public final ObsazenostOnoffAction obsazenostOnoffAction = new ObsazenostOnoffAction();
 

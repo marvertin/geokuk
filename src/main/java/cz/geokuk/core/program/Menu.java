@@ -146,8 +146,6 @@ public class Menu extends MenuStrujce {
 
 		item(akce.nastavParametryZvyraznovacichKruhuAction);
 
-		item(akce.jednotkoveKruhyAction);
-
 		separator();
 		item(akce.implicitniVyberZobrazenychKesi);
 		item(akce.urlToClipboardForGeogetAction);
