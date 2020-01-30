@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.swing.Action;
 import javax.swing.JComponent;
 
+import cz.geokuk.framework.BeanBag;
 import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 
@@ -15,6 +16,7 @@ import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
  *
  */
 public interface KesoidPlugin {
+
 
 	public GpxWptProcak createGpxWptProcak(GpxToWptContext ctx, GpxToWptBuilder builder);
 
@@ -48,10 +50,18 @@ public interface KesoidPlugin {
 	public <T> PluginFilter<T> getPluginFilter();
 
 	/**
+	 * Registruje všechnysingletony v pluginu, především modely.
+	 * Nemusí registrovat menu akce a toolbar komponenty.
+	 * @param bb
+	 */
+	public void registerSingletons(BeanBag bb);
+
+	/**
 	 * Přiřadí pluginu relativní pořadí. Podle pořadí pluginů se určuje:
 	 *   - Pořadí načítání kešoidů, špatné pořadí může znehodnotit vyhodncení některých typů kešoidů. Například CGP musí být před waymarky.
 	 *   - V gui se prvky příslušející pluginům zobrazují v tomto pořadí.
 	 * @return
 	 */
 	public int getOrder();
+
 }

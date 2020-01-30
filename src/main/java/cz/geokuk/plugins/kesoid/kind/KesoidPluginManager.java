@@ -11,6 +11,7 @@ import javax.swing.JComponent;
 
 import org.reflections.Reflections;
 
+import cz.geokuk.framework.BeanBag;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.Wpt;
@@ -142,5 +143,14 @@ public class KesoidPluginManager {
 	private static class KesoidPodplugin {
 		final KesoidPlugin plugin;
 		final Kepodr kepodr;
+	}
+
+	/**
+	 * Registruje všechny pluginoidní singletony.
+	 * @param bb
+	 */
+	public void registrPluginsAsSingltons(final BeanBag bb) {
+		getPlugins().stream().forEach(bb::registerSigleton);
+		getPlugins().stream().forEach(plugin -> plugin.registerSingletons(bb));
 	}
 }

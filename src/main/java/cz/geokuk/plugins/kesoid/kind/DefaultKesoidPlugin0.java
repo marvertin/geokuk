@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.JComponent;
 
+import cz.geokuk.framework.BeanBag;
 import cz.geokuk.plugins.kesoid.Wpt;
 
 
@@ -51,4 +52,8 @@ public abstract class DefaultKesoidPlugin0 implements KesoidPlugin {
 
 		};
 	}
+
+	/** Defaultně neregistrujeme nic */
+	@Override
+	public void registerSingletons(final BeanBag bb) {}
 }

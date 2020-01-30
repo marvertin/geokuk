@@ -89,7 +89,7 @@ public class Inicializator {
 
 		final KesoidPluginManager kpm = new KesoidPluginManager();
 		bb.registerSigleton(kpm);
-		kpm.getPlugins().stream().forEach(bb::registerSigleton);
+		kpm.registrPluginsAsSingltons(bb);
 
 		// akce
 		final Akce akce = new Akce();
