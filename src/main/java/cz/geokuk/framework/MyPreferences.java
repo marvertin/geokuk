@@ -476,6 +476,9 @@ public class MyPreferences extends Preferences {
 		return new LinkedHashSet<>(stringList != null ? stringList : defval);
 	}
 
+	/**
+	 * Pozor na to, že vyzobáváme jen ty položky, ke kterým máme defaulty. Neumíme načíst libovolný obsah.
+	 */
 	public <K,V> Map<K, V> getMap(final String key, final Map<K, V> defval) {
 		final MyPreferences node = node(key);
 		final HashMap<K, V> result = new HashMap<K, V>();

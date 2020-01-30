@@ -106,7 +106,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 		vlastnostiPismaModel.setFont(pose.getFont());
 
 		jradky.forEach(r -> {
-			setPattern(r.jtext, pose.getPatterns().asMap().get(r.kepodr));
+			setPattern(r.jtext, pose.getPatterns2().get(r.kepodr));
 		});
 	}
 
@@ -244,7 +244,7 @@ public class JPopiskyDialog extends JMyDialog0 implements AfterEventReceiverRegi
 
 				private void zmena() {
 					final PopiskySettings data = popiskyModel.getData();
-					data.getPatterns().put(r.getKepodr(), r.getJtext().getText());
+					data.getPatterns2().put(r.getKepodr(), r.getJtext().getText());
 					popiskyModel.setData(data);
 				}
 			});

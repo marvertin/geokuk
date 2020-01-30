@@ -9,7 +9,7 @@ public interface PopiskyDef {
 
 	public String getLabel();
 
-	public String getDefaultPatter();
+	public String getDefaultPattern();
 
 	public Map<String, PopiskyNahrazovac> getNahrazovace();
 

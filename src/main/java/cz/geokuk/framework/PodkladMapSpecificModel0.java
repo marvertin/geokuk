@@ -95,7 +95,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	 * @param podklad
 	 * @return
 	 */
-	private String jmenoPodkladu(final EKaType podklad) {
+	protected String jmenoPodkladu(final EKaType podklad) {
 		return podklad == null ? "bezmap" : podklad.name();
 	}
 

@@ -95,7 +95,7 @@ public class JPopiskySlide extends JSingleSlide0 {
 			p.y += 25;
 			g.setColor(barvaPodkladu);
 			sestavmapa.computeIfAbsent(wpt.getKepodr(), kepodr ->
-			new SestavovacPopisku(popiskyModel.getData().getPatterns().asMap().get(kepodr),
+			new SestavovacPopisku(popiskyModel.getData().getPatterns2().get(kepodr),
 					wpt
 					.getKesoidPlugin()
 					.getPopiskyDef(kepodr)

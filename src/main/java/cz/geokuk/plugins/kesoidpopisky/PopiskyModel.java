@@ -1,10 +1,18 @@
 package cz.geokuk.plugins.kesoidpopisky;
 
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.*;
+import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
+import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import lombok.SneakyThrows;
 
 public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, PopiskySettings> {
 
+	private KesoidPluginManager kpm;
 	/*
 	 * (non-Javadoc)
 	 *
@@ -12,7 +20,27 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 	 */
 	@Override
 	protected PopiskySettings createDefaults() {
-		return new PopiskySettings();
+//		final Map<Kepodr, String> result =;
+		migrace(); // Provede migraci jmen starých popisků na nové názvy hodnot dle Kepodr. Migrace je jednorázová při spuštění této verze.
+		return new PopiskySettings(kpm.getPopisekDefMap().entrySet().stream()
+				.collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getDefaultPattern())));
+	}
+
+	@SneakyThrows
+	private void migrace() {
+		for (final EKaType katyp : EKaType.values()) {
+			final MyPreferences nodeKesoidPopisky = currPrefe().node(FPref.KESOID_POPISKY_node);
+			if (nodeKesoidPopisky.nodeExists(jmenoPodkladu(katyp))) {
+				final MyPreferences nodeKa = nodeKesoidPopisky.node(jmenoPodkladu(katyp));
+				if (! nodeKa.nodeExists("patterns2")) {
+					if (nodeKa.nodeExists("patterns")) {
+						final Map<String, String> starePopiskyPatterns = nodeKa.getStructure("patterns", new MigracePopiskyPatterns()).asMap();
+						System.out.println("Migrace popisky/patterns: " + starePopiskyPatterns);
+						nodeKa.putMap("patterns2", starePopiskyPatterns);
+					}
+				}
+			}
+		}
 	}
 
 	/*
@@ -73,6 +101,11 @@ public class PopiskyModel extends PodkladMapSpecificModel0<PopiskyModel, Popisky
 	@Override
 	protected Onoff<PopiskyModel> visiblexxx() {
 		return visible;
+	}
+
+
+	public void inject(final KesoidPluginManager kpm) {
+		this.kpm = kpm;
 	}
 
 }

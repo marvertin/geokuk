@@ -51,7 +51,7 @@ public abstract class PopiskyDefBuilder0 {
 			}
 
 			@Override
-			public String getDefaultPatter() {
+			public String getDefaultPattern() {
 				return defaultPattern;
 			}
 

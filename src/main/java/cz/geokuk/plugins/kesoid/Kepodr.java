@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import cz.geokuk.plugins.kesoid.genetika.Indexable;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
 /**
  * KEěoid PODdruh.
@@ -14,7 +15,6 @@ import lombok.*;
  *
  */
 @AllArgsConstructor(access=AccessLevel.PRIVATE)
-@ToString
 public final class Kepodr implements Indexable {
 
 	private static Set<String> values = new HashSet<>();
@@ -39,6 +39,11 @@ public final class Kepodr implements Indexable {
 	@Override
 	public int getIndex() {
 		return index;
+	}
+
+	@Override
+	public String toString() {
+		return value;
 	}
 }
 
