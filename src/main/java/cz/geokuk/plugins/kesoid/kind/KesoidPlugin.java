@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid.kind;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.Action;
 import javax.swing.JComponent;
 
 import cz.geokuk.plugins.kesoid.Kepodr;
@@ -33,6 +34,11 @@ public interface KesoidPlugin {
 	 * @return Seznam komponent. Vrací prázdný seznam, pokud není žádná komponenta potřeba.
 	 */
 	public List<JComponent> getSpecificToolbarComponents();
+
+	/**
+	 * Sezam akcí, které mají být dány do kešoid menu.
+	 */
+	public List<Action> getSpecificKesoidMenuActions();
 
 	/**
 	 * Přiřadí pluginu relativní pořadí. Podle pořadí pluginů se určuje:

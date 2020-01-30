@@ -2,6 +2,7 @@ package cz.geokuk.plugins.kesoid.kind.kes;
 
 import java.util.*;
 
+import javax.swing.Action;
 import javax.swing.JComponent;
 
 import com.google.common.collect.ImmutableSet;
@@ -49,6 +50,11 @@ public class KesPlugin implements KesoidPlugin {
 	@Override
 	public List<JComponent> getSpecificToolbarComponents() {
 		return Arrays.asList(new JVybiracHodnoceni(), new JVybiracBestOf(),new JVybiracHodnoceni());
+	}
+
+	@Override
+	public List<Action> getSpecificKesoidMenuActions() {
+		return Arrays.asList(new JenDoTerenuUNenalezenychAction(), new JenFinalUNalezenychAction());
 	}
 
 }

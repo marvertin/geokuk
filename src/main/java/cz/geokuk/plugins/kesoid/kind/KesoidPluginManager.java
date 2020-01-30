@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.swing.Action;
 import javax.swing.JComponent;
 
 import org.reflections.Reflections;
@@ -115,6 +116,16 @@ public class KesoidPluginManager {
 	 */
 	public List<JComponent> getSpecificToolbarComponents() {
 		return getPlugins().stream().flatMap(plugin -> plugin.getSpecificToolbarComponents().stream())
+				.collect(Collectors.toList());
+	}
+
+
+	/**
+	 * Z jednotlivých pluginů získá co dát do hlavního jmenu kešoid.
+	 * @return
+	 */
+	public List<Action> getSpecificKesoidMenuActions() {
+		return getPlugins().stream().flatMap(plugin -> plugin.getSpecificKesoidMenuActions().stream())
 				.collect(Collectors.toList());
 	}
 

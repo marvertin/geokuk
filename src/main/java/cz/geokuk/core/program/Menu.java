@@ -142,8 +142,10 @@ public class Menu extends MenuStrujce {
 		separator();
 		tb.addSeparator();
 
-		item(akce.jenDoTerenuUNenalezenychAction);
-		item(akce.jenFinalUNalezenychAction);
+		// Přidat specifické věci z kesoid pluginů do toolbaru
+		kesoidPluginManager.getSpecificKesoidMenuActions().stream()
+		.map(factory::init)
+		.forEach(this::item);
 
 		separator();
 		item(akce.obsazenostOnoffAction);

@@ -18,8 +18,6 @@ import cz.geokuk.plugins.cesty.akce.doc.PromazatJednobodoveAPrazdneCesty;
 import cz.geokuk.plugins.cesty.akce.soubor.*;
 import cz.geokuk.plugins.geocoding.GeocodingAdrAction;
 import cz.geokuk.plugins.kesoid.filtr.FiltrIkonyAction;
-import cz.geokuk.plugins.kesoid.kind.kes.JenDoTerenuUNenalezenychAction;
-import cz.geokuk.plugins.kesoid.kind.kes.JenFinalUNalezenychAction;
 import cz.geokuk.plugins.kesoid.mapicon.*;
 import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.kesoidkruhy.KruhyOnoffAction;
@@ -75,8 +73,6 @@ public class Akce {
 	public final TadyJsemDomaAction tadyJsemDomaAction = new TadyJsemDomaAction();
 
 	public final ImplicitniVyberZobrazenychKesiAction implicitniVyberZobrazenychKesi = new ImplicitniVyberZobrazenychKesiAction();
-	public final JenFinalUNalezenychAction jenFinalUNalezenychAction = new JenFinalUNalezenychAction();
-	public final JenDoTerenuUNenalezenychAction jenDoTerenuUNenalezenychAction = new JenDoTerenuUNenalezenychAction();
 	public final FiltrIkonyAction filtrIkonyAction = new FiltrIkonyAction();
 
 	public final FenotypIkonyAction fenotypIkonyAction = new FenotypIkonyAction();
