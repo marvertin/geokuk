@@ -91,6 +91,7 @@ public class GpxWptmportBuilder implements IImportBuilder {
 	 */
 	@Override
 	public void init() {
+		kesoidPluginManager.initLoading();
 		gpxWptDispatcher = kesoidPluginManager.createGpxWptProcakDispatcher(gpxToWptContext,
 				(gpxwpt, kepodr) -> {
 					final Wpt wpt = new Wpt();
@@ -111,6 +112,7 @@ public class GpxWptmportBuilder implements IImportBuilder {
 	public void done() {
 		gpxWptDispatcher.done(); // ještě dojíždějí nezpracovanci
 		informaceOZdrojich = informaceOZdrojichBuilder.done();
+		kesoidPluginManager.doneLoading();
 	}
 
 	public synchronized void setCurrentlyLoading(final KeFile aJmenoZdroje, final boolean nacteno) {

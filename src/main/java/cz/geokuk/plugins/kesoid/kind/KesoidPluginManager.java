@@ -66,8 +66,8 @@ public class KesoidPluginManager {
 							wpt.setKesoidPlugin(plugin);
 							return wpt;
 						}, wpt -> {
-							plugin.getWptSumarizer().expose(wpt);
 							wpts.expose(wpt);
+							plugin.getWptSumarizer().afterLoaded(wpt);
 						}))
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList()),
@@ -78,8 +78,8 @@ public class KesoidPluginManager {
 							wpt.setKesoidPlugin(sinkPlugin());
 							return wpt;
 						}, wpt -> {
-							sinkPlugin().getWptSumarizer().expose(wpt);
 							wpts.expose(wpt);
+							sinkPlugin().getWptSumarizer().afterLoaded(wpt);
 						})
 
 				);
@@ -159,5 +159,23 @@ public class KesoidPluginManager {
 	public void registrPluginsAsSingltons(final BeanBag bb) {
 		getPlugins().stream().forEach(bb::registerSigleton);
 		getPlugins().stream().forEach(plugin -> plugin.registerSingletons(bb));
+	}
+
+	/**
+	 * Poslední moetoda volaná po ukončení loadování.
+	 */
+	public void initLoading() {
+		getPlugins().stream()
+		.map(KesoidPlugin::getWptSumarizer)
+		.forEach(WptSumarizer::initLoading);
+	}
+
+	/**
+	 * Poslední moetoda volaná po ukončení loadování.
+	 */
+	public void doneLoading() {
+		getPlugins().stream()
+		.map(KesoidPlugin::getWptSumarizer)
+		.forEach(WptSumarizer::doneLoading);
 	}
 }
