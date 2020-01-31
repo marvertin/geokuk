@@ -1,21 +1,24 @@
 package cz.geokuk.plugins.kesoid.importek;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import cz.geokuk.framework.ProgressModel;
-import cz.geokuk.framework.Progressor;
-import cz.geokuk.plugins.kesoid.*;
-import cz.geokuk.plugins.kesoid.genetika.Alela;
-import cz.geokuk.plugins.kesoid.genetika.Genom;
-import cz.geokuk.plugins.kesoid.kind.GpxToWptContext;
+import cz.geokuk.plugins.kesoid.EKesStatus;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
-import cz.geokuk.plugins.kesoid.mvc.GccomNick;
 import cz.geokuk.util.file.KeFile;
 import cz.geokuk.util.procak.ProcakDispatcher;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Builder, který přijímá GpxWpt přímo ze zdrojů, ze kterých se načítají.
+ * Toto propasírovává přes pluginy "Procáky" jenž zajišťují vytvoření Wpt.
+ * Vyrobené Wpt se posílají dál.
+ * @author Martin
+ *
+ */
 @Slf4j
-public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
+public class GpxWptmportBuilder implements IImportBuilder {
 
 
 
@@ -24,29 +27,23 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 	static final String GEOCACHE_FOUND = "Geocache Found";
 
 
-	private final Genom genom;
-	private KesBag kesBag;
-
 	private int citacBezejmennychWaypintu;
 	private InformaceOZdroji infoOCurrentnimZdroji;
 	private final InformaceOZdrojich.Builder informaceOZdrojichBuilder = InformaceOZdrojich.builder();
 
-	private final GccomNick gccomNick;
-	private final ProgressModel progressModel;
 
 	private final KesoidPluginManager kesoidPluginManager;
 
 	private ProcakDispatcher<GpxWpt> gpxWptDispatcher;
 
-	private List<Wpt> wpts;
-
 	private final Map<String, GpxWpt> gpxwpts = new HashMap<String, GpxWpt>(1023);
+	private final WptReceiver wptReceiver;
+	// Až všechno doběhne, budou informace o zdrohjícz
+	private InformaceOZdrojich informaceOZdrojich;
 
-	public KesoidImportBuilder(final Genom genom, final GccomNick gccomNick, final ProgressModel progressModel, final KesoidPluginManager kesoidPluginManager) {
-		this.genom = genom;
-		this.gccomNick = gccomNick;
-		this.progressModel = progressModel;
+	public GpxWptmportBuilder(final KesoidPluginManager kesoidPluginManager, final WptReceiver wptReceiver) {
 		this.kesoidPluginManager = kesoidPluginManager;
+		this.wptReceiver = wptReceiver;
 	}
 
 	/*
@@ -87,15 +84,6 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 		}
 	}
 
-	@Override
-	public void addTrackWpt(final GpxWpt wpt) {}
-
-	@Override
-	public void begTrack() {}
-
-	@Override
-	public void begTrackSegment() {}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -103,8 +91,7 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 	 */
 	@Override
 	public void init() {
-		wpts = new LinkedList<Wpt>();
-		gpxWptDispatcher = kesoidPluginManager.createGpxWptProcakDispatcher(this,
+		gpxWptDispatcher = kesoidPluginManager.createGpxWptProcakDispatcher(wptReceiver,
 				(gpxwpt, kepodr) -> {
 					final Wpt wpt = new Wpt();
 					wpt.setKepodr(kepodr);
@@ -122,72 +109,20 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 	 */
 	@Override
 	public void done() {
-		gpxWptDispatcher.done();
-		final InformaceOZdrojich informaceOZdrojich = informaceOZdrojichBuilder.done();
-//		Progressor progressor = progressModel.start(delkaTasku, "Vytvářím waypointy");
-
-		// přesypeme do seznamu
-
-		// FIXME vyřešit jednoduché waypointy
-//		// A všechno, co zbylo jsou obyčejné jednoduché waypointy
-//		for (final ListIterator<GpxWpt> it = list.listIterator(); it.hasNext();) {
-//			final GpxWpt gpxwpt = it.next();
-//			final SimpleWaypoint simpleWaypoint = createSimpleWaypoint(gpxwpt);
-//			resultKesoidsByName.put(gpxwpt.name, simpleWaypoint);
-//			it.remove();
-//		}
-//
-//		progressor.finish();
-
-		//////////////////////////////////////
-		log.debug("Indexuji waypointy: " + wpts.size());
-
-		kesBag = new KesBag(genom);
-		final Progressor progressor = progressModel.start(wpts.size(), "Indexování");
-		int citac = 0;
-		try {
-			for (final Wpt wpt : wpts) {
-				kesBag.add(wpt);
-			}
-			if (citac++ % 1000 == 0) {
-				progressor.setProgress(citac);
-			}
-			kesBag.setInformaceOZdrojich(informaceOZdrojich);
-			kesBag.done();
-		} finally {
-			progressor.finish();
-		}
-		log.debug("Konec zpracování: " + wpts.size());
+		gpxWptDispatcher.done(); // ještě dojíždějí nezpracovanci
+		informaceOZdrojich = informaceOZdrojichBuilder.done();
 	}
-
-	@Override
-	public void endTrack() {}
-
-	@Override
-	public void endTrackSegment() {}
-
-//	@Override
-//	public GpxWpt get(final String aName) {
-//		return gpxwpts.get(aName);
-//	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.plugins.kesoid.importek.IImportBuilder#getKesBag()
-	 */
-	public KesBag getKesBag() {
-		return kesBag;
-	}
-
-
 
 	public synchronized void setCurrentlyLoading(final KeFile aJmenoZdroje, final boolean nacteno) {
 		infoOCurrentnimZdroji = informaceOZdrojichBuilder.add(aJmenoZdroje, nacteno);
 	}
 
-	@Override
-	public void setTrackName(final String aTrackName) {}
+	public InformaceOZdrojich getInformaceOZdrojich() {
+		if (informaceOZdrojich == null) {
+			throw new IllegalStateException("Ještě nedoběhlo načítání, nejsou informace o zdrojích");
+		}
+		return informaceOZdrojich;
+	}
 
 	protected EKesStatus urciStatus(final boolean archived, final boolean availaible) {
 		if (archived) {
@@ -198,30 +133,6 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 			return EKesStatus.ACTIVE;
 		}
 	}
-
-
-
-	@Override
-	public Set<Alela> definujUzivatslskeAlely(final GpxWpt gpxwpt) {
-		final Set<Alela> alely = new HashSet<>();
-
-		for (final Map.Entry<String, String> entry : gpxwpt.gpxg.userTags.entrySet()) {
-			final String alelaName = entry.getValue();
-			final String genName = entry.getKey();
-			final Alela alela = genom.gen(genName).alela(alelaName);
-			if (alela == null) {
-				continue;
-			}
-			alely.add(alela);
-			genom.UNIVERZALNI_DRUH.addGen(alela.getGen());
-		}
-
-		return alely;
-	}
-
-
-
-
 
 	private int urciElevation(final GpxWpt gpxwpt) {
 		if (gpxwpt.ele != 0) {
@@ -234,7 +145,6 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 			}
 		}
 	}
-
 
 	private String vytvorNazev(final GpxWpt gpxwpt) {
 		String s;
@@ -259,27 +169,29 @@ public class KesoidImportBuilder implements IImportBuilder, GpxToWptContext {
 	}
 
 
-
-	@Override
-	public Genom getGenom() {
-		return genom;
-	}
-
-	@Override
-	public GccomNick getGccomNick() {
-		return gccomNick;
-	}
-
 	@Override
 	public GpxWpt get(final String name) {
 		return gpxwpts.get(name);
 	}
 
+	// Tracky tady v této instanci nezpracováváme
 	@Override
-	public void expose(final Wpt wpt) {
-		wpts.add(wpt);
-	}
+	public void addTrackWpt(final GpxWpt wpt) {}
 
+	@Override
+	public void begTrack() {}
+
+	@Override
+	public void endTrack() {}
+
+	@Override
+	public void endTrackSegment() {}
+
+	@Override
+	public void begTrackSegment() {}
+
+	@Override
+	public void setTrackName(final String aTrackName) {}
 
 
 }

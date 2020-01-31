@@ -65,7 +65,7 @@ public class NacitacGeokuk extends NacitacInputStream0 {
 					gpxwpt.groundspeak.archived = Boolean.parseBoolean(pp[5]);
 					gpxwpt.groundspeak.availaible = !Boolean.parseBoolean(pp[6]);
 					gpxwpt.explicitneUrcenoVlastnictvi = Boolean.parseBoolean(pp[8]);
-					gpxwpt.sym = Boolean.parseBoolean(pp[7]) ? KesoidImportBuilder.GEOCACHE_FOUND : KesoidImportBuilder.GEOCACHE;
+					gpxwpt.sym = Boolean.parseBoolean(pp[7]) ? GpxWptmportBuilder.GEOCACHE_FOUND : GpxWptmportBuilder.GEOCACHE;
 					gpxwpt.groundspeak.owner = pp[9].trim().intern();
 					gpxwpt.groundspeak.placedBy = pp[9].trim().intern();
 					gpxwpt.time = pp[10];

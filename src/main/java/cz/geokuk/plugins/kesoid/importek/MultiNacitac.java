@@ -66,12 +66,21 @@ public class MultiNacitac {
 		return ds.scan(new Root(aDataDir.getFile(), GSAK_ROOTDIR_DEF));
 	}
 
+	/**
+	 * Asi hlavní načítací metoda.
+	 * @param future
+	 * @param genom
+	 * @return
+	 * @throws IOException
+	 */
 	public KesBag nacti(final Future<?> future, final Genom genom) throws IOException {
 		final List<KeFile> list = ds.coMamNacist();
 		if (list == null) {
 			return null;
 		}
-		final KesoidImportBuilder builder = new KesoidImportBuilder(genom, kesoidModel.getGccomNick(), kesoidModel.getProgressModel(), kesoidModel.getKesopidPluginManager());
+		final KesBag kesBag = new KesBag(genom);
+		final WptReceiver wptReceiver = new WptReceiver(genom, kesoidModel.getGccomNick(), kesBag);
+		final GpxWptmportBuilder builder = new GpxWptmportBuilder(kesoidModel.getKesopidPluginManager(), wptReceiver);
 		builder.init();
 		for (final KeFile file : list) {
 			log.debug("Nacitam: " + file);
@@ -84,8 +93,9 @@ public class MultiNacitac {
 		}
 
 		builder.done();
-
-		return builder.getKesBag();
+		kesBag.setInformaceOZdrojich(builder.getInformaceOZdrojich());
+		kesBag.done();
+		return kesBag;
 	}
 
 	// TODO Proč jsou tu ty File parametry, když máme k dispozici kesoidModel, odkud se jejich hodnoty vždy berou? [2016-04-09, Bohusz]
@@ -106,10 +116,10 @@ public class MultiNacitac {
 	/**
 	 * @param kefile
 	 * @param builder
-	 * @param future
+	 * @param future Řeší naclování, někde hluboko se to testuje.
 	 * @throws IOException
 	 */
-	private void zpracujJedenFile(final KeFile kefile, final KesoidImportBuilder builder, final Future<?> future) throws IOException {
+	private void zpracujJedenFile(final KeFile kefile, final GpxWptmportBuilder builder, final Future<?> future) throws IOException {
 		final File file = kefile.getFile();
 		if (isZipFile(file)) {
 			try (ZipFile zipFile = new ZipFile(file)) {
