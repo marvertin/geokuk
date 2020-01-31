@@ -8,6 +8,7 @@ import javax.swing.JComponent;
 
 import cz.geokuk.framework.BeanBag;
 import cz.geokuk.plugins.kesoid.Kepodr;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 
 /**
@@ -43,12 +44,11 @@ public interface KesoidPlugin {
 	public List<Action> getSpecificKesoidMenuActions();
 
 	/**
-	 * Objekt, která umožňuje, aby plugin dával k dispozici svoje filtrování.
-	 * @param <T> Filtrovací data.
-	 * @return Objekt zajišťující filtrování
+	 * Podrobí dané WPT filtrování. Jen Waypointy, které plugin stvořil jsou zde filtrovány.
+	 * @param wpt
+	 * @return
 	 */
-	public <T> PluginFilter<T> getPluginFilter();
-
+	public boolean filter(Wpt wpt);
 	/**
 	 * Registruje všechnysingletony v pluginu, především modely.
 	 * Nemusí registrovat menu akce a toolbar komponenty.

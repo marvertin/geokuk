@@ -1,7 +1,6 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
-import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
 
 public class JVybiracBestOf extends JVybiracCiselnyRuznychHodnoceni0 implements AfterEventReceiverRegistrationInit {
@@ -21,13 +20,13 @@ public class JVybiracBestOf extends JVybiracCiselnyRuznychHodnoceni0 implements 
 	}
 
 	@Override
-	protected int getPrah(final FilterDefinition filterDefinition) {
+	protected int getPrah(final KesFilterDefinition filterDefinition) {
 		return filterDefinition.getPrahBestOf();
 	}
 
 	@Override
-	protected void setPrah(final FilterDefinition filterDefinition, final int prah) {
-		filterDefinition.setPrahBestOf(prah);
+	protected KesFilterDefinition withPrah(final KesFilterDefinition filterDefinition, final int prah) {
+		return filterDefinition.withPrahBestOf(prah);
 
 	}
 

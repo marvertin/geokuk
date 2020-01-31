@@ -5,6 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data @EqualsAndHashCode(callSuper=false)
-public class KesFilterChangeEvent extends Event0<KesFiltrModel> {
+public class KesFilterDefinitionChangedEvent extends Event0<KesFilterModel> {
 	private final KesFilterDefinition kesFilterDefinition;
 }

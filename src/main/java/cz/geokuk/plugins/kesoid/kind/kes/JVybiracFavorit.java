@@ -1,6 +1,5 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
-import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
 
 public class JVybiracFavorit extends JVybiracCiselnyRuznychHodnoceni0 {
@@ -17,13 +16,13 @@ public class JVybiracFavorit extends JVybiracCiselnyRuznychHodnoceni0 {
 	}
 
 	@Override
-	protected int getPrah(final FilterDefinition filterDefinition) {
+	protected int getPrah(final KesFilterDefinition filterDefinition) {
 		return filterDefinition.getPrahFavorit();
 	}
 
 	@Override
-	protected void setPrah(final FilterDefinition filterDefinition, final int prah) {
-		filterDefinition.setPrahFavorit(prah);
+	protected KesFilterDefinition withPrah(final KesFilterDefinition filterDefinition, final int prah) {
+		return filterDefinition.withPrahFavorit(prah);
 	}
 
 }

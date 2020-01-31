@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableSet;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.BeanBag;
 import cz.geokuk.plugins.kesoid.Kepodr;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.genetika.IndexMap;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -21,7 +22,7 @@ public class KesPlugin implements KesoidPlugin {
 
 	public static final String PREF_KES_PLUGIN_node = FPref.KESOID_PLUGIN_node + "/kes";
 
-	private final KesFiltrModel kesFilterModel = new KesFiltrModel();
+	private final KesFilterModel kesFilterModel = new KesFilterModel();
 
 	private final IndexMap<Kepodr, PopiskyDefBuilder0> map = new IndexMap<>();
 	{
@@ -63,15 +64,15 @@ public class KesPlugin implements KesoidPlugin {
 		return Arrays.asList(new JenDoTerenuUNenalezenychAction(), new JenFinalUNalezenychAction());
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> PluginFilter<T> getPluginFilter() {
-		return (PluginFilter<T>) new KesFilter();
-	}
 
 	@Override
 	public void registerSingletons(final BeanBag bb) {
 		bb.registerSigleton(kesFilterModel);
+	}
+
+	@Override
+	public boolean filter(final Wpt wpt) {
+		return kesFilterModel.getKesFilter().filter(wpt);
 	}
 
 }

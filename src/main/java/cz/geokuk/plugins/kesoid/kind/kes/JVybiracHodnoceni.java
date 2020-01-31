@@ -2,7 +2,6 @@ package cz.geokuk.plugins.kesoid.kind.kes;
 
 import javax.swing.SpinnerNumberModel;
 
-import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
 
 public class JVybiracHodnoceni extends JVybiracCiselnyRuznychHodnoceni0 {
@@ -22,13 +21,13 @@ public class JVybiracHodnoceni extends JVybiracCiselnyRuznychHodnoceni0 {
 	}
 
 	@Override
-	protected int getPrah(final FilterDefinition filterDefinition) {
+	protected int getPrah(final KesFilterDefinition filterDefinition) {
 		return filterDefinition.getPrahHodnoceni();
 	}
 
 	@Override
-	protected void setPrah(final FilterDefinition filterDefinition, final int prah) {
-		filterDefinition.setPrahHodnoceni(prah);
+	protected KesFilterDefinition withPrah(final KesFilterDefinition filterDefinition, final int prah) {
+		return filterDefinition.withPrahHodnoceni(prah);
 	}
 
 }

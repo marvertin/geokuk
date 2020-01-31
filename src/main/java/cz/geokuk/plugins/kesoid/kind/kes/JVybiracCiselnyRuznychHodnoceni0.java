@@ -1,16 +1,15 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
-import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
-import cz.geokuk.plugins.kesoid.mvc.*;
+import cz.geokuk.plugins.kesoid.mvc.JVybiracCiselny0;
+import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 
 public abstract class JVybiracCiselnyRuznychHodnoceni0 extends JVybiracCiselny0 implements AfterEventReceiverRegistrationInit {
 
 	private static final long serialVersionUID = -484273090975902036L;
 
-	private KesoidModel kesoidModel;
+	private KesFilterModel kesFilterModel;
 
 	/**
 	 *
@@ -22,19 +21,16 @@ public abstract class JVybiracCiselnyRuznychHodnoceni0 extends JVybiracCiselny0 
 	@Override
 	public void initAfterEventReceiverRegistration() {
 		iModel.addChangeListener(e -> {
-			final FilterDefinition definition = kesoidModel.getDefinition();
-			final Integer prah = (Integer) iModel.getNumber();
-			setPrah(definition, prah);
-			kesoidModel.setDefinition(definition);
+			setPrah((Integer) iModel.getNumber());
 		});
 	}
 
-	public void inject(final KesoidModel kesoidModel) {
-		this.kesoidModel = kesoidModel;
+	public void inject(final KesFilterModel kesFilterModel) {
+		this.kesFilterModel = kesFilterModel;
 	}
 
-	public void onEvent(final FilterDefinitionChangedEvent event) {
-		final FilterDefinition filterDefinition = event.getFilterDefinition();
+	public void onEvent(final KesFilterDefinitionChangedEvent event) {
+		final KesFilterDefinition filterDefinition = event.getKesFilterDefinition();
 		iModel.setValue(getPrah(filterDefinition));
 	}
 
@@ -51,21 +47,19 @@ public abstract class JVybiracCiselnyRuznychHodnoceni0 extends JVybiracCiselny0 
 	@Override
 	protected abstract int getMaximum(KesBag vsechny);
 
-	protected abstract int getPrah(FilterDefinition filterDefinition);
+	protected abstract int getPrah(KesFilterDefinition filterDefinition);
 
-	protected abstract void setPrah(FilterDefinition filterDefinition, int prah);
+	protected abstract KesFilterDefinition withPrah(KesFilterDefinition filterDefinition, int prah);
 
 
 	@Override
 	protected int getPrah() {
-		return getPrah(kesoidModel.getDefinition());
+		return getPrah(kesFilterModel.getKesFilterDefinition());
 	}
 
 	@Override
 	protected void setPrah(final int prah) {
-		final FilterDefinition definition = kesoidModel.getDefinition();
-		setPrah(definition, prah);
-		kesoidModel.setDefinition(definition);
+		kesFilterModel.modify(definition -> withPrah(definition, prah));
 	}
 
 

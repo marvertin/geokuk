@@ -34,26 +34,16 @@ public abstract class DefaultKesoidPlugin0 implements KesoidPlugin {
 		return Collections.emptyList();
 	}
 
-	@Override
-	public <T> PluginFilter<T> getPluginFilter() {
-		// TODO Auto-generated method stub
-		return new PluginFilter<T>() {
-
-			@SuppressWarnings("unchecked")
-			@Override
-			public T getDefaultFilterDefinition() {
-				return (T) new Object();
-			}
-
-			@Override
-			public boolean filter(final T definition, final Wpt waypoint) {
-				return true; // všechno tam bude
-			}
-
-		};
-	}
-
 	/** Defaultně neregistrujeme nic */
 	@Override
 	public void registerSingletons(final BeanBag bb) {}
+
+
+	/**
+	 * Defaultně propustíme všechno.
+	 */
+	@Override
+	public boolean filter(final Wpt wpt) {
+		return true;
+	}
 }

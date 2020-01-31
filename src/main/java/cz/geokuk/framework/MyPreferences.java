@@ -3,13 +3,12 @@ package cz.geokuk.framework;
 import static java.util.Locale.ENGLISH;
 
 import java.awt.*;
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
 import java.util.prefs.*;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
@@ -21,6 +20,7 @@ import cz.geokuk.plugins.kesoid.genetika.QualAlelaNames;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.Filex;
+import lombok.*;
 
 /**
  * @author Martin Veverka
@@ -135,44 +135,74 @@ public class MyPreferences extends Preferences {
 		return duo;
 	}
 
-	private static Map<String, PropertyDescriptor> findProperties(final Class<?> cls) {
-		try {
-			final Map<String, PropertyDescriptor> descrs = new HashMap<>();
-			for (final Method method : cls.getMethods()) {
-				if (!method.isAnnotationPresent(PreferencebleIgnore.class)) {
-					proverProperties("is", method, descrs, cls);
-					proverProperties("get", method, descrs, cls);
-					proverProperties("set", method, descrs, cls);
-				}
-			}
-			return descrs;
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
+
+	private static List<PropertyManipulator> findProperties(final Class<?> cls) {
+		return Arrays.stream(cls.getMethods())
+				.map(MyPreferences::createPropertyManipulator)
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.collect(Collectors.toList());
+
+
+	}
+
+	private enum EPropertyManimulatorTyp { GETTER, SETTER, WITHER };
+
+	@Data
+	private static class PropertyManipulator {
+		@NonNull private final String propertyName;
+		@NonNull private final Class<?> propertyType;
+		@NonNull private final EPropertyManimulatorTyp typ;
+		@NonNull private final Method method;
+
+		@SneakyThrows
+		public Object invoke(final Object obj, final Object... args) {
+			return method.invoke(obj, args);
 		}
+
 	}
 
 	/**
-	 * @param string
-	 * @param methodName
-	 * @param descrs
-	 * @throws IntrospectionException
+	 * Pokud je vyhodnoceno, že metoda manipuluje s property, je vytvořen property manipulator, jinak je vráceno prázdno.
+	 * @param method
+	 * @return
 	 */
-	private static void proverProperties(final String prefix, final Method method, final Map<String, PropertyDescriptor> descrs, final Class<?> cls) throws IntrospectionException {
-		final String methodName = method.getName();
-		if (methodName.startsWith(prefix)) {
-			final String javaPropertyName = uncapitalize(methodName.substring(prefix.length()));
-			if ("class".equals(javaPropertyName)) {
-				return;
-			}
-			final PropertyDescriptor pd = new PropertyDescriptor(javaPropertyName, cls);
-			final PreferencebleProperty annotation = method.getAnnotation(PreferencebleProperty.class);
-			String prefePropertyName = javaPropertyName;
-			if (annotation != null) {
-				prefePropertyName = annotation.name();
-			}
-			descrs.put(prefePropertyName, pd);
+	private static Optional<PropertyManipulator> createPropertyManipulator(final Method method) {
+		if (method.isAnnotationPresent(PreferencebleIgnore.class)) {
+			return Optional.empty();
 		}
+		final String methodName = method.getName();
+		if ("getClass".equals(methodName)) {
+			return Optional.empty();
+		}
+		final EPropertyManimulatorTyp typ;
+		final int delkaPrefixu;
+		final Class<?> propertyType;
+		if (methodName.startsWith("is")) {
+			typ = EPropertyManimulatorTyp.GETTER;
+			propertyType = method.getReturnType();
+			delkaPrefixu = 2;
+		} else if (methodName.startsWith("get")) {
+			typ = EPropertyManimulatorTyp.GETTER;
+			propertyType = method.getReturnType();
+			delkaPrefixu = 3;
+		} else if (methodName.startsWith("set")) {
+			typ = EPropertyManimulatorTyp.SETTER;
+			propertyType = method.getParameterTypes()[0];
+			delkaPrefixu = 3;
+		} else if (methodName.startsWith("with")) {
+			typ = EPropertyManimulatorTyp.WITHER;
+			propertyType = method.getParameterTypes()[0];
+			delkaPrefixu = 4;
+		} else  {
+			return Optional.empty();
+		}
+		final String javaPropertyName = uncapitalize(methodName.substring(delkaPrefixu));
+		final PreferencebleProperty annotation = method.getAnnotation(PreferencebleProperty.class);
+		final String prefePropertyName =  annotation != null ? annotation.name() : javaPropertyName;
+		return Optional.of(new PropertyManipulator(prefePropertyName, propertyType, typ, method));
 	}
+
 
 	MyPreferences(final Preferences aPreferences) {
 		pref = aPreferences;
@@ -503,17 +533,33 @@ public class MyPreferences extends Preferences {
 		try {
 			@SuppressWarnings("unchecked")
 			final Class<T> cls = (Class<T>) defautStructure.getClass();
-			final T stucture = cls.newInstance();
 			if (!cls.isAnnotationPresent(Preferenceble.class)) {
 				throw new RuntimeException("Klasa " + cls + " postrada anotaci " + Preferenceble.class);
 			}
+			final List<PropertyManipulator> propes = findProperties(cls);
+			System.out.println(cls);
+			System.out.println(propes);
+			final Map<String, Object> defaultValues = propes.stream()
+					.filter(pm -> pm.getTyp() == EPropertyManimulatorTyp.GETTER)
+					.collect(HashMap::new, (m,v)->m.put(v.propertyName, v.invoke(defautStructure)), HashMap::putAll);
+
 			final MyPreferences node = node(name);
-			for (final Map.Entry<String, PropertyDescriptor> entry : findProperties(cls).entrySet()) {
-				final Object defaultValue = entry.getValue().getReadMethod().invoke(defautStructure);
+			T stucture = cls.newInstance();
+			for (final PropertyManipulator manipulator : propes) {
+				final Object defaultValue = defaultValues.get(manipulator.getPropertyName());
 				@SuppressWarnings("unchecked")
-				final Class<Object> valueType = (Class<Object>) entry.getValue().getPropertyType();
-				final Object newValue = node.getAnyElement(entry.getKey(), defaultValue, valueType);
-				entry.getValue().getWriteMethod().invoke(stucture, newValue);
+				final Class<Object> valueType = (Class<Object>) manipulator.getPropertyType();
+				final Object newValue = node.getAnyElement(manipulator.getPropertyName(), defaultValue, valueType);
+				switch (manipulator.typ) {
+				case GETTER: break;
+				case SETTER:
+					manipulator.invoke(stucture, newValue);
+					break;
+				case WITHER:
+					@SuppressWarnings("unchecked") final T newStructure = (T) manipulator.invoke(stucture, newValue);
+					stucture = newStructure;
+					break;
+				}
 			}
 			return stucture;
 		} catch (final Exception e) {
@@ -731,12 +777,21 @@ public class MyPreferences extends Preferences {
 				throw new RuntimeException("Klasa " + cls + " postrada anotaci " + Preferenceble.class);
 			}
 			final MyPreferences node = node(name);
-			for (final Map.Entry<String, PropertyDescriptor> entry : findProperties(cls).entrySet()) {
-				final Object value = entry.getValue().getReadMethod().invoke(structure);
+			for (final PropertyManipulator manipulator : findProperties(cls)) {
 				@SuppressWarnings("unchecked")
-				final Class<Object> valueType = (Class<Object>) entry.getValue().getPropertyType();
-				node.putAnyElement(entry.getKey(), value, valueType);
+				final Class<Object> valueType = (Class<Object>) manipulator.getPropertyType();
+				switch (manipulator.typ) {
+				case GETTER:
+					final Object value = manipulator.invoke(structure);
+					node.putAnyElement(manipulator.getPropertyName(), value, valueType);
+					break;
+				case SETTER:
+					break;
+				case WITHER:
+					break;
+				}
 			}
+
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -915,4 +970,5 @@ public class MyPreferences extends Preferences {
 	private <T> List<T> unpack(final String packedString, final Function<String, T> parseFunc) {
 		return new ArrayList<>(Collections2.transform(unpack(packedString), parseFunc));
 	}
+
 }
