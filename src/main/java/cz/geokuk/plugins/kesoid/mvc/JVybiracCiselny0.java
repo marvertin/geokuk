@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import javax.swing.*;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
-import cz.geokuk.plugins.kesoid.KesBag;
 
 public abstract class JVybiracCiselny0 extends JPanel implements AfterEventReceiverRegistrationInit {
 
@@ -39,17 +38,6 @@ public abstract class JVybiracCiselny0 extends JPanel implements AfterEventRecei
 			setPrah(prah);
 		});
 	}
-
-	public void onEvent(final KeskyNactenyEvent aEvent) {
-		final KesBag vsechny = aEvent.getVsechny();
-		final int maximalniFavorit = getMaximum(vsechny);
-		iModel.setMinimum(0);
-		iModel.setMaximum(maximalniFavorit);
-		iModel.setValue(Math.min((Integer) iModel.getNumber(), maximalniFavorit));
-		setVisible(!iModel.getMinimum().equals(iModel.getMaximum()));
-	}
-
-	protected abstract int getMaximum(KesBag vsechny);
 
 	protected abstract int getPrah();
 

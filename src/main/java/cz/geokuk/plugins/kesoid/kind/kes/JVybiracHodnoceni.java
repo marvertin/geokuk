@@ -2,8 +2,6 @@ package cz.geokuk.plugins.kesoid.kind.kes;
 
 import javax.swing.SpinnerNumberModel;
 
-import cz.geokuk.plugins.kesoid.KesBag;
-
 public class JVybiracHodnoceni extends JVybiracCiselnyRuznychHodnoceni0 {
 
 	private static final long serialVersionUID = 2417664157609045262L;
@@ -16,8 +14,8 @@ public class JVybiracHodnoceni extends JVybiracCiselnyRuznychHodnoceni0 {
 	}
 
 	@Override
-	protected int getMaximum(final KesBag vsechny) {
-		return vsechny.getMaximalniHodnoceni();
+	protected int getMaximum(final KesWptSumarizer sumarizer) {
+		return sumarizer.getMaximalniHodnoceni();
 	}
 
 	@Override

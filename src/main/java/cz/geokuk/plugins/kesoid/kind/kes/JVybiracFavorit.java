@@ -1,7 +1,5 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
-import cz.geokuk.plugins.kesoid.KesBag;
-
 public class JVybiracFavorit extends JVybiracCiselnyRuznychHodnoceni0 {
 
 	private static final long serialVersionUID = -484273090975902036L;
@@ -11,8 +9,8 @@ public class JVybiracFavorit extends JVybiracCiselnyRuznychHodnoceni0 {
 	}
 
 	@Override
-	protected int getMaximum(final KesBag vsechny) {
-		return vsechny.getMaximalniFavorit();
+	protected int getMaximum(final KesWptSumarizer sumarizer) {
+		return sumarizer.getMaximalniFavorit();
 	}
 
 	@Override

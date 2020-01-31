@@ -1,7 +1,6 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
-import cz.geokuk.plugins.kesoid.KesBag;
 
 public class JVybiracBestOf extends JVybiracCiselnyRuznychHodnoceni0 implements AfterEventReceiverRegistrationInit {
 
@@ -15,8 +14,8 @@ public class JVybiracBestOf extends JVybiracCiselnyRuznychHodnoceni0 implements 
 	}
 
 	@Override
-	protected int getMaximum(final KesBag vsechny) {
-		return vsechny.getMaximalniBestOf();
+	protected int getMaximum(final KesWptSumarizer sumarizer) {
+		return sumarizer.getMaximalniBestOf();
 	}
 
 	@Override

@@ -1,26 +1,48 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
+import javax.swing.SwingUtilities;
+
+import cz.geokuk.framework.Model0;
+import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.kind.WptSumarizer;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-public class KesWptSumarizer implements WptSumarizer {
+@RequiredArgsConstructor
+public class KesWptSumarizer extends Model0  implements WptSumarizer {
+
+	private final KesPlugin kesPlugin;
+
+	@Getter
+	private int maximalniBestOf;
+
+	@Getter
+	private int maximalniHodnoceni;
+
+	@Getter
+	private int maximalniFavorit;
+
 
 	@Override
 	public void initLoading() {
-		// TODO Auto-generated method stub
-
+		maximalniBestOf = 0;
+		maximalniHodnoceni = 0;
+		maximalniFavorit = 0;
 	}
 
 	@Override
 	public void afterLoaded(final Wpt wpt) {
-		// TODO Auto-generated method stub
-
+		final Kesoid kesoid = wpt.getKesoid();
+		final Kes kes = (Kes) kesoid;
+		maximalniBestOf = Math.max(maximalniBestOf, kes.getBestOf());
+		maximalniHodnoceni = Math.max(maximalniHodnoceni, kes.getHodnoceni());
+		maximalniFavorit = Math.max(maximalniFavorit, kes.getFavorit());
 	}
 
 	@Override
 	public void doneLoading() {
-		// TODO Auto-generated method stub
-
+		SwingUtilities.invokeLater(() -> fire(new KesWptSumarizeEvent()));
 	}
 
 	@Override
@@ -39,6 +61,10 @@ public class KesWptSumarizer implements WptSumarizer {
 	public void doneFiltering() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	protected void initAndFire() {
 	}
 
 }

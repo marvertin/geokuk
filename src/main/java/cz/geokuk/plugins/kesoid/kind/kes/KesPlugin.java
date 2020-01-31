@@ -24,7 +24,7 @@ public class KesPlugin implements KesoidPlugin {
 	public static final String PREF_KES_PLUGIN_node = FPref.KESOID_PLUGIN_node + "/kes";
 
 	private final KesFilterModel kesFilterModel = new KesFilterModel();
-	private final KesWptSumarizer kesWptSumarizer = new KesWptSumarizer();
+	private final KesWptSumarizer kesWptSumarizer = new KesWptSumarizer(this);
 
 	private final IndexMap<Kepodr, PopiskyDefBuilder0> map = new IndexMap<>();
 	{
@@ -70,6 +70,7 @@ public class KesPlugin implements KesoidPlugin {
 	@Override
 	public void registerSingletons(final BeanBag bb) {
 		bb.registerSigleton(kesFilterModel);
+		bb.registerSigleton(kesWptSumarizer);
 	}
 
 	@Override

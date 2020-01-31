@@ -7,7 +7,6 @@ import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom.CitacAlel;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
-import cz.geokuk.plugins.kesoid.kind.kes.Kes;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.lang.CounterMap;
@@ -48,9 +47,6 @@ public class KesBag implements WptReceiver {
 	private Indexator<Wpt> indexator;
 
 
-	private int maximalniBestOf = 0;
-	private int maximalniHodnoceni;
-	private int maximalniFavorit;
 	private final Genom genom;
 
 	private final CitacAlel citacAlel;
@@ -90,12 +86,6 @@ public class KesBag implements WptReceiver {
 		final Kesoid kesoid = wpt.getKesoid();
 		kesoidyset.add(kesoid);
 		wpts.add(wpt);
-		if (kesoid instanceof Kes) {
-			final Kes kes = (Kes) kesoid;
-			maximalniBestOf = Math.max(maximalniBestOf, kes.getBestOf());
-			maximalniHodnoceni = Math.max(maximalniHodnoceni, kes.getHodnoceni());
-			maximalniFavorit = Math.max(maximalniFavorit, kes.getFavorit());
-		}
 		genotyp.countTo(citacAlel);
 	}
 
@@ -131,21 +121,6 @@ public class KesBag implements WptReceiver {
 			throw new RuntimeException("Jeste neni kesBag vytvoren");
 		}
 		return kesoidy;
-	}
-
-	/**
-	 * @return the maximalniBestOf
-	 */
-	public int getMaximalniBestOf() {
-		return maximalniBestOf;
-	}
-
-	public int getMaximalniFavorit() {
-		return maximalniFavorit;
-	}
-
-	public int getMaximalniHodnoceni() {
-		return maximalniHodnoceni;
 	}
 
 	/**

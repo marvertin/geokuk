@@ -1,9 +1,7 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
-import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracCiselny0;
-import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 
 public abstract class JVybiracCiselnyRuznychHodnoceni0 extends JVybiracCiselny0 implements AfterEventReceiverRegistrationInit {
 
@@ -34,18 +32,16 @@ public abstract class JVybiracCiselnyRuznychHodnoceni0 extends JVybiracCiselny0 
 		iModel.setValue(getPrah(filterDefinition));
 	}
 
-	@Override
-	public void onEvent(final KeskyNactenyEvent aEvent) {
-		final KesBag vsechny = aEvent.getVsechny();
-		final int maximalniFavorit = getMaximum(vsechny);
+	public void onEvent(final KesWptSumarizeEvent aEvent) {
+		final KesWptSumarizer sumarizer = aEvent.getModel();
+		final int maximalniHodnota = getMaximum(sumarizer);
 		iModel.setMinimum(0);
-		iModel.setMaximum(maximalniFavorit);
-		iModel.setValue(Math.min((Integer) iModel.getNumber(), maximalniFavorit));
+		iModel.setMaximum(maximalniHodnota);
+		iModel.setValue(Math.min((Integer) iModel.getNumber(), maximalniHodnota));
 		setVisible(!iModel.getMinimum().equals(iModel.getMaximum()));
 	}
 
-	@Override
-	protected abstract int getMaximum(KesBag vsechny);
+	protected abstract int getMaximum(KesWptSumarizer sumarizer);
 
 	protected abstract int getPrah(KesFilterDefinition filterDefinition);
 
