@@ -6,6 +6,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom.CitacAlel;
 import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.kes.Kes;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
@@ -35,7 +36,7 @@ import cz.geokuk.util.lang.CounterMap;
  * @author veverka
  *
  */
-public class KesBag {
+public class KesBag implements WptReceiver {
 	//
 
 	private final List<Wpt> wpts = new ArrayList<>();
@@ -65,7 +66,8 @@ public class KesBag {
 		citacAlel = genom.createCitacAlel();
 	}
 
-	public void add(final Wpt wpt) {
+	@Override
+	public void expose(final Wpt wpt) {
 		if (indexatorOdevzdan) {
 			throw new IllegalStateException("Indexator uz byl odevztdan");
 		}

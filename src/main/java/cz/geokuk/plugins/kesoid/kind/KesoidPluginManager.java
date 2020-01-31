@@ -17,6 +17,7 @@ import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.simplewaypoint.SimpleWaypointGpxWptProcak;
 import cz.geokuk.util.procak.ProcakDispatcher;
 import lombok.*;
@@ -57,13 +58,16 @@ public class KesoidPluginManager {
 	 * @param builder
 	 * @return
 	 */
-	public ProcakDispatcher<GpxWpt> createGpxWptProcakDispatcher(final GpxToWptContext ctx, final GpxToWptBuilder builder) {
+	public ProcakDispatcher<GpxWpt> createGpxWptProcakDispatcher(final GpxToWptContext ctx, final GpxToWptBuilder builder, final WptReceiver wpts) {
 		return new ProcakDispatcher<>(plugins.stream()
 				.map(plugin -> plugin.createGpxWptProcak(ctx,
 						(gpxwpt, kepodr) -> {
 							final Wpt wpt = builder.createWpt(gpxwpt, kepodr);
 							wpt.setKesoidPlugin(plugin);
 							return wpt;
+						}, wpt -> {
+							plugin.getWptSumarizer().expose(wpt);
+							wpts.expose(wpt);
 						}))
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList()),
@@ -73,6 +77,9 @@ public class KesoidPluginManager {
 							final Wpt wpt = builder.createWpt(gpxwpt, kepodr);
 							wpt.setKesoidPlugin(sinkPlugin());
 							return wpt;
+						}, wpt -> {
+							sinkPlugin().getWptSumarizer().expose(wpt);
+							wpts.expose(wpt);
 						})
 
 				);

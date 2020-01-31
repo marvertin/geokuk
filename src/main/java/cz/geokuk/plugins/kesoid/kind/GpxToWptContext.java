@@ -2,7 +2,6 @@ package cz.geokuk.plugins.kesoid.kind;
 
 import java.util.Set;
 
-import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
@@ -15,8 +14,4 @@ public interface GpxToWptContext {
 	GccomNick getGccomNick();
 
 	Set<Alela> definujUzivatslskeAlely(final GpxWpt gpxwpt);
-
-	void expose(Wpt wpt);
-
-
 }

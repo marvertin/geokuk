@@ -13,6 +13,7 @@ import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.genetika.IndexMap;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 
 public class KesPlugin implements KesoidPlugin {
@@ -30,8 +31,8 @@ public class KesPlugin implements KesoidPlugin {
 		map.put(KESADWPT, new KesAddWptPopiskyDef().doInit());
 	}
 	@Override
-	public GpxWptProcak createGpxWptProcak(final GpxToWptContext ctx, final GpxToWptBuilder builder) {
-		return new KesGpxWptProcak(ctx, builder);
+	public GpxWptProcak createGpxWptProcak(final GpxToWptContext ctx, final GpxToWptBuilder builder, final WptReceiver wpts) {
+		return new KesGpxWptProcak(ctx, builder, wpts);
 	}
 
 	@Override
@@ -73,6 +74,12 @@ public class KesPlugin implements KesoidPlugin {
 	@Override
 	public boolean filter(final Wpt wpt) {
 		return kesFilterModel.getKesFilter().filter(wpt);
+	}
+
+
+	@Override
+	public WptSumarizer getWptSumarizer() {
+		return WptSumarizer.EMPTY;
 	}
 
 }

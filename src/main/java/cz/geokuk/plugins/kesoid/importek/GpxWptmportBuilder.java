@@ -5,9 +5,11 @@ import java.util.Map;
 
 import cz.geokuk.plugins.kesoid.EKesStatus;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.kind.GpxToWptContext;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.util.file.KeFile;
 import cz.geokuk.util.procak.ProcakDispatcher;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -18,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
+@RequiredArgsConstructor
 public class GpxWptmportBuilder implements IImportBuilder {
 
 
@@ -26,25 +29,22 @@ public class GpxWptmportBuilder implements IImportBuilder {
 	static final String GEOCACHE = "Geocache";
 	static final String GEOCACHE_FOUND = "Geocache Found";
 
+	private final KesoidPluginManager kesoidPluginManager;
+	private final GpxToWptContext gpxToWptContext;
+	private final WptReceiver wptReceiver;
+
 
 	private int citacBezejmennychWaypintu;
 	private InformaceOZdroji infoOCurrentnimZdroji;
 	private final InformaceOZdrojich.Builder informaceOZdrojichBuilder = InformaceOZdrojich.builder();
 
 
-	private final KesoidPluginManager kesoidPluginManager;
-
 	private ProcakDispatcher<GpxWpt> gpxWptDispatcher;
 
 	private final Map<String, GpxWpt> gpxwpts = new HashMap<String, GpxWpt>(1023);
-	private final WptReceiver wptReceiver;
 	// Až všechno doběhne, budou informace o zdrohjícz
 	private InformaceOZdrojich informaceOZdrojich;
 
-	public GpxWptmportBuilder(final KesoidPluginManager kesoidPluginManager, final WptReceiver wptReceiver) {
-		this.kesoidPluginManager = kesoidPluginManager;
-		this.wptReceiver = wptReceiver;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -91,7 +91,7 @@ public class GpxWptmportBuilder implements IImportBuilder {
 	 */
 	@Override
 	public void init() {
-		gpxWptDispatcher = kesoidPluginManager.createGpxWptProcakDispatcher(wptReceiver,
+		gpxWptDispatcher = kesoidPluginManager.createGpxWptProcakDispatcher(gpxToWptContext,
 				(gpxwpt, kepodr) -> {
 					final Wpt wpt = new Wpt();
 					wpt.setKepodr(kepodr);
@@ -100,7 +100,7 @@ public class GpxWptmportBuilder implements IImportBuilder {
 					wpt.setName(gpxwpt.name);
 					wpt.setNazev(vytvorNazev(gpxwpt));
 					return wpt;
-				});
+				}, wptReceiver);
 	}
 	/*
 	 * (non-Javadoc)

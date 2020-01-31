@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid.kind.munzee;
 import cz.geokuk.plugins.kesoid.EKesVztah;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 import cz.geokuk.util.procak.EProcakResult;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +18,14 @@ public class MunzeeGpxWptProcak implements GpxWptProcak {
 
 	private final GpxToWptContext ctx;
 	private final GpxToWptBuilder builder;
+	private final WptReceiver wpts;
 
 
 	@Override
 	public EProcakResult process(final GpxWpt gpxwpt) {
 		if (isMunzee(gpxwpt)) {
 			final Munzee munzee = createMunzee(gpxwpt);
-			ctx.expose(munzee.getMainWpt());
+			wpts.expose(munzee.getMainWpt());
 			return EProcakResult.DONE;
 		} else {
 			return EProcakResult.NEVER;

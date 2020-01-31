@@ -6,6 +6,7 @@ import java.util.Map;
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.Wpt.EZOrder;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 import cz.geokuk.util.procak.EProcakResult;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,8 @@ public class KesGpxWptProcak implements GpxWptProcak {
 
 	private final GpxToWptContext ctx;
 	private final GpxToWptBuilder builder;
+	private final WptReceiver wpts;
+
 
 	/** Zde shromažďujeme stvořené keše */
 	private final Map<String, Kesoid> resultKesoidsByName = new HashMap<>();
@@ -33,7 +36,7 @@ public class KesGpxWptProcak implements GpxWptProcak {
 		if (isGeocache(gpxwpt)) {
 			final Kes kes = createKes(gpxwpt);
 			resultKesoidsByName.put(gpxwpt.name, kes);
-			ctx.expose(kes.getFirstWpt());
+			wpts.expose(kes.getFirstWpt());
 			return EProcakResult.DONE;
 		} else {
 			// TODO dodatečné waypointy též pro waymarky
@@ -59,7 +62,7 @@ public class KesGpxWptProcak implements GpxWptProcak {
 				} else {
 					kesoid.addWpt(wpt);
 				}
-				ctx.expose(wpt);
+				wpts.expose(wpt);
 				return EProcakResult.DONE;
 			} else {
 				return druheKolo ? EProcakResult.NEVER // když to neumíme teď, nebudeme to umět nikdy

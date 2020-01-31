@@ -84,7 +84,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 				if (wpt == Wpt.ZARAZKA) {
 					break;
 				}
-				kesbag.add(wpt);
+				kesbag.expose(wpt);
 			}
 			log.debug("FILTERING {} - prepared result, {} ms.", cisloFiltrovani, System.currentTimeMillis() - startTime);
 			kesbag.done();

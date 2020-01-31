@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 
 public class PhotoPlugin extends DefaultKesoidPlugin0 {
@@ -14,8 +15,8 @@ public class PhotoPlugin extends DefaultKesoidPlugin0 {
 	public static final Kepodr PHOTO = Kepodr.of("photo");
 
 	@Override
-	public GpxWptProcak createGpxWptProcak(final GpxToWptContext ctx, final GpxToWptBuilder builder) {
-		return new PhotoGpxWptProcak(ctx, builder);
+	public GpxWptProcak createGpxWptProcak(final GpxToWptContext ctx, final GpxToWptBuilder builder, final WptReceiver wpts) {
+		return new PhotoGpxWptProcak(ctx, builder, wpts);
 	}
 
 	@SuppressWarnings("serial")

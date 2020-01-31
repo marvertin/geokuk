@@ -2,6 +2,7 @@ package cz.geokuk.plugins.kesoid.kind.photo;
 
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 import cz.geokuk.util.procak.EProcakResult;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,13 @@ public class PhotoGpxWptProcak implements GpxWptProcak {
 
 	private final GpxToWptContext ctx;
 	private final GpxToWptBuilder builder;
+	private final WptReceiver wpts;
 
 
 	@Override
 	public EProcakResult process(final GpxWpt gpxwpt) {
 		if (isPhoto(gpxwpt)) {
-			ctx.expose(createPhoto(gpxwpt).getMainWpt());
+			wpts.expose(createPhoto(gpxwpt).getMainWpt());
 			return EProcakResult.DONE;
 		} else {
 			return EProcakResult.NEVER;

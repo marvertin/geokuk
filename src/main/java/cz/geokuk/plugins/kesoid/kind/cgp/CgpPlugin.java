@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableSet;
 
 import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 
 public class CgpPlugin extends DefaultKesoidPlugin0 {
@@ -13,8 +14,8 @@ public class CgpPlugin extends DefaultKesoidPlugin0 {
 	public static final Kepodr CGP = Kepodr.of("cgp");
 
 	@Override
-	public GpxWptProcak createGpxWptProcak(final GpxToWptContext ctx, final GpxToWptBuilder builder) {
-		return new CgpGpxWptProcak(ctx, builder);
+	public GpxWptProcak createGpxWptProcak(final GpxToWptContext ctx, final GpxToWptBuilder builder, final WptReceiver wpts) {
+		return new CgpGpxWptProcak(ctx, builder, wpts);
 	}
 
 	@Override

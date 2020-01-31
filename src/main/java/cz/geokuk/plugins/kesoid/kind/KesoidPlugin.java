@@ -10,6 +10,7 @@ import cz.geokuk.framework.BeanBag;
 import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 
 /**
  * Rozhraní, které musí implementovat každý kešoid plugin.
@@ -19,7 +20,7 @@ import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 public interface KesoidPlugin {
 
 
-	public GpxWptProcak createGpxWptProcak(GpxToWptContext ctx, GpxToWptBuilder builder);
+	public GpxWptProcak createGpxWptProcak(GpxToWptContext ctx, GpxToWptBuilder builder, WptReceiver wpts);
 
 	public JKesoidDetail0 createDetail();
 
@@ -55,6 +56,9 @@ public interface KesoidPlugin {
 	 * @param bb
 	 */
 	public void registerSingletons(BeanBag bb);
+
+	/** Objekt, do kterého budou posílány posbírané i vyfiltrované waypointy pluginu */
+	public WptSumarizer getWptSumarizer();
 
 	/**
 	 * Přiřadí pluginu relativní pořadí. Podle pořadí pluginů se určuje:

@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid.kind.waymark;
 import cz.geokuk.plugins.kesoid.EKesVztah;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 import cz.geokuk.util.procak.EProcakResult;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 
 	private final GpxToWptContext ctx;
 	private final GpxToWptBuilder builder;
+	private final WptReceiver wpts;
 
 
 	@Override
@@ -30,7 +32,7 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		} else {
 			return EProcakResult.NEVER;
 		}
-		ctx.expose(wm.getMainWpt());
+		wpts.expose(wm.getMainWpt());
 		return EProcakResult.DONE;
 	}
 

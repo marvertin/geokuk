@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import cz.geokuk.plugins.kesoid.EKesVztah;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 import cz.geokuk.plugins.kesoid.kind.kes.EKesType;
 import cz.geokuk.util.procak.EProcakResult;
@@ -31,6 +32,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 
 	private final GpxToWptContext ctx;
 	private final GpxToWptBuilder builder;
+	private final WptReceiver wpts;
 
 	final Map<String, CzechGeodeticPoint> mapaPredTeckou = new HashMap<>();
 
@@ -48,14 +50,14 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 			{
 				final CzechGeodeticPoint cgp = createCgp(gpxwpt);
 				mapaPredTeckou.put(extrahujPrefixPredTeckou(gpxwpt), cgp);
-				ctx.expose(cgp.getMainWpt());
+				wpts.expose(cgp.getMainWpt());
 				return EProcakResult.DONE;
 			}
 			case EVENT:
 			case CACHE_IN_TRASH_OUT_EVENT:
 			case MEGA_EVENT:
 			{
-				ctx.expose(createCgp(gpxwpt).getMainWpt());
+				wpts.expose(createCgp(gpxwpt).getMainWpt());
 				return EProcakResult.DONE;
 			}
 			case LETTERBOX_HYBRID:
@@ -64,9 +66,9 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 					final CzechGeodeticPoint cgp2 = mapaPredTeckou.get(extrahujPrefixPredTeckou(gpxwpt));
 					if (cgp2 != null) {
 						final Wpt wpt = pridruz(cgp2, gpxwpt);
-						ctx.expose(wpt);
+						wpts.expose(wpt);
 					} else {
-						ctx.expose(createCgp(gpxwpt).getMainWpt());
+						wpts.expose(createCgp(gpxwpt).getMainWpt());
 					}
 					return EProcakResult.DONE;
 				} else {

@@ -46,4 +46,11 @@ public abstract class DefaultKesoidPlugin0 implements KesoidPlugin {
 	public boolean filter(final Wpt wpt) {
 		return true;
 	}
+
+
+	@Override
+	public WptSumarizer getWptSumarizer() {
+		return WptSumarizer.EMPTY;
+	}
+
 }

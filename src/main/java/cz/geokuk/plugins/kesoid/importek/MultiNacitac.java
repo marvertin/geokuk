@@ -9,6 +9,7 @@ import java.util.zip.ZipFile;
 
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
+import cz.geokuk.plugins.kesoid.kind.GpxToWptContext;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
@@ -79,8 +80,8 @@ public class MultiNacitac {
 			return null;
 		}
 		final KesBag kesBag = new KesBag(genom);
-		final WptReceiver wptReceiver = new WptReceiver(genom, kesoidModel.getGccomNick(), kesBag);
-		final GpxWptmportBuilder builder = new GpxWptmportBuilder(kesoidModel.getKesopidPluginManager(), wptReceiver);
+		final GpxToWptContext gpxToWptContext = new GpxToWptContextIml(genom, kesoidModel.getGccomNick());
+		final GpxWptmportBuilder builder = new GpxWptmportBuilder(kesoidModel.getKesopidPluginManager(), gpxToWptContext, kesBag);
 		builder.init();
 		for (final KeFile file : list) {
 			log.debug("Nacitam: " + file);

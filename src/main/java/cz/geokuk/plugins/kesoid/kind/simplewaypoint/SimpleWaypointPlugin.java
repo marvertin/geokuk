@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
+import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 import cz.geokuk.util.procak.EProcakResult;
 
@@ -15,7 +16,7 @@ public class SimpleWaypointPlugin extends DefaultKesoidPlugin0 {
 	public static final Kepodr SIMPLEWAYPOINT = Kepodr.of("simplewaypoint");
 
 	@Override
-	public GpxWptProcak createGpxWptProcak(final GpxToWptContext ctx, final GpxToWptBuilder builder) {
+	public GpxWptProcak createGpxWptProcak(final GpxToWptContext ctx, final GpxToWptBuilder builder, final WptReceiver wpts) {
 		// to je ten interní, nějaký být musí a nesmí škodit, nezpracováváme a už pak nechceme.
 		// Pravé naplnění se dělá jako sink z toho co zbude.
 		return new GpxWptProcak() {
