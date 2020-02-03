@@ -23,7 +23,7 @@ public class KesFilter {
 		final Kes kes = (Kes) kesoid;
 
 		if (kes.getVztah() == EKesVztah.NORMAL) { // jen u nenalezených
-			if (kes.hasValidFinal() && filterDefinition.isJenDoTerenuUNenalezenych() && !aWpt.nutnyKLusteni() && !Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())) {
+			if (kes.hasValidFinal() && filterDefinition.isJenDoTerenuUNenalezenych() && !nutnyKLusteni(aWpt) && !Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())) {
 				return false;
 			}
 		}
@@ -45,6 +45,12 @@ public class KesFilter {
 		}
 		return true;
 	}
+
+
+	private boolean nutnyKLusteni(final Wpt wpt) {
+		return wpt.isMainWpt() || wpt.getType() == EKesWptType.QUESTION_TO_ANSWER || wpt.getType() == EKesWptType.STAGES_OF_A_MULTICACHE;
+	}
+
 
 
 }

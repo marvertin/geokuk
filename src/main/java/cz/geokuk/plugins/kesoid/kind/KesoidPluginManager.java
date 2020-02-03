@@ -178,4 +178,9 @@ public class KesoidPluginManager {
 		.map(KesoidPlugin::getWptSumarizer)
 		.forEach(WptSumarizer::doneLoading);
 	}
+
+	public double getMaxPolomerObsazenosti() {
+		// TODO [veverka] Tak tot se musí určit nějak jinak, je to je pro odhad jak rozšířit vykreslovací oblast. -- 3. 2. 2020 8:35:53 veverka
+		return 161;
+	}
 }

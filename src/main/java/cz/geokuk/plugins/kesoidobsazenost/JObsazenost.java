@@ -11,6 +11,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.MouseGestureContext;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.util.gui.JBarvovyDvojSlider;
 import cz.geokuk.util.index2d.BoundingRect;
@@ -32,8 +33,6 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		}
 	}
 
-	private static final int POLOMER_OBSAZENOSTI = 161;
-
 	private static final long serialVersionUID = -5858146658366237217L;
 
 	private ObsazenostSettings obsazenost;
@@ -43,6 +42,8 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 	private JBarvovyDvojSlider iSlidovnik;
 
 	private ObsazenostModel obsazenostModel;
+
+	private KesoidPluginManager kesoidPluginManager;
 
 	public JObsazenost() {
 		setOpaque(false);
@@ -62,6 +63,10 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 
 	public void inject(final ObsazenostModel obsazenostModel) {
 		this.obsazenostModel = obsazenostModel;
+	}
+
+	public void inject(final KesoidPluginManager kesoidPluginManager) {
+		this.kesoidPluginManager = kesoidPluginManager;
 	}
 
 	@Override
@@ -92,18 +97,19 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 			return;
 		}
 		final Graphics2D g = (Graphics2D) aG;
-		final int r = polomerObsazenosti();
+		final int r =  (int) (getSoord().getPixluNaMetr() * kesoidPluginManager.getMaxPolomerObsazenosti());
 		final int d = 2 * r;
 		if (d < 4) {
 			return; // nemá smysl kreslit malé kroužky
 		}
 		// obsazenost.setColor(new Color(128,128,128,128));
 		g.setColor(obsazenost.getColor());
-		final int mouokraj = (int) (getSoord().getMouboduNaMetr() * POLOMER_OBSAZENOSTI);
+		final int mouokraj = (int) (getSoord().getMouboduNaMetr() * kesoidPluginManager.getMaxPolomerObsazenosti());
 		final BoundingRect boundingRect = getSoord().getBoundingRect().rozsir(mouokraj);
 		// final Area area = new Area();
 		iIndexator.bound(boundingRect).stream().forEach(wpt -> {
-			if (!wpt.obsazujeOblast()) {
+			final int polomerObsazenosti = wpt.getKesoidPlugin().getPolomerObsazenosti(wpt);
+			if (polomerObsazenosti == 0) {
 				return;
 			}
 			final Mou mou = wpt.getMou();
@@ -126,13 +132,6 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		add(iSlidovnik, BorderLayout.EAST);
 		iSlidovnik.getBarvovnik().setToolTipText("Nastavení stupně šedi kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");
 		iSlidovnik.getPruhlednik().setToolTipText("Nastavení průhlednosti kruhů (161 m), kterými se zobrazí kešemi obsazené oblasti.");
-	}
-
-	/**
-	 * @return
-	 */
-	private int polomerObsazenosti() {
-		return (int) (getSoord().getPixluNaMetr() * POLOMER_OBSAZENOSTI);
 	}
 
 	/**

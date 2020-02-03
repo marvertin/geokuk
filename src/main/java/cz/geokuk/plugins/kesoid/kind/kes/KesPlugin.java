@@ -9,14 +9,17 @@ import com.google.common.collect.ImmutableSet;
 
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.BeanBag;
-import cz.geokuk.plugins.kesoid.Kepodr;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.genetika.IndexMap;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
 
 public class KesPlugin implements KesoidPlugin {
+
+	private static final int POLOMER_OBSAZENOSTI = 161;
+
+
 
 	public static final Kepodr KES = Kepodr.of("kes");
 	public static final Kepodr KESADWPT = Kepodr.of("kesadwpt");
@@ -82,6 +85,15 @@ public class KesPlugin implements KesoidPlugin {
 	@Override
 	public WptSumarizer getWptSumarizer() {
 		return kesWptSumarizer;
+	}
+
+	@Override
+	public int getPolomerObsazenosti(final Wpt wpt) {
+		if (wpt.getKesoid().getStatus() == EKesStatus.ARCHIVED) {
+			return 0;
+		}
+		final EKesWptType type = wpt.getType();
+		return type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE || Wpt.TRADITIONAL_CACHE.equals(wpt.getSym()) ? POLOMER_OBSAZENOSTI : 0;
 	}
 
 }

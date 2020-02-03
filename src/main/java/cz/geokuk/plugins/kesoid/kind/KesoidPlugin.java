@@ -61,6 +61,14 @@ public interface KesoidPlugin {
 	public WptSumarizer getWptSumarizer();
 
 	/**
+	 * Pokud daný waypoint nějakým způsobem omezuje umístění dalších nějakých waypointů, tak vrátí poloměr krhu,
+	 * kam nesmí být tyto jiné waypointy umístěny. Například 161 m pro keše.
+	 * @param wpt Waypoint, ke kterému se má kreslit kruh.
+	 * @return Poloměr v metrech, nula, pokdu nic nobsazuje. nevrací záporné číslo.
+	 */
+	public int getPolomerObsazenosti(Wpt wpt);
+
+	/**
 	 * Přiřadí pluginu relativní pořadí. Podle pořadí pluginů se určuje:
 	 *   - Pořadí načítání kešoidů, špatné pořadí může znehodnotit vyhodncení některých typů kešoidů. Například CGP musí být před waymarky.
 	 *   - V gui se prvky příslušející pluginům zobrazují v tomto pořadí.

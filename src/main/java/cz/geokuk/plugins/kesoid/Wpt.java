@@ -223,18 +223,6 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return rucnePridany;
 	}
 
-	public boolean nutnyKLusteni() {
-		return isMainWpt() || getType() == EKesWptType.QUESTION_TO_ANSWER || getType() == EKesWptType.STAGES_OF_A_MULTICACHE;
-	}
-
-	public boolean obsazujeOblast() {
-		if (getKesoid().getStatus() == EKesStatus.ARCHIVED) {
-			return false;
-		}
-		final EKesWptType type = getType();
-		return type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE || TRADITIONAL_CACHE.equals(sym);
-	}
-
 	/**
 	 * @param aElevation
 	 *            the elevation to set

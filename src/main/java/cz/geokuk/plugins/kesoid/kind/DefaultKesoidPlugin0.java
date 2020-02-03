@@ -53,4 +53,9 @@ public abstract class DefaultKesoidPlugin0 implements KesoidPlugin {
 		return WptSumarizer.EMPTY;
 	}
 
+	@Override
+	public int getPolomerObsazenosti(final Wpt wpt) {
+		return 0;
+	}
+
 }
