@@ -9,7 +9,8 @@ import java.net.URL;
 import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
-import cz.geokuk.plugins.kesoid.*;
+import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
@@ -45,7 +46,7 @@ public class Kes extends Kesoid {
 		if (wpt == null) {
 			return;
 		}
-		if (EKesWptType.FINAL_LOCATION == wpt.getType()) {
+		if (EKesWptType.FINAL_LOCATION == EKesWptType.decode(wpt.getSym())) {
 			finalWpt = wpt;
 		}
 	}

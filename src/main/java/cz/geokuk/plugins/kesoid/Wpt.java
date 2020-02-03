@@ -7,7 +7,6 @@ import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 import cz.geokuk.plugins.kesoid.kind.KesoidPlugin;
-import cz.geokuk.plugins.kesoid.kind.kes.EKesWptType;
 import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
 import lombok.Getter;
 import lombok.Setter;
@@ -181,12 +180,6 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 		return sym;
 	}
 
-	// private Genotyp __;
-
-	public EKesWptType getType() {
-		return EKesWptType.decode(sym);
-	}
-
 	/**
 	 * @return the wgs
 	 */
@@ -319,7 +312,7 @@ public class Wpt extends Weikoid0 implements Uchopenec {
 	 */
 	@Override
 	public String toString() {
-		return "Wpt [name=" + nazev + ", type=" + getType() + ", wgs=" + getWgs() + "] " + (getKesoid() == null ? "" : getKesoid().getIdentifier());
+		return "Wpt [name=" + nazev + ", type="  + ", wgs=" + getWgs() + "] " + (getKesoid() == null ? "" : getKesoid().getIdentifier());
 	}
 
 	/**

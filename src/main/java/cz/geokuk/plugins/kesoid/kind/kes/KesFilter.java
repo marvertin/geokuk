@@ -48,7 +48,8 @@ public class KesFilter {
 
 
 	private boolean nutnyKLusteni(final Wpt wpt) {
-		return wpt.isMainWpt() || wpt.getType() == EKesWptType.QUESTION_TO_ANSWER || wpt.getType() == EKesWptType.STAGES_OF_A_MULTICACHE;
+		final EKesWptType wptType = EKesWptType.decode(wpt.getSym());
+		return wpt.isMainWpt() || wptType == EKesWptType.QUESTION_TO_ANSWER || wptType == EKesWptType.STAGES_OF_A_MULTICACHE;
 	}
 
 

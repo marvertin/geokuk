@@ -44,7 +44,7 @@ public class KesGpxWptProcak implements GpxWptProcak {
 			// TODO přísnější test na to, co může být additional waypoint
 			if (kesoid != null) {
 				final Wpt wpt = createAditionalWpt(gpxwpt);
-				if (wpt.getType() == EKesWptType.FINAL_LOCATION) {
+				if (EKesWptType.decode(wpt.getSym()) == EKesWptType.FINAL_LOCATION) {
 					wpt.setZorder(EZOrder.FINAL);
 					if (kesoid instanceof Kes) {
 						final Kes kes = (Kes) kesoid;

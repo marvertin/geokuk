@@ -92,7 +92,7 @@ public class KesPlugin implements KesoidPlugin {
 		if (wpt.getKesoid().getStatus() == EKesStatus.ARCHIVED) {
 			return 0;
 		}
-		final EKesWptType type = wpt.getType();
+		final EKesWptType type = EKesWptType.decode(wpt.getSym());
 		return type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE || Wpt.TRADITIONAL_CACHE.equals(wpt.getSym()) ? POLOMER_OBSAZENOSTI : 0;
 	}
 
