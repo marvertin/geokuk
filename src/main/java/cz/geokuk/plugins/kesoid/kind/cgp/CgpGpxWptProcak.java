@@ -12,7 +12,6 @@ import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
-import cz.geokuk.plugins.kesoid.kind.kes.EKesType;
 import cz.geokuk.util.procak.EProcakResult;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +40,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 	@Override
 	public EProcakResult process(final GpxWpt gpxwpt) {
 		if (isCzechGeodeticPoint(gpxwpt)) {
-			final EKesType kesType = decodePseudoKesType(gpxwpt);
+			final EPseudoKesType kesType = decodePseudoKesType(gpxwpt);
 			switch (kesType) {
 			case TRADITIONAL:
 			case MULTI:
@@ -159,7 +158,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 	private void urciNazevCgpZPseudoKese(final CzechGeodeticPoint cgp, final Wpt wpt, final GpxWpt gpxwpt) {
 		String name = firstNonNull(gpxwpt.groundspeak.name, "Unknown CGP");
 
-		final EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
+		final EPseudoKesType pseudoKesType = decodePseudoKesType(gpxwpt);
 
 		final String nameCandidate = null;
 
@@ -206,41 +205,41 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 	 * @return
 	 */
 	private String urciSymCgpZPseudoKese(final GpxWpt gpxwpt) {
-		final EKesType pseudoKesType = decodePseudoKesType(gpxwpt);
-		if (pseudoKesType == EKesType.TRADITIONAL) {
+		final EPseudoKesType pseudoKesType = decodePseudoKesType(gpxwpt);
+		if (pseudoKesType == EPseudoKesType.TRADITIONAL) {
 			return gpxwpt.groundspeak.name.contains("ETRS") ? "TrB (ETRS)" : "TrB";
 		}
-		if (pseudoKesType == EKesType.LETTERBOX_HYBRID) {
+		if (pseudoKesType == EPseudoKesType.LETTERBOX_HYBRID) {
 			return "TrB-p";
 		}
-		if (pseudoKesType == EKesType.MULTI) {
+		if (pseudoKesType == EPseudoKesType.MULTI) {
 			return "ZhB";
 		}
-		if (pseudoKesType == EKesType.UNKNOWN) {
+		if (pseudoKesType == EPseudoKesType.UNKNOWN) {
 			return "ZhB-p";
 		}
-		if (pseudoKesType == EKesType.EARTHCACHE) {
+		if (pseudoKesType == EPseudoKesType.EARTHCACHE) {
 			return "BTP";
 		}
-		if (pseudoKesType == EKesType.WHERIGO) {
+		if (pseudoKesType == EPseudoKesType.WHERIGO) {
 			return "ZGS";
 		}
 
-		if (pseudoKesType == EKesType.EVENT) {
+		if (pseudoKesType == EPseudoKesType.EVENT) {
 			return "ZVBP";
 		}
-		if (pseudoKesType == EKesType.CACHE_IN_TRASH_OUT_EVENT) {
+		if (pseudoKesType == EPseudoKesType.CACHE_IN_TRASH_OUT_EVENT) {
 			return "PVBP";
 		}
-		if (pseudoKesType == EKesType.MEGA_EVENT) {
+		if (pseudoKesType == EPseudoKesType.MEGA_EVENT) {
 			return "ZNB";
 		}
 
 		return "Unknown Cgp";
 	}
 
-	private EKesType decodePseudoKesType(final GpxWpt gpxwpt) {
-		return gpxwpt.groundspeak.type != null ? EKesType.decode(gpxwpt.groundspeak.type) : EKesType.decode(gpxwpt.type.substring(9));
+	private EPseudoKesType decodePseudoKesType(final GpxWpt gpxwpt) {
+		return gpxwpt.groundspeak.type != null ? EPseudoKesType.decode(gpxwpt.groundspeak.type) : EPseudoKesType.decode(gpxwpt.type.substring(9));
 	}
 
 	private String extractOznaceniBodu(final String celeJmeno) {
