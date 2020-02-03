@@ -64,6 +64,10 @@ public abstract class Action0 extends AbstractAction {
 		actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand(), EventQueue.getMostRecentEventTime(), modifiers));
 	}
 
+	public boolean shouldBeVisible() {
+		return true; // implicitně ano, ale lze zablokovat, pokud v konkrétním příapdě nemá smysl
+	}
+
 	public Icon getIcon() {
 		return (Icon) getValue(Action.SMALL_ICON);
 	}

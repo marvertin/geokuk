@@ -6,14 +6,14 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 
 import cz.geokuk.img.ImageLoader;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 
 public class VyletNeAction extends VyletActionIndividual0 {
 
 	private static final long serialVersionUID = -2637836928166450446L;
 
-	public VyletNeAction(final Kesoid kes) {
-		super("Ignoruj", kes);
+	public VyletNeAction(final Wpt wpt) {
+		super("Ignoruj", wpt);
 		putValue(SHORT_DESCRIPTION, "Zařadí keš mezi keše ignorované.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_I);
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke('-'));

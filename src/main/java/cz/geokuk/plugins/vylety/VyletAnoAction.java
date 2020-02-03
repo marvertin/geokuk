@@ -6,14 +6,14 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 
 import cz.geokuk.img.ImageLoader;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 
 public class VyletAnoAction extends VyletActionIndividual0 {
 
 	private static final long serialVersionUID = 1L;
 
-	public VyletAnoAction(final Kesoid kes) {
-		super("Lovím", kes);
+	public VyletAnoAction(final Wpt wpt) {
+		super("Lovím", wpt);
 
 		putValue(SHORT_DESCRIPTION, "Zařadí keš mezi favority, které chci lovit.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_L);

@@ -31,4 +31,9 @@ public class OpenFileAction extends Action0 {
 			log.error("Unable to open file " + fileToOpen, exception);
 		}
 	}
+
+	@Override
+	public boolean shouldBeVisible() {
+		return fileToOpen != null;
+	}
 }

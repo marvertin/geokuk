@@ -502,41 +502,36 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 		///
 		final Kesoid kesoid = mysNadWpt.getKesoid();
-		p.add(factory.init(new ZoomKesAction(kesoid)));
+		addToPopup(p, new ZoomKesAction(kesoid));
 		final JMenuItem item = new JMenuItem(factory.init(new CenterWaypointAction(mysNadWpt)));
 		item.setText("Centruj");
 		// TODO Dát ikonu středování
 		item.setIcon(null);
 		p.add(item);
-		if (kesoid.getUrlShow() != null) {
-			p.add(factory.init(new ZobrazNaGcComAction(kesoid)));
-		}
-		if (kesoid.getUrlPrint() != null) {
-			p.add(factory.init(new TiskniNaGcComAction(kesoid)));
-		}
-		if (kesoid.getUrlShow() != null) {
-			p.add(factory.init(new UrlToClipboardForGeogetAction(kesoid)));
-		}
-		if (kesoid.getUrlPrint() != null) {
-			p.add(factory.init(new UrlToListingForGeogetAction(kesoid)));
-		}
+		addToPopup(p, new ZobrazNaGcComAction(mysNadWpt));
+		addToPopup(p, new TiskniNaGcComAction(mysNadWpt));
+		addToPopup(p, new UrlToClipboardForGeogetAction(mysNadWpt));
+		addToPopup(p, new UrlToListingForGeogetAction(mysNadWpt));
 		final File kesoidSourceFile = kesoid.getSourceFile();
-		if (kesoidSourceFile != null) {
-			p.add(factory.init(new OpenFileAction(kesoidSourceFile)));
-		}
-		if (kesoid.getIdentifier() != null) {
-			p.add(factory.init(new KesoidCodeToClipboard(kesoid)));
-		}
+		addToPopup(p, new OpenFileAction(kesoidSourceFile));
+		addToPopup(p, new KesoidCodeToClipboard(mysNadWpt));
 		p.addSeparator();
-		p.add(factory.init(new PridatDoCestyAction(mysNadWpt)));
-		p.add(factory.init(new OdebratZCestyAction(mysNadWpt)));
+		addToPopup(p, new PridatDoCestyAction(mysNadWpt));
+		addToPopup(p, new OdebratZCestyAction(mysNadWpt));
 		p.addSeparator();
-		p.add(factory.init(new VyletAnoAction(kesoid)));
-		p.add(factory.init(new VyletNeAction(kesoid)));
-		p.add(factory.init(new VyletNevimAction(kesoid)));
+		addToPopup(p, new VyletAnoAction(mysNadWpt));
+		addToPopup(p, new VyletNeAction(mysNadWpt));
+		addToPopup(p, new VyletNevimAction(mysNadWpt));
 		p.addSeparator();
 		for (final Wpt wpt : kesoid.getWpts()) {
-			p.add(factory.init(new CenterWaypointAction(wpt)));
+			addToPopup(p, new CenterWaypointAction(wpt));
+		}
+	}
+
+
+	private void addToPopup(final JPopupMenu p, final Action0 action) {
+		if (action.shouldBeVisible()) {
+			p.add(factory.init(action));
 		}
 	}
 

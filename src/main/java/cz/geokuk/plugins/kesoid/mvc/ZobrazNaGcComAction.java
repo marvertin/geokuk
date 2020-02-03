@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.net.URL;
 
 import cz.geokuk.framework.Action0;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.util.process.BrowserOpener;
 
 /**
@@ -22,10 +22,9 @@ public class ZobrazNaGcComAction extends Action0 {
 	/**
 	 *
 	 */
-	public ZobrazNaGcComAction(final Kesoid kesoid) {
-
-		super("Zobrazení na webu", kesoid.getUrlIcon());
-		url = kesoid.getUrlShow();
+	public ZobrazNaGcComAction(final Wpt wpt) {
+		super("Zobrazení na webu", wpt.getKesoid().getUrlIcon());
+		url = wpt.getKesoid().getUrlShow();
 		putValue(SHORT_DESCRIPTION, "Zobrazí listing keše na geocaching COM.");
 		// putValue(MNEMONIC_KEY, InputEvent.)
 		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
@@ -42,4 +41,8 @@ public class ZobrazNaGcComAction extends Action0 {
 		BrowserOpener.displayURL(url);
 	}
 
+	@Override
+	public boolean shouldBeVisible() {
+		return url != null;
+	}
 }

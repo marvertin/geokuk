@@ -20,8 +20,8 @@ import cz.geokuk.plugins.kesoid.genetika.Genotyp;
  */
 public class Kes extends Kesoid {
 
-	private static String URL_PREFIX_PRINT = "http://www.geocaching.com/seek/cdpf.aspx?guid=";
-	private static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
+	private static String URL_PREFIX_PRINT = "https://www.geocaching.com/seek/cdpf.aspx?guid=";
+	private static String URL_PREFIX_SHOW = "https://www.geocaching.com/seek/cache_details.aspx?guid=";
 	public static final int NENI_HODNOCENI = -1;
 	private int bestOf = Kes.NENI_HODNOCENI;
 	private int hodnoceni = Kes.NENI_HODNOCENI;
@@ -195,6 +195,8 @@ public class Kes extends Kesoid {
 	public URL getUrlPrint() {
 		try {
 			final String urls = getUrl();
+			System.out.println(urls);
+			System.out.println(URL_PREFIX_SHOW);
 			if (urls.startsWith(URL_PREFIX_SHOW)) {
 				return new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));
 			} else {

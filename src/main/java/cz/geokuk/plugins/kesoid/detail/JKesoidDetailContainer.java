@@ -166,13 +166,9 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 				}
 				jDetailyKesoidu.get(wpt.getKesoidPlugin()).napln(wpt);
 
-				final Kesoid kesoid = wpt.getKesoid();
-				if (kesoid.getUrlShow() != null) {
-					jOtevriUrl.setAction(new ZobrazNaGcComAction(kesoid));
-					jOtevriUrl.setVisible(true);
-				} else {
-					jOtevriUrl.setVisible(false);
-				}
+				final ZobrazNaGcComAction zobrazNaGcComAkce = new ZobrazNaGcComAction(wpt);
+				jOtevriUrl.setAction(zobrazNaGcComAkce);
+				jOtevriUrl.setVisible(zobrazNaGcComAkce.shouldBeVisible());
 				jOtevriUrl.setText(null);
 				napln();
 				// boolean mameHint = kes.getHint() != null && ! kes.getHint().trim().isEmpty();

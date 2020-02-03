@@ -9,6 +9,7 @@ import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.framework.Action0;
 import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 
 /**
  * @author Martin Veverka
@@ -24,10 +25,11 @@ public class KesoidCodeToClipboard extends Action0 {
 	/**
 	 *
 	 */
-	public KesoidCodeToClipboard(final Kesoid aKesoid) {
-		super("<html>Identifikátor <i>" + aKesoid.getIdentifier() + "</i> do schráky");
-		kesoid = aKesoid;
+	public KesoidCodeToClipboard(final Wpt wpt) {
+		super("<html>Identifikátor <i>" + wpt.getKesoid().getIdentifier() + "</i> do schráky");
+		kesoid = wpt.getKesoid();
 		putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží kód kešoidu.");
+
 		// putValue(MNEMONIC_KEY, InputEvent.)
 		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F7"));
 	}
@@ -57,5 +59,11 @@ public class KesoidCodeToClipboard extends Action0 {
 	public void onEvent(final PoziceChangedEvent event) {
 		poziceq = event.poziceq;
 		setEnabled(kesoid != null || poziceq.getWpt() != null);
+	}
+
+
+	@Override
+	public boolean shouldBeVisible() {
+		return kesoid != null && kesoid.getIdentifier() != null;
 	}
 }

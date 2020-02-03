@@ -12,9 +12,9 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
 	private final Kesoid kespevna;
 	private Kesoid kesdocasna;
 
-	public VyletActionIndividual0(final String string, final Kesoid kes) {
+	public VyletActionIndividual0(final String string, final Wpt wpt) {
 		super(string);
-		kespevna = kes;
+		kespevna = wpt == null ? null : wpt.getKesoid();
 		setEnabled(false);
 	}
 
