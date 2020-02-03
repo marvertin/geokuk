@@ -18,7 +18,6 @@ import com.google.common.io.Files;
 
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.framework.*;
-import cz.geokuk.plugins.kesoid.kind.kes.EKesType;
 import cz.geokuk.plugins.kesoid.mvc.GsakParametryNacitani;
 import cz.geokuk.util.lang.ATimestamp;
 import cz.geokuk.util.lang.StringUtils;
@@ -47,6 +46,10 @@ public class GsakDbLoader extends Nacitac0 {
 			"Logs");
 
 	private final Supplier<GsakParametryNacitani> parametryNačítání;
+
+	private enum EKesType {
+		TRADITIONAL, MULTI, UNKNOWN, LETTERBOX_HYBRID, EARTHCACHE, WHERIGO, CACHE_IN_TRASH_OUT_EVENT, EVENT, VIRTUAL, WEBCAM, LOCATIONLESS_REVERSE, MEGA_EVENT
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////  Public  /////
 	public GsakDbLoader(final Supplier<GsakParametryNacitani> aGsakParametryNacitani) {
