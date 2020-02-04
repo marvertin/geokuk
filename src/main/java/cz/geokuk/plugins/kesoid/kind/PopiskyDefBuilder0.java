@@ -17,7 +17,7 @@ public abstract class PopiskyDefBuilder0 {
 	}
 
 	public final PopiskyDefBuilder0 doInit()  {
-		def("{wpt}", (sb, wpt) -> sb.append(wpt.getName()));
+		def("{wpt}", (sb, wpt) -> sb.append(wpt.getIdentifier()));
 
 
 		def("{autor}", (sb, wpt) -> sb.append(wpt.getKesoid().getAuthor()));

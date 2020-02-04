@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cz.geokuk.plugins.kesoid.EKesStatus;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.kind.GpxToWptContext;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.util.file.KeFile;
@@ -94,11 +94,11 @@ public class GpxWptmportBuilder implements IImportBuilder {
 		kesoidPluginManager.initLoading();
 		gpxWptDispatcher = kesoidPluginManager.createGpxWptProcakDispatcher(gpxToWptContext,
 				(gpxwpt, kepodr) -> {
-					final Wpt wpt = new Wpt();
+					final Wpti wpt = new Wpti();
 					wpt.setKepodr(kepodr);
 					wpt.setWgs(gpxwpt.wgs);
 					wpt.setElevation(urciElevation(gpxwpt));
-					wpt.setName(gpxwpt.name);
+					wpt.setIdentifier(gpxwpt.name);
 					wpt.setNazev(vytvorNazev(gpxwpt));
 					return wpt;
 				}, wptReceiver);

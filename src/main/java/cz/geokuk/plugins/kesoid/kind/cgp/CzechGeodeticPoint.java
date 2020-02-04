@@ -45,7 +45,7 @@ public class CzechGeodeticPoint extends Kesoid {
 	@Override
 	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
 		sb.append("<b>");
-		sb.append(wpt.getName());
+		sb.append(wpt.getIdentifier());
 		sb.append("</b>  - ");
 		sb.append(wpt.getNazev());
 		if (!wpt.getNazev().contains(wpt.getSym())) {

@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cz.geokuk.plugins.kesoid.EKesVztah;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -131,12 +130,12 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 			}
 		}
 
-		final Wpt wpt = builder.createWpt(gpxwpt, CgpPlugin.CGP);
-		wpt.setName(cisloBodu);
-		urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
-		wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));
+		final Wpti wpti = builder.createWpt(gpxwpt, CgpPlugin.CGP);
+		wpti.setIdentifier(cisloBodu);
+		urciNazevCgpZPseudoKese(cgp, wpti, gpxwpt);
+		wpti.setSym(urciSymCgpZPseudoKese(gpxwpt));
 
-		cgp.addWpt(wpt);
+		cgp.addWpt(wpti);
 		cgp.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
 
 		return cgp;
@@ -147,15 +146,15 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 	 * @param aGpxwpt
 	 */
 	private Wpt pridruz(final CzechGeodeticPoint cgp, final GpxWpt gpxwpt) {
-		final Wpt wpt = builder.createWpt(gpxwpt, CgpPlugin.CGP);
-		wpt.setName(gpxwpt.groundspeak.name);
-		urciNazevCgpZPseudoKese(cgp, wpt, gpxwpt);
-		wpt.setSym(urciSymCgpZPseudoKese(gpxwpt));
-		cgp.addWpt(wpt);
-		return wpt;
+		final Wpti wpti = builder.createWpt(gpxwpt, CgpPlugin.CGP);
+		wpti.setIdentifier(gpxwpt.groundspeak.name);
+		urciNazevCgpZPseudoKese(cgp, wpti, gpxwpt);
+		wpti.setSym(urciSymCgpZPseudoKese(gpxwpt));
+		cgp.addWpt(wpti);
+		return wpti;
 	}
 
-	private void urciNazevCgpZPseudoKese(final CzechGeodeticPoint cgp, final Wpt wpt, final GpxWpt gpxwpt) {
+	private void urciNazevCgpZPseudoKese(final CzechGeodeticPoint cgp, final Wpti wpt, final GpxWpt gpxwpt) {
 		String name = firstNonNull(gpxwpt.groundspeak.name, "Unknown CGP");
 
 		final EPseudoKesType pseudoKesType = decodePseudoKesType(gpxwpt);
@@ -288,7 +287,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 	private boolean prepisInformaceVCgpZWaymarku(final Wmdata wm, final CzechGeodeticPoint cgp) {
 		// tak a tady musíme do cgp narvat vše, co víme
 		cgp.setVztahx(wm.getVztahx());
-		cgp.getFirstWpt().setNazev(wm.getNazev());
+		((Wpti)cgp.getFirstWpt()).setNazev(wm.getNazev());
 		cgp.setUrl(wm.getUrl());
 		cgp.setAuthor(wm.getAuthor());
 		cgp.setHidden(wm.getHidden());

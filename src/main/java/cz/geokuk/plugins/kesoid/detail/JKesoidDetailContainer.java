@@ -40,7 +40,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	private JLabel jKesoidNazev;
 	private JLabel jKesoidSym;
 
-	private JLabel jWptName;
+	private JLabel jWptIdentifier;
 	private JLabel jWptNazev;
 	private JLabel jWptSym;
 
@@ -180,11 +180,11 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 
 	protected void napln() {
 		final Kesoid kesoid = wpt.getKesoid();
-		jKesoidCode.setText(kesoid.getKesoidKind() == EKesoidKind.CGP ? wpt.getName() : kesoid.getIdentifier());
+		jKesoidCode.setText(kesoid.getKesoidKind() == EKesoidKind.CGP ? wpt.getIdentifier() : kesoid.getIdentifier());
 		jKesoidNazev.setText(formatuj(kesoid.getNazev(), kesoid.getStatus()));
 		jKesoidSym.setText(kesoid.getFirstWpt().getSym());
 
-		jWptName.setText(wpt.getName());
+		jWptIdentifier.setText(wpt.getIdentifier());
 		jWptNazev.setText(formatuj(wpt.getNazev(), kesoid.getStatus()));
 		jWptSym.setText(wpt.getSym());
 		jRucnePridany.setText(wpt.isRucnePridany() ? "+" : "*");
@@ -214,7 +214,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		jKesoidNazev = new JLabel();
 		jKesoidSym = new JLabel();
 
-		jWptName = new JLabel();
+		jWptIdentifier = new JLabel();
 		jWptNazev = new JLabel();
 		jWptSym = new JLabel();
 

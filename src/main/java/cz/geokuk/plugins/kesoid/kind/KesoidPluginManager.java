@@ -14,7 +14,7 @@ import org.reflections.Reflections;
 import cz.geokuk.framework.BeanBag;
 import cz.geokuk.framework.Factory;
 import cz.geokuk.plugins.kesoid.Kepodr;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
@@ -62,9 +62,9 @@ public class KesoidPluginManager {
 		return new ProcakDispatcher<>(plugins.stream()
 				.map(plugin -> plugin.createGpxWptProcak(ctx,
 						(gpxwpt, kepodr) -> {
-							final Wpt wpt = builder.createWpt(gpxwpt, kepodr);
-							wpt.setKesoidPlugin(plugin);
-							return wpt;
+							final Wpti wpti = builder.createWpt(gpxwpt, kepodr);
+							wpti.setKesoidPlugin(plugin);
+							return wpti;
 						}, wpt -> {
 							wpts.expose(wpt);
 							plugin.getWptSumarizer().afterLoaded(wpt);
@@ -74,9 +74,9 @@ public class KesoidPluginManager {
 
 				new SimpleWaypointGpxWptProcak(ctx,
 						(gpxwpt, kepodr) -> {
-							final Wpt wpt = builder.createWpt(gpxwpt, kepodr);
-							wpt.setKesoidPlugin(sinkPlugin());
-							return wpt;
+							final Wpti wpti = builder.createWpt(gpxwpt, kepodr);
+							wpti.setKesoidPlugin(sinkPlugin());
+							return wpti;
 						}, wpt -> {
 							wpts.expose(wpt);
 							sinkPlugin().getWptSumarizer().afterLoaded(wpt);

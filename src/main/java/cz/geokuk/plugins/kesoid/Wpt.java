@@ -1,339 +1,98 @@
 package cz.geokuk.plugins.kesoid;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import cz.geokuk.core.coordinates.*;
+import cz.geokuk.core.coordinates.Uchopenec;
+import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 import cz.geokuk.plugins.kesoid.kind.KesoidPlugin;
 import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
-import lombok.Getter;
-import lombok.Setter;
 
-public class Wpt extends Weikoid0 implements Uchopenec {
-
+/**
+ * Waypoint je bod mající souřadnice a další atributy.
+ * Rozhraní obsahuje metody pro ostatní části geokuku mimo kešoidových pluginů.
+ * Proto poskytuje převážně jen metody poskytující nějaká data o waypointu.
+ * Jednotlivé pluginy pak mohou mít různé implementace různých waypointů.
+ * @author veverka
+ *
+ */
+public interface Wpt extends Uchopenec {
 	/**
 	 * Umísťuje se do fronty, aby se poznalo, že je konec.
 	 * Nic se na tom nevolá, jen se porovnává na objektovou identitu.
 	 */
-	public static Wpt ZARAZKA = new Wpt();
+	public static Wpt ZARAZKA = new Wpti();
+
 
 	public static enum EZOrder {
 		OTHER, KESWPT, FIRST, FINAL,
 	}
 
-	public static final String TRADITIONAL_CACHE = "Traditional Cache";
+	/** Identifikátor waypointu, například GC14G57P. Jednoznačně identifikuje waypoint,
+	 * ale na tu jednoznačnost se nemusí jít stoprocentně spolehnout.
+	 * @return
+	 */
+	String getIdentifier();
 
-	private static Map<String, String> wptMapping = new HashMap<>();
+	/** Souřadnice waypointu */
+	Wgs getWgs();
 
-	static {
-		wptMapping.put("Virtual Stage", "Question to Answer");
-		wptMapping.put("Physical Stage", "Stages of a Multicache");
-	}
+	/** Nadmořská výška waypointu přišlá v datech, tak jak přišla */
+	int getElevation();
 
-	private static int currentSklivecValidityCode;
+	/** Genotyp wypointu, má vliv na zobrazení ikon a na filtrování */
+	Genotyp getGenotyp();
 
 	/**
-	 * Jmené vejpointu, z GPS tag name
+	 * Ručně přidaný  waypointje takový, který nebyl ve zdrojových datech ze serveru, ale byl přidán někde na cestě uživatelem.
+	 * Položka je dost obtížně uchopitelná, tak by se neměla využívat k hulbším algoritmům.
+	 * Typické ruční přidání se týká finálních waypointů vyluštěných mysterek přidaných v geogeteu.
 	 */
-	private String name;
+	boolean isRucnePridany();
+
+
+////////////////////// Položky infrastrukturní ///////////////////////////
+	/**
+	 * Plugin, ze kterého waypoint pochází. Každý waypoint pochzí z nějakého pluginu.
+	 */
+	KesoidPlugin getKesoidPlugin();
 
 	/**
-	 * symbol waypointu, zároveˇje jeho typem, určuje, co se zobrazí na napě, není to přímo <sym>
+	 * Kešoid poddruh. Další členění typů kešoidů uvnitř pluginu.
+	 * Například plugin keš rozlišuje hlavní wapyinty keší a dodatečné waypointy.
+	 * Většina pluginů má jediný Kepodr.
 	 */
-	private String sym;
+	Kepodr getKepodr();
 
-	/**
-	 * Sožadnice
-	 */
-	private int elevation;
 
-	// private String prefix;
+/////////////////// Položky podivné a neroztřídené ////////////////////////////////
+	Kesoid getKesoid();
 
-	private boolean rucnePridany;
-	/**
-	 * Název waypointu, je to nějaký delší název z GPS to bud <cmt> nebo <desc>, podle toho, co tam je
-	 */
-	private String nazev;
 
-	// Podpora vykreslování
-	private Sklivec sklivec;
+	String getNazev();
 
-	private int sklivecValidityCode;
-	public double lat;
+	EZOrder getZorder();
 
-	public double lon;
-	private int xx = -1;
+	boolean isMainWpt();
 
-	private int yy = -1;
+	String getSym();
 
-	private EZOrder zorder = EZOrder.OTHER;
+	boolean hasEmptyCoords();
 
-	private Genotyp genotyp;
+	void computeGenotypIfNotExistsForAllRing(Genom genom);
 
-	/** Plugin pomocí něhož byl waypoint stvořen. Použije se při
-	 * pro polymorfismus chování různých kešoidů */
-	@Setter
-	private KesoidPlugin kesoidPlugin;
+	void removeMeFromRing();
 
-	/** Poddruh kešoidu */
-	@Getter @Setter
-	private Kepodr kepodr;
+	String textToolTipu();
 
-	public static void invalidateAllSklivec() {
-		currentSklivecValidityCode++;
-	}
 
-	/**
-	 *
-	 */
-	public Wpt() {}
+/////////////////////////// Položky související s vykreslováním ////////////////////
+/// Toto by zde vůbec nemělo být, vnikají dynamicky během práce s waypointy a vykreslováním
+/// Je to zde především z výkonnostních důvodů.
 
-	/**
-	 * @return the elevation
-	 */
-	public int getElevation() {
-		return elevation;
-	}
+	void invalidate();
 
-	// public void setPrefix(String prefix) {
-	// this.prefix = prefix.intern();
-	// }
+	Sklivec getSklivec();
 
-	public Genotyp getGenotyp() {
-		if (genotyp == null) {
-			throw new IllegalStateException("Prázdný genotyp waypointu: " + this);
-		}
-		return genotyp;
-	}
-
-	/**
-	 * Pokud neexistuje gentotyp vypočte ho a schová.
-	 * @param genom
-	 */
-	private void computeGenotypIfNotExists(final Genom genom) {
-		if (genotyp == null) {
-			final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom);
-			final Genotyp g = genom.UNIVERZALNI_DRUH.genotypVychozi();
-			genotyp = getKesoid().doBuildGenotyp(genotypBuilder.build(this, g));
-			assert genotyp != null;
-		}
-	}
-
-	/**
-	 * Pokud neexistuje gentotyp vypočte ho a schová.
-	 * @param genom
-	 */
-	public void computeGenotypIfNotExistsForAllRing(final Genom genom) {
-		Weikoid0 weikoid = this;
-		do {
-			if (weikoid instanceof Wpt) {
-				final Wpt wpt = (Wpt) weikoid;
-				wpt.computeGenotypIfNotExists(genom);
-			}
-			weikoid = weikoid.next;
-		} while (weikoid != this);
-	}
-
-	// public String getPrefix() {
-	// return prefix;
-	// }
-
-	public Kesoid getKesoid() {
-		for (Weikoid0 weik = next;; weik = weik.next) {
-			if (weik instanceof Kesoid) {
-				return (Kesoid) weik;
-			}
-		}
-	}
-
-	@Override
-	public Mou getMou() {
-		if (yy == -1) { // testovat yy, protože se nastavuje později
-			final Mou mou = getWgs().toMou();
-			xx = mou.xx;
-			yy = mou.yy;
-			return mou;
-		} else {
-			// System.out.println("kesnuto " + xx + " " + yy);
-			return new Mou(xx, yy);
-		}
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getNazev() {
-		return nazev;
-	}
-
-	public Sklivec getSklivec() {
-		if (sklivecValidityCode != currentSklivecValidityCode) {
-			sklivec = null;
-		}
-		return sklivec;
-	}
-
-	public String getSym() {
-		return sym;
-	}
-
-	/**
-	 * @return the wgs
-	 */
-	public Wgs getWgs() {
-		return new Wgs(lat, lon);
-	}
-
-	/**
-	 * @return the zorder
-	 */
-	public EZOrder getZorder() {
-		return zorder;
-	}
-
-	public boolean hasEmptyCoords() {
-		return getMou().xx == 0 && getMou().yy == 0;
-	}
-
-	/**
-	 *
-	 */
-	public void invalidate() {
-		setSklivec(null);
-	}
-
-	public boolean isMainWpt() {
-		return getKesoid().getMainWpt() == this;
-	}
-
-	/**
-	 * @return the rucnePridany
-	 */
-	public boolean isRucnePridany() {
-		return rucnePridany;
-	}
-
-	/**
-	 * @param aElevation
-	 *            the elevation to set
-	 */
-	public void setElevation(final int aElevation) {
-		elevation = aElevation;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	public void setNazev(final String aNazev) {
-		// Je tam strašne moc krátkých názvů jako TrB nebo ZhB
-		nazev = aNazev.length() >= 5 ? aNazev : aNazev.intern();
-	}
-
-	/**
-	 * @param aRucnePridany
-	 *            the rucnePridany to set
-	 */
-	public void setRucnePridany(final boolean aRucnePridany) {
-		rucnePridany = aRucnePridany;
-	}
-
-	public void setSklivec(final Sklivec sklivec) {
-		this.sklivec = sklivec;
-		sklivecValidityCode = currentSklivecValidityCode;
-	}
-
-	public void setSym(final String sym) {
-		String adjustedSym = wptMapping.get(sym);
-		if (adjustedSym == null) {
-			adjustedSym = sym;
-		}
-		this.sym = adjustedSym == null ? "unknown_sym" : adjustedSym.intern();
-	}
-
-	/**
-	 * @param aWgs
-	 *            the wgs to set
-	 */
-	public void setWgs(final Wgs aWgs) {
-		lat = aWgs.lat;
-		lon = aWgs.lon;
-	}
-
-	/**
-	 * @param zorder
-	 *            the zorder to set
-	 */
-	public void setZorder(final EZOrder zorder) {
-		this.zorder = zorder;
-	}
-
-	public String textToolTipu() {
-		final Wpt wpt = this;
-		final StringBuilder sb = new StringBuilder();
-		sb.append("<html>");
-		// TODO Zpbrazení tooltipu nutno dořešit
-		// if (wpt.getType() != EKesWptType.CACHE && wpt.getType() != EKesWptType.FINAL_LOCATION) {
-		// sb.append("<i>" + wpt.getName() + ": " + wpt.getNazev() + "</i><br>");
-		// }
-		// sb.append("<b>");
-		// sb.append(wpt.getKesoid().getNazev());
-		// sb.append("</b>");
-		// sb.append("<small>");
-		// sb.append(" - ");
-		// sb.append(sym);
-		// sb.append(" (" + wpt.getKesoid().getIdentifier() + ")");
-		// sb.append("</small>");
-		// sb.append("<br>");
-
-		getKesoid().prispejDoTooltipu(sb, wpt);
-
-		// sb.append("<br>");
-		// sb.append("<br>");
-		// sb.append("<b>");
-		// sb.append(wpt.getNazev());
-		// sb.append("</b>");
-		// sb.append("<small>");
-		// sb.append(" - ");
-		// sb.append(sym);
-		// sb.append(" (" + wpt.getName() + ")");
-		// sb.append("</small>");
-
-		return sb.toString();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Wpt [name=" + nazev + ", type="  + ", wgs=" + getWgs() + "] " + (getKesoid() == null ? "" : getKesoid().getIdentifier());
-	}
-
-	/**
-	 * Odstranění seve z kruhu waipointů. Je to divná metoda, použije se pokud má waypoint prázdné souřadnice.
-	 * Vůbewc by neměl takový waypoint v kruhu být.
-	 */
-	public void removeMeFromRing() {
-		Weikoid0 weikoid = this;
-		while (weikoid.next != this) { // najít v kruhu ten ukazující na mě
-			weikoid = weikoid.next;
-		}
-		// vynechat mě, když vím, že ukazuje na mě. Pokud jsme byl v kruhu sám, nestalo se nic.
-		weikoid.next = weikoid.next.next;
-	}
-
-	public KesoidPlugin getKesoidPlugin() {
-		if (kesoidPlugin == null) {
-			throw new NullPointerException(this.getNazev() + " nemá kesoidPlugin");
-		}
-		return kesoidPlugin;
-	}
-
+	void setSklivec(Sklivec sklivec);
 
 }

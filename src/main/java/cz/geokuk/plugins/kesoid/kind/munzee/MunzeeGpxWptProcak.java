@@ -1,7 +1,7 @@
 package cz.geokuk.plugins.kesoid.kind.munzee;
 
 import cz.geokuk.plugins.kesoid.EKesVztah;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -53,15 +53,15 @@ public class MunzeeGpxWptProcak implements GpxWptProcak {
 		mz.setAuthor(gpxwpt.groundspeak.placedBy);
 		mz.setHidden(gpxwpt.time);
 
-		final Wpt wpt = builder.createWpt(gpxwpt, MunzeePlugin.MUNZEE);
-		wpt.setNazev(gpxwpt.groundspeak.name);
+		final Wpti wpti = builder.createWpt(gpxwpt, MunzeePlugin.MUNZEE);
+		wpti.setNazev(gpxwpt.groundspeak.name);
 		if (gpxwpt.name.startsWith(MZ)) {
-			wpt.setSym("MZ " + odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+			wpti.setSym("MZ " + odstranNadbytecneMezery(gpxwpt.groundspeak.type));
 		} else {
-			wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+			wpti.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
 		}
 
-		mz.addWpt(wpt);
+		mz.addWpt(wpti);
 		mz.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
 		return mz;
 	}

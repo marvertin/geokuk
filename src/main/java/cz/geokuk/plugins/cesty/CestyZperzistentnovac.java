@@ -76,7 +76,7 @@ public class CestyZperzistentnovac {
 					final Mouable mouable = bod.getMouable();
 					if (mouable instanceof Wpt) {
 						final Wpt wpt = (Wpt) mouable;
-						zapisKdyzNeni(wrt, wpt.getName(), exportovano);
+						zapisKdyzNeni(wrt, wpt.getIdentifier(), exportovano);
 						zapisKdyzNeni(wrt, wpt.getKesoid().getIdentifier(), exportovano);
 					}
 

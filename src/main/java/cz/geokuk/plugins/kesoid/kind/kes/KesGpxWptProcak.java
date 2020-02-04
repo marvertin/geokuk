@@ -43,26 +43,28 @@ public class KesGpxWptProcak implements GpxWptProcak {
 			final Kesoid kesoid = resultKesoidsByName.get(potentialGcCode(gpxwpt));
 			// TODO přísnější test na to, co může být additional waypoint
 			if (kesoid != null) {
-				final Wpt wpt = createAditionalWpt(gpxwpt);
-				if (EKesWptType.decode(wpt.getSym()) == EKesWptType.FINAL_LOCATION) {
-					wpt.setZorder(EZOrder.FINAL);
+				final Wpti wpti = createAditionalWpt(gpxwpt);
+				if (EKesWptType.decode(wpti.getSym()) == EKesWptType.FINAL_LOCATION) {
+					wpti.setZorder(EZOrder.FINAL);
 					if (kesoid instanceof Kes) {
 						final Kes kes = (Kes) kesoid;
-						if (Wpt.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym()) && Math.abs(kes.getFirstWpt().lat - wpt.lat) < 0.001 && Math.abs(kes.getFirstWpt().lon - wpt.lon) < 0.001) {
-							log.debug("Vypouštíme finální waypointy tradičních keší na úvodních souřadnicích: {} {} {} {} {}", kes.getNazev(), kes.getFirstWpt().lat, wpt.lat, kes.getFirstWpt().lon,
-									wpt.lon);
+						// // TODO [veverka] Tady toto je dost grozné -- 4. 2. 2020 8:47:34 veverka
+						final Wpti firstWpt = (Wpti) kes.getFirstWpt();
+						if (Wpti.TRADITIONAL_CACHE.equals(firstWpt.getSym()) && Math.abs(firstWpt.lat - wpti.lat) < 0.001 && Math.abs(firstWpt.lon - wpti.lon) < 0.001) {
+							log.debug("Vypouštíme finální waypointy tradičních keší na úvodních souřadnicích: {} {} {} {} {}", kes.getNazev(), firstWpt.lat, wpti.lat, firstWpt.lon,
+									wpti.lon);
 							return  EProcakResult.NEVER;
 						} else {
-							kes.setMainWpt(wpt);
-							kesoid.addWpt(wpt);
+							kes.setMainWpt(wpti);
+							kesoid.addWpt(wpti);
 						}
 					} else {
-						kesoid.addWpt(wpt);
+						kesoid.addWpt(wpti);
 					}
 				} else {
-					kesoid.addWpt(wpt);
+					kesoid.addWpt(wpti);
 				}
-				wpts.expose(wpt);
+				wpts.expose(wpti);
 				return EProcakResult.DONE;
 			} else {
 				return druheKolo ? EProcakResult.NEVER // když to neumíme teď, nebudeme to umět nikdy
@@ -118,26 +120,26 @@ public class KesGpxWptProcak implements GpxWptProcak {
 		kes.setFavorit(gpxwpt.gpxg.favorites);
 		kes.setFoundTime(gpxwpt.gpxg.found);
 
-		final Wpt wpt = builder.createWpt(gpxwpt, KesPlugin.KES);
-		wpt.setSym(gpxwpt.groundspeak.type);
-		wpt.setNazev(gpxwpt.groundspeak.name); // název hlavního waypointu shodný s názvem keše
-		wpt.setZorder(EZOrder.FIRST);
+		final Wpti wpti = builder.createWpt(gpxwpt, KesPlugin.KES);
+		wpti.setSym(gpxwpt.groundspeak.type);
+		wpti.setNazev(gpxwpt.groundspeak.name); // název hlavního waypointu shodný s názvem keše
+		wpti.setZorder(EZOrder.FIRST);
 
-		kes.addWpt(wpt);
-		kes.setMainWpt(wpt);
+		kes.addWpt(wpti);
+		kes.setMainWpt(wpti);
 
 		kes.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
 		return kes;
 	}
 
 
-	private Wpt createAditionalWpt(final GpxWpt gpxwpt) {
-		final Wpt wpt = builder.createWpt(gpxwpt, KesPlugin.KESADWPT);
-		wpt.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
+	private Wpti createAditionalWpt(final GpxWpt gpxwpt) {
+		final Wpti wpti = builder.createWpt(gpxwpt, KesPlugin.KESADWPT);
+		wpti.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
 		final boolean rucnePridany = (gpxwpt.gpxg.flag & 1) == 0;
-		wpt.setRucnePridany(rucnePridany);
-		wpt.setZorder(EZOrder.KESWPT);
-		return wpt;
+		wpti.setRucnePridany(rucnePridany);
+		wpti.setZorder(EZOrder.KESWPT);
+		return wpti;
 	}
 
 	private EKesVztah urciVztah(final GpxWpt gpxwpt) {

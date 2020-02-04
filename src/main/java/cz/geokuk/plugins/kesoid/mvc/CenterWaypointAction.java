@@ -48,7 +48,7 @@ public class CenterWaypointAction extends Action0 implements AfterEventReceiverR
 	 */
 	@Override
 	public void initAfterEventReceiverRegistration() {
-		super.putValue(NAME, wpt.getName() + " - " + wpt.getNazev());
+		super.putValue(NAME, wpt.getIdentifier() + " - " + wpt.getNazev());
 		// super.putValue(SMALL_ICON, Board.ikonizer.findIcon(wpt, "x16", true));
 		super.putValue(SMALL_ICON, ikonBag.seekIkon(wpt.getGenotyp()));
 		super.putValue(SHORT_DESCRIPTION, "Vycentruje daný waypoint keše.");

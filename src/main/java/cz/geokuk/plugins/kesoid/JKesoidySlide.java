@@ -370,7 +370,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	public void onEvent(final VyletChangeEvent aEvent) {
 		if (aEvent.isVelkaZmena()) {
-			Wpt.invalidateAllSklivec();
+			Wpti.invalidateAllSklivec();
 			repaint();
 		} else {
 			repaintWpt(aEvent.getKes().getMainWpt());
@@ -607,7 +607,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 			return;
 		}
 		fenotypoveZakazaneAlely = ikonBag.getGenom().searchAlelasByQualNames(iJmenaAlel);
-		Wpt.invalidateAllSklivec();
+		Wpti.invalidateAllSklivec();
 		repaint();
 	}
 

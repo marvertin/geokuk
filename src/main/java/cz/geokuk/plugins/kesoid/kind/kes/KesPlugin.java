@@ -93,7 +93,7 @@ public class KesPlugin implements KesoidPlugin {
 			return 0;
 		}
 		final EKesWptType type = EKesWptType.decode(wpt.getSym());
-		return type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE || Wpt.TRADITIONAL_CACHE.equals(wpt.getSym()) ? POLOMER_OBSAZENOSTI : 0;
+		return type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE || Wpti.TRADITIONAL_CACHE.equals(wpt.getSym()) ? POLOMER_OBSAZENOSTI : 0;
 	}
 
 }

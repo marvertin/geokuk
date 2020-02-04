@@ -1,6 +1,6 @@
 package cz.geokuk.plugins.kesoid.kind.photo;
 
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -36,13 +36,13 @@ public class PhotoGpxWptProcak implements GpxWptProcak {
 
 
 	private Photo createPhoto(final GpxWpt gpxwpt) {
-		final Wpt wpt = builder.createWpt(gpxwpt, PhotoPlugin.PHOTO);
-		wpt.setSym(gpxwpt.sym);
+		final Wpti wpti = builder.createWpt(gpxwpt, PhotoPlugin.PHOTO);
+		wpti.setSym(gpxwpt.sym);
 
 		final Photo photo = new Photo();
 		photo.setIdentifier(gpxwpt.link.href);
 
-		photo.addWpt(wpt);
+		photo.addWpt(wpti);
 		log.debug("photo: " + photo.getFirstWpt());
 		photo.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
 		return photo;

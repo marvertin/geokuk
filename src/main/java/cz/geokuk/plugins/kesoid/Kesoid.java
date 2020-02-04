@@ -30,8 +30,8 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 
 	private Set<Alela> userDefinedAlelas;
 
-	public void addWpt(final Wpt wpt) {
-		if (wpt == null) {
+	public void addWpt(final Wpti wpti) {
+		if (wpti == null) {
 			return;
 		}
 		//wpt.getKesoidPlugin(); // jen kontrola, zda tam je
@@ -40,8 +40,8 @@ public abstract class Kesoid extends Weikoid0 implements Cloneable {
 		while (weik.next instanceof Wpt) {
 			weik = weik.next;
 		}
-		wpt.next = weik.next;
-		weik.next = wpt;
+		wpti.next = weik.next;
+		weik.next = wpti;
 	}
 
 	public abstract Genotyp buildGenotyp(Genotyp g);

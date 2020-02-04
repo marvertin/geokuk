@@ -1,7 +1,7 @@
 package cz.geokuk.plugins.kesoid.kind.waymark;
 
 import cz.geokuk.plugins.kesoid.EKesVztah;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -62,11 +62,11 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		wm.setAuthor(gpxwpt.groundspeak.placedBy);
 		wm.setHidden(gpxwpt.time);
 
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setNazev(gpxwpt.groundspeak.name);
-		wpt.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
+		final Wpti wpti = createWpt(gpxwpt);
+		wpti.setNazev(gpxwpt.groundspeak.name);
+		wpti.setSym(odstranNadbytecneMezery(gpxwpt.groundspeak.type));
 
-		wm.addWpt(wpt);
+		wm.addWpt(wpti);
 		wm.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
 		return wm;
 	}
@@ -86,18 +86,18 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		}
 		wm.setUrl(gpxwpt.link.href);
 
-		final Wpt wpt = createWpt(gpxwpt);
-		wpt.setNazev(gpxwpt.link.text);
-		wpt.setSym(odstranNadbytecneMezery(gpxwpt.type));
+		final Wpti wpti = createWpt(gpxwpt);
+		wpti.setNazev(gpxwpt.link.text);
+		wpti.setSym(odstranNadbytecneMezery(gpxwpt.type));
 
-		wm.addWpt(wpt);
+		wm.addWpt(wpti);
 		wm.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
 
 		return wm;
 	}
 
 
-	private Wpt createWpt(final GpxWpt gpxwpt) {
+	private Wpti createWpt(final GpxWpt gpxwpt) {
 		return builder.createWpt(gpxwpt, WaymarkPlugin.WAYMARK);
 	}
 

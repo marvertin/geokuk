@@ -51,7 +51,7 @@ public class SimpleWaypoint extends Kesoid {
 			if (!getNazev().contains(wpt.getNazev())) {
 				sb.append(wpt.isRucnePridany() ? "+ " : "");
 				sb.append("<i>");
-				sb.append(wpt.getName().substring(0, 2));
+				sb.append(wpt.getIdentifier().substring(0, 2));
 				sb.append(": ");
 				sb.append(wpt.getNazev());
 				sb.append("</i>");
@@ -60,7 +60,7 @@ public class SimpleWaypoint extends Kesoid {
 			sb.append("<small>");
 			sb.append(" - ");
 			sb.append(wpt.getSym());
-			sb.append("  (").append(wpt.getName()).append(")");
+			sb.append("  (").append(wpt.getIdentifier()).append(")");
 			sb.append("</small>");
 		}
 	}

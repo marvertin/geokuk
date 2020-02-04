@@ -43,6 +43,6 @@ public class Photo extends Kesoid {
 
 	@Override
 	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {
-		sb.append("<b>").append(wpt.getName()).append("<b>");
+		sb.append("<b>").append(wpt.getIdentifier()).append("<b>");
 	}
 }
