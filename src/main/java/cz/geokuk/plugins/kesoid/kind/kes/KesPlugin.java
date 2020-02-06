@@ -8,12 +8,15 @@ import javax.swing.JComponent;
 import com.google.common.collect.ImmutableSet;
 
 import cz.geokuk.core.program.FPref;
+import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.BeanBag;
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.genetika.IndexMap;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
+import cz.geokuk.plugins.kesoid.mvc.TiskniNaGcComAction;
+import cz.geokuk.plugins.kesoid.mvc.ZobrazNaGcComAction;
 
 public class KesPlugin implements KesoidPlugin {
 
@@ -96,4 +99,11 @@ public class KesPlugin implements KesoidPlugin {
 		return type == EKesWptType.FINAL_LOCATION || type == EKesWptType.STAGES_OF_A_MULTICACHE || Wpti.TRADITIONAL_CACHE.equals(wpt.getSym()) ? POLOMER_OBSAZENOSTI : 0;
 	}
 
+	@Override
+	public List<Action0> getPopupMenuActions(final Wpt wpt) {
+		return Arrays.asList(
+				new ZobrazNaGcComAction(wpt),
+				new TiskniNaGcComAction(wpt)
+				);
+	}
 }

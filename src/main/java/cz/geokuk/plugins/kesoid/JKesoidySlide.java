@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.kesoid;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.ref.ReferenceQueue;
@@ -26,7 +27,6 @@ import cz.geokuk.plugins.vylety.*;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
 import cz.geokuk.util.pocitadla.PocitadloNula;
-import cz.geokuk.util.process.BrowserOpener;
 
 public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
 
@@ -267,28 +267,37 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		return EJakOtacetPriRendrovani.COORD;
 	}
 
+
+
 	/*
 	 * (non-Javadoc)
 	 *
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseClicked(final MouseEvent e, final MouseGestureContext ctx) {
+	public void mouseClicked(final MouseEvent me, final MouseGestureContext ctx) {
 		if (wptPodMysi != null) {
-			if (SwingUtilities.isLeftMouseButton(e)) {
+			if (SwingUtilities.isLeftMouseButton(me)) {
 				poziceModel.setPozice(wptPodMysi);
 			}
-			final Kesoid kesoid = wptPodMysi.getKesoid();
-			if (e.getClickCount() >= 3 && kesoid.getUrlPrint() != null) {
-				BrowserOpener.displayURL(kesoid.getUrlPrint());
-			} else if (e.getClickCount() >= 2 && kesoid.getUrlShow() != null) {
-				BrowserOpener.displayURL(kesoid.getUrlShow());
+			if (me.getClickCount() >= 2) {
+				final List<Action0> popupMenuActions = wptPodMysi.getKesoidPlugin().getPopupMenuActions(wptPodMysi);
+				// Toto zajišťuje, že se vybere akce podle počtu kliků myši. Pro dvojklik první, pro trojklik druhá atd.
+				final int index = Math.min (me.getClickCount() - 2, popupMenuActions.size() -1);
+				if (index >= 0) {
+					final Action0 action = popupMenuActions.get(index);
+					if (action.shouldBeVisible()) {
+						// // TODO [veverka] Zavolat opožděně, aby spři trojkliku se nevykonaly i dvojklikoviny -- 6. 2. 2020 15:45:21 veverka
+						action.actionPerformed(new ActionEvent(me.getSource(), me.getID(), me.paramString()));
+					}
+				}
 			}
-			e.consume();
+			me.consume();
 		} else {
-			chain().mouseClicked(e, ctx);
+			chain().mouseClicked(me, ctx);
 		}
 	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -508,8 +517,10 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		// TODO Dát ikonu středování
 		item.setIcon(null);
 		p.add(item);
-		addToPopup(p, new ZobrazNaGcComAction(mysNadWpt));
-		addToPopup(p, new TiskniNaGcComAction(mysNadWpt));
+		//addToPopup(p, new ZobrazNaGcComAction(mysNadWpt));
+		//addToPopup(p, new TiskniNaGcComAction(mysNadWpt));
+
+		mysNadWpt.getKesoidPlugin().getPopupMenuActions(mysNadWpt).stream().forEach(akce -> addToPopup(p, akce));
 		addToPopup(p, new UrlToClipboardForGeogetAction(mysNadWpt));
 		addToPopup(p, new UrlToListingForGeogetAction(mysNadWpt));
 		final File kesoidSourceFile = mysNadWpt.getSourceFile();

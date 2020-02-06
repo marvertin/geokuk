@@ -38,4 +38,5 @@ public class CgpPlugin extends DefaultKesoidPlugin0 {
 		return 1000;
 	}
 
+
 }

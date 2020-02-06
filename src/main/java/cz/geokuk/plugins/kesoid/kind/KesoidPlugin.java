@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.swing.Action;
 import javax.swing.JComponent;
 
+import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.BeanBag;
 import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.Wpt;
@@ -67,6 +68,13 @@ public interface KesoidPlugin {
 	 * @return Poloměr v metrech, nula, pokdu nic nobsazuje. nevrací záporné číslo.
 	 */
 	public int getPolomerObsazenosti(Wpt wpt);
+
+	/**
+	 * Vrátí seznam akcí, které mají být zařazeny do popup menu.
+	 * @param wpt Waypoint, pro který se akce hjledají.
+	 * @return Vytvořené akce, nemusí být prohnané injektátorem, tačí na ně udělat new.
+	 */
+	public List<Action0> getPopupMenuActions(Wpt wpt);
 
 	/**
 	 * Přiřadí pluginu relativní pořadí. Podle pořadí pluginů se určuje:

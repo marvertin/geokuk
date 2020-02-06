@@ -1,13 +1,15 @@
 package cz.geokuk.plugins.kesoid.kind;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
 
+import cz.geokuk.framework.Action0;
 import cz.geokuk.framework.BeanBag;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.mvc.TiskniNaGcComAction;
+import cz.geokuk.plugins.kesoid.mvc.ZobrazNaGcComAction;
 
 
 /**
@@ -56,6 +58,14 @@ public abstract class DefaultKesoidPlugin0 implements KesoidPlugin {
 	@Override
 	public int getPolomerObsazenosti(final Wpt wpt) {
 		return 0;
+	}
+
+	@Override
+	public List<Action0> getPopupMenuActions(final Wpt wpt) {
+		return Arrays.asList(
+				new ZobrazNaGcComAction(wpt),
+				new TiskniNaGcComAction(wpt)
+				);
 	}
 
 }
