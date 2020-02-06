@@ -1,5 +1,6 @@
 package cz.geokuk.plugins.kesoid;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,10 +136,10 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	// }
 
 	@Override
-	public Kesoid getKesoid() {
+	public Kesoid0 getKesoid() {
 		for (Weikoid0 weik = next;; weik = weik.next) {
 			if (weik instanceof Kesoid) {
-				return (Kesoid) weik;
+				return (Kesoid0) weik;
 			}
 		}
 	}
@@ -342,6 +343,11 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 			throw new NullPointerException(this.getNazev() + " nemá kesoidPlugin");
 		}
 		return kesoidPlugin;
+	}
+
+	@Override
+	public File getSourceFile() {
+		return getKesoid().getSourceFile();
 	}
 
 

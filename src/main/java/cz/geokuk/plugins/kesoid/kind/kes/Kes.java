@@ -17,7 +17,7 @@ import cz.geokuk.plugins.kesoid.genetika.Genotyp;
  * @author Martin Veverka
  *
  */
-public class Kes extends Kesoid {
+public class Kes extends Kesoid0 {
 
 	private static String URL_PREFIX_PRINT = "https://www.geocaching.com/seek/cdpf.aspx?guid=";
 	private static String URL_PREFIX_SHOW = "https://www.geocaching.com/seek/cache_details.aspx?guid=";

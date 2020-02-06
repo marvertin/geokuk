@@ -1,231 +1,97 @@
 package cz.geokuk.plugins.kesoid;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.swing.Icon;
 
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
-import cz.geokuk.plugins.kesoid.genetika.Alela;
-import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
-public abstract class Kesoid extends Weikoid0 implements Cloneable {
-
-	private static String[] urlPrefixes = new String[] { "http://www.geocaching.com/seek/cache_details.aspx?guid=", "http://www.waymarking.com/waymarks/", "http://dataz.cuzk.cz/gu/ztl", };
-	// protected static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
-
-	/** Jednoznacna identifikace jako GC124X4 nebo WM4587 */
-	private String identifier;
-
-	private EKesVztah vztah = EKesVztah.NORMAL;
-	private EKesStatus status = EKesStatus.ACTIVE;
-
-	private String author;
-	private String hidden;
-
-	private String zbytekUrl;
-
-	private Set<Alela> userDefinedAlelas;
-
-	public void addWpt(final Wpti wpti) {
-		if (wpti == null) {
-			return;
-		}
-		//wpt.getKesoidPlugin(); // jen kontrola, zda tam je
-		// najít konec
-		Weikoid0 weik = this;
-		while (weik.next instanceof Wpt) {
-			weik = weik.next;
-		}
-		wpti.next = weik.next;
-		weik.next = wpti;
-	}
-
-	public abstract Genotyp buildGenotyp(Genotyp g);
-
-	public final Genotyp doBuildGenotyp(final Genotyp g0) {
-		Genotyp g = buildGenotyp(g0);
-		if (userDefinedAlelas != null) {
-			for (final Alela alela : userDefinedAlelas) {
-				assert alela != null;
-				g = g.with(alela);
-			}
-		}
-		return g;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
+public interface Kesoid {
 
 	/**
 	 * @return the firstWpt
 	 */
-	public Wpt getFirstWpt() {
-		if (next instanceof Wpt) {
-			return (Wpt) next;
-		} else {
-			return null;
-		}
-	}
+	Wpt getFirstWpt();
 
-	public String getHidden() {
-		return hidden;
-	}
 
-	public String getIdentifier() {
-		return identifier;
-	}
+	/** S tím identifikátorem je potíž, každý waypoint má svůj identifikátor a kešoid také, tak který použít? */
+	String getIdentifier();
 
-	public abstract EKesoidKind getKesoidKind();
 
-	public Wpt getMainWpt() {
-		return getFirstWpt();
-	}
+	/** Co to je mainWpt? Úvodky, fální souřadnice? A co u prodejních míst turistických známek. Nechceme zde mít stejný model, jako má geoget 1:n,
+	 * toto se musí vymítit, ne vždy je jasný hlavní waypoint. */
+	Wpt getMainWpt();
 
-	public String getNazev() {
-		return getFirstWpt().getNazev();
-	}
+	/** S tím názvem je potíž, každý waypoint má svůj název a kešoid také, tak který použít? */
+	String getNazev();
 
-	public String[] getProhledavanci() {
-		return new String[] { getNazev(), getIdentifier() };
-	}
+	/**
+	 * Toto dává texty, které se budou prohledávat.
+	 * ale asi to patří spíš k waypointům, chcme hledat waypointy a ne kešoidy.
+	 * @return
+	 */
+	String[] getProhledavanci();
 
-	public File getSourceFile() {
-		return null;
-	}
 
-	public EKesStatus getStatus() {
-		return status;
-	}
 
 	/**
 	 * @return the url
 	 */
-	public String getUrl() {
-		if (zbytekUrl == null || zbytekUrl.length() == 0) {
-			return zbytekUrl;
-		}
-		final char c = zbytekUrl.charAt(0);
-		if (c == '-') {
-			return zbytekUrl.substring(1);
-		}
-		final int index = c - '0';
-		return urlPrefixes[index] + zbytekUrl.substring(1);
-	}
+	String getUrl();
 
-	public abstract Icon getUrlIcon();
+	Icon getUrlIcon();
 
-	public URL getUrlPrint() {
-		return null;
-	}
+	URL getUrlPrint();
 
-	public URL getUrlShow() {
-		try {
-			final String url = getUrl();
-			return new URL(url);
-		} catch (final MalformedURLException e) {
-			return null;
-		}
-	}
-
-	public EKesVztah getVztah() {
-		return vztah;
-	}
-
-	//////////////////////////////////////////////////////////////////
-	public Iterable<Wpt> getWpts() {
-		return () -> new Iterator<Wpt>() {
-
-			private Weikoid0 curwk = Kesoid.this.next; // na první waypoint
-
-			@Override
-			public boolean hasNext() {
-				return curwk instanceof Wpt;
-			}
-
-			@Override
-			public Wpt next() {
-				final Wpt result = (Wpt) curwk;
-				curwk = curwk.next;
-				return result;
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
-
-	public int getWptsCount() {
-		int count = 0;
-		for (@SuppressWarnings("unused")
-		final Wpt wpt : getWpts()) {
-			count++;
-		}
-		return count;
-
-	}
-
-	public abstract void prispejDoTooltipu(StringBuilder sb, Wpt wpt);
-
-	public void promoteVztah(final EKesVztah vztah) {
-		if (this.vztah == null) {
-			this.vztah = vztah;
-		}
-		if (vztah.ordinal() > this.vztah.ordinal()) {
-			this.vztah = vztah;
-		}
-	}
-
-	public void setAuthor(final String author) {
-		this.author = author.intern();
-	}
-
-	public void setHidden(final String hidden) {
-		this.hidden = hidden;
-	}
-
-	public void setIdentifier(final String identifier) {
-		this.identifier = identifier;
-	}
-
-	public void setStatus(final EKesStatus status) {
-		this.status = status;
-	}
+	URL getUrlShow();
 
 	/**
-	 * @param aUrl
-	 *            the url to set
+	 * Hlavní metoda, která poskytuje informaci o tom, které waypointy patří kešoidu.
+	 * Asi by měla přejít na waypoint.
+	 * @return
 	 */
-	public void setUrl(final String aUrl) {
-		if (aUrl == null) {
-			zbytekUrl = null;
-			return;
-		}
-		// Řetězcová konkatenace zde provedená vytvoří nový řetězec, takže se nemusíme bát,
-		// že podstringy všechno nesou
-		char index = '0';
-		for (final String prefix : urlPrefixes) {
-			if (aUrl.startsWith(prefix)) {
-				zbytekUrl = index + aUrl.substring(prefix.length());
-				return;
-			}
-			index++;
-		}
-		zbytekUrl = '-' + aUrl; // nemá žádný prefix
-	}
+	Iterable<Wpt> getWpts();
 
-	public void setUserDefinedAlelas(final Set<Alela> userDefinedAlelas) {
-		this.userDefinedAlelas = userDefinedAlelas;
-	}
+	// Použito do titulku o počtu waypontů při zůmování keše
+	int getWptsCount();
 
-	public void setVztahx(final EKesVztah vztah) {
-		this.vztah = vztah;
-	}
+	// Tady jsou věci, které používá jen detailní okno v pravém dolním rohu, které by mělo být také poplatnédanému pluginu.
+
+	/**
+	 * @deprecated Zlikvidovat, až se dostane pravý dolní roh do pluginů.
+	 */
+	@Deprecated
+	EKesStatus getStatus();
+
+	/**
+	 * @deprecated TODO [veverka] Zlikvidovat, použito jen na pro zjiětění priority a na pravý dolní roh, to má býát řešeno jinak  -- 6. 2. 2020 11:11:11 veverka
+	 * @return
+	 */
+	@Deprecated
+	EKesoidKind getKesoidKind();
+
+	/**
+	 * @deprecated To je datum založení, mělo by to být v luginu jen pro ty, kteří nějaké založení z principu mají. Nebo ho mají všichni?
+	 * Nebo většina?
+	 * A mělo by se to jmenovat logičtěji. Určitě promyslet.
+	 * @return
+	 */
+	@Deprecated
+	String getHidden();
+
+	/**
+	 * Vztahy jsou víceméně jen ke keším a možná waymarkům. Možná dát do pluginů. ale nevím.
+	 * @return
+	 */
+	EKesVztah getVztah();
+
+
+	/** Ne vše má autora, ale hodně věcí ano, tak budiž. Mělo by to být na waypointu.
+	 * @deprecated Dát na waypoint, teroreticky může mít každý waypoint autora jiného.
+	 */
+	@Deprecated
+	String getAuthor();
+
+
 
 }

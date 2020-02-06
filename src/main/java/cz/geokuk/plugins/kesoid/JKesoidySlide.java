@@ -512,7 +512,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		addToPopup(p, new TiskniNaGcComAction(mysNadWpt));
 		addToPopup(p, new UrlToClipboardForGeogetAction(mysNadWpt));
 		addToPopup(p, new UrlToListingForGeogetAction(mysNadWpt));
-		final File kesoidSourceFile = kesoid.getSourceFile();
+		final File kesoidSourceFile = mysNadWpt.getSourceFile();
 		addToPopup(p, new OpenFileAction(kesoidSourceFile));
 		addToPopup(p, new KesoidCodeToClipboard(mysNadWpt));
 		p.addSeparator();

@@ -3,12 +3,12 @@ package cz.geokuk.plugins.kesoid.kind.munzee;
 import javax.swing.Icon;
 
 import cz.geokuk.img.ImageLoader;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Kesoid0;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 
-public class Munzee extends Kesoid {
+public class Munzee extends Kesoid0 {
 
 	/*
 	 * (non-Javadoc)

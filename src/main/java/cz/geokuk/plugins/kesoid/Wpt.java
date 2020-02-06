@@ -1,5 +1,7 @@
 package cz.geokuk.plugins.kesoid;
 
+import java.io.File;
+
 import cz.geokuk.core.coordinates.Uchopenec;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
@@ -49,6 +51,12 @@ public interface Wpt extends Uchopenec {
 	 */
 	boolean isRucnePridany();
 
+
+	/**
+	 * Soubor, ze kterého byl waypoint načten, aby uživatel mohl tento soubor otevřít.
+	 * @return
+	 */
+	File getSourceFile();
 
 ////////////////////// Položky infrastrukturní ///////////////////////////
 	/**

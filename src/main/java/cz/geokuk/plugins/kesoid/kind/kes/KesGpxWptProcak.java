@@ -28,7 +28,7 @@ public class KesGpxWptProcak implements GpxWptProcak {
 
 
 	/** Zde shromažďujeme stvořené keše */
-	private final Map<String, Kesoid> resultKesoidsByName = new HashMap<>();
+	private final Map<String, Kesoid0> resultKesoidsByName = new HashMap<>();
 	private boolean druheKolo;
 
 	@Override
@@ -40,7 +40,7 @@ public class KesGpxWptProcak implements GpxWptProcak {
 			return EProcakResult.DONE;
 		} else {
 			// TODO dodatečné waypointy též pro waymarky
-			final Kesoid kesoid = resultKesoidsByName.get(potentialGcCode(gpxwpt));
+			final Kesoid0 kesoid = resultKesoidsByName.get(potentialGcCode(gpxwpt));
 			// TODO přísnější test na to, co může být additional waypoint
 			if (kesoid != null) {
 				final Wpti wpti = createAditionalWpt(gpxwpt);
