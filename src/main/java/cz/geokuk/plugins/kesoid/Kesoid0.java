@@ -6,13 +6,16 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.swing.Icon;
-
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Alela;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import lombok.SneakyThrows;
 
 public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
+
+	private static String URL_PREFIX_PRINT = "https://www.geocaching.com/seek/cdpf.aspx?guid=";
+	private static String URL_PREFIX_SHOW = "https://www.geocaching.com/seek/cache_details.aspx?guid=";
+
 
 	private static String[] urlPrefixes = new String[] { "http://www.geocaching.com/seek/cache_details.aspx?guid=", "http://www.waymarking.com/waymarks/", "http://dataz.cuzk.cz/gu/ztl", };
 	// protected static String URL_PREFIX_SHOW = "http://www.geocaching.com/seek/cache_details.aspx?guid=";
@@ -111,11 +114,17 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 		return status;
 	}
 
+
+	@Override
+	@SneakyThrows
+	public URL getUrl() {
+		return new URL(_getUrl());
+	}
 	/**
 	 * @return the url
 	 */
-	@Override
-	public String getUrl() {
+
+	private String _getUrl() {
 		if (zbytekUrl == null || zbytekUrl.length() == 0) {
 			return zbytekUrl;
 		}
@@ -128,21 +137,8 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 	}
 
 	@Override
-	public abstract Icon getUrlIcon();
-
-	@Override
-	public URL getUrlPrint() {
-		return null;
-	}
-
-	@Override
-	public URL getUrlShow() {
-		try {
-			final String url = getUrl();
-			return new URL(url);
-		} catch (final MalformedURLException e) {
-			return null;
-		}
+	public URL getUrlProPridaniDoSeznamuVGeogetu() {
+		return null; // implicitně neumíme přidat
 	}
 
 	@Override
@@ -235,6 +231,24 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 
 	public void setVztahx(final EKesVztah vztah) {
 		this.vztah = vztah;
+	}
+
+
+
+	@Override
+	public URL getUrlProOtevreniListinguVGeogetu() {
+		try {
+			final String urls = getUrl().toExternalForm();
+			System.out.println(urls);
+			System.out.println(URL_PREFIX_SHOW);
+			if (urls.startsWith(URL_PREFIX_SHOW)) {
+				return new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));
+			} else {
+				return null;
+			}
+		} catch (final MalformedURLException e) {
+			return null;
+		}
 	}
 
 }

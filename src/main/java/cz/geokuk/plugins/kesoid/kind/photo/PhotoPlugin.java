@@ -1,9 +1,10 @@
 package cz.geokuk.plugins.kesoid.kind.photo;
 
-import java.util.Set;
+import java.util.*;
 
 import com.google.common.collect.ImmutableSet;
 
+import cz.geokuk.framework.Action0;
 import cz.geokuk.plugins.kesoid.Kepodr;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
@@ -46,4 +47,10 @@ public class PhotoPlugin extends DefaultKesoidPlugin0 {
 		return 5000;
 	}
 
+	@Override
+	public List<Action0> getPopupMenuActions(final Wpt wpt) {
+		return Arrays.asList(
+				new ZobrazNaUrlSpojenemSFotkouAction(wpt)
+				);
+	}
 }

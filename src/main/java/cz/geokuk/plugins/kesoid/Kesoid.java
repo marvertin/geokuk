@@ -2,8 +2,6 @@ package cz.geokuk.plugins.kesoid;
 
 import java.net.URL;
 
-import javax.swing.Icon;
-
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 
 public interface Kesoid {
@@ -35,15 +33,13 @@ public interface Kesoid {
 
 
 	/**
-	 * @return the url
+	 * @return Toto je URL spojené s kešoidem, mělo by být s waypointem.
 	 */
-	String getUrl();
+	URL getUrl();
 
-	Icon getUrlIcon();
+	URL getUrlProOtevreniListinguVGeogetu();
 
-	URL getUrlPrint();
-
-	URL getUrlShow();
+	URL getUrlProPridaniDoSeznamuVGeogetu();
 
 	/**
 	 * Hlavní metoda, která poskytuje informaci o tom, které waypointy patří kešoidu.

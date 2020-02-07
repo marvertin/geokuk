@@ -1,8 +1,5 @@
 package cz.geokuk.plugins.kesoid.kind.simplewaypoint;
 
-import javax.swing.Icon;
-
-import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Kesoid0;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
@@ -25,12 +22,6 @@ public class SimpleWaypoint extends Kesoid0 {
 	public EKesoidKind getKesoidKind() {
 		return EKesoidKind.SIMPLEWAYPOINT;
 	}
-
-	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("internet.png");
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *

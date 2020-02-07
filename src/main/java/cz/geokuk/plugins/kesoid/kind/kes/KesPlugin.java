@@ -15,8 +15,6 @@ import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.genetika.IndexMap;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
-import cz.geokuk.plugins.kesoid.mvc.TiskniNaGcComAction;
-import cz.geokuk.plugins.kesoid.mvc.ZobrazNaGcComAction;
 
 public class KesPlugin implements KesoidPlugin {
 

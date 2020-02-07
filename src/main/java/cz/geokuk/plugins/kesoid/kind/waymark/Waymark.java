@@ -1,12 +1,12 @@
 package cz.geokuk.plugins.kesoid.kind.waymark;
 
-import javax.swing.Icon;
+import java.net.URL;
 
-import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Kesoid0;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import lombok.SneakyThrows;
 
 public class Waymark extends Kesoid0 {
 
@@ -19,11 +19,6 @@ public class Waymark extends Kesoid0 {
 	@Override
 	public EKesoidKind getKesoidKind() {
 		return EKesoidKind.WAYMARK;
-	}
-
-	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("waymarking.png");
 	}
 
 	/*
@@ -59,5 +54,13 @@ public class Waymark extends Kesoid0 {
 			sb.append("</small>");
 		}
 	}
+
+
+	@Override
+	@SneakyThrows
+	public URL getUrlProPridaniDoSeznamuVGeogetu() {
+		return new URL("https://www.waymarking.com/waymarks/" + getIdentifier());
+	}
+
 
 }

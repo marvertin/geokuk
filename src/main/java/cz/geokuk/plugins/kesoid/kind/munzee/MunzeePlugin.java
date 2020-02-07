@@ -1,10 +1,12 @@
 package cz.geokuk.plugins.kesoid.kind.munzee;
 
-import java.util.Set;
+import java.util.*;
 
 import com.google.common.collect.ImmutableSet;
 
+import cz.geokuk.framework.Action0;
 import cz.geokuk.plugins.kesoid.Kepodr;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -38,4 +40,10 @@ public class MunzeePlugin extends DefaultKesoidPlugin0 {
 		return 4000;
 	}
 
+	@Override
+	public List<Action0> getPopupMenuActions(final Wpt wpt) {
+		return Arrays.asList(
+				new ZobrazNaMunzeeCom(wpt)
+				);
+	}
 }

@@ -2,9 +2,6 @@ package cz.geokuk.plugins.kesoid.kind.photo;
 
 import java.io.File;
 
-import javax.swing.Icon;
-
-import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Kesoid0;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
@@ -36,10 +33,6 @@ public class Photo extends Kesoid0 {
 		}
 	}
 
-	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("gccom.png");
-	}
 
 	@Override
 	public void prispejDoTooltipu(final StringBuilder sb, final Wpt wpt) {

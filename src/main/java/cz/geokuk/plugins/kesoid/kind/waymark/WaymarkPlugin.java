@@ -1,10 +1,12 @@
 package cz.geokuk.plugins.kesoid.kind.waymark;
 
-import java.util.Set;
+import java.util.*;
 
 import com.google.common.collect.ImmutableSet;
 
+import cz.geokuk.framework.Action0;
 import cz.geokuk.plugins.kesoid.Kepodr;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -36,6 +38,13 @@ public class WaymarkPlugin extends DefaultKesoidPlugin0 {
 	@Override
 	public int getOrder() {
 		return 3000;
+	}
+
+	@Override
+	public List<Action0> getPopupMenuActions(final Wpt wpt) {
+		return Arrays.asList(
+				new ZobrazNaWaymarkingComAction(wpt)
+				);
 	}
 
 }

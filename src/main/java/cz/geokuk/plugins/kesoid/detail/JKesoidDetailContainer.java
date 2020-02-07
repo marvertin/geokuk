@@ -14,9 +14,9 @@ import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.kind.KesoidPlugin;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
+import cz.geokuk.plugins.kesoid.kind.kes.ZobrazNaGcComAction;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
-import cz.geokuk.plugins.kesoid.mvc.ZobrazNaGcComAction;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 import cz.geokuk.plugins.refbody.RefbodyModel;
 import cz.geokuk.util.gui.JSmallPictureButton;
@@ -166,6 +166,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 				}
 				jDetailyKesoidu.get(wpt.getKesoidPlugin()).napln(wpt);
 
+				// todo tady to nemůže takto být
 				final ZobrazNaGcComAction zobrazNaGcComAkce = new ZobrazNaGcComAction(wpt);
 				jOtevriUrl.setAction(zobrazNaGcComAkce);
 				jOtevriUrl.setVisible(zobrazNaGcComAkce.shouldBeVisible());

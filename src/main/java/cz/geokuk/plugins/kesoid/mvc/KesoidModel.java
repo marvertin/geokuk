@@ -128,7 +128,7 @@ public class KesoidModel extends Model0 {
 			return;
 		}
 		final Clipboard scl = getSystemClipboard();
-		final StringSelection ss = new StringSelection(kes.getUrlPrint().toExternalForm());
+		final StringSelection ss = new StringSelection(kes.getUrlProOtevreniListinguVGeogetu().toExternalForm());
 		try {
 			scl.setContents(ss, null);
 		} catch (final IllegalStateException e2) {
@@ -141,7 +141,7 @@ public class KesoidModel extends Model0 {
 			return;
 		}
 		final Clipboard scl = getSystemClipboard();
-		final StringSelection ss = new StringSelection(kes.getUrlShow().toExternalForm());
+		final StringSelection ss = new StringSelection(kes.getUrlProPridaniDoSeznamuVGeogetu().toExternalForm());
 		try {
 			scl.setContents(ss, null);
 		} catch (final IllegalStateException e2) {

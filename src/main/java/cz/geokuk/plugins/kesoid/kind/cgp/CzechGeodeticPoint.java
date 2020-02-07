@@ -1,8 +1,5 @@
 package cz.geokuk.plugins.kesoid.kind.cgp;
 
-import javax.swing.Icon;
-
-import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Kesoid0;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
@@ -22,11 +19,6 @@ public class CzechGeodeticPoint extends Kesoid0 {
 	@Override
 	public EKesoidKind getKesoidKind() {
 		return EKesoidKind.CGP;
-	}
-
-	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("dataz.png");
 	}
 
 	public double getXjtsk() {

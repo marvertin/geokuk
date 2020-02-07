@@ -3,15 +3,12 @@
  */
 package cz.geokuk.plugins.kesoid.kind.kes;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.Icon;
-
-import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
+import lombok.SneakyThrows;
 
 /**
  * @author Martin Veverka
@@ -19,8 +16,6 @@ import cz.geokuk.plugins.kesoid.genetika.Genotyp;
  */
 public class Kes extends Kesoid0 {
 
-	private static String URL_PREFIX_PRINT = "https://www.geocaching.com/seek/cdpf.aspx?guid=";
-	private static String URL_PREFIX_SHOW = "https://www.geocaching.com/seek/cache_details.aspx?guid=";
 	public static final int NENI_HODNOCENI = -1;
 	private int bestOf = Kes.NENI_HODNOCENI;
 	private int hodnoceni = Kes.NENI_HODNOCENI;
@@ -180,31 +175,6 @@ public class Kes extends Kesoid0 {
 		return terrain;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.kes.Kesoid#getUrlIcon()
-	 */
-	@Override
-	public Icon getUrlIcon() {
-		return ImageLoader.seekResIcon("gccom.png");
-	}
-
-	@Override
-	public URL getUrlPrint() {
-		try {
-			final String urls = getUrl();
-			System.out.println(urls);
-			System.out.println(URL_PREFIX_SHOW);
-			if (urls.startsWith(URL_PREFIX_SHOW)) {
-				return new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));
-			} else {
-				return null;
-			}
-		} catch (final MalformedURLException e) {
-			return null;
-		}
-	}
 
 	/**
 	 * @return the znamka
@@ -335,4 +305,9 @@ public class Kes extends Kesoid0 {
 		return "Kes [mainWpt=" + mainWpt + ", finalWpt=" + finalWpt + "]";
 	}
 
+	@Override
+	@SneakyThrows
+	public URL getUrlProPridaniDoSeznamuVGeogetu() {
+		return new URL("https://coord.info/" + getIdentifier());
+	}
 }

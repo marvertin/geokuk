@@ -6,6 +6,7 @@ import java.net.URL;
 import javax.swing.Icon;
 
 import cz.geokuk.util.process.BrowserOpener;
+import lombok.SneakyThrows;
 
 public class OpenUrlAction0 extends Action0 {
 
@@ -44,5 +45,10 @@ public class OpenUrlAction0 extends Action0 {
 	@Override
 	public boolean shouldBeVisible() {
 		return url != null;
+	}
+
+	@SneakyThrows
+	protected static URL url(final String url) {
+		return new URL(url);
 	}
 }

@@ -1,10 +1,12 @@
 package cz.geokuk.plugins.kesoid.kind.cgp;
 
-import java.util.Set;
+import java.util.*;
 
 import com.google.common.collect.ImmutableSet;
 
+import cz.geokuk.framework.Action0;
 import cz.geokuk.plugins.kesoid.Kepodr;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -38,5 +40,11 @@ public class CgpPlugin extends DefaultKesoidPlugin0 {
 		return 1000;
 	}
 
+	@Override
+	public List<Action0> getPopupMenuActions(final Wpt wpt) {
+		return Arrays.asList(
+				new ZobrazNaDatazCuzkCzAction(wpt)
+				);
+	}
 
 }

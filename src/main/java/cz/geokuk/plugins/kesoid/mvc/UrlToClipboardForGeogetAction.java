@@ -65,6 +65,6 @@ public class UrlToClipboardForGeogetAction extends Action0 {
 
 	@Override
 	public boolean shouldBeVisible() {
-		return kesoid != null && kesoid.getUrlShow() != null;
+		return kesoid != null && kesoid.getUrlProPridaniDoSeznamuVGeogetu() != null;
 	}
 }

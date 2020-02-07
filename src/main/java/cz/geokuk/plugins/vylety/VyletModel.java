@@ -40,7 +40,7 @@ public class VyletModel extends Model0 {
 				if (isCancelled()) {
 					break;
 				}
-				scl.setContents(new StringSelection(kes.getUrlShow().toExternalForm()), null);
+				scl.setContents(new StringSelection(kes.getUrlProPridaniDoSeznamuVGeogetu().toExternalForm()), null);
 				Thread.sleep(100);
 			}
 			return null;

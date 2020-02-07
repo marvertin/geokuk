@@ -65,6 +65,6 @@ public class UrlToListingForGeogetAction extends Action0 {
 
 	@Override
 	public boolean shouldBeVisible() {
-		return iKes != null && iKes.getUrlPrint() != null;
+		return iKes != null && iKes.getUrlProOtevreniListinguVGeogetu() != null;
 	}
 }
