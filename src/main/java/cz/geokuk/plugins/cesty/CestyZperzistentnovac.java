@@ -7,7 +7,8 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.cesty.data.*;
-import cz.geokuk.plugins.kesoid.*;
+import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.importek.NacitacGpx;
 import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
@@ -149,9 +150,9 @@ public class CestyZperzistentnovac {
 	private Cesta zbuildujCestuZGgt(final Ggt ggt, final KesBag kesBag) {
 		final Cesta cesta = Cesta.create();
 		if (kesBag != null) {
-			for (final Kesoid kesoid : kesBag.getKesoidy()) {
-				if (ggt.kesides.contains(kesoid.getIdentifier())) {
-					updator.pridejNaMisto(cesta, kesoid.getMainWpt());
+			for (final Wpt wpt : kesBag.getWpts()) {
+				if (ggt.kesides.contains(wpt.getIdentifier())) {
+					updator.pridejNaMisto(cesta, wpt);
 				}
 			}
 		}

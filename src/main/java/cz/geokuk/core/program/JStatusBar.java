@@ -292,7 +292,8 @@ public class JStatusBar extends JPanel {
 	}
 
 	private String celkove(final KesBag bag) {
-		final String s = bag.getWpts().size() + "/" + bag.getKesoidy().size();
+		// TODO [veverka] Chtělo by to zase zobrazovat počty keší a jiných potvor -- 10. 2. 2020 13:03:53 veverka
+		final String s = bag.getWpts().size() + "";
 		return s;
 	}
 

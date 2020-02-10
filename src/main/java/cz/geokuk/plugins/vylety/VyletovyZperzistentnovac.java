@@ -4,8 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import cz.geokuk.core.program.FConst;
-import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,9 +37,9 @@ public class VyletovyZperzistentnovac {
 
 	private void aktualizujVylet(final Vylet novyvylet, final VyletPul vyletPul, final EVylet evyl, final KesBag vsechny) {
 		if (vsechny != null) {
-			for (final Kesoid kes : vsechny.getKesoidy()) {
-				if (vyletPul.kesides.contains(kes.getIdentifier())) {
-					novyvylet.add(evyl, kes);
+			for (final Wpt wpt : vsechny.getWpts()) {
+				if (vyletPul.kesides.contains(wpt.getIdentifier())) {
+					novyvylet.add(evyl, wpt);
 				}
 			}
 		}

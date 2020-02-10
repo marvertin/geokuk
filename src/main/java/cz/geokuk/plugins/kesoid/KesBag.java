@@ -39,8 +39,6 @@ public class KesBag implements WptReceiver {
 	//
 
 	private final List<Wpt> wpts = new ArrayList<>();
-	private Set<Kesoid> kesoidyset;
-	private List<Kesoid> kesoidy;
 
 	private CounterMap<Alela> poctyAlel;
 
@@ -58,7 +56,6 @@ public class KesBag implements WptReceiver {
 	public KesBag(final Genom genom) {
 		this.genom = genom;
 		indexator = new Indexator<>(BoundingRect.ALL);
-		kesoidyset = new HashSet<>();
 		citacAlel = genom.createCitacAlel();
 	}
 
@@ -83,16 +80,11 @@ public class KesBag implements WptReceiver {
 
 		final Mou mou = wpt.getMou();
 		indexator = indexator.add(mou.xx, mou.yy, wpt);
-		final Kesoid kesoid = wpt.getKesoid();
-		kesoidyset.add(kesoid);
 		wpts.add(wpt);
 		genotyp.countTo(citacAlel);
 	}
 
 	public void done() {
-		kesoidy = new ArrayList<>(kesoidyset.size());
-		kesoidy.addAll(kesoidyset);
-		kesoidyset = null;
 		poctyAlel = citacAlel.getCounterMap();
 		// System.out.println(poctyAlel);
 	}
@@ -116,13 +108,6 @@ public class KesBag implements WptReceiver {
 		return iInformaceOZdrojich;
 	}
 
-	public List<Kesoid> getKesoidy() {
-		if (kesoidy == null) {
-			throw new RuntimeException("Jeste neni kesBag vytvoren");
-		}
-		return kesoidy;
-	}
-
 	/**
 	 * @return the poctyAlel
 	 */
@@ -136,9 +121,6 @@ public class KesBag implements WptReceiver {
 	}
 
 	public List<Wpt> getWpts() {
-		if (kesoidy == null) {
-			throw new RuntimeException("Jeste neni kesBag vytvoren");
-		}
 		return wpts;
 	}
 

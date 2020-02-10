@@ -3,6 +3,7 @@ package cz.geokuk.plugins.vylety;
 import java.util.*;
 
 import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 
 public class Vylet {
 
@@ -68,6 +69,10 @@ public class Vylet {
 		default:
 			assert false;
 		}
+	}
+
+	public void add(final EVylet evyl, final Wpt wpt) {
+		add(evyl, wpt.getKesoid());
 	}
 
 }
