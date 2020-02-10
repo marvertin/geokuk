@@ -27,6 +27,7 @@ public class HledaciPodminka extends HledaciPodminka0 {
 
 	public void setJenVZobrazenych(final boolean selected) {
 		jenVZobrazenych = selected;
+		jenVZobrazenych = true;
 	}
 
 	/**

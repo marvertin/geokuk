@@ -46,7 +46,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 import cz.geokuk.plugins.kesoid.Ikonizer;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mapicon.IkonBag;
 import cz.geokuk.plugins.kesoid.mvc.IkonyNactenyEvent;
 
@@ -106,12 +106,12 @@ public class JKesTable extends JPanel {
 		@Override
 		public Object getValueAt(final int row, final int col) {
 			final Nalezenec nalezenec = keslist.get(row);
-			final Kesoid kesoid = nalezenec.getKes();
+			final Wpt wpt = nalezenec.getWpt();
 
 			Object s = null;
 			switch (col) {
 			case 0:
-				s = kesIkona(kesoid);
+				s = kesIkona(wpt);
 				break;
 			case 1:
 				s = Math.round(nalezenec.getVzdalenost() / 100) / 10.0;
@@ -120,13 +120,13 @@ public class JKesTable extends JPanel {
 				s = Ikonizer.findSmerIcon(nalezenec.getAzimut());
 				break;
 			case 3:
-				s = formatuj(nalezenec, kesoid.getIdentifier());
+				s = formatuj(nalezenec, wpt.getIdentifier());
 				break;
 			case 4:
-				s = formatuj(nalezenec, kesoid.getNazev());
+				s = formatuj(nalezenec, wpt.getNazev());
 				break;
 			case 5:
-				s = formatuj(nalezenec, computeAutora(kesoid));
+				s = formatuj(nalezenec, computeAutora(wpt));
 				break;
 				// case 6: s = kes.getStatus() == EKesStatus.DISABLED; break;
 			}
@@ -150,8 +150,8 @@ public class JKesTable extends JPanel {
 			fireTableStructureChanged();
 		}
 
-		private String computeAutora(final Kesoid kesoid) {
-			final String author = kesoid.getAuthor();
+		private String computeAutora(final Wpt wpt) {
+			final String author = wpt.getKesoid().getAuthor();
 			return author == null ? "" : author;
 		}
 
@@ -164,11 +164,11 @@ public class JKesTable extends JPanel {
 			return "<html>" + s.substring(0, nal.getPoc()) + "<b bgcolor='yellow'>" + s.substring(nal.getPoc(), nal.getKon()) + "</b>" + s.substring(nal.getKon()) + "</html>";
 		}
 
-		private Icon kesIkona(final Kesoid kes) {
+		private Icon kesIkona(final Wpt wpt) {
 			if (ikonBag == null) {
 				return null;
 			}
-			return ikonBag.seekIkon(kes.getMainWpt().getGenotyp());
+			return ikonBag.seekIkon(wpt.getGenotyp());
 		}
 
 	}
@@ -233,7 +233,7 @@ public class JKesTable extends JPanel {
 		if (current != null) {
 			int index = 0;
 			for (final Nalezenec nalezenec : aKeslist) {
-				if (current.getKes() == nalezenec.getKes()) {
+				if (current.getWpt() == nalezenec.getWpt()) {
 					table.getSelectionModel().setSelectionInterval(index, index);
 					return;
 				}

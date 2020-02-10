@@ -50,7 +50,7 @@ import cz.geokuk.core.hledani.*;
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.framework.JMyDialog0;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.refbody.ReferencniBodSeZmenilEvent;
@@ -257,21 +257,21 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // hroup
-		        .addGroup(GroupLayout.Alignment.TRAILING,
-		                layout.createSequentialGroup() // h1
-		                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // h2
-		                                .addComponent(jKeskovaciTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-		                                .addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-		                                .addGroup(layout.createSequentialGroup() // h3
-		                                        .addComponent(jLabel1).addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE).addComponent(jButtonCentruj))
-		                        .addGroup(layout.createSequentialGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)))));
+				.addGroup(GroupLayout.Alignment.TRAILING,
+						layout.createSequentialGroup() // h1
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // h2
+								.addComponent(jKeskovaciTabulka, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+								.addComponent(status, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+								.addGroup(layout.createSequentialGroup() // h3
+										.addComponent(jLabel1).addComponent(entry, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE).addComponent(jButtonCentruj))
+								.addGroup(layout.createSequentialGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)))));
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING) // vGrou
-		        .addGroup(layout.createSequentialGroup() // v1
-		                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE) // v2
-		                        .addComponent(jLabel1).addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jButtonCentruj))
-		                .addGroup(layout.createParallelGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)).addComponent(status)
-		                .addComponent(jKeskovaciTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)));
+				.addGroup(layout.createSequentialGroup() // v1
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE) // v2
+								.addComponent(jLabel1).addComponent(entry, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jButtonCentruj))
+						.addGroup(layout.createParallelGroup().addComponent(jJenVZobrazenych).addComponent(jRegularniVyrazy)).addComponent(status)
+						.addComponent(jKeskovaciTabulka, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)));
 
 		pack();
 	}
@@ -296,8 +296,8 @@ public class JTextoveHledaniDialog extends JMyDialog0 implements AfterInjectInit
 
 			final Nalezenec nalezenec = jKeskovaciTabulka.getCurrent();
 			if (nalezenec != null) {
-				final Kesoid kes = nalezenec.getKes();
-				poziceModel.setPozice(kes.getMainWpt());
+				final Wpt wpt = nalezenec.getWpt();
+				poziceModel.setPozice(wpt);
 				vyrezModel.vystredovatNaPozici();
 				// Board.eveman.fire(new PoziceChangedEvent(kes.getMainWpt(), true) );
 			}

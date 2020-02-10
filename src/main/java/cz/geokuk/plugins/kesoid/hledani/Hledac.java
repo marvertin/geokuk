@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import cz.geokuk.core.hledani.Hledac0;
 import cz.geokuk.core.hledani.HledaciPodminka0;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.util.lang.FUtil;
 
 /**
@@ -81,11 +81,11 @@ public class Hledac extends Hledac0<Nalezenec> {
 		System.out.println("Hledy, hledy, hledy: " + kesBag.getWpts().size() + " " + podm.getVzorek());
 		final Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());
 		final List<Nalezenec> list = new ArrayList<>();
-		for (final Kesoid kesoid : kesBag.getKesoidy()) {
+		for (final Wpt wpt : kesBag.getWpts()) {
 			if (getFuture() != null && getFuture().isCancelled()) {
 				return null;
 			}
-			final String[] prohledavanci = kesoid.getProhledavanci();
+			final String[] prohledavanci = wpt.getKesoid().getProhledavanci();
 			Nalezenec nal = null;
 			for (final String prohledavanec : prohledavanci) {
 				if (prohledavanec != null) {
@@ -96,7 +96,7 @@ public class Hledac extends Hledac0<Nalezenec> {
 				}
 			}
 			if (nal != null) {
-				nal.setKes(kesoid);
+				nal.setWpt(wpt);
 				if (nal.getPoc() == nal.getKon()) {
 					nal.setKdeNalezeno(null);
 				}
