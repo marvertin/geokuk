@@ -55,7 +55,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 		try {
 			final KesBag kesbag = new KesBag(vsechny2.getGenom());
 			final BlockingQueue<Wpt> queue = new LinkedBlockingDeque<>();
-			log.debug("FILTERING {} - start, source: {} caches, {}={} waypoints.", cisloFiltrovani, vsechny2.getKesoidy().size(), pocetvsech, vsechny2.getIndexator().count(BoundingRect.ALL));
+			log.debug("FILTERING {} - start, source: {}={} waypoints.", cisloFiltrovani, pocetvsech, vsechny2.getIndexator().count(BoundingRect.ALL));
 			startTime = System.currentTimeMillis();
 			final KesoidFilter filter = kesoidFilterModel.createKesoidFilter();
 			new Thread((Runnable) () -> {
@@ -113,7 +113,7 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 		}
 		// TODO řešit progresy nějak ssematicky
 		kesoidModel.fire(new KeskyVyfiltrovanyEvent(result, vsechny));
-		log.debug("FILTERING {} - finished, filtered {} caches, {}={} waypoints, {} ms.\n", cisloFiltrovani, result.getKesoidy().size(), result.getWpts().size(),
+		log.debug("FILTERING {} - finished, filtered {}={} waypoints, {} ms.\n", cisloFiltrovani, result.getWpts().size(),
 				result.getIndexator().count(BoundingRect.ALL), System.currentTimeMillis() - startTime);
 	}
 }

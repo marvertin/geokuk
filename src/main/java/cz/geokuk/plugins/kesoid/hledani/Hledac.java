@@ -78,7 +78,7 @@ public class Hledac extends Hledac0<Nalezenec> {
 
 	@Override
 	public List<Nalezenec> hledej(final HledaciPodminka0 podm) {
-		System.out.println("Hledy, hledy, hledy: " + kesBag.getKesoidy().size() + " " + podm.getVzorek());
+		System.out.println("Hledy, hledy, hledy: " + kesBag.getWpts().size() + " " + podm.getVzorek());
 		final Porovnavac poro = new Porovnavac(podm.getVzorek(), ((HledaciPodminka) podm).isRegularniVyraz());
 		final List<Nalezenec> list = new ArrayList<>();
 		for (final Kesoid kesoid : kesBag.getKesoidy()) {
