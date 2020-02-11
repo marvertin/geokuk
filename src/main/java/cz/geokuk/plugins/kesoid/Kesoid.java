@@ -16,10 +16,6 @@ public interface Kesoid {
 	String getIdentifier();
 
 
-	/** Co to je mainWpt? Úvodky, fální souřadnice? A co u prodejních míst turistických známek. Nechceme zde mít stejný model, jako má geoget 1:n,
-	 * toto se musí vymítit, ne vždy je jasný hlavní waypoint. */
-	Wpt getMainWpt();
-
 	/** S tím názvem je potíž, každý waypoint má svůj název a kešoid také, tak který použít? */
 	String getNazev();
 

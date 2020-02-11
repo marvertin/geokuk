@@ -90,7 +90,6 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 	@Override
 	public abstract EKesoidKind getKesoidKind();
 
-	@Override
 	public Wpt getMainWpt() {
 		return getFirstWpt();
 	}

@@ -196,10 +196,10 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		jHiddenTime.setText(JKesoidDetail0.formatujDatum(kesoid.getHidden()));
 		jVztah.setIcon(vztah(kesoid.getVztah()));
 		if (ikonBag != null) {
-			jType.setIcon(ikonBag.seekIkon(kesoid.getMainWpt().getGenotyp()));
+			jType.setIcon(ikonBag.seekIkon(wpt.getGenotyp()));
 		}
-		jAzimut.setIcon(azimut(kesoid.getMainWpt()));
-		jVzdalenost.setText(vzdalenost(kesoid.getMainWpt()));
+		jAzimut.setIcon(azimut(wpt));
+		jVzdalenost.setText(vzdalenost(wpt));
 
 		// jNoFirstWpt.setVisible(wpt != kesoid.getFirstWpt());
 		// kesoid.getKesoidKind().getDetail().setVisible(true);

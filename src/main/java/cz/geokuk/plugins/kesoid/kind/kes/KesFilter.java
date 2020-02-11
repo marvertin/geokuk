@@ -10,7 +10,7 @@ public class KesFilter {
 
 
 	public boolean filter(final Wpt aWpt) {
-		final Kesoid kesoid = aWpt.getKesoid();
+		final Kesoid0 kesoid = ((Wpti)aWpt).getKesoid();
 
 		if (filterDefinition.isJenFinalUNalezenych()) {
 			if (kesoid.getVztah() == EKesVztah.FOUND || kesoid.getVztah() == EKesVztah.OWN) {
