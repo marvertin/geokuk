@@ -18,7 +18,8 @@ import cz.geokuk.core.coordinates.Mouable;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.cesty.data.*;
-import cz.geokuk.plugins.kesoid.*;
+import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.util.lang.FUtil;
@@ -59,10 +60,10 @@ public class CestyModel extends Model0 {
 
 	private class Worker extends SwingWorker<Void, Void> {
 
-		private final List<Kesoid> kese;
+		private final List<Wpt> wpts;
 
-		public Worker(final List<Kesoid> kese) {
-			this.kese = kese;
+		public Worker(final List<Wpt> wpts) {
+			this.wpts = wpts;
 		}
 
 		/*
@@ -73,11 +74,11 @@ public class CestyModel extends Model0 {
 		@Override
 		protected Void doInBackground() throws Exception {
 			final Clipboard scl = getSystemClipboard();
-			for (final Kesoid kes : kese) {
+			for (final Wpt wpt : wpts) {
 				if (isCancelled()) {
 					break;
 				}
-				scl.setContents(new StringSelection(kes.getUrlProPridaniDoSeznamuVGeogetu().toExternalForm()), null);
+				scl.setContents(new StringSelection(wpt.getKesoid().getUrlProPridaniDoSeznamuVGeogetu().toExternalForm()), null);
 				Thread.sleep(100);
 			}
 			return null;
@@ -250,13 +251,13 @@ public class CestyModel extends Model0 {
 		return false;
 	}
 
-	public void nasypVyletDoGeogetu() {
+	public void nasypCestyDoGeogetu() {
 		if (worker != null) {
 			worker.cancel(true);
 		}
-		final List<Kesoid> kesoidy = new ArrayList<>();
+		final List<Wpt> kesoidy = new ArrayList<>();
 		for (final Wpt wpt : doc.getWpts()) {
-			kesoidy.add(wpt.getKesoid());
+			kesoidy.add(wpt);
 		}
 		worker = new Worker(kesoidy);
 		worker.execute();

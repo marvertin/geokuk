@@ -17,7 +17,7 @@ public class CestyPresClipboardDoGeogetuAction extends CestyAction0 {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		cestyModel.nasypVyletDoGeogetu();
+		cestyModel.nasypCestyDoGeogetu();
 	}
 
 	@Override
