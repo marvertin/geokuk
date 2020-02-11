@@ -4,6 +4,7 @@ import java.util.function.UnaryOperator;
 
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
+import cz.geokuk.plugins.vylety.VyletChangeEvent;
 import lombok.Getter;
 
 public class KesFilterModel extends Model0 {
@@ -22,6 +23,15 @@ public class KesFilterModel extends Model0 {
 		kesFilter = new KesFilter(event.getKesFilterDefinition());
 		kesoidModel.spustFiltrovani();
 	}
+
+	public void onEvent(final VyletChangeEvent event) {
+		// TODO Nemůže to být obaleno velkou změnou, je potřeba, aby se přefiltrovávalo chytře, podle toho
+		// jakou výletovou změnu dělám a jak mám filtr, nutno dmyslet
+		if (event.isVelkaZmena()) {
+			kesoidModel.spustFiltrovani();
+		}
+	}
+
 
 	private void setKesFilterDefinition(final KesFilterDefinition kesFilterDefinition) {
 		if (! kesFilterDefinition.equals(this.kesFilterDefinition)) {

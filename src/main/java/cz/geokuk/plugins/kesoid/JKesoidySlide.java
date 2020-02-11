@@ -382,7 +382,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 			Wpti.invalidateAllSklivec();
 			repaint();
 		} else {
-			repaintWpt(aEvent.getKes().getMainWpt());
+			repaintWpt(aEvent.getWpt());
 		}
 	}
 
@@ -453,7 +453,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		// // case ANO: g = g.with(ikonBag.getGenom().ALELA_lovime); break;
 		// case NE: g = g.with(ikonBag.getGenom().ALELA_ignoru); break;
 		// }
-		switch (vyletModel.get(wpt.getKesoid())) {
+		switch (vyletModel.get(wpt)) {
 		case ANO:
 			g = g.with(genom.ALELA_lovime);
 			break;

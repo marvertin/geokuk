@@ -17,7 +17,7 @@ import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
 import cz.geokuk.plugins.kesoid.importek.MultiNacitacLoaderManager;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mapicon.*;
-import cz.geokuk.plugins.vylety.EVylet;
+import cz.geokuk.plugins.vylety.EPrahVyletu;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.KeFile;
@@ -339,7 +339,7 @@ public class KesoidModel extends Model0 {
 		setGccomNick(new GccomNick(gccomNickName, gccomNickId));
 		final FilterDefinition filterDefinition = currPrefe().getStructure(FPref.KESFILTER_structure_node, new FilterDefinition());
 		final int prahVyletuOrdinal = currPrefe().node(FPref.KESFILTER_structure_node).getInt("prahVyletu", filterDefinition.getPrahVyletu().ordinal());
-		for (final EVylet vylet : EVylet.values()) {
+		for (final EPrahVyletu vylet : EPrahVyletu.values()) {
 			if (prahVyletuOrdinal == vylet.ordinal()) {
 				filterDefinition.setPrahVyletu(vylet);
 			}

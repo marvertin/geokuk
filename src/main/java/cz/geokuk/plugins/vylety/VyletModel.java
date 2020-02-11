@@ -12,7 +12,7 @@ import javax.swing.SwingWorker;
 
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.kesoid.KesBag;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 
 /**
  * @author Martin Veverka
@@ -22,10 +22,10 @@ public class VyletModel extends Model0 {
 
 	private class Worker extends SwingWorker<Void, Void> {
 
-		private final List<Kesoid> kese;
+		private final List<Wpt> wpts;
 
-		public Worker(final List<Kesoid> kese) {
-			this.kese = kese;
+		public Worker(final List<Wpt> wpts) {
+			this.wpts = wpts;
 		}
 
 		/*
@@ -36,11 +36,11 @@ public class VyletModel extends Model0 {
 		@Override
 		protected Void doInBackground() throws Exception {
 			final Clipboard scl = getSystemClipboard();
-			for (final Kesoid kes : kese) {
+			for (final Wpt wpt : wpts) {
 				if (isCancelled()) {
 					break;
 				}
-				scl.setContents(new StringSelection(kes.getUrlProPridaniDoSeznamuVGeogetu().toExternalForm()), null);
+				scl.setContents(new StringSelection(wpt.getKesoid().getUrlProPridaniDoSeznamuVGeogetu().toExternalForm()), null);
 				Thread.sleep(100);
 			}
 			return null;
@@ -54,29 +54,29 @@ public class VyletModel extends Model0 {
 
 	private Worker worker;
 
-	public void add(final EVylet evyl, final Kesoid kes) {
-		final EVylet evylPuvodni = vylet.add(evyl, kes);
+	public void add(final EVylet evyl, final Wpt wpt) {
+		final EVylet evylPuvodni = vylet.add(evyl, wpt);
 		if (evyl != evylPuvodni) {
 			final VyletSaveSwingWorker worker = new VyletSaveSwingWorker(vyletovyZperzistentnovac, vylet);
 			worker.execute();
-			onChange(kes, evylPuvodni, evyl);
+			onChange(wpt, evylPuvodni, evyl);
 		}
 
 	}
 
-	public Set<Kesoid> get(final EVylet evyl) {
+	public Set<Wpt> get(final EVylet evyl) {
 		return vylet.get(evyl);
 	}
 
-	public EVylet get(final Kesoid kes) {
-		return vylet.get(kes);
+	public EVylet get(final Wpt wpt) {
+		return vylet.get(wpt);
 	}
 
 	public void inject(final VyletovyZperzistentnovac vyletovyZperzistentnovac) {
 		this.vyletovyZperzistentnovac = vyletovyZperzistentnovac;
 	}
 
-	public void nasypVypetDoGeogetu() {
+	public void nasypVyletDoGeogetu() {
 		if (worker != null) {
 			worker.cancel(true);
 		}
@@ -93,6 +93,7 @@ public class VyletModel extends Model0 {
 
 	public void setNewVylet(final Vylet newvylet) {
 		vylet = newvylet;
+		System.out.println("fajruju zmenu vyletu");
 		fire(new VyletChangeEvent(this, null, null, null));
 	}
 
@@ -114,11 +115,11 @@ public class VyletModel extends Model0 {
 		setNewVylet(new Vylet());
 	}
 
-	private void onChange(final Kesoid kes, final EVylet evylPuvodni, final EVylet evyl) {
+	private void onChange(final Wpt wpt, final EVylet evylPuvodni, final EVylet evyl) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			return;
 		}
-		fire(new VyletChangeEvent(this, kes, evyl, evylPuvodni));
+		fire(new VyletChangeEvent(this, wpt, evyl, evylPuvodni));
 	}
 
 }

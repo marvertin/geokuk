@@ -4,7 +4,7 @@
 package cz.geokuk.plugins.kesoid;
 
 import cz.geokuk.framework.*;
-import cz.geokuk.plugins.vylety.EVylet;
+import cz.geokuk.plugins.vylety.EPrahVyletu;
 
 /**
  * @author Martin Veverka
@@ -14,7 +14,7 @@ import cz.geokuk.plugins.vylety.EVylet;
 public class FilterDefinition implements Copyable<FilterDefinition> {
 
 
-	private EVylet prahVyletu = EVylet.NEVIM;
+	private EPrahVyletu prahVyletu = EPrahVyletu.BEZ_VYNECHANYCH;
 
 	/*
 	 * (non-Javadoc)
@@ -35,7 +35,7 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
 	 * @return the prahVyletu
 	 */
 	@PreferencebleIgnore
-	public EVylet getPrahVyletu() {
+	public EPrahVyletu getPrahVyletu() {
 		return prahVyletu;
 	}
 
@@ -45,7 +45,7 @@ public class FilterDefinition implements Copyable<FilterDefinition> {
 	 *            the prahVyletu to set
 	 */
 	@PreferencebleIgnore
-	public void setPrahVyletu(final EVylet prahVyletu) {
+	public void setPrahVyletu(final EPrahVyletu prahVyletu) {
 		this.prahVyletu = prahVyletu;
 	}
 

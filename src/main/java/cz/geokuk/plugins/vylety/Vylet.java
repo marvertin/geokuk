@@ -2,16 +2,15 @@ package cz.geokuk.plugins.vylety;
 
 import java.util.*;
 
-import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
 
 public class Vylet {
 
-	private final Set<Kesoid> ano = new HashSet<>();
-	private final Set<Kesoid> ne = new HashSet<>();
+	private final Set<Wpt> ano = new HashSet<>();
+	private final Set<Wpt> ne = new HashSet<>();
 
-	public Set<Kesoid> get(final EVylet evyl) {
-		Set<Kesoid> set;
+	public Set<Wpt> get(final EVylet evyl) {
+		Set<Wpt> set;
 		switch (evyl) {
 		case ANO:
 			set = ano;
@@ -25,7 +24,7 @@ public class Vylet {
 		return Collections.unmodifiableSet(set);
 	}
 
-	public EVylet get(final Kesoid kes) {
+	public EVylet get(final Wpt kes) {
 		if (ano.contains(kes)) {
 			return EVylet.ANO;
 		}
@@ -35,7 +34,7 @@ public class Vylet {
 		return EVylet.NEVIM;
 	}
 
-	EVylet add(final EVylet evyl, final Kesoid kes) {
+	EVylet add(final EVylet evyl, final Wpt kes) {
 		final EVylet evylPuvodni = get(kes);
 		switch (evyl) {
 		case ANO:
@@ -69,10 +68,6 @@ public class Vylet {
 		default:
 			assert false;
 		}
-	}
-
-	public void add(final EVylet evyl, final Wpt wpt) {
-		add(evyl, wpt.getKesoid());
 	}
 
 }

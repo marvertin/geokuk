@@ -34,21 +34,13 @@ public class KesoidFilter {
 				}
 			}
 
-			// if (aWpt.getType() != AWptType.CACHE && ! wptTypes.contains(aWpt.getType())) return false;
-
-			final Kesoid kesoid = aWpt.getKesoid();
-
 			if (! aWpt.getKesoidPlugin().filter(aWpt)) {
 				return false; // Plugin si nepřeje, aby byl waypoint viděn
 			}
 
 
-			if (vyletModel != null) {
-				final EVylet evylKes = vyletModel.get(kesoid);
-				final EVylet evylPrah = filterDefinition.getPrahVyletu();
-				if (evylKes.ordinal() < evylPrah.ordinal()) {
-					return false;
-				}
+			if (!vyletFilter(aWpt)) {
+				return false;  // výlet nám to dává pryč
 			}
 			return true;
 		} catch (final Exception e) {
@@ -56,6 +48,30 @@ public class KesoidFilter {
 
 		}
 
+	}
+
+	private boolean vyletFilter(final Wpt wpt) {
+		if (vyletModel == null) {
+			System.out.println("Vylet mode neni");
+			return true; // nemáme model nemůžeme odfiltrovávat
+		}
+		switch (filterDefinition.getPrahVyletu()) {
+		case VSECHNY: return true; // všechny tam máme mít
+		case BEZ_VYNECHANYCH: { // nemáme tam mít vynechané, ale jednotlivé waypointy
+			final EVylet evylKes = vyletModel.get(wpt);
+			return evylKes != EVylet.NE; // takže když neříkám ne, nechám totam
+		}
+		case JEN_LOVENE: {// jen lovené, ale zobrazme vše, co s tím souvisí
+			for (final Wpt wtpx : wpt.getKesoid().getWpts()) {
+				final EVylet evylKes = vyletModel.get(wtpx);
+				if (evylKes == EVylet.ANO) {
+					return true;
+				}
+			}
+			return false;
+		}
+		default: return true; // raději zobrazit, když je to neco jiného
+		}
 	}
 
 	private synchronized Set<Alela> nechteneAlely(final Genom genom) {

@@ -129,13 +129,12 @@ public class VyrezModel extends Model0 {
 		final Mou moustred = mourect.getStred();
 		poziceModel.setPozice(moustred.toWgs());
 		vystredovatNaPozici();
-		// coord.setMoustred(moustred);
-		// setMoucur(moustred);
-		// odspodu hledáme měřítko, které tam vleze
 		int mer = 20;
 		for (;; mer--) {
-			final int pom = 1 << 20 - mer; // pomer pro toto meritko
-			if (mourect.getMouWidth() / pom <= moord.getDim().getWidth() && mourect.getMouHeight() / pom <= moord.getDim().getHeight()) {
+			// TODO [veverka] Ta konstanta 24 je vycucaná z prstu, funguje, ale kde se vzala? -- 11. 2. 2020 11:04:15 veverka
+			final int pom = 1 << 24 - mer; // pomer pro toto meritko
+			if (mourect.getMouWidth() / pom <= moord.getDim().getWidth()
+					&& mourect.getMouHeight() / pom <= moord.getDim().getHeight()) {
 				break; // hledáme nejbližší nejlepší
 			}
 		}

@@ -1,46 +1,28 @@
 package cz.geokuk.plugins.vylety;
 
-import cz.geokuk.framework.Event0;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import java.util.Optional;
 
+import cz.geokuk.framework.Event0;
+import cz.geokuk.plugins.kesoid.Wpt;
+import lombok.*;
+
+@Getter @RequiredArgsConstructor @ToString
 public class VyletChangeEvent extends Event0<VyletModel> {
 
 	private final VyletModel vyletModel;
 
-	private final Kesoid kes;
+	private final Wpt wpt;
 	private final EVylet evyl;
 	private final EVylet evylPuvodni;
 
-	VyletChangeEvent(final VyletModel vylet, final Kesoid kes, final EVylet evyl, final EVylet evylPuvodni) {
-		super();
-		vyletModel = vylet;
-		this.evyl = evyl;
-		this.kes = kes;
-		this.evylPuvodni = evylPuvodni;
+
+
+	public Optional<Wpt> getAno() {
+		return evyl == EVylet.ANO ? Optional.of(wpt) : Optional.empty();
 	}
 
-	public Kesoid getAno() {
-		return evyl == EVylet.ANO ? kes : null;
-	}
-
-	public EVylet getEvyl() {
-		return evyl;
-	}
-
-	public EVylet getEvylPuvodni() {
-		return evylPuvodni;
-	}
-
-	public Kesoid getKes() {
-		return kes;
-	}
-
-	public Kesoid getNe() {
-		return evyl == EVylet.NE ? kes : null;
-	}
-
-	public VyletModel getVyletModel() {
-		return vyletModel;
+	public Optional<Wpt> getNe() {
+		return evyl == EVylet.NE ? Optional.of(wpt) : Optional.empty();
 	}
 
 	/**
@@ -49,7 +31,7 @@ public class VyletChangeEvent extends Event0<VyletModel> {
 	 * @return
 	 */
 	public boolean isVelkaZmena() {
-		return evyl == null || kes == null;
+		return evyl == null || wpt == null;
 	}
 
 }

@@ -17,7 +17,7 @@ public class VyletPresClipboardDoGeogetuAction extends VyletAction0 {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		vyletModel.nasypVypetDoGeogetu();
+		vyletModel.nasypVyletDoGeogetu();
 	}
 
 	@Override

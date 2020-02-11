@@ -10,12 +10,12 @@ import javax.swing.event.ListDataListener;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.kesoid.FilterDefinition;
 import cz.geokuk.plugins.kesoid.filtr.FilterDefinitionChangedEvent;
-import cz.geokuk.plugins.vylety.EVylet;
+import cz.geokuk.plugins.vylety.EPrahVyletu;
 
-public class JVybiracVyletu extends JComboBox<EVylet>implements AfterEventReceiverRegistrationInit {
+public class JVybiracVyletu extends JComboBox<EPrahVyletu>implements AfterEventReceiverRegistrationInit {
 
 	private static final long serialVersionUID = 1L;
-	private final DefaultComboBoxModel<EVylet> model = new DefaultComboBoxModel<>(EVylet.values());
+	private final DefaultComboBoxModel<EPrahVyletu> model = new DefaultComboBoxModel<>(EPrahVyletu.values());
 	private KesoidModel kesoidModel;
 
 	public JVybiracVyletu() {
@@ -50,7 +50,7 @@ public class JVybiracVyletu extends JComboBox<EVylet>implements AfterEventReceiv
 
 			private void nastavto() {
 				final FilterDefinition definition = kesoidModel.getDefinition();
-				definition.setPrahVyletu((EVylet) model.getSelectedItem());
+				definition.setPrahVyletu((EPrahVyletu) model.getSelectedItem());
 				kesoidModel.setDefinition(definition);
 			}
 		});

@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.Set;
 
 import cz.geokuk.core.coordinates.MouRect;
-import cz.geokuk.plugins.kesoid.Kesoid;
+import cz.geokuk.plugins.kesoid.Wpt;
 
 public class VyletZoomAction extends VyletAction0 {
 
@@ -19,10 +19,10 @@ public class VyletZoomAction extends VyletAction0 {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		final Set<Kesoid> set = vyletModel.get(EVylet.ANO);
+		final Set<Wpt> set = vyletModel.get(EVylet.ANO);
 		final MouRect mourect = new MouRect();
-		for (final Kesoid kes : set) {
-			mourect.add(kes.getMainWpt().getWgs().toMou());
+		for (final Wpt wpt : set) {
+			mourect.add(wpt.getWgs().toMou());
 		}
 		mourect.resize(1.2);
 		vyrezModel.zoomTo(mourect);

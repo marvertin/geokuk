@@ -86,6 +86,8 @@ public class KesFilteringSwingWorker extends MySwingWorker0<KesBag, Void> {
 				}
 				kesbag.expose(wpt);
 			}
+			System.out.println("hlasim dofiltrovano");
+
 			log.debug("FILTERING {} - prepared result, {} ms.", cisloFiltrovani, System.currentTimeMillis() - startTime);
 			kesbag.done();
 			progressor.finish();

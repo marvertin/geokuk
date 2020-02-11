@@ -4,7 +4,8 @@ import java.io.*;
 import java.util.*;
 
 import cz.geokuk.core.program.FConst;
-import cz.geokuk.plugins.kesoid.*;
+import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -78,10 +79,10 @@ public class VyletovyZperzistentnovac {
 	}
 
 	private void zapis(final Vylet vylet, final File file, final EVylet evyl) {
-		final Set<Kesoid> caches = vylet.get(evyl);
-		final Set<String> tripGeocodes = new HashSet<>(caches.size());
-		for (final Kesoid cache : caches) {
-			tripGeocodes.add(cache.getIdentifier());
+		final Set<Wpt> wpts = vylet.get(evyl);
+		final Set<String> tripGeocodes = new HashSet<>(wpts.size());
+		for (final Wpt wpt : wpts) {
+			tripGeocodes.add(wpt.getIdentifier());
 		}
 		final List<String> toWrite = new ArrayList<>();
 

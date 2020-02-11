@@ -2,19 +2,18 @@ package cz.geokuk.plugins.vylety;
 
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.framework.AfterInjectInit;
-import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
 
 public abstract class VyletActionIndividual0 extends VyletAction0 implements AfterInjectInit {
 
 	private static final long serialVersionUID = -649900052004328014L;
 
-	private final Kesoid kespevna;
-	private Kesoid kesdocasna;
+	private final Wpt wptpevny;
+	private Wpt wptdocasny;
 
 	public VyletActionIndividual0(final String string, final Wpt wpt) {
 		super(string);
-		kespevna = wpt == null ? null : wpt.getKesoid();
+		wptpevny = wpt;
 		setEnabled(false);
 	}
 
@@ -33,21 +32,21 @@ public abstract class VyletActionIndividual0 extends VyletAction0 implements Aft
 	public void onEvent(final PoziceChangedEvent aEvent) {
 		final Wpt wpt = aEvent.poziceq.getWpt();
 		if (wpt != null) {
-			kesdocasna = wpt.getKesoid();
+			wptdocasny = wpt;
 			enablujPokudMaSmysl();
 		} else {
-			kesdocasna = null;
+			wptdocasny = null;
 			setEnabled(false);
 		}
 	}
 
 	protected abstract void enablujPokudMaSmysl();
 
-	protected Kesoid kesoid() {
-		if (kespevna != null) {
-			return kespevna;
+	protected Wpt kesoid() {
+		if (wptpevny != null) {
+			return wptpevny;
 		}
-		return kesdocasna;
+		return wptdocasny;
 	}
 
 	@Override
