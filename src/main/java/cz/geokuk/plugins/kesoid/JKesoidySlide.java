@@ -140,7 +140,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	// private List<Rectangle> repaintovaneCtverce = new ArrayList<Rectangle>();
 	// private List<Rectangle> klipovanci = new ArrayList<Rectangle>();
 
-	private Kesoid kesoidPodMysi;
 
 	private Wpt wptPodMysi;
 
@@ -307,15 +306,14 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	@Override
 	public void mouseMoved(final MouseEvent e, final MouseGestureContext ctx) {
 		final Wpt wpt = najdiWptVBlizkosti(new Point(e.getX(), e.getY()));
-		wptPodMysi = wpt;
 		final Kesoid kes = wpt == null ? null : wpt.getKesoid();
 
-		if (kes != kesoidPodMysi) {
-			final Kesoid staraKes = kesoidPodMysi;
-			kesoidPodMysi = kes;
+		if (wpt != wptPodMysi) {
+			final Wpt staraKes = wptPodMysi;
 			// repaint();
 			repaintKes(staraKes);
-			repaintKes(kesoidPodMysi);
+			wptPodMysi = wpt;
+			repaintKes(wptPodMysi);
 		}
 
 		if (wptPodMysi != null) {
@@ -438,8 +436,8 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 				}
 			}
 			// Vykreslení zvýrazněných
-			if (kesoidPodMysi != null) {
-				for (final Wpt wpt : kesoidPodMysi.getRelatedWpts()) {
+			if (wptPodMysi != null) {
+				for (final Wpt wpt : wptPodMysi.getRelatedWpts()) {
 					paintWaypoint(gg, wpt, null, i);
 				}
 			}
@@ -465,13 +463,12 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 		g = g.with(cestyModel.isOnVylet(wpt) ? genom.ALELA_nacestejsou : genom.ALELA_mimocesticu);
 
-		if (wpt.getKesoid() == kesoidPodMysi) {
+		if (wptPodMysi != null && wptPodMysi.maTohotoMeziRelated(wpt)) {
 			g = g.with(genom.ALELA_mousean);
 		}
 		if (wpt == wptPodMysi) {
 			g = g.with(genom.ALELA_mouseon);
 		}
-		System.out.println("POSAVENI ALELNI " +g.getAlela(g.getGenom().GEN_postavenikMysi));
 		g = g.without(fenotypoveZakazaneAlely);
 		return g;
 	}
@@ -628,7 +625,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	// System.out.println("Kesoidy finalizovány");
 	// }
 
-	private void repaintKes(final Kesoid kes) {
+	private void repaintKes(final Wpt kes) {
 		if (kes == null) {
 			return;
 		}

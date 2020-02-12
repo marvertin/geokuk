@@ -112,4 +112,13 @@ public interface Wpt extends Uchopenec {
 
 	void setSklivec(Sklivec sklivec);
 
+	default boolean maTohotoMeziRelated(final Wpt wpt) {
+		for (final Wpt w : getRelatedWpts()) {
+			if (w == wpt) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
