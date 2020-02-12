@@ -102,17 +102,28 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 		return genotyp;
 	}
 
+	public void recomputeGenotypIfExists() {
+		if (genotyp != null) {
+			computeGenotyp(genotyp.getGenom());
+		}
+
+	}
+
 	/**
 	 * Pokud neexistuje gentotyp vypočte ho a schová.
 	 * @param genom
 	 */
 	private void computeGenotypIfNotExists(final Genom genom) {
 		if (genotyp == null) {
-			final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom);
-			final Genotyp g = genom.UNIVERZALNI_DRUH.genotypVychozi();
-			genotyp = getKesoid().doBuildGenotyp(genotypBuilder.build(this, g));
-			assert genotyp != null;
+			computeGenotyp(genom);
 		}
+	}
+
+	private void computeGenotyp(final Genom genom) {
+		final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom);
+		final Genotyp g = genom.UNIVERZALNI_DRUH.genotypVychozi();
+		genotyp = getKesoid().doBuildGenotyp(genotypBuilder.build(this, g));
+		assert genotyp != null;
 	}
 
 	/**

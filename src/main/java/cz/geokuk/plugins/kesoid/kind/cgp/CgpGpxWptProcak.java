@@ -291,6 +291,10 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 		cgp.setUrl(wm.getUrl());
 		cgp.setAuthor(wm.getAuthor());
 		cgp.setHidden(wm.getHidden());
+		// TODO [veverka] Důsledek redundance a mutabilty waypointu, když se něco změní, musí se přepočítat genotyp, chělo by to udělat jinak -- 12. 2. 2020 18:10:13 veverka
+		for (final Wpt wpt : cgp.getRelatedWpts()) {
+			((Wpti)wpt).recomputeGenotypIfExists();
+		}
 		return true;
 	}
 
