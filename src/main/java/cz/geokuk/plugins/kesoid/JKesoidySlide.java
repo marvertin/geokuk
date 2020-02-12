@@ -465,12 +465,13 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 		g = g.with(cestyModel.isOnVylet(wpt) ? genom.ALELA_nacestejsou : genom.ALELA_mimocesticu);
 
-		if (wpt == wptPodMysi) {
-			g = g.with(genom.ALELA_mouseon);
-		}
 		if (wpt.getKesoid() == kesoidPodMysi) {
 			g = g.with(genom.ALELA_mousean);
 		}
+		if (wpt == wptPodMysi) {
+			g = g.with(genom.ALELA_mouseon);
+		}
+		System.out.println("POSAVENI ALELNI " +g.getAlela(g.getGenom().GEN_postavenikMysi));
 		g = g.without(fenotypoveZakazaneAlely);
 		return g;
 	}
