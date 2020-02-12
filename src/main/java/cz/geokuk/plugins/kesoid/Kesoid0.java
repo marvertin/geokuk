@@ -147,7 +147,7 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 
 	//////////////////////////////////////////////////////////////////
 	@Override
-	public Iterable<Wpt> getWpts() {
+	public Iterable<Wpt> getRelatedWpts() {
 		return () -> new Iterator<Wpt>() {
 
 			private Weikoid0 curwk = Kesoid0.this.next; // na první waypoint
@@ -169,17 +169,6 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 				throw new UnsupportedOperationException();
 			}
 		};
-	}
-
-	@Override
-	public int getWptsCount() {
-		int count = 0;
-		for (@SuppressWarnings("unused")
-		final Wpt wpt : getWpts()) {
-			count++;
-		}
-		return count;
-
 	}
 
 

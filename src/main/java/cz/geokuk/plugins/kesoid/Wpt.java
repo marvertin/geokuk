@@ -58,6 +58,15 @@ public interface Wpt extends Uchopenec {
 	 */
 	File getSourceFile();
 
+	/**
+	 * @return Vrací waypointy, které jsou nějak svázané z daným waypoitem + tento waypoint.
+	 */
+
+	default Iterable<Wpt> getRelatedWpts() {
+		// // TODO [veverka] Implementovat přidání tohoto waypointu až se bude měnit zůsob získávání korelovaných wpts. -- 11. 2. 2020 13:36:28 veverka
+		return getKesoid().getRelatedWpts();
+	}
+
 ////////////////////// Položky infrastrukturní ///////////////////////////
 	/**
 	 * Plugin, ze kterého waypoint pochází. Každý waypoint pochzí z nějakého pluginu.

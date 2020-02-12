@@ -439,7 +439,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 			}
 			// Vykreslení zvýrazněných
 			if (kesoidPodMysi != null) {
-				for (final Wpt wpt : kesoidPodMysi.getWpts()) {
+				for (final Wpt wpt : kesoidPodMysi.getRelatedWpts()) {
 					paintWaypoint(gg, wpt, null, i);
 				}
 			}
@@ -511,7 +511,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 		///
 		final Kesoid kesoid = mysNadWpt.getKesoid();
-		addToPopup(p, new ZoomKesAction(kesoid));
+		addToPopup(p, new ZoomKesAction(mysNadWpt));
 		final JMenuItem item = new JMenuItem(factory.init(new CenterWaypointAction(mysNadWpt)));
 		item.setText("Centruj");
 		// TODO Dát ikonu středování
@@ -534,7 +534,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		addToPopup(p, new VyletNeAction(mysNadWpt));
 		addToPopup(p, new VyletNevimAction(mysNadWpt));
 		p.addSeparator();
-		for (final Wpt wpt : kesoid.getWpts()) {
+		for (final Wpt wpt : kesoid.getRelatedWpts()) {
 			addToPopup(p, new CenterWaypointAction(wpt));
 		}
 	}
@@ -631,7 +631,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		if (kes == null) {
 			return;
 		}
-		for (final Wpt wpt : kes.getWpts()) {
+		for (final Wpt wpt : kes.getRelatedWpts()) {
 			repaintWpt(wpt);
 		}
 	}

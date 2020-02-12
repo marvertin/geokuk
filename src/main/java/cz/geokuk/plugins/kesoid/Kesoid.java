@@ -40,22 +40,23 @@ public interface Kesoid {
 	/**
 	 * Hlavní metoda, která poskytuje informaci o tom, které waypointy patří kešoidu.
 	 * Asi by měla přejít na waypoint.
-	 * @return
+	 * @return Vrací waypointy, které jsou nějak svázané z daným waypoitem.
 	 */
-	Iterable<Wpt> getWpts();
+	Iterable<Wpt> getRelatedWpts();
 
-	// Použito do titulku o počtu waypontů při zůmování keše
-	int getWptsCount();
 
-	// Tady jsou věci, které používá jen detailní okno v pravém dolním rohu, které by mělo být také poplatnédanému pluginu.
+	// Tady jsou věci, které používá jen detailní okno v pravém dolním rohu a hledání, které by mělo být také poplatnédanému pluginu.
 
 	/**
+	 * - detail
 	 * @deprecated Zlikvidovat, až se dostane pravý dolní roh do pluginů.
 	 */
 	@Deprecated
 	EKesStatus getStatus();
 
 	/**
+	 * - detail
+	 * - zjištění priority
 	 * @deprecated TODO [veverka] Zlikvidovat, použito jen na pro zjiětění priority a na pravý dolní roh, to má býát řešeno jinak  -- 6. 2. 2020 11:11:11 veverka
 	 * @return
 	 */
@@ -63,6 +64,7 @@ public interface Kesoid {
 	EKesoidKind getKesoidKind();
 
 	/**
+	 *  - detail
 	 * @deprecated To je datum založení, mělo by to být v luginu jen pro ty, kteří nějaké založení z principu mají. Nebo ho mají všichni?
 	 * Nebo většina?
 	 * A mělo by se to jmenovat logičtěji. Určitě promyslet.
@@ -72,14 +74,18 @@ public interface Kesoid {
 	String getHidden();
 
 	/**
+	 *  - detail
 	 * Vztahy jsou víceméně jen ke keším a možná waymarkům. Možná dát do pluginů. ale nevím.
 	 * @return
 	 */
 	EKesVztah getVztah();
 
 
-	/** Ne vše má autora, ale hodně věcí ano, tak budiž. Mělo by to být na waypointu.
-	 * @deprecated Dát na waypoint, teroreticky může mít každý waypoint autora jiného.
+	/**
+	 *  - heldání
+	 *  - detail
+	 *  Ne vše má autora, ale hodně věcí ano, tak budiž. Mělo by to být na waypointu.
+	 *  @deprecated Dát na waypoint, teroreticky může mít každý waypoint autora jiného.
 	 */
 	@Deprecated
 	String getAuthor();

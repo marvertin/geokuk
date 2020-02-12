@@ -62,7 +62,7 @@ public class KesoidFilter {
 			return evylKes != EVylet.NE; // takže když neříkám ne, nechám totam
 		}
 		case JEN_LOVENE: {// jen lovené, ale zobrazme vše, co s tím souvisí
-			for (final Wpt wtpx : wpt.getKesoid().getWpts()) {
+			for (final Wpt wtpx : wpt.getRelatedWpts()) {
 				final EVylet evylKes = vyletModel.get(wtpx);
 				if (evylKes == EVylet.ANO) {
 					return true;
