@@ -1,7 +1,6 @@
 package cz.geokuk.plugins.kesoid.kind.waymark;
 
-import cz.geokuk.plugins.kesoid.EKesVztah;
-import cz.geokuk.plugins.kesoid.Wpti;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -24,7 +23,7 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 	@Override
 	public EProcakResult process(final GpxWpt gpxwpt) {
 
-		Waymark wm;
+		Wpt wm;
 		if (isWaymarkNormal(gpxwpt)) {
 			wm = createWaymarkNormal(gpxwpt);
 		} else if (isWaymarkGeoget(gpxwpt)) {
@@ -32,7 +31,7 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		} else {
 			return EProcakResult.NEVER;
 		}
-		wpts.expose(wm.getMainWpt());
+		wpts.expose(wm);
 		return EProcakResult.DONE;
 	}
 
@@ -50,7 +49,7 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 	}
 
 
-	private Waymark createWaymarkGeoget(final GpxWpt gpxwpt) {
+	private Wpt createWaymarkGeoget(final GpxWpt gpxwpt) {
 		final Waymark wm = new Waymark();
 		wm.setIdentifier(gpxwpt.name);
 		if (ctx.getGccomNick().name.equals(gpxwpt.groundspeak.placedBy)) {
@@ -68,10 +67,10 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 
 		wm.addWpt(wpti);
 		wm.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
-		return wm;
+		return wpti;
 	}
 
-	private Waymark createWaymarkNormal(final GpxWpt gpxwpt) {
+	private Wpt createWaymarkNormal(final GpxWpt gpxwpt) {
 		final Waymark wm = new Waymark();
 		wm.setIdentifier(gpxwpt.name);
 		if (gpxwpt.groundspeak != null) {
@@ -93,7 +92,7 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		wm.addWpt(wpti);
 		wm.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
 
-		return wm;
+		return wpti;
 	}
 
 

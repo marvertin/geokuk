@@ -46,16 +46,16 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 			case EARTHCACHE:
 			case WHERIGO:
 			{
-				final CzechGeodeticPoint cgp = createCgp(gpxwpt);
-				mapaPredTeckou.put(extrahujPrefixPredTeckou(gpxwpt), cgp);
-				wpts.expose(cgp.getMainWpt());
+				final CgpWithWpt cgpwpt = createCgp(gpxwpt);
+				mapaPredTeckou.put(extrahujPrefixPredTeckou(gpxwpt), cgpwpt.cgp);
+				wpts.expose(cgpwpt.wpt);
 				return EProcakResult.DONE;
 			}
 			case EVENT:
 			case CACHE_IN_TRASH_OUT_EVENT:
 			case MEGA_EVENT:
 			{
-				wpts.expose(createCgp(gpxwpt).getMainWpt());
+				wpts.expose(createCgp(gpxwpt).wpt);
 				return EProcakResult.DONE;
 			}
 			case LETTERBOX_HYBRID:
@@ -66,7 +66,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 						final Wpt wpt = pridruz(cgp2, gpxwpt);
 						wpts.expose(wpt);
 					} else {
-						wpts.expose(createCgp(gpxwpt).getMainWpt());
+						wpts.expose(createCgp(gpxwpt).wpt);
 					}
 					return EProcakResult.DONE;
 				} else {
@@ -112,7 +112,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 	 * @param aGpxwpt
 	 * @return
 	 */
-	private CzechGeodeticPoint createCgp(final GpxWpt gpxwpt) {
+	private CgpWithWpt createCgp(final GpxWpt gpxwpt) {
 		final CzechGeodeticPoint cgp = new CzechGeodeticPoint();
 		final String suroveCisloBodu = gpxwpt.groundspeak.name;
 		String cisloBodu = suroveCisloBodu;
@@ -138,7 +138,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 		cgp.addWpt(wpti);
 		cgp.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
 
-		return cgp;
+		return new CgpWithWpt(cgp, wpti);
 	}
 
 	/**
@@ -384,5 +384,10 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 	}
 
 
+	@Data
+	private static class CgpWithWpt {
+		private final CzechGeodeticPoint cgp;
+		private final Wpt wpt;
+	}
 
 }

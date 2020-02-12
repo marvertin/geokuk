@@ -1,5 +1,6 @@
 package cz.geokuk.plugins.kesoid.kind.photo;
 
+import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
@@ -21,7 +22,7 @@ public class PhotoGpxWptProcak implements GpxWptProcak {
 	@Override
 	public EProcakResult process(final GpxWpt gpxwpt) {
 		if (isPhoto(gpxwpt)) {
-			wpts.expose(createPhoto(gpxwpt).getMainWpt());
+			wpts.expose(createPhoto(gpxwpt));
 			return EProcakResult.DONE;
 		} else {
 			return EProcakResult.NEVER;
@@ -35,7 +36,7 @@ public class PhotoGpxWptProcak implements GpxWptProcak {
 	}
 
 
-	private Photo createPhoto(final GpxWpt gpxwpt) {
+	private Wpt createPhoto(final GpxWpt gpxwpt) {
 		final Wpti wpti = builder.createWpt(gpxwpt, PhotoPlugin.PHOTO);
 		wpti.setSym(gpxwpt.sym);
 
@@ -45,7 +46,7 @@ public class PhotoGpxWptProcak implements GpxWptProcak {
 		photo.addWpt(wpti);
 		log.debug("photo: " + photo.getFirstWpt());
 		photo.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
-		return photo;
+		return wpti;
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package cz.geokuk.plugins.kesoid.kind.munzee;
 
-import cz.geokuk.plugins.kesoid.EKesVztah;
-import cz.geokuk.plugins.kesoid.Wpti;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.importek.GpxWpt;
 import cz.geokuk.plugins.kesoid.importek.WptReceiver;
 import cz.geokuk.plugins.kesoid.kind.*;
@@ -24,8 +23,7 @@ public class MunzeeGpxWptProcak implements GpxWptProcak {
 	@Override
 	public EProcakResult process(final GpxWpt gpxwpt) {
 		if (isMunzee(gpxwpt)) {
-			final Munzee munzee = createMunzee(gpxwpt);
-			wpts.expose(munzee.getMainWpt());
+			wpts.expose(createMunzeeWpt(gpxwpt));
 			return EProcakResult.DONE;
 		} else {
 			return EProcakResult.NEVER;
@@ -39,7 +37,7 @@ public class MunzeeGpxWptProcak implements GpxWptProcak {
 
 
 
-	private Munzee createMunzee(final GpxWpt gpxwpt) {
+	private Wpt createMunzeeWpt(final GpxWpt gpxwpt) {
 		final Munzee mz = new Munzee();
 		mz.setIdentifier(gpxwpt.name);
 		if (ctx.getGccomNick().name.equals(gpxwpt.groundspeak.placedBy)) {
@@ -63,7 +61,7 @@ public class MunzeeGpxWptProcak implements GpxWptProcak {
 
 		mz.addWpt(wpti);
 		mz.setUserDefinedAlelas(ctx.definujUzivatslskeAlely(gpxwpt));
-		return mz;
+		return wpti;
 	}
 
 
