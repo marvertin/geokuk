@@ -92,8 +92,6 @@ public interface Wpt extends Uchopenec {
 
 	EZOrder getZorder();
 
-	boolean isMainWpt();
-
 	String getSym();
 
 	boolean hasEmptyCoords();

@@ -120,9 +120,10 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	}
 
 	private void computeGenotyp(final Genom genom) {
-		final GenotypBuilderWpt genotypBuilder = new GenotypBuilderWpt(genom);
-		final Genotyp g = genom.UNIVERZALNI_DRUH.genotypVychozi();
-		genotyp = getKesoid().doBuildGenotyp(genotypBuilder.build(this, g));
+		final Genotyp g = genom.UNIVERZALNI_DRUH.genotypVychozi()
+				.with(genom.alelaSym(getSym(), null, null))
+				.with(isMainWpt() ? genom.ALELA_h : genom.ALELA_v);
+		genotyp = getKesoid().doBuildGenotyp(g);
 		assert genotyp != null;
 	}
 
@@ -220,7 +221,6 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 		setSklivec(null);
 	}
 
-	@Override
 	public boolean isMainWpt() {
 		return getKesoid().getFirstWpt() == this;
 	}
