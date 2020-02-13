@@ -86,9 +86,6 @@ public class JPopiskySlide extends JSingleSlide0 {
 		final int posuny = fontMetrics.getDescent() - height2;
 		final Map<Kepodr, SestavovacPopisku> sestavmapa = new HashMap<>();
 		iIndexator.bound(getSoord().getBoundingRect()).stream().forEach(wpt -> {
-			if (!wpt.isMainWpt()) {
-				return;
-			}
 			final Mou mou = wpt.getMou();
 			final Point p = getSoord().transform(mou);
 			p.x -= 10;
