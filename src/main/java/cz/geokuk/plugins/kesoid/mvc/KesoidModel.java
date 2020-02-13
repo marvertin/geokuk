@@ -149,12 +149,12 @@ public class KesoidModel extends Model0 {
 		}
 	}
 
-	public void pridejKodKesoiduDoClipboardu(final Kesoid kes) {
-		if (kes == null) {
+	public void pridejKodKesoiduDoClipboardu(final Wpt wpt) {
+		if (wpt == null) {
 			return;
 		}
 		final Clipboard scl = getSystemClipboard();
-		final StringSelection ss = new StringSelection(kes.getIdentifier());
+		final StringSelection ss = new StringSelection(wpt.getIdentifier());
 		try {
 			scl.setContents(ss, null);
 		} catch (final IllegalStateException e2) {

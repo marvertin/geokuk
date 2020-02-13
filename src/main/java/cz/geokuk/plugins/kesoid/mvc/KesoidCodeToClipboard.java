@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import cz.geokuk.core.coord.PoziceChangedEvent;
 import cz.geokuk.core.coord.Poziceq;
 import cz.geokuk.framework.Action0;
-import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
 
 /**
@@ -18,7 +17,7 @@ import cz.geokuk.plugins.kesoid.Wpt;
 public class KesoidCodeToClipboard extends Action0 {
 
 	private static final long serialVersionUID = -8054017274338240706L;
-	private final Kesoid kesoid;
+	private final Wpt wpt;
 	private Poziceq poziceq = new Poziceq();
 	private KesoidModel kesoidModel;
 
@@ -26,9 +25,9 @@ public class KesoidCodeToClipboard extends Action0 {
 	 *
 	 */
 	public KesoidCodeToClipboard(final Wpt wpt) {
-		super("<html>Identifikátor <i>" + wpt.getKesoid().getIdentifier() + "</i> do schráky");
-		kesoid = wpt.getKesoid();
-		putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží kód kešoidu.");
+		super("<html>Identifikátor <i>" + wpt.getIdentifier() + "</i> do schráky");
+		this.wpt = wpt;
+		putValue(SHORT_DESCRIPTION, "Do systémového clipboardu vloží kód waypointu.");
 
 		// putValue(MNEMONIC_KEY, InputEvent.)
 		// putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("F7"));
@@ -42,9 +41,9 @@ public class KesoidCodeToClipboard extends Action0 {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		Kesoid kes = kesoid;
+		Wpt kes = wpt;
 		if (kes == null) {
-			kes = poziceq.getKesoid();
+			kes = poziceq.getWpt();
 			if (kes == null) {
 				return;
 			}
@@ -58,12 +57,12 @@ public class KesoidCodeToClipboard extends Action0 {
 
 	public void onEvent(final PoziceChangedEvent event) {
 		poziceq = event.poziceq;
-		setEnabled(kesoid != null || poziceq.getWpt() != null);
+		setEnabled(wpt != null || poziceq.getWpt() != null);
 	}
 
 
 	@Override
 	public boolean shouldBeVisible() {
-		return kesoid != null && kesoid.getIdentifier() != null;
+		return wpt != null && wpt.getIdentifier() != null;
 	}
 }
