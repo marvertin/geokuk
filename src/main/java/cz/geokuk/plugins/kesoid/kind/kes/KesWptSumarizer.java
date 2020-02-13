@@ -33,7 +33,7 @@ public class KesWptSumarizer extends Model0  implements WptSumarizer {
 
 	@Override
 	public void afterLoaded(final Wpt wpt) {
-		final Kesoid kesoid = wpt.getKesoid();
+		final Kesoid kesoid = wpt.getKoid();
 		final Kes kes = (Kes) kesoid;
 		maximalniBestOf = Math.max(maximalniBestOf, kes.getBestOf());
 		maximalniHodnoceni = Math.max(maximalniHodnoceni, kes.getHodnoceni());

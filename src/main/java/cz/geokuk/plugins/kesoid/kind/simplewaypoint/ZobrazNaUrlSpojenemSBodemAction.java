@@ -24,7 +24,7 @@ public class ZobrazNaUrlSpojenemSBodemAction extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaUrlSpojenemSBodemAction(final Wpt wpt)  {
-		super(wpt.getKesoid().getUrl());
+		super(wpt.getUrl());
 		putValue(NAME, "Zobrazení na webu");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("internet.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí nawebu spojeném s bodem.");

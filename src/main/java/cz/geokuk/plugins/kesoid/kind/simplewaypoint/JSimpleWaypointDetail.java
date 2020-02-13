@@ -24,7 +24,7 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
 
 	@Override
 	public void napln(final Wpt wpt) {
-		simwpt = (SimpleWaypoint) wpt.getKesoid();
+		simwpt = (SimpleWaypoint) wpt.getKoid();
 		napln();
 	}
 

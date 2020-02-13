@@ -27,7 +27,7 @@ public class JMunzeeDetail extends JKesoidDetail0 {
 
 	@Override
 	public void napln(final Wpt wpt) {
-		munzee = (Munzee) wpt.getKesoid();
+		munzee = (Munzee) wpt.getKoid();
 		napln();
 	}
 

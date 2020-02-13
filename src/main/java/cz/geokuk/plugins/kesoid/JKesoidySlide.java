@@ -501,7 +501,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		}
 
 		///
-		final Kesoid kesoid = mysNadWpt.getKesoid();
 		addToPopup(p, new ZoomKesAction(mysNadWpt));
 		final JMenuItem item = new JMenuItem(factory.init(new CenterWaypointAction(mysNadWpt)));
 		item.setText("Centruj");
@@ -525,7 +524,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 		addToPopup(p, new VyletNeAction(mysNadWpt));
 		addToPopup(p, new VyletNevimAction(mysNadWpt));
 		p.addSeparator();
-		for (final Wpt wpt : kesoid.getRelatedWpts()) {
+		for (final Wpt wpt : mysNadWpt.getRelatedWpts()) {
 			addToPopup(p, new CenterWaypointAction(wpt));
 		}
 	}

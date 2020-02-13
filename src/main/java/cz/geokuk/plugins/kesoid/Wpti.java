@@ -147,7 +147,6 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	// return prefix;
 	// }
 
-	@Override
 	public Kesoid0 getKesoid() {
 		for (Weikoid0 weik = next;; weik = weik.next) {
 			if (weik instanceof Kesoid) {

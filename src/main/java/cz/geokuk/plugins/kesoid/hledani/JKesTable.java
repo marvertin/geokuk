@@ -151,7 +151,7 @@ public class JKesTable extends JPanel {
 		}
 
 		private String computeAutora(final Wpt wpt) {
-			final String author = wpt.getKesoid().getAuthor();
+			final String author = wpt.getAuthor();
 			return author == null ? "" : author;
 		}
 

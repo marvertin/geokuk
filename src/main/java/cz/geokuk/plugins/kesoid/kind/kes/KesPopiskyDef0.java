@@ -8,7 +8,7 @@ public abstract class KesPopiskyDef0 extends PopiskyDefBuilder0 {
 
 
 	private static Kes kes(final Wpt wpt) {
-		return (Kes) wpt.getKesoid();
+		return (Kes) wpt.getKoid();
 	}
 
 	@Override

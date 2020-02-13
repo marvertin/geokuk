@@ -90,7 +90,7 @@ public class KesPlugin implements KesoidPlugin {
 
 	@Override
 	public int getPolomerObsazenosti(final Wpt wpt) {
-		if (wpt.getKesoid().getStatus() == EKesStatus.ARCHIVED) {
+		if (wpt.getStatus() == EKesStatus.ARCHIVED) {
 			return 0;
 		}
 		final EKesWptType type = EKesWptType.decode(wpt.getSym());

@@ -11,7 +11,6 @@ import cz.geokuk.core.program.Akce;
 import cz.geokuk.framework.AfterInjectInit;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.*;
-import cz.geokuk.plugins.kesoid.data.EKesoidKind;
 import cz.geokuk.plugins.kesoid.kind.KesoidPlugin;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.kind.kes.ZobrazNaGcComAction;
@@ -36,11 +35,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 
 	//private Kesoid kesoid;
 
-	private JLabel jKesoidCode;
-	private JLabel jKesoidNazev;
-	private JLabel jKesoidSym;
-
-	private JLabel jWptIdentifier;
+	private JLabel jWptCode;
 	private JLabel jWptNazev;
 	private JLabel jWptSym;
 
@@ -180,21 +175,17 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	}
 
 	protected void napln() {
-		final Kesoid kesoid = wpt.getKesoid();
-		jKesoidCode.setText(kesoid.getKesoidKind() == EKesoidKind.CGP ? wpt.getIdentifier() : kesoid.getIdentifier());
-		jKesoidNazev.setText(formatuj(kesoid.getNazev(), kesoid.getStatus()));
-		jKesoidSym.setText(wpt.getSym());
-
-		jWptIdentifier.setText(wpt.getIdentifier());
-		jWptNazev.setText(formatuj(wpt.getNazev(), kesoid.getStatus()));
+		jWptCode.setText(wpt.getIdentifier());
+		jWptNazev.setText(formatuj(wpt.getNazev(), wpt.getStatus()));
 		jWptSym.setText(wpt.getSym());
+
 		jRucnePridany.setText(wpt.isRucnePridany() ? "+" : "*");
 		jRucnePridany.setToolTipText(wpt.isRucnePridany() ? "Waypoint byl ručně přidán v Geogetu nebo podobném programu." : "Waypoint byl obsažen v PQ");
 		final int elevation = wpt.getElevation();
 		jElevation.setText(elevation == 0 ? null : elevation + " m n. m.");
-		jAuthor.setText(kesoid.getAuthor());
-		jHiddenTime.setText(JKesoidDetail0.formatujDatum(kesoid.getHidden()));
-		jVztah.setIcon(vztah(kesoid.getVztah()));
+		jAuthor.setText(wpt.getAuthor());
+		jHiddenTime.setText(JKesoidDetail0.formatujDatum(wpt.getHidden()));
+		jVztah.setIcon(vztah(wpt.getVztah()));
 		if (ikonBag != null) {
 			jType.setIcon(ikonBag.seekIkon(wpt.getGenotyp()));
 		}
@@ -211,13 +202,10 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 	}
 
 	private void initComponents() {
-		jKesoidCode = new JLabel();
-		jKesoidNazev = new JLabel();
-		jKesoidSym = new JLabel();
-
-		jWptIdentifier = new JLabel();
+		jWptCode = new JLabel();
 		jWptNazev = new JLabel();
 		jWptSym = new JLabel();
+
 
 		jType = new JLabel();
 		jAuthor = new JLabel();
@@ -244,15 +232,15 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		vyletNevimButton.setAction(akce.vyletNevimAction);
 		vyletNevimButton.setText(null);
 
-		jKesoidCode.setForeground(Color.RED);
-		jKesoidNazev.setFont(jKesoidNazev.getFont().deriveFont(Font.BOLD));
-		jKesoidSym.setFont(jKesoidSym.getFont().deriveFont(Font.ITALIC));
+		jWptCode.setForeground(Color.RED);
+		jWptNazev.setFont(jWptNazev.getFont().deriveFont(Font.BOLD));
+		jWptSym.setFont(jWptSym.getFont().deriveFont(Font.ITALIC));
 		final Box hlav = Box.createVerticalBox();
 		add(hlav);
 
 		{
 			final Box box1 = Box.createHorizontalBox();
-			box1.add(jKesoidNazev);
+			box1.add(jWptNazev);
 			box1.add(Box.createHorizontalStrut(10));
 			hlav.add(box1);
 		}
@@ -266,10 +254,10 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 			box2a.add(jAzimut);
 
 			final Box box2b = Box.createVerticalBox();
-			jKesoidSym.setAlignmentX(RIGHT_ALIGNMENT);
-			jKesoidCode.setAlignmentX(RIGHT_ALIGNMENT);
-			box2b.add(jKesoidCode);
-			box2b.add(jKesoidSym);
+			jWptSym.setAlignmentX(RIGHT_ALIGNMENT);
+			jWptCode.setAlignmentX(RIGHT_ALIGNMENT);
+			box2b.add(jWptCode);
+			box2b.add(jWptSym);
 
 			final Box box2 = Box.createHorizontalBox();
 			box2.add(jType);

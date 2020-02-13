@@ -78,7 +78,6 @@ public class CestyZperzistentnovac {
 					if (mouable instanceof Wpt) {
 						final Wpt wpt = (Wpt) mouable;
 						zapisKdyzNeni(wrt, wpt.getIdentifier(), exportovano);
-						zapisKdyzNeni(wrt, wpt.getKesoid().getIdentifier(), exportovano);
 					}
 
 				}

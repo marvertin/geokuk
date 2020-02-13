@@ -9,9 +9,6 @@ public class CgpPopiskyDef extends PopiskyDefBuilder0 {
 	public void init() {
 		label = "Český geodetický bod";
 		defaultPattern = "{wpt}";
-
-		def("{puvodnipotvora}", (sb, wpt) -> sb.append(wpt.getKesoid().getIdentifier()));
-
 	}
 
 

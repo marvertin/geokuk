@@ -24,7 +24,7 @@ public class ZobrazNaWaymarkingComAction extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaWaymarkingComAction(final Wpt wpt)  {
-		super(wpt.getKesoid().getUrl());
+		super(wpt.getUrl());
 		putValue(NAME, "Zobrazení na waymarking.com");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("waymarking.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí listing waymarku na oficialním webu \"waymarking.com\".");

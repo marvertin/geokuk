@@ -24,7 +24,7 @@ public class ZobrazNaMunzeeCom extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaMunzeeCom(final Wpt wpt)  {
-		super(wpt.getKesoid().getUrl());
+		super(wpt.getUrl());
 		putValue(NAME, "Zobrazení na munzee.com");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("munzee.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí listing munzee na oficiálním webu munzee.com.");

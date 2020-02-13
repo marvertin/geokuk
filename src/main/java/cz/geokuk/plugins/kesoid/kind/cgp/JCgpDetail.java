@@ -30,7 +30,7 @@ public class JCgpDetail extends JKesoidDetail0 {
 
 	@Override
 	public void napln(final Wpt wpt) {
-		cgp = (CzechGeodeticPoint) wpt.getKesoid();
+		cgp = (CzechGeodeticPoint) wpt.getKoid();
 		jXjtsk.setText(cgp.getXjtsk() + "");
 		jYjtsk.setText(cgp.getYjtsk() + "");
 	}

@@ -24,7 +24,7 @@ public class ZobrazNaUrlSpojenemSFotkouAction extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaUrlSpojenemSFotkouAction(final Wpt wpt)  {
-		super(wpt.getKesoid().getUrl());
+		super(wpt.getUrl());
 		putValue(NAME, "Zobrazení na webu");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("internet.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí na webu spojeneém s fotkou.");

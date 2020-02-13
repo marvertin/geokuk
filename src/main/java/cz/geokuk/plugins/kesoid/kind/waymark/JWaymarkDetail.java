@@ -27,7 +27,7 @@ public class JWaymarkDetail extends JKesoidDetail0 {
 
 	@Override
 	public void napln(final Wpt wpt) {
-		waym = (Waymark) wpt.getKesoid();
+		waym = (Waymark) wpt.getKoid();
 		napln();
 	}
 

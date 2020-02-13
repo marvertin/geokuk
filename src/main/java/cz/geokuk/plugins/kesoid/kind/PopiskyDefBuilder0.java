@@ -20,16 +20,14 @@ public abstract class PopiskyDefBuilder0 {
 		def("{wpt}", (sb, wpt) -> sb.append(wpt.getIdentifier()));
 
 
-		def("{autor}", (sb, wpt) -> sb.append(wpt.getKesoid().getAuthor()));
+		def("{autor}", (sb, wpt) -> sb.append(wpt.getAuthor()));
 
 		def("{nazev}", (sb, wpt) -> sb.append(wpt.getNazev()));
 
-		def("{zalozeno}", (sb, wpt) -> sb.append(wpt.getKesoid().getHidden()));
+		def("{zalozeno}", (sb, wpt) -> sb.append(wpt.getHidden()));
 		def("{nbsp}", new SestavovacPopisku.NahrKonstantni(" "));
 
 		def("{br}", SestavovacPopisku.NAHRBR);
-
-		def("{puvodnipotvora}", (sb, wpt) -> sb.append(wpt.getKesoid().getNazev()));
 
 		init();
 		return this;

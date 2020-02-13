@@ -85,7 +85,7 @@ public class Hledac extends Hledac0<Nalezenec> {
 			if (getFuture() != null && getFuture().isCancelled()) {
 				return null;
 			}
-			final String[] prohledavanci = wpt.getKesoid().getProhledavanci();
+			final String[] prohledavanci = wpt.getProhledavanci();
 			Nalezenec nal = null;
 			for (final String prohledavanec : prohledavanci) {
 				if (prohledavanec != null) {

@@ -32,7 +32,7 @@ public class TiskniNaGcComAction extends OpenUrlAction0 {
 
 	@SneakyThrows
 	private static URL getUrlPrint(final Wpt wpt) {
-		final String urls = wpt.getKesoid().getUrl().toExternalForm();
+		final String urls = wpt.getUrl().toExternalForm();
 		System.out.println(urls);
 		if (urls.startsWith(URL_PREFIX_SHOW)) {
 			return new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));

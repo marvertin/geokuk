@@ -24,7 +24,7 @@ public class ZobrazNaDatazCuzkCzAction extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaDatazCuzkCzAction(final Wpt wpt)  {
-		super(wpt.getKesoid().getUrl());
+		super(wpt.getUrl());
 		putValue(NAME, "Zobrazení na dataz.cuzk.cz");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("dataz.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí oficiální geodetické údaje na webu zeměměřičského úřadu.");

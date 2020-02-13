@@ -24,7 +24,7 @@ public class ZobrazNaGcComAction extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaGcComAction(final Wpt wpt)  {
-		super(url("https://coord.info/" + wpt.getKesoid().getIdentifier()));
+		super(url("https://coord.info/" + wpt.getKoid().getIdentifier())); // sem se nesmí dát aditional waypoint
 		putValue(NAME, "Zobrazení na gc.com");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("gccom-green-16.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí listing keše na oficiálním webu webu \"geocaching.com\".");
