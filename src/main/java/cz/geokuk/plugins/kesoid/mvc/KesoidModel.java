@@ -123,12 +123,12 @@ public class KesoidModel extends Model0 {
 		startIkonLoad(false);
 	}
 
-	public void otevriListingVGeogetu(final Kesoid kes) {
-		if (kes == null) {
+	public void otevriListingVGeogetu(final Wpt wpt) {
+		if (wpt == null) {
 			return;
 		}
 		final Clipboard scl = getSystemClipboard();
-		final StringSelection ss = new StringSelection(kes.getUrlProOtevreniListinguVGeogetu().toExternalForm());
+		final StringSelection ss = new StringSelection(wpt.getUrlProOtevreniListinguVGeogetu().toExternalForm());
 		try {
 			scl.setContents(ss, null);
 		} catch (final IllegalStateException e2) {
@@ -136,12 +136,12 @@ public class KesoidModel extends Model0 {
 		}
 	}
 
-	public void pridejDoSeznamuVGeogetu(final Kesoid kes) {
-		if (kes == null) {
+	public void pridejDoSeznamuVGeogetu(final Wpt wpt) {
+		if (wpt == null) {
 			return;
 		}
 		final Clipboard scl = getSystemClipboard();
-		final StringSelection ss = new StringSelection(kes.getUrlProPridaniDoSeznamuVGeogetu().toExternalForm());
+		final StringSelection ss = new StringSelection(wpt.getUrlProPridaniDoSeznamuVGeogetu().toExternalForm());
 		try {
 			scl.setContents(ss, null);
 		} catch (final IllegalStateException e2) {

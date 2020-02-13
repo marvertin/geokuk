@@ -371,5 +371,13 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 		return priorita;
 	}
 
+	/**
+	 * Jen pro účely Wpt, možná je to dočasná meoda.
+	 */
+	@Override
+	public Kesoid getKoid() {
+		return getKesoid();
+	}
+
 
 }

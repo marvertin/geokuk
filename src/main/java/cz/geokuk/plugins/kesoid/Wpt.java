@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.kesoid;
 
 import java.io.File;
+import java.net.URL;
 
 import cz.geokuk.core.coordinates.Uchopenec;
 import cz.geokuk.core.coordinates.Wgs;
@@ -85,6 +86,19 @@ public interface Wpt extends Uchopenec {
 	int getPrioritaUchopovani();
 
 /////////////////// Položky podivné a neroztřídené ////////////////////////////////
+
+	Kesoid getKoid();
+
+	default URL getUrlProOtevreniListinguVGeogetu() {
+		return getKoid().getUrlProOtevreniListinguVGeogetu();
+	}
+
+	default URL getUrlProPridaniDoSeznamuVGeogetu() {
+		return getKoid().getUrlProPridaniDoSeznamuVGeogetu();
+	}
+
+
+
 	Kesoid getKesoid();
 
 
@@ -121,5 +135,6 @@ public interface Wpt extends Uchopenec {
 		}
 		return false;
 	}
+
 
 }

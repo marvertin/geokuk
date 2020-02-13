@@ -2,7 +2,6 @@ package cz.geokuk.core.coord;
 
 import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.cesty.data.Bod;
-import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
 
 public class Poziceq {
@@ -34,14 +33,6 @@ public class Poziceq {
 			return bod;
 		}
 		return null;
-	}
-
-	public Kesoid getKesoid() {
-		final Wpt wpt = getWpt();
-		if (wpt == null) {
-			return null;
-		}
-		return wpt.getKesoid();
 	}
 
 	public Mou getPoziceMou() {
