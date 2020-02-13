@@ -361,5 +361,15 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 		return getKesoid().getSourceFile();
 	}
 
+	@Override
+	public int getPrioritaUchopovani() {
+		int priorita = 40;
+		if (isMainWpt()) {
+			priorita = 50;
+		}
+		priorita -= getKesoid().getKesoidKind().ordinal();
+		return priorita;
+	}
+
 
 }

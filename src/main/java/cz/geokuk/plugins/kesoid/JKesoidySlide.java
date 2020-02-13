@@ -306,8 +306,6 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 	@Override
 	public void mouseMoved(final MouseEvent e, final MouseGestureContext ctx) {
 		final Wpt wpt = najdiWptVBlizkosti(new Point(e.getX(), e.getY()));
-		final Kesoid kes = wpt == null ? null : wpt.getKesoid();
-
 		if (wpt != wptPodMysi) {
 			final Wpt staraKes = wptPodMysi;
 			// repaint();
@@ -366,12 +364,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 		final Wpt wpt = indexator == null ? null : indexator.bound(getSoord().transforToBounding(rect)).locateNearestOne(event.mou.xx, event.mou.yy).orElse(null);
 		if (wpt != null && wpt.getMou().equals(event.mou)) { // je to přesně on
-			int priorita = 40;
-			if (wpt.isMainWpt()) {
-				priorita = 50;
-			}
-			priorita -= wpt.getKesoid().getKesoidKind().ordinal();
-			event.add(wpt, priorita);
+			event.add(wpt, wpt.getPrioritaUchopovani());
 		}
 	}
 

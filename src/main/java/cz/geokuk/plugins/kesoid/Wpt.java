@@ -81,6 +81,9 @@ public interface Wpt extends Uchopenec {
 	Kepodr getKepodr();
 
 
+	/** Vrátí prioritu s jakou má být waypoint uchopen při práci s myší. Čím větší číslo, tím spíš bude uchopen. */
+	int getPrioritaUchopovani();
+
 /////////////////// Položky podivné a neroztřídené ////////////////////////////////
 	Kesoid getKesoid();
 
