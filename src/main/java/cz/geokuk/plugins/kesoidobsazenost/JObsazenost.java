@@ -108,7 +108,7 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		final BoundingRect boundingRect = getSoord().getBoundingRect().rozsir(mouokraj);
 		// final Area area = new Area();
 		iIndexator.bound(boundingRect).stream().forEach(wpt -> {
-			final int polomerObsazenosti = wpt.getKesoidPlugin().getPolomerObsazenosti(wpt);
+			final int polomerObsazenosti = wpt.getPolomerObsazenosti();
 			if (polomerObsazenosti == 0) {
 				return;
 			}

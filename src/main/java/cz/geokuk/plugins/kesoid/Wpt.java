@@ -156,6 +156,16 @@ public interface Wpt extends Uchopenec {
 		return false;
 	}
 
+	/**
+	 * Pokud daný waypoint nějakým způsobem omezuje umístění dalších nějakých waypointů, tak vrátí poloměr krhu,
+	 * kam nesmí být tyto jiné waypointy umístěny. Například 161 m pro keše.
+	 * @param wpt Waypoint, ke kterému se má kreslit kruh.
+	 * @return Poloměr v metrech, nula, pokdu nic nobsazuje. nevrací záporné číslo.
+	 */
+	default int getPolomerObsazenosti() {
+		return getKesoidPlugin().getPolomerObsazenosti(this);
+	}
+
 
 
 }
