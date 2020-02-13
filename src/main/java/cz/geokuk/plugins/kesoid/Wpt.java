@@ -63,7 +63,7 @@ public interface Wpt extends Uchopenec {
 	 */
 
 	default Iterable<Wpt> getRelatedWpts() {
-		// // TODO [veverka] Implementovat přidání tohoto waypointu až se bude měnit zůsob získávání korelovaných wpts. -- 11. 2. 2020 13:36:28 veverka
+		// // TODO [veverka] Implementovat přidání také tohoto waypointu do kolekce až se bude měnit zůsob získávání korelovaných wpts. -- 11. 2. 2020 13:36:28 veverka
 		return getKesoid().getRelatedWpts();
 	}
 

@@ -9,7 +9,7 @@ public interface Kesoid {
 	/**
 	 * @return the firstWpt
 	 */
-	Wpt getFirstWpt();
+	//Wpt getFirstWpt();
 
 
 	/** S tím identifikátorem je potíž, každý waypoint má svůj identifikátor a kešoid také, tak který použít? */

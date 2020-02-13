@@ -68,7 +68,6 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 	/**
 	 * @return the firstWpt
 	 */
-	@Override
 	public Wpt getFirstWpt() {
 		if (next instanceof Wpt) {
 			return (Wpt) next;

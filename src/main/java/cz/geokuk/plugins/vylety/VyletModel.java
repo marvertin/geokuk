@@ -93,7 +93,6 @@ public class VyletModel extends Model0 {
 
 	public void setNewVylet(final Vylet newvylet) {
 		vylet = newvylet;
-		System.out.println("fajruju zmenu vyletu");
 		fire(new VyletChangeEvent(this, null, null, null));
 	}
 

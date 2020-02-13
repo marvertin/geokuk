@@ -183,7 +183,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		final Kesoid kesoid = wpt.getKesoid();
 		jKesoidCode.setText(kesoid.getKesoidKind() == EKesoidKind.CGP ? wpt.getIdentifier() : kesoid.getIdentifier());
 		jKesoidNazev.setText(formatuj(kesoid.getNazev(), kesoid.getStatus()));
-		jKesoidSym.setText(kesoid.getFirstWpt().getSym());
+		jKesoidSym.setText(wpt.getSym());
 
 		jWptIdentifier.setText(wpt.getIdentifier());
 		jWptNazev.setText(formatuj(wpt.getNazev(), kesoid.getStatus()));
