@@ -9,12 +9,13 @@ public class KesFilter {
 	private final KesFilterDefinition filterDefinition;
 
 
-	public boolean filter(final Wpt aWpt) {
-		final Kesoid0 kesoid = ((Wpti)aWpt).getKesoid();
+	public boolean filter(final Wpt aWptx) {
+		final Wpti wpti = (Wpti)aWptx;
+		final Kesoid0 kesoid = wpti.getKesoid();
 
 		if (filterDefinition.isJenFinalUNalezenych()) {
 			if (kesoid.getVztah() == EKesVztah.FOUND || kesoid.getVztah() == EKesVztah.OWN) {
-				if (aWpt != kesoid.getFirstWpt()) {
+				if (wpti != kesoid.getFirstWpt()) {
 					return false;
 				}
 			}
@@ -23,7 +24,7 @@ public class KesFilter {
 		final Kes kes = (Kes) kesoid;
 
 		if (kes.getVztah() == EKesVztah.NORMAL) { // jen u nenalezených
-			if (kes.hasValidFinal() && filterDefinition.isJenDoTerenuUNenalezenych() && !nutnyKLusteni(aWpt) && !Wpti.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())) {
+			if (kes.hasValidFinal() && filterDefinition.isJenDoTerenuUNenalezenych() && !nutnyKLusteni(wpti) && !Wpti.TRADITIONAL_CACHE.equals(kes.getFirstWpt().getSym())) {
 				return false;
 			}
 		}
@@ -47,7 +48,7 @@ public class KesFilter {
 	}
 
 
-	private boolean nutnyKLusteni(final Wpt wpt) {
+	private boolean nutnyKLusteni(final Wpti wpt) {
 		final EKesWptType wptType = EKesWptType.decode(wpt.getSym());
 		return wpt.isMainWpt() || wptType == EKesWptType.QUESTION_TO_ANSWER || wptType == EKesWptType.STAGES_OF_A_MULTICACHE;
 	}
