@@ -123,11 +123,11 @@ public class Kes extends Kesoid0 {
 	 * @return the mainWpt
 	 */
 	@Override
-	public Wpt getMainWpt() {
+	public Wpt getFirstWpt() {
 		if (mainWpt != null) {
 			return mainWpt;
 		}
-		return super.getMainWpt();
+		return super.getFirstWpt();
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class Kes extends Kesoid0 {
 	 * @return
 	 */
 	public char getOneLetterType() {
-		final String sym = getMainWpt().getSym();
+		final String sym = getFirstWpt().getSym();
 		if (sym == null || sym.length() == 0) {
 			return '?';
 		}

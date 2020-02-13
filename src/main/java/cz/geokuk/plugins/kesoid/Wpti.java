@@ -222,7 +222,7 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 
 	@Override
 	public boolean isMainWpt() {
-		return getKesoid().getMainWpt() == this;
+		return getKesoid().getFirstWpt() == this;
 	}
 
 	/**

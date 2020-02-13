@@ -14,7 +14,7 @@ public class KesFilter {
 
 		if (filterDefinition.isJenFinalUNalezenych()) {
 			if (kesoid.getVztah() == EKesVztah.FOUND || kesoid.getVztah() == EKesVztah.OWN) {
-				if (aWpt != kesoid.getMainWpt()) {
+				if (aWpt != kesoid.getFirstWpt()) {
 					return false;
 				}
 			}
