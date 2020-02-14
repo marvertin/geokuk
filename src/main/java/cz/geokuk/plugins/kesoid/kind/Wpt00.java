@@ -4,8 +4,7 @@ import java.io.File;
 
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
-import cz.geokuk.plugins.kesoid.Kepodr;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
@@ -44,7 +43,7 @@ public abstract class Wpt00 implements Wpt {
 	private int elevation;
 
 	@NonNull
-	private Genotyp genotyp;
+	protected Genotyp genotyp;
 
 	private boolean rucnePridany = false;
 
@@ -120,6 +119,44 @@ public abstract class Wpt00 implements Wpt {
 		return kesoidPlugin;
 	}
 
+
+	///////////////// Implementace odvozené z genotypu ////////////////////////////////
+
+	@Override
+	public EWptVztah getVztah() {
+		final Genom genom = genotyp.getGenom();
+		if (genotyp.has(genom.ALELA_fnd)) {
+			return EWptVztah.FOUND;
+		}
+		if (genotyp.has(genom.ALELA_own)) {
+			return EWptVztah.OWN;
+		}
+		if (genotyp.has(genom.ALELA_not)) {
+			return EWptVztah.NOT;
+		}
+		return EWptVztah.NORMAL;
+	}
+
+	@Override
+	public EWptStatus getStatus() {
+		final Genom genom = genotyp.getGenom();
+		if (genotyp.has(genom.ALELA_dsbl)) {
+			return EWptStatus.DISABLED;
+		}
+		if (genotyp.has(genom.ALELA_arch)) {
+			return EWptStatus.ARCHIVED;
+		}
+		return EWptStatus.ACTIVE;
+	}
+
+	public void setStatus(@NonNull final EWptStatus status) {
+		final Genom genom = genotyp.getGenom();
+		switch (status) {
+		case ACTIVE: genotyp = genotyp.with(genom.ALELA_actv); break;
+		case DISABLED: genotyp = genotyp.with(genom.ALELA_dsbl); break;
+		case ARCHIVED: genotyp = genotyp.with(genom.ALELA_arch); break;
+		}
+	}
 /////////////////// Na vyhození ////////////
 	@Override
 	public void computeGenotypIfNotExistsForAllRing(final Genom genom) {
