@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import cz.geokuk.framework.OpenUrlAction0;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import lombok.SneakyThrows;
 
 /**
@@ -24,7 +25,7 @@ public class ZobrazNaUrlSpojenemSBodemAction extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaUrlSpojenemSBodemAction(final Wpt wpt)  {
-		super(wpt.getUrl());
+		super(((Wpti)wpt).getUrl());
 		putValue(NAME, "Zobrazení na webu");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("internet.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí nawebu spojeném s bodem.");

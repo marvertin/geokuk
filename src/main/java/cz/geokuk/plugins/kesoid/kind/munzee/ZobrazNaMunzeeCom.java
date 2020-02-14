@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import cz.geokuk.framework.OpenUrlAction0;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import lombok.SneakyThrows;
 
 /**
@@ -24,7 +25,7 @@ public class ZobrazNaMunzeeCom extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaMunzeeCom(final Wpt wpt)  {
-		super(wpt.getUrl());
+		super(((Wpti)wpt).getUrl());
 		putValue(NAME, "Zobrazení na munzee.com");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("munzee.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí listing munzee na oficiálním webu munzee.com.");

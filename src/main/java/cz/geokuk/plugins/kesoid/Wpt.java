@@ -27,6 +27,11 @@ public interface Wpt extends Uchopenec {
 	public static Wpt ZARAZKA = new Wpti();
 
 
+	/**
+	 * Zoder určuje pořadí v jakém se vykreslují waypointy, aby nejzajímavější waypointy byly nakresléné co nejvýše.
+	 * @author veverka
+	 *
+	 */
 	public static enum EZOrder {
 		OTHER, KESWPT, FIRST, FINAL,
 	}
@@ -78,22 +83,39 @@ public interface Wpt extends Uchopenec {
 	 */
 	File getSourceFile();
 
-
 	/**
 	 * Pokud daný waypoint nějakým způsobem omezuje umístění dalších nějakých waypointů, tak vrátí poloměr krhu,
 	 * kam nesmí být tyto jiné waypointy umístěny. Například 161 m pro keše.
 	 * @param wpt Waypoint, ke kterému se má kreslit kruh.
 	 * @return Poloměr v metrech, nula, pokdu nic nobsazuje. nevrací záporné číslo.
 	 */
-	default int getPolomerObsazenosti() {
-		return getKesoidPlugin().getPolomerObsazenosti(this);
-	}
+	int getPolomerObsazenosti();
 
 	/**
 	 * @return Vrací waypointy, které jsou nějak svázané z daným waypoitem + tento waypoint.
 	 */
-
 	Iterable<Wpt> getRelatedWpts();
+
+	/**
+	 * Položka úzce svázaná s getRelatedWpts. Nepředpokládá se, že by se toto mělo přepisovat.
+	 * @param wpt
+	 * @return
+	 */
+	default boolean maTohotoMeziRelated(final Wpt wpt) {
+		for (final Wpt w : getRelatedWpts()) {
+			if (w == wpt) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Pořadí vykreslování waypointů, aby se vykreslily nejdůležitější waypointy co nejvýše.
+	 * @return
+	 */
+	EZOrder getZorder();
+
 
 ///////////////////// Datové položky, které mnohdy budou sdíleny mezi waypinty stejného kešoidu, neboť nejsou rozlišitelné pro jednotlivé waypointyé ////////////////////////
 
@@ -133,6 +155,10 @@ public interface Wpt extends Uchopenec {
 	 */
 	Optional<URL> getUrlProPridaniDoSeznamuVGeogetu();
 
+	/** Text, který má být zobrazen v tooltipu, bude se lišit waypoint od waypointu. a to je dobře */
+	String getTextToolTipu();
+
+
 
 ////////////////////// Položky infrastrukturní ///////////////////////////
 	/**
@@ -151,24 +177,6 @@ public interface Wpt extends Uchopenec {
 	/** Vrátí prioritu s jakou má být waypoint uchopen při práci s myší. Čím větší číslo, tím spíš bude uchopen. */
 	int getPrioritaUchopovani();
 
-/////////////////// Položky podivné a neroztřídené ////////////////////////////////
-
-
-	URL getUrl();
-
-	String[] getProhledavanci();
-
-	EZOrder getZorder();
-
-	boolean hasEmptyCoords();
-
-	void computeGenotypIfNotExistsForAllRing(Genom genom);
-
-	void removeMeFromRing();
-
-	String textToolTipu();
-
-
 /////////////////////////// Položky související s vykreslováním ////////////////////
 /// Toto by zde vůbec nemělo být, vnikají dynamicky během práce s waypointy a vykreslováním
 /// Je to zde především z výkonnostních důvodů.
@@ -179,15 +187,22 @@ public interface Wpt extends Uchopenec {
 
 	void setSklivec(Sklivec sklivec);
 
-	default boolean maTohotoMeziRelated(final Wpt wpt) {
-		for (final Wpt w : getRelatedWpts()) {
-			if (w == wpt) {
-				return true;
-			}
-		}
-		return false;
-	}
 
+
+////////////////////////////////////// Zatracené metody, vyhodit až se zlikviduje Wpti implementace, v nových implementacích nedělají nic
+
+	@Deprecated
+	void computeGenotypIfNotExistsForAllRing(Genom genom);
+
+	@Deprecated
+	void removeMeFromRing();
+
+	/**
+	 * Nesmí vzniknout waypoint z prázdnými souřadnicemi.
+	 * @return
+	 */
+	@Deprecated
+	boolean hasEmptyCoords();
 
 
 }

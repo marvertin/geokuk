@@ -289,7 +289,7 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	}
 
 	@Override
-	public String textToolTipu() {
+	public String getTextToolTipu() {
 		final Wpt wpt = this;
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<html>");
@@ -389,14 +389,12 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	}
 
 
-	@Override
+	/**
+	 *
+	 * @return URL spojené s waypoitem, které zobrazí na Internetu informace o tomto waypointu.
+	 */
 	public URL getUrl() {
 		return getKoid().getUrl();
-	}
-
-	@Override
-	public String[] getProhledavanci() {
-		return getKoid().getProhledavanci();
 	}
 
 	@Override
@@ -422,5 +420,10 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	@Override
 	public Iterable<Wpt> getRelatedWpts() {
 		return getKoid().getRelatedWpts();
+	}
+
+	@Override
+	public int getPolomerObsazenosti() {
+		return getKesoidPlugin().getPolomerObsazenosti(this);
 	}
 }

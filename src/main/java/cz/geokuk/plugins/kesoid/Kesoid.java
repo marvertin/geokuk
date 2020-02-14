@@ -19,14 +19,6 @@ public interface Kesoid {
 	/** S tím názvem je potíž, každý waypoint má svůj název a kešoid také, tak který použít? */
 	String getNazev();
 
-	/**
-	 * Toto dává texty, které se budou prohledávat.
-	 * ale asi to patří spíš k waypointům, chcme hledat waypointy a ne kešoidy.
-	 * @return
-	 */
-	String[] getProhledavanci();
-
-
 
 	/**
 	 * @return Toto je URL spojené s kešoidem, mělo by být s waypointem.

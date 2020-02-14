@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import cz.geokuk.framework.OpenUrlAction0;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import lombok.SneakyThrows;
 
 /**
@@ -24,7 +25,7 @@ public class ZobrazNaWaymarkingComAction extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaWaymarkingComAction(final Wpt wpt)  {
-		super(wpt.getUrl());
+		super(((Wpti)wpt).getUrl());
 		putValue(NAME, "Zobrazení na waymarking.com");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("waymarking.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí listing waymarku na oficialním webu \"waymarking.com\".");

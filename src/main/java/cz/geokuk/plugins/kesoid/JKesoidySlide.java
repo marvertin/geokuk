@@ -316,7 +316,7 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 		if (wptPodMysi != null) {
 			// setCursor(cursor);
-			jakoTooltip.setText(wptPodMysi.textToolTipu());
+			jakoTooltip.setText(wptPodMysi.getTextToolTipu());
 			jakoTooltip.setOpaque(true);
 			jakoTooltip.setBackground(Color.WHITE);
 			jakoTooltip.setSize(jakoTooltip.getPreferredSize());

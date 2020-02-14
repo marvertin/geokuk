@@ -5,6 +5,7 @@ import java.net.URL;
 import cz.geokuk.framework.OpenUrlAction0;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import lombok.SneakyThrows;
 
 /**
@@ -32,7 +33,7 @@ public class TiskniNaGcComAction extends OpenUrlAction0 {
 
 	@SneakyThrows
 	private static URL getUrlPrint(final Wpt wpt) {
-		final String urls = wpt.getUrl().toExternalForm();
+		final String urls = ((Wpti)wpt).getUrl().toExternalForm();
 		System.out.println(urls);
 		if (urls.startsWith(URL_PREFIX_SHOW)) {
 			return new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));

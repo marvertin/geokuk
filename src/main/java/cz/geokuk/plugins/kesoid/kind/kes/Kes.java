@@ -162,11 +162,6 @@ public class Kes extends Kesoid0 {
 		return sym.charAt(0);
 	}
 
-	@Override
-	public String[] getProhledavanci() {
-		return new String[] { getNazev(), getIdentifier(), getAuthor() };
-	}
-
 	public EKesSize getSize() {
 		return size;
 	}

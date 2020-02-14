@@ -94,11 +94,6 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 		return getFirstWpt().getNazev();
 	}
 
-	@Override
-	public String[] getProhledavanci() {
-		return new String[] { getNazev(), getIdentifier() };
-	}
-
 	public File getSourceFile() {
 		return null;
 	}

@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import cz.geokuk.framework.OpenUrlAction0;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import lombok.SneakyThrows;
 
 /**
@@ -24,7 +25,7 @@ public class ZobrazNaDatazCuzkCzAction extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaDatazCuzkCzAction(final Wpt wpt)  {
-		super(wpt.getUrl());
+		super(((Wpti)wpt).getUrl());
 		putValue(NAME, "Zobrazení na dataz.cuzk.cz");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("dataz.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí oficiální geodetické údaje na webu zeměměřičského úřadu.");
