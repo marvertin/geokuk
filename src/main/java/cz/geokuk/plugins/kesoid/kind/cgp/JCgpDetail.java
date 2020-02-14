@@ -4,6 +4,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 
 /**
@@ -30,7 +31,7 @@ public class JCgpDetail extends JKesoidDetail0 {
 
 	@Override
 	public void napln(final Wpt wpt) {
-		cgp = (CzechGeodeticPoint) wpt.getKoid();
+		cgp = (CzechGeodeticPoint) ((Wpti)wpt).getKoid();
 		jXjtsk.setText(cgp.getXjtsk() + "");
 		jYjtsk.setText(cgp.getYjtsk() + "");
 	}

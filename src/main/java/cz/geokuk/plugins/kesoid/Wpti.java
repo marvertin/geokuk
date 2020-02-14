@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.kesoid;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -373,10 +374,54 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	/**
 	 * Jen pro účely Wpt, možná je to dočasná meoda.
 	 */
-	@Override
 	public Kesoid getKoid() {
 		return getKesoid();
 	}
 
 
+	@Override
+	public URL getUrlProOtevreniListinguVGeogetu() {
+		return getKoid().getUrlProOtevreniListinguVGeogetu();
+	}
+
+	@Override
+	public URL getUrlProPridaniDoSeznamuVGeogetu() {
+		return getKoid().getUrlProPridaniDoSeznamuVGeogetu();
+	}
+
+
+	@Override
+	public URL getUrl() {
+		return getKoid().getUrl();
+	}
+
+	@Override
+	public String[] getProhledavanci() {
+		return getKoid().getProhledavanci();
+	}
+
+	@Override
+	public String getAuthor() {
+		return getKoid().getAuthor();
+	}
+
+	@Override
+	public String getHidden() {
+		return getKoid().getHidden();
+	}
+
+	@Override
+	public EKesStatus getStatus() {
+		return getKoid().getStatus();
+	}
+
+	@Override
+	public EKesVztah getVztah() {
+		return getKoid().getVztah();
+	}
+
+	@Override
+	public Iterable<Wpt> getRelatedWpts() {
+		return getKoid().getRelatedWpts();
+	}
 }

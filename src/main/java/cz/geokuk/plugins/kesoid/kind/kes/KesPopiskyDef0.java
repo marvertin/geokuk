@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.kesoid.kind.kes;
 
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.kind.PopiskyDefBuilder0;
 
 
@@ -8,7 +9,7 @@ public abstract class KesPopiskyDef0 extends PopiskyDefBuilder0 {
 
 
 	private static Kes kes(final Wpt wpt) {
-		return (Kes) wpt.getKoid();
+		return (Kes) ((Wpti)wpt).getKoid();
 	}
 
 	@Override

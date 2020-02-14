@@ -3,8 +3,7 @@ package cz.geokuk.plugins.kesoid.kind.kes;
 import javax.swing.SwingUtilities;
 
 import cz.geokuk.framework.Model0;
-import cz.geokuk.plugins.kesoid.Kesoid;
-import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.*;
 import cz.geokuk.plugins.kesoid.kind.WptSumarizer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +32,7 @@ public class KesWptSumarizer extends Model0  implements WptSumarizer {
 
 	@Override
 	public void afterLoaded(final Wpt wpt) {
-		final Kesoid kesoid = wpt.getKoid();
+		final Kesoid kesoid = ((Wpti)wpt).getKoid();
 		final Kes kes = (Kes) kesoid;
 		maximalniBestOf = Math.max(maximalniBestOf, kes.getBestOf());
 		maximalniHodnoceni = Math.max(maximalniHodnoceni, kes.getHodnoceni());

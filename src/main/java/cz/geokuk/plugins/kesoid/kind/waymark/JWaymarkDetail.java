@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid.kind.waymark;
 import javax.swing.Box;
 
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 
@@ -27,7 +28,7 @@ public class JWaymarkDetail extends JKesoidDetail0 {
 
 	@Override
 	public void napln(final Wpt wpt) {
-		waym = (Waymark) wpt.getKoid();
+		waym = (Waymark) ((Wpti)wpt).getKoid();
 		napln();
 	}
 

@@ -9,6 +9,7 @@ import javax.swing.*;
 import cz.geokuk.framework.Dlg;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 import cz.geokuk.util.gui.JSmallPictureButton;
@@ -75,7 +76,7 @@ public class JKesDetail extends JKesoidDetail0 {
 
 	@Override
 	public void napln(final Wpt wpt) {
-		kes = (Kes) wpt.getKoid();
+		kes = (Kes) ((Wpti)wpt).getKoid();
 		napln();
 		final boolean mameHint = kes.getHint() != null && !kes.getHint().trim().isEmpty();
 		zobrazHint.setEnabled(mameHint);

@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid.kind.simplewaypoint;
 import javax.swing.Box;
 
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 
@@ -24,7 +25,7 @@ public class JSimpleWaypointDetail extends JKesoidDetail0 {
 
 	@Override
 	public void napln(final Wpt wpt) {
-		simwpt = (SimpleWaypoint) wpt.getKoid();
+		simwpt = (SimpleWaypoint) ((Wpti)wpt).getKoid();
 		napln();
 	}
 

@@ -63,10 +63,7 @@ public interface Wpt extends Uchopenec {
 	 * @return Vrací waypointy, které jsou nějak svázané z daným waypoitem + tento waypoint.
 	 */
 
-	default Iterable<Wpt> getRelatedWpts() {
-		// // TODO [veverka] Implementovat přidání také tohoto waypointu do kolekce až se bude měnit zůsob získávání korelovaných wpts. -- 11. 2. 2020 13:36:28 veverka
-		return getKoid().getRelatedWpts();
-	}
+	Iterable<Wpt> getRelatedWpts();
 
 ////////////////////// Položky infrastrukturní ///////////////////////////
 	/**
@@ -87,40 +84,21 @@ public interface Wpt extends Uchopenec {
 
 /////////////////// Položky podivné a neroztřídené ////////////////////////////////
 
-	Kesoid getKoid();
+	URL getUrlProOtevreniListinguVGeogetu();
 
-	default URL getUrlProOtevreniListinguVGeogetu() {
-		return getKoid().getUrlProOtevreniListinguVGeogetu();
-	}
+	URL getUrlProPridaniDoSeznamuVGeogetu();
 
-	default URL getUrlProPridaniDoSeznamuVGeogetu() {
-		return getKoid().getUrlProPridaniDoSeznamuVGeogetu();
-	}
+	URL getUrl();
 
+	String[] getProhledavanci();
 
-	default URL getUrl() {
-		return getKoid().getUrl();
-	}
+	String getAuthor();
 
-	default String[] getProhledavanci() {
-		return getKoid().getProhledavanci();
-	}
+	String getHidden();
 
-	default String getAuthor() {
-		return getKoid().getAuthor();
-	}
+	EKesStatus getStatus();
 
-	default String getHidden() {
-		return getKoid().getHidden();
-	}
-
-	default EKesStatus getStatus() {
-		return getKoid().getStatus();
-	}
-
-	default EKesVztah getVztah() {
-		return getKoid().getVztah();
-	}
+	EKesVztah getVztah();
 
 	String getNazev();
 

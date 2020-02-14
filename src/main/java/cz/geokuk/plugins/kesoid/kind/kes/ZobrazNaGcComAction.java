@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import cz.geokuk.framework.OpenUrlAction0;
 import cz.geokuk.img.ImageLoader;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import lombok.SneakyThrows;
 
 /**
@@ -24,7 +25,7 @@ public class ZobrazNaGcComAction extends OpenUrlAction0 {
 	 */
 	@SneakyThrows
 	public ZobrazNaGcComAction(final Wpt wpt)  {
-		super(url("https://coord.info/" + wpt.getKoid().getIdentifier())); // sem se nesmí dát aditional waypoint
+		super(url("https://coord.info/" + ((Wpti)wpt).getKoid().getIdentifier())); // sem se nesmí dát aditional waypoint
 		putValue(NAME, "Zobrazení na gc.com");
 		putValue(SMALL_ICON, ImageLoader.seekResIcon("gccom-green-16.png"));
 		putValue(SHORT_DESCRIPTION, "Zobrazí listing keše na oficiálním webu webu \"geocaching.com\".");

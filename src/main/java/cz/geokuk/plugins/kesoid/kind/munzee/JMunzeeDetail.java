@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoid.kind.munzee;
 import javax.swing.Box;
 
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.detail.JKesoidDetail0;
 import cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent;
 
@@ -27,7 +28,7 @@ public class JMunzeeDetail extends JKesoidDetail0 {
 
 	@Override
 	public void napln(final Wpt wpt) {
-		munzee = (Munzee) wpt.getKoid();
+		munzee = (Munzee) ((Wpti)wpt).getKoid();
 		napln();
 	}
 
