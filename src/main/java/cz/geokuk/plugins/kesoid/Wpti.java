@@ -8,6 +8,7 @@ import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
 import cz.geokuk.plugins.kesoid.genetika.Genotyp;
 import cz.geokuk.plugins.kesoid.kind.KesoidPlugin;
+import cz.geokuk.plugins.kesoid.kind.Wpt00;
 import cz.geokuk.plugins.kesoid.mapicon.Sklivec;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,8 +24,6 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 		wptMapping.put("Virtual Stage", "Question to Answer");
 		wptMapping.put("Physical Stage", "Stages of a Multicache");
 	}
-
-	private static int currentSklivecValidityCode;
 
 	/**
 	 * Jmené vejpointu, z GPS tag name
@@ -74,7 +73,7 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	private Kepodr kepodr;
 
 	public static void invalidateAllSklivec() {
-		currentSklivecValidityCode++;
+		Wpt00.currentSklivecValidityCode++;
 	}
 
 	/**
@@ -180,7 +179,7 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 
 	@Override
 	public Sklivec getSklivec() {
-		if (sklivecValidityCode != currentSklivecValidityCode) {
+		if (sklivecValidityCode != Wpt00.currentSklivecValidityCode) {
 			sklivec = null;
 		}
 		return sklivec;
@@ -260,7 +259,7 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	@Override
 	public void setSklivec(final Sklivec sklivec) {
 		this.sklivec = sklivec;
-		sklivecValidityCode = currentSklivecValidityCode;
+		sklivecValidityCode = Wpt00.currentSklivecValidityCode;
 	}
 
 	public void setSym(final String sym) {

@@ -40,7 +40,6 @@ public interface Wpt extends Uchopenec {
 	/**
 	 * @return Identifikátor waypointu, například GC14G57P. Jednoznačně identifikuje waypoint,
 	 * ale na tu jednoznačnost se nemusí jít stoprocentně spolehnout.
-	 *
 	 */
 	String getIdentifier();
 	/**
