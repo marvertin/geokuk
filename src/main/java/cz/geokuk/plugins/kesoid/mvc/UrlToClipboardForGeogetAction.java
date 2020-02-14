@@ -64,6 +64,6 @@ public class UrlToClipboardForGeogetAction extends Action0 {
 
 	@Override
 	public boolean shouldBeVisible() {
-		return iWpt != null && iWpt.getUrlProPridaniDoSeznamuVGeogetu() != null;
+		return iWpt != null && iWpt.getUrlProPridaniDoSeznamuVGeogetu().isPresent();
 	}
 }

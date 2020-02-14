@@ -64,6 +64,6 @@ public class UrlToListingForGeogetAction extends Action0 {
 
 	@Override
 	public boolean shouldBeVisible() {
-		return iWpt != null && iWpt.getUrlProOtevreniListinguVGeogetu() != null;
+		return iWpt != null && iWpt.getUrlProOtevreniListinguVGeogetu().isPresent();
 	}
 }

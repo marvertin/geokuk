@@ -3,7 +3,7 @@ package cz.geokuk.plugins.kesoid.importek;
 import java.util.HashMap;
 import java.util.Map;
 
-import cz.geokuk.plugins.kesoid.EKesStatus;
+import cz.geokuk.plugins.kesoid.EWptStatus;
 import cz.geokuk.plugins.kesoid.Wpti;
 import cz.geokuk.plugins.kesoid.kind.GpxToWptContext;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
@@ -126,13 +126,13 @@ public class GpxWptmportBuilder implements IImportBuilder {
 		return informaceOZdrojich;
 	}
 
-	protected EKesStatus urciStatus(final boolean archived, final boolean availaible) {
+	protected EWptStatus urciStatus(final boolean archived, final boolean availaible) {
 		if (archived) {
-			return EKesStatus.ARCHIVED;
+			return EWptStatus.ARCHIVED;
 		} else if (!availaible) {
-			return EKesStatus.DISABLED;
+			return EWptStatus.DISABLED;
 		} else {
-			return EKesStatus.ACTIVE;
+			return EWptStatus.ACTIVE;
 		}
 	}
 

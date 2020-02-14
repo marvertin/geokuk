@@ -52,7 +52,7 @@ public interface Kesoid {
 	 * @deprecated Zlikvidovat, až se dostane pravý dolní roh do pluginů.
 	 */
 	@Deprecated
-	EKesStatus getStatus();
+	EWptStatus getStatus();
 
 	/**
 	 * - detail
@@ -78,7 +78,7 @@ public interface Kesoid {
 	 * Vztahy jsou víceméně jen ke keším a možná waymarkům. Možná dát do pluginů. ale nevím.
 	 * @return
 	 */
-	EKesVztah getVztah();
+	EWptVztah getVztah();
 
 
 	/**

@@ -69,32 +69,32 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 
 	private KesoidPluginManager kesoidPluginManager;
 
-	private static String formatuj(final String s, final EKesStatus status) {
+	private static String formatuj(final String s, final EWptStatus status) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<html>");
-		if (status != EKesStatus.ACTIVE) {
+		if (status != EWptStatus.ACTIVE) {
 			sb.append("<strike>");
 		}
-		if (status == EKesStatus.DISABLED) {
+		if (status == EWptStatus.DISABLED) {
 			sb.append("<font color=\"darkgray\">");
 		}
-		if (status == EKesStatus.ARCHIVED) {
+		if (status == EWptStatus.ARCHIVED) {
 			sb.append("<font color=\"red\">");
 		}
 		sb.append(s);
-		if (status == EKesStatus.ARCHIVED) {
+		if (status == EWptStatus.ARCHIVED) {
 			sb.append("</font");
 		}
-		if (status == EKesStatus.DISABLED) {
+		if (status == EWptStatus.DISABLED) {
 			sb.append("</font");
 		}
-		if (status != EKesStatus.ACTIVE) {
+		if (status != EWptStatus.ACTIVE) {
 			sb.append("</strike>");
 		}
 		return sb.toString();
 	}
 
-	private static Icon vztah(final EKesVztah vztah) {
+	private static Icon vztah(final EWptVztah vztah) {
 		switch (vztah) {
 		case FOUND:
 			return ImageLoader.seekResIcon("kesvztah/found.gif");
@@ -183,8 +183,8 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		jRucnePridany.setToolTipText(wpt.isRucnePridany() ? "Waypoint byl ručně přidán v Geogetu nebo podobném programu." : "Waypoint byl obsažen v PQ");
 		final int elevation = wpt.getElevation();
 		jElevation.setText(elevation == 0 ? null : elevation + " m n. m.");
-		jAuthor.setText(wpt.getAuthor());
-		jHiddenTime.setText(JKesoidDetail0.formatujDatum(wpt.getHidden()));
+		jAuthor.setText(wpt.getAuthor().orElse(""));
+		jHiddenTime.setText(JKesoidDetail0.formatujDatum(wpt.getCreatinDate().orElse(null)));
 		jVztah.setIcon(vztah(wpt.getVztah()));
 		if (ikonBag != null) {
 			jType.setIcon(ikonBag.seekIkon(wpt.getGenotyp()));

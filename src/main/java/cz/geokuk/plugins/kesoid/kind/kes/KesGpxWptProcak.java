@@ -142,32 +142,32 @@ public class KesGpxWptProcak implements GpxWptProcak {
 		return wpti;
 	}
 
-	private EKesVztah urciVztah(final GpxWpt gpxwpt) {
+	private EWptVztah urciVztah(final GpxWpt gpxwpt) {
 		if (gpxwpt.explicitneUrcenoVlastnictvi) {
-			return EKesVztah.OWN;
+			return EWptVztah.OWN;
 		}
 		if (ctx.getGccomNick().name.equals(gpxwpt.groundspeak.owner)) {
-			return EKesVztah.OWN;
+			return EWptVztah.OWN;
 		}
 		if (ctx.getGccomNick().id == gpxwpt.groundspeak.ownerid) {
-			return EKesVztah.OWN;
+			return EWptVztah.OWN;
 		}
 		if (ctx.getGccomNick().name.equals(gpxwpt.groundspeak.placedBy)) {
-			return EKesVztah.OWN;
+			return EWptVztah.OWN;
 		} else if (GEOCACHE_FOUND.equals(gpxwpt.sym)) {
-			return EKesVztah.FOUND;
+			return EWptVztah.FOUND;
 		} else {
-			return EKesVztah.NORMAL;
+			return EWptVztah.NORMAL;
 		}
 	}
 
-	private EKesStatus urciStatus(final boolean archived, final boolean availaible) {
+	private EWptStatus urciStatus(final boolean archived, final boolean availaible) {
 		if (archived) {
-			return EKesStatus.ARCHIVED;
+			return EWptStatus.ARCHIVED;
 		} else if (!availaible) {
-			return EKesStatus.DISABLED;
+			return EWptStatus.DISABLED;
 		} else {
-			return EKesStatus.ACTIVE;
+			return EWptStatus.ACTIVE;
 		}
 	}
 

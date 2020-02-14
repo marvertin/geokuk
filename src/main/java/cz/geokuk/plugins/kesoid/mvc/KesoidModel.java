@@ -128,7 +128,7 @@ public class KesoidModel extends Model0 {
 			return;
 		}
 		final Clipboard scl = getSystemClipboard();
-		final StringSelection ss = new StringSelection(wpt.getUrlProOtevreniListinguVGeogetu().toExternalForm());
+		final StringSelection ss = new StringSelection(wpt.getUrlProOtevreniListinguVGeogetu().get().toExternalForm());
 		try {
 			scl.setContents(ss, null);
 		} catch (final IllegalStateException e2) {
@@ -141,12 +141,14 @@ public class KesoidModel extends Model0 {
 			return;
 		}
 		final Clipboard scl = getSystemClipboard();
-		final StringSelection ss = new StringSelection(wpt.getUrlProPridaniDoSeznamuVGeogetu().toExternalForm());
-		try {
-			scl.setContents(ss, null);
-		} catch (final IllegalStateException e2) {
-			FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
-		}
+		wpt.getUrlProPridaniDoSeznamuVGeogetu().ifPresent(url -> {
+			final StringSelection ss = new StringSelection(url.toExternalForm());
+			try {
+				scl.setContents(ss, null);
+			} catch (final IllegalStateException e2) {
+				FExceptionDumper.dump(e2, EExceptionSeverity.WORKARROUND, "Do clipboardu to nejde dáti.");
+			}
+		});
 	}
 
 	public void pridejKodKesoiduDoClipboardu(final Wpt wpt) {

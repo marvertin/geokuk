@@ -53,9 +53,9 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		final Waymark wm = new Waymark();
 		wm.setIdentifier(gpxwpt.name);
 		if (ctx.getGccomNick().name.equals(gpxwpt.groundspeak.placedBy)) {
-			wm.setVztahx(EKesVztah.OWN);
+			wm.setVztahx(EWptVztah.OWN);
 		} else {
-			wm.setVztahx(EKesVztah.NORMAL);
+			wm.setVztahx(EWptVztah.NORMAL);
 		}
 		wm.setUrl(gpxwpt.link.href);
 		wm.setAuthor(gpxwpt.groundspeak.placedBy);
@@ -75,13 +75,13 @@ public class WaymarkGpxWptProcak implements GpxWptProcak {
 		wm.setIdentifier(gpxwpt.name);
 		if (gpxwpt.groundspeak != null) {
 			if (ctx.getGccomNick().name.equals(gpxwpt.groundspeak.placedBy)) {
-				wm.setVztahx(EKesVztah.OWN);
+				wm.setVztahx(EWptVztah.OWN);
 			} else {
-				wm.setVztahx(EKesVztah.NORMAL);
+				wm.setVztahx(EWptVztah.NORMAL);
 			}
 			wm.setAuthor(gpxwpt.groundspeak.placedBy);
 		} else {
-			wm.setVztahx(EKesVztah.NORMAL);
+			wm.setVztahx(EWptVztah.NORMAL);
 		}
 		wm.setUrl(gpxwpt.link.href);
 

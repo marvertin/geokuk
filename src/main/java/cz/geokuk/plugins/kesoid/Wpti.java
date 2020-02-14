@@ -2,8 +2,7 @@ package cz.geokuk.plugins.kesoid;
 
 import java.io.File;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import cz.geokuk.core.coordinates.*;
 import cz.geokuk.plugins.kesoid.genetika.Genom;
@@ -380,13 +379,13 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 
 
 	@Override
-	public URL getUrlProOtevreniListinguVGeogetu() {
-		return getKoid().getUrlProOtevreniListinguVGeogetu();
+	public Optional<URL> getUrlProOtevreniListinguVGeogetu() {
+		return Optional.ofNullable(getKoid().getUrlProOtevreniListinguVGeogetu());
 	}
 
 	@Override
-	public URL getUrlProPridaniDoSeznamuVGeogetu() {
-		return getKoid().getUrlProPridaniDoSeznamuVGeogetu();
+	public Optional<URL> getUrlProPridaniDoSeznamuVGeogetu() {
+		return Optional.ofNullable(getKoid().getUrlProPridaniDoSeznamuVGeogetu());
 	}
 
 
@@ -401,22 +400,22 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	}
 
 	@Override
-	public String getAuthor() {
-		return getKoid().getAuthor();
+	public Optional<String> getAuthor() {
+		return Optional.ofNullable(getKoid().getAuthor());
 	}
 
 	@Override
-	public String getHidden() {
-		return getKoid().getHidden();
+	public Optional<String> getCreatinDate() {
+		return Optional.ofNullable(getKoid().getHidden());
 	}
 
 	@Override
-	public EKesStatus getStatus() {
+	public EWptStatus getStatus() {
 		return getKoid().getStatus();
 	}
 
 	@Override
-	public EKesVztah getVztah() {
+	public EWptVztah getVztah() {
 		return getKoid().getVztah();
 	}
 

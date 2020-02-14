@@ -23,8 +23,8 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 	/** Jednoznacna identifikace jako GC124X4 nebo WM4587 */
 	private String identifier;
 
-	private EKesVztah vztah = EKesVztah.NORMAL;
-	private EKesStatus status = EKesStatus.ACTIVE;
+	private EWptVztah vztah = EWptVztah.NORMAL;
+	private EWptStatus status = EWptStatus.ACTIVE;
 
 	private String author;
 	private String hidden;
@@ -104,7 +104,7 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 	}
 
 	@Override
-	public EKesStatus getStatus() {
+	public EWptStatus getStatus() {
 		return status;
 	}
 
@@ -136,7 +136,7 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 	}
 
 	@Override
-	public EKesVztah getVztah() {
+	public EWptVztah getVztah() {
 		return vztah;
 	}
 
@@ -182,7 +182,7 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 		this.identifier = identifier;
 	}
 
-	public void setStatus(final EKesStatus status) {
+	public void setStatus(final EWptStatus status) {
 		this.status = status;
 	}
 
@@ -212,7 +212,7 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 		this.userDefinedAlelas = userDefinedAlelas;
 	}
 
-	public void setVztahx(final EKesVztah vztah) {
+	public void setVztahx(final EWptVztah vztah) {
 		this.vztah = vztah;
 	}
 

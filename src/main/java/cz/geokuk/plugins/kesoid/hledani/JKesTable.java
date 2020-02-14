@@ -151,8 +151,8 @@ public class JKesTable extends JPanel {
 		}
 
 		private String computeAutora(final Wpt wpt) {
-			final String author = wpt.getAuthor();
-			return author == null ? "" : author;
+			final String author = wpt.getAuthor().orElse("");
+			return author;
 		}
 
 		private Object formatuj(final Nalezenec nal, final String s) {

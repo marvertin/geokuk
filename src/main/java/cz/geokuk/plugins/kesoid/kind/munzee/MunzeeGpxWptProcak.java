@@ -41,11 +41,11 @@ public class MunzeeGpxWptProcak implements GpxWptProcak {
 		final Munzee mz = new Munzee();
 		mz.setIdentifier(gpxwpt.name);
 		if (ctx.getGccomNick().name.equals(gpxwpt.groundspeak.placedBy)) {
-			mz.setVztahx(EKesVztah.OWN);
+			mz.setVztahx(EWptVztah.OWN);
 		} else if (GEOCACHE_FOUND.equals(gpxwpt.sym)) {
-			mz.setVztahx(EKesVztah.FOUND);
+			mz.setVztahx(EWptVztah.FOUND);
 		} else {
-			mz.setVztahx(EKesVztah.NORMAL);
+			mz.setVztahx(EWptVztah.NORMAL);
 		}
 		mz.setUrl(gpxwpt.link.href);
 		mz.setAuthor(gpxwpt.groundspeak.placedBy);

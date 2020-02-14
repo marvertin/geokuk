@@ -120,7 +120,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 			cisloBodu = cisloBodu.substring(0, cisloBodu.length() - 7);
 		}
 		cgp.setIdentifier(cisloBodu);
-		cgp.setVztahx(EKesVztah.NOT);
+		cgp.setVztahx(EWptVztah.NOT);
 
 		// System.out.println(gpxwpt.groundspeak.name);
 		// System.out.println(gpxwpt.groundspeak.shortDescription);
@@ -330,9 +330,9 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 	private Wmdata createWaymarkGeoget(final GpxWpt gpxwpt) {
 		final Wmdata wm = new Wmdata();
 		if (ctx.getGccomNick().name.equals(gpxwpt.groundspeak.placedBy)) {
-			wm.setVztahx(EKesVztah.OWN);
+			wm.setVztahx(EWptVztah.OWN);
 		} else {
-			wm.setVztahx(EKesVztah.NORMAL);
+			wm.setVztahx(EWptVztah.NORMAL);
 		}
 		wm.setUrl(gpxwpt.link.href);
 		wm.setAuthor(gpxwpt.groundspeak.placedBy);
@@ -348,13 +348,13 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 		final Wmdata wm = new Wmdata();
 		if (gpxwpt.groundspeak != null) {
 			if (ctx.getGccomNick().name.equals(gpxwpt.groundspeak.placedBy)) {
-				wm.setVztahx(EKesVztah.OWN);
+				wm.setVztahx(EWptVztah.OWN);
 			} else {
-				wm.setVztahx(EKesVztah.NORMAL);
+				wm.setVztahx(EWptVztah.NORMAL);
 			}
 			wm.setAuthor(gpxwpt.groundspeak.placedBy);
 		} else {
-			wm.setVztahx(EKesVztah.NORMAL);
+			wm.setVztahx(EWptVztah.NORMAL);
 		}
 		wm.setUrl(gpxwpt.link.href);
 
@@ -371,7 +371,7 @@ public class CgpGpxWptProcak implements GpxWptProcak {
 		String hidden;
 		String author;
 		String nazev;
-		EKesVztah vztahx;
+		EWptVztah vztahx;
 	}
 	/**
 	 * @param aType
