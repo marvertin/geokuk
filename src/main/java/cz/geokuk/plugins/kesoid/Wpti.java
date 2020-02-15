@@ -397,7 +397,7 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	}
 
 	@Override
-	public Optional<String> getCreatinDate() {
+	public Optional<String> getCreationDate() {
 		return Optional.ofNullable(getKoid().getHidden());
 	}
 

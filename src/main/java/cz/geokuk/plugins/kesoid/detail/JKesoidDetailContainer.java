@@ -184,7 +184,7 @@ public class JKesoidDetailContainer extends JPanel implements AfterInjectInit {
 		final int elevation = wpt.getElevation();
 		jElevation.setText(elevation == 0 ? null : elevation + " m n. m.");
 		jAuthor.setText(wpt.getAuthor().orElse(""));
-		jHiddenTime.setText(JKesoidDetail0.formatujDatum(wpt.getCreatinDate().orElse(null)));
+		jHiddenTime.setText(JKesoidDetail0.formatujDatum(wpt.getCreationDate().orElse(null)));
 		jVztah.setIcon(vztah(wpt.getVztah()));
 		if (ikonBag != null) {
 			jType.setIcon(ikonBag.seekIkon(wpt.getGenotyp()));

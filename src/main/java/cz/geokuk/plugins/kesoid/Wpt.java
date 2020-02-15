@@ -132,7 +132,7 @@ public interface Wpt extends Uchopenec {
 	 * U keše je to datum založení ownerem, u turznámek datum vydání konkrétní známky.
 	 * Nedávat sem datum vzniku nějaké evidence.
 	 */
-	Optional<String> getCreatinDate();
+	Optional<String> getCreationDate();
 
 	/**
 	 * @return Stav waypointu případně celého kešoidu. Ne všechny waypointy musí mít možnost existovat ve všech stavech.

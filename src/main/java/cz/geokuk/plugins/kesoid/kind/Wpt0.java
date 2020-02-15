@@ -9,7 +9,7 @@ import lombok.*;
 public abstract class Wpt0 extends Wpt00 {
 
 	private Optional<String> author = Optional.empty();
-	private Optional<String> creatinDate = Optional.empty();
+	private Optional<String> creationDate = Optional.empty();
 
 
 

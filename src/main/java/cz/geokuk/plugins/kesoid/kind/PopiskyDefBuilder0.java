@@ -24,7 +24,7 @@ public abstract class PopiskyDefBuilder0 {
 
 		def("{nazev}", (sb, wpt) -> sb.append(wpt.getNazev()));
 
-		def("{zalozeno}", (sb, wpt) -> sb.append(wpt.getCreatinDate().orElse("")));
+		def("{zalozeno}", (sb, wpt) -> sb.append(wpt.getCreationDate().orElse("")));
 		def("{nbsp}", new SestavovacPopisku.NahrKonstantni(" "));
 
 		def("{br}", SestavovacPopisku.NAHRBR);
