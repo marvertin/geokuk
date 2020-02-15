@@ -286,4 +286,30 @@ public class Genotyp implements Indexable {
 		return g;
 	}
 
+	public <T> T ifuj(final Iface<T> iface) {
+		return iface.ifuj(new Ifer<T>(), getGenom());
+	}
+
+	@FunctionalInterface
+	public interface Iface<T> {
+		T ifuj(Ifer<T> maper, Genom genom);
+	}
+
+	/** Ifování podle alel a vyrábění objektů */
+	public class Ifer<T> {
+		T vybrany;
+
+		/** IF Alela then this object */
+		public Ifer<T> ifa (final Alela alela, final T obj) {
+			if (Genotyp.this.has(alela)) {
+				vybrany = obj;
+			}
+			return this;
+		}
+
+		/** else this value */
+		public T els(final T obj) {
+			return vybrany == null ? obj : vybrany;
+		}
+	}
 }

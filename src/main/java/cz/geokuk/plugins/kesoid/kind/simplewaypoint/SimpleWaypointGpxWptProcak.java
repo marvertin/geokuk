@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class SimpleWaypointGpxWptProcak implements GpxWptProcak {
-	private static final String DEFAULT_SYM = "Waypoint";
 
 	private final GpxToWptContext ctx;
 	private final GpxToWptBuilder builder;
@@ -26,7 +25,7 @@ public class SimpleWaypointGpxWptProcak implements GpxWptProcak {
 
 	private Wpt createSimpleWaypoint(final GpxWpt gpxwpt) {
 		final Wpti wpti = builder.createWpt(gpxwpt, SimpleWaypointPlugin.SIMPLEWAYPOINT);
-		wpti.setSym(gpxwpt.sym == null ? DEFAULT_SYM : gpxwpt.sym);
+		wpti.setSym(gpxwpt.sym == null ? Wpt00.DEFAULT_SYM : gpxwpt.sym);
 
 		final SimpleWaypoint simpleWaypoint = new SimpleWaypoint();
 		simpleWaypoint.setIdentifier(gpxwpt.name);

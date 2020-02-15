@@ -77,11 +77,6 @@ public class Wpti extends Weikoid0 implements Uchopenec, Wpt {
 	}
 
 	/**
-	 *
-	 */
-	public Wpti() {}
-
-	/**
 	 * @return the elevation
 	 */
 	@Override

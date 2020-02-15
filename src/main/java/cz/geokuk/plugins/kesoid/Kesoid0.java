@@ -13,8 +13,8 @@ import lombok.SneakyThrows;
 
 public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 
-	private static String URL_PREFIX_PRINT = "https://www.geocaching.com/seek/cdpf.aspx?guid=";
-	private static String URL_PREFIX_SHOW = "https://www.geocaching.com/seek/cache_details.aspx?guid=";
+	private static final String MARKER_URL_PRINT = "aspx?guid=";
+	private static final String URL_PREFIX_PRINT = "https://www.geocaching.com/seek/cdpf.aspx?guid=";
 
 
 	private static String[] urlPrefixes = new String[] { "http://www.geocaching.com/seek/cache_details.aspx?guid=", "http://www.waymarking.com/waymarks/", "http://dataz.cuzk.cz/gu/ztl", };
@@ -216,11 +216,10 @@ public abstract class Kesoid0 extends Weikoid0 implements Cloneable, Kesoid {
 	@Override
 	public URL getUrlProOtevreniListinguVGeogetu() {
 		try {
-			final String urls = getUrl().toExternalForm();
-			System.out.println(urls);
-			System.out.println(URL_PREFIX_SHOW);
-			if (urls.startsWith(URL_PREFIX_SHOW)) {
-				return new URL(URL_PREFIX_PRINT + urls.substring(URL_PREFIX_SHOW.length()));
+			final String url = getUrl().toExternalForm();
+			final int index = url.indexOf(MARKER_URL_PRINT);
+			if (index >= 0) {
+				return new URL(URL_PREFIX_PRINT + url.substring(index + MARKER_URL_PRINT.length()));
 			} else {
 				return null;
 			}
