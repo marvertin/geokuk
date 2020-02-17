@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import cz.geokuk.plugins.kesoid.genetika.Genom.CitacAlel;
+import lombok.AllArgsConstructor;
 
 /**
  * Genotyp jako množina alel. Typ je immutable, různé instance mají různou množinu alel.
@@ -312,4 +313,39 @@ public class Genotyp implements Indexable {
 			return vybrany == null ? obj : vybrany;
 		}
 	}
+
+	@FunctionalInterface
+	public interface Uface<T> {
+		Uface<T> ufuj(Updator<T> maper, Genom genom);
+	}
+
+	/**
+	 * Aktualiuje alelu porovnáním nějaké hodnoty s jinou hodnotou.
+	 * @param <T>
+	 * @param obj
+	 * @param updator
+	 * @return
+	 */
+	public <T> Genotyp update(final T obj, final Uface<T> updator) {
+		final Updator<T> upd = new Updator<T>(obj, this);
+		updator.ufuj(upd,  getGenom());
+		return upd.genotyp;
+	}
+
+
+	@AllArgsConstructor
+	public class Updator<T> {
+		private final T obj;
+		Genotyp genotyp;
+
+		public Updator<T> iff(final T o, final Alela alela) {
+			if (o.equals(obj)) {
+				genotyp = genotyp.with(alela);
+			}
+			return this;
+		}
+	}
+
+
+
 }

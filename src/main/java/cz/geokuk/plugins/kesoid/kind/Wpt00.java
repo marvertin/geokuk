@@ -14,7 +14,9 @@ import lombok.*;
 @NoArgsConstructor
 public class Wpt00 extends WptDefaults implements Wpt {
 
-	@Getter @NonNull private String identifier;
+	@Getter @Setter @NonNull private String identifier;
+	@Getter @Setter @NonNull private String nazev;
+	@Getter @Setter private int elevation;
 
 	// Wgs souřadnice
 	private double lat;
@@ -29,6 +31,7 @@ public class Wpt00 extends WptDefaults implements Wpt {
 	@Getter @NonNull private Kepodr kepodr;
 
 	@Getter @NonNull protected Genotyp genotyp;
+
 
 	// Podpora vykreslování
 	public static int currentSklivecValidityCode;
@@ -95,5 +98,14 @@ public class Wpt00 extends WptDefaults implements Wpt {
 		}
 	}
 
+	public void setVztah(@NonNull final EWptVztah vztah) {
+		final Genom genom = genotyp.getGenom();
+		switch (vztah) {
+		case FOUND: genotyp = genotyp.with(genom.ALELA_fnd); break;
+		case NORMAL: genotyp = genotyp.with(genom.ALELA_dsbl); break;
+		case NOT: genotyp = genotyp.with(genom.ALELA_not); break;
+		case OWN: genotyp = genotyp.with(genom.ALELA_own); break;
+		}
+	}
 ////////////////////////////////////////////////////////////////////////////////////
 }

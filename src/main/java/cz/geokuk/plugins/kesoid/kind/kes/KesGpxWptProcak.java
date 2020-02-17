@@ -19,7 +19,6 @@ public class KesGpxWptProcak implements GpxWptProcak {
 
 	private static final String GC = "GC";
 	static final String GEOCACHE = "Geocache";
-	static final String GEOCACHE_FOUND = "Geocache Found";
 	private static final String DEFAULT_SYM = "Waypoint";
 
 	private final GpxToWptContext ctx;
