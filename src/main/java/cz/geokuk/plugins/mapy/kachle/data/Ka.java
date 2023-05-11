@@ -17,7 +17,7 @@ public class Ka {
 	// private int DOPLNKOVAC = 1<<28;
 
 	private final KaLoc loc;
-	private final EKaType type;
+	private final KaType type;
 
 	@Override
 	public String toString() {
@@ -25,7 +25,7 @@ public class Ka {
 	}
 
 	public String typToString() {
-		return type.name();
+		return type.toString();
 	}
 
 	/** Zbuilduje URL ke kachli 256*256 mapy */

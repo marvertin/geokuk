@@ -29,6 +29,8 @@ import cz.geokuk.plugins.refbody.HlidacReferencnihoBodu;
 import cz.geokuk.plugins.refbody.RefbodyModel;
 import cz.geokuk.plugins.vylety.*;
 
+import java.util.stream.Stream;
+
 /**
  * @author Martin Veverka
  *
@@ -104,12 +106,15 @@ public class Inicializator {
 	}
 
 	public void intMapAkce(final BeanBag bb, final Akce akce) {
-		for (final EKaType ka : EKaType.values()) {
-			final MapyAction0 jednamapoakce = new PodkladAction(ka);
-			akce.mapoakce.add(jednamapoakce);
-			bb.registerSigleton(jednamapoakce);
-
-		}
+        Stream.concat(
+            Stream.of(EKaType.values()),
+            Stream.empty() // sem přijdou konfigurovatelné mapové zdroje
+        )
+            .map(PodkladAction::new)
+            .forEach(jednamapoakce -> {
+                akce.mapoakce.add(jednamapoakce);
+                bb.registerSigleton(jednamapoakce);
+            });
 	}
 
 	public void setMainFrame(final JMainFrame frame) {

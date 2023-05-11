@@ -107,7 +107,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 	private class TotoSeTaha {
 		private int minmoumer;
 		private int maxmoumer;
-		private EKaType katype;
+		private KaType katype;
 	}
 
 	private static final long serialVersionUID = 7180968190465321695L;
@@ -126,7 +126,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 
 	private KachleModel kachleModel;
 
-	private EKaType katype;
+	private KaType katype;
 
 	private int xminmoumer;
 

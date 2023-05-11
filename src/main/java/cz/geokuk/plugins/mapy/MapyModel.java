@@ -7,9 +7,9 @@ import cz.geokuk.plugins.mapy.kachle.data.KaType;
 
 public class MapyModel extends Model0 {
 
-	private EKaType podklad;
+	private KaType podklad;
 
-	public EKaType getKaSet() {
+	public KaType getKaSet() {
 		return podklad;
 	}
 
@@ -17,12 +17,10 @@ public class MapyModel extends Model0 {
 		return podklad;
 	}
 
-	public void setPodklad(final EKaType podklad) {
+	public void setPodklad(final KaType podklad) {
 		if (podklad == this.podklad) {
 			return;
 		}
-		this.podklad = podklad;
-		currPrefe().node(FPref.NODE_KTERE_MAPY_node).putEnum(FPref.VALUE_MAPOVE_PODKLADY_value, podklad);
 		fajruj();
 	}
 

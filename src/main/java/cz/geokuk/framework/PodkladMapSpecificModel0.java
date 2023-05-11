@@ -1,7 +1,7 @@
 package cz.geokuk.framework;
 
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 
 public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copyable<S>> extends Model0 {
 
@@ -9,7 +9,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	 *
 	 */
 	protected MyPreferences prefNode;
-	private EKaType podkladMap;
+	private KaType podkladMap;
 
 	private S structure;
 
@@ -29,7 +29,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	}
 
 	public void onEvent(final ZmenaMapNastalaEvent event) {
-		final EKaType podklad = event.getKatype();
+		final KaType podklad = event.getKatype();
 		setPodkladMap(podklad);
 	}
 
@@ -45,7 +45,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	/**
 	 * @param podklad
 	 */
-	public void setPodkladMap(final EKaType podklad) {
+	public void setPodkladMap(final KaType podklad) {
 		if (podkladMap == podklad) {
 			return;
 		}
@@ -95,14 +95,14 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	 * @param podklad
 	 * @return
 	 */
-	private String jmenoPodkladu(final EKaType podklad) {
-		return podklad == null ? "bezmap" : podklad.name();
+	private String jmenoPodkladu(final KaType podklad) {
+		return podklad == null ? "bezmap" : podklad.toString();
 	}
 
 	/**
 	 * @return
 	 */
-	private S load(final EKaType podklad) {
+	private S load(final KaType podklad) {
 		final S p = prefNode.getStructure(jmenoPodkladu(podklad), createDefaults());
 		return p;
 	}
@@ -110,7 +110,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	/**
 	 * @param p
 	 */
-	private void save(final EKaType podklad, final S p) {
+	private void save(final KaType podklad, final S p) {
 		prefNode.putStructure(jmenoPodkladu(podklad), p);
 	}
 

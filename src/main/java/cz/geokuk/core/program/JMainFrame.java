@@ -1,14 +1,9 @@
 package cz.geokuk.core.program;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-
-import cz.geokuk.core.coord.*;
+import cz.geokuk.core.coord.JPozicovnikSlide;
+import cz.geokuk.core.coord.JSingleSlide0;
+import cz.geokuk.core.coord.JZoomovaciObdelnik;
+import cz.geokuk.core.coord.SlideListProvider;
 import cz.geokuk.core.render.JRenderSlide;
 import cz.geokuk.framework.*;
 import cz.geokuk.img.ImageLoader;
@@ -22,10 +17,19 @@ import cz.geokuk.plugins.kesoidkruhy.JZvyraznovaciKruhySlide;
 import cz.geokuk.plugins.kesoidobsazenost.JObsazenost;
 import cz.geokuk.plugins.kesoidpopisky.JPopiskySlide;
 import cz.geokuk.plugins.mapy.kachle.data.EKaType;
-import cz.geokuk.plugins.mapy.kachle.gui.*;
+import cz.geokuk.plugins.mapy.kachle.gui.JKachlovnik;
+import cz.geokuk.plugins.mapy.kachle.gui.JKachlovnikDoRohu;
+import cz.geokuk.plugins.mapy.kachle.gui.JKachlovnikPresCele;
 import cz.geokuk.plugins.mrizky.*;
 import cz.geokuk.util.gui.CornerLayoutManager;
 import cz.geokuk.util.gui.ERoh;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JMainFrame extends JFrame implements SlideListProvider {
 
