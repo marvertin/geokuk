@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
-public enum EKaType {
+public enum EKaType implements KaType {
 
     // Mapové podklady, dále neprůhledné
 	BASE_M(false, 0, 19, 19, "Základní", "Základní mapa se silnicemi.", KeyEvent.VK_Z, KeyStroke.getKeyStroke('z'), new MapyCzUrlBuilder("base-m")),
@@ -86,45 +86,43 @@ public enum EKaType {
 
 	}
 
-	public int fitMoumer(int moumer) {
-		if (moumer < minMoumer) {
-			moumer = minMoumer;
-		}
-		if (moumer > maxMoumer) {
-			moumer = maxMoumer;
-		}
-		return moumer;
-	}
-
-	public KeyStroke getKeyStroke() {
+	@Override
+    public KeyStroke getKeyStroke() {
 		return keyStroke;
 	}
 
-	public int getKlavesa() {
+	@Override
+    public int getKlavesa() {
 		return klavesa;
 	}
 
-	public int getMaxAutoMoumer() {
+	@Override
+    public int getMaxAutoMoumer() {
 		return maxAutoMoumer;
 	}
 
-	public int getMaxMoumer() {
+	@Override
+    public int getMaxMoumer() {
 		return maxMoumer;
 	}
 
-	public int getMinMoumer() {
+	@Override
+    public int getMinMoumer() {
 		return minMoumer;
 	}
 
-	public String getNazev() {
+	@Override
+    public String getNazev() {
 		return nazev;
 	}
 
-	public String getPopis() {
+	@Override
+    public String getPopis() {
 		return popis;
 	}
 
-	public KachleUrlBuilder getUrlBuilder() {
+	@Override
+    public KachleUrlBuilder getUrlBuilder() {
 		return urlBuilder;
 	}
 
