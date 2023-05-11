@@ -8,7 +8,7 @@ import cz.geokuk.core.program.FConst;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 import cz.geokuk.util.index2d.Indexator;
 
 public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
@@ -17,7 +17,7 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 
 	private Indexator<Wpt> iIndexator;
 
-	private EKaType podklad;
+	private KaType podklad;
 	private KruhySettings kruhy;
 
 	public JZvyraznovaciKruhySlide() {

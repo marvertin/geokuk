@@ -3,6 +3,7 @@ package cz.geokuk.plugins.mapy;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 
 public class MapyModel extends Model0 {
 
@@ -12,7 +13,7 @@ public class MapyModel extends Model0 {
 		return podklad;
 	}
 
-	public EKaType getPodklad() {
+	public KaType getPodklad() {
 		return podklad;
 	}
 
