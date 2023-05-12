@@ -17,11 +17,15 @@ import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
 import cz.geokuk.plugins.kesoid.importek.MultiNacitacLoaderManager;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mapicon.*;
+import cz.geokuk.plugins.mapy.kachle.data.ConfigurableMapUrlBuilder;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.KeFile;
 import lombok.Getter;
+
+import static java.util.Arrays.asList;
 
 /**
  * @author Martin Veverka
@@ -41,6 +45,7 @@ public class KesoidModel extends Model0 {
 	private KesoidUmisteniSouboru umisteniSouboru;
 	private Set<File> blokovaneZdroje;
 	private GsakParametryNacitani gsakParametryNacitani;
+	private Collection<KaType> configurableMapSources;
 
 	// injektovanci
 	private final MultiNacitacLoaderManager multiNacitacLoaderManager = new MultiNacitacLoaderManager(this);
@@ -95,6 +100,10 @@ public class KesoidModel extends Model0 {
 
 	public GsakParametryNacitani getGsakParametryNacitani() {
 		return gsakParametryNacitani;
+	}
+
+	public Collection<KaType> getConfigurableMapSources() {
+		return configurableMapSources;
 	}
 
 	public void inject(final KesoidFilterModel filter) {
@@ -259,6 +268,15 @@ public class KesoidModel extends Model0 {
 		fire(new GsakParametryNacitaniChangedEvent(gsakParametryNacitani));
 	}
 
+	public void setConfigurableMapSources(final Collection<KaType> aConfigurableMapSources) {
+		configurableMapSources = aConfigurableMapSources;
+//		final MyPreferences pref = currPrefe().node(FPref.GSAK_node);
+//		pref.putStringSet(FPref.GSAK_CAS_NALEZU_value, aGsakParametryNacitani.getCasNalezu());
+//		pref.putStringSet(FPref.GSAK_CAS_NENALEZU_value, aGsakParametryNacitani.getCasNenalezu());
+//		pref.putBoolean(FPref.GSAK_NACITAT_VSECHNO, aGsakParametryNacitani.isNacistVsechnyDatabaze());
+		fire(new ConfigurableMapSourcesChangedEvent(configurableMapSources));
+	}
+
 	/**
 	 * @param aUmisteniSouboru
 	 *            the umisteniSouboru to set
@@ -358,6 +376,7 @@ public class KesoidModel extends Model0 {
 		// fire(new GccomNickChangedEvent(gccomNick));
 		// loadUmisteniSouboru();
 		setGsakParametryNacitani(loadGsakParametryNacitani());
+		setConfigurableMapSources(loadConfigurableMapSources());
 		setUmisteniSouboru(loadUmisteniSouboru());
 
 		setOnoff(currPrefe().node(FPref.KESOID_node).getBoolean(FPref.KESOID_VISIBLE_value, true));
@@ -390,6 +409,28 @@ public class KesoidModel extends Model0 {
 		g.setCasNenalezu(pref.getStringList(FPref.GSAK_CAS_NENALEZU_value, Arrays.asList("UserData")));
 		g.setNacistVsechnyDatabaze(pref.getBoolean(FPref.GSAK_NACITAT_VSECHNO, true));
 		return g;
+	}
+
+	private Collection<KaType> loadConfigurableMapSources() {
+		return asList(
+			KaType.simpleKaType( 0, 18, "osm",           "OSM", 				0, null, new ConfigurableMapUrlBuilder("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", "abc")),
+			KaType.simpleKaType( 0, 18, "ocmde",         "OSM German Style", 	0, null, new ConfigurableMapUrlBuilder("http://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png")),
+			KaType.simpleKaType( 0, 18, "ocm",           "OpenCycleMap", 		0, null, new ConfigurableMapUrlBuilder("https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png")),
+			KaType.simpleKaType( 0, 22, "googlemaps",    "Google Maps", 		0, null, new ConfigurableMapUrlBuilder("https://mt.google.com/vt?&x={x}&y={y}&z={z}", "1234", 256)),
+			KaType.simpleKaType( 0, 22, "googlemapssat", "Google Satellite", 	0, null, new ConfigurableMapUrlBuilder("https://mt.google.com/vt?lyrs=s&x={x}&y={y}&z={z}", "1234", 256)),
+			KaType.simpleKaType( 0, 20, "googlehybr",    "Google Maps Hybrid",  0, null, new ConfigurableMapUrlBuilder("http://mt0.google.com/vt/lyrs=s,m@110&hl=en&x={x}&y={y}&z={z}", 256)),
+			KaType.simpleKaType( 1, 20, "bingmap",       "Bing Maps", 		    0, null, new ConfigurableMapUrlBuilder("https://ecn.t{s}.tiles.virtualearth.net/tiles/r{q}?g=864&mkt=en-gb&lbl=l1&stl=h&shading=hill&n=z", "0123")),
+			KaType.simpleKaType( 0, 18, "esriimagy",     "Esri WorldImagery",   0, null, new ConfigurableMapUrlBuilder("http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")),
+			KaType.simpleKaType( 0, 18, "esriworld",     "Esri WorldStreetMap", 0, null, new ConfigurableMapUrlBuilder("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}")),
+			KaType.simpleKaType( 0, 18, "esritopo",      "Esri WorldTopoMap",   0, null, new ConfigurableMapUrlBuilder("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}")),
+			KaType.simpleKaType(14, 17, "binglondon",    "London Street Maps",  0, null, new ConfigurableMapUrlBuilder("https://ecn.t{s}.tiles.virtualearth.net/tiles/r{q}?g=864&productSet=mmCB", "0123")),
+			KaType.simpleKaType( 1, 18, "nazev",         "MTBmap.cz",           0, null, new ConfigurableMapUrlBuilder("http://tile.mtbmap.cz/mtbmap_tiles/{z}/{x}/{y}.png")),
+			KaType.simpleKaType(10, 19, "cuzktop",       "ČUZK - Topografická", 0, null, new ConfigurableMapUrlBuilder("http://ags.cuzk.cz/arcgis/services/zmwm/MapServer/WMSServer")),
+			KaType.simpleKaType(10, 20, "cuzksat",       "ČUZK - Satelitní", 	0, null, new ConfigurableMapUrlBuilder("http://ags.cuzk.cz/arcgis/services/ortofoto_wm/MapServer/WMSServer")),
+			KaType.simpleKaType(10, 20, "cuzkater",      "ČUZK - Jen terén", 	0, null, new ConfigurableMapUrlBuilder("http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer\",\"crs\":\"EPSG:4326\",\"layers\":\"dmr5g:GrayscaleHillshade")),
+			KaType.simpleKaType(10, 20, "cuzklidar",     "ČUZK - LIDAR", 		0, null, new ConfigurableMapUrlBuilder("http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer")),
+			KaType.simpleKaType( 0, 22, "googlelabels",  "Google labels", 	    0, null, new ConfigurableMapUrlBuilder("http://mt1.google.com/vt/lyrs=h@218000000&hl=en&src=app&x={x}&y={y}&z={z}&s="))
+		);
 	}
 
 	private void startKesLoading() {

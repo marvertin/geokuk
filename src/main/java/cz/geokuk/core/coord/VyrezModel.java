@@ -155,6 +155,9 @@ public class VyrezModel extends Model0 {
 	}
 
 	private int nastavitelneMeritkoZChteneho(int moumer, final boolean autoMeritko) {
+		if (podkladMap == null) {
+			return 0;
+		}
 		moumer = FMath.fit(moumer, podkladMap.getMinMoumer(), autoMeritko ? podkladMap.getMaxAutoMoumer() : podkladMap.getMaxMoumer());
 		return moumer;
 	}

@@ -29,7 +29,13 @@ import cz.geokuk.plugins.refbody.HlidacReferencnihoBodu;
 import cz.geokuk.plugins.refbody.RefbodyModel;
 import cz.geokuk.plugins.vylety.*;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import static java.util.Arrays.asList;
 
 /**
  * @author Martin Veverka
@@ -39,6 +45,7 @@ public class Inicializator {
 
 	private final MainFrameHolder mainFrameHolder = new MainFrameHolder();
 	private NapovedaModel napovedaModel;
+	private KesoidModel kesoidModel;
 
 	public void inicializace() {
 		final BeanBag bb = new BeanBag();
@@ -74,7 +81,7 @@ public class Inicializator {
 		bb.registerSigleton(new KachloDownloader());
 
 		bb.registerSigleton(new MapyModel());
-		bb.registerSigleton(new KesoidModel());
+		kesoidModel = bb.registerSigleton(new KesoidModel());
 
 		bb.registerSigleton(new HlidacReferencnihoBodu());
 		bb.registerSigleton(new ProfileModel());
@@ -106,10 +113,10 @@ public class Inicializator {
 	}
 
 	public void intMapAkce(final BeanBag bb, final Akce akce) {
-        Stream.concat(
-            Stream.of(EKaType.values()),
-            Stream.empty() // sem přijdou konfigurovatelné mapové zdroje
-        )
+		Stream.of(null
+			, asList(EKaType.values())
+			, Optional.ofNullable(kesoidModel).map(KesoidModel::getConfigurableMapSources).orElse(null)
+		).filter(Objects::nonNull).flatMap(Collection::stream)
             .map(PodkladAction::new)
             .forEach(jednamapoakce -> {
                 akce.mapoakce.add(jednamapoakce);
