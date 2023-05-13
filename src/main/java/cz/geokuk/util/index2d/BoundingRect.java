@@ -3,6 +3,12 @@
  */
 package cz.geokuk.util.index2d;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
+
 /**
  * @author Martin Veverka
  *
@@ -28,8 +34,11 @@ public class BoundingRect {
 		xx2 = aXx2;
 		yy2 = aYy2;
 
-		if (xx2 < xx1 || yy2 < yy1) {
-			throw new RuntimeException("Spatne presahy " + this);
+        boolean xx2_lt_xx1 = xx2 < xx1;
+        boolean yy2_lt_yy1 = yy2 < yy1;
+        if (xx2_lt_xx1 || yy2_lt_yy1) {
+            String msg = Stream.of(xx2_lt_xx1 ? "xx2 < xx1" : null, yy2_lt_yy1 ? "yy2 < yy1" : null).filter(Objects::nonNull).collect(joining(" && ", "Spatne presahy ", " "));
+            throw new RuntimeException(msg + this);
 		}
 	}
 
