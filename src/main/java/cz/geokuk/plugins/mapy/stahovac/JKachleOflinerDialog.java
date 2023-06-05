@@ -223,7 +223,7 @@ public class JKachleOflinerDialog extends JMyDialog0 implements AfterEventReceiv
 		return String.format("<html>Budou stahovány dlaždice mapových pokladů <b>%s</b> v rozmění měřítek " + " <b>&lt;%d,%d&gt;</b>"
 				+ " nyní natavte v hlavním okně výřez mapy který chcete stáhnout. Výřez můžete" + " nastavit v libovolném měřítku a v na libovolném mapovém podkladu. "
 				+ " Pak spusťte stahování tlačítkem. Stahování poběží na pozadí. V servisním okně lze sledovat," + " jak se zkracují frony. Stahování nelze zastavit jinak než ukončením programu.",
-				totoSeTaha.katype, totoSeTaha.minmoumer, totoSeTaha.maxmoumer);
+				totoSeTaha.katype.getId(), totoSeTaha.minmoumer, totoSeTaha.maxmoumer);
 	}
 
 	private void prepocetKachli() {

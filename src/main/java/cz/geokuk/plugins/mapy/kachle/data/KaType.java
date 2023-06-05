@@ -12,6 +12,8 @@ public interface KaType {
     int getMaxMoumer();
     /** Už přesně nevím [veverka], nutno analyzovat, nastavujem to stejnějako maxMoumer. */
     int getMaxAutoMoumer();
+    /** Id mapy, jak se zapisuje do konfigurace. */
+    String getId();
     /** Název mapy, tak se objeví v menu. */
     String getNazev();
     /** Bližší popis mapy, objeví se jako tooltip v menu. */
@@ -33,13 +35,25 @@ public interface KaType {
 	}
 
     static KaType simpleKaType(
-        int minMoumer,
-        int maxMoumer,
-        @Nonnull String nazev,
-        @Nullable String popis,
-        int klavesa,
-        @Nullable KeyStroke keyStroke,
-        @Nonnull KachleUrlBuilder urlBuilder
+            @Nonnull String id,
+            @Nonnull String nazev,
+            int minMoumer,
+            int maxMoumer,
+            int klavesa,
+            @Nullable KeyStroke keyStroke,
+            @Nonnull KachleUrlBuilder urlBuilder
+    ) {
+        return simpleKaType(id, nazev, null, minMoumer, maxMoumer, klavesa, keyStroke, urlBuilder);
+    }
+    static KaType simpleKaType(
+            @Nonnull String id,
+            @Nonnull String nazev,
+            @Nullable String popis,
+            int minMoumer,
+            int maxMoumer,
+            int klavesa,
+            @Nullable KeyStroke keyStroke,
+            @Nonnull KachleUrlBuilder urlBuilder
     ) {
         return new KaType() {
             @Override public int getMinMoumer() {
@@ -50,6 +64,9 @@ public interface KaType {
             }
             @Override public int getMaxAutoMoumer() {
                 return maxMoumer;
+            }
+            @Override public String getId() {
+                return id;
             }
             @Override public String getNazev() {
                 return nazev;

@@ -21,11 +21,11 @@ public class Ka {
 
 	@Override
 	public String toString() {
-		return getLoc().toString() + "*" + type;
+		return getLoc().toString() + "*" + type.getId();
 	}
 
-	public String typToString() {
-		return type.toString();
+	public String typToId() {
+		return type.getId();
 	}
 
 	/** Zbuilduje URL ke kachli 256*256 mapy */

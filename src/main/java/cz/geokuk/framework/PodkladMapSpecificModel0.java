@@ -96,7 +96,7 @@ public abstract class PodkladMapSpecificModel0<T extends Model0, S extends Copya
 	 * @return
 	 */
 	private String jmenoPodkladu(final KaType podklad) {
-		return podklad == null ? "bezmap" : podklad.toString();
+		return podklad == null ? "bezmap" : podklad.getId();
 	}
 
 	/**

@@ -111,6 +111,10 @@ public enum EKaType implements KaType {
     }
 
     @Override
+    public String getId() {
+        return name();
+    }
+    @Override
     public String getNazev() {
         return nazev;
     }
