@@ -83,6 +83,24 @@ public interface KaType {
             @Override public KachleUrlBuilder getUrlBuilder() {
                 return urlBuilder;
             }
+
+            @Override public String toString() {
+                return _toString();
+            }
         };
     };
+
+    default String _toString() {
+        return getClass().getSimpleName() + "{" +
+                "id=" + getId() +
+                ", nazev=" + getNazev() +
+                ", popis=" + getPopis() +
+                ", minMoumer=" + getMinMoumer() +
+                ", maxMoumer=" + getMaxMoumer() +
+                ", maxAutoMoumer=" + getMaxAutoMoumer() +
+                ", klavesa=" + getKlavesa() +
+                ", keyStroke=" + getKeyStroke() +
+                ", urlBuilder=" + getUrlBuilder() +
+            '}';
+    }
 }

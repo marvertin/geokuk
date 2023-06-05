@@ -121,7 +121,7 @@ public enum EKaType implements KaType {
 
     @Override
     public String getPopis() {
-        return popis;
+        return popis == null ? nazev : popis;
     }
 
     @Override

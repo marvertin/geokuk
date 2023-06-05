@@ -25,6 +25,7 @@ public class ConfigurableMapUrlBuilder implements KachleUrlBuilder {
 	public URL buildUrl(final Ka kaOne) throws MalformedURLException {
 		final KaLoc kaloc = kaOne.getLoc();
 		String urlString = urlBase
+				.replace("{s}", Objects.toString("a"))
 				.replace("{x}", Objects.toString(kaloc.getFromSzUnsignedX()))
 				.replace("{y}", Objects.toString(kaloc.getFromSzUnsignedY()))
 				.replace("{z}", Objects.toString(kaloc.getMoumer()))
