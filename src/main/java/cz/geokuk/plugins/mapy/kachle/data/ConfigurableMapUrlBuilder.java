@@ -3,13 +3,18 @@ package cz.geokuk.plugins.mapy.kachle.data;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 public class ConfigurableMapUrlBuilder implements KachleUrlBuilder {
 
 	private final String urlBase;
+	private final String subdomains;
 
 	public ConfigurableMapUrlBuilder(final String urlBase, final String subdomains, int tileSize) {
 		this.urlBase = urlBase;
+		this.subdomains = Optional.ofNullable(subdomains).map(String::trim).filter(s -> !s.isEmpty()).orElse(null);
+
 	}
 	public ConfigurableMapUrlBuilder(final String urlBase, int tileSize) {
 		this(urlBase, null, -1);
@@ -25,12 +30,16 @@ public class ConfigurableMapUrlBuilder implements KachleUrlBuilder {
 	public URL buildUrl(final Ka kaOne) throws MalformedURLException {
 		final KaLoc kaloc = kaOne.getLoc();
 		String urlString = urlBase
-				.replace("{s}", Objects.toString("a"))
+				.replace("{s}", _subDomain())
 				.replace("{x}", Objects.toString(kaloc.getFromSzUnsignedX()))
 				.replace("{y}", Objects.toString(kaloc.getFromSzUnsignedY()))
 				.replace("{z}", Objects.toString(kaloc.getMoumer()))
 		;
 		return new URL(urlString);
+	}
+
+	private String _subDomain() {
+		return Optional.ofNullable(subdomains).map(s->s.substring(0,1)).orElse("");
 	}
 
 }
