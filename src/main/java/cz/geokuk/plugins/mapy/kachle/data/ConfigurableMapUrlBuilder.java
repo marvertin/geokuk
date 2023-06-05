@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import static cz.geokuk.util.lang.StringUtils.isBlank;
+
 public class ConfigurableMapUrlBuilder implements KachleUrlBuilder {
 
 	private final String urlBase;
@@ -13,9 +15,19 @@ public class ConfigurableMapUrlBuilder implements KachleUrlBuilder {
 
 	public ConfigurableMapUrlBuilder(final String urlBase, final String subdomains, int tileSize) {
 		this.urlBase = urlBase;
-		this.subdomains = Optional.ofNullable(subdomains).map(String::trim).filter(s -> !s.isEmpty()).orElse(null);
-
+		this.subdomains = subdomains;
+		_validate();
 	}
+
+	private void _validate() {
+		if (isBlank(urlBase)) {
+			throw new IllegalArgumentException("urlBase cannot be blank.");
+		}
+		if (urlBase.contains("{s}") && isBlank(subdomains)) {
+			throw new IllegalArgumentException("If urlBase contains \"{s}\" placeholder, at least one subdomain character must be specfied: urlBase="+urlBase);
+		}
+	}
+
 	public ConfigurableMapUrlBuilder(final String urlBase, int tileSize) {
 		this(urlBase, null, -1);
 	}
