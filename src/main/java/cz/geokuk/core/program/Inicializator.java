@@ -45,13 +45,13 @@ public class Inicializator {
 
 	private final MainFrameHolder mainFrameHolder = new MainFrameHolder();
 	private NapovedaModel napovedaModel;
-	private KesoidModel kesoidModel;
+	private MapyModel mapy;
 
 	public void inicializace() {
 		final BeanBag bb = new BeanBag();
 		bb.registerSigleton(bb);
-		bb.registerSigleton(new EventManager());
-		bb.registerSigleton(new Prefe());
+		EventManager ef = bb.registerSigleton(new EventManager());
+		Prefe prefe = bb.registerSigleton(new Prefe());
 
 		bb.registerSigleton(new CestyZperzistentnovac());
 		bb.registerSigleton(new VyletovyZperzistentnovac());
@@ -80,8 +80,12 @@ public class Inicializator {
 		bb.registerSigleton(new KachleModel());
 		bb.registerSigleton(new KachloDownloader());
 
-		bb.registerSigleton(new MapyModel());
-		kesoidModel = bb.registerSigleton(new KesoidModel());
+		mapy = bb.registerSigleton(new MapyModel());
+		// Potřebuji mít MapyModel inicializovaný dřív, než proběhne bb.init()...
+		mapy.inject(ef);
+		mapy.inject(prefe);
+		//.
+		bb.registerSigleton(new KesoidModel());
 
 		bb.registerSigleton(new HlidacReferencnihoBodu());
 		bb.registerSigleton(new ProfileModel());
@@ -105,18 +109,16 @@ public class Inicializator {
 		bb.registerSigleton(akce);
 		bb.registrFieldsAsSingleton(akce);
 
-		intMapAkce(bb, akce);
+		initMapAkce(bb, akce);
 		//
 		bb.registerSigleton(mainFrameHolder);
 		bb.init();
 		// Board.eveman = eveman;
 	}
 
-	public void intMapAkce(final BeanBag bb, final Akce akce) {
-		Stream.of(null
-			, asList(EKaType.values())
-			, Optional.ofNullable(kesoidModel).map(KesoidModel::getConfigurableMapSources).orElse(null)
-		).filter(Objects::nonNull).flatMap(Collection::stream)
+	public void initMapAkce(final BeanBag bb, final Akce akce) {
+		mapy.init();
+		mapy.getMapy().stream()
             .map(PodkladAction::new)
             .forEach(jednamapoakce -> {
                 akce.mapoakce.add(jednamapoakce);
