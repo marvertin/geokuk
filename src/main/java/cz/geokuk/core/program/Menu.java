@@ -53,9 +53,6 @@ public class Menu extends MenuStrujce {
 				item(mapoakce1, mapPodkladButtonGroup, selected);
 			}
 		}
-
-		separator();
-
 	}
 
 	@Override

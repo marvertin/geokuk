@@ -10,8 +10,13 @@ import cz.geokuk.core.napoveda.NapovedaModel;
 import cz.geokuk.core.onoffline.OnofflineModel;
 import cz.geokuk.core.profile.ProfileModel;
 import cz.geokuk.core.render.RenderModel;
-import cz.geokuk.framework.*;
-import cz.geokuk.plugins.cesty.*;
+import cz.geokuk.framework.BeanBag;
+import cz.geokuk.framework.EventManager;
+import cz.geokuk.framework.Prefe;
+import cz.geokuk.framework.ProgressModel;
+import cz.geokuk.plugins.cesty.CestyModel;
+import cz.geokuk.plugins.cesty.CestyNacitaniKesoiduWatchDog;
+import cz.geokuk.plugins.cesty.CestyZperzistentnovac;
 import cz.geokuk.plugins.geocoding.GeocodingModel;
 import cz.geokuk.plugins.kesoid.KesoidFilterModel;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
@@ -19,23 +24,17 @@ import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
 import cz.geokuk.plugins.kesoidkruhy.KruhyModel;
 import cz.geokuk.plugins.kesoidobsazenost.ObsazenostModel;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyModel;
-import cz.geokuk.plugins.mapy.*;
+import cz.geokuk.plugins.mapy.MapyModel;
+import cz.geokuk.plugins.mapy.PodkladAction;
 import cz.geokuk.plugins.mapy.kachle.KachleModel;
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 import cz.geokuk.plugins.mapy.kachle.podklady.KachleZiskavac;
 import cz.geokuk.plugins.mapy.kachle.podklady.KachloDownloader;
 import cz.geokuk.plugins.mrizky.MrizkaModel;
 import cz.geokuk.plugins.refbody.HlidacReferencnihoBodu;
 import cz.geokuk.plugins.refbody.RefbodyModel;
-import cz.geokuk.plugins.vylety.*;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static java.util.Arrays.asList;
+import cz.geokuk.plugins.vylety.VyletModel;
+import cz.geokuk.plugins.vylety.VyletNacitaniKesoiduWatchDog;
+import cz.geokuk.plugins.vylety.VyletovyZperzistentnovac;
 
 /**
  * @author Martin Veverka
@@ -81,7 +80,7 @@ public class Inicializator {
 		bb.registerSigleton(new KachloDownloader());
 
 		mapy = bb.registerSigleton(new MapyModel());
-		// Potřebuji mít MapyModel inicializovaný dřív, než proběhne bb.init()...
+		// WORKAROUND: Potřebuji mít MapyModel inicializovaný dřív, než proběhne bb.init()...
 		mapy.inject(ef);
 		mapy.inject(prefe);
 		//.
