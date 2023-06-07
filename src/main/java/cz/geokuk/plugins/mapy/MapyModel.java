@@ -1,5 +1,6 @@
 package cz.geokuk.plugins.mapy;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.mapy.kachle.data.ConfigurableMapUrlBuilder;
@@ -93,5 +94,237 @@ public class MapyModel extends Model0 {
                 KaType.simpleKaType("cuzklidar",    "ČUZK - LIDAR",        10, 20, 0, null, new ConfigurableMapUrlBuilder("https://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer")),
                 KaType.simpleKaType("googlelabels", "Google labels",        5, 22, 0, null, new ConfigurableMapUrlBuilder("https://mt1.google.com/vt/lyrs=h@218000000&hl=en&src=app&x={x}&y={y}&z={z}&s="))
         );
+    }
+
+    public List<Map<String, Object>> loadMapDefinitions() {
+        try {
+            return new ObjectMapper().readValue(_mapDefinitionsJson(), List.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Stream<KaType> mapToKaType(List<Map<String, Object>> definitions) {
+        return definitions.stream().map(this::mapToKaType);
+    }
+
+    private KaType mapToKaType(Map<String, Object> definition) {
+        ConfiguredKaType result = new ConfiguredKaType();
+        definition.forEach((key, value) -> {
+            Class<?> expectedType = null;
+            switch (key) {
+                case "name":
+                    if (value instanceof String) {
+                        result.setName((String) value);
+                    } else {
+                        expectedType = String.class;
+                    }
+                    break;
+                case "ignore":
+                    if (value instanceof Boolean) {
+                        result.setIgnore((Boolean) value);
+                    } else {
+                        expectedType = Boolean.class;
+                    }
+                    break;
+                case "transparent":
+                    if (value instanceof Boolean) {
+                        result.setTransparent((Boolean) value);
+                    } else {
+                        expectedType = Boolean.class;
+                    }
+                    break;
+                case "overlay":
+                    if (value instanceof Boolean) {
+                        result.setOverlay((Boolean) value);
+                    } else {
+                        expectedType = Boolean.class;
+                    }
+                    break;
+                case "alt":
+                    if (value instanceof String) {
+                        result.setAlt((String) value);
+                    } else {
+                        expectedType = String.class;
+                    }
+                    break;
+                case "tileUrl":
+                    if (value instanceof String) {
+                        result.setTileUrl((String) value);
+                    } else {
+                        expectedType = String.class;
+                    }
+                    break;
+                case "subdomains":
+                    if (value instanceof String) {
+                        result.setSubdomains((String) value);
+                    } else {
+                        expectedType = String.class;
+                    }
+                    break;
+                case "attribution":
+                    if (value instanceof String) {
+                        result.setAttribution((String) value);
+                    } else {
+                        expectedType = String.class;
+                    }
+                    break;
+                case "minZoom":
+                    if (value instanceof Number) {
+                        result.setMinZoom(((Number) value).intValue());
+                    } else {
+                        expectedType = Integer.class;
+                    }
+                    break;
+                case "maxZoom":
+                    if (value instanceof Number) {
+                        result.setMaxZoom(((Number) value).intValue());
+                    } else {
+                        expectedType = Integer.class;
+                    }
+                    break;
+                case "tileSize":
+                    if (value instanceof Number) {
+                        result.setTileSize(((Number) value).intValue());
+                    } else {
+                        expectedType = Integer.class;
+                    }
+                    break;
+                case "format":
+                case "crs":
+                case "layers":
+                    if (!(value instanceof String)) {
+                        expectedType = String.class;
+                    }
+                    // Používáno mapami od ČÚZK, zatím není podporováno.
+                    result.setIgnore(true);
+                    result.setUnsupported(true);
+                    break;
+                default:
+                    LOG.warn("Neznámý atribut \"{}\" v definici mapy.", key);
+                    break;
+            }
+            if (expectedType != null) {
+                LOG.error("Atribut \"{}\" definice mapy má být typu {}, ale je {}. Hodnota \"{}\" bude ignorována."
+                        , key, expectedType.getSimpleName(), value.getClass().getSimpleName(), value
+                );
+            }
+        });
+        return result;
+    }
+}
+
+class ConfiguredKaType implements KaType {
+    private static int DEFAULT_MIN_ZOOM = 5;
+    private static int DEFAULT_MAX_ZOOM = 20;
+    private static int DEFAULT_TILE_SIZE = 256;
+    private static boolean DEFAULT_IS_IGNORED = false;
+    private static boolean DEFAULT_IS_TRANSPARENT = false;
+    private static boolean DEFAULT_IS_OVERLAY = false;
+    private static boolean DEFAULT_IS_UNSUPPORTED = false;
+
+    private String name;
+    private String alt;
+    private String description;
+    private String attribution;
+    private int minZoom = DEFAULT_MIN_ZOOM;
+    private int maxZoom = DEFAULT_MAX_ZOOM;
+    private int tileSize = DEFAULT_TILE_SIZE;
+    private String tileUrl;
+    private String subdomains;
+    private int klavesa;
+    private KeyStroke keyStroke;
+    private boolean ignore = DEFAULT_IS_IGNORED;
+    private boolean transparent = DEFAULT_IS_TRANSPARENT;
+    private boolean overlay = DEFAULT_IS_OVERLAY;
+    private boolean unsupported = DEFAULT_IS_UNSUPPORTED;
+
+    void setName(String value) {
+        name = value;
+    }
+    void setAlt(String value) {
+        alt = value;
+    }
+    void setDescription(String value) {
+        description = value;
+    }
+    void setAttribution(String value) {
+        attribution = value;
+    }
+    void setMinZoom(int value) {
+        minZoom = value;
+    }
+    void setMaxZoom(int value) {
+        maxZoom = value;
+    }
+    void setTileSize(int value) {
+        tileSize = value;
+    }
+    void setTileUrl(String value) {
+        tileUrl = value;
+    }
+    void setSubdomains(String value) {
+        subdomains = value;
+    }
+    void setKlavesa(int value) {
+        klavesa = value;
+    }
+    void setKeyStroke(KeyStroke value) {
+        keyStroke = value;
+    }
+    void setIgnore(boolean value) {
+        ignore = value;
+    }
+    void setTransparent(boolean value) {
+        transparent = value;
+    }
+    void setOverlay(boolean value) {
+        overlay = value;
+    }
+    void setUnsupported(boolean value) {
+        unsupported = value;
+    }
+
+    @Override public int getMinMoumer() {
+        return minZoom;
+    }
+    @Override public int getMaxMoumer() {
+        return maxZoom;
+    }
+    @Override public int getMaxAutoMoumer() {
+        return maxZoom;
+    }
+    @Override public String getId() {
+        return name;
+    }
+    @Override public String getNazev() {
+        return alt;
+    }
+    @Override public String getPopis() {
+        return description;
+    }
+    public String getAttribution() {
+        return attribution;
+    }
+    @Override public int getKlavesa() {
+        return klavesa;
+    }
+    @Override public KeyStroke getKeyStroke() {
+        return keyStroke;
+    }
+    @Override public ConfigurableMapUrlBuilder getUrlBuilder() {
+        return new ConfigurableMapUrlBuilder(tileUrl, subdomains, tileSize);
+    }
+    @Override public boolean isIgnored() {
+        return ignore;
+    }
+    @Override public boolean isTransparent() {
+        return transparent;
+    }
+    @Override public boolean isOverleay() {
+        return overlay;
+    }
+    public boolean isUnsupported() {
+        return unsupported;
     }
 }
