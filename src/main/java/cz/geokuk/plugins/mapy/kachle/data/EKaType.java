@@ -129,4 +129,13 @@ public enum EKaType implements KaType {
         return urlBuilder;
     }
 
+    @Override public boolean isIgnored() {
+        return false;
+    }
+    @Override public boolean isTransparent() {
+        return false;
+    }
+    @Override public boolean isOverleay() {
+        return false;
+    }
 }

@@ -24,6 +24,11 @@ public interface KaType {
     KeyStroke getKeyStroke();
     /** Implementace třídy, která sestaví URL pro zobrazení mapy. */
     KachleUrlBuilder getUrlBuilder();
+
+    boolean isIgnored();
+    boolean isTransparent();
+    boolean isOverleay();
+
     default int fitMoumer(int moumer)  {
 		if (moumer < getMinMoumer()) {
 			moumer = getMinMoumer();
@@ -82,6 +87,15 @@ public interface KaType {
             }
             @Override public KachleUrlBuilder getUrlBuilder() {
                 return urlBuilder;
+            }
+            @Override public boolean isIgnored() {
+                return false;
+            }
+            @Override public boolean isTransparent() {
+                return false;
+            }
+            @Override public boolean isOverleay() {
+                return false;
             }
 
             @Override public String toString() {
