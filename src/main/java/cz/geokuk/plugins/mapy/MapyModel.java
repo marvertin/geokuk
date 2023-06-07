@@ -6,15 +6,26 @@ import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.mapy.kachle.data.ConfigurableMapUrlBuilder;
 import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 import cz.geokuk.plugins.mapy.kachle.data.KaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.Objects;
+import javax.swing.*;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static java.nio.file.Files.newInputStream;
 import static java.util.stream.Collectors.toList;
 
 public class MapyModel extends Model0 {
-
+    private static final Logger LOG = LoggerFactory.getLogger(MapyModel.class);
+    private static final String DEFAULT_MAP_DEFINITIONS_JSON = "defaultMapDefinitions.utf-8.json";
     private Collection<KaType> mapy;
     private KaType podklad;
 
@@ -58,12 +69,64 @@ public class MapyModel extends Model0 {
 
     private void _init() {
         setMapy(prepareAvailableMapsCollection());
-        String podkladId = currPrefe().node(FPref.NODE_KTERE_MAPY_node).get(FPref.VALUE_MAPOVE_PODKLADY_value, EKaType.TURIST_M.name());
-        getMapy().stream().filter(m -> Objects.equals(podkladId, m.getId())).findFirst().ifPresent(
+        String defaultPodkladId = getMapy().stream().filter(m -> !m.isIgnored()).findFirst().map(KaType::getId).orElse(null);
+        String selectedPodkladId = Optional.ofNullable(getConfiguredPodklad()).orElse(defaultPodkladId);
+        getMapy().stream().filter(m -> Objects.equals(selectedPodkladId, m.getId())).findFirst().ifPresent(
                 this::setPodklad
         );
     }
 
+    public String getConfiguredPodklad() {
+        return currPrefe().node(FPref.NODE_KTERE_MAPY_node).get(FPref.VALUE_MAPOVE_PODKLADY_value, null);
+    }
+
+    private Reader _mapDefinitionsJson() throws IOException {
+        File json = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getFile(FPref.VALUE_MAPOVE_PODKLADY_DEFINITIONS_FILE_value, null);
+        if (json == null) {
+            LOG.info("Název souboru s definicemi není nastaven: [{}]{}", currPrefe().node(FPref.NODE_KTERE_MAPY_node), FPref.VALUE_MAPOVE_PODKLADY_DEFINITIONS_FILE_value);
+            return _useDefaultMapDefinitions();
+        }
+        if (json.getName().toLowerCase().endsWith(".json")) {
+            LOG.info("Název souboru s definicemi map musí mít příponu .json: {}", json);
+            return _useDefaultMapDefinitions();
+        }
+        Charset charset = _extractCharsetFromFileName(json);
+        if (!json.exists()) {
+            LOG.info("Soubor s definicemi map neexistuje: {}", json);
+            return _useDefaultMapDefinitions();
+        }
+        if (!json.canRead()) {
+            LOG.info("Soubor s definicemi map nelze číst: {}", json);
+            return _useDefaultMapDefinitions();
+        }
+        return new InputStreamReader(newInputStream(json.toPath()), charset);
+    }
+
+    private Reader _useDefaultMapDefinitions() {
+        LOG.info("Bude použita výchozí definice map z interního zdroje \"" + DEFAULT_MAP_DEFINITIONS_JSON + "\".");
+        return Optional.ofNullable(getClass().getResourceAsStream(DEFAULT_MAP_DEFINITIONS_JSON))
+            .map(is -> new InputStreamReader(is, StandardCharsets.UTF_8))
+            .orElseThrow(() -> new IllegalStateException("Výchozí definice map \"" + DEFAULT_MAP_DEFINITIONS_JSON + "\" nebyla nalezena."))
+        ;
+    }
+
+    private Charset _extractCharsetFromFileName(File f) {
+        Matcher matcher = Pattern.compile("^.\\.(-\\w+)\\.json").matcher(f.getName());
+        if (!matcher.matches()) {
+            LOG.info("Název souboru s definicemi map neobsahuje kódování, předpokládá se UTF-8: {}", f);
+            return StandardCharsets.UTF_8;
+        }
+        String charsetName = matcher.group(1);
+        try {
+            return Charset.forName(charsetName);
+        } catch (IllegalCharsetNameException e) {
+            LOG.info("Kódování \"{}\" uvedené v názvu souboru s definicemi map není platné: {}", charsetName, f);
+            return StandardCharsets.UTF_8;
+        } catch (UnsupportedCharsetException e) {
+            LOG.info("Kódování \"{}\" uvedené v názvu souboru s definicemi map není podporováno: {}", charsetName, f);
+            return StandardCharsets.UTF_8;
+        }
+    }
     private Collection<KaType> prepareAvailableMapsCollection() {
         return Stream.concat(
                 _builtinMapSources(),
