@@ -119,6 +119,7 @@ public class Inicializator {
 	public void initMapAkce(final BeanBag bb, final Akce akce) {
 		mapy.init();
 		mapy.getMapy().stream()
+			.filter(kt -> !kt.isIgnored())
             .map(PodkladAction::new)
             .forEach(jednamapoakce -> {
                 akce.mapoakce.add(jednamapoakce);
