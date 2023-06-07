@@ -41,11 +41,15 @@ public abstract class MenuStrujce {
 		}
 	}
 
-	protected void item(final ToggleAction0 action, final ButtonGroup bg) {
+	protected void item(final ToggleAction0 action, final ButtonGroup bg, boolean selected) {
 		item = new JRadioButtonMenuItem(action);
 		action.join(item);
+
 		menu.add(item);
 		bg.add(item);
+
+		item.setSelected(selected);
+		bg.setSelected(item.getModel(), selected);
 	}
 
 	protected abstract void makeMenu();
