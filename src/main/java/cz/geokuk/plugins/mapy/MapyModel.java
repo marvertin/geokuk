@@ -4,13 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.mapy.kachle.data.ConfigurableMapUrlBuilder;
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
 import cz.geokuk.plugins.mapy.kachle.data.KaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.StandardCharsets;
@@ -128,35 +130,12 @@ public class MapyModel extends Model0 {
         }
     }
     private Collection<KaType> prepareAvailableMapsCollection() {
-        return Stream.concat(
-                _builtinMapSources(),
-                _configurableMapSources()
-        ).collect(toList());
+        return _configurableMapSources().collect(toList());
     }
 
-    private Stream<KaType> _builtinMapSources() {
-        return Stream.of(EKaType.values());
-    }
     private Stream<KaType> _configurableMapSources() {
-        return Stream.of(
-                KaType.simpleKaType("osm", 			"OSM",                  5, 18, 0, null, new ConfigurableMapUrlBuilder("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", "abc")),
-                KaType.simpleKaType("ocmde", 		"OSM German Style",     5, 18, 0, null, new ConfigurableMapUrlBuilder("https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png")),
-                KaType.simpleKaType("ocm", 			"OpenCycleMap",         5, 18, 0, null, new ConfigurableMapUrlBuilder("https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png")),
-                KaType.simpleKaType("googlemaps", 	"Google Maps",          5, 22, 0, null, new ConfigurableMapUrlBuilder("https://mt.google.com/vt?&x={x}&y={y}&z={z}", "1234", 256)),
-                KaType.simpleKaType("googlemapssat", "Google Satellite",    5, 22, 0, null, new ConfigurableMapUrlBuilder("https://mt.google.com/vt?lyrs=s&x={x}&y={y}&z={z}", "1234", 256)),
-                KaType.simpleKaType("googlehybr", 	"Google Maps Hybrid",   5, 20, 0, null, new ConfigurableMapUrlBuilder("https://mt0.google.com/vt/lyrs=s,m@110&hl=en&x={x}&y={y}&z={z}", 256)),
-                KaType.simpleKaType("bingmap", 		"Bing Maps", 			1, 20, 0, null, new ConfigurableMapUrlBuilder("https://ecn.t{s}.tiles.virtualearth.net/tiles/r{q}?g=864&mkt=en-gb&lbl=l1&stl=h&shading=hill&n=z", "0123")),
-                KaType.simpleKaType("esriimagy", 	"Esri WorldImagery", 	5, 18, 0, null, new ConfigurableMapUrlBuilder("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")),
-                KaType.simpleKaType("esriworld", 	"Esri WorldStreetMap", 	5, 18, 0, null, new ConfigurableMapUrlBuilder("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}")),
-                KaType.simpleKaType("esritopo",     "Esri WorldTopoMap", 	5, 18, 0, null, new ConfigurableMapUrlBuilder("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}")),
-                KaType.simpleKaType("binglondon",   "London Street Maps",  14, 17, 0, null, new ConfigurableMapUrlBuilder("https://ecn.t{s}.tiles.virtualearth.net/tiles/r{q}?g=864&productSet=mmCB", "0123")),
-                KaType.simpleKaType("nazev",        "MTBmap.cz", 			1, 18, 0, null, new ConfigurableMapUrlBuilder("https://tile.mtbmap.cz/mtbmap_tiles/{z}/{x}/{y}.png")),
-                KaType.simpleKaType("cuzktop",      "ČUZK - Topografická", 10, 19, 0, null, new ConfigurableMapUrlBuilder("https://ags.cuzk.cz/arcgis/services/zmwm/MapServer/WMSServer")),
-                KaType.simpleKaType("cuzksat",      "ČUZK - Satelitní",    10, 20, 0, null, new ConfigurableMapUrlBuilder("https://ags.cuzk.cz/arcgis/services/ortofoto_wm/MapServer/WMSServer")),
-                KaType.simpleKaType("cuzkater",     "ČUZK - Jen terén",    10, 20, 0, null, new ConfigurableMapUrlBuilder("https://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer\",\"crs\":\"EPSG:4326\",\"layers\":\"dmr5g:GrayscaleHillshade")),
-                KaType.simpleKaType("cuzklidar",    "ČUZK - LIDAR",        10, 20, 0, null, new ConfigurableMapUrlBuilder("https://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer")),
-                KaType.simpleKaType("googlelabels", "Google labels",        5, 22, 0, null, new ConfigurableMapUrlBuilder("https://mt1.google.com/vt/lyrs=h@218000000&hl=en&src=app&x={x}&y={y}&z={z}&s="))
-        );
+        List<Map<String, Object>> definitions = loadMapDefinitions();
+        return mapToKaType(definitions);
     }
 
     public List<Map<String, Object>> loadMapDefinitions() {
