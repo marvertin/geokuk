@@ -43,7 +43,9 @@ public class KachloDownloader {
 		// if (Math.random() > 0.5 && url.toString().contains("hybrid")) {
 		// throw new IOException("Nasimulovaná chyba hybrid");
 		// }
-
+		// FIXME: Tady by to chtělo vyřešit přesměrování (kódy 3xx).
+		//        Většinou sice stačí jen změnit protokol z http: na https:, ale co s tím prostý uživatel udělá, že.
+		//
 		final DataHoldingInputStream dhis = new DataHoldingInputStream(url.openStream());
 		final Image img;
 		try (InputStream stm = new BufferedInputStream(dhis)) {

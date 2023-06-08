@@ -12,6 +12,7 @@ import cz.geokuk.framework.Dlg;
 import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboru;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboruChangedEvent;
+import cz.geokuk.plugins.mapy.MapyModel;
 import cz.geokuk.plugins.mapy.kachle.KachleModel;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.Filex;
@@ -46,6 +47,8 @@ public class JPrehledSouboru extends JPanel {
 	private JTextField jGsakCasNalezu;
 	private JTextField jGsakCasNenalezu;
 
+	private JJedenSouborPanel jMapyJsonFile;
+
 	private JJedenSouborPanel jImageMyDir;
 	private JJedenSouborPanel jOziDir;
 	private JJedenSouborPanel jKmzDir;
@@ -57,6 +60,7 @@ public class JPrehledSouboru extends JPanel {
 	private KachleModel kachleModel;
 
 	private RenderModel renderModel;
+	private MapyModel mapyModel;
 
 	private JTabbedPane jTabbedPane;
 
@@ -85,6 +89,9 @@ public class JPrehledSouboru extends JPanel {
 	public void inject(final RenderModel renderModel) {
 		this.renderModel = renderModel;
 	}
+	public void inject(final MapyModel mapyModel) {
+		this.mapyModel = mapyModel;
+	}
 
 	public void onEvent(final KachleUmisteniSouboruChangedEvent event) {
 		final KachleUmisteniSouboru u = event.getUmisteniSouboru();
@@ -103,7 +110,10 @@ public class JPrehledSouboru extends JPanel {
 		jImage3rdPartyDir.setFilex(u.getImage3rdPartyDir());
 		jImageMyDir.setFilex(u.getImageMyDir());
 	}
-
+	public void onEvent(final MapyUmisteniSouboruChangedEvent event) {
+		final MapyUmisteniSouboru u = event.getUmisteniSouboru();
+		jMapyJsonFile.setFilex(u.getMapyJsonFile());
+	}
 	public void onEvent(final GsakParametryNacitaniChangedEvent event) {
 		final GsakParametryNacitani g = event.getGsakParametryNacitani();
 		jGsakCasNalezu.setText(_join(g.getCasNalezu()));
@@ -170,6 +180,14 @@ public class JPrehledSouboru extends JPanel {
 		                + "<br/>Pokud obsahuje kromě časového údaje i další text, bude použit jen časový údaj." //
 		                + "<br/>Můžete uvést více políček, použije se první časový údaj, který bude nalezen." //
 		                + "</html>");
+
+		jMapyJsonFile = pridejJednuPolozkuproEdit(null, tab1a, "Definice mapových podkladů.", false, false);
+//				"<html>" +
+//				" JSON soubor ve formátu používaném nástrojem Geocaching Maps Enhancements (GME)." +
+//				" Vlastní název soubor musí mít příponu .json." +
+//				" Očekává se, že této příponě předchází název kódování (znakové sady) použitého pro obsah souboru;" +
+//				" není-li kódování uvedeno, předpokládá se UTF-8." +
+//				"</html>"
 
 		jImage3rdPartyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s rozšiřujícími obrázky jiných geokolegů.", true, true);
 		jImageMyDir = pridejJednuPolozkuproEdit(null, tab2, "Složka s mými vlastními rozšiřujícími obrázky.", true, true);
@@ -292,6 +310,11 @@ public class JPrehledSouboru extends JPanel {
 					u3.setKmzDir(jKmzDir.vezmiSouborAProver());
 					u3.setPictureDir(jPictureDir.vezmiSouborAProver());
 					renderModel.setUmisteniSouboru(u3);
+				}
+				{
+					MapyUmisteniSouboru um = new MapyUmisteniSouboru();
+					um.setMapyJsonFile(jMapyJsonFile.vezmiSouborAProver());
+					mapyModel.setUmisteniSouboru(um);
 				}
 
 				// Board.multiNacitacLoaderManager.startLoad(true);

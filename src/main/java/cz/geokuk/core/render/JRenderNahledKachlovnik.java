@@ -1,6 +1,6 @@
 package cz.geokuk.core.render;
 
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 import cz.geokuk.plugins.mapy.kachle.gui.JKachlovnik;
 import cz.geokuk.plugins.mapy.kachle.podklady.Priority;
 
@@ -13,7 +13,7 @@ public class JRenderNahledKachlovnik extends JKachlovnik {
 	}
 
 	@Override
-	public void setKachloType(final EKaType katype) {
+	public void setKachloType(final KaType katype) {
 		super.setKachloType(katype);
 	}
 

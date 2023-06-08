@@ -4,7 +4,7 @@
 package cz.geokuk.plugins.mapy;
 
 import cz.geokuk.framework.Event0;
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,5 +16,5 @@ import lombok.Getter;
 @Getter
 public class ZmenaMapNastalaEvent extends Event0<MapyModel> {
 
-	private final EKaType katype;
+	private final KaType katype;
 }

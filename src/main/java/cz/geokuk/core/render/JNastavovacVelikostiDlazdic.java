@@ -5,7 +5,7 @@ import javax.swing.event.ChangeListener;
 
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 
 public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventReceiverRegistrationInit {
 
@@ -32,7 +32,7 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 	}
 
 	/**
-	 * @return
+	; * @return
 	 */
 	public Integer getMaximalniVelikost() {
 		return (Integer) iModel.getValue();
@@ -53,7 +53,7 @@ public class JNastavovacVelikostiDlazdic extends JPanel implements AfterEventRec
 	}
 
 	public void onEvent(final ZmenaMapNastalaEvent event) {
-		final EKaType podklad = event.getKatype();
+		final KaType podklad = event.getKatype();
 		iModel.setMinimum(podklad.getMinMoumer());
 		iModel.setMaximum(podklad.getMaxMoumer());
 		iModel.setValue(podklad.fitMoumer((Integer) iModel.getValue()));

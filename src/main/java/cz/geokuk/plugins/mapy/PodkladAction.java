@@ -1,16 +1,16 @@
 package cz.geokuk.plugins.mapy;
 
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 
 public class PodkladAction extends MapyAction0 {
 
 	private static final long serialVersionUID = 8106696486908484270L;
 
-	public PodkladAction(final EKaType katype) {
+	public PodkladAction(final KaType katype) {
 		super(katype);
 	}
 
-	public EKaType getPodklad() {
+	public KaType getPodklad() {
 		return super.getKaType();
 	}
 

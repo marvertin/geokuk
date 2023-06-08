@@ -60,6 +60,7 @@ public class FPref {
 	public static final String VALUE_MAPOVE_DEKORACE_value = "mapoveDekorace";
 
 	public static final String VALUE_MAPOVE_PODKLADY_value = "mapovePodklady";
+	public static final String VALUE_MAPOVE_PODKLADY_DEFINITIONS_FILE_value = "mapovePodkladyJson";
 	public static final String VSEOBECNE_node = "vseobecne";
 	public static final String ZOBRAZ_OBSAZENOST_value = "zobrazitObsazenost";
 

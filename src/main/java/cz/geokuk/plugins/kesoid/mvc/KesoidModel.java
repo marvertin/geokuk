@@ -17,11 +17,15 @@ import cz.geokuk.plugins.kesoid.importek.InformaceOZdrojich;
 import cz.geokuk.plugins.kesoid.importek.MultiNacitacLoaderManager;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mapicon.*;
+import cz.geokuk.plugins.mapy.kachle.data.ConfigurableMapUrlBuilder;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 import cz.geokuk.plugins.vylety.EVylet;
 import cz.geokuk.util.exception.EExceptionSeverity;
 import cz.geokuk.util.exception.FExceptionDumper;
 import cz.geokuk.util.file.KeFile;
 import lombok.Getter;
+
+import static java.util.Arrays.asList;
 
 /**
  * @author Martin Veverka

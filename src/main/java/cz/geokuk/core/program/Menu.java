@@ -2,6 +2,7 @@ package cz.geokuk.core.program;
 
 import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.*;
 
@@ -10,6 +11,7 @@ import cz.geokuk.plugins.kesoid.kind.kes.*;
 import cz.geokuk.plugins.kesoid.mapicon.JMenuIkony;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracVyletu;
 import cz.geokuk.plugins.mapy.MapyAction0;
+import cz.geokuk.plugins.mapy.MapyModel;
 import cz.geokuk.plugins.mapy.PodkladAction;
 import cz.geokuk.plugins.refbody.NaKonkretniBodAction;
 import cz.geokuk.plugins.refbody.RefbodyModel;
@@ -19,6 +21,7 @@ public class Menu extends MenuStrujce {
 
 	private Akce akce;
 	private RefbodyModel refbodyModel;
+	private MapyModel mapyModel;
 	private final JMainFrame jMainFrame;
 
 	public Menu(final JMainFrame jMainFrame, final JGeokukToolbar geokukToolbar) {
@@ -38,16 +41,18 @@ public class Menu extends MenuStrujce {
 		this.refbodyModel = refbodyModel;
 	}
 
-	public void makeMapSubmenuPart(final Akce akce) {
+	public void inject(MapyModel mapyModel) {
+		this.mapyModel = mapyModel;
+	}
+
+	public void makeMapSubmenuPart(final Akce akce, String selectedPodklad) {
 		final ButtonGroup mapPodkladButtonGroup = new ButtonGroup();
 		for (final MapyAction0 mapoakce1 : akce.mapoakce) {
 			if (mapoakce1 instanceof PodkladAction) {
-				item(mapoakce1, mapPodkladButtonGroup);
+				boolean selected = Objects.equals(selectedPodklad, ((PodkladAction)mapoakce1).getPodklad().getId());
+				item(mapoakce1, mapPodkladButtonGroup, selected);
 			}
 		}
-
-		separator();
-
 	}
 
 	@Override
@@ -108,7 +113,7 @@ public class Menu extends MenuStrujce {
 		menu("Mapy", "Řízení zobrazení součástí map");
 		menu.setMnemonic(KeyEvent.VK_M);
 
-		makeMapSubmenuPart(akce);
+		makeMapSubmenuPart(akce, mapyModel.getConfiguredPodklad());
 
 		separator();
 		item(akce.priblizMapuAction);
