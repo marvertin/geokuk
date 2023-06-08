@@ -3,6 +3,10 @@ package cz.geokuk.plugins.mapy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
+import cz.geokuk.framework.MyPreferences;
+import cz.geokuk.plugins.kesoid.mvc.KesoidUmisteniSouboru;
+import cz.geokuk.plugins.kesoid.mvc.MapyUmisteniSouboru;
+import cz.geokuk.plugins.kesoid.mvc.MapyUmisteniSouboruChangedEvent;
 import cz.geokuk.plugins.mapy.kachle.data.ConfigurableMapUrlBuilder;
 import cz.geokuk.plugins.mapy.kachle.data.KaType;
 import org.slf4j.Logger;
@@ -28,6 +32,7 @@ import static java.util.stream.Collectors.toList;
 public class MapyModel extends Model0 {
     private static final Logger LOG = LoggerFactory.getLogger(MapyModel.class);
     private static final String DEFAULT_MAP_DEFINITIONS_JSON = "defaultMapDefinitions.utf-8.json";
+    private MapyUmisteniSouboru umisteniSouboru;
     private Collection<KaType> mapy;
     private KaType podklad;
 
@@ -44,6 +49,26 @@ public class MapyModel extends Model0 {
     public KaType getPodklad() {
         return podklad;
     }
+
+    private MapyUmisteniSouboru loadUmisteniSouboru() {
+        final MapyUmisteniSouboru u = new MapyUmisteniSouboru();
+        final MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
+        u.setMapyJsonFile(pref.getFilex(FPref.VALUE_MAPOVE_PODKLADY_DEFINITIONS_FILE_value, MapyUmisteniSouboru.MAPY_JSON_FILE));
+        return u;
+    }
+
+    public void setUmisteniSouboru(MapyUmisteniSouboru umisteniSouboru) {
+        if (Objects.equals(this.umisteniSouboru, umisteniSouboru)) {
+            return;
+        }
+        this.umisteniSouboru = umisteniSouboru;
+
+        MyPreferences pref = currPrefe().node(FPref.UMISTENI_SOUBORU_node);
+        pref.putFilex(FPref.VALUE_MAPOVE_PODKLADY_DEFINITIONS_FILE_value, umisteniSouboru.getMapyJsonFile());
+
+        fire(new MapyUmisteniSouboruChangedEvent(umisteniSouboru));
+    }
+
     public void setPodklad(final KaType podklad) {
         if (podklad == this.podklad) {
             return;
@@ -60,7 +85,7 @@ public class MapyModel extends Model0 {
     @Override
     protected void initAndFire() {
         _init();
-        // Nemělo by se tu volat fajruj()?
+        fajruj();
     }
 
     private void fajruj() {
@@ -70,6 +95,7 @@ public class MapyModel extends Model0 {
     }
 
     private void _init() {
+        setUmisteniSouboru(loadUmisteniSouboru());
         setMapy(prepareAvailableMapsCollection());
         String defaultPodkladId = getMapy().stream().filter(m -> !m.isIgnored()).findFirst().map(KaType::getId).orElse(null);
         String selectedPodkladId = Optional.ofNullable(getConfiguredPodklad()).orElse(defaultPodkladId);
@@ -83,12 +109,12 @@ public class MapyModel extends Model0 {
     }
 
     private Reader _mapDefinitionsJson() throws IOException {
-        File json = currPrefe().node(FPref.NODE_KTERE_MAPY_node).getFile(FPref.VALUE_MAPOVE_PODKLADY_DEFINITIONS_FILE_value, null);
+        File json = currPrefe().node(FPref.UMISTENI_SOUBORU_node).getFile(FPref.VALUE_MAPOVE_PODKLADY_DEFINITIONS_FILE_value, null);
         if (json == null) {
             LOG.info("Název souboru s definicemi není nastaven: [{}]{}", currPrefe().node(FPref.NODE_KTERE_MAPY_node), FPref.VALUE_MAPOVE_PODKLADY_DEFINITIONS_FILE_value);
             return _useDefaultMapDefinitions();
         }
-        if (json.getName().toLowerCase().endsWith(".json")) {
+        if (!json.getName().toLowerCase().endsWith(".json")) {
             LOG.info("Název souboru s definicemi map musí mít příponu .json: {}", json);
             return _useDefaultMapDefinitions();
         }
@@ -111,7 +137,6 @@ public class MapyModel extends Model0 {
             .orElseThrow(() -> new IllegalStateException("Výchozí definice map \"" + DEFAULT_MAP_DEFINITIONS_JSON + "\" nebyla nalezena."))
         ;
     }
-
     private Charset _extractCharsetFromFileName(File f) {
         Matcher matcher = Pattern.compile("^.\\.(-\\w+)\\.json").matcher(f.getName());
         if (!matcher.matches()) {
@@ -129,6 +154,7 @@ public class MapyModel extends Model0 {
             return StandardCharsets.UTF_8;
         }
     }
+
     private Collection<KaType> prepareAvailableMapsCollection() {
         return _configurableMapSources().collect(toList());
     }
