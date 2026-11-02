@@ -42,7 +42,7 @@ public class ObsazenostModel extends PodkladMapSpecificModel0<ObsazenostModel, O
 	 */
 	@Override
 	protected boolean getVisibleFromPreferences(final boolean defaultOnoff) {
-		return currPrefe().node(FPref.MRIZKA_node).getBoolean(FPref.ZOBRAZ_OBSAZENOST_value, defaultOnoff);
+		return currPrefe().node(FPref.MRIZKA_node).getBoolean(FPref.ZOBRAZ_OBSAZENOST_value, false);
 	}
 
 	/*

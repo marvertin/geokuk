@@ -13,7 +13,7 @@ public class JednotkoveKruhyAction extends ToggleAction0 {
 
 	public JednotkoveKruhyAction() {
 		super("Jednotkové kruhy");
-		putValue(SHORT_DESCRIPTION, "Kruhy mají velikost 10m, 100m, 10km atd.");
+		putValue(SHORT_DESCRIPTION, "Zvýrazňovací kruhy mají poloměr 10 m, 100 m, 1 km, 10 km… podle přiblížení mapy.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_J);
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("alt F8"));
 	}
@@ -30,6 +30,9 @@ public class JednotkoveKruhyAction extends ToggleAction0 {
 	protected void onSlectedChange(final boolean onoff) {
 		final KruhySettings data = model.getData();
 		data.setJednotkovaVelikost(onoff);
+		if (onoff) {
+			data.setOnoff(true);
+		}
 		model.setData(data);
 	}
 

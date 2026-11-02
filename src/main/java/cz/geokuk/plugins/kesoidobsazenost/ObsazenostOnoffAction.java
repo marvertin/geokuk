@@ -13,7 +13,7 @@ public class ObsazenostOnoffAction extends ToggleAction0 {
 
 	public ObsazenostOnoffAction() {
 		super("Obsazenost 161 m");
-		putValue(SHORT_DESCRIPTION, "Zobrazí na mapě oblasti, které jsou již obsazené kešemi a kde nemohou vzniknout další keše.");
+		putValue(SHORT_DESCRIPTION, "Zobrazí kruhy o poloměru 161 m kolem fyzických částí keší, i skrytých filtrem. Nová keš nesmí ležet uvnitř cizího kruhu, překryv kruhů pravidlo neporušuje.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_O);
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0));
 
