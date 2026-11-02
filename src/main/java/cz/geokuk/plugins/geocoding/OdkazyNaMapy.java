@@ -59,12 +59,10 @@ public final class OdkazyNaMapy {
 		return odkazy;
 	}
 
-	/** Odkazy v podnabídce Další mapy; ČÚZK jen tam, kde se dá použít, OpenStreetMap jen když ho nenabízí jiná položka nabídky ({@code sOpenStreetMap}). */
-	public static List<Odkaz> dalsi(final Wgs wgs, final boolean sOpenStreetMap) {
+	/** Odkazy v podnabídce Další mapy: OpenStreetMap a ČÚZK Geoprohlížeč (jen tam, kde se dá použít). */
+	public static List<Odkaz> dalsi(final Wgs wgs) {
 		final List<Odkaz> odkazy = new ArrayList<>();
-		if (sOpenStreetMap) {
-			odkazy.add(new Odkaz("OpenStreetMap", "OpenStreetMap", Nominatim.odkazNaMapu(wgs)));
-		}
+		odkazy.add(new Odkaz("OpenStreetMap", "OpenStreetMap", Nominatim.odkazNaMapu(wgs)));
 		final String cuzk = cuzk(wgs);
 		if (cuzk != null) {
 			odkazy.add(new Odkaz("ČÚZK Geoprohlížeč", "ČÚZK Geoprohlížeč", cuzk));

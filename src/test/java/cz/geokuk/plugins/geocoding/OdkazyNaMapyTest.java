@@ -55,8 +55,7 @@ public class OdkazyNaMapyTest {
 	@Test
 	public void cuzkMimoRepublikuSeNenabizi() {
 		assertNull(OdkazyNaMapy.cuzk(new Wgs(48.8566, 2.3522)));
-		assertTrue("mimo ČR nic nezbývá do podnabídky", OdkazyNaMapy.dalsi(new Wgs(48.8566, 2.3522), false).isEmpty());
-		assertEquals(Arrays.asList("OpenStreetMap"), nazvy(OdkazyNaMapy.dalsi(new Wgs(48.8566, 2.3522), true)));
+		assertEquals("mimo ČR zůstane jen OpenStreetMap", Arrays.asList("OpenStreetMap"), nazvy(OdkazyNaMapy.dalsi(new Wgs(48.8566, 2.3522))));
 	}
 
 	@Test
@@ -68,10 +67,9 @@ public class OdkazyNaMapyTest {
 	}
 
 	@Test
-	public void dalsiMapyMajiOpenStreetMapJenMimoKrizACuzkVCr() {
-		assertEquals(Arrays.asList("OpenStreetMap", "ČÚZK Geoprohlížeč"), nazvy(OdkazyNaMapy.dalsi(MISTO, true)));
-		assertEquals(Arrays.asList("ČÚZK Geoprohlížeč"), nazvy(OdkazyNaMapy.dalsi(MISTO, false)));
-		for (final OdkazyNaMapy.Odkaz o : OdkazyNaMapy.dalsi(MISTO, true)) {
+	public void dalsiMapyMajiOpenStreetMapACuzkVCr() {
+		assertEquals(Arrays.asList("OpenStreetMap", "ČÚZK Geoprohlížeč"), nazvy(OdkazyNaMapy.dalsi(MISTO)));
+		for (final OdkazyNaMapy.Odkaz o : OdkazyNaMapy.dalsi(MISTO)) {
 			assertTrue(o.url, o.url.startsWith("https://"));
 			assertFalse(o.url, o.url.contains(" "));
 		}
@@ -102,7 +100,7 @@ public class OdkazyNaMapyTest {
 	@Test
 	public void tooltipNazyvaWebAneNazevPolozky() {
 		final List<OdkazyNaMapy.Odkaz> vsechny = new ArrayList<>(OdkazyNaMapy.hlavni(MISTO));
-		vsechny.addAll(OdkazyNaMapy.dalsi(MISTO, true));
+		vsechny.addAll(OdkazyNaMapy.dalsi(MISTO));
 		final List<String> tooltipy = new ArrayList<>();
 		for (final OdkazyNaMapy.Odkaz o : vsechny) {
 			tooltipy.add((String) new OtevritVMapeAction(o).getValue(javax.swing.Action.SHORT_DESCRIPTION));

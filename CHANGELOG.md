@@ -123,9 +123,8 @@
   neořezává.
 - V nabídce pravého tlačítka na mapě jsou položky Otevřít v Mapy.com (otevře
   turistickou mapu) a Otevřít v Google Mapách; podnabídka Další mapy má
-  položky OpenStreetMap (mimo kříž) a ČÚZK Geoprohlížeč (jen v ČR a jejím
-  okolí). Značka se otevře v místě kurzoru, u kříže v místě kříže; u kříže je
-  OpenStreetMap samostatná položka Na OpenStreetMap….
+  položky OpenStreetMap, ČÚZK Geoprohlížeč (jen v ČR a jejím okolí) a u kříže
+  Otevřít StreetView. Značka se otevře v místě kurzoru, u kříže v místě kříže.
 - Nová volba v menu Kešoidy „Přejít na kešoid ze schránky“ (výchozí vypnuto):
   když se do schránky zkopíruje kód kešoidu nebo odkaz s kódem a GeoKuk není
   aktivní okno, mapa se vycentruje na kešoid a otevře se jeho detail; okno se
