@@ -11,6 +11,7 @@ import cz.geokuk.plugins.kesoid.kind.kes.*;
 import cz.geokuk.plugins.kesoid.mapicon.JMenuIkony;
 import cz.geokuk.plugins.kesoid.mapicon.JMenuZvyrazneni;
 import cz.geokuk.plugins.kesoid.mvc.JVybiracVyletu;
+import cz.geokuk.plugins.kesoid.mvc.PrepniZdrojAction;
 import cz.geokuk.plugins.mapy.MapyAction0;
 import cz.geokuk.plugins.mapy.PodkladAction;
 import cz.geokuk.plugins.mapy.kachle.KachleModel;
@@ -109,6 +110,21 @@ public class Menu extends MenuStrujce {
 		item(akce.closeAction);
 	}
 
+	/** Podnabídka Zdroje keší: zapnutí a vypnutí typů zdrojů klávesami Ctrl+číslo, na číselné klávesnici také. */
+	private void sestavSubmenuZdroju() {
+		final JMenu hlavni = menu;
+		final JMenu zdroje = new JMenu("Zdroje keší");
+		zdroje.setToolTipText("Zapne nebo vypne načítání typu zdroje; zkratky Ctrl+1 až Ctrl+4.");
+		hlavni.add(zdroje);
+		menu = zdroje;
+		final PrepniZdrojAction[] vsechny = { akce.prepniZdrojGpxAction, akce.prepniZdrojGeogetAction, akce.prepniZdrojGsakAction, akce.prepniZdrojOpensakAction };
+		for (final PrepniZdrojAction zdroj : vsechny) {
+			item(zdroj);
+		}
+		PrepniZdrojAction.navazNumpad(jMainFrame.getRootPane(), vsechny);
+		menu = hlavni;
+	}
+
 	/** Menu Mapy: podklady, překryvy, správce offline map, pohyb po mapě a volby ukládání map. */
 	void sestavMenuMapy() {
 		// Ovládat mapy
@@ -192,6 +208,8 @@ public class Menu extends MenuStrujce {
 		item(akce.zobrazeniKesiTeckyAction, zobrazeniKesi);
 		item(akce.limityKresleniAction);
 		menu.add(factory.init(new JMenuZvyrazneni()));
+		separator();
+		sestavSubmenuZdroju();
 		separator();
 		item(akce.popiskyOnoffAction);
 		item(akce.popiskyNastavParametryAction);

@@ -341,13 +341,19 @@ public class JTabulkaZdroju extends JPanel {
 		}
 	}
 
+	/** Název typu a v závorce jeho zkratka, třeba „GSAK (Ctrl+3)“. */
+	static String nazevTypuSeZkratkou(final TypZdroje typ) {
+		final String zkratka = ZkratkyZdroju.text(typ);
+		return zkratka == null ? typ.getNazev() : typ.getNazev() + " (" + zkratka + ")";
+	}
+
 	String text(final Radek radek, final int sloupec) {
 		final StavPolozky p = radek.polozka;
 		switch (sloupec) {
 		case SL_NACIST:
 			return "";
 		case SL_ZDROJ:
-			return p != null ? p.getNazev() : radek.typ.getNazev();
+			return p != null ? p.getNazev() : nazevTypuSeZkratkou(radek.typ);
 		case SL_VELIKOST:
 			return velikost(p != null ? p.getVelikostNaDisku() : velikostTypu(radek.typ));
 		case SL_WP:

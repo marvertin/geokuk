@@ -445,13 +445,15 @@ public class JPrepinaceZdroju extends JPanel {
 	}
 
 	static String tooltipZaskrtavatka(final TypZdroje typ, final StavVyberu volba) {
+		final String zkratka = ZkratkyZdroju.text(typ);
+		final String ve = zkratka == null ? "" : " (" + zkratka + ")";
 		switch (volba) {
 		case VYPNUTO:
-			return typ.getNazev() + " zapnout" + jenTypem(typ);
+			return typ.getNazev() + " zapnout" + ve + jenTypem(typ);
 		case CASTECNE:
-			return typ.getNazev() + " vypnout (načítá se jen část položek)" + jenTypem(typ);
+			return typ.getNazev() + " vypnout" + ve + " (načítá se jen část položek)" + jenTypem(typ);
 		default:
-			return typ.getNazev() + " vypnout" + jenTypem(typ);
+			return typ.getNazev() + " vypnout" + ve + jenTypem(typ);
 		}
 	}
 

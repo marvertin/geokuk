@@ -23,6 +23,7 @@ import cz.geokuk.plugins.cesty.akce.soubor.*;
 import cz.geokuk.plugins.geocoding.GeocodingAdrAction;
 import cz.geokuk.plugins.kesoid.EZobrazeniKesi;
 import cz.geokuk.plugins.kesoid.filtr.FiltrIkonyAction;
+import cz.geokuk.plugins.kesoid.importek.TypZdroje;
 import cz.geokuk.plugins.kesoid.kind.kes.JenDoTerenuUNenalezenychAction;
 import cz.geokuk.plugins.kesoid.kind.kes.JenFinalUNalezenychAction;
 import cz.geokuk.plugins.kesoid.mapicon.*;
@@ -130,6 +131,10 @@ public class Akce {
 	public final RenderAction renderAction = new RenderAction();
 
 	public final KesoidyOnoffAction kesoidyOnoffAction = new KesoidyOnoffAction();
+	public final PrepniZdrojAction prepniZdrojGpxAction = new PrepniZdrojAction(TypZdroje.GPX);
+	public final PrepniZdrojAction prepniZdrojGeogetAction = new PrepniZdrojAction(TypZdroje.GEOGET);
+	public final PrepniZdrojAction prepniZdrojGsakAction = new PrepniZdrojAction(TypZdroje.GSAK);
+	public final PrepniZdrojAction prepniZdrojOpensakAction = new PrepniZdrojAction(TypZdroje.OPENSAK);
 	public final PrejdiNaKesoidZeSchrankyAction prejdiNaKesoidZeSchrankyAction = new PrejdiNaKesoidZeSchrankyAction();
 
 	public final NapovedaAction napovedaAction = new NapovedaAction(null);
@@ -197,6 +202,12 @@ public class Akce {
 				}
 			} catch (final IllegalAccessException e) {
 				throw new IllegalStateException(e);
+			}
+		}
+		for (final PrepniZdrojAction zdroj : new PrepniZdrojAction[] { prepniZdrojGpxAction, prepniZdrojGeogetAction, prepniZdrojGsakAction, prepniZdrojOpensakAction }) {
+			final KeyStroke numpad = ZkratkyZdroju.zkratkaNumpad(zdroj.getTyp());
+			if (numpad != null) {
+				zkratky.put(numpad, "akce " + zdroj.getValue(Action.NAME));
 			}
 		}
 		// Referenční body dostávají Alt+číslo postupně až při sestavení menu.

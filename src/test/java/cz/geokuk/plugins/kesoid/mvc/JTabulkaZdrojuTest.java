@@ -100,6 +100,14 @@ public class JTabulkaZdrojuTest {
 	}
 
 	@Test
+	public void radekTypuUkazujeZkratku() {
+		final JTabulkaZdroju t = tabulka(null);
+		Assert.assertEquals("GPX (Ctrl+1)", text(t, TypZdroje.GPX, null, JTabulkaZdroju.SL_ZDROJ));
+		Assert.assertEquals("GSAK (Ctrl+3)", text(t, TypZdroje.GSAK, null, JTabulkaZdroju.SL_ZDROJ));
+		Assert.assertEquals("OpenSAK (Ctrl+4)", text(t, TypZdroje.OPENSAK, null, JTabulkaZdroju.SL_ZDROJ));
+	}
+
+	@Test
 	public void detailMaJenSvujTyp() {
 		final JTabulkaZdroju t = tabulka(TypZdroje.GEOGET);
 		Assert.assertEquals(3, t.getRadky().size());
