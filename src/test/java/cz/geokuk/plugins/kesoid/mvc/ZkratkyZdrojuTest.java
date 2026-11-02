@@ -110,4 +110,33 @@ public class ZkratkyZdrojuTest {
 		assertEquals(java.util.Arrays.asList("GSAK true"), volani);
 		assertNull("Ctrl+4 (OpenSAK) nebyl navázán", koren.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).get(ZkratkyZdroju.zkratkaNumpad(TypZdroje.OPENSAK)));
 	}
+
+	/** Zaškrtnutí položky menu Zdroje keší odpovídá stavu typu: zapnutý typ zaškrtnutý, vypnutý ne. */
+	@Test
+	public void zaskrtnutiPolozkyMenuOdpovidaStavuZdroje() {
+		final StavyZdrojuProTesty data = StavyZdrojuProTesty.vzorek();
+		final StavZdroju stav = data.snimek();
+		final java.util.Map<TypZdroje, JCheckBoxMenuItem> polozky = new java.util.EnumMap<>(TypZdroje.class);
+		final java.util.Map<TypZdroje, PrepniZdrojAction> akce = new java.util.EnumMap<>(TypZdroje.class);
+		for (final TypZdroje typ : TypZdroje.values()) {
+			final PrepniZdrojAction a = new PrepniZdrojAction(typ);
+			final JCheckBoxMenuItem polozka = new JCheckBoxMenuItem();
+			a.join(polozka);
+			polozky.put(typ, polozka);
+			akce.put(typ, a);
+			a.onEvent(new StavZdrojuEvent(stav));
+		}
+		for (final TypZdroje typ : TypZdroje.values()) {
+			assertEquals(typ.toString(), stav.getStavVyberuTypu(typ) != StavZdroju.StavVyberu.VYPNUTO, polozky.get(typ).isSelected());
+			assertEquals(polozky.get(typ).isSelected(), akce.get(typ).isSelected());
+		}
+		// Typ, který se vypne, se v menu odškrtne.
+		data.vypnuteTypy.add(TypZdroje.GSAK);
+		data.prepisZapnuti();
+		for (final PrepniZdrojAction a : akce.values()) {
+			a.onEvent(new StavZdrojuEvent(data.snimek()));
+		}
+		assertFalse(polozky.get(TypZdroje.GSAK).isSelected());
+		assertTrue(polozky.get(TypZdroje.GPX).isSelected());
+	}
 }

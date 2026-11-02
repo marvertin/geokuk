@@ -45,4 +45,10 @@ public final class ZkratkyZdroju {
 		final int cislo = cislo(typ);
 		return cislo == 0 ? null : "Ctrl+" + cislo;
 	}
+
+	/** Název typu a v závorce jeho zkratka, třeba „GSAK (Ctrl+3)“. */
+	public static String nazevSeZkratkou(final TypZdroje typ) {
+		final String zkratka = text(typ);
+		return zkratka == null ? typ.getNazev() : typ.getNazev() + " (" + zkratka + ")";
+	}
 }

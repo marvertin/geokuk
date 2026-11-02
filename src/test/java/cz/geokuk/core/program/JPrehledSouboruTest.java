@@ -32,6 +32,97 @@ public class JPrehledSouboruTest {
 		Assert.assertEquals(2, pocet);
 	}
 
+	/** Zdroje keší jsou na jedné záložce, každý v rámečku s názvem a klávesovou zkratkou. */
+	@Test
+	public void zdrojeKesiMajiJednuZalozkuSNadpisyAZkratkami() {
+		final JPrehledSouboru panel = new JPrehledSouboru(null);
+		final javax.swing.JTabbedPane zalozky = (javax.swing.JTabbedPane) najdi(panel, javax.swing.JTabbedPane.class).get(0);
+		final List<String> nazvyZalozek = new ArrayList<>();
+		for (int i = 0; i < zalozky.getTabCount(); i++) {
+			nazvyZalozek.add(zalozky.getTitleAt(i));
+		}
+		Assert.assertEquals(java.util.Arrays.asList("Zdroje keší", "Mapy", "Rendr", "Program"), nazvyZalozek);
+		final List<String> nadpisy = new ArrayList<>();
+		for (final java.awt.Component c : najdi((java.awt.Container) zalozky.getComponentAt(0), javax.swing.JPanel.class)) {
+			if (((javax.swing.JPanel) c).getBorder() instanceof javax.swing.border.CompoundBorder
+					&& ((javax.swing.border.CompoundBorder) ((javax.swing.JPanel) c).getBorder()).getOutsideBorder() instanceof javax.swing.border.TitledBorder) {
+				nadpisy.add(((javax.swing.border.TitledBorder) ((javax.swing.border.CompoundBorder) ((javax.swing.JPanel) c).getBorder()).getOutsideBorder()).getTitle());
+			}
+		}
+		Assert.assertEquals(java.util.Arrays.asList("GPX (Ctrl+1)", "GeoGet (Ctrl+2)", "GSAK (Ctrl+3)", "OpenSAK (Ctrl+4)"), nadpisy);
+	}
+
+	/** Panel složky GSAK a OpenSAK se nesmí zkrátit pod výšku, kterou potřebují přidaná políčka (jinak by se políčka neukázala). */
+	@Test
+	public void panelSlozkyMaMistoProPridanaPolicka() {
+		final JPrehledSouboru panel = new JPrehledSouboru(null);
+		int pocet = 0;
+		for (final javax.swing.JCheckBox c : checkboxy(panel)) {
+			if ("Nové databáze načíst až po vybrání".equals(c.getText())) {
+				pocet++;
+				final java.awt.Container rodic = c.getParent();
+				Assert.assertTrue(rodic.getMaximumSize().height + " < " + rodic.getPreferredSize().height, rodic.getMaximumSize().height >= rodic.getPreferredSize().height);
+			}
+		}
+		Assert.assertEquals(2, pocet);
+	}
+
+	/** Na malé obrazovce (třeba 1366×768 při 150 %) se záložky posouvají a řádek s tlačítkem Uložit zůstane vidět. */
+	@Test
+	public void minimalniVyskaPanelujeMalaATlacitkoUlozitJeVOknuVidet() {
+		final JPrehledSouboru panel = new JPrehledSouboru(null);
+		Assert.assertTrue("minimální výška " + panel.getMinimumSize().height, panel.getMinimumSize().height <= 290);
+		Assert.assertTrue(panel.getMinimumSize().height < JUmisteniSouboruDialog.NEJMENSI_VELIKOST.height - 100);
+		for (final java.awt.Dimension okno : new java.awt.Dimension[] { JUmisteniSouboruDialog.NEJMENSI_VELIKOST, new java.awt.Dimension(910, 460) }) {
+			// Bez skutečného okna, ať test běží i bez displeje: panel dostane velikost okna a rozloží se.
+			panel.setSize(okno);
+			rozloz(panel);
+			final javax.swing.JButton ulozit = najdiTlacitko(panel, "Uložit");
+			Assert.assertNotNull(ulozit);
+			final java.awt.Point levyHorni = javax.swing.SwingUtilities.convertPoint(ulozit.getParent(), ulozit.getLocation(), panel);
+			Assert.assertTrue("Uložit leží uvnitř okna " + okno + ": y=" + levyHorni.y + " h=" + ulozit.getHeight() + " výška=" + panel.getHeight(), levyHorni.y + ulozit.getHeight() <= panel.getHeight());
+			Assert.assertTrue(levyHorni.x + ulozit.getWidth() <= panel.getWidth());
+		}
+	}
+
+	private static void rozloz(final java.awt.Component c) {
+		c.doLayout();
+		if (c instanceof java.awt.Container) {
+			for (final java.awt.Component k : ((java.awt.Container) c).getComponents()) {
+				rozloz(k);
+			}
+		}
+	}
+
+	private static javax.swing.JButton najdiTlacitko(final java.awt.Container kde, final String text) {
+		for (final java.awt.Component c : najdi(kde, javax.swing.JButton.class)) {
+			if (text.equals(((javax.swing.JButton) c).getText())) {
+				return (javax.swing.JButton) c;
+			}
+		}
+		return null;
+	}
+
+	@Test
+	public void dialogJeVetsiNezMinimum() {
+		Assert.assertTrue(JUmisteniSouboruDialog.VYCHOZI_VELIKOST.width > JUmisteniSouboruDialog.NEJMENSI_VELIKOST.width);
+		Assert.assertTrue(JUmisteniSouboruDialog.VYCHOZI_VELIKOST.height > JUmisteniSouboruDialog.NEJMENSI_VELIKOST.height);
+		Assert.assertTrue(JUmisteniSouboruDialog.VYCHOZI_VELIKOST.width >= 900);
+	}
+
+	private static List<java.awt.Component> najdi(final java.awt.Container kde, final Class<?> typ) {
+		final List<java.awt.Component> vysledek = new ArrayList<>();
+		for (final java.awt.Component c : kde.getComponents()) {
+			if (typ.isInstance(c)) {
+				vysledek.add(c);
+			}
+			if (c instanceof java.awt.Container) {
+				vysledek.addAll(najdi((java.awt.Container) c, typ));
+			}
+		}
+		return vysledek;
+	}
+
 	private static List<javax.swing.JCheckBox> checkboxy(final java.awt.Container kde) {
 		final List<javax.swing.JCheckBox> vysledek = new ArrayList<>();
 		for (final java.awt.Component c : kde.getComponents()) {

@@ -349,6 +349,25 @@ public class UzivatelskeMapyTest {
 		}
 	}
 
+	/** Příklady zkratek v chybové hlášce nesmí být obsazené akcí programu ani vestavěnou mapou, jinak by hláška radila zkratku, kterou program odmítne. */
+	@Test
+	public void prikladyZkratekVHlasceJsouVolne() throws Exception {
+		zpracuj("m.nazev=M", "m.url=" + URL, "m.zkratka=nesmysl nesmysl");
+		Assert.assertEquals(chyby.toString(), 1, chyby.size());
+		final String hlaska = chyby.get(0);
+		final java.util.regex.Matcher m = java.util.regex.Pattern.compile("\\(např\\. ([^)]*)\\)").matcher(hlaska);
+		Assert.assertTrue(hlaska, m.find());
+		final java.util.Map<KeyStroke, String> obsazene = new cz.geokuk.core.program.Akce().zkratky();
+		for (final String priklad : m.group(1).split(", ")) {
+			final KeyStroke zkratka = priklad.length() == 1 ? KeyStroke.getKeyStroke(Character.toUpperCase(priklad.charAt(0)), 0) : KeyStroke.getKeyStroke(priklad);
+			Assert.assertNotNull(priklad, zkratka);
+			Assert.assertFalse(priklad + " je obsazená: " + obsazene.get(zkratka), obsazene.containsKey(zkratka));
+			for (final EKaType mapa : EKaType.vestavene()) {
+				Assert.assertNotEquals(priklad + " je obsazená mapou " + mapa.getNazev(), zkratka, mapa.getKeyStroke());
+			}
+		}
+	}
+
 	@Test
 	public void zkratkaAkceProgramuSeOdmitne() throws Exception {
 		UzivatelskeMapy.setZkratkyProgramu(Collections.singletonMap(KeyStroke.getKeyStroke("F3"), "akce Listing do Geogetu"));

@@ -16,6 +16,12 @@
 - V nastavení Umístění souborů je u GSAKu odstraněno pole Čas nenálezu
   (program ho nepoužíval) a volba u GSAKu i OpenSAKu se jmenuje Nové databáze
   načíst až po vybrání. Uložená nastavení zůstávají platná.
+- Klávesa F5 patří zobrazování kešoidů. Uživatelská mapa, která má zkratku F5,
+  se při načtení odmítne s hláškou o obsazené zkratce; stačí v jejím souboru
+  zkratku změnit nebo smazat. Příklad volné zkratky v hlášce je F4.
+- Okno Umístění souborů je větší a zdroje keší (GPX, GeoGet, GSAK, OpenSAK)
+  jsou na jedné záložce Zdroje keší, každý v rámečku se jménem a svou
+  klávesovou zkratkou.
 - Dialog Nápověda > O programu ukazuje nahoře verzi a licenci a pod nimi dvě
   části: původní texty Martina Veverky s odkazem na původní projekt a údaje
   o upravené verzi (GeoKuk community) s odkazy na projekt na GitHubu,

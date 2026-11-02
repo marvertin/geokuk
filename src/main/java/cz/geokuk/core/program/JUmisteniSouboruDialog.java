@@ -6,11 +6,14 @@ import cz.geokuk.framework.JMyDialog0;
 public class JUmisteniSouboruDialog extends JMyDialog0 implements AfterInjectInit {
 
 	private static final long serialVersionUID = 7180968190465321695L;
+	static final java.awt.Dimension VYCHOZI_VELIKOST = new java.awt.Dimension(900, 700);
+	static final java.awt.Dimension NEJMENSI_VELIKOST = new java.awt.Dimension(640, 420);
 	private JPrehledSouboru jPrehledSoubor;
 
 	public JUmisteniSouboruDialog() {
 		setTitle("Umístění souborů");
 		init();
+		nastavVelikost(VYCHOZI_VELIKOST, NEJMENSI_VELIKOST);
 	}
 
 	public void fokusni(final ESouborPanelName panelName) {

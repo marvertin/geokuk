@@ -11,6 +11,7 @@ import javax.swing.*;
 
 import cz.geokuk.core.render.*;
 import cz.geokuk.framework.Dlg;
+import cz.geokuk.plugins.kesoid.importek.TypZdroje;
 import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboru;
 import cz.geokuk.plugins.mapy.KachleUmisteniSouboruChangedEvent;
@@ -131,23 +132,23 @@ public class JPrehledSouboru extends JPanel {
 		jTabbedPane = new JTabbedPane();
 
 		final JComponent tab1 = createTab();
-		jTabbedPane.addTab("Keše", null, tab1, "Odkud program načítá keše.");
-		final JComponent tab1a = createTab();
-		jTabbedPane.addTab("GSAK", null, tab1a, "Načítání keší z GSAK.");
-		final JComponent tab1b = createTab();
-		jTabbedPane.addTab("OpenSAK", null, tab1b, "Načítání keší z OpenSAKu.");
+		jTabbedPane.addTab("Zdroje keší", null, jenSPosuvnikem(tab1), "Odkud program načítá keše: GPX, GeoGet, GSAK a OpenSAK; u každého zdroje je jeho klávesová zkratka.");
+		final JComponent sekceGpx = vytvorSekci(tab1, TypZdroje.GPX);
+		final JComponent sekceGeoget = vytvorSekci(tab1, TypZdroje.GEOGET);
+		final JComponent sekceGsak = vytvorSekci(tab1, TypZdroje.GSAK);
+		final JComponent sekceOpensak = vytvorSekci(tab1, TypZdroje.OPENSAK);
 		final JComponent tab2 = createTab();
-		jTabbedPane.addTab("Mapy", null, tab2, "Offline mapy v počítači.");
+		jTabbedPane.addTab("Mapy", null, jenSPosuvnikem(tab2), "Offline mapy v počítači.");
 		final JComponent tab3 = createTab();
-		jTabbedPane.addTab("Rendr", null, tab3, "Výstupní složky pro rendrování.");
+		jTabbedPane.addTab("Rendr", null, jenSPosuvnikem(tab3), "Výstupní složky pro rendrování.");
 		final JComponent tab4 = createTab();
-		jTabbedPane.addTab("Program", null, tab4, "Složky a soubory programu, všechny jsou ve složce s programem.");
+		jTabbedPane.addTab("Program", null, jenSPosuvnikem(tab4), "Složky a soubory programu, všechny jsou ve složce s programem.");
 		// tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
-		jKesDir = pridejJednuPolozkuproEdit(null, tab1, "Složka s keškami (GPX) získanými z Geogetu nebo jiného programu.", true, false);
-		jGeogetDataDir = pridejJednuPolozkuproEdit(null, tab1, "Datová složka GeoGetu.", true, true).nezakladat();
+		jKesDir = pridejJednuPolozkuproEdit(null, sekceGpx, "Složka s keškami (GPX) získanými z Geogetu nebo jiného programu.", true, false);
+		jGeogetDataDir = pridejJednuPolozkuproEdit(null, sekceGeoget, "Datová složka GeoGetu.", true, true).nezakladat();
 
-		jGsakDataDir = pridejJednuPolozkuproEdit(null, tab1a, "Datová složka GSAK.", true, true).nezakladat();
+		jGsakDataDir = pridejJednuPolozkuproEdit(null, sekceGsak, "Datová složka GSAK.", true, true).nezakladat();
 		jGsakNacitatAzPoVybrani = pridejLogickePole(jGsakDataDir, "Nové databáze načíst až po vybrání",
 		        "<html>" //
 		                + "Databáze GSAKu, které GeoKuk ještě neviděl, se nenačtou hned, ale zůstanou blokované," //
@@ -162,11 +163,15 @@ public class JPrehledSouboru extends JPanel {
 		                + "<br/>Můžete uvést více políček, použije se první časový údaj, který bude nalezen." //
 		                + "</html>");
 
-		jOpensakDataDir = pridejJednuPolozkuproEdit(null, tab1b, "Datová složka OpenSAKu.", true, true).nezakladat();
+		dorovnejVysku(jGsakDataDir);
+
+		jOpensakDataDir = pridejJednuPolozkuproEdit(null, sekceOpensak, "Datová složka OpenSAKu.", true, true).nezakladat();
 		jOpensakNacitatAzPoVybrani = pridejLogickePole(jOpensakDataDir, "Nové databáze načíst až po vybrání",
 		        "<html>Databáze OpenSAKu, které GeoKuk ještě neviděl, se nenačtou hned, ale zůstanou blokované," //
 		                + "<br/>dokud je nevyberete v tabulce zdrojů: najeďte myší na „Zdroje:“ ve stavovém řádku" //
 		                + "<br/>nebo otevřete Soubor &gt; Přehled zdrojů.</html>");
+
+		dorovnejVysku(jOpensakDataDir);
 
 		jOfflineMapyDir = pridejJednuPolozkuproEdit(null, tab2, "Offline mapy: soubory .map (třeba z osm.paws.cz) a k nim stažená témata (.zip, .xml).", true, false);
 
@@ -182,8 +187,10 @@ public class JPrehledSouboru extends JPanel {
 		pridejJednuPolozkuProCteni(null, tab4, "Cache: dlaždice map uložené na disk (lze smazat)", KachleUmisteniSouboru.KACHLE_CACHE_DIR, true);
 		pridejJednuPolozkuProCteni(null, tab4, "Log a chybová hlášení", new Filex(UmisteniProgramu.log(), false, true), true);
 		ukonciPanel(tab1);
-		ukonciPanel(tab1a);
-		ukonciPanel(tab1b);
+		for (final JComponent sekce : new JComponent[] { sekceGpx, sekceGeoget, sekceGsak, sekceOpensak }) {
+			sekce.remove(sekce.getComponentCount() - 1); // mezera za poslední položkou
+			sekce.setMaximumSize(new Dimension(Integer.MAX_VALUE, sekce.getPreferredSize().height));
+		}
 		ukonciPanel(tab2);
 		ukonciPanel(tab3);
 		ukonciPanel(tab4);
@@ -203,6 +210,32 @@ public class JPrehledSouboru extends JPanel {
 		// jTabbedPane.setSelectedIndex(2);
 		// jKmzDir.requestFocus();
 		registerEvents(ulozit);
+	}
+
+	/** Panel složky dostal další ovládací prvky, jeho nejvyšší výška musí odpovídat nové potřebné výšce. */
+	private static void dorovnejVysku(final JComponent panel) {
+		panel.setMaximumSize(new Dimension(panel.getMaximumSize().width, panel.getPreferredSize().height));
+	}
+
+	/** Záložka s dlouhým obsahem se na malém okně posouvá. */
+	private static JComponent jenSPosuvnikem(final JComponent obsah) {
+		final JScrollPane posuvnik = new JScrollPane(obsah);
+		posuvnik.setBorder(BorderFactory.createEmptyBorder());
+		posuvnik.getVerticalScrollBar().setUnitIncrement(16);
+		return posuvnik;
+	}
+
+	/** Rámeček s nadpisem zdroje a jeho klávesovou zkratkou, třeba „GSAK (Ctrl+3)“. */
+	private static JComponent vytvorSekci(final JComponent tab, final TypZdroje typ) {
+		final JComponent sekce = new JPanel();
+		sekce.setLayout(new BoxLayout(sekce, BoxLayout.PAGE_AXIS));
+		final javax.swing.border.TitledBorder ramecek = BorderFactory.createTitledBorder(ZkratkyZdroju.nazevSeZkratkou(typ));
+		ramecek.setTitleFont(ramecek.getTitleFont() == null ? null : ramecek.getTitleFont().deriveFont(java.awt.Font.BOLD));
+		sekce.setBorder(BorderFactory.createCompoundBorder(ramecek, BorderFactory.createEmptyBorder(2, 6, 4, 6)));
+		sekce.setAlignmentX(LEFT_ALIGNMENT);
+		tab.add(sekce);
+		tab.add(Box.createRigidArea(new Dimension(0, 8)));
+		return sekce;
 	}
 
 	private JJedenSouborPanel pridejJednuPolozkuProCteni(final ESouborPanelName souborPanelName, final JComponent tab, final String label, final Filex hodnota, final boolean jenAdresare) {
