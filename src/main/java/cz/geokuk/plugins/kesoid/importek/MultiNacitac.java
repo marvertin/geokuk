@@ -604,8 +604,7 @@ public class MultiNacitac {
 				pluginy.add(p.getClass().getName());
 			}
 		}
-		return Arrays.asList(genom, nick == null ? null : nick.name, nick == null ? null : nick.id, gsak == null ? null : gsak.getCasNalezu(), gsak == null ? null : gsak.getCasNenalezu(),
-				pluginy);
+		return Arrays.asList(genom, nick == null ? null : nick.name, nick == null ? null : nick.id, gsak == null ? null : gsak.getCasNalezu(), pluginy);
 	}
 
 	/** Skupiny z minulého dokončeného načtení, jejichž členům se nic nezměnilo: zapnuté, stejný soubor, nezamčené, stejný kontext. */

@@ -143,7 +143,6 @@ public class JPrehledSouboruKombinaceTest {
 		panel.onEvent(new KachleUmisteniSouboruChangedEvent(k));
 		final GsakParametryNacitani g = new GsakParametryNacitani();
 		g.setCasNalezu(Collections.emptySet());
-		g.setCasNenalezu(Collections.emptySet());
 		panel.onEvent(new GsakParametryNacitaniChangedEvent(g));
 		return panel;
 	}

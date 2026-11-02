@@ -24,7 +24,7 @@ public class JPrehledSouboruTest {
 		final JPrehledSouboru panel = new JPrehledSouboru(null);
 		int pocet = 0;
 		for (final javax.swing.JCheckBox c : checkboxy(panel)) {
-			if ("Načítat až po vybrání".equals(c.getText())) {
+			if ("Nové databáze načíst až po vybrání".equals(c.getText())) {
 				pocet++;
 				Assert.assertTrue(c.getToolTipText(), c.getToolTipText().contains("„Zdroje:“ ve stavovém řádku") && c.getToolTipText().contains("Soubor &gt; Přehled zdrojů"));
 			}
@@ -53,7 +53,7 @@ public class JPrehledSouboruTest {
 		final KesoidModel kesoidModel = new KesoidModel() {
 			@Override
 			public void setGsakParametryNacitani(final GsakParametryNacitani g) {
-				volani.add("gsak " + g.isNacistVsechnyDatabaze());
+				volani.add("gsak " + g.isNoveDatabazeHned());
 			}
 
 			@Override
@@ -93,8 +93,7 @@ public class JPrehledSouboruTest {
 		panel.onEvent(new KachleUmisteniSouboruChangedEvent(k));
 		final GsakParametryNacitani g = new GsakParametryNacitani();
 		g.setCasNalezu(Collections.emptySet());
-		g.setCasNenalezu(Collections.emptySet());
-		g.setNacistVsechnyDatabaze(false);
+		g.setNoveDatabazeHned(false);
 		panel.onEvent(new GsakParametryNacitaniChangedEvent(g));
 
 		panel.uloz();

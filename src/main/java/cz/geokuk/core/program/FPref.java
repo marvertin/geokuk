@@ -91,8 +91,10 @@ public class FPref {
 	// Specifická nastavení pro GSAK:
 	public static final String GSAK_node = "gsak";
 	public static final String GSAK_CAS_NALEZU_value = "casNalezu";
+	/** Zrušené nastavení Čas nenálezu; při uložení nastavení se ze starších profilů odstraní. */
 	public static final String GSAK_CAS_NENALEZU_value = "casNenalezu";
-	public static final String GSAK_NACITAT_VSECHNO = "nacitatHnedVsechnyDatabaze";
+	/** Klíč je stejný v uzlech {@link #GSAK_node} a {@link #OPENSAK_node}; true (výchozí) = nové databáze se načtou hned, false = čekají na výběr v tabulce zdrojů. */
+	public static final String NOVE_DATABAZE_HNED_value = "nacitatHnedVsechnyDatabaze";
 
 	public static final String OPENSAK_node = "opensak";
 }

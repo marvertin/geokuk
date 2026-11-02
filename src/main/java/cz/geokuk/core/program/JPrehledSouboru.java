@@ -45,7 +45,6 @@ public class JPrehledSouboru extends JPanel {
 	private JJedenSouborPanel jGsakDataDir;
 	private JCheckBox jGsakNacitatAzPoVybrani;
 	private JTextField jGsakCasNalezu;
-	private JTextField jGsakCasNenalezu;
 
 	private JJedenSouborPanel jOpensakDataDir;
 	private JCheckBox jOpensakNacitatAzPoVybrani;
@@ -102,9 +101,8 @@ public class JPrehledSouboru extends JPanel {
 	public void onEvent(final GsakParametryNacitaniChangedEvent event) {
 		final GsakParametryNacitani g = event.getGsakParametryNacitani();
 		jGsakCasNalezu.setText(_join(g.getCasNalezu()));
-		jGsakCasNenalezu.setText(_join(g.getCasNenalezu()));
-		jGsakNacitatAzPoVybrani.setSelected(!g.isNacistVsechnyDatabaze());
-		jOpensakNacitatAzPoVybrani.setSelected(!g.isNacistVsechnyDatabazeOpensaku());
+		jGsakNacitatAzPoVybrani.setSelected(!g.isNoveDatabazeHned());
+		jOpensakNacitatAzPoVybrani.setSelected(!g.isNoveDatabazeOpensakuHned());
 	}
 
 	public void onEvent(final KachleUmisteniSouboruChangedEvent event) {
@@ -150,12 +148,12 @@ public class JPrehledSouboru extends JPanel {
 		jGeogetDataDir = pridejJednuPolozkuproEdit(null, tab1, "Datová složka GeoGetu.", true, true).nezakladat();
 
 		jGsakDataDir = pridejJednuPolozkuproEdit(null, tab1a, "Datová složka GSAK.", true, true).nezakladat();
-		jGsakNacitatAzPoVybrani = pridejLogickePole(jGsakDataDir, "Načítat až po vybrání",
+		jGsakNacitatAzPoVybrani = pridejLogickePole(jGsakDataDir, "Nové databáze načíst až po vybrání",
 		        "<html>" //
-		                + "Po změně datové složky GSAK budou všechny databáze označeny jako blokované." //
-		                + "<br/>Mohou být dost velké a stejně asi budete chtít zobrazit jen několik málo z nich" //
-		                + "<br/>vyberte si je v tabulce zdrojů: najeďte myší na „Zdroje:“ ve stavovém řádku" //
+		                + "Databáze GSAKu, které GeoKuk ještě neviděl, se nenačtou hned, ale zůstanou blokované," //
+		                + "<br/>dokud je nevyberete v tabulce zdrojů: najeďte myší na „Zdroje:“ ve stavovém řádku" //
 		                + "<br/>nebo otevřete Soubor &gt; Přehled zdrojů." //
+		                + "<br/>Po změně datové složky GSAK jsou blokované všechny databáze." //
 		                + "</html>");
 		jGsakCasNalezu = pridejTextovePole(jGsakDataDir, "Čas nálezu",
 		        "<html>" //
@@ -163,17 +161,12 @@ public class JPrehledSouboru extends JPanel {
 		                + "<br/>Pokud obsahuje kromě časového údaje i další text, bude použit jen časový údaj." //
 		                + "<br/>Můžete uvést více políček, použije se první časový údaj, který bude nalezen." //
 		                + "</html>");
-		jGsakCasNenalezu = pridejTextovePole(jGsakDataDir, "Čas nenálezu",
-		        "<html>" //
-		                + "Vestavěné nebo vlastní políčko v GSAK, které obsahuje čas nenalezení (DNF) keše ve tvaru <tt>HH:MM</tt>." //
-		                + "<br/>Pokud obsahuje kromě časového údaje i další text, bude použit jen časový údaj." //
-		                + "<br/>Můžete uvést více políček, použije se první časový údaj, který bude nalezen." //
-		                + "</html>");
 
 		jOpensakDataDir = pridejJednuPolozkuproEdit(null, tab1b, "Datová složka OpenSAKu.", true, true).nezakladat();
-		jOpensakNacitatAzPoVybrani = pridejLogickePole(jOpensakDataDir, "Načítat až po vybrání",
-		        "<html>Nové databáze OpenSAKu se načtou, až je vyberete v tabulce zdrojů:" //
-		                + "<br/>najeďte myší na „Zdroje:“ ve stavovém řádku nebo otevřete Soubor &gt; Přehled zdrojů.</html>");
+		jOpensakNacitatAzPoVybrani = pridejLogickePole(jOpensakDataDir, "Nové databáze načíst až po vybrání",
+		        "<html>Databáze OpenSAKu, které GeoKuk ještě neviděl, se nenačtou hned, ale zůstanou blokované," //
+		                + "<br/>dokud je nevyberete v tabulce zdrojů: najeďte myší na „Zdroje:“ ve stavovém řádku" //
+		                + "<br/>nebo otevřete Soubor &gt; Přehled zdrojů.</html>");
 
 		jOfflineMapyDir = pridejJednuPolozkuproEdit(null, tab2, "Offline mapy: soubory .map (třeba z osm.paws.cz) a k nim stažená témata (.zip, .xml).", true, false);
 
@@ -330,7 +323,7 @@ public class JPrehledSouboru extends JPanel {
 		}
 
 		void zapis() {
-			// Změna složky GSAK podle volby „Načítat až po vybrání“ zakazuje nové databáze, volba proto musí být uložená dřív.
+			// Změna složky GSAK podle volby „Nové databáze načíst až po vybrání“ zakazuje nové databáze, volba proto musí být uložená dřív.
 			kesoidModel.setGsakParametryNacitani(g);
 			kesoidModel.setUmisteniSouboru(u1);
 			renderModel.setUmisteniSouboru(u3);
@@ -341,9 +334,8 @@ public class JPrehledSouboru extends JPanel {
 	private Ulozeni priprav() {
 		final Ulozeni u = new Ulozeni();
 		u.g.setCasNalezu(_split(jGsakCasNalezu.getText()));
-		u.g.setCasNenalezu(_split(jGsakCasNenalezu.getText()));
-		u.g.setNacistVsechnyDatabaze(!jGsakNacitatAzPoVybrani.isSelected());
-		u.g.setNacistVsechnyDatabazeOpensaku(!jOpensakNacitatAzPoVybrani.isSelected());
+		u.g.setNoveDatabazeHned(!jGsakNacitatAzPoVybrani.isSelected());
+		u.g.setNoveDatabazeOpensakuHned(!jOpensakNacitatAzPoVybrani.isSelected());
 
 		u.u1.setKesDir(u.vezmi(jKesDir));
 		u.u1.setCestyDir(KesoidUmisteniSouboru.CESTY_DIR);

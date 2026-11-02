@@ -58,8 +58,8 @@ public class OpensakNastaveniTest {
 
 	@Test
 	public void novaDatabazeOpensakuSeNenacte() {
-		parametry.setNacistVsechnyDatabaze(true);
-		parametry.setNacistVsechnyDatabazeOpensaku(false);
+		parametry.setNoveDatabazeHned(true);
+		parametry.setNoveDatabazeOpensakuHned(false);
 		model.zaradOpensakDatabaze(set(a));
 		Assert.assertTrue("první prohledání nic nezakáže", nacte(a));
 		model.zaradOpensakDatabaze(set(a, b));
@@ -69,8 +69,8 @@ public class OpensakNastaveniTest {
 
 	@Test
 	public void volbaGsakuOpensakNeblokuje() {
-		parametry.setNacistVsechnyDatabaze(false);
-		parametry.setNacistVsechnyDatabazeOpensaku(true);
+		parametry.setNoveDatabazeHned(false);
+		parametry.setNoveDatabazeOpensakuHned(true);
 		model.zaradGsakDatabaze(set());
 		model.zaradOpensakDatabaze(set(a));
 		model.zaradOpensakDatabaze(set(a, b));
@@ -79,7 +79,7 @@ public class OpensakNastaveniTest {
 
 	@Test
 	public void seznamyZnamychDatabaziJsouOddelene() {
-		parametry.setNacistVsechnyDatabazeOpensaku(false);
+		parametry.setNoveDatabazeOpensakuHned(false);
 		model.zaradGsakDatabaze(set(a));
 		model.zaradOpensakDatabaze(set(b));
 		Assert.assertTrue("první prohledání OpenSAKu nic nezakáže, i když GSAK už prohledaný byl", nacte(b));

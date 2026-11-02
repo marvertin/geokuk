@@ -4,10 +4,10 @@ import java.util.*;
 
 public class GsakParametryNacitani {
 	private Set<String> casNalezu = Collections.emptySet();
-	private Set<String> casNenalezu = Collections.emptySet();
-	private boolean nacistVsechnyDatabaze = false;
-	/** „Načítat až po vybrání“ pro databáze OpenSAKu. */
-	private boolean nacistVsechnyDatabazeOpensaku = true;
+	/** Nové databáze GSAKu se načtou hned; vypnuto = zůstanou blokované, dokud je uživatel nevybere v tabulce zdrojů. */
+	private boolean noveDatabazeHned = false;
+	/** Totéž pro databáze OpenSAKu. */
+	private boolean noveDatabazeOpensakuHned = true;
 
 	public Set<String> getCasNalezu() {
 		return casNalezu;
@@ -17,45 +17,30 @@ public class GsakParametryNacitani {
 		this.casNalezu = Collections.unmodifiableSet(new LinkedHashSet<>(aCasNalezu));
 	}
 
-	public Set<String> getCasNenalezu() {
-		return casNenalezu;
+	public boolean isNoveDatabazeHned() {
+		return noveDatabazeHned;
 	}
 
-	public void setCasNenalezu(final Collection<String> aCasNenalezu) {
-		this.casNenalezu = Collections.unmodifiableSet(new LinkedHashSet<>(aCasNenalezu));
+	public void setNoveDatabazeHned(final boolean noveDatabazeHned) {
+		this.noveDatabazeHned = noveDatabazeHned;
 	}
 
-	public boolean isNacistVsechnyDatabaze() {
-		return nacistVsechnyDatabaze;
+	public boolean isNoveDatabazeOpensakuHned() {
+		return noveDatabazeOpensakuHned;
 	}
 
-	public void setNacistVsechnyDatabaze(final boolean aNacistVsechnyDatabaze) {
-		this.nacistVsechnyDatabaze = aNacistVsechnyDatabaze;
+	public void setNoveDatabazeOpensakuHned(final boolean noveDatabazeOpensakuHned) {
+		this.noveDatabazeOpensakuHned = noveDatabazeOpensakuHned;
 	}
 
-	public boolean isNacistVsechnyDatabazeOpensaku() {
-		return nacistVsechnyDatabazeOpensaku;
-	}
-
-	public void setNacistVsechnyDatabazeOpensaku(final boolean aNacistVsechnyDatabazeOpensaku) {
-		this.nacistVsechnyDatabazeOpensaku = aNacistVsechnyDatabazeOpensaku;
-	}
-
-	// ------------------------------------------------------------------------------------------------
 	@Override
 	public String toString() {
-		return "GsakParametryNacitani [casNalezu=" + casNalezu + ", casNenalezu=" + casNenalezu + ", nacistVsechnyDatabaze=" + nacistVsechnyDatabaze + ", nacistVsechnyDatabazeOpensaku=" + nacistVsechnyDatabazeOpensaku + "]";
+		return "GsakParametryNacitani [casNalezu=" + casNalezu + ", noveDatabazeHned=" + noveDatabazeHned + ", noveDatabazeOpensakuHned=" + noveDatabazeOpensakuHned + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (casNalezu == null ? 0 : casNalezu.hashCode());
-		result = prime * result + (casNenalezu == null ? 0 : casNenalezu.hashCode());
-		result = prime * result + (nacistVsechnyDatabaze ? 1231 : 1237);
-		result = prime * result + (nacistVsechnyDatabazeOpensaku ? 1231 : 1237);
-		return result;
+		return Objects.hash(casNalezu, noveDatabazeHned, noveDatabazeOpensakuHned);
 	}
 
 	@Override
@@ -63,33 +48,10 @@ public class GsakParametryNacitani {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}
 		final GsakParametryNacitani other = (GsakParametryNacitani) obj;
-		if (casNalezu == null) {
-			if (other.casNalezu != null) {
-				return false;
-			}
-		} else if (!casNalezu.equals(other.casNalezu)) {
-			return false;
-		}
-		if (casNenalezu == null) {
-			if (other.casNenalezu != null) {
-				return false;
-			}
-		} else if (!casNenalezu.equals(other.casNenalezu)) {
-			return false;
-		}
-		if (nacistVsechnyDatabaze != other.nacistVsechnyDatabaze) {
-			return false;
-		}
-		if (nacistVsechnyDatabazeOpensaku != other.nacistVsechnyDatabazeOpensaku) {
-			return false;
-		}
-		return true;
+		return Objects.equals(casNalezu, other.casNalezu) && noveDatabazeHned == other.noveDatabazeHned && noveDatabazeOpensakuHned == other.noveDatabazeOpensakuHned;
 	}
 }

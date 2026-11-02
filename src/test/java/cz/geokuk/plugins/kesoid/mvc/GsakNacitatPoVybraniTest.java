@@ -54,14 +54,14 @@ public class GsakNacitatPoVybraniTest {
 
 	@Test
 	public void prvniProhledaniNicNezakaze() {
-		parametry.setNacistVsechnyDatabaze(false);
+		parametry.setNoveDatabazeHned(false);
 		model.zaradGsakDatabaze(set(a));
 		Assert.assertTrue(nacte(a));
 	}
 
 	@Test
 	public void novaDatabazeVGsakuSeNenacte() {
-		parametry.setNacistVsechnyDatabaze(false);
+		parametry.setNoveDatabazeHned(false);
 		model.zaradGsakDatabaze(set(a));
 		model.zaradGsakDatabaze(set(a, b));
 		Assert.assertTrue(nacte(a));
@@ -70,7 +70,7 @@ public class GsakNacitatPoVybraniTest {
 
 	@Test
 	public void poZapnutiGsakuSeDatabazeNenactou() {
-		parametry.setNacistVsechnyDatabaze(false);
+		parametry.setNoveDatabazeHned(false);
 		model.zaradGsakDatabaze(set(a, b));
 		model.zaradGsakDatabaze(set()); // GSAK neaktivní
 		model.zaradGsakDatabaze(set(a, b));
@@ -80,11 +80,11 @@ public class GsakNacitatPoVybraniTest {
 
 	@Test
 	public void priNacitaniVsehoSeNicNezakaze() {
-		parametry.setNacistVsechnyDatabaze(true);
+		parametry.setNoveDatabazeHned(true);
 		model.zaradGsakDatabaze(set(a));
 		model.zaradGsakDatabaze(set(a, b));
 		Assert.assertTrue(nacte(b));
-		parametry.setNacistVsechnyDatabaze(false);
+		parametry.setNoveDatabazeHned(false);
 		model.zaradGsakDatabaze(set(a, b));
 		Assert.assertTrue(nacte(b));
 	}
@@ -99,7 +99,7 @@ public class GsakNacitatPoVybraniTest {
 		umisteni.setKesDir(new Filex(tmp.newFolder("gpx"), false, true));
 		umisteni.setGeogetDataDir(new Filex(new File(tmp.getRoot(), "geoget"), false, false));
 		umisteni.setGsakDataDir(new Filex(slozka, false, true));
-		parametry.setNacistVsechnyDatabaze(false);
+		parametry.setNoveDatabazeHned(false);
 		model.zaradGsakDatabaze(set(stara));
 		model.zaradGsakDatabaze(set(stara, treti));
 		Assert.assertFalse(nacte(treti));
@@ -128,7 +128,7 @@ public class GsakNacitatPoVybraniTest {
 			Assume.assumeNoException("symbolický odkaz nejde vytvořit", e);
 		}
 		final File db = new File(odkaz, "Default/sqlite.db3").getAbsoluteFile();
-		parametry.setNacistVsechnyDatabaze(false);
+		parametry.setNoveDatabazeHned(false);
 		model.zaradGsakDatabaze(set(db));
 		model.zaradGsakDatabaze(set(db));
 		Assert.assertTrue(nacte(db));
@@ -141,7 +141,7 @@ public class GsakNacitatPoVybraniTest {
 		umisteni.setKesDir(new Filex(new File(tmp.getRoot(), "a\0b"), false, true));
 		umisteni.setGeogetDataDir(new Filex(new File(tmp.getRoot(), "geoget"), false, false));
 		umisteni.setGsakDataDir(new Filex(new File(tmp.getRoot(), "gsak"), false, false));
-		parametry.setNacistVsechnyDatabaze(false);
+		parametry.setNoveDatabazeHned(false);
 		model.zaradGsakDatabaze(set(a));
 		model.zaradGsakDatabaze(set(a, b)); // b je zablokovaná, úklid má co dělat
 		model.setNedostupnePriNacitani(set(new File(tmp.getRoot(), "a\0b")));
@@ -155,7 +155,7 @@ public class GsakNacitatPoVybraniTest {
 		umisteni.setKesDir(new Filex(tmp.newFolder("gpx"), false, true));
 		umisteni.setGeogetDataDir(new Filex(new File(tmp.getRoot(), "geoget"), false, true));
 		umisteni.setGsakDataDir(new Filex(new File(tmp.getRoot(), "gsak"), false, true));
-		parametry.setNacistVsechnyDatabaze(false);
+		parametry.setNoveDatabazeHned(false);
 		model.zaradGsakDatabaze(set(a));
 		model.zaradGsakDatabaze(set(a, b));
 		final int predUklidem = dotazuNaUmisteni;
@@ -185,7 +185,7 @@ public class GsakNacitatPoVybraniTest {
 		umisteni.setKesDir(new Filex(tmp.newFolder("gpx"), false, true));
 		umisteni.setGeogetDataDir(new Filex(new File(tmp.getRoot(), "geoget"), false, false));
 		umisteni.setGsakDataDir(new Filex(slozka, false, true));
-		parametry.setNacistVsechnyDatabaze(false);
+		parametry.setNoveDatabazeHned(false);
 		model.zaradGsakDatabaze(set(vybrana));
 		model.zaradGsakDatabaze(set(vybrana, treti));
 		Assert.assertTrue(nacte(vybrana));

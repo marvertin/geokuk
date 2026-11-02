@@ -128,8 +128,8 @@ public class OpensakSlozkaTest {
 	/** „Načítat až po vybrání“: databáze, která do složky OpenSAKu přibyla, se nenačte, dokud ji uživatel nevybere. */
 	@Test
 	public void novaDatabazePoVybrani() throws Exception {
-		parametry.setNacistVsechnyDatabaze(true);
-		parametry.setNacistVsechnyDatabazeOpensaku(false);
+		parametry.setNoveDatabazeHned(true);
+		parametry.setNoveDatabazeOpensakuHned(false);
 		final File prvni = new File(slozka, "Default.db");
 		OpensakTestDb.zaloz(prvni, OpensakTestDb.verze());
 		OpensakTestDb.vlozKes(prvni, 1, "GC1111", "Traditional Cache", 49.0, 15.0);

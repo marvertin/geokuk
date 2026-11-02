@@ -13,6 +13,9 @@
   Připnutý zástupce může dál chvíli ukazovat starou ikonu, dokud Windows
   neobnoví mezipaměť ikon; pomůže odepnout a znovu připnout zástupce, obnovit
   ikony (ie4uinit.exe -ClearIconCache), restartovat Průzkumník nebo počítač.
+- V nastavení Umístění souborů je u GSAKu odstraněno pole Čas nenálezu
+  (program ho nepoužíval) a volba u GSAKu i OpenSAKu se jmenuje Nové databáze
+  načíst až po vybrání. Uložená nastavení zůstávají platná.
 - Dialog Nápověda > O programu ukazuje nahoře verzi a licenci a pod nimi dvě
   části: původní texty Martina Veverky s odkazem na původní projekt a údaje
   o upravené verzi (GeoKuk community) s odkazy na projekt na GitHubu,
