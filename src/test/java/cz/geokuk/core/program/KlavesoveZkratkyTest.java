@@ -1,5 +1,6 @@
 package cz.geokuk.core.program;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
@@ -40,6 +41,11 @@ public class KlavesoveZkratkyTest {
 			}
 		});
 		assertTrue("Kolize klávesových zkratek:\n" + String.join("\n", kolize), kolize.isEmpty());
+	}
+
+	@Test
+	public void zobrazovaniKesoiduMaZkratkuF5() {
+		assertEquals(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0), new Akce().kesoidyOnoffAction.getValue(Action.ACCELERATOR_KEY));
 	}
 
 	private static void pridej(final Map<KeyStroke, List<String>> podleZkratky, final Action akce, final String jmeno) {
