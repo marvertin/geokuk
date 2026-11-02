@@ -291,8 +291,9 @@
   program po aktualizaci poprvé startuje.
 - Mapa je plynulejší při pohybu myši, při tažení bodu cesty, se zvětšenými
   ikonami keší, s popisky keší a se stínovaným reliéfem.
-- Kruhy obsazenosti se při velkém počtu keší ve výřezu nekreslí, mapa pak
-  nezpomaluje.
+- Obsazenost 161 m se kreslí jako jedna plocha jedné barvy, takže překryvy
+  kruhů netmavnou a zůstává vidět i v hustě obsazeném území a při přiblížení.
+  Kreslí se při dostatečném přiblížení a nejvýš pro 20 000 keší ve výřezu.
 - Soubor GPX s kešemi, které mají místo čísla vlastníka GUID (například Lab
   keše), už nezahltí log tisíci varováními. Jiná nečíselná čísla vlastníka
   program ohlásí jedním varováním za soubor.
