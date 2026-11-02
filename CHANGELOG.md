@@ -279,6 +279,10 @@
 ### Opravy
 - Kešoidy > Jednotkové kruhy (Alt+F8) zapnou i zvýrazňovací kruhy, takže se
   na mapě hned projeví.
+- Zvýrazňovací a jednotkové kruhy zůstanou zapnuté i po přepnutí mapového
+  podkladu; velikost a barva kruhů se dál pamatují pro každý podklad. Kdo měl
+  kruhy zapnuté jen u některých podkladů, začne se stavem podkladu, na kterém
+  program po aktualizaci poprvé startuje.
 - Mapa je plynulejší při pohybu myši, při tažení bodu cesty, se zvětšenými
   ikonami keší, s popisky keší a se stínovaným reliéfem.
 - Kruhy obsazenosti se při velkém počtu keší ve výřezu nekreslí, mapa pak
