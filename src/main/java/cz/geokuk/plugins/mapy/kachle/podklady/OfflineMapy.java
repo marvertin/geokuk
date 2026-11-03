@@ -309,7 +309,7 @@ public class OfflineMapy {
 	 * Základní mapa, ke které vrstva tras je, se vynechá, jinak by se stejné trasy kreslily dvakrát.
 	 *
 	 * @param trasyKresliPodklad
-	 *            vrstvy tras kreslí už podklad, překryv bere jen základní mapy
+	 *            vrstvy tras kreslí už podklad: překryv je nebere a bere jen základní mapy bez nich
 	 */
 	static List<File> mapyPrekryvu(final File slozka, final boolean trasyKresliPodklad) {
 		if (slozka == null) {
@@ -318,11 +318,13 @@ public class OfflineMapy {
 		final List<File> vysledek = new ArrayList<>();
 		final Set<String> klice = new HashSet<>();
 		final File slozkaVrstev = new File(slozka, SLOZKA_VRSTEV);
-		for (final File f : trasyKresliPodklad ? Collections.<File> emptyList() : vrstvyVeSlozce(slozka)) {
+		for (final File f : vrstvyVeSlozce(slozka)) {
 			final String cesta = slozkaVrstev.toPath().relativize(f.toPath()).toString().replace('\\', '/');
 			for (final String pripona : PRIPONY_TRAS) {
 				if (cesta.toLowerCase(Locale.ROOT).endsWith(pripona)) {
-					vysledek.add(f);
+					if (!trasyKresliPodklad) {
+						vysledek.add(f);
+					}
 					klice.add(cesta.substring(0, cesta.length() - pripona.length()).toLowerCase(Locale.ROOT));
 				}
 			}

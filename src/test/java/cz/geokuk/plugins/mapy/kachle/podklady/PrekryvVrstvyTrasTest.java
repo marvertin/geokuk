@@ -110,8 +110,8 @@ public class PrekryvVrstvyTrasTest {
 		Assert.assertEquals(Arrays.asList(new File(vrstvy, "czech-republic.tourist.map"), new File(vrstvy, "germany/bayern.tourist.map"),
 				new File(slozka, "austria.map"), new File(slozka, "moje.map")), OfflineMapy.mapyPrekryvu(slozka, false));
 		Assert.assertEquals(Collections.emptyList(), OfflineMapy.mapyPrekryvu(null, false));
-		Assert.assertEquals("vrstvy tras kreslí podklad, překryv bere jen základní mapy",
-				Arrays.asList(new File(slozka, "austria.map"), new File(slozka, "czech-republic.map"), new File(slozka, "moje.map")), OfflineMapy.mapyPrekryvu(slozka, true));
+		Assert.assertEquals("vrstvy tras kreslí podklad, překryv bere jen základní mapy bez vrstvy tras",
+				Arrays.asList(new File(slozka, "austria.map"), new File(slozka, "moje.map")), OfflineMapy.mapyPrekryvu(slozka, true));
 	}
 
 	/** Starší verze vrstvy tras (*.routes.map) slouží překryvu jako vrstva tras, dokud vedle ní není vrstva tourist. */
