@@ -35,11 +35,16 @@ public class PrepniZdrojAction extends ToggleAction0 {
 
 	public void onEvent(final StavZdrojuEvent event) {
 		stav = event.getStav();
+		// Typ bez položek (zdroj není aktivní nebo nic nenašel) se nedá zapnout ani vypnout; položka menu a zkratka jsou pak vypnuté.
+		setEnabled(!stav.getPolozky(typ).isEmpty());
 		setSelected(stav.getStavVyberuTypu(typ) != StavVyberu.VYPNUTO);
 	}
 
 	/** Přepne typ stejně jako klik na jeho zaškrtávátko. */
 	public void prepni() {
+		if (!isEnabled()) {
+			return;
+		}
 		JTabulkaZdroju.klikTyp(stav, typ, kesoidModel);
 	}
 

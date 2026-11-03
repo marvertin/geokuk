@@ -134,6 +134,8 @@
   (GeoGet), Ctrl+3 (GSAK) a Ctrl+4 (OpenSAK), také z číselné klávesnice;
   číslo typu je pevné. Zkratky jsou v menu Kešoidy > Zdroje keší a v Přehledu
   zdrojů.
+  Zdroj, ve kterém nejsou žádné položky (není aktivní nebo nic nenašel), má
+  položku i zkratku vypnutou.
 - V nabídce pravého tlačítka na mapě jsou položky Otevřít v Mapy.com (otevře
   turistickou mapu) a Otevřít v Google Mapách; podnabídka Další mapy má
   položky OpenStreetMap, ČÚZK Geoprohlížeč (jen v ČR a jejím okolí) a u kříže
