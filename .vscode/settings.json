@@ -3,7 +3,7 @@
         {
             "type": "maven",
             "path": "file:///$PROJECT_DIR$/pom.xml",
-            "java-home": "C:\\Program Files\\Amazon Corretto\\jdk21.0.12_9"
+            "java-home": "C:\\Opt\\Amazon Corretto\\jdk25.0.5_0" 
         }
     ]
 }
