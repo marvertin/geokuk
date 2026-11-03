@@ -221,6 +221,10 @@ public class MultiNacitac {
 		if (gsak == null || !nedostupne.contains(gsak)) {
 			kesoidModel.zaradGsakDatabaze(databaze(list, GSAK_ROOTDIR_DEF), nedostupne);
 		}
+		final File geoget = geogetDir;
+		if (geoget == null || !nedostupne.contains(geoget)) {
+			kesoidModel.zaradGeogetDatabaze(databaze(list, FILE_NAME_REGEX_GEOGET_DIR), nedostupne);
+		}
 		final File opensak = opensakDir;
 		if (opensak == null || !nedostupne.contains(opensak)) {
 			kesoidModel.zaradOpensakDatabaze(databaze(list, OPENSAK_ROOTDIR_DEF), nedostupne);

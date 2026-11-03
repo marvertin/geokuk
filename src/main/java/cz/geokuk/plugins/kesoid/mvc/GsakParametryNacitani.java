@@ -8,6 +8,8 @@ public class GsakParametryNacitani {
 	private boolean noveDatabazeHned = false;
 	/** Totéž pro databáze OpenSAKu. */
 	private boolean noveDatabazeOpensakuHned = true;
+	/** Totéž pro databáze GeoGetu. */
+	private boolean noveDatabazeGeogetuHned = true;
 
 	public Set<String> getCasNalezu() {
 		return casNalezu;
@@ -33,14 +35,22 @@ public class GsakParametryNacitani {
 		this.noveDatabazeOpensakuHned = noveDatabazeOpensakuHned;
 	}
 
+	public boolean isNoveDatabazeGeogetuHned() {
+		return noveDatabazeGeogetuHned;
+	}
+
+	public void setNoveDatabazeGeogetuHned(final boolean noveDatabazeGeogetuHned) {
+		this.noveDatabazeGeogetuHned = noveDatabazeGeogetuHned;
+	}
+
 	@Override
 	public String toString() {
-		return "GsakParametryNacitani [casNalezu=" + casNalezu + ", noveDatabazeHned=" + noveDatabazeHned + ", noveDatabazeOpensakuHned=" + noveDatabazeOpensakuHned + "]";
+		return "GsakParametryNacitani [casNalezu=" + casNalezu + ", noveDatabazeHned=" + noveDatabazeHned + ", noveDatabazeOpensakuHned=" + noveDatabazeOpensakuHned + ", noveDatabazeGeogetuHned=" + noveDatabazeGeogetuHned + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(casNalezu, noveDatabazeHned, noveDatabazeOpensakuHned);
+		return Objects.hash(casNalezu, noveDatabazeHned, noveDatabazeOpensakuHned, noveDatabazeGeogetuHned);
 	}
 
 	@Override
@@ -52,6 +62,7 @@ public class GsakParametryNacitani {
 			return false;
 		}
 		final GsakParametryNacitani other = (GsakParametryNacitani) obj;
-		return Objects.equals(casNalezu, other.casNalezu) && noveDatabazeHned == other.noveDatabazeHned && noveDatabazeOpensakuHned == other.noveDatabazeOpensakuHned;
+		return Objects.equals(casNalezu, other.casNalezu) && noveDatabazeHned == other.noveDatabazeHned && noveDatabazeOpensakuHned == other.noveDatabazeOpensakuHned
+		        && noveDatabazeGeogetuHned == other.noveDatabazeGeogetuHned;
 	}
 }

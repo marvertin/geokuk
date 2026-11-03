@@ -135,6 +135,8 @@ public class ZamcenaDatabazeNezdrziTest {
 
 			@Override
 			public void zaradOpensakDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
+			@Override
+			public void zaradGeogetDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
 
 			@Override
 			public KesBag getVsechnyKesoidy() {

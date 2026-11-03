@@ -287,6 +287,8 @@ public class StavZdrojuNacitaniTest {
 
 			@Override
 			public void zaradOpensakDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
+			@Override
+			public void zaradGeogetDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
 		};
 		final ProgressModel progress = new ProgressModel();
 		progress.inject(udalost -> {});
@@ -454,6 +456,8 @@ public class StavZdrojuNacitaniTest {
 
 			@Override
 			public void zaradOpensakDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
+			@Override
+			public void zaradGeogetDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
 		};
 		m.inject(progress);
 		m.inject(new KesoidPluginManager());

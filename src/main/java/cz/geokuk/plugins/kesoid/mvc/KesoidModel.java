@@ -185,6 +185,15 @@ public class KesoidModel extends Model0 implements OvladaniZdroju {
 		zaradDatabaze(FPref.ZNAME_OPENSAK_DATABAZE_value, () -> getGsakParametryNacitani().isNoveDatabazeOpensakuHned(), databaze, nedostupne);
 	}
 
+	/** Databáze GeoGetu (soubory .db3) z aktuálního prohledání, „Načítat až po vybrání“ stejně jako u GSAKu. */
+	public void zaradGeogetDatabaze(final Set<File> databaze) {
+		zaradGeogetDatabaze(databaze, Collections.emptySet());
+	}
+
+	public void zaradGeogetDatabaze(final Set<File> databaze, final Set<File> nedostupne) {
+		zaradDatabaze(FPref.ZNAME_GEOGET_DATABAZE_value, () -> getGsakParametryNacitani().isNoveDatabazeGeogetuHned(), databaze, nedostupne);
+	}
+
 	private synchronized void zaradDatabaze(final String klicZnamych, final java.util.function.BooleanSupplier nacistVsechny, final Set<File> databaze, final Set<File> nedostupne) {
 		final MyPreferences pref = currPrefe().node(FPref.KESOID_node);
 		final Collection<File> zname = pref.getFileCollection(klicZnamych, null);
@@ -640,6 +649,7 @@ public class KesoidModel extends Model0 implements OvladaniZdroju {
 		pref.remove(FPref.GSAK_CAS_NENALEZU_value);
 		pref.putBoolean(FPref.NOVE_DATABAZE_HNED_value, aGsakParametryNacitani.isNoveDatabazeHned());
 		currPrefe().node(FPref.OPENSAK_node).putBoolean(FPref.NOVE_DATABAZE_HNED_value, aGsakParametryNacitani.isNoveDatabazeOpensakuHned());
+		currPrefe().node(FPref.GEOGET_node).putBoolean(FPref.NOVE_DATABAZE_HNED_value, aGsakParametryNacitani.isNoveDatabazeGeogetuHned());
 		fire(new GsakParametryNacitaniChangedEvent(gsakParametryNacitani));
 	}
 
@@ -762,6 +772,7 @@ public class KesoidModel extends Model0 implements OvladaniZdroju {
 		g.setCasNalezu(pref.getStringList(FPref.GSAK_CAS_NALEZU_value, Arrays.asList("UserData")));
 		g.setNoveDatabazeHned(pref.getBoolean(FPref.NOVE_DATABAZE_HNED_value, true));
 		g.setNoveDatabazeOpensakuHned(currPrefe().node(FPref.OPENSAK_node).getBoolean(FPref.NOVE_DATABAZE_HNED_value, true));
+		g.setNoveDatabazeGeogetuHned(currPrefe().node(FPref.GEOGET_node).getBoolean(FPref.NOVE_DATABAZE_HNED_value, true));
 		return g;
 	}
 

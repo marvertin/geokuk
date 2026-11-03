@@ -49,6 +49,7 @@ public class JPrehledSouboru extends JPanel {
 
 	private JJedenSouborPanel jOpensakDataDir;
 	private JCheckBox jOpensakNacitatAzPoVybrani;
+	private JCheckBox jGeogetNacitatAzPoVybrani;
 
 	private JJedenSouborPanel jOziDir;
 	private JJedenSouborPanel jKmzDir;
@@ -104,6 +105,7 @@ public class JPrehledSouboru extends JPanel {
 		jGsakCasNalezu.setText(_join(g.getCasNalezu()));
 		jGsakNacitatAzPoVybrani.setSelected(!g.isNoveDatabazeHned());
 		jOpensakNacitatAzPoVybrani.setSelected(!g.isNoveDatabazeOpensakuHned());
+		jGeogetNacitatAzPoVybrani.setSelected(!g.isNoveDatabazeGeogetuHned());
 	}
 
 	public void onEvent(final KachleUmisteniSouboruChangedEvent event) {
@@ -147,6 +149,11 @@ public class JPrehledSouboru extends JPanel {
 
 		jKesDir = pridejJednuPolozkuproEdit(null, sekceGpx, "Složka s keškami (GPX) získanými z Geogetu nebo jiného programu.", true, false);
 		jGeogetDataDir = pridejJednuPolozkuproEdit(null, sekceGeoget, "Datová složka GeoGetu.", true, true).nezakladat();
+		jGeogetNacitatAzPoVybrani = pridejLogickePole(jGeogetDataDir, "Nové databáze načíst až po vybrání",
+		        "<html>Databáze GeoGetu, které GeoKuk ještě neviděl, se nenačtou hned, ale zůstanou blokované," //
+		                + "<br/>dokud je nevyberete v tabulce zdrojů: najeďte myší na „Zdroje:“ ve stavovém řádku" //
+		                + "<br/>nebo otevřete Soubor &gt; Přehled zdrojů.</html>");
+		dorovnejVysku(jGeogetDataDir);
 
 		jGsakDataDir = pridejJednuPolozkuproEdit(null, sekceGsak, "Datová složka GSAK.", true, true).nezakladat();
 		jGsakNacitatAzPoVybrani = pridejLogickePole(jGsakDataDir, "Nové databáze načíst až po vybrání",
@@ -369,6 +376,7 @@ public class JPrehledSouboru extends JPanel {
 		u.g.setCasNalezu(_split(jGsakCasNalezu.getText()));
 		u.g.setNoveDatabazeHned(!jGsakNacitatAzPoVybrani.isSelected());
 		u.g.setNoveDatabazeOpensakuHned(!jOpensakNacitatAzPoVybrani.isSelected());
+		u.g.setNoveDatabazeGeogetuHned(!jGeogetNacitatAzPoVybrani.isSelected());
 
 		u.u1.setKesDir(u.vezmi(jKesDir));
 		u.u1.setCestyDir(KesoidUmisteniSouboru.CESTY_DIR);

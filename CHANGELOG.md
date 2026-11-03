@@ -19,6 +19,9 @@
 - Klávesa F5 patří zobrazování kešoidů. Uživatelská mapa, která má zkratku F5,
   se při načtení odmítne s hláškou o obsazené zkratce; stačí v jejím souboru
   zkratku změnit nebo smazat. Příklad volné zkratky v hlášce je F4.
+- Volba Nové databáze načíst až po vybrání je v Umístění souborů i u GeoGetu
+  (každý zdroj ji má zvlášť). Výchozí je načítat hned, uložená nastavení se
+  nemění.
 - Okno Umístění souborů je větší a zdroje keší (GPX, GeoGet, GSAK, OpenSAK)
   jsou na jedné záložce Zdroje keší, každý v rámečku se jménem a svou
   klávesovou zkratkou.

@@ -119,6 +119,8 @@ public class PrepsanyGpxSeNacteTest {
 
 			@Override
 			public void zaradOpensakDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
+			@Override
+			public void zaradGeogetDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
 
 			@Override
 			public boolean maSeNacist(final File zdroj) {

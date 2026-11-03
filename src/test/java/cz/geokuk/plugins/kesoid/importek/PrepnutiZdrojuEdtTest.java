@@ -179,6 +179,8 @@ public class PrepnutiZdrojuEdtTest {
 
 			@Override
 			public void zaradOpensakDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
+			@Override
+			public void zaradGeogetDatabaze(final Set<File> databaze, final Set<File> nedostupne) {}
 		};
 		m.inject(progress);
 		m.inject(new KesoidPluginManager());
