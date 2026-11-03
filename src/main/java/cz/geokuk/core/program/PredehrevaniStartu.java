@@ -54,6 +54,7 @@ final class PredehrevaniStartu {
 
 	static void predehrej() {
 		try {
+			cz.geokuk.plugins.mapy.kachle.gui.LogoNacitani.predehrej();
 			Toolkit.getDefaultToolkit();
 			final FontRenderContext frc = new FontRenderContext(null, true, true);
 			final Graphics2D g = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();

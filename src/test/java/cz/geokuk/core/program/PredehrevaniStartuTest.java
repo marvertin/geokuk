@@ -52,4 +52,20 @@ public class PredehrevaniStartuTest {
 		assertEquals(1, PredehrevaniStartu.kontextyMereni(new HashMap<>()).size());
 		assertEquals(1, PredehrevaniStartu.kontextyMereni("neco jineho").size());
 	}
+
+	/** PNG loga načítání se dekóduje už v předehřátí, ne až při prvním vykreslení mapy na EDT. */
+	@Test
+	public void predehratiDekodujeLogo() throws Exception {
+		final java.lang.reflect.Field zdroj = cz.geokuk.plugins.mapy.kachle.gui.LogoNacitani.class.getDeclaredField("zdroj");
+		final java.lang.reflect.Field nacten = cz.geokuk.plugins.mapy.kachle.gui.LogoNacitani.class.getDeclaredField("zdrojNacten");
+		zdroj.setAccessible(true);
+		nacten.setAccessible(true);
+		synchronized (cz.geokuk.plugins.mapy.kachle.gui.LogoNacitani.class) {
+			zdroj.set(null, null);
+			nacten.setBoolean(null, false);
+		}
+		PredehrevaniStartu.predehrej();
+		assertTrue(nacten.getBoolean(null));
+		assertTrue(zdroj.get(null) instanceof java.awt.image.BufferedImage);
+	}
 }

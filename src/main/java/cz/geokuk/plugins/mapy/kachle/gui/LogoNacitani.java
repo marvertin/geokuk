@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * Slabé logo GeoKuk uprostřed výřezu, které je vidět jen tam, kde mapa ještě nedorazila. Zmenšené logo se drží v paměti, takže překreslení je jedno vykreslení hotového obrázku.
  */
 @Slf4j
-final class LogoNacitani {
+public final class LogoNacitani {
 
 	private static final String ZDROJ = "/img/geokuk-logo.png";
 	/** Podíl kratší strany výřezu, který logo zabere. */
@@ -100,6 +100,11 @@ final class LogoNacitani {
 			g.dispose();
 		}
 		return v;
+	}
+
+	/** Logo se dekóduje předem vedle EDT, ať první vykreslení mapy nečeká. */
+	public static void predehrej() {
+		zdroj();
 	}
 
 	private static synchronized BufferedImage zdroj() {
