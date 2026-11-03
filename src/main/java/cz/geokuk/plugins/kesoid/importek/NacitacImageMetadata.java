@@ -38,12 +38,12 @@ public class NacitacImageMetadata extends NacitacInputStream0 {
 		}
 		Metadata imageMetadata;
 		try {
-			imageMetadata = ImageMetadataReader.readMetadata(bis, true);
+			imageMetadata = ImageMetadataReader.readMetadata(bis);
 		} catch (final ImageProcessingException e) {
 			log.error("The input stream for file " + name + "couldn't be loaded!", e);
 			return;
 		}
-		final GpsDirectory gpsDirectory = imageMetadata.getDirectory(GpsDirectory.class);
+		final GpsDirectory gpsDirectory = imageMetadata.getFirstDirectoryOfType(GpsDirectory.class);
 		if (gpsDirectory == null) {
 			log.info("Image has no GPS metadata.");
 			return;
