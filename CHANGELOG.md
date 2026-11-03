@@ -3,6 +3,9 @@
 ## 6.5.0
 
 ### Změny
+- Posuvníky kruhů Obsazenost 161 m mají nadpisy Barva a Průhlednost, popisky os
+  (černá, šedá, bílá; průhlednost po 25 %) a při tažení bublinku s aktuální
+  hodnotou, která plynule vyplave a po puštění plynule zmizí.
 - V nastavení zvýrazňovacích kruhů se průhlednost nastavuje posuvníkem
   Průhlednost.
 - Velikost zvýrazňovacích kruhů se v nastavení volí v pixelech nebo v metrech.

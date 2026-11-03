@@ -156,6 +156,12 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		g.setComposite(puvodni);
 	}
 
+	@Override
+	protected void paintChildren(final Graphics g) {
+		super.paintChildren(g);
+		iSlidovnik.kresliBublinky((Graphics2D) g, this);
+	}
+
 	/** Kruhy se nekreslí, když je keší ve výřezu víc než {@link #MAX_KRUHU}. */
 	boolean prekrocenLimit(final int pocet) {
 		return pocet > MAX_KRUHU;
