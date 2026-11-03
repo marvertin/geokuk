@@ -30,6 +30,7 @@ final class PrioritniFronta extends AbstractQueue<Runnable> implements BlockingQ
 
 	private final ReentrantLock zamek = new ReentrantLock();
 	private final Condition neprazdna = zamek.newCondition();
+	private final Condition prazdna = zamek.newCondition();
 	private final List<Runnable> prvky = new ArrayList<>();
 
 	/** Vybere nejlepší úlohu a odebere ji; zastaralé odebere také a přidá je do {@code zahodit}. Volá se pod zámkem. */
@@ -53,6 +54,25 @@ final class PrioritniFronta extends AbstractQueue<Runnable> implements BlockingQ
 			i++;
 		}
 		return nejlepsi < 0 ? null : prvky.remove(nejlepsi);
+	}
+
+	/** Probudí čekající na prázdnou frontu, je-li prázdná. Volá se pod zámkem po odebrání. */
+	private void ohlasPrazdnou() {
+		if (prvky.isEmpty()) {
+			prazdna.signalAll();
+		}
+	}
+
+	/** Počká, až ve frontě nebude žádná úloha. */
+	void pockejNaPrazdnou() throws InterruptedException {
+		zamek.lockInterruptibly();
+		try {
+			while (!prvky.isEmpty()) {
+				prazdna.await();
+			}
+		} finally {
+			zamek.unlock();
+		}
 	}
 
 	private static void zahod(final List<Razena> zahodit) {
@@ -101,6 +121,7 @@ final class PrioritniFronta extends AbstractQueue<Runnable> implements BlockingQ
 				while ((vybrany = vyber(zahodit)) == null && zahodit.isEmpty()) {
 					neprazdna.await();
 				}
+				ohlasPrazdnou();
 			} finally {
 				zamek.unlock();
 			}
@@ -125,6 +146,7 @@ final class PrioritniFronta extends AbstractQueue<Runnable> implements BlockingQ
 					}
 					zbyva = neprazdna.awaitNanos(zbyva);
 				}
+				ohlasPrazdnou();
 			} finally {
 				zamek.unlock();
 			}
@@ -142,6 +164,7 @@ final class PrioritniFronta extends AbstractQueue<Runnable> implements BlockingQ
 		zamek.lock();
 		try {
 			vybrany = vyber(zahodit);
+			ohlasPrazdnou();
 		} finally {
 			zamek.unlock();
 		}
@@ -194,7 +217,9 @@ final class PrioritniFronta extends AbstractQueue<Runnable> implements BlockingQ
 	public boolean remove(final Object o) {
 		zamek.lock();
 		try {
-			return prvky.remove(o);
+			final boolean odebrano = prvky.remove(o);
+			ohlasPrazdnou();
+			return odebrano;
 		} finally {
 			zamek.unlock();
 		}
@@ -224,6 +249,7 @@ final class PrioritniFronta extends AbstractQueue<Runnable> implements BlockingQ
 				c.add(prvky.remove(0));
 				n++;
 			}
+			ohlasPrazdnou();
 			return n;
 		} finally {
 			zamek.unlock();

@@ -503,7 +503,7 @@ public class KachleZiskavac {
 	}
 
 	private static Pocitadlo pocitBrzdeniOfflineKdyzJeOnline = new PocitadloRoste("ka61 #počet brzdení dávkového downloadu",
-			"Počítá, kolikrát se o 100 ms zbrzdilo dávkové dotahování, protože běžel online.");
+			"Počítá, kolikrát dávkové dotahování čekalo, protože běžel online.");
 
 	private static final int MAXIMALNI_POCET_UKLADANYCH_KACHLI_V_JEDNOM_CHUNKU = 50;
 
@@ -1022,6 +1022,18 @@ public class KachleZiskavac {
 		}
 	}
 
+	/** Dávka počká, dokud čekají dlaždice, které uživatel právě prohlíží. */
+	static void pockejNaOnline(final BlockingQueue<Runnable> online) throws InterruptedException {
+		if (online.isEmpty()) {
+			return;
+		}
+		if (!(online instanceof PrioritniFronta)) {
+			throw new IllegalStateException("Fronta online dlaždic není PrioritniFronta: " + online.getClass().getName());
+		}
+		pocitBrzdeniOfflineKdyzJeOnline.inc();
+		((PrioritniFronta) online).pockejNaPrazdnou();
+	}
+
 	/** Úloha stažení dlaždice; spouští ji volající, až ji zaregistruje. */
 	private ListenableFutureTask<ImageWithData> pripravDownload(final Ka ka, final DvojiceExekucnichSluzeb dvojiceExekucnichSluzeb, final DiagnosticsData diagnosticsData,
 			final Kachlice kachlice, final AtomicReference<Future<?>> moje) {
@@ -1032,9 +1044,8 @@ public class KachleZiskavac {
 
 			// Pokud stahujeme backgroundově a jsou nějaké požadavny na online kachle, tak ty online mají absolutní přednost,
 			// backgroundy brzíme.
-			while (dvojiceExekucnichSluzeb.priority == Priority.STAHOVANI && exekucniSluzby.get(Priority.KACHLE).webQueue.size() > 0) {
-				pocitBrzdeniOfflineKdyzJeOnline.inc();
-				Thread.sleep(100);
+			if (dvojiceExekucnichSluzeb.priority == Priority.STAHOVANI) {
+				pockejNaOnline(exekucniSluzby.get(Priority.KACHLE).webQueue);
 			}
 			final String klic = url.toExternalForm();
 			if (mimoUzemi.getIfPresent(klic) != null) {
@@ -1074,9 +1085,8 @@ public class KachleZiskavac {
 	private ListenableFutureTask<BufferedImage> pripravRender(final Ka ka, final DvojiceExekucnichSluzeb dvojiceExekucnichSluzeb, final DiagnosticsData diagnosticsData,
 			final Kachlice kachlice, final AtomicReference<Future<?>> moje) {
 		return ListenableFutureTask.create(() -> {
-			while (dvojiceExekucnichSluzeb.priority == Priority.STAHOVANI && exekucniSluzby.get(Priority.KACHLE).renderQueue.size() > 0) {
-				pocitBrzdeniOfflineKdyzJeOnline.inc();
-				Thread.sleep(100);
+			if (dvojiceExekucnichSluzeb.priority == Priority.STAHOVANI) {
+				pockejNaOnline(exekucniSluzby.get(Priority.KACHLE).renderQueue);
 			}
 			if (!kachlice.zahajStahovani(moje)) {
 				throw new CancellationException("Dlaždici už nikdo nechce: " + ka);
