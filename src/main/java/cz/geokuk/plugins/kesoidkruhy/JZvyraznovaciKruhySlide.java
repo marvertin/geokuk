@@ -5,8 +5,10 @@ import java.awt.*;
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.plugins.kesoid.LimityKresleni;
+import cz.geokuk.plugins.kesoid.ViditelnostSKesoidy;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
+import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
 import cz.geokuk.plugins.kesoid.mvc.LimityKresleniEvent;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
 import cz.geokuk.plugins.mapy.kachle.data.EKaType;
@@ -21,6 +23,7 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 
 	private EKaType podklad;
 	private KruhySettings kruhy;
+	private final ViditelnostSKesoidy viditelnost = new ViditelnostSKesoidy(this);
 
 	public JZvyraznovaciKruhySlide() {
 		setOpaque(false);
@@ -48,8 +51,12 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		repaint();
 	}
 
+	public void onEvent(final KesoidOnoffEvent event) {
+		viditelnost.setKesoidy(event.isOnoff());
+	}
+
 	public void onEvent(final KruhyPreferencesChangeEvent event) {
-		setVisible(event.kruhy.isOnoff());
+		viditelnost.setVlastni(event.kruhy.isOnoff());
 		kruhy = event.kruhy;
 		repaint();
 	}
