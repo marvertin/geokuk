@@ -31,62 +31,31 @@
 
 package cz.geokuk.plugins.kesoidkruhy;
 
-/*
- * TextFieldDemo.java requires one additional file:
- * content.txt
- */
-
-import java.awt.Color;
-
-import javax.swing.*;
-import javax.swing.event.ChangeListener;
-
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.JMyDialog0;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegistrationInit {
 
 	private static final long serialVersionUID = 7087453419069194768L;
 
-	private JLabel velikostLabel;
-	private JSlider velikostSlider;
-	private JColorChooser alfaColorChooser;
-	private JCheckBox jJednotkoveKruhy;
-
-	private KruhyModel kruhyModel;
+	private final PanelKruhu panel = new PanelKruhu();
 
 	public JKruhyDialog() {
 		setTitle("Nastavení parametrů zvýrazňovacích kruhů");
 		init();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.AfterEventReceiverRegistrationInit#initAfterEventReceiverRegistration()
-	 */
 	@Override
 	public void initAfterEventReceiverRegistration() {
-		registerEvents();
+		panel.registerEvents();
 	}
 
 	public void inject(final KruhyModel kruhyModel) {
-		this.kruhyModel = kruhyModel;
+		panel.inject(kruhyModel);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cz.geokuk.framework.AfterInjectInit#initAfterInject()
-	 */
 	public void onEvent(final KruhyPreferencesChangeEvent event) {
-		jJednotkoveKruhy.getModel().setSelected(event.kruhy.isJednotkovaVelikost());
-		velikostSlider.getModel().setValue(event.kruhy.getVelikost());
-		final Color barva = event.kruhy.getBarva();
-		alfaColorChooser.getSelectionModel().setSelectedColor(barva);
+		panel.onEvent(event);
 	}
 
 	@Override
@@ -94,50 +63,9 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 		return "ZvyraznovaciKruhy";
 	}
 
-	/**
-	 * This method is called from within the constructor to initialize the form.
-	 */
 	@Override
 	protected void initComponents() {
-		velikostLabel = new JLabel("Velikost kruhů");
-		velikostSlider = new JSlider();
-		velikostSlider.setToolTipText("Nastavení velikosti zvýrazňovacího kruhu.");
-		alfaColorChooser = new JColorChooser(Color.WHITE);
-		alfaColorChooser.setToolTipText("Nastavení barvy a průhlednosti zvýrazňovacího kruhu");
-		jJednotkoveKruhy = new JCheckBox();
-		jJednotkoveKruhy.setText("Jednotkové kruhy");
-		jJednotkoveKruhy.setToolTipText("Nastavení jednotkovosti kruhů");
-
-		final Box box = Box.createVerticalBox();
-		add(box);
-
-		box.add(jJednotkoveKruhy);
-		box.add(velikostLabel);
-		box.add(velikostSlider);
-		box.add(Box.createVerticalStrut(10));
-		box.add(alfaColorChooser);
-	}
-
-	/**
-	 *
-	 */
-	private void registerEvents() {
-		final ChangeListener chlist = e -> {
-			// Board.mainFrame.parametryZvyraznovaceKruhuSeZmenily();
-			final KruhySettings kruhy = new KruhySettings();
-			final Color barva = alfaColorChooser.getSelectionModel().getSelectedColor();
-			log.debug("Kruhy: {} {}", barva, barva.getAlpha());
-			kruhy.setBarva(barva);
-			log.debug("Kruhy: {} {}", barva, barva.getAlpha());
-			kruhy.setVelikost(velikostSlider.getValue());
-			kruhy.setJednotkovaVelikost(jJednotkoveKruhy.isSelected());
-			log.debug("Kruhy: {} {}", barva, barva.getAlpha());
-			kruhyModel.setData(kruhy);
-		};
-		velikostSlider.getModel().addChangeListener(chlist);
-		alfaColorChooser.getSelectionModel().addChangeListener(chlist);
-		jJednotkoveKruhy.getModel().addChangeListener(chlist);
-
+		add(panel);
 	}
 
 }
