@@ -9,12 +9,13 @@ final class KruhyZDialogu {
 
 	private KruhyZDialogu() {}
 
-	/** Kopie aktuálního nastavení se změněnou barvou, průhledností, velikostí a jednotkovostí. */
-	static KruhySettings zmen(final KruhySettings aktualni, final Color rgb, final int pruhlednostProcent, final int velikost, final boolean jednotkove) {
+	/** Kopie aktuálního nastavení se změněnou barvou, průhledností, velikostí, jednotkovostí a poloměrem jednotkových kruhů. */
+	static KruhySettings zmen(final KruhySettings aktualni, final Color rgb, final int pruhlednostProcent, final int velikost, final boolean jednotkove, final int polomerMetru) {
 		final KruhySettings k = aktualni.copy();
 		k.setBarva(slozBarvu(rgb, pruhlednostProcent, aktualni.getBarva().getAlpha()));
 		k.setVelikost(velikost);
 		k.setJednotkovaVelikost(jednotkove);
+		k.setPolomerMetru(polomerMetru);
 		return k;
 	}
 

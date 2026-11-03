@@ -12,6 +12,8 @@ public class KruhySettings implements Copyable<KruhySettings> {
 	private Color barva = new Color(153, 0, 220, 70);
 	private int velikost = 20;
 	private boolean jednotkovaVelikost = false;
+	/** Poloměr jednotkových kruhů v metrech. */
+	private int polomerMetru = PolomerKruhu.VYCHOZI_METRU;
 
 	@Override
 	public KruhySettings copy() {
@@ -42,6 +44,9 @@ public class KruhySettings implements Copyable<KruhySettings> {
 			return false;
 		}
 		if (jednotkovaVelikost != other.jednotkovaVelikost) {
+			return false;
+		}
+		if (polomerMetru != other.polomerMetru) {
 			return false;
 		}
 		if (onoff != other.onoff) {
@@ -75,6 +80,7 @@ public class KruhySettings implements Copyable<KruhySettings> {
 		result = prime * result + (jednotkovaVelikost ? 1231 : 1237);
 		result = prime * result + (onoff ? 1231 : 1237);
 		result = prime * result + velikost;
+		result = prime * result + polomerMetru;
 		return result;
 	}
 
@@ -83,6 +89,14 @@ public class KruhySettings implements Copyable<KruhySettings> {
 	 */
 	public boolean isJednotkovaVelikost() {
 		return jednotkovaVelikost;
+	}
+
+	public int getPolomerMetru() {
+		return polomerMetru;
+	}
+
+	public void setPolomerMetru(final int polomerMetru) {
+		this.polomerMetru = polomerMetru;
 	}
 
 	public boolean isOnoff() {
@@ -124,7 +138,7 @@ public class KruhySettings implements Copyable<KruhySettings> {
 	 */
 	@Override
 	public String toString() {
-		return "KruhySettings [onoff=" + onoff + ", velikost=" + velikost + ", barva=" + barva + ", jednotkovaVelikost=" + jednotkovaVelikost + "]";
+		return "KruhySettings [onoff=" + onoff + ", velikost=" + velikost + ", barva=" + barva + ", jednotkovaVelikost=" + jednotkovaVelikost + ", polomerMetru=" + polomerMetru + "]";
 	}
 
 }

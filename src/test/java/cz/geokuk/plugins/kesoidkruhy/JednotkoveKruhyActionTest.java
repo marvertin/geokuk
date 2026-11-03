@@ -43,4 +43,17 @@ public class JednotkoveKruhyActionTest {
 		Assert.assertFalse(model.getData().isJednotkovaVelikost());
 		Assert.assertTrue(model.getData().isOnoff());
 	}
+
+	@Test
+	public void bublinaUvadiAktualniPolomer() {
+		Assert.assertEquals("Jednotkové kruhy, poloměr 100 m", akce.getValue(javax.swing.Action.SHORT_DESCRIPTION));
+		final KruhySettings d = model.getData();
+		d.setPolomerMetru(1500);
+		model.setData(d);
+		akce.onEvent(new KruhyPreferencesChangeEvent(model.getData()));
+		Assert.assertEquals("Jednotkové kruhy, poloměr 1,5 km", akce.getValue(javax.swing.Action.SHORT_DESCRIPTION));
+		d.setPolomerMetru(250);
+		akce.onEvent(new KruhyPreferencesChangeEvent(d));
+		Assert.assertEquals("Jednotkové kruhy, poloměr 250 m", akce.getValue(javax.swing.Action.SHORT_DESCRIPTION));
+	}
 }

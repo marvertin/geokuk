@@ -17,7 +17,6 @@ import cz.geokuk.util.index2d.Indexator;
 public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 	private static final long serialVersionUID = -5858146658366237217L;
 	private volatile int limitIkon = LimityKresleni.VYCHOZI_IKON;
-	private static final int MINIMALNI_JEDNOTKOVY_KRUH = 25;
 
 	private Indexator<Wpt> iIndexator;
 
@@ -71,12 +70,10 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		if (iIndexator == null) {
 			return;
 		}
-		final int r;
 		final boolean jednotkove = kruhy.isJednotkovaVelikost();
-		if (jednotkove) {
-			r = vypoctiJednotkovyPolomer();
-		} else {
-			r = kruhy.getVelikost();
+		final int r = jednotkove ? PolomerKruhu.pixlu(kruhy.getPolomerMetru(), getSoord().getPixluNaMetr()) : kruhy.getVelikost();
+		if (r == 0) {
+			return;
 		}
 		final int pocet = iIndexator.count(getSoord().getBoundingRect());
 		if (pocet > limitIkon || prilisHuste(pocet, Math.PI * r * r)) {
@@ -114,17 +111,6 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		if (podklad != null) {
 			// barvaAVElikostKruhuModel = Settings.barvyAVelikostiKruhu.get(podklad);
 		}
-	}
-
-	private int vypoctiJednotkovyPolomer() {
-		final double pixluNaMetr = getSoord().getPixluNaMetr();
-		int metru = 1;
-		int pixlu;
-		do {
-			metru = metru * 10;
-			pixlu = (int) (metru * pixluNaMetr);
-		} while (pixlu < MINIMALNI_JEDNOTKOVY_KRUH);
-		return pixlu;
 	}
 
 }

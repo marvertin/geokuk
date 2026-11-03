@@ -13,7 +13,7 @@ public class JednotkoveKruhyAction extends ToggleAction0 {
 
 	public JednotkoveKruhyAction() {
 		super("Jednotkové kruhy");
-		putValue(SHORT_DESCRIPTION, "Zvýrazňovací kruhy mají poloměr 10 m, 100 m, 1 km, 10 km… podle přiblížení mapy.");
+		putValue(SHORT_DESCRIPTION, popis(PolomerKruhu.VYCHOZI_METRU));
 		putValue(MNEMONIC_KEY, KeyEvent.VK_J);
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("alt F8"));
 	}
@@ -23,7 +23,12 @@ public class JednotkoveKruhyAction extends ToggleAction0 {
 	}
 
 	public void onEvent(final KruhyPreferencesChangeEvent event) {
+		putValue(SHORT_DESCRIPTION, popis(event.kruhy.getPolomerMetru()));
 		setSelected(event.kruhy.isJednotkovaVelikost());
+	}
+
+	static String popis(final int polomerMetru) {
+		return "Jednotkové kruhy, poloměr " + PolomerKruhu.format(polomerMetru);
 	}
 
 	@Override

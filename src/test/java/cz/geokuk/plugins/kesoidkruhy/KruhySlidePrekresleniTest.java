@@ -120,4 +120,49 @@ public class KruhySlidePrekresleniTest {
 		kopie.onEvent(kruhy(true, 20, false));
 		Assert.assertFalse(obarveno(kopie, 35));
 	}
+
+	private static KruhyPreferencesChangeEvent jednotkove(final int metru) {
+		final KruhySettings s = new KruhySettings();
+		s.setOnoff(true);
+		s.setJednotkovaVelikost(true);
+		s.setPolomerMetru(metru);
+		s.setBarva(new Color(200, 0, 0, 255));
+		return new KruhyPreferencesChangeEvent(s);
+	}
+
+	@Test
+	public void jednotkovyKruhMaPolomerVMetrechPodleMeritka() {
+		final JZvyraznovaciKruhySlide s = slide();
+		final double pixluNaMetr = s.getSoord().getPixluNaMetr();
+		for (final int metru : new int[] { 500, 1000, 2000 }) {
+			final int r = (int) Math.round(metru * pixluNaMetr);
+			Assert.assertTrue("mimo obrázek: " + r, r > 10 && r < 380);
+			s.onEvent(jednotkove(metru));
+			Assert.assertTrue(metru + " m: uvnitř " + r, obarveno(s, r - 3));
+			Assert.assertFalse(metru + " m: vně " + r, obarveno(s, r + 4));
+		}
+	}
+
+	@Test
+	public void jednotkovyKruhSeNekresliPodTriPixly() {
+		final JZvyraznovaciKruhySlide s = slide();
+		final double pixluNaMetr = s.getSoord().getPixluNaMetr();
+		s.onEvent(jednotkove((int) Math.floor(2.4 / pixluNaMetr)));
+		Assert.assertFalse(obarveno(s, 0));
+		s.onEvent(jednotkove((int) Math.ceil(5.0 / pixluNaMetr)));
+		Assert.assertTrue(obarveno(s, 0));
+	}
+
+	@Test
+	public void pixlovyKruhNezavisiNaPolomeruVMetrech() {
+		final JZvyraznovaciKruhySlide s = slide();
+		final KruhySettings k = new KruhySettings();
+		k.setOnoff(true);
+		k.setVelikost(40);
+		k.setPolomerMetru(50_000);
+		k.setBarva(new Color(200, 0, 0, 255));
+		s.onEvent(new KruhyPreferencesChangeEvent(k));
+		Assert.assertTrue(obarveno(s, 35));
+		Assert.assertFalse(obarveno(s, 45));
+	}
 }

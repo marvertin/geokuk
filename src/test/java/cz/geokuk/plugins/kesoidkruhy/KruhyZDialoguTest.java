@@ -12,9 +12,10 @@ public class KruhyZDialoguTest {
 		for (final boolean zapnuto : new boolean[] { true, false }) {
 			final KruhySettings a = new KruhySettings();
 			a.setOnoff(zapnuto);
-			final KruhySettings k = KruhyZDialogu.zmen(a, new Color(1, 2, 3), 40, 33, true);
+			final KruhySettings k = KruhyZDialogu.zmen(a, new Color(1, 2, 3), 40, 33, true, 250);
 			Assert.assertEquals(zapnuto, k.isOnoff());
 			Assert.assertEquals(33, k.getVelikost());
+			Assert.assertEquals(250, k.getPolomerMetru());
 			Assert.assertTrue(k.isJednotkovaVelikost());
 			Assert.assertEquals(new Color(1, 2, 3, KruhyZDialogu.alfa(40)), k.getBarva());
 		}
@@ -24,9 +25,10 @@ public class KruhyZDialoguTest {
 	public void puvodniNastaveniSeNemeni() {
 		final KruhySettings a = new KruhySettings();
 		a.setOnoff(true);
-		KruhyZDialogu.zmen(a, Color.RED, 0, 99, true);
+		KruhyZDialogu.zmen(a, Color.RED, 0, 99, true, 5000);
 		Assert.assertEquals(new KruhySettings().getBarva(), a.getBarva());
 		Assert.assertEquals(20, a.getVelikost());
+		Assert.assertEquals(100, a.getPolomerMetru());
 	}
 
 	@Test
