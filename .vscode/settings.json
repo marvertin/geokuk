@@ -1,0 +1,9 @@
+{
+    "intellij.projects": [
+        {
+            "type": "maven",
+            "path": "file:///$PROJECT_DIR$/pom.xml",
+            "java-home": "C:\\Program Files\\Amazon Corretto\\jdk21.0.12_9"
+        }
+    ]
+}

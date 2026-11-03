@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.Scanners;
 
 /**
  * Nese informace z několika složek, ať resourcových nebo normálních. Informace se překrývají.
@@ -47,7 +47,7 @@ public class MultiFolder {
 	 */
 	public void addResourceTree() {
 		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		final Set<String> obrazky = obohatOAdresare(new Reflections(RESOURCE_FOLDER_IMG + "." + RESOURCE_FOLDER_MAP, new ResourcesScanner())
+		final Set<String> obrazky = obohatOAdresare(new Reflections(RESOURCE_FOLDER_IMG + "." + RESOURCE_FOLDER_MAP, Scanners.Resources)
 				.getResources(Pattern.compile(".*")));
 		obrazky.remove(RESOURCE_FOLDER_IMG); // ten tam dělal problém
 		obrazky.forEach(System.out::println);
