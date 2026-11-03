@@ -451,9 +451,16 @@ public class JKesoidySlide extends JSingleSlide0 implements AfterEventReceiverRe
 
 	public void onEvent(final KesoidOnoffEvent event) {
 		setVisible(event.isOnoff());
+		if (!event.isOnoff()) {
+			zrusPodMysi();
+		}
 	}
 
 	public void onEvent(final PoziceSeMaMenitEvent event) {
+		if (!isVisible()) {
+			// Skryté kešoidy se myší nechytají, kříž by jinak přeskočil na kešoid, který není vidět.
+			return;
+		}
 		// TODO-vylet Tato metoda by měla být na modelu, pak je otázkou s jakou citlivostí vybírat
 		final int polomerCitlivosi = polomerCitlivosti();
 		final Point p = getSoord().transform(event.mou);

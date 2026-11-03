@@ -141,8 +141,10 @@
   položky OpenStreetMap, ČÚZK Geoprohlížeč (jen v ČR a jejím okolí) a u kříže
   Otevřít StreetView. Značka se otevře v místě kurzoru, u kříže v místě kříže.
 - Zobrazování kešoidů jde zapnout a vypnout klávesou F5 (menu Kešoidy > Zobrazovat kešoidy).
-  Vypnutí skryje i zvýrazňovací kruhy a obsazenost; po zapnutí se vrátí tak,
-  jak byly nastavené.
+  Vypnutí skryje i zvýrazňovací kruhy, obsazenost a popisky kešoidů; jejich
+  vlastní vypínače (včetně F12 u popisků) se tím nemění, takže se po zapnutí
+  vrátí tak, jak byly nastavené. Při vypnutých kešoidech se kříž nechytá na
+  kešoidy, které nejsou vidět.
 - Nová volba v menu Kešoidy „Přejít na kešoid ze schránky“ (výchozí vypnuto):
   když se do schránky zkopíruje kód kešoidu nebo odkaz s kódem a GeoKuk není
   aktivní okno, mapa se vycentruje na kešoid a otevře se jeho detail; okno se
