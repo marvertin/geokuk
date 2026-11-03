@@ -154,8 +154,8 @@ public class SpravaMapModel extends Model0 {
 
 	/** Offline mapy dostanou živé katalogy, podle kterých se katalogovým mapám a vrstvám přiřadí obrys; po změně katalogu se otevřou znovu. */
 	public void inject(final KachleZiskavac ziskavac) {
-		ziskavac.getOfflineMapy().setKatalogy(this::getKatalog, this::getKatalogVrstev);
-		ziskavac.getOfflineTrasy().setKatalogy(this::getKatalog, this::getKatalogVrstev);
+		ziskavac.getOfflineMapy().setKatalogy(this::getKatalog, this::getKatalogVrstevProOtevreni);
+		ziskavac.getOfflineTrasy().setKatalogy(this::getKatalog, this::getKatalogVrstevProOtevreni);
 	}
 
 	/** Pro testy: složka a odpalování událostí bez Swingu. */
@@ -215,6 +215,18 @@ public class SpravaMapModel extends Model0 {
 	public KatalogVrstev getKatalogVrstev() {
 		final KatalogVrstev k = stazenyKatalog;
 		return k != null ? k : katalogVrstev.get();
+	}
+
+	/**
+	 * Katalog vrstev pro otevření offline map: uložený katalog se načte už před prvním otevřením, jinak by se mapy po jeho načtení na vlákně kontroly
+	 * otevřely znovu. Nevolat z EDT.
+	 */
+	KatalogVrstev getKatalogVrstevProOtevreni() {
+		final File s = slozka.get();
+		if (s != null && stazenyKatalogZ == null) {
+			nactiStazenyKatalog(new File(s, SLOZKA_VRSTEV));
+		}
+		return getKatalogVrstev();
 	}
 
 	/**
@@ -336,8 +348,8 @@ public class SpravaMapModel extends Model0 {
 		return true;
 	}
 
-	/** Kopie staženého katalogu ve složce vrstev; čte se jednou pro každou složku. Volá se na vlákně kontroly. */
-	private void nactiStazenyKatalog(final File sv) {
+	/** Kopie staženého katalogu ve složce vrstev; čte se jednou pro každou složku, na vlákně kontroly nebo před prvním otevřením offline map. */
+	private synchronized void nactiStazenyKatalog(final File sv) {
 		if (sv.equals(stazenyKatalogZ)) {
 			return;
 		}
@@ -358,7 +370,7 @@ public class SpravaMapModel extends Model0 {
 		odpalovac.accept(new KatalogVrstevEvent(getKatalogVrstev(), null));
 	}
 
-	private void zmenKatalogVrstev(final KatalogVrstev k, final File z) {
+	private synchronized void zmenKatalogVrstev(final KatalogVrstev k, final File z) {
 		stazenyKatalog = k;
 		stazenyKatalogZ = z;
 	}
