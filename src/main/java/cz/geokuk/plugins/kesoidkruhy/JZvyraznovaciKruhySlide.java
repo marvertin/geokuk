@@ -130,7 +130,7 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 		return duvod;
 	}
 
-	/** Kolik kruhů s hranou ve výřezu se při posledním kreslení vynechalo kvůli {@link PolomerKruhu#MAX_CASTECNYCH_KRUHU}. */
+	/** Kolik kruhů s hranou ve výřezu se při posledním kreslení vynechalo kvůli rozpočtu ploch {@link PolomerKruhu#ROZPOCET_PLOCHY}. */
 	int getVynechanychKruhu() {
 		return vynechanychKruhu;
 	}
@@ -170,8 +170,10 @@ public class JZvyraznovaciKruhySlide extends JSingleSlide0 {
 			}
 			castecne.add(new int[] { p.x, p.y });
 		});
-		// Kruhy s hranou ve výřezu se kreslí po jednom a jeden velký kruh trvá milisekundy: nejbližších ke středu výřezu je nejvýš MAX_CASTECNYCH_KRUHU.
-		final List<int[]> kreslene = PolomerKruhu.nejblizsi(castecne, vyrez.x + vyrez.width / 2.0, vyrez.y + vyrez.height / 2.0, PolomerKruhu.MAX_CASTECNYCH_KRUHU);
+		// Kruhy s hranou ve výřezu se kreslí po jednom a cena roste s plochou: nejbližší ke středu výřezu se kreslí, dokud se nevyčerpá rozpočet ploch.
+		final Dimension dim = getSoord().getDim();
+		final int limit = PolomerKruhu.limitKruhu(r, (double) dim.width * dim.height);
+		final List<int[]> kreslene = PolomerKruhu.nejblizsi(castecne, vyrez.x + vyrez.width / 2.0, vyrez.y + vyrez.height / 2.0, limit);
 		vynechanychKruhu = castecne.size() - kreslene.size();
 		g.setStroke(prerus);
 		for (final int[] p : kreslene) {

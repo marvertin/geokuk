@@ -271,15 +271,58 @@ public class KruhyVelkyPolomerTest {
 		Assert.assertEquals(PolomerKruhu.slozAlfu(70, 3), alfa, 2);
 	}
 
-	// --- pojistka: nejvýš MAX_CASTECNYCH_KRUHU kruhů s hranou ve výřezu, nejbližších ke středu ---
+	// --- pojistka: rozpočet ploch kruhů s hranou ve výřezu, kreslí se nejbližší ke středu ---
+
+	/** Poloměr kruhů v testech pojistky: v okně 800×600 jsou jen částečné a drahé. */
+	private static final int R_PX = 250;
+
+	/** Limit pro poloměr, který slide skutečně dostane (z metrů zaokrouhlených na celé). */
+	private static int limitProOkno() {
+		final JZvyraznovaciKruhySlide ref = slide(17, jedna());
+		final int metru = polomerMetruProPixely(ref, R_PX);
+		return PolomerKruhu.limitKruhu(metru * ref.getSoord().getPixluNaMetr(), (double) W * H);
+	}
 
 	private static int polomerMetruProPixely(final JZvyraznovaciKruhySlide s, final int pixelu) {
 		return (int) Math.round(pixelu / s.getSoord().getPixluNaMetr());
 	}
 
 	@Test
-	public void limitCastecnychKruhuJeDvanact() {
-		Assert.assertEquals(12, PolomerKruhu.MAX_CASTECNYCH_KRUHU);
+	public void rozpoctovaKonstanta() {
+		Assert.assertEquals(15_000_000L, PolomerKruhu.ROZPOCET_PLOCHY);
+		Assert.assertEquals(2000, PolomerKruhu.MAX_CASTECNYCH_KRUHU);
+	}
+
+	@Test
+	public void maleKruhySeKresliVsechnyAzDoTvrdehoStropu() {
+		final double fhd = 1920.0 * 1080;
+		Assert.assertEquals("r = 26 px: plocha 2124 px, rozpočet vystačí na tisíce", PolomerKruhu.MAX_CASTECNYCH_KRUHU, PolomerKruhu.limitKruhu(26, fhd));
+		Assert.assertEquals(PolomerKruhu.MAX_CASTECNYCH_KRUHU, PolomerKruhu.limitKruhu(3, fhd));
+		Assert.assertTrue("100 kruhů po 26 px se vejde", PolomerKruhu.limitKruhu(26, fhd) >= 100);
+	}
+
+	@Test
+	public void velkeKruhySeOmezi() {
+		final double fhd = 1920.0 * 1080;
+		Assert.assertEquals("r = 652 px: 1,335 M px, 11 kruhů", 11, PolomerKruhu.limitKruhu(652, fhd));
+		Assert.assertEquals("r = 1305 px: ořezané na výřez 2,07 M px, 7 kruhů", 7, PolomerKruhu.limitKruhu(1305, fhd));
+		Assert.assertEquals("kruh větší než výřez stojí nejvýš plochu výřezu", 7, PolomerKruhu.limitKruhu(100_000, fhd));
+		Assert.assertEquals(1, PolomerKruhu.limitKruhu(1000, 1e12, 100));
+		Assert.assertTrue("12 kruhů o r = 652 px se omezí", PolomerKruhu.limitKruhu(652, fhd) < 12);
+	}
+
+	@Test
+	public void hraniceRozpoctuJeMeziDvemaPocty() {
+		final double plocha = 1000.0;
+		final double r = Math.sqrt(plocha / Math.PI);
+		Assert.assertEquals(10, PolomerKruhu.limitKruhu(r, 1e9, 10_000));
+		Assert.assertEquals("o pixel větší plocha už 10 nevejde", 9, PolomerKruhu.limitKruhu(r * 1.001, 1e9, 10_000));
+		Assert.assertEquals(11, PolomerKruhu.limitKruhu(r * 0.95, 1e9, 10_000));
+	}
+
+	@Test
+	public void rozpoctovaFunkceSeNeridiPocetnymKonstantou() {
+		Assert.assertNotEquals("plocha rozhoduje, ne počet", PolomerKruhu.limitKruhu(26, 2e6), PolomerKruhu.limitKruhu(652, 2e6));
 	}
 
 	@Test
@@ -299,7 +342,7 @@ public class KruhyVelkyPolomerTest {
 
 	private JZvyraznovaciKruhySlide slideSCastecnymi(final int pocet, final boolean sDalekym) {
 		final JZvyraznovaciKruhySlide ref = slide(17, jedna());
-		final int metru = polomerMetruProPixely(ref, 100);
+		final int metru = polomerMetruProPixely(ref, R_PX);
 		final List<Mou> kese = new ArrayList<>();
 		for (int k = 0; k < pocet; k++) {
 			kese.add(MISTO); // blízko středu: kruhy r = 100 px jsou v okně 800×600 jen částečné
@@ -315,8 +358,8 @@ public class KruhyVelkyPolomerTest {
 	}
 
 	@Test
-	public void dvanactJedenCastecnyKruhSeKresliJenDvanactNejblizsich() {
-		final JZvyraznovaciKruhySlide s = slideSCastecnymi(PolomerKruhu.MAX_CASTECNYCH_KRUHU, true);
+	public void dalsiCastecnyKruhPoVycerpaniRozpoctuSeVynechaAKresliSeNejblizsi() {
+		final JZvyraznovaciKruhySlide s = slideSCastecnymi(limitProOkno(), true);
 		final BufferedImage i = nakresli(s);
 		Assert.assertEquals(1, s.getVynechanychKruhu());
 		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.KRESLI, s.getDuvod());
@@ -325,8 +368,8 @@ public class KruhyVelkyPolomerTest {
 	}
 
 	@Test
-	public void dvanactCastecnychKruhuSeKresliVsechny() {
-		final JZvyraznovaciKruhySlide s = slideSCastecnymi(PolomerKruhu.MAX_CASTECNYCH_KRUHU - 1, true);
+	public void kruhyVRozpoctuSeKresliVsechny() {
+		final JZvyraznovaciKruhySlide s = slideSCastecnymi(limitProOkno() - 1, true);
 		final BufferedImage i = nakresli(s);
 		Assert.assertEquals(0, s.getVynechanychKruhu());
 		Assert.assertTrue("i nejvzdálenější se kreslí, když se vejde do limitu", obarveno(i, W / 2 + 385, H / 2));
@@ -350,7 +393,7 @@ public class KruhyVelkyPolomerTest {
 
 	@Test
 	public void vynechanychKruhuSeNulujePriDalsimKresleni() {
-		final JZvyraznovaciKruhySlide s = slideSCastecnymi(PolomerKruhu.MAX_CASTECNYCH_KRUHU + 5, false);
+		final JZvyraznovaciKruhySlide s = slideSCastecnymi(limitProOkno() + 5, false);
 		nakresli(s);
 		Assert.assertEquals(5, s.getVynechanychKruhu());
 		s.onEvent(pixely(10));
@@ -399,11 +442,11 @@ public class KruhyVelkyPolomerTest {
 	@Test
 	public void vynechanyJeNejvzdalenejsiOdStreduClipuMimoPocatek() {
 		final JZvyraznovaciKruhySlide ref = slide(17, jedna());
-		final int metru = polomerMetruProPixely(ref, 100);
+		final int metru = polomerMetruProPixely(ref, R_PX);
 		final double px = mouNaPixel(ref);
 		final List<Mou> kese = new ArrayList<>();
 		// osa y souřadnic Mou míří nahoru; střed oříznutého výřezu (100, 50, 500, 400) je (350, 250); okno má střed MISTO v (400, 300)
-		for (int k = 0; k < PolomerKruhu.MAX_CASTECNYCH_KRUHU; k++) {
+		for (int k = 0; k < limitProOkno(); k++) {
 			kese.add(new Mou(MISTO.xx + (int) Math.round((-50 + k % 3) * px), MISTO.yy + (int) Math.round((50 - k / 3) * px)));
 		}
 		// kruh těsně u levého horního rohu výřezu je od jeho středu nejdál
@@ -418,5 +461,70 @@ public class KruhyVelkyPolomerTest {
 		Assert.assertEquals(1, s.getVynechanychKruhu());
 		Assert.assertFalse("vynechán kruh u rohu výřezu", obarveno(i, 110, 60));
 		Assert.assertTrue("střed výřezu se kreslí", obarveno(i, 350, 250));
+	}
+
+	private JZvyraznovaciKruhySlide slideSeMrizkou(final int pocet, final int rPx) {
+		final JZvyraznovaciKruhySlide ref = slide(17, jedna());
+		final double px = mouNaPixel(ref);
+		final List<Mou> kese = new ArrayList<>();
+		for (int k = 0; k < pocet; k++) {
+			kese.add(new Mou(MISTO.xx + (int) Math.round((-390 + (k % 66) * 12) * px), MISTO.yy + (int) Math.round((250 - (k / 66) * 12) * px)));
+		}
+		final JZvyraznovaciKruhySlide s = slide(17, kese);
+		s.onEvent(metry(polomerMetruProPixely(ref, rPx)));
+		return s;
+	}
+
+	@Test
+	public void stoMalychKruhuSeNakresliVsech() {
+		final JZvyraznovaciKruhySlide s = slideSeMrizkou(100, 26);
+		final BufferedImage i = nakresli(s);
+		Assert.assertEquals(0, s.getVynechanychKruhu());
+		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.KRESLI, s.getDuvod());
+		Assert.assertTrue("první", obarveno(i, 10, 50));
+		Assert.assertTrue("poslední v řadě", obarveno(i, 10 + 33 * 12, 50 + 0));
+		Assert.assertTrue("druhá řada", obarveno(i, 10, 62));
+	}
+
+	@Test
+	public void tisiceMalychKruhuSeOmeziAzTvrdymStropem() {
+		final JZvyraznovaciKruhySlide s = slideSeMrizkou(2500, 26);
+		nakresli(s);
+		Assert.assertEquals(2500 - PolomerKruhu.MAX_CASTECNYCH_KRUHU, s.getVynechanychKruhu());
+		final JZvyraznovaciKruhySlide mene = slideSeMrizkou(PolomerKruhu.MAX_CASTECNYCH_KRUHU, 26);
+		nakresli(mene);
+		Assert.assertEquals(0, mene.getVynechanychKruhu());
+	}
+
+	@Test
+	public void velkeKruhySeOmeziPodlePlochy() {
+		final JZvyraznovaciKruhySlide s = slideSeMrizkou(300, 300);
+		nakresli(s);
+		final int limit = PolomerKruhu.limitKruhu(300, (double) W * H);
+		Assert.assertEquals(300 - limit, s.getVynechanychKruhu());
+		Assert.assertTrue("velké kruhy se omezují výrazně pod tvrdý strop", limit < 300);
+	}
+
+	@Test
+	public void vyberHaldouDavaStejneVzdalenostiJakoUplneRazeni() {
+		final java.util.Random rnd = new java.util.Random(7);
+		final List<int[]> body = new ArrayList<>();
+		for (int k = 0; k < 600; k++) {
+			body.add(new int[] { rnd.nextInt(2000) - 500, rnd.nextInt(1500) - 400 });
+		}
+		final double cx = 640.5;
+		final double cy = 310.25;
+		final List<int[]> vybrane = PolomerKruhu.nejblizsi(body, cx, cy, 37);
+		final List<Double> ocekavane = new ArrayList<>();
+		for (final int[] b : body) {
+			ocekavane.add((b[0] - cx) * (b[0] - cx) + (b[1] - cy) * (b[1] - cy));
+		}
+		java.util.Collections.sort(ocekavane);
+		Assert.assertEquals(37, vybrane.size());
+		for (int k = 0; k < 37; k++) {
+			final int[] b = vybrane.get(k);
+			Assert.assertEquals("pořadí od nejbližšího, " + k, ocekavane.get(k), (b[0] - cx) * (b[0] - cx) + (b[1] - cy) * (b[1] - cy), 1e-9);
+		}
+		Assert.assertEquals("vstup se nemění", 600, body.size());
 	}
 }

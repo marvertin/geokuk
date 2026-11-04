@@ -3,6 +3,7 @@ package cz.geokuk.plugins.kesoidkruhy;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Locale;
 
 /** Poloměr jednotkových kruhů v metrech: přednastavené hodnoty posuvníku, převod z textu a do textu, přepočet na pixely. */
@@ -50,17 +51,45 @@ final class PolomerKruhu {
 		return nejdalnejsiX * nejdalnejsiX + nejdalnejsiY * nejdalnejsiY <= r * r ? Kresleni.VYPLN_VYREZ : Kresleni.KRUH;
 	}
 
-	/** Nejvíc kruhů, jejichž okraj protíná výřez, které se při jednom kreslení vykreslí; kreslení jednoho velkého kruhu trvá řádově milisekundy. */
-	static final int MAX_CASTECNYCH_KRUHU = 12;
+	/**
+	 * Rozpočet na součet ploch kruhů s hranou ve výřezu, v pixelech. Vyplnění průhledné plochy stojí kolem 10 ns na pixel, takže 15 milionů pixelů je řádově desetiny sekundy
+	 * i s dotazem do indexu a výběrem kruhů, zhruba sedm kruhů velkých jako celé okno 1920×1080.
+	 */
+	static final long ROZPOCET_PLOCHY = 15_000_000L;
+	/** Nejvíc kruhů s hranou ve výřezu bez ohledu na plochu; i malý kruh má režii (tvar, průhlednost, bílý okraj). */
+	static final int MAX_CASTECNYCH_KRUHU = 2000;
 
-	/** Nejvýš {@code limit} bodů nejbližších bodu ({@code cx}, {@code cy}), od nejbližšího; při menším počtu všechny beze změny pořadí. */
+	/**
+	 * Kolik kruhů o poloměru {@code r} px s hranou ve výřezu se smí nakreslit. Cena kruhu roste s jeho plochou ve výřezu, omezenou plochou výřezu, takže malé kruhy se kreslí
+	 * všechny (až {@link #MAX_CASTECNYCH_KRUHU}) a velké nejvýš pár. Vždy aspoň jeden.
+	 */
+	static int limitKruhu(final double r, final double plochaVyrezu, final long rozpocet) {
+		final double plocha = Math.max(1, Math.min(Math.PI * r * r, plochaVyrezu));
+		return (int) Math.max(1, Math.min(MAX_CASTECNYCH_KRUHU, Math.floor(rozpocet / plocha)));
+	}
+
+	static int limitKruhu(final double r, final double plochaVyrezu) {
+		return limitKruhu(r, plochaVyrezu, ROZPOCET_PLOCHY);
+	}
+
+	/** Nejvýš {@code limit} bodů nejbližších bodu ({@code cx}, {@code cy}), od nejbližšího; při menším počtu všechny beze změny pořadí. Výběr je O(n log limit), ne řazení všech. */
 	static List<int[]> nejblizsi(final List<int[]> body, final double cx, final double cy, final int limit) {
 		if (body.size() <= limit) {
 			return body;
 		}
-		final List<int[]> kopie = new ArrayList<>(body);
-		kopie.sort((a, b) -> Double.compare(vzdalenost2(a, cx, cy), vzdalenost2(b, cx, cy)));
-		return new ArrayList<>(kopie.subList(0, limit));
+		// Halda s nejvzdálenějším vybraným bodem navrchu: nový bod ji vytlačí, jen když je blíž.
+		final PriorityQueue<int[]> halda = new PriorityQueue<>(limit + 1, (a, b) -> Double.compare(vzdalenost2(b, cx, cy), vzdalenost2(a, cx, cy)));
+		for (final int[] b : body) {
+			if (halda.size() < limit) {
+				halda.add(b);
+			} else if (vzdalenost2(b, cx, cy) < vzdalenost2(halda.peek(), cx, cy)) {
+				halda.poll();
+				halda.add(b);
+			}
+		}
+		final List<int[]> vybrane = new ArrayList<>(halda);
+		vybrane.sort((a, b) -> Double.compare(vzdalenost2(a, cx, cy), vzdalenost2(b, cx, cy)));
+		return vybrane;
 	}
 
 	private static double vzdalenost2(final int[] b, final double cx, final double cy) {
