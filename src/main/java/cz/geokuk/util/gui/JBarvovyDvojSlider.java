@@ -4,7 +4,9 @@
 package cz.geokuk.util.gui;
 
 import java.awt.*;
-import java.util.Hashtable;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -12,7 +14,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 
 /**
- * Dva svislé posuvníky nad mapou, barva (stupeň šedi) a průhlednost, s nadpisy, popisky os a bublinkou s hodnotou při tažení.
+ * Dva svislé tenké posuvníky nad mapou, barva (stupeň šedi) a průhlednost. Nadpisy, popisky os a bublinka s hodnotou se kreslí jen při interakci (najetí myší, tažení, kolečko) a
+ * to přes {@link #kresliNadMapou}, aby je vrstva nad mapou mohla vykreslit nad ostatními vrstvami.
  *
  * @author Martin Veverka
  *
@@ -22,33 +25,48 @@ public class JBarvovyDvojSlider extends JPanel {
 	private static final long serialVersionUID = 5956221175094609896L;
 
 	private static final int MAX = 255;
-	/** Mezera mezi bublinkou a posuvníkem. */
-	private static final int MEZERA_BUBLINKY = 8;
+	/** Vzdálenost popisků os od osy posuvníku. */
+	private static final int MEZERA_OSY = 12;
+	/** Mezera mezi popisky a bublinkou. */
+	private static final int MEZERA_BUBLINKY = 14;
+	/** Výška místa nad posuvníkem pro nadpis. */
+	private static final int VYSKA_NADPISU = 30;
+	private static final String[] TEXTY_OSY_BARVY = { "Černá", "Šedá", "Bílá" };
+	private static final int[] HODNOTY_OSY_BARVY = { 0, 128, MAX };
 
 	private JSlider iBarvovnik;
 	private JSlider iPruhlednik;
 	private final BublinkaHodnoty bublinkaBarvy;
 	private final BublinkaHodnoty bublinkaPruhlednosti;
-	private final java.util.List<Sledovani> sledovani = new java.util.ArrayList<>();
+	private final ViditelnostLegendy legenda;
+	private final List<Sledovani> sledovani = new ArrayList<>();
 	/** Hodnoty se právě nastavují z modelu, bublinka se neukazuje. */
 	private boolean nastavuji;
-	/** Kde se bublinky naposledy kreslily, ve značkách rodiče; překreslí se při dalším kroku animace. */
+	/** Kde se legenda naposledy kreslila, ve značkách vrstvy; překreslí se při dalším kroku animace. */
 	private Rectangle naposledy = new Rectangle();
+	/** Vrstva, do které se legenda kreslí a kam se posílají překreslení. */
+	private Component vrstva;
 
 	public JBarvovyDvojSlider() {
-		this(BublinkaHodnoty::new);
+		this(BublinkaHodnoty::new, null);
 	}
 
-	/** V testech se bublinky vyrábějí s vlastními hodinami a časovačem. */
-	JBarvovyDvojSlider(final Function<Runnable, BublinkaHodnoty> vyrobaBublinky) {
-		bublinkaBarvy = vyrobaBublinky.apply(this::prekresliBublinky);
-		bublinkaPruhlednosti = vyrobaBublinky.apply(this::prekresliBublinky);
+	/** V testech se bublinky a legenda vyrábějí s vlastními hodinami a časovačem. */
+	JBarvovyDvojSlider(final Function<Runnable, BublinkaHodnoty> vyrobaBublinky, final Function<Runnable, ViditelnostLegendy> vyrobaLegendy) {
+		bublinkaBarvy = vyrobaBublinky.apply(this::prekresliLegendu);
+		bublinkaPruhlednosti = vyrobaBublinky.apply(this::prekresliLegendu);
+		legenda = vyrobaLegendy != null ? vyrobaLegendy.apply(this::prekresliLegendu) : new ViditelnostLegendy(this::prekresliLegendu);
 		initComponents();
 		addHierarchyListener(e -> {
-			if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0 && !isShowing()) {
+			if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && !isShowing()) {
 				zrusBublinky();
 			}
 		});
+	}
+
+	/** Vrstva nad mapou, která legendu kreslí; kvůli překreslování jen oblasti legendy. */
+	public void setVrstvaLegendy(final Component vrstva) {
+		this.vrstva = vrstva;
 	}
 
 	@Override
@@ -63,11 +81,17 @@ public class JBarvovyDvojSlider extends JPanel {
 			s.tahne = false;
 			s.bublinka.zrus();
 		}
+		legenda.zrus();
 	}
 
 	private Font fontBublinky() {
 		final Font f = getFont() != null ? getFont() : new JLabel().getFont();
 		return f.deriveFont(Font.BOLD, 12f);
+	}
+
+	private Font fontLegendy() {
+		final Font f = getFont() != null ? getFont() : new JLabel().getFont();
+		return f.deriveFont(Font.PLAIN, 11f);
 	}
 
 	/** Stav tažení jednoho posuvníku. */
@@ -82,6 +106,35 @@ public class JBarvovyDvojSlider extends JPanel {
 			this.bublinka = bublinka;
 			this.posledni = slider.getValue();
 		}
+	}
+
+	/** Popisek na ose: hodnota posuvníku a text. */
+	static final class Popisek {
+		final int hodnota;
+		final String text;
+
+		Popisek(final int hodnota, final String text) {
+			this.hodnota = hodnota;
+			this.text = text;
+		}
+	}
+
+	/** Popisky osy barvy: černá dole, šedá uprostřed, bílá nahoře. */
+	static List<Popisek> osaBarvy() {
+		final List<Popisek> l = new ArrayList<>();
+		for (int i = 0; i < HODNOTY_OSY_BARVY.length; i++) {
+			l.add(new Popisek(HODNOTY_OSY_BARVY[i], TEXTY_OSY_BARVY[i]));
+		}
+		return l;
+	}
+
+	/** Popisky osy průhlednosti po 25 %; 0 % (plně krycí) nahoře. */
+	static List<Popisek> osaPruhlednosti() {
+		final List<Popisek> l = new ArrayList<>();
+		for (int procent = 0; procent <= 100; procent += 25) {
+			l.add(new Popisek(krytiProPruhlednost(procent), procent + " %"));
+		}
+		return l;
 	}
 
 	/**
@@ -124,14 +177,18 @@ public class JBarvovyDvojSlider extends JPanel {
 		}
 	}
 
-	/** Jas v procentech; 0 je černá, 100 bílá. */
+	/** Barva v procentech ve směru osy: nahoře je bílá (0 %), dole černá (100 %). */
 	public static String textBarvy(final int hodnota) {
-		return "Jas " + Math.round(hodnota * 100f / MAX) + " %";
+		return barvaProcent(hodnota) + " %";
 	}
 
-	/** Průhlednost v procentech z krytí 0 až 255: 0 % je plně krycí, 100 % neviditelná. */
+	static int barvaProcent(final int hodnota) {
+		return Math.round((MAX - hodnota) * 100f / MAX);
+	}
+
+	/** Průhlednost v procentech z krytí 0 až 255 ve směru osy: nahoře plně krycí (0 %), dole neviditelná (100 %). */
 	public static String textPruhlednosti(final int krytiAlfa) {
-		return "Průhlednost " + pruhlednostProcent(krytiAlfa) + " %";
+		return pruhlednostProcent(krytiAlfa) + " %";
 	}
 
 	static int pruhlednostProcent(final int krytiAlfa) {
@@ -151,73 +208,100 @@ public class JBarvovyDvojSlider extends JPanel {
 		return okraj + (int) Math.round((1 - podil) * (vyska - 2 * okraj));
 	}
 
-	/** Nakreslí bublinky s hodnotami u jezdců; volá vrstva, které posuvníky patří, ze své kresby potomků. Vrací souhrnný obdélník ve značkách vrstvy. */
-	public Rectangle kresliBublinky(final Graphics2D g, final Component vrstva) {
-		Rectangle souhrn = null;
-		for (final JSlider s : new JSlider[] { iBarvovnik, iPruhlednik }) {
-			final BublinkaHodnoty b = bublinka(s);
-			if (b.viditelnost() <= 0f) {
-				continue;
-			}
-			final Point p = SwingUtilities.convertPoint(s, 0, 0, vrstva);
-			final int stredY = p.y + polohaJezdce(s.getHeight() - s.getInsets().top - s.getInsets().bottom, okraj(s), s.getValue(), s.getMinimum(), s.getMaximum()) + s.getInsets().top;
-			final Rectangle r = b.kresli(g, fontBublinky(), p.x - MEZERA_BUBLINKY, stredY);
-			if (r != null) {
-				souhrn = souhrn == null ? r : souhrn.union(r);
-			}
-		}
-		naposledy = souhrn == null ? new Rectangle() : souhrn;
-		return souhrn;
+	/** Střed osy posuvníku ve značkách vrstvy. */
+	private Point stredOsy(final JSlider s, final Component kam) {
+		final Point p = SwingUtilities.convertPoint(s, s.getWidth() / 2, 0, kam);
+		return p;
+	}
+
+	private int yHodnoty(final JSlider s, final Component kam, final int hodnota) {
+		final Point p = SwingUtilities.convertPoint(s, 0, 0, kam);
+		final Insets in = s.getInsets();
+		return p.y + in.top + polohaJezdce(s.getHeight() - in.top - in.bottom, okraj(), hodnota, s.getMinimum(), s.getMaximum());
 	}
 
 	private BublinkaHodnoty bublinka(final JSlider s) {
 		return s == iBarvovnik ? bublinkaBarvy : bublinkaPruhlednosti;
 	}
 
-	/** Kolik pixelů z každého konce zabírá jezdec nebo polovina popisku. */
-	private static int okraj(final JSlider s) {
+	/** Šířka nejdelšího popisku os, podle ní se odsadí bublinky. */
+	private int sirkaOsy(final FontMetrics fm) {
+		int w = 0;
+		for (final Popisek p : osaBarvy()) {
+			w = Math.max(w, PopisekNaMape.hranice(fm, p.text, 0, 0).width);
+		}
+		for (final Popisek p : osaPruhlednosti()) {
+			w = Math.max(w, PopisekNaMape.hranice(fm, p.text, 0, 0).width);
+		}
+		return w;
+	}
+
+	/**
+	 * Nakreslí legendu (nadpisy, popisky os) a bublinky s hodnotami; volá vrstva nad mapou, které posuvníky patří. Vrací souhrnný obdélník ve značkách vrstvy, nebo null, když se
+	 * nic nekreslilo.
+	 */
+	public Rectangle kresliNadMapou(final Graphics2D g, final Component kam) {
+		Rectangle souhrn = null;
+		final float v = legenda.viditelnost();
+		final Font fontL = fontLegendy();
+		final FontMetrics fmL = g.getFontMetrics(fontL);
+		final int sirkaOsy = sirkaOsy(fmL);
+		final int pravyOkrajPanelu = SwingUtilities.convertPoint(this, getWidth(), 0, kam).x;
+		for (final JSlider s : new JSlider[] { iBarvovnik, iPruhlednik }) {
+			final int osaX = stredOsy(s, kam).x;
+			final int pravyOkrajPopisku = osaX - MEZERA_OSY;
+			if (v > 0f) {
+				final boolean barva = s == iBarvovnik;
+				for (final Popisek p : barva ? osaBarvy() : osaPruhlednosti()) {
+					final int y = yHodnoty(s, kam, p.hodnota);
+					PopisekNaMape.znacka(g, osaX - MEZERA_OSY + 2, osaX - 3, y, v);
+					souhrn = sjednot(souhrn, PopisekNaMape.nakresli(g, fontL, p.text, pravyOkrajPopisku, y, v));
+				}
+				final Point nahore = SwingUtilities.convertPoint(s, 0, 0, kam);
+				souhrn = sjednot(souhrn, PopisekNaMape.nakresli(g, fontL, barva ? "Barva" : "Průhlednost", pravyOkrajPanelu, nahore.y - VYSKA_NADPISU / 2, v));
+			}
+			final BublinkaHodnoty b = bublinka(s);
+			final float vb = b.viditelnost();
+			if (vb > 0f) {
+				final Rectangle r = PopisekNaMape.nakresli(g, fontBublinky(), b.getText(), pravyOkrajPopisku - sirkaOsy - MEZERA_BUBLINKY, yHodnoty(s, kam, s.getValue()), vb);
+				souhrn = sjednot(souhrn, r);
+			}
+		}
+		naposledy = souhrn == null ? new Rectangle() : souhrn;
+		return souhrn;
+	}
+
+	private static Rectangle sjednot(final Rectangle a, final Rectangle b) {
+		if (b == null) {
+			return a;
+		}
+		return a == null ? b : a.union(b);
+	}
+
+	/** Kolik pixelů z každého konce zabírá jezdec. */
+	private static int okraj() {
 		int vyska = 16;
 		final Icon jezdec = UIManager.getIcon("Slider.verticalThumbIcon");
 		if (jezdec != null) {
 			vyska = Math.max(vyska, jezdec.getIconHeight());
 		}
-		if (s.getLabelTable() != null) {
-			final java.util.Enumeration<?> popisky = s.getLabelTable().elements();
-			while (popisky.hasMoreElements()) {
-				final Object o = popisky.nextElement();
-				if (o instanceof Component) {
-					vyska = Math.max(vyska, ((Component) o).getPreferredSize().height);
-				}
-			}
-		}
 		return vyska / 2;
 	}
 
-	/** Překreslí jen oblast bublinek, ne celou mapu. */
-	private void prekresliBublinky() {
-		final Container rodic = getParent();
-		if (rodic == null) {
+	/** Překreslí jen oblast legendy a bublinek, ne celou mapu. */
+	private void prekresliLegendu() {
+		final Component kam = vrstva != null ? vrstva : getParent();
+		if (kam == null) {
 			repaint();
 			return;
 		}
 		final Rectangle oblast = new Rectangle(naposledy);
-		final FontMetrics fm = getFontMetrics(fontBublinky());
-		for (final JSlider s : new JSlider[] { iBarvovnik, iPruhlednik }) {
-			final BublinkaHodnoty b = bublinka(s);
-			if (!b.jeAktivni()) {
-				continue;
-			}
-			final Point p = SwingUtilities.convertPoint(s, 0, 0, rodic);
-			final int stredY = p.y + polohaJezdce(s.getHeight() - s.getInsets().top - s.getInsets().bottom, okraj(s), s.getValue(), s.getMinimum(), s.getMaximum()) + s.getInsets().top;
-			final int w = fm.stringWidth(b.getText()) + 16;
-			final int h = fm.getHeight() + 8;
-			oblast.add(new Rectangle(p.x - MEZERA_BUBLINKY - w, stredY - h / 2, w, h));
-		}
-		if (oblast.isEmpty()) {
-			return;
-		}
+		final Point vlevoNahore = SwingUtilities.convertPoint(this, 0, 0, kam);
+		final FontMetrics fm = getFontMetrics(fontLegendy());
+		final int odOkraje = sirkaOsy(fm) + MEZERA_OSY + MEZERA_BUBLINKY + 190;
+		oblast.add(new Rectangle(vlevoNahore.x - odOkraje, vlevoNahore.y - VYSKA_NADPISU - 10, odOkraje + getWidth() + 4, getHeight() + 2 * VYSKA_NADPISU));
 		oblast.grow(2, 2);
-		rodic.repaint(oblast.x, oblast.y, oblast.width, oblast.height);
+		kam.repaint(oblast.x, oblast.y, oblast.width, oblast.height);
 	}
 
 	/**
@@ -233,11 +317,6 @@ public class JBarvovyDvojSlider extends JPanel {
 		iBarvovnik.setFocusable(false);
 		final DefaultBoundedRangeModel barvovnikModel = new DefaultBoundedRangeModel(128, 0, 0, MAX);
 		iBarvovnik.setModel(barvovnikModel);
-		final Hashtable<Integer, JComponent> popiskyBarvy = new Hashtable<>();
-		popiskyBarvy.put(0, new JPopisekNaMape("Černá", true));
-		popiskyBarvy.put(128, new JPopisekNaMape("Šedá", true));
-		popiskyBarvy.put(MAX, new JPopisekNaMape("Bílá", true));
-		nastavOsu(iBarvovnik, popiskyBarvy);
 
 		iPruhlednik = new JSlider(SwingConstants.VERTICAL);
 		iPruhlednik.setOpaque(false);
@@ -245,38 +324,62 @@ public class JBarvovyDvojSlider extends JPanel {
 		iPruhlednik.setFocusable(false);
 		final DefaultBoundedRangeModel pruhlednikModel = new DefaultBoundedRangeModel(128, 0, 0, MAX);
 		iPruhlednik.setModel(pruhlednikModel);
-		final Hashtable<Integer, JComponent> popiskyPruhlednosti = new Hashtable<>();
-		for (int procent = 0; procent <= 100; procent += 25) {
-			popiskyPruhlednosti.put(krytiProPruhlednost(procent), new JPopisekNaMape(procent + " %", true));
-		}
-		nastavOsu(iPruhlednik, popiskyPruhlednosti);
 
 		sledujBublinku(iBarvovnik, bublinkaBarvy, JBarvovyDvojSlider::textBarvy);
 		sledujBublinku(iPruhlednik, bublinkaPruhlednosti, JBarvovyDvojSlider::textPruhlednosti);
+		sledujMys();
 
-		add(Box.createRigidArea(new Dimension(0, 20)));
-		add(nadpis("Barva"));
-		add(Box.createRigidArea(new Dimension(0, 8)));
+		add(Box.createRigidArea(new Dimension(0, VYSKA_NADPISU)));
 		add(iBarvovnik);
-		add(Box.createRigidArea(new Dimension(0, 20)));
-		add(nadpis("Průhlednost"));
-		add(Box.createRigidArea(new Dimension(0, 8)));
+		add(Box.createRigidArea(new Dimension(0, VYSKA_NADPISU + 10)));
 		add(iPruhlednik);
 		add(Box.createRigidArea(new Dimension(0, 20)));
 	}
 
-	private static JLabel nadpis(final String text) {
-		final JLabel l = new JPopisekNaMape(text, false);
-		l.setAlignmentX(Component.CENTER_ALIGNMENT);
-		return l;
+	/** Najetí myší na pruh posuvníků a fokus na posuvníku ukazují legendu. */
+	private void sledujMys() {
+		final MouseAdapter ma = new MouseAdapter() {
+			@Override
+			public void mouseEntered(final MouseEvent e) {
+				aktualizujMys(e);
+			}
+
+			@Override
+			public void mouseExited(final MouseEvent e) {
+				aktualizujMys(e);
+			}
+
+			@Override
+			public void mouseMoved(final MouseEvent e) {
+				aktualizujMys(e);
+			}
+		};
+		for (final Component c : new Component[] { this, iBarvovnik, iPruhlednik }) {
+			c.addMouseListener(ma);
+			c.addMouseMotionListener(ma);
+		}
+		final FocusListener fl = new FocusAdapter() {
+			@Override
+			public void focusGained(final FocusEvent e) {
+				legenda.fokus(true);
+			}
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				legenda.fokus(false);
+			}
+		};
+		iBarvovnik.addFocusListener(fl);
+		iPruhlednik.addFocusListener(fl);
 	}
 
-	private static void nastavOsu(final JSlider s, final Hashtable<Integer, JComponent> popisky) {
-		s.setLabelTable(popisky);
-		s.setPaintLabels(true);
+	/** Myš je nad pruhem, když je v mezích panelu, i když přešla z jednoho posuvníku na druhý. */
+	private void aktualizujMys(final MouseEvent e) {
+		final Point p = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), this);
+		legenda.mys(contains(p));
 	}
 
-	/** Bublinka se ukazuje při tažení i při změně kolečkem nebo klávesou, ne při nastavení z modelu ani při pouhé změně příznaku tažení. */
+	/** Bublinka a legenda se ukazují při tažení i při změně kolečkem nebo klávesou, ne při nastavení z modelu ani při pouhé změně příznaku tažení. */
 	private void sledujBublinku(final JSlider s, final BublinkaHodnoty bublinka, final IntFunction<String> text) {
 		final Sledovani sl = new Sledovani(s, bublinka);
 		sledovani.add(sl);
@@ -291,15 +394,27 @@ public class JBarvovyDvojSlider extends JPanel {
 				sl.tahne = true;
 				sl.posledni = hodnota;
 				bublinka.tahne(t);
+				legenda.tahne(true);
 			} else if (sl.tahne) {
 				sl.tahne = false;
 				sl.posledni = hodnota;
 				bublinka.tahne(t);
 				bublinka.pust();
+				legenda.tahne(jeNekdoTahne());
 			} else if (hodnota != sl.posledni) {
 				sl.posledni = hodnota;
 				bublinka.dotkni(t);
+				legenda.dotyk();
 			}
 		});
+	}
+
+	private boolean jeNekdoTahne() {
+		for (final Sledovani s : sledovani) {
+			if (s.tahne) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

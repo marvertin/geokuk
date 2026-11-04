@@ -106,7 +106,8 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			final JComponent kesky = new JKesoidySlide(false);
 			final JComponent pozicovnik = new JPozicovnikSlide();
 			final JComponent zvyraznovaciKruhy = new JZvyraznovaciKruhySlide();
-			final JComponent obsazenik = new JObsazenost();
+			final JObsazenost obsazenik = new JObsazenost();
+			final JComponent legendaObsazenosti = new cz.geokuk.plugins.kesoidobsazenost.JLegendaObsazenosti(obsazenik);
 			final JKachlovnikPresCele kachlovnik = new JKachlovnikPresCele();
 			final JComponent odkazRady = new JOdkazRadySlide(kachlovnik);
 			final JKachlovnik kachlovnikTras = new JKachlovnikTras();
@@ -127,6 +128,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			smrizema.add(mrizkaUtm);
 			// smrizema.add(mrizkaS42);
 			// smrizema.add(mrizkaJtsk);
+			smrizema.add(legendaObsazenosti);
 			smrizema.add(cesty);
 			smrizema.add(popisyKesiNaMape);
 			smrizema.add(kesky);

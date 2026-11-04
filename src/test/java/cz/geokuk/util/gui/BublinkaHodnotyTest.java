@@ -88,7 +88,7 @@ public class BublinkaHodnotyTest {
 	public void bublinkaSeObjeviDrziAZmizi() {
 		final BublinkaHodnoty b = bublinka();
 		Assert.assertEquals(0f, b.viditelnost(), 0f);
-		b.tahne("Jas 50 %");
+		b.tahne("50 %");
 		Assert.assertTrue("časovač se spustil", b.casovacBezi());
 		Assert.assertEquals(0f, b.viditelnost(), 0.001f);
 		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
@@ -138,7 +138,7 @@ public class BublinkaHodnotyTest {
 	@Test
 	public void dotykBezTazeniSeKratkoUkazeAZmizi() {
 		final BublinkaHodnoty b = bublinka();
-		b.dotkni("Jas 10 %");
+		b.dotkni("10 %");
 		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
 		Assert.assertEquals(1f, b.viditelnost(), 0f);
 		cas.addAndGet(BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS);

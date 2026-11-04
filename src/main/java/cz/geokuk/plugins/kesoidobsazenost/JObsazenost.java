@@ -156,10 +156,9 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		g.setComposite(puvodni);
 	}
 
-	@Override
-	protected void paintChildren(final Graphics g) {
-		super.paintChildren(g);
-		iSlidovnik.kresliBublinky((Graphics2D) g, this);
+	/** Posuvníky vrstvy; jejich legendu kreslí vrstva nad kešoidy. */
+	public JBarvovyDvojSlider getSlidovnik() {
+		return iSlidovnik;
 	}
 
 	/** Kruhy se nekreslí, když je keší ve výřezu víc než {@link #MAX_KRUHU}. */

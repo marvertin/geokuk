@@ -63,6 +63,32 @@ public final class BublinkaHodnoty {
 		};
 	}
 
+	/** Časovač na EDT, který volá {@code krok}; {@code krok} se nastavuje později, zatím může být null. */
+	static Casovac swingovyCasovac(final Runnable krok) {
+		final Timer timer = new Timer(KROK_ANIMACE_MS, e -> {
+			if (krok != null) {
+				krok.run();
+			}
+		});
+		timer.setCoalesce(true);
+		return new Casovac() {
+			@Override
+			public void spust() {
+				timer.start();
+			}
+
+			@Override
+			public void zastav() {
+				timer.stop();
+			}
+
+			@Override
+			public boolean bezi() {
+				return timer.isRunning();
+			}
+		};
+	}
+
 	BublinkaHodnoty(final LongSupplier hodinyMs, final Casovac casovac, final Runnable prekresli) {
 		this.hodinyMs = hodinyMs;
 		this.casovac = casovac;

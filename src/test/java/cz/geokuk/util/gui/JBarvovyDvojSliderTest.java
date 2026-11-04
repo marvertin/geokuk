@@ -1,129 +1,69 @@
 package cz.geokuk.util.gui;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 
 import org.junit.*;
 
-/** Popisky, nadpisy a bublinky u posuvníků kruhů Obsazenost; bez displeje. */
+/** Legenda, nadpisy a bubliny u posuvníků kruhů Obsazenost; bez displeje. */
 public class JBarvovyDvojSliderTest {
 
-	private final JBarvovyDvojSlider slider = new JBarvovyDvojSlider();
+	private static final class FalesnyCasovac implements BublinkaHodnoty.Casovac {
+		boolean bezi;
 
-	private static Map<Integer, String> popisky(final JSlider s) {
-		final Map<Integer, String> m = new HashMap<>();
-		final Enumeration<?> klice = s.getLabelTable().keys();
-		while (klice.hasMoreElements()) {
-			final Integer k = (Integer) klice.nextElement();
-			m.put(k, ((JLabel) s.getLabelTable().get(k)).getText());
+		@Override
+		public void spust() {
+			bezi = true;
 		}
-		return m;
-	}
 
-	@Test
-	public void osaBarvyMaPopiskyNaKrajichAUprostred() {
-		Assert.assertTrue(slider.getBarvovnik().getPaintLabels());
-		final Map<Integer, String> m = popisky(slider.getBarvovnik());
-		Assert.assertEquals(3, m.size());
-		Assert.assertEquals("Černá", m.get(0));
-		Assert.assertEquals("Šedá", m.get(128));
-		Assert.assertEquals("Bílá", m.get(255));
-	}
-
-	@Test
-	public void osaPruhlednostiMaZnackyPo25Procentech() {
-		final Map<Integer, String> m = popisky(slider.getPruhlednik());
-		Assert.assertEquals(5, m.size());
-		Assert.assertEquals("0 %", m.get(255));
-		Assert.assertEquals("25 %", m.get(191));
-		Assert.assertEquals("50 %", m.get(128));
-		Assert.assertEquals("75 %", m.get(64));
-		Assert.assertEquals("100 %", m.get(0));
-	}
-
-	@Test
-	public void popiskyOsMajiZnackuANadpisyNe() {
-		for (final JSlider s : new JSlider[] { slider.getBarvovnik(), slider.getPruhlednik() }) {
-			final Enumeration<?> popisky = s.getLabelTable().elements();
-			while (popisky.hasMoreElements()) {
-				Assert.assertTrue(((JPopisekNaMape) popisky.nextElement()).maZnacku());
-			}
+		@Override
+		public void zastav() {
+			bezi = false;
 		}
-		final java.util.List<String> nadpisy = new java.util.ArrayList<>();
-		for (final Component c : slider.getComponents()) {
-			if (c instanceof JPopisekNaMape) {
-				nadpisy.add(((JPopisekNaMape) c).getText());
-				Assert.assertFalse(((JPopisekNaMape) c).maZnacku());
-			}
-		}
-		Assert.assertEquals(java.util.Arrays.asList("Barva", "Průhlednost"), nadpisy);
-	}
 
-	@Test
-	public void nadpisyJsouNadPosuvniky() {
-		final Component[] c = slider.getComponents();
-		int barva = -1, pruhlednost = -1, sBarvy = -1, sPruhlednosti = -1;
-		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof JPopisekNaMape && "Barva".equals(((JLabel) c[i]).getText())) {
-				barva = i;
-			}
-			if (c[i] instanceof JPopisekNaMape && "Průhlednost".equals(((JLabel) c[i]).getText())) {
-				pruhlednost = i;
-			}
-			if (c[i] == slider.getBarvovnik()) {
-				sBarvy = i;
-			}
-			if (c[i] == slider.getPruhlednik()) {
-				sPruhlednosti = i;
-			}
-		}
-		Assert.assertEquals(barva + 2, sBarvy);
-		Assert.assertEquals(pruhlednost + 2, sPruhlednosti);
-	}
-
-	@Test
-	public void rozsahyAHodnotyZustalyBezeZmeny() {
-		Assert.assertEquals(0, slider.getBarvovnik().getMinimum());
-		Assert.assertEquals(255, slider.getBarvovnik().getMaximum());
-		Assert.assertEquals(0, slider.getPruhlednik().getMinimum());
-		Assert.assertEquals(255, slider.getPruhlednik().getMaximum());
-		Assert.assertEquals(new Color(128, 128, 128, 128), slider.getColor());
-		slider.setColor(new Color(10, 10, 10, 77));
-		Assert.assertEquals(new Color(10, 10, 10, 77), slider.getColor());
-	}
-
-	@Test
-	public void textyBublinek() {
-		Assert.assertEquals("Jas 0 %", JBarvovyDvojSlider.textBarvy(0));
-		Assert.assertEquals("Jas 50 %", JBarvovyDvojSlider.textBarvy(128));
-		Assert.assertEquals("Jas 100 %", JBarvovyDvojSlider.textBarvy(255));
-		Assert.assertEquals("Průhlednost 0 %", JBarvovyDvojSlider.textPruhlednosti(255));
-		Assert.assertEquals("Průhlednost 50 %", JBarvovyDvojSlider.textPruhlednosti(128));
-		Assert.assertEquals("Průhlednost 73 %", JBarvovyDvojSlider.textPruhlednosti(70));
-		Assert.assertEquals("Průhlednost 100 %", JBarvovyDvojSlider.textPruhlednosti(0));
-	}
-
-	@Test
-	public void popiskyOsOdpovidajiTextumBublin() {
-		for (int procent = 0; procent <= 100; procent += 25) {
-			Assert.assertEquals(procent, JBarvovyDvojSlider.pruhlednostProcent(JBarvovyDvojSlider.krytiProPruhlednost(procent)));
+		@Override
+		public boolean bezi() {
+			return bezi;
 		}
 	}
 
-	@Test
-	public void polohaJezdce() {
-		Assert.assertEquals("nejvyšší hodnota nahoře", 10, JBarvovyDvojSlider.polohaJezdce(200, 10, 255, 0, 255));
-		Assert.assertEquals("nejnižší dole", 190, JBarvovyDvojSlider.polohaJezdce(200, 10, 0, 0, 255));
-		Assert.assertEquals(100, JBarvovyDvojSlider.polohaJezdce(200, 10, 128, 0, 255), 1);
-		Assert.assertEquals(10, JBarvovyDvojSlider.polohaJezdce(200, 10, 5, 5, 5));
+	private final AtomicLong cas = new AtomicLong(5000);
+	private final List<FalesnyCasovac> casovace = new ArrayList<>();
+	private final List<BublinkaHodnoty> bublinky = new ArrayList<>();
+	private final List<ViditelnostLegendy> legendy = new ArrayList<>();
+	private final JBarvovyDvojSlider slider = new JBarvovyDvojSlider(prekresli -> {
+		final FalesnyCasovac c = new FalesnyCasovac();
+		casovace.add(c);
+		final BublinkaHodnoty b = new BublinkaHodnoty(cas::get, c, prekresli);
+		bublinky.add(b);
+		return b;
+	}, prekresli -> {
+		final FalesnyCasovac c = new FalesnyCasovac();
+		casovace.add(c);
+		final ViditelnostLegendy l = new ViditelnostLegendy(cas::get, c, prekresli);
+		legendy.add(l);
+		return l;
+	});
+
+	private ViditelnostLegendy legenda() {
+		return legendy.get(0);
+	}
+
+	private boolean vsechnyCasovaceStoji() {
+		for (final FalesnyCasovac c : casovace) {
+			if (c.bezi) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private JPanel rodic() {
@@ -147,229 +87,375 @@ public class JBarvovyDvojSliderTest {
 	private Rectangle kresli(final JPanel rodic, final BufferedImage obraz) {
 		final Graphics2D g = obraz.createGraphics();
 		try {
-			return slider.kresliBublinky(g, rodic);
+			return slider.kresliNadMapou(g, rodic);
 		} finally {
 			g.dispose();
 		}
 	}
 
+	private static BufferedImage obraz() {
+		return new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+	}
+
+	// --- obsah a hodnoty ---
+
 	@Test
-	public void bublinkaSeUkazePriTazeniAPriNastaveniZModeluNe() throws Exception {
+	public void osaBarvyMaPopiskyNaKrajichAUprostred() {
+		final List<JBarvovyDvojSlider.Popisek> osa = JBarvovyDvojSlider.osaBarvy();
+		Assert.assertEquals(3, osa.size());
+		Assert.assertEquals("Černá", osa.get(0).text);
+		Assert.assertEquals(0, osa.get(0).hodnota);
+		Assert.assertEquals("Šedá", osa.get(1).text);
+		Assert.assertEquals(128, osa.get(1).hodnota);
+		Assert.assertEquals("Bílá", osa.get(2).text);
+		Assert.assertEquals(255, osa.get(2).hodnota);
+	}
+
+	@Test
+	public void osaPruhlednostiMaZnackyPo25Procentech() {
+		final List<JBarvovyDvojSlider.Popisek> osa = JBarvovyDvojSlider.osaPruhlednosti();
+		Assert.assertEquals(5, osa.size());
+		final String[] texty = { "0 %", "25 %", "50 %", "75 %", "100 %" };
+		final int[] hodnoty = { 255, 191, 128, 64, 0 };
+		for (int i = 0; i < 5; i++) {
+			Assert.assertEquals(texty[i], osa.get(i).text);
+			Assert.assertEquals(hodnoty[i], osa.get(i).hodnota);
+		}
+	}
+
+	@Test
+	public void rozsahyAHodnotyZustalyBezeZmeny() {
+		Assert.assertEquals(0, slider.getBarvovnik().getMinimum());
+		Assert.assertEquals(255, slider.getBarvovnik().getMaximum());
+		Assert.assertEquals(0, slider.getPruhlednik().getMinimum());
+		Assert.assertEquals(255, slider.getPruhlednik().getMaximum());
+		Assert.assertEquals(new Color(128, 128, 128, 128), slider.getColor());
+		slider.setColor(new Color(10, 10, 10, 77));
+		Assert.assertEquals(new Color(10, 10, 10, 77), slider.getColor());
+	}
+
+	@Test
+	public void bezInterakcePosuvnikyNemajiZadnyText() {
+		Assert.assertFalse("popisky se z posuvníků nekreslí, jsou v legendě", slider.getBarvovnik().getPaintLabels());
+		Assert.assertFalse(slider.getPruhlednik().getPaintLabels());
+		for (final Component c : slider.getComponents()) {
+			Assert.assertFalse("v panelu nejsou štítky", c instanceof javax.swing.JLabel);
+		}
+		final Dimension d = slider.getPreferredSize();
+		Assert.assertTrue("tenký pruh: " + d, d.width < 40);
+		Assert.assertFalse(slider.isOpaque());
+	}
+
+	@Test
+	public void textyBublinekJsouJenCislaSProcenty() {
+		Assert.assertEquals("0 %", JBarvovyDvojSlider.textBarvy(255));
+		Assert.assertEquals("50 %", JBarvovyDvojSlider.textBarvy(128));
+		Assert.assertEquals("100 %", JBarvovyDvojSlider.textBarvy(0));
+		Assert.assertEquals("0 %", JBarvovyDvojSlider.textPruhlednosti(255));
+		Assert.assertEquals("50 %", JBarvovyDvojSlider.textPruhlednosti(128));
+		Assert.assertEquals("73 %", JBarvovyDvojSlider.textPruhlednosti(70));
+		Assert.assertEquals("100 %", JBarvovyDvojSlider.textPruhlednosti(0));
+		for (int v = 0; v <= 255; v++) {
+			Assert.assertTrue(v + ": " + JBarvovyDvojSlider.textBarvy(v), JBarvovyDvojSlider.textBarvy(v).matches("\\d{1,3} %"));
+			Assert.assertTrue(JBarvovyDvojSlider.textPruhlednosti(v).matches("\\d{1,3} %"));
+		}
+	}
+
+	/** Číslo roste od prvního popisku osy (nahoře) k poslednímu (dole), u obou posuvníků stejně. */
+	@Test
+	public void ciselnaHodnotaRosteSmeremOsy() {
+		final List<JBarvovyDvojSlider.Popisek> barva = JBarvovyDvojSlider.osaBarvy();
+		// osa je vykreslena shora: Bílá (hodnota 255) nahoře, Černá (0) dole
+		final JBarvovyDvojSlider.Popisek nahore = barva.get(barva.size() - 1);
+		final JBarvovyDvojSlider.Popisek dole = barva.get(0);
+		Assert.assertEquals("Bílá", nahore.text);
+		Assert.assertEquals("Černá", dole.text);
+		Assert.assertEquals("0 %", JBarvovyDvojSlider.textBarvy(nahore.hodnota));
+		Assert.assertEquals("100 %", JBarvovyDvojSlider.textBarvy(dole.hodnota));
+		final List<JBarvovyDvojSlider.Popisek> pruhlednost = JBarvovyDvojSlider.osaPruhlednosti();
+		Assert.assertEquals("0 %", JBarvovyDvojSlider.textPruhlednosti(pruhlednost.get(0).hodnota));
+		Assert.assertEquals("100 %", JBarvovyDvojSlider.textPruhlednosti(pruhlednost.get(pruhlednost.size() - 1).hodnota));
+		// směrem dolů po ose čísla neklesají
+		int predchozi = -1;
+		for (int v = 255; v >= 0; v--) {
+			final int p = Integer.parseInt(JBarvovyDvojSlider.textBarvy(v).replace(" %", ""));
+			Assert.assertTrue(p >= predchozi);
+			predchozi = p;
+		}
+	}
+
+	@Test
+	public void barvaSeZaokrouhlujeNeOrezava() {
+		Assert.assertEquals("šedá 41 = 83,92 % tmavosti", "84 %", JBarvovyDvojSlider.textBarvy(41));
+		Assert.assertEquals("šedá 40 = 84,31 %", "84 %", JBarvovyDvojSlider.textBarvy(40));
+		Assert.assertEquals("2 %", JBarvovyDvojSlider.textBarvy(250));
+		Assert.assertEquals("98 %", JBarvovyDvojSlider.textBarvy(4));
+	}
+
+	@Test
+	public void popiskyOsOdpovidajiTextumBublin() {
+		for (int procent = 0; procent <= 100; procent += 25) {
+			Assert.assertEquals(procent, JBarvovyDvojSlider.pruhlednostProcent(JBarvovyDvojSlider.krytiProPruhlednost(procent)));
+		}
+	}
+
+	@Test
+	public void polohaJezdce() {
+		Assert.assertEquals("nejvyšší hodnota nahoře", 10, JBarvovyDvojSlider.polohaJezdce(200, 10, 255, 0, 255));
+		Assert.assertEquals("nejnižší dole", 190, JBarvovyDvojSlider.polohaJezdce(200, 10, 0, 0, 255));
+		Assert.assertEquals(100, JBarvovyDvojSlider.polohaJezdce(200, 10, 128, 0, 255), 1);
+		Assert.assertEquals(10, JBarvovyDvojSlider.polohaJezdce(200, 10, 5, 5, 5));
+	}
+
+	// --- legenda se kreslí jen při interakci ---
+
+	@Test
+	public void bezInterakceSeNicNekresli() {
 		final JPanel rodic = rodic();
-		final BufferedImage obraz = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+		Assert.assertNull(kresli(rodic, obraz()));
 		slider.setColor(new Color(40, 40, 40, 90));
-		Assert.assertNull("nastavení z modelu bublinu neukáže", kresli(rodic, obraz));
-		Thread.sleep(BublinkaHodnoty.ZACATEK_MS + 80);
-		Assert.assertNull(kresli(rodic, obraz));
-
-		slider.getBarvovnik().setValueIsAdjusting(true);
-		slider.getBarvovnik().setValue(200);
-		Thread.sleep(BublinkaHodnoty.ZACATEK_MS + 80);
-		Assert.assertNotNull("při tažení se ukáže", kresli(rodic, obraz));
-		slider.getBarvovnik().setValueIsAdjusting(false);
+		Assert.assertNull("nastavení z modelu nic neukáže", kresli(rodic, obraz()));
 	}
 
 	@Test
-	public void zmenaBezTazeniSeTakyUkaze() throws Exception {
+	public void legendaSeUkazePoNajetiMysiAPoZpozdeni() {
 		final JPanel rodic = rodic();
-		final BufferedImage obraz = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
-		slider.getPruhlednik().setValue(33);
-		Thread.sleep(BublinkaHodnoty.ZACATEK_MS + 80);
-		Assert.assertNotNull(kresli(rodic, obraz));
-	}
-
-	@Test
-	public void bublinkaJeVedleJezdceNaMapeVlevoOdPosuvniku() throws Exception {
-		final JPanel rodic = rodic();
-		final BufferedImage obraz = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
-		slider.getPruhlednik().setValueIsAdjusting(true);
-		slider.getPruhlednik().setValue(10);
-		Thread.sleep(BublinkaHodnoty.ZACATEK_MS + 80);
+		final BufferedImage obraz = obraz();
+		legenda().mys(true);
+		cas.addAndGet(ViditelnostLegendy.ZPOZDENI_NAJETI_MS - 1);
+		legenda().tik();
+		Assert.assertNull("před uplynutím zpoždění nic", kresli(rodic, obraz));
+		cas.addAndGet(1 + BublinkaHodnoty.ZACATEK_MS);
+		legenda().tik();
 		final Rectangle r = kresli(rodic, obraz);
 		Assert.assertNotNull(r);
-		final Point p = javax.swing.SwingUtilities.convertPoint(slider.getPruhlednik(), 0, 0, rodic);
-		Assert.assertTrue("vlevo od posuvníku", r.x + r.width <= p.x);
-		Assert.assertTrue(r.y >= p.y - 20 && r.y + r.height <= p.y + slider.getPruhlednik().getHeight() + 20);
-		slider.getPruhlednik().setValueIsAdjusting(false);
+		final Point osa = SwingUtilities.convertPoint(slider.getBarvovnik(), slider.getBarvovnik().getWidth() / 2, 0, rodic);
+		Assert.assertTrue("legenda je vlevo od osy a nad posuvníky, nadpis na pravém okraji pruhu", r.x < osa.x && r.y < osa.y);
+		Assert.assertTrue("nadpisy jsou v rámci vrstvy", r.x >= 0 && r.y >= 0 && r.x + r.width <= rodic.getWidth() + 1);
 	}
 
 	@Test
-	public void jednaBublinkaNaKazdyPosuvnik() throws Exception {
+	public void legendaObsahujeNadpisyAPopiskyOsVHorniAVSpodniCasti() {
 		final JPanel rodic = rodic();
-		final BufferedImage obraz = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
-		slider.getBarvovnik().setValueIsAdjusting(true);
-		slider.getBarvovnik().setValue(30);
-		slider.getPruhlednik().setValueIsAdjusting(true);
-		slider.getPruhlednik().setValue(220);
-		Thread.sleep(BublinkaHodnoty.ZACATEK_MS + 80);
-		final Rectangle souhrn = kresli(rodic, obraz);
-		Assert.assertNotNull(souhrn);
-		final Point pb = javax.swing.SwingUtilities.convertPoint(slider.getBarvovnik(), 0, 0, rodic);
-		final Point pp = javax.swing.SwingUtilities.convertPoint(slider.getPruhlednik(), 0, 0, rodic);
-		Assert.assertTrue(souhrn.height > 30 + (pp.y - pb.y) / 4);
-		slider.getBarvovnik().setValueIsAdjusting(false);
-		slider.getPruhlednik().setValueIsAdjusting(false);
-	}
-
-	@Test
-	public void nadpisyAPopiskyMajiCitelnePozadi() {
-		final JPopisekNaMape l = new JPopisekNaMape("Šedá", true);
-		l.setSize(l.getPreferredSize());
-		final BufferedImage i = new BufferedImage(l.getWidth(), l.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		final Graphics2D g = i.createGraphics();
-		l.paint(g);
-		g.dispose();
-		Assert.assertTrue("podklad je poloprůhledný, ne prázdný", (i.getRGB(l.getWidth() / 2, 1) >>> 24) > 100);
-		Assert.assertEquals(Color.WHITE, l.getForeground());
-	}
-
-	@Test
-	public void rozlozeniSeVejdeDoSvislehoPruhu() {
-		final Dimension d = slider.getPreferredSize();
-		Assert.assertTrue(d.width < 160 && d.width > 40);
-		Assert.assertTrue(d.height > 150);
-		final JComponent c = slider;
-		Assert.assertFalse(c.isOpaque());
-	}
-
-	// --- zapojení bublinek na posuvníky s vlastními hodinami a časovačem ---
-
-	private static final class FalesnyCasovac implements BublinkaHodnoty.Casovac {
-		boolean bezi;
-
-		@Override
-		public void spust() {
-			bezi = true;
-		}
-
-		@Override
-		public void zastav() {
-			bezi = false;
-		}
-
-		@Override
-		public boolean bezi() {
-			return bezi;
-		}
-	}
-
-	private final java.util.concurrent.atomic.AtomicLong cas = new java.util.concurrent.atomic.AtomicLong(5000);
-	private final java.util.List<FalesnyCasovac> casovace = new java.util.ArrayList<>();
-	private final java.util.List<BublinkaHodnoty> bublinky = new java.util.ArrayList<>();
-
-	private JBarvovyDvojSlider sOvladanymCasem() {
-		return new JBarvovyDvojSlider(prekresli -> {
-			final FalesnyCasovac c = new FalesnyCasovac();
-			casovace.add(c);
-			final BublinkaHodnoty b = new BublinkaHodnoty(cas::get, c, prekresli);
-			bublinky.add(b);
-			return b;
-		});
-	}
-
-	private boolean vsechnyCasovaceStoji() {
-		for (final FalesnyCasovac c : casovace) {
-			if (c.bezi) {
-				return false;
+		legenda().tahne(true);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+		final BufferedImage obraz = obraz();
+		final Rectangle r = kresli(rodic, obraz);
+		Assert.assertNotNull(r);
+		final Point nahore = SwingUtilities.convertPoint(slider.getBarvovnik(), 0, 0, rodic);
+		final Point dole = SwingUtilities.convertPoint(slider.getPruhlednik(), 0, slider.getPruhlednik().getHeight(), rodic);
+		Assert.assertTrue("nadpis Barva nad horním posuvníkem", r.y < nahore.y);
+		Assert.assertTrue("popisky až k dolnímu konci druhého posuvníku", r.y + r.height >= dole.y - 30);
+		int neprazdnych = 0;
+		for (int y = r.y; y < r.y + r.height; y += 2) {
+			if ((obraz.getRGB(r.x + 4, y) >>> 24) != 0) {
+				neprazdnych++;
 			}
 		}
-		return true;
+		Assert.assertTrue("legenda něco nakreslila", neprazdnych > 0);
 	}
 
 	@Test
-	public void tazeniAPusteniDobehneAZastaviCasovac() {
-		final JBarvovyDvojSlider s = sOvladanymCasem();
-		s.getBarvovnik().setValueIsAdjusting(true);
-		s.getBarvovnik().setValue(200);
-		Assert.assertTrue("při tažení časovač běží", casovace.get(0).bezi);
+	public void viditelnostLegendyRoztahujeAlfuKresby() {
+		final JPanel rodic = rodic();
+		legenda().tahne(true);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS / 2);
+		final BufferedImage poloviny = obraz();
+		final Rectangle r1 = kresli(rodic, poloviny);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+		final BufferedImage plny = obraz();
+		final Rectangle r2 = kresli(rodic, plny);
+		Assert.assertEquals(r1, r2);
+		int sumaPoloviny = 0;
+		int sumaPlny = 0;
+		for (int y = r2.y; y < r2.y + r2.height; y++) {
+			for (int x = r2.x; x < r2.x + r2.width; x++) {
+				sumaPoloviny += poloviny.getRGB(x, y) >>> 24;
+				sumaPlny += plny.getRGB(x, y) >>> 24;
+			}
+		}
+		Assert.assertTrue("poloviční viditelnost je řidší: " + sumaPoloviny + " < " + sumaPlny, sumaPoloviny < sumaPlny);
+	}
+
+	// --- zapojení vstupů na legendu a bublinky ---
+
+	@Test
+	public void najetiMysiNaPosuvnikASchozeniMimoPruh() {
+		rodic();
+		final JSlider s = slider.getBarvovnik();
+		s.dispatchEvent(new MouseEvent(s, MouseEvent.MOUSE_ENTERED, cas.get(), 0, 2, 20, 0, false));
+		Assert.assertTrue("myš nad pruhem: legenda čeká na zpoždění", legenda().casovacBezi());
+		cas.addAndGet(ViditelnostLegendy.ZPOZDENI_NAJETI_MS + BublinkaHodnoty.ZACATEK_MS);
+		legenda().tik();
+		Assert.assertEquals(1f, legenda().viditelnost(), 0f);
+		// myš přejde na druhý posuvník: pořád nad pruhem
+		final JSlider p = slider.getPruhlednik();
+		s.dispatchEvent(new MouseEvent(s, MouseEvent.MOUSE_EXITED, cas.get(), 0, 2, s.getHeight() + 1, 0, false));
+		Assert.assertEquals("přechod na sousední posuvník legendu neschová", 1f, legenda().viditelnost(), 0f);
+		cas.addAndGet(5 * (BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS));
+		legenda().tik();
+		Assert.assertTrue("myš je pořád nad pruhem, legenda se nezačne ztrácet", legenda().jeAktivni());
+		Assert.assertEquals(1f, legenda().viditelnost(), 0f);
+		// myš odejde z pruhu doleva
+		p.dispatchEvent(new MouseEvent(p, MouseEvent.MOUSE_EXITED, cas.get(), 0, -30, 5, 0, false));
+		cas.addAndGet(BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS);
+		legenda().tik();
+		Assert.assertFalse(legenda().jeAktivni());
+		Assert.assertTrue(vsechnyCasovaceStoji());
+	}
+
+	@Test
+	public void tazeniUkazeLegendu() {
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(200);
+		Assert.assertTrue(legenda().jeAktivni());
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS + 5000);
+		Assert.assertEquals("při tažení se drží", 1f, legenda().viditelnost(), 0f);
+		slider.getBarvovnik().setValueIsAdjusting(false);
+		cas.addAndGet(BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS);
+		legenda().tik();
+		bublinky.get(0).tik();
+		Assert.assertFalse("po puštění legenda zmizí", legenda().jeAktivni());
+		Assert.assertTrue(vsechnyCasovaceStoji());
+	}
+
+	@Test
+	public void kolečkoNeboKlavesaLegenduKratkoUkaze() {
+		slider.getPruhlednik().setValue(33);
+		Assert.assertTrue(legenda().jeAktivni());
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+		Assert.assertEquals(1f, legenda().viditelnost(), 0f);
+		cas.addAndGet(BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS);
+		legenda().tik();
+		Assert.assertFalse(legenda().jeAktivni());
+	}
+
+	@Test
+	public void focusNaPosuvnikuUkazeLegendu() {
+		final JSlider s = slider.getBarvovnik();
+		for (final java.awt.event.FocusListener l : s.getFocusListeners()) {
+			l.focusGained(new java.awt.event.FocusEvent(s, java.awt.event.FocusEvent.FOCUS_GAINED));
+		}
+		Assert.assertTrue(legenda().jeAktivni());
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS + 3000);
+		Assert.assertEquals("při fokusu se drží", 1f, legenda().viditelnost(), 0f);
+		for (final java.awt.event.FocusListener l : s.getFocusListeners()) {
+			l.focusLost(new java.awt.event.FocusEvent(s, java.awt.event.FocusEvent.FOCUS_LOST));
+		}
+		cas.addAndGet(BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS);
+		legenda().tik();
+		Assert.assertFalse(legenda().jeAktivni());
+	}
+
+	@Test
+	public void stejnaHodnotaBezTazeniLegenduNeukaze() {
+		slider.getBarvovnik().setValue(slider.getBarvovnik().getValue());
+		Assert.assertFalse(legenda().jeAktivni());
+	}
+
+	@Test
+	public void legendaSeRusiPriOdebraniAPriSkryti() {
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(100);
+		Assert.assertFalse(vsechnyCasovaceStoji());
+		slider.removeNotify();
+		Assert.assertTrue(vsechnyCasovaceStoji());
+		Assert.assertFalse(legenda().jeAktivni());
+
+		slider.getPruhlednik().setValueIsAdjusting(true);
+		slider.getPruhlednik().setValue(100);
+		Assert.assertTrue(legenda().jeAktivni());
+		slider.dispatchEvent(new java.awt.event.HierarchyEvent(slider, java.awt.event.HierarchyEvent.HIERARCHY_CHANGED, slider, null, java.awt.event.HierarchyEvent.SHOWING_CHANGED));
+		Assert.assertFalse(legenda().jeAktivni());
+		Assert.assertTrue(vsechnyCasovaceStoji());
+	}
+
+	@Test
+	public void pozdniPusteniPoSkryteLegenduZnovuNeukaze() {
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(100);
+		slider.zrusBublinky();
+		slider.getBarvovnik().setValueIsAdjusting(false);
+		Assert.assertFalse(legenda().jeAktivni());
+		Assert.assertFalse(bublinky.get(0).jeAktivni());
+		Assert.assertTrue(vsechnyCasovaceStoji());
+	}
+
+	// --- bublinky ---
+
+	@Test
+	public void bublinkaJeVlevoOdPopiskuOsAVidetKdyzTahne() {
+		final JPanel rodic = rodic();
+		slider.getPruhlednik().setValueIsAdjusting(true);
+		slider.getPruhlednik().setValue(10);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+		final Rectangle r = kresli(rodic, obraz());
+		Assert.assertNotNull(r);
+		final Point osa = SwingUtilities.convertPoint(slider.getPruhlednik(), slider.getPruhlednik().getWidth() / 2, 0, rodic);
+		Assert.assertTrue("bublinka je vlevo od popisků os, ne u osy: " + r + " osa " + osa, r.x < osa.x - 100);
+		slider.getPruhlednik().setValueIsAdjusting(false);
+	}
+
+	@Test
+	public void tazeniAPusteniBublinkyDobehneAZastaviCasovac() {
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(200);
+		Assert.assertTrue(casovace.get(0).bezi);
 		Assert.assertTrue(bublinky.get(0).jeAktivni());
 		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS + 3000);
-		Assert.assertEquals("při tažení se drží", 1f, bublinky.get(0).viditelnost(), 0f);
-		s.getBarvovnik().setValueIsAdjusting(false);
+		Assert.assertEquals(1f, bublinky.get(0).viditelnost(), 0f);
+		slider.getBarvovnik().setValueIsAdjusting(false);
 		cas.addAndGet(BublinkaHodnoty.DRZENI_MS - 1);
 		Assert.assertEquals(1f, bublinky.get(0).viditelnost(), 0f);
 		cas.addAndGet(1 + BublinkaHodnoty.ZANIKNUTI_MS);
 		bublinky.get(0).tik();
-		Assert.assertEquals("po puštění bublinka zmizí", 0f, bublinky.get(0).viditelnost(), 0f);
-		Assert.assertFalse(bublinky.get(0).jeAktivni());
-		Assert.assertTrue("a časovač se zastaví", vsechnyCasovaceStoji());
-	}
-
-	@Test
-	public void pruhlednikSeChovaStejne() {
-		final JBarvovyDvojSlider s = sOvladanymCasem();
-		s.getPruhlednik().setValueIsAdjusting(true);
-		s.getPruhlednik().setValue(20);
-		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
-		s.getPruhlednik().setValueIsAdjusting(false);
-		cas.addAndGet(BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS);
-		bublinky.get(1).tik();
-		Assert.assertFalse(bublinky.get(1).jeAktivni());
-		Assert.assertTrue(vsechnyCasovaceStoji());
-	}
-
-	@Test
-	public void odebraniZeHierarchieBublinkuZrusi() {
-		final JBarvovyDvojSlider s = sOvladanymCasem();
-		s.getBarvovnik().setValueIsAdjusting(true);
-		s.getBarvovnik().setValue(100);
-		s.getPruhlednik().setValueIsAdjusting(true);
-		s.getPruhlednik().setValue(100);
-		Assert.assertFalse(vsechnyCasovaceStoji());
-		s.removeNotify();
-		Assert.assertTrue(vsechnyCasovaceStoji());
-		Assert.assertFalse(bublinky.get(0).jeAktivni());
-		Assert.assertFalse(bublinky.get(1).jeAktivni());
-	}
-
-	@Test
-	public void skryteVrstvyBublinkuZrusi() {
-		final JBarvovyDvojSlider s = sOvladanymCasem();
-		s.getBarvovnik().setValueIsAdjusting(true);
-		s.getBarvovnik().setValue(100);
-		Assert.assertFalse(vsechnyCasovaceStoji());
-		// vrstva se skryla (F5, F9) a komponenta už není vidět
-		s.dispatchEvent(new java.awt.event.HierarchyEvent(s, java.awt.event.HierarchyEvent.HIERARCHY_CHANGED, s, null, java.awt.event.HierarchyEvent.SHOWING_CHANGED));
-		Assert.assertTrue(vsechnyCasovaceStoji());
-		Assert.assertFalse(bublinky.get(0).jeAktivni());
-	}
-
-	@Test
-	public void pozdniPusteniPoSkryteBublinkuZnovuNeukaze() {
-		final JBarvovyDvojSlider s = sOvladanymCasem();
-		s.getBarvovnik().setValueIsAdjusting(true);
-		s.getBarvovnik().setValue(100);
-		s.zrusBublinky();
-		s.getBarvovnik().setValueIsAdjusting(false);
+		legenda().tik();
 		Assert.assertFalse(bublinky.get(0).jeAktivni());
 		Assert.assertTrue(vsechnyCasovaceStoji());
 	}
 
 	@Test
-	public void zmenaHodnotyBezTazeniSeUkazeAleStejnaHodnotaNe() {
-		final JBarvovyDvojSlider s = sOvladanymCasem();
-		s.getBarvovnik().setValue(s.getBarvovnik().getValue());
-		Assert.assertFalse("beze změny hodnoty nic", bublinky.get(0).jeAktivni());
-		s.getBarvovnik().setValue(10);
+	public void zmenaHodnotyBezTazeniUkazeBublinku() {
+		slider.getBarvovnik().setValue(10);
 		Assert.assertTrue(bublinky.get(0).jeAktivni());
-		Assert.assertEquals("Jas 4 %", bublinky.get(0).getText());
+		Assert.assertEquals("96 %", bublinky.get(0).getText());
 	}
 
 	@Test
-	public void jasSeZaokrouhlujeNeOrezava() {
-		Assert.assertEquals("šedá 40 = 15,69 %", "Jas 16 %", JBarvovyDvojSlider.textBarvy(40));
-		Assert.assertEquals("Jas 2 %", JBarvovyDvojSlider.textBarvy(4));
-		Assert.assertEquals("Jas 98 %", JBarvovyDvojSlider.textBarvy(250));
+	public void bublinkySeKresliNadLegendouBezOhleduNaViditelnostLegendy() {
+		final JPanel rodic = rodic();
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(30);
+		slider.getPruhlednik().setValueIsAdjusting(true);
+		slider.getPruhlednik().setValue(220);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+		Assert.assertNotNull(kresli(rodic, obraz()));
+		slider.getBarvovnik().setValueIsAdjusting(false);
+		slider.getPruhlednik().setValueIsAdjusting(false);
 	}
 
 	@Test
-	public void nadpisMaOdPosuvnikuMezeru() {
-		final Component[] c = slider.getComponents();
-		for (int i = 0; i + 2 < c.length; i++) {
-			if (c[i] instanceof JPopisekNaMape && !((JPopisekNaMape) c[i]).maZnacku()) {
-				Assert.assertTrue("mezi nadpisem a posuvníkem je odsazení", c[i + 1] instanceof javax.swing.Box.Filler);
-				Assert.assertTrue(c[i + 2] instanceof JSlider);
-			}
-		}
+	public void pusteniJednohoZDvouTazenychPosuvnikuLegenduNezhasne() {
+		rodic();
+		final JSlider b = slider.getBarvovnik();
+		final JSlider p = slider.getPruhlednik();
+		b.setValueIsAdjusting(true);
+		b.setValue(b.getValue() > 100 ? b.getValue() - 20 : b.getValue() + 20);
+		p.setValueIsAdjusting(true);
+		p.setValue(p.getValue() > 100 ? p.getValue() - 20 : p.getValue() + 20);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+		legenda().tik();
+		Assert.assertEquals(1f, legenda().viditelnost(), 0f);
+		b.setValueIsAdjusting(false);
+		cas.addAndGet(2 * (BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS));
+		legenda().tik();
+		Assert.assertEquals("druhý posuvník se pořád táhne", 1f, legenda().viditelnost(), 0f);
+		p.setValueIsAdjusting(false);
+		cas.addAndGet(BublinkaHodnoty.DRZENI_MS - 1);
+		legenda().tik();
+		Assert.assertEquals("po puštění posledního se legenda drží", 1f, legenda().viditelnost(), 0f);
+		cas.addAndGet(BublinkaHodnoty.ZANIKNUTI_MS + 1);
+		legenda().tik();
+		Assert.assertEquals(0f, legenda().viditelnost(), 0f);
 	}
 }
