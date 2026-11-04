@@ -23,6 +23,8 @@ import cz.geokuk.plugins.geocoding.GeocodingModel;
 import cz.geokuk.plugins.kesoid.KesoidFilterModel;
 import cz.geokuk.plugins.kesoid.kind.KesoidPluginManager;
 import cz.geokuk.plugins.kesoid.mvc.KesoidModel;
+import cz.geokuk.plugins.kesoid.StavVrstevModel;
+import cz.geokuk.plugins.kesoid.ToastModel;
 import cz.geokuk.plugins.kesoidkruhy.KruhyModel;
 import cz.geokuk.plugins.kesoidobsazenost.ObsazenostModel;
 import cz.geokuk.plugins.kesoidpopisky.PopiskyModel;
@@ -71,6 +73,8 @@ public class Inicializator {
 		bb.registerSigleton(new PopiskyModel());
 		bb.registerSigleton(new KruhyModel());
 		bb.registerSigleton(new ObsazenostModel());
+		bb.registerSigleton(new StavVrstevModel());
+		bb.registerSigleton(new ToastModel());
 
 		bb.registerSigleton(new MrizkaModel("Dd", false));
 		bb.registerSigleton(new MrizkaModel("DdMmMmm", false));

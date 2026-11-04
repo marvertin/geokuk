@@ -74,6 +74,9 @@ final class PolomerKruhu {
 
 	/** Nejvýš {@code limit} bodů nejbližších bodu ({@code cx}, {@code cy}), od nejbližšího; při menším počtu všechny beze změny pořadí. Výběr je O(n log limit), ne řazení všech. */
 	static List<int[]> nejblizsi(final List<int[]> body, final double cx, final double cy, final int limit) {
+		if (limit <= 0) {
+			return new ArrayList<>();
+		}
 		if (body.size() <= limit) {
 			return body;
 		}

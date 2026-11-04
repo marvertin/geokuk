@@ -1,10 +1,14 @@
 package cz.geokuk.plugins.kesoid.mvc;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
 import cz.geokuk.framework.ToggleAction0;
+import cz.geokuk.plugins.kesoid.ToastModel;
+import cz.geokuk.plugins.kesoid.ZpravyZkratek;
 import cz.geokuk.plugins.kesoid.importek.StavZdroju;
 import cz.geokuk.plugins.kesoid.importek.StavZdroju.StavVyberu;
 import cz.geokuk.plugins.kesoid.importek.TypZdroje;
@@ -15,6 +19,7 @@ public class PrepniZdrojAction extends ToggleAction0 {
 	private static final long serialVersionUID = 1L;
 	private final TypZdroje typ;
 	private KesoidModel kesoidModel;
+	private ToastModel toast;
 	private StavZdroju stav = StavZdroju.PRAZDNY;
 
 	public PrepniZdrojAction(final TypZdroje typ) {
@@ -33,6 +38,10 @@ public class PrepniZdrojAction extends ToggleAction0 {
 		this.kesoidModel = kesoidModel;
 	}
 
+	public void inject(final ToastModel toast) {
+		this.toast = toast;
+	}
+
 	public void onEvent(final StavZdrojuEvent event) {
 		stav = event.getStav();
 		// Typ bez položek (zdroj není aktivní nebo nic nenašel) se nedá zapnout ani vypnout; položka menu a zkratka jsou pak vypnuté.
@@ -46,6 +55,21 @@ public class PrepniZdrojAction extends ToggleAction0 {
 			return;
 		}
 		JTabulkaZdroju.klikTyp(stav, typ, kesoidModel);
+		// Událost se stavem přijde později, stav po přepnutí je hned v registru.
+		if (toast != null) {
+			toast.ukaz(ZpravyZkratek.zdroje(zapnuteZdroje(kesoidModel.getRegistrStavuZdroju().getSnimek())));
+		}
+	}
+
+	/** Názvy typů zdrojů, které jsou po přepnutí zapnuté, i částečně. */
+	static List<String> zapnuteZdroje(final StavZdroju stav) {
+		final List<String> nazvy = new ArrayList<>();
+		for (final TypZdroje t : TypZdroje.values()) {
+			if (!stav.getPolozky(t).isEmpty() && stav.getStavVyberuTypu(t) != StavVyberu.VYPNUTO) {
+				nazvy.add(t.getNazev());
+			}
+		}
+		return nazvy;
 	}
 
 	@Override

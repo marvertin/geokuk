@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -11,11 +12,15 @@ import javax.swing.event.ChangeListener;
 import cz.geokuk.core.coord.JSingleSlide0;
 import cz.geokuk.framework.AfterEventReceiverRegistrationInit;
 import cz.geokuk.framework.MouseGestureContext;
+import cz.geokuk.plugins.kesoid.DuvodNekresleni;
+import cz.geokuk.plugins.kesoid.StavVrstevModel;
 import cz.geokuk.plugins.kesoid.ViditelnostSKesoidy;
+import cz.geokuk.plugins.kesoid.VrstvaNadMapou;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyNactenyEvent;
 import cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent;
 import cz.geokuk.util.gui.JBarvovyDvojSlider;
+import cz.geokuk.util.index2d.BoundingRect;
 import cz.geokuk.util.index2d.Indexator;
 
 public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegistrationInit {
@@ -50,9 +55,13 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 	private JBarvovyDvojSlider iSlidovnik;
 
 	private ObsazenostModel obsazenostModel;
+	/** Null v kopii pro rendrování: ta o stavu nehlásí. */
+	private StavVrstevModel stavModel;
 
 	/** Maska kruhů, znovu použitá mezi kresleními. */
 	private BufferedImage maska;
+	private Object pocetKlic;
+	private int pocetVeVyrezu;
 
 	public JObsazenost() {
 		setOpaque(false);
@@ -74,6 +83,15 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		this.obsazenostModel = obsazenostModel;
 	}
 
+	public void inject(final StavVrstevModel stavModel) {
+		this.stavModel = stavModel;
+	}
+
+	@Override
+	protected void onVyrezChanged() {
+		prepocitejStav();
+	}
+
 	@Override
 	public void mouseDragged(final MouseEvent e, final MouseGestureContext ctx) {
 		// ctx.setMouseCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
@@ -82,15 +100,18 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 
 	public void onEvent(final KeskyNactenyEvent event) {
 		iIndexator = event.getVsechny().getIndexator();
+		prepocitejStav();
 		repaint();
 	}
 
 	public void onEvent(final KesoidOnoffEvent event) {
 		viditelnost.setKesoidy(event.isOnoff());
+		prepocitejStav();
 	}
 
 	public void onEvent(final ObsazenostOnoffEvent event) {
 		viditelnost.setVlastni(event.isOnoff());
+		prepocitejStav();
 		repaint();
 	}
 
@@ -111,7 +132,7 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		if (r < MIN_POLOMER) {
 			return;
 		}
-		if (prekrocenLimit(iIndexator.count(getSoord().getBoundingRect()))) {
+		if (prekrocenLimit(pocetVeVyrezu())) {
 			return;
 		}
 		final Rectangle clip = g.getClipBounds();
@@ -159,6 +180,40 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 	/** Posuvníky vrstvy; jejich legendu kreslí vrstva nad kešoidy. */
 	public JBarvovyDvojSlider getSlidovnik() {
 		return iSlidovnik;
+	}
+
+	/** Rozhodnutí o kreslení: pod {@link #MIN_POLOMER} px se nekreslí, nad {@link #MAX_KRUHU} kruhů ve výřezu také ne. */
+	static DuvodNekresleni rozhodni(final int polomerPx, final int pocet) {
+		if (polomerPx < MIN_POLOMER) {
+			return DuvodNekresleni.POLOMER_PRILIS_MALY;
+		}
+		return pocet > MAX_KRUHU ? DuvodNekresleni.LIMIT_POCTU : DuvodNekresleni.KRESLI;
+	}
+
+	/** Počet bodů ve výřezu; platí, dokud se nezmění výřez nebo data. */
+	private int pocetVeVyrezu() {
+		final BoundingRect vyrez = getSoord().getBoundingRect();
+		final Object klic = Arrays.asList(vyrez.xx1, vyrez.yy1, vyrez.xx2, vyrez.yy2, System.identityHashCode(iIndexator));
+		if (!klic.equals(pocetKlic)) {
+			pocetVeVyrezu = iIndexator.count(vyrez);
+			pocetKlic = klic;
+		}
+		return pocetVeVyrezu;
+	}
+
+	/** Pro stavový štítek: proč se zapnutá obsazenost nekreslí; z výřezu a dat, ne z kreslení. */
+	DuvodNekresleni aktualniDuvod() {
+		if (iIndexator == null || !viditelnost.isViditelna() || !isSoordInitialized()) {
+			return DuvodNekresleni.KRESLI;
+		}
+		final int r = polomerObsazenosti();
+		return rozhodni(r, r < MIN_POLOMER ? 0 : pocetVeVyrezu());
+	}
+
+	private void prepocitejStav() {
+		if (stavModel != null) {
+			stavModel.nahlas(VrstvaNadMapou.OBSAZENOST, aktualniDuvod(), MAX_KRUHU);
+		}
 	}
 
 	/** Kruhy se nekreslí, když je keší ve výřezu víc než {@link #MAX_KRUHU}. */

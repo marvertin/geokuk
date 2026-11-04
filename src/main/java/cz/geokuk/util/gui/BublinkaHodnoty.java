@@ -34,6 +34,7 @@ public final class BublinkaHodnoty {
 	private final LongSupplier hodinyMs;
 	private final Casovac casovac;
 	private final Runnable prekresli;
+	private final int drzeniMs;
 	private String text = "";
 	private boolean aktivni;
 	private long zacatek;
@@ -41,6 +42,12 @@ public final class BublinkaHodnoty {
 	private long pusteno = -1;
 
 	public BublinkaHodnoty(final Runnable prekresli) {
+		this(prekresli, DRZENI_MS);
+	}
+
+	/** Bublinka s vlastní dobou držení po puštění. */
+	public BublinkaHodnoty(final Runnable prekresli, final int drzeniMs) {
+		this.drzeniMs = drzeniMs;
 		this.hodinyMs = () -> System.nanoTime() / 1_000_000;
 		this.prekresli = prekresli;
 		final Timer timer = new Timer(KROK_ANIMACE_MS, e -> tik());
@@ -90,6 +97,11 @@ public final class BublinkaHodnoty {
 	}
 
 	BublinkaHodnoty(final LongSupplier hodinyMs, final Casovac casovac, final Runnable prekresli) {
+		this(hodinyMs, casovac, prekresli, DRZENI_MS);
+	}
+
+	BublinkaHodnoty(final LongSupplier hodinyMs, final Casovac casovac, final Runnable prekresli, final int drzeniMs) {
+		this.drzeniMs = drzeniMs;
 		this.hodinyMs = hodinyMs;
 		this.casovac = casovac;
 		this.prekresli = prekresli;
@@ -99,11 +111,16 @@ public final class BublinkaHodnoty {
 	 * Viditelnost bublinky 0 až 1 v čase. {@code msOdZacatku} je čas od začátku tažení, {@code msOdPusteni} čas od puštění, záporný, dokud se táhne.
 	 */
 	public static float viditelnost(final long msOdZacatku, final long msOdPusteni) {
+		return viditelnost(msOdZacatku, msOdPusteni, DRZENI_MS);
+	}
+
+	/** Totéž s vlastní dobou držení po puštění. */
+	public static float viditelnost(final long msOdZacatku, final long msOdPusteni, final int drzeniMs) {
 		final float nabeh = omez(msOdZacatku / (float) ZACATEK_MS);
-		if (msOdPusteni <= DRZENI_MS) {
+		if (msOdPusteni <= drzeniMs) {
 			return nabeh;
 		}
-		final float utlum = omez((msOdPusteni - DRZENI_MS) / (float) ZANIKNUTI_MS);
+		final float utlum = omez((msOdPusteni - drzeniMs) / (float) ZANIKNUTI_MS);
 		return nabeh * (1 - utlum);
 	}
 
@@ -151,7 +168,7 @@ public final class BublinkaHodnoty {
 			return 0f;
 		}
 		final long ted = hodinyMs.getAsLong();
-		return viditelnost(ted - zacatek, pusteno < 0 ? -1 : ted - pusteno);
+		return viditelnost(ted - zacatek, pusteno < 0 ? -1 : ted - pusteno, drzeniMs);
 	}
 
 	public boolean jeAktivni() {
@@ -168,7 +185,7 @@ public final class BublinkaHodnoty {
 
 	/** Krok animace: překreslí a na konci zastaví časovač. */
 	void tik() {
-		if (aktivni && pusteno >= 0 && hodinyMs.getAsLong() - pusteno >= DRZENI_MS + ZANIKNUTI_MS) {
+		if (aktivni && pusteno >= 0 && hodinyMs.getAsLong() - pusteno >= drzeniMs + ZANIKNUTI_MS) {
 			aktivni = false;
 		}
 		prekresli.run();

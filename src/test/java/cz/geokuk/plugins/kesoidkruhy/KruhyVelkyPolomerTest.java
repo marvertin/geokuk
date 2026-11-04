@@ -16,6 +16,7 @@ import org.junit.*;
 import cz.geokuk.core.coord.Coord;
 import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.plugins.kesoid.DuvodNekresleni;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
@@ -186,28 +187,28 @@ public class KruhyVelkyPolomerTest {
 		return 1_000_000.0 / Math.abs(b.x - a.x);
 	}
 
-	private static JZvyraznovaciKruhySlide.Rozhodnuti rozhodni(final boolean vMetrech, final double r, final int pocet, final int limit, final boolean husta) {
+	private static DuvodNekresleni rozhodni(final boolean vMetrech, final double r, final int pocet, final int limit, final boolean husta) {
 		return JZvyraznovaciKruhySlide.rozhodni(vMetrech, r, pocet, limit, husta);
 	}
 
 	@Test
 	public void rozhodnutiOKresleniAJehoDuvod() {
-		final JZvyraznovaciKruhySlide.Rozhodnuti kresli = JZvyraznovaciKruhySlide.Rozhodnuti.KRESLI;
+		final DuvodNekresleni kresli = DuvodNekresleni.KRESLI;
 		// metry: velký poloměr i řídké kruhy se kreslí, pokrytí se nehlídá
 		Assert.assertEquals(kresli, rozhodni(true, 5000, 1, 90_000, true));
 		Assert.assertEquals(kresli, rozhodni(true, 3, 500, 90_000, true));
 		// pixely: hustota dál skrývá
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.PRILIS_HUSTE, rozhodni(false, 100, 200, 90_000, true));
+		Assert.assertEquals(DuvodNekresleni.PRILIS_HUSTE, rozhodni(false, 100, 200, 90_000, true));
 		Assert.assertEquals(kresli, rozhodni(false, 100, 2, 90_000, false));
 		// počet nad limitem skrývá v obou režimech
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.LIMIT_POCTU, rozhodni(true, 50, 90_001, 90_000, false));
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.LIMIT_POCTU, rozhodni(false, 50, 90_001, 90_000, false));
+		Assert.assertEquals(DuvodNekresleni.LIMIT_POCTU, rozhodni(true, 50, 90_001, 90_000, false));
+		Assert.assertEquals(DuvodNekresleni.LIMIT_POCTU, rozhodni(false, 50, 90_001, 90_000, false));
 		Assert.assertEquals("na hranici limitu se ještě kreslí", kresli, rozhodni(true, 50, 90_000, 90_000, false));
 		// bez poloměru se nekreslí
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.POLOMER_PRILIS_MALY, rozhodni(true, 0, 1, 90_000, false));
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.POLOMER_PRILIS_MALY, rozhodni(false, 0, 1, 90_000, false));
+		Assert.assertEquals(DuvodNekresleni.POLOMER_PRILIS_MALY, rozhodni(true, 0, 1, 90_000, false));
+		Assert.assertEquals(DuvodNekresleni.POLOMER_PRILIS_MALY, rozhodni(false, 0, 1, 90_000, false));
 		// nejdřív poloměr, pak limit
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.POLOMER_PRILIS_MALY, rozhodni(true, 0, 99_999, 90_000, true));
+		Assert.assertEquals(DuvodNekresleni.POLOMER_PRILIS_MALY, rozhodni(true, 0, 99_999, 90_000, true));
 	}
 
 	@Test
@@ -362,7 +363,7 @@ public class KruhyVelkyPolomerTest {
 		final JZvyraznovaciKruhySlide s = slideSCastecnymi(limitProOkno(), true);
 		final BufferedImage i = nakresli(s);
 		Assert.assertEquals(1, s.getVynechanychKruhu());
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.KRESLI, s.getDuvod());
+		Assert.assertEquals(DuvodNekresleni.KRESLI, s.getDuvod());
 		Assert.assertTrue("střed se kreslí", obarveno(i, W / 2, H / 2));
 		Assert.assertFalse("nejvzdálenější kruh se vynechal", obarveno(i, W / 2 + 385, H / 2));
 	}
@@ -406,10 +407,10 @@ public class KruhyVelkyPolomerTest {
 		final JZvyraznovaciKruhySlide s = slide(12, jedna());
 		s.onEvent(metry(1));
 		nakresli(s);
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.POLOMER_PRILIS_MALY, s.getDuvod());
+		Assert.assertEquals(DuvodNekresleni.POLOMER_PRILIS_MALY, s.getDuvod());
 		s.onEvent(metry(5000));
 		nakresli(s);
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.KRESLI, s.getDuvod());
+		Assert.assertEquals(DuvodNekresleni.KRESLI, s.getDuvod());
 		final List<Mou> husto = new ArrayList<>();
 		for (int k = 0; k < 200; k++) {
 			husto.add(MISTO);
@@ -417,7 +418,7 @@ public class KruhyVelkyPolomerTest {
 		final JZvyraznovaciKruhySlide h = slide(18, husto);
 		h.onEvent(pixely(100));
 		nakresli(h);
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.PRILIS_HUSTE, h.getDuvod());
+		Assert.assertEquals(DuvodNekresleni.PRILIS_HUSTE, h.getDuvod());
 	}
 
 	@Test
@@ -480,7 +481,7 @@ public class KruhyVelkyPolomerTest {
 		final JZvyraznovaciKruhySlide s = slideSeMrizkou(100, 26);
 		final BufferedImage i = nakresli(s);
 		Assert.assertEquals(0, s.getVynechanychKruhu());
-		Assert.assertEquals(JZvyraznovaciKruhySlide.Rozhodnuti.KRESLI, s.getDuvod());
+		Assert.assertEquals(DuvodNekresleni.KRESLI, s.getDuvod());
 		Assert.assertTrue("první", obarveno(i, 10, 50));
 		Assert.assertTrue("poslední v řadě", obarveno(i, 10 + 33 * 12, 50 + 0));
 		Assert.assertTrue("druhá řada", obarveno(i, 10, 62));
@@ -526,5 +527,14 @@ public class KruhyVelkyPolomerTest {
 			Assert.assertEquals("pořadí od nejbližšího, " + k, ocekavane.get(k), (b[0] - cx) * (b[0] - cx) + (b[1] - cy) * (b[1] - cy), 1e-9);
 		}
 		Assert.assertEquals("vstup se nemění", 600, body.size());
+	}
+
+	@Test
+	public void nejblizsiSNulovymLimitemVratiPrazdnySeznam() {
+		final List<int[]> body = new ArrayList<>();
+		body.add(new int[] { 1, 1 });
+		Assert.assertTrue(PolomerKruhu.nejblizsi(body, 0, 0, 0).isEmpty());
+		Assert.assertTrue(PolomerKruhu.nejblizsi(body, 0, 0, -3).isEmpty());
+		Assert.assertEquals(1, body.size());
 	}
 }

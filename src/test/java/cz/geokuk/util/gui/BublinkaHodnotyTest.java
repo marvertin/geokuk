@@ -188,4 +188,40 @@ public class BublinkaHodnotyTest {
 	private static int alfa(final BufferedImage i, final Rectangle r) {
 		return i.getRGB(r.x + r.width / 2, r.y + 2) >>> 24;
 	}
+
+	@Test
+	public void vlastniDrzeniPosouvaZanik() {
+		Assert.assertEquals(1f, BublinkaHodnoty.viditelnost(5000, 2500, 2500), 0f);
+		Assert.assertEquals("při výchozím držení už ubývá", true, BublinkaHodnoty.viditelnost(5000, 2500) < 1f);
+		Assert.assertEquals(0.5f, BublinkaHodnoty.viditelnost(5000, 2500 + BublinkaHodnoty.ZANIKNUTI_MS / 2, 2500), 0.001f);
+		Assert.assertEquals(0f, BublinkaHodnoty.viditelnost(5000, 2500 + BublinkaHodnoty.ZANIKNUTI_MS, 2500), 0f);
+		Assert.assertEquals(BublinkaHodnoty.viditelnost(100, -1), BublinkaHodnoty.viditelnost(100, -1, 2500), 0f);
+	}
+
+	@Test
+	public void zpravaSDlouhymDrzenimTrvaPresDveASPulSekundy() {
+		final BublinkaHodnoty b = new BublinkaHodnoty(cas::get, casovac, prekresleni::incrementAndGet, 2500);
+		b.dotkni("zpráva");
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+		Assert.assertEquals(1f, b.viditelnost(), 0f);
+		cas.addAndGet(2500 - BublinkaHodnoty.ZACATEK_MS);
+		b.tik();
+		Assert.assertEquals("držení se počítá od doteku, tedy včetně náběhu", 1f, b.viditelnost(), 0f);
+		Assert.assertTrue(bezi);
+		cas.addAndGet(BublinkaHodnoty.ZANIKNUTI_MS + 1);
+		b.tik();
+		Assert.assertFalse("na konci se časovač zastaví", bezi);
+		Assert.assertEquals(0f, b.viditelnost(), 0f);
+	}
+
+	@Test
+	public void novaZpravaNahradiStaroubezSkokuDoNuly() {
+		final BublinkaHodnoty b = new BublinkaHodnoty(cas::get, casovac, prekresleni::incrementAndGet, 2500);
+		b.dotkni("první");
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS + 1000);
+		b.dotkni("druhá");
+		Assert.assertEquals("druhá", b.getText());
+		Assert.assertTrue("zpráva zůstává viditelná", b.viditelnost() > 0.9f);
+		Assert.assertEquals("časovač se nespouští znovu", 1, spusteni);
+	}
 }

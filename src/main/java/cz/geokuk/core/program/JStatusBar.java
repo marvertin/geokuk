@@ -20,6 +20,8 @@ import cz.geokuk.plugins.cesty.data.Doc;
 import cz.geokuk.plugins.kesoid.Ikonizer;
 import cz.geokuk.plugins.kesoid.KesBag;
 import cz.geokuk.plugins.kesoid.LimityKresleni;
+import cz.geokuk.plugins.kesoid.StavVrstev;
+import cz.geokuk.plugins.kesoid.StavVrstevEvent;
 import cz.geokuk.plugins.kesoid.mvc.*;
 import cz.geokuk.plugins.mapy.sprava.gui.JBlokMap;
 import cz.geokuk.plugins.vylety.*;
@@ -163,6 +165,8 @@ public class JStatusBar extends JPanel implements AfterInjectInit {
 			return d;
 		}
 	};
+	/** Proč zapnuté kruhy nejsou vidět; jen když nějaká zapnutá vrstva nic nekreslí. */
+	private final JLabel stitekSkrytychKruhu = new JLabel(StavVrstev.TEXT_STITKU);
 	private JPanel odPozice;
 
 	private final Map<Progressor, JProgressBar> jFilterProgressMap = new HashMap<>();
@@ -320,6 +324,14 @@ public class JStatusBar extends JPanel implements AfterInjectInit {
 
 	public void onEvent(final StavZdrojuEvent event) {
 		prepinaceZdroju.obnov(event.getStav());
+	}
+
+	public void onEvent(final StavVrstevEvent event) {
+		final StavVrstev stav = event.getStav();
+		stitekSkrytychKruhu.setText(stav.text());
+		stitekSkrytychKruhu.setToolTipText(stav.jeKVideni() ? stav.tooltip() : null);
+		stitekSkrytychKruhu.setVisible(stav.jeKVideni());
+		revalidate();
 	}
 
 	public void onEvent(final PrekrocenLimitWaypointuVeVyrezuEvent event) {
@@ -486,6 +498,10 @@ public class JStatusBar extends JPanel implements AfterInjectInit {
 		varovaniPoctuPrekrocenych.setVisible(false);
 		add(varovaniPoctuPrekrocenych);
 		layout.rezervuj(varovaniPoctuPrekrocenych);
+		stitekSkrytychKruhu.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+		stitekSkrytychKruhu.setVisible(false);
+		add(stitekSkrytychKruhu);
+		layout.plovouci(stitekSkrytychKruhu);
 		jFilterProgressPanel = createPanel();
 		// jFilterProgress.setVisible(false);
 		// jFilterProgress.setStringPainted(true);

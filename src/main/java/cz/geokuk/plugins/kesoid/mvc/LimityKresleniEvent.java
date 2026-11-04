@@ -6,7 +6,7 @@ import cz.geokuk.plugins.kesoid.LimityKresleni;
 public class LimityKresleniEvent extends Event0<KesoidModel> {
 	private final LimityKresleni limity;
 
-	LimityKresleniEvent(final LimityKresleni limity) {
+	public LimityKresleniEvent(final LimityKresleni limity) {
 		this.limity = limity;
 	}
 
