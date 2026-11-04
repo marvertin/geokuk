@@ -216,7 +216,7 @@ public class KruhyStavTest {
 	}
 
 	@Test
-	public void castecnePrekresleniVynechaneNeoznamuje() throws Exception {
+	public void castecnePrekresleniHlasiStejnaCislaJakoCelek() throws Exception {
 		final int metru = metruProPolomerPx(250);
 		final JZvyraznovaciKruhySlide s = slide(17, limitPro(metru) + 3);
 		s.onEvent(metry(metru, true));
@@ -226,7 +226,7 @@ public class KruhyStavTest {
 		s.paintComponent(g);
 		g.dispose();
 		dokonciUdalosti();
-		Assert.assertEquals(0, stav.getStav().getVynechanychKruhu());
+		Assert.assertEquals("počty jsou za celý výřez, i když se překreslila jen část", 3, stav.getStav().getVynechanychKruhu());
 	}
 
 	@Test

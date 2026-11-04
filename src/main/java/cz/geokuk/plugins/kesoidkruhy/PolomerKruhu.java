@@ -37,6 +37,20 @@ final class PolomerKruhu {
 		KRUH
 	}
 
+	/** Kolikrát smí součet ploch kruhů (bez ohledu na překryv) přesáhnout plochu výřezu, než kruhy v metrech splynou v souvislou plochu bez informační hodnoty. */
+	static final double MAX_POKRYTI_V_METRECH = 1.5;
+
+	/**
+	 * Jsou kruhy v metrech příliš husté? Jen když jsou malé vůči výřezu (poloměr pod čtvrtinou kratší strany, takže jeden kruh výřez nepokrývá) a jejich součet ploch přesáhne
+	 * {@link #MAX_POKRYTI_V_METRECH} násobek plochy výřezu. Velký kruh kolem jedné keše při detailu zůstává vidět.
+	 */
+	static boolean prilisHusteVMetrech(final int pocet, final double r, final int sirka, final int vyska) {
+		if (r >= Math.min(sirka, vyska) / 4.0) {
+			return false;
+		}
+		return pocet * Math.PI * r * r > MAX_POKRYTI_V_METRECH * sirka * vyska;
+	}
+
 	/** Co s kruhem o středu ({@code sx}, {@code sy}) a poloměru {@code r} ve výřezu daném rohy {@code x1, y1, x2, y2}. */
 	static Kresleni kresleni(final double sx, final double sy, final double r, final double x1, final double y1, final double x2, final double y2) {
 		final double nejblizsiX = Math.max(x1, Math.min(sx, x2));
