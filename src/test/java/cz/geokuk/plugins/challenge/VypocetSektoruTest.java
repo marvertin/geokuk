@@ -328,10 +328,11 @@ public class VypocetSektoruTest {
 	@Test
 	public void statorUProtinozceSpadneNaKouliSNejistymSektorem() {
 		// Střed 50 N, 14 E; nález téměř v protinožci (tam elipsoid nekonverguje).
-		final Kes protinozec = new Kes("PROTI", -50.0, -166.0, true);
+		final Kes protinozec = new Kes("PROTI", -49.9, -166.2, true);
+		Assert.assertTrue("elipsoid tu nekonverguje", Double.isNaN(Geodezie.azimutElipsoid(50, 14, -49.9, -166.2)));
 		final VysledekSektoru v = VypocetSektoru.spocti(ZdrojPravidel.STATOR, 50, 14, null, Collections.<String> emptySet(), Collections.singletonList(protinozec));
 		Assert.assertEquals(1, v.pocetObsazenych());
-		final int s = Geodezie.sektor(Geodezie.azimutKoule(50, 14, -50, -166));
+		final int s = Geodezie.sektor(Geodezie.azimutKoule(50, 14, -49.9, -166.2));
 		Assert.assertTrue(v.jeObsazeny(s));
 		Assert.assertTrue("sektor z náhradní koule je nejistý", v.jeNejisty(s));
 	}

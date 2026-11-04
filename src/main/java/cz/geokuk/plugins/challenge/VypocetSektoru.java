@@ -33,12 +33,95 @@ public final class VypocetSektoru {
 		if (!jePlatnyStred(lat, lon)) {
 			throw new IllegalArgumentException("Střed mimo rozsah souřadnic: " + lat + ", " + lon);
 		}
+		return spoctiSKlasifikaci(zdroj, lat, lon, primy(zdroj, lat, lon, oblast), ignorovane, kese, zruseno);
+	}
+
+	/**
+	 * Poloha keše vůči středu a oblasti: leží v oblasti, v kterém sektoru a zda je sektor nejistý. Záleží jen na souřadnicích keše, středu, oblasti a pravidlech, proto
+	 * se dá předpočítat a uložit, viz {@link Predpocet}.
+	 */
+	public interface Klasifikator {
+		Klasifikace klasifikuj(VstupKes k);
+	}
+
+	/** Výsledek {@link Klasifikator}u zakódovaný do jednoho čísla: sektor (9 bitů), nejistota (2 bity) a příznak, že keš leží v oblasti. */
+	public static final class Klasifikace {
+		static final int BEZ_NEJISTOTY = 0;
+		static final int NEJISTY_DOLU = 1;
+		static final int NEJISTY_NAHORU = 2;
+
+		private final short kod;
+
+		Klasifikace(final short kod) {
+			this.kod = kod;
+		}
+
+		static Klasifikace mimoOblast() {
+			return new Klasifikace((short) 0);
+		}
+
+		static Klasifikace vOblasti(final int sektor, final int nejistota) {
+			return new Klasifikace((short) (sektor | nejistota << 9 | 1 << 11));
+		}
+
+		static Klasifikace zKodu(final short kod) {
+			return new Klasifikace(kod);
+		}
+
+		short kod() {
+			return kod;
+		}
+
+		public boolean jeVOblasti() {
+			return (kod >> 11 & 1) != 0;
+		}
+
+		public int sektor() {
+			return kod & 0x1FF;
+		}
+
+		/** Nejistota: {@link #NEJISTY_DOLU} = soused je sektor pod, {@link #NEJISTY_NAHORU} = nad. */
+		int nejistota() {
+			return kod >> 9 & 3;
+		}
+
+		@Override
+		public boolean equals(final Object o) {
+			return o instanceof Klasifikace && ((Klasifikace) o).kod == kod;
+		}
+
+		@Override
+		public int hashCode() {
+			return kod;
+		}
+	}
+
+	/** Klasifikace přímým výpočtem z nálezu: leží v oblasti (null = bez omezení), sektor a nejistota podle pravidel. */
+	public static Klasifikator primy(final ZdrojPravidel zdroj, final double lat, final double lon, final Oblast oblast) {
+		return k -> {
+			if (oblast != null && !oblast.obsahuje(k.lat(), k.lon())) {
+				return Klasifikace.mimoOblast();
+			}
+			final double az = azimut(zdroj, lat, lon, k);
+			final int s = Geodezie.sektor(az);
+			if (Geodezie.jeNejisty(az) || nahrazenoKouli(zdroj, lat, lon, k)) {
+				final double zlomek = az - Math.floor(az);
+				return Klasifikace.vOblasti(s, zlomek < 0.5 ? Klasifikace.NEJISTY_DOLU : Klasifikace.NEJISTY_NAHORU);
+			}
+			return Klasifikace.vOblasti(s, Klasifikace.BEZ_NEJISTOTY);
+		};
+	}
+
+	/** Výpočet s danou klasifikací keší (přímou nebo předpočítanou); střed je potřeba jen pro vzdálenost kandidátů. */
+	public static VysledekSektoru spoctiSKlasifikaci(final ZdrojPravidel zdroj, final double lat, final double lon, final Klasifikator klasifikator, final Set<String> ignorovane,
+			final Iterable<? extends VstupKes> kese, final java.util.function.BooleanSupplier zruseno) {
 		final Set<String> ign = zdroj == ZdrojPravidel.STATOR ? ignorovane : Collections.<String> emptySet();
 		final BitSet obsazeneJiste = new BitSet(360);
 		final BitSet obsazeneJakkoli = new BitSet(360);
 		final BitSet soused = new BitSet(360);
 		final Kandidati[] kandidati = new Kandidati[360];
 		final java.util.List<VstupKes> nenalezene = new java.util.ArrayList<>();
+		final java.util.List<Klasifikace> nenalezeneKlasifikace = new java.util.ArrayList<>();
 		int nalezu = 0;
 		int poradi = 0;
 		for (final VstupKes k : kese) {
@@ -48,31 +131,33 @@ public final class VypocetSektoru {
 			if (!lzePocitat(zdroj, k, ign)) {
 				continue;
 			}
-			if (oblast != null && !oblast.obsahuje(k.lat(), k.lon())) {
-				continue;
-			}
 			if (k.nalezena()) {
 				if (zdroj == ZdrojPravidel.PGC && k.logNaGc() == VstupKes.StavLogu.NE) {
 					continue;
 				}
-				nalezu++;
-				final double az = azimut(zdroj, lat, lon, k);
-				final int s = Geodezie.sektor(az);
-				obsazeneJakkoli.set(s);
-				if (Geodezie.jeNejisty(az) || nahrazenoKouli(zdroj, lat, lon, k)) {
-					final double zlomek = az - Math.floor(az);
-					soused.set(zlomek < 0.5 ? (s + 359) % 360 : (s + 1) % 360);
-				} else {
-					obsazeneJiste.set(s);
+				final Klasifikace c = klasifikator.klasifikuj(k);
+				if (!c.jeVOblasti()) {
+					continue;
 				}
-			} else {
-				if (!k.vlastni() && !k.neaktivni()) {
+				nalezu++;
+				final int s = c.sektor();
+				obsazeneJakkoli.set(s);
+				if (c.nejistota() == Klasifikace.BEZ_NEJISTOTY) {
+					obsazeneJiste.set(s);
+				} else {
+					soused.set(c.nejistota() == Klasifikace.NEJISTY_DOLU ? (s + 359) % 360 : (s + 1) % 360);
+				}
+			} else if (!k.vlastni() && !k.neaktivni()) {
+				final Klasifikace c = klasifikator.klasifikuj(k);
+				if (c.jeVOblasti()) {
 					nenalezene.add(k);
+					nenalezeneKlasifikace.add(c);
 				}
 			}
 		}
-		for (final VstupKes k : nenalezene) {
-			final int s = Geodezie.sektor(azimut(zdroj, lat, lon, k));
+		for (int i = 0; i < nenalezene.size(); i++) {
+			final VstupKes k = nenalezene.get(i);
+			final int s = nenalezeneKlasifikace.get(i).sektor();
 			if (!obsazeneJakkoli.get(s)) {
 				if (kandidati[s] == null) {
 					kandidati[s] = new Kandidati(s);

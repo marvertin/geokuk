@@ -83,4 +83,21 @@ public class KesVstupTest {
 		Assert.assertTrue(KesVstup.z(archivovana).neaktivni());
 		Assert.assertFalse(KesVstup.z(kes("GC6", EKesVztah.NORMAL, "Geocache", 50.1, 14.2)).neaktivni());
 	}
+
+	@Test
+	public void sbirkaMaPresnyPocetKesiKterePrejde() {
+		final java.util.List<cz.geokuk.plugins.kesoid.Kesoid> v = new java.util.ArrayList<>();
+		v.add(kes("GC1", EKesVztah.FOUND, "Geocache", 50.1, 14.2));
+		v.add(kes("OC1", EKesVztah.FOUND, "Geocache", 50.1, 14.2));
+		v.add(kes("GC2", EKesVztah.NORMAL, "Geocache", 0, 0));
+		v.add(kes("GC3", EKesVztah.NORMAL, "Geocache", 50.2, 14.3));
+		final java.util.Collection<VstupKes> sbirka = KesVstup.zKesoidu(v);
+		int projito = 0;
+		for (final VstupKes k : sbirka) {
+			Assert.assertNotNull(k.id());
+			projito++;
+		}
+		Assert.assertEquals(2, projito);
+		Assert.assertEquals(2, sbirka.size());
+	}
 }
