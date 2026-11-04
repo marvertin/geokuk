@@ -46,12 +46,49 @@ public final class VysledekSektoru {
 		}
 	}
 
+	/** Nenalezená keš, která by zaplnila chybějící sektor. */
+	public static final class KandidatKes {
+		private final String id;
+		private final double lat;
+		private final double lon;
+		private final int sektor;
+
+		KandidatKes(final String id, final double lat, final double lon, final int sektor) {
+			this.id = id;
+			this.lat = lat;
+			this.lon = lon;
+			this.sektor = sektor;
+		}
+
+		public String id() {
+			return id;
+		}
+
+		public double lat() {
+			return lat;
+		}
+
+		public double lon() {
+			return lon;
+		}
+
+		public int sektor() {
+			return sektor;
+		}
+	}
+
 	private final BitSet obsazene;
 	private final BitSet nejiste;
 	private final Kandidati[] kandidati = new Kandidati[360];
 	private final int pocetNalezu;
+	private final List<KandidatKes> vsichniKandidati;
 
 	VysledekSektoru(final BitSet obsazene, final BitSet nejiste, final Kandidati[] kandidati, final int pocetNalezu) {
+		this(obsazene, nejiste, kandidati, pocetNalezu, Collections.<KandidatKes> emptyList());
+	}
+
+	VysledekSektoru(final BitSet obsazene, final BitSet nejiste, final Kandidati[] kandidati, final int pocetNalezu, final List<KandidatKes> vsichniKandidati) {
+		this.vsichniKandidati = vsichniKandidati;
 		this.obsazene = obsazene;
 		this.nejiste = nejiste;
 		System.arraycopy(kandidati, 0, this.kandidati, 0, 360);
@@ -83,6 +120,11 @@ public final class VysledekSektoru {
 	/** Kandidáti pro chybějící sektor; null, když sektor není chybějící. */
 	public Kandidati kandidati(final int sektor) {
 		return kandidati[sektor];
+	}
+
+	/** Všichni kandidáti pro chybějící sektory (nenalezené keše v oblasti, jejichž sektor chybí) v pořadí, v jakém přišli. */
+	public List<KandidatKes> vsichniKandidati() {
+		return vsichniKandidati;
 	}
 
 	/** Kolik nálezů se do výpočtu započetlo (v oblasti a podle pravidel). */

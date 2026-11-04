@@ -155,10 +155,12 @@ public final class VypocetSektoru {
 				}
 			}
 		}
+		final java.util.List<VysledekSektoru.KandidatKes> vsichni = new java.util.ArrayList<>();
 		for (int i = 0; i < nenalezene.size(); i++) {
 			final VstupKes k = nenalezene.get(i);
 			final int s = nenalezeneKlasifikace.get(i).sektor();
 			if (!obsazeneJakkoli.get(s)) {
+				vsichni.add(new VysledekSektoru.KandidatKes(k.id(), k.lat(), k.lon(), s));
 				if (kandidati[s] == null) {
 					kandidati[s] = new Kandidati(s);
 				}
@@ -173,7 +175,7 @@ public final class VypocetSektoru {
 				nejiste.set(s);
 			}
 		}
-		return new VysledekSektoru(obsazeneJakkoli, nejiste, kandidati, nalezu);
+		return new VysledekSektoru(obsazeneJakkoli, nejiste, kandidati, nalezu, vsichni);
 	}
 
 	/** Střed musí být konečné číslo ve rozsahu souřadnic; jinak by sektory vycházely nesmyslně. */

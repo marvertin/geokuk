@@ -37,6 +37,14 @@ public final class Challenge {
 		SADA
 	}
 
+	/** Které nálezy se počítají. */
+	public enum ZdrojeNalezu {
+		/** Nálezy ze zapnutých zdrojů dat, tedy to, co uživatel vidí. */
+		ZAPNUTE,
+		/** Nálezy ze všech načtených zdrojů, i vypnutých. */
+		VSECHNY
+	}
+
 	/** Pravidla, podle kterých se počítá. */
 	public enum ZdrojPravidel {
 		/** Project-GC: koule, bez Lab a Locationless, jen nálezy s logem na gc.com. */
@@ -154,8 +162,14 @@ public final class Challenge {
 	private final Stred stred;
 	private final OblastDef oblast;
 	private final ZdrojPravidel zdroj;
+	private final ZdrojeNalezu nalezy;
 
 	public Challenge(final String nazev, final Typ typ, final Stred stred, final OblastDef oblast, final ZdrojPravidel zdroj) {
+		this(nazev, typ, stred, oblast, zdroj, ZdrojeNalezu.ZAPNUTE);
+	}
+
+	public Challenge(final String nazev, final Typ typ, final Stred stred, final OblastDef oblast, final ZdrojPravidel zdroj, final ZdrojeNalezu nalezy) {
+		this.nalezy = Objects.requireNonNull(nalezy);
 		this.nazev = Objects.requireNonNull(nazev);
 		this.typ = Objects.requireNonNull(typ);
 		this.stred = Objects.requireNonNull(stred);
@@ -183,12 +197,22 @@ public final class Challenge {
 		return zdroj;
 	}
 
+	public ZdrojeNalezu nalezy() {
+		return nalezy;
+	}
+
+	/** Stejná definice pod jiným názvem. */
+	public Challenge sNazvem(final String novyNazev) {
+		return new Challenge(novyNazev, typ, stred, oblast, zdroj, nalezy);
+	}
+
 	/** Ploché vyjádření definice (klíč → text) pro uložení; pořadí klíčů je stálé. */
 	public Map<String, String> naMapu() {
 		final Map<String, String> m = new LinkedHashMap<>();
 		m.put("nazev", nazev);
 		m.put("typ", typ.name());
 		m.put("zdroj", zdroj.name());
+		m.put("nalezy", nalezy.name());
 		m.put("stred", stred.druh.name());
 		if (stred.druh == DruhStredu.SOURADNICE) {
 			m.put("stred.lat", Double.toString(stred.lat));
@@ -232,7 +256,8 @@ public final class Challenge {
 				oblast = OblastDef.sada(povinne(m, "oblast.id").split(","));
 				break;
 			}
-			return new Challenge(povinne(m, "nazev"), typ, stred, oblast, zdroj);
+			final String nalezy = m.get("nalezy");
+			return new Challenge(povinne(m, "nazev"), typ, stred, oblast, zdroj, nalezy == null || nalezy.isEmpty() ? ZdrojeNalezu.ZAPNUTE : ZdrojeNalezu.valueOf(nalezy));
 		} catch (final NumberFormatException e) {
 			throw new IllegalArgumentException("Neplatné souřadnice středu: " + e.getMessage(), e);
 		}
@@ -252,12 +277,12 @@ public final class Challenge {
 			return false;
 		}
 		final Challenge c = (Challenge) o;
-		return nazev.equals(c.nazev) && typ == c.typ && stred.equals(c.stred) && oblast.equals(c.oblast) && zdroj == c.zdroj;
+		return nazev.equals(c.nazev) && typ == c.typ && stred.equals(c.stred) && oblast.equals(c.oblast) && zdroj == c.zdroj && nalezy == c.nalezy;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(nazev, typ, stred, oblast, zdroj);
+		return Objects.hash(nazev, typ, stred, oblast, zdroj, nalezy);
 	}
 
 	@Override
