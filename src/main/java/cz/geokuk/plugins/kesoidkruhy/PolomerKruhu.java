@@ -1,6 +1,8 @@
 package cz.geokuk.plugins.kesoidkruhy;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /** Poloměr jednotkových kruhů v metrech: přednastavené hodnoty posuvníku, převod z textu a do textu, přepočet na pixely. */
@@ -11,8 +13,6 @@ final class PolomerKruhu {
 	static final int MAX_METRU = 50_000;
 	/** Menší kruh se nekreslí. */
 	static final int MIN_PIXLU = 3;
-	/** Větší kruh se nekreslí. */
-	private static final int MAX_PIXLU = 200_000;
 	/** Hodnoty, ke kterým se posuvník přichytává. */
 	static final int[] PRESETY = { 10, 25, 50, 100, 250, 500, 1000, 2000, 5000 };
 
@@ -20,13 +20,61 @@ final class PolomerKruhu {
 
 	private PolomerKruhu() {}
 
-	/** Poloměr v pixelech, při přiblížení plynule; 0, když je kruh příliš malý nebo příliš velký ke kreslení. */
-	static int pixlu(final int metru, final double pixluNaMetr) {
+	/** Poloměr v pixelech, při přiblížení plynule bez horní hranice; 0, když je kruh příliš malý ke kreslení. */
+	static double pixlu(final int metru, final double pixluNaMetr) {
 		final double r = metru * pixluNaMetr;
-		if (r < MIN_PIXLU || r > MAX_PIXLU) {
+		return r < MIN_PIXLU ? 0 : r;
+	}
+
+	/** Jak se kruh nakreslí do výřezu. */
+	enum Kresleni {
+		/** Kruh výřez nezasahuje. */
+		NIC,
+		/** Výřez leží celý uvnitř kruhu, okraj není vidět, stačí vyplnit výřez. */
+		VYPLN_VYREZ,
+		/** Okraj kruhu protíná výřez. */
+		KRUH
+	}
+
+	/** Co s kruhem o středu ({@code sx}, {@code sy}) a poloměru {@code r} ve výřezu daném rohy {@code x1, y1, x2, y2}. */
+	static Kresleni kresleni(final double sx, final double sy, final double r, final double x1, final double y1, final double x2, final double y2) {
+		final double nejblizsiX = Math.max(x1, Math.min(sx, x2));
+		final double nejblizsiY = Math.max(y1, Math.min(sy, y2));
+		final double dnx = nejblizsiX - sx;
+		final double dny = nejblizsiY - sy;
+		if (dnx * dnx + dny * dny > r * r) {
+			return Kresleni.NIC;
+		}
+		final double nejdalnejsiX = Math.max(Math.abs(x1 - sx), Math.abs(x2 - sx));
+		final double nejdalnejsiY = Math.max(Math.abs(y1 - sy), Math.abs(y2 - sy));
+		return nejdalnejsiX * nejdalnejsiX + nejdalnejsiY * nejdalnejsiY <= r * r ? Kresleni.VYPLN_VYREZ : Kresleni.KRUH;
+	}
+
+	/** Nejvíc kruhů, jejichž okraj protíná výřez, které se při jednom kreslení vykreslí; kreslení jednoho velkého kruhu trvá řádově milisekundy. */
+	static final int MAX_CASTECNYCH_KRUHU = 12;
+
+	/** Nejvýš {@code limit} bodů nejbližších bodu ({@code cx}, {@code cy}), od nejbližšího; při menším počtu všechny beze změny pořadí. */
+	static List<int[]> nejblizsi(final List<int[]> body, final double cx, final double cy, final int limit) {
+		if (body.size() <= limit) {
+			return body;
+		}
+		final List<int[]> kopie = new ArrayList<>(body);
+		kopie.sort((a, b) -> Double.compare(vzdalenost2(a, cx, cy), vzdalenost2(b, cx, cy)));
+		return new ArrayList<>(kopie.subList(0, limit));
+	}
+
+	private static double vzdalenost2(final int[] b, final double cx, final double cy) {
+		final double dx = b[0] - cx;
+		final double dy = b[1] - cy;
+		return dx * dx + dy * dy;
+	}
+
+	/** Výsledná průhlednost, když se přes sebe položí {@code pocet} vrstev stejné barvy s krytím {@code alfa} (0 až 255). */
+	static int slozAlfu(final int alfa, final int pocet) {
+		if (pocet <= 0) {
 			return 0;
 		}
-		return (int) Math.round(r);
+		return (int) Math.round(255 * (1 - Math.pow(1 - alfa / 255.0, pocet)));
 	}
 
 	/** Poloha posuvníku nejbližší hodnotě (v logaritmické míře, hodnota mimo presety dostane sousední pozici). */

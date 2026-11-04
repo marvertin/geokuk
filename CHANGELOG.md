@@ -301,6 +301,8 @@
   Jednotkových kruhů uvádí poloměr (10 m, 100 m, 1 km…).
 
 ### Opravy
+- Jednotkové kruhy v metrech zůstávají vidět i při velkém přiblížení, když zakrývají
+  většinu obrazovky.
 - Změna velikosti, barvy nebo jednotkovosti v nastavení zvýrazňovacích kruhů
   kruhy nevypne.
 - Turistické a cyklotrasy nad offline mapou se staženou vrstvou tras kreslí jen

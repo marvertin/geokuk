@@ -75,24 +75,24 @@ public class PolomerKruhuTest {
 
 	@Test
 	public void pixlyJsouUmernePribliZeniBezSkoku() {
-		int predchozi = PolomerKruhu.pixlu(100, 0.05);
+		double predchozi = PolomerKruhu.pixlu(100, 0.05);
 		for (double p = 0.05; p < 1; p *= 1.004) {
-			final int r = PolomerKruhu.pixlu(100, p);
+			final double r = PolomerKruhu.pixlu(100, p);
 			Assert.assertTrue("skok z " + predchozi + " na " + r, Math.abs(r - predchozi) <= 1);
 			predchozi = r;
 		}
-		Assert.assertEquals(50, PolomerKruhu.pixlu(100, 0.5));
-		Assert.assertEquals(51, PolomerKruhu.pixlu(100, 0.51));
-		Assert.assertEquals("žádné skoky po mocninách 10", 37, PolomerKruhu.pixlu(100, 0.37));
-		Assert.assertEquals(370, PolomerKruhu.pixlu(1000, 0.37));
+		Assert.assertEquals(50, PolomerKruhu.pixlu(100, 0.5), 1e-9);
+		Assert.assertEquals(51, PolomerKruhu.pixlu(100, 0.51), 1e-9);
+		Assert.assertEquals("žádné skoky po mocninách 10", 37, PolomerKruhu.pixlu(100, 0.37), 1e-9);
+		Assert.assertEquals(370, PolomerKruhu.pixlu(1000, 0.37), 1e-9);
 	}
 
 	@Test
-	public void prilisMalyAVelkyKruhSeNekresli() {
-		Assert.assertEquals(0, PolomerKruhu.pixlu(100, 0.02));
-		Assert.assertEquals(3, PolomerKruhu.pixlu(100, 0.03));
-		Assert.assertEquals(0, PolomerKruhu.pixlu(1, 2.9));
-		Assert.assertEquals(0, PolomerKruhu.pixlu(50_000, 10));
+	public void prilisMalyKruhSeNekresliVelkyAno() {
+		Assert.assertEquals(0, PolomerKruhu.pixlu(100, 0.02), 0);
+		Assert.assertEquals(3, PolomerKruhu.pixlu(100, 0.03), 1e-9);
+		Assert.assertEquals(0, PolomerKruhu.pixlu(1, 2.9), 0);
+		Assert.assertEquals("bez horní hranice", 500_000, PolomerKruhu.pixlu(50_000, 10), 1e-6);
 	}
 
 	@Test
