@@ -3,9 +3,12 @@
 ## 6.5.0
 
 ### Změny
-- Když jsou zapnuté kruhy (zvýrazňovací, jednotkové, Obsazenost) a nejsou vidět,
+- Položka Kešoidy > Kruhy (Alt+F8) se jmenuje podle poloměru (Kruhy 1 km,
+  Kruhy 161 m) a mění se hned po změně nastavení; dialog se jmenuje Nastavení
+  kruhů.
+- Když jsou zapnuté kruhy (zvýrazňovací, v metrech, Obsazenost) a nejsou vidět,
   ve stavovém řádku se ukáže štítek Kruhy skryté; v bublině je u každé vrstvy
-  důvod a co udělat. Když se jednotkové kruhy kreslí jen částečně (nejbližší ke
+  důvod a co udělat. Když se kruhy v metrech kreslí jen částečně (nejbližší ke
   středu výřezu), je tam štítek Kruhy omezené. Po zkratkách, jejichž
   výsledek není vidět (F5, F9 při malém přiblížení, Alt+F8, Ctrl+1 až Ctrl+4,
   skryté kruhy), se vlevo dole nad mapou na chvíli ukáže krátká zpráva.
@@ -306,10 +309,10 @@
   a čáry offline mapy až na 200 %.
 - Obsazenost 161 m (F9) je na nové instalaci vypnutá. Její bublina vysvětluje,
   že kruh má poloměr 161 m a překryv kruhů pravidlo neporušuje; bublina
-  Jednotkových kruhů uvádí poloměr (10 m, 100 m, 1 km…).
+  kruhů v metrech uvádí poloměr (10 m, 100 m, 1 km…).
 
 ### Opravy
-- Jednotkové kruhy v metrech zůstávají vidět i při velkém přiblížení, když zakrývají
+- Kruhy v metrech zůstávají vidět i při velkém přiblížení, když zakrývají
   většinu obrazovky.
 - Změna velikosti, barvy nebo jednotkovosti v nastavení zvýrazňovacích kruhů
   kruhy nevypne.
@@ -317,9 +320,9 @@
   podklad; prázdný překryv tras se nad ní už nevykresluje.
 - Po startu bez nového katalogu vrstev se offline mapy se staženými vrstvami
   otevřou jen jednou, rovnou s obrysy vrstev z uloženého katalogu.
-- Kešoidy > Jednotkové kruhy (Alt+F8) zapnou i zvýrazňovací kruhy, takže se
+- Kešoidy > Kruhy v metrech (Alt+F8) zapnou i zvýrazňovací kruhy, takže se
   na mapě hned projeví.
-- Zvýrazňovací a jednotkové kruhy zůstanou zapnuté i po přepnutí mapového
+- Zvýrazňovací kruhy a kruhy v metrech zůstanou zapnuté i po přepnutí mapového
   podkladu; velikost a barva kruhů se dál pamatují pro každý podklad. Kdo měl
   kruhy zapnuté jen u některých podkladů, začne se stavem podkladu, na kterém
   program po aktualizaci poprvé startuje.

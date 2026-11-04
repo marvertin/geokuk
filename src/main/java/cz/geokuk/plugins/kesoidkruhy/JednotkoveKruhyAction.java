@@ -17,9 +17,9 @@ public class JednotkoveKruhyAction extends ToggleAction0 {
 	private ToastModel toast;
 
 	public JednotkoveKruhyAction() {
-		super("Jednotkové kruhy");
+		super(nazev(PolomerKruhu.VYCHOZI_METRU));
 		putValue(SHORT_DESCRIPTION, popis(PolomerKruhu.VYCHOZI_METRU));
-		putValue(MNEMONIC_KEY, KeyEvent.VK_J);
+		putValue(MNEMONIC_KEY, KeyEvent.VK_R);
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("alt F8"));
 	}
 
@@ -36,12 +36,18 @@ public class JednotkoveKruhyAction extends ToggleAction0 {
 	}
 
 	public void onEvent(final KruhyPreferencesChangeEvent event) {
+		putValue(NAME, nazev(event.kruhy.getPolomerMetru()));
 		putValue(SHORT_DESCRIPTION, popis(event.kruhy.getPolomerMetru()));
 		setSelected(event.kruhy.isJednotkovaVelikost());
 	}
 
+	/** Název v menu podle poloměru, třeba „Kruhy 1 km“. */
+	static String nazev(final int polomerMetru) {
+		return "Kruhy " + PolomerKruhu.format(polomerMetru);
+	}
+
 	static String popis(final int polomerMetru) {
-		return "Jednotkové kruhy, poloměr " + PolomerKruhu.format(polomerMetru);
+		return "Kruhy o poloměru " + PolomerKruhu.format(polomerMetru) + ", jehož velikost na mapě se mění s přiblížením.";
 	}
 
 	@Override

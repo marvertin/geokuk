@@ -107,7 +107,7 @@ public class ZkratkyToastTest {
 		akce.inject(toast);
 		final JCheckBoxMenuItem m = zapoj(akce);
 		m.doClick();
-		Assert.assertEquals("Zapnuté zvýrazňovací i jednotkové kruhy", posledni());
+		Assert.assertEquals("Zapnuté zvýrazňovací kruhy s poloměrem v metrech", posledni());
 		Assert.assertTrue(s.isOnoff());
 		zpravy.clear();
 		m.doClick();

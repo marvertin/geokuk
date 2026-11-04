@@ -13,7 +13,7 @@ public class NastavParametryZvyraznovacichKruhuAction extends Action0 {
 
 	public NastavParametryZvyraznovacichKruhuAction() {
 		super("Nastavení kruhů...");
-		putValue(SHORT_DESCRIPTION, "Zobrazí dialog pro nastavení barvy a velikosti zvýrazňovacích kruhů.");
+		putValue(SHORT_DESCRIPTION, "Zobrazí dialog pro nastavení barvy a velikosti kruhů.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_K);
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl F8"));
 	}

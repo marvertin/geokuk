@@ -41,7 +41,7 @@ public class JKruhyDialog extends JMyDialog0 implements AfterEventReceiverRegist
 	private final PanelKruhu panel = new PanelKruhu();
 
 	public JKruhyDialog() {
-		setTitle("Nastavení parametrů zvýrazňovacích kruhů");
+		setTitle("Nastavení kruhů");
 		init();
 	}
 

@@ -25,7 +25,7 @@ public final class ZpravyZkratek {
 		if (skryta != null) {
 			return zapnuteAleSkryte("Kruhy zapnuté, ale skryté", skryta, VrstvaNadMapou.JEDNOTKOVE_KRUHY);
 		}
-		return zvyrazneniBylyZapnute ? null : "Zapnuté zvýrazňovací i jednotkové kruhy";
+		return zvyrazneniBylyZapnute ? null : "Zapnuté zvýrazňovací kruhy s poloměrem v metrech";
 	}
 
 	/** F5. */

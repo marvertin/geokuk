@@ -135,7 +135,7 @@ public final class StavVrstev {
 			if (!prvni) {
 				sb.append("<br/>");
 			}
-			sb.append("Jednotkové kruhy: kresleno jen ").append(kreslenychKruhu).append(" nejbližších ke středu, přibližte mapu");
+			sb.append("Kruhy v metrech: kresleno jen ").append(kreslenychKruhu).append(" nejbližších ke středu, přibližte mapu");
 		}
 		return sb.append("</html>").toString();
 	}
