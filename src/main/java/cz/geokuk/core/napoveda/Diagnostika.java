@@ -468,9 +468,38 @@ public final class Diagnostika {
 		return b ? "ano" : "ne";
 	}
 
-	/** Hlášení je veřejné: bez jména uživatele v cestách a bez parametrů v adresách (mohou obsahovat klíč k mapám). */
+	/** Adresa; skupina 1 je schéma, 2 adresa bez uživatele a parametrů, 3 parametry za otazníkem, zakódovaným otazníkem nebo středníkem. */
+	private static final java.util.regex.Pattern ADRESA = java.util.regex.Pattern
+			.compile("(?i)((?:https?|ftps?)://)(?:[^\\s/?#\"']*@)?((?:(?!%3F)[^\\s?\"'#;])++)((?:[?#;]|%3F)[^\\s\"']*+)?");
+
+	/** Hlášení je veřejné: bez jména uživatele v cestách a bez uživatele, hesla a parametrů v adresách (mohou obsahovat klíč k mapám). */
 	static String soukrome(final String text) {
-		return text == null ? null : text.replace(FConst.HOME_DIR.getAbsolutePath(), "~").replaceAll("(https?://[^\\s?\"']++)\\?[^\\s\"']*+", "$1?…");
+		return soukrome(text, FConst.HOME_DIR.getAbsolutePath(), File.separatorChar == '\\');
+	}
+
+	static String soukrome(final String text, final String domov, final boolean windows) {
+		if (text == null) {
+			return null;
+		}
+		String vysledek = text;
+		if (!domov.isEmpty()) {
+			// Na Windows záleží na velikosti písmen a lomítka mohou být obě.
+			final StringBuilder vzor = new StringBuilder();
+			for (final String cast : domov.split("[\\\\/]+", -1)) {
+				if (vzor.length() > 0) {
+					vzor.append("[\\\\/]+");
+				}
+				vzor.append(java.util.regex.Pattern.quote(cast));
+			}
+			vzor.append("(?![\\p{L}\\p{N}_]|[.-][\\p{L}\\p{N}_])");
+			vysledek = java.util.regex.Pattern.compile(vzor.toString(), windows ? java.util.regex.Pattern.CASE_INSENSITIVE : 0).matcher(vysledek).replaceAll("~");
+		}
+		final java.util.regex.Matcher m = ADRESA.matcher(vysledek);
+		final StringBuffer sb = new StringBuffer();
+		while (m.find()) {
+			m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(m.group(1) + m.group(2) + (m.group(3) == null ? "" : "?…")));
+		}
+		return m.appendTail(sb).toString();
 	}
 
 	/** Domovskou složku zkrátí na ~, ať text neobsahuje jméno uživatele. */
