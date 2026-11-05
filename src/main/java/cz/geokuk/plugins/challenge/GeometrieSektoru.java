@@ -80,6 +80,9 @@ public final class GeometrieSektoru {
 		}
 	}
 
+	/** Tolerance porovnání vzdálenosti s hranicí poloměru v metrech. */
+	public static final double TOLERANCE_POLOMERU = 1e-3;
+
 	/** Největší úhlový krok oblouku ve stupních. */
 	public static final double KROK_OBLOUKU = 1.0;
 
@@ -303,7 +306,7 @@ public final class GeometrieSektoru {
 
 	/**
 	 * Sektor bodu podle jeho azimutu od středu, nebo -1, když je bod ve středu, blíž než {@code polomerMin} nebo dál než {@code polomerMax}. Hranice poloměrů patří
-	 * dovnitř. Vzdálenost i azimut se měří v zadaném modelu (u elipsoidu po elipsoidu, u téměř protilehlých bodů po kouli), stejně jako v {@link #bod}.
+	 * dovnitř s přesností {@link #TOLERANCE_POLOMERU} (zaokrouhlení výpočtu bodu a vzdálenosti). Vzdálenost i azimut se měří v zadaném modelu (u elipsoidu po elipsoidu, u téměř protilehlých bodů po kouli), stejně jako v {@link #bod}.
 	 */
 	public static int sektorBodu(final double lat, final double lon, final double bodLat, final double bodLon, final double polomerMin, final double polomerMax, final Model model) {
 		zkontrolujStred(lat, lon);
@@ -315,7 +318,7 @@ public final class GeometrieSektoru {
 		if (Double.isNaN(vzdalenost)) {
 			vzdalenost = Geodezie.vzdalenostKoule(lat, lon, bodLat, bodLon);
 		}
-		if (vzdalenost <= 0 || vzdalenost < polomerMin || vzdalenost > polomerMax) {
+		if (vzdalenost <= 0 || vzdalenost < polomerMin - TOLERANCE_POLOMERU || vzdalenost > polomerMax + TOLERANCE_POLOMERU) {
 			return -1;
 		}
 		double azimut = model == Model.ELIPSOID ? Geodezie.azimutElipsoid(lat, lon, bodLat, bodLon) : Double.NaN;

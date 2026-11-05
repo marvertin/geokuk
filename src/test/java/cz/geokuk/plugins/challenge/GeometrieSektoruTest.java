@@ -375,8 +375,8 @@ public class GeometrieSektoruTest {
 			final double d = m == Model.ELIPSOID ? Geodezie.vzdalenostElipsoid(LAT, LON, b.lat, b.lon) : Geodezie.vzdalenostKoule(LAT, LON, b.lat, b.lon);
 			Assert.assertEquals(m + " dolní hrana", 100, GeometrieSektoru.sektorBodu(LAT, LON, b.lat, b.lon, d, d + 1, m));
 			Assert.assertEquals(m + " horní hrana", 100, GeometrieSektoru.sektorBodu(LAT, LON, b.lat, b.lon, d - 1, d, m));
-			Assert.assertEquals(m + " těsně mimo", -1, GeometrieSektoru.sektorBodu(LAT, LON, b.lat, b.lon, d + 1e-3, d + 1, m));
-			Assert.assertEquals(m + " těsně mimo", -1, GeometrieSektoru.sektorBodu(LAT, LON, b.lat, b.lon, d - 1, d - 1e-3, m));
+			Assert.assertEquals(m + " těsně mimo", -1, GeometrieSektoru.sektorBodu(LAT, LON, b.lat, b.lon, d + 0.01, d + 1, m));
+			Assert.assertEquals(m + " těsně mimo", -1, GeometrieSektoru.sektorBodu(LAT, LON, b.lat, b.lon, d - 1, d - 0.01, m));
 		}
 	}
 
@@ -403,5 +403,52 @@ public class GeometrieSektoruTest {
 			}
 		}
 		Assert.assertTrue("žádný bod, kde se koule a elipsoid liší: " + rozlisenych, rozlisenych > 0);
+	}
+
+	private static Bod b(final double lat, final double lon) {
+		return new Bod(lat, lon);
+	}
+
+	@Test
+	public void odvinutiRozlisujeSkokOd180Do190() {
+		final List<Bod> dopredu = java.util.Arrays.asList(b(0, 0), b(0, 185));
+		Assert.assertEquals(-175, GeometrieSektoru.odvinuteDelky(dopredu).get(1).lon, 1e-9);
+		final List<Bod> dozadu = java.util.Arrays.asList(b(0, 0), b(0, -185));
+		Assert.assertEquals(175, GeometrieSektoru.odvinuteDelky(dozadu).get(1).lon, 1e-9);
+		final List<Bod> presne = java.util.Arrays.asList(b(0, 0), b(0, 180));
+		Assert.assertEquals(180, GeometrieSektoru.odvinuteDelky(presne).get(1).lon, 1e-9);
+		final List<Bod> presneZpet = java.util.Arrays.asList(b(0, 0), b(0, -180));
+		Assert.assertEquals(-180, GeometrieSektoru.odvinuteDelky(presneZpet).get(1).lon, 1e-9);
+	}
+
+	@Test
+	public void odvinutiObloukuJdouciehoNaVychodPresAntimeridian() {
+		final List<Bod> vychod = java.util.Arrays.asList(b(0, 179.0), b(0, -179.0), b(0, -178.0));
+		final List<Bod> v = GeometrieSektoru.odvinuteDelky(vychod);
+		Assert.assertEquals(179, v.get(0).lon, 1e-9);
+		Assert.assertEquals(181, v.get(1).lon, 1e-9);
+		Assert.assertEquals(182, v.get(2).lon, 1e-9);
+		final List<Bod> zapad = java.util.Arrays.asList(b(0, -179.0), b(0, 179.0), b(0, 178.0));
+		final List<Bod> z = GeometrieSektoru.odvinuteDelky(zapad);
+		Assert.assertEquals(-179, z.get(0).lon, 1e-9);
+		Assert.assertEquals(-181, z.get(1).lon, 1e-9);
+		Assert.assertEquals(-182, z.get(2).lon, 1e-9);
+	}
+
+	@Test
+	public void protilehlyBodElipsoiduMaNaNAKouleSeVezmeZaloha() {
+		Assert.assertTrue(Double.isNaN(Geodezie.vzdalenostElipsoid(0, 0, 0, 179.5)));
+		final double azimutKoule = Geodezie.azimutKoule(0, 0, 0, 179.5);
+		Assert.assertEquals(Geodezie.sektor(azimutKoule), GeometrieSektoru.sektorBodu(0, 0, 0, 179.5, 1_000, 25_000_000, Model.ELIPSOID));
+		Assert.assertEquals(-1, GeometrieSektoru.sektorBodu(0, 0, 0, 179.5, 1_000, 10_000_000, Model.ELIPSOID));
+	}
+
+	@Test
+	public void hraniceDovnitrJeNaMilimetr() {
+		final Bod bod = GeometrieSektoru.bod(LAT, LON, 100.5, 50_000, Model.ELIPSOID);
+		Assert.assertEquals(100, GeometrieSektoru.sektorBodu(LAT, LON, bod.lat, bod.lon, 1_000, 50_000, Model.ELIPSOID));
+		Assert.assertEquals(100, GeometrieSektoru.sektorBodu(LAT, LON, bod.lat, bod.lon, 50_000, 60_000, Model.ELIPSOID));
+		Assert.assertEquals(-1, GeometrieSektoru.sektorBodu(LAT, LON, bod.lat, bod.lon, 1_000, 49_999.99, Model.ELIPSOID));
+		Assert.assertEquals(-1, GeometrieSektoru.sektorBodu(LAT, LON, bod.lat, bod.lon, 50_000.01, 60_000, Model.ELIPSOID));
 	}
 }
