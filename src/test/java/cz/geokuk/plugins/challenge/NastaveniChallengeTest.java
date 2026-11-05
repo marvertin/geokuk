@@ -302,4 +302,41 @@ public class NastaveniChallengeTest {
 		Assert.assertEquals("1", u.get("verze"));
 		Assert.assertEquals("A", NastaveniChallenge.nacti(u).seznam.vlastni().get(0).nazev());
 	}
+
+	@Test
+	public void zapornaUlozenaVerzeSeBereJakoNula() {
+		final MapoveUloziste u = new MapoveUloziste();
+		u.put("verze", "-5");
+		final ChallengeSeznam s = new ChallengeSeznam();
+		s.ulozVlastni(vlastni("A", ZdrojPravidel.PGC, ZdrojeNalezu.ZAPNUTE));
+		NastaveniChallenge.uloz(s, false, u);
+		Assert.assertEquals("1", u.get("verze"));
+		Assert.assertEquals(1, NastaveniChallenge.nacti(u).seznam.vlastni().size());
+	}
+
+	@Test
+	public void verzeBezDefinicNovaJeOJednuVyssi() {
+		final MapoveUloziste u = new MapoveUloziste();
+		u.put("verze", "7");
+		final ChallengeSeznam s = new ChallengeSeznam();
+		s.ulozVlastni(vlastni("A", ZdrojPravidel.PGC, ZdrojeNalezu.ZAPNUTE));
+		NastaveniChallenge.uloz(s, false, u);
+		Assert.assertEquals("8", u.get("verze"));
+		Assert.assertEquals("A", NastaveniChallenge.nacti(u).seznam.vlastni().get(0).nazev());
+	}
+
+	@Test
+	public void hranice1e15JeJeste_platna_ADalsiUz_ne() {
+		final String hranice = "1000000000000000";
+		final MapoveUloziste u = new MapoveUloziste();
+		u.put("verze", hranice);
+		final ChallengeSeznam s = new ChallengeSeznam();
+		s.ulozVlastni(vlastni("A", ZdrojPravidel.PGC, ZdrojeNalezu.ZAPNUTE));
+		NastaveniChallenge.uloz(s, false, u);
+		Assert.assertEquals("1000000000000001", u.get("verze"));
+		final MapoveUloziste v = new MapoveUloziste();
+		v.put("verze", "1000000000000001");
+		NastaveniChallenge.uloz(s, false, v);
+		Assert.assertEquals("1", v.get("verze"));
+	}
 }

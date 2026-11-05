@@ -78,6 +78,55 @@ public final class Geodezie {
 		return normalizuj(Math.toDegrees(az));
 	}
 
+	/**
+	 * Vzdálenost po elipsoidu WGS84 v metrech (Vincenty, inverzní úloha). U téměř protilehlých bodů, kde iterace nekonverguje, vrací {@code NaN}; volající použije
+	 * kouli.
+	 */
+	public static double vzdalenostElipsoid(final double lat1, final double lon1, final double lat2, final double lon2) {
+		final double b = (1 - F) * A;
+		final double u1 = Math.atan((1 - F) * Math.tan(Math.toRadians(lat1)));
+		final double u2 = Math.atan((1 - F) * Math.tan(Math.toRadians(lat2)));
+		final double velkeL = Math.toRadians(lon2 - lon1);
+		double lam = velkeL;
+		final double sinU1 = Math.sin(u1);
+		final double cosU1 = Math.cos(u1);
+		final double sinU2 = Math.sin(u2);
+		final double cosU2 = Math.cos(u2);
+		for (int i = 0; i < 100; i++) {
+			final double sinLam = Math.sin(lam);
+			final double cosLam = Math.cos(lam);
+			final double ss = Math.hypot(cosU2 * sinLam, cosU1 * sinU2 - sinU1 * cosU2 * cosLam);
+			if (ss == 0) {
+				return 0;
+			}
+			final double cs = sinU1 * sinU2 + cosU1 * cosU2 * cosLam;
+			final double sigma = Math.atan2(ss, cs);
+			final double sinAlfa = cosU1 * cosU2 * sinLam / ss;
+			final double cos2Alfa = 1 - sinAlfa * sinAlfa;
+			final double cos2Sm = cos2Alfa == 0 ? 0 : cs - 2 * sinU1 * sinU2 / cos2Alfa;
+			final double c = F / 16 * cos2Alfa * (4 + F * (4 - 3 * cos2Alfa));
+			final double nova = velkeL + (1 - c) * F * sinAlfa * (sigma + c * ss * (cos2Sm + c * cs * (-1 + 2 * cos2Sm * cos2Sm)));
+			final boolean konec = Math.abs(nova - lam) < 1e-13;
+			lam = nova;
+			if (konec) {
+				final double sinLam2 = Math.sin(lam);
+				final double cosLam2 = Math.cos(lam);
+				final double ss2 = Math.hypot(cosU2 * sinLam2, cosU1 * sinU2 - sinU1 * cosU2 * cosLam2);
+				final double cs2 = sinU1 * sinU2 + cosU1 * cosU2 * cosLam2;
+				final double sigma2 = Math.atan2(ss2, cs2);
+				final double sinAlfa2 = cosU1 * cosU2 * sinLam2 / ss2;
+				final double cos2Alfa2 = 1 - sinAlfa2 * sinAlfa2;
+				final double cos2Sm2 = cos2Alfa2 == 0 ? 0 : cs2 - 2 * sinU1 * sinU2 / cos2Alfa2;
+				final double u2k = cos2Alfa2 * (A * A - b * b) / (b * b);
+				final double kA = 1 + u2k / 16384 * (4096 + u2k * (-768 + u2k * (320 - 175 * u2k)));
+				final double kB = u2k / 1024 * (256 + u2k * (-128 + u2k * (74 - 47 * u2k)));
+				final double deltaSigma = kB * ss2 * (cos2Sm2 + kB / 4 * (cs2 * (-1 + 2 * cos2Sm2 * cos2Sm2) - kB / 6 * cos2Sm2 * (-3 + 4 * ss2 * ss2) * (-3 + 4 * cos2Sm2 * cos2Sm2)));
+				return b * kA * (sigma2 - deltaSigma);
+			}
+		}
+		return Double.NaN;
+	}
+
 	/** Sektor 0 až 359: azimut uříznutý dolů na celé stupně. */
 	public static int sektor(final double azimut) {
 		return (int) Math.floor(azimut) % 360;

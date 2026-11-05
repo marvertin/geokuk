@@ -77,6 +77,32 @@ public class GeodezieTest {
 	}
 
 	@Test
+	public void vzdalenostPoElipsoiduSedisVincentymVReferencniUloze() {
+		Assert.assertEquals(54_972.271, Geodezie.vzdalenostElipsoid(-37.95103341, 144.42486789, -37.65282113, 143.92649552), 0.001);
+		Assert.assertEquals(0, Geodezie.vzdalenostElipsoid(50, 14, 50, 14), 0);
+		Assert.assertEquals(111_319.4908, Geodezie.vzdalenostElipsoid(0, 0, 0, 1), 0.001);
+	}
+
+	@Test
+	public void priameAInverzniUlohaSeShodujiNaDlouhychVzdalenostech() {
+		for (final double m : new double[] { 1_000_000, 2_500_000, 5_000_000 }) {
+			for (final double az : new double[] { 20, 100.5, 250 }) {
+				final GeometrieSektoru.Bod b = GeometrieSektoru.bod(50.0875, 14.4208, az, m, GeometrieSektoru.Model.ELIPSOID);
+				Assert.assertEquals(m + " m " + az, m, Geodezie.vzdalenostElipsoid(50.0875, 14.4208, b.lat, b.lon), 0.001);
+				Assert.assertEquals(m + " m " + az, az, Geodezie.azimutElipsoid(50.0875, 14.4208, b.lat, b.lon), 1e-7);
+			}
+		}
+	}
+
+	@Test
+	public void vzdalenostElipsoiduSeVHrubemOdhaduShodujeSKoulemAleNeni_stejna() {
+		final double koule = Geodezie.vzdalenostKoule(50.0875, 14.4208, 50.5, 15.5);
+		final double elipsoid = Geodezie.vzdalenostElipsoid(50.0875, 14.4208, 50.5, 15.5);
+		Assert.assertEquals(koule, elipsoid, koule * 0.005);
+		Assert.assertNotEquals(koule, elipsoid, 1);
+	}
+
+	@Test
 	public void azimutyZPrikladuRuian() throws Exception {
 		int radku = 0;
 		try (java.io.BufferedReader r = new java.io.BufferedReader(
