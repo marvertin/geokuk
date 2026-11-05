@@ -68,6 +68,30 @@ jobs:
                       print('- ⚠️ %s.%s prošel až napodruhé: %s' % (t.get('classname', '').split('.')[-1], t.get('name'), zprava))
           PY
 
+      - name: Odezva EDT do souhrnu
+        if: always() && runner.os != 'macOS'
+        continue-on-error: true
+        shell: bash
+        env:
+          PYTHONIOENCODING: utf-8
+        run: |
+          python - <<'PY' | tee -a "$GITHUB_STEP_SUMMARY"
+          import glob, os
+          print('### Odezva EDT (ms) – ' + os.environ.get('RUNNER_OS', ''))
+          print('| scénář | nejdelší | při startu | při přepnutí vzhledu | událostí ≥ 500 ms | pauzy JVM |')
+          print('|---|---|---|---|---|---|')
+          for f in sorted(glob.glob('target/smoke/*/*.properties')):
+              p = {}
+              with open(f, encoding='utf-8', errors='replace') as h:
+                  for r in h:
+                      if '=' in r and not r.startswith(('#', ' ')):
+                          k, v = r.split('=', 1)
+                          p[k.strip()] = v.strip()
+              if 'edt.nejdelsiMs' in p:
+                  pomalych = sum(1 for k in p if k.startswith('edt.pomala.'))
+                  print('| %s/%s | %s | %s | %s | %d | %s |' % (os.path.basename(os.path.dirname(f)), os.path.basename(f)[:-11], p['edt.nejdelsiMs'], p.get('edt.startMs', ''), p.get('edt.vzhledMs', ''), pomalych, p.get('edt.pauzyJvm', '')))
+          PY
+
       - name: Jednotkové testy
         if: runner.os == 'macOS'
         run: ./mvnw -B test
