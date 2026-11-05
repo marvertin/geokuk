@@ -1,25 +1,37 @@
 package cz.geokuk.plugins.challenge;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Objects;
+
 import cz.geokuk.plugins.kesoid.EKesStatus;
 import cz.geokuk.plugins.kesoid.EKesVztah;
 import cz.geokuk.plugins.kesoid.Kesoid;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.kind.kes.EKesDiffTerRating;
 import cz.geokuk.plugins.kesoid.kind.kes.Kes;
 
 /** Přizpůsobení kešoidu z modelu programu pro výpočet challenge. */
-public final class KesVstup implements VstupKes {
+public final class KesVstup implements VstupKes, VstupDT, VstupKalendar {
 
 	private final Kesoid kesoid;
 	private final Wpt hlavni;
+	private final ZoneId pasmo;
 
-	private KesVstup(final Kesoid kesoid, final Wpt hlavni) {
+	private KesVstup(final Kesoid kesoid, final Wpt hlavni, final ZoneId pasmo) {
 		this.kesoid = kesoid;
 		this.hlavni = hlavni;
+		this.pasmo = pasmo;
 	}
 
 	/** Pro challenge se počítají jen keše z gc.com (kód GC…); jiné kešoidy (OC, waymarky, munzee) a kešoidy bez souřadnic dávají null. */
 	public static KesVstup z(final Kesoid kesoid) {
-		return jeVhodny(kesoid) ? new KesVstup(kesoid, kesoid.getMainWpt()) : null;
+		return z(kesoid, ZoneId.systemDefault());
+	}
+
+	/** Jako {@link #z(Kesoid)}; datum nálezu se zapsané s časovou zónou převádí do pásma uživatele. */
+	public static KesVstup z(final Kesoid kesoid, final ZoneId pasmo) {
+		return jeVhodny(kesoid) ? new KesVstup(kesoid, kesoid.getMainWpt(), Objects.requireNonNull(pasmo, "pasmo")) : null;
 	}
 
 	private static boolean jeVhodny(final Kesoid kesoid) {
@@ -31,28 +43,34 @@ public final class KesVstup implements VstupKes {
 	}
 
 	/** Keše z gc.com ze seznamu kešoidů, vytvářené až při průchodu; kešoidy, které se nepočítají, se přeskočí. */
-	public static java.util.Collection<VstupKes> zKesoidu(final java.util.List<? extends Kesoid> kesoidy) {
-		return new java.util.AbstractCollection<VstupKes>() {
+	public static java.util.Collection<KesVstup> zKesoidu(final java.util.List<? extends Kesoid> kesoidy) {
+		return zKesoidu(kesoidy, ZoneId.systemDefault());
+	}
+
+	/** Jako {@link #zKesoidu(java.util.List)} s pásmem pro datum nálezu. */
+	public static java.util.Collection<KesVstup> zKesoidu(final java.util.List<? extends Kesoid> kesoidy, final ZoneId pasmo) {
+		Objects.requireNonNull(pasmo, "pasmo");
+		return new java.util.AbstractCollection<KesVstup>() {
 			@Override
-			public java.util.Iterator<VstupKes> iterator() {
+			public java.util.Iterator<KesVstup> iterator() {
 				final java.util.Iterator<? extends Kesoid> it = kesoidy.iterator();
-				return new java.util.Iterator<VstupKes>() {
-					private VstupKes dalsi;
+				return new java.util.Iterator<KesVstup>() {
+					private KesVstup dalsi;
 
 					@Override
 					public boolean hasNext() {
 						while (dalsi == null && it.hasNext()) {
-							dalsi = z(it.next());
+							dalsi = z(it.next(), pasmo);
 						}
 						return dalsi != null;
 					}
 
 					@Override
-					public VstupKes next() {
+					public KesVstup next() {
 						if (!hasNext()) {
 							throw new java.util.NoSuchElementException();
 						}
-						final VstupKes v = dalsi;
+						final KesVstup v = dalsi;
 						dalsi = null;
 						return v;
 					}
@@ -112,7 +130,7 @@ public final class KesVstup implements VstupKes {
 	private static final java.util.Set<String> MIMO_KANDIDATY = new java.util.HashSet<>(java.util.Arrays.asList("gps adventures exhibit", "community celebration event",
 			"lost and found event caches", "giga-event cache"));
 
-	/** Typ keše podle gc.com (hlavní waypoint ho nese v symbolu). */
+	/** Typ keše podle gc.com (hlavní waypoint ho nese v symbolu); u nalezených keší z GeoGetu a GSAKu je symbol „Geocache Found“, takže typ nezná. */
 	private String typ() {
 		final String sym = hlavni.getSym();
 		return sym == null ? "" : sym.trim().toLowerCase(java.util.Locale.ROOT);
@@ -136,5 +154,34 @@ public final class KesVstup implements VstupKes {
 	@Override
 	public StavLogu logNaGc() {
 		return StavLogu.NEZNAMY;
+	}
+
+	@Override
+	public int obtiznost() {
+		final EKesDiffTerRating r = ((Kes) kesoid).getDifficulty();
+		return r == null ? -1 : r.ordinal();
+	}
+
+	@Override
+	public int teren() {
+		final EKesDiffTerRating r = ((Kes) kesoid).getTerrain();
+		return r == null ? -1 : r.ordinal();
+	}
+
+	/** Datum nálezu, jen u nalezené keše. */
+	@Override
+	public LocalDate datumNalezu() {
+		return nalezena() ? DatumyKese.datum(((Kes) kesoid).getFountTime(), pasmo) : null;
+	}
+
+	@Override
+	public LocalDate datum() {
+		return DatumyKese.datum(kesoid.getHidden(), null);
+	}
+
+	@Override
+	public boolean event() {
+		final String t = typ();
+		return t.contains("event") || t.startsWith("geocaching hq");
 	}
 }

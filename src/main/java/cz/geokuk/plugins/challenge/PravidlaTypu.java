@@ -57,6 +57,6 @@ public final class PravidlaTypu {
 
 	/** Nenalezená keš, kterou lze jít hledat. */
 	static boolean hledatelna(final VstupKes k) {
-		return !k.nalezena() && !k.vlastni() && !k.neaktivni();
+		return !k.nalezena() && !k.vlastni() && !k.neaktivni() && !k.mimoKandidaty();
 	}
 }

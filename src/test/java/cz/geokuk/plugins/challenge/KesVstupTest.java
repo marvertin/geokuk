@@ -1,11 +1,15 @@
 package cz.geokuk.plugins.challenge;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.plugins.kesoid.EKesVztah;
 import cz.geokuk.plugins.kesoid.Wpt;
+import cz.geokuk.plugins.kesoid.kind.kes.EKesDiffTerRating;
 import cz.geokuk.plugins.kesoid.kind.kes.Kes;
 
 public class KesVstupTest {
@@ -110,13 +114,109 @@ public class KesVstupTest {
 		v.add(kes("OC1", EKesVztah.FOUND, "Geocache", 50.1, 14.2));
 		v.add(kes("GC2", EKesVztah.NORMAL, "Geocache", 0, 0));
 		v.add(kes("GC3", EKesVztah.NORMAL, "Geocache", 50.2, 14.3));
-		final java.util.Collection<VstupKes> sbirka = KesVstup.zKesoidu(v);
+		final java.util.Collection<KesVstup> sbirka = KesVstup.zKesoidu(v);
 		int projito = 0;
-		for (final VstupKes k : sbirka) {
+		for (final KesVstup k : sbirka) {
 			Assert.assertNotNull(k.id());
 			projito++;
 		}
 		Assert.assertEquals(2, projito);
 		Assert.assertEquals(2, sbirka.size());
+	}
+
+	private static Kes kesDT(final String id, final EKesVztah vztah, final String sym, final EKesDiffTerRating d, final EKesDiffTerRating t) {
+		final Kes k = kes(id, vztah, sym, 50.1, 14.2);
+		k.setDifficulty(d);
+		k.setTerrain(t);
+		return k;
+	}
+
+	@Test
+	public void obtiznostATerenPoPulkach() {
+		final KesVstup v = KesVstup.z(kesDT("GC1", EKesVztah.NORMAL, "Traditional Cache", EKesDiffTerRating.FOUR, EKesDiffTerRating.ONE));
+		Assert.assertEquals(6, v.obtiznost());
+		Assert.assertEquals(0, v.teren());
+		final KesVstup kraj = KesVstup.z(kesDT("GC1", EKesVztah.NORMAL, "Traditional Cache", EKesDiffTerRating.FIVE, EKesDiffTerRating.ONE_HALF));
+		Assert.assertEquals(8, kraj.obtiznost());
+		Assert.assertEquals(1, kraj.teren());
+		Assert.assertEquals("D4/T1", VypocetMatice.stitek(v.obtiznost(), v.teren()));
+	}
+
+	@Test
+	public void neznamaNeboChybejiciObtiznostJeMimoRozsah() {
+		final KesVstup nezname = KesVstup.z(kesDT("GC1", EKesVztah.NORMAL, "Traditional Cache", EKesDiffTerRating.UNKNOWN, EKesDiffTerRating.UNKNOWN));
+		Assert.assertTrue(nezname.obtiznost() < 0 || nezname.obtiznost() > 8);
+		Assert.assertTrue(nezname.teren() < 0 || nezname.teren() > 8);
+		final KesVstup chybi = KesVstup.z(kes("GC2", EKesVztah.NORMAL, "Traditional Cache", 50.1, 14.2));
+		Assert.assertEquals(-1, chybi.obtiznost());
+		Assert.assertEquals(-1, chybi.teren());
+	}
+
+	@Test
+	public void datumNalezuJenUNalezeneKesePodlePasma() {
+		final Kes nalezena = kes("GC1", EKesVztah.FOUND, "Geocache Found", 50.1, 14.2);
+		nalezena.setFoundTime("2026-03-14T23:30:00Z");
+		Assert.assertEquals(LocalDate.of(2026, 3, 15), KesVstup.z(nalezena, ZoneId.of("Europe/Prague")).datumNalezu());
+		Assert.assertEquals(LocalDate.of(2026, 3, 14), KesVstup.z(nalezena, ZoneId.of("UTC")).datumNalezu());
+		final Kes nenalezena = kes("GC2", EKesVztah.NORMAL, "Traditional Cache", 50.1, 14.2);
+		nenalezena.setFoundTime("2026-03-14T23:30:00Z");
+		Assert.assertNull(KesVstup.z(nenalezena).datumNalezu());
+		Assert.assertNull("bez data", KesVstup.z(kes("GC3", EKesVztah.FOUND, "Geocache Found", 50.1, 14.2)).datumNalezu());
+	}
+
+	@Test
+	public void datumNalezuNenalezeneKeseJeNullIKdyzJeVyplneno() {
+		for (final EKesVztah vztah : new EKesVztah[] { EKesVztah.NORMAL, EKesVztah.OWN }) {
+			final Kes k = kes("GC1", vztah, "Traditional Cache", 50.1, 14.2);
+			k.setFoundTime("2026-03-14");
+			Assert.assertNull(vztah.name(), KesVstup.z(k, ZoneId.of("UTC")).datumNalezu());
+		}
+		final Kes nalezena = kes("GC2", EKesVztah.FOUND, "Geocache Found", 50.1, 14.2);
+		nalezena.setFoundTime("2026-03-14");
+		Assert.assertEquals(LocalDate.of(2026, 3, 14), KesVstup.z(nalezena, ZoneId.of("UTC")).datumNalezu());
+	}
+
+	@Test
+	public void datumZverejneniABezPasma() {
+		final Kes k = kes("GC1", EKesVztah.NORMAL, "Event Cache", 50.1, 14.2);
+		k.setHidden("2026-12-24T23:30:00Z");
+		Assert.assertEquals("datum zveřejnění se nepřevádí", LocalDate.of(2026, 12, 24), KesVstup.z(k, ZoneId.of("Asia/Tokyo")).datum());
+		Assert.assertNull(KesVstup.z(kes("GC2", EKesVztah.NORMAL, "Event Cache", 50.1, 14.2)).datum());
+	}
+
+	@Test
+	public void eventPoznaPodleTypu() {
+		for (final String typ : new String[] { "Event Cache", "Cache In Trash Out Event", "Mega-Event Cache", "Giga-Event Cache", "Community Celebration Event", "Geocaching HQ Celebration",
+				"Lost and Found Event Caches" }) {
+			Assert.assertTrue(typ, KesVstup.z(kes("GC1", EKesVztah.NORMAL, typ, 50.1, 14.2)).event());
+		}
+		for (final String typ : new String[] { "Traditional Cache", "Multi-cache", "Lab Cache", "Locationless Cache", "Webcam Cache" }) {
+			Assert.assertFalse(typ, KesVstup.z(kes("GC1", EKesVztah.NORMAL, typ, 50.1, 14.2)).event());
+		}
+		Assert.assertFalse(KesVstup.z(kes("GC1", EKesVztah.NORMAL, null, 50.1, 14.2)).event());
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void nullPasmo() {
+		KesVstup.z(kes("GC1", EKesVztah.NORMAL, "Traditional Cache", 50.1, 14.2), null);
+	}
+
+	@Test
+	public void celyRetezKesVypocetKalendareAMatice() {
+		final Kes nalezena = kesDT("GC1", EKesVztah.FOUND, "Geocache Found", EKesDiffTerRating.TWO, EKesDiffTerRating.TWO);
+		nalezena.setFoundTime("2026-03-14");
+		final Kes event = kesDT("GC2", EKesVztah.NORMAL, "Event Cache", EKesDiffTerRating.ONE, EKesDiffTerRating.ONE);
+		event.setHidden("2026-12-24T07:00:00Z");
+		final Kes mimo = kesDT("GC3", EKesVztah.NORMAL, "Giga-Event Cache", EKesDiffTerRating.ONE, EKesDiffTerRating.ONE);
+		mimo.setHidden("2026-12-25T07:00:00Z");
+		final java.util.List<cz.geokuk.plugins.kesoid.Kesoid> kese = java.util.Arrays.<cz.geokuk.plugins.kesoid.Kesoid> asList(nalezena, event, mimo);
+		final VysledekPolicek kal = VypocetKalendare.spocti(PravidlaKalendare.vychozi(), LocalDate.of(2026, 11, 5), 50, 14, KesVstup.zKesoidu(kese));
+		Assert.assertEquals(364, kal.pocetChybejicich());
+		Assert.assertEquals(1, kal.kandidati().size());
+		Assert.assertEquals("GC2", kal.kandidati().get(0).id());
+		final VysledekPolicek mat = VypocetMatice.spocti(PravidlaTypu.proMatici(), 50, 14, KesVstup.zKesoidu(kese));
+		Assert.assertEquals(80, mat.pocetChybejicich());
+		Assert.assertEquals("typ mimo kandidáty se nenabízí", 1, mat.kandidati().size());
+		Assert.assertEquals("D1/T1", mat.kandidati().get(0).stitek());
 	}
 }
