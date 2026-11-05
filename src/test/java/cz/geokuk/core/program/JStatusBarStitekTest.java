@@ -79,4 +79,18 @@ public class JStatusBarStitekTest {
 		radek.onEvent(new StavVrstevEvent(StavVrstev.prazdny().s(VrstvaNadMapou.OBSAZENOST, DuvodNekresleni.POLOMER_PRILIS_MALY, 0)));
 		Assert.assertEquals("plovoucí štítek neposouvá ostatní a nezvětšuje řádek", pred, layout.sirkaVJednomRadku(radek));
 	}
+
+	@Test
+	public void smisenyStavMaStitekSkrytyAOmezeny() throws Exception {
+		Assume.assumeFalse("bez displeje", GraphicsEnvironment.isHeadless());
+		final JStatusBar radek = new JStatusBar();
+		final JLabel s = stitek(radek);
+		radek.onEvent(new StavVrstevEvent(StavVrstev.prazdny().s(VrstvaNadMapou.OBSAZENOST, DuvodNekresleni.POLOMER_PRILIS_MALY, 0).sVynechanymi(5, 2000)));
+		Assert.assertTrue(s.isVisible());
+		Assert.assertEquals("Kruhy skryté a omezené", s.getText());
+		Assert.assertTrue(s.getToolTipText(), s.getToolTipText().contains("Obsazenost (F9)"));
+		Assert.assertTrue(s.getToolTipText(), s.getToolTipText().contains("kresleno jen 2000 nejbližších"));
+		radek.onEvent(new StavVrstevEvent(StavVrstev.prazdny().sVynechanymi(5, 2000)));
+		Assert.assertEquals("po zobrazení Obsazenosti zůstane jen omezení", "Kruhy omezené", s.getText());
+	}
 }

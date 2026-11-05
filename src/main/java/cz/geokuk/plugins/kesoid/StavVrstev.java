@@ -11,6 +11,7 @@ public final class StavVrstev {
 
 	public static final String TEXT_STITKU = "Kruhy skryté";
 	public static final String TEXT_STITKU_OMEZENO = "Kruhy omezené";
+	public static final String TEXT_STITKU_SKRYTO_A_OMEZENO = "Kruhy skryté a omezené";
 
 	/** Skrytá vrstva: důvod a limit, o který šlo (u limitu počtu). */
 	public static final class Skryta {
@@ -117,7 +118,10 @@ public final class StavVrstev {
 
 	/** Text štítku ve stavovém řádku. */
 	public String text() {
-		return maSkryte() ? TEXT_STITKU : TEXT_STITKU_OMEZENO;
+		if (maSkryte()) {
+			return vynechanychKruhu > 0 ? TEXT_STITKU_SKRYTO_A_OMEZENO : TEXT_STITKU;
+		}
+		return TEXT_STITKU_OMEZENO;
 	}
 
 	/** Tooltip štítku: řádek pro každou skrytou vrstvu s důvodem. */

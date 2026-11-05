@@ -9,9 +9,10 @@
 - Když jsou zapnuté kruhy (zvýrazňovací, v metrech, Obsazenost) a nejsou vidět,
   ve stavovém řádku se ukáže štítek Kruhy skryté; v bublině je u každé vrstvy
   důvod a co udělat. Když se kruhy v metrech kreslí jen částečně (nejbližší ke
-  středu výřezu), je tam štítek Kruhy omezené. Po zkratkách, jejichž
-  výsledek není vidět (F5, F9 při malém přiblížení, Alt+F8, Ctrl+1 až Ctrl+4,
-  skryté kruhy), se vlevo dole nad mapou na chvíli ukáže krátká zpráva.
+  středu výřezu), je tam štítek Kruhy omezené, a když je zároveň něco skryté
+  a něco omezené, Kruhy skryté a omezené. Po zkratkách, jejichž výsledek není
+  vidět (F5, F9 při malém přiblížení, Alt+F8, Ctrl+1 až Ctrl+4, skryté kruhy),
+  se vlevo dole nad mapou na chvíli ukáže krátká zpráva.
 - Posuvníky kruhů Obsazenost 161 m jsou tenké; při najetí myší, tažení nebo
   změně kolečkem se plynule ukážou nadpisy Barva a Průhlednost, popisky os
   (bílá, šedá, černá; průhlednost po 25 %) a bublinka s aktuální hodnotou v

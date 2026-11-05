@@ -199,7 +199,7 @@ public class StavVrstevTest {
 		Assert.assertTrue(s.tooltip(), s.tooltip().contains("kresleno jen 12 nejbližších"));
 		Assert.assertSame("bez vynechaných je stav zase prázdný", StavVrstev.prazdny(), s.sVynechanymi(0, 12));
 		final StavVrstev oboji = s.s(F9, DuvodNekresleni.POLOMER_PRILIS_MALY, 0);
-		Assert.assertEquals("Kruhy skryté", oboji.text());
+		Assert.assertEquals("smíšený stav: něco skryté, něco omezené", "Kruhy skryté a omezené", oboji.text());
 		Assert.assertEquals(2, oboji.tooltip().split("<br/>").length);
 		Assert.assertNotEquals(s, StavVrstev.prazdny().sVynechanymi(6, 12));
 	}
@@ -233,5 +233,19 @@ public class StavVrstevTest {
 		Assert.assertTrue(t, t.contains("Kruhy v metrech (Alt+F8): poloměr pod 3 px, přibližte mapu"));
 		Assert.assertFalse(t, t.contains("Jednotkové"));
 		Assert.assertTrue(StavVrstev.prazdny().sVynechanymi(2, 7).tooltip().contains("Kruhy v metrech: kresleno jen 7 nejbližších"));
+	}
+
+	@Test
+	public void textStitkuPodlePritomnostiSkrytychAOmezenych() {
+		final StavVrstev skryto = StavVrstev.prazdny().s(F9, DuvodNekresleni.POLOMER_PRILIS_MALY, 0);
+		Assert.assertEquals("jen skryté", "Kruhy skryté", skryto.text());
+		Assert.assertEquals("jen omezené", "Kruhy omezené", StavVrstev.prazdny().sVynechanymi(3, 40).text());
+		Assert.assertEquals("obojí v jednom pořadí", "Kruhy skryté a omezené", skryto.sVynechanymi(3, 40).text());
+		Assert.assertEquals("obojí v druhém pořadí", "Kruhy skryté a omezené", StavVrstev.prazdny().sVynechanymi(3, 40).s(F9, DuvodNekresleni.POLOMER_PRILIS_MALY, 0).text());
+		Assert.assertEquals("po skončení omezení zůstane jen skryté", "Kruhy skryté", skryto.sVynechanymi(3, 40).sVynechanymi(0, 0).text());
+		Assert.assertEquals("po zobrazení skryté vrstvy zůstane jen omezené", "Kruhy omezené", skryto.sVynechanymi(3, 40).s(F9, DuvodNekresleni.KRESLI, 0).text());
+		final String tooltip = skryto.sVynechanymi(3, 2000).tooltip();
+		Assert.assertTrue(tooltip, tooltip.contains("Obsazenost (F9): nezobrazuje se v tak malém měřítku, přibližte mapu"));
+		Assert.assertTrue(tooltip, tooltip.contains("Kruhy v metrech: kresleno jen 2000 nejbližších ke středu"));
 	}
 }
