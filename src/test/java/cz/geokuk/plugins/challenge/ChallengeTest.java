@@ -51,7 +51,7 @@ public class ChallengeTest {
 		Assert.assertEquals("360° of Prague", c.nazev());
 		Assert.assertEquals("GC56R49", c.stred().kodListingu());
 		Assert.assertEquals(DruhOblasti.SADA, c.oblast().druh());
-		Assert.assertEquals(java.util.Arrays.asList("okres-praha", "okres-praha-vychod", "okres-praha-zapad"), c.oblast().idOblasti());
+		Assert.assertEquals(java.util.Collections.singletonList("praha"), c.oblast().idOblasti());
 	}
 
 	@Test

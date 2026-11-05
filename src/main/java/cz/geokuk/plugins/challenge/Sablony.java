@@ -14,9 +14,8 @@ public final class Sablony {
 
 	/** Označení oblastí v {@link PoskytovatelOblasti}. */
 	public static final String STAT_CESKO = "stat-cz";
-	public static final String PRAHA = "okres-praha";
-	public static final String PRAHA_VYCHOD = "okres-praha-vychod";
-	public static final String PRAHA_ZAPAD = "okres-praha-zapad";
+	/** Hlavní město Praha a okresy Praha-východ a Praha-západ jako jeden obrys. */
+	public static final String PRAHA = "praha";
 
 	private Sablony() {}
 
@@ -31,7 +30,7 @@ public final class Sablony {
 
 	/** GC56R49: střed je výchozí bod listingu, oblast hl. m. Praha a okresy Praha-východ a Praha-západ. */
 	public static Challenge praha360() {
-		return new Challenge("360° of Prague", Typ.SEKTORY_360, Stred.listing("GC56R49"), OblastDef.sada(PRAHA, PRAHA_VYCHOD, PRAHA_ZAPAD), ZdrojPravidel.PGC);
+		return new Challenge("360° of Prague", Typ.SEKTORY_360, Stred.listing("GC56R49"), OblastDef.sada(PRAHA), ZdrojPravidel.PGC);
 	}
 
 	public static List<Challenge> vse() {

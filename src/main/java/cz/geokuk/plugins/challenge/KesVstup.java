@@ -108,23 +108,33 @@ public final class KesVstup implements VstupKes {
 		return kesoid.getStatus() != EKesStatus.ACTIVE;
 	}
 
+	/** Typy, které se zatím nenabízejí jako kandidáti na chybějící sektor; nálezy se počítají normálně. */
+	private static final java.util.Set<String> MIMO_KANDIDATY = new java.util.HashSet<>(java.util.Arrays.asList("gps adventures exhibit", "community celebration event",
+			"lost and found event caches", "giga-event cache"));
+
+	/** Typ keše podle gc.com (hlavní waypoint ho nese v symbolu). */
+	private String typ() {
+		final String sym = hlavni.getSym();
+		return sym == null ? "" : sym.trim().toLowerCase(java.util.Locale.ROOT);
+	}
+
 	@Override
 	public boolean lab() {
-		return symbolObsahuje("lab");
+		return "lab cache".equals(typ());
 	}
 
 	@Override
 	public boolean locationless() {
-		return symbolObsahuje("locationless");
+		return typ().startsWith("locationless");
+	}
+
+	@Override
+	public boolean mimoKandidaty() {
+		return MIMO_KANDIDATY.contains(typ());
 	}
 
 	@Override
 	public StavLogu logNaGc() {
 		return StavLogu.NEZNAMY;
-	}
-
-	private boolean symbolObsahuje(final String text) {
-		final String sym = hlavni.getSym();
-		return sym != null && sym.toLowerCase(java.util.Locale.ROOT).contains(text);
 	}
 }

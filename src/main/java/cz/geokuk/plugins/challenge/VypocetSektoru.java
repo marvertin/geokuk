@@ -147,7 +147,7 @@ public final class VypocetSektoru {
 				} else {
 					soused.set(c.nejistota() == Klasifikace.NEJISTY_DOLU ? (s + 359) % 360 : (s + 1) % 360);
 				}
-			} else if (!k.vlastni() && !k.neaktivni()) {
+			} else if (!k.vlastni() && !k.neaktivni() && !k.mimoKandidaty()) {
 				final Klasifikace c = klasifikator.klasifikuj(k);
 				if (c.jeVOblasti()) {
 					nenalezene.add(k);

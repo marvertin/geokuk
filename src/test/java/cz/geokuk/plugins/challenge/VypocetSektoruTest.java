@@ -28,6 +28,7 @@ public class VypocetSektoruTest {
 		boolean locationless;
 		boolean vlastni;
 		boolean neaktivni;
+		boolean mimoKandidaty;
 		StavLogu log = StavLogu.NEZNAMY;
 
 		Kes(final String id, final double lat, final double lon, final boolean nalezena) {
@@ -35,6 +36,11 @@ public class VypocetSektoruTest {
 			this.lat = lat;
 			this.lon = lon;
 			this.nalezena = nalezena;
+		}
+
+		@Override
+		public boolean mimoKandidaty() {
+			return mimoKandidaty;
 		}
 
 		@Override
@@ -335,5 +341,28 @@ public class VypocetSektoruTest {
 		final int s = Geodezie.sektor(Geodezie.azimutKoule(50, 14, -49.9, -166.2));
 		Assert.assertTrue(v.jeObsazeny(s));
 		Assert.assertTrue("sektor z náhradní koule je nejistý", v.jeNejisty(s));
+	}
+
+	@Test
+	public void typMimoKandidatyNeniKandidatAleNalezSePocita() {
+		final List<Kes> kese = new ArrayList<>();
+		for (int s = 0; s < 360; s++) {
+			if (s != 100 && s != 200) {
+				kese.add(vAzimutu("N" + s, s + 0.5, 20_000, true));
+			}
+		}
+		final Kes exhibit = vAzimutu("EXH", 100.5, 10_000, false);
+		exhibit.mimoKandidaty = true;
+		final Kes bezne = vAzimutu("OK", 200.5, 10_000, false);
+		final Kes nalezenyGiga = vAzimutu("GIGA", 100.5, 15_000, true);
+		nalezenyGiga.mimoKandidaty = true;
+		kese.add(exhibit);
+		kese.add(bezne);
+		VysledekSektoru v = VypocetSektoru.spocti(ZdrojPravidel.PGC, LAT, LON, null, Collections.<String> emptySet(), kese);
+		Assert.assertNull("exhibit není kandidát", v.kandidati(100));
+		Assert.assertEquals("OK", v.kandidati(200).nejblizsiId());
+		kese.add(nalezenyGiga);
+		v = VypocetSektoru.spocti(ZdrojPravidel.PGC, LAT, LON, null, Collections.<String> emptySet(), kese);
+		Assert.assertFalse("nález tohoto typu sektor zaplní", v.chybejici().contains(100));
 	}
 }

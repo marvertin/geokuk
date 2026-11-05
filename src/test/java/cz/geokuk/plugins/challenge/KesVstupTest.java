@@ -43,7 +43,26 @@ public class KesVstupTest {
 	public void labALocationlessPoznaPodleSymbolu() {
 		Assert.assertTrue(KesVstup.z(kes("GCLAB1", EKesVztah.FOUND, "Lab Cache", 50.1, 14.2)).lab());
 		Assert.assertTrue(KesVstup.z(kes("GC9", EKesVztah.FOUND, "Locationless Cache", 50.1, 14.2)).locationless());
+		Assert.assertTrue(KesVstup.z(kes("GC9", EKesVztah.FOUND, "Locationless (Reverse) Cache", 50.1, 14.2)).locationless());
 		Assert.assertFalse(KesVstup.z(kes("GC9", EKesVztah.FOUND, null, 50.1, 14.2)).locationless());
+	}
+
+	@Test
+	public void labPoznaPodleTypuNeDleKodu() {
+		Assert.assertTrue(KesVstup.z(kes("GC12345", EKesVztah.FOUND, "Lab Cache", 50.1, 14.2)).lab());
+		Assert.assertTrue(KesVstup.z(kes("GCABC-1", EKesVztah.FOUND, " lab cache ", 50.1, 14.2)).lab());
+		Assert.assertFalse("kód s pomlčkou nestačí", KesVstup.z(kes("GCABC-1", EKesVztah.FOUND, "Traditional Cache", 50.1, 14.2)).lab());
+		Assert.assertFalse("slovo lab v jiném typu", KesVstup.z(kes("GC1", EKesVztah.FOUND, "Collab Cache", 50.1, 14.2)).lab());
+	}
+
+	@Test
+	public void typyMimoKandidatyAleSeNalezyPocitaji() {
+		for (final String typ : new String[] { "GPS Adventures Exhibit", "Community Celebration Event", "Lost and Found Event Caches", "Giga-Event Cache" }) {
+			Assert.assertTrue(typ, KesVstup.z(kes("GC7", EKesVztah.NORMAL, typ, 50.1, 14.2)).mimoKandidaty());
+		}
+		Assert.assertFalse(KesVstup.z(kes("GC7", EKesVztah.NORMAL, "Traditional Cache", 50.1, 14.2)).mimoKandidaty());
+		Assert.assertFalse(KesVstup.z(kes("GC7", EKesVztah.NORMAL, "Mega-Event Cache", 50.1, 14.2)).mimoKandidaty());
+		Assert.assertFalse(KesVstup.z(kes("GC7", EKesVztah.NORMAL, null, 50.1, 14.2)).mimoKandidaty());
 	}
 
 	@Test

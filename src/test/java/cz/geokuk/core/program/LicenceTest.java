@@ -9,6 +9,7 @@ public class LicenceTest {
 	public void programObsahujeLicenciASeznamKnihoven() {
 		final String text = JOProgramuDialog.textLicence().replace("\r\n", "\n");
 		Assert.assertTrue(text.contains("SQLJet"));
+		Assert.assertTrue(text.contains("© ČÚZK, RÚIAN, licence CC BY 4.0"));
 		Assert.assertTrue(text.contains("Sun Microsystems"));
 		Assert.assertTrue(text.contains("Copyright (c) 1995 - 2008 Sun Microsystems"));
 		Assert.assertTrue(text.contains("GNU GENERAL PUBLIC LICENSE"));

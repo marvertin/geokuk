@@ -21,6 +21,7 @@ Program obsahuje tyto knihovny, každá je pod svou licencí:
 | mapsforge (core, map, map-reader, map-awt, themes) | 0.25.0 | LGPL 3 nebo novější (bez §4(d), §4(e)) |
 | SVG Salamander                             | 1.1.3       | BSD                                        |
 | kXML 2 (s rozhraním XmlPull)               | 2.3.0       | MIT; XmlPull je volné dílo                 |
+| Hranice ČR a Prahy (RÚIAN, ČÚZK)           | 2026-11-05  | CC BY 4.0                                  |
 
 SQLJet je nabízen pod GPL 2 nebo pod GPL 3 a novější (v jeho jaru jsou
 oba texty); GeoKuk ho užívá pod GPL 3 a novější.
@@ -686,3 +687,10 @@ GNU Lesser General Public License 2.1 (Logback):
   That's all there is to it!
 
 Zdrojový kód GeoKuku: https://github.com/geokuk-community/geokuk
+
+Hranice České republiky a okresů Praha, Praha-východ a Praha-západ
+(soubor oblasti-ruian.txt): © ČÚZK, RÚIAN, licence CC BY 4.0
+(https://creativecommons.org/licenses/by/4.0/deed.cs), zdroj dat
+https://ags.cuzk.gov.cz/opendata/. Zjednodušeno: Praha sloučena s okresy
+do jednoho obrysu, zjednodušení Douglasovým–Peuckerovým algoritmem
+(stát 25 m, Praha 10 m), zaokrouhleno na 1e-5°.

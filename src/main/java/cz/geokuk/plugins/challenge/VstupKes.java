@@ -28,6 +28,11 @@ public interface VstupKes {
 		return false;
 	}
 
+	/** Typ, který se nenabízí jako kandidát na chybějící sektor (nález se počítá). */
+	default boolean mimoKandidaty() {
+		return false;
+	}
+
 	/** Má nález na gc.com log Found it, Attended nebo Webcam Photo Taken. */
 	StavLogu logNaGc();
 

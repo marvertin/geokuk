@@ -1,0 +1,9 @@
+# stred_lat stred_lon bod_lat bod_lon azimut_sfericky_stupne(0.001) sektor(floor) poznamka
+# Sferický azimut po velké kružnici, R = 6371 km (na R azimut nezávisí); odpovídá výpočtu Project-GC. Sektor = floor(azimut) pro 0..359.
+50.079767 14.429733 50.087000 14.420800 321.607 321 Praha, Staré Město
+50.079767 14.429733 50.150000 14.600000 57.183 57 sev-vych
+50.079767 14.429733 49.950000 14.350000 201.576 201 jih-zapad
+49.743750 15.338633 50.075500 14.437800 300.107 300 Praha (CR stred)
+49.743750 15.338633 49.593800 17.250900 96.179 96 Olomouc
+49.743750 15.338633 48.974500 14.474300 216.526 216 Ceske Budejovice
+49.743750 15.338633 50.230000 12.870000 287.975 287 Karlovy Vary
