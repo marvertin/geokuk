@@ -159,7 +159,7 @@
   minuty zkusí znovu.
 - Menu Téma offline mapy se otevře hned, i když jsou témata na pomalém disku.
 - Informace pro hlášení chyby rozliší uspání počítače od záseku programu.
-- Informace pro hlášení chyby neobsahují parametry adres z logu.
+- Informace pro hlášení chyby neobsahují z adres v logu parametry ani přihlašovací údaje.
 - Informace pro hlášení chyby uvádějí údaje o offline mapách, počet zobrazených
   dlaždic od spuštění a odhad kreditů při načítání z API; okno je větší a jde
   měnit.
