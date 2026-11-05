@@ -1,10 +1,14 @@
 package cz.geokuk.plugins.mapy.kachle.podklady;
 
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.*;
 
@@ -67,30 +71,72 @@ public class KachloDownloaderSpojeniTest {
 		Assert.assertEquals(String.valueOf(KachleZiskavac.NTHREADS_WEB_CORE_ONLINE + KachleZiskavac.NTHREADS_WEB_MAXIMUM_BACTH), System.getProperty("http.maxConnections"));
 	}
 
+	/** Velká chybová odpověď: server pošle 300 kB z deklarovaných 100 MB a dál mlčí, dokud klient spojení nezavře. */
 	@Test(timeout = 20000)
 	public void velkaChybovaOdpovedNeblokujeAConnectionSeZavre() throws Exception {
-		final List<Integer> porty = Collections.synchronizedList(new ArrayList<>());
-		final byte[] velke = new byte[300 * 1024];
-		server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
-		server.createContext("/", ex -> {
-			porty.add(ex.getRemoteAddress().getPort());
-			ex.sendResponseHeaders(500, velke.length);
-			try (OutputStream out = ex.getResponseBody()) {
-				out.write(velke);
-			} catch (final java.io.IOException e) {
-				// klient spojení zavřel dřív, než dostal celé tělo
-			}
-		});
-		server.start();
-		for (int i = 0; i < 2; i++) {
+		final byte[] zacatek = new byte[300 * 1024];
+		final AtomicInteger spojeni = new AtomicInteger();
+		final CountDownLatch zavrena = new CountDownLatch(2);
+		final List<Socket> otevrena = Collections.synchronizedList(new ArrayList<>());
+		try (ServerSocket ss = new ServerSocket(0, 50, InetAddress.getByName("127.0.0.1"))) {
+			final Thread prijimac = new Thread(() -> {
+				try {
+					while (true) {
+						final Socket so = ss.accept();
+						otevrena.add(so);
+						spojeni.incrementAndGet();
+						final Thread obsluha = new Thread(() -> obsluz(so, zacatek, zavrena), "test-spojeni");
+						obsluha.setDaemon(true);
+						obsluha.start();
+					}
+				} catch (final java.io.IOException e) {
+					// server se zavřel
+				}
+			}, "test-prijimac");
+			prijimac.setDaemon(true);
+			prijimac.start();
 			try {
-				new KachloDownloader().downloadImage(new URL("http://127.0.0.1:" + server.getAddress().getPort() + "/1/2/3.png"));
-				Assert.fail();
-			} catch (final KachloDownloader.ChybaServeru e) {
-				Assert.assertEquals(500, e.getKod());
+				for (int i = 0; i < 2; i++) {
+					try {
+						new KachloDownloader().downloadImage(new URL("http://127.0.0.1:" + ss.getLocalPort() + "/1/2/3.png"));
+						Assert.fail();
+					} catch (final KachloDownloader.ChybaServeru e) {
+						Assert.assertEquals(500, e.getKod());
+					}
+				}
+				Assert.assertTrue("klient oba rozečtené odpovědi zavřel", zavrena.await(10, TimeUnit.SECONDS));
+				Assert.assertEquals("nedočtené spojení se nevrací do keep-alive, druhý požadavek otevřel nové", 2, spojeni.get());
+			} finally {
+				synchronized (otevrena) {
+					for (final Socket so : otevrena) {
+						so.close();
+					}
+				}
 			}
 		}
-		Assert.assertEquals(2, new HashSet<>(porty).size());
+	}
+
+	/** Přečte požadavek, odpoví začátkem těla a čeká, až klient spojení zavře. */
+	private static void obsluz(final Socket so, final byte[] zacatek, final CountDownLatch zavrena) {
+		try (Socket s = so) {
+			final java.io.InputStream in = s.getInputStream();
+			int konec = 0;
+			int c;
+			while (konec < 4 && (c = in.read()) >= 0) {
+				konec = c == '\r' || c == '\n' ? konec + 1 : 0;
+			}
+			final OutputStream out = s.getOutputStream();
+			out.write("HTTP/1.1 500 Chyba\r\nContent-Length: 104857600\r\n\r\n".getBytes(java.nio.charset.StandardCharsets.US_ASCII));
+			out.write(zacatek);
+			out.flush();
+			while (in.read() >= 0) {
+				// klient dál nic neposílá; čeká se na zavření
+			}
+		} catch (final java.io.IOException e) {
+			// klient spojení zavřel
+		} finally {
+			zavrena.countDown();
+		}
 	}
 
 	@Test

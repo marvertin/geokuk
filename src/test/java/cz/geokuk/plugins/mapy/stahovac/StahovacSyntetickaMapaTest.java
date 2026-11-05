@@ -115,6 +115,12 @@ public class StahovacSyntetickaMapaTest {
 			protected MyPreferences currPrefe() {
 				return pref;
 			}
+
+			// Zápis na disk zapnutý jako ve výchozím nastavení; asynchronní úlohy po testu tak nesahají do už smazaných Preferences.
+			@Override
+			public boolean isUkladatMapyNaDisk() {
+				return true;
+			}
 		};
 		kachleModel.inject(ziskavac);
 		ziskavac.inject(kachleModel);
