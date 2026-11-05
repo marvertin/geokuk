@@ -114,6 +114,11 @@ public final class Predpocet {
 		vlakno.shutdownNow();
 	}
 
+	/** Pro test: vlákno předpočtu je ukončené. */
+	boolean jeZavreno() {
+		return vlakno.isShutdown();
+	}
+
 	private Path soubor() {
 		final CRC32 crc = new CRC32();
 		crc.update(klic.getBytes(StandardCharsets.UTF_8));

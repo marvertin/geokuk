@@ -41,7 +41,7 @@ public final class Challenge {
 	public enum ZdrojeNalezu {
 		/** Nálezy ze zapnutých zdrojů dat, tedy to, co uživatel vidí. */
 		ZAPNUTE,
-		/** Nálezy ze všech načtených zdrojů, i vypnutých. */
+		/** Nálezy ze všech načtených zdrojů, i vypnutých; zatím bez účinku, protože načtená data vypnuté zdroje neobsahují. */
 		VSECHNY
 	}
 

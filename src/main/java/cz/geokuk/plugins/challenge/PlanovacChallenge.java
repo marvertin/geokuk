@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  * Plánovač challenge: při zapnutí, změně definic, aktivních, domova nebo načtených keší (s odkladem, ať se změny sloučí) spočítá na pozadí výsledky aktivních
  * challenge a uloží je do {@link ChallengeModel}. Challenge se počítají postupně jedna po druhé (předpočet každé zabírá paměť), běžící výpočet se novou změnou ruší a po
  * dokončení challenge se předpočet zahodí. Výsledky pro střed mapy a „další chybějící“ viz {@link #dalsiChybejici(Challenge)}.
+ * Zatím se nepředává množina ignorovaných keší pro zdroj Stator (je prázdná).
  */
 @Slf4j
 public final class PlanovacChallenge {
@@ -43,6 +44,8 @@ public final class PlanovacChallenge {
 	private final Supplier<Wgs> stredMapy;
 	private final Consumer<VybranyKandidat> vystredit;
 	private final long odklad;
+	/** Pro test: zavolá se s každým vytvořeným předpočtem. */
+	Consumer<Predpocet> poVytvoreni = p -> {};
 	private final ScheduledExecutorService planovac = Executors.newSingleThreadScheduledExecutor(r -> demon(r, "Odklad plánovače challenge"));
 	private final ExecutorService vykon = Executors.newSingleThreadExecutor(r -> demon(r, "Plánovač challenge"));
 	private final Map<String, DalsiChybejici> dalsi = new HashMap<>();
@@ -166,7 +169,12 @@ public final class PlanovacChallenge {
 		final Predpocet p = new Predpocet(adresar.get(), KLIC_ZDROJE, c.zdroj(), v.lat, v.lon, v.oblast);
 		bezici = p;
 		try {
-			p.pridejPosluchace(s -> model.nastavStavPredpoctu(c, s));
+			poVytvoreni.accept(p);
+			p.pridejPosluchace(s -> {
+				if (!zastaralo(moje)) {
+					model.nastavStavPredpoctu(c, s);
+				}
+			});
 			final Future<?> f = p.spust(data);
 			try {
 				f.get();

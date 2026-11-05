@@ -48,7 +48,7 @@ public final class NastaveniChallenge {
 	 */
 	public static void uloz(final ChallengeSeznam seznam, final boolean zapnuto, final ChallengeUloziste uloziste) {
 		final String staraVerze = uloziste.get("verze");
-		final String novaVerze = Integer.toString(cisloVerze(staraVerze) + 1);
+		final String novaVerze = Integer.toString(nejvyssiVerze(uloziste, cisloVerze(staraVerze)) + 1);
 		final Map<String, String> zapis = new java.util.LinkedHashMap<>();
 		int i = 0;
 		for (final Challenge c : seznam.vlastni()) {
@@ -85,6 +85,21 @@ public final class NastaveniChallenge {
 				uloziste.remove(k);
 			}
 		}
+	}
+
+	/** Nejvyšší verze, pod kterou už něco leží, ať dvě instance nezapisují do stejné sady. */
+	private static int nejvyssiVerze(final ChallengeUloziste uloziste, final int vychozi) {
+		int nejvyssi = vychozi;
+		for (final String k : uloziste.klice()) {
+			if (!k.startsWith(PREDPONA)) {
+				continue;
+			}
+			final int tecka = k.indexOf('.', PREDPONA.length());
+			if (tecka > PREDPONA.length()) {
+				nejvyssi = Math.max(nejvyssi, cisloVerze(k.substring(PREDPONA.length(), tecka)));
+			}
+		}
+		return nejvyssi;
 	}
 
 	private static int cisloVerze(final String verze) {

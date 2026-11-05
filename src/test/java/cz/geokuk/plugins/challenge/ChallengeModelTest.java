@@ -347,4 +347,29 @@ public class ChallengeModelTest {
 		pockejNaEdt();
 		Assert.assertEquals(50, model.vysledek(nova).pocetObsazenych());
 	}
+
+	@Test
+	public void chybaPriNacteniNastaveniVypneUkladani() throws Exception {
+		final MapoveUloziste u = new MapoveUloziste() {
+			boolean cteni = true;
+
+			@Override
+			public java.util.Set<String> klice() {
+				if (cteni) {
+					cteni = false;
+					throw new IllegalStateException("poškozené úložiště");
+				}
+				return super.klice();
+			}
+		};
+		u.put("budouci", "x");
+		final ChallengeModel m = novyModel(u);
+		m.initAfterInject();
+		final Challenge c = m.ulozVlastni(vlastni("Nová"));
+		m.aktivuj(c);
+		m.setZapnuto(true);
+		Assert.assertNull(u.get("verze"));
+		Assert.assertNull(u.get("zapnuto"));
+		Assert.assertEquals("x", u.get("budouci"));
+	}
 }

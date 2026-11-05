@@ -379,4 +379,78 @@ public class PlanovacChallengeTest {
 		Thread.sleep(500);
 		Assert.assertEquals("starý běh nic nepublikoval", 1, pocet(ChallengeZmenenyEvent.Druh.VYSLEDEK));
 	}
+
+	private Challenge oblastni(final Oblast o) {
+		oblasti.put("o1", o);
+		return model.ulozVlastni(vlastni("Oblast", Stred.souradnice(50.0, 14.0), OblastDef.stat("o1")));
+	}
+
+	private static Oblast ctverec() {
+		return new OblastPolygony("o1", "v1", Collections.singletonList(new Cast(OblastPolygonyTest.ctverec(49.0, 13.0, 51.0, 15.0), Collections.<Okraj> emptyList())));
+	}
+
+	@Test
+	public void dalsiZmenaZrusiBeziciPredpocet() throws Exception {
+		napojNaModel();
+		final List<Predpocet> predpocty = new CopyOnWriteArrayList<>();
+		final java.util.concurrent.CountDownLatch bezi = new java.util.concurrent.CountDownLatch(1);
+		final java.util.concurrent.CountDownLatch pust = new java.util.concurrent.CountDownLatch(1);
+		planovac.poVytvoreni = p -> {
+			predpocty.add(p);
+			if (predpocty.size() == 1) {
+				p.pridejPosluchace(s -> {
+					if (s.faze() == StavPredpoctu.Faze.POCITA && bezi.getCount() > 0) {
+						bezi.countDown();
+						try {
+							pust.await();
+						} catch (final InterruptedException e) {
+							Thread.currentThread().interrupt();
+						}
+					}
+				});
+			}
+		};
+		final Challenge c = oblastni(ctverec());
+		planovac.keseNacteny(kese(500, 1));
+		zapni(c);
+		Assert.assertTrue(bezi.await(20, java.util.concurrent.TimeUnit.SECONDS));
+		planovac.keseNacteny(kese(600, 2));
+		pust.countDown();
+		pockej(() -> model.vysledek(c) != null, "výsledek");
+		Assert.assertEquals(StavPredpoctu.Faze.ZRUSENO, predpocty.get(0).stav().faze());
+		Assert.assertTrue(predpocty.size() >= 2);
+	}
+
+	@Test
+	public void kazdyPredpocetJePoPrepoctuZavreny() throws Exception {
+		napojNaModel();
+		final List<Predpocet> predpocty = new CopyOnWriteArrayList<>();
+		planovac.poVytvoreni = predpocty::add;
+		final Challenge c = oblastni(ctverec());
+		planovac.keseNacteny(kese(300, 1));
+		zapni(c);
+		pockej(() -> model.vysledek(c) != null, "výsledek");
+		pockej(() -> !predpocty.isEmpty() && predpocty.stream().allMatch(Predpocet::jeZavreno), "předpočty zavřené");
+	}
+
+	@Test
+	public void zrusenyPredpocetNedaVysledek() throws Exception {
+		napojNaModel();
+		final List<Predpocet> predpocty = new CopyOnWriteArrayList<>();
+		planovac.poVytvoreni = p -> {
+			predpocty.add(p);
+			p.pridejPosluchace(s -> {
+				if (s.faze() == StavPredpoctu.Faze.POCITA) {
+					p.zrus();
+				}
+			});
+		};
+		final Challenge c = oblastni(ctverec());
+		planovac.keseNacteny(kese(300, 1));
+		zapni(c);
+		pockej(() -> !predpocty.isEmpty() && predpocty.get(0).jeZavreno(), "předpočet zavřený");
+		Thread.sleep(300);
+		Assert.assertEquals(StavPredpoctu.Faze.ZRUSENO, predpocty.get(0).stav().faze());
+		Assert.assertNull(model.vysledek(c));
+	}
 }

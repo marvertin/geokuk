@@ -250,4 +250,30 @@ public class NastaveniChallengeTest {
 		}
 		Assert.assertTrue(s.vlastni().isEmpty());
 	}
+
+	private static int cislo(final String text) {
+		try {
+			return Integer.parseInt(text);
+		} catch (final NumberFormatException e) {
+			throw new AssertionError("není číslo: " + text, e);
+		}
+	}
+
+	@Test
+	public void druhaInstanceNezapisujeDoSadyPrvni() {
+		final MapoveUloziste u = new MapoveUloziste();
+		final ChallengeSeznam a = new ChallengeSeznam();
+		a.ulozVlastni(vlastni("A", ZdrojPravidel.PGC, ZdrojeNalezu.ZAPNUTE));
+		NastaveniChallenge.uloz(a, false, u);
+		final int verzeA = cislo(u.get("verze"));
+		// Druhá instance načetla stejný stav a zatím první uložila novější sadu.
+		final ChallengeSeznam b = new ChallengeSeznam();
+		b.ulozVlastni(vlastni("B", ZdrojPravidel.PGC, ZdrojeNalezu.ZAPNUTE));
+		u.put("definice." + (verzeA + 3) + ".0.nazev", "Cizí");
+		NastaveniChallenge.uloz(b, false, u);
+		Assert.assertEquals(Integer.toString(verzeA + 4), u.get("verze"));
+		final NastaveniChallenge.Nacteno n = NastaveniChallenge.nacti(u);
+		Assert.assertEquals(1, n.seznam.vlastni().size());
+		Assert.assertEquals("B", n.seznam.vlastni().get(0).nazev());
+	}
 }
