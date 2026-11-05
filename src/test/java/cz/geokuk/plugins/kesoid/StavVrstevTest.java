@@ -378,4 +378,32 @@ public class StavVrstevTest {
 		Assert.assertTrue("nahrazená zpráva se z mapy smaže: překreslí se i oblast staré", posledni.contains(r1));
 		toast.removeNotify();
 	}
+
+	@Test
+	public void rovnostAHashSeridiPodleSkrytychVrstevAPoctuKruhu() {
+		final StavVrstev a = StavVrstev.prazdny().s(F8, DuvodNekresleni.LIMIT_POCTU, 5);
+		final StavVrstev b = StavVrstev.prazdny().s(F8, DuvodNekresleni.LIMIT_POCTU, 5);
+		Assert.assertEquals(a, b);
+		Assert.assertEquals(a.hashCode(), b.hashCode());
+		Assert.assertNotEquals(a, StavVrstev.prazdny().s(F8, DuvodNekresleni.LIMIT_POCTU, 6));
+		Assert.assertNotEquals(a, StavVrstev.prazdny().s(F8, DuvodNekresleni.PRILIS_HUSTE, 5));
+		Assert.assertNotEquals(a, StavVrstev.prazdny());
+		Assert.assertNotEquals(a, "StavVrstev");
+		Assert.assertNotEquals(StavVrstev.prazdny().hashCode(), a.hashCode());
+		Assert.assertEquals(a.get(F8), b.get(F8));
+		Assert.assertEquals(a.get(F8).hashCode(), b.get(F8).hashCode());
+		Assert.assertNotEquals(a.get(F8), a);
+		Assert.assertNotEquals(a.get(F8).hashCode(), StavVrstev.prazdny().s(F8, DuvodNekresleni.LIMIT_POCTU, 6).get(F8).hashCode());
+	}
+
+	@Test
+	public void skryteVrstvyAPopisStavu() {
+		final StavVrstev s = StavVrstev.prazdny().s(F8, DuvodNekresleni.PRILIS_HUSTE, 0).s(F9, DuvodNekresleni.POLOMER_PRILIS_MALY, 0);
+		Assert.assertEquals(2, s.getSkryte().size());
+		Assert.assertTrue(s.getSkryte().containsKey(F8));
+		Assert.assertTrue(s.getSkryte().containsKey(F9));
+		Assert.assertTrue(s.toString(), s.toString().startsWith("StavVrstev"));
+		Assert.assertTrue(s.toString(), s.toString().contains(F8.toString()));
+		Assert.assertTrue(StavVrstev.prazdny().getSkryte().isEmpty());
+	}
 }

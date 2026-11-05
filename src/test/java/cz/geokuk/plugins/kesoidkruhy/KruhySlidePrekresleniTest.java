@@ -165,4 +165,17 @@ public class KruhySlidePrekresleniTest {
 		Assert.assertTrue(obarveno(s, 35));
 		Assert.assertFalse(obarveno(s, 45));
 	}
+
+	@Test
+	public void zmenaDatNeboLimituVrstvuPrekresli() {
+		final JZvyraznovaciKruhySlide s = slide();
+		final KesBag bag = mock(KesBag.class);
+		when(bag.getIndexator()).thenReturn(Indexator.postav(BoundingRect.ALL, Collections.<Wpt> emptyList(), w -> MISTO.xx, w -> MISTO.yy));
+		prekresleni.set(0);
+		s.onEvent(new KeskyVyfiltrovanyEvent(bag, bag));
+		Assert.assertTrue("nová data", prekresleni.get() > 0);
+		prekresleni.set(0);
+		s.onEvent(new cz.geokuk.plugins.kesoid.mvc.LimityKresleniEvent(cz.geokuk.plugins.kesoid.LimityKresleni.of(10, 20)));
+		Assert.assertTrue("nové limity", prekresleni.get() > 0);
+	}
 }

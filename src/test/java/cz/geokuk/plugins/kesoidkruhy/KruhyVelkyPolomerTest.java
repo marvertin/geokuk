@@ -1,6 +1,11 @@
 package cz.geokuk.plugins.kesoidkruhy;
 
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.awt.Color;
@@ -18,6 +23,7 @@ import cz.geokuk.core.coordinates.Mou;
 import cz.geokuk.core.coordinates.Wgs;
 import cz.geokuk.plugins.kesoid.DuvodNekresleni;
 import cz.geokuk.plugins.kesoid.KesBag;
+import cz.geokuk.plugins.kesoid.StavVrstevModel;
 import cz.geokuk.plugins.kesoid.Wpt;
 import cz.geokuk.plugins.kesoid.mvc.KeskyVyfiltrovanyEvent;
 import cz.geokuk.util.index2d.BoundingRect;
@@ -266,6 +272,18 @@ public class KruhyVelkyPolomerTest {
 		Assert.assertEquals("střed mimo, kruh nezasáhne roh", nic, PolomerKruhu.kresleni(-50, -50, 60, 0, 0, 800, 600));
 		Assert.assertEquals("obří kruh se středem daleko, okno uvnitř", vypln, PolomerKruhu.kresleni(-1.0e6, 300, 1.0e6 + 900, 0, 0, 800, 600));
 		Assert.assertEquals("obří kruh, okraj prochází oknem", kruh, PolomerKruhu.kresleni(-1.0e6, 300, 1.0e6 + 400, 0, 0, 800, 600));
+	}
+
+	@Test
+	public void nejvzdalenejsiRohVyrezuUrcujeVyplnPriStreduVBlizkostiRohu() {
+		final PolomerKruhu.Kresleni vypln = PolomerKruhu.Kresleni.VYPLN_VYREZ;
+		final PolomerKruhu.Kresleni kruh = PolomerKruhu.Kresleni.KRUH;
+		// výřez 0,0 – 800,600, nejvzdálenější roh od (700, 500) je (0, 0) ve vzdálenosti přibližně 860,2
+		Assert.assertEquals(vypln, PolomerKruhu.kresleni(700, 500, 861, 0, 0, 800, 600));
+		Assert.assertEquals(kruh, PolomerKruhu.kresleni(700, 500, 860, 0, 0, 800, 600));
+		// a od (100, 100) je to roh (800, 600) ve vzdálenosti přibližně 860,2
+		Assert.assertEquals(vypln, PolomerKruhu.kresleni(100, 100, 861, 0, 0, 800, 600));
+		Assert.assertEquals(kruh, PolomerKruhu.kresleni(100, 100, 860, 0, 0, 800, 600));
 	}
 
 	@Test
@@ -590,6 +608,28 @@ public class KruhyVelkyPolomerTest {
 	}
 
 	@Test
+	public void nejblizsiSLimitemJedenVratiJedinyNejblizsiBod() {
+		final List<int[]> body = new ArrayList<>();
+		body.add(new int[] { 50, 0 });
+		body.add(new int[] { 10, 0 });
+		body.add(new int[] { 30, 0 });
+		final List<int[]> vybrane = PolomerKruhu.nejblizsi(body, 0, 0, 1);
+		Assert.assertEquals(1, vybrane.size());
+		Assert.assertEquals(10, vybrane.get(0)[0]);
+	}
+
+	@Test
+	public void nejblizsiPriStejneVzdalenostiPonechaDrivejsiBod() {
+		final int[] prvni = { 10, 0 };
+		final List<int[]> body = new ArrayList<>();
+		body.add(prvni);
+		body.add(new int[] { 0, 10 });
+		body.add(new int[] { -10, 0 });
+		final List<int[]> vybrane = PolomerKruhu.nejblizsi(body, 0, 0, 1);
+		Assert.assertSame(prvni, vybrane.get(0));
+	}
+
+	@Test
 	public void nejblizsiSNulovymLimitemVratiPrazdnySeznam() {
 		final List<int[]> body = new ArrayList<>();
 		body.add(new int[] { 1, 1 });
@@ -717,5 +757,70 @@ public class KruhyVelkyPolomerTest {
 	@Test
 	public void hodnotaHusteHranicePokryti() {
 		Assert.assertEquals(1.5, PolomerKruhu.MAX_POKRYTI_V_METRECH, 0);
+	}
+
+	private static void dokonciUdalostiEdt() throws Exception {
+		javax.swing.SwingUtilities.invokeAndWait(() -> {
+		});
+	}
+
+	@Test
+	public void vynechaneKruhySeHlasiJednouAPoZmeneNaPixelyVynuluji() throws Exception {
+		final int limit = limitProOkno();
+		final JZvyraznovaciKruhySlide s = slideSCastecnymi(limit + 5, false);
+		final StavVrstevModel model = mock(StavVrstevModel.class);
+		s.inject(model);
+		nakresli(s);
+		dokonciUdalostiEdt();
+		verify(model, times(1)).nahlasVynechane(5, limit);
+		nakresli(s);
+		dokonciUdalostiEdt();
+		verify(model, times(1)).nahlasVynechane(5, limit);
+		s.onEvent(pixely(10));
+		clearInvocations(model);
+		nakresli(s);
+		dokonciUdalostiEdt();
+		verify(model, never()).nahlasVynechane(anyInt(), anyInt());
+	}
+
+	@Test
+	public void bezVynechanychKruhuSeNicNehlasi() throws Exception {
+		final JZvyraznovaciKruhySlide s = slideSCastecnymi(3, false);
+		final StavVrstevModel model = mock(StavVrstevModel.class);
+		s.inject(model);
+		nakresli(s);
+		dokonciUdalostiEdt();
+		verify(model, never()).nahlasVynechane(anyInt(), anyInt());
+	}
+
+	@Test
+	public void prepocetStavuNesmazeHlasenyPocetVynechanychPriKresleniVMetrech() throws Exception {
+		final JZvyraznovaciKruhySlide s = slideSCastecnymi(limitProOkno() + 5, false);
+		final StavVrstevModel model = mock(StavVrstevModel.class);
+		s.inject(model);
+		nakresli(s);
+		dokonciUdalostiEdt();
+		clearInvocations(model);
+		s.onVyrezChanged();
+		verify(model, never()).nahlasVynechane(0, 0);
+	}
+
+	@Test
+	public void pixelovyKruhMaBarvuVyplneAHranuBilouCarkovanou() {
+		final JZvyraznovaciKruhySlide s = slide(17, jedna());
+		s.onEvent(metry(polomerMetruProPixely(s, R_PX)));
+		final BufferedImage i = nakresli(s);
+		final int stred = i.getRGB(W / 2, H / 2);
+		Assert.assertEquals(new Color(200, 0, 0, 255).getRGB(), stred);
+		boolean bila = false;
+		for (int y = 0; y < H && !bila; y++) {
+			for (int x = 0; x < W; x++) {
+				if (i.getRGB(x, y) == 0xFFFFFFFF) {
+					bila = true;
+					break;
+				}
+			}
+		}
+		Assert.assertTrue("okraj kruhu v metrech je bílý", bila);
 	}
 }

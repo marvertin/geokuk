@@ -12,6 +12,7 @@ import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 
 import org.junit.*;
+import org.mockito.Mockito;
 
 /** Legenda, nadpisy a bubliny u posuvníků kruhů Obsazenost; bez displeje. */
 public class JBarvovyDvojSliderTest {
@@ -588,5 +589,295 @@ public class JBarvovyDvojSliderTest {
 		cas.addAndGet(BublinkaHodnoty.ZANIKNUTI_MS + 1);
 		legenda().tik();
 		Assert.assertEquals(0f, legenda().viditelnost(), 0f);
+	}
+
+	// --- přesné rozmístění kresby ---
+
+	private static final class Zaznam {
+		final List<Object[]> texty = new ArrayList<>();
+		final List<int[]> cary = new ArrayList<>();
+
+		int[] text(final String t) {
+			for (final Object[] o : texty) {
+				if (t.equals(o[0])) {
+					return new int[] { (Integer) o[1], (Integer) o[2] };
+				}
+			}
+			return null;
+		}
+	}
+
+	/** Grafika, která si pamatuje vykreslené texty a čáry; měření písma dělá skutečná grafika obrazu. */
+	private static Graphics2D zaznamenavajici(final Zaznam z) {
+		final Graphics2D real = obraz().createGraphics();
+		final Graphics2D g = Mockito.mock(Graphics2D.class);
+		final Font[] font = { real.getFont() };
+		Mockito.when(g.create()).thenReturn(g);
+		Mockito.doAnswer(i -> {
+			font[0] = i.getArgument(0);
+			return null;
+		}).when(g).setFont(Mockito.any());
+		Mockito.when(g.getFontMetrics()).thenAnswer(i -> real.getFontMetrics(font[0]));
+		Mockito.when(g.getFontMetrics(Mockito.any(Font.class))).thenAnswer(i -> real.getFontMetrics((Font) i.getArgument(0)));
+		Mockito.doAnswer(i -> {
+			z.texty.add(new Object[] { i.getArgument(0), i.getArgument(1), i.getArgument(2) });
+			return null;
+		}).when(g).drawString(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt());
+		Mockito.doAnswer(i -> {
+			z.cary.add(new int[] { i.getArgument(0), i.getArgument(1), i.getArgument(2), i.getArgument(3) });
+			return null;
+		}).when(g).drawLine(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt());
+		return g;
+	}
+
+	private Font fontLegendy() {
+		return slider.getFont().deriveFont(Font.PLAIN, 11f);
+	}
+
+	private FontMetrics metrikaLegendy() {
+		return obraz().createGraphics().getFontMetrics(fontLegendy());
+	}
+
+	/** Pixelů z každého konce, které zabírá jezdec. */
+	private static int okrajJezdce() {
+		int vyska = 16;
+		final javax.swing.Icon ikona = javax.swing.UIManager.getIcon("Slider.verticalThumbIcon");
+		if (ikona != null) {
+			vyska = Math.max(vyska, ikona.getIconHeight());
+		}
+		return vyska / 2;
+	}
+
+	private int yPopisku(final JPanel rodic, final JSlider s, final int hodnota) {
+		final Insets in = s.getInsets();
+		final int nahore = SwingUtilities.convertPoint(s, 0, 0, rodic).y;
+		return nahore + in.top + JBarvovyDvojSlider.polohaJezdce(s.getHeight() - in.top - in.bottom, okrajJezdce(), hodnota, s.getMinimum(), s.getMaximum());
+	}
+
+	private Zaznam nakresliZaznam(final JPanel rodic) {
+		final Zaznam z = new Zaznam();
+		slider.kresliNadMapou(zaznamenavajici(z), rodic);
+		return z;
+	}
+
+	private void ukazLegendu() {
+		legenda().tahne(true);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+	}
+
+	@Test
+	public void popiskyOsANadpisyJsouNaSvychMistechUObouPosuvniku() {
+		slider.getBarvovnik().setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 5, 0));
+		slider.getPruhlednik().setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 0, 7, 0));
+		final JPanel rodic = rodic();
+		ukazLegendu();
+		final Zaznam z = nakresliZaznam(rodic);
+		final FontMetrics fm = metrikaLegendy();
+		for (final JSlider s : new JSlider[] { slider.getBarvovnik(), slider.getPruhlednik() }) {
+			final boolean barva = s == slider.getBarvovnik();
+			final int osaX = SwingUtilities.convertPoint(s, s.getWidth() / 2, 0, rodic).x;
+			for (final JBarvovyDvojSlider.Popisek p : barva ? JBarvovyDvojSlider.osaBarvy() : JBarvovyDvojSlider.osaPruhlednosti()) {
+				final Rectangle r = PopisekNaMape.hranice(fm, p.text, osaX - JBarvovyDvojSlider.MEZERA_OSY, yPopisku(rodic, s, p.hodnota));
+				Assert.assertArrayEquals(p.text, new int[] { r.x + 7, r.y + 2 + fm.getAscent() }, z.text(p.text));
+			}
+			final String nadpis = barva ? "Barva" : "Průhlednost";
+			final int pravyOkrajPanelu = SwingUtilities.convertPoint(slider, slider.getWidth(), 0, rodic).x;
+			final int stredNadpisu = SwingUtilities.convertPoint(s, 0, 0, rodic).y - 12;
+			final Rectangle r = PopisekNaMape.hranice(fm, nadpis, pravyOkrajPanelu, stredNadpisu);
+			Assert.assertArrayEquals(nadpis, new int[] { r.x + 7, r.y + 2 + fm.getAscent() }, z.text(nadpis));
+		}
+	}
+
+	@Test
+	public void znackyOsJsouVedleOsyUKazdehoPopisku() {
+		final JPanel rodic = rodic();
+		ukazLegendu();
+		final Zaznam z = nakresliZaznam(rodic);
+		final JSlider s = slider.getBarvovnik();
+		final int osaX = SwingUtilities.convertPoint(s, s.getWidth() / 2, 0, rodic).x;
+		final int y = yPopisku(rodic, s, 128);
+		boolean nalezeno = false;
+		for (final int[] c : z.cary) {
+			if (c[1] == y) {
+				Assert.assertEquals(osaX - JBarvovyDvojSlider.MEZERA_OSY + 2, c[0]);
+				Assert.assertEquals(osaX - 3, c[2]);
+				nalezeno = true;
+			}
+		}
+		Assert.assertTrue("značka osy šedé", nalezeno);
+	}
+
+	@Test
+	public void popisekSeSkryjePodBublinkouPresneVeVzdalenostiDanePismem() {
+		final JPanel rodic = rodic();
+		ukazLegendu();
+		final FontMetrics fm = metrikaLegendy();
+		final Font fontBublinky = slider.getFont().deriveFont(Font.BOLD, 12f);
+		final int vyskaPopisku = fm.getHeight() + 4;
+		final int vyskaBublinky = obraz().createGraphics().getFontMetrics(fontBublinky).getHeight() + 4;
+		final JSlider s = slider.getBarvovnik();
+		final int yCerne = yPopisku(rodic, s, 0);
+		int pocetSkrytych = 0;
+		int pocetViditelnych = 0;
+		for (int hodnota = 0; hodnota <= 255; hodnota += 3) {
+			s.setValueIsAdjusting(true);
+			s.setValue(hodnota);
+			cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+			final Zaznam z = nakresliZaznam(rodic);
+			final boolean skryty = JBarvovyDvojSlider.prekryvaBublinku(yCerne, vyskaPopisku, yPopisku(rodic, s, hodnota), vyskaBublinky);
+			Assert.assertEquals("hodnota " + hodnota, !skryty, z.text("Černá") != null);
+			if (skryty) {
+				pocetSkrytych++;
+			} else {
+				pocetViditelnych++;
+			}
+		}
+		s.setValueIsAdjusting(false);
+		Assert.assertTrue(pocetSkrytych > 0 && pocetViditelnych > 0);
+	}
+
+	@Test
+	public void polohaJezdceSNenulovymMinimem() {
+		Assert.assertEquals(10 + 90, JBarvovyDvojSlider.polohaJezdce(200, 10, 60, 10, 110));
+		Assert.assertEquals(10, JBarvovyDvojSlider.polohaJezdce(200, 10, 110, 10, 110));
+		Assert.assertEquals(190, JBarvovyDvojSlider.polohaJezdce(200, 10, 10, 10, 110));
+		Assert.assertEquals(5 + 55, JBarvovyDvojSlider.polohaJezdce(120, 5, 30, 0, 60));
+	}
+
+	@Test
+	public void zmenaPosuvnikuVolaVlastniPoslouchaceObouPosuvniku() {
+		final int[] pocet = { 0 };
+		slider.addChangeListener(e -> pocet[0]++);
+		slider.getBarvovnik().setValue(10);
+		slider.getPruhlednik().setValue(20);
+		Assert.assertEquals(2, pocet[0]);
+	}
+
+	// --- překreslení legendy ---
+
+	private static final class Vrstva extends JPanel {
+		private static final long serialVersionUID = 1L;
+		List<Rectangle> oblasti;
+
+		@Override
+		public void repaint(final long tm, final int x, final int y, final int width, final int height) {
+			if (oblasti != null) {
+				oblasti.add(new Rectangle(x, y, width, height));
+			}
+		}
+
+		@Override
+		public void repaint() {
+			if (oblasti != null) {
+				oblasti.add(null);
+			}
+		}
+	}
+
+	@Test
+	public void prekresleniLegendyZasahujeCelouLegenduAleJenJejiOblast() {
+		final JPanel rodic = rodic();
+		final Vrstva vrstva = new Vrstva();
+		vrstva.setSize(500, 500);
+		vrstva.oblasti = new ArrayList<>();
+		slider.setVrstvaLegendy(vrstva);
+		ukazLegendu();
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(30);
+		final Rectangle legenda = kresli(rodic, obraz());
+		Assert.assertNotNull(legenda);
+		vrstva.oblasti.clear();
+		legenda().dotyk();
+		Assert.assertFalse(vrstva.oblasti.isEmpty());
+		final Rectangle oblast = vrstva.oblasti.get(vrstva.oblasti.size() - 1);
+		Assert.assertNotNull(oblast);
+		Assert.assertTrue("zahrnuje poslední kreslenou legendu " + legenda + " v " + oblast, oblast.contains(legenda));
+		final Rectangle pruh = SwingUtilities.convertRectangle(slider, new Rectangle(0, 0, slider.getWidth(), slider.getHeight()), vrstva);
+		Assert.assertTrue("zahrnuje pruh posuvníků", oblast.contains(pruh));
+		Assert.assertTrue("nadpis nad pruhem", oblast.y <= pruh.y - 24);
+		Assert.assertTrue("legenda nezasahuje celou šířku vrstvy " + oblast, oblast.x > 0 && oblast.width < 500);
+		slider.getBarvovnik().setValueIsAdjusting(false);
+	}
+
+	@Test
+	public void prekresleniBezVrstvyJdeNaRodiceAMBezRodiceNaSebe() {
+		final Vrstva rodic = new Vrstva();
+		rodic.setLayout(new BorderLayout());
+		rodic.add(slider, BorderLayout.EAST);
+		rodic.setSize(500, 500);
+		rozloz(rodic);
+		rodic.oblasti = new ArrayList<>();
+		legenda().dotyk();
+		Assert.assertFalse("bez vrstvy se překresluje rodič", rodic.oblasti.isEmpty());
+		Assert.assertNotNull(rodic.oblasti.get(rodic.oblasti.size() - 1));
+		final Vrstva vrstva = new Vrstva();
+		vrstva.oblasti = new ArrayList<>();
+		slider.setVrstvaLegendy(vrstva);
+		rodic.oblasti.clear();
+		legenda().dotyk();
+		Assert.assertFalse("s vrstvou se překresluje vrstva", vrstva.oblasti.isEmpty());
+		Assert.assertTrue("rodič se nepřekresluje", rodic.oblasti.isEmpty());
+	}
+
+	@Test
+	public void posuvnikyMajiNapoveduNejsouVyplnenaANelzeNaNePrejitFokusem() {
+		for (final JSlider s : new JSlider[] { slider.getBarvovnik(), slider.getPruhlednik() }) {
+			Assert.assertFalse(s.isOpaque());
+			Assert.assertFalse(s.isFocusable());
+			Assert.assertNotNull(s.getToolTipText());
+			Assert.assertTrue(s.getToolTipText(), s.getToolTipText().contains("161 m"));
+		}
+		Assert.assertTrue(slider.getBarvovnik().getToolTipText().contains("stupně šedi"));
+		Assert.assertTrue(slider.getPruhlednik().getToolTipText().contains("průhlednosti"));
+		Assert.assertFalse(slider.isOpaque());
+	}
+
+	@Test
+	public void odebraniZeSceny() {
+		legenda().tahne(true);
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(40);
+		Assert.assertTrue(legenda().jeAktivni());
+		Assert.assertTrue(bublinky.get(0).jeAktivni());
+		slider.removeNotify();
+		Assert.assertFalse(legenda().jeAktivni());
+		Assert.assertFalse(bublinky.get(0).jeAktivni());
+		Assert.assertTrue(vsechnyCasovaceStoji());
+	}
+
+	@Test
+	public void focusNaPruhlednikuUkazeLegenduPohybMysiPoPruhu() {
+		final JSlider s = slider.getPruhlednik();
+		for (final java.awt.event.FocusListener l : s.getFocusListeners()) {
+			l.focusGained(new java.awt.event.FocusEvent(s, java.awt.event.FocusEvent.FOCUS_GAINED));
+		}
+		Assert.assertTrue(legenda().jeAktivni());
+		for (final java.awt.event.FocusListener l : s.getFocusListeners()) {
+			l.focusLost(new java.awt.event.FocusEvent(s, java.awt.event.FocusEvent.FOCUS_LOST));
+		}
+	}
+
+	@Test
+	public void pohybMysiPoPosuvnikuStacíKUkazaniLegendy() {
+		final JPanel rodic = rodic();
+		final JSlider s = slider.getBarvovnik();
+		final java.awt.event.MouseEvent pohyb = new java.awt.event.MouseEvent(s, java.awt.event.MouseEvent.MOUSE_MOVED, cas.get(), 0, s.getWidth() / 2, s.getHeight() / 2, 0, false);
+		for (final java.awt.event.MouseMotionListener l : s.getMouseMotionListeners()) {
+			l.mouseMoved(pohyb);
+		}
+		Assert.assertNotNull(rodic);
+		cas.addAndGet(ViditelnostLegendy.ZPOZDENI_NAJETI_MS);
+		legenda().tik();
+		Assert.assertTrue(legenda().jeAktivni());
+	}
+
+	@Test
+	public void legendaPoPusteniTazeniDoznije() {
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(40);
+		slider.getBarvovnik().setValueIsAdjusting(false);
+		cas.addAndGet(BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS);
+		legenda().tik();
+		Assert.assertFalse("legenda po puštění nezůstává", legenda().jeAktivni());
 	}
 }

@@ -215,4 +215,93 @@ public class ViditelnostLegendyTest {
 		Assert.assertEquals("poslední krok legendu skryje", 0f, legenda.viditelnost(), 0f);
 		Assert.assertFalse(legenda.jeAktivni());
 	}
+
+	@Test
+	public void dotykAZrusPrekresli() {
+		legenda.dotyk();
+		Assert.assertEquals(1, prekresleni.get());
+		legenda.zrus();
+		Assert.assertEquals(2, prekresleni.get());
+	}
+
+	@Test
+	public void krokPrekresliJenKdyzSeViditelnostZmenila() {
+		legenda.fokus(true);
+		final int po = prekresleni.get();
+		ubehne(PLNA / 2);
+		Assert.assertEquals(po + 1, prekresleni.get());
+		ubehne(PLNA);
+		Assert.assertEquals(po + 2, prekresleni.get());
+		ubehne(10);
+		Assert.assertEquals(po + 2, prekresleni.get());
+	}
+
+	@Test
+	public void beziciKrokBezZmenyViditelnostiNeprekresluje() {
+		legenda.fokus(true);
+		ubehne(PLNA);
+		final int po = prekresleni.get();
+		ubehne(10);
+		ubehne(10);
+		Assert.assertEquals(po, prekresleni.get());
+	}
+
+	@Test
+	public void vstupBezZmenyViditelnostiNeprekresluje() {
+		legenda.mys(true);
+		Assert.assertEquals("první vstup poprvé překreslí", 1, prekresleni.get());
+		legenda.mys(true);
+		Assert.assertEquals(1, prekresleni.get());
+	}
+
+	@Test
+	public void plneViditelnaLegendaZastaviCasovacPriTazeni() {
+		legenda.tahne(true);
+		ubehne(PLNA);
+		Assert.assertEquals(1f, legenda.viditelnost(), 0f);
+		Assert.assertFalse(legenda.casovacBezi());
+	}
+
+	@Test
+	public void interakceSkoncenaVNulovemCaseSeNepovazujeZaTrvajici() {
+		cas.set(0);
+		legenda.dotyk();
+		cas.set(BublinkaHodnoty.DRZENI_MS + BublinkaHodnoty.ZANIKNUTI_MS / 2);
+		final float v = legenda.viditelnost();
+		Assert.assertTrue("viditelnost " + v, v > 0f && v < 1f);
+	}
+
+	@Test
+	public void legendaPustenaVNulovemCaseZaniknePresneKonci() {
+		cas.set(0);
+		legenda.tahne(true);
+		legenda.tahne(false);
+		ubehne(KONEC - 1);
+		Assert.assertTrue(legenda.jeAktivni());
+		ubehne(1);
+		Assert.assertFalse(legenda.jeAktivni());
+	}
+
+	@Test
+	public void legendaZanikaPresneVCasePoDrzeniAZaniknuti() {
+		legenda.dotyk();
+		ubehne(KONEC - 1);
+		Assert.assertTrue(legenda.jeAktivni());
+		ubehne(1);
+		Assert.assertFalse(legenda.jeAktivni());
+	}
+
+	@Test
+	public void verejnyKonstruktorPouzivaSkutecneHodinyACasovac() {
+		final ViditelnostLegendy l = new ViditelnostLegendy(prekresleni::incrementAndGet);
+		try {
+			l.mys(true);
+			Assert.assertTrue("čeká na zpoždění", l.casovacBezi());
+			Assert.assertFalse(l.jeAktivni());
+			l.zrus();
+			Assert.assertFalse(l.casovacBezi());
+		} finally {
+			l.zrus();
+		}
+	}
 }
