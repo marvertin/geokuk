@@ -9,12 +9,12 @@ import javax.swing.Timer;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.MyPreferences;
 
-/** Štítek s výkonem kreslení vlevo nahoře na mapě pod pruhem plánovače; jen v beta kanálu a na přání. */
+/** Štítek s výkonem kreslení vlevo nahoře na mapě, je-li vidět pruh plánovače, pod ním; jen v beta kanálu a na přání. */
 public final class UkazatelVykonu {
 
 	static final String KLIC = "ukazatelVykonu";
-	/** Kde štítek leží; jeho překreslení se do doby kreslení mapy nepočítá. */
-	public static final Rectangle OBLAST = cz.geokuk.framework.RozmisteniPrekryvu.UKAZATEL_VYKONU;
+	/** Štítek je jediný na celý program (jedno okno s mapou), proto i tento stav je společný; nastavuje ho pruh plánovače podle toho, jestli je vidět. */
+	private static volatile boolean podPruhem;
 	private static final Color POZADI = new Color(0, 0, 0, 150);
 
 	private static volatile boolean zapnuty;
@@ -23,6 +23,24 @@ public final class UkazatelVykonu {
 
 	private UkazatelVykonu() {}
 
+	/** Kde štítek leží; jeho překreslení se do doby kreslení mapy nepočítá. */
+	public static Rectangle oblast() {
+		return cz.geokuk.framework.RozmisteniPrekryvu.ukazatelVykonu(podPruhem);
+	}
+
+	/** Posune štítek pod pruh plánovače, nebo zpět nahoru. */
+	public static void setPodPruhem(final boolean pod) {
+		if (podPruhem == pod) {
+			return;
+		}
+		final Rectangle stara = oblast();
+		podPruhem = pod;
+		if (mapa != null) {
+			mapa.repaint(stara);
+			mapa.repaint(oblast());
+		}
+	}
+
 	static boolean ulozeno() {
 		return MyPreferences.current().node(FPref.VSEOBECNE_node).getBoolean(KLIC, false);
 	}
@@ -30,7 +48,7 @@ public final class UkazatelVykonu {
 	/** Mapa, na které se štítek kreslí; zapne ho, když je zapnutý beta kanál i volba. */
 	public static void sleduj(final JComponent naMape) {
 		mapa = naMape;
-		obnova = new Timer(500, e -> mapa.repaint(OBLAST));
+		obnova = new Timer(500, e -> mapa.repaint(oblast()));
 		nastav(Diagnostika.betaKanal() && ulozeno());
 	}
 
@@ -47,7 +65,7 @@ public final class UkazatelVykonu {
 			} else {
 				obnova.stop();
 			}
-			mapa.repaint(OBLAST);
+			mapa.repaint(oblast());
 		}
 	}
 
@@ -65,10 +83,11 @@ public final class UkazatelVykonu {
 		try {
 			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			g.setColor(POZADI);
-			g.fillRoundRect(OBLAST.x, OBLAST.y, OBLAST.width, OBLAST.height, 6, 6);
+			final Rectangle oblast = oblast();
+			g.fillRoundRect(oblast.x, oblast.y, oblast.width, oblast.height, 6, 6);
 			g.setColor(Color.WHITE);
 			g.setFont(g.getFont().deriveFont(Font.PLAIN, 12f));
-			g.drawString(text(), OBLAST.x + 6, OBLAST.y + OBLAST.height - 6);
+			g.drawString(text(), oblast.x + 6, oblast.y + oblast.height - 6);
 		} finally {
 			g.dispose();
 		}

@@ -42,7 +42,7 @@ public class JPresCelePrekryvnik extends JCoordPrekryvnik0 implements AfterEvent
 		super.paint(g);
 		final Rectangle vyrez = g.getClipBounds();
 		// Překreslení jen štítku ukazatele se do doby kreslení mapy nepočítá.
-		if (vyrez == null || !UkazatelVykonu.OBLAST.contains(vyrez)) {
+		if (vyrez == null || !UkazatelVykonu.oblast().contains(vyrez)) {
 			Vykon.zaznamenej(Vykon.Velicina.PREKRESLENI, System.nanoTime() - zacatek);
 		}
 		UkazatelVykonu.kresli(g);

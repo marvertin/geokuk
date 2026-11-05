@@ -36,8 +36,14 @@ public final class RozmisteniPrekryvu {
 	public static final int VYSKA_PRUHU = 28;
 	/** Možné šířky pruhu plánovače od nejširší; užší stupeň se použije, když se širší nevejde. */
 	public static final int[] STUPNE_PRUHU = { 267, 178, 106 };
-	/** Ukazatel výkonu leží pod pruhem plánovače. */
+	/** Ukazatel výkonu leží pod pruhem plánovače, když je pruh vidět. */
 	public static final Rectangle UKAZATEL_VYKONU = new Rectangle(OKRAJ, OKRAJ + VYSKA_PRUHU + 4, 330, 20);
+	/** Ukazatel výkonu bez pruhu plánovače. */
+	public static final Rectangle UKAZATEL_VYKONU_BEZ_PRUHU = new Rectangle(OKRAJ, OKRAJ, 330, 20);
+	/** Šířka vpravo nahoře, kterou pruh plánovače nesmí zabrat (spinner a ovladače vpravo nahoře). */
+	public static final int REZERVA_VPRAVO = 250;
+	/** Výchozí svislá poloha rady kachlovníku od horního okraje mapy. */
+	public static final int Y_RADY = 8;
 	/** Výška místa dole pro měřítko včetně stupnice, popisků a odsazení od spodního okraje. */
 	public static final int VYSKA_MERITKA = 76;
 	/** Odsazení měřítka od spodního okraje mapy. */
@@ -66,6 +72,26 @@ public final class RozmisteniPrekryvu {
 			}
 		}
 		return STUPNE_PRUHU[STUPNE_PRUHU.length - 1];
+	}
+
+	/** Volná šířka pro pruh plánovače na mapě dané šířky. */
+	public static int volnaSirkaPruhu(final int sirkaMapy) {
+		return sirkaMapy - OKRAJ - REZERVA_VPRAVO;
+	}
+
+	/** Ukazatel výkonu: pod pruhem plánovače, když je vidět, jinak úplně nahoře. */
+	public static Rectangle ukazatelVykonu(final boolean pruh) {
+		return new Rectangle(pruh ? UKAZATEL_VYKONU : UKAZATEL_VYKONU_BEZ_PRUHU);
+	}
+
+	/**
+	 * Svislá poloha rady kachlovníku: nahoře, ale zasahuje-li zleva do pruhu plánovače a ukazatele výkonu, pod ně. Bez pruhu je vždy {@link #Y_RADY}.
+	 */
+	public static int yRady(final int xRady, final boolean pruh) {
+		if (pruh && xRady < UKAZATEL_VYKONU.x + UKAZATEL_VYKONU.width + MEZERA_PREKAZKY) {
+			return UKAZATEL_VYKONU.y + UKAZATEL_VYKONU.height + OKRAJ;
+		}
+		return Y_RADY;
 	}
 
 	public static Rectangle pruhPlanovace(final int volnaSirka) {

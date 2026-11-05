@@ -110,6 +110,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			final JObsazenost obsazenik = new JObsazenost();
 			final JComponent legendaObsazenosti = new cz.geokuk.plugins.kesoidobsazenost.JLegendaObsazenosti(obsazenik);
 			final JToast toast = new JToast();
+			final cz.geokuk.plugins.challenge.JPruhPlanovace pruhPlanovace = new cz.geokuk.plugins.challenge.JPruhPlanovace();
 			final JKachlovnikPresCele kachlovnik = new JKachlovnikPresCele();
 			final JComponent odkazRady = new JOdkazRadySlide(kachlovnik);
 			final JKachlovnik kachlovnikTras = new JKachlovnikTras();
@@ -164,6 +165,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			factory.init(zvyraznovaciKruhy);
 			factory.init(obsazenik);
 			factory.init(toast);
+			factory.init(pruhPlanovace);
 			factory.init(obrysMap);
 			factory.init(kachlovnikTras);
 			factory.init(kachlovnikReliefu);
@@ -183,6 +185,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 
 			toast.setPrekazky(() -> RozmisteniPrekryvu.prekazky(srohama, smrizema, obsazenik.isVisible()));
 
+			smrizema.add(pruhPlanovace, 0);
 			smrizema.add(mysovani, smrizema.getComponentCount());
 
 			factory.init(smrizema);

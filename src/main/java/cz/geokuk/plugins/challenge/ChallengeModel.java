@@ -98,6 +98,11 @@ public class ChallengeModel extends Model0 {
 		return zapnuto;
 	}
 
+	/** Pruh plánovače na mapě je vidět, když je plánovač zapnutý a je co ukazovat. */
+	public boolean jePruhViditelny() {
+		return zapnuto && !seznam.aktivni().isEmpty();
+	}
+
 	public void setZapnuto(final boolean zapnuto) {
 		if (this.zapnuto == zapnuto) {
 			return;

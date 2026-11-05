@@ -266,4 +266,27 @@ public class RozmisteniPrekryvuTest {
 		podklad.setBounds(10, 5, 980, 590);
 		Assert.assertTrue("přepočet o polohu podkladu", RozmisteniPrekryvu.prekazky(rohy, podklad, false).contains(new Rectangle(jv.getX() - 10, jv.getY() - 5, jv.getWidth(), jv.getHeight())));
 	}
+
+	@Test
+	public void ukazatelVykonuJePodPruhemJenKdyzJePruhVidet() {
+		Assert.assertEquals(new Rectangle(4, 36, 330, 20), RozmisteniPrekryvu.ukazatelVykonu(true));
+		Assert.assertEquals(new Rectangle(4, 4, 330, 20), RozmisteniPrekryvu.ukazatelVykonu(false));
+		Assert.assertNotSame("kopie, ne sdílená konstanta", RozmisteniPrekryvu.UKAZATEL_VYKONU, RozmisteniPrekryvu.ukazatelVykonu(true));
+	}
+
+	@Test
+	public void radaKachlovnikuSeVyhneLevemuHornimuRohuJenSPruhem() {
+		for (final Dimension okno : OKNA) {
+			for (final int sirkaRady : new int[] { 250, 600, okno.width - 40 }) {
+				final int x = (okno.width - sirkaRady) / 2;
+				Assert.assertEquals("bez pruhu beze změny", RozmisteniPrekryvu.Y_RADY, RozmisteniPrekryvu.yRady(x, false));
+				final Rectangle rada = new Rectangle(x, RozmisteniPrekryvu.yRady(x, true), sirkaRady, 90);
+				Assert.assertFalse(okno + " rada " + sirkaRady + " × pruh", rada.intersects(RozmisteniPrekryvu.pruhPlanovace(RozmisteniPrekryvu.volnaSirkaPruhu(okno.width))));
+				Assert.assertFalse(okno + " rada " + sirkaRady + " × ukazatel", rada.intersects(RozmisteniPrekryvu.ukazatelVykonu(true)));
+			}
+		}
+		Assert.assertEquals("úzká rada uprostřed široké mapy zůstane nahoře", 8, RozmisteniPrekryvu.yRady(700, true));
+		Assert.assertEquals("hranice: ukazatel končí na x = 334, mezera 8", 60, RozmisteniPrekryvu.yRady(341, true));
+		Assert.assertEquals(8, RozmisteniPrekryvu.yRady(342, true));
+	}
 }

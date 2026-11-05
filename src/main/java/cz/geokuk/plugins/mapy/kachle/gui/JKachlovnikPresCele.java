@@ -70,6 +70,9 @@ public class JKachlovnikPresCele extends JKachlovnik {
 	private static final Color ODKAZ = new Color(0x1A5FB4);
 
 	private transient SpravaMapModel spravaMap;
+	/** Je vidět pruh plánovače vlevo nahoře? Rada se pak vyhýbá jeho oblasti. */
+	private boolean pruhPlanovace;
+
 	/** Kde jsou v kachlovníku odkazy rady a mapy, které stahují; prázdné, když se nekreslí. */
 	private final transient List<Rectangle> odkazyRady = new ArrayList<>();
 	private final transient List<KatalogovaMapa> mapyRady = new ArrayList<>();
@@ -81,6 +84,18 @@ public class JKachlovnikPresCele extends JKachlovnik {
 	/** Rada a atribuce, jak se naposledy kreslily nebo zkontrolovaly; null, když se nekreslí. */
 	private transient RozlozeniRady posledniRada;
 	private transient AtribuceMapy.Rozlozeni posledniAtribuce;
+
+	public void inject(final cz.geokuk.plugins.challenge.ChallengeModel challengeModel) {
+		pruhPlanovace = challengeModel.jePruhViditelny();
+	}
+
+	public void onEvent(final cz.geokuk.plugins.challenge.ChallengeZmenenyEvent event) {
+		final boolean pruh = event.getModel().jePruhViditelny();
+		if (pruh != pruhPlanovace) {
+			pruhPlanovace = pruh;
+			repaint();
+		}
+	}
 
 	public void inject(final SpravaMapModel spravaMap) {
 		this.spravaMap = spravaMap;
@@ -414,7 +429,8 @@ public class JKachlovnikPresCele extends JKachlovnik {
 		}
 		w += 16;
 		final int h = fmTucne.getHeight() + (radky.size() + tabulka.size()) * fm.getHeight() + 8;
-		return new RozlozeniRady(novaRada, radky, tabulka, sloupce, (getWidth() - w) / 2, 8, w, h);
+		final int xRady = (getWidth() - w) / 2;
+		return new RozlozeniRady(novaRada, radky, tabulka, sloupce, xRady, cz.geokuk.framework.RozmisteniPrekryvu.yRady(xRady, pruhPlanovace), w, h);
 	}
 
 	/** Stavy a velikosti map a vrstev pro dvě tlačítka rady; matice se sestaví až při prvním dotazu. */

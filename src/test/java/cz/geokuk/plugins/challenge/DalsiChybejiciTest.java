@@ -74,4 +74,23 @@ public class DalsiChybejiciTest {
 		Assert.assertEquals("GC0", d.dalsi(v, 50, 14).id());
 		Assert.assertEquals(Collections.singletonList("GC0"), Collections.singletonList(d.dalsi(v, 50, 14).id()));
 	}
+
+	@Test
+	public void predchoziVratiPredchozihoVybranehoAAktualniSeMuzeVybratZnovu() {
+		final VysledekSektoru v = vysledek(new double[][] { { 50.0, 14.0 }, { 50.1, 14.0 }, { 50.5, 14.0 } });
+		final DalsiChybejici d = new DalsiChybejici();
+		Assert.assertNull("nic nebylo vybráno", d.predchozi(v, 50.0, 14.0));
+		Assert.assertEquals("GC0", d.dalsi(v, 50.0, 14.0).id());
+		Assert.assertNull("před prvním nic není", d.predchozi(v, 50.0, 14.0));
+		Assert.assertEquals("GC1", d.dalsi(v, 50.0, 14.0).id());
+		Assert.assertEquals("GC2", d.dalsi(v, 50.0, 14.0).id());
+		final VybranyKandidat zpet = d.predchozi(v, 50.1, 14.0);
+		Assert.assertEquals("GC1", zpet.id());
+		Assert.assertEquals(0, zpet.vzdalenost(), 1);
+		Assert.assertEquals("GC2 je zase k dispozici", "GC2", d.dalsi(v, 50.1, 14.0).id());
+		Assert.assertEquals("GC1", d.predchozi(v, 50.0, 14.0).id());
+		Assert.assertEquals("GC0", d.predchozi(v, 50.0, 14.0).id());
+		Assert.assertNull(d.predchozi(v, 50.0, 14.0));
+		Assert.assertNull("jiný výsledek", d.predchozi(vysledek(new double[][] { { 50.0, 14.0 } }), 50.0, 14.0));
+	}
 }
