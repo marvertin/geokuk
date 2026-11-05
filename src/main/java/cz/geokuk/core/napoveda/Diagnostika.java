@@ -450,11 +450,10 @@ public final class Diagnostika {
 		if (!soubor.isFile()) {
 			return konec;
 		}
-		final String domov = FConst.HOME_DIR.getAbsolutePath();
 		try (BufferedReader reader = Files.newBufferedReader(soubor.toPath(), StandardCharsets.UTF_8)) {
 			String radek;
 			while ((radek = reader.readLine()) != null) {
-				konec.addLast(radek.replace(domov, "~"));
+				konec.addLast(soukrome(radek));
 				if (konec.size() > radku) {
 					konec.removeFirst();
 				}

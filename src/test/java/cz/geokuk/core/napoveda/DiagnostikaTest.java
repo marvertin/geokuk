@@ -121,6 +121,15 @@ public class DiagnostikaTest {
 	}
 
 	@Test
+	public void konecLoguBezParametruAdres() throws Exception {
+		final File log = tmp.newFile("geokuk-url.log");
+		Files.write(log.toPath(), Arrays.asList("Chyba https://tile.example.org/1/2/3.png?apikey=TAJNE&x=1 při stahování"), StandardCharsets.UTF_8);
+		final String radek = Diagnostika.konecLogu(log, 3).getFirst();
+		Assert.assertFalse(radek, radek.contains("TAJNE"));
+		Assert.assertEquals("Chyba https://tile.example.org/1/2/3.png?… při stahování", radek);
+	}
+
+	@Test
 	public void chybejiciLogJePrazdny() {
 		Assert.assertTrue(Diagnostika.konecLogu(new File(tmp.getRoot(), "neni.log"), 3).isEmpty());
 	}
