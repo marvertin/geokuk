@@ -57,4 +57,10 @@ public class JMeritkoSlideTest {
 			}
 		}
 	}
+
+	@Test
+	public void meritkoSeVejdeDoVyhrazeneVysky() {
+		Assert.assertTrue(new JMeritkoSlide().zabranaVyska() + " > " + cz.geokuk.framework.RozmisteniPrekryvu.VYSKA_MERITKA,
+				new JMeritkoSlide().zabranaVyska() <= cz.geokuk.framework.RozmisteniPrekryvu.VYSKA_MERITKA);
+	}
 }

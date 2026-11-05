@@ -181,6 +181,8 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 				}
 			}
 
+			toast.setPrekazky(() -> RozmisteniPrekryvu.prekazky(srohama, smrizema, obsazenik.isVisible()));
+
 			smrizema.add(mysovani, smrizema.getComponentCount());
 
 			factory.init(smrizema);

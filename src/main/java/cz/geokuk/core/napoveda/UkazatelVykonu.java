@@ -9,12 +9,12 @@ import javax.swing.Timer;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.MyPreferences;
 
-/** Štítek s výkonem kreslení v levém horním rohu mapy; jen v beta kanálu a na přání. */
+/** Štítek s výkonem kreslení vlevo nahoře na mapě pod pruhem plánovače; jen v beta kanálu a na přání. */
 public final class UkazatelVykonu {
 
 	static final String KLIC = "ukazatelVykonu";
 	/** Kde štítek leží; jeho překreslení se do doby kreslení mapy nepočítá. */
-	public static final Rectangle OBLAST = new Rectangle(4, 4, 330, 20);
+	public static final Rectangle OBLAST = cz.geokuk.framework.RozmisteniPrekryvu.UKAZATEL_VYKONU;
 	private static final Color POZADI = new Color(0, 0, 0, 150);
 
 	private static volatile boolean zapnuty;

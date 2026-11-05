@@ -256,6 +256,16 @@ public class JBarvovyDvojSliderTest {
 	}
 
 	@Test
+	public void legendaSeVejdeDoVyhrazenePraveSirky() {
+		final JPanel rodic = rodic();
+		legenda().tahne(true);
+		cas.addAndGet(2 * BublinkaHodnoty.ZACATEK_MS);
+		final Rectangle r = kresli(rodic, obraz());
+		Assert.assertNotNull(r);
+		Assert.assertTrue("legenda zasahuje " + (500 - r.x) + " bodů od pravého okraje", 500 - r.x <= cz.geokuk.framework.RozmisteniPrekryvu.SIRKA_LEGENDY);
+	}
+
+	@Test
 	public void viditelnostLegendyRoztahujeAlfuKresby() {
 		final JPanel rodic = rodic();
 		legenda().tahne(true);

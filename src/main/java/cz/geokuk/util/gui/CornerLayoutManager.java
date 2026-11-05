@@ -183,17 +183,17 @@ public class CornerLayoutManager implements LayoutManager2 {
 	 * @param cc
 	 */
 	private Dimension rozmer(final Dimension dim, final Component cc) {
-		final Dimension prs = cc.getPreferredSize();
-		final Dimension mis = cc.getMinimumSize();
-		final Dimension mas = cc.getMaximumSize();
-
-		final int dx = rozmer(ratiox, dim.width, prs.width, mis.width, mas.width);
-		final int dy = rozmer(ratioy, dim.height, prs.height, mis.height, mas.height);
-		final Dimension v = new Dimension(dx, dy);
-		return v;
+		return rozmerRohu(dim, cc.getPreferredSize(), cc.getMinimumSize(), cc.getMaximumSize());
 	}
 
-	private int rozmer(final float ratio, final int size, final int pr, final int mi, final int ma) {
+	/** Rozměr panelu v rohu: preferovaný, nejvýš čtvrtina šířky a třetina výšky, v mezích nejmenšího a největšího rozměru a v mezích prostoru. */
+	public static Dimension rozmerRohu(final Dimension dim, final Dimension prs, final Dimension mis, final Dimension mas) {
+		final int dx = rozmer(ratiox, dim.width, prs.width, mis.width, mas.width);
+		final int dy = rozmer(ratioy, dim.height, prs.height, mis.height, mas.height);
+		return new Dimension(dx, dy);
+	}
+
+	private static int rozmer(final float ratio, final int size, final int pr, final int mi, final int ma) {
 		final int mypr = (int) (size * ratio);
 		int v = Math.min(mypr, pr);
 		v = Math.max(v, mi);

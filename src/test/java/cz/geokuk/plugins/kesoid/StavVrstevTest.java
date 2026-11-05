@@ -255,7 +255,7 @@ public class StavVrstevTest {
 		final java.awt.Rectangle r = JToast.umisteni(1000, 700, 300, 24);
 		Assert.assertEquals("vodorovně na středu", 500, r.x + r.width / 2);
 		Assert.assertEquals(350, r.x);
-		Assert.assertEquals("střed zprávy je 90 px nad dolním okrajem", 700 - 90, r.y + r.height / 2);
+		Assert.assertEquals("zpráva stojí 12 px nad oblastí měřítka", 700 - cz.geokuk.framework.RozmisteniPrekryvu.VYSKA_MERITKA - 12, r.y + r.height);
 		Assert.assertEquals(300, r.width);
 		Assert.assertEquals(24, r.height);
 		final java.awt.Rectangle sudy = JToast.umisteni(1001, 700, 301, 24);
@@ -263,20 +263,30 @@ public class StavVrstevTest {
 	}
 
 	@Test
-	public void zpravaSeVUzkemOknePosuneKLevemuOkrajiAleNeoriznese() {
+	public void zpravaSeVUzkemOknePosuneKLevemuOkrajiAZkratiSe() {
 		final java.awt.Rectangle uzke = JToast.umisteni(300, 700, 340, 24);
-		Assert.assertEquals("delší než mapa: začíná na okraji, nezkracuje se zleva", JToast.OKRAJ, uzke.x);
-		final java.awt.Rectangle skoroTesne = JToast.umisteni(350, 700, 340, 24);
-		Assert.assertEquals(JToast.OKRAJ, skoroTesne.x);
-		final java.awt.Rectangle volne = JToast.umisteni(400, 700, 340, 24);
-		Assert.assertEquals(30, volne.x);
+		Assert.assertEquals("delší než mapa: začíná na okraji, nezkracuje se zleva", cz.geokuk.framework.RozmisteniPrekryvu.OKRAJ_ZPRAVY, uzke.x);
+		Assert.assertEquals("a zkrátí se, aby nezasáhla do pásu legendy", cz.geokuk.framework.RozmisteniPrekryvu.nejvetsiSirkaZpravy(300), uzke.width);
+		final java.awt.Rectangle volne = JToast.umisteni(500, 700, 340, 24);
+		Assert.assertEquals("na pravé straně zůstane pás pro legendu", 500 - 90 - 12 - 340, volne.x);
+		final java.awt.Rectangle stred = JToast.umisteni(800, 700, 340, 24);
+		Assert.assertEquals("kde je místo, je vodorovně uprostřed", 230, stred.x);
 	}
 
 	@Test
-	public void zpravaJeNadMeritkemAVizualneNadStavovymRadkem() {
-		final java.awt.Rectangle r = JToast.umisteni(1280, 656, 330, 24);
-		Assert.assertTrue("nad dolním okrajem mapy, tedy nad stavovým řádkem pod ní", r.y + r.height < 656);
-		Assert.assertTrue("měřítko má nahoře kolem 55 px od dolního okraje: zpráva ho nepřekrývá", r.y + r.height < 656 - 55);
+	public void dlouhyTextSeZkratiTremiTeckami() {
+		final java.awt.image.BufferedImage obraz = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+		final java.awt.Graphics2D g = obraz.createGraphics();
+		final java.awt.FontMetrics fm = g.getFontMetrics(new java.awt.Font(java.awt.Font.DIALOG, java.awt.Font.BOLD, 12));
+		g.dispose();
+		final String text = "Zapnuté zvýrazňovací kruhy s poloměrem v metrech";
+		Assert.assertEquals("vejde se", text, JToast.zkrat(text, fm, fm.stringWidth(text)));
+		final String kratky = JToast.zkrat(text, fm, fm.stringWidth(text) - 1);
+		Assert.assertTrue(kratky, kratky.endsWith("…") && kratky.length() < text.length());
+		Assert.assertTrue(fm.stringWidth(kratky) <= fm.stringWidth(text) - 1);
+		Assert.assertEquals("…", JToast.zkrat(text, fm, 3).substring(JToast.zkrat(text, fm, 3).length() - 1));
+		Assert.assertEquals("aspoň jeden znak zůstane i v nejužším místě", "Z…", JToast.zkrat(text, fm, 0));
+		Assert.assertEquals("vejde se přesně", "Zap…", JToast.zkrat(text, fm, fm.stringWidth("Zap…")));
 	}
 
 	@Test
@@ -290,11 +300,12 @@ public class StavVrstevTest {
 
 	@Test
 	public void presnaHraniceOkrajeDvanactBodu() {
-		Assert.assertEquals("(324 − 300) / 2 = 12: právě na hranici", 12, JToast.umisteni(324, 700, 300, 24).x);
-		Assert.assertEquals("o bod širší mapa: dělení dolů, stále 12", 12, JToast.umisteni(325, 700, 300, 24).x);
-		Assert.assertEquals("o dva body širší: 13", 13, JToast.umisteni(326, 700, 300, 24).x);
-		Assert.assertEquals("o bod užší mapa: nejméně 12", 12, JToast.umisteni(323, 700, 300, 24).x);
-		Assert.assertEquals("delší než mapa: začíná na okraji", 12, JToast.umisteni(200, 700, 500, 24).x);
+		// pás vpravo pro legendu: pravý okraj zprávy nejvýš 90 + 12 bodů od pravého okraje mapy
+		Assert.assertEquals("právě na hranici", 12, JToast.umisteni(414, 700, 300, 24).x);
+		Assert.assertEquals("o bod širší mapa: o bod dál od okraje", 13, JToast.umisteni(415, 700, 300, 24).x);
+		Assert.assertEquals("o bod užší mapa: zpráva se zkrátí o bod a stojí na okraji", 12, JToast.umisteni(413, 700, 300, 24).x);
+		Assert.assertEquals(299, JToast.umisteni(413, 700, 300, 24).width);
+		Assert.assertEquals("delší než mapa", 12, JToast.umisteni(200, 700, 500, 24).x);
 	}
 
 	@Test
