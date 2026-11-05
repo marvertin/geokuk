@@ -12,7 +12,7 @@
   středu výřezu), je tam štítek Kruhy omezené, a když je zároveň něco skryté
   a něco omezené, Kruhy skryté a omezené. Po zkratkách, jejichž výsledek není
   vidět (F5, F9 při malém přiblížení, Alt+F8, Ctrl+1 až Ctrl+4, skryté kruhy),
-  se vlevo dole nad mapou na chvíli ukáže krátká zpráva.
+  se uprostřed dole nad měřítkem na chvíli ukáže krátká zpráva.
 - Posuvníky kruhů Obsazenost 161 m jsou tenké; při najetí myší, tažení nebo
   změně kolečkem se plynule ukážou nadpisy Barva a Průhlednost, popisky os
   (bílá, šedá, černá; průhlednost po 25 %) a bublinka s aktuální hodnotou v
