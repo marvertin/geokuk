@@ -48,7 +48,7 @@ public final class NastaveniChallenge {
 	 */
 	public static void uloz(final ChallengeSeznam seznam, final boolean zapnuto, final ChallengeUloziste uloziste) {
 		final String staraVerze = uloziste.get("verze");
-		final String novaVerze = Integer.toString(nejvyssiVerze(uloziste, cisloVerze(staraVerze)) + 1);
+		final String novaVerze = Long.toString(nejvyssiVerze(uloziste, cisloVerze(staraVerze)) + 1);
 		final Map<String, String> zapis = new java.util.LinkedHashMap<>();
 		int i = 0;
 		for (final Challenge c : seznam.vlastni()) {
@@ -88,8 +88,8 @@ public final class NastaveniChallenge {
 	}
 
 	/** Nejvyšší verze, pod kterou už něco leží, ať dvě instance nezapisují do stejné sady. */
-	private static int nejvyssiVerze(final ChallengeUloziste uloziste, final int vychozi) {
-		int nejvyssi = vychozi;
+	private static long nejvyssiVerze(final ChallengeUloziste uloziste, final long vychozi) {
+		long nejvyssi = vychozi;
 		for (final String k : uloziste.klice()) {
 			if (!k.startsWith(PREDPONA)) {
 				continue;
@@ -102,9 +102,13 @@ public final class NastaveniChallenge {
 		return nejvyssi;
 	}
 
-	private static int cisloVerze(final String verze) {
+	/** Větší číslo než tohle bere jako neplatné, ať +1 nepřeteče. */
+	private static final long NEJVYSSI_VERZE = 1_000_000_000_000_000L;
+
+	private static long cisloVerze(final String verze) {
 		try {
-			return verze == null ? 0 : Math.max(0, Integer.parseInt(verze));
+			final long v = verze == null ? 0 : Long.parseLong(verze);
+			return v < 0 || v > NEJVYSSI_VERZE ? 0 : v;
 		} catch (final NumberFormatException e) {
 			return 0;
 		}

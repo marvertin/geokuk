@@ -276,4 +276,30 @@ public class NastaveniChallengeTest {
 		Assert.assertEquals(1, n.seznam.vlastni().size());
 		Assert.assertEquals("B", n.seznam.vlastni().get(0).nazev());
 	}
+
+	@Test
+	public void verzeZa2147483647NepreteceAUlozeniFunguje() {
+		final MapoveUloziste u = new MapoveUloziste();
+		final ChallengeSeznam s = new ChallengeSeznam();
+		s.ulozVlastni(vlastni("A", ZdrojPravidel.PGC, ZdrojeNalezu.ZAPNUTE));
+		NastaveniChallenge.uloz(s, false, u);
+		u.put("verze", "2147483647");
+		u.put("definice.2147483647.0.nazev", "Stará");
+		NastaveniChallenge.uloz(s, false, u);
+		Assert.assertEquals("2147483648", u.get("verze"));
+		Assert.assertEquals(1, NastaveniChallenge.nacti(u).seznam.vlastni().size());
+		Assert.assertFalse(u.m.keySet().toString(), u.m.keySet().stream().anyMatch(k -> k.startsWith("definice.2147483647.")));
+	}
+
+	@Test
+	public void nesmyslneVelkaVerzeSeBereJakoNulaAUlozeniZacneZnovu() {
+		final MapoveUloziste u = new MapoveUloziste();
+		u.put("verze", "9223372036854775807");
+		u.put("definice.9223372036854775807.0.nazev", "Nesmysl");
+		final ChallengeSeznam s = new ChallengeSeznam();
+		s.ulozVlastni(vlastni("A", ZdrojPravidel.PGC, ZdrojeNalezu.ZAPNUTE));
+		NastaveniChallenge.uloz(s, false, u);
+		Assert.assertEquals("1", u.get("verze"));
+		Assert.assertEquals("A", NastaveniChallenge.nacti(u).seznam.vlastni().get(0).nazev());
+	}
 }

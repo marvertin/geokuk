@@ -45,6 +45,8 @@ public class PlanovacChallengeTest {
 	private volatile Wgs domov = new Wgs(LAT, LON);
 	private volatile Wgs stredMapy = new Wgs(LAT, LON);
 	private Path adresar;
+	/** Fáze předpočtu v okamžiku každého hlášení do modelu. */
+	private final List<StavPredpoctu.Faze> hlasenaFaze = new CopyOnWriteArrayList<>();
 
 	@Before
 	public void setUp() throws Exception {
@@ -104,7 +106,11 @@ public class PlanovacChallengeTest {
 			@Override
 			public void fire(final Event0<?> event) {
 				udalosti.add((ChallengeZmenenyEvent) event);
-				planovac.modelZmenen((ChallengeZmenenyEvent) event);
+				final ChallengeZmenenyEvent e = (ChallengeZmenenyEvent) event;
+				if (e.druh() == ChallengeZmenenyEvent.Druh.PREDPOCET) {
+					hlasenaFaze.add(model.stavPredpoctu(e.challenge()).faze());
+				}
+				planovac.modelZmenen(e);
 			}
 		});
 	}
@@ -419,6 +425,8 @@ public class PlanovacChallengeTest {
 		pockej(() -> model.vysledek(c) != null, "výsledek");
 		Assert.assertEquals(StavPredpoctu.Faze.ZRUSENO, predpocty.get(0).stav().faze());
 		Assert.assertTrue(predpocty.size() >= 2);
+		pockej(() -> model.stavPredpoctu(c).faze() == StavPredpoctu.Faze.HOTOVO, "stav hotovo");
+		Assert.assertFalse("zrušený běh se do modelu nehlásí: " + hlasenaFaze, hlasenaFaze.contains(StavPredpoctu.Faze.ZRUSENO));
 	}
 
 	@Test
