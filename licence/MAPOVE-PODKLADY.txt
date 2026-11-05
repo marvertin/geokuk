@@ -14,6 +14,13 @@ Atribuce:      © OpenStreetMap contributors
 Licence:       https://www.openstreetmap.org/copyright
 Podmínky dlaždic: https://operations.osmfoundation.org/policies/tiles/
 
+Mapy.com (Mapy.cz) – Základní, Turistická, Letecká (včetně starších snímků),
+Zeměpisná, Dopravní a Historická mapa
+------------------------------------------------------------------------
+Poskytovatel:  Seznam.cz, a.s.
+Atribuce:      © Seznam.cz, a.s. a další
+Podmínky:      https://developer.mapy.com/terms-and-conditions/
+
 Freemap Slovakia
 ----------------
 Poskytovatel:  Freemap Slovakia (outdoor.tiles.freemap.sk,
@@ -53,6 +60,30 @@ Metainformace poskytovatele o službě:
                https://zbgis.skgeodesy.sk/zbgis/rest/services/Ortofoto/MapServer?f=json
 Služby ZBGIS:  https://www.skgeodesy.sk/geoportal-en/services/web-map-services/wmts/wmts-zbgis
 
+DE topografická mapa (BKG)
+--------------------------
+Poskytovatel:  Bundesamt für Kartographie und Geodäsie (BKG),
+               produkt TopPlusOpen (sgx.geodatenzentrum.de)
+Licence:       Datenlizenz Deutschland – Namensnennung – Version 2.0
+               (dl-de/by-2-0), https://www.govdata.de/dl-de/by-2-0
+Atribuce:      © BKG (rok zobrazení) dl-de/by-2-0, Datenquellen:
+               https://sgx.geodatenzentrum.de/web_public/gdz/datenquellen/datenquellen_topplusopen.html
+
+AT mapa (basemap.at)
+--------------------
+Poskytovatel:  basemap.at (maps.wien.gv.at)
+Licence:       Open Government Data Österreich, CC BY 4.0,
+               https://creativecommons.org/licenses/by/4.0/
+Atribuce:      Data source: basemap.at (https://basemap.at)
+
+CH topografická mapa (swisstopo)
+--------------------------------
+Poskytovatel:  Bundesamt für Landestopografie swisstopo
+               (wmts.geo.admin.ch)
+Podmínky:      https://www.swisstopo.admin.ch/ogd-conditions
+               https://www.geo.admin.ch/en/general-terms-of-use-fsdi
+Atribuce:      © swisstopo
+
 Vyhledávání adres
 -----------------
 Poskytovatel:  Nominatim (OpenStreetMap Foundation)
@@ -77,6 +108,31 @@ Licence:       volné dílo (public domain)
 Atribuce:      Made with Natural Earth. Free vector and raster map data
                @ naturalearthdata.com.
 Soubor lze ze složky smazat, program funguje i bez něj.
+
+Mapy ke stažení ve Správci offline map
+---------------------------------------
+Poskytovatel:  mapsforge (download.mapsforge.org, zrcadlo
+               ftp-stud.hs-esslingen.de, Hochschule Esslingen)
+Licence dat:   Open Database License (ODbL) 1.0
+Atribuce:      © přispěvatelé OpenStreetMap
+Licence:       https://www.openstreetmap.org/copyright
+Obrysy map (soubory .poly přibalené v programu) jsou ze stejného serveru
+(maps/poly), jsou odvozené z dat OpenStreetMap a mají stejnou licenci
+a atribuci.
+
+Vrstvy GeoKuku (trasy, vrstevnice, stínování terénu)
+----------------------------------------------------
+Poskytovatel:  GeoKuk community (github.com/geokuk-community/geokuk-maps)
+Trasy a body:  © přispěvatelé OpenStreetMap, ODbL 1.0
+Vrstevnice a stínování:
+               produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014
+               and © Airbus Defence and Space GmbH 2014-2018 provided under
+               COPERNICUS by the European Union and ESA; all rights reserved.
+               The organisations in charge of the Copernicus programme by law
+               or by delegation do not incur any liability for any use of the
+               Copernicus WorldDEM-30.
+               Česká republika: © ČÚZK, CC BY 4.0 (DMR 4G)
+Atribuce zobrazená v mapě je u každé vrstvy v jejím katalogu.
 
 Mapy zadané uživatelem
 ----------------------
