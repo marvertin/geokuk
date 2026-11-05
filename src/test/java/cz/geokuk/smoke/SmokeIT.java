@@ -24,8 +24,8 @@ public class SmokeIT {
 
 	private static final File KOREN = new File("target/smoke");
 	private static final long EDT_LIMIT_MS = 3000;
-	private static final long EDT_LIMIT_START_MS = 10_000;
-	private static final long EDT_LIMIT_VZHLED_MS = 10_000;
+	private static final long EDT_LIMIT_START_MS = 4000;
+	private static final long EDT_LIMIT_VZHLED_MS = 3000;
 
 	private FalesnyDlazdicovyServer server;
 	private int pocetWpt;
@@ -671,9 +671,9 @@ public class SmokeIT {
 			problemy.add("Hlídač EDT po startu neviděl žádnou událost, odezvu EDT neměří");
 		}
 		zkontrolujEdt(zprava, "edt.nejdelsiMs", EDT_LIMIT_MS, "", problemy);
-		// Start programu (okno, načtení keší, první vykreslení) běží na EDT naráz a na pomalém stroji trvá déle.
+		// Start programu (okno, načtení keší, první vykreslení) běží na EDT naráz, proto má vyšší limit.
 		zkontrolujEdt(zprava, "edt.startMs", EDT_LIMIT_START_MS, "při startu: ", problemy);
-		// Přepnutí vzhledu přestaví všechny komponenty okna a na Windows runneru trvá jednotky sekund.
+		// Přepnutí vzhledu přestaví všechny komponenty okna, proto má vyšší limit.
 		zkontrolujEdt(zprava, "edt.vzhledMs", EDT_LIMIT_VZHLED_MS, "při přepnutí vzhledu: ", problemy);
 		vypisPauzyJvm(adresar, zprava);
 		final long pamet = Long.parseLong(zprava.getProperty("pamet.mb", "0"));
