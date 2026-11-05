@@ -384,16 +384,137 @@ public class JBarvovyDvojSliderTest {
 	// --- bublinky ---
 
 	@Test
-	public void bublinkaJeVlevoOdPopiskuOsAVidetKdyzTahne() {
+	public void bublinkaStojiVeStejnemSloupciJakoPopiskyOs() {
 		final JPanel rodic = rodic();
 		slider.getPruhlednik().setValueIsAdjusting(true);
 		slider.getPruhlednik().setValue(10);
 		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
-		final Rectangle r = kresli(rodic, obraz());
+		final Rectangle r = pouzeBublinka(rodic);
 		Assert.assertNotNull(r);
 		final Point osa = SwingUtilities.convertPoint(slider.getPruhlednik(), slider.getPruhlednik().getWidth() / 2, 0, rodic);
-		Assert.assertTrue("bublinka je vlevo od popisků os, ne u osy: " + r + " osa " + osa, r.x < osa.x - 100);
+		Assert.assertEquals("pravý okraj bublinky je v pravém okraji popisků os, 8 px od osy", osa.x - 8, r.x + r.width);
+		Assert.assertEquals(8, JBarvovyDvojSlider.MEZERA_OSY);
 		slider.getPruhlednik().setValueIsAdjusting(false);
+	}
+
+	@Test
+	public void bublinkaLegendeNerozsiriAniNeposune() {
+		final JPanel rodic = rodic();
+		legenda().tahne(true);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+		final Rectangle bez = kresli(rodic, obraz());
+		slider.getPruhlednik().setValueIsAdjusting(true);
+		slider.getPruhlednik().setValue(100);
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(40);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS);
+		final Rectangle s = kresli(rodic, obraz());
+		Assert.assertEquals("bublina je uvnitř sloupce popisků, legenda je stejně široká", bez.x, s.x);
+		Assert.assertEquals(bez.width, s.width);
+		slider.getPruhlednik().setValueIsAdjusting(false);
+		slider.getBarvovnik().setValueIsAdjusting(false);
+	}
+
+	@Test
+	public void popisekPodBublinkouSeSkryjeAJinePopiskyZustanou() {
+		final JPanel rodic = rodic();
+		legenda().tahne(true);
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		// bílá je nahoře: bublinka leží přesně na popisku Bílá
+		slider.getBarvovnik().setValue(255);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS + 50);
+		final BufferedImage sLegendou = obraz();
+		final Rectangle r = kresli(rodic, sLegendou);
+		final Rectangle bublina = pouzeBublinka(rodic);
+		final BufferedImage jenBublina = obraz();
+		final Graphics2D g = jenBublina.createGraphics();
+		legendy.get(0).zrus();
+		slider.kresliNadMapou(g, rodic);
+		g.dispose();
+		Assert.assertNotNull(r);
+		Assert.assertNotNull(bublina);
+		for (int y = bublina.y; y < bublina.y + bublina.height; y++) {
+			for (int x = bublina.x - 30; x < bublina.x + bublina.width; x++) {
+				Assert.assertEquals("pixel " + x + "," + y + " je jen bublinka, popisek pod ní je skrytý", jenBublina.getRGB(x, y), sLegendou.getRGB(x, y));
+			}
+		}
+		slider.getBarvovnik().setValueIsAdjusting(false);
+	}
+
+	private Rectangle pouzeBublinka(final JPanel rodic) {
+		final ViditelnostLegendy l = legenda();
+		final boolean aktivni = l.jeAktivni();
+		l.zrus();
+		final Rectangle r = kresli(rodic, obraz());
+		if (aktivni) {
+			l.tahne(true);
+		}
+		return r;
+	}
+
+	@Test
+	public void popisekMimoBublinkuZustaneViditelny() {
+		final JPanel rodic = rodic();
+		legenda().tahne(true);
+		slider.getBarvovnik().setValueIsAdjusting(true);
+		slider.getBarvovnik().setValue(255);
+		cas.addAndGet(BublinkaHodnoty.ZACATEK_MS + 50);
+		final BufferedImage sLegendou = obraz();
+		kresli(rodic, sLegendou);
+		final Rectangle bublina = pouzeBublinka(rodic);
+		// popisek Černá dole na ose barvy je daleko od bublinky nahoře
+		final Point nahore = SwingUtilities.convertPoint(slider.getBarvovnik(), 0, 0, rodic);
+		final int y = nahore.y + slider.getBarvovnik().getHeight() - 8;
+		int viditelnych = 0;
+		for (int dy = -6; dy <= 6; dy++) {
+			for (int x = bublina.x - 30; x < bublina.x + bublina.width; x++) {
+				if ((sLegendou.getRGB(x, y + dy) >>> 24) != 0) {
+					viditelnych++;
+				}
+			}
+		}
+		Assert.assertTrue("popisky mimo bublinku se nekryjí a zůstávají: " + viditelnych, viditelnych > 0);
+		slider.getBarvovnik().setValueIsAdjusting(false);
+	}
+
+	@Test
+	public void prekryvaniBublinkyAPopiskuPodleVzdalenostiStredu() {
+		final int hp = 15;
+		final int hb = 20;
+		final int mez = 2;
+		final int hranice = (hp + hb + 2 * mez) / 2; // 19,5: dy = 19 ještě překrývá, dy = 20 už ne
+		Assert.assertTrue(JBarvovyDvojSlider.prekryvaBublinku(100, hp, 100, hb));
+		Assert.assertTrue(JBarvovyDvojSlider.prekryvaBublinku(100, hp, 100 + hranice - 1, hb));
+		Assert.assertTrue(JBarvovyDvojSlider.prekryvaBublinku(100, hp, 100 + hranice, hb));
+		Assert.assertFalse(JBarvovyDvojSlider.prekryvaBublinku(100, hp, 100 + hranice + 1, hb));
+		Assert.assertTrue("záleží jen na vzdálenosti, ne na směru", JBarvovyDvojSlider.prekryvaBublinku(100, hp, 100 - hranice, hb));
+		Assert.assertFalse(JBarvovyDvojSlider.prekryvaBublinku(100, hp, 100 - hranice - 1, hb));
+		Assert.assertFalse("daleko", JBarvovyDvojSlider.prekryvaBublinku(10, hp, 300, hb));
+		// bublinka mezi dvěma popisky překryje oba, když jsou blízko; u kraje stupnice jen jeden
+		final int y1 = 100;
+		final int y2 = 120;
+		Assert.assertTrue(JBarvovyDvojSlider.prekryvaBublinku(y1, hp, 110, hb));
+		Assert.assertTrue(JBarvovyDvojSlider.prekryvaBublinku(y2, hp, 110, hb));
+		Assert.assertTrue(JBarvovyDvojSlider.prekryvaBublinku(10, hp, 5, hb));
+		Assert.assertFalse(JBarvovyDvojSlider.prekryvaBublinku(60, hp, 5, hb));
+	}
+
+	@Test
+	public void hranicePrekryvaniPriSudemSouctuVysek() {
+		// výšky 16 a 20 a mezera 2: součet 40, střed od středu o 20 px se ještě nedotýká
+		Assert.assertTrue(JBarvovyDvojSlider.prekryvaBublinku(100, 16, 119, 20));
+		Assert.assertFalse(JBarvovyDvojSlider.prekryvaBublinku(100, 16, 120, 20));
+		Assert.assertFalse(JBarvovyDvojSlider.prekryvaBublinku(100, 16, 80, 20));
+		Assert.assertTrue(JBarvovyDvojSlider.prekryvaBublinku(100, 16, 81, 20));
+	}
+
+	@Test
+	public void viditelnostPopiskuMiziSObjevovanimBublinky() {
+		Assert.assertEquals(0.8f, JBarvovyDvojSlider.viditelnostPopisku(0.8f, 0f, true), 0f);
+		Assert.assertEquals(0f, JBarvovyDvojSlider.viditelnostPopisku(0.8f, 1f, true), 0f);
+		Assert.assertEquals(0.4f, JBarvovyDvojSlider.viditelnostPopisku(0.8f, 0.5f, true), 0.0001f);
+		Assert.assertEquals("mimo bublinku se nic nemění", 0.8f, JBarvovyDvojSlider.viditelnostPopisku(0.8f, 1f, false), 0f);
+		Assert.assertEquals("bez legendy nic", 0f, JBarvovyDvojSlider.viditelnostPopisku(0f, 0f, true), 0f);
 	}
 
 	@Test

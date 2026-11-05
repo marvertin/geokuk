@@ -26,11 +26,13 @@ public class JBarvovyDvojSlider extends JPanel {
 
 	private static final int MAX = 255;
 	/** Vzdálenost popisků os od osy posuvníku. */
-	private static final int MEZERA_OSY = 12;
-	/** Mezera mezi popisky a bublinkou. */
-	private static final int MEZERA_BUBLINKY = 14;
+	static final int MEZERA_OSY = 8;
+	/** Kolik pixelů mezi popiskem osy a bublinkou ještě stačí, aby se nedotýkaly; blíž se popisek pod bublinkou skryje. */
+	private static final int MEZERA_BUBLINKY = 2;
 	/** Výška místa nad posuvníkem pro nadpis. */
-	private static final int VYSKA_NADPISU = 30;
+	private static final int VYSKA_NADPISU = 24;
+	/** Mezera pod nadpisem druhého posuvníku, nad ním je jen nadpis. */
+	private static final int MEZERA_MEZI_POSUVNIKY = 4;
 	private static final String[] TEXTY_OSY_BARVY = { "Černá", "Šedá", "Bílá" };
 	private static final int[] HODNOTY_OSY_BARVY = { 0, 128, MAX };
 
@@ -245,30 +247,44 @@ public class JBarvovyDvojSlider extends JPanel {
 		final float v = legenda.viditelnost();
 		final Font fontL = fontLegendy();
 		final FontMetrics fmL = g.getFontMetrics(fontL);
-		final int sirkaOsy = sirkaOsy(fmL);
 		final int pravyOkrajPanelu = SwingUtilities.convertPoint(this, getWidth(), 0, kam).x;
+		final Font fontB = fontBublinky();
+		final int vyskaPopisku = fmL.getHeight() + 4;
+		final int vyskaBublinky = g.getFontMetrics(fontB).getHeight() + 4;
 		for (final JSlider s : new JSlider[] { iBarvovnik, iPruhlednik }) {
 			final int osaX = stredOsy(s, kam).x;
 			final int pravyOkrajPopisku = osaX - MEZERA_OSY;
+			final BublinkaHodnoty b = bublinka(s);
+			final float vb = b.viditelnost();
+			final int yBublinky = yHodnoty(s, kam, s.getValue());
 			if (v > 0f) {
 				final boolean barva = s == iBarvovnik;
 				for (final Popisek p : barva ? osaBarvy() : osaPruhlednosti()) {
 					final int y = yHodnoty(s, kam, p.hodnota);
+					// Popisek, který by ležel pod bublinkou, se po dobu jejího zobrazení plynule skryje; bublinka stojí ve stejném sloupci jako popisky.
+					final float vp = viditelnostPopisku(v, vb, prekryvaBublinku(y, vyskaPopisku, yBublinky, vyskaBublinky));
 					PopisekNaMape.znacka(g, osaX - MEZERA_OSY + 2, osaX - 3, y, v);
-					souhrn = sjednot(souhrn, PopisekNaMape.nakresli(g, fontL, p.text, pravyOkrajPopisku, y, v));
+					souhrn = sjednot(souhrn, PopisekNaMape.nakresli(g, fontL, p.text, pravyOkrajPopisku, y, vp));
 				}
 				final Point nahore = SwingUtilities.convertPoint(s, 0, 0, kam);
 				souhrn = sjednot(souhrn, PopisekNaMape.nakresli(g, fontL, barva ? "Barva" : "Průhlednost", pravyOkrajPanelu, nahore.y - VYSKA_NADPISU / 2, v));
 			}
-			final BublinkaHodnoty b = bublinka(s);
-			final float vb = b.viditelnost();
 			if (vb > 0f) {
-				final Rectangle r = PopisekNaMape.nakresli(g, fontBublinky(), b.getText(), pravyOkrajPopisku - sirkaOsy - MEZERA_BUBLINKY, yHodnoty(s, kam, s.getValue()), vb);
-				souhrn = sjednot(souhrn, r);
+				souhrn = sjednot(souhrn, PopisekNaMape.nakresli(g, fontB, b.getText(), pravyOkrajPopisku, yBublinky, vb));
 			}
 		}
 		naposledy = souhrn == null ? new Rectangle() : souhrn;
 		return souhrn;
+	}
+
+	/** Viditelnost popisku osy: popisek pod bublinkou mizí s tím, jak se bublinka objevuje, stejným časováním jako legenda. */
+	static float viditelnostPopisku(final float viditelnostLegendy, final float viditelnostBublinky, final boolean podBublinkou) {
+		return viditelnostLegendy * (podBublinkou ? 1f - viditelnostBublinky : 1f);
+	}
+
+	/** Překrývá popisek osy (svislý střed a výška) bublinku? Mezi nimi musí zůstat aspoň {@link #MEZERA_BUBLINKY} pixelů, jinak se popisek skryje. */
+	static boolean prekryvaBublinku(final int yPopisku, final int vyskaPopisku, final int yBublinky, final int vyskaBublinky) {
+		return 2 * Math.abs(yPopisku - yBublinky) < vyskaPopisku + vyskaBublinky + 2 * MEZERA_BUBLINKY;
 	}
 
 	private static Rectangle sjednot(final Rectangle a, final Rectangle b) {
@@ -298,7 +314,7 @@ public class JBarvovyDvojSlider extends JPanel {
 		final Rectangle oblast = new Rectangle(naposledy);
 		final Point vlevoNahore = SwingUtilities.convertPoint(this, 0, 0, kam);
 		final FontMetrics fm = getFontMetrics(fontLegendy());
-		final int odOkraje = sirkaOsy(fm) + MEZERA_OSY + MEZERA_BUBLINKY + 190;
+		final int odOkraje = sirkaOsy(fm) + MEZERA_OSY + 190;
 		oblast.add(new Rectangle(vlevoNahore.x - odOkraje, vlevoNahore.y - VYSKA_NADPISU - 10, odOkraje + getWidth() + 4, getHeight() + 2 * VYSKA_NADPISU));
 		oblast.grow(2, 2);
 		kam.repaint(oblast.x, oblast.y, oblast.width, oblast.height);
@@ -331,9 +347,9 @@ public class JBarvovyDvojSlider extends JPanel {
 
 		add(Box.createRigidArea(new Dimension(0, VYSKA_NADPISU)));
 		add(iBarvovnik);
-		add(Box.createRigidArea(new Dimension(0, VYSKA_NADPISU + 10)));
+		add(Box.createRigidArea(new Dimension(0, VYSKA_NADPISU + MEZERA_MEZI_POSUVNIKY)));
 		add(iPruhlednik);
-		add(Box.createRigidArea(new Dimension(0, 20)));
+		add(Box.createRigidArea(new Dimension(0, 12)));
 	}
 
 	/** Najetí myší na pruh posuvníků a fokus na posuvníku ukazují legendu. */
