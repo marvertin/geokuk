@@ -8,19 +8,21 @@ import java.util.Set;
 
 /**
  * Výběr „dalšího chybějícího“ pro challenge s políčky: nejdřív kandidát s nejbližším datem (kalendář), při shodě nebo bez data nejbližší zadanému bodu. Už vybraní se
- * v jednom kole přeskakují; po projití všech začne kolo znovu, stejně jako při změně výsledku.
+ * v jednom kole přeskakují; po projití všech začne kolo znovu. Kolo pokračuje i přes nový výsledek téhož vstupu (přepočet podle jiného středu mapy, viz
+ * {@link VysledekPolicek#sVstupem(Object)}); výsledek z jiného vstupu začne kolo od začátku.
  */
 public final class DalsiPolicko {
 
 	private final Set<String> vybrane = new HashSet<>();
 	/** Vybraní v tomto kole v pořadí výběru, kvůli „předchozímu“. */
-	private final List<String> poradi = new ArrayList<>();
-	private VysledekPolicek vysledek;
+	private final List<KandidatPolicka> poradi = new ArrayList<>();
+	private Object vstup;
 
 	/** Další kandidát; null, když kandidáti nejsou. */
 	public synchronized KandidatPolicka dalsi(final VysledekPolicek vysledek, final double lat, final double lon) {
-		if (vysledek != this.vysledek) {
-			this.vysledek = vysledek;
+		final Object klic = vysledek == null ? null : vysledek.vstup();
+		if (klic != vstup) {
+			vstup = klic;
 			vybrane.clear();
 			poradi.clear();
 		}
@@ -34,23 +36,17 @@ public final class DalsiPolicko {
 			k = nejlepsi(vysledek, lat, lon);
 		}
 		vybrane.add(k.id());
-		poradi.add(k.id());
+		poradi.add(k);
 		return k;
 	}
 
 	/** Předchozí vybraný kandidát v tomto kole; null, když před posledním vybraným žádný není. Aktuální se tím vrátí mezi nevybrané. */
 	public synchronized KandidatPolicka predchozi(final VysledekPolicek vysledek) {
-		if (vysledek != this.vysledek || vysledek == null || poradi.size() < 2) {
+		if (vysledek == null || vysledek.vstup() != vstup || poradi.size() < 2) {
 			return null;
 		}
-		vybrane.remove(poradi.remove(poradi.size() - 1));
-		final String id = poradi.get(poradi.size() - 1);
-		for (final KandidatPolicka k : vysledek.kandidati()) {
-			if (k.id().equals(id)) {
-				return k;
-			}
-		}
-		return null;
+		vybrane.remove(poradi.remove(poradi.size() - 1).id());
+		return poradi.get(poradi.size() - 1);
 	}
 
 	private KandidatPolicka nejlepsi(final VysledekPolicek v, final double lat, final double lon) {

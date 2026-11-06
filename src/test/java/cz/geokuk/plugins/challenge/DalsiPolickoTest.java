@@ -97,4 +97,45 @@ public class DalsiPolickoTest {
 		d.dalsi(v, 50.0, 14);
 		Assert.assertNull("nové kolo začíná od jediného vybraného", d.predchozi(v));
 	}
+
+	@Test
+	public void vysledekTehozVstupuPokracujeVKole() {
+		final Object vstup = new Object();
+		final VysledekPolicek v1 = v(k("A", 50.0, null), k("B", 50.1, null), k("C", 50.5, null)).sVstupem(vstup);
+		final VysledekPolicek v2 = v(k("A", 50.0, null), k("B", 50.1, null), k("C", 50.5, null)).sVstupem(vstup);
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertEquals("A", d.dalsi(v1, 50.0, 14).id());
+		Assert.assertEquals("pokračuje, nezačíná od A", "B", d.dalsi(v2, 50.0, 14).id());
+		Assert.assertEquals("předchozí platí i přes nový výsledek", "A", d.predchozi(v2).id());
+		Assert.assertEquals("B", d.dalsi(v2, 50.0, 14).id());
+	}
+
+	@Test
+	public void predchoziVraciKandidataIKdyzNovyVysledekHoUzNema() {
+		final Object vstup = new Object();
+		final VysledekPolicek v1 = v(k("A", 50.0, null), k("B", 50.1, null)).sVstupem(vstup);
+		final VysledekPolicek v2 = v(k("B", 50.1, null), k("C", 50.5, null)).sVstupem(vstup);
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertEquals("A", d.dalsi(v1, 50.0, 14).id());
+		Assert.assertEquals("B", d.dalsi(v2, 50.1, 14).id());
+		Assert.assertEquals("A", d.predchozi(v2).id());
+	}
+
+	@Test
+	public void vysledekJinehoVstupuZacneKoloAHistoriiSmaze() {
+		final Object a = new Object();
+		final VysledekPolicek v1 = v(k("A", 50.0, null), k("B", 50.1, null)).sVstupem(a);
+		final VysledekPolicek v2 = v(k("A", 50.0, null), k("B", 50.1, null)).sVstupem(new Object());
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertEquals("A", d.dalsi(v1, 50.0, 14).id());
+		Assert.assertEquals("B", d.dalsi(v1, 50.0, 14).id());
+		Assert.assertEquals("A", d.dalsi(v2, 50.0, 14).id());
+		Assert.assertNull("historie původního vstupu je pryč", d.predchozi(v2));
+		Assert.assertNull("výsledek původního vstupu už neplatí", d.predchozi(v1));
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void vstupMusiBytZadany() {
+		v(k("A", 50.0, null)).sVstupem(null);
+	}
 }

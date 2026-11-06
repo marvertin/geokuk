@@ -50,6 +50,8 @@ public final class PlanovacChallenge {
 	private final ExecutorService vykon = Executors.newSingleThreadExecutor(r -> demon(r, "Plánovač challenge"));
 	private final Map<String, DalsiChybejici> dalsi = new HashMap<>();
 	private final Map<String, DalsiPolicko> dalsiPolicko = new HashMap<>();
+	/** Vstup výsledku D/T a kalendáře podle challenge; mění se při plném přepočtu, ne při přepočtu podle jiného středu mapy. */
+	private final Map<String, Object> vstupyPolicek = new HashMap<>();
 
 	/** O kolik metrů se musí střed mapy posunout, aby se D/T a kalendář přepočítaly podle nového středu. */
 	static final double PRAH_POSUNU_M = 2000;
@@ -174,7 +176,7 @@ public final class PlanovacChallenge {
 
 	private void prepocitej(final long moje, final Challenge c, final Collection<? extends VstupKes> data) {
 		if (c.typ() != Challenge.Typ.SEKTORY_360) {
-			prepocitejPolicka(() -> zastaralo(moje), c, data);
+			prepocitejPolicka(() -> zastaralo(moje), c, data, true);
 			return;
 		}
 		final Vyreseno v = resolver.vyres(c, kod -> najdi(data, kod));
@@ -250,8 +252,13 @@ public final class PlanovacChallenge {
 		};
 	}
 
-	/** D/T matice a kalendář: čistá funkce nad kešemi, počítá se podle středu mapy. */
-	private void prepocitejPolicka(final java.util.function.BooleanSupplier zastarale, final Challenge c, final Collection<? extends VstupKes> data) {
+	/**
+	 * D/T matice a kalendář: čistá funkce nad kešemi, počítá se podle středu mapy.
+	 *
+	 * @param novyVstup
+	 *            plný přepočet (jiné keše nebo definice); výběr „dalšího“ pak začne od začátku, při přepočtu jen podle jiného středu pokračuje
+	 */
+	private void prepocitejPolicka(final java.util.function.BooleanSupplier zastarale, final Challenge c, final Collection<? extends VstupKes> data, final boolean novyVstup) {
 		final Wgs stred = stredMapy.get();
 		if (stred == null) {
 			model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.CHYBA, 0, 0, "Střed mapy není znám."));
@@ -268,10 +275,14 @@ public final class PlanovacChallenge {
 		if (zastarale.getAsBoolean()) {
 			return;
 		}
+		final Object klic;
 		synchronized (this) {
-			dalsiPolicko.remove(c.nazev());
+			if (novyVstup || !vstupyPolicek.containsKey(c.nazev())) {
+				vstupyPolicek.put(c.nazev(), new Object());
+			}
+			klic = vstupyPolicek.get(c.nazev());
 		}
-		model.nastavVysledekPolicek(c, vysledek);
+		model.nastavVysledekPolicek(c, vysledek.sVstupem(klic));
 		model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.HOTOVO, data.size(), data.size(), null));
 	}
 
@@ -316,7 +327,7 @@ public final class PlanovacChallenge {
 			try {
 				for (final Challenge c : aktivni) {
 					if (c.typ() != Challenge.Typ.SEKTORY_360 && generacePolicek.get() == moje) {
-						prepocitejPolicka(() -> generacePolicek.get() != moje, c, data);
+						prepocitejPolicka(() -> generacePolicek.get() != moje, c, data, false);
 					}
 				}
 			} catch (final RuntimeException e) {

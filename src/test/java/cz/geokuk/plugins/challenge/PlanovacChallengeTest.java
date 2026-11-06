@@ -693,6 +693,44 @@ public class PlanovacChallengeTest {
 		Assert.assertEquals("zastaralý běh nic nepublikoval", 2, vysledkuDt("DT"));
 	}
 
+	private VybranyKandidat f4(final Challenge c, final boolean zpet) throws Exception {
+		final VybranyKandidat[] v = new VybranyKandidat[1];
+		javax.swing.SwingUtilities.invokeAndWait(() -> v[0] = zpet ? planovac.predchoziChybejici(c) : planovac.dalsiChybejici(c));
+		return v[0];
+	}
+
+	@Test
+	public void opakovaneDalsiChybejiciProchaziKandidatyIKdyzPosunStreduVyvolaPrepocet() throws Exception {
+		napojNaModel();
+		final Challenge c = dtChallenge("DT");
+		final List<VstupKes> data = new ArrayList<>();
+		for (int d = 0; d < 9; d++) {
+			for (int t = 0; t < 3; t++) {
+				data.add(PolicekKes.dt("F" + d + "_" + t, 50.0 + d * 0.001, 14.0 + t * 0.001, true, d, t));
+			}
+		}
+		data.add(PolicekKes.dt("P1", 50.001, 14.0, false, 3, 5));
+		data.add(PolicekKes.dt("P2", 50.06, 14.0, false, 3, 5));
+		data.add(PolicekKes.dt("P3", 50.12, 14.0, false, 3, 5));
+		planovac.keseNacteny(data);
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "první výsledek");
+		Assert.assertEquals("P1", f4(c, false).id());
+		Assert.assertEquals("P2", f4(c, false).id());
+		final VysledekPolicek predP2 = model.vysledekPolicek(c);
+		posunStredu(50.06, 14.0);
+		pockej(() -> model.vysledekPolicek(c) != predP2, "přepočet po vystředění na P2");
+		Assert.assertEquals("po přepočtu se pokračuje dál, ne od začátku", "P3", f4(c, false).id());
+		Assert.assertEquals("zpět na předchozího vybraného", "P2", f4(c, true).id());
+		final VysledekPolicek predP3 = model.vysledekPolicek(c);
+		posunStredu(50.12, 14.0);
+		pockej(() -> model.vysledekPolicek(c) != predP3, "přepočet po vystředění na P3");
+		Assert.assertEquals("P3", f4(c, false).id());
+		Assert.assertEquals("P2", f4(c, true).id());
+		Assert.assertEquals("P1", f4(c, true).id());
+		Assert.assertNull("před prvním už nic není", f4(c, true));
+	}
+
 	private String prvniKandidatPolicka(final VysledekPolicek v, final String stitek) {
 		for (final KandidatPolicka k : v.kandidati()) {
 			if (k.stitek().equals(stitek)) {
