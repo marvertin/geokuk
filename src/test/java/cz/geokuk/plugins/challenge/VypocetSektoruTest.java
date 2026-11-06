@@ -365,4 +365,56 @@ public class VypocetSektoruTest {
 		v = VypocetSektoru.spocti(ZdrojPravidel.PGC, LAT, LON, null, Collections.<String> emptySet(), kese);
 		Assert.assertFalse("nález tohoto typu sektor zaplní", v.chybejici().contains(100));
 	}
+
+	private static VysledekSektoru spoctiSNejistym(final int sektor, final int nejistota) {
+		final java.util.List<Kes> kese = java.util.Collections.singletonList(new Kes("GC1", 50, 14, true));
+		return VypocetSektoru.spoctiSKlasifikaci(ZdrojPravidel.STATOR, 50, 14, k -> VypocetSektoru.Klasifikace.vOblasti(sektor, nejistota), java.util.Collections.<String> emptySet(), kese, () -> false);
+	}
+
+	@Test
+	public void chybejiciSousedNejistehoSektoruJeNejistyIPresZacatekACenuKruhu() {
+		final VysledekSektoru dole0 = spoctiSNejistym(0, VypocetSektoru.Klasifikace.NEJISTY_DOLU);
+		Assert.assertTrue(dole0.jeObsazeny(0));
+		Assert.assertTrue("sektor 0 a soused dole je 359", dole0.jeNejisty(359));
+		Assert.assertTrue("obsazený jen nejistě", dole0.jeNejisty(0));
+		Assert.assertFalse(dole0.jeNejisty(1));
+		Assert.assertFalse(dole0.jeNejisty(358));
+		final VysledekSektoru nahore359 = spoctiSNejistym(359, VypocetSektoru.Klasifikace.NEJISTY_NAHORU);
+		Assert.assertTrue("sektor 359 a soused nahoře je 0", nahore359.jeNejisty(0));
+		Assert.assertFalse(nahore359.jeNejisty(358));
+		final VysledekSektoru dole100 = spoctiSNejistym(100, VypocetSektoru.Klasifikace.NEJISTY_DOLU);
+		Assert.assertTrue(dole100.jeNejisty(99));
+		Assert.assertFalse(dole100.jeNejisty(101));
+		final VysledekSektoru nahore100 = spoctiSNejistym(100, VypocetSektoru.Klasifikace.NEJISTY_NAHORU);
+		Assert.assertTrue(nahore100.jeNejisty(101));
+		Assert.assertFalse(nahore100.jeNejisty(99));
+	}
+
+	@Test
+	public void zruseniSeKontrolujeKazdych16384KesiAZacinaSePoPocitaniPrvni() {
+		final java.util.List<Kes> kese = new java.util.ArrayList<>();
+		for (int i = 0; i < 16384; i++) {
+			kese.add(new Kes("GC" + i, 50, 14, false));
+		}
+		final VypocetSektoru.Klasifikator mimo = k -> VypocetSektoru.Klasifikace.mimoOblast();
+		final java.util.Set<String> nic = java.util.Collections.<String> emptySet();
+		Assert.assertNotNull("do 16383 se zrušení neptá", VypocetSektoru.spoctiSKlasifikaci(ZdrojPravidel.PGC, 50, 14, mimo, nic, kese.subList(0, 16383), () -> true));
+		Assert.assertNull("16384. keš zrušení zjistí", VypocetSektoru.spoctiSKlasifikaci(ZdrojPravidel.PGC, 50, 14, mimo, nic, kese, () -> true));
+		Assert.assertNotNull("bez zrušení doběhne", VypocetSektoru.spoctiSKlasifikaci(ZdrojPravidel.PGC, 50, 14, mimo, nic, kese, () -> false));
+		final java.util.concurrent.atomic.AtomicInteger dotazu = new java.util.concurrent.atomic.AtomicInteger();
+		VypocetSektoru.spoctiSKlasifikaci(ZdrojPravidel.PGC, 50, 14, mimo, nic, kese, () -> dotazu.incrementAndGet() < 0);
+		Assert.assertEquals(1, dotazu.get());
+	}
+
+	@Test
+	public void klasifikaceSeRovnaJenSeStejnymKodemAMaStejnyHash() {
+		final VypocetSektoru.Klasifikace a = VypocetSektoru.Klasifikace.vOblasti(5, 0);
+		Assert.assertEquals(a, VypocetSektoru.Klasifikace.vOblasti(5, 0));
+		Assert.assertEquals(a.hashCode(), VypocetSektoru.Klasifikace.vOblasti(5, 0).hashCode());
+		Assert.assertNotEquals(a, VypocetSektoru.Klasifikace.vOblasti(6, 0));
+		Assert.assertNotEquals(a, VypocetSektoru.Klasifikace.vOblasti(5, 1));
+		Assert.assertNotEquals(a, VypocetSektoru.Klasifikace.mimoOblast());
+		Assert.assertNotEquals(a, "5");
+		Assert.assertNotEquals(a.hashCode(), VypocetSektoru.Klasifikace.vOblasti(6, 0).hashCode());
+	}
 }

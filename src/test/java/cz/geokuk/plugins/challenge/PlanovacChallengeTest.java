@@ -462,6 +462,22 @@ public class PlanovacChallengeTest {
 		Assert.assertNull(model.vysledek(c));
 	}
 
+	@Test
+	public void vypocetBeziNaPojmenovanemDemonuSNizsiPriorite() throws Exception {
+		napojNaModel();
+		final List<Thread> vlakna = new CopyOnWriteArrayList<>();
+		planovac.poVytvoreni = p -> vlakna.add(Thread.currentThread());
+		final Challenge c = oblastni(ctverec());
+		planovac.keseNacteny(kese(100, 1));
+		zapni(c);
+		pockej(() -> model.vysledek(c) != null, "výsledek");
+		Assert.assertFalse(vlakna.isEmpty());
+		final Thread t = vlakna.get(0);
+		Assert.assertEquals("Plánovač challenge", t.getName());
+		Assert.assertTrue(t.isDaemon());
+		Assert.assertEquals(Thread.NORM_PRIORITY - 2, t.getPriority());
+	}
+
 	// ---- D/T matice a kalendář
 
 	private Challenge dtChallenge(final String nazev) {

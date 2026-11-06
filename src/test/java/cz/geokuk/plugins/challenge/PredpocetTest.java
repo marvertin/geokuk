@@ -489,4 +489,149 @@ public class PredpocetTest {
 		Assert.assertTrue(prvni.isDone());
 		Assert.assertEquals(StavPredpoctu.Faze.HOTOVO, p.stav().faze());
 	}
+
+	@Test
+	public void predpocetBeziNaPojmenovanemDemonuSNizsiPriorityAJdeZavrit() throws Exception {
+		final Predpocet p = predpocet("z1", oblast, ZdrojPravidel.PGC, LAT);
+		final List<Thread> vlakna = new CopyOnWriteArrayList<>();
+		p.pridejPosluchace(stav -> vlakna.add(Thread.currentThread()));
+		pockej(p, p.spust(kese(5, 1)));
+		Assert.assertFalse(vlakna.isEmpty());
+		final Thread t = vlakna.get(0);
+		Assert.assertEquals("Předpočet challenge", t.getName());
+		Assert.assertTrue(t.isDaemon());
+		Assert.assertEquals(Thread.NORM_PRIORITY - 2, t.getPriority());
+		Assert.assertFalse(p.jeZavreno());
+		p.zavri();
+		Assert.assertTrue(p.jeZavreno());
+	}
+
+	@Test
+	public void novySpustZrusiBeziciPredpocetACestouJeStavZruseno() throws Exception {
+		final Predpocet p = predpocet("z1", oblast, ZdrojPravidel.PGC, LAT);
+		final CountDownLatch spusteno = new CountDownLatch(1);
+		final CountDownLatch pokracuj = new CountDownLatch(1);
+		final List<StavPredpoctu.Faze> faze = new CopyOnWriteArrayList<>();
+		p.pridejPosluchace(stav -> {
+			faze.add(stav.faze());
+			if (spusteno.getCount() > 0) {
+				spusteno.countDown();
+				try {
+					pokracuj.await(30, TimeUnit.SECONDS);
+				} catch (final InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+		});
+		final java.util.concurrent.Future<?> prvni = p.spust(kese(100, 1));
+		Assert.assertTrue(spusteno.await(30, TimeUnit.SECONDS));
+		final java.util.concurrent.Future<?> druhy = p.spust(kese(100, 2));
+		pokracuj.countDown();
+		prvni.get(60, TimeUnit.SECONDS);
+		druhy.get(60, TimeUnit.SECONDS);
+		Assert.assertTrue(faze.toString(), faze.contains(StavPredpoctu.Faze.ZRUSENO));
+		Assert.assertEquals(StavPredpoctu.Faze.HOTOVO, p.stav().faze());
+	}
+
+	@Test
+	public void souborSeZnovuNezapisujeKdyzSeNicNezmenilAleZapisePriUbytkuKesi() throws Exception {
+		final List<VypocetSektoruTest.Kes> kese = kese(200, 3);
+		final Predpocet p1 = predpocet("z1", oblast, ZdrojPravidel.PGC, LAT);
+		pockej(p1, p1.spust(kese));
+		final Path soubor = jedinySoubor();
+		final java.nio.file.attribute.FileTime davno = java.nio.file.attribute.FileTime.fromMillis(1_000_000_000_000L);
+		Files.setLastModifiedTime(soubor, davno);
+		final Predpocet p2 = predpocet("z1", oblast, ZdrojPravidel.PGC, LAT);
+		pockej(p2, p2.spust(kese));
+		Assert.assertEquals(0, p2.pocetPrepocitanych());
+		Assert.assertEquals("beze změny se soubor nepřepisuje", davno, Files.getLastModifiedTime(soubor));
+		final Predpocet p3 = predpocet("z1", oblast, ZdrojPravidel.PGC, LAT);
+		pockej(p3, p3.spust(kese.subList(0, 150)));
+		Assert.assertEquals(0, p3.pocetPrepocitanych());
+		Assert.assertNotEquals("při ubytku keší se soubor zapíše", davno, Files.getLastModifiedTime(soubor));
+	}
+
+	@Test
+	public void chybaBezZpravyMaVStavuNazevVyjimkyAChybaSeZpravouJenJiZpravu() throws Exception {
+		final Oblast bezZpravy = new Oblast() {
+			@Override
+			public boolean obsahuje(final double lat, final double lon) {
+				throw new IllegalStateException();
+			}
+
+			@Override
+			public String verze() {
+				return "bez-zpravy";
+			}
+		};
+		final Predpocet p = predpocet("z1", bezZpravy, ZdrojPravidel.PGC, LAT);
+		p.spust(kese(3, 1)).get(30, TimeUnit.SECONDS);
+		Assert.assertEquals("java.lang.IllegalStateException", p.stav().chyba());
+		final Oblast sNazvem = new Oblast() {
+			@Override
+			public boolean obsahuje(final double lat, final double lon) {
+				throw new IllegalStateException("přesná zpráva");
+			}
+
+			@Override
+			public String verze() {
+				return "se-zpravou";
+			}
+		};
+		final Predpocet q = predpocet("z1", sNazvem, ZdrojPravidel.PGC, LAT);
+		q.spust(kese(3, 1)).get(30, TimeUnit.SECONDS);
+		Assert.assertEquals("přesná zpráva", q.stav().chyba());
+	}
+
+	@Test
+	public void poPredpoctuSeKlasifikatorMeniZPrimehoNaPredpocitanyAVraciStejneHodnoty() throws Exception {
+		final List<VypocetSektoruTest.Kes> kese = kese(300, 5);
+		final Predpocet p = predpocet("z1", oblast, ZdrojPravidel.PGC, LAT);
+		final Klasifikator pred = p.klasifikator();
+		pockej(p, p.spust(kese));
+		final Klasifikator po = p.klasifikator();
+		Assert.assertNotSame(pred, po);
+		for (final VypocetSektoruTest.Kes k : kese) {
+			Assert.assertEquals(pred.klasifikuj(k), po.klasifikuj(k));
+		}
+	}
+
+	@Test
+	public void uklidPonechaOsmNejnovejsichSouboruPodleCasuUpravyNeDlePoradiVeSlozce() throws Exception {
+		final Tabulka tabulka = new Tabulka(4);
+		final List<Path> soubory = new ArrayList<>();
+		final Random r = new Random(11);
+		final List<Integer> poradi = new ArrayList<>();
+		for (int i = 0; i < 24; i++) {
+			poradi.add(i);
+		}
+		Collections.shuffle(poradi, r);
+		for (int i = 0; i < 24; i++) {
+			final Path f = adresar.resolve(String.format("challenge-%08x-7.bin", 1000 + i));
+			SouborPredpoctu.zapis(f, "klic" + i, tabulka);
+			nastavStari(f, poradi.get(i));
+			soubory.add(f);
+		}
+		final Predpocet p = predpocet("z-nove", oblast, ZdrojPravidel.PGC, LAT);
+		pockej(p, p.spust(kese(20, 1)));
+		Assert.assertEquals(8, vlastniSoubory());
+		// nové dílo je nejnovější, dalších sedm nejnovějších ze staré sady zůstane
+		for (int i = 0; i < 24; i++) {
+			final boolean maZustat = poradi.get(i) >= 24 - 7;
+			Assert.assertEquals("soubor " + i + " s pořadím stáří " + poradi.get(i), maZustat, Files.exists(soubory.get(i)));
+		}
+	}
+
+	@Test
+	public void prubehSeHlasiKazdychCtyriTisiceKesi() throws Exception {
+		final Predpocet p = predpocet("z1", oblast, ZdrojPravidel.PGC, LAT);
+		final List<Long> hotovo = new CopyOnWriteArrayList<>();
+		p.pridejPosluchace(stav -> {
+			if (stav.faze() == StavPredpoctu.Faze.POCITA) {
+				hotovo.add(stav.hotovo());
+			}
+		});
+		pockej(p, p.spust(kese(9000, 1)));
+		Assert.assertEquals(java.util.Arrays.asList(0L, 4096L, 8192L), hotovo);
+	}
 }

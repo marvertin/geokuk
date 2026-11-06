@@ -167,4 +167,87 @@ public class OblastPolygonyTest {
 			Assert.assertTrue(e.getMessage(), e.getMessage().contains("256"));
 		}
 	}
+
+	@Test
+	public void okrajSeSouradnicemNaMeziRozsahuJeVporadku() {
+		Assert.assertEquals(4, new Okraj(new double[] { -90, 90, 90, -90 }, new double[] { -180, -180, 0, 0 }).pocetBodu());
+		Assert.assertEquals(4, new Okraj(new double[] { -90, 90, 90, -90 }, new double[] { 0, 0, 180, 180 }).pocetBodu());
+	}
+
+	@Test
+	public void souradniceTesneZaMezemRozsahuJsouChyba() {
+		final double[][][] spatne = {
+				{ { -90.0001, 0, 1 }, { 0, 1, 1 } },
+				{ { 90.0001, 0, 1 }, { 0, 1, 1 } },
+				{ { 0, 0, 1 }, { -180.0001, 1, 1 } },
+				{ { 0, 0, 1 }, { 180.0001, 1, 1 } } };
+		for (final double[][] s : spatne) {
+			try {
+				new Okraj(s[0], s[1]);
+				Assert.fail(Arrays.toString(s[0]) + " " + Arrays.toString(s[1]));
+			} catch (final IllegalArgumentException e) {
+				Assert.assertTrue(e.getMessage(), e.getMessage().contains("mimo rozsah"));
+			}
+		}
+	}
+
+	@Test
+	public void rozdilDelekPresne180StupnuAVychodniDelkyBezPresahuJsouVporadku() {
+		new Okraj(new double[] { 0, 1, 2 }, new double[] { 0, 180, 0 });
+		new Okraj(new double[] { 0, 1, 2 }, new double[] { 100, 120, 110 });
+		try {
+			new Okraj(new double[] { 0, 1, 2 }, new double[] { 0, 180.0001, 0 });
+			Assert.fail();
+		} catch (final IllegalArgumentException e) {
+			Assert.assertTrue(e.getMessage(), e.getMessage().contains("180"));
+		}
+	}
+
+	private static String verzeBodu(final double[] lat, final double[] lon) {
+		final String v = new OblastPolygony("t", "d", Collections.singletonList(new Cast(new Okraj(lat, lon), Collections.<Okraj> emptyList()))).verze();
+		return v.substring(v.indexOf('/') + 1);
+	}
+
+	@Test
+	public void otiskGeometrieRozlisujeMikrostupneOddelovaceAPoradiSouradnic() {
+		final double u = 1e-6;
+		final double[] lat0 = { 10, 10.5, 11 };
+		final double[] lon0 = { 20, 21, 20.5 };
+		final String zaklad = verzeBodu(lat0, lon0);
+		Assert.assertEquals("shodná geometrie", zaklad, verzeBodu(lat0.clone(), lon0.clone()));
+		final double[] lat1 = lat0.clone();
+		lat1[0] += u;
+		Assert.assertNotEquals("změna šířky o 1e-6", zaklad, verzeBodu(lat1, lon0));
+		final double[] lon1 = lon0.clone();
+		lon1[0] += u;
+		Assert.assertNotEquals("změna délky o 1e-6", zaklad, verzeBodu(lat0, lon1));
+		Assert.assertNotEquals("záměna šířky a délky", verzeBodu(new double[] { 10, 11, 12 }, new double[] { 20, 21, 22 }), verzeBodu(new double[] { 20, 21, 22 }, new double[] { 10, 11, 12 }));
+		// Spojení číslic bez oddělovače by dalo stejný otisk.
+		Assert.assertNotEquals("oddělovač šířky a délky", verzeBodu(new double[] { 1 * u, 4 * u, 6 * u }, new double[] { 23 * u, 5 * u, 7 * u }),
+				verzeBodu(new double[] { 12 * u, 4 * u, 6 * u }, new double[] { 3 * u, 5 * u, 7 * u }));
+		Assert.assertNotEquals("oddělovač bodů", verzeBodu(new double[] { 1 * u, 4 * u, 6 * u }, new double[] { 23 * u, 5 * u, 7 * u }),
+				verzeBodu(new double[] { 1 * u, 34 * u, 6 * u }, new double[] { 2 * u, 5 * u, 7 * u }));
+	}
+
+	private static Oblast oblastSVerzi(final String verze) {
+		return new Oblast() {
+			@Override
+			public boolean obsahuje(final double lat, final double lon) {
+				return false;
+			}
+
+			@Override
+			public String verze() {
+				return verze;
+			}
+		};
+	}
+
+	@Test
+	public void sjednoceniOddelujeVerzeJednotlivychOblasti() {
+		final String ab = new SjednoceniOblasti(Arrays.asList(oblastSVerzi("a"), oblastSVerzi("bc"))).verze();
+		final String ba = new SjednoceniOblasti(Arrays.asList(oblastSVerzi("ab"), oblastSVerzi("c"))).verze();
+		Assert.assertNotEquals(ab, ba);
+		Assert.assertTrue(ab, ab.startsWith("U2/"));
+	}
 }

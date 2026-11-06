@@ -197,4 +197,107 @@ public class FormatRuianTest {
 		Assert.assertTrue(celkem > 0);
 		Assert.assertTrue(shoda + " z " + celkem, shoda * 10 >= celkem * 9);
 	}
+
+	// ---- Hranice limitů
+
+	private static String ctverecSNazvem(final String kod) {
+		return "oblast " + kod + " X\nokruh 3\n1400000 5000000\n100000 0\n0 100000\nkonec\n";
+	}
+
+	private static String opakuj(final char znak, final int delka) {
+		final StringBuilder b = new StringBuilder();
+		for (int i = 0; i < delka; i++) {
+			b.append(znak);
+		}
+		return b.toString();
+	}
+
+	private static String mezera(final int delka) {
+		return opakuj(' ', delka);
+	}
+
+	@Test
+	public void souborPresneNaLimituVelikostiSeNacteJedenZnakNavicNe() throws Exception {
+		final String zaklad = HLAVICKA + CTVEREC;
+		final StringBuilder b = new StringBuilder(zaklad);
+		// Do limitu se počítají řádky mimo body okruhů; komentář může být delší než řádek dat.
+		final int bodyOkruhu = "1400000 5000000\n100000 0\n0 100000\n-100000 0\n".length();
+		final int zbyva = FormatRuian.NEJVIC_ZNAKU - (zaklad.length() - bodyOkruhu) - 1;
+		b.append('#');
+		for (int i = 1; i < zbyva; i++) {
+			b.append('x');
+		}
+		b.append('\n');
+		Assert.assertEquals(FormatRuian.NEJVIC_ZNAKU + bodyOkruhu, b.length());
+		Assert.assertEquals(1, nacti(b.toString()).size());
+		odmitne(b.insert(zaklad.length() + 1, 'x').toString(), "velký");
+	}
+
+	@Test
+	public void radekSOsmdesatiZnakyProjdeSedmdesatDevetNeAOsmdesatJedenNe() throws Exception {
+		final String hlavicka = "oblast kod ";
+		final String okruh = "okruh 3\n1400000 5000000\n100000 0\n0 100000\nkonec\n";
+		Assert.assertEquals(1, nacti(HLAVICKA + hlavicka + opakuj('n', 80 - hlavicka.length()) + "\n" + okruh).size());
+		odmitne(HLAVICKA + hlavicka + opakuj('n', 81 - hlavicka.length()) + "\n" + okruh, "dlouhý");
+	}
+
+	@Test
+	public void chybaUkazujeCisloRadkuVcetneBoduOkruhu() {
+		// 1 hlavička, 2 datum, 3 oblast, 4 okruh, 5 až 7 body, 8 neznámý řádek
+		odmitne(HLAVICKA + "oblast a A\nokruh 3\n1400000 5000000\n100000 0\n0 100000\nnesmysl\n", "Řádek 8:");
+		odmitne(HLAVICKA + "oblast a A\nokruh 3\n1400000 5000000\n100000 0\n0 100000\nokruh x\n", "Neplatné číslo na řádku 8");
+	}
+
+	@Test
+	public void pocetOblastiJeOmezenNaCtyriaSedesat() throws Exception {
+		final StringBuilder b = new StringBuilder(HLAVICKA);
+		for (int i = 0; i < FormatRuian.NEJVIC_OBLASTI; i++) {
+			b.append(ctverecSNazvem("o" + i));
+		}
+		Assert.assertEquals(FormatRuian.NEJVIC_OBLASTI, nacti(b.toString()).size());
+		b.append(ctverecSNazvem("navic"));
+		odmitne(b.toString(), "příliš mnoho");
+	}
+
+	@Test
+	public void pocetOkruhuVOblastiJeOmezenNaDveStaPadesatSest() throws Exception {
+		final StringBuilder b = new StringBuilder(HLAVICKA + "oblast a A\n");
+		for (int i = 0; i < FormatRuian.NEJVIC_OKRUHU; i++) {
+			b.append("okruh 3\n").append(1000000 + i * 1000).append(" 5000000\n100 0\n0 100\n");
+		}
+		b.append("konec\n");
+		Assert.assertEquals(FormatRuian.NEJVIC_OKRUHU, nacti(b.toString()).get("a").casti().size());
+		b.insert(b.length() - "konec\n".length(), "okruh 3\n1900000 5000000\n100 0\n0 100\n");
+		odmitne(b.toString(), "příliš mnoho okruhů");
+	}
+
+	@Test
+	public void pocetBoduOkruhuMaDolniAHorniMez() throws Exception {
+		odmitne(HLAVICKA + "oblast a A\nokruh 2\n1 1\n1 1\nkonec\n", "mimo rozsah");
+		final StringBuilder b = new StringBuilder(HLAVICKA + "oblast a A\nokruh " + FormatRuian.NEJVIC_BODU_OKRUHU + "\n1400000 5000000\n");
+		for (int i = 1; i < FormatRuian.NEJVIC_BODU_OKRUHU; i++) {
+			b.append(i % 2 == 0 ? "1 1\n" : "-1 -1\n");
+		}
+		b.append("konec\n");
+		Assert.assertEquals(1, nacti(b.toString()).size());
+		odmitne(HLAVICKA + "oblast a A\nokruh " + (FormatRuian.NEJVIC_BODU_OKRUHU + 1) + "\n", "mimo rozsah");
+	}
+
+	@Test
+	public void souradniceNaMeziRozsahuSeNactouOPoJednotkuVicNe() throws Exception {
+		final String ok = HLAVICKA + "oblast a A\nokruh 3\n18000000 9000000\n-18000000 -9000000\n9000000 9000000\nkonec\n";
+		Assert.assertEquals(1, nacti(ok).size());
+		odmitne(ok.replace("18000000 9000000", "18000001 9000000"), "mimo rozsah souřadnic");
+		odmitne(ok.replace("18000000 9000000", "18000000 9000001"), "mimo rozsah souřadnic");
+		odmitne(ok.replace("-18000000 -9000000", "-18000000 -9000000").replace("18000000 9000000", "-18000001 9000000"), "mimo rozsah souřadnic");
+	}
+
+	@Test
+	public void bodOkruhuSOsmdesatiZnakyProjdeOsmdesatJedenNe() throws Exception {
+		final String zacatek = HLAVICKA + "oblast a A\nokruh 3\n";
+		final String konec = "\n100000 0\n0 100000\nkonec\n";
+		final String bod = "1400000 5000000";
+		Assert.assertEquals(1, nacti(zacatek + bod + mezera(80 - bod.length()) + konec).size());
+		odmitne(zacatek + bod + mezera(81 - bod.length()) + konec, "dlouhý");
+	}
 }

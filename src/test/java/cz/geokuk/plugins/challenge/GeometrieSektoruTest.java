@@ -405,6 +405,116 @@ public class GeometrieSektoruTest {
 		Assert.assertTrue("žádný bod, kde se koule a elipsoid liší: " + rozlisenych, rozlisenych > 0);
 	}
 
+	@Test
+	public void bodNaElipsoiduSeShodujeSInverznimVypoctemNaDlouheVzdalenosti() {
+		final double[] vzdalenosti = { 100_000, 1_000_000, 5_000_000, 12_000_000 };
+		final double[][] stredy = { { 50.0875, 14.4208 }, { -33.9, 151.2 }, { 5.0, -70.0 }, { 70.0, 25.0 } };
+		for (final double[] st : stredy) {
+			for (final double metru : vzdalenosti) {
+				for (int az = 0; az < 360; az += 37) {
+					final Bod b = GeometrieSektoru.bod(st[0], st[1], az, metru, Model.ELIPSOID);
+					final double d = Geodezie.vzdalenostElipsoid(st[0], st[1], b.lat, b.lon);
+					if (Double.isNaN(d)) {
+						continue; // téměř protilehlé body, inverzní úloha nekonverguje
+					}
+					Assert.assertEquals(st[0] + "," + st[1] + " az " + az + " " + metru + " m", metru, d, 0.001);
+					Assert.assertEquals(st[0] + "," + st[1] + " az " + az + " " + metru + " m", 0, rozdil(az, Geodezie.azimutElipsoid(st[0], st[1], b.lat, b.lon)), 1e-6);
+				}
+			}
+		}
+	}
+
+	@Test
+	public void delkaBoduSeVraciDoRozsahuAPriMeziMinus180ZustaneMinus180() {
+		Assert.assertEquals(-180, GeometrieSektoru.bod(10, -180, 0, 0, Model.KOULE).lon, 1e-9);
+		final Bod vychod = GeometrieSektoru.bod(10, 179.9, 90, 100_000, Model.KOULE);
+		Assert.assertTrue("přes antimeridián na východ " + vychod, vychod.lon < -179 && vychod.lon >= -180);
+		final Bod zapad = GeometrieSektoru.bod(10, -179.9, 270, 100_000, Model.KOULE);
+		Assert.assertTrue("přes antimeridián na západ " + zapad, zapad.lon > 179 && zapad.lon <= 180);
+		final Bod vychodElipsoid = GeometrieSektoru.bod(10, 179.9, 90, 100_000, Model.ELIPSOID);
+		Assert.assertTrue(vychodElipsoid.toString(), vychodElipsoid.lon < -179 && vychodElipsoid.lon >= -180);
+		final Bod zapadElipsoid = GeometrieSektoru.bod(10, -179.9, 270, 100_000, Model.ELIPSOID);
+		Assert.assertTrue(zapadElipsoid.toString(), zapadElipsoid.lon > 179 && zapadElipsoid.lon <= 180);
+	}
+
+	@Test
+	public void pocetBoduObloukuZavisiNaCelemNasobkuKroku() {
+		Assert.assertEquals("3° = 3 úseky", 4, GeometrieSektoru.oblouk(LAT, LON, 10, 13, 1000, Model.KOULE).size());
+		Assert.assertEquals("3,5° = 4 úseky", 5, GeometrieSektoru.oblouk(LAT, LON, 10, 13.5, 1000, Model.KOULE).size());
+		Assert.assertEquals("1° = 1 úsek", 2, GeometrieSektoru.oblouk(LAT, LON, 359, 360, 1000, Model.KOULE).size());
+		Assert.assertEquals("kružnice 360° = 360 úseků", 361, GeometrieSektoru.oblouk(LAT, LON, 0, 360, 1000, Model.KOULE).size());
+	}
+
+	@Test
+	public void odvinutiDelekNechaSkokPresne180AleVyrovnaVetsi() {
+		final List<Bod> ctyri = java.util.Arrays.asList(new Bod(0, 0), new Bod(0, 180), new Bod(0, -180), new Bod(0, 0));
+		final List<Bod> v = GeometrieSektoru.odvinuteDelky(ctyri);
+		Assert.assertEquals(0, v.get(0).lon, 0);
+		Assert.assertEquals("rozdíl přesně 180 se nemění", 180, v.get(1).lon, 0);
+		Assert.assertEquals("-180 je od 180 vzdáleno 360, posune se o 360", 180, v.get(2).lon, 0);
+		Assert.assertEquals("rozdíl -180 od 180 se nemění", 0, v.get(3).lon, 0);
+		final List<Bod> opacne = GeometrieSektoru.odvinuteDelky(java.util.Arrays.asList(new Bod(0, 0), new Bod(0, -180), new Bod(0, 179)));
+		Assert.assertEquals("rozdíl přesně -180 se nemění", -180, opacne.get(1).lon, 0);
+		Assert.assertEquals(-181, opacne.get(2).lon, 0);
+	}
+
+	@Test
+	public void prvniBodSeNeodvinuje() {
+		final List<Bod> v = GeometrieSektoru.odvinuteDelky(java.util.Arrays.asList(new Bod(0, 270), new Bod(0, 275)));
+		Assert.assertEquals(270, v.get(0).lon, 0);
+		Assert.assertEquals(275, v.get(1).lon, 0);
+		Assert.assertTrue(GeometrieSektoru.odvinuteDelky(java.util.Collections.<Bod> emptyList()).isEmpty());
+	}
+
+	@Test
+	public void splnenyJedinySektorNulaDaDvaUsekyAProstrencePresSeverSpravneSpocitaDelku() {
+		final List<Usek> u = GeometrieSektoru.prstenec(vysledek(bity(0), new BitSet(360)), LAT, LON, 10_000, Model.KOULE);
+		Assert.assertEquals(2, u.size());
+		Assert.assertEquals(0, u.get(0).zacatekSektor());
+		Assert.assertEquals(1, u.get(0).pocetSektoru());
+		Assert.assertEquals(Stav.SPLNENY, u.get(0).stav());
+		Assert.assertEquals(1, u.get(1).zacatekSektor());
+		Assert.assertEquals(359, u.get(1).pocetSektoru());
+		Assert.assertEquals(Stav.CHYBI, u.get(1).stav());
+		Assert.assertEquals(360, u.get(1).body().size());
+	}
+
+	@Test
+	public void splnenyUsekPresSeverZacinaVePrvnimSektoruAMaCelouDelku() {
+		final BitSet obs = new BitSet(360);
+		obs.set(350, 360);
+		obs.set(0, 10);
+		final List<Usek> u = GeometrieSektoru.prstenec(vysledek(obs, new BitSet(360)), LAT, LON, 10_000, Model.KOULE);
+		Assert.assertEquals(2, u.size());
+		Assert.assertEquals(10, u.get(0).zacatekSektor());
+		Assert.assertEquals(340, u.get(0).pocetSektoru());
+		Assert.assertEquals(Stav.CHYBI, u.get(0).stav());
+		Assert.assertEquals(341, u.get(0).body().size());
+		Assert.assertEquals(350, u.get(1).zacatekSektor());
+		Assert.assertEquals(20, u.get(1).pocetSektoru());
+		Assert.assertEquals(Stav.SPLNENY, u.get(1).stav());
+		Assert.assertEquals(21, u.get(1).body().size());
+	}
+
+	@Test
+	public void sektorBoduOdmitneNeplatnyStredAPoloměry() {
+		final double[][] spatne = { { 91, 14, 0, 1000 }, { 50, 181, 0, 1000 }, { 50, 14, -1, 1000 }, { 50, 14, 1000, 1000 }, { 50, 14, 0, Double.POSITIVE_INFINITY } };
+		for (final double[] a : spatne) {
+			try {
+				GeometrieSektoru.sektorBodu(a[0], a[1], 50.1, 14.1, a[2], a[3], Model.KOULE);
+				Assert.fail(java.util.Arrays.toString(a));
+			} catch (final IllegalArgumentException e) {
+				// očekávané
+			}
+		}
+	}
+
+	@Test
+	public void bodMaPopisSeSouradnicemVRetezci() {
+		final Bod b = GeometrieSektoru.bod(10, 20, 0, 0, Model.KOULE);
+		Assert.assertEquals("10.0, 20.0", b.toString());
+	}
+
 	private static Bod b(final double lat, final double lon) {
 		return new Bod(lat, lon);
 	}
