@@ -47,8 +47,13 @@ public class KruhyOnoffAction extends ToggleAction0 {
 		data.setOnoff(nastaveno);
 		model.setData(data);
 		if (toast != null && stavVrstev != null) {
-			toast.ukaz(ZpravyZkratek.zvyraznovaciKruhy(nastaveno, stavVrstev.getStav().getSkrytyKruh()));
+			toast.ukaz(ZpravyZkratek.zvyraznovaciKruhy(nastaveno, velikost(data), stavVrstev.getStav().getSkrytyKruh()));
 		}
+	}
+
+	/** Velikost kruhu pro zprávu: poloměr, když je velikost v metrech, jinak v pixelech. */
+	static String velikost(final KruhySettings data) {
+		return data.isJednotkovaVelikost() ? PolomerKruhu.format(data.getPolomerMetru()) : PolomerKruhu.formatPixely(data.getVelikost());
 	}
 
 }

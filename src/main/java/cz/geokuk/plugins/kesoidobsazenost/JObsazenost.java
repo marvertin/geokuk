@@ -39,7 +39,7 @@ public class JObsazenost extends JSingleSlide0 implements AfterEventReceiverRegi
 		}
 	}
 
-	private static final int POLOMER_OBSAZENOSTI = 161;
+	static final int POLOMER_OBSAZENOSTI = 161;
 	/** Menší kroužky splývají s ikonami keší a obsazenost z nich není poznat. */
 	private static final int MIN_POLOMER = 3;
 	/** Víc kruhů by překreslení mapy zpomalilo pod plynulost. */

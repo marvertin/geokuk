@@ -60,7 +60,7 @@ public class JednotkoveKruhyAction extends ToggleAction0 {
 		}
 		model.setData(data);
 		if (toast != null && stavVrstev != null) {
-			toast.ukaz(ZpravyZkratek.jednotkoveKruhy(onoff, zvyrazneniBylyZapnute, stavVrstev.getStav().getSkrytyKruh()));
+			toast.ukaz(ZpravyZkratek.jednotkoveKruhy(onoff, zvyrazneniBylyZapnute, PolomerKruhu.format(data.getPolomerMetru()), stavVrstev.getStav().getSkrytyKruh()));
 		}
 	}
 

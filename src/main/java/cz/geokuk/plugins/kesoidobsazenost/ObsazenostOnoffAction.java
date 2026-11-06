@@ -45,7 +45,7 @@ public class ObsazenostOnoffAction extends ToggleAction0 {
 	protected void onSlectedChange(final boolean nastaveno) {
 		popiskyModel.visible.setOnoff(nastaveno);
 		if (toast != null && stavVrstev != null) {
-			toast.ukaz(ZpravyZkratek.obsazenost(nastaveno, stavVrstev.getStav().get(VrstvaNadMapou.OBSAZENOST)));
+			toast.ukaz(ZpravyZkratek.obsazenost(nastaveno, JObsazenost.POLOMER_OBSAZENOSTI + " m", stavVrstev.getStav().get(VrstvaNadMapou.OBSAZENOST)));
 		}
 	}
 

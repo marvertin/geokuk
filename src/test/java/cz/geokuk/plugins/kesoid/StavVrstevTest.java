@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import cz.geokuk.framework.Event0;
 import cz.geokuk.framework.EventFirer;
+import cz.geokuk.plugins.kesoid.importek.StavZdroju.StavVyberu;
 
 /** Stav skrytých vrstev kruhů: texty důvodů, štítek, hlášení změn a texty zpráv po zkratkách. */
 public class StavVrstevTest {
@@ -116,47 +117,75 @@ public class StavVrstevTest {
 	}
 
 	@Test
-	public void f8JenKdyzZapnuteKruhyNejsouVidet() {
-		Assert.assertNull("F8 viditelně přepíná kruhy", ZpravyZkratek.zvyraznovaciKruhy(true, null));
-		Assert.assertNull("vypnutí nemá co vysvětlovat", ZpravyZkratek.zvyraznovaciKruhy(false, skryta(F8, DuvodNekresleni.PRILIS_HUSTE, 0)));
-		Assert.assertEquals("Kruhy zapnuté, ale skryté: příliš husté, přibližte mapu", ZpravyZkratek.zvyraznovaciKruhy(true, skryta(F8, DuvodNekresleni.PRILIS_HUSTE, 0)));
-		Assert.assertEquals("Kruhy zapnuté, ale skryté: poloměr pod 3 px, přibližte mapu", ZpravyZkratek.zvyraznovaciKruhy(true, skryta(F8, DuvodNekresleni.POLOMER_PRILIS_MALY, 0)));
+	public void f8AkceStavAParametrPriZapnutiIVypnuti() {
+		Assert.assertEquals("Zvýrazňovací kruhy – Zapnuto, 20 px", ZpravyZkratek.zvyraznovaciKruhy(true, "20 px", null));
+		Assert.assertEquals("parametr i při vypnutí", "Zvýrazňovací kruhy – Vypnuto, 20 px", ZpravyZkratek.zvyraznovaciKruhy(false, "20 px", null));
+		Assert.assertEquals("Zvýrazňovací kruhy – Zapnuto, 161 m, ale skryté: příliš husté, přibližte mapu", ZpravyZkratek.zvyraznovaciKruhy(true, "161 m", skryta(F8, DuvodNekresleni.PRILIS_HUSTE, 0)));
+		Assert.assertEquals("Zvýrazňovací kruhy – Zapnuto, 20 px, ale skryté: poloměr pod 3 px, přibližte mapu", ZpravyZkratek.zvyraznovaciKruhy(true, "20 px", skryta(F8, DuvodNekresleni.POLOMER_PRILIS_MALY, 0)));
+		Assert.assertEquals("vypnutá vrstva nemá co vysvětlovat", "Zvýrazňovací kruhy – Vypnuto, 20 px", ZpravyZkratek.zvyraznovaciKruhy(false, "20 px", skryta(F8, DuvodNekresleni.PRILIS_HUSTE, 0)));
+		Assert.assertEquals("bez parametru", "Zvýrazňovací kruhy – Zapnuto", ZpravyZkratek.zvyraznovaciKruhy(true, null, null));
 	}
 
 	@Test
-	public void altF8ZapneObojeKdyzF8Nebylo() {
-		Assert.assertEquals("Zapnuté zvýrazňovací kruhy s poloměrem v metrech", ZpravyZkratek.jednotkoveKruhy(true, false, null));
-		Assert.assertNull("F8 už svítilo, zapnutí je vidět", ZpravyZkratek.jednotkoveKruhy(true, true, null));
-		Assert.assertNull("vypnutí jednotkových", ZpravyZkratek.jednotkoveKruhy(false, false, null));
-		Assert.assertNull(ZpravyZkratek.jednotkoveKruhy(false, true, skryta(ALT_F8, DuvodNekresleni.PRILIS_HUSTE, 0)));
+	public void altF8AkceStavPolomerAZapnutiF8() {
+		Assert.assertEquals("Kruhy v metrech – Zapnuto, 161 m (zapnuly se i zvýrazňovací kruhy)", ZpravyZkratek.jednotkoveKruhy(true, false, "161 m", null));
+		Assert.assertEquals("Kruhy v metrech – Zapnuto, 1,5 km", ZpravyZkratek.jednotkoveKruhy(true, true, "1,5 km", null));
+		Assert.assertEquals("Kruhy v metrech – Vypnuto, 161 m", ZpravyZkratek.jednotkoveKruhy(false, false, "161 m", null));
+		Assert.assertEquals("Kruhy v metrech – Vypnuto, 161 m", ZpravyZkratek.jednotkoveKruhy(false, true, "161 m", skryta(ALT_F8, DuvodNekresleni.PRILIS_HUSTE, 0)));
 	}
 
 	@Test
 	public void skrytiMaPrednostPredZpravouOZapnutiObou() {
-		Assert.assertEquals("Kruhy zapnuté, ale skryté: poloměr pod 3 px, přibližte mapu",
-				ZpravyZkratek.jednotkoveKruhy(true, false, skryta(ALT_F8, DuvodNekresleni.POLOMER_PRILIS_MALY, 0)));
+		Assert.assertEquals("Kruhy v metrech – Zapnuto, 161 m, ale skryté: poloměr pod 3 px, přibližte mapu (zapnuly se i zvýrazňovací kruhy)",
+				ZpravyZkratek.jednotkoveKruhy(true, false, "161 m", skryta(ALT_F8, DuvodNekresleni.POLOMER_PRILIS_MALY, 0)));
 	}
 
 	@Test
-	public void f5ZpravaPodleStavu() {
-		Assert.assertEquals("Kešoidy skryté včetně kruhů, obsazenosti a popisků", ZpravyZkratek.kesoidy(false));
-		Assert.assertEquals("Kešoidy zobrazené", ZpravyZkratek.kesoidy(true));
+	public void f5AkceStav() {
+		Assert.assertEquals("Kešoidy – Vypnuto, včetně kruhů, obsazenosti a popisků", ZpravyZkratek.kesoidy(false));
+		Assert.assertEquals("Kešoidy – Zapnuto", ZpravyZkratek.kesoidy(true));
 	}
 
 	@Test
-	public void f9ProZoomPodJedenactCiLimit() {
-		Assert.assertNull(ZpravyZkratek.obsazenost(true, null));
-		Assert.assertNull(ZpravyZkratek.obsazenost(false, skryta(F9, DuvodNekresleni.POLOMER_PRILIS_MALY, 0)));
-		Assert.assertEquals("Obsazenost se kreslí až po přiblížení mapy", ZpravyZkratek.obsazenost(true, skryta(F9, DuvodNekresleni.POLOMER_PRILIS_MALY, 0)));
-		final String limit = ZpravyZkratek.obsazenost(true, skryta(F9, DuvodNekresleni.LIMIT_POCTU, 20_000));
-		Assert.assertTrue(limit, limit.startsWith("Obsazenost zapnutá, ale skrytá: příliš mnoho bodů"));
+	public void f9AkceStavPolomerProZoomPodJedenactCiLimit() {
+		Assert.assertEquals("Obsazenost – Zapnuto, 161 m", ZpravyZkratek.obsazenost(true, "161 m", null));
+		Assert.assertEquals("Obsazenost – Vypnuto, 161 m", ZpravyZkratek.obsazenost(false, "161 m", skryta(F9, DuvodNekresleni.POLOMER_PRILIS_MALY, 0)));
+		Assert.assertEquals("Obsazenost – Zapnuto, 161 m, ale kreslí se až po přiblížení mapy", ZpravyZkratek.obsazenost(true, "161 m", skryta(F9, DuvodNekresleni.POLOMER_PRILIS_MALY, 0)));
+		final String limit = ZpravyZkratek.obsazenost(true, "161 m", skryta(F9, DuvodNekresleni.LIMIT_POCTU, 20_000));
+		Assert.assertTrue(limit, limit.startsWith("Obsazenost – Zapnuto, 161 m, ale skryté: příliš mnoho bodů"));
 	}
 
 	@Test
-	public void zdrojeKesiPodleSkutecnehoStavu() {
-		Assert.assertEquals("Zdroj keší: GSAK", ZpravyZkratek.zdroje(java.util.Arrays.asList("GSAK")));
-		Assert.assertEquals("Zdroje keší: GeoGet, GSAK", ZpravyZkratek.zdroje(java.util.Arrays.asList("GeoGet", "GSAK")));
-		Assert.assertEquals("Zdroje keší: žádný", ZpravyZkratek.zdroje(new ArrayList<>()));
+	public void zdrojKesiNazevStavAZbyleZdroje() {
+		final java.util.List<String> zapnute = java.util.Arrays.asList("GSAK");
+		Assert.assertEquals("Zdroj keší GeoGet – Zapnuto", ZpravyZkratek.zdroj("GeoGet", StavVyberu.ZAPNUTO, zapnute));
+		Assert.assertEquals("Zdroj keší GeoGet – Vypnuto", ZpravyZkratek.zdroj("GeoGet", StavVyberu.VYPNUTO, zapnute));
+		Assert.assertEquals("Zdroj keší GSAK – Zapnuto, částečně", ZpravyZkratek.zdroj("GSAK", StavVyberu.CASTECNE, zapnute));
+		Assert.assertEquals("Zdroj keší GPX – Vypnuto, žádný zdroj keší není zapnutý", ZpravyZkratek.zdroj("GPX", StavVyberu.VYPNUTO, new ArrayList<String>()));
+	}
+
+	/** Nejdelší zprávy po zkratkách se vejdou do toastu uprostřed nad měřítkem i při 150 % na FHD (mapa 1280 px široká), bez zkrácení tečkami. */
+	@Test
+	public void nejdelsiZpravyPoZkratkachSeVejdouPri150Procentech() {
+		final String[] nejdelsi = {
+				ZpravyZkratek.zvyraznovaciKruhy(true, "1,5 km", skryta(F8, DuvodNekresleni.LIMIT_POCTU, 90_000)),
+				ZpravyZkratek.jednotkoveKruhy(true, false, "1,5 km", skryta(ALT_F8, DuvodNekresleni.LIMIT_POCTU, 90_000)),
+				ZpravyZkratek.obsazenost(true, "161 m", skryta(F9, DuvodNekresleni.LIMIT_POCTU, 90_000)),
+				ZpravyZkratek.kesoidy(false),
+				ZpravyZkratek.zdroj("OpenSAK", StavVyberu.VYPNUTO, new ArrayList<String>()) };
+		final java.awt.image.BufferedImage obraz = new java.awt.image.BufferedImage(10, 10, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+		final java.awt.Graphics2D g = obraz.createGraphics();
+		try {
+			final JToast toast = new JToast();
+			final java.awt.FontMetrics fm = g.getFontMetrics(toast.font());
+			final int dostupna = cz.geokuk.framework.RozmisteniPrekryvu.nejvetsiSirkaZpravy(1280);
+			for (final String text : nejdelsi) {
+				final int sirka = cz.geokuk.util.gui.PopisekNaMape.hranice(fm, text, 0, 0).width;
+				Assert.assertTrue(text + ": " + sirka + " > " + dostupna, sirka <= dostupna);
+			}
+		} finally {
+			g.dispose();
+		}
 	}
 
 	@Test

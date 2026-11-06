@@ -27,9 +27,10 @@ import cz.geokuk.util.gui.PopisekNaMape;
  */
 public class RozmisteniPrekryvuTest {
 
-	private static final Dimension[] OKNA = { new Dimension(1920, 960), new Dimension(1536, 744), new Dimension(1280, 620), new Dimension(1000, 600), new Dimension(800, 560),
+	private static final Dimension[] OKNA = { new Dimension(1920, 960), new Dimension(1536, 744), new Dimension(1280, 620), new Dimension(1000, 600), new Dimension(800, 560), new Dimension(860, 560),
 			new Dimension(2560, 1200) };
-	private static final String[] ZPRAVY = { "Kešoidy skryté včetně kruhů, obsazenosti a popisků", "Zapnuté zvýrazňovací kruhy s poloměrem v metrech",
+	private static final String[] ZPRAVY = { "Kešoidy – Vypnuto, včetně kruhů, obsazenosti a popisků", "Zvýrazňovací kruhy – Zapnuto, 1,5 km, ale skryté: příliš mnoho bodů ve výřezu (limit 90 000), přibližte mapu",
+			"Kešoidy skryté včetně kruhů, obsazenosti a popisků", "Zapnuté zvýrazňovací kruhy s poloměrem v metrech",
 			"Kruhy zapnuté, ale skryté: příliš mnoho bodů ve výřezu (limit 90 000), přibližte mapu" };
 
 	private static Dimension zprava(final String text, final float velikostPisma) {

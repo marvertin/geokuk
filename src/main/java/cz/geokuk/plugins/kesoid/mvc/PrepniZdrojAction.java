@@ -57,7 +57,8 @@ public class PrepniZdrojAction extends ToggleAction0 {
 		JTabulkaZdroju.klikTyp(stav, typ, kesoidModel);
 		// Událost se stavem přijde později, stav po přepnutí je hned v registru.
 		if (toast != null) {
-			toast.ukaz(ZpravyZkratek.zdroje(zapnuteZdroje(kesoidModel.getRegistrStavuZdroju().getSnimek())));
+			final StavZdroju snimek = kesoidModel.getRegistrStavuZdroju().getSnimek();
+			toast.ukaz(ZpravyZkratek.zdroj(typ.getNazev(), snimek.getStavVyberuTypu(typ), zapnuteZdroje(snimek)));
 		}
 	}
 
