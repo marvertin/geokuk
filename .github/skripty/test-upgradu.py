@@ -55,7 +55,7 @@ def verze_jaru(jar):
 class Beh:
     """Jeden běh programu přes start.jar s dálkovým ovládáním."""
 
-    def __init__(self, koren, java, nazev):
+    def __init__(self, koren, java, nazev, env=None):
         self.koren, self.nazev = koren, nazev
         self.data = os.path.join(koren, "data")
         self.log = os.path.join(self.data, "log", "geokuk.log")
@@ -66,7 +66,7 @@ class Beh:
             pass
         self.zacatek = time.perf_counter()
         self.proces = subprocess.Popen([java, "-XX:-UsePerfData", "-jar", os.path.join(koren, "program", "start.jar"), "--ovladani=0", "--ovladani-devel"], cwd=koren,
-                                       stdout=open(os.path.join(koren, nazev + ".out"), "wb"), stderr=subprocess.STDOUT)
+                                       stdout=open(os.path.join(koren, nazev + ".out"), "wb"), stderr=subprocess.STDOUT, env=env)
         self.port = self.token = None
 
     def pocet_oken_v_logu(self):
@@ -129,6 +129,9 @@ class Beh:
                 time.sleep(3)  # nastavení a cache se dopisují při ukončení
                 return True
             time.sleep(0.5)
+        print("Program se přes menu neukončil, ukončuji ho signálem.")
+        ukonci_zbytky(self.koren)
+        time.sleep(5)
         return False
 
 
@@ -184,25 +187,36 @@ def radky_logu(log, vzor):
         return []
 
 
+SITOVE_CHYBY = r"stahování dlaždice|UnknownHost|Connection refused|ConnectException|NoRouteToHost"
+
+
 def main():
     # Windows má výchozí kódování konzole cp1252, české znaky by skript shodily.
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
     a = argparse.ArgumentParser()
     a.add_argument("koren")
-    a.add_argument("--stary", nargs=2, required=True, metavar=("GEOKUK_JAR", "START_JAR"))
+    a.add_argument("--stary", nargs=2, metavar=("GEOKUK_JAR", "START_JAR"), help="vydaná starší verze; bez ní se zkouší jen nová verze (--jen-novy)")
     a.add_argument("--novy", nargs=2, required=True, metavar=("GEOKUK_JAR", "START_JAR"))
+    a.add_argument("--jen-novy", action="store_true", help="bez staré verze: nová verze dvakrát po sobě nad čistými daty")
     a.add_argument("--java", default="java")
     a.add_argument("--runtime")
     a.add_argument("--mapy", help="složka s offline mapou (soubory .map)")
+    a.add_argument("--podklad", default="OFFLINE_MF", help="podklad, který stará verze nastaví (starší řady offline mapu nemají)")
+    a.add_argument("--bez-site", action="store_true", help="program nesmí na internet (dlaždice online podkladu), chyby sítě se v logu nepočítají")
+    a.add_argument("--poskodit-cache", action="store_true", help="mezi starou a novou verzí poškodit tiles.sqlite a nechat zbytky .vadna a .new")
+    a.add_argument("--ocekavej-cds", action="store_true", help="po 2. startu musí být v data/cds hotový archiv tříd (runtime se základním archivem)")
     arg = a.parse_args()
+    if not arg.jen_novy and not arg.stary:
+        a.error("chybí --stary (nebo --jen-novy)")
 
     koren = os.path.abspath(os.path.join(arg.koren, "GeoKuk"))
     program, data = os.path.join(koren, "program"), os.path.join(koren, "data")
     os.makedirs(program)
     os.makedirs(os.path.join(data, "offline-mapy"))
-    shutil.copy(arg.stary[0], os.path.join(program, "geokuk.jar"))
-    shutil.copy(arg.stary[1], os.path.join(program, "start.jar"))
+    zacatecni = arg.novy if arg.jen_novy else arg.stary
+    shutil.copy(zacatecni[0], os.path.join(program, "geokuk.jar"))
+    shutil.copy(zacatecni[1], os.path.join(program, "start.jar"))
     java = arg.java
     if arg.runtime:
         shutil.copytree(arg.runtime, os.path.join(program, "runtime"))
@@ -213,41 +227,59 @@ def main():
                 shutil.copy(os.path.join(arg.mapy, f), os.path.join(data, "offline-mapy", f))
     with open(os.path.join(data, "nastaveni.xml"), "w", encoding="utf-8") as f:
         f.write(NASTAVENI)
-    stara_verze, nova_verze = verze_jaru(arg.stary[0]), verze_jaru(arg.novy[0])
-    info("| Stará verze | %s |" % stara_verze)
+    env = dict(os.environ)
+    if arg.bez_site:
+        proxy = "-Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=9 -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=9 -Dhttp.nonProxyHosts=localhost|127.0.0.1"
+        env["JAVA_TOOL_OPTIONS"] = (env.get("JAVA_TOOL_OPTIONS", "") + " " + proxy).strip()
+    stara_verze = "-" if arg.jen_novy else verze_jaru(arg.stary[0])
+    nova_verze = verze_jaru(arg.novy[0])
+    if not arg.jen_novy:
+        info("| Stará verze | %s |" % stara_verze)
     info("| Nová verze | %s |" % nova_verze)
     verze_javy = [r for r in subprocess.run([java, "-version"], capture_output=True, text=True).stderr.splitlines() if "version" in r and "Picked up" not in r]
     info("| Java | %s |" % (verze_javy[0] if verze_javy else "?"))
+    info("| Základní archiv Javy (classes.jsa) | %s |" % ("je" if any(os.path.isfile(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(java))), d, "server", n)) for d in ("bin", "lib") for n in ("classes.jsa", "classes_nocoops.jsa")) else "není"))
 
-    # 1. Stará verze vytvoří profil.
-    stary = Beh(koren, java, "stary")
-    ms = stary.cekej_na_okno(0)
-    ocekavej(ms is not None, "stará verze %s otevřela okno" % stara_verze)
-    if ms is None:
-        diagnostika(stary)
-        return konec()
-    ocekavej(stary.pripoj_ovladani(), "stará verze: dálkové ovládání odpovídá")
-    stary.volej("POST", "/podklad", jmeno="OFFLINE_MF")
-    stary.volej("POST", "/pozice", lat="50.003", lon="14.405", meritko="15")
-    time.sleep(15)
-    stav_stary = stary.volej("GET", "/stav")
-    print("Stav staré verze: %s" % json.dumps(stav_stary, ensure_ascii=False))
-    ocekavej(pole(stav_stary, "podklad") == "OFFLINE_MF", "stará verze má podklad OFFLINE_MF (%s)" % pole(stav_stary, "podklad"))
-    ocekavej(stary.ukonci(), "stará verze se ukončila sama přes menu")
-    pred = soubory(data)
-    cache = {k: v for k, v in pred.items() if k.startswith("cache/")}
-    info("| Cache po staré verzi | %s |" % (", ".join("%s %d kB" % (k, v // 1024) for k, v in sorted(cache.items())) or "žádná"))
-    ocekavej(any(k.endswith("tiles.sqlite") and v > 0 for k, v in cache.items()), "stará verze založila cache dlaždic")
-    ocekavej(os.path.isfile(os.path.join(data, "nastaveni.xml")), "stará verze uložila nastavení")
+    pred = {}
+    if not arg.jen_novy:
+        # 1. Stará verze vytvoří profil.
+        stary = Beh(koren, java, "stary", env)
+        ms = stary.cekej_na_okno(0)
+        ocekavej(ms is not None, "stará verze %s otevřela okno" % stara_verze)
+        if ms is None:
+            diagnostika(stary)
+            return konec()
+        ocekavej(stary.pripoj_ovladani(), "stará verze: dálkové ovládání odpovídá")
+        stary.volej("POST", "/podklad", jmeno=arg.podklad)
+        stary.volej("POST", "/pozice", lat="50.003", lon="14.405", meritko="15")
+        time.sleep(15)
+        stav_stary = stary.volej("GET", "/stav")
+        print("Stav staré verze: %s" % json.dumps(stav_stary, ensure_ascii=False))
+        ocekavej(pole(stav_stary, "podklad") == arg.podklad, "stará verze má podklad %s (%s)" % (arg.podklad, pole(stav_stary, "podklad")))
+        ocekavej(stary.ukonci(), "stará verze se ukončila sama přes menu")
+        cache = {k: v for k, v in soubory(data).items() if k.startswith("cache/")}
+        info("| Cache po staré verzi | %s |" % (", ".join("%s %d kB" % (k, v // 1024) for k, v in sorted(cache.items())) or "žádná"))
+        ocekavej(any(k.endswith("tiles.sqlite") and v > 0 for k, v in cache.items()), "stará verze založila cache dlaždic")
+        ocekavej(os.path.isfile(os.path.join(data, "nastaveni.xml")), "stará verze uložila nastavení")
 
-    # 2. Výměna jako při aktualizaci z programu: nový jar jako .new, nový start.jar.
-    shutil.copy(arg.novy[0], os.path.join(program, "geokuk.jar.new"))
-    shutil.copy(arg.novy[1], os.path.join(program, "start.jar"))
+        if arg.poskodit_cache:
+            tiles = os.path.join(data, "cache", "tiles.sqlite")
+            if os.path.isfile(tiles):
+                with open(tiles, "r+b") as f:
+                    f.write(b"\xff" * 4096)
+            for nazev, kb in (("tiles.sqlite.vadna", 3072), ("tiles.sqlite.vadna.1", 1024), ("tiles.sqlite.new", 2048)):
+                with open(os.path.join(data, "cache", nazev), "wb") as f:
+                    f.write(os.urandom(kb * 1024))
+            info("| Před přechodem | poškozený tiles.sqlite, zbylé tiles.sqlite.vadna, .vadna.1 a .new |")
 
-    # 3. Kandidát nad stejnými daty, dvakrát po sobě.
-    stavy = []
+        # 2. Výměna jako při aktualizaci z programu: nový jar jako .new, nový start.jar.
+        shutil.copy(arg.novy[0], os.path.join(program, "geokuk.jar.new"))
+        shutil.copy(arg.novy[1], os.path.join(program, "start.jar"))
+        pred = soubory(data)
+
+    # 3. Nová verze nad stejnými daty, dvakrát po sobě.
     for poradi in (1, 2):
-        beh = Beh(koren, java, "novy%d" % poradi)
+        beh = Beh(koren, java, "novy%d" % poradi, env)
         okna_pred = beh.pocet_oken_v_logu()
         ms = beh.cekej_na_okno(okna_pred)
         ocekavej(ms is not None, "%d. start nové verze otevřel okno" % poradi)
@@ -256,32 +288,56 @@ def main():
             break
         info("| %d. start nové verze: okno za | %d ms |" % (poradi, ms))
         ocekavej(beh.pripoj_ovladani(), "%d. start: dálkové ovládání odpovídá" % poradi)
+        if arg.jen_novy and poradi == 1:
+            beh.volej("POST", "/podklad", jmeno=arg.podklad)
+            beh.volej("POST", "/pozice", lat="50.003", lon="14.405", meritko="15")
         time.sleep(20)
         stav = beh.volej("GET", "/stav")
         print("Stav %d. startu: %s" % (poradi, json.dumps(stav, ensure_ascii=False)))
-        stavy.append(stav)
-        ocekavej(pole(stav, "podklad") == "OFFLINE_MF", "%d. start: podklad z nastavení staré verze zůstal (%s)" % (poradi, pole(stav, "podklad")))
         ocekavej(pole(stav, "verze") == nova_verze, "%d. start: běží verze %s (%s)" % (poradi, nova_verze, pole(stav, "verze")))
+        if not arg.jen_novy or poradi == 2:
+            ocekavej(pole(stav, "podklad") == arg.podklad, "%d. start: podklad %s z nastavení zůstal (%s)" % (poradi, arg.podklad, pole(stav, "podklad")))
         ocekavej(beh.ukonci(), "%d. start: program se ukončil sám přes menu" % poradi)
+        if poradi == 1 and arg.ocekavej_cds:
+            # Rozepsaný archiv mladší než 30 s se nepovyšuje, další start by ho nechal být.
+            time.sleep(35)
 
-    ocekavej(verze_jaru(os.path.join(program, "geokuk.jar")) == nova_verze, "program/geokuk.jar je nová verze")
-    ocekavej(not os.path.exists(os.path.join(program, "geokuk.jar.new")), "geokuk.jar.new po výměně nezůstal")
-    ocekavej(os.path.isfile(os.path.join(program, "geokuk.jar.bak")), "starý jar zůstal jako geokuk.jar.bak")
+    if not arg.jen_novy:
+        ocekavej(verze_jaru(os.path.join(program, "geokuk.jar")) == nova_verze, "program/geokuk.jar je nová verze")
+        ocekavej(not os.path.exists(os.path.join(program, "geokuk.jar.new")), "geokuk.jar.new po výměně nezůstal")
+        ocekavej(os.path.isfile(os.path.join(program, "geokuk.jar.bak")), "starý jar zůstal jako geokuk.jar.bak")
 
     po = soubory(data)
     zbytky = sorted(k for k in po if re.search(r"\.(vadna(\.\d+)?|new|tmp)$", k) and k not in pred)
-    ocekavej(not zbytky, "po přechodu nevznikly zbytky .vadna/.new/.tmp: %s" % (zbytky or "žádné"))
-    info("| Zbytky .vadna/.new/.tmp | %s |" % (", ".join(zbytky) or "žádné"))
-    cache_po = {k: v for k, v in po.items() if k.startswith("cache/")}
-    info("| Cache po nové verzi | %s |" % (", ".join("%s %d kB" % (k, v // 1024) for k, v in sorted(cache_po.items())) or "žádná"))
-    ocekavej(any(k.endswith("tiles.sqlite") and v > 0 for k, v in cache_po.items()), "cache dlaždic zůstala")
+    zustalo = sorted(k for k in pred if re.search(r"\.(vadna(\.\d+)?|new|tmp)$", k) and k in po)
+    if arg.poskodit_cache:
+        info("| Zbylé soubory z přípravy po přechodu | %s |" % (", ".join(zustalo) or "žádné se nezachovaly"))
+        info("| Nové soubory .vadna/.new/.tmp | %s |" % (", ".join(zbytky) or "žádné"))
+        tiles = os.path.join(data, "cache", "tiles.sqlite")
+        hlavicka = open(tiles, "rb").read(16) if os.path.isfile(tiles) else b""
+        ocekavej(hlavicka == b"SQLite format 3\x00", "po přechodu je tiles.sqlite platná databáze (hlavička %r)" % hlavicka)
+    else:
+        ocekavej(not zbytky, "po přechodu nevznikly zbytky .vadna/.new/.tmp: %s" % (zbytky or "žádné"))
+        info("| Zbytky .vadna/.new/.tmp | %s |" % (", ".join(zbytky) or "žádné"))
+        cache_po = {k: v for k, v in po.items() if k.startswith("cache/")}
+        info("| Cache po nové verzi | %s |" % (", ".join("%s %d kB" % (k, v // 1024) for k, v in sorted(cache_po.items())) or "žádná"))
+        ocekavej(any(k.endswith("tiles.sqlite") and v > 0 for k, v in cache_po.items()), "cache dlaždic zůstala")
     cds = sorted(k for k in po if k.startswith("cds/"))
     info("| Archiv tříd (data/cds) | %s |" % (", ".join(cds) or "není (přibalená Java bez základního archivu, nebo první běh)"))
+    if arg.ocekavej_cds:
+        ocekavej(any(k.startswith("cds/geokuk-") and k.endswith(".jsa") for k in cds), "po 2. startu je v data/cds hotový archiv tříd geokuk-*.jsa")
 
     chyby = radky_logu(os.path.join(data, "log", "geokuk.log"), r"\bERROR\b|Exception")
-    # Dlaždice se z internetu nestahují (offline mapa, žádná síť), proto je v logu chyb málo; cokoli jiného je nález.
-    chyby = [r for r in chyby if "UnknownHost" not in r]
-    ocekavej(not chyby, "v logu nejsou chyby (%d): %s" % (len(chyby), " | ".join(r[:200] for r in chyby[:5])))
+    if arg.bez_site:
+        chyby = [r for r in chyby if not re.search(SITOVE_CHYBY, r)]
+    else:
+        chyby = [r for r in chyby if "UnknownHost" not in r]
+    if arg.poskodit_cache:
+        info("| Chyby v logu při poškozené cache (očekávané) | %d |" % len(chyby))
+        for r in chyby[:5]:
+            print("  " + r[:220])
+    else:
+        ocekavej(not chyby, "v logu nejsou chyby (%d): %s" % (len(chyby), " | ".join(r[:200] for r in chyby[:5])))
     return konec()
 
 
@@ -289,7 +345,7 @@ def konec():
     vystup = os.environ.get("GITHUB_STEP_SUMMARY")
     if vystup:
         with open(vystup, "a", encoding="utf-8") as f:
-            f.write("### Zkouška přechodu ze starší verze\n| | |\n|---|---|\n" + "\n".join(souhrn) + "\n\n")
+            f.write("### %s\n| | |\n|---|---|\n" % os.environ.get("NAZEV_ZKOUSKY", "Zkouška přechodu ze starší verze") + "\n".join(souhrn) + "\n\n")
             f.write("**%s**\n" % ("V pořádku." if not problemy else "Chyby: " + "; ".join(problemy)))
     print("\nVÝSLEDEK: %s" % ("v pořádku" if not problemy else "%d chyb" % len(problemy)))
     return 1 if problemy else 0

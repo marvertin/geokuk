@@ -8,10 +8,14 @@ on:
       stara:
         description: "Značka vydání, ze kterého se přechází (prázdné = poslední ostrá verze)"
         default: ""
+      starsi:
+        description: "Značka vydání starší řady (prázdné = poslední ostrá verze před řadou poslední ostré)"
+        default: ""
   pull_request:
     branches: [main]
     paths:
       - ".github/skripty/test-upgradu.py"
+      - ".github/skripty/upgrade-spust.sh"
       - ".github/workflows/upgrade.yml"
 
 permissions:
@@ -24,7 +28,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
         with:
@@ -41,36 +45,33 @@ jobs:
         shell: bash
         run: ./mvnw -B -q -DskipTests package
 
-      - name: Stará verze
+      - name: Přechod z poslední ostré verze
         shell: bash
         env:
-          STARA_VSTUP: ${{ inputs.stara }}
+          STARA: ${{ inputs.stara }}
           GH_TOKEN: ${{ github.token }}
-        run: |
-          STARA="${STARA_VSTUP:-$(git tag --list 'v*' --sort=-v:refname | grep -v -- '-' | head -1)}"
-          echo "Stará verze: $STARA"
-          mkdir -p "$RUNNER_TEMP/stara"
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            gh release download "$STARA" --repo "$GITHUB_REPOSITORY" --pattern GeoKuk-windows.zip --dir "$RUNNER_TEMP/stara"
-            pwsh -NoProfile -Command "Expand-Archive -Path '$RUNNER_TEMP/stara/GeoKuk-windows.zip' -DestinationPath '$RUNNER_TEMP/stara' -Force"
-          else
-            gh release download "$STARA" --repo "$GITHUB_REPOSITORY" --pattern geokuk.jar --pattern start.jar --dir "$RUNNER_TEMP/stara"
-          fi
+        run: .github/skripty/upgrade-spust.sh prechod
 
-      - name: Zkouška přechodu
+      - name: Přechod s poškozenou cache dlaždic
+        if: always()
         shell: bash
-        run: |
-          NOVY_JAR="$(ls target/geokuk-[0-9]*.jar | head -1)"
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            ARGS=(--stary "$RUNNER_TEMP/stara/GeoKuk/program/geokuk.jar" "$RUNNER_TEMP/stara/GeoKuk/program/start.jar" --runtime "$RUNNER_TEMP/stara/GeoKuk/program/runtime")
-            PY=python
-          else
-            ARGS=(--stary "$RUNNER_TEMP/stara/geokuk.jar" "$RUNNER_TEMP/stara/start.jar")
-            PY=python3
-            DISPLEJ=(xvfb-run -a -s "-screen 0 1400x900x24")
-          fi
-          mkdir -p "$RUNNER_TEMP/zkouska"
-          "${DISPLEJ[@]}" "$PY" .github/skripty/test-upgradu.py "$RUNNER_TEMP/zkouska" "${ARGS[@]}" --novy "$NOVY_JAR" target/temporary-start.jar --mapy src/test/resources/offline-mapy
+        env:
+          STARA: ${{ inputs.stara }}
+          GH_TOKEN: ${{ github.token }}
+        run: .github/skripty/upgrade-spust.sh poskozena-cache
+
+      - name: Přechod z poslední starší řady
+        if: always()
+        shell: bash
+        env:
+          STARSI: ${{ inputs.starsi }}
+          GH_TOKEN: ${{ github.token }}
+        run: .github/skripty/upgrade-spust.sh starsi-rada
+
+      - name: Nová instalace s archivem tříd
+        if: always()
+        shell: bash
+        run: .github/skripty/upgrade-spust.sh novy-zip
 
       - name: Logy
         if: always()
@@ -78,5 +79,5 @@ jobs:
         with:
           name: upgrade-${{ runner.os }}
           path: |
-            ${{ runner.temp }}/zkouska/GeoKuk/data/log/
-            ${{ runner.temp }}/zkouska/GeoKuk/*.out
+            ${{ runner.temp }}/zkouska-*/GeoKuk/data/log/
+            ${{ runner.temp }}/zkouska-*/GeoKuk/*.out
