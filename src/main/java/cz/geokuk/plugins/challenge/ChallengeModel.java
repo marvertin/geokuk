@@ -106,7 +106,7 @@ public class ChallengeModel extends Model0 {
 
 	/** Pruh plánovače na mapě je vidět, když je plánovač zapnutý a je co ukazovat. */
 	public boolean jePruhViditelny() {
-		return zapnuto && !seznam.aktivni().isEmpty();
+		return zapnuto && zobrazena() != null;
 	}
 
 	public void setZapnuto(final boolean zapnuto) {
@@ -306,15 +306,45 @@ public class ChallengeModel extends Model0 {
 	public Challenge zobrazena() {
 		final String k = zobrazena;
 		if (k != null && seznam.jeAktivni(k)) {
-			return seznam.najdi(k);
+			final Challenge c = seznam.najdi(k);
+			if (jeVUi(c)) {
+				return c;
+			}
 		}
-		final List<Challenge> a = seznam.aktivni();
-		return a.isEmpty() ? null : a.get(0);
+		for (final Challenge c : seznam.aktivni()) {
+			if (jeVUi(c)) {
+				return c;
+			}
+		}
+		return null;
+	}
+
+	/** Kalendář se v rozhraní zatím neukazuje (pruh, popup, nabídka v dialogu), i když je uložený a aktivní z dřívějška; zapnout ho jde jen v testech. */
+	private volatile boolean kalendarVUi;
+
+	public void setKalendarVUi(final boolean kalendarVUi) {
+		this.kalendarVUi = kalendarVUi;
+	}
+
+	/** Typy, které se v rozhraní nabízejí a ukazují v pruhu a popupu. */
+	public boolean jeVUi(final Challenge c) {
+		return kalendarVUi || c.typ() != Challenge.Typ.KALENDAR;
+	}
+
+	/** Počet aktivních challenge, které se v rozhraní ukazují. */
+	private int pocetAktivnichVUi() {
+		int n = 0;
+		for (final Challenge c : seznam.aktivni()) {
+			if (jeVUi(c)) {
+				n++;
+			}
+		}
+		return n;
 	}
 
 	/** Přepne pruh na jinou aktivní challenge. */
 	public void setZobrazena(final Challenge c) {
-		if (!seznam.jeAktivni(c.nazev())) {
+		if (!seznam.jeAktivni(c.nazev()) || !jeVUi(c)) {
 			throw new ChallengeChyba("V pruhu jde zobrazit jen aktivní challenge.");
 		}
 		final Challenge pred = zobrazena();
@@ -334,7 +364,7 @@ public class ChallengeModel extends Model0 {
 		final StavPredpoctu stav = stavPredpoctu(c);
 		final String chyba = stav.faze() == StavPredpoctu.Faze.CHYBA ? stav.chyba() : null;
 		final Challenge filtr = jenKandidatiPro();
-		return new StavPruhu(true, c, seznam.aktivni().size(), pocetChybejicich(c), stitekKandidata(c, k), k, filtr != null && klic(filtr).equals(klic(c)), chyba);
+		return new StavPruhu(true, c, pocetAktivnichVUi(), pocetChybejicich(c), stitekKandidata(c, k), k, filtr != null && klic(filtr).equals(klic(c)), chyba);
 	}
 
 	private String stitekKandidata(final Challenge c, final VybranyKandidat k) {

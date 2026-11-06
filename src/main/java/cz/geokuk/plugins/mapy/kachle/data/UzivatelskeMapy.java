@@ -310,7 +310,7 @@ public final class UzivatelskeMapy {
 		final String zkratka = v.getOrDefault("zkratka", "");
 		final KeyStroke keyStroke = zkratka.isEmpty() ? null : zkratka.length() == 1 ? jednaKlavesa(zkratka.charAt(0)) : KeyStroke.getKeyStroke(zkratka);
 		if (!zkratka.isEmpty() && keyStroke == null) {
-			chyby.add(jmeno + ": zkratka není platná klávesová zkratka (např. u, F4, ctrl U)");
+			chyby.add(jmeno + ": zkratka není platná klávesová zkratka (např. u, alt U, ctrl U)");
 			return null;
 		}
 		final String akce = keyStroke == null ? null : zkratkyProgramu.get(keyStroke);

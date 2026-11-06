@@ -204,4 +204,36 @@ public class JPruhPlanovaceTest {
 			javax.swing.UIManager.setLookAndFeel(puvodni);
 		}
 	}
+
+	@Test
+	public void popiskyOdznakuAFiltruPodleTypuChallenge() {
+		Assert.assertEquals("Chybějící sektory", JPruhPlanovace.popisChybejicich(Challenge.Typ.SEKTORY_360));
+		Assert.assertEquals("Chybějící políčka D/T", JPruhPlanovace.popisChybejicich(Challenge.Typ.DT_MATICE));
+		Assert.assertEquals("Chybějící dny", JPruhPlanovace.popisChybejicich(Challenge.Typ.KALENDAR));
+		Assert.assertTrue(JPruhPlanovace.popisKandidatu(Challenge.Typ.SEKTORY_360).endsWith("sektor"));
+		Assert.assertTrue(JPruhPlanovace.popisKandidatu(Challenge.Typ.DT_MATICE).endsWith("políčko D/T"));
+		Assert.assertTrue(JPruhPlanovace.popisKandidatu(Challenge.Typ.KALENDAR).endsWith("den"));
+	}
+
+	@Test
+	public void tooltipOdznakuSledujeTypZobrazeneChallenge() throws Exception {
+		priprav();
+		final Challenge dt = model.ulozVlastni(new Challenge("DT", Challenge.Typ.DT_MATICE, Challenge.Stred.domov(), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.PGC));
+		model.aktivuj(dt);
+		model.setZapnuto(true);
+		final javax.swing.AbstractButton odznak = najdiOdznak();
+		Assert.assertEquals("Chybějící políčka D/T", odznak.getToolTipText());
+		model.aktivuj(Sablony.cesko360());
+		model.setZobrazena(Sablony.cesko360());
+		Assert.assertEquals("Chybějící sektory", odznak.getToolTipText());
+	}
+
+	private javax.swing.AbstractButton najdiOdznak() {
+		for (final Component c : pruh.getComponents()) {
+			if (c instanceof javax.swing.AbstractButton && !(c instanceof javax.swing.JToggleButton) && ((javax.swing.AbstractButton) c).getToolTipText() != null && ((javax.swing.AbstractButton) c).getToolTipText().startsWith("Chybějící")) {
+				return (javax.swing.AbstractButton) c;
+			}
+		}
+		throw new AssertionError("odznak");
+	}
 }

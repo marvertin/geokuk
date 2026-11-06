@@ -125,6 +125,21 @@ public class Menu extends MenuStrujce {
 		menu = hlavni;
 	}
 
+	private void sestavSubmenuChallenge() {
+		final JMenu hlavni = menu;
+		final JMenu challenge = new JMenu("Challenge");
+		challenge.setToolTipText("Plánovač challenge: pruh na mapě, další a předchozí chybějící, jen kandidáti.");
+		hlavni.add(challenge);
+		menu = challenge;
+		item(akce.challengeNastaveniAction);
+		item(akce.challengeZapnoutAction);
+		separator();
+		item(akce.challengeDalsiAction);
+		item(akce.challengePredchoziAction);
+		item(akce.challengeJenKandidatiAction);
+		menu = hlavni;
+	}
+
 	/** Menu Mapy: podklady, překryvy, správce offline map, pohyb po mapě a volby ukládání map. */
 	void sestavMenuMapy() {
 		// Ovládat mapy
@@ -229,6 +244,8 @@ public class Menu extends MenuStrujce {
 
 		item(akce.nastavParametryZvyraznovacichKruhuAction);
 
+		separator();
+		sestavSubmenuChallenge();
 		separator();
 		item(akce.implicitniVyberZobrazenychKesi);
 		item(akce.urlToClipboardForGeogetAction);

@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.kesoid;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
 import cz.geokuk.plugins.kesoid.genetika.*;
 import cz.geokuk.plugins.kesoid.kind.kes.Kes;
@@ -17,11 +18,22 @@ public class KesoidFilter {
 
 	private Set<Alela> nechteneAlely;
 
+	/** Další podmínka, která se přidává ke všem ostatním (plánovač challenge: jen kandidáti); null = žádná. */
+	private Predicate<Kesoid> doplnkovy;
+
+	public KesoidFilter doplnkovy(final Predicate<Kesoid> doplnkovy) {
+		this.doplnkovy = doplnkovy;
+		return this;
+	}
+
 	private final IndexMap<Genotyp, Boolean> uzFiltrovane  = new IndexMap<>();
 
 
 	public boolean isFiltered(final Wpt aWpt) {
 		try {
+			if (doplnkovy != null && !doplnkovy.test(aWpt.getKesoid())) {
+				return false;
+			}
 			final Genotyp genotyp = aWpt.getGenotyp();
 			final Genom genom = genotyp.getGenom();
 			if (jmenaNechtenychAlel != null) {

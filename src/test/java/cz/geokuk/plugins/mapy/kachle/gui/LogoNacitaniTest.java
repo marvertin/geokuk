@@ -314,6 +314,8 @@ public class LogoNacitaniTest {
 	@Test
 	public void kachlovnikVybiraKrytiPodlePozadiPanelu() {
 		final Object puvodni = javax.swing.UIManager.get("Panel.background");
+		// Bez vlastní hodnoty se po testu vrátí hodnota vzhledu; vlastní hodnota by přebila i pozdější přepnutí vzhledu v jiných testech.
+		final boolean vlastni = puvodni != javax.swing.UIManager.getLookAndFeelDefaults().get("Panel.background");
 		try {
 			final Color tmava = new Color(0x3C3F41);
 			javax.swing.UIManager.put("Panel.background", tmava);
@@ -321,7 +323,7 @@ public class LogoNacitaniTest {
 			final BufferedImage nadTmavou = vykresliPozadi(k);
 			Assert.assertTrue("na tmavé ploše je logo vidět s tmavým krytím", odchylka(nadTmavou, tmava) > 3.5);
 		} finally {
-			javax.swing.UIManager.put("Panel.background", puvodni);
+			javax.swing.UIManager.put("Panel.background", vlastni ? puvodni : null);
 		}
 	}
 }

@@ -73,6 +73,12 @@ public class RozmisteniPrekryvuTest {
 		o.put(Prvek.UKAZATEL_VYKONU, new Rectangle(RozmisteniPrekryvu.UKAZATEL_VYKONU));
 		o.put(Prvek.MERITKO, RozmisteniPrekryvu.meritko(mapa));
 		o.put(Prvek.ZPRAVA, RozmisteniPrekryvu.zprava(mapa, zprava, prekazky));
+		// popup plánovače (obsah ~420×330 při písmu 12, úměrně větší při větším) pod odznakem; měřítko je pro něj také překážka
+		final List<Rectangle> proPopup = new ArrayList<>(prekazky);
+		proPopup.add(RozmisteniPrekryvu.meritko(mapa));
+		final float k = zprava.height / 16f;
+		final Rectangle odznak = new Rectangle(RozmisteniPrekryvu.OKRAJ + 52, RozmisteniPrekryvu.OKRAJ + 4, 40, 20);
+		o.put(Prvek.POPUP_PLANOVACE, RozmisteniPrekryvu.popupPlanovace(mapa, odznak, new Dimension(Math.round(420 * k), Math.round(330 * k)), proPopup));
 		Assert.assertNotNull(velky);
 		return o;
 	}
@@ -289,5 +295,29 @@ public class RozmisteniPrekryvuTest {
 		Assert.assertEquals("úzká rada uprostřed široké mapy zůstane nahoře", 8, RozmisteniPrekryvu.yRady(700, true));
 		Assert.assertEquals("hranice: ukazatel končí na x = 334, mezera 8", 60, RozmisteniPrekryvu.yRady(341, true));
 		Assert.assertEquals(8, RozmisteniPrekryvu.yRady(342, true));
+	}
+
+	@Test
+	public void popupPlanovaceUhnePanelumVedleAPodSebouAleNeZmensiSePodMez() {
+		final Dimension mapa = new Dimension(1000, 600);
+		final Rectangle odznak = new Rectangle(56, 8, 40, 20);
+		final Dimension chce = new Dimension(420, 330);
+		final Rectangle volny = RozmisteniPrekryvu.popupPlanovace(mapa, odznak, chce, new ArrayList<>());
+		Assert.assertEquals(new Rectangle(36, 34, 420, 330), volny);
+		final Rectangle vedle = RozmisteniPrekryvu.popupPlanovace(mapa, odznak, chce, java.util.Collections.singletonList(new Rectangle(400, 0, 600, 200)));
+		Assert.assertEquals("posune se doleva k okraji a pak zúží", new Rectangle(4, 34, 392, 330), vedle);
+		final Rectangle pod = RozmisteniPrekryvu.popupPlanovace(mapa, odznak, chce, java.util.Collections.singletonList(new Rectangle(0, 300, 200, 300)));
+		Assert.assertEquals("zkrátí se nad panelem dole", new Rectangle(36, 34, 420, 262), pod);
+		final Rectangle tesne = RozmisteniPrekryvu.popupPlanovace(mapa, odznak, chce, java.util.Collections.singletonList(new Rectangle(0, 100, 200, 500)));
+		Assert.assertEquals("kvůli panelu by byl nepoužitelně malý, panel překryje", volny, tesne);
+		Assert.assertEquals("panel dole vpravo mimo popup ho nezkrátí", volny,
+				RozmisteniPrekryvu.popupPlanovace(mapa, odznak, chce, java.util.Collections.singletonList(new Rectangle(600, 300, 400, 300))));
+		final Rectangle obe = RozmisteniPrekryvu.popupPlanovace(mapa, odznak, chce, java.util.Arrays.asList(new Rectangle(400, 0, 600, 200), new Rectangle(0, 300, 200, 300)));
+		Assert.assertEquals(new Rectangle(4, 34, 392, 262), obe);
+		final Map<Prvek, Rectangle> o = RozmisteniPrekryvu.prazdne();
+		o.put(Prvek.POPUP_PLANOVACE, volny);
+		o.put(Prvek.UKAZATEL_VYKONU, new Rectangle(RozmisteniPrekryvu.UKAZATEL_VYKONU));
+		o.put(Prvek.PRUH_PLANOVACE, RozmisteniPrekryvu.pruhPlanovace(RozmisteniPrekryvu.volnaSirkaPruhu(1000)));
+		Assert.assertTrue("ukazatel výkonu smí popup překrýt, pruh ne: " + RozmisteniPrekryvu.kolize(o), RozmisteniPrekryvu.kolize(o).isEmpty());
 	}
 }

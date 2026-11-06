@@ -17,7 +17,7 @@ import cz.geokuk.util.gui.CornerLayoutManager;
  * kreslí samy (ukazatel výkonu, zpráva po zkratce, měřítko), si polohu berou odtud; panely v rozích mají rozměry z {@link CornerLayoutManager}.
  *
  * <pre>
- * vlevo nahoře   pruh plánovače (4,4), pod ním ukazatel výkonu (4,40)
+ * vlevo nahoře   pruh plánovače (4,4), pod ním ukazatel výkonu (4,40); popup plánovače pod pruhem (smí překrýt ukazatel)
  * vpravo nahoře  panel cest        vpravo dole  detail kešoidu       vlevo dole  náhled fotomapy
  * uprostřed dole měřítko, nad ním zpráva po zkratce
  * vpravo         legenda posuvníků Obsazenosti (pod panely v pravých rozích)
@@ -27,7 +27,7 @@ public final class RozmisteniPrekryvu {
 
 	/** Prvky na mapě; pořadí je pořadí kontroly. */
 	public enum Prvek {
-		PRUH_PLANOVACE, UKAZATEL_VYKONU, MERITKO, ZPRAVA, NAHLED_FOTOMAPY, DETAIL_KESOIDU, PANEL_CEST, LEGENDA_OBSAZENOSTI
+		PRUH_PLANOVACE, POPUP_PLANOVACE, UKAZATEL_VYKONU, MERITKO, ZPRAVA, NAHLED_FOTOMAPY, DETAIL_KESOIDU, PANEL_CEST, LEGENDA_OBSAZENOSTI
 	}
 
 	/** Odsazení prvků vlevo nahoře od okraje mapy. */
@@ -96,6 +96,41 @@ public final class RozmisteniPrekryvu {
 
 	public static Rectangle pruhPlanovace(final int volnaSirka) {
 		return new Rectangle(OKRAJ, OKRAJ, sirkaPruhu(volnaSirka), VYSKA_PRUHU);
+	}
+
+	/** Mezera mezi spodním okrajem pruhu plánovače a jeho popupem. */
+	public static final int POD_PRUHEM = 2;
+	/** O kolik popup plánovače přesahuje doleva před odznak. */
+	public static final int PRED_ODZNAKEM = 20;
+	/** Menší popup už není k užitku; když by se kvůli překážce zmenšil pod tuto mez, překážku překryje. */
+	public static final Dimension NEJMENSI_POPUP = new Dimension(220, 120);
+
+	/**
+	 * Popup plánovače pod pruhem, levým okrajem kousek před odznakem ({@code odznak} v souřadnicích mapy). Leží celý v mapě s odstupem {@link #OKRAJ}. Překážka vedle něj (panel vpravo
+	 * nahoře, legenda) ho posune doleva a pak zúží, překážka pod ním (panely dole, měřítko) ho zkrátí; seznam se pak posouvá. Překážku, kvůli které by byl menší než
+	 * {@link #NEJMENSI_POPUP}, překryje.
+	 */
+	public static Rectangle popupPlanovace(final Dimension mapa, final Rectangle odznak, final Dimension pozadovana, final Collection<Rectangle> prekazky) {
+		final int y = OKRAJ + VYSKA_PRUHU + POD_PRUHEM;
+		final int w0 = Math.max(0, Math.min(pozadovana.width, mapa.width - 2 * OKRAJ));
+		Rectangle r = new Rectangle(Math.max(OKRAJ, Math.min(odznak.x - PRED_ODZNAKEM, mapa.width - OKRAJ - w0)), y, w0, Math.max(0, Math.min(pozadovana.height, mapa.height - y - OKRAJ)));
+		for (final Rectangle p : prekazky) {
+			if (!p.intersects(r)) {
+				continue;
+			}
+			final Rectangle upraveny;
+			if (p.y <= r.y) {
+				final int pravy = p.x - OKRAJ;
+				final int x = Math.max(OKRAJ, Math.min(r.x, pravy - r.width));
+				upraveny = new Rectangle(x, r.y, Math.min(r.width, pravy - x), r.height);
+			} else {
+				upraveny = new Rectangle(r.x, r.y, r.width, Math.min(r.height, p.y - OKRAJ - r.y));
+			}
+			if (upraveny.width >= Math.min(NEJMENSI_POPUP.width, w0) && upraveny.height >= Math.min(NEJMENSI_POPUP.height, r.height)) {
+				r = upraveny;
+			}
+		}
+		return r;
 	}
 
 	/** Oblast měřítka: uprostřed dole, nejvýš polovina šířky mapy. */
@@ -192,9 +227,10 @@ public final class RozmisteniPrekryvu {
 		return kolize;
 	}
 
-	/** Legenda leží pod panely v pravých rozích a tomu se nebrání; panely ji zakryjí. */
+	/** Legenda leží pod panely v pravých rozích a tomu se nebrání; panely ji zakryjí. Otevřený popup plánovače smí na chvíli překrýt ukazatel výkonu a zprávu po zkratce. */
 	static boolean jeDovolenePrekryti(final Prvek a, final Prvek b) {
-		return jePar(a, b, Prvek.LEGENDA_OBSAZENOSTI, Prvek.PANEL_CEST) || jePar(a, b, Prvek.LEGENDA_OBSAZENOSTI, Prvek.DETAIL_KESOIDU);
+		return jePar(a, b, Prvek.LEGENDA_OBSAZENOSTI, Prvek.PANEL_CEST) || jePar(a, b, Prvek.LEGENDA_OBSAZENOSTI, Prvek.DETAIL_KESOIDU) || jePar(a, b, Prvek.POPUP_PLANOVACE, Prvek.UKAZATEL_VYKONU)
+				|| jePar(a, b, Prvek.POPUP_PLANOVACE, Prvek.ZPRAVA);
 	}
 
 	private static boolean jePar(final Prvek a, final Prvek b, final Prvek x, final Prvek y) {

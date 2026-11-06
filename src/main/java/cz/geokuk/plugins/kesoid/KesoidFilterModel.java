@@ -1,5 +1,7 @@
 package cz.geokuk.plugins.kesoid;
 
+import java.util.function.Predicate;
+
 import cz.geokuk.plugins.kesoid.genetika.QualAlelaNames;
 import cz.geokuk.plugins.vylety.VyletModel;
 
@@ -9,12 +11,23 @@ public class KesoidFilterModel {
 	private volatile FilterDefinition filterDefinition;
 	private volatile QualAlelaNames jmenaNechtenychAlel;
 
+	/** Další podmínka přidaná ke všem ostatním; null = žádná. */
+	private volatile Predicate<Kesoid> doplnkovyFiltr;
+
 	private VyletModel vyletModel;
 
 	public KesoidFilterModel() {}
 
 	KesoidFilter createKesoidFilter() {
-		return new KesoidFilter(filterDefinition, jmenaNechtenychAlel, vyletModel);
+		return new KesoidFilter(filterDefinition, jmenaNechtenychAlel, vyletModel).doplnkovy(doplnkovyFiltr);
+	}
+
+	public Predicate<Kesoid> getDoplnkovyFiltr() {
+		return doplnkovyFiltr;
+	}
+
+	public void setDoplnkovyFiltr(final Predicate<Kesoid> doplnkovyFiltr) {
+		this.doplnkovyFiltr = doplnkovyFiltr;
 	}
 
 	/**

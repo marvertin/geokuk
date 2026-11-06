@@ -688,6 +688,15 @@ public class KesoidModel extends Model0 implements OvladaniZdroju {
 		fire(new KeskyNactenyEvent(vsechnyKesoidy));
 	}
 
+	/** Nastaví další podmínku, kterou musí kešoid splnit kromě filtru; null ji zruší. Při změně se spustí filtrování; stejná podmínka (podle equals) nic nedělá. */
+	public void setDoplnkovyFiltr(final java.util.function.Predicate<Kesoid> doplnkovyFiltr) {
+		if (Objects.equals(doplnkovyFiltr, filter.getDoplnkovyFiltr())) {
+			return;
+		}
+		filter.setDoplnkovyFiltr(doplnkovyFiltr);
+		spustFiltrovani();
+	}
+
 	public void spustFiltrovani() {
 		if (vsechny == null) {
 			return;

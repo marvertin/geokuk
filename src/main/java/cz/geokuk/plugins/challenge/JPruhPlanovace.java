@@ -42,10 +42,10 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		setLayout(null);
 		kandidati.setIcon(new Trychtyr());
 		kandidati.setText("jen kandidáti");
-		kandidati.setToolTipText("Zobrazit jen kandidáty, kteří zaplní chybějící sektor");
+		kandidati.setToolTipText(popisKandidatu(Challenge.Typ.SEKTORY_360));
 		zpet.setToolTipText("Předchozí chybějící");
 		dal.setToolTipText("Další chybějící");
-		odznak.setToolTipText("Chybějící sektory");
+		odznak.setToolTipText(popisChybejicich(Challenge.Typ.SEKTORY_360));
 		typ.setToolTipText("Typ challenge");
 		typ.setForeground(Color.DARK_GRAY);
 		for (final AbstractButton b : new AbstractButton[] { odznak, kandidati, zpet, dal }) {
@@ -87,6 +87,30 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		obnov();
 	}
 
+	/** Co počítá odznak: chybějící sektory, políčka nebo dny podle typu challenge. */
+	static String popisChybejicich(final Challenge.Typ typ) {
+		switch (typ) {
+		case DT_MATICE:
+			return "Chybějící políčka D/T";
+		case KALENDAR:
+			return "Chybějící dny";
+		default:
+			return "Chybějící sektory";
+		}
+	}
+
+	/** Co zůstane na mapě po zapnutí filtru „jen kandidáti“. */
+	static String popisKandidatu(final Challenge.Typ typ) {
+		switch (typ) {
+		case DT_MATICE:
+			return "Na mapě zůstanou jen kandidáti, kteří doplní chybějící políčko D/T";
+		case KALENDAR:
+			return "Na mapě zůstanou jen kandidáti, kteří doplní chybějící den";
+		default:
+			return "Na mapě zůstanou jen kandidáti, kteří zaplní chybějící sektor";
+		}
+	}
+
 	/**
 	 * Obdélníky prvků pruhu v souřadnicích mapy pro danou šířku pruhu: typ, odznak, filtr, předchozí, další. Prvek, který se na tomto stupni neukazuje, má prázdný obdélník; zbytek šířky
 	 * dostane filtr, na nejužším stupni odznak.
@@ -115,6 +139,16 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		return r;
 	}
 
+	/** Odznak v souřadnicích mapy dané šířky (pod ním visí popup). */
+	static Rectangle oblastOdznaku(final int sirkaMapy) {
+		return rozloz(RozmisteniPrekryvu.pruhPlanovace(RozmisteniPrekryvu.volnaSirkaPruhu(sirkaMapy)).width)[ODZNAK];
+	}
+
+	/** Odznak v souřadnicích mapy. */
+	public Rectangle oblastOdznaku() {
+		return oblastOdznaku(getWidth());
+	}
+
 	/** Obdélník pruhu v souřadnicích mapy podle její šířky. */
 	Rectangle oblastPruhu() {
 		return RozmisteniPrekryvu.pruhPlanovace(RozmisteniPrekryvu.volnaSirkaPruhu(getWidth()));
@@ -135,6 +169,19 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 			c[i].setVisible(!r[i].isEmpty());
 		}
 		kandidati.setText(r[KANDIDATI].width >= 100 ? "jen kandidáti" : "");
+		typ.setFont(pismoNaSirku(UIManager.getFont("Label.font"), typ.getText(), r[TYP].width, typ::getFontMetrics));
+	}
+
+	/** Písmo popisku typu: výchozí, a když se text nevejde (Kalendář), menší až do 9 bodů, ať se nezkrátí na „…“. */
+	static Font pismoNaSirku(final Font zaklad, final String text, final int sirka, final java.util.function.Function<Font, FontMetrics> metriky) {
+		if (zaklad == null || text == null || sirka <= 0) {
+			return zaklad;
+		}
+		Font f = zaklad;
+		while (f.getSize2D() > 9f && metriky.apply(f).stringWidth(text) > sirka) {
+			f = f.deriveFont(f.getSize2D() - 0.5f);
+		}
+		return f;
 	}
 
 	@Override
@@ -153,18 +200,19 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	}
 
 	private Challenge challenge() {
-		final List<Challenge> aktivni = model == null ? java.util.Collections.<Challenge> emptyList() : model.aktivni();
-		return aktivni.isEmpty() ? null : aktivni.get(0);
+		return model == null ? null : model.zobrazena();
 	}
 
 	private void obnov() {
-		final boolean vidim = model != null && model.jePruhViditelny();
+		final StavPruhu stav = model == null ? StavPruhu.SKRYTY : model.stavPruhu();
+		final boolean vidim = stav.jeViditelny();
 		if (vidim) {
-			final Challenge c = challenge();
-			final int chybi = model.pocetChybejicich(c);
-			odznak.nastav(chybi < 0 ? "…" : Integer.toString(chybi));
-			kandidati.setSelected(c.equals(model.jenKandidatiPro()));
-			typ.setText("360°");
+			odznak.nastav(stav.badge() < 0 ? "…" : Integer.toString(stav.badge()));
+			kandidati.setSelected(stav.jenKandidati());
+			typ.setText(stav.stitekTypu());
+			typ.setToolTipText("Typ challenge: " + stav.stitekTypu());
+			odznak.setToolTipText(popisChybejicich(stav.typ()));
+			kandidati.setToolTipText(popisKandidatu(stav.typ()));
 		}
 		if (vidim != isVisible()) {
 			setVisible(vidim);
@@ -187,15 +235,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	}
 
 	private void prejdi(final boolean dopredu) {
-		final Challenge c = challenge();
-		if (c == null || sluzba == null || sluzba.planovac() == null) {
-			return;
-		}
-		if (dopredu) {
-			sluzba.planovac().dalsiChybejici(c);
-		} else {
-			sluzba.planovac().predchoziChybejici(c);
-		}
+		ChallengeAkce.prejdi(model, sluzba == null ? null : sluzba.planovac(), dopredu);
 	}
 
 	/** Červený odznak s počtem chybějících. */

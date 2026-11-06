@@ -38,6 +38,7 @@ public class PruhModeluTest {
 		final MapoveUloziste u = new MapoveUloziste();
 		model.setUloziste(() -> u);
 		model.initAfterInject();
+		model.setKalendarVUi(true);
 		udalosti.clear();
 	}
 

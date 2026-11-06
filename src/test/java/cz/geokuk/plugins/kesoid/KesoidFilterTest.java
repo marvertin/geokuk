@@ -91,4 +91,20 @@ public class KesoidFilterTest {
 		d.setPrahFavorit(20);
 		Assert.assertEquals(new TreeSet<>(Arrays.asList("GC2222", "FI2222", "PK2222", "GC4444")), zobrazene(d));
 	}
+
+	@Test
+	public void doplnkovaPodminkaSePridavaKeVsemuOstatnimuKazdemuWaypointuKesoidu() {
+		final KesoidFilter filtr = new KesoidFilter(definice(false, false), null, null).doplnkovy(k -> "GC2222".equals(k.getIdentifier()));
+		final Set<String> z = new TreeSet<>();
+		for (final Wpt w : wpts) {
+			if (filtr.isFiltered(w)) {
+				z.add(w.getName());
+			}
+		}
+		Assert.assertTrue(z.toString(), z.contains("GC2222"));
+		Assert.assertFalse(z.contains("GC1111"));
+		Assert.assertFalse(z.contains("GC4444"));
+		final KesoidFilter bez = new KesoidFilter(definice(false, false), null, null).doplnkovy(null);
+		Assert.assertTrue(bez.isFiltered(wpts.get(0)));
+	}
 }

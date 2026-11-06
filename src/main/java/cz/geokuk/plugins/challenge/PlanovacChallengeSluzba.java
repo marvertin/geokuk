@@ -77,7 +77,29 @@ public class PlanovacChallengeSluzba implements AfterInjectInit {
 	}
 
 	public void onEvent(final ChallengeZmenenyEvent event) {
-		planovac.modelZmenen(event);
+		if (planovac != null) {
+			planovac.modelZmenen(event);
+		}
+		switch (event.druh()) {
+		case JEN_KANDIDATI:
+		case VYSLEDEK:
+		case AKTIVNI:
+		case DEFINICE:
+		case NACTENO:
+			obnovFiltrKandidatu();
+			break;
+		default:
+			break;
+		}
+	}
+
+	/** Filtr „jen kandidáti“ se promítne do filtru keší na mapě; bez výsledku výpočtu se nefiltruje. */
+	void obnovFiltrKandidatu() {
+		if (kesoidModel == null) {
+			return;
+		}
+		final Challenge c = challengeModel.jenKandidatiPro();
+		kesoidModel.setDoplnkovyFiltr(c == null ? null : FiltrKandidatu.pro(challengeModel, c));
 	}
 
 	private Path adresarPredpoctu() {
