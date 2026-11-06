@@ -447,6 +447,113 @@ public class GeometrieOdolnostTest {
 		}
 	}
 
+	// ---- Azimut mimo rozsah, keš ve středu, datová čára a pól po opravách
+
+	@Test
+	public void sektorZAzimutuMimoNulaAz360JeVzdyVRozsahuAPeriodicky() {
+		final Random r = new Random(11);
+		for (int i = 0; i < 20_000; i++) {
+			final double az = (r.nextDouble() - 0.5) * 2e6;
+			final int s = Geodezie.sektor(az);
+			Assert.assertTrue(az + " → " + s, s >= 0 && s < 360);
+			Assert.assertEquals(az + " → " + s, Math.floorMod((long) Math.floor(az), 360L), s);
+			Assert.assertEquals("o celý obrat dál", s, Geodezie.sektor(az + 360));
+			Assert.assertEquals("o celý obrat zpět", s, Geodezie.sektor(az - 360));
+		}
+		for (final double az : new double[] { -0.0, -1e-300, -0.5, -1, -359.9999, -360, -360.0000001, -720.5, 359.9999999, 360, 360.5, 1e15, -1e15 }) {
+			final int s = Geodezie.sektor(az);
+			Assert.assertTrue(az + " → " + s, s >= 0 && s < 360);
+			Assert.assertEquals(az + " → " + s, Math.floorMod((long) Math.floor(az), 360L), s);
+		}
+		Assert.assertEquals(359, Geodezie.sektor(-0.5));
+		Assert.assertEquals(0, Geodezie.sektor(-0.0));
+		Assert.assertEquals(180, Geodezie.sektor(-179.5));
+	}
+
+	@Test
+	public void nekonecnyNeboNeciselnyAzimutSeOdmitneVeVsechFunkcichSAzimutem() {
+		for (final double zla : new double[] { Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY }) {
+			odmitne("sektor " + zla, () -> Geodezie.sektor(zla));
+			for (final Model m : Model.values()) {
+				odmitne("bod " + zla, () -> GeometrieSektoru.bod(10, 20, zla, 1000, m));
+				odmitne("oblouk od " + zla, () -> GeometrieSektoru.oblouk(10, 20, zla, 10, 1000, m));
+				odmitne("oblouk do " + zla, () -> GeometrieSektoru.oblouk(10, 20, 0, zla, 1000, m));
+				odmitne("paprsek " + zla, () -> GeometrieSektoru.paprsek(10, 20, zla, 0, 1000, m));
+			}
+		}
+	}
+
+	@Test
+	public void bodVAzimutuMimoNulaAz360ZpetDavaStejnySektorVsudePoZemi() {
+		final double[][] stredy = { { 50.0875, 14.4208 }, { 89, 10 }, { -89, -10 }, { 0, 180 }, { 0, -180 }, { 20, 179.99 }, { 20, -179.99 } };
+		for (final Model m : Model.values()) {
+			for (final double[] st : stredy) {
+				for (final int sektor : new int[] { 0, 1, 90, 179, 180, 270, 359 }) {
+					for (final int obraty : new int[] { -3, -1, 0, 1, 4 }) {
+						final Bod b = GeometrieSektoru.bod(st[0], st[1], sektor + 0.5 + 360 * obraty, 100_000, m);
+						jePlatnyBod("azimut " + (sektor + 0.5 + 360 * obraty), b);
+						Assert.assertEquals(m + " " + Arrays.toString(st) + " sektor " + sektor + " obratů " + obraty, sektor, GeometrieSektoru.sektorBodu(st[0], st[1], b.lat, b.lon, 0, 100_001, m));
+					}
+				}
+			}
+		}
+	}
+
+	@Test
+	public void kesBlizkoStreduSePocitaJenKdyzJeVeVzdalenostiVetsiNezMikrometr() {
+		for (final ZdrojPravidel z : ZdrojPravidel.values()) {
+			final Bod blizko = GeometrieSektoru.bod(50, 14, 270.5, 1e-9, Model.KOULE);
+			final Bod milimetr = GeometrieSektoru.bod(50, 14, 90.5, 0.001, Model.KOULE);
+			final Bod pulMetru = GeometrieSektoru.bod(50, 14, 180.5, 0.5, Model.KOULE);
+			final List<VypocetSektoruTest.Kes> kese = Arrays.asList(new VypocetSektoruTest.Kes("STRED", 50, 14, true), new VypocetSektoruTest.Kes("BLIZKO", blizko.lat, blizko.lon, true),
+					new VypocetSektoruTest.Kes("MM", milimetr.lat, milimetr.lon, true), new VypocetSektoruTest.Kes("POLMETRU", pulMetru.lat, pulMetru.lon, true));
+			final VysledekSektoru v = VypocetSektoru.spocti(z, 50, 14, null, Collections.<String> emptySet(), kese);
+			Assert.assertEquals(z.toString(), 2, v.pocetObsazenych());
+			Assert.assertTrue(z + " milimetr východně", v.jeObsazeny(90));
+			Assert.assertTrue(z + " půl metru jižně", v.jeObsazeny(180));
+			Assert.assertEquals(2, v.pocetZapocitanychNalezu());
+			final VysledekSektoru nenalezene = VypocetSektoru.spocti(z, 50, 14, null, Collections.<String> emptySet(),
+					Arrays.asList(new VypocetSektoruTest.Kes("STRED", 50, 14, false), new VypocetSektoruTest.Kes("MM", milimetr.lat, milimetr.lon, false)));
+			Assert.assertEquals(1, nenalezene.vsichniKandidati().size());
+			Assert.assertEquals("MM", nenalezene.vsichniKandidati().get(0).id());
+		}
+	}
+
+	@Test
+	public void kesVeStreduNaPoluAnaDatoveCareSePocitaJakoStred() {
+		for (final ZdrojPravidel z : ZdrojPravidel.values()) {
+			for (final double[] stred : new double[][] { { 90, 0 }, { -90, 0 }, { 0, 180 }, { 0, -180 } }) {
+				final List<VypocetSektoruTest.Kes> kese = new ArrayList<>();
+				kese.add(new VypocetSektoruTest.Kes("A", stred[0], stred[1], true));
+				kese.add(new VypocetSektoruTest.Kes("B", stred[0], -stred[1] == 0 ? stred[1] : -stred[1], true));
+				kese.add(new VypocetSektoruTest.Kes("C", stred[0], stred[1] == 90 ? -90 : stred[1], false));
+				if (Math.abs(stred[0]) == 90) {
+					kese.add(new VypocetSektoruTest.Kes("D", stred[0], 123.4, true));
+					kese.add(new VypocetSektoruTest.Kes("E", stred[0], -77.7, false));
+				}
+				final VysledekSektoru v = VypocetSektoru.spocti(z, stred[0], stred[1], null, Collections.<String> emptySet(), kese);
+				Assert.assertEquals(z + " " + Arrays.toString(stred), 0, v.pocetObsazenych());
+				Assert.assertTrue(z + " " + Arrays.toString(stred), v.vsichniKandidati().isEmpty());
+			}
+		}
+	}
+
+	@Test
+	public void sektorBoduPresDatovouCaruKolemPoluAVeStreduSeChovaPeriodicky() {
+		for (final Model m : Model.values()) {
+			for (final double[] dvojice : new double[][] { { 0, 180, 0, -180 }, { 0, -180, 0, 180 }, { 45, 180, 45, -180 }, { 90, 0, 90, 123 }, { -90, 40, -90, -40 } }) {
+				Assert.assertEquals(m + " " + Arrays.toString(dvojice), -1, GeometrieSektoru.sektorBodu(dvojice[0], dvojice[1], dvojice[2], dvojice[3], 0, 1000, m));
+			}
+			Assert.assertEquals(m.toString(), 90, GeometrieSektoru.sektorBodu(0, 180, 0, -179.99999, 0, 5000, m));
+			Assert.assertEquals(m.toString(), 270, GeometrieSektoru.sektorBodu(0, -180, 0, 179.99999, 0, 5000, m));
+			Assert.assertEquals(m.toString(), 90, GeometrieSektoru.sektorBodu(0, 179.99999, 0, -180, 0, 5000, m));
+			Assert.assertEquals(m.toString(), 270, GeometrieSektoru.sektorBodu(0, -179.99999, 0, 180, 0, 5000, m));
+			final int uPolu = GeometrieSektoru.sektorBodu(90, 0, 89.9999, 77, 0, 1000, m);
+			Assert.assertTrue(m + " u pólu " + uPolu, uPolu >= 0 && uPolu < 360);
+			Assert.assertEquals("z pólu míří na stejnou délku vždy stejně", uPolu, GeometrieSektoru.sektorBodu(90, 0, 89.9999, 77, 0, 1000, m));
+		}
+	}
+
 	private interface Volani {
 		void zavolej();
 	}
