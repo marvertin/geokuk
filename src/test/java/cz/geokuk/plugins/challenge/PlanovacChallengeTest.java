@@ -582,6 +582,47 @@ public class PlanovacChallengeTest {
 	}
 
 	@Test
+	public void kandidatVeSmeruVybiraVystredujeAVybranehoNevybereZnovu() throws Exception {
+		napojNaModel();
+		final Challenge c = dtChallenge("DT");
+		stredMapy = new Wgs(50.0, 14.0);
+		Assert.assertNull("bez výsledku", planovac.kandidatVeSmeru(c, SmerSkoku.SEVER));
+		planovac.keseNacteny(dtData());
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "výsledek D/T");
+		Assert.assertNull("na jihu nikdo", planovac.kandidatVeSmeru(c, SmerSkoku.JIH));
+		Assert.assertTrue(vystredeno.isEmpty());
+		final VybranyKandidat prvni = planovac.kandidatVeSmeru(c, SmerSkoku.SEVER);
+		Assert.assertEquals("K1", prvni.id());
+		Assert.assertEquals(prvni.id(), vystredeno.get(0).id());
+		pockej(() -> model.vybranyKandidat(c) != null && model.vybranyKandidat(c).id().equals("K1"), "kandidát v modelu");
+		final VybranyKandidat druhy = planovac.kandidatVeSmeru(c, SmerSkoku.SEVER);
+		Assert.assertEquals("K3", druhy.id());
+	}
+
+	@Test
+	public void kandidatVeSmeruProSektory360() throws Exception {
+		napojNaModel();
+		final Challenge c = model.ulozVlastni(vlastni("Domov", Stred.domov(), OblastDef.zadna()));
+		final List<VypocetSektoruTest.Kes> data = new ArrayList<>();
+		for (int s = 0; s < 300; s++) {
+			data.add(VypocetSektoruTest.vAzimutu("N" + s, s + 0.5, 20_000, true));
+		}
+		for (int s = 300; s < 306; s++) {
+			data.add(VypocetSektoruTest.vAzimutu("K" + s, s + 0.5, 10_000 + 5_000 * (s - 300), false));
+		}
+		planovac.keseNacteny(data);
+		zapni(c);
+		pockej(() -> model.vysledek(c) != null, "výsledek");
+		stredMapy = new Wgs(LAT, LON);
+		Assert.assertNull("na východě nikdo", planovac.kandidatVeSmeru(c, SmerSkoku.VYCHOD));
+		final VybranyKandidat k = planovac.kandidatVeSmeru(c, SmerSkoku.ZAPAD);
+		Assert.assertEquals("K300", k.id());
+		Assert.assertEquals(300, k.sektor());
+		Assert.assertEquals(k.id(), vystredeno.get(0).id());
+	}
+
+	@Test
 	public void malyPosunStreduMapyNepocitaZnovuAVelkyAno() throws Exception {
 		napojNaModel();
 		final Challenge dt = dtChallenge("DT");
