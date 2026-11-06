@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.Future;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -76,7 +77,7 @@ public class OpensakDbLoader extends Nacitac0 {
 			}
 			final int pocet = count(statement, "SELECT count(*) FROM caches") * PROGRESS_VAHA_CACHES + count(statement, "SELECT count(*) FROM waypoints") * PROGRESS_VAHA_WAYPOINTS;
 			final Progressor progressor = zahajPrubeh(aProgressModel, pocet, file.toString());
-			loadCaches(file, statement, builder, future, progressor);
+			loadCaches(file, statement, builder, future, progressor, datumNalezuPouzitelny(statement, file));
 			loadWaypoints(statement, builder, future, progressor);
 			progressor.finish();
 		} catch (final SQLException e) {
@@ -123,7 +124,47 @@ public class OpensakDbLoader extends Nacitac0 {
 		}
 	}
 
-	private void loadCaches(final File file, final Statement statement, final IImportBuilder builder, final Future<?> future, final Progressor progressor) throws SQLException {
+	/** Zápis data nálezu, který umíme číst: RRRR-MM-DD, případně s časem a zlomkem sekundy. */
+	private static final Pattern ZAPIS_DATA = Pattern.compile("\\d{4}-\\d{2}-\\d{2}([ T]\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?)?");
+
+	/** Kolik hodnot data nálezu se při ověření zápisu přečte. */
+	private static final int VZORKU_DATA = 20;
+
+	/**
+	 * Datum nálezu se čte jen z textového sloupce {@code caches.found_date} se zápisem {@link #ZAPIS_DATA}. Jiný typ sloupce nebo zápis (změna formátu v novější verzi
+	 * OpenSAKu) by se četl špatně, proto se pak datum nálezu nepoužije a ohlásí se to.
+	 */
+	private static boolean datumNalezuPouzitelny(final Statement statement, final File file) throws SQLException {
+		final Set<String> sloupce = DatabazeJinehoProgramu.sloupce(statement, "caches");
+		if (!sloupce.contains("found_date") || !sloupce.contains("found")) {
+			return true;
+		}
+		String typ = "";
+		try (ResultSet rs = statement.executeQuery("PRAGMA table_info(caches)")) {
+			while (rs.next()) {
+				if ("found_date".equalsIgnoreCase(rs.getString("name"))) {
+					typ = String.valueOf(rs.getString("type")).toUpperCase(Locale.ROOT);
+				}
+			}
+		}
+		if (!typ.contains("TEXT") && !typ.contains("CHAR") && !typ.contains("CLOB")) {
+			log.warn("Databáze OpenSAKu {}: sloupec caches.found_date má typ „{}“, datum nálezu se nepoužije.", file, typ);
+			return false;
+		}
+		try (ResultSet rs = statement.executeQuery("SELECT found_date FROM caches WHERE found = 1 AND found_date IS NOT NULL LIMIT " + VZORKU_DATA)) {
+			while (rs.next()) {
+				final String hodnota = rs.getString(1).trim();
+				if (!hodnota.isEmpty() && !ZAPIS_DATA.matcher(hodnota).matches()) {
+					log.warn("Databáze OpenSAKu {}: datum nálezu „{}“ má neznámý tvar, datum nálezu se nepoužije.", file, hodnota);
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private void loadCaches(final File file, final Statement statement, final IImportBuilder builder, final Future<?> future, final Progressor progressor, final boolean datumNalezu)
+			throws SQLException {
 		final DotahovacZDatabaze hint = HintZDatabaze.dotahovac(file, HintZDatabaze.OPENSAK);
 		final Preskocene preskocene = new Preskocene("keš");
 		final boolean hinty = DatabazeJinehoProgramu.sloupce(statement, "caches").contains("encoded_hints");
@@ -171,7 +212,7 @@ public class OpensakDbLoader extends Nacitac0 {
 					cache.link.href = "http://coord.info/" + kod;
 					cache.link.text = String.format("%s by %s", groundspeak.name, groundspeak.placedBy);
 
-					if (rs.getBoolean("found")) {
+					if (rs.getBoolean("found") && datumNalezu) {
 						cache.gpxg.found = datum(texty.get("found_date"));
 					}
 					if (rs.getObject("favorite_points") != null) {

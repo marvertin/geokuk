@@ -325,6 +325,81 @@ public class OpensakDbLoaderTest {
 		Assert.assertTrue(nacti(novejsi).containsKey("GC1111"));
 	}
 
+	private File dbSNalezy(final String nazev, final String typSloupce, final Object... datumy) throws Exception {
+		final File f = new File(tmp.getRoot(), nazev);
+		OpensakTestDb.zaloz(f, OpensakTestDb.verze(), "caches.found_date");
+		sql(f, "ALTER TABLE caches ADD COLUMN found_date " + typSloupce);
+		for (int i = 0; i < datumy.length; i++) {
+			OpensakTestDb.vlozKes(f, i + 1, "GC" + (1000 + i), "Traditional Cache", 50.0 + i * 0.01, 14.0, "found", 1, "found_date", datumy[i]);
+		}
+		return f;
+	}
+
+	@Test
+	public void datumNalezuVeZnamemZapisuSeNacte() throws Exception {
+		final Map<String, GpxWpt> w = nacti(dbSNalezy("Zapisy.db", "TEXT", "2020-05-01 10:15:00.000000", "2020-05-02", "2020-05-03T11:12", "2020-05-04 11:12:13", "", " 2020-05-05 "));
+		Assert.assertEquals("2020-05-01T10:15:00", w.get("GC1000").gpxg.found);
+		Assert.assertEquals("2020-05-02", w.get("GC1001").gpxg.found);
+		Assert.assertEquals("2020-05-03T11:12", w.get("GC1002").gpxg.found);
+		Assert.assertEquals("2020-05-04T11:12:13", w.get("GC1003").gpxg.found);
+		Assert.assertNull("prázdné datum", w.get("GC1004").gpxg.found);
+		Assert.assertNotNull("mezery okolo se ořežou", w.get("GC1005").gpxg.found);
+	}
+
+	@Test
+	public void datumNalezuVJinemTvaruSeNepouzijeAleNalezZustane() throws Exception {
+		for (final String spatne : new String[] { "1.5.2020", "20200501", "2020-5-1", "05/01/2020", "datum", "2020-05-01 10:15:00 +01:00", "2020-05-01x" }) {
+			final Map<String, GpxWpt> w = nacti(dbSNalezy("Spatny" + spatne.hashCode() + ".db", "TEXT", "2020-05-01", spatne));
+			Assert.assertNull(spatne, w.get("GC1000").gpxg.found);
+			Assert.assertNull(spatne, w.get("GC1001").gpxg.found);
+			Assert.assertEquals("keš zůstává nalezená", "Geocache Found", w.get("GC1000").sym);
+		}
+	}
+
+	@Test
+	public void datumNalezuVNetextovemSloupciSeNepouzije() throws Exception {
+		for (final String typ : new String[] { "INTEGER", "REAL", "NUMERIC", "BLOB" }) {
+			final Map<String, GpxWpt> w = nacti(dbSNalezy("Typ" + typ + ".db", typ, 20200501, 20200502));
+			Assert.assertNull(typ, w.get("GC1000").gpxg.found);
+			Assert.assertEquals(typ, "Geocache Found", w.get("GC1000").sym);
+		}
+	}
+
+	@Test
+	public void datumNalezuSeNepouzijeVeCiselnemSloupciIKdyzMaZnamyZapis() throws Exception {
+		for (final String typ : new String[] { "INTEGER", "REAL", "BLOB" }) {
+			final Map<String, GpxWpt> w = nacti(dbSNalezy("ZapisVTypu" + typ + ".db", typ, "2020-05-01 10:15:00"));
+			Assert.assertNull(typ, w.get("GC1000").gpxg.found);
+		}
+	}
+
+	@Test
+	public void datumNalezuVeVariantachTextovehoTypuSeNacte() throws Exception {
+		for (final String typ : new String[] { "text", "VARCHAR(30)", "NVARCHAR", "CLOB" }) {
+			final Map<String, GpxWpt> w = nacti(dbSNalezy("Typ" + typ.hashCode() + ".db", typ, "2020-05-01"));
+			Assert.assertEquals(typ, "2020-05-01", w.get("GC1000").gpxg.found);
+		}
+	}
+
+	@Test
+	public void zapisDataSeOverujeNaPrvnichDvaceti() throws Exception {
+		final Object[] datumy = new Object[21];
+		Arrays.fill(datumy, "2020-05-01");
+		datumy[19] = "špatně";
+		Assert.assertNull("dvacátá hodnota je ještě v ověření", nacti(dbSNalezy("Dvacata.db", "TEXT", datumy)).get("GC1000").gpxg.found);
+		datumy[19] = "2020-05-01";
+		datumy[20] = "špatně";
+		Assert.assertNotNull("jedenadvacátá už ne", nacti(dbSNalezy("Jedenadvacata.db", "TEXT", datumy)).get("GC1000").gpxg.found);
+	}
+
+	@Test
+	public void bezSloupceDatumNalezuSeNacteBezNeho() throws Exception {
+		final File f = new File(tmp.getRoot(), "BezData.db");
+		OpensakTestDb.zaloz(f, OpensakTestDb.verze(), "caches.found_date");
+		OpensakTestDb.vlozKes(f, 1, "GC1000", "Traditional Cache", 50.0, 14.0, "found", 1);
+		Assert.assertNull(nacti(f).get("GC1000").gpxg.found);
+	}
+
 	private static void sql(final File db, final String... prikazy) throws SQLException {
 		try (Connection c = DriverManager.getConnection("jdbc:sqlite:" + db); Statement s = c.createStatement()) {
 			for (final String p : prikazy) {
