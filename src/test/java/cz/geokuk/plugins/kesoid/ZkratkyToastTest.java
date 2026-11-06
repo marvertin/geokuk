@@ -164,6 +164,50 @@ public class ZkratkyToastTest {
 		akce.setEnabled(false);
 		zpravy.clear();
 		akce.prepni();
-		Assert.assertTrue("vypnutá akce nic nepřepne, zpráva nemá smysl", zpravy.isEmpty());
+		Assert.assertEquals("vypnutá akce nic nepřepne, ale zkratka řekne proč", "Zdroj keší " + TypZdroje.values()[2].getNazev() + " – nemá načtené soubory", posledni());
+	}
+
+	@Test
+	public void tooltipVypnuteAkceVysvetliProc() {
+		final PrepniZdrojAction akce = new PrepniZdrojAction(TypZdroje.GPX);
+		final String zapnuta = (String) akce.getValue(javax.swing.Action.SHORT_DESCRIPTION);
+		Assert.assertTrue(zapnuta, zapnuta.contains("Ctrl+1"));
+		akce.setEnabled(false);
+		final String vypnuta = (String) akce.getValue(javax.swing.Action.SHORT_DESCRIPTION);
+		Assert.assertEquals("Zdroj GPX nemá žádné načtené soubory. Složku zdroje zkontrolujte v Soubor > Umístění souborů.", vypnuta);
+		akce.setEnabled(true);
+		Assert.assertEquals(zapnuta, akce.getValue(javax.swing.Action.SHORT_DESCRIPTION));
+	}
+
+	@Test
+	public void horniRadaCtrlCisloVysvetliVypnutyZdrojAJinakMlci() {
+		final KesoidModel model = mock(KesoidModel.class);
+		final PrepniZdrojAction akce = new PrepniZdrojAction(TypZdroje.GPX);
+		akce.inject(model);
+		akce.inject(toast);
+		akce.setEnabled(false);
+		final javax.swing.JRootPane koren = new javax.swing.JRootPane();
+		PrepniZdrojAction.navazNumpad(koren, akce);
+		final javax.swing.KeyStroke ctrl1 = cz.geokuk.plugins.kesoid.mvc.ZkratkyZdroju.zkratka(TypZdroje.GPX);
+		final Object klic = koren.getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).get(ctrl1);
+		Assert.assertNotNull("horní řada je u vypnutého zdroje navázaná", klic);
+		final javax.swing.Action vysvetleni = koren.getActionMap().get(klic);
+		Assert.assertTrue(vysvetleni.isEnabled());
+		vysvetleni.actionPerformed(new java.awt.event.ActionEvent(this, 0, ""));
+		Assert.assertEquals("Zdroj keší GPX – nemá načtené soubory", posledni());
+		akce.setEnabled(true);
+		Assert.assertFalse("zapnutý zdroj dostane zkratku z menu, náhradní vazba se vypne", vysvetleni.isEnabled());
+		akce.setEnabled(false);
+		Assert.assertTrue(vysvetleni.isEnabled());
+	}
+
+	@Test
+	public void horniRadaJeUZapnutehoZdrojeBezNahradniVazby() {
+		final PrepniZdrojAction akce = new PrepniZdrojAction(TypZdroje.GPX);
+		akce.setEnabled(true);
+		final javax.swing.JRootPane koren = new javax.swing.JRootPane();
+		PrepniZdrojAction.navazNumpad(koren, akce);
+		final Object klic = koren.getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).get(cz.geokuk.plugins.kesoid.mvc.ZkratkyZdroju.zkratka(TypZdroje.GPX));
+		Assert.assertFalse("zapnutý zdroj: zkratku zpracuje menu, náhradní vazba je vypnutá", koren.getActionMap().get(klic).isEnabled());
 	}
 }

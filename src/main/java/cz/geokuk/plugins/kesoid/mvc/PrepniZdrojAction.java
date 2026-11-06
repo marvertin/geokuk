@@ -25,9 +25,23 @@ public class PrepniZdrojAction extends ToggleAction0 {
 	public PrepniZdrojAction(final TypZdroje typ) {
 		super(typ.getNazev());
 		this.typ = typ;
-		final String zkratka = ZkratkyZdroju.text(typ);
-		putValue(SHORT_DESCRIPTION, "Zapne nebo vypne načítání zdroje " + typ.getNazev() + (zkratka == null ? "." : " (" + zkratka + ")."));
+		putValue(SHORT_DESCRIPTION, popis(true));
 		putValue(Action.ACCELERATOR_KEY, ZkratkyZdroju.zkratka(typ));
+	}
+
+	/** Tooltip položky menu: co dělá, a když je vypnutá, proč. */
+	String popis(final boolean zapnutelny) {
+		final String zkratka = ZkratkyZdroju.text(typ);
+		if (zapnutelny) {
+			return "Zapne nebo vypne načítání zdroje " + typ.getNazev() + (zkratka == null ? "." : " (" + zkratka + ").");
+		}
+		return "Zdroj " + typ.getNazev() + " nemá žádné načtené soubory. Složku zdroje zkontrolujte v Soubor > Umístění souborů.";
+	}
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+		putValue(SHORT_DESCRIPTION, popis(enabled));
+		super.setEnabled(enabled);
 	}
 
 	public TypZdroje getTyp() {
@@ -52,6 +66,10 @@ public class PrepniZdrojAction extends ToggleAction0 {
 	/** Přepne typ stejně jako klik na jeho zaškrtávátko. */
 	public void prepni() {
 		if (!isEnabled()) {
+			// Vypnutý zdroj nemá co přepnout; zkratka, která by jinak mlčela, vysvětlí proč.
+			if (toast != null) {
+				toast.ukaz(ZpravyZkratek.zdrojBezSouboru(typ.getNazev()));
+			}
 			return;
 		}
 		JTabulkaZdroju.klikTyp(stav, typ, kesoidModel);
@@ -78,9 +96,32 @@ public class PrepniZdrojAction extends ToggleAction0 {
 		prepni();
 	}
 
-	/** Naváže na okno zkratku z číselné klávesnice; zkratky horní řady dává menu přes ACCELERATOR_KEY. */
+	/**
+	 * Naváže na okno zkratku z číselné klávesnice; zkratky horní řady dává menu přes ACCELERATOR_KEY, ale vypnutá položka menu zkratku nezpracuje, takže pro vypnutý zdroj se horní řada
+	 * váže zvlášť (jen dokud je zdroj vypnutý) a ukáže, proč se nic nestalo.
+	 */
 	public static void navazNumpad(final JRootPane koren, final PrepniZdrojAction... akce) {
 		for (final PrepniZdrojAction zdroj : akce) {
+			final KeyStroke horniRada = ZkratkyZdroju.zkratka(zdroj.typ);
+			if (horniRada != null) {
+				final String klicVypnuteho = "prepniZdrojVypnuty" + zdroj.typ;
+				final AbstractAction vysvetleni = new AbstractAction() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void actionPerformed(final ActionEvent e) {
+						zdroj.prepni();
+					}
+				};
+				vysvetleni.setEnabled(!zdroj.isEnabled());
+				zdroj.addPropertyChangeListener(e -> {
+					if ("enabled".equals(e.getPropertyName())) {
+						vysvetleni.setEnabled(!zdroj.isEnabled());
+					}
+				});
+				koren.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(horniRada, klicVypnuteho);
+				koren.getActionMap().put(klicVypnuteho, vysvetleni);
+			}
 			final KeyStroke numpad = ZkratkyZdroju.zkratkaNumpad(zdroj.typ);
 			if (numpad != null) {
 				final String klic = "prepniZdroj" + zdroj.typ;

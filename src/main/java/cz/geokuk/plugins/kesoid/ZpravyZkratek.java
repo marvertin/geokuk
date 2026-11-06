@@ -61,4 +61,9 @@ public final class ZpravyZkratek {
 		final String zprava = stav == StavVyberu.CASTECNE ? akceStav(akce, true, "částečně") : akceStav(akce, stav == StavVyberu.ZAPNUTO, null);
 		return zapnute.isEmpty() ? zprava + ", žádný zdroj keší není zapnutý" : zprava;
 	}
+
+	/** Ctrl+1 až Ctrl+4 u zdroje, který nemá žádné načtené soubory a proto jde vypnutý. */
+	public static String zdrojBezSouboru(final String nazevZdroje) {
+		return "Zdroj keší " + nazevZdroje + " – nemá načtené soubory";
+	}
 }
