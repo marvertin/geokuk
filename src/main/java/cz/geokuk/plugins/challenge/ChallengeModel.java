@@ -24,9 +24,12 @@ public class ChallengeModel extends Model0 {
 	private ChallengeSeznam seznam = new ChallengeSeznam();
 	private boolean zapnuto;
 	private final Map<String, VysledekSektoru> vysledky = new ConcurrentHashMap<>();
+	private final Map<String, VysledekPolicek> vysledkyPolicek = new ConcurrentHashMap<>();
 	private final Map<String, StavPredpoctu> stavy = new ConcurrentHashMap<>();
 	private final Map<String, VybranyKandidat> kandidati = new ConcurrentHashMap<>();
 	private volatile String jenKandidatiPro;
+	/** Klíč challenge zobrazené v pruhu; neukládá se, bez ní nebo při neaktivní je to první aktivní. */
+	private volatile String zobrazena;
 	/** Uložené nastavení je novější nebo nečitelné; nepřepisuje se, aby o něj uživatel nepřišel. */
 	private boolean ukladaniZakazano;
 	private Supplier<ChallengeUloziste> uloziste = () -> new PreferenceUloziste(currPrefe().node(UZEL));
@@ -63,6 +66,8 @@ public class ChallengeModel extends Model0 {
 			ukladaniZakazano = true;
 		}
 		vysledky.clear();
+		vysledkyPolicek.clear();
+		zobrazena = null;
 		stavy.clear();
 		kandidati.clear();
 		jenKandidatiPro = null;
@@ -135,6 +140,7 @@ public class ChallengeModel extends Model0 {
 	public Challenge ulozVlastni(final Challenge definice) {
 		final Challenge c = seznam.ulozVlastni(definice);
 		vysledky.remove(klic(c));
+		vysledkyPolicek.remove(klic(c));
 		stavy.remove(klic(c));
 		kandidati.remove(klic(c));
 		uloz();
@@ -154,6 +160,10 @@ public class ChallengeModel extends Model0 {
 		final String staryKlic = klic(c);
 		final Challenge nova = seznam.prejmenuj(c.nazev(), novyNazev);
 		prenes(vysledky, staryKlic, klic(nova));
+		prenes(vysledkyPolicek, staryKlic, klic(nova));
+		if (staryKlic.equals(zobrazena)) {
+			zobrazena = klic(nova);
+		}
 		prenes(stavy, staryKlic, klic(nova));
 		prenes(kandidati, staryKlic, klic(nova));
 		if (staryKlic.equals(jenKandidatiPro)) {
@@ -184,6 +194,7 @@ public class ChallengeModel extends Model0 {
 
 	private void odstranStav(final Challenge c) {
 		vysledky.remove(klic(c));
+		vysledkyPolicek.remove(klic(c));
 		stavy.remove(klic(c));
 		kandidati.remove(klic(c));
 		if (klic(c).equals(jenKandidatiPro)) {
@@ -235,10 +246,30 @@ public class ChallengeModel extends Model0 {
 		return vysledky.get(klic(c));
 	}
 
-	/** Počet chybějících sektorů, nebo -1, dokud výsledek není. */
+	/** Počet chybějících sektorů, políček nebo dnů podle typu, nebo -1, dokud výsledek není. */
 	public int pocetChybejicich(final Challenge c) {
-		final VysledekSektoru v = vysledek(c);
-		return v == null ? -1 : 360 - v.pocetObsazenych();
+		if (c.typ() == Challenge.Typ.SEKTORY_360) {
+			final VysledekSektoru v = vysledek(c);
+			return v == null ? -1 : 360 - v.pocetObsazenych();
+		}
+		final VysledekPolicek p = vysledekPolicek(c);
+		return p == null ? -1 : p.pocetChybejicich();
+	}
+
+	/** Poslední výsledek D/T matice nebo kalendáře, nebo null, dokud není. */
+	public VysledekPolicek vysledekPolicek(final Challenge c) {
+		return vysledkyPolicek.get(klic(c));
+	}
+
+	/** Uloží výsledek D/T matice nebo kalendáře aktivní challenge a ohlásí ho; pro neaktivní nebo změněnou definici se zahodí. Z kteréhokoli vlákna. */
+	public void nastavVysledekPolicek(final Challenge c, final VysledekPolicek vysledek) {
+		naEdt(() -> {
+			if (!seznam.jeAktivni(c.nazev()) || !c.equals(seznam.najdi(c.nazev()))) {
+				return;
+			}
+			vysledkyPolicek.put(klic(c), vysledek);
+			ohlas(ChallengeZmenenyEvent.Druh.VYSLEDEK, c);
+		});
 	}
 
 	public StavPredpoctu stavPredpoctu(final Challenge c) {
@@ -266,6 +297,55 @@ public class ChallengeModel extends Model0 {
 			stavy.put(klic(c), stav);
 			ohlas(ChallengeZmenenyEvent.Druh.PREDPOCET, c);
 		});
+	}
+
+	// --- Pruh na mapě
+
+	/** Challenge zobrazená v pruhu: vybraná {@link #setZobrazena}, je-li aktivní, jinak první aktivní, nebo null. */
+	public Challenge zobrazena() {
+		final String k = zobrazena;
+		if (k != null && seznam.jeAktivni(k)) {
+			return seznam.najdi(k);
+		}
+		final List<Challenge> a = seznam.aktivni();
+		return a.isEmpty() ? null : a.get(0);
+	}
+
+	/** Přepne pruh na jinou aktivní challenge. */
+	public void setZobrazena(final Challenge c) {
+		if (!seznam.jeAktivni(c.nazev())) {
+			throw new ChallengeChyba("V pruhu jde zobrazit jen aktivní challenge.");
+		}
+		final Challenge pred = zobrazena();
+		zobrazena = klic(c);
+		if (pred == null || !klic(pred).equals(klic(c))) {
+			ohlas(ChallengeZmenenyEvent.Druh.ZOBRAZENA, c);
+		}
+	}
+
+	/** Co má pruh právě ukazovat; {@link StavPruhu#SKRYTY}, když je plánovač vypnutý nebo žádná challenge není aktivní. */
+	public StavPruhu stavPruhu() {
+		final Challenge c = zobrazena();
+		if (!zapnuto || c == null) {
+			return StavPruhu.SKRYTY;
+		}
+		final VybranyKandidat k = vybranyKandidat(c);
+		final StavPredpoctu stav = stavPredpoctu(c);
+		final String chyba = stav.faze() == StavPredpoctu.Faze.CHYBA ? stav.chyba() : null;
+		final Challenge filtr = jenKandidatiPro();
+		return new StavPruhu(true, c, seznam.aktivni().size(), pocetChybejicich(c), stitekKandidata(c, k), k, filtr != null && klic(filtr).equals(klic(c)), chyba);
+	}
+
+	private String stitekKandidata(final Challenge c, final VybranyKandidat k) {
+		if (k == null) {
+			return null;
+		}
+		if (c.typ() != Challenge.Typ.SEKTORY_360) {
+			return k.stitek();
+		}
+		final VysledekSektoru v = vysledek(c);
+		final VysledekSektoru.Kandidati kand = v == null ? null : v.kandidati(k.sektor());
+		return StitkyPruhu.sektor(k.sektor(), kand == null ? 0 : kand.pocet(), k.vzdalenost());
 	}
 
 	// --- Kandidáti

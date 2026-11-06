@@ -79,7 +79,7 @@ public class ChallengeTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void neznamyTypJeChyba() {
 		final Map<String, String> m = new LinkedHashMap<>(Sablony.od360Domova().naMapu());
-		m.put("typ", "KALENDAR");
+		m.put("typ", "BUDOUCI_TYP");
 		Challenge.zMapy(m);
 	}
 

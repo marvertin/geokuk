@@ -49,6 +49,18 @@ public final class PlanovacChallenge {
 	private final ScheduledExecutorService planovac = Executors.newSingleThreadScheduledExecutor(r -> demon(r, "Odklad plánovače challenge"));
 	private final ExecutorService vykon = Executors.newSingleThreadExecutor(r -> demon(r, "Plánovač challenge"));
 	private final Map<String, DalsiChybejici> dalsi = new HashMap<>();
+	private final Map<String, DalsiPolicko> dalsiPolicko = new HashMap<>();
+
+	/** O kolik metrů se musí střed mapy posunout, aby se D/T a kalendář přepočítaly podle nového středu. */
+	static final double PRAH_POSUNU_M = 2000;
+
+	/** Dnešní datum pro kalendář; pro test jde nahradit. */
+	Supplier<java.time.LocalDate> dnes = java.time.LocalDate::now;
+
+	/** Střed mapy, podle kterého se naposledy počítaly D/T a kalendář. */
+	private volatile Wgs stredPolicek;
+	private final java.util.concurrent.atomic.AtomicLong generacePolicek = new java.util.concurrent.atomic.AtomicLong();
+	private ScheduledFuture<?> naplanovanoPolicek;
 
 	private volatile Collection<? extends VstupKes> kese;
 	private final java.util.concurrent.atomic.AtomicLong generace = new java.util.concurrent.atomic.AtomicLong();
@@ -161,6 +173,10 @@ public final class PlanovacChallenge {
 	}
 
 	private void prepocitej(final long moje, final Challenge c, final Collection<? extends VstupKes> data) {
+		if (c.typ() != Challenge.Typ.SEKTORY_360) {
+			prepocitejPolicka(() -> zastaralo(moje), c, data);
+			return;
+		}
 		final Vyreseno v = resolver.vyres(c, kod -> najdi(data, kod));
 		if (!v.jeUplne()) {
 			model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.CHYBA, 0, 0, v.duvod));
@@ -205,6 +221,110 @@ public final class PlanovacChallenge {
 		}
 	}
 
+	/** Pohled na keše, které umějí zadaný vstup; ostatní se přeskočí. */
+	private static <T> Iterable<T> jen(final Collection<? extends VstupKes> data, final Class<T> typ) {
+		return () -> new java.util.Iterator<T>() {
+			private final java.util.Iterator<? extends VstupKes> it = data.iterator();
+			private T dalsi;
+
+			@Override
+			public boolean hasNext() {
+				while (dalsi == null && it.hasNext()) {
+					final VstupKes k = it.next();
+					if (typ.isInstance(k)) {
+						dalsi = typ.cast(k);
+					}
+				}
+				return dalsi != null;
+			}
+
+			@Override
+			public T next() {
+				if (!hasNext()) {
+					throw new java.util.NoSuchElementException();
+				}
+				final T v = dalsi;
+				dalsi = null;
+				return v;
+			}
+		};
+	}
+
+	/** D/T matice a kalendář: čistá funkce nad kešemi, počítá se podle středu mapy. */
+	private void prepocitejPolicka(final java.util.function.BooleanSupplier zastarale, final Challenge c, final Collection<? extends VstupKes> data) {
+		final Wgs stred = stredMapy.get();
+		if (stred == null) {
+			model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.CHYBA, 0, 0, "Střed mapy není znám."));
+			return;
+		}
+		model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.POCITA, 0, data.size(), null));
+		final VysledekPolicek vysledek;
+		if (c.typ() == Challenge.Typ.DT_MATICE) {
+			vysledek = VypocetMatice.spocti(PravidlaTypu.proMatici(), stred.lat, stred.lon, jen(data, VstupDT.class));
+		} else {
+			vysledek = VypocetKalendare.spocti(PravidlaKalendare.vychozi(), dnes.get(), stred.lat, stred.lon, jen(data, VstupKalendar.class));
+		}
+		if (zastarale.getAsBoolean()) {
+			return;
+		}
+		synchronized (this) {
+			dalsiPolicko.remove(c.nazev());
+			stredPolicek = stred;
+		}
+		model.nastavVysledekPolicek(c, vysledek);
+		model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.HOTOVO, data.size(), data.size(), null));
+	}
+
+	/**
+	 * Střed mapy se změnil: D/T a kalendář se přepočítají podle nového středu, když se střed posunul aspoň o {@link #PRAH_POSUNU_M} od středu posledního výpočtu.
+	 * Sektory se nepřepočítávají (nezávisí na středu mapy). Volat ve vlákně Swingu.
+	 */
+	public void stredMapyZmenen() {
+		final Wgs ted = stredMapy.get();
+		final Wgs pred = stredPolicek;
+		if (ted == null || (pred != null && Geodezie.vzdalenostKoule(pred.lat, pred.lon, ted.lat, ted.lon) < PRAH_POSUNU_M)) {
+			return;
+		}
+		for (final Challenge c : model.aktivni()) {
+			if (c.typ() != Challenge.Typ.SEKTORY_360) {
+				naplanujPolicka();
+				return;
+			}
+		}
+	}
+
+	private synchronized void naplanujPolicka() {
+		if (planovac.isShutdown()) {
+			return;
+		}
+		generacePolicek.incrementAndGet();
+		if (naplanovanoPolicek != null) {
+			naplanovanoPolicek.cancel(false);
+		}
+		naplanovanoPolicek = planovac.schedule(() -> SwingUtilities.invokeLater(this::zacniPolicka), odklad, TimeUnit.MILLISECONDS);
+	}
+
+	private void zacniPolicka() {
+		final long moje = generacePolicek.get();
+		final boolean zapnuto = model.jeZapnuto();
+		final List<Challenge> aktivni = model.aktivni();
+		final Collection<? extends VstupKes> data = kese;
+		if (!zapnuto || data == null) {
+			return;
+		}
+		vykon.execute(() -> {
+			try {
+				for (final Challenge c : aktivni) {
+					if (c.typ() != Challenge.Typ.SEKTORY_360 && generacePolicek.get() == moje) {
+						prepocitejPolicka(() -> generacePolicek.get() != moje, c, data);
+					}
+				}
+			} catch (final RuntimeException e) {
+				log.warn("Přepočet D/T a kalendáře selhal: {}", e.toString());
+			}
+		});
+	}
+
 	private static Optional<VstupKes> najdi(final Collection<? extends VstupKes> data, final String kod) {
 		for (final VstupKes k : data) {
 			if (kod.equalsIgnoreCase(k.id())) {
@@ -219,6 +339,9 @@ public final class PlanovacChallenge {
 	 * Swingu. Vrací vybraného, nebo null, když výsledek nebo kandidáti nejsou.
 	 */
 	public VybranyKandidat dalsiChybejici(final Challenge c) {
+		if (c.typ() != Challenge.Typ.SEKTORY_360) {
+			return dalsiPolicko(c);
+		}
 		final VysledekSektoru v = model.vysledek(c);
 		if (v == null) {
 			return null;
@@ -239,8 +362,34 @@ public final class PlanovacChallenge {
 		return k;
 	}
 
-	/** „Předchozí chybějící“: vrátí se k předchozímu vybranému kandidátovi a vystředí na něj mapu; null, když není kam. Ve vlákně Swingu. */
+	private VybranyKandidat dalsiPolicko(final Challenge c) {
+		final VysledekPolicek v = model.vysledekPolicek(c);
+		final Wgs stred = stredMapy.get();
+		if (v == null || stred == null) {
+			return null;
+		}
+		final DalsiPolicko d;
+		synchronized (this) {
+			d = dalsiPolicko.computeIfAbsent(c.nazev(), k -> new DalsiPolicko());
+		}
+		final KandidatPolicka k = d.dalsi(v, stred.lat, stred.lon);
+		if (k == null) {
+			return null;
+		}
+		final VybranyKandidat vk = new VybranyKandidat(k.id(), k.lat(), k.lon(), -1, Geodezie.vzdalenostKoule(stred.lat, stred.lon, k.lat(), k.lon()), k.popis());
+		model.nastavVybranyKandidat(c, vk);
+		vystredit.accept(vk);
+		return vk;
+	}
+
+	/**
+	 * „Předchozí chybějící“: vrátí se k předchozímu vybranému kandidátovi a vystředí na něj mapu; null, když není kam. Ve vlákně Swingu. Zatím jen u sektorů 360°, u D/T a
+	 * kalendáře vrací null.
+	 */
 	public VybranyKandidat predchoziChybejici(final Challenge c) {
+		if (c.typ() != Challenge.Typ.SEKTORY_360) {
+			return null;
+		}
 		final VysledekSektoru v = model.vysledek(c);
 		final Wgs stred = stredMapy.get();
 		if (v == null || stred == null) {
@@ -261,6 +410,7 @@ public final class PlanovacChallenge {
 	/** Zastaví plánovač a uvolní paměť předpočtu. */
 	public synchronized void zavri() {
 		generace.incrementAndGet();
+		generacePolicek.incrementAndGet();
 		final Predpocet p = bezici;
 		if (p != null) {
 			p.zrus();

@@ -21,7 +21,9 @@ public class ChallengeZmenenyEvent extends Event0<ChallengeModel> {
 		/** Změnil se stav filtru „jen kandidáti“. */
 		JEN_KANDIDATI,
 		/** Změnil se vybraný kandidát některé challenge. */
-		KANDIDAT
+		KANDIDAT,
+		/** Změnila se challenge zobrazená v pruhu na mapě. */
+		ZOBRAZENA
 	}
 
 	private final Druh druh;

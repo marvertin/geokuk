@@ -15,7 +15,11 @@ public final class Challenge {
 
 	public enum Typ {
 		/** Úhlové sektory po stupni okolo středu: každý ze 360 sektorů má mít nález. */
-		SEKTORY_360
+		SEKTORY_360,
+		/** Matice obtížnost × terén: každé z 81 políček (po půlkách 1 až 5) má mít nález. */
+		DT_MATICE,
+		/** Kalendář: každý den v roce má mít nález. */
+		KALENDAR
 	}
 
 	/** Odkud se měří azimut. */

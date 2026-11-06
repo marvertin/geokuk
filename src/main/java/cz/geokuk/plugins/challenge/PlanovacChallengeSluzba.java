@@ -72,6 +72,10 @@ public class PlanovacChallengeSluzba implements AfterInjectInit {
 		planovac.domovZmenen();
 	}
 
+	public void onEvent(final cz.geokuk.core.coord.VyrezChangedEvent event) {
+		planovac.stredMapyZmenen();
+	}
+
 	public void onEvent(final ChallengeZmenenyEvent event) {
 		planovac.modelZmenen(event);
 	}

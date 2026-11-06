@@ -461,4 +461,255 @@ public class PlanovacChallengeTest {
 		Assert.assertEquals(StavPredpoctu.Faze.ZRUSENO, predpocty.get(0).stav().faze());
 		Assert.assertNull(model.vysledek(c));
 	}
+
+	// ---- D/T matice a kalendář
+
+	private Challenge dtChallenge(final String nazev) {
+		return model.ulozVlastni(new Challenge(nazev, Typ.DT_MATICE, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC));
+	}
+
+	private Challenge kalendarChallenge(final String nazev) {
+		return model.ulozVlastni(new Challenge(nazev, Typ.KALENDAR, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC));
+	}
+
+	private static List<PolicekKes> dtData() {
+		final List<PolicekKes> v = new ArrayList<>();
+		for (int d = 0; d < 9; d++) {
+			for (int t = 0; t < 3; t++) {
+				v.add(PolicekKes.dt("F" + d + "_" + t, 50.0 + d * 0.001, 14.0 + t * 0.001, true, d, t));
+			}
+		}
+		v.add(PolicekKes.dt("K1", 50.01, 14.01, false, 3, 5));
+		v.add(PolicekKes.dt("K2", 50.30, 14.30, false, 3, 5));
+		v.add(PolicekKes.dt("K3", 50.02, 14.02, false, 8, 8));
+		return v;
+	}
+
+	@Test
+	public void dtChallengeSeSpocitaPodleStredMapyAZnamoPolickoOdKazdeKese() throws Exception {
+		napojNaModel();
+		final Challenge c = dtChallenge("DT");
+		planovac.keseNacteny(dtData());
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "výsledek D/T");
+		final VysledekPolicek v = model.vysledekPolicek(c);
+		Assert.assertEquals(81, v.celkem());
+		Assert.assertEquals("27 splněných políček, zbylých 54", 81 - 27, v.pocetChybejicich());
+		Assert.assertEquals(81 - 27, model.pocetChybejicich(c));
+		Assert.assertTrue(v.stitkyChybejicich().contains("D2/T3"));
+		pockej(() -> model.stavPredpoctu(c).faze() == StavPredpoctu.Faze.HOTOVO, "stav hotovo");
+		final List<String> id = new ArrayList<>();
+		for (final KandidatPolicka k : v.kandidati()) {
+			id.add(k.id());
+		}
+		Assert.assertTrue(id.toString(), id.contains("K1") && id.contains("K2") && id.contains("K3"));
+	}
+
+	@Test
+	public void kesBezVstupuDTSeVDTPreskocia_VseChybi() throws Exception {
+		napojNaModel();
+		final Challenge c = dtChallenge("DT");
+		planovac.keseNacteny(kese(300, 1));
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "výsledek D/T");
+		Assert.assertEquals(81, model.vysledekPolicek(c).pocetChybejicich());
+	}
+
+	@Test
+	public void kalendarSeSpocitaSDnesnimDatem() throws Exception {
+		napojNaModel();
+		final java.time.LocalDate dnes = java.time.LocalDate.of(2026, 11, 5);
+		planovac.dnes = () -> dnes;
+		final Challenge c = kalendarChallenge("Kal");
+		final List<PolicekKes> data = new ArrayList<>();
+		for (int i = 0; i < 100; i++) {
+			data.add(new PolicekKes("N" + i, 50, 14, true, 0, 0, java.time.LocalDate.of(2025, 1, 1).plusDays(i), null, false));
+		}
+		data.add(new PolicekKes("EV", 50.05, 14.05, false, 0, 0, null, java.time.LocalDate.of(2026, 12, 25), true));
+		data.add(new PolicekKes("EV-MINULY", 50.05, 14.05, false, 0, 0, null, java.time.LocalDate.of(2026, 3, 14), true));
+		planovac.keseNacteny(data);
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "výsledek kalendáře");
+		final VysledekPolicek v = model.vysledekPolicek(c);
+		Assert.assertEquals(365 - 100, v.pocetChybejicich());
+		boolean nasel = false;
+		for (final KandidatPolicka k : v.kandidati()) {
+			if (k.id().equals("EV")) {
+				nasel = true;
+				Assert.assertEquals(Integer.valueOf(50), k.dniDo());
+				Assert.assertTrue(k.popis(), k.popis().contains("za 50 dní"));
+			}
+			Assert.assertNotEquals("event v minulosti není kandidát", "EV-MINULY", k.id());
+		}
+		Assert.assertTrue(nasel);
+	}
+
+	@Test
+	public void dalsiChybejiciPolickaJdeCykliceVystredujeAUkladaStitek() throws Exception {
+		napojNaModel();
+		final Challenge c = dtChallenge("DT");
+		Assert.assertNull("bez výsledku", planovac.dalsiChybejici(c));
+		planovac.keseNacteny(dtData());
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "výsledek D/T");
+		final int kandidatu = model.vysledekPolicek(c).kandidati().size();
+		Assert.assertEquals(3, kandidatu);
+		final List<String> vybrani = new ArrayList<>();
+		for (int i = 0; i < kandidatu; i++) {
+			final VybranyKandidat k = planovac.dalsiChybejici(c);
+			Assert.assertNotNull(k);
+			Assert.assertEquals(-1, k.sektor());
+			Assert.assertNotNull(k.stitek());
+			vybrani.add(k.id());
+		}
+		Assert.assertEquals("každý jednou", kandidatu, new java.util.HashSet<>(vybrani).size());
+		Assert.assertEquals(kandidatu, vystredeno.size());
+		Assert.assertEquals("po kole znovu", vybrani.get(0), planovac.dalsiChybejici(c).id());
+		pockej(() -> model.vybranyKandidat(c) != null && model.vybranyKandidat(c).id().equals(vybrani.get(0)), "kandidát v modelu");
+		Assert.assertEquals(model.vybranyKandidat(c).stitek(), model.stavPruhu().stitek());
+	}
+
+	@Test
+	public void malyPosunStreduMapyNepocitaZnovuAVelkyAno() throws Exception {
+		napojNaModel();
+		final Challenge dt = dtChallenge("DT");
+		final Challenge sektory = model.ulozVlastni(vlastni("Sektory", Stred.domov(), OblastDef.zadna()));
+		final List<VstupKes> data = new ArrayList<>(dtData());
+		planovac.keseNacteny(data);
+		zapni(dt, sektory);
+		pockej(() -> model.vysledekPolicek(dt) != null && model.vysledek(sektory) != null, "výsledky");
+		final VysledekPolicek prvni = model.vysledekPolicek(dt);
+		final VysledekSektoru sek = model.vysledek(sektory);
+		final long vysledkuSektoru = udalosti.stream().filter(e -> e.druh() == ChallengeZmenenyEvent.Druh.VYSLEDEK && e.challenge().nazev().equals("Sektory")).count();
+		javax.swing.SwingUtilities.invokeAndWait(() -> {
+			stredMapy = new Wgs(stredMapy.lat + 0.005, stredMapy.lon);
+			planovac.stredMapyZmenen();
+		});
+		Thread.sleep(500);
+		Assert.assertSame("posun asi 550 m", prvni, model.vysledekPolicek(dt));
+		javax.swing.SwingUtilities.invokeAndWait(() -> {
+			stredMapy = new Wgs(stredMapy.lat + 0.05, stredMapy.lon);
+			planovac.stredMapyZmenen();
+		});
+		pockej(() -> model.vysledekPolicek(dt) != prvni, "přepočet po velkém posunu");
+		Thread.sleep(300);
+		Assert.assertSame("sektory se nepřepočítávají", sek, model.vysledek(sektory));
+		Assert.assertEquals(vysledkuSektoru, udalosti.stream().filter(e -> e.druh() == ChallengeZmenenyEvent.Druh.VYSLEDEK && e.challenge().nazev().equals("Sektory")).count());
+	}
+
+	@Test
+	public void bezDTAKalendareSePosunStreduNicNepocita() throws Exception {
+		napojNaModel();
+		final Challenge c = model.ulozVlastni(vlastni("Sektory", Stred.domov(), OblastDef.zadna()));
+		planovac.keseNacteny(kese(500, 1));
+		zapni(c);
+		pockej(() -> model.vysledek(c) != null, "výsledek");
+		final long pred = udalosti.size();
+		javax.swing.SwingUtilities.invokeAndWait(() -> {
+			stredMapy = new Wgs(stredMapy.lat + 1, stredMapy.lon);
+			planovac.stredMapyZmenen();
+		});
+		Thread.sleep(400);
+		Assert.assertEquals(pred, udalosti.size());
+	}
+
+	// ---- zastaralé výsledky D/T
+
+	/** Keš, jejíž čtení terénu při zapnuté blokaci čeká, dokud ho test nepustí. */
+	private static final class BlokujiciKes extends PolicekKes {
+		private final java.util.concurrent.atomic.AtomicReference<java.util.concurrent.CountDownLatch[]> zamek;
+
+		BlokujiciKes(final java.util.concurrent.atomic.AtomicReference<java.util.concurrent.CountDownLatch[]> zamek) {
+			super("BLOK", 50.02, 14.02, false, 1, 1, null, null, false);
+			this.zamek = zamek;
+		}
+
+		@Override
+		public int teren() {
+			final java.util.concurrent.CountDownLatch[] z = zamek.get();
+			if (z != null) {
+				z[0].countDown();
+				try {
+					z[1].await(20, java.util.concurrent.TimeUnit.SECONDS);
+				} catch (final InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			return super.teren();
+		}
+	}
+
+	private long vysledkuDt(final String nazev) {
+		return udalosti.stream().filter(e -> e.druh() == ChallengeZmenenyEvent.Druh.VYSLEDEK && e.challenge().nazev().equals(nazev)).count();
+	}
+
+	private java.util.concurrent.CountDownLatch[] zablokuj(final java.util.concurrent.atomic.AtomicReference<java.util.concurrent.CountDownLatch[]> zamek) {
+		final java.util.concurrent.CountDownLatch[] z = { new java.util.concurrent.CountDownLatch(1), new java.util.concurrent.CountDownLatch(1) };
+		zamek.set(z);
+		return z;
+	}
+
+	private void posunStredu(final double lat, final double lon) throws Exception {
+		javax.swing.SwingUtilities.invokeAndWait(() -> {
+			stredMapy = new Wgs(lat, lon);
+			planovac.stredMapyZmenen();
+		});
+	}
+
+	@Test
+	public void zastaralyVypocetDTPoDalsimPosunuNeniVModelu() throws Exception {
+		napojNaModel();
+		final java.util.concurrent.atomic.AtomicReference<java.util.concurrent.CountDownLatch[]> zamek = new java.util.concurrent.atomic.AtomicReference<>();
+		final Challenge c = dtChallenge("DT");
+		final List<VstupKes> data = new ArrayList<>(dtData());
+		data.add(new BlokujiciKes(zamek));
+		planovac.keseNacteny(data);
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "první výsledek");
+		Assert.assertEquals(1, vysledkuDt("DT"));
+		final java.util.concurrent.CountDownLatch[] z = zablokuj(zamek);
+		posunStredu(LAT + 0.05, LON);
+		Assert.assertTrue("přepočet běží a čeká", z[0].await(20, java.util.concurrent.TimeUnit.SECONDS));
+		posunStredu(LAT + 0.10, LON);
+		z[1].countDown();
+		pockej(() -> vysledkuDt("DT") >= 2, "výsledek posledního posunu");
+		Thread.sleep(800);
+		Assert.assertEquals("zastaralý běh nic nepublikoval", 2, vysledkuDt("DT"));
+	}
+
+	@Test
+	public void zavreniPlanovaceBehemVypoctuDTNicNepublikuje() throws Exception {
+		napojNaModel();
+		final java.util.concurrent.atomic.AtomicReference<java.util.concurrent.CountDownLatch[]> zamek = new java.util.concurrent.atomic.AtomicReference<>();
+		final Challenge c = dtChallenge("DT");
+		final List<VstupKes> data = new ArrayList<>(dtData());
+		data.add(new BlokujiciKes(zamek));
+		planovac.keseNacteny(data);
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "první výsledek");
+		final java.util.concurrent.CountDownLatch[] z = zablokuj(zamek);
+		posunStredu(LAT + 0.05, LON);
+		Assert.assertTrue("přepočet běží a čeká", z[0].await(20, java.util.concurrent.TimeUnit.SECONDS));
+		planovac.zavri();
+		z[1].countDown();
+		Thread.sleep(800);
+		Assert.assertEquals("po zavření se nic nepublikuje", 1, vysledkuDt("DT"));
+	}
+
+	@Test
+	public void prahPosunuStreduJeDvaKilometry() throws Exception {
+		napojNaModel();
+		final Challenge c = dtChallenge("DT");
+		planovac.keseNacteny(dtData());
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "první výsledek");
+		final VysledekPolicek prvni = model.vysledekPolicek(c);
+		final GeometrieSektoru.Bod pod = GeometrieSektoru.bod(LAT, LON, 0, 1_990, GeometrieSektoru.Model.KOULE);
+		posunStredu(pod.lat, pod.lon);
+		Thread.sleep(500);
+		Assert.assertSame("posun 1990 m", prvni, model.vysledekPolicek(c));
+		final GeometrieSektoru.Bod nad = GeometrieSektoru.bod(LAT, LON, 0, 2_010, GeometrieSektoru.Model.KOULE);
+		posunStredu(nad.lat, nad.lon);
+		pockej(() -> model.vysledekPolicek(c) != prvni, "přepočet po posunu 2010 m");
+	}
 }
