@@ -161,24 +161,26 @@ public final class VypocetSektoru {
 				}
 			}
 		}
-		final java.util.List<VysledekSektoru.KandidatKes> vsichni = new java.util.ArrayList<>();
-		for (int i = 0; i < nenalezene.size(); i++) {
-			final VstupKes k = nenalezene.get(i);
-			final int s = nenalezeneKlasifikace.get(i).sektor();
-			if (!obsazeneJakkoli.get(s)) {
-				vsichni.add(new VysledekSektoru.KandidatKes(k.id(), k.lat(), k.lon(), s));
-				if (kandidati[s] == null) {
-					kandidati[s] = new Kandidati(s);
-				}
-				kandidati[s].pridej(k.id(), Geodezie.vzdalenostKoule(lat, lon, k.lat(), k.lon()));
-			}
-		}
 		final BitSet nejiste = new BitSet(360);
 		for (int s = 0; s < 360; s++) {
 			final boolean jenNejistymi = obsazeneJakkoli.get(s) && !obsazeneJiste.get(s);
 			final boolean chybiVedleNejisteho = !obsazeneJakkoli.get(s) && soused.get(s);
 			if (jenNejistymi || chybiVedleNejisteho) {
 				nejiste.set(s);
+			}
+		}
+		final java.util.List<VysledekSektoru.KandidatKes> vsichni = new java.util.ArrayList<>();
+		for (int i = 0; i < nenalezene.size(); i++) {
+			final VstupKes k = nenalezene.get(i);
+			final Klasifikace kl = nenalezeneKlasifikace.get(i);
+			final int s = kl.sektor();
+			if (!obsazeneJakkoli.get(s)) {
+				final double vzdalenost = Geodezie.vzdalenostKoule(lat, lon, k.lat(), k.lon());
+				vsichni.add(new VysledekSektoru.KandidatKes(k.id(), k.lat(), k.lon(), s, vzdalenost, nejiste.get(s) || kl.nejistota() != Klasifikace.BEZ_NEJISTOTY));
+				if (kandidati[s] == null) {
+					kandidati[s] = new Kandidati(s);
+				}
+				kandidati[s].pridej(k.id(), vzdalenost);
 			}
 		}
 		return new VysledekSektoru(obsazeneJakkoli, nejiste, kandidati, nalezu, vsichni);

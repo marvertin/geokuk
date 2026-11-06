@@ -69,7 +69,7 @@ public final class VypocetKalendare {
 			final OmezenaFronta fronta = kandidatiDne.get(den);
 			if (fronta != null) {
 				for (final OmezenaFronta.Kandidat c : fronta.serazene()) {
-					kandidati.add(new KandidatPolicka(c.keska.id(), c.keska.lat(), c.keska.lon(), stitek, stitek(den, c.dni), c.dni));
+					kandidati.add(new KandidatPolicka(c.keska.id(), c.keska.lat(), c.keska.lon(), stitek, stitek(den, c.dni), c.dni, c.vzdalenost));
 				}
 			}
 		}

@@ -25,6 +25,9 @@ public class ChallengeModel extends Model0 {
 	private boolean zapnuto;
 	private final Map<String, VysledekSektoru> vysledky = new ConcurrentHashMap<>();
 	private final Map<String, VysledekPolicek> vysledkyPolicek = new ConcurrentHashMap<>();
+	/** Střed (šířka, délka), podle kterého vznikl výsledek; chybí u výsledků zadaných bez středu. */
+	private final Map<String, double[]> stredy = new ConcurrentHashMap<>();
+	private volatile PrehledChallenge prehled;
 	private final Map<String, StavPredpoctu> stavy = new ConcurrentHashMap<>();
 	private final Map<String, VybranyKandidat> kandidati = new ConcurrentHashMap<>();
 	private volatile String jenKandidatiPro;
@@ -67,6 +70,8 @@ public class ChallengeModel extends Model0 {
 		}
 		vysledky.clear();
 		vysledkyPolicek.clear();
+		stredy.clear();
+		prehled = null;
 		zobrazena = null;
 		stavy.clear();
 		kandidati.clear();
@@ -142,6 +147,7 @@ public class ChallengeModel extends Model0 {
 		final Challenge c = seznam.ulozVlastni(definice);
 		vysledky.remove(klic(c));
 		vysledkyPolicek.remove(klic(c));
+		stredy.remove(klic(c));
 		stavy.remove(klic(c));
 		kandidati.remove(klic(c));
 		uloz();
@@ -204,6 +210,7 @@ public class ChallengeModel extends Model0 {
 	private void odstranStav(final Challenge c) {
 		vysledky.remove(klic(c));
 		vysledkyPolicek.remove(klic(c));
+		stredy.remove(klic(c));
 		stavy.remove(klic(c));
 		kandidati.remove(klic(c));
 		if (klic(c).equals(jenKandidatiPro)) {
@@ -278,10 +285,16 @@ public class ChallengeModel extends Model0 {
 
 	/** Uloží výsledek D/T matice nebo kalendáře aktivní challenge a ohlásí ho; pro neaktivní nebo změněnou definici se zahodí. Z kteréhokoli vlákna. */
 	public void nastavVysledekPolicek(final Challenge c, final VysledekPolicek vysledek) {
+		nastavVysledekPolicek(c, vysledek, Double.NaN, Double.NaN);
+	}
+
+	/** Jako {@link #nastavVysledekPolicek(Challenge, VysledekPolicek)} se středem, podle kterého se počítalo (střed mapy). */
+	public void nastavVysledekPolicek(final Challenge c, final VysledekPolicek vysledek, final double stredLat, final double stredLon) {
 		naEdt(() -> {
 			if (!seznam.jeAktivni(c.nazev()) || !c.equals(seznam.najdi(c.nazev()))) {
 				return;
 			}
+			stredy.put(klic(c), new double[] { stredLat, stredLon });
 			vysledkyPolicek.put(klic(c), vysledek);
 			ohlas(ChallengeZmenenyEvent.Druh.VYSLEDEK, c);
 		});
@@ -294,13 +307,51 @@ public class ChallengeModel extends Model0 {
 
 	/** Uloží výsledek výpočtu aktivní challenge a ohlásí ho; pro neaktivní challenge se zahodí. Z kteréhokoli vlákna. */
 	public void nastavVysledek(final Challenge c, final VysledekSektoru vysledek) {
+		nastavVysledek(c, vysledek, Double.NaN, Double.NaN);
+	}
+
+	/** Jako {@link #nastavVysledek(Challenge, VysledekSektoru)} se středem challenge, ze kterého se počítalo. */
+	public void nastavVysledek(final Challenge c, final VysledekSektoru vysledek, final double stredLat, final double stredLon) {
 		naEdt(() -> {
 			if (!seznam.jeAktivni(c.nazev()) || !c.equals(seznam.najdi(c.nazev()))) {
 				return;
 			}
+			stredy.put(klic(c), new double[] { stredLat, stredLon });
 			vysledky.put(klic(c), vysledek);
 			ohlas(ChallengeZmenenyEvent.Druh.VYSLEDEK, c);
 		});
+	}
+
+	/**
+	 * Přehled zobrazené (jediné aktivní) challenge pro štítky keší na mapě, nebo null, když žádná není aktivní, nemá výsledek nebo se v rozhraní neukazuje. Pro tentýž výsledek
+	 * vrací tentýž objekt, nový výsledek dá nový přehled.
+	 */
+	public PrehledChallenge prehled() {
+		final Challenge c = zobrazena();
+		if (c == null) {
+			return null;
+		}
+		final boolean sektory = c.typ() == Challenge.Typ.SEKTORY_360;
+		final Object v = sektory ? vysledky.get(klic(c)) : vysledkyPolicek.get(klic(c));
+		if (v == null) {
+			return null;
+		}
+		PrehledChallenge p = prehled;
+		if (p != null && p.zdroj() == v && p.challenge().equals(c)) {
+			return p;
+		}
+		synchronized (stredy) {
+			p = prehled;
+			if (p != null && p.zdroj() == v && p.challenge().equals(c)) {
+				return p;
+			}
+			final double[] stred = stredy.get(klic(c));
+			final double lat = stred == null ? Double.NaN : stred[0];
+			final double lon = stred == null ? Double.NaN : stred[1];
+			p = sektory ? PrehledChallenge.zeSektoru(c, (VysledekSektoru) v, lat, lon) : PrehledChallenge.zPolicek(c, (VysledekPolicek) v, lat, lon);
+			prehled = p;
+			return p;
+		}
 	}
 
 	/** Uloží stav předpočtu aktivní challenge a ohlásí ho. Z kteréhokoli vlákna. */

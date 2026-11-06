@@ -3,7 +3,9 @@ package cz.geokuk.plugins.challenge;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** Výsledek výpočtu 360°: obsazené a chybějící sektory, kandidáti a sektory s nejistým stavem. */
 public final class VysledekSektoru {
@@ -47,17 +49,48 @@ public final class VysledekSektoru {
 	}
 
 	/** Nenalezená keš, která by zaplnila chybějící sektor. */
-	public static final class KandidatKes {
+	public static final class KandidatKes implements StitekKese {
+		private static final String[] TEXTY_SEKTORU = new String[360];
+
+		static {
+			for (int i = 0; i < TEXTY_SEKTORU.length; i++) {
+				TEXTY_SEKTORU[i] = Integer.toString(i);
+			}
+		}
+
 		private final String id;
 		private final double lat;
 		private final double lon;
 		private final int sektor;
+		private final double vzdalenost;
+		private final boolean nejisty;
 
 		KandidatKes(final String id, final double lat, final double lon, final int sektor) {
+			this(id, lat, lon, sektor, Double.NaN, false);
+		}
+
+		KandidatKes(final String id, final double lat, final double lon, final int sektor, final double vzdalenost, final boolean nejisty) {
 			this.id = id;
 			this.lat = lat;
 			this.lon = lon;
 			this.sektor = sektor;
+			this.vzdalenost = vzdalenost;
+			this.nejisty = nejisty;
+		}
+
+		@Override
+		public String text() {
+			return TEXTY_SEKTORU[sektor];
+		}
+
+		@Override
+		public boolean nejisty() {
+			return nejisty;
+		}
+
+		@Override
+		public double vzdalenostM() {
+			return vzdalenost;
 		}
 
 		public String id() {
@@ -72,6 +105,7 @@ public final class VysledekSektoru {
 			return lon;
 		}
 
+		@Override
 		public int sektor() {
 			return sektor;
 		}
@@ -125,6 +159,26 @@ public final class VysledekSektoru {
 	/** Všichni kandidáti pro chybějící sektory (nenalezené keše v oblasti, jejichž sektor chybí) v pořadí, v jakém přišli. */
 	public List<KandidatKes> vsichniKandidati() {
 		return vsichniKandidati;
+	}
+
+	private volatile Map<String, KandidatKes> index;
+
+	/** Štítek nenalezené keše, která zaplní chybějící sektor; null, když takovou není. Index kódů se staví při prvním dotazu, potom jde o čtení z mapy bez alokace. */
+	public StitekKese stitek(final String idKese) {
+		Map<String, KandidatKes> m = index;
+		if (m == null) {
+			synchronized (this) {
+				m = index;
+				if (m == null) {
+					m = new HashMap<>(Math.max(16, vsichniKandidati.size() * 4 / 3 + 1));
+					for (final KandidatKes k : vsichniKandidati) {
+						m.putIfAbsent(k.id(), k);
+					}
+					index = m;
+				}
+			}
+		}
+		return m.get(idKese);
 	}
 
 	/** Kolik nálezů se do výpočtu započetlo (v oblasti a podle pravidel). */

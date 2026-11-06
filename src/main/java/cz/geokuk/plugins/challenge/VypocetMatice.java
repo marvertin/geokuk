@@ -49,7 +49,7 @@ public final class VypocetMatice {
 				final String stitek = stitek(d, t);
 				chybejici.add(stitek);
 				for (final OmezenaFronta.Kandidat c : hledatelne[d * PULEK + t].serazene()) {
-					kandidati.add(new KandidatPolicka(c.keska.id(), c.keska.lat(), c.keska.lon(), stitek, stitek, null));
+					kandidati.add(new KandidatPolicka(c.keska.id(), c.keska.lat(), c.keska.lon(), stitek, stitek, null, c.vzdalenost));
 				}
 			}
 		}

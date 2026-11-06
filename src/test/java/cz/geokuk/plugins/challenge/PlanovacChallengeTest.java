@@ -730,6 +730,41 @@ public class PlanovacChallengeTest {
 	}
 
 	@Test
+	public void prehledMaStredAStitkyZVypoctuPlanovace() throws Exception {
+		napojNaModel();
+		final Challenge sektory = model.ulozVlastni(vlastni("Sektory", Stred.domov(), OblastDef.zadna()));
+		planovac.keseNacteny(kese(500, 3));
+		zapni(sektory);
+		pockej(() -> model.prehled() != null, "přehled sektorů");
+		PrehledChallenge p = model.prehled();
+		Assert.assertEquals(LAT, p.stredLat(), 0);
+		Assert.assertEquals(LON, p.stredLon(), 0);
+		Assert.assertEquals("domov", p.stredPopis());
+		Assert.assertEquals(360 - model.pocetChybejicich(sektory), p.splneno());
+		final VysledekSektoru.KandidatKes k = model.vysledek(sektory).vsichniKandidati().get(0);
+		Assert.assertEquals(Integer.toString(k.sektor()), p.stitek(k.id()).text());
+		Assert.assertEquals(Geodezie.vzdalenostKoule(LAT, LON, k.lat(), k.lon()), p.stitek(k.id()).vzdalenostM(), 1e-6);
+
+		final Challenge dt = dtChallenge("DT");
+		javax.swing.SwingUtilities.invokeAndWait(() -> {
+			model.deaktivuj(sektory);
+			model.aktivuj(dt);
+		});
+		planovac.keseNacteny(dtData());
+		pockej(() -> model.prehled() != null && model.prehled().typ() == Challenge.Typ.DT_MATICE, "přehled D/T");
+		p = model.prehled();
+		Assert.assertEquals("střed mapy", p.stredPopis());
+		Assert.assertEquals(stredMapy.lat, p.stredLat(), 0);
+		Assert.assertEquals(81, p.celkem());
+		Assert.assertEquals("D2,5/T3,5", p.stitek("K1").text());
+		Assert.assertEquals(Geodezie.vzdalenostKoule(stredMapy.lat, stredMapy.lon, 50.01, 14.01), p.stitek("K1").vzdalenostM(), 1e-6);
+		final PrehledChallenge pred = p;
+		posunStredu(LAT + 0.05, LON);
+		pockej(() -> model.prehled() != pred, "nový přehled po přepočtu podle jiného středu");
+		Assert.assertEquals(LAT + 0.05, model.prehled().stredLat(), 0);
+	}
+
+	@Test
 	public void skrytyAktivniKalendarSeNaPozadiNepocita() throws Exception {
 		napojNaModel();
 		final Challenge kal = model.ulozVlastni(new Challenge("Kal", Typ.KALENDAR, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC));

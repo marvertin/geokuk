@@ -216,7 +216,7 @@ public final class PlanovacChallenge {
 			synchronized (this) {
 				dalsi.remove(c.nazev());
 			}
-			model.nastavVysledek(c, vysledek);
+			model.nastavVysledek(c, vysledek, v.lat, v.lon);
 		} finally {
 			p.zavri();
 			if (bezici == p) {
@@ -284,7 +284,7 @@ public final class PlanovacChallenge {
 			}
 			klic = vstupyPolicek.get(c.nazev());
 		}
-		model.nastavVysledekPolicek(c, vysledek.sVstupem(klic));
+		model.nastavVysledekPolicek(c, vysledek.sVstupem(klic), stred.lat, stred.lon);
 		model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.HOTOVO, data.size(), data.size(), null));
 	}
 
