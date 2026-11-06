@@ -108,6 +108,16 @@ public class PredpocetTest {
 	}
 
 	@Test
+	public void souborPredpoctuMaVerziVypoctu2ASouborZeStarsiVerzeSeNenacte() throws Exception {
+		final Predpocet p = predpocet("z1", oblast, ZdrojPravidel.PGC, LAT);
+		pockej(p, p.spust(kese(50, 9)));
+		final Path soubor = jedinySoubor();
+		final String zbytek = "|z1|" + oblast.verze() + "|" + String.format(java.util.Locale.ROOT, "%.7f,%.7f", LAT, LON) + "|PGC";
+		Assert.assertNotNull("aktuální verze výpočtu", SouborPredpoctu.nacti(soubor, "GKPC2" + zbytek));
+		Assert.assertNull("předchozí verze výpočtu", SouborPredpoctu.nacti(soubor, "GKPC1" + zbytek));
+	}
+
+	@Test
 	public void podruheseNicNepocitaAPoZmeneJedneKesePocitaJenJi() throws Exception {
 		final List<VypocetSektoruTest.Kes> kese = kese(2500, 6);
 		final Predpocet p1 = predpocet("z1", oblast, ZdrojPravidel.PGC, LAT);

@@ -158,4 +158,35 @@ public class GeodezieOpravyTest {
 		Assert.assertEquals("na východ přes datovou čáru", 89, GeometrieSektoru.sektorBodu(10, 179.9, 10, -179.9, 0, 100_000, Model.KOULE));
 		Assert.assertEquals("na západ přes datovou čáru", 270, GeometrieSektoru.sektorBodu(10, -179.9, 10, 179.9, 0, 100_000, Model.KOULE));
 	}
+
+	@Test
+	public void kesMilimetrOdStreduSeNapocitaAMikrometrNe() {
+		final double metr = 1 / 111_194.9266;
+		final double mm = 0.9e-3 * metr / Math.cos(Math.toRadians(50));
+		final double mikro = 0.5e-6 * metr / Math.cos(Math.toRadians(50));
+		for (final ZdrojPravidel zdroj : ZdrojPravidel.values()) {
+			final VysledekSektoru blizko = spocti(zdroj, new VypocetSektoruTest.Kes("GC1", 50, 14 + mm, true), new VypocetSektoruTest.Kes("GC2", 50, 14 + mm, false));
+			Assert.assertEquals(zdroj.name(), 1, blizko.pocetZapocitanychNalezu());
+			Assert.assertEquals(zdroj.name(), 1, blizko.pocetObsazenych());
+			final VysledekSektoru shodny = spocti(zdroj, new VypocetSektoruTest.Kes("GC1", 50, 14 + mikro, true), new VypocetSektoruTest.Kes("GC2", 50, 14 + mikro, false));
+			Assert.assertEquals(zdroj.name(), 0, shodny.pocetZapocitanychNalezu());
+			Assert.assertTrue(zdroj.name(), shodny.vsichniKandidati().isEmpty());
+		}
+		final double stupne = 0.9e-3 * metr / Math.cos(Math.toRadians(50));
+		Assert.assertTrue("sektorBodu mm od středu", GeometrieSektoru.sektorBodu(50, 14, 50, 14 + stupne, 0, 1000, Model.KOULE) >= 0);
+		Assert.assertEquals("sektorBodu mikrometr od středu", -1, GeometrieSektoru.sektorBodu(50, 14, 50, 14 + mikro, 0, 1000, Model.KOULE));
+	}
+
+	@Test
+	public void rozdilDelekPres180StupnuDavaStejnyVysledekJakoOpacnaStrana() {
+		// po převodu do rozsahu ±180 jsou vstupy stejná čísla, takže i výsledky jsou shodné bit po bitu
+		for (final double lat : new double[] { 0, 10, 45, -30 }) {
+			for (final double lon2 : new double[] { 180.5, 181, 200, 270, 359.9 }) {
+				final double lon2Ekv = lon2 - 360;
+				Assert.assertEquals(lat + " " + lon2, Geodezie.vzdalenostElipsoid(lat, 0, lat, lon2Ekv), Geodezie.vzdalenostElipsoid(lat, 0, lat, lon2), 0);
+				Assert.assertEquals(lat + " " + lon2, Geodezie.azimutElipsoid(lat, 0, lat, lon2Ekv), Geodezie.azimutElipsoid(lat, 0, lat, lon2), 0);
+				Assert.assertEquals(lat + " " + lon2, Geodezie.vzdalenostKoule(lat, 0, lat, lon2Ekv), Geodezie.vzdalenostKoule(lat, 0, lat, lon2), 0);
+			}
+		}
+	}
 }
