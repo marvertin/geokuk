@@ -3,6 +3,12 @@
 ## 6.5.0
 
 ### Změny
+- Plánovač challenge (Kešoidy > Challenge): v Plánovači challenge… se vybere
+  challenge (šablony 360° od domova, 360° of the Czech Republic, 360° of
+  Prague a Matice D/T) a zapne se. Pruh vlevo nahoře na mapě ukazuje počet
+  chybějících sektorů 360° nebo políček D/T; po kliknutí na počet se ukáže
+  seznam chybějících sektorů s kandidáty nebo chybějících políček D/T. Další
+  chybějící F4 (Shift+F4 zpět), zobrazení jen kandidátů na mapě.
 - Položka Kešoidy > Kruhy (Alt+F8) se jmenuje podle poloměru (Kruhy 1 km,
   Kruhy 161 m); dialog se jmenuje Nastavení kruhů.
 - Kruhy (Alt+F8) mají pevný poloměr v metrech, výchozí 100 m; mění se v
@@ -12,9 +18,10 @@
   důvod a co udělat. Když se kruhy v metrech kreslí jen částečně (nejbližší ke
   středu výřezu), je tam štítek Kruhy omezené, a když je zároveň něco skryté
   a něco omezené, Kruhy skryté a omezené.
-- Po zkratkách F5 a Ctrl+1 až Ctrl+4 se uprostřed dole nad měřítkem na chvíli
-  ukáže krátká zpráva, co se změnilo; po F8, Alt+F8 a F9, když kruhy nejsou
-  vidět.
+- Po zkratkách F5, F8, Alt+F8, F9 a Ctrl+1 až Ctrl+4 se uprostřed dole nad
+  měřítkem na chvíli ukáže krátká zpráva s názvem akce a stavem, třeba „Zdroj
+  keší GeoGet – Vypnuto“ nebo „Kruhy v metrech – Zapnuto, 100 m“. Když se
+  zapnuté kruhy nekreslí, je v ní i důvod a co udělat.
 - Posuvníky kruhů Obsazenost 161 m jsou tenké a při najetí myší ukážou popisky
   a aktuální hodnotu.
 - Velikost zvýrazňovacích kruhů se volí v pixelech nebo v metrech (od 1 m do
@@ -28,11 +35,15 @@
   zkratkou.
 - Zdroje keší GeoGet, GSAK a OpenSAK mají volbu Nové databáze načíst až po
   vybrání.
+- Zdroj keší bez načtených souborů má v menu Kešoidy > Zdroje keší vypnutou
+  položku; bublina u ní a krátká zpráva po Ctrl+1 až Ctrl+4 řeknou, že zdroj
+  nemá načtené soubory a že jeho složku jde zkontrolovat v Soubor > Umístění
+  souborů.
 - Klávesa F5 (Kešoidy > Zobrazovat kešoidy) skryje a zase ukáže kešoidy včetně
   kruhů a popisků.
-- Uživatelská mapa se zkratkou, kterou používá program (F5, Ctrl+1 až Ctrl+4
-  a další) nebo jiná mapa, se odmítne; zkratku v jejím souboru stačí změnit
-  nebo smazat.
+- Uživatelská mapa se zkratkou, kterou používá program (F4, F5, Ctrl+1 až
+  Ctrl+4 a další) nebo jiná mapa, se odmítne; zkratku v jejím souboru stačí
+  změnit nebo smazat.
 - Nápověda > O programu ukazuje verzi, licenci, původní texty Martina Veverky
   a údaje o upravené verzi (GeoKuk community) s odkazy.
 - Při prvním načítání mapy po spuštění je v mapě bílá plocha se slabým logem
