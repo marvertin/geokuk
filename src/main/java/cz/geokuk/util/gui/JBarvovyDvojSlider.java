@@ -5,6 +5,7 @@ package cz.geokuk.util.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -33,8 +34,6 @@ public class JBarvovyDvojSlider extends JPanel {
 	private static final int VYSKA_NADPISU = 24;
 	/** Mezera pod nadpisem druhého posuvníku, nad ním je jen nadpis. */
 	private static final int MEZERA_MEZI_POSUVNIKY = 4;
-	private static final String[] TEXTY_OSY_BARVY = { "Černá", "Šedá", "Bílá" };
-	private static final int[] HODNOTY_OSY_BARVY = { 0, 128, MAX };
 
 	private JSlider iBarvovnik;
 	private JSlider iPruhlednik;
@@ -121,22 +120,14 @@ public class JBarvovyDvojSlider extends JPanel {
 		}
 	}
 
-	/** Popisky osy barvy: černá dole, šedá uprostřed, bílá nahoře. */
+	/** Popisky osy barvy: černá dole, bílá nahoře. */
 	static List<Popisek> osaBarvy() {
-		final List<Popisek> l = new ArrayList<>();
-		for (int i = 0; i < HODNOTY_OSY_BARVY.length; i++) {
-			l.add(new Popisek(HODNOTY_OSY_BARVY[i], TEXTY_OSY_BARVY[i]));
-		}
-		return l;
+		return Arrays.asList(new Popisek(0, "Černá"), new Popisek(MAX, "Bílá"));
 	}
 
-	/** Popisky osy průhlednosti po 25 %; 0 % (plně krycí) nahoře. */
+	/** Popisky osy průhlednosti: 0 % (plně krycí) nahoře, 100 % dole. */
 	static List<Popisek> osaPruhlednosti() {
-		final List<Popisek> l = new ArrayList<>();
-		for (int procent = 0; procent <= 100; procent += 25) {
-			l.add(new Popisek(krytiProPruhlednost(procent), procent + " %"));
-		}
-		return l;
+		return Arrays.asList(new Popisek(krytiProPruhlednost(0), "0 %"), new Popisek(krytiProPruhlednost(100), "100 %"));
 	}
 
 	/**

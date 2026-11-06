@@ -101,27 +101,23 @@ public class JBarvovyDvojSliderTest {
 	// --- obsah a hodnoty ---
 
 	@Test
-	public void osaBarvyMaPopiskyNaKrajichAUprostred() {
+	public void osaBarvyMaPopiskyJenNaKrajich() {
 		final List<JBarvovyDvojSlider.Popisek> osa = JBarvovyDvojSlider.osaBarvy();
-		Assert.assertEquals(3, osa.size());
+		Assert.assertEquals(2, osa.size());
 		Assert.assertEquals("Černá", osa.get(0).text);
 		Assert.assertEquals(0, osa.get(0).hodnota);
-		Assert.assertEquals("Šedá", osa.get(1).text);
-		Assert.assertEquals(128, osa.get(1).hodnota);
-		Assert.assertEquals("Bílá", osa.get(2).text);
-		Assert.assertEquals(255, osa.get(2).hodnota);
+		Assert.assertEquals("Bílá", osa.get(1).text);
+		Assert.assertEquals(255, osa.get(1).hodnota);
 	}
 
 	@Test
-	public void osaPruhlednostiMaZnackyPo25Procentech() {
+	public void osaPruhlednostiMaPopiskyJenNaKrajich() {
 		final List<JBarvovyDvojSlider.Popisek> osa = JBarvovyDvojSlider.osaPruhlednosti();
-		Assert.assertEquals(5, osa.size());
-		final String[] texty = { "0 %", "25 %", "50 %", "75 %", "100 %" };
-		final int[] hodnoty = { 255, 191, 128, 64, 0 };
-		for (int i = 0; i < 5; i++) {
-			Assert.assertEquals(texty[i], osa.get(i).text);
-			Assert.assertEquals(hodnoty[i], osa.get(i).hodnota);
-		}
+		Assert.assertEquals(2, osa.size());
+		Assert.assertEquals("0 %", osa.get(0).text);
+		Assert.assertEquals(255, osa.get(0).hodnota);
+		Assert.assertEquals("100 %", osa.get(1).text);
+		Assert.assertEquals(0, osa.get(1).hodnota);
 	}
 
 	@Test
@@ -689,22 +685,27 @@ public class JBarvovyDvojSliderTest {
 	}
 
 	@Test
-	public void znackyOsJsouVedleOsyUKazdehoPopisku() {
+	public void znackyOsJsouVedleOsyJenUKrajnichPopisku() {
 		final JPanel rodic = rodic();
 		ukazLegendu();
 		final Zaznam z = nakresliZaznam(rodic);
 		final JSlider s = slider.getBarvovnik();
 		final int osaX = SwingUtilities.convertPoint(s, s.getWidth() / 2, 0, rodic).x;
-		final int y = yPopisku(rodic, s, 128);
-		boolean nalezeno = false;
-		for (final int[] c : z.cary) {
-			if (c[1] == y) {
-				Assert.assertEquals(osaX - JBarvovyDvojSlider.MEZERA_OSY + 2, c[0]);
-				Assert.assertEquals(osaX - 3, c[2]);
-				nalezeno = true;
+		for (final int hodnota : new int[] { 0, 255 }) {
+			final int y = yPopisku(rodic, s, hodnota);
+			boolean nalezeno = false;
+			for (final int[] c : z.cary) {
+				if (c[1] == y) {
+					Assert.assertEquals(osaX - JBarvovyDvojSlider.MEZERA_OSY + 2, c[0]);
+					Assert.assertEquals(osaX - 3, c[2]);
+					nalezeno = true;
+				}
 			}
+			Assert.assertTrue("značka osy pro hodnotu " + hodnota, nalezeno);
 		}
-		Assert.assertTrue("značka osy šedé", nalezeno);
+		for (final int[] c : z.cary) {
+			Assert.assertNotEquals("uprostřed osy není žádná značka", yPopisku(rodic, s, 128), c[1]);
+		}
 	}
 
 	@Test
