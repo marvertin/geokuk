@@ -96,9 +96,15 @@ public final class VypocetSektoru {
 		}
 	}
 
-	/** Klasifikace přímým výpočtem z nálezu: leží v oblasti (null = bez omezení), sektor a nejistota podle pravidel. */
+	/**
+	 * Klasifikace přímým výpočtem z nálezu: leží v oblasti (null = bez omezení), sektor a nejistota podle pravidel. Keš s neplatnými souřadnicemi a keš přesně ve středu
+	 * (azimut není definován) se do oblasti nepočítají.
+	 */
 	public static Klasifikator primy(final ZdrojPravidel zdroj, final double lat, final double lon, final Oblast oblast) {
 		return k -> {
+			if (!jePlatnyStred(k.lat(), k.lon()) || k.lat() == lat && Geodezie.vzdalenostKoule(lat, lon, k.lat(), k.lon()) < Geodezie.STEJNY_BOD_M) {
+				return Klasifikace.mimoOblast();
+			}
 			if (oblast != null && !oblast.obsahuje(k.lat(), k.lon())) {
 				return Klasifikace.mimoOblast();
 			}

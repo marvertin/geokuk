@@ -100,6 +100,9 @@ public final class GeometrieSektoru {
 	/** Bod ve zadané vzdálenosti (m) a azimutu (stupně) od středu. */
 	public static Bod bod(final double lat, final double lon, final double azimut, final double metru, final Model model) {
 		zkontrolujStred(lat, lon);
+		if (Double.isNaN(azimut) || Double.isInfinite(azimut)) {
+			throw new IllegalArgumentException("Azimut není konečné číslo: " + azimut);
+		}
 		if (!(metru >= 0) || Double.isInfinite(metru)) {
 			throw new IllegalArgumentException("Vzdálenost musí být nezáporná: " + metru);
 		}
@@ -318,7 +321,7 @@ public final class GeometrieSektoru {
 		if (Double.isNaN(vzdalenost)) {
 			vzdalenost = Geodezie.vzdalenostKoule(lat, lon, bodLat, bodLon);
 		}
-		if (vzdalenost <= 0 || vzdalenost < polomerMin - TOLERANCE_POLOMERU || vzdalenost > polomerMax + TOLERANCE_POLOMERU) {
+		if (vzdalenost < Geodezie.STEJNY_BOD_M || vzdalenost < polomerMin - TOLERANCE_POLOMERU || vzdalenost > polomerMax + TOLERANCE_POLOMERU) {
 			return -1;
 		}
 		double azimut = model == Model.ELIPSOID ? Geodezie.azimutElipsoid(lat, lon, bodLat, bodLon) : Double.NaN;

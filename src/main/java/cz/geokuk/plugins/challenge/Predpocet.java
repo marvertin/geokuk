@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public final class Predpocet {
 
 	/** Zvýšit při změně výpočtu klasifikace, ať se uložené výsledky zahodí. */
-	private static final int VERZE_VYPOCTU = 1;
+	private static final int VERZE_VYPOCTU = 2;
 
 	private static final int KROK_STAVU = 4096;
 
