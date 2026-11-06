@@ -509,6 +509,11 @@ public class KesoidModel extends Model0 implements OvladaniZdroju {
 		zmenZapnute(nicVybrano ? soubory : Collections.<File>emptyList(), Collections.<File>emptyList(), typy);
 	}
 
+	/** Zobrazují se kešoidy (F5)? Dokud není nastaveno, ano. */
+	public boolean isOnoff() {
+		return onoff == null || onoff;
+	}
+
 	public void setOnoff(final boolean onoff) {
 		if (this.onoff != null && this.onoff == onoff) {
 			return;

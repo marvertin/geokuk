@@ -40,7 +40,7 @@ public final class ZpravyZkratek {
 
 	/** F5. */
 	public static String kesoidy(final boolean zapnuto) {
-		return akceStav("Kešoidy", zapnuto, zapnuto ? null : "včetně kruhů, obsazenosti a popisků");
+		return akceStav("Kešoidy", zapnuto, zapnuto ? null : "včetně kruhů, obsazenosti a popisků (F5 zapne)");
 	}
 
 	/** F9; v příliš malém měřítku se Obsazenost nekreslí; {@code polomer} je poloměr kruhu, třeba „161 m“. */

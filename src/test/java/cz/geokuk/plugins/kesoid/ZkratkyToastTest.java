@@ -60,7 +60,7 @@ public class ZkratkyToastTest {
 		akce.setSelected(true);
 		final JCheckBoxMenuItem m = zapoj(akce);
 		m.doClick();
-		Assert.assertEquals("Kešoidy – Vypnuto, včetně kruhů, obsazenosti a popisků", posledni());
+		Assert.assertEquals("Kešoidy – Vypnuto, včetně kruhů, obsazenosti a popisků (F5 zapne)", posledni());
 		m.doClick();
 		Assert.assertEquals("Kešoidy – Zapnuto", posledni());
 	}

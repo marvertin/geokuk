@@ -213,6 +213,12 @@ public class Menu extends MenuStrujce {
 		// ////////////////////////////// keškový filtr
 		item(akce.kesoidyOnoffAction);
 		item(akce.filtrIkonyAction);
+		final javax.swing.JToggleButton kesoidyTlacitko = new javax.swing.JToggleButton(new cz.geokuk.plugins.kesoid.OkoKesoiduIkona());
+		kesoidyTlacitko.setFocusable(false);
+		akce.kesoidyOnoffAction.join(kesoidyTlacitko);
+		kesoidyTlacitko.setHideActionText(true);
+		kesoidyTlacitko.setIcon(new cz.geokuk.plugins.kesoid.OkoKesoiduIkona());
+		tb.add(kesoidyTlacitko);
 		tb.add(akce.filtrIkonyAction).setFocusable(false);
 		tb.add(akce.renderAction).setFocusable(false);
 

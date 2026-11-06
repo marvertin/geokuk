@@ -142,7 +142,7 @@ public class StavVrstevTest {
 
 	@Test
 	public void f5AkceStav() {
-		Assert.assertEquals("Kešoidy – Vypnuto, včetně kruhů, obsazenosti a popisků", ZpravyZkratek.kesoidy(false));
+		Assert.assertEquals("Kešoidy – Vypnuto, včetně kruhů, obsazenosti a popisků (F5 zapne)", ZpravyZkratek.kesoidy(false));
 		Assert.assertEquals("Kešoidy – Zapnuto", ZpravyZkratek.kesoidy(true));
 	}
 
