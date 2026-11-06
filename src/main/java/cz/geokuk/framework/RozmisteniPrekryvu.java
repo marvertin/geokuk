@@ -35,7 +35,10 @@ public final class RozmisteniPrekryvu {
 	/** Výška pruhu plánovače; končí na y = 32. */
 	public static final int VYSKA_PRUHU = 28;
 	/** Možné šířky pruhu plánovače od nejširší; užší stupeň se použije, když se širší nevejde. */
-	public static final int[] STUPNE_PRUHU = { 267, 178, 106 };
+	/** Šířky lišty plánovače podle stupně: plná s texty, s ikonami a nejužší. */
+	public static final int PRUH_PLNY = 600, PRUH_IKONY = 328, PRUH_UZKY = 234;
+	/** Šířka úchytu, který zůstane z lišty, když je plánovač vypnutý. */
+	public static final int PRUH_UCHYT = 34;
 	/** Ukazatel výkonu leží pod pruhem plánovače, když je pruh vidět. */
 	public static final Rectangle UKAZATEL_VYKONU = new Rectangle(OKRAJ, OKRAJ + VYSKA_PRUHU + 4, 330, 20);
 	/** Ukazatel výkonu bez pruhu plánovače. */
@@ -64,19 +67,29 @@ public final class RozmisteniPrekryvu {
 		return sirkaMapy / 2;
 	}
 
-	/** Šířka pruhu plánovače: nejširší stupeň, který se vejde do volné šířky; nejužší, když se nevejde žádný. */
+	/** Šířka lišty plánovače: nejširší stupeň, který se vejde do volné šířky; nejužší, když se nevejde žádný. */
 	public static int sirkaPruhu(final int volnaSirka) {
-		for (final int s : STUPNE_PRUHU) {
-			if (s <= volnaSirka) {
-				return s;
-			}
+		if (volnaSirka >= PRUH_PLNY) {
+			return PRUH_PLNY;
 		}
-		return STUPNE_PRUHU[STUPNE_PRUHU.length - 1];
+		return volnaSirka >= PRUH_IKONY ? PRUH_IKONY : PRUH_UZKY;
 	}
 
 	/** Volná šířka pro pruh plánovače na mapě dané šířky. */
 	public static int volnaSirkaPruhu(final int sirkaMapy) {
 		return sirkaMapy - OKRAJ - REZERVA_VPRAVO;
+	}
+
+	/** Volná šířka pro pruh plánovače: navíc končí před panelem nebo legendou, které zasahují do jeho výšky. */
+	public static int volnaSirkaPruhu(final int sirkaMapy, final Collection<Rectangle> prekazky) {
+		int volna = volnaSirkaPruhu(sirkaMapy);
+		final Rectangle pas = new Rectangle(OKRAJ, OKRAJ, sirkaMapy, VYSKA_PRUHU);
+		for (final Rectangle p : prekazky) {
+			if (p.intersects(pas) && p.x > OKRAJ + PRUH_UCHYT) {
+				volna = Math.min(volna, p.x - 2 * OKRAJ);
+			}
+		}
+		return volna;
 	}
 
 	/** Ukazatel výkonu: pod pruhem plánovače, když je vidět, jinak úplně nahoře. */
@@ -85,17 +98,25 @@ public final class RozmisteniPrekryvu {
 	}
 
 	/**
-	 * Svislá poloha rady kachlovníku: nahoře, ale zasahuje-li zleva do pruhu plánovače a ukazatele výkonu, pod ně. Bez pruhu je vždy {@link #Y_RADY}.
+	 * Svislá poloha rady kachlovníku: nahoře, ale zasahuje-li zleva do zapnuté lišty plánovače nebo ukazatele výkonu, pod ně. Bez lišty je vždy {@link #Y_RADY}.
 	 */
-	public static int yRady(final int xRady, final boolean pruh) {
-		if (pruh && xRady < UKAZATEL_VYKONU.x + UKAZATEL_VYKONU.width + MEZERA_PREKAZKY) {
+	public static int yRady(final int xRady, final boolean pruh, final int sirkaMapy) {
+		final Rectangle lista = pruhPlanovace(volnaSirkaPruhu(sirkaMapy));
+		final int konec = Math.max(UKAZATEL_VYKONU.x + UKAZATEL_VYKONU.width, lista.x + lista.width);
+		if (pruh && xRady < konec + MEZERA_PREKAZKY) {
 			return UKAZATEL_VYKONU.y + UKAZATEL_VYKONU.height + OKRAJ;
 		}
 		return Y_RADY;
 	}
 
+	/** Obdélník zapnuté lišty plánovače. */
 	public static Rectangle pruhPlanovace(final int volnaSirka) {
 		return new Rectangle(OKRAJ, OKRAJ, sirkaPruhu(volnaSirka), VYSKA_PRUHU);
+	}
+
+	/** Obdélník lišty plánovače: zapnutá podle volné šířky, vypnutá jen úchyt. */
+	public static Rectangle pruhPlanovace(final int volnaSirka, final boolean zapnuto) {
+		return new Rectangle(OKRAJ, OKRAJ, zapnuto ? sirkaPruhu(volnaSirka) : PRUH_UCHYT, VYSKA_PRUHU);
 	}
 
 	/** Mezera mezi spodním okrajem pruhu plánovače a jeho popupem. */

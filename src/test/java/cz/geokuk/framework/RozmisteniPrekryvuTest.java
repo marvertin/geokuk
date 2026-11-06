@@ -67,9 +67,8 @@ public class RozmisteniPrekryvuTest {
 			o.put(Prvek.LEGENDA_OBSAZENOSTI, RozmisteniPrekryvu.legendaObsazenosti(mapa));
 			prekazky.add(RozmisteniPrekryvu.legendaObsazenosti(mapa));
 		}
-		// pruh plánovače se zkrátí podle volné šířky do pravého horního panelu nebo okraje
-		final int volno = (panelyVpravo ? sv.x : mapa.width) - 2 * RozmisteniPrekryvu.OKRAJ - RozmisteniPrekryvu.OKRAJ;
-		o.put(Prvek.PRUH_PLANOVACE, RozmisteniPrekryvu.pruhPlanovace(volno));
+		// lišta plánovače se zkrátí podle volné šířky před pravým horním panelem a legendou
+		o.put(Prvek.PRUH_PLANOVACE, RozmisteniPrekryvu.pruhPlanovace(RozmisteniPrekryvu.volnaSirkaPruhu(mapa.width, prekazky)));
 		o.put(Prvek.UKAZATEL_VYKONU, new Rectangle(RozmisteniPrekryvu.UKAZATEL_VYKONU));
 		o.put(Prvek.MERITKO, RozmisteniPrekryvu.meritko(mapa));
 		o.put(Prvek.ZPRAVA, RozmisteniPrekryvu.zprava(mapa, zprava, prekazky));
@@ -124,14 +123,13 @@ public class RozmisteniPrekryvuTest {
 
 	@Test
 	public void pruhPlanovaceSeZkratiPodleVolneSirky() {
-		Assert.assertEquals(267, RozmisteniPrekryvu.pruhPlanovace(1000).width);
-		Assert.assertEquals(267, RozmisteniPrekryvu.pruhPlanovace(267).width);
-		Assert.assertEquals(178, RozmisteniPrekryvu.pruhPlanovace(266).width);
-		Assert.assertEquals(178, RozmisteniPrekryvu.pruhPlanovace(178).width);
-		Assert.assertEquals(106, RozmisteniPrekryvu.pruhPlanovace(177).width);
-		Assert.assertEquals(106, RozmisteniPrekryvu.pruhPlanovace(106).width);
-		Assert.assertEquals("užší nevejde nic, zůstane nejužší", 106, RozmisteniPrekryvu.pruhPlanovace(10).width);
-		Assert.assertEquals(new Rectangle(4, 4, 267, 28), RozmisteniPrekryvu.pruhPlanovace(500));
+		Assert.assertEquals(600, RozmisteniPrekryvu.pruhPlanovace(1000).width);
+		Assert.assertEquals(600, RozmisteniPrekryvu.pruhPlanovace(600).width);
+		Assert.assertEquals(328, RozmisteniPrekryvu.pruhPlanovace(599).width);
+		Assert.assertEquals(234, RozmisteniPrekryvu.pruhPlanovace(327).width);
+		Assert.assertEquals("užší nevejde nic, zůstane nejužší", 234, RozmisteniPrekryvu.pruhPlanovace(10).width);
+		Assert.assertEquals(new Rectangle(4, 4, 328, 28), RozmisteniPrekryvu.pruhPlanovace(500));
+		Assert.assertEquals("vypnutý je jen úchyt", new Rectangle(4, 4, 34, 28), RozmisteniPrekryvu.pruhPlanovace(500, false));
 		Assert.assertEquals("pruh končí na y = 32, ukazatel výkonu začíná pod ním", 32, RozmisteniPrekryvu.pruhPlanovace(500).y + RozmisteniPrekryvu.pruhPlanovace(500).height);
 		Assert.assertEquals(new Rectangle(4, 36, 330, 20), RozmisteniPrekryvu.UKAZATEL_VYKONU);
 		Assert.assertTrue(RozmisteniPrekryvu.UKAZATEL_VYKONU.y > 32);
@@ -286,15 +284,17 @@ public class RozmisteniPrekryvuTest {
 		for (final Dimension okno : OKNA) {
 			for (final int sirkaRady : new int[] { 250, 600, okno.width - 40 }) {
 				final int x = (okno.width - sirkaRady) / 2;
-				Assert.assertEquals("bez pruhu beze změny", RozmisteniPrekryvu.Y_RADY, RozmisteniPrekryvu.yRady(x, false));
-				final Rectangle rada = new Rectangle(x, RozmisteniPrekryvu.yRady(x, true), sirkaRady, 90);
+				Assert.assertEquals("bez pruhu beze změny", RozmisteniPrekryvu.Y_RADY, RozmisteniPrekryvu.yRady(x, false, okno.width));
+				final Rectangle rada = new Rectangle(x, RozmisteniPrekryvu.yRady(x, true, okno.width), sirkaRady, 90);
 				Assert.assertFalse(okno + " rada " + sirkaRady + " × pruh", rada.intersects(RozmisteniPrekryvu.pruhPlanovace(RozmisteniPrekryvu.volnaSirkaPruhu(okno.width))));
 				Assert.assertFalse(okno + " rada " + sirkaRady + " × ukazatel", rada.intersects(RozmisteniPrekryvu.ukazatelVykonu(true)));
 			}
 		}
-		Assert.assertEquals("úzká rada uprostřed široké mapy zůstane nahoře", 8, RozmisteniPrekryvu.yRady(700, true));
-		Assert.assertEquals("hranice: ukazatel končí na x = 334, mezera 8", 60, RozmisteniPrekryvu.yRady(341, true));
-		Assert.assertEquals(8, RozmisteniPrekryvu.yRady(342, true));
+		Assert.assertEquals("rada vpravo od lišty široké mapy zůstane nahoře", 8, RozmisteniPrekryvu.yRady(700, true, 1920));
+		Assert.assertEquals("hranice: lišta končí na x = 604, mezera 8", 60, RozmisteniPrekryvu.yRady(611, true, 1920));
+		Assert.assertEquals(8, RozmisteniPrekryvu.yRady(612, true, 1920));
+		Assert.assertEquals("v úzké mapě je delší ukazatel výkonu", 60, RozmisteniPrekryvu.yRady(341, true, 500));
+		Assert.assertEquals(8, RozmisteniPrekryvu.yRady(342, true, 500));
 	}
 
 	@Test

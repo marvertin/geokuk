@@ -2,15 +2,15 @@ package cz.geokuk.plugins.challenge;
 
 import cz.geokuk.framework.ToggleAction0;
 
-/** Zapíná a vypíná plánovač challenge (pruh na mapě). */
+/** Zapíná a vypíná plánovač challenge: lišta na mapě, při vypnutí zůstane jen úchyt. */
 public class ChallengeZapnoutAction extends ToggleAction0 {
 
 	private static final long serialVersionUID = 1L;
 	private transient ChallengeModel model;
 
 	public ChallengeZapnoutAction() {
-		super("Zapnout plánovač");
-		putValue(SHORT_DESCRIPTION, "Ukáže na mapě pruh plánovače challenge s počtem chybějících a přechodem na další chybějící.");
+		super("Lišta challenge");
+		putValue(SHORT_DESCRIPTION, "Zapne plánovač challenge: lišta na mapě s výběrem challenge, počtem chybějících a přechodem na další chybějící.");
 	}
 
 	public void inject(final ChallengeModel model) {

@@ -128,15 +128,22 @@ public class Menu extends MenuStrujce {
 	private void sestavSubmenuChallenge() {
 		final JMenu hlavni = menu;
 		final JMenu challenge = new JMenu("Challenge");
-		challenge.setToolTipText("Plánovač challenge: pruh na mapě, další a předchozí chybějící, jen kandidáti.");
+		challenge.setToolTipText("Plánovač challenge: lišta na mapě, další a předchozí chybějící, jen kandidáti, kreslení sektorů a štítků.");
 		hlavni.add(challenge);
 		menu = challenge;
-		item(akce.challengeNastaveniAction);
 		item(akce.challengeZapnoutAction);
 		separator();
+		item(akce.challengeNastaveniAction);
 		item(akce.challengeDalsiAction);
 		item(akce.challengePredchoziAction);
 		item(akce.challengeJenKandidatiAction);
+		item(akce.challengeSektoryAction);
+		item(akce.challengeStitkyAction);
+		separator();
+		item(akce.challengeSkokSever);
+		item(akce.challengeSkokVychod);
+		item(akce.challengeSkokJih);
+		item(akce.challengeSkokZapad);
 		menu = hlavni;
 	}
 

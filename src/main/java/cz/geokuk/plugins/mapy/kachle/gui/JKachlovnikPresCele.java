@@ -86,11 +86,11 @@ public class JKachlovnikPresCele extends JKachlovnik {
 	private transient AtribuceMapy.Rozlozeni posledniAtribuce;
 
 	public void inject(final cz.geokuk.plugins.challenge.ChallengeModel challengeModel) {
-		pruhPlanovace = challengeModel.jePruhViditelny();
+		pruhPlanovace = challengeModel.jeZapnuto();
 	}
 
 	public void onEvent(final cz.geokuk.plugins.challenge.ChallengeZmenenyEvent event) {
-		final boolean pruh = event.getModel().jePruhViditelny();
+		final boolean pruh = event.getModel().jeZapnuto();
 		if (pruh != pruhPlanovace) {
 			pruhPlanovace = pruh;
 			repaint();
@@ -430,7 +430,7 @@ public class JKachlovnikPresCele extends JKachlovnik {
 		w += 16;
 		final int h = fmTucne.getHeight() + (radky.size() + tabulka.size()) * fm.getHeight() + 8;
 		final int xRady = (getWidth() - w) / 2;
-		return new RozlozeniRady(novaRada, radky, tabulka, sloupce, xRady, cz.geokuk.framework.RozmisteniPrekryvu.yRady(xRady, pruhPlanovace), w, h);
+		return new RozlozeniRady(novaRada, radky, tabulka, sloupce, xRady, cz.geokuk.framework.RozmisteniPrekryvu.yRady(xRady, pruhPlanovace, getWidth()), w, h);
 	}
 
 	/** Stavy a velikosti map a vrstev pro dvě tlačítka rady; matice se sestaví až při prvním dotazu. */

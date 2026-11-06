@@ -1,14 +1,11 @@
 package cz.geokuk.plugins.challenge;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.function.Supplier;
-
-import javax.swing.KeyStroke;
 
 import cz.geokuk.framework.Action0;
 
-/** Předchozí chybějící (Shift+F4). */
+/** Předchozí chybějící. */
 public class ChallengePredchoziAction extends Action0 {
 
 	private static final long serialVersionUID = 1L;
@@ -18,7 +15,6 @@ public class ChallengePredchoziAction extends Action0 {
 	public ChallengePredchoziAction() {
 		super("Předchozí chybějící");
 		putValue(SHORT_DESCRIPTION, "Vrátí se k předchozí vybrané keši.");
-		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
 		setEnabled(false);
 	}
 

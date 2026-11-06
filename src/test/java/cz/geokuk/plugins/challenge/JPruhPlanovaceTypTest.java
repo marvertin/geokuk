@@ -19,19 +19,19 @@ public class JPruhPlanovaceTypTest {
 	@Test
 	public void kazdyTypSeVejdeCely() {
 		final Font zaklad = new JLabel().getFont().deriveFont(Font.BOLD, 12f);
-		final int sirka = JPruhPlanovace.rozloz(267)[JPruhPlanovace.TYP].width;
+		final int sirka = JPruhPlanovace.rozloz(cz.geokuk.framework.RozmisteniPrekryvu.PRUH_PLNY)[JPruhPlanovace.VYBER].width - 8;
 		for (final Challenge.Typ t : Challenge.Typ.values()) {
-			final String text = StitkyPruhu.typ(t);
+			final String text = StitkyPruhu.typ(t) + " ▾";
 			final Font f = JPruhPlanovace.pismoNaSirku(zaklad, text, sirka, JPruhPlanovaceTypTest::metriky);
 			Assert.assertTrue(text + ": " + metriky(f).stringWidth(text) + " > " + sirka, metriky(f).stringWidth(text) <= sirka);
 			Assert.assertTrue(text + ": písmo aspoň 9 bodů", f.getSize2D() >= 9f);
 		}
-		Assert.assertEquals("360° výchozím písmem", 12f, JPruhPlanovace.pismoNaSirku(zaklad, "360°", sirka, JPruhPlanovaceTypTest::metriky).getSize2D(), 0.01);
-		Assert.assertTrue("Kalendář menším", JPruhPlanovace.pismoNaSirku(zaklad, "Kalendář", sirka, JPruhPlanovaceTypTest::metriky).getSize2D() < 12f);
+		Assert.assertEquals("360° výchozím písmem", 12f, JPruhPlanovace.pismoNaSirku(zaklad, "360° ▾", sirka, JPruhPlanovaceTypTest::metriky).getSize2D(), 0.01);
+		Assert.assertTrue("Kalendář menším", JPruhPlanovace.pismoNaSirku(zaklad, "Kalendář ▾", sirka, JPruhPlanovaceTypTest::metriky).getSize2D() < 12f);
 		Assert.assertEquals("nejmenší 9 bodů", 9f, JPruhPlanovace.pismoNaSirku(zaklad, "Velmi dlouhý typ challenge", sirka, JPruhPlanovaceTypTest::metriky).getSize2D(), 0.01);
 	}
 
-	/** Skutečný pruh s Kalendářem: popisek typu se po rozložení vejde do svého obdélníku. */
+	/** Skutečná lišta s Kalendářem: typ v tlačítku výběru se po rozložení vejde celý, název challenge je jen v tooltipu. */
 	@Test
 	public void pruhSKalendaremUkazePopisekCely() throws Exception {
 		final ChallengeModel model = new ChallengeModel();
@@ -54,16 +54,10 @@ public class JPruhPlanovaceTypTest {
 		model.setZapnuto(true);
 		javax.swing.SwingUtilities.invokeAndWait(() -> {});
 		pruh.doLayout();
-		JLabel typ = null;
-		for (final java.awt.Component k : pruh.getComponents()) {
-			if (k instanceof JLabel) {
-				typ = (JLabel) k;
-			}
-		}
-		Assert.assertNotNull(typ);
-		Assert.assertEquals("Kalendář", typ.getText());
-		Assert.assertTrue(typ.getFont() + ": " + typ.getFontMetrics(typ.getFont()).stringWidth("Kalendář") + " > " + typ.getWidth(),
-				typ.getFontMetrics(typ.getFont()).stringWidth("Kalendář") <= typ.getWidth());
-		Assert.assertTrue(typ.getToolTipText(), typ.getToolTipText().startsWith("Typ challenge: Kalendář"));
+		final javax.swing.AbstractButton vyber = (javax.swing.AbstractButton) pruh.getComponent(JPruhPlanovace.VYBER);
+		Assert.assertEquals("Kalendář ▾", vyber.getText());
+		final int text = vyber.getFontMetrics(vyber.getFont()).stringWidth(vyber.getText());
+		Assert.assertTrue(vyber.getFont() + ": " + text + " > " + vyber.getWidth(), text <= vyber.getWidth() - 8);
+		Assert.assertEquals("Challenge: Kalendář test – vybrat jinou", vyber.getToolTipText());
 	}
 }

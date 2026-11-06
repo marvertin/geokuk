@@ -153,11 +153,13 @@ public class ChallengeModelTest {
 	}
 
 	@Test
-	public void zapnutiDalsiChallengeVypneDosavadniSJejimStavemAFiltrem() {
+	public void zapnutiDalsiChallengeVypneDosavadniSJejimStavemAFiltrem() throws Exception {
 		final Challenge a = model.ulozVlastni(vlastni("A"));
 		final Challenge b = model.ulozVlastni(vlastni("B"));
 		model.aktivuj(a);
 		model.nastavVysledek(a, vysledek(100));
+		// Výsledek se do modelu zapíše ve vlákně Swingu; než se zapne další challenge, musí tam být.
+		SwingUtilities.invokeAndWait(() -> {});
 		model.setJenKandidatiPro(a);
 		udalosti.clear();
 		model.aktivuj(b);

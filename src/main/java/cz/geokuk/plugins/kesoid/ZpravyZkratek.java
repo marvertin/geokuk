@@ -62,6 +62,16 @@ public final class ZpravyZkratek {
 		return zapnute.isEmpty() ? zprava + ", žádný zdroj keší není zapnutý" : zprava;
 	}
 
+	/** F4: filtr plánovače challenge „jen kandidáti“. */
+	public static String challengeJenKandidati(final boolean zapnuto) {
+		return akceStav("Challenge: jen kandidáti", zapnuto, null);
+	}
+
+	/** Shift+šipka, když ve směru šipky žádný kandidát challenge není; {@code smer} je třeba „na sever“. */
+	public static String challengeZadnyKandidat(final String smer) {
+		return "Challenge – žádný kandidát " + smer;
+	}
+
 	/** Ctrl+1 až Ctrl+4 u zdroje, který nemá žádné načtené soubory a proto jde vypnutý. */
 	public static String zdrojBezSouboru(final String nazevZdroje) {
 		return "Zdroj keší " + nazevZdroje + " – nemá načtené soubory";

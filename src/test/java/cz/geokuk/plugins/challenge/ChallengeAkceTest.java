@@ -2,13 +2,13 @@ package cz.geokuk.plugins.challenge;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import cz.geokuk.framework.Event0;
 import cz.geokuk.framework.EventFirer;
 import cz.geokuk.plugins.challenge.NastaveniChallengeTest.MapoveUloziste;
 
-/** Akce menu Kešoidy > Challenge: stav z modelu, zkratky F4 a Shift+F4. */
+/** Akce menu Kešoidy > Challenge: stav z modelu, zkratka F4 pro jen kandidáty. */
 public class ChallengeAkceTest {
 
 	private ChallengeModel model;
@@ -48,12 +48,18 @@ public class ChallengeAkceTest {
 		kandidati.inject(model);
 	}
 
+	/** Plánovač zapisuje vybraného kandidáta ve vlákně Swingu; zápis z testu musí doběhnout, než začne další test. */
+	@After
+	public void pockejNaEdt() throws Exception {
+		SwingUtilities.invokeAndWait(() -> {});
+	}
+
 	@Test
-	public void zkratkyJsouF4AShiftF4() {
-		Assert.assertEquals(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), dalsi.getValue(Action.ACCELERATOR_KEY));
-		Assert.assertEquals(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.SHIFT_DOWN_MASK), predchozi.getValue(Action.ACCELERATOR_KEY));
-		Assert.assertNull(zapnout.getValue(Action.ACCELERATOR_KEY));
-		Assert.assertNull(kandidati.getValue(Action.ACCELERATOR_KEY));
+	public void f4PrepinaJenKandidatyDalsiAPredchoziBezZkratky() {
+		Assert.assertEquals(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), kandidati.getValue(Action.ACCELERATOR_KEY));
+		Assert.assertNull(dalsi.getValue(Action.ACCELERATOR_KEY));
+		Assert.assertNull(predchozi.getValue(Action.ACCELERATOR_KEY));
+		Assert.assertNull("lišta jen úchytem a menu", zapnout.getValue(Action.ACCELERATOR_KEY));
 	}
 
 	@Test
@@ -93,6 +99,45 @@ public class ChallengeAkceTest {
 		kandidati.onSlectedChange(false);
 		Assert.assertNull(model.jenKandidatiPro());
 		Assert.assertFalse(kandidati.isSelected());
+	}
+
+	@Test
+	public void f4UkazeZpravuSeStavem() {
+		final java.util.List<String> zpravy = new java.util.ArrayList<>();
+		kandidati.inject(new cz.geokuk.plugins.kesoid.ToastModel() {
+			@Override
+			public void ukaz(final String text) {
+				zpravy.add(text);
+			}
+		});
+		model.aktivuj(Sablony.cesko360());
+		model.setZapnuto(true);
+		kandidati.onSlectedChange(true);
+		kandidati.onSlectedChange(false);
+		Assert.assertEquals(java.util.Arrays.asList("Challenge: jen kandidáti – Zapnuto", "Challenge: jen kandidáti – Vypnuto"), zpravy);
+	}
+
+	@Test
+	public void shiftSipkySkaceNaKandidataAHlasiKdyzZadnyNeni() {
+		final java.util.List<String> zpravy = new java.util.ArrayList<>();
+		final cz.geokuk.plugins.kesoid.ToastModel toast = new cz.geokuk.plugins.kesoid.ToastModel() {
+			@Override
+			public void ukaz(final String text) {
+				zpravy.add(text);
+			}
+		};
+		final int[] klavesy = { KeyEvent.VK_UP, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT };
+		for (final SmerSkoku smer : SmerSkoku.values()) {
+			final ChallengeSkokAction skok = new ChallengeSkokAction(smer);
+			Assert.assertEquals(KeyStroke.getKeyStroke(klavesy[smer.ordinal()], java.awt.event.InputEvent.SHIFT_DOWN_MASK), skok.getValue(Action.ACCELERATOR_KEY));
+			Assert.assertFalse("bez lišty nejde", skok.isEnabled());
+			skok.inject(model);
+			skok.inject(toast);
+			skok.setPlanovac(() -> null);
+			skok.actionPerformed(null);
+		}
+		Assert.assertEquals(java.util.Arrays.asList("Challenge – žádný kandidát na sever", "Challenge – žádný kandidát na východ", "Challenge – žádný kandidát na jih",
+				"Challenge – žádný kandidát na západ"), zpravy);
 	}
 
 	@Test
@@ -139,6 +184,33 @@ public class ChallengeAkceTest {
 		Assert.assertEquals(2, vystredeno.size());
 		Assert.assertEquals("GC1", ChallengeAkce.prejdi(model, p, false).id());
 		Assert.assertEquals("GC1", vystredeno.get(2).id());
+	}
+
+	@Test
+	public void shiftSipkaVyberePlanovacemKandidataVeSmeru() throws Exception {
+		priravVysledek();
+		model.setZapnuto(true);
+		final PlanovacChallenge p = planovac();
+		final java.util.List<String> zpravy = new java.util.ArrayList<>();
+		final cz.geokuk.plugins.kesoid.ToastModel toast = new cz.geokuk.plugins.kesoid.ToastModel() {
+			@Override
+			public void ukaz(final String text) {
+				zpravy.add(text);
+			}
+		};
+		final ChallengeSkokAction sever = new ChallengeSkokAction(SmerSkoku.SEVER);
+		final ChallengeSkokAction jih = new ChallengeSkokAction(SmerSkoku.JIH);
+		for (final ChallengeSkokAction a : new ChallengeSkokAction[] { sever, jih }) {
+			a.inject(model);
+			a.inject(toast);
+			a.setPlanovac(() -> p);
+		}
+		sever.actionPerformed(new ActionEvent(this, 0, ""));
+		Assert.assertEquals("na severu je kandidát, mapa se na něj vystředí", 1, vystredeno.size());
+		Assert.assertTrue("bez zprávy", zpravy.isEmpty());
+		jih.actionPerformed(new ActionEvent(this, 0, ""));
+		Assert.assertEquals("na jihu nikdo", java.util.Collections.singletonList("Challenge – žádný kandidát na jih"), zpravy);
+		Assert.assertEquals(1, vystredeno.size());
 	}
 
 	@Test
@@ -215,6 +287,8 @@ public class ChallengeAkceTest {
 		SwingUtilities.invokeAndWait(() -> {});
 		final PlanovacChallenge p = planovac();
 		Assert.assertEquals("další jde na aktivní challenge", "GC9", ChallengeAkce.prejdi(model, p, true).id());
+		// Vybraného kandidáta zapíše plánovač ve vlákně Swingu; model se dál mění až po něm.
+		SwingUtilities.invokeAndWait(() -> {});
 		Assert.assertFalse("filtr ještě není zapnutý", kandidati.isSelected());
 		model.setJenKandidatiPro(Sablony.praha360());
 		Assert.assertTrue("přepínač filtru ukazuje stav aktivní challenge", kandidati.isSelected());

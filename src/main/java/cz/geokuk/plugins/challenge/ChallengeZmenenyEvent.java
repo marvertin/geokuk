@@ -23,7 +23,9 @@ public class ChallengeZmenenyEvent extends Event0<ChallengeModel> {
 		/** Změnil se vybraný kandidát některé challenge. */
 		KANDIDAT,
 		/** Změnila se challenge zobrazená v pruhu na mapě. */
-		ZOBRAZENA
+		ZOBRAZENA,
+		/** Změnilo se, co se z challenge kreslí na mapě (sektory, štítky); výsledek zůstává. */
+		ZOBRAZENI
 	}
 
 	private final Druh druh;

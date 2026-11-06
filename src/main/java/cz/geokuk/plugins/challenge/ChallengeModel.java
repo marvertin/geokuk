@@ -23,6 +23,8 @@ public class ChallengeModel extends Model0 {
 
 	private ChallengeSeznam seznam = new ChallengeSeznam();
 	private boolean zapnuto;
+	private boolean kresliSektory = true;
+	private boolean kresliStitky = true;
 	private final Map<String, VysledekSektoru> vysledky = new ConcurrentHashMap<>();
 	private final Map<String, VysledekPolicek> vysledkyPolicek = new ConcurrentHashMap<>();
 	/** Střed (šířka, délka), podle kterého vznikl výsledek; chybí u výsledků zadaných bez středu. */
@@ -62,11 +64,15 @@ public class ChallengeModel extends Model0 {
 			seznam = n.seznam;
 			zapnuto = n.zapnuto;
 			ukladaniZakazano = n.neznamyFormat;
+			kresliSektory = nactiPrepinac(KRESLI_SEKTORY);
+			kresliStitky = nactiPrepinac(KRESLI_STITKY);
 		} catch (final RuntimeException e) {
 			log.warn("Nastavení challenge nejde načíst, použijí se výchozí hodnoty a ukládání se vypne: {}", e.toString());
 			seznam = new ChallengeSeznam();
 			zapnuto = false;
 			ukladaniZakazano = true;
+			kresliSektory = true;
+			kresliStitky = true;
 		}
 		vysledky.clear();
 		vysledkyPolicek.clear();
@@ -121,6 +127,55 @@ public class ChallengeModel extends Model0 {
 		this.zapnuto = zapnuto;
 		uloz();
 		ohlas(ChallengeZmenenyEvent.Druh.ZAPNUTO, null);
+	}
+
+	// --- Kreslení na mapě
+
+	private static final String KRESLI_SEKTORY = "kresli.sektory";
+	private static final String KRESLI_STITKY = "kresli.stitky";
+
+	/** Přepínač kreslení; chybí-li v nastavení, je zapnutý. */
+	private boolean nactiPrepinac(final String klic) {
+		return !"false".equals(uloziste.get().get(klic));
+	}
+
+	private void ulozPrepinac(final String klic, final boolean hodnota) {
+		if (ukladaniZakazano) {
+			return;
+		}
+		try {
+			uloziste.get().put(klic, Boolean.toString(hodnota));
+		} catch (final RuntimeException e) {
+			log.warn("Nastavení challenge nejde uložit: {}", e.toString());
+		}
+	}
+
+	/** Kreslí se u zobrazené challenge sektory (prstenec, klín, čára)? */
+	public boolean isKresliSektory() {
+		return kresliSektory;
+	}
+
+	public void setKresliSektory(final boolean kresli) {
+		if (kresliSektory == kresli) {
+			return;
+		}
+		kresliSektory = kresli;
+		ulozPrepinac(KRESLI_SEKTORY, kresli);
+		ohlas(ChallengeZmenenyEvent.Druh.ZOBRAZENI, null);
+	}
+
+	/** Kreslí se u kandidátů štítky (číslo sektoru, políčko D/T)? */
+	public boolean isKresliStitky() {
+		return kresliStitky;
+	}
+
+	public void setKresliStitky(final boolean kresli) {
+		if (kresliStitky == kresli) {
+			return;
+		}
+		kresliStitky = kresli;
+		ulozPrepinac(KRESLI_STITKY, kresli);
+		ohlas(ChallengeZmenenyEvent.Druh.ZOBRAZENI, null);
 	}
 
 	// --- Definice
