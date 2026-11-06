@@ -57,7 +57,7 @@ public final class PlanovacChallenge {
 	/** Dnešní datum pro kalendář; pro test jde nahradit. */
 	Supplier<java.time.LocalDate> dnes = java.time.LocalDate::now;
 
-	/** Střed mapy, podle kterého se naposledy počítaly D/T a kalendář. */
+	/** Střed mapy, podle kterého se naposledy začaly počítat D/T a kalendář (i když výpočet ještě běží); podle něj se rozhoduje, zda je potřeba další přepočet. */
 	private volatile Wgs stredPolicek;
 	private final java.util.concurrent.atomic.AtomicLong generacePolicek = new java.util.concurrent.atomic.AtomicLong();
 	private ScheduledFuture<?> naplanovanoPolicek;
@@ -257,6 +257,7 @@ public final class PlanovacChallenge {
 			model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.CHYBA, 0, 0, "Střed mapy není znám."));
 			return;
 		}
+		stredPolicek = stred;
 		model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.POCITA, 0, data.size(), null));
 		final VysledekPolicek vysledek;
 		if (c.typ() == Challenge.Typ.DT_MATICE) {
@@ -269,7 +270,6 @@ public final class PlanovacChallenge {
 		}
 		synchronized (this) {
 			dalsiPolicko.remove(c.nazev());
-			stredPolicek = stred;
 		}
 		model.nastavVysledekPolicek(c, vysledek);
 		model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.HOTOVO, data.size(), data.size(), null));
@@ -320,6 +320,7 @@ public final class PlanovacChallenge {
 					}
 				}
 			} catch (final RuntimeException e) {
+				stredPolicek = null;
 				log.warn("Přepočet D/T a kalendáře selhal: {}", e.toString());
 			}
 		});
