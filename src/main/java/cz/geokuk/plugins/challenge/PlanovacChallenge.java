@@ -383,12 +383,11 @@ public final class PlanovacChallenge {
 	}
 
 	/**
-	 * „Předchozí chybějící“: vrátí se k předchozímu vybranému kandidátovi a vystředí na něj mapu; null, když není kam. Ve vlákně Swingu. Zatím jen u sektorů 360°, u D/T a
-	 * kalendáře vrací null.
+	 * „Předchozí chybějící“: vrátí se k předchozímu vybranému kandidátovi a vystředí na něj mapu; null, když není kam. Ve vlákně Swingu.
 	 */
 	public VybranyKandidat predchoziChybejici(final Challenge c) {
 		if (c.typ() != Challenge.Typ.SEKTORY_360) {
-			return null;
+			return predchoziPolicko(c);
 		}
 		final VysledekSektoru v = model.vysledek(c);
 		final Wgs stred = stredMapy.get();
@@ -405,6 +404,26 @@ public final class PlanovacChallenge {
 			vystredit.accept(k);
 		}
 		return k;
+	}
+
+	private VybranyKandidat predchoziPolicko(final Challenge c) {
+		final VysledekPolicek v = model.vysledekPolicek(c);
+		final Wgs stred = stredMapy.get();
+		if (v == null || stred == null) {
+			return null;
+		}
+		final DalsiPolicko d;
+		synchronized (this) {
+			d = dalsiPolicko.get(c.nazev());
+		}
+		final KandidatPolicka k = d == null ? null : d.predchozi(v);
+		if (k == null) {
+			return null;
+		}
+		final VybranyKandidat vk = new VybranyKandidat(k.id(), k.lat(), k.lon(), -1, Geodezie.vzdalenostKoule(stred.lat, stred.lon, k.lat(), k.lon()), k.popis());
+		model.nastavVybranyKandidat(c, vk);
+		vystredit.accept(vk);
+		return vk;
 	}
 
 	/** Zastaví plánovač a uvolní paměť předpočtu. */

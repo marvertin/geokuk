@@ -63,4 +63,38 @@ public class DalsiPolickoTest {
 		Assert.assertNull(d.dalsi(v(), 50, 14));
 		Assert.assertNull(d.dalsi(null, 50, 14));
 	}
+
+	@Test
+	public void predchoziVratiPredchozihoVybranehoAAktualniSeMuzeVybratZnovu() {
+		final VysledekPolicek v = v(k("A", 50.0, null), k("B", 50.1, null), k("C", 50.5, null));
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertNull("nic nebylo vybráno", d.predchozi(v));
+		Assert.assertEquals("A", d.dalsi(v, 50.0, 14).id());
+		Assert.assertNull("před prvním nic není", d.predchozi(v));
+		Assert.assertEquals("B", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("C", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("B", d.predchozi(v).id());
+		Assert.assertEquals("C je zase k dispozici", "C", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("B", d.predchozi(v).id());
+		Assert.assertEquals("A", d.predchozi(v).id());
+		Assert.assertNull(d.predchozi(v));
+		d.dalsi(v, 50.0, 14);
+		d.dalsi(v, 50.0, 14);
+		Assert.assertNull("jiná instance výsledku, i se stejnými kandidáty", d.predchozi(v(k("A", 50.0, null), k("B", 50.1, null), k("C", 50.5, null))));
+		Assert.assertNull(d.predchozi(null));
+	}
+
+	@Test
+	public void predchoziPoResetuAPoNovemKoluNeniKam() {
+		final VysledekPolicek v = v(k("A", 50.0, null), k("B", 50.1, null));
+		final DalsiPolicko d = new DalsiPolicko();
+		d.dalsi(v, 50.0, 14);
+		d.dalsi(v, 50.0, 14);
+		d.reset();
+		Assert.assertNull(d.predchozi(v));
+		d.dalsi(v, 50.0, 14);
+		d.dalsi(v, 50.0, 14);
+		d.dalsi(v, 50.0, 14);
+		Assert.assertNull("nové kolo začíná od jediného vybraného", d.predchozi(v));
+	}
 }

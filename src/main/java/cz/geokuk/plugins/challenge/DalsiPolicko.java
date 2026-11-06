@@ -1,7 +1,9 @@
 package cz.geokuk.plugins.challenge;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,6 +13,8 @@ import java.util.Set;
 public final class DalsiPolicko {
 
 	private final Set<String> vybrane = new HashSet<>();
+	/** Vybraní v tomto kole v pořadí výběru, kvůli „předchozímu“. */
+	private final List<String> poradi = new ArrayList<>();
 	private VysledekPolicek vysledek;
 
 	/** Další kandidát; null, když kandidáti nejsou. */
@@ -18,6 +22,7 @@ public final class DalsiPolicko {
 		if (vysledek != this.vysledek) {
 			this.vysledek = vysledek;
 			vybrane.clear();
+			poradi.clear();
 		}
 		if (vysledek == null || vysledek.kandidati().isEmpty()) {
 			return null;
@@ -25,10 +30,27 @@ public final class DalsiPolicko {
 		KandidatPolicka k = nejlepsi(vysledek, lat, lon);
 		if (k == null) {
 			vybrane.clear();
+			poradi.clear();
 			k = nejlepsi(vysledek, lat, lon);
 		}
 		vybrane.add(k.id());
+		poradi.add(k.id());
 		return k;
+	}
+
+	/** Předchozí vybraný kandidát v tomto kole; null, když před posledním vybraným žádný není. Aktuální se tím vrátí mezi nevybrané. */
+	public synchronized KandidatPolicka predchozi(final VysledekPolicek vysledek) {
+		if (vysledek != this.vysledek || vysledek == null || poradi.size() < 2) {
+			return null;
+		}
+		vybrane.remove(poradi.remove(poradi.size() - 1));
+		final String id = poradi.get(poradi.size() - 1);
+		for (final KandidatPolicka k : vysledek.kandidati()) {
+			if (k.id().equals(id)) {
+				return k;
+			}
+		}
+		return null;
 	}
 
 	private KandidatPolicka nejlepsi(final VysledekPolicek v, final double lat, final double lon) {
@@ -46,5 +68,6 @@ public final class DalsiPolicko {
 	/** Začne kolo znovu. */
 	public synchronized void reset() {
 		vybrane.clear();
+		poradi.clear();
 	}
 }
