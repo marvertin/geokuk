@@ -38,7 +38,7 @@ public class ChallengeTest {
 	@Test
 	public void sablonaCesko() {
 		final Challenge c = Sablony.cesko360();
-		Assert.assertEquals("360° of the Czech Republic", c.nazev());
+		Assert.assertEquals(Sablony.NAZEV_CESKO, c.nazev());
 		Assert.assertEquals(DruhStredu.LISTING, c.stred().druh());
 		Assert.assertEquals("GC4PCQB", c.stred().kodListingu());
 		Assert.assertEquals(DruhOblasti.STAT, c.oblast().druh());
@@ -48,7 +48,7 @@ public class ChallengeTest {
 	@Test
 	public void sablonaPraha() {
 		final Challenge c = Sablony.praha360();
-		Assert.assertEquals("360° of Prague", c.nazev());
+		Assert.assertEquals(Sablony.NAZEV_PRAHA, c.nazev());
 		Assert.assertEquals("GC56R49", c.stred().kodListingu());
 		Assert.assertEquals(DruhOblasti.SADA, c.oblast().druh());
 		Assert.assertEquals(java.util.Collections.singletonList("praha"), c.oblast().idOblasti());
@@ -129,6 +129,23 @@ public class ChallengeTest {
 		final java.util.Set<String> nazvy = new java.util.HashSet<>();
 		for (final Challenge c : Sablony.vse()) {
 			Assert.assertTrue(c.nazev(), nazvy.add(c.nazev().toLowerCase(java.util.Locale.ROOT)));
+		}
+	}
+
+	@Test
+	public void nazvySablonSKodemAOriginalemKese() {
+		Assert.assertEquals("GC4PCQB – Challenge - 360 degrees of the Czech Republic", Sablony.cesko360().nazev());
+		Assert.assertEquals("GC56R49 – Challenge - 360 Degrees of Prague", Sablony.praha360().nazev());
+		Assert.assertEquals("360° od domova", Sablony.od360Domova().nazev());
+		Assert.assertEquals("Matice D/T", Sablony.maticeDT().nazev());
+		Assert.assertTrue(Sablony.cesko360().nazev().startsWith(Sablony.cesko360().stred().kodListingu() + " – "));
+		Assert.assertTrue(Sablony.praha360().nazev().startsWith(Sablony.praha360().stred().kodListingu() + " – "));
+	}
+
+	@Test
+	public void nazvySablonSeVejdouDoLimituNazvu() {
+		for (final Challenge c : Sablony.vse()) {
+			Assert.assertTrue(c.nazev(), c.nazev().length() <= ChallengeSeznam.NEJDELSI_NAZEV - " (vlastní 99)".length());
 		}
 	}
 }

@@ -4,8 +4,9 @@
 
 ### Změny
 - Plánovač challenge (Kešoidy > Challenge): v Plánovači challenge… se vybere
-  challenge (šablony 360° od domova, 360° of the Czech Republic, 360° of
-  Prague a Matice D/T) a zapne se. Pruh vlevo nahoře na mapě ukazuje počet
+  challenge (šablony 360° od domova, GC4PCQB – Challenge - 360 degrees of the
+  Czech Republic, GC56R49 – Challenge - 360 Degrees of Prague a Matice D/T) a
+  zapne se. Pruh vlevo nahoře na mapě ukazuje počet
   chybějících sektorů 360° nebo políček D/T; po kliknutí na počet se ukáže
   seznam chybějících sektorů s kandidáty nebo chybějících políček D/T. Další
   chybějící F4 (Shift+F4 zpět), zobrazení jen kandidátů na mapě.

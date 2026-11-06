@@ -123,7 +123,7 @@ public class ChallengeModelTest {
 		druhy.initAfterInject();
 		Assert.assertTrue(druhy.jeZapnuto());
 		Assert.assertEquals(2, druhy.vlastni().size());
-		Assert.assertEquals("360° of the Czech Republic", druhy.aktivni().get(0).nazev());
+		Assert.assertEquals(Sablony.NAZEV_CESKO, druhy.aktivni().get(0).nazev());
 		Assert.assertEquals("Moje", druhy.aktivni().get(1).nazev());
 	}
 
@@ -141,7 +141,7 @@ public class ChallengeModelTest {
 	@Test
 	public void sablonuNejdePrepsatSmazatAniUlozitJakoVlastni() {
 		try {
-			model.ulozVlastni(vlastni("360° of Prague"));
+			model.ulozVlastni(vlastni(Sablony.NAZEV_PRAHA));
 			Assert.fail();
 		} catch (final ChallengeChyba e) {
 			Assert.assertTrue(e.getMessage(), e.getMessage().contains("kopii"));

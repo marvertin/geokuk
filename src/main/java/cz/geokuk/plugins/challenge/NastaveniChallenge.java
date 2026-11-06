@@ -167,7 +167,7 @@ public final class NastaveniChallenge {
 					continue;
 				}
 				try {
-					seznam.aktivuj(nazev);
+					seznam.aktivuj(Sablony.soucasnyNazev(nazev));
 				} catch (final ChallengeChyba ex) {
 					log.warn("Aktivní challenge „{}“ se přeskočí: {}", nazev, ex.getMessage());
 					preskoceno++;

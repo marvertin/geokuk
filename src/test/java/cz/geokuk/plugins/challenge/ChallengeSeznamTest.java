@@ -35,33 +35,33 @@ public class ChallengeSeznamTest {
 		Assert.assertEquals(4, s.vsechny().size());
 		Assert.assertTrue(s.aktivni().isEmpty());
 		Assert.assertEquals(5, s.strop());
-		Assert.assertTrue(s.jeSablona("360° of Prague"));
-		Assert.assertTrue("bez ohledu na velikost písmen", s.jeSablona("360° OF prague"));
+		Assert.assertTrue(s.jeSablona(Sablony.NAZEV_PRAHA));
+		Assert.assertTrue("bez ohledu na velikost písmen", s.jeSablona(Sablony.NAZEV_PRAHA.toUpperCase(java.util.Locale.ROOT)));
 	}
 
 	@Test
 	public void sablonuNejdePrepsatSmazatAniPrejmenovat() {
 		final ChallengeSeznam s = new ChallengeSeznam();
-		chyba(() -> s.ulozVlastni(vlastni("360° of Prague")), "kopii");
-		chyba(() -> s.ulozVlastni(vlastni("  360° OF PRAGUE ")), "kopii");
-		chyba(() -> s.smazVlastni("360° of Prague"), "Šablonu nejde smazat");
-		chyba(() -> s.prejmenuj("360° of Prague", "Jiné"), "Šablonu nejde přejmenovat");
-		Assert.assertEquals(Sablony.praha360(), s.najdi("360° of Prague"));
+		chyba(() -> s.ulozVlastni(vlastni(Sablony.NAZEV_PRAHA)), "kopii");
+		chyba(() -> s.ulozVlastni(vlastni("  " + Sablony.NAZEV_PRAHA.toUpperCase(java.util.Locale.ROOT) + " ")), "kopii");
+		chyba(() -> s.smazVlastni(Sablony.NAZEV_PRAHA), "Šablonu nejde smazat");
+		chyba(() -> s.prejmenuj(Sablony.NAZEV_PRAHA, "Jiné"), "Šablonu nejde přejmenovat");
+		Assert.assertEquals(Sablony.praha360(), s.najdi(Sablony.NAZEV_PRAHA));
 	}
 
 	@Test
 	public void kopieSablonyMaJinyNazevAJeVlastni() {
 		final ChallengeSeznam s = new ChallengeSeznam();
-		final Challenge k1 = s.kopieSablony("360° of Prague");
-		Assert.assertEquals("360° of Prague (vlastní)", k1.nazev());
+		final Challenge k1 = s.kopieSablony(Sablony.NAZEV_PRAHA);
+		Assert.assertEquals(Sablony.NAZEV_PRAHA + " (vlastní)", k1.nazev());
 		Assert.assertEquals(Sablony.praha360().oblast(), k1.oblast());
 		Assert.assertEquals(Sablony.praha360().stred(), k1.stred());
-		final Challenge k2 = s.kopieSablony("360° of Prague");
-		Assert.assertEquals("360° of Prague (vlastní 2)", k2.nazev());
+		final Challenge k2 = s.kopieSablony(Sablony.NAZEV_PRAHA);
+		Assert.assertEquals(Sablony.NAZEV_PRAHA + " (vlastní 2)", k2.nazev());
 		Assert.assertEquals(2, s.vlastni().size());
-		Assert.assertEquals("šablona zůstala beze změny", Sablony.praha360(), s.najdi("360° of Prague"));
+		Assert.assertEquals("šablona zůstala beze změny", Sablony.praha360(), s.najdi(Sablony.NAZEV_PRAHA));
 		chyba(() -> s.kopieSablony("Neexistuje"), "neexistuje");
-		chyba(() -> s.kopieSablony("360° of Prague (vlastní)"), "neexistuje");
+		chyba(() -> s.kopieSablony(Sablony.NAZEV_PRAHA + " (vlastní)"), "neexistuje");
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class ChallengeSeznamTest {
 		Assert.assertNull(s.najdi("B"));
 		Assert.assertEquals(Arrays.asList("A", "Béčko", "C"), nazvy(s.vlastni()));
 		chyba(() -> s.prejmenuj("A", "c"), "už existuje");
-		chyba(() -> s.prejmenuj("A", "360° of Prague"), "už existuje");
+		chyba(() -> s.prejmenuj("A", Sablony.NAZEV_PRAHA), "už existuje");
 		chyba(() -> s.prejmenuj("Neexistuje", "X"), "neexistuje");
 		s.prejmenuj("A", "a");
 		Assert.assertEquals("změna jen velikosti písmen projde", "a", s.najdi("A").nazev());
@@ -133,8 +133,8 @@ public class ChallengeSeznamTest {
 	public void stropJdeNastavit() {
 		final ChallengeSeznam s = new ChallengeSeznam(Sablony.vse(), 2);
 		s.aktivuj("360° od domova");
-		s.aktivuj("360° of Prague");
-		chyba(() -> s.aktivuj("360° of the Czech Republic"), "nejvýš 2");
+		s.aktivuj(Sablony.NAZEV_PRAHA);
+		chyba(() -> s.aktivuj(Sablony.NAZEV_CESKO), "nejvýš 2");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -157,11 +157,11 @@ public class ChallengeSeznamTest {
 	@Test
 	public void aktivniSablonaAUpravenaVlastniZustavaAktivni() {
 		final ChallengeSeznam s = new ChallengeSeznam();
-		s.aktivuj("360° of Prague");
+		s.aktivuj(Sablony.NAZEV_PRAHA);
 		s.ulozVlastni(vlastni("X"));
 		s.aktivuj("x");
 		s.ulozVlastni(new Challenge("X", Typ.SEKTORY_360, Stred.souradnice(1, 2), OblastDef.zadna(), ZdrojPravidel.STATOR));
-		Assert.assertEquals(Arrays.asList("360° of Prague", "X"), nazvy(s.aktivni()));
+		Assert.assertEquals(Arrays.asList(Sablony.NAZEV_PRAHA, "X"), nazvy(s.aktivni()));
 		Assert.assertEquals(ZdrojPravidel.STATOR, s.aktivni().get(1).zdroj());
 	}
 
@@ -183,5 +183,15 @@ public class ChallengeSeznamTest {
 		s.aktivuj("Matice D/T");
 		Assert.assertEquals(Arrays.asList(Sablony.maticeDT()), s.aktivni());
 		chyba(() -> s.ulozVlastni(Sablony.maticeDT()), "nejde přepsat");
+	}
+
+	@Test
+	public void sablonyPoSKodemSeRozeznajiAKopieMajiRozlisitelnyNazev() {
+		final ChallengeSeznam s = new ChallengeSeznam();
+		Assert.assertTrue(s.jeSablona(Sablony.NAZEV_CESKO));
+		Assert.assertTrue(s.jeSablona(Sablony.NAZEV_PRAHA.toLowerCase(java.util.Locale.ROOT)));
+		Assert.assertFalse("starý název už šablonu neoznačuje", s.jeSablona("360° of Prague"));
+		Assert.assertEquals(Sablony.NAZEV_CESKO + " (vlastní)", s.kopieSablony(Sablony.NAZEV_CESKO).nazev());
+		chyba(() -> s.ulozVlastni(vlastni(Sablony.NAZEV_CESKO)), "kopii");
 	}
 }
