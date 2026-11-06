@@ -8,8 +8,8 @@ import java.util.Set;
 
 /**
  * Výběr „dalšího chybějícího“ pro challenge s políčky: nejdřív kandidát s nejbližším datem (kalendář), při shodě nebo bez data nejbližší zadanému bodu. Už vybraní se
- * v jednom kole přeskakují; po projití všech začne kolo znovu. Kolo pokračuje i přes nový výsledek téhož vstupu (přepočet podle jiného středu mapy, viz
- * {@link VysledekPolicek#sVstupem(Object)}); výsledek z jiného vstupu začne kolo od začátku.
+ * v jednom kole přeskakují; po projití všech začne kolo znovu nejbližším jiným kandidátem, než je poslední vybraný (na tom mapa už stojí). Kolo pokračuje i přes
+ * nový výsledek téhož vstupu (přepočet podle jiného středu mapy, viz {@link VysledekPolicek#sVstupem(Object)}); výsledek z jiného vstupu začne kolo od začátku.
  */
 public final class DalsiPolicko {
 
@@ -31,9 +31,16 @@ public final class DalsiPolicko {
 		}
 		KandidatPolicka k = nejlepsi(vysledek, lat, lon);
 		if (k == null) {
+			final String posledni = poradi.isEmpty() ? null : poradi.get(poradi.size() - 1).id();
 			vybrane.clear();
 			poradi.clear();
-			k = nejlepsi(vysledek, lat, lon);
+			if (posledni != null && vysledek.kandidati().size() > 1) {
+				vybrane.add(posledni);
+				k = nejlepsi(vysledek, lat, lon);
+				vybrane.clear();
+			} else {
+				k = nejlepsi(vysledek, lat, lon);
+			}
 		}
 		vybrane.add(k.id());
 		poradi.add(k);

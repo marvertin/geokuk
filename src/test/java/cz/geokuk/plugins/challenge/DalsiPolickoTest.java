@@ -138,4 +138,25 @@ public class DalsiPolickoTest {
 	public void vstupMusiBytZadany() {
 		v(k("A", 50.0, null)).sVstupem(null);
 	}
+
+	@Test
+	public void poObratuKolaSeNezustaneNaKandidatoviNaKterymStojime() {
+		final VysledekPolicek v = v(k("A", 50.0, null), k("B", 50.1, null), k("C", 50.5, null));
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertEquals("A", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("B", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("C", d.dalsi(v, 50.1, 14).id());
+		Assert.assertEquals("kolo se uzavřelo, stojíme na C, jde se na nejbližšího jiného", "B", d.dalsi(v, 50.5, 14).id());
+		Assert.assertEquals("pak dál podle nového kola, B už je v něm vybrané", "A", d.dalsi(v, 50.1, 14).id());
+		Assert.assertEquals("C, na kterém se kolo uzavřelo, je v novém kole zase k dispozici", "C", d.dalsi(v, 50.0, 14).id());
+	}
+
+	@Test
+	public void jedinyKandidatSeVraciVzdy() {
+		final VysledekPolicek v = v(k("A", 50.0, null));
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertEquals("A", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("A", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("A", d.dalsi(v, 50.0, 14).id());
+	}
 }
