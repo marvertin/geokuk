@@ -693,6 +693,32 @@ public class PlanovacChallengeTest {
 		Assert.assertEquals("zastaralý běh nic nepublikoval", 2, vysledkuDt("DT"));
 	}
 
+	@Test
+	public void sablonaMaticeDTSeAktivujeAPocita() throws Exception {
+		napojNaModel();
+		final Challenge sablona = Sablony.maticeDT();
+		planovac.keseNacteny(dtData());
+		zapni(sablona);
+		pockej(() -> model.vysledekPolicek(sablona) != null, "výsledek šablony");
+		final VysledekPolicek v = model.vysledekPolicek(sablona);
+		Assert.assertEquals(81, v.celkem());
+		Assert.assertEquals("27 splněných políček", 81 - 27, v.pocetChybejicich());
+		Assert.assertEquals("K1", f4(sablona, false).id());
+		Assert.assertEquals(81 - 27, model.pocetChybejicich(sablona));
+	}
+
+	@Test
+	public void upravenaKopieSablonyMaticeDTSePocita() throws Exception {
+		napojNaModel();
+		planovac.keseNacteny(dtData());
+		final Challenge kopie = model.kopieSablony(Sablony.maticeDT());
+		final Challenge upravena = model.ulozVlastni(new Challenge(kopie.nazev(), kopie.typ(), kopie.stred(), kopie.oblast(), ZdrojPravidel.STATOR));
+		zapni(upravena);
+		pockej(() -> model.vysledekPolicek(upravena) != null, "výsledek upravené kopie");
+		Assert.assertEquals(81 - 27, model.vysledekPolicek(upravena).pocetChybejicich());
+		Assert.assertNull("kopie D/T nemá výsledek sektorů", model.vysledek(upravena));
+	}
+
 	/** Splněná políčka a tři kandidáti P1, P2, P3 v jednom chybějícím políčku, ve vzdálenosti asi 0 m, 6,7 km a 13 km od výchozího středu. */
 	private static List<VstupKes> dataProF4() {
 		final List<VstupKes> data = new ArrayList<>();

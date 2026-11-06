@@ -33,7 +33,12 @@ public final class Sablony {
 		return new Challenge("360° of Prague", Typ.SEKTORY_360, Stred.listing("GC56R49"), OblastDef.sada(PRAHA), ZdrojPravidel.PGC);
 	}
 
+	/** Všech 81 kombinací obtížnosti a terénu po půlkách od 1 do 5, střed v domově. */
+	public static Challenge maticeDT() {
+		return new Challenge("Matice D/T", Typ.DT_MATICE, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC);
+	}
+
 	public static List<Challenge> vse() {
-		return Collections.unmodifiableList(Arrays.asList(od360Domova(), cesko360(), praha360()));
+		return Collections.unmodifiableList(Arrays.asList(od360Domova(), cesko360(), praha360(), maticeDT()));
 	}
 }

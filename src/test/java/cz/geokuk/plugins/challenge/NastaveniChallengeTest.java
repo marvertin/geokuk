@@ -49,7 +49,7 @@ public class NastaveniChallengeTest {
 		final NastaveniChallenge.Nacteno n = NastaveniChallenge.nacti(new MapoveUloziste());
 		Assert.assertFalse(n.zapnuto);
 		Assert.assertEquals(0, n.preskoceno);
-		Assert.assertEquals(3, n.seznam.vsechny().size());
+		Assert.assertEquals(4, n.seznam.vsechny().size());
 		Assert.assertTrue(n.seznam.aktivni().isEmpty());
 	}
 
@@ -151,7 +151,7 @@ public class NastaveniChallengeTest {
 		u.put("zapnuto", "true");
 		final NastaveniChallenge.Nacteno n = NastaveniChallenge.nacti(u);
 		Assert.assertFalse(n.zapnuto);
-		Assert.assertEquals(3, n.seznam.vsechny().size());
+		Assert.assertEquals(4, n.seznam.vsechny().size());
 		Assert.assertEquals("9", u.get("format"));
 	}
 
@@ -441,5 +441,24 @@ public class NastaveniChallengeTest {
 			Assert.assertFalse(kv[0], n.neznamyFormat);
 			Assert.assertEquals(kv[0], 1, n.preskoceno);
 		}
+	}
+
+	@Test
+	public void kopieSablonyMaticeDTSeUpravenaUlozyANacte() {
+		final MapoveUloziste u = new MapoveUloziste();
+		final ChallengeSeznam s = new ChallengeSeznam();
+		final Challenge kopie = s.kopieSablony("Matice D/T");
+		final Challenge upravena = new Challenge(kopie.nazev(), kopie.typ(), Stred.souradnice(49.5, 15.25), OblastDef.zadna(), ZdrojPravidel.STATOR, ZdrojeNalezu.VSECHNY);
+		s.ulozVlastni(upravena);
+		s.aktivuj("Matice D/T");
+		s.aktivuj(upravena.nazev());
+		NastaveniChallenge.uloz(s, true, u);
+		final NastaveniChallenge.Nacteno n = NastaveniChallenge.nacti(u);
+		Assert.assertEquals(0, n.preskoceno);
+		Assert.assertFalse(n.neznamyFormat);
+		Assert.assertEquals(Arrays.asList(upravena), n.seznam.vlastni());
+		Assert.assertEquals(Challenge.Typ.DT_MATICE, n.seznam.vlastni().get(0).typ());
+		Assert.assertEquals(Arrays.asList(Sablony.maticeDT(), upravena), n.seznam.aktivni());
+		Assert.assertTrue(n.zapnuto);
 	}
 }

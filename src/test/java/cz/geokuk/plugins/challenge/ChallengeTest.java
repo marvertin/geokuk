@@ -17,9 +17,9 @@ import cz.geokuk.plugins.challenge.Challenge.ZdrojPravidel;
 public class ChallengeTest {
 
 	@Test
-	public void sablonyJsouTriAVsechnyPrejdouPresMapu() {
+	public void sablonyJsouCtyriAVsechnyPrejdouPresMapu() {
 		final List<Challenge> vse = Sablony.vse();
-		Assert.assertEquals(3, vse.size());
+		Assert.assertEquals(4, vse.size());
 		for (final Challenge c : vse) {
 			Assert.assertEquals(c.nazev(), c, Challenge.zMapy(c.naMapu()));
 		}
@@ -101,5 +101,34 @@ public class ChallengeTest {
 		Assert.assertNotSame(Sablony.praha360(), Sablony.praha360());
 		Assert.assertEquals(Sablony.praha360(), Sablony.praha360());
 		Assert.assertNotEquals(Sablony.praha360(), Sablony.cesko360());
+	}
+
+	@Test
+	public void sablonaMaticeDT() {
+		final Challenge c = Sablony.maticeDT();
+		Assert.assertEquals("Matice D/T", c.nazev());
+		Assert.assertEquals(Typ.DT_MATICE, c.typ());
+		Assert.assertEquals(DruhStredu.DOMOV, c.stred().druh());
+		Assert.assertEquals(DruhOblasti.ZADNA, c.oblast().druh());
+		Assert.assertEquals(ZdrojPravidel.PGC, c.zdroj());
+		Assert.assertEquals(c, Challenge.zMapy(c.naMapu()));
+		Assert.assertNotSame(Sablony.maticeDT(), Sablony.maticeDT());
+		Assert.assertEquals(Sablony.maticeDT(), Sablony.maticeDT());
+	}
+
+	@Test
+	public void sablonyNemajiKalendar() {
+		for (final Challenge c : Sablony.vse()) {
+			Assert.assertNotEquals(c.nazev(), Typ.KALENDAR, c.typ());
+		}
+		Assert.assertTrue(Sablony.vse().contains(Sablony.maticeDT()));
+	}
+
+	@Test
+	public void sablonyMajiUnikatniNazvy() {
+		final java.util.Set<String> nazvy = new java.util.HashSet<>();
+		for (final Challenge c : Sablony.vse()) {
+			Assert.assertTrue(c.nazev(), nazvy.add(c.nazev().toLowerCase(java.util.Locale.ROOT)));
+		}
 	}
 }

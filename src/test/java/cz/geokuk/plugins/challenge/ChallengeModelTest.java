@@ -75,8 +75,8 @@ public class ChallengeModelTest {
 	@Test
 	public void pocatecniStav() {
 		Assert.assertFalse(model.jeZapnuto());
-		Assert.assertEquals(3, model.sablony().size());
-		Assert.assertEquals(3, model.vsechny().size());
+		Assert.assertEquals(4, model.sablony().size());
+		Assert.assertEquals(4, model.vsechny().size());
 		Assert.assertTrue(model.vlastni().isEmpty());
 		Assert.assertTrue(model.aktivni().isEmpty());
 		Assert.assertEquals(5, model.strop());
@@ -300,7 +300,7 @@ public class ChallengeModelTest {
 		});
 		m.initAfterInject();
 		Assert.assertFalse(m.jeZapnuto());
-		Assert.assertEquals(3, m.vsechny().size());
+		Assert.assertEquals(4, m.vsechny().size());
 		m.setZapnuto(true);
 		Assert.assertTrue("změna se v paměti projeví i bez uložení", m.jeZapnuto());
 	}

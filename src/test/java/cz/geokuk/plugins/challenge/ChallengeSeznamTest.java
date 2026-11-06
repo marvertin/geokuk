@@ -28,11 +28,11 @@ public class ChallengeSeznamTest {
 	}
 
 	@Test
-	public void zacinaSeTremiSablonamiBezVlastnichAktivnich() {
+	public void zacinaSeCtyrmiSablonamiBezVlastnichAktivnich() {
 		final ChallengeSeznam s = new ChallengeSeznam();
-		Assert.assertEquals(3, s.sablony().size());
+		Assert.assertEquals(4, s.sablony().size());
 		Assert.assertTrue(s.vlastni().isEmpty());
-		Assert.assertEquals(3, s.vsechny().size());
+		Assert.assertEquals(4, s.vsechny().size());
 		Assert.assertTrue(s.aktivni().isEmpty());
 		Assert.assertEquals(5, s.strop());
 		Assert.assertTrue(s.jeSablona("360° of Prague"));
@@ -163,5 +163,25 @@ public class ChallengeSeznamTest {
 		s.ulozVlastni(new Challenge("X", Typ.SEKTORY_360, Stred.souradnice(1, 2), OblastDef.zadna(), ZdrojPravidel.STATOR));
 		Assert.assertEquals(Arrays.asList("360° of Prague", "X"), nazvy(s.aktivni()));
 		Assert.assertEquals(ZdrojPravidel.STATOR, s.aktivni().get(1).zdroj());
+	}
+
+	@Test
+	public void kopieSablonyMaticeDTMaStejnyTypAJeVlastni() {
+		final ChallengeSeznam s = new ChallengeSeznam();
+		final Challenge k = s.kopieSablony("Matice D/T");
+		Assert.assertEquals("Matice D/T (vlastní)", k.nazev());
+		Assert.assertEquals(Challenge.Typ.DT_MATICE, k.typ());
+		Assert.assertEquals(Sablony.maticeDT().stred(), k.stred());
+		Assert.assertTrue(s.vlastni().contains(k));
+		Assert.assertEquals("šablona zůstala beze změny", Sablony.maticeDT(), s.najdi("Matice D/T"));
+		Assert.assertTrue(s.jeSablona("matice d/t"));
+	}
+
+	@Test
+	public void sablonuMaticeDTLzeAktivovatAVlastniNazevSeSablonouSeNesmiShodovat() {
+		final ChallengeSeznam s = new ChallengeSeznam();
+		s.aktivuj("Matice D/T");
+		Assert.assertEquals(Arrays.asList(Sablony.maticeDT()), s.aktivni());
+		chyba(() -> s.ulozVlastni(Sablony.maticeDT()), "nejde přepsat");
 	}
 }

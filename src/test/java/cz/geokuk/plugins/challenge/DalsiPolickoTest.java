@@ -159,4 +159,15 @@ public class DalsiPolickoTest {
 		Assert.assertEquals("A", d.dalsi(v, 50.0, 14).id());
 		Assert.assertEquals("A", d.dalsi(v, 50.0, 14).id());
 	}
+
+	@Test
+	public void sPresneDvemaKandidatyPoObratuKolaStridajiSe() {
+		final VysledekPolicek v = v(k("A", 50.0, null), k("B", 50.1, null));
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertEquals("A", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("B", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("stojíme na B, jde se na A", "A", d.dalsi(v, 50.1, 14).id());
+		Assert.assertEquals("B", d.dalsi(v, 50.0, 14).id());
+		Assert.assertEquals("A", d.dalsi(v, 50.1, 14).id());
+	}
 }
