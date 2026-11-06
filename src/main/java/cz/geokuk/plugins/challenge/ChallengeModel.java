@@ -76,6 +76,7 @@ public class ChallengeModel extends Model0 {
 
 	private void uloz() {
 		if (ukladaniZakazano) {
+			log.info("Nastavení challenge se nepřepisuje, je novější nebo obsahuje definici, které tento program nerozumí");
 			return;
 		}
 		try {

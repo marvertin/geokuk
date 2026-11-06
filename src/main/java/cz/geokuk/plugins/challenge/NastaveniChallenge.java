@@ -25,7 +25,7 @@ public final class NastaveniChallenge {
 		public final boolean zapnuto;
 		/** Kolik uložených definic se nepodařilo použít. */
 		public final int preskoceno;
-		/** Uložené nastavení je v novějším formátu; nesmí se přepisovat. */
+		/** Uložené nastavení je v novějším formátu nebo má definici s hodnotou, kterou tento program nezná; nesmí se přepisovat. */
 		public final boolean neznamyFormat;
 
 		Nacteno(final ChallengeSeznam seznam, final boolean zapnuto, final int preskoceno) {
@@ -122,6 +122,7 @@ public final class NastaveniChallenge {
 			log.warn("Nastavení challenge má neznámý formát {}, použijí se výchozí hodnoty", format);
 			return new Nacteno(seznam, false, 0, true);
 		}
+		boolean neznamaHodnota = false;
 		final Map<Integer, Map<String, String>> definice = new TreeMap<>();
 		final String zacatek = PREDPONA + cisloVerze(uloziste.get("verze")) + ".";
 		for (final String k : uloziste.klice()) {
@@ -155,6 +156,7 @@ public final class NastaveniChallenge {
 			} catch (final IllegalArgumentException | ChallengeChyba ex) {
 				log.warn("Uložená definice challenge č. {} se přeskočí: {}", e.getKey(), ex.getMessage());
 				preskoceno++;
+				neznamaHodnota |= ex instanceof NeznamaHodnota;
 			}
 		}
 		final String aktivni = uloziste.get("aktivni");
@@ -172,6 +174,6 @@ public final class NastaveniChallenge {
 				}
 			}
 		}
-		return new Nacteno(seznam, Boolean.parseBoolean(uloziste.get("zapnuto")), preskoceno);
+		return new Nacteno(seznam, Boolean.parseBoolean(uloziste.get("zapnuto")), preskoceno, neznamaHodnota);
 	}
 }

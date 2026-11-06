@@ -14,13 +14,18 @@ final class DatumyKese {
 
 	private DatumyKese() {}
 
+	/** Čas přesně 00:00 (s nulovými sekundami a zlomky). */
+	private static boolean jePulnoc(final String s) {
+		return s.substring(11).matches("00:00(:00(\\.0+)?)?Z");
+	}
+
 	/**
 	 * @param pasmo
 	 *            pásmo uživatele; má-li hodnota časovou zónu, datum se převede do něj, jinak se vezme datum, jak je zapsáno; null = vždy datum, jak je zapsáno
 	 * @return null, když hodnota chybí nebo nejde přečíst
 	 *
 	 *         Zóna je jen {@code Z} nebo {@code ±hh:mm}; posun {@code +0100} se bere jako zápis bez zóny. Zlomek sekundy delší než 9 číslic se zónou je nečitelný (null), bez zóny
-	 *         se přečte datum. Zdroj, který zapisuje lokální datum jako „…T00:00:00Z“, se v pásmu západně od UTC převede na předchozí den.
+	 *         se přečte datum. Čas přesně 00:00 se zónou {@code Z} je zápis samotného data a nepřevádí se.
 	 */
 	static LocalDate datum(final String hodnota, final ZoneId pasmo) {
 		if (hodnota == null) {
@@ -35,7 +40,7 @@ final class DatumyKese {
 			if (!m.matches()) {
 				return null;
 			}
-			if (m.group(2) != null && pasmo != null) {
+			if (m.group(2) != null && pasmo != null && !(m.group(2).equals("Z") && jePulnoc(s))) {
 				return OffsetDateTime.parse(s.replace(' ', 'T').substring(0, m.end(2))).atZoneSameInstant(pasmo).toLocalDate();
 			}
 			return LocalDate.parse(m.group(1));

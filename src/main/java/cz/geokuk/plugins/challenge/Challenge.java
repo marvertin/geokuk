@@ -234,10 +234,10 @@ public final class Challenge {
 	/** Opak {@link #naMapu()}; neúplná nebo nesmyslná data jsou {@link IllegalArgumentException}. */
 	public static Challenge zMapy(final Map<String, String> m) {
 		try {
-			final Typ typ = Typ.valueOf(povinne(m, "typ"));
-			final ZdrojPravidel zdroj = ZdrojPravidel.valueOf(povinne(m, "zdroj"));
+			final Typ typ = vycet(Typ.class, povinne(m, "typ"));
+			final ZdrojPravidel zdroj = vycet(ZdrojPravidel.class, povinne(m, "zdroj"));
 			final Stred stred;
-			switch (DruhStredu.valueOf(povinne(m, "stred"))) {
+			switch (vycet(DruhStredu.class, povinne(m, "stred"))) {
 			case DOMOV:
 				stred = Stred.domov();
 				break;
@@ -249,7 +249,7 @@ public final class Challenge {
 				break;
 			}
 			final OblastDef oblast;
-			switch (DruhOblasti.valueOf(povinne(m, "oblast"))) {
+			switch (vycet(DruhOblasti.class, povinne(m, "oblast"))) {
 			case ZADNA:
 				oblast = OblastDef.zadna();
 				break;
@@ -261,9 +261,17 @@ public final class Challenge {
 				break;
 			}
 			final String nalezy = m.get("nalezy");
-			return new Challenge(povinne(m, "nazev"), typ, stred, oblast, zdroj, nalezy == null || nalezy.isEmpty() ? ZdrojeNalezu.ZAPNUTE : ZdrojeNalezu.valueOf(nalezy));
+			return new Challenge(povinne(m, "nazev"), typ, stred, oblast, zdroj, nalezy == null || nalezy.isEmpty() ? ZdrojeNalezu.ZAPNUTE : vycet(ZdrojeNalezu.class, nalezy));
 		} catch (final NumberFormatException e) {
 			throw new IllegalArgumentException("Neplatné souřadnice středu: " + e.getMessage(), e);
+		}
+	}
+
+	private static <E extends Enum<E>> E vycet(final Class<E> trida, final String hodnota) {
+		try {
+			return Enum.valueOf(trida, hodnota);
+		} catch (final IllegalArgumentException e) {
+			throw new NeznamaHodnota("Neznámá hodnota " + trida.getSimpleName() + ": " + hodnota);
 		}
 	}
 

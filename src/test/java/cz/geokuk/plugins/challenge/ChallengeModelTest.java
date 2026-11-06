@@ -372,4 +372,22 @@ public class ChallengeModelTest {
 		Assert.assertNull(u.get("zapnuto"));
 		Assert.assertEquals("x", u.get("budouci"));
 	}
+
+	@Test
+	public void definiceSNeznamymTypemSeUlozenimNesmaze() {
+		final MapoveUloziste u = new MapoveUloziste();
+		u.put("format", "1");
+		u.put("verze", "3");
+		u.put("definice.3.0.nazev", "Budoucí");
+		u.put("definice.3.0.typ", "BUDOUCI_TYP");
+		u.put("definice.3.0.zdroj", "PGC");
+		u.put("definice.3.0.stred", "DOMOV");
+		u.put("definice.3.0.oblast", "ZADNA");
+		final java.util.Map<String, String> pred = new java.util.LinkedHashMap<>(u.m);
+		final ChallengeModel m = novyModel(u);
+		m.initAfterInject();
+		m.ulozVlastni(vlastni("Nová"));
+		m.setZapnuto(true);
+		Assert.assertEquals("uložené nastavení zůstalo beze změny", pred, u.m);
+	}
 }
