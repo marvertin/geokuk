@@ -66,18 +66,7 @@ public class JChallengeDialog extends JMyDialog0 {
 		obsah.setBorder(BorderFactory.createEmptyBorder(8, 8, 0, 8));
 		add(obsah, BorderLayout.CENTER);
 		seznam.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		seznam.setCellRenderer(new DefaultListCellRenderer() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Component getListCellRendererComponent(final JList<?> l, final Object v, final int i, final boolean sel, final boolean fokus) {
-				final Challenge c = (Challenge) v;
-				final JLabel s = (JLabel) super.getListCellRendererComponent(l, c.nazev(), i, sel, fokus);
-				s.setText((model != null && model.jeAktivni(c) ? "● " : "   ") + c.nazev() + (model != null && model.jeSablona(c) ? "  (šablona)" : "") + (model != null && !model.jeVUi(c) ? "  (nedostupný)" : ""));
-				s.setToolTipText(FormularDefinice.souhrn(c));
-				return s;
-			}
-		});
+		seznam.setCellRenderer(new PolozkaChallengeRenderer(() -> model));
 		seznam.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
 				naplnFormular(seznam.getSelectedValue());

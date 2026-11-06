@@ -352,4 +352,17 @@ public class JPopupPlanovaceTest {
 		}
 		Assert.assertFalse("popup se před dialogem zavře", popup.jeOtevreno());
 	}
+
+	@Test
+	public void dlouhyNazevChallengeNerozsiriPopupAVeZkracenemTvaruMaTooltip() {
+		final JPopupPlanovace.Obsah o = new JPopupPlanovace.Obsah();
+		final String text = TextyPopupuPlanovace.nadpis(Sablony.cesko360());
+		o.nadpis.setPlnyText(text);
+		Assert.assertEquals("getText je plný", text, o.nadpis.getText());
+		Assert.assertTrue(o.nadpis.getPreferredSize().width <= JPopupPlanovace.NEJVETSI_SIRKA_NADPISU);
+		o.nadpis.setSize(o.nadpis.getPreferredSize());
+		Assert.assertTrue("zkrácený text: " + text.length(), o.nadpis.getToolTipText(null) != null || o.nadpis.getPreferredSize().width >= o.nadpis.getFontMetrics(o.nadpis.getFont()).stringWidth(text));
+		o.nadpis.setSize(150, 20);
+		Assert.assertEquals(text, o.nadpis.getToolTipText(null));
+	}
 }

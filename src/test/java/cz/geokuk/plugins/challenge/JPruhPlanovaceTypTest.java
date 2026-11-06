@@ -64,6 +64,6 @@ public class JPruhPlanovaceTypTest {
 		Assert.assertEquals("Kalendář", typ.getText());
 		Assert.assertTrue(typ.getFont() + ": " + typ.getFontMetrics(typ.getFont()).stringWidth("Kalendář") + " > " + typ.getWidth(),
 				typ.getFontMetrics(typ.getFont()).stringWidth("Kalendář") <= typ.getWidth());
-		Assert.assertEquals("Typ challenge: Kalendář", typ.getToolTipText());
+		Assert.assertTrue(typ.getToolTipText(), typ.getToolTipText().startsWith("Typ challenge: Kalendář"));
 	}
 }

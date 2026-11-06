@@ -210,8 +210,8 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 			odznak.nastav(stav.badge() < 0 ? "…" : Integer.toString(stav.badge()));
 			kandidati.setSelected(stav.jenKandidati());
 			typ.setText(stav.stitekTypu());
-			typ.setToolTipText("Typ challenge: " + stav.stitekTypu());
-			odznak.setToolTipText(popisChybejicich(stav.typ()));
+			typ.setToolTipText("Typ challenge: " + stav.stitekTypu() + " – " + stav.challenge().nazev());
+			odznak.setToolTipText(popisChybejicich(stav.typ()) + " – " + stav.challenge().nazev());
 			kandidati.setToolTipText(popisKandidatu(stav.typ()));
 		}
 		if (vidim != isVisible()) {

@@ -230,10 +230,13 @@ public class JPopupPlanovace extends JSlide0 implements AfterInjectInit {
 	}
 
 	/** Vlastní obsah popupu; barvy a písmo z aktuálního vzhledu. */
+	static final int NEJVETSI_SIRKA_NADPISU = 380;
+
 	static final class Obsah extends JPanel {
 		private static final long serialVersionUID = 1L;
 
-		final JLabel nadpis = new JLabel();
+		/** Název challenge může být dlouhý (šablony mají GC kód a anglický název): zkrátí se „…“ a plný je v tooltipu. */
+		final cz.geokuk.util.gui.JZkracenyLabel nadpis = new cz.geokuk.util.gui.JZkracenyLabel(NEJVETSI_SIRKA_NADPISU);
 		final JButton nastaveni = new JButton("Nastavení…");
 		final JLabel typ = new JLabel();
 		final JLabel stred = new JLabel();
@@ -331,7 +334,7 @@ public class JPopupPlanovace extends JSlide0 implements AfterInjectInit {
 
 		/** Společná hlavička; vrátí false, když výsledek ještě není a ukáže se jen průběh. */
 		private boolean zahlavi(final Challenge c, final boolean maVysledek, final StavPredpoctu stav, final boolean jenKandidati) {
-			nadpis.setText(TextyPopupuPlanovace.nadpis(c));
+			nadpis.setPlnyText(TextyPopupuPlanovace.nadpis(c));
 			typ.setText("Typ: " + StitkyPruhu.typ(c.typ()) + "    Pravidla: " + TextyPopupuPlanovace.pravidla(c.zdroj()));
 			stred.setText("Střed: " + TextyPopupuPlanovace.stred(c.stred()));
 			stred.setVisible(c.typ() == Challenge.Typ.SEKTORY_360);

@@ -222,10 +222,10 @@ public class JPruhPlanovaceTest {
 		model.aktivuj(dt);
 		model.setZapnuto(true);
 		final javax.swing.AbstractButton odznak = najdiOdznak();
-		Assert.assertEquals("Chybějící políčka D/T", odznak.getToolTipText());
+		Assert.assertEquals("Chybějící políčka D/T – DT", odznak.getToolTipText());
 		model.aktivuj(Sablony.cesko360());
 		model.setZobrazena(Sablony.cesko360());
-		Assert.assertEquals("Chybějící sektory", odznak.getToolTipText());
+		Assert.assertEquals("Chybějící sektory – " + Sablony.cesko360().nazev(), odznak.getToolTipText());
 	}
 
 	private javax.swing.AbstractButton najdiOdznak() {
@@ -235,5 +235,21 @@ public class JPruhPlanovaceTest {
 			}
 		}
 		throw new AssertionError("odznak");
+	}
+
+	@Test
+	public void tooltipTypuAOdznakuMaNazevZobrazeneChallenge() throws Exception {
+		priprav();
+		model.aktivuj(Sablony.cesko360());
+		model.setZapnuto(true);
+		final javax.swing.AbstractButton odznak = najdiOdznak();
+		Assert.assertTrue(odznak.getToolTipText(), odznak.getToolTipText().endsWith(" – " + Sablony.cesko360().nazev()));
+		boolean typSNazvem = false;
+		for (final Component c : pruh.getComponents()) {
+			if (c instanceof javax.swing.JLabel && ((javax.swing.JLabel) c).getToolTipText() != null && ((javax.swing.JLabel) c).getToolTipText().contains(Sablony.cesko360().nazev())) {
+				typSNazvem = true;
+			}
+		}
+		Assert.assertTrue("štítek typu má v tooltipu název", typSNazvem);
 	}
 }

@@ -50,14 +50,7 @@ public class JToast extends JSlide0 {
 
 	/** Text zkrácený o konec s třemi tečkami, aby se vešel do {@code sirka}; text, který se vejde, beze změny. */
 	static String zkrat(final String text, final FontMetrics fm, final int sirka) {
-		if (fm.stringWidth(text) <= sirka) {
-			return text;
-		}
-		int n = text.length();
-		while (n > 1 && fm.stringWidth(text.substring(0, n) + "…") > sirka) {
-			n--;
-		}
-		return text.substring(0, n) + "…";
+		return cz.geokuk.util.gui.ZkraceniTextu.zkrat(text, fm, sirka);
 	}
 
 	@Override

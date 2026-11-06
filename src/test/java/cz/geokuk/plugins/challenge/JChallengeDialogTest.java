@@ -330,4 +330,29 @@ public class JChallengeDialogTest {
 			}
 		});
 	}
+
+	/** Seznam nemá vodorovný posuvník a přípona „(šablona)“ je u každé šablony vidět. */
+	@Test
+	public void seznamBezPosuvnikuSPriponouSablony() throws Exception {
+		SwingUtilities.invokeAndWait(() -> {
+			dialog.pack();
+			dialog.setSize(dialog.getWidth(), dialog.getHeight());
+			dialog.validate();
+			final javax.swing.JScrollPane sp = najdi(dialog.getContentPane(), javax.swing.JScrollPane.class, new ArrayList<javax.swing.JScrollPane>()).get(0);
+			final JList<?> seznam = (JList<?>) sp.getViewport().getView();
+			Assert.assertFalse("vodorovný posuvník", sp.getHorizontalScrollBar().isVisible());
+			final int sirka = sp.getViewport().getWidth();
+			for (int i = 0; i < seznam.getModel().getSize(); i++) {
+				final JLabel l = (JLabel) vykresli(seznam, i);
+				l.setSize(sirka, l.getPreferredSize().height);
+				Assert.assertEquals("položka " + i, 1, l.getPreferredSize().width);
+				Assert.assertTrue(l.getText(), l.getText().contains("(šablona)"));
+			}
+		});
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static Component vykresli(final JList<?> seznam, final int i) {
+		return ((javax.swing.ListCellRenderer) seznam.getCellRenderer()).getListCellRendererComponent(seznam, seznam.getModel().getElementAt(i), i, false, false);
+	}
 }
