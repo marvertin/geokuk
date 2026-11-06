@@ -17,6 +17,7 @@ public final class KesVstup implements VstupKes, VstupDT, VstupKalendar {
 	private final Kesoid kesoid;
 	private final Wpt hlavni;
 	private final ZoneId pasmo;
+	private String typ;
 
 	private KesVstup(final Kesoid kesoid, final Wpt hlavni, final ZoneId pasmo) {
 		this.kesoid = kesoid;
@@ -132,8 +133,11 @@ public final class KesVstup implements VstupKes, VstupDT, VstupKalendar {
 
 	/** Typ keše podle gc.com (hlavní waypoint ho nese v symbolu, i u nalezených keší). */
 	private String typ() {
-		final String sym = hlavni.getSym();
-		return sym == null ? "" : sym.trim().toLowerCase(java.util.Locale.ROOT);
+		if (typ == null) {
+			final String sym = hlavni.getSym();
+			typ = sym == null ? "" : sym.trim().toLowerCase(java.util.Locale.ROOT);
+		}
+		return typ;
 	}
 
 	@Override

@@ -19,6 +19,8 @@ public class DatumyKeseTest {
 		Assert.assertEquals(LocalDate.of(2026, 3, 14), DatumyKese.datum("  2026-03-14T23:30  ", PRAHA));
 		Assert.assertEquals(LocalDate.of(2026, 3, 14), DatumyKese.datum("20260314", PRAHA));
 		Assert.assertEquals(LocalDate.of(2026, 3, 14), DatumyKese.datum("202603142330", PRAHA));
+		Assert.assertEquals("nejdelší čtená číselná podoba", LocalDate.of(2026, 3, 14), DatumyKese.datum("20260314233000", PRAHA));
+		Assert.assertNull("příliš dlouhé", DatumyKese.datum("202603142330000", PRAHA));
 	}
 
 	@Test

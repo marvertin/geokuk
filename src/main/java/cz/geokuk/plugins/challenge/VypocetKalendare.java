@@ -44,6 +44,7 @@ public final class VypocetKalendare {
 			throw new IllegalArgumentException("Bod mimo rozsah souřadnic: " + lat + ", " + lon);
 		}
 		final int max = pravidla.typy().maxKandidatu();
+		final boolean vyroci = pravidla.kandidati() == PravidlaKalendare.Kandidati.EVENTY_A_VYROCI;
 		final Set<MonthDay> nalezene = new HashSet<>();
 		final Map<MonthDay, OmezenaFronta> kandidatiDne = new HashMap<>();
 		for (final VstupKalendar k : kese) {
@@ -55,7 +56,7 @@ public final class VypocetKalendare {
 				if (k.datumNalezu() != null) {
 					nalezene.add(MonthDay.from(k.datumNalezu()));
 				}
-			} else if (PravidlaTypu.hledatelna(k) && k.datum() != null) {
+			} else if (PravidlaTypu.hledatelna(k) && (vyroci || k.event())) {
 				pridejKandidata(pravidla, dnes, max, lat, lon, k, kandidatiDne);
 			}
 		}
@@ -79,6 +80,9 @@ public final class VypocetKalendare {
 	private static void pridejKandidata(final PravidlaKalendare pravidla, final LocalDate dnes, final int max, final double lat, final double lon, final VstupKalendar k,
 			final Map<MonthDay, OmezenaFronta> kandidatiDne) {
 		final LocalDate datum = k.datum();
+		if (datum == null) {
+			return;
+		}
 		final MonthDay den = MonthDay.from(datum);
 		final int dni;
 		if (k.event()) {
