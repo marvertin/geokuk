@@ -224,6 +224,22 @@ public class VypocetMaticeTest {
 	}
 
 	@Test
+	public void priUplneShodePriOrezuRozhodujeKodKese() {
+		final PravidlaTypu p = PravidlaTypu.proMatici().sMaxKandidatu(1);
+		Assert.assertEquals("A", VypocetMatice.spocti(p, 50, 14, Arrays.asList(new K(2, 2, false).id("B"), new K(2, 2, false).id("A"))).kandidati().get(0).id());
+		Assert.assertEquals("A", VypocetMatice.spocti(p, 50, 14, Arrays.asList(new K(2, 2, false).id("A"), new K(2, 2, false).id("B"))).kandidati().get(0).id());
+	}
+
+	@Test
+	public void kandidatSNeplatnymiSouradnicemiSeNenabizi() {
+		for (final double lat : new double[] { Double.NaN, Double.POSITIVE_INFINITY, 95, -91 }) {
+			Assert.assertTrue(String.valueOf(lat), spocti(new K(2, 2, false).misto(lat)).kandidati().isEmpty());
+		}
+		Assert.assertEquals("nález bez souřadnic vyplní políčko", 80, spocti(new K(2, 2, true).misto(Double.NaN)).pocetChybejicich());
+		Assert.assertEquals(1, spocti(new K(2, 2, false).misto(50)).kandidati().size());
+	}
+
+	@Test
 	public void kandidatPoOrezuNeniVNalezenemPolicku() {
 		final VysledekPolicek v = VypocetMatice.spocti(PravidlaTypu.proMatici().sMaxKandidatu(1), 50, 14, Arrays.asList(new K(2, 2, false).id("A"), new K(2, 2, true)));
 		Assert.assertTrue(v.kandidati().isEmpty());

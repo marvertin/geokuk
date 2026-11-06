@@ -50,6 +50,7 @@ public final class KesVstup implements VstupKes, VstupDT, VstupKalendar {
 
 	/** Jako {@link #zKesoidu(java.util.List)} s pásmem pro datum nálezu. */
 	public static java.util.Collection<KesVstup> zKesoidu(final java.util.List<? extends Kesoid> kesoidy, final ZoneId pasmo) {
+		Objects.requireNonNull(kesoidy, "kesoidy");
 		Objects.requireNonNull(pasmo, "pasmo");
 		return new java.util.AbstractCollection<KesVstup>() {
 			@Override

@@ -312,6 +312,15 @@ public class VypocetKalendareTest {
 		Assert.assertEquals(v.kandidati().get(0).stitek(), v.kandidati().get(0).popis());
 	}
 
+	@Test
+	public void kandidatSNeplatnymiSouradnicemiSeNenabizi() {
+		final PravidlaKalendare p = PravidlaKalendare.vychozi().sKandidaty(PravidlaKalendare.Kandidati.EVENTY_A_VYROCI);
+		for (final double lat : new double[] { Double.NaN, Double.POSITIVE_INFINITY, 95, -91 }) {
+			Assert.assertTrue(String.valueOf(lat), spocti(p, K.event("E", LocalDate.of(2026, 12, 24)).misto(lat), K.keska("K", LocalDate.of(2010, 12, 24)).misto(lat)).kandidati().isEmpty());
+		}
+		Assert.assertEquals(1, spocti(p, K.event("E", LocalDate.of(2026, 12, 24)).misto(50)).kandidati().size());
+	}
+
 	@Test(expected = NullPointerException.class)
 	public void nullPravidla() {
 		VypocetKalendare.spocti(null, DNES, 50, 14, new ArrayList<K>());
@@ -355,10 +364,10 @@ public class VypocetKalendareTest {
 	}
 
 	@Test
-	public void priShodeDataPriOrezuZustavaPrvniZVstupu() {
+	public void priUplneShodePriOrezuRozhodujeKodKese() {
 		final PravidlaKalendare p = PravidlaKalendare.vychozi().sTypy(PravidlaTypu.proKalendar().sMaxKandidatu(1));
-		final VysledekPolicek v = spocti(p, K.event("B", LocalDate.of(2026, 12, 24)), K.event("A", LocalDate.of(2026, 12, 24)));
-		Assert.assertEquals(Arrays.asList("B"), idKandidatu(v));
+		Assert.assertEquals(Arrays.asList("A"), idKandidatu(spocti(p, K.event("B", LocalDate.of(2026, 12, 24)), K.event("A", LocalDate.of(2026, 12, 24)))));
+		Assert.assertEquals(Arrays.asList("A"), idKandidatu(spocti(p, K.event("A", LocalDate.of(2026, 12, 24)), K.event("B", LocalDate.of(2026, 12, 24)))));
 	}
 
 	@Test

@@ -197,6 +197,16 @@ public class KesVstupTest {
 	}
 
 	@Test(expected = NullPointerException.class)
+	public void nullSeznamKesoiduSelzeHned() {
+		KesVstup.zKesoidu(null);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void nullSeznamKesoiduSPasmemSelzeHned() {
+		KesVstup.zKesoidu(null, ZoneId.of("UTC"));
+	}
+
+	@Test(expected = NullPointerException.class)
 	public void nullPasmo() {
 		KesVstup.z(kes("GC1", EKesVztah.NORMAL, "Traditional Cache", 50.1, 14.2), null);
 	}

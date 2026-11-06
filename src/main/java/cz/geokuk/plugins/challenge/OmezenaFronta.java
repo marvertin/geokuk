@@ -22,7 +22,9 @@ final class OmezenaFronta {
 		}
 	}
 
-	private static final Comparator<Kandidat> PORADI = Comparator.comparingInt((final Kandidat k) -> k.dni).thenComparingDouble(k -> k.vzdalenost);
+	/** Datum, vzdálenost a při úplné shodě kód keše, takže výběr nezávisí na pořadí vstupu. */
+	private static final Comparator<Kandidat> PORADI = Comparator.comparingInt((final Kandidat k) -> k.dni).thenComparingDouble(k -> k.vzdalenost)
+			.thenComparing((final Kandidat k) -> k.keska.id());
 
 	private final int max;
 	private final PriorityQueue<Kandidat> nejhorsiNahore = new PriorityQueue<>(PORADI.reversed());
@@ -31,23 +33,27 @@ final class OmezenaFronta {
 		this.max = max;
 	}
 
+	/** Keš s neplatnými souřadnicemi se nepřidá. */
 	void pridej(final VstupKes keska, final int dni, final double lat, final double lon) {
+		if (!VypocetSektoru.jePlatnyStred(keska.lat(), keska.lon())) {
+			return;
+		}
 		final double vzdalenost = Geodezie.vzdalenostKoule(lat, lon, keska.lat(), keska.lon());
 		if (nejhorsiNahore.size() < max) {
 			nejhorsiNahore.add(new Kandidat(keska, dni, vzdalenost));
 			return;
 		}
-		final Kandidat nejhorsi = nejhorsiNahore.peek();
-		if (dni < nejhorsi.dni || dni == nejhorsi.dni && vzdalenost < nejhorsi.vzdalenost) {
+		final Kandidat novy = new Kandidat(keska, dni, vzdalenost);
+		if (PORADI.compare(novy, nejhorsiNahore.peek()) < 0) {
 			nejhorsiNahore.poll();
-			nejhorsiNahore.add(new Kandidat(keska, dni, vzdalenost));
+			nejhorsiNahore.add(novy);
 		}
 	}
 
-	/** Od nejlepšího; při úplné shodě podle kódu keše. */
+	/** Od nejlepšího. */
 	List<Kandidat> serazene() {
 		final List<Kandidat> v = new ArrayList<>(nejhorsiNahore);
-		Collections.sort(v, PORADI.thenComparing((final Kandidat k) -> k.keska.id()));
+		Collections.sort(v, PORADI);
 		return v;
 	}
 }
