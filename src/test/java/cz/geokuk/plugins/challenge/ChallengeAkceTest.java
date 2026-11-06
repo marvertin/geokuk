@@ -103,15 +103,13 @@ public class ChallengeAkceTest {
 	}
 
 	@Test
-	public void zobrazenaJePrvniAktivni() {
+	public void zobrazenaJeJedinaAktivni() {
 		Assert.assertNull(model.zobrazena());
 		model.aktivuj(Sablony.cesko360());
 		Assert.assertEquals(Sablony.cesko360(), model.zobrazena());
 		final Challenge druha = model.ulozVlastni(new Challenge("Druhá", Challenge.Typ.SEKTORY_360, Challenge.Stred.souradnice(50, 14), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.PGC));
 		model.aktivuj(druha);
-		Assert.assertEquals("první zapnutá, ne poslední", Sablony.cesko360(), model.zobrazena());
-		model.deaktivuj(Sablony.cesko360());
-		Assert.assertEquals(druha, model.zobrazena());
+		Assert.assertEquals("zapnutí druhé vypnulo první", druha, model.zobrazena());
 		model.deaktivuj(druha);
 		Assert.assertNull(model.zobrazena());
 	}
@@ -197,18 +195,17 @@ public class ChallengeAkceTest {
 	}
 
 	@Test
-	public void akceAFiltrPracujiSChallengeKterouUkazujePruh() throws Exception {
+	public void akceAFiltrPracujiSAktivniChallenge() throws Exception {
 		model.aktivuj(Sablony.cesko360());
 		model.aktivuj(Sablony.praha360());
 		model.setZapnuto(true);
-		model.setZobrazena(Sablony.praha360());
 		Assert.assertEquals(Sablony.praha360(), model.zobrazena());
 		kandidati.onSlectedChange(true);
-		Assert.assertEquals("filtr patří zobrazené challenge, ne první aktivní", Sablony.praha360(), model.jenKandidatiPro());
+		Assert.assertEquals("filtr patří aktivní challenge", Sablony.praha360(), model.jenKandidatiPro());
 	}
 
 	@Test
-	public void dalsiJdeNaChallengeKterouUkazujePruhAFiltrSeZobrazujeProNi() throws Exception {
+	public void dalsiJdeNaAktivniChallengeAFiltrSeZobrazujeProNi() throws Exception {
 		model.aktivuj(Sablony.cesko360());
 		model.aktivuj(Sablony.praha360());
 		model.setZapnuto(true);
@@ -217,14 +214,12 @@ public class ChallengeAkceTest {
 		model.nastavVysledek(Sablony.praha360(), new VysledekSektoru(new java.util.BitSet(360), new java.util.BitSet(360), new VysledekSektoru.Kandidati[360], 0, kandidati2));
 		SwingUtilities.invokeAndWait(() -> {});
 		final PlanovacChallenge p = planovac();
-		Assert.assertNull("zobrazená je první, ta výsledek nemá", ChallengeAkce.prejdi(model, p, true));
-		model.setZobrazena(Sablony.praha360());
-		Assert.assertEquals("po přepnutí jde další na druhou challenge", "GC9", ChallengeAkce.prejdi(model, p, true).id());
+		Assert.assertEquals("další jde na aktivní challenge", "GC9", ChallengeAkce.prejdi(model, p, true).id());
 		Assert.assertFalse("filtr ještě není zapnutý", kandidati.isSelected());
 		model.setJenKandidatiPro(Sablony.praha360());
-		Assert.assertTrue("přepínač filtru ukazuje stav zobrazené challenge", kandidati.isSelected());
-		model.setZobrazena(Sablony.cesko360());
-		Assert.assertFalse("pro první challenge filtr zapnutý není", kandidati.isSelected());
+		Assert.assertTrue("přepínač filtru ukazuje stav aktivní challenge", kandidati.isSelected());
+		model.aktivuj(Sablony.cesko360());
+		Assert.assertFalse("zapnutí jiné challenge vypne i filtr", kandidati.isSelected());
 	}
 
 	private Challenge kalendar() {

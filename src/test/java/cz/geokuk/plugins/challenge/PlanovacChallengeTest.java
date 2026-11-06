@@ -206,7 +206,7 @@ public class PlanovacChallengeTest {
 	}
 
 	@Test
-	public void vicAktivnichSeCitaPostupneAKazdaMaSvujVysledek() throws Exception {
+	public void prepnutiAktivniChallengePocitaVzdyJenAktivniASvujVysledek() throws Exception {
 		napojNaModel();
 		oblasti.put("o1", new OblastPolygony("o1", "v1", Collections.singletonList(new Cast(OblastPolygonyTest.ctverec(49.4, 13.4, 50.0, 14.4), Collections.<Okraj> emptyList()))));
 		final Challenge a = model.ulozVlastni(vlastni("A", Stred.domov(), OblastDef.zadna()));
@@ -214,33 +214,31 @@ public class PlanovacChallengeTest {
 		final Challenge d = model.ulozVlastni(vlastni("C", Stred.souradnice(50.4, 14.9), OblastDef.zadna()));
 		final List<VypocetSektoruTest.Kes> data = kese(5000, 7);
 		planovac.keseNacteny(data);
-		zapni(a, b, d);
-		pockej(() -> model.vysledek(a) != null && model.vysledek(b) != null && model.vysledek(d) != null, "tři výsledky");
+		zapni(a);
+		pockej(() -> model.vysledek(a) != null, "výsledek A");
+		javax.swing.SwingUtilities.invokeAndWait(() -> model.aktivuj(b));
+		pockej(() -> model.vysledek(b) != null, "výsledek B");
+		Assert.assertNull("vypnutá A nemá výsledek", model.vysledek(a));
 		Assert.assertEquals(VypocetSektoru.spocti(ZdrojPravidel.PGC, 49.7, 13.9, oblasti.get("o1"), Collections.<String> emptySet(), data).chybejici(), model.vysledek(b).chybejici());
-		Assert.assertNotEquals(model.vysledek(a).chybejici(), model.vysledek(d).chybejici());
-		// Předpočty běžely postupně: stav další challenge se začal hlásit až po dokončení předchozí.
-		final List<String> poradi = new ArrayList<>();
-		for (final ChallengeZmenenyEvent e : udalosti) {
-			if (e.druh() == ChallengeZmenenyEvent.Druh.PREDPOCET && model.stavPredpoctu(e.challenge()) != null) {
-				poradi.add(e.challenge().nazev());
-			}
-		}
-		Assert.assertEquals("A", poradi.get(0));
-		Assert.assertTrue(poradi.indexOf("B") > poradi.lastIndexOf("A"));
-		Assert.assertTrue(poradi.indexOf("C") > poradi.lastIndexOf("B"));
+		javax.swing.SwingUtilities.invokeAndWait(() -> model.aktivuj(d));
+		pockej(() -> model.vysledek(d) != null, "výsledek C");
+		Assert.assertNull(model.vysledek(b));
+		Assert.assertNotEquals(VypocetSektoru.spocti(ZdrojPravidel.PGC, LAT, LON, null, Collections.<String> emptySet(), data).chybejici(), model.vysledek(d).chybejici());
+		Assert.assertEquals(Collections.singletonList(d), model.aktivni());
 	}
 
 	@Test
-	public void definiceBezDatOblastiMaStavChybaAOstatniSeSpoctou() throws Exception {
+	public void definiceBezDatOblastiMaStavChybaAPoPrepnutiSeDobraSpocte() throws Exception {
 		napojNaModel();
 		final Challenge dobra = model.ulozVlastni(vlastni("Dobrá", Stred.domov(), OblastDef.zadna()));
 		final Challenge spatna = model.ulozVlastni(vlastni("Špatná", Stred.domov(), OblastDef.stat("stat-cz")));
 		planovac.keseNacteny(kese(500, 8));
-		zapni(spatna, dobra);
-		pockej(() -> model.vysledek(dobra) != null, "výsledek dobré");
+		zapni(spatna);
 		pockej(() -> model.stavPredpoctu(spatna).faze() == StavPredpoctu.Faze.CHYBA, "chyba špatné");
 		Assert.assertTrue(model.stavPredpoctu(spatna).chyba(), model.stavPredpoctu(spatna).chyba().contains("stat-cz"));
 		Assert.assertNull(model.vysledek(spatna));
+		javax.swing.SwingUtilities.invokeAndWait(() -> model.aktivuj(dobra));
+		pockej(() -> model.vysledek(dobra) != null, "výsledek dobré");
 	}
 
 	@Test
@@ -320,7 +318,7 @@ public class PlanovacChallengeTest {
 	}
 
 	@Test
-	public void predpoctyNebeziSoucasne() throws Exception {
+	public void predpoctyPriRychlemPrepinaniNebeziSoucasne() throws Exception {
 		final java.util.concurrent.atomic.AtomicInteger bezi = new java.util.concurrent.atomic.AtomicInteger();
 		final java.util.concurrent.atomic.AtomicInteger nejvic = new java.util.concurrent.atomic.AtomicInteger();
 		final Oblast o = new OblastPolygony("o1", "v1", Collections.singletonList(new Cast(OblastPolygonyTest.ctverec(49.0, 13.0, 51.0, 15.0), Collections.<Okraj> emptyList())));
@@ -341,15 +339,12 @@ public class PlanovacChallengeTest {
 			c[i] = model.ulozVlastni(vlastni("C" + i, Stred.souradnice(49.5 + i * 0.1, 14.0), OblastDef.stat("o1")));
 		}
 		planovac.keseNacteny(kese(300, 1));
-		zapni(c);
-		pockej(() -> {
-			for (final Challenge d : c) {
-				if (model.vysledek(d) == null) {
-					return false;
-				}
-			}
-			return true;
-		}, "všechny výsledky");
+		zapni(c[0]);
+		for (int i = 1; i < c.length; i++) {
+			final Challenge dalsi = c[i];
+			javax.swing.SwingUtilities.invokeAndWait(() -> model.aktivuj(dalsi));
+		}
+		pockej(() -> model.vysledek(c[3]) != null, "výsledek poslední");
 		Assert.assertEquals(1, nejvic.get());
 	}
 
@@ -590,14 +585,11 @@ public class PlanovacChallengeTest {
 	public void malyPosunStreduMapyNepocitaZnovuAVelkyAno() throws Exception {
 		napojNaModel();
 		final Challenge dt = dtChallenge("DT");
-		final Challenge sektory = model.ulozVlastni(vlastni("Sektory", Stred.domov(), OblastDef.zadna()));
 		final List<VstupKes> data = new ArrayList<>(dtData());
 		planovac.keseNacteny(data);
-		zapni(dt, sektory);
-		pockej(() -> model.vysledekPolicek(dt) != null && model.vysledek(sektory) != null, "výsledky");
+		zapni(dt);
+		pockej(() -> model.vysledekPolicek(dt) != null, "výsledek");
 		final VysledekPolicek prvni = model.vysledekPolicek(dt);
-		final VysledekSektoru sek = model.vysledek(sektory);
-		final long vysledkuSektoru = udalosti.stream().filter(e -> e.druh() == ChallengeZmenenyEvent.Druh.VYSLEDEK && e.challenge().nazev().equals("Sektory")).count();
 		javax.swing.SwingUtilities.invokeAndWait(() -> {
 			stredMapy = new Wgs(stredMapy.lat + 0.005, stredMapy.lon);
 			planovac.stredMapyZmenen();
@@ -609,9 +601,6 @@ public class PlanovacChallengeTest {
 			planovac.stredMapyZmenen();
 		});
 		pockej(() -> model.vysledekPolicek(dt) != prvni, "přepočet po velkém posunu");
-		Thread.sleep(300);
-		Assert.assertSame("sektory se nepřepočítávají", sek, model.vysledek(sektory));
-		Assert.assertEquals(vysledkuSektoru, udalosti.stream().filter(e -> e.druh() == ChallengeZmenenyEvent.Druh.VYSLEDEK && e.challenge().nazev().equals("Sektory")).count());
 	}
 
 	@Test
@@ -743,18 +732,14 @@ public class PlanovacChallengeTest {
 	@Test
 	public void skrytyAktivniKalendarSeNaPozadiNepocita() throws Exception {
 		napojNaModel();
-		final Challenge dt = dtChallenge("DT");
 		final Challenge kal = model.ulozVlastni(new Challenge("Kal", Typ.KALENDAR, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC));
 		planovac.keseNacteny(dtData());
-		zapni(dt, kal);
-		pockej(() -> model.vysledekPolicek(dt) != null, "výsledek D/T");
-		Thread.sleep(500);
+		zapni(kal);
+		Thread.sleep(600);
 		Assert.assertNull("kalendář mimo rozhraní se po plném přepočtu nepočítá", model.vysledekPolicek(kal));
 		Assert.assertEquals(StavPredpoctu.Faze.NEBEZI, model.stavPredpoctu(kal).faze());
-		final VysledekPolicek pred = model.vysledekPolicek(dt);
 		posunStredu(LAT + 0.05, LON);
-		pockej(() -> model.vysledekPolicek(dt) != pred, "přepočet D/T po posunu");
-		Thread.sleep(500);
+		Thread.sleep(600);
 		Assert.assertNull("ani po posunu středu", model.vysledekPolicek(kal));
 		Assert.assertEquals(StavPredpoctu.Faze.NEBEZI, model.stavPredpoctu(kal).faze());
 		model.setKalendarVUi(true);

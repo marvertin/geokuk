@@ -92,24 +92,20 @@ public class PruhModeluTest {
 	}
 
 	@Test
-	public void zobrazenaJeVychoziPrvniAktivniAPrepnutimSeMeni() throws Exception {
+	public void zobrazenaJeJedinaAktivniAZapnutiDalsiJiMeni() throws Exception {
 		final Challenge a = model.ulozVlastni(definice("A", Typ.SEKTORY_360));
 		final Challenge b = model.ulozVlastni(definice("B", Typ.DT_MATICE));
 		Assert.assertNull(model.zobrazena());
 		model.aktivuj(a);
-		model.aktivuj(b);
 		model.setZapnuto(true);
 		Assert.assertEquals("A", model.zobrazena().nazev());
 		udalosti.clear();
-		model.setZobrazena(b);
+		model.aktivuj(b);
 		Assert.assertEquals("B", model.zobrazena().nazev());
-		Assert.assertEquals(Arrays.asList(Druh.ZOBRAZENA), udalosti.stream().map(ChallengeZmenenyEvent::druh).collect(java.util.stream.Collectors.toList()));
 		Assert.assertEquals("D/T", model.stavPruhu().stitekTypu());
-		Assert.assertEquals(2, model.stavPruhu().pocetAktivnich());
-		model.setZobrazena(b);
-		Assert.assertEquals("beze změny se neohlásí", 1, udalosti.size());
+		Assert.assertEquals(1, model.stavPruhu().pocetAktivnich());
 		model.deaktivuj(b);
-		Assert.assertEquals("po deaktivaci zpět na první aktivní", "A", model.zobrazena().nazev());
+		Assert.assertNull("bez aktivní není co zobrazit", model.zobrazena());
 	}
 
 	@Test
@@ -192,11 +188,12 @@ public class PruhModeluTest {
 		final Challenge a = model.ulozVlastni(definice("A", Typ.SEKTORY_360));
 		final Challenge b = model.ulozVlastni(definice("B", Typ.SEKTORY_360));
 		model.aktivuj(a);
-		model.aktivuj(b);
 		model.setZapnuto(true);
+		model.setJenKandidatiPro(a);
+		Assert.assertTrue(model.stavPruhu().jenKandidati());
+		model.aktivuj(b);
+		Assert.assertFalse("zapnutí jiné challenge vypnulo filtr", model.stavPruhu().jenKandidati());
 		model.setJenKandidatiPro(b);
-		Assert.assertFalse("filtr je pro jinou challenge", model.stavPruhu().jenKandidati());
-		model.setZobrazena(b);
 		Assert.assertTrue(model.stavPruhu().jenKandidati());
 		model.nastavStavPredpoctu(b, new StavPredpoctu(StavPredpoctu.Faze.CHYBA, 0, 0, "Keš X (střed challenge) není v načtených datech."));
 		flush();

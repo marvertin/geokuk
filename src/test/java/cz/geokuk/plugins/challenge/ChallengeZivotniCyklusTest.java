@@ -418,20 +418,16 @@ public class ChallengeZivotniCyklusTest {
 		final Challenge dt = a.model.ulozVlastni(new Challenge("Matice", Typ.DT_MATICE, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC));
 		naEdt(() -> {
 			a.model.aktivuj(c);
-			a.model.aktivuj(dt);
 			a.model.setZapnuto(true);
 		});
 		// Prázdný výčet keší: všechno chybí, žádný kandidát.
 		a.planovac.keseNacteny(Collections.<VstupKes> emptyList());
-		pockej(() -> a.model.vysledek(c) != null && a.model.vysledekPolicek(dt) != null, "výsledky pro prázdná data");
+		pockej(() -> a.model.vysledek(c) != null, "výsledek pro prázdná data");
 		Assert.assertEquals(360, a.model.vysledek(c).chybejici().size());
 		Assert.assertTrue(a.model.vysledek(c).vsichniKandidati().isEmpty());
-		Assert.assertEquals(81, a.model.vysledekPolicek(dt).pocetChybejicich());
 		stredMapy = new Wgs(LAT, LON);
 		Assert.assertNull("není kam jít", a.planovac.dalsiChybejici(c));
 		Assert.assertNull(a.planovac.predchoziChybejici(c));
-		Assert.assertNull(a.planovac.dalsiChybejici(dt));
-		Assert.assertNull(a.planovac.predchoziChybejici(dt));
 
 		// Střed mapy neznámý (null): výběr nic nevrátí a nespadne.
 		a.planovac.keseNacteny(sektoroveKese());
@@ -439,7 +435,6 @@ public class ChallengeZivotniCyklusTest {
 		stredMapy = null;
 		Assert.assertNull(a.planovac.dalsiChybejici(c));
 		Assert.assertNull(a.planovac.predchoziChybejici(c));
-		Assert.assertNull(a.planovac.dalsiChybejici(dt));
 
 		// Domov neznámý (null): challenge se středem v domově hlásí, proč nejde spočítat.
 		domov = null;
@@ -447,6 +442,19 @@ public class ChallengeZivotniCyklusTest {
 		pockej(() -> a.model.stavPredpoctu(c).faze() == StavPredpoctu.Faze.CHYBA, "chyba pro neznámý domov");
 		Assert.assertNotNull(a.model.stavPredpoctu(c).chyba());
 		Assert.assertFalse(a.model.stavPredpoctu(c).chyba().isEmpty());
+
+		// D/T matice na prázdných datech.
+		domov = new Wgs(LAT, LON);
+		stredMapy = new Wgs(LAT, LON);
+		a.planovac.keseNacteny(Collections.<VstupKes> emptyList());
+		naEdt(() -> a.model.aktivuj(dt));
+		pockej(() -> a.model.vysledekPolicek(dt) != null, "výsledek D/T pro prázdná data");
+		Assert.assertEquals(81, a.model.vysledekPolicek(dt).pocetChybejicich());
+		stredMapy = new Wgs(LAT, LON);
+		Assert.assertNull(a.planovac.dalsiChybejici(dt));
+		Assert.assertNull(a.planovac.predchoziChybejici(dt));
+		stredMapy = null;
+		Assert.assertNull(a.planovac.dalsiChybejici(dt));
 	}
 
 	@Test

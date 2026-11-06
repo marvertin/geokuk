@@ -55,7 +55,7 @@ public class ChallengeModel extends Model0 {
 
 	private void nactiNastaveni() {
 		try {
-			final NastaveniChallenge.Nacteno n = NastaveniChallenge.nacti(uloziste.get());
+			final NastaveniChallenge.Nacteno n = NastaveniChallenge.nacti(uloziste.get(), this::jeVUi);
 			seznam = n.seznam;
 			zapnuto = n.zapnuto;
 			ukladaniZakazano = n.neznamyFormat;
@@ -223,18 +223,24 @@ public class ChallengeModel extends Model0 {
 		return seznam.jeAktivni(c.nazev());
 	}
 
-	/** Nejvíc aktivních challenge najednou. */
+	/** Nejvíc aktivních challenge najednou; zapnutí další vypne nejdéle zapnutou. */
 	public int strop() {
 		return seznam.strop();
 	}
 
-	/** Zapne challenge; při překročení stropu {@link ChallengeChyba} se zprávou pro uživatele. */
+	/** Zapne challenge; je-li už aktivních {@link #strop()}, vypne se dosavadní (i s jeho filtrem „jen kandidáti“). */
 	public void aktivuj(final Challenge c) {
 		if (seznam.jeAktivni(c.nazev())) {
 			return;
 		}
-		seznam.aktivuj(c.nazev());
+		final Challenge vypnuta = seznam.aktivuj(c.nazev());
+		if (vypnuta != null) {
+			odstranStav(vypnuta);
+		}
 		uloz();
+		if (vypnuta != null) {
+			ohlas(ChallengeZmenenyEvent.Druh.AKTIVNI, vypnuta);
+		}
 		ohlas(ChallengeZmenenyEvent.Druh.AKTIVNI, c);
 	}
 

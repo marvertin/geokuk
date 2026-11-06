@@ -79,7 +79,7 @@ public class ChallengeModelTest {
 		Assert.assertEquals(4, model.vsechny().size());
 		Assert.assertTrue(model.vlastni().isEmpty());
 		Assert.assertTrue(model.aktivni().isEmpty());
-		Assert.assertEquals(5, model.strop());
+		Assert.assertEquals(1, model.strop());
 		Assert.assertNull(model.jenKandidatiPro());
 		Assert.assertEquals(-1, model.pocetChybejicich(Sablony.praha360()));
 		Assert.assertNull(model.vysledek(Sablony.praha360()));
@@ -123,8 +123,8 @@ public class ChallengeModelTest {
 		druhy.initAfterInject();
 		Assert.assertTrue(druhy.jeZapnuto());
 		Assert.assertEquals(2, druhy.vlastni().size());
-		Assert.assertEquals(Sablony.NAZEV_CESKO, druhy.aktivni().get(0).nazev());
-		Assert.assertEquals("Moje", druhy.aktivni().get(1).nazev());
+		Assert.assertEquals("zapnutí další vypnulo dosavadní", 1, druhy.aktivni().size());
+		Assert.assertEquals("Moje", druhy.aktivni().get(0).nazev());
 	}
 
 	@Test
@@ -153,24 +153,42 @@ public class ChallengeModelTest {
 	}
 
 	@Test
-	public void strop5AktivnichSeHlidaSrozumitelnouZpravou() {
-		final List<Challenge> c = new ArrayList<>();
-		for (int i = 0; i < 6; i++) {
-			c.add(model.ulozVlastni(vlastni("V" + i)));
-		}
-		for (int i = 0; i < 5; i++) {
-			model.aktivuj(c.get(i));
-		}
+	public void zapnutiDalsiChallengeVypneDosavadniSJejimStavemAFiltrem() {
+		final Challenge a = model.ulozVlastni(vlastni("A"));
+		final Challenge b = model.ulozVlastni(vlastni("B"));
+		model.aktivuj(a);
+		model.nastavVysledek(a, vysledek(100));
+		model.setJenKandidatiPro(a);
 		udalosti.clear();
-		try {
-			model.aktivuj(c.get(5));
-			Assert.fail();
-		} catch (final ChallengeChyba e) {
-			Assert.assertTrue(e.getMessage(), e.getMessage().contains("nejvýš 5"));
-		}
-		Assert.assertEquals("při chybě se nic neohlásí", 0, udalosti.size());
-		Assert.assertEquals(5, model.aktivni().size());
-		Assert.assertFalse(model.jeAktivni(c.get(5)));
+		model.aktivuj(b);
+		Assert.assertEquals(java.util.Arrays.asList(b), model.aktivni());
+		Assert.assertFalse(model.jeAktivni(a));
+		Assert.assertNull("výsledek vypnuté se zahodil", model.vysledek(a));
+		Assert.assertNull("filtr patřil vypnuté", model.jenKandidatiPro());
+		Assert.assertEquals(java.util.Arrays.asList(Druh.JEN_KANDIDATI, Druh.AKTIVNI, Druh.AKTIVNI), druhy());
+		Assert.assertEquals("vypnutá, zapnutá", java.util.Arrays.asList("A", "B"), java.util.Arrays.asList(udalosti.get(1).challenge().nazev(), udalosti.get(2).challenge().nazev()));
+		udalosti.clear();
+		model.aktivuj(b);
+		Assert.assertEquals("zapnutá znovu nic nehlásí", 0, udalosti.size());
+		Assert.assertEquals(1, model.aktivni().size());
+	}
+
+	@Test
+	public void ulozenoViceAktivnichPonechaPrvniAOstatniVypneBezeZtratyDefinic() {
+		final Challenge a = model.ulozVlastni(vlastni("A"));
+		final Challenge b = model.ulozVlastni(vlastni("B"));
+		model.aktivuj(a);
+		final String definice = uloziste.get("verze");
+		uloziste.put("aktivni", "B\nA\n360° od domova");
+		final ChallengeModel druhy = novyModel(uloziste);
+		druhy.initAfterInject();
+		Assert.assertEquals(java.util.Arrays.asList("B"), java.util.Arrays.asList(druhy.aktivni().get(0).nazev()));
+		Assert.assertEquals(1, druhy.aktivni().size());
+		Assert.assertEquals("definice zůstaly", 2, druhy.vlastni().size());
+		Assert.assertEquals(definice, uloziste.get("verze"));
+		Assert.assertEquals("uložení se zatím nepřepsalo", "B\nA\n360° od domova", uloziste.get("aktivni"));
+		druhy.setZapnuto(true);
+		Assert.assertEquals("po prvním uložení jen jedna", "B", uloziste.get("aktivni"));
 	}
 
 	@Test
@@ -272,18 +290,21 @@ public class ChallengeModelTest {
 			Assert.assertTrue(e.getMessage(), e.getMessage().contains("aktivní"));
 		}
 		model.aktivuj(a);
-		model.aktivuj(b);
 		udalosti.clear();
 		model.setJenKandidatiPro(a);
 		model.setJenKandidatiPro(a);
 		Assert.assertEquals("A", model.jenKandidatiPro().nazev());
-		model.setJenKandidatiPro(b);
-		Assert.assertEquals("B", model.jenKandidatiPro().nazev());
-		model.deaktivuj(b);
+		try {
+			model.setJenKandidatiPro(b);
+			Assert.fail();
+		} catch (final ChallengeChyba e) {
+			Assert.assertEquals("A", model.jenKandidatiPro().nazev());
+		}
+		model.deaktivuj(a);
 		Assert.assertNull("vypnutí challenge vypne i filtr", model.jenKandidatiPro());
-		Assert.assertEquals(java.util.Arrays.asList(Druh.JEN_KANDIDATI, Druh.JEN_KANDIDATI, Druh.JEN_KANDIDATI, Druh.AKTIVNI), druhy());
+		Assert.assertEquals(java.util.Arrays.asList(Druh.JEN_KANDIDATI, Druh.JEN_KANDIDATI, Druh.AKTIVNI), druhy());
 		model.setJenKandidatiPro(null);
-		Assert.assertEquals("vypnutí vypnutého se neohlásí", 4, udalosti.size());
+		Assert.assertEquals("vypnutí vypnutého se neohlásí", 3, udalosti.size());
 	}
 
 	@Test

@@ -115,6 +115,14 @@ public final class NastaveniChallenge {
 	}
 
 	public static Nacteno nacti(final ChallengeUloziste uloziste) {
+		return nacti(uloziste, c -> true);
+	}
+
+	/**
+	 * Načte uložený stav. Z uložených aktivních se zapne prvních {@link ChallengeSeznam#strop()} z těch, které {@code nabizena} přijme (třeba bez těch, které se v rozhraní
+	 * nenabízejí); ostatní zůstanou vypnuté, definice se nemění.
+	 */
+	public static Nacteno nacti(final ChallengeUloziste uloziste, final java.util.function.Predicate<Challenge> nabizena) {
 		final ChallengeSeznam seznam = new ChallengeSeznam();
 		int preskoceno = 0;
 		final String format = uloziste.get("format");
@@ -167,7 +175,20 @@ public final class NastaveniChallenge {
 					continue;
 				}
 				try {
-					seznam.aktivuj(Sablony.soucasnyNazev(nazev));
+					final String soucasny = Sablony.soucasnyNazev(nazev);
+					if (seznam.jeAktivni(soucasny)) {
+						continue;
+					}
+					final Challenge c = seznam.najdi(soucasny);
+					if (c != null && !nabizena.test(c)) {
+						continue;
+					}
+					if (seznam.aktivni().size() >= seznam.strop()) {
+						log.info("Aktivní challenge „{}“ se nezapne, najednou jich může být nejvýš {}.", nazev, seznam.strop());
+						preskoceno++;
+						continue;
+					}
+					seznam.aktivuj(soucasny);
 				} catch (final ChallengeChyba ex) {
 					log.warn("Aktivní challenge „{}“ se přeskočí: {}", nazev, ex.getMessage());
 					preskoceno++;

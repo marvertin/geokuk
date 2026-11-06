@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public final class ChallengeSeznam {
 
-	/** Výchozí strop aktivních challenge najednou; každá drží v paměti předpočet. */
-	public static final int NEJVIC_AKTIVNICH = 5;
+	/** Výchozí strop aktivních challenge najednou: filtry a štítky na mapě patří jedné challenge. */
+	public static final int NEJVIC_AKTIVNICH = 1;
 
 	public static final int NEJDELSI_NAZEV = 80;
 
@@ -209,20 +209,24 @@ public final class ChallengeSeznam {
 		aktivni.remove(klic(nazev));
 	}
 
-	/** Zapne challenge; zapnutá už zůstane, překročení stropu je chyba s vysvětlením. */
-	public void aktivuj(final String nazev) {
+	/**
+	 * Zapne challenge; zapnutá už zůstane. Je-li aktivních už {@link #strop()}, vypne se nejdéle zapnutá a vrátí se; jinak se vrací null.
+	 */
+	public Challenge aktivuj(final String nazev) {
 		final Challenge d = najdi(nazev);
 		if (d == null) {
 			throw new ChallengeChyba("Challenge „" + nazev + "“ neexistuje.");
 		}
 		final String k = klic(d.nazev());
 		if (aktivni.contains(k)) {
-			return;
+			return null;
 		}
+		Challenge vypnuta = null;
 		if (aktivni.size() >= strop) {
-			throw new ChallengeChyba("Najednou může být aktivních nejvýš " + strop + " challenge. Nejdřív některou vypněte.");
+			vypnuta = najdi(aktivni.remove(0));
 		}
 		aktivni.add(k);
+		return vypnuta;
 	}
 
 	public void deaktivuj(final String nazev) {

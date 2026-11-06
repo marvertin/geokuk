@@ -296,7 +296,7 @@ public class UlozeniModeluTest {
 	}
 
 	@Test
-	public void aktivniSeUkladajiVPoradiZapnutiAPoRestartuSeOmezi() throws Exception {
+	public void aktivniJePoslednZapnutaAUkladaSeTak() throws Exception {
 		final ChallengeModel a = model();
 		final List<Challenge> c = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
@@ -307,8 +307,8 @@ public class UlozeniModeluTest {
 				a.aktivuj(c.get(i));
 			}
 		});
-		Assert.assertEquals(Arrays_asList("C4\nC3\nC2\nC1\nC0".split("\n")), nazvy(a.aktivni()));
-		Assert.assertEquals("C4\nC3\nC2\nC1\nC0", uloziste.get("aktivni"));
+		Assert.assertEquals("každé zapnutí vypnulo předchozí", Arrays_asList("C0"), nazvy(a.aktivni()));
+		Assert.assertEquals("C0", uloziste.get("aktivni"));
 		Assert.assertEquals(nazvy(a.aktivni()), nazvy(model().aktivni()));
 		final Set<String> pred = uloziste.klice();
 		Assert.assertTrue(pred.contains("aktivni"));

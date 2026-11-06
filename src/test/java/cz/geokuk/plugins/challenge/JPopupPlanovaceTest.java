@@ -251,18 +251,17 @@ public class JPopupPlanovaceTest {
 		return r;
 	}
 
-	/** Popup ukazuje stejnou challenge jako pruh, i když je aktivních víc. */
+	/** Popup ukazuje aktivní challenge; po zapnutí jiné ukáže tu. */
 	@Test
-	public void ukazujeChallengeZobrazenouVPruhu() throws Exception {
+	public void ukazujeAktivniChallenge() throws Exception {
 		priprav();
 		model.aktivuj(Sablony.praha360());
-		model.setZobrazena(Sablony.praha360());
 		SwingUtilities.invokeAndWait(() -> {});
 		popup.prepni();
 		Assert.assertEquals(TextyPopupuPlanovace.nadpis(Sablony.praha360()), popup.obsah.nadpis.getText());
-		model.setZobrazena(Sablony.cesko360());
+		model.aktivuj(Sablony.cesko360());
 		SwingUtilities.invokeAndWait(() -> {});
-		Assert.assertEquals("po přepnutí v pruhu", TextyPopupuPlanovace.nadpis(Sablony.cesko360()), popup.obsah.nadpis.getText());
+		Assert.assertEquals("po zapnutí jiné", TextyPopupuPlanovace.nadpis(Sablony.cesko360()), popup.obsah.nadpis.getText());
 	}
 
 	private Challenge aktivujPolicka(final Challenge.Typ typ) throws Exception {
@@ -313,7 +312,7 @@ public class JPopupPlanovaceTest {
 		Assert.assertEquals("Chybějící dny:", o.nadpisSeznamu.getText());
 		Assert.assertEquals(366, o.postup.getMaximum());
 		Assert.assertEquals(java.util.Arrays.asList("14. 3.", "29. 2."), radky(o));
-		model.setZobrazena(aktivni360());
+		model.aktivuj(Sablony.cesko360());
 		vysledek(TextyPopupuPlanovaceTest.vysledek(new int[] { 47 }, new int[0], new double[][] { { 47, 6200 } }));
 		Assert.assertEquals("Typ: 360°    Pravidla: " + TextyPopupuPlanovace.pravidla(aktivni360().zdroj()), o.typ.getText());
 		Assert.assertEquals(360, o.postup.getMaximum());

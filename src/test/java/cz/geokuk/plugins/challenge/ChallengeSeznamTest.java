@@ -34,7 +34,7 @@ public class ChallengeSeznamTest {
 		Assert.assertTrue(s.vlastni().isEmpty());
 		Assert.assertEquals(4, s.vsechny().size());
 		Assert.assertTrue(s.aktivni().isEmpty());
-		Assert.assertEquals(5, s.strop());
+		Assert.assertEquals(1, s.strop());
 		Assert.assertTrue(s.jeSablona(Sablony.NAZEV_PRAHA));
 		Assert.assertTrue("bez ohledu na velikost písmen", s.jeSablona(Sablony.NAZEV_PRAHA.toUpperCase(java.util.Locale.ROOT)));
 	}
@@ -114,27 +114,32 @@ public class ChallengeSeznamTest {
 	}
 
 	@Test
-	public void stropAktivnichJeHlidanASrozumitelnaZprava() {
+	public void zapnutiDalsiVypneDosavadniAVratiJi() {
 		final ChallengeSeznam s = new ChallengeSeznam();
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 3; i++) {
 			s.ulozVlastni(vlastni("V" + i));
-			s.aktivuj("V" + i);
 		}
-		Assert.assertEquals(5, s.aktivni().size());
-		s.aktivuj("V3");
-		Assert.assertEquals("už aktivní se nepočítá znovu", 5, s.aktivni().size());
-		chyba(() -> s.aktivuj("360° od domova"), "nejvýš 5");
-		s.deaktivuj("V1");
-		s.aktivuj("360° od domova");
-		Assert.assertEquals(Arrays.asList("V2", "V3", "V4", "V5", "360° od domova"), nazvy(s.aktivni()));
+		Assert.assertNull("první nic nevypíná", s.aktivuj("V1"));
+		Assert.assertNull("už aktivní zůstává", s.aktivuj("V1"));
+		Assert.assertEquals(Arrays.asList("V1"), nazvy(s.aktivni()));
+		Assert.assertEquals("V1", s.aktivuj("V2").nazev());
+		Assert.assertEquals(Arrays.asList("V2"), nazvy(s.aktivni()));
+		Assert.assertFalse(s.jeAktivni("V1"));
+		Assert.assertEquals("V2", s.aktivuj("360° od domova").nazev());
+		Assert.assertEquals(Arrays.asList("360° od domova"), nazvy(s.aktivni()));
+		s.deaktivuj("360° od domova");
+		Assert.assertNull("nic není vypnuto, když nic neběží", s.aktivuj("V3"));
 	}
 
 	@Test
-	public void stropJdeNastavit() {
+	public void stropJdeNastavitAVypinaSeNejdelZapnuta() {
 		final ChallengeSeznam s = new ChallengeSeznam(Sablony.vse(), 2);
-		s.aktivuj("360° od domova");
-		s.aktivuj(Sablony.NAZEV_PRAHA);
-		chyba(() -> s.aktivuj(Sablony.NAZEV_CESKO), "nejvýš 2");
+		Assert.assertNull(s.aktivuj("360° od domova"));
+		Assert.assertNull(s.aktivuj(Sablony.NAZEV_PRAHA));
+		Assert.assertEquals("360° od domova", s.aktivuj(Sablony.NAZEV_CESKO).nazev());
+		Assert.assertEquals(Arrays.asList(Sablony.NAZEV_PRAHA, Sablony.NAZEV_CESKO), nazvy(s.aktivni()));
+		Assert.assertNull("už aktivní nevytlačí nic", s.aktivuj(Sablony.NAZEV_PRAHA));
+		Assert.assertEquals(2, s.aktivni().size());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -156,7 +161,7 @@ public class ChallengeSeznamTest {
 
 	@Test
 	public void aktivniSablonaAUpravenaVlastniZustavaAktivni() {
-		final ChallengeSeznam s = new ChallengeSeznam();
+		final ChallengeSeznam s = new ChallengeSeznam(Sablony.vse(), 2);
 		s.aktivuj(Sablony.NAZEV_PRAHA);
 		s.ulozVlastni(vlastni("X"));
 		s.aktivuj("x");
