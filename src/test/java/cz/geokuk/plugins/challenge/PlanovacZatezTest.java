@@ -211,6 +211,7 @@ public class PlanovacZatezTest {
 
 	@Test
 	public void posunStreduZpetPocasPrepoctuNenechaVysledekProStarySteD() throws Exception {
+		model.setKalendarVUi(true);
 		final Challenge kal = model.ulozVlastni(new Challenge("Kal", Typ.KALENDAR, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC));
 		final List<PolicekKes> data = new ArrayList<>();
 		data.add(new PolicekKes("K_A", A.lat + 0.01, A.lon + 0.01, false, 0, 0, null, DNES.plusDays(10), true));

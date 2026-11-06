@@ -170,7 +170,9 @@ public final class PlanovacChallenge {
 			if (zastaralo(moje)) {
 				return;
 			}
-			prepocitej(moje, c, data);
+			if (model.jeVUi(c)) {
+				prepocitej(moje, c, data);
+			}
 		}
 	}
 
@@ -326,7 +328,7 @@ public final class PlanovacChallenge {
 		vykon.execute(() -> {
 			try {
 				for (final Challenge c : aktivni) {
-					if (c.typ() != Challenge.Typ.SEKTORY_360 && generacePolicek.get() == moje) {
+					if (c.typ() != Challenge.Typ.SEKTORY_360 && model.jeVUi(c) && generacePolicek.get() == moje) {
 						prepocitejPolicka(() -> generacePolicek.get() != moje, c, data, false);
 					}
 				}

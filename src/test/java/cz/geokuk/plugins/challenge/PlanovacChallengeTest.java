@@ -536,6 +536,7 @@ public class PlanovacChallengeTest {
 		napojNaModel();
 		final java.time.LocalDate dnes = java.time.LocalDate.of(2026, 11, 5);
 		planovac.dnes = () -> dnes;
+		model.setKalendarVUi(true);
 		final Challenge c = kalendarChallenge("Kal");
 		final List<PolicekKes> data = new ArrayList<>();
 		for (int i = 0; i < 100; i++) {
@@ -737,6 +738,28 @@ public class PlanovacChallengeTest {
 		final VybranyKandidat[] v = new VybranyKandidat[1];
 		javax.swing.SwingUtilities.invokeAndWait(() -> v[0] = zpet ? planovac.predchoziChybejici(c) : planovac.dalsiChybejici(c));
 		return v[0];
+	}
+
+	@Test
+	public void skrytyAktivniKalendarSeNaPozadiNepocita() throws Exception {
+		napojNaModel();
+		final Challenge dt = dtChallenge("DT");
+		final Challenge kal = model.ulozVlastni(new Challenge("Kal", Typ.KALENDAR, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC));
+		planovac.keseNacteny(dtData());
+		zapni(dt, kal);
+		pockej(() -> model.vysledekPolicek(dt) != null, "výsledek D/T");
+		Thread.sleep(500);
+		Assert.assertNull("kalendář mimo rozhraní se po plném přepočtu nepočítá", model.vysledekPolicek(kal));
+		Assert.assertEquals(StavPredpoctu.Faze.NEBEZI, model.stavPredpoctu(kal).faze());
+		final VysledekPolicek pred = model.vysledekPolicek(dt);
+		posunStredu(LAT + 0.05, LON);
+		pockej(() -> model.vysledekPolicek(dt) != pred, "přepočet D/T po posunu");
+		Thread.sleep(500);
+		Assert.assertNull("ani po posunu středu", model.vysledekPolicek(kal));
+		Assert.assertEquals(StavPredpoctu.Faze.NEBEZI, model.stavPredpoctu(kal).faze());
+		model.setKalendarVUi(true);
+		planovac.naplanujPrepocet();
+		pockej(() -> model.vysledekPolicek(kal) != null, "kalendář po zapnutí v rozhraní");
 	}
 
 	@Test
