@@ -5,13 +5,16 @@
 ### Změny
 - Položka Kešoidy > Kruhy (Alt+F8) se jmenuje podle poloměru (Kruhy 1 km,
   Kruhy 161 m); dialog se jmenuje Nastavení kruhů.
+- Kruhy (Alt+F8) mají pevný poloměr v metrech, výchozí 100 m; mění se v
+  Nastavení kruhů. Zapnou i zvýrazňovací kruhy.
 - Když jsou zapnuté kruhy (zvýrazňovací, v metrech, Obsazenost) a nejsou vidět,
   ve stavovém řádku se ukáže štítek Kruhy skryté; v bublině je u každé vrstvy
   důvod a co udělat. Když se kruhy v metrech kreslí jen částečně (nejbližší ke
   středu výřezu), je tam štítek Kruhy omezené, a když je zároveň něco skryté
-  a něco omezené, Kruhy skryté a omezené. Po zkratkách, jejichž výsledek není
-  vidět (F5, F9 při malém přiblížení, Alt+F8, Ctrl+1 až Ctrl+4, skryté kruhy),
-  se uprostřed dole nad měřítkem na chvíli ukáže krátká zpráva.
+  a něco omezené, Kruhy skryté a omezené.
+- Po zkratkách F5 a Ctrl+1 až Ctrl+4 se uprostřed dole nad měřítkem na chvíli
+  ukáže krátká zpráva, co se změnilo; po F8, Alt+F8 a F9, když kruhy nejsou
+  vidět.
 - Posuvníky kruhů Obsazenost 161 m jsou tenké a při najetí myší ukážou popisky
   a aktuální hodnotu.
 - Velikost zvýrazňovacích kruhů se volí v pixelech nebo v metrech (od 1 m do
@@ -20,32 +23,35 @@
 - GeoKuk má nové logo, ikonu a úvodní obrázek.
 - Přenosná verze pro Windows při startu obnoví soubor geokuk.ico, takže ikonu
   vymění i aktualizace z programu.
-- Okno Umístění souborů je větší a zdroje keší (GPX, GeoGet, GSAK, OpenSAK)
-  jsou na jedné záložce, každý se svou klávesovou zkratkou.
+- Okno Umístění souborů má výchozí velikost 900×700 a zdroje keší (GPX,
+  GeoGet, GSAK, OpenSAK) jsou na jedné záložce, každý se svou klávesovou
+  zkratkou.
 - Zdroje keší GeoGet, GSAK a OpenSAK mají volbu Nové databáze načíst až po
   vybrání.
-- U GSAKu je odstraněno nepoužívané pole Čas nenálezu.
 - Klávesa F5 (Kešoidy > Zobrazovat kešoidy) skryje a zase ukáže kešoidy včetně
   kruhů a popisků.
-- Uživatelská mapa se zkratkou F5 se odmítne; zkratku v jejím souboru stačí
-  změnit nebo smazat.
+- Uživatelská mapa se zkratkou, kterou používá program (F5, Ctrl+1 až Ctrl+4
+  a další) nebo jiná mapa, se odmítne; zkratku v jejím souboru stačí změnit
+  nebo smazat.
 - Nápověda > O programu ukazuje verzi, licenci, původní texty Martina Veverky
   a údaje o upravené verzi (GeoKuk community) s odkazy.
 - Při prvním načítání mapy po spuštění je v mapě bílá plocha se slabým logem
   GeoKuk; body keší, popisky, kruhy a cesty se kreslí, až je načteno 40 %
   dlaždic výřezu.
-- Offline mapy se kreslí novým tématem GeoKuk; původní téma je v Mapy > Téma
+- Offline mapy se kreslí tématem GeoKuk; původní téma je v Mapy > Téma
   offline mapy jako Mapsforge (původní).
-- Varianta GeoKuk – detail v Mapy > Téma offline mapy přidává parkoviště,
-  zastávky, posedy, informační tabule a další místa ve větších měřítkách;
-  ikony jsou z projektu Osmic (CC0).
+- Varianta GeoKuk – detail v Mapy > Téma offline mapy ukazuje ve větších
+  měřítkách další body pro orientaci (posedy, krmelce, stoly, ohniště, kameny,
+  bunkry a další); parkoviště a zastávky ukáže o úroveň přiblížení dřív. Ikony
+  jsou z projektu Osmic (CC0).
 - Vydání obsahuje GeoKuk-tema.zip: téma GeoKuk a GeoKuk – detail pro aplikace
   s mapami ve formátu mapsforge (například c:geo, aDrake).
 - Po aktualizaci programu se offline mapy v cache jednou vykreslí znovu.
 - Správce offline map (menu Mapy nebo blok Mapy ve stavovém řádku) ukazuje
   stažené mapy, jejich obrysy v mapě a odkazy na weby s mapami.
-- Mapy zemí a regionů Evropy a k nim trasy, vrstevnice a stínování terénu jde
-  ve Správci offline map stáhnout a aktualizovat.
+- Mapy zemí a regionů Evropy, Kanárských ostrovů a Egypta a k nim trasy,
+  vrstevnice a stínování terénu jde ve Správci offline map stáhnout; novější
+  verzi stažené mapy nebo vrstvy stáhne tlačítko Aktualizovat.
 - Správce offline map ukáže při stahování odhad zbývajícího času a mapu, která
   se nevejde na disk, nenechá stáhnout.
 - Přerušené stahování program sám až třikrát zkusí znovu a naváže, kde skončilo.
@@ -63,27 +69,23 @@
   jednotkou.
 - Nadmořská výška keše z databáze GeoGetu se čte až při zobrazení jejího
   detailu.
-- Start programu je rychlejší: okno se vykreslí před dialogy a méně potřebné
-  části se připravují později. Při spuštění z jar souboru se okno na Windows
-  otevře za 1633 ms místo 1767 ms ve verzi 6.4.3 (medián z 9 běhů). Po startu
-  program zatěžuje procesor zhruba o třetinu méně (prvních 30 s, párové měření
-  na Windows).
+- Okno programu se vykreslí před dialogy a méně potřebné části se připravují
+  až po startu.
 - Dlaždice se načítají podle toho, co je vidět: nejdřív hlavní mapa a viditelné
   dlaždice od středu ven, ostatní se přeskočí. Online dlaždice se stahují podle
-  téže priority a spojení se znovu používají.
-- Posun offline mapy méně zatěžuje procesor (asi 0,4 jádra místo 1,7 podle
-  měření na Windows).
+  téže priority.
+- Posun a přibližování offline mapy méně zatěžují procesor.
 - Paměťová cache dlaždic se přizpůsobí paměti programu.
 - Dokud se dlaždice načítá, ukáže se její náhled z jiného měřítka.
 - Načítání dlaždic ukazuje malé točící se kolečko vpravo nahoře v mapě.
-- Přenosná verze pro Windows z nového zipu vytváří archiv tříd pro další
-  starty; první ukončení po instalaci trvá o několik sekund déle.
-- GeoKuk načte databáze OpenSAKu i z jeho nejnovější verze.
+- Přenosná verze pro Windows si při prvním ukončení připraví soubor pro další
+  starty; první ukončení po instalaci proto trvá o několik sekund déle.
+- GeoKuk načte databáze OpenSAKu se schématem do verze 28.
 - Okno Najdi keš najde kešoid podle odkazu (coord.info, geocaching.com,
   Opencaching, Waymarking) nebo kódu (GC, WM, OC, OP, OZ…, také zastávku
   Adventure Labu GCxxxx-N); když kešoid s takovým ID neexistuje, hledá se zadaný
   text.
-- Okno Najdi keš je větší (výchozí 950×700, na malé obrazovce nejvýš 90 %
+- Okno Najdi keš má výchozí velikost 950×700 (na malé obrazovce nejvýš 90 %
   plochy), jde měnit a sloupec Id se neořezává.
 - Typy zdrojů keší jdou zapnout a vypnout klávesami Ctrl+1 (GPX) až Ctrl+4
   (OpenSAK), také z číselné klávesnice; zkratky jsou v menu Kešoidy > Zdroje
@@ -102,13 +104,9 @@
   filtr, a pokusit se přenést okno GeoKuku do popředí; podrobnosti jsou
   v README.
 - GeoKuk používá novější knihovnu Guava s bezpečnostní opravou.
-- Offline mapa s tématem, které má vrstvy (například paws, Biker, Motorider),
-  kreslí jen vrstvy, které má ve výchozím stavu zapnuté autor tématu.
-- Správa offline map používá jednotné názvy: Stažené mapy, Mapy ke stažení,
-  Pro toto místo, Trasy.
-- Každá země je ve Správci offline map jen jednou, regiony stažené země jsou
-  pod ní.
-- Dole ve Správci offline map jsou přepínače Přes mapu stejně jako v menu Mapy.
+- Regiony stažené země jsou ve Správci offline map pod ní.
+- Dole ve Správci offline map jsou přepínače Turistické a cyklotrasy a Stínování
+  terénu.
 - Když pro zobrazené místo chybí offline mapa, program nabídne její stažení
   (i s vrstvami a velikostí), u hranice i sousední mapy v záběru.
 - Po změně jedné offline mapy nebo vrstvy se dlaždice v cache vykreslí znovu
@@ -116,22 +114,22 @@
 - Změna zvýraznění nebo sady ikon nenačítá znovu zdroje keší.
 - Soubor > Optimalizace cache dlaždic… zmenší soubor s uloženými dlaždicemi;
   když je to potřeba, program ji nabídne sám při startu.
-- Optimalizace cache dlaždic odstraní i dlaždice staré verze offline map;
-  dlaždice jiných témat a vrstev zůstávají.
-- Novější verzi stažené mapy nebo vrstvy stáhne tlačítko Aktualizovat.
+- Optimalizace cache dlaždic odstraní i dlaždice vykreslené starší verzí mapy
+  nebo tématu; dlaždice jiných témat a vrstev zůstávají.
 - Nové mapové podklady: DE topografická mapa (BKG), AT mapa (basemap.at)
   a CH topografická mapa (swisstopo); německou a švýcarskou mapu nejde
   hromadně stahovat do cache.
-- Mapy > Téma offline mapy > Vrstvy tématu: u tématu s vrstvami lze zvolit
-  styl a zapnout nebo vypnout jednotlivé vrstvy; volba se pamatuje pro každé
-  téma, u tématu paws je v menu odkaz na legendu.
+- Mapy > Téma offline mapy > Vrstvy tématu: u tématu s vrstvami (například
+  paws, Biker, Motorider) lze zvolit styl a zapnout nebo vypnout jednotlivé
+  vrstvy; ve výchozím stavu jsou zapnuté vrstvy, které zvolil autor tématu.
+  Volba se pamatuje pro každé téma, u tématu paws je v menu odkaz na legendu.
 - Podmenu Kešoidy > Zvýraznění ukáže barevný čtverec pod ikonou keší podle
   předvolby (Bez zvýraznění, Terén 4,5 a 5, Obtížnost 4,5 a 5) nebo vlastních
   pravidel.
-- Ikony stavů Disablovaná, Archivovaný a Není vyluštěno na liště nástrojů mají
-  nový vzhled; stejné ikony jsou ve Výběru filtru (F2), Výběru fenotypu (F6),
+- Stavy Disablovaná, Archivovaný a Není vyluštěno mají na liště nástrojů
+  vlastní ikony; stejné ikony jsou ve Výběru filtru (F2), Výběru fenotypu (F6),
   Ladění ikon a v nabídce Zhasni.
-- Ovladače stavů keše jsou na liště nástrojů za oddělovačem a všechny ikony na
+- Přepínače stavů keše jsou na liště nástrojů za oddělovačem a všechny ikony na
   liště kromě druhů waypointů jsou stejně velké.
 - Pojmenované výlety: ve stavovém řádku je jméno aktivního výletu a najetím
   myší se otevře seznam výletů, kde lze výlet založit, aktivovat, přejmenovat
@@ -141,11 +139,11 @@
 - Panel cesty vpravo nahoře v mapě ukazuje délku vybrané cesty, počet bodů
   a keší a vzdušné úseky; vypnout jde křížkem nebo v Cesty > Panel cesty.
 - Mapy > ČÚZK – Stínovaný reliéf: jemné stínování terénu České republiky přes
-  jakoukoli mapu, i v tisku a exportu výřezu; jen s připojením k internetu,
-  od podrobnějšího měřítka.
+  jakoukoli mapu, i v Tisknout/Rendrovat…; jen s připojením k internetu, od
+  podrobnějšího měřítka.
 - Mapy > Turistické a cyklotrasy: turistické trasy a cyklotrasy přes jakoukoli
-  mapu, i v tisku a exportu výřezu; kreslí se z offline map z osm.paws.cz nebo
-  ze stažené vrstvy tras.
+  mapu, i v Tisknout/Rendrovat…; kreslí se z offline map z osm.paws.cz nebo ze
+  stažené vrstvy tras.
 - Úseky cesty mohou vést po cestách a pěšinách z offline mapy (pěší trasa bez
   internetu); způsob vedení se přepíná v panelu cesty a v kontextovém menu
   úseku.
@@ -154,16 +152,11 @@
 - Úsek vedený po cestě se do GPX ukládá se všemi body.
 - Nová instalace začíná offline mapou, když je ve složce offline map podrobná
   mapa, jinak ortofotem ČÚZK; stávajícím uživatelům se podklad nemění.
-- Offline mapa zkopírovaná do složky za běhu se otevře až po dokopírování
-  a mapa v okně se sama obnoví. Mapu, kterou chvíli nešlo číst, program za půl
-  minuty zkusí znovu.
-- Menu Téma offline mapy se otevře hned, i když jsou témata na pomalém disku.
 - Informace pro hlášení chyby rozliší uspání počítače od záseku programu.
-- Informace pro hlášení chyby neobsahují z adres v logu parametry ani přihlašovací údaje.
-- Informace pro hlášení chyby uvádějí údaje o offline mapách, počet zobrazených
-  dlaždic od spuštění a odhad kreditů při načítání z API; okno je větší a jde
-  měnit.
-- Po načtení keší program nečeká na vykreslení ikon v liště typů keší.
+- Informace pro hlášení chyby neobsahují z adres v logu parametry ani
+  přihlašovací údaje.
+- Informace pro hlášení chyby uvádějí údaje o offline mapách a počet
+  zobrazených dlaždic od spuštění; okno jde měnit.
 - Nápověda > Co je nového ukáže, co přinesly jednotlivé verze programu.
 - Když se s programem chvíli nepracuje, předkreslí offline mapy pro oddálená
   měřítka a okolí zobrazeného místa do cache; při práci s programem počká.
@@ -171,12 +164,14 @@
   a písmo, symboly a čáry offline mapy až na 200 %.
 
 ### Opravy
-- Zvýrazňovací kruhy zůstanou zapnuté i po přepnutí mapového podkladu.
+- Zvýrazňovací kruhy (F8) a Kruhy (Alt+F8) zůstanou zapnuté i po přepnutí
+  mapového podkladu.
+- Změna velikosti nebo barvy v Nastavení kruhů kruhy nevypne.
 - Obsazenost 161 m se kreslí jako jedna plocha jedné barvy, takže překryvy
   netmavnou; kreslí se při dostatečném přiblížení a nejvýš pro 20 000 keší
   ve výřezu.
-- Soubor GPX s kešemi, které mají místo čísla vlastníka GUID (například Lab
-  keše), se načte bez zbytečných varování.
+- Soubor GPX s kešemi s vlastníkem zapsaným jako GUID (například Lab keše) se
+  načte bez zbytečných varování v logu.
 - Soubor s kešemi, který se právě kopíruje nebo ho drží jiný program, se načte,
   až je volný.
 - Nastavení se při ukončení nebo restartu uloží spolehlivě.
@@ -190,12 +185,17 @@
 - Obrázek ikony v neznámém formátu ve vlastní sadě ikon program ohlásí
   a nespadne.
 - Vlastní sada ikon s chybným číslem se načte s výchozí hodnotou.
-- Hledání adresy vynechá výsledek bez platné polohy.
+- Jít > Adresa… vynechá výsledek bez platné polohy.
 - Po změně nicku se keše z databáze, kterou zrovna drží GeoGet nebo GSAK,
   načtou znovu, až ji program pustí.
-- Při ukončení programu se na pomalém disku zapíšou do cache všechny stažené
-  dlaždice.
+- Při ukončení programu na pomalém disku program počká, až se stažené dlaždice
+  zapíšou do cache (nejvýš minutu).
 - Úklid cache dlaždic pokračuje, i když některý soubor nejde smazat.
+- Offline mapa zkopírovaná do složky za běhu se otevře až po dokopírování
+  a mapa v okně se sama obnoví. Mapu, kterou chvíli nešlo číst, program za půl
+  minuty zkusí znovu.
+- Menu Téma offline mapy se otevře hned, i když jsou témata na pomalém disku.
+- Po načtení keší program nečeká na vykreslení ikon na liště nástrojů.
 
 Obsahuje i všechny opravy z 6.4.3.
 
