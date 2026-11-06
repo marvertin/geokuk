@@ -26,8 +26,7 @@ public class JChallengeDialog extends JMyDialog0 {
 	private final JRadioButton stredDomov = new JRadioButton("Domov");
 	private final JRadioButton stredSouradnice = new JRadioButton("Souřadnice");
 	private final JRadioButton stredListing = new JRadioButton("Keš (kód)");
-	private final JTextField lat = new JTextField(9);
-	private final JTextField lon = new JTextField(9);
+	private final JTextField souradnice = new JTextField(20);
 	private final JTextField kod = new JTextField(9);
 	private final JComboBox<FormularDefinice.Oblast> oblast = new JComboBox<>(FormularDefinice.oblasti().toArray(new FormularDefinice.Oblast[0]));
 	private final JComboBox<String> nalezy = new JComboBox<>(new String[] { "Ze zapnutých zdrojů", "Ze všech zdrojů" });
@@ -92,15 +91,19 @@ public class JChallengeDialog extends JMyDialog0 {
 		radek(f, r++, new JLabel("Název"), nazev);
 		final JLabel popisekPravidel = new JLabel("Pravidla");
 		final JLabel popisekStredu = new JLabel("Střed");
-		final JPanel stredSouradnicePanel = panel(stredSouradnice, new JLabel("šířka"), lat, new JLabel("délka"), lon);
+		final JPanel stredSouradnicePanel = panel(stredSouradnice, souradnice);
+		souradnice.setToolTipText("Např. " + FormularDefinice.UKAZKA_SOURADNIC);
+		final JLabel ukazkaSouradnic = new JLabel("např. " + FormularDefinice.UKAZKA_SOURADNIC);
+		ukazkaSouradnic.setEnabled(false);
 		final JPanel stredListingPanel = panel(stredListing, kod);
 		final JLabel popisekOblasti = new JLabel("Oblast");
 		radek(f, r++, popisekPravidel, pravidla);
 		radek(f, r++, popisekStredu, stredDomov);
 		radek(f, r++, null, stredSouradnicePanel);
+		radek(f, r++, null, ukazkaSouradnic);
 		radek(f, r++, null, stredListingPanel);
 		radek(f, r++, popisekOblasti, oblast);
-		poleSektoru.addAll(java.util.Arrays.asList(popisekPravidel, pravidla, popisekStredu, stredDomov, stredSouradnicePanel, stredListingPanel, popisekOblasti, oblast));
+		poleSektoru.addAll(java.util.Arrays.asList(popisekPravidel, pravidla, popisekStredu, stredDomov, stredSouradnicePanel, ukazkaSouradnic, stredListingPanel, popisekOblasti, oblast));
 		radek(f, r++, new JLabel("Nálezy"), nalezy);
 		chyba.setForeground(new Color(180, 30, 30));
 		radek(f, r++, null, chyba);
@@ -182,8 +185,7 @@ public class JChallengeDialog extends JMyDialog0 {
 	private void povolStred() {
 		final Challenge c = seznam.getSelectedValue();
 		final boolean uprava = c != null && !jeSablona(c);
-		lat.setEnabled(uprava && stredSouradnice.isSelected());
-		lon.setEnabled(uprava && stredSouradnice.isSelected());
+		souradnice.setEnabled(uprava && stredSouradnice.isSelected());
 		kod.setEnabled(uprava && stredListing.isSelected());
 	}
 
@@ -195,7 +197,7 @@ public class JChallengeDialog extends JMyDialog0 {
 				k.setEnabled(uprava);
 			}
 			aktivni.setEnabled(c != null && (!jeNedostupny(c) || model.jeAktivni(c)));
-			kopie.setEnabled(jeSablona(c));
+			kopie.setEnabled(c != null && !jeNedostupny(c));
 			smazat.setEnabled(c != null && !jeSablona(c));
 			chyba.setText(" ");
 			if (c == null) {
@@ -212,8 +214,7 @@ public class JChallengeDialog extends JMyDialog0 {
 			stredDomov.setSelected(c.stred().druh() == DruhStredu.DOMOV);
 			stredSouradnice.setSelected(c.stred().druh() == DruhStredu.SOURADNICE);
 			stredListing.setSelected(c.stred().druh() == DruhStredu.LISTING);
-			lat.setText(c.stred().druh() == DruhStredu.SOURADNICE ? Double.toString(c.stred().lat()) : "");
-			lon.setText(c.stred().druh() == DruhStredu.SOURADNICE ? Double.toString(c.stred().lon()) : "");
+			souradnice.setText(c.stred().druh() == DruhStredu.SOURADNICE ? FormularDefinice.formatSouradnic(c.stred().lat(), c.stred().lon()) : "");
 			kod.setText(c.stred().druh() == DruhStredu.LISTING ? c.stred().kodListingu() : "");
 			oblast.setSelectedItem(FormularDefinice.oblastDefinice(c));
 			nalezy.setSelectedIndex(c.nalezy() == ZdrojeNalezu.ZAPNUTE ? 0 : 1);
@@ -248,9 +249,9 @@ public class JChallengeDialog extends JMyDialog0 {
 
 	private void vytvorKopii() {
 		final Challenge c = seznam.getSelectedValue();
-		if (jeSablona(c)) {
+		if (c != null && !jeNedostupny(c)) {
 			try {
-				obnovSeznam(model.kopieSablony(c));
+				obnovSeznam(jeSablona(c) ? model.kopieSablony(c) : model.kopieVlastni(c));
 			} catch (final ChallengeChyba e) {
 				chyba.setText(e.getMessage());
 			}
@@ -278,7 +279,7 @@ public class JChallengeDialog extends JMyDialog0 {
 		}
 		try {
 			final DruhStredu druh = stredSouradnice.isSelected() ? DruhStredu.SOURADNICE : stredListing.isSelected() ? DruhStredu.LISTING : DruhStredu.DOMOV;
-			final Challenge nova = FormularDefinice.sestav(c, nazev.getText(), pravidla.getSelectedIndex() == 0 ? ZdrojPravidel.PGC : ZdrojPravidel.STATOR, druh, lat.getText(), lon.getText(), kod.getText(),
+			final Challenge nova = FormularDefinice.sestav(c, nazev.getText(), pravidla.getSelectedIndex() == 0 ? ZdrojPravidel.PGC : ZdrojPravidel.STATOR, druh, souradnice.getText(), kod.getText(),
 					(FormularDefinice.Oblast) oblast.getSelectedItem(), nalezy.getSelectedIndex() == 0 ? ZdrojeNalezu.ZAPNUTE : ZdrojeNalezu.VSECHNY);
 			Challenge ulozena = c;
 			if (!nova.nazev().trim().equals(c.nazev())) {

@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import cz.geokuk.core.coordinates.Wgs;
+import cz.geokuk.core.coordinates.WgsParser;
 import cz.geokuk.plugins.challenge.Challenge.DruhOblasti;
 import cz.geokuk.plugins.challenge.Challenge.DruhStredu;
 import cz.geokuk.plugins.challenge.Challenge.OblastDef;
@@ -62,19 +64,21 @@ public final class FormularDefinice {
 		return o.druh() == DruhOblasti.ZADNA || o.idOblasti().size() == 1 && oblastDefinice(c).id != null;
 	}
 
-	/** Souřadnice z textu: tečka nebo čárka jako desetinná čárka; mimo rozsah je {@link ChallengeChyba}. */
-	static double souradnice(final String text, final String co, final double nejmene, final double nejvice) {
-		final String t = text == null ? "" : text.trim().replace(',', '.');
-		final double d;
-		try {
-			d = Double.parseDouble(t);
-		} catch (final NumberFormatException e) {
-			throw new ChallengeChyba(co + " musí být číslo.");
+	/** Ukázka zápisu souřadnic pro uživatele. */
+	public static final String UKAZKA_SOURADNIC = "N50°03.253 E14°23.399";
+
+	/** Souřadnice středu tak, jak je GeoKuk kopíruje do schránky. */
+	public static String formatSouradnic(final double lat, final double lon) {
+		return new Wgs(lat, lon).toString();
+	}
+
+	/** Souřadnice z textu stávajícím parserem GeoKuku (schránka, stupně, minuty, desetinné stupně); nerozpoznaný zápis (včetně šířky mimo -90 až 90 a délky mimo -180 až 180, které parser odmítá) je {@link ChallengeChyba}. */
+	static Wgs souradnice(final String text) {
+		final Wgs w = text == null ? null : new WgsParser().parsruj(text.trim());
+		if (w == null) {
+			throw new ChallengeChyba("Souřadnice neznám. Zadejte např. " + UKAZKA_SOURADNIC + ".");
 		}
-		if (Double.isNaN(d) || d < nejmene || d > nejvice) {
-			throw new ChallengeChyba(co + " musí být mezi " + (int) nejmene + " a " + (int) nejvice + ".");
-		}
-		return d;
+		return w;
 	}
 
 	/**
@@ -82,7 +86,7 @@ public final class FormularDefinice {
 	 *
 	 * @param puvodni definice, ze které formulář vychází; z ní se přebírá typ a oblast, kterou formulář neumí vyjádřit; bez ní vzniká typ 360°
 	 */
-	public static Challenge sestav(final Challenge puvodni, final String nazev, final ZdrojPravidel pravidla, final DruhStredu druhStredu, final String lat, final String lon, final String kod,
+	public static Challenge sestav(final Challenge puvodni, final String nazev, final ZdrojPravidel pravidla, final DruhStredu druhStredu, final String souradnice, final String kod,
 			final Oblast oblast, final ZdrojeNalezu nalezy) {
 		if (puvodni != null && puvodni.typ() == Challenge.Typ.DT_MATICE) {
 			// D/T se počítá z pevných pravidel podle středu mapy: z formuláře se bere jen název a zdroj nálezů, ostatní zůstává, jak bylo.
@@ -94,7 +98,13 @@ public final class FormularDefinice {
 			stred = Stred.domov();
 			break;
 		case SOURADNICE:
-			stred = Stred.souradnice(souradnice(lat, "Zeměpisná šířka", -90, 90), souradnice(lon, "Zeměpisná délka", -180, 180));
+			if (puvodni != null && puvodni.stred().druh() == DruhStredu.SOURADNICE && souradnice != null
+					&& souradnice.trim().equals(formatSouradnic(puvodni.stred().lat(), puvodni.stred().lon()))) {
+				stred = puvodni.stred();
+			} else {
+				final Wgs w = souradnice(souradnice);
+				stred = Stred.souradnice(w.lat, w.lon);
+			}
 			break;
 		default:
 			final String k = kod == null ? "" : kod.trim().toUpperCase(java.util.Locale.ROOT);
@@ -136,7 +146,7 @@ public final class FormularDefinice {
 			stred = "domov";
 			break;
 		case SOURADNICE:
-			stred = String.format(java.util.Locale.ROOT, "%.5f, %.5f", c.stred().lat(), c.stred().lon());
+			stred = formatSouradnic(c.stred().lat(), c.stred().lon());
 			break;
 		default:
 			stred = c.stred().kodListingu();

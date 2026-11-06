@@ -194,4 +194,59 @@ public class ChallengeSeznamTest {
 		Assert.assertEquals(Sablony.NAZEV_CESKO + " (vlastní)", s.kopieSablony(Sablony.NAZEV_CESKO).nazev());
 		chyba(() -> s.ulozVlastni(vlastni(Sablony.NAZEV_CESKO)), "kopii");
 	}
+
+	@Test
+	public void kopieVlastniZachovaDefiniciAJeNeaktivni() {
+		final ChallengeSeznam s = new ChallengeSeznam();
+		final Challenge puvodni = s.ulozVlastni(new Challenge("Moje 360", Challenge.Typ.SEKTORY_360, Challenge.Stred.souradnice(50.1, 14.5), Challenge.OblastDef.stat("CZ"), ZdrojPravidel.STATOR, Challenge.ZdrojeNalezu.VSECHNY));
+		s.aktivuj("Moje 360");
+		final Challenge k = s.kopieVlastni("Moje 360");
+		Assert.assertEquals("Moje 360 (kopie)", k.nazev());
+		Assert.assertEquals(puvodni.typ(), k.typ());
+		Assert.assertEquals(puvodni.stred(), k.stred());
+		Assert.assertEquals(puvodni.oblast(), k.oblast());
+		Assert.assertEquals(puvodni.zdroj(), k.zdroj());
+		Assert.assertEquals(puvodni.nalezy(), k.nalezy());
+		Assert.assertFalse("kopie není aktivní", s.jeAktivni(k.nazev()));
+		Assert.assertTrue("původní zůstala aktivní", s.jeAktivni("Moje 360"));
+		Assert.assertFalse(s.jeSablona(k.nazev()));
+	}
+
+	@Test
+	public void kopieVlastniMaticeDTZachovaTyp() {
+		final ChallengeSeznam s = new ChallengeSeznam();
+		final Challenge v = s.kopieSablony("Matice D/T");
+		final Challenge k = s.kopieVlastni(v.nazev());
+		Assert.assertEquals(Challenge.Typ.DT_MATICE, k.typ());
+		Assert.assertEquals("Matice D/T (vlastní) (kopie)", k.nazev());
+	}
+
+	@Test
+	public void kopieVlastniMaJedinecnyNazevAKopieKopieSeNeNarusta() {
+		final ChallengeSeznam s = new ChallengeSeznam();
+		s.ulozVlastni(Sablony.praha360().sNazvem("A"));
+		Assert.assertEquals("A (kopie)", s.kopieVlastni("A").nazev());
+		Assert.assertEquals("A (kopie 2)", s.kopieVlastni("A").nazev());
+		Assert.assertEquals("A (kopie 3)", s.kopieVlastni("A (kopie)").nazev());
+		Assert.assertEquals(4, s.vlastni().size());
+		chyba(() -> s.kopieVlastni("Neexistuje"), "neexistuje");
+		chyba(() -> s.kopieVlastni(Sablony.NAZEV_PRAHA), "neexistuje");
+	}
+
+	@Test
+	public void kopieVlastniNeprekrociNejdelsiNazev() {
+		final ChallengeSeznam s = new ChallengeSeznam();
+		final StringBuilder dlouhy = new StringBuilder();
+		while (dlouhy.length() < ChallengeSeznam.NEJDELSI_NAZEV) {
+			dlouhy.append('x');
+		}
+		s.ulozVlastni(Sablony.praha360().sNazvem(dlouhy.toString()));
+		final Challenge k1 = s.kopieVlastni(dlouhy.toString());
+		final Challenge k2 = s.kopieVlastni(dlouhy.toString());
+		Assert.assertEquals(ChallengeSeznam.NEJDELSI_NAZEV, k1.nazev().length());
+		Assert.assertTrue(k1.nazev().endsWith(" (kopie)"));
+		Assert.assertTrue(k2.nazev().endsWith(" (kopie 2)"));
+		Assert.assertTrue(k2.nazev().length() <= ChallengeSeznam.NEJDELSI_NAZEV);
+		Assert.assertNotEquals(k1.nazev(), k2.nazev());
+	}
 }

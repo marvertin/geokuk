@@ -152,6 +152,25 @@ public final class ChallengeSeznam {
 		return ulozVlastni(s.sNazvem(nazev));
 	}
 
+	/** Kopie vlastní definice pojmenovaná „název (kopie)“, popř. „(kopie 2)“…; nikdy neaktivní, název nejvýš {@link #NEJDELSI_NAZEV} znaků. */
+	public Challenge kopieVlastni(final String nazevVlastni) {
+		final Challenge v = vlastni.get(klic(nazevVlastni));
+		if (v == null) {
+			throw new ChallengeChyba("Challenge „" + nazevVlastni + "“ neexistuje.");
+		}
+		final String zaklad = v.nazev().replaceFirst(" \\(kopie( \\d+)?\\)$", "");
+		String nazev = nazevKopie(zaklad, " (kopie)");
+		for (int i = 2; najdi(nazev) != null; i++) {
+			nazev = nazevKopie(zaklad, " (kopie " + i + ")");
+		}
+		return ulozVlastni(v.sNazvem(nazev));
+	}
+
+	private static String nazevKopie(final String zaklad, final String koncovka) {
+		final int misto = NEJDELSI_NAZEV - koncovka.length();
+		return (zaklad.length() > misto ? zaklad.substring(0, misto).trim() : zaklad) + koncovka;
+	}
+
 	/** Přejmenuje vlastní definici; aktivita se zachová. */
 	public Challenge prejmenuj(final String stary, final String novy) {
 		final Challenge d = vlastni.get(klic(stary));

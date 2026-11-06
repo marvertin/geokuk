@@ -124,7 +124,7 @@ public class JChallengeDialogTest {
 			Assert.assertEquals("360° od domova (vlastní)", vybrana.nazev());
 			Assert.assertTrue(tlacitko("Uložit změny").isEnabled());
 			Assert.assertTrue(tlacitko("Smazat").isEnabled());
-			Assert.assertFalse(tlacitko("Vytvořit kopii…").isEnabled());
+			Assert.assertTrue(tlacitko("Vytvořit kopii…").isEnabled());
 			Assert.assertEquals(1, model.vlastni().size());
 		});
 	}
@@ -135,16 +135,15 @@ public class JChallengeDialogTest {
 			tlacitko("Vytvořit kopii…").doClick();
 			tlacitko("Souřadnice").doClick();
 			pole(0).setText("Moje 360");
-			pole(1).setText("50,1");
-			pole(2).setText("14,5");
+			pole(1).setText("N50°06.000 E14°30.000");
 			tlacitko("Uložit změny").doClick();
 			Assert.assertEquals(chyba(), " ".trim(), chyba());
 			Assert.assertEquals(1, model.vlastni().size());
 			final Challenge c = model.vlastni().get(0);
 			Assert.assertEquals("Moje 360", c.nazev());
 			Assert.assertEquals(Challenge.DruhStredu.SOURADNICE, c.stred().druh());
-			Assert.assertEquals(50.1, c.stred().lat(), 0);
-			Assert.assertEquals(14.5, c.stred().lon(), 0);
+			Assert.assertEquals(50.1, c.stred().lat(), 1e-9);
+			Assert.assertEquals(14.5, c.stred().lon(), 1e-9);
 			Assert.assertEquals("po uložení je vybrána přejmenovaná", "Moje 360", seznam().getSelectedValue().nazev());
 			Assert.assertEquals(5, dialog.polozky().size());
 		});
@@ -156,10 +155,12 @@ public class JChallengeDialogTest {
 			tlacitko("Vytvořit kopii…").doClick();
 			final Challenge pred = model.vlastni().get(0);
 			tlacitko("Souřadnice").doClick();
-			pole(1).setText("95");
-			pole(2).setText("14");
+			pole(1).setText("N95°00.000 E14°00.000");
 			tlacitko("Uložit změny").doClick();
-			Assert.assertTrue(chyba(), chyba().contains("šířka"));
+			Assert.assertTrue(chyba(), chyba().contains("Souřadnice neznám"));
+			pole(1).setText("nesmysl");
+			tlacitko("Uložit změny").doClick();
+			Assert.assertTrue(chyba(), chyba().contains("Souřadnice neznám. Zadejte např. N50°03.253 E14°23.399."));
 			Assert.assertEquals(pred, model.vlastni().get(0));
 			pole(0).setText("");
 			tlacitko("Domov").doClick();
@@ -328,6 +329,52 @@ public class JChallengeDialogTest {
 			} finally {
 				novy.dispose();
 			}
+		});
+	}
+
+	/** Pole souřadnic se nesmí oříznout ani při výchozí velikosti dialogu a písmu 150 %. */
+	@Test
+	public void poleSouradnicSeVejdeCeleVeVychoziVelikostiA150Procent() throws Exception {
+		naEdt(() -> {
+			tlacitko("Vytvořit kopii…").doClick();
+			tlacitko("Souřadnice").doClick();
+			final JTextField p = pole(1);
+			for (final double meritko : new double[] { 1.0, 1.5 }) {
+				zvetsiPismo(dialog.getContentPane(), meritko);
+				p.setText(FormularDefinice.UKAZKA_SOURADNIC);
+				dialog.pack();
+				dialog.validate();
+				final int potreba = p.getFontMetrics(p.getFont()).stringWidth(FormularDefinice.UKAZKA_SOURADNIC) + p.getInsets().left + p.getInsets().right;
+				Assert.assertTrue(meritko + ": šířka pole " + p.getWidth() + " < " + potreba, p.getWidth() >= potreba);
+				Assert.assertTrue(meritko + ": pole je celé v dialogu", SwingUtilities.convertRectangle(p.getParent(), p.getBounds(), dialog.getContentPane()).getMaxX() <= dialog.getContentPane().getWidth());
+			}
+		});
+	}
+
+	private static void zvetsiPismo(final Component c, final double meritko) {
+		if (c.getFont() != null) {
+			c.setFont(c.getFont().deriveFont((float) (12 * meritko)));
+		}
+		if (c instanceof Container) {
+			for (final Component k : ((Container) c).getComponents()) {
+				zvetsiPismo(k, meritko);
+			}
+		}
+	}
+
+	@Test
+	public void kopieVlastniChallengeJeVybranaNeaktivniAJdeUpravit() throws Exception {
+		naEdt(() -> {
+			tlacitko("Vytvořit kopii…").doClick();
+			final Challenge vlastni = seznam().getSelectedValue();
+			Assert.assertTrue("kopii jde vytvořit i z vlastní", tlacitko("Vytvořit kopii…").isEnabled());
+			tlacitko("Vytvořit kopii…").doClick();
+			final Challenge kopie = seznam().getSelectedValue();
+			Assert.assertEquals(vlastni.nazev() + " (kopie)", kopie.nazev());
+			Assert.assertEquals(vlastni.typ(), kopie.typ());
+			Assert.assertFalse(model.jeAktivni(kopie));
+			Assert.assertTrue(tlacitko("Uložit změny").isEnabled());
+			Assert.assertEquals(2, model.vlastni().size());
 		});
 	}
 

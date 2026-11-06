@@ -157,6 +157,14 @@ public class ChallengeModel extends Model0 {
 		return c;
 	}
 
+	/** Kopie vlastní challenge („název (kopie)“), neaktivní; stejný typ, střed, oblast, pravidla i zdroje nálezů. */
+	public Challenge kopieVlastni(final Challenge puvodni) {
+		final Challenge c = seznam.kopieVlastni(puvodni.nazev());
+		uloz();
+		ohlas(ChallengeZmenenyEvent.Druh.DEFINICE, c);
+		return c;
+	}
+
 	public Challenge prejmenuj(final Challenge c, final String novyNazev) {
 		final String staryKlic = klic(c);
 		final Challenge nova = seznam.prejmenuj(c.nazev(), novyNazev);
