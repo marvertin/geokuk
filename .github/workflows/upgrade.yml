@@ -1,0 +1,82 @@
+name: Zkouška přechodu ze starší verze
+
+# Stará vydaná verze (výchozí poslední ostrá) si vytvoří profil a cache, pak ji jako aktualizace z programu nahradí měřená verze.
+# Na Windows se zkouší zip s přibalenou Javou. Nic nevydává, výsledek je v souhrnu běhu a v artefaktu s logy.
+on:
+  workflow_dispatch:
+    inputs:
+      stara:
+        description: "Značka vydání, ze kterého se přechází (prázdné = poslední ostrá verze)"
+        default: ""
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/skripty/test-upgradu.py"
+      - ".github/workflows/upgrade.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  upgrade:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: JDK 21 (Temurin)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Měřená verze
+        shell: bash
+        run: ./mvnw -B -q -DskipTests package
+
+      - name: Stará verze
+        shell: bash
+        env:
+          STARA_VSTUP: ${{ inputs.stara }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          STARA="${STARA_VSTUP:-$(git tag --list 'v*' --sort=-v:refname | grep -v -- '-' | head -1)}"
+          echo "Stará verze: $STARA"
+          mkdir -p "$RUNNER_TEMP/stara"
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            gh release download "$STARA" --repo "$GITHUB_REPOSITORY" --pattern GeoKuk-windows.zip --dir "$RUNNER_TEMP/stara"
+            pwsh -NoProfile -Command "Expand-Archive -Path '$RUNNER_TEMP/stara/GeoKuk-windows.zip' -DestinationPath '$RUNNER_TEMP/stara' -Force"
+          else
+            gh release download "$STARA" --repo "$GITHUB_REPOSITORY" --pattern geokuk.jar --pattern start.jar --dir "$RUNNER_TEMP/stara"
+          fi
+
+      - name: Zkouška přechodu
+        shell: bash
+        run: |
+          NOVY_JAR="$(ls target/geokuk-[0-9]*.jar | head -1)"
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            ARGS=(--stary "$RUNNER_TEMP/stara/GeoKuk/program/geokuk.jar" "$RUNNER_TEMP/stara/GeoKuk/program/start.jar" --runtime "$RUNNER_TEMP/stara/GeoKuk/program/runtime")
+            PY=python
+          else
+            ARGS=(--stary "$RUNNER_TEMP/stara/geokuk.jar" "$RUNNER_TEMP/stara/start.jar")
+            PY=python3
+            DISPLEJ=(xvfb-run -a -s "-screen 0 1400x900x24")
+          fi
+          mkdir -p "$RUNNER_TEMP/zkouska"
+          "${DISPLEJ[@]}" "$PY" .github/skripty/test-upgradu.py "$RUNNER_TEMP/zkouska" "${ARGS[@]}" --novy "$NOVY_JAR" target/temporary-start.jar --mapy src/test/resources/offline-mapy
+
+      - name: Logy
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: upgrade-${{ runner.os }}
+          path: |
+            ${{ runner.temp }}/zkouska/GeoKuk/data/log/
+            ${{ runner.temp }}/zkouska/GeoKuk/*.out
