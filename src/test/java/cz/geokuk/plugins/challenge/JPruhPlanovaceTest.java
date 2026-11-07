@@ -308,6 +308,8 @@ public class JPruhPlanovaceTest {
 		Assert.assertEquals("Chybí 193 sektorů z 360 – klik ukáže podrobnosti", odznak.getToolTipText());
 	}
 
+	private static final String[] KLICE_PISMA = { "Button.font", "ToggleButton.font", "Label.font" };
+
 	/**
 	 * Texty tlačítek a odznaku („Nastavení…“, „chybí 360“) se na plné liště vejdou celé ve všech skinech, s písmem systému i se širokým DejaVu Sans (výchozí na
 	 * Linuxu), je-li nainstalované.
@@ -327,7 +329,7 @@ public class JPruhPlanovaceTest {
 					javax.swing.plaf.metal.MetalLookAndFeel.setCurrentTheme(tema);
 					javax.swing.UIManager.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
 					if (pismo != null) {
-						for (final String klic : new String[] { "Button.font", "ToggleButton.font", "Label.font" }) {
+						for (final String klic : KLICE_PISMA) {
 							final java.awt.Font f = javax.swing.UIManager.getFont(klic);
 							javax.swing.UIManager.put(klic, new javax.swing.plaf.FontUIResource(pismo, f.getStyle(), f.getSize()));
 						}
@@ -349,6 +351,9 @@ public class JPruhPlanovaceTest {
 				}
 			}
 		} finally {
+			for (final String klic : KLICE_PISMA) {
+				javax.swing.UIManager.put(klic, null);
+			}
 			javax.swing.plaf.metal.MetalLookAndFeel.setCurrentTheme(puvodniTema);
 			javax.swing.UIManager.setLookAndFeel(puvodni);
 		}
