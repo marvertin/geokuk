@@ -216,7 +216,7 @@ public final class PlanovacChallenge {
 			synchronized (this) {
 				dalsi.remove(c.nazev());
 			}
-			model.nastavVysledek(c, vysledek, v.lat, v.lon);
+			model.nastavVysledek(c, vysledek, v.lat, v.lon, v.oblast);
 		} finally {
 			p.zavri();
 			if (bezici == p) {

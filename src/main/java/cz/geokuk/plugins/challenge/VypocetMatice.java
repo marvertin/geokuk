@@ -56,16 +56,31 @@ public final class VypocetMatice {
 		return new VysledekPolicek(PULEK * PULEK, chybejici, kandidati, pravidla.maxKandidatu());
 	}
 
+	private static final String[] STITKY = new String[PULEK * PULEK];
+
+	static {
+		for (int d = 0; d < PULEK; d++) {
+			for (int t = 0; t < PULEK; t++) {
+				STITKY[d * PULEK + t] = "D" + hodnota(d) + "/T" + hodnota(t);
+			}
+		}
+	}
+
 	/** Štítek políčka z pořadí po půlkách, například „D4/T1“ nebo „D1,5/T2,5“. */
 	public static String stitek(final int obtiznost, final int teren) {
-		return "D" + hodnota(obtiznost) + "/T" + hodnota(teren);
+		return jePlatne(obtiznost) && jePlatne(teren) ? STITKY[obtiznost * PULEK + teren] : "D" + hodnota(obtiznost) + "/T" + hodnota(teren);
+	}
+
+	/** Předpočítaný štítek políčka, nebo null mimo 0 až 8. */
+	static String stitekNeboNull(final int obtiznost, final int teren) {
+		return jePlatne(obtiznost) && jePlatne(teren) ? STITKY[obtiznost * PULEK + teren] : null;
 	}
 
 	private static String hodnota(final int pulky) {
 		return pulky % 2 == 0 ? String.valueOf(1 + pulky / 2) : (1 + pulky / 2) + ",5";
 	}
 
-	private static boolean jePlatne(final int pulky) {
+	static boolean jePlatne(final int pulky) {
 		return pulky >= 0 && pulky < PULEK;
 	}
 }

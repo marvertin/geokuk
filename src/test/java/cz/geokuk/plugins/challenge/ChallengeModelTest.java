@@ -510,6 +510,26 @@ public class ChallengeModelTest {
 	}
 
 	@Test
+	public void dalsiSektorNastaviVybranySektorAOhlasiPolicko() throws Exception {
+		final Challenge c = model.ulozVlastni(vlastni("Moje"));
+		model.aktivuj(c);
+		model.nastavVysledek(c, sKandidaty(5, 120));
+		pockejNaEdt();
+		udalosti.clear();
+		final int sektor = model.dalsiSektor(c, true);
+		pockejNaEdt();
+		Assert.assertEquals(5, sektor);
+		Assert.assertEquals("výběr v modelu je vrácený sektor", sektor, model.vybranySektor(c));
+		Assert.assertEquals(Collections.singletonList(Druh.POLICKO), druhy());
+		Assert.assertEquals(c, udalosti.get(0).challenge());
+		udalosti.clear();
+		Assert.assertEquals(120, model.dalsiSektor(c, true));
+		pockejNaEdt();
+		Assert.assertEquals(120, model.vybranySektor(c));
+		Assert.assertEquals(Collections.singletonList(Druh.POLICKO), druhy());
+	}
+
+	@Test
 	public void sipkyPosouvajiPolickaMaticePoRadcichAVyberVNemModelu() throws Exception {
 		final Challenge c = dtAktivni("DT");
 		Assert.assertNull("bez výsledku", model.dalsiPolicko(c, true));

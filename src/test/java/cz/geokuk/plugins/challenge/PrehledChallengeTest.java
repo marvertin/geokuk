@@ -138,6 +138,113 @@ public class PrehledChallengeTest {
 		Assert.assertNotSame("nový výsledek, nový přehled", p, model.prehled());
 	}
 
+	private static Challenge dt(final String nazev) {
+		return new Challenge(nazev, Typ.DT_MATICE, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC);
+	}
+
+	@Test
+	public void sektorBoduSedisSVypoctemSektoruNaKouliIElipsoidu() {
+		final java.util.Random r = new java.util.Random(42);
+		for (final ZdrojPravidel zdroj : new ZdrojPravidel[] { ZdrojPravidel.PGC, ZdrojPravidel.STATOR }) {
+			final Challenge c = new Challenge("S", Typ.SEKTORY_360, Stred.souradnice(50, 14), OblastDef.zadna(), zdroj);
+			final PrehledChallenge p = PrehledChallenge.zeSektoru(c, vysledekSektoru(), 50, 14);
+			final VypocetSektoru.Klasifikator klasifikator = VypocetSektoru.primy(zdroj, 50, 14, null);
+			for (int i = 0; i < 2000; i++) {
+				final double lat = 50 + (r.nextDouble() - 0.5) * (i % 10 == 0 ? 80 : 2);
+				final double lon = 14 + (r.nextDouble() - 0.5) * (i % 10 == 0 ? 320 : 2);
+				final VypocetSektoru.Klasifikace k = klasifikator.klasifikuj(new VypocetSektoruTest.Kes("X", lat, lon, false));
+				Assert.assertTrue(k.jeVOblasti());
+				Assert.assertEquals(zdroj + " " + lat + ", " + lon, k.sektor(), p.sektorBodu(lat, lon));
+			}
+		}
+	}
+
+	@Test
+	public void sektorBoduVraciMinusJednaKdyzNeniCoSpocitat() {
+		final PrehledChallenge p = PrehledChallenge.zeSektoru(sektory("S", Stred.souradnice(50, 14)), vysledekSektoru(), 50, 14);
+		Assert.assertEquals("severně od středu", 0, p.sektorBodu(50.1, 14));
+		final PrehledChallenge naRovniku = PrehledChallenge.zeSektoru(sektory("R", Stred.souradnice(0, 14)), vysledekSektoru(), 0, 14);
+		Assert.assertEquals("východně po rovníku", 90, naRovniku.sektorBodu(0, 14.1));
+		Assert.assertEquals("západně po rovníku", 270, naRovniku.sektorBodu(0, 13.9));
+		Assert.assertEquals("jižně", 180, p.sektorBodu(49.9, 14));
+		Assert.assertEquals("přesně ve středu", -1, p.sektorBodu(50, 14));
+		Assert.assertEquals("neplatná šířka", -1, p.sektorBodu(91, 14));
+		Assert.assertEquals("neplatná délka", -1, p.sektorBodu(50, 181));
+		Assert.assertEquals("NaN", -1, p.sektorBodu(Double.NaN, 14));
+		Assert.assertEquals("bez středu", -1, PrehledChallenge.zeSektoru(sektory("S", Stred.domov()), vysledekSektoru(), Double.NaN, Double.NaN).sektorBodu(50.1, 14));
+		Assert.assertEquals("střed mimo rozsah", -1, PrehledChallenge.zeSektoru(sektory("S", Stred.domov()), vysledekSektoru(), 95, 14).sektorBodu(50.1, 14));
+		Assert.assertEquals("matice sektory nemá", -1, PrehledChallenge.zPolicek(dt("DT"), new VysledekPolicek(81, Collections.<String> emptyList(), Collections.<KandidatPolicka> emptyList()), 50, 14).sektorBodu(50.1, 14));
+	}
+
+	@Test
+	public void jeVOblastiBezOmezeniVzdyAJinakPodleOblasti() throws Exception {
+		Assert.assertTrue(PrehledChallenge.zeSektoru(sektory("S", Stred.domov()), vysledekSektoru(), 50, 14).jeVOblasti(10, 10));
+		final Oblast jenSever = new Oblast() {
+			@Override
+			public boolean obsahuje(final double lat, final double lon) {
+				return lat > 50;
+			}
+
+			@Override
+			public String verze() {
+				return "t";
+			}
+		};
+		final PrehledChallenge p = PrehledChallenge.zeSektoru(sektory("S", Stred.domov()), vysledekSektoru(), 50, 14, jenSever);
+		Assert.assertTrue(p.jeVOblasti(50.5, 14));
+		Assert.assertFalse(p.jeVOblasti(49.5, 14));
+		final Challenge c = model.ulozVlastni(sektory("A", Stred.domov()));
+		model.aktivuj(c);
+		model.nastavVysledek(c, vysledekSektoru(), 50, 14, jenSever);
+		naEdt();
+		Assert.assertFalse("oblast jde z modelu do přehledu", model.prehled().jeVOblasti(49.5, 14));
+		Assert.assertTrue(model.prehled().jeVOblasti(50.5, 14));
+		model.nastavVysledek(c, vysledekSektoru(), 50, 14);
+		naEdt();
+		Assert.assertTrue("nový výsledek bez oblasti ji zruší", model.prehled().jeVOblasti(49.5, 14));
+	}
+
+	@Test
+	public void stitekAIndexPolickaPodlePulekJenUMatice() {
+		final PrehledChallenge p = PrehledChallenge.zPolicek(dt("DT"), new VysledekPolicek(81, Collections.<String> emptyList(), Collections.<KandidatPolicka> emptyList()), 50, 14);
+		Assert.assertEquals("D1/T1", p.stitekPolicka(0, 0));
+		Assert.assertEquals("D3/T4", p.stitekPolicka(4, 6));
+		Assert.assertEquals("D2,5/T3,5", p.stitekPolicka(3, 5));
+		Assert.assertEquals("D5/T5", p.stitekPolicka(8, 8));
+		Assert.assertSame("stejný objekt, bez alokace", p.stitekPolicka(4, 6), p.stitekPolicka(4, 6));
+		Assert.assertEquals(VypocetMatice.stitek(4, 6), p.stitekPolicka(4, 6));
+		Assert.assertNull(p.stitekPolicka(-1, 0));
+		Assert.assertNull(p.stitekPolicka(0, -1));
+		Assert.assertNull(p.stitekPolicka(9, 0));
+		Assert.assertNull(p.stitekPolicka(0, 9));
+		Assert.assertEquals(0, p.indexPolicka(0, 0));
+		Assert.assertEquals(8, p.indexPolicka(0, 8));
+		Assert.assertEquals(9, p.indexPolicka(1, 0));
+		Assert.assertEquals(80, p.indexPolicka(8, 8));
+		Assert.assertEquals(-1, p.indexPolicka(-1, 0));
+		Assert.assertEquals(-1, p.indexPolicka(0, -1));
+		Assert.assertEquals(-1, p.indexPolicka(9, 0));
+		Assert.assertEquals(-1, p.indexPolicka(0, 9));
+		final PrehledChallenge sektory = PrehledChallenge.zeSektoru(sektory("S", Stred.domov()), vysledekSektoru(), 50, 14);
+		Assert.assertNull("360° políčka nemá", sektory.stitekPolicka(0, 0));
+		Assert.assertEquals(-1, sektory.indexPolicka(0, 0));
+		final PrehledChallenge kalendar = PrehledChallenge.zPolicek(new Challenge("K", Typ.KALENDAR, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC),
+				new VysledekPolicek(365, Collections.<String> emptyList(), Collections.<KandidatPolicka> emptyList()), 50, 14);
+		Assert.assertNull("kalendář není matice", kalendar.stitekPolicka(0, 0));
+		Assert.assertEquals(-1, kalendar.indexPolicka(0, 0));
+	}
+
+	@Test
+	public void stitkyVypoctuMaticeSeShodujiSPredpocitanymiPoRozsahu() {
+		for (int d = 0; d < 9; d++) {
+			for (int t = 0; t < 9; t++) {
+				Assert.assertEquals("D" + (d % 2 == 0 ? String.valueOf(1 + d / 2) : (1 + d / 2) + ",5") + "/T" + (t % 2 == 0 ? String.valueOf(1 + t / 2) : (1 + t / 2) + ",5"),
+						VypocetMatice.stitek(d, t));
+			}
+		}
+		Assert.assertEquals("mimo rozsah se počítá jako dřív", "D6/T1", VypocetMatice.stitek(10, 0));
+	}
+
 	@Test
 	public void prehledSektoruMaBarvuSplnenoStredAStitky() throws Exception {
 		final Challenge c = model.ulozVlastni(sektory("A", Stred.domov()));

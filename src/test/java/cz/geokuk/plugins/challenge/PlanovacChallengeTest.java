@@ -391,6 +391,18 @@ public class PlanovacChallengeTest {
 	}
 
 	@Test
+	public void prehledZnaOblastSKterouSePocitalo() throws Exception {
+		napojNaModel();
+		final Challenge c = oblastni(ctverec());
+		planovac.keseNacteny(kese(200, 1));
+		zapni(c);
+		pockej(() -> model.prehled() != null, "přehled");
+		Assert.assertTrue("uvnitř čtverce", model.prehled().jeVOblasti(50.2, 14.2));
+		Assert.assertFalse("vně čtverce", model.prehled().jeVOblasti(52.0, 14.0));
+		Assert.assertEquals("sektor bodu je z azimutu od středu", 0, model.prehled().sektorBodu(50.5, 14.0));
+	}
+
+	@Test
 	public void dalsiZmenaZrusiBeziciPredpocet() throws Exception {
 		napojNaModel();
 		final List<Predpocet> predpocty = new CopyOnWriteArrayList<>();
