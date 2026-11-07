@@ -85,8 +85,8 @@ public class TextyPopupuPlanovaceTest {
 
 	@Test
 	public void pravidlaAStred() {
-		assertEquals("PGC", TextyPopupuPlanovace.pravidla(Challenge.ZdrojPravidel.PGC));
 		assertEquals("Stator", TextyPopupuPlanovace.pravidla(Challenge.ZdrojPravidel.STATOR));
+		assertEquals("Project-GC", TextyPopupuPlanovace.pravidla(Challenge.ZdrojPravidel.PGC));
 		assertEquals("domov", TextyPopupuPlanovace.stred(Challenge.Stred.domov()));
 		assertEquals("výchozí bod GC12345", TextyPopupuPlanovace.stred(Challenge.Stred.listing("GC12345")));
 		assertEquals("50.08700, 14.42100", TextyPopupuPlanovace.stred(Challenge.Stred.souradnice(50.087, 14.421)));

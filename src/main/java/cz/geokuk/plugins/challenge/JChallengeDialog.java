@@ -90,6 +90,7 @@ public class JChallengeDialog extends JMyDialog0 {
 		radek(f, r++, aktivni, null);
 		radek(f, r++, new JLabel("Název"), nazev);
 		final JLabel popisekPravidel = new JLabel("Pravidla");
+		pravidla.setToolTipText("<html>Project-GC: koule, bez Lab a Locationless, jen nálezy s logem na gc.com.<br>Stator: elipsoid WGS84, včetně Lab, bez Locationless.</html>");
 		final JLabel popisekStredu = new JLabel("Střed");
 		final JPanel stredSouradnicePanel = panel(stredSouradnice, souradnice);
 		souradnice.setToolTipText("Např. " + FormularDefinice.UKAZKA_SOURADNIC);

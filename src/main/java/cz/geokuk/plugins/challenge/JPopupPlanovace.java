@@ -335,7 +335,7 @@ public class JPopupPlanovace extends JSlide0 implements AfterInjectInit {
 		/** Společná hlavička; vrátí false, když výsledek ještě není a ukáže se jen průběh. */
 		private boolean zahlavi(final Challenge c, final boolean maVysledek, final StavPredpoctu stav, final boolean jenKandidati) {
 			nadpis.setPlnyText(TextyPopupuPlanovace.nadpis(c));
-			typ.setText("Typ: " + StitkyPruhu.typ(c.typ()) + "    Pravidla: " + TextyPopupuPlanovace.pravidla(c.zdroj()));
+			typ.setText("Typ: " + StitkyPruhu.typ(c.typ()) + (c.typ() == Challenge.Typ.SEKTORY_360 ? "    Pravidla: " + TextyPopupuPlanovace.pravidla(c.zdroj()) : ""));
 			stred.setText("Střed: " + TextyPopupuPlanovace.stred(c.stred()));
 			stred.setVisible(c.typ() == Challenge.Typ.SEKTORY_360);
 			nadpisSeznamu.setText(TextyPopupuPlanovace.nadpisSeznamu(c.typ()));

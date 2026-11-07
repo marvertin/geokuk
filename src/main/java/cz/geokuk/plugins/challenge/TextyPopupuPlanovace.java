@@ -63,7 +63,7 @@ final class TextyPopupuPlanovace {
 	}
 
 	static String pravidla(final Challenge.ZdrojPravidel z) {
-		return z == Challenge.ZdrojPravidel.STATOR ? "Stator" : "PGC";
+		return z == Challenge.ZdrojPravidel.STATOR ? "Stator" : "Project-GC";
 	}
 
 	static String stred(final Challenge.Stred s) {
