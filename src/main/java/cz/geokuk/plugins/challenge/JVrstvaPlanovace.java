@@ -20,6 +20,7 @@ abstract class JVrstvaPlanovace extends JSingleSlide0 {
 
 	protected transient ChallengeModel model;
 	private transient java.util.concurrent.Executor stavba;
+	private volatile boolean kesoidyViditelne = true;
 	private final transient Runnable poHotovo = this::repaint;
 	private transient TvarPlanovace tvar;
 	private transient Supplier<? extends Collection<Rectangle>> prekazky = Collections::emptyList;
@@ -48,6 +49,16 @@ abstract class JVrstvaPlanovace extends JSingleSlide0 {
 		l.add(cz.geokuk.framework.RozmisteniPrekryvu.pruhPlanovace(cz.geokuk.framework.RozmisteniPrekryvu.volnaSirkaPruhu(sirka, panely)));
 		l.add(cz.geokuk.framework.RozmisteniPrekryvu.UKAZATEL_VYKONU);
 		return l;
+	}
+
+	/** Skryté kešoidy (F5): kandidáti i čára k nim se nekreslí, prstenec, klín a střed ano, patří k challenge. */
+	public void onEvent(final cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent event) {
+		kesoidyViditelne = event.isOnoff();
+		repaint();
+	}
+
+	boolean kesoidyViditelne() {
+		return kesoidyViditelne;
 	}
 
 	public void onEvent(final ChallengeZmenenyEvent event) {

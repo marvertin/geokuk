@@ -77,7 +77,7 @@ public class JPlanovacPodKeskami extends JVrstvaPlanovace {
 				g.setStroke(new BasicStroke(1.2f));
 				g.draw(v.klin);
 			}
-			if (v.vybrany != null) {
+			if (v.vybrany != null && kesoidyViditelne()) {
 				g.setColor(LEM);
 				g.setStroke(new BasicStroke(3.5f));
 				g.drawLine(v.stred.x, v.stred.y, v.vybrany.x, v.vybrany.y);

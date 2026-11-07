@@ -119,11 +119,11 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 			}
 			pocetPrekazek = pocetObdelniku;
 			kresliStred(g, c, t, tucne);
-			if (kresliSektory() && t.vybranyPozice != null && t.popisVybraneho != null && t.stred != null) {
+			if (kesoidyViditelne() && kresliSektory() && t.vybranyPozice != null && t.popisVybraneho != null && t.stred != null) {
 				final Point k = PixelyMapy.transform(c, t.vybranyPozice, new Point());
 				umistiOkoloBodu(g, tucne, t.popisVybraneho, k.x, k.y, POLOMER_KROUZKU + 12);
 			}
-			if (kresliStitky()) {
+			if (kesoidyViditelne() && kresliStitky()) {
 				kresliKandidaty(g, c, t, pismo);
 			}
 		} finally {

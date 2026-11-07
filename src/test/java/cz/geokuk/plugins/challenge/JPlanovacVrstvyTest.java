@@ -428,6 +428,63 @@ public class JPlanovacVrstvyTest {
 	}
 
 	@Test
+	public void priSkrytychKesoidechSeKandidatiNekresliAleStredAPrstenecAno() throws Exception {
+		zobraz(TvarPlanovaceTest.vysledek(), 50.0, 14.0);
+		model.nastavVybranyKandidat(model.zobrazena(), new VybranyKandidat("GC1", 50.01, 14.0, 150, 1200));
+		SwingUtilities.invokeAndWait(() -> {});
+		final Coord c = mapa(50.005, 14.0, 14);
+		final java.awt.Point s = PixelyMapy.transform(c, PixelyMapy.mou(50.0, 14.0), new java.awt.Point());
+		nakresli(nad, c);
+		final int obdelniku = nad.obdelnikyStitku().size();
+		Assert.assertEquals("kandidáti jsou vidět", 1, nad.posledniZnacek() > 0 ? 1 : 0);
+		nad.onEvent(new cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent(false));
+		final BufferedImage img = nakresli(nad, c);
+		Assert.assertEquals("žádné kroužky kandidátů", 0, nad.posledniZnacek());
+		final int pocetSkryte = nad.obdelnikyStitku().size();
+		Assert.assertTrue("kandidáti odpadli: " + pocetSkryte + " < " + obdelniku, pocetSkryte < obdelniku);
+		model.nastavVybranyKandidat(model.zobrazena(), null);
+		SwingUtilities.invokeAndWait(() -> {});
+		nakresli(nad, c);
+		Assert.assertEquals("ani štítek vybraného sektoru (stejně štítků jako bez výběru)", nad.obdelnikyStitku().size(), pocetSkryte);
+		model.nastavVybranyKandidat(model.zobrazena(), new VybranyKandidat("GC1", 50.01, 14.0, 150, 1200));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("značka středu zůstává", AkcentPlanovace.barva().getRGB(), img.getRGB(s.x - 7, s.y));
+		nad.onEvent(new cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent(true));
+		nakresli(nad, c);
+		Assert.assertTrue("po zapnutí zpět", nad.posledniZnacek() > 0);
+	}
+
+	@Test
+	public void priSkrytychKesoidechNeniCaraKKandidatoviAlePrstenecAKlinZustavaji() throws Exception {
+		zobraz(new VysledekSektoru(obsazene(0, 100), new BitSet(360), new VysledekSektoru.Kandidati[360], 100, TvarPlanovaceTest.vysledek().vsichniKandidati()), 50.0, 14.0);
+		model.nastavVybranyKandidat(model.zobrazena(), new VybranyKandidat("GC1", 50.01, 14.0, 150, 1200));
+		SwingUtilities.invokeAndWait(() -> {});
+		final Coord c = mapa(50.005, 14.0, 14);
+		final java.awt.Point a = PixelyMapy.transform(c, PixelyMapy.mou(50.0, 14.0), new java.awt.Point());
+		final java.awt.Point b = PixelyMapy.transform(c, PixelyMapy.mou(50.01, 14.0), new java.awt.Point());
+		BufferedImage img = nakresli(pod, c);
+		Assert.assertTrue("čára je vidět", pixelNaUsecce(img, a, b, AkcentPlanovace.barva().getRGB()));
+		pod.onEvent(new cz.geokuk.plugins.kesoid.mvc.KesoidOnoffEvent(false));
+		img = nakresli(pod, c);
+		Assert.assertFalse("čára zmizí", pixelNaUsecce(img, a, b, AkcentPlanovace.barva().getRGB()));
+		final Coord siroka = mapa(50.0, 14.0, 13);
+		final java.awt.Point stred = PixelyMapy.transform(siroka, PixelyMapy.mou(50.0, 14.0), new java.awt.Point());
+		Assert.assertTrue("prstenec zůstává", pixelNaPaprsku(nakresli(pod, siroka), stred.x, stred.y, 90.5, JPlanovacPodKeskami.SPLNENY.getRGB()));
+	}
+
+	private static boolean pixelNaUsecce(final BufferedImage img, final java.awt.Point a, final java.awt.Point b, final int rgb) {
+		final int n = Math.max(Math.abs(b.x - a.x), Math.abs(b.y - a.y));
+		for (int i = 0; i <= n; i++) {
+			final int x = a.x + (b.x - a.x) * i / Math.max(1, n);
+			final int y = a.y + (b.y - a.y) * i / Math.max(1, n);
+			if (x >= 0 && y >= 0 && x < W && y < H && img.getRGB(x, y) == rgb) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Test
 	public void stitekMaCitelnyTextVeTrechTematech() {
 		final javax.swing.plaf.metal.MetalTheme[] temata = { new DefaultMetalTheme(), new OceanTheme(), new cz.geokuk.core.lookandfeel.CharcoalTheme() };
 		final javax.swing.LookAndFeel puvodni = UIManager.getLookAndFeel();
