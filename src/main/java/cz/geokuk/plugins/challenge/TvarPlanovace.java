@@ -33,6 +33,7 @@ final class TvarPlanovace {
 	private double polomerPrstence = Double.NaN;
 	private List<GeometrieSektoru.Usek> prstenec;
 	private List<GeometrieSektoru.Bod> klin;
+	private int klinSektor = -1;
 
 	private TvarPlanovace(final PrehledChallenge prehled, final VybranyKandidat vybrany, final java.util.function.BooleanSupplier zruseno) {
 		this.prehled = prehled;
@@ -130,10 +131,16 @@ final class TvarPlanovace {
 
 	/** Klín vybraného sektoru až k prstenci daného poloměru, nebo prázdný. */
 	List<GeometrieSektoru.Bod> klin(final double polomer) {
+		return klin(vybranySektor, polomer);
+	}
+
+	/** Klín sektoru {@code sektor} (0 až 359; záporný = žádný) až k prstenci daného poloměru; pamatuje si poslední. */
+	List<GeometrieSektoru.Bod> klin(final int sektor, final double polomer) {
 		prstenec(polomer);
-		if (klin == null) {
-			klin = stredWgs == null || vybranySektor < 0 ? java.util.Collections.<GeometrieSektoru.Bod>emptyList()
-					: GeometrieSektoru.klin(stredWgs.lat, stredWgs.lon, vybranySektor, 0, polomer, model);
+		if (klin == null || klinSektor != sektor) {
+			klinSektor = sektor;
+			klin = stredWgs == null || sektor < 0 || sektor > 359 ? java.util.Collections.<GeometrieSektoru.Bod>emptyList()
+					: GeometrieSektoru.klin(stredWgs.lat, stredWgs.lon, sektor, 0, polomer, model);
 		}
 		return klin;
 	}

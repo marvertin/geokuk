@@ -26,22 +26,24 @@ public class JPlanovacPodKeskami extends JVrstvaPlanovace {
 	private static final class Tvary {
 		final TvarPlanovace tvar;
 		final Coord coord;
+		final int sektor;
 		final List<Path2D> useky = new ArrayList<>();
 		final List<GeometrieSektoru.Stav> stavy = new ArrayList<>();
 		Path2D klin;
 		Point stred;
 		Point vybrany;
 
-		Tvary(final TvarPlanovace tvar, final Coord coord) {
+		Tvary(final TvarPlanovace tvar, final Coord coord, final int sektor) {
 			this.tvar = tvar;
 			this.coord = coord;
+			this.sektor = sektor;
 			final double polomer = TvarPlanovace.polomerPrstence(coord);
 			final Point p = new Point();
 			for (final GeometrieSektoru.Usek u : tvar.prstenec(polomer)) {
 				useky.add(cesta(coord, u.body(), p, false));
 				stavy.add(u.stav());
 			}
-			final List<GeometrieSektoru.Bod> k = tvar.klin(polomer);
+			final List<GeometrieSektoru.Bod> k = tvar.klin(sektor, polomer);
 			if (!k.isEmpty()) {
 				klin = cesta(coord, k, p, true);
 			}
@@ -61,9 +63,10 @@ public class JPlanovacPodKeskami extends JVrstvaPlanovace {
 			return;
 		}
 		final Coord c = getSoord();
+		final VyberZvyrazneni vyber = zvyrazneni(t);
 		Tvary v = tvary;
-		if (v == null || v.tvar != t || !v.coord.equals(c)) {
-			v = new Tvary(t, c);
+		if (v == null || v.tvar != t || !v.coord.equals(c) || v.sektor != vyber.sektor) {
+			v = new Tvary(t, c, vyber.sektor);
 			tvary = v;
 		}
 		final Graphics2D g = (Graphics2D) aG.create();

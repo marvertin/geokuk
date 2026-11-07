@@ -34,6 +34,13 @@ final class TextyKresleni {
 		return "Sektor " + sektor + "° · " + kandidatu(pocet) + (Double.isNaN(metru) ? "" : " · " + vzdalenost(metru));
 	}
 
+	/** Štítek vybrané keše: „Sektor 213° · 5 kandidátů · 46 km“, u sektoru bez kandidátů jen „Sektor 213°“. */
+	static String sektorVybrane(final int sektor, final PrehledChallenge prehled) {
+		final Object zdroj = prehled.zdroj();
+		final VysledekSektoru.Kandidati k = zdroj instanceof VysledekSektoru ? ((VysledekSektoru) zdroj).kandidati(sektor) : null;
+		return k != null && k.pocet() > 0 ? vybranySektor(sektor, k.pocet(), k.nejblizsiVzdalenost()) : "Sektor " + sektor + "°";
+	}
+
 	/** Štítek středu: „Střed: domov“, „Střed: GC56R49“. */
 	static String stred(final String popis) {
 		return "Střed: " + popis;

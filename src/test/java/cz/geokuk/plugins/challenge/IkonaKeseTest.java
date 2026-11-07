@@ -21,4 +21,13 @@ public class IkonaKeseTest {
 		IkonaKese.okraje(new Indexator<>(new BoundingRect(0, 0, 10_000, 10_000)), new Mou(1000, 1000), 1.5, o);
 		Assert.assertEquals("keš v indexu není, platí odhad", 12, o[0]);
 	}
+
+	@Test
+	public void tretiPrvekPoleJeHorniOkrajIkony() {
+		final int[] o = new int[3];
+		IkonaKese.okraje(null, new Mou(1000, 1000), 1, o);
+		Assert.assertEquals(-8, o[2]);
+		IkonaKese.okraje(null, new Mou(1000, 1000), 2, o);
+		Assert.assertEquals(-16, o[2]);
+	}
 }

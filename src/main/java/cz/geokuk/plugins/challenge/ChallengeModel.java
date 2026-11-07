@@ -188,6 +188,29 @@ public class ChallengeModel extends Model0 {
 		ohlas(ChallengeZmenenyEvent.Druh.ZOBRAZENI, null);
 	}
 
+	private volatile VybranaKes vybranaKes;
+	private volatile long casVyberuKese;
+
+	/** Keš z gc.com, kterou program vybral, nebo null. */
+	public VybranaKes vybranaKes() {
+		return vybranaKes;
+	}
+
+	/** Kdy (podle {@link System#nanoTime}) se naposledy změnila vybraná keš; pro rozhodnutí, co je novější, výběr keše, nebo sektoru či políčka. */
+	public long casVyberuKese() {
+		return casVyberuKese;
+	}
+
+	/** Program vybral keš (null = žádná z gc.com); ve vlákně Swingu. Ohlásí se jen změna. */
+	public void setVybranaKes(final VybranaKes kes) {
+		if (java.util.Objects.equals(vybranaKes, kes)) {
+			return;
+		}
+		vybranaKes = kes;
+		casVyberuKese = System.nanoTime();
+		ohlas(ChallengeZmenenyEvent.Druh.VYBRANA_KES, null);
+	}
+
 	private volatile int stitkuNaMape = -1;
 	private volatile int kandidatuVeVyrezu = -1;
 

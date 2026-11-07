@@ -35,7 +35,8 @@ public final class KesVstup implements VstupKes, VstupDT, VstupKalendar {
 		return jeVhodny(kesoid) ? new KesVstup(kesoid, kesoid.getMainWpt(), Objects.requireNonNull(pasmo, "pasmo")) : null;
 	}
 
-	private static boolean jeVhodny(final Kesoid kesoid) {
+	/** Je to keš z gc.com se souřadnicemi, tedy taková, která se v challenge počítá? */
+	static boolean jeVhodny(final Kesoid kesoid) {
 		if (!(kesoid instanceof Kes) || kesoid.getIdentifier() == null || !kesoid.getIdentifier().startsWith("GC")) {
 			return false;
 		}

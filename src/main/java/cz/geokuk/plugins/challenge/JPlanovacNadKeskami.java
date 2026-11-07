@@ -67,6 +67,10 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 	/** Index keší (pro ikony) a zvětšení ikon z vrstvy keší. */
 	private transient volatile Indexator<Wpt> indexatorKesi;
 	private transient volatile double meritkoIkon = 1;
+	/** Keše zvýrazněného sektoru nebo políčka; staví se jednou pro okno a výběr. */
+	private transient ZvyrazneniKese zvyrazneniKese;
+	private transient CleniVyberu cleniVyberu;
+	private final transient java.util.List<Rectangle> stitkyZvyrazneniKresleni = new java.util.ArrayList<>();
 
 	/** Výběr kandidátů ve výřezu pro jeden podklad a jednu polohu mapy; kreslení z něj čte, dokud se nic nezmění. */
 	private static final class Vyber {
@@ -110,6 +114,15 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		return new java.util.ArrayList<>(stitkyKandidatuKresleni);
 	}
 
+	/** Štítky keší zvýrazněného sektoru nebo políčka z posledního kreslení. */
+	CleniVyberu cleniVyberu() {
+		return cleniVyberu;
+	}
+
+	java.util.List<Rectangle> obdelnikyStitkuZvyrazneni() {
+		return new java.util.ArrayList<>(stitkyZvyrazneniKresleni);
+	}
+
 	/** Překážky a štítky nahoře (střed, vybraný sektor) z posledního kreslení. */
 	java.util.List<Rectangle> obdelnikyStitku() {
 		final java.util.List<Rectangle> l = new java.util.ArrayList<>();
@@ -117,6 +130,11 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 			l.add(new Rectangle(ox[i], oy[i], ow[i], oh[i]));
 		}
 		return l;
+	}
+
+	/** Index keší (testy; jinak z události vrstvy keší). */
+	void setIndexatorKesi(final Indexator<Wpt> indexator) {
+		indexatorKesi = indexator;
 	}
 
 	public void onEvent(final KeskyVyfiltrovanyEvent event) {
@@ -139,6 +157,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		posledniZnacek = 0;
 		posledniVeVyrezu = 0;
 		stitkyKandidatuKresleni.clear();
+		stitkyZvyrazneniKresleni.clear();
 		pocetObdelniku = 0;
 		final TvarPlanovace t = tvar();
 		if (t == null || !isSoordInitialized()) {
@@ -161,13 +180,14 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 			}
 			pocetPrekazek = pocetObdelniku;
 			// Pořadí kreslení: nejdřív štítky kandidátů, nad nimi střed a vybraný sektor, aby byly vždy čitelné.
+			final VyberZvyrazneni vyber = zvyrazneni(t);
 			if (kesoidyViditelne() && kresliStitky()) {
 				kresliKandidaty(g, c, t, pismo);
+				kresliZvyrazneni(g, c, t, pismo, vyber);
 			}
 			kresliStred(g, c, t, tucne);
-			if (kesoidyViditelne() && kresliSektory() && t.vybranyPozice != null && t.popisVybraneho != null && t.stred != null) {
-				final Point k = PixelyMapy.transform(c, t.vybranyPozice, new Point());
-				umistiOkoloBodu(g, tucne, t.popisVybraneho, k.x, k.y, ODSAZENI_VYBRANEHO, false);
+			if (kesoidyViditelne()) {
+				kresliStitekVybraneKese(g, c, t, tucne, vyber);
 			}
 			nahlasPocty();
 		} finally {
@@ -405,6 +425,71 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		}
 		vyber = v;
 		return v;
+	}
+
+	/** Štítky keší zvýrazněného sektoru nebo políčka: výplň v akcentu, vždy těsně vpravo od ikony, nad štítky kandidátů. */
+	private void kresliZvyrazneni(final Graphics2D g, final Coord c, final TvarPlanovace t, final Font pismo, final VyberZvyrazneni vyber) {
+		if (vyber.jeNic() || vyber.sektor >= 0 && !kresliSektory()) {
+			return;
+		}
+		final Indexator<Wpt> indexator = indexatorKesi;
+		final double meritko = meritkoIkon;
+		if (indexator == null) {
+			return;
+		}
+		CleniVyberu cl = cleniVyberu;
+		if (cl == null || !cl.jeStejny(t.prehled, indexator, vyber)) {
+			if (cl != null) {
+				cl.zrus();
+			}
+			cl = CleniVyberu.spust(t.prehled, indexator, vyber, stavba(), poHotovo());
+			cleniVyberu = cl;
+		}
+		ZvyrazneniKese z = zvyrazneniKese;
+		if (z == null || !z.jeStejne(t, c, indexator, cl, meritko, vyber)) {
+			z = ZvyrazneniKese.postav(t, c, indexator, cl, meritko, vyber);
+			zvyrazneniKese = z;
+		}
+		final Rectangle misto = new Rectangle();
+		final int mezera = Math.max(MEZERA_STITKU, (int) Math.round(MEZERA_STITKU * meritko));
+		for (int q = 0; q < z.pocet; q++) {
+			misto.setBounds(z.x[q] - 3, z.y[q] - 3, 6, 6);
+			if (kryjeVNekterou(misto)) {
+				continue;
+			}
+			final Dimension d = rozmerStitku(g, pismo, z.text[q]);
+			stitkyZvyrazneniKresleni.add(nakresliStitek(g, pismo, z.text[q], z.x[q] + z.ikonaVpravo[q] + mezera, z.y[q] + z.ikonaStredY[q] - d.height / 2, AkcentPlanovace.barva(), true));
+		}
+	}
+
+	/**
+	 * Štítek keše, podle které se vybralo, nebo vybraného kandidáta: u 360° „Sektor 213° · 5 kandidátů · 46 km“, u D/T štítek políčka. Kreslí se úplně nahoře.
+	 */
+	private void kresliStitekVybraneKese(final Graphics2D g, final Coord c, final TvarPlanovace t, final Font tucne, final VyberZvyrazneni vyber) {
+		if (vyber.kes != null && vyber.sektor >= 0 && kresliSektory()) {
+			final String text = TextyKresleni.sektorVybrane(vyber.sektor, t.prehled);
+			umistiNadKes(g, c, tucne, text, vyber.kes, false);
+		} else if (vyber.kes != null && vyber.stitek != null && kresliStitky()) {
+			umistiNadKes(g, c, tucne, vyber.stitek, vyber.kes, true);
+		} else if (vyber.kes == null && vyber.sektor >= 0 && vyber.sektor == t.vybranySektor && t.vybranyPozice != null && t.popisVybraneho != null && t.stred != null && kresliSektory()) {
+			final Point k = PixelyMapy.transform(c, t.vybranyPozice, new Point());
+			umistiOkoloBodu(g, tucne, t.popisVybraneho, k.x, k.y, ODSAZENI_VYBRANEHO, false);
+		}
+	}
+
+	/** Štítek vybrané keše stojí nad její ikonou, aby nepřekrýval popisek keše vpravo od ikony. */
+	private void umistiNadKes(final Graphics2D g, final Coord c, final Font f, final String text, final VybranaKes kes, final boolean zvyrazneny) {
+		final cz.geokuk.core.coordinates.Mou mou = PixelyMapy.mou(kes.lat(), kes.lon());
+		final Point p = PixelyMapy.transform(c, mou, new Point());
+		if (p.x < 0 || p.y < 0 || p.x > c.getWidth() || p.y > c.getHeight()) {
+			return;
+		}
+		final int[] okraje = new int[3];
+		IkonaKese.okraje(indexatorKesi, mou, meritkoIkon, okraje);
+		final Dimension d = rozmerStitku(g, f, text);
+		final int mezera = Math.max(MEZERA_STITKU, (int) Math.round(MEZERA_STITKU * meritkoIkon));
+		final Rectangle r = nakresliStitek(g, f, text, p.x - d.width / 2, Math.max(0, p.y + okraje[2] - mezera - d.height), AkcentPlanovace.barva(), zvyrazneny);
+		zapis(r.x, r.y, r.width, r.height);
 	}
 
 	/** Štítek kandidáta stojí vždy těsně vpravo od své ikony, bez vyhýbání ostatním štítkům; ve hustotě se slévají. */
