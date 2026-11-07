@@ -37,11 +37,16 @@ public class LimityKresleniTest {
 
 	@Test
 	public void vlastnostiPrebijiUlozene() {
-		System.setProperty("geokuk.limitIkon", "60000");
-		System.setProperty("geokuk.limitTecek", "1000000");
-		assertEquals(LimityKresleni.of(60_000, 1_000_000), LimityKresleni.VYCHOZI.sVlastnostmi());
-		System.clearProperty("geokuk.limitTecek");
-		assertEquals(LimityKresleni.of(60_000, 300_000), LimityKresleni.VYCHOZI.sVlastnostmi());
+		try {
+			System.setProperty("geokuk.limitIkon", "60000");
+			System.setProperty("geokuk.limitTecek", "1000000");
+			assertEquals(LimityKresleni.of(60_000, 1_000_000), LimityKresleni.VYCHOZI.sVlastnostmi());
+			System.clearProperty("geokuk.limitTecek");
+			assertEquals(LimityKresleni.of(60_000, 300_000), LimityKresleni.VYCHOZI.sVlastnostmi());
+		} finally {
+			System.clearProperty("geokuk.limitIkon");
+			System.clearProperty("geokuk.limitTecek");
+		}
 	}
 
 	@Test
