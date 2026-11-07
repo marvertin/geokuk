@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
@@ -14,6 +15,11 @@ import cz.geokuk.core.coord.PrvniNacitaniMapy;
 
 /** Kolečko načítání se ukáže až po prodlevě, plynule se objeví a po poslední dlaždici zmizí. */
 public class IndikatorNacitaniTest {
+
+	@After
+	public void obnovPo() {
+		PrvniNacitaniMapy.obnovProTesty();
+	}
 
 	@Test
 	public void kratkeCekaniKolecko_neukaze() {

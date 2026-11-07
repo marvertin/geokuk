@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JComponent;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,11 @@ public class PrvniNacitaniMapyTest {
 
 	@Before
 	public void obnov() {
+		PrvniNacitaniMapy.obnovProTesty();
+	}
+
+	@After
+	public void obnovPo() {
 		PrvniNacitaniMapy.obnovProTesty();
 	}
 

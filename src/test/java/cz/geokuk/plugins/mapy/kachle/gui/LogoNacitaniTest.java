@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,11 @@ public class LogoNacitaniTest {
 
 	@Before
 	public void obnovLogo() {
+		PrvniNacitaniMapy.obnovProTesty();
+	}
+
+	@After
+	public void obnovLogoPo() {
 		PrvniNacitaniMapy.obnovProTesty();
 	}
 
