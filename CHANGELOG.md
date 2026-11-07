@@ -3,13 +3,22 @@
 ## 6.5.0
 
 ### Změny
-- Plánovač challenge (Kešoidy > Challenge): v Plánovači challenge… se vybere
-  challenge (šablony 360° od domova, GC4PCQB – Challenge - 360 degrees of the
-  Czech Republic, GC56R49 – Challenge - 360 Degrees of Prague a Matice D/T) a
-  zapne se. Pruh vlevo nahoře na mapě ukazuje počet
-  chybějících sektorů 360° nebo políček D/T; po kliknutí na počet se ukáže
-  seznam chybějících sektorů s kandidáty nebo chybějících políček D/T. Další
-  chybějící F4 (Shift+F4 zpět), zobrazení jen kandidátů na mapě.
+- Plánovač challenge: lišta vlevo nahoře na mapě. Zapíná se úchytem nebo v
+  Kešoidy > Challenge > Lišta challenge. Má výběr challenge („360° ▾“),
+  odznak s počtem chybějících sektorů nebo políček D/T, tlačítka ◀ ▶ na
+  předchozí a další chybějící, přepínače Jen kandidáti (F4), Sektory a Štítky
+  a Nastavení….
+- Plánovač challenge: Shift+šipka skočí na nejbližšího kandidáta ve směru
+  šipky. Když tam žádný není, ukáže se o tom krátká zpráva.
+- Plánovač challenge: na mapě je prstenec sektorů se středem, klínem
+  vybraného sektoru, kandidáti se štítky a čárou ke kandidátovi. Když je
+  střed mimo výřez, ukazuje na něj šipka a po kliknutí na ni se mapa na střed
+  přesune.
+- Zapnutá může být jen jedna challenge; zapnutí další vypne dosavadní.
+- V dialogu plánovače se střed zadává jedním polem souřadnic a kopii jde
+  vytvořit i z vlastní challenge.
+- Šablony: 360° od domova, GC4PCQB – Challenge - 360 degrees of the Czech
+  Republic, GC56R49 – Challenge - 360 Degrees of Prague a Matice D/T.
 - Položka Kešoidy > Kruhy (Alt+F8) se jmenuje podle poloměru (Kruhy 1 km,
   Kruhy 161 m); dialog se jmenuje Nastavení kruhů.
 - Kruhy (Alt+F8) mají pevný poloměr v metrech, výchozí 100 m; mění se v
@@ -42,6 +51,12 @@
   souborů.
 - Klávesa F5 (Kešoidy > Zobrazovat kešoidy) skryje a zase ukáže kešoidy včetně
   kruhů a popisků.
+- Když jsou kešoidy skryté (F5), je to vidět: tlačítko v liště to ukazuje,
+  počty ve stavovém řádku jsou jantarové (klikem se kešoidy zobrazí) a ve
+  Filtru je nad ikonami upozornění, že se filtr na mapě teď neuplatní.
+- Stavový řádek se vejde do jednoho řádku i při zvětšení obrazovky na 125 % a
+  150 %: bez počtů ve výřezu a při 150 % i bez celkových počtů.
+- Legenda Obsazenosti má popisky osy jen na krajích.
 - Uživatelská mapa se zkratkou, kterou používá program (F4, F5, Ctrl+1 až
   Ctrl+4 a další) nebo jiná mapa, se odmítne; zkratku v jejím souboru stačí
   změnit nebo smazat.
