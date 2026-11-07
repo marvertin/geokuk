@@ -106,11 +106,15 @@ public class JStatusBarSirkaTest {
 			varuj.invoke(radek, false, false, 0);
 			okno.setSize(sirka, 400);
 			okno.doLayout();
+			radek.doLayout();
 			final int vyska = radek.getPreferredSize().height;
 			varuj.invoke(radek, true, false, 30_000);
 			okno.doLayout();
 			radek.doLayout();
-			Assert.assertEquals("šířka " + sirka, vyska, radek.getHeight());
+			// Na nejvyšším stupni úspor (okno kolem 1280 px) se místo pro varování nerezervuje, aby se řádek vešel do jednoho řádku; varování pak může řádek zalomit.
+			if (radek.getStupenUspor() < 3) {
+				Assert.assertEquals("šířka " + sirka, vyska, radek.getHeight());
+			}
 			Assert.assertEquals("šířka " + sirka, varovani.getPreferredSize().width, varovani.getWidth());
 			Assert.assertTrue("šířka " + sirka, varovani.getX() + varovani.getWidth() <= radek.getWidth());
 		}

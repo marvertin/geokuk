@@ -129,6 +129,11 @@ public class JStatusBar extends JPanel implements AfterInjectInit {
 	private static final String SOURADNICE = new Wgs(-88.888, -178.888).toString();
 	private static final String POCTY = "9999999/9999999";
 	private static final String POCET = "999999";
+	private static final String OD_POZICE = "Od pozice:";
+	private static final String OD_POZICE_KRATKE = "Od:";
+	/** Mezera mezi buňkami {@link #createPanel()}: počítá se kolem každé viditelné buňky. */
+	private static final int MEZERA_BUNEK = 2;
+	private static final int NEJVYSSI_STUPEN = 3;
 
 	private Mou cur;
 	/** Úhel, pro který je nastavená ikona směru. */
@@ -153,15 +158,14 @@ public class JStatusBar extends JPanel implements AfterInjectInit {
 
 	private final JValue meritkoMapy = new JValue("22");
 
-	/** Šířka podle nejdelšího textu, aby zalamování stavového řádku nezáviselo na zobrazeném limitu. */
+	/** Šířka podle nejdelšího textu, aby zalamování stavového řádku nezáviselo na zobrazeném limitu; na nejvyšším stupni úspor se místo rezervuje jen pro zobrazené varování. */
 	private final JLabel varovaniPoctuPrekrocenych = new JLabel() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		public Dimension getPreferredSize() {
 			final Dimension d = super.getPreferredSize();
-			final Insets ins = getInsets();
-			d.width = Math.max(d.width, getFontMetrics(getFont()).stringWidth(textPrekroceni(false, LimityKresleni.MAX)) + ins.left + ins.right);
+			d.width = sirkaVarovani(stupenUspor, isVisible(), d.width);
 			return d;
 		}
 	};
@@ -169,8 +173,9 @@ public class JStatusBar extends JPanel implements AfterInjectInit {
 	private final JLabel stitekSkrytychKruhu = new JLabel(StavVrstev.TEXT_STITKU);
 	private final JLabel stitekChallenge = new cz.geokuk.plugins.challenge.StitekChallenge("Challenge: jen kandidáti");
 	private JPanel odPozice;
+	private final JLabel popisekOdPozice = new JLabel(OD_POZICE);
 	JPanel poctyKesiPanel;
-	private final JLabel popisekVse = new JLabel("Vše:");
+	private JLabel popisekVse;
 	private final JLabel popisekFiltr = new JLabel("Filtr:");
 	KesoidModel kesoidModel;
 
@@ -215,20 +220,109 @@ public class JStatusBar extends JPanel implements AfterInjectInit {
 		initComponents();
 	}
 
-	/** Nevejde-li se řádek do jednoho řádku, zdroje se zúží na zaškrtávátka; zalomení zůstává pro opravdu úzké okno. */
+	/** Stupeň úspor, který je právě použitý: 0 plný řádek, 1 zdroje bez názvů, 2 „Od:“ a bez počtů ve výřezu, 3 navíc bez celkových počtů a bez rezervy pro varování. */
+	private int stupenUspor;
+
+	/**
+	 * Nevejde-li se řádek do jednoho řádku, ubírá se postupně a jen podle šířky okna, nikdy podle dat, takže se při načtení dat nic nepohne: zdroje se zúží na zaškrtávátka, „Od pozice:“
+	 * se zkrátí a zmizí počty ve výřezu, nakonec zmizí celkové počty a místo pro varování o překročení limitu se rezervuje jen zobrazenému varování. Zalomení zůstává pro opravdu
+	 * úzké okno.
+	 */
 	@Override
 	public void doLayout() {
 		if (getWidth() > 0) {
-			final int bezNazvu = layout.sirkaVJednomRadku(this);
-			final int plna = bezNazvu + (prepinaceZdroju.isUsporny() ? prepinaceZdroju.sirkaNazvu() : 0);
 			final Insets ins = getInsets();
-			final boolean usporny = plna > getWidth() - ins.left - ins.right;
-			if (usporny != prepinaceZdroju.isUsporny()) {
-				prepinaceZdroju.setUsporny(usporny);
+			final int dostupna = getWidth() - ins.left - ins.right;
+			if (nastavStupen(vyberStupen(dostupna))) {
 				SwingUtilities.invokeLater(this::revalidate);
 			}
 		}
 		super.doLayout();
+	}
+
+	/** Šířky řádku na jednotlivých stupních úspor; počítají se z plné podoby, takže na právě použitém stupni nezávisí. */
+	int[] sirkyStupnu() {
+		final boolean videtVarovani = varovaniPoctuPrekrocenych.isVisible();
+		final int textVarovani = sirkaTextuVarovani();
+		int plna = layout.sirkaVJednomRadku(this) - sirkaVarovani(stupenUspor, videtVarovani, textVarovani);
+		if (prepinaceZdroju.isUsporny()) {
+			plna += prepinaceZdroju.sirkaNazvu();
+		}
+		if (stupenUspor >= 2) {
+			plna += usporaPopiskuOdPozice() + sirkaVyrezu();
+		}
+		if (stupenUspor >= 3) {
+			plna += sirkaCelkovych();
+		}
+		final int[] w = new int[NEJVYSSI_STUPEN + 1];
+		w[0] = plna + sirkaVarovani(0, videtVarovani, textVarovani);
+		w[1] = w[0] - prepinaceZdroju.sirkaNazvu();
+		w[2] = w[1] - usporaPopiskuOdPozice() - sirkaVyrezu();
+		w[3] = w[2] - sirkaCelkovych() - sirkaVarovani(0, videtVarovani, textVarovani) + sirkaVarovani(NEJVYSSI_STUPEN, videtVarovani, textVarovani);
+		return w;
+	}
+
+	/** Šířka štítku s varováním: rezervovaná podle nejdelšího textu, na nejvyšším stupni úspor jen když je varování vidět. */
+	private int sirkaVarovani(final int stupen, final boolean videt, final int sirkaTextu) {
+		if (stupen >= NEJVYSSI_STUPEN) {
+			return videt ? sirkaTextu : 0;
+		}
+		final Insets ins = varovaniPoctuPrekrocenych.getInsets();
+		return Math.max(sirkaTextu, varovaniPoctuPrekrocenych.getFontMetrics(varovaniPoctuPrekrocenych.getFont()).stringWidth(textPrekroceni(false, LimityKresleni.MAX)) + ins.left + ins.right);
+	}
+
+	private int sirkaTextuVarovani() {
+		final Insets ins = varovaniPoctuPrekrocenych.getInsets();
+		final String text = varovaniPoctuPrekrocenych.getText();
+		return varovaniPoctuPrekrocenych.getFontMetrics(varovaniPoctuPrekrocenych.getFont()).stringWidth(text == null ? "" : text) + ins.left + ins.right;
+	}
+
+	private int usporaPopiskuOdPozice() {
+		final FontMetrics fm = popisekOdPozice.getFontMetrics(popisekOdPozice.getFont());
+		return fm.stringWidth(OD_POZICE) - fm.stringWidth(OD_POZICE_KRATKE);
+	}
+
+	/** Šířka obou počtů ve výřezu včetně mezer. */
+	private int sirkaVyrezu() {
+		return celkovePoctyVyrez.getPreferredSize().width + filtrovanePocetyVyrez.getPreferredSize().width + 2 * MEZERA_BUNEK;
+	}
+
+	/** Šířka popisku „Vše:“ a celkových počtů včetně mezer. */
+	private int sirkaCelkovych() {
+		return popisekVse.getPreferredSize().width + celkovePoctyVsude.getPreferredSize().width + 2 * MEZERA_BUNEK;
+	}
+
+	private int vyberStupen(final int dostupna) {
+		final int[] w = sirkyStupnu();
+		for (int s = 0; s < NEJVYSSI_STUPEN; s++) {
+			if (w[s] <= dostupna) {
+				return s;
+			}
+		}
+		return NEJVYSSI_STUPEN;
+	}
+
+	/** Použije stupeň úspor; vrací, jestli se něco změnilo. */
+	private boolean nastavStupen(final int stupen) {
+		if (stupen == stupenUspor) {
+			return false;
+		}
+		stupenUspor = stupen;
+		prepinaceZdroju.setUsporny(stupen >= 1);
+		popisekOdPozice.setText(stupen >= 2 ? OD_POZICE_KRATKE : OD_POZICE);
+		celkovePoctyVyrez.setVisible(stupen < 2);
+		filtrovanePocetyVyrez.setVisible(stupen < 2);
+		popisekVse.setVisible(stupen < 3);
+		celkovePoctyVsude.setVisible(stupen < 3);
+		varovaniPoctuPrekrocenych.invalidate();
+		poctyKesiPanel.invalidate();
+		odPozice.invalidate();
+		return true;
+	}
+
+	/** Stupeň úspor pro testy. */
+	int getStupenUspor() {
+		return stupenUspor;
 	}
 
 	public void inject(final KesoidModel kesoidModel) {
@@ -466,7 +560,7 @@ public class JStatusBar extends JPanel implements AfterInjectInit {
 
 		odPozice = createPanel();
 
-		odPozice.add(new JLabel("Od pozice:"));
+		odPozice.add(popisekOdPozice);
 		odPozice.add(vzdalenost);
 		vzdalenost.setToolTipText("Vzdálenost mezi vyznačenou pozicí nebo waypointem a myší kurzoru.");
 
@@ -486,6 +580,7 @@ public class JStatusBar extends JPanel implements AfterInjectInit {
 		///////////////////////////////
 		final JPanel poctyKesi = createPanel();
 		poctyKesiPanel = poctyKesi;
+		popisekVse = new JLabel("Vše:");
 		final java.awt.event.MouseAdapter klikZobrazKesoidy = new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseClicked(final java.awt.event.MouseEvent e) {
