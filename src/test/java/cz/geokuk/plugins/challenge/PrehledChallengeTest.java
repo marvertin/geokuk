@@ -367,4 +367,35 @@ public class PrehledChallengeTest {
 		Assert.assertNotNull(model.prehled());
 		Assert.assertEquals(365, model.prehled().celkem());
 	}
+
+	@Test
+	public void prehledMaticeSOpakovanimPocitaPostupVNalezech() {
+		final int[] nalezu = new int[81];
+		nalezu[0] = 3;
+		nalezu[10] = 1;
+		final List<String> chybejici = new ArrayList<>();
+		for (int i = 0; i < 81; i++) {
+			if (nalezu[i] < 3) {
+				chybejici.add(VypocetMatice.stitek(i / 9, i % 9));
+			}
+		}
+		final PrehledChallenge p = PrehledChallenge.zPolicek(dt("DT").sOpakovanim(3), new VysledekPolicek(81, chybejici, Collections.<KandidatPolicka> emptyList(), 50, 3, nalezu), 50, 14);
+		Assert.assertEquals(4, p.splneno());
+		Assert.assertEquals(243, p.celkem());
+	}
+
+	@Test
+	public void prehledMaticeBezOpakovaniMaStavajiciCisla() {
+		final PrehledChallenge p = PrehledChallenge.zPolicek(dt("DT"), new VysledekPolicek(81, Arrays.asList("D1/T1", "D2/T2"), Collections.<KandidatPolicka> emptyList()), 50, 14);
+		Assert.assertEquals(79, p.splneno());
+		Assert.assertEquals(81, p.celkem());
+	}
+
+	@Test
+	public void sektorBoduSNeplatnymStredemJeMinusJednaBezVyjimky() {
+		for (final double[] stred : new double[][] { { 95, 14 }, { -95, 14 }, { 50, 181 }, { 50, -181 }, { 90.5, 0 } }) {
+			final PrehledChallenge p = PrehledChallenge.zeSektoru(sektory("S", Stred.domov()), vysledekSektoru(), stred[0], stred[1]);
+			Assert.assertEquals(stred[0] + ", " + stred[1], -1, p.sektorBodu(50.1, 14));
+		}
+	}
 }

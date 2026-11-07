@@ -23,7 +23,7 @@ public final class VypocetMatice {
 		if (!VypocetSektoru.jePlatnyStred(lat, lon)) {
 			throw new IllegalArgumentException("Bod mimo rozsah souřadnic: " + lat + ", " + lon);
 		}
-		final boolean[][] nalezeno = new boolean[PULEK][PULEK];
+		final int[] nalezu = new int[PULEK * PULEK];
 		final OmezenaFronta[] hledatelne = new OmezenaFronta[PULEK * PULEK];
 		for (int i = 0; i < hledatelne.length; i++) {
 			hledatelne[i] = new OmezenaFronta(pravidla.maxKandidatu());
@@ -34,7 +34,7 @@ public final class VypocetMatice {
 				continue;
 			}
 			if (PravidlaTypu.platnyNalez(k)) {
-				nalezeno[k.obtiznost()][k.teren()] = true;
+				nalezu[k.obtiznost() * PULEK + k.teren()]++;
 			} else if (PravidlaTypu.hledatelna(k)) {
 				hledatelne[k.obtiznost() * PULEK + k.teren()].pridej(k, 0, lat, lon);
 			}
@@ -43,7 +43,7 @@ public final class VypocetMatice {
 		final List<KandidatPolicka> kandidati = new ArrayList<>();
 		for (int d = 0; d < PULEK; d++) {
 			for (int t = 0; t < PULEK; t++) {
-				if (nalezeno[d][t]) {
+				if (nalezu[d * PULEK + t] >= pravidla.opakovani()) {
 					continue;
 				}
 				final String stitek = stitek(d, t);
@@ -53,7 +53,7 @@ public final class VypocetMatice {
 				}
 			}
 		}
-		return new VysledekPolicek(PULEK * PULEK, chybejici, kandidati, pravidla.maxKandidatu());
+		return new VysledekPolicek(PULEK * PULEK, chybejici, kandidati, pravidla.maxKandidatu(), pravidla.opakovani(), nalezu);
 	}
 
 	private static final String[] STITKY = new String[PULEK * PULEK];
@@ -69,6 +69,20 @@ public final class VypocetMatice {
 	/** Štítek políčka z pořadí po půlkách, například „D4/T1“ nebo „D1,5/T2,5“. */
 	public static String stitek(final int obtiznost, final int teren) {
 		return jePlatne(obtiznost) && jePlatne(teren) ? STITKY[obtiznost * PULEK + teren] : "D" + hodnota(obtiznost) + "/T" + hodnota(teren);
+	}
+
+	private static final java.util.Map<String, Integer> INDEX_STITKU = new java.util.HashMap<>();
+
+	static {
+		for (int i = 0; i < STITKY.length; i++) {
+			INDEX_STITKU.put(STITKY[i], i);
+		}
+	}
+
+	/** Pořadí políčka (obtížnost × 9 + terén) podle štítku, nebo -1 pro neznámý štítek. */
+	static int indexStitku(final String stitek) {
+		final Integer i = INDEX_STITKU.get(stitek);
+		return i == null ? -1 : i;
 	}
 
 	/** Předpočítaný štítek políčka, nebo null mimo 0 až 8. */

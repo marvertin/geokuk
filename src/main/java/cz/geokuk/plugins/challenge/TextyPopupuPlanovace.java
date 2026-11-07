@@ -44,11 +44,14 @@ final class TextyPopupuPlanovace {
 	}
 
 	static String souhrn(final VysledekPolicek p) {
+		if (p.cil() > 1) {
+			return "Splněno " + p.splnenoNalezu() + " z " + p.celkem() + " × " + p.cil() + " (" + procenta(p) + "), chybí " + p.chybiNalezu();
+		}
 		return "Splněno " + (p.celkem() - p.pocetChybejicich()) + " z " + p.celkem() + " (" + procenta(p) + "), chybí " + p.pocetChybejicich();
 	}
 
 	static String procenta(final VysledekPolicek p) {
-		return Math.round((p.celkem() - p.pocetChybejicich()) * 100.0 / Math.max(1, p.celkem())) + " %";
+		return Math.round(p.splnenoNalezu() * 100.0 / Math.max(1, p.celkemNalezu())) + " %";
 	}
 
 	static String nadpisSeznamu(final Challenge.Typ typ) {

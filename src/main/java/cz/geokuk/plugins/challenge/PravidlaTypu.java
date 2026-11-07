@@ -9,8 +9,14 @@ public final class PravidlaTypu {
 	private final boolean lab;
 	private final boolean locationless;
 	private final int maxKandidatu;
+	private final int opakovani;
 
 	private PravidlaTypu(final boolean lab, final boolean locationless, final int maxKandidatu) {
+		this(lab, locationless, maxKandidatu, 1);
+	}
+
+	private PravidlaTypu(final boolean lab, final boolean locationless, final int maxKandidatu, final int opakovani) {
+		this.opakovani = opakovani;
 		this.lab = lab;
 		this.locationless = locationless;
 		this.maxKandidatu = maxKandidatu;
@@ -27,11 +33,11 @@ public final class PravidlaTypu {
 	}
 
 	public PravidlaTypu sLab(final boolean zapocitat) {
-		return new PravidlaTypu(zapocitat, locationless, maxKandidatu);
+		return new PravidlaTypu(zapocitat, locationless, maxKandidatu, opakovani);
 	}
 
 	public PravidlaTypu sLocationless(final boolean zapocitat) {
-		return new PravidlaTypu(lab, zapocitat, maxKandidatu);
+		return new PravidlaTypu(lab, zapocitat, maxKandidatu, opakovani);
 	}
 
 	/** Kolik kandidátů se nejvýš vrátí na jedno políčko: v kalendáři s nejbližším datem, při shodě i v matici nejbližších referenčnímu bodu. */
@@ -39,7 +45,19 @@ public final class PravidlaTypu {
 		if (max < 1) {
 			throw new IllegalArgumentException("Počet kandidátů na políčko musí být alespoň 1: " + max);
 		}
-		return new PravidlaTypu(lab, locationless, max);
+		return new PravidlaTypu(lab, locationless, max, opakovani);
+	}
+
+	/** Kolikrát se má každé políčko naplnit; výchozí 1. */
+	public PravidlaTypu sOpakovanim(final int kolikrat) {
+		if (kolikrat < 1) {
+			throw new IllegalArgumentException("Opakování musí být alespoň 1: " + kolikrat);
+		}
+		return new PravidlaTypu(lab, locationless, maxKandidatu, kolikrat);
+	}
+
+	int opakovani() {
+		return opakovani;
 	}
 
 	int maxKandidatu() {

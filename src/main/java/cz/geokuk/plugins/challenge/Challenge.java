@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Definice challenge jako data: typ, střed, oblast a zdroj pravidel. Nenese žádný pevný případ; šablony jsou jen předvyplněné hodnoty, viz {@link Sablony}.
  * Do plochého textového tvaru a zpět jde převést přes {@link #naMapu()} a {@link #zMapy(Map)}.
  */
+@Slf4j
 public final class Challenge {
 
 	public enum Typ {
@@ -167,12 +170,21 @@ public final class Challenge {
 	private final OblastDef oblast;
 	private final ZdrojPravidel zdroj;
 	private final ZdrojeNalezu nalezy;
+	private final int opakovani;
+
+	/** Nejvíc, kolikrát jde matici D/T naplnit; jediné místo, kde je strop. */
+	public static final int NEJVETSI_OPAKOVANI = 9;
 
 	public Challenge(final String nazev, final Typ typ, final Stred stred, final OblastDef oblast, final ZdrojPravidel zdroj) {
 		this(nazev, typ, stred, oblast, zdroj, ZdrojeNalezu.ZAPNUTE);
 	}
 
 	public Challenge(final String nazev, final Typ typ, final Stred stred, final OblastDef oblast, final ZdrojPravidel zdroj, final ZdrojeNalezu nalezy) {
+		this(nazev, typ, stred, oblast, zdroj, nalezy, 1);
+	}
+
+	private Challenge(final String nazev, final Typ typ, final Stred stred, final OblastDef oblast, final ZdrojPravidel zdroj, final ZdrojeNalezu nalezy, final int opakovani) {
+		this.opakovani = opakovani;
 		this.nalezy = Objects.requireNonNull(nalezy);
 		this.nazev = Objects.requireNonNull(nazev);
 		this.typ = Objects.requireNonNull(typ);
@@ -205,9 +217,27 @@ public final class Challenge {
 		return nalezy;
 	}
 
+	/** Kolikrát se má každé políčko matice D/T naplnit (1 až {@link #NEJVETSI_OPAKOVANI}); u ostatních typů vždy 1. */
+	public int opakovani() {
+		return opakovani;
+	}
+
+	/**
+	 * Stejná definice s jiným počtem opakování. Víc než jedno jde jen u matice D/T a nejvýš {@link #NEJVETSI_OPAKOVANI}, jinak {@link ChallengeChyba}.
+	 */
+	public Challenge sOpakovanim(final int kolikrat) {
+		if (kolikrat < 1 || kolikrat > NEJVETSI_OPAKOVANI) {
+			throw new ChallengeChyba("Kolikrát splnit: číslo od 1 do " + NEJVETSI_OPAKOVANI + ".");
+		}
+		if (kolikrat > 1 && typ != Typ.DT_MATICE) {
+			throw new ChallengeChyba("Opakování jde nastavit jen u matice D/T.");
+		}
+		return new Challenge(nazev, typ, stred, oblast, zdroj, nalezy, kolikrat);
+	}
+
 	/** Stejná definice pod jiným názvem. */
 	public Challenge sNazvem(final String novyNazev) {
-		return new Challenge(novyNazev, typ, stred, oblast, zdroj, nalezy);
+		return new Challenge(novyNazev, typ, stred, oblast, zdroj, nalezy, opakovani);
 	}
 
 	/** Ploché vyjádření definice (klíč → text) pro uložení; pořadí klíčů je stálé. */
@@ -217,6 +247,9 @@ public final class Challenge {
 		m.put("typ", typ.name());
 		m.put("zdroj", zdroj.name());
 		m.put("nalezy", nalezy.name());
+		if (opakovani > 1) {
+			m.put("opakovani", Integer.toString(opakovani));
+		}
 		m.put("stred", stred.druh.name());
 		if (stred.druh == DruhStredu.SOURADNICE) {
 			m.put("stred.lat", Double.toString(stred.lat));
@@ -261,10 +294,28 @@ public final class Challenge {
 				break;
 			}
 			final String nalezy = m.get("nalezy");
-			return new Challenge(povinne(m, "nazev"), typ, stred, oblast, zdroj, nalezy == null || nalezy.isEmpty() ? ZdrojeNalezu.ZAPNUTE : vycet(ZdrojeNalezu.class, nalezy));
+			return new Challenge(povinne(m, "nazev"), typ, stred, oblast, zdroj, nalezy == null || nalezy.isEmpty() ? ZdrojeNalezu.ZAPNUTE : vycet(ZdrojeNalezu.class, nalezy),
+					typ == Typ.DT_MATICE ? opakovani(m.get("opakovani")) : 1);
 		} catch (final NumberFormatException e) {
 			throw new IllegalArgumentException("Neplatné souřadnice středu: " + e.getMessage(), e);
 		}
+	}
+
+	/** Uložená hodnota opakování; chybějící, nečíselná nebo mimo 1 až {@link #NEJVETSI_OPAKOVANI} se bere jako 1, aby kvůli ní definice nezmizela. */
+	private static int opakovani(final String hodnota) {
+		if (hodnota == null || hodnota.isEmpty()) {
+			return 1;
+		}
+		try {
+			final int n = Integer.parseInt(hodnota.trim());
+			if (n >= 1 && n <= NEJVETSI_OPAKOVANI) {
+				return n;
+			}
+		} catch (final NumberFormatException e) {
+			// bere se jako 1
+		}
+		log.warn("Uložené opakování „{}“ je mimo 1 až {}, použije se 1", hodnota, NEJVETSI_OPAKOVANI);
+		return 1;
 	}
 
 	private static <E extends Enum<E>> E vycet(final Class<E> trida, final String hodnota) {
@@ -289,12 +340,12 @@ public final class Challenge {
 			return false;
 		}
 		final Challenge c = (Challenge) o;
-		return nazev.equals(c.nazev) && typ == c.typ && stred.equals(c.stred) && oblast.equals(c.oblast) && zdroj == c.zdroj && nalezy == c.nalezy;
+		return nazev.equals(c.nazev) && typ == c.typ && stred.equals(c.stred) && oblast.equals(c.oblast) && zdroj == c.zdroj && nalezy == c.nalezy && opakovani == c.opakovani;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(nazev, typ, stred, oblast, zdroj, nalezy);
+		return Objects.hash(nazev, typ, stred, oblast, zdroj, nalezy, opakovani);
 	}
 
 	@Override

@@ -33,8 +33,8 @@ public final class PrehledChallenge {
 			this.celkem = 360;
 			this.splneno = sektory.pocetObsazenych();
 		} else {
-			this.celkem = policka.celkem();
-			this.splneno = policka.celkem() - policka.pocetChybejicich();
+			this.celkem = policka.celkemNalezu();
+			this.splneno = policka.splnenoNalezu();
 		}
 	}
 
@@ -69,7 +69,7 @@ public final class PrehledChallenge {
 		return splneno;
 	}
 
-	/** Kolik jich je celkem (360, 81, 365 nebo 366). */
+	/** Kolik jich je celkem (360, 81 × počet opakování matice, 365 nebo 366). */
 	public int celkem() {
 		return celkem;
 	}

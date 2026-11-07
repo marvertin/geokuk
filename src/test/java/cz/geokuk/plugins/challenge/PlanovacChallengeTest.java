@@ -681,6 +681,28 @@ public class PlanovacChallengeTest {
 	}
 
 	@Test
+	public void opakovaniMaticeSePredaVypoctuAJehoZmenaPrepocita() throws Exception {
+		napojNaModel();
+		final Challenge dvakrat = model.ulozVlastni(new Challenge("DT", Typ.DT_MATICE, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC).sOpakovanim(2));
+		planovac.keseNacteny(dtData());
+		zapni(dvakrat);
+		pockej(() -> model.vysledekPolicek(dvakrat) != null, "výsledek s opakováním 2");
+		final VysledekPolicek v2 = model.vysledekPolicek(dvakrat);
+		Assert.assertEquals(2, v2.cil());
+		Assert.assertEquals("každé políčko má jen jeden nález, takže chybí všech 81", 81, v2.pocetChybejicich());
+		Assert.assertEquals(27, v2.splnenoNalezu());
+		Assert.assertEquals(1, v2.pocetNalezu(VypocetMatice.stitek(0, 0)));
+		pockej(() -> model.prehled() != null, "přehled");
+		Assert.assertEquals(27, model.prehled().splneno());
+		Assert.assertEquals(162, model.prehled().celkem());
+		final Challenge jednou = model.ulozVlastni(dvakrat.sOpakovanim(1));
+		Assert.assertNull("změna definice zahodí starý výsledek", model.vysledekPolicek(jednou));
+		zapni(jednou);
+		pockej(() -> model.vysledekPolicek(jednou) != null && model.vysledekPolicek(jednou).cil() == 1, "přepočet s opakováním 1");
+		Assert.assertEquals(81 - 27, model.vysledekPolicek(jednou).pocetChybejicich());
+	}
+
+	@Test
 	public void malyPosunStreduMapyNepocitaZnovuAVelkyAno() throws Exception {
 		napojNaModel();
 		final Challenge dt = dtChallenge("DT");

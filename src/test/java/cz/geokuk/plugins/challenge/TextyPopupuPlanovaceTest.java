@@ -109,4 +109,20 @@ public class TextyPopupuPlanovaceTest {
 		assertEquals(" ", TextyPopupuPlanovace.omezeniStitku(200));
 		assertEquals("Štítky na mapě: 200 nejbližších z 1\u00a0234", TextyPopupuPlanovace.omezeniStitku(1234));
 	}
+
+	@Test
+	public void polickaSOpakovanimUkazujePostupVNalezech() {
+		final int[] nalezu = new int[81];
+		nalezu[0] = 2;
+		nalezu[1] = 1;
+		final java.util.List<String> chybejici = new java.util.ArrayList<>();
+		for (int i = 0; i < 81; i++) {
+			if (nalezu[i] < 3) {
+				chybejici.add(VypocetMatice.stitek(i / 9, i % 9));
+			}
+		}
+		final VysledekPolicek p = new VysledekPolicek(81, chybejici, java.util.Collections.<KandidatPolicka> emptyList(), 50, 3, nalezu);
+		assertEquals("Splněno 3 z 81 × 3 (1 %), chybí 240", TextyPopupuPlanovace.souhrn(p));
+		assertEquals("1 %", TextyPopupuPlanovace.procenta(p));
+	}
 }

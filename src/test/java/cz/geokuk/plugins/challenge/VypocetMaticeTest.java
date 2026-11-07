@@ -326,4 +326,118 @@ public class VypocetMaticeTest {
 		Assert.assertTrue("plné zůstane plné i s označením vstupu", v.sVstupem(new Object()).jePlne(plne));
 		Assert.assertFalse("neznámý limit není nikdy plné", new VysledekPolicek(81, Arrays.asList(plne), v.kandidati()).jePlne(plne));
 	}
+
+	private static List<VstupDT> nalezyV(final int d, final int t, final int kolik) {
+		final List<VstupDT> v = new ArrayList<>();
+		for (int i = 0; i < kolik; i++) {
+			v.add(new K(d, t, true).id("N" + d + t + "_" + i));
+		}
+		return v;
+	}
+
+	@Test
+	public void sOpakovanimPolickoChybiDokudNeniNalezuAspoNAKandidatiJsouJenUChybejicich() {
+		final List<VstupDT> kese = new ArrayList<>(nalezyV(2, 2, 1));
+		kese.addAll(nalezyV(3, 3, 2));
+		kese.addAll(nalezyV(4, 4, 3));
+		kese.add(new K(2, 2, false).id("A"));
+		kese.add(new K(3, 3, false).id("B"));
+		kese.add(new K(4, 4, false).id("C"));
+		final VysledekPolicek v = VypocetMatice.spocti(PravidlaTypu.proMatici().sOpakovanim(3), 50, 14, kese);
+		Assert.assertEquals(3, v.cil());
+		Assert.assertEquals(81, v.celkem());
+		Assert.assertEquals("hotové je jen (4,4), ostatních 80 chybí", 80, v.pocetChybejicich());
+		Assert.assertEquals(1, v.splnenoPolicek());
+		Assert.assertEquals(1, v.pocetNalezu(VypocetMatice.stitek(2, 2)));
+		Assert.assertEquals(2, v.pocetNalezu(VypocetMatice.stitek(3, 3)));
+		Assert.assertEquals(3, v.pocetNalezu(VypocetMatice.stitek(4, 4)));
+		Assert.assertEquals(0, v.pocetNalezu(VypocetMatice.stitek(0, 0)));
+		Assert.assertEquals("postup 1 + 2 + 3", 6, v.splnenoNalezu());
+		Assert.assertEquals("81 × 3", 243, v.celkemNalezu());
+		Assert.assertEquals(243 - 6, v.chybiNalezu());
+		Assert.assertEquals(1, v.pocetKandidatu(VypocetMatice.stitek(2, 2)));
+		Assert.assertEquals("částečně splněné políčko má kandidáty", 1, v.pocetKandidatu(VypocetMatice.stitek(3, 3)));
+		Assert.assertEquals("splněné políčko je bez kandidátů", 0, v.pocetKandidatu(VypocetMatice.stitek(4, 4)));
+		Assert.assertFalse(v.stitkyChybejicich().contains(VypocetMatice.stitek(4, 4)));
+		Assert.assertTrue(v.stitkyChybejicich().contains(VypocetMatice.stitek(3, 3)));
+	}
+
+	@Test
+	public void nalezuNadCilSeDoPostupuNezapocitajiAleSkutecnyPocetSeNese() {
+		final VysledekPolicek v = VypocetMatice.spocti(PravidlaTypu.proMatici().sOpakovanim(2), 50, 14, nalezyV(1, 1, 5));
+		Assert.assertEquals(5, v.pocetNalezu(VypocetMatice.stitek(1, 1)));
+		Assert.assertEquals("min(5, 2)", 2, v.splnenoNalezu());
+		Assert.assertEquals(1, v.splnenoPolicek());
+		Assert.assertEquals(80, v.pocetChybejicich());
+		Assert.assertEquals(162 - 2, v.chybiNalezu());
+	}
+
+	@Test
+	public void opakovaniJedenJeStavajiciChovaniAPocetNalezuSeNese() {
+		final List<VstupDT> kese = new ArrayList<>(nalezyV(2, 2, 2));
+		kese.add(new K(3, 3, false).id("A"));
+		final VysledekPolicek v = VypocetMatice.spocti(PravidlaTypu.proMatici(), 50, 14, kese);
+		Assert.assertEquals(1, v.cil());
+		Assert.assertEquals(80, v.pocetChybejicich());
+		Assert.assertEquals(1, v.splnenoPolicek());
+		Assert.assertEquals(1, v.splnenoNalezu());
+		Assert.assertEquals(81, v.celkemNalezu());
+		Assert.assertEquals(80, v.chybiNalezu());
+		Assert.assertEquals(2, v.pocetNalezu(VypocetMatice.stitek(2, 2)));
+	}
+
+	@Test
+	public void nalezSLogemNaGcNeniNalezAKeseMimoPravidlaSeNepocitaji() {
+		final K spatny = new K(2, 2, true).id("S");
+		spatny.log = cz.geokuk.plugins.challenge.VstupKes.StavLogu.NE;
+		final K lab = new K(2, 2, true).id("L");
+		lab.lab = true;
+		final List<VstupDT> kese = new ArrayList<>(Arrays.asList(spatny, lab, new K(2, 2, true).id("OK")));
+		final VysledekPolicek v = VypocetMatice.spocti(PravidlaTypu.proMatici().sOpakovanim(2), 50, 14, kese);
+		Assert.assertEquals("započte se jediný platný nález", 1, v.pocetNalezu(VypocetMatice.stitek(2, 2)));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void opakovaniMusiBytKladne() {
+		PravidlaTypu.proMatici().sOpakovanim(0);
+	}
+
+	@Test
+	public void bezPoctuNalezuVysledekDaMinusJednaAOdvozenaCislaSedi() {
+		final VysledekPolicek v = new VysledekPolicek(365, Arrays.asList("1. 1.", "2. 1."), new ArrayList<KandidatPolicka>());
+		Assert.assertEquals(-1, v.pocetNalezu("1. 1."));
+		Assert.assertEquals(1, v.cil());
+		Assert.assertEquals(363, v.splnenoNalezu());
+		Assert.assertEquals(365, v.celkemNalezu());
+		Assert.assertEquals(2, v.chybiNalezu());
+		Assert.assertEquals(363, v.splnenoPolicek());
+	}
+
+	@Test
+	public void indexStitkuJePoradiPolicka() {
+		Assert.assertEquals(0, VypocetMatice.indexStitku("D1/T1"));
+		Assert.assertEquals(80, VypocetMatice.indexStitku("D5/T5"));
+		Assert.assertEquals(9, VypocetMatice.indexStitku("D1,5/T1"));
+		Assert.assertEquals(-1, VypocetMatice.indexStitku("D9/T9"));
+		Assert.assertEquals(-1, VypocetMatice.indexStitku(null));
+	}
+
+	@Test
+	public void nalezyPrvnihoPolickaSeNesouAOpakovaniJednaJeDovoleno() {
+		final VysledekPolicek v = VypocetMatice.spocti(PravidlaTypu.proMatici().sOpakovanim(1).sOpakovanim(2), 50, 14, nalezyV(0, 0, 2));
+		Assert.assertEquals(2, v.pocetNalezu("D1/T1"));
+		Assert.assertEquals("první políčko je splněno, ostatní chybí", 80, v.pocetChybejicich());
+		Assert.assertEquals(2, v.splnenoNalezu());
+	}
+
+	@Test
+	public void cilVysledkuMusiBytKladny() {
+		try {
+			new VysledekPolicek(81, new ArrayList<String>(), new ArrayList<KandidatPolicka>(), 50, 0, new int[81]);
+			Assert.fail();
+		} catch (final IllegalArgumentException e) {
+			// očekáváno
+		}
+		Assert.assertEquals(1, new VysledekPolicek(81, new ArrayList<String>(), new ArrayList<KandidatPolicka>(), 50, 1, new int[81]).cil());
+	}
 }

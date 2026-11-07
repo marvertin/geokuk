@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map;
 import java.util.Objects;
 
 /** Neměnný výsledek challenge s políčky (D/T matice, kalendář): chybějící políčka a kandidáti. */
@@ -17,6 +16,10 @@ public final class VysledekPolicek {
 	private final List<KandidatPolicka> kandidati;
 	private final Object vstup;
 	private final int limitKandidatu;
+	private final int cil;
+	/** Počty nálezů po políčkách matice v pořadí {@link VypocetMatice#stitek(int, int)}; null, když výsledek počty nenese. */
+	private final int[] nalezu;
+	private final int splnenoNalezu;
 
 	VysledekPolicek(final int celkem, final List<String> chybejici, final List<KandidatPolicka> kandidati) {
 		this(celkem, chybejici, kandidati, 0);
@@ -24,10 +27,35 @@ public final class VysledekPolicek {
 
 	/** {@code limitKandidatu}: nejvíc kandidátů na políčko, které výpočet ponechal; 0 = neznámý. */
 	VysledekPolicek(final int celkem, final List<String> chybejici, final List<KandidatPolicka> kandidati, final int limitKandidatu) {
-		this(celkem, chybejici, kandidati, null, limitKandidatu);
+		this(celkem, chybejici, kandidati, null, limitKandidatu, 1, null);
 	}
 
-	private VysledekPolicek(final int celkem, final List<String> chybejici, final List<KandidatPolicka> kandidati, final Object vstup, final int limitKandidatu) {
+	/**
+	 * Výsledek matice, kterou je potřeba naplnit {@code cil}-krát.
+	 *
+	 * @param nalezu
+	 *            počet nálezů každého ze 81 políček v pořadí {@link VypocetMatice#stitek(int, int)}; políčko s počtem pod {@code cil} je chybějící
+	 */
+	VysledekPolicek(final int celkem, final List<String> chybejici, final List<KandidatPolicka> kandidati, final int limitKandidatu, final int cil, final int[] nalezu) {
+		this(celkem, chybejici, kandidati, null, limitKandidatu, cil, nalezu);
+	}
+
+	private VysledekPolicek(final int celkem, final List<String> chybejici, final List<KandidatPolicka> kandidati, final Object vstup, final int limitKandidatu, final int cil,
+			final int[] nalezu) {
+		if (cil < 1) {
+			throw new IllegalArgumentException("Cíl musí být alespoň 1: " + cil);
+		}
+		this.cil = cil;
+		this.nalezu = nalezu == null ? null : nalezu.clone();
+		int splneno = 0;
+		if (nalezu == null) {
+			splneno = (celkem - chybejici.size()) * cil;
+		} else {
+			for (final int n : nalezu) {
+				splneno += Math.min(n, cil);
+			}
+		}
+		this.splnenoNalezu = splneno;
 		this.limitKandidatu = limitKandidatu;
 		this.celkem = celkem;
 		this.stitky = Collections.unmodifiableList(new ArrayList<>(chybejici));
@@ -40,7 +68,7 @@ public final class VysledekPolicek {
 	 * pokračuje v kole; výsledek bez označení je vlastním vstupem.
 	 */
 	VysledekPolicek sVstupem(final Object klic) {
-		return new VysledekPolicek(celkem, stitky, kandidati, Objects.requireNonNull(klic, "klic"), limitKandidatu);
+		return new VysledekPolicek(celkem, stitky, kandidati, Objects.requireNonNull(klic, "klic"), limitKandidatu, cil, nalezu);
 	}
 
 	Object vstup() {
@@ -65,6 +93,42 @@ public final class VysledekPolicek {
 			}
 		}
 		return m.get(idKese);
+	}
+
+	/** Kolikrát se má každé políčko naplnit (u matice D/T nastavená násobnost, jinak 1). */
+	public int cil() {
+		return cil;
+	}
+
+	/**
+	 * Kolik nalezených keší leží v políčku matice (skutečný počet, i nad {@link #cil()}); 0 pro neznámý štítek, -1 když výsledek počty nenese (kalendář).
+	 */
+	public int pocetNalezu(final String stitek) {
+		if (nalezu == null) {
+			return -1;
+		}
+		final int i = VypocetMatice.indexStitku(stitek);
+		return i < 0 ? 0 : nalezu[i];
+	}
+
+	/** Součet {@code min(počet, cíl)} přes políčka: kolik z {@link #celkemNalezu()} je splněno. */
+	public int splnenoNalezu() {
+		return splnenoNalezu;
+	}
+
+	/** {@code celkem × cíl}: kolik nálezů je potřeba. */
+	public int celkemNalezu() {
+		return celkem * cil;
+	}
+
+	/** Kolik nálezů ještě chybí do {@link #celkemNalezu()}. */
+	public int chybiNalezu() {
+		return celkemNalezu() - splnenoNalezu;
+	}
+
+	/** Kolik políček je už úplně splněno (počet nálezů aspoň {@link #cil()}). */
+	public int splnenoPolicek() {
+		return celkem - stitky.size();
 	}
 
 	/** Kolik políček je potřeba zaplnit. */

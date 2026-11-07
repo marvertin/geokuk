@@ -517,4 +517,40 @@ public class NastaveniChallengeTest {
 		Assert.assertEquals("nenabízená není chyba", 0, n.preskoceno);
 		Assert.assertNotNull("definice zůstala", n.seznam.najdi("Kal"));
 	}
+
+	@Test
+	public void opakovaniMaticeSeUlozAVratiAJednaNechaUlozeniBezKlice() {
+		final MapoveUloziste u = new MapoveUloziste();
+		final ChallengeSeznam s = new ChallengeSeznam();
+		s.ulozVlastni(Sablony.maticeDT().sNazvem("Matice dvakrát").sOpakovanim(2));
+		s.ulozVlastni(Sablony.maticeDT().sNazvem("Matice jednou"));
+		NastaveniChallenge.uloz(s, false, u);
+		int klicu = 0;
+		for (final String k : u.klice()) {
+			if (k.endsWith(".opakovani")) {
+				klicu++;
+				Assert.assertEquals("2", u.get(k));
+			}
+		}
+		Assert.assertEquals("klíč má jen definice s opakováním", 1, klicu);
+		final ChallengeSeznam zpet = NastaveniChallenge.nacti(u).seznam;
+		Assert.assertEquals(2, zpet.najdi("Matice dvakrát").opakovani());
+		Assert.assertEquals(1, zpet.najdi("Matice jednou").opakovani());
+	}
+
+	@Test
+	public void spatneUlozeneOpakovaniNeznamyFormatNenastaviADefiniceZustane() {
+		final MapoveUloziste u = new MapoveUloziste();
+		final ChallengeSeznam s = new ChallengeSeznam();
+		s.ulozVlastni(Sablony.maticeDT().sNazvem("Matice").sOpakovanim(3));
+		NastaveniChallenge.uloz(s, false, u);
+		for (final String k : new java.util.ArrayList<>(u.klice())) {
+			if (k.endsWith(".opakovani")) {
+				u.put(k, "moc");
+			}
+		}
+		final NastaveniChallenge.Nacteno n = NastaveniChallenge.nacti(u);
+		Assert.assertEquals("definice nezmizí", 1, n.seznam.najdi("Matice").opakovani());
+		Assert.assertFalse("ukládání se kvůli tomu nezakáže", n.neznamyFormat);
+	}
 }

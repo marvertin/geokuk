@@ -88,9 +88,15 @@ public final class FormularDefinice {
 	 */
 	public static Challenge sestav(final Challenge puvodni, final String nazev, final ZdrojPravidel pravidla, final DruhStredu druhStredu, final String souradnice, final String kod,
 			final Oblast oblast, final ZdrojeNalezu nalezy) {
+		return sestav(puvodni, nazev, pravidla, druhStredu, souradnice, kod, oblast, nalezy, puvodni == null ? 1 : puvodni.opakovani());
+	}
+
+	/** Jako {@link #sestav(Challenge, String, ZdrojPravidel, DruhStredu, String, String, Oblast, ZdrojeNalezu)} s počtem opakování matice D/T (u ostatních typů musí být 1). */
+	public static Challenge sestav(final Challenge puvodni, final String nazev, final ZdrojPravidel pravidla, final DruhStredu druhStredu, final String souradnice, final String kod,
+			final Oblast oblast, final ZdrojeNalezu nalezy, final int opakovani) {
 		if (puvodni != null && puvodni.typ() == Challenge.Typ.DT_MATICE) {
-			// D/T se počítá z pevných pravidel podle středu mapy: z formuláře se bere jen název a zdroj nálezů, ostatní zůstává, jak bylo.
-			return new Challenge(nazev, Challenge.Typ.DT_MATICE, puvodni.stred(), puvodni.oblast(), puvodni.zdroj(), nalezy);
+			// D/T se počítá z pevných pravidel podle středu mapy: z formuláře se bere jen název, zdroj nálezů a počet opakování, ostatní zůstává, jak bylo.
+			return new Challenge(nazev, Challenge.Typ.DT_MATICE, puvodni.stred(), puvodni.oblast(), puvodni.zdroj(), nalezy).sOpakovanim(opakovani);
 		}
 		final Stred stred;
 		switch (druhStredu) {
@@ -124,7 +130,7 @@ public final class FormularDefinice {
 		} else {
 			def = OblastDef.stat(oblast.id);
 		}
-		return new Challenge(nazev, puvodni == null ? Challenge.Typ.SEKTORY_360 : puvodni.typ(), stred, def, pravidla, nalezy);
+		return new Challenge(nazev, puvodni == null ? Challenge.Typ.SEKTORY_360 : puvodni.typ(), stred, def, pravidla, nalezy).sOpakovanim(opakovani);
 	}
 
 	private static String typ(final Challenge.Typ t) {

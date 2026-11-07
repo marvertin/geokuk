@@ -270,7 +270,7 @@ public final class PlanovacChallenge {
 		model.nastavStavPredpoctu(c, new StavPredpoctu(StavPredpoctu.Faze.POCITA, 0, data.size(), null));
 		final VysledekPolicek vysledek;
 		if (c.typ() == Challenge.Typ.DT_MATICE) {
-			vysledek = VypocetMatice.spocti(PravidlaTypu.proMatici(), stred.lat, stred.lon, jen(data, VstupDT.class));
+			vysledek = VypocetMatice.spocti(PravidlaTypu.proMatici().sOpakovanim(c.opakovani()), stred.lat, stred.lon, jen(data, VstupDT.class));
 		} else {
 			vysledek = VypocetKalendare.spocti(PravidlaKalendare.vychozi(), dnes.get(), stred.lat, stred.lon, jen(data, VstupKalendar.class));
 		}

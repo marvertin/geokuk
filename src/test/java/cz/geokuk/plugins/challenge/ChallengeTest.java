@@ -148,4 +148,81 @@ public class ChallengeTest {
 			Assert.assertTrue(c.nazev(), c.nazev().length() <= ChallengeSeznam.NEJDELSI_NAZEV - " (vlastní 99)".length());
 		}
 	}
+
+	private static Challenge matice() {
+		return new Challenge("Moje matice", Typ.DT_MATICE, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC);
+	}
+
+	@Test
+	public void opakovaniJeVychoziJednaAUlozeniJeBezKlice() {
+		final Challenge c = matice();
+		Assert.assertEquals(1, c.opakovani());
+		Assert.assertFalse("při 1 se klíč nezapisuje, úložiště je jako dřív", c.naMapu().containsKey("opakovani"));
+		Assert.assertEquals(1, Challenge.zMapy(c.naMapu()).opakovani());
+		for (final Challenge sablona : Sablony.vse()) {
+			Assert.assertEquals(1, sablona.opakovani());
+			Assert.assertFalse(sablona.naMapu().containsKey("opakovani"));
+		}
+	}
+
+	@Test
+	public void opakovaniVetsiNezJednaSeUlozAVratiARuzneDefiniceSeNerovnaji() {
+		for (int n = 2; n <= Challenge.NEJVETSI_OPAKOVANI; n++) {
+			final Challenge c = matice().sOpakovanim(n);
+			Assert.assertEquals(n, c.opakovani());
+			Assert.assertEquals(Integer.toString(n), c.naMapu().get("opakovani"));
+			final Challenge zpet = Challenge.zMapy(c.naMapu());
+			Assert.assertEquals(c, zpet);
+			Assert.assertEquals(n, zpet.opakovani());
+			Assert.assertEquals(c.hashCode(), zpet.hashCode());
+			Assert.assertNotEquals("jiné opakování je jiná definice", matice(), c);
+			Assert.assertEquals("přejmenování opakování zachová", n, c.sNazvem("Jiný").opakovani());
+		}
+		Assert.assertEquals("zpět na jedno", matice(), matice().sOpakovanim(5).sOpakovanim(1));
+		Assert.assertNotEquals(matice().sOpakovanim(2).hashCode(), matice().sOpakovanim(3).hashCode());
+	}
+
+	@Test
+	public void opakovaniMimoRozsahANeMaticiJeChyba() {
+		for (final int n : new int[] { 0, -1, Challenge.NEJVETSI_OPAKOVANI + 1, 100 }) {
+			try {
+				matice().sOpakovanim(n);
+				Assert.fail(String.valueOf(n));
+			} catch (final ChallengeChyba e) {
+				Assert.assertTrue(e.getMessage(), e.getMessage().contains("od 1 do " + Challenge.NEJVETSI_OPAKOVANI));
+			}
+		}
+		for (final Challenge jina : new Challenge[] { Sablony.od360Domova(), new Challenge("K", Typ.KALENDAR, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC) }) {
+			Assert.assertSame("jedno je v pořádku", jina.typ(), jina.sOpakovanim(1).typ());
+			try {
+				jina.sOpakovanim(2);
+				Assert.fail(jina.typ().toString());
+			} catch (final ChallengeChyba e) {
+				Assert.assertTrue(e.getMessage(), e.getMessage().contains("jen u matice D/T"));
+			}
+		}
+		Assert.assertEquals("strop je devět", 9, Challenge.NEJVETSI_OPAKOVANI);
+	}
+
+	@Test
+	public void spatneUlozeneOpakovaniJeJednaADefiniceZustane() {
+		for (final String spatne : new String[] { "abc", "0", "-3", "10", "99999999999999", "2,5", "", " " }) {
+			final Map<String, String> m = new LinkedHashMap<>(matice().sOpakovanim(3).naMapu());
+			m.put("opakovani", spatne);
+			final Challenge c = Challenge.zMapy(m);
+			Assert.assertEquals("hodnota „" + spatne + "“", 1, c.opakovani());
+			Assert.assertEquals("Moje matice", c.nazev());
+		}
+		final Map<String, String> m = new LinkedHashMap<>(matice().naMapu());
+		m.put("opakovani", " 4 ");
+		Assert.assertEquals("mezery kolem čísla nevadí", 4, Challenge.zMapy(m).opakovani());
+	}
+
+	@Test
+	public void ulozeneOpakovaniUOstatnichTypuSeIgnoruje() {
+		final Map<String, String> m = new LinkedHashMap<>(Sablony.od360Domova().naMapu());
+		m.put("opakovani", "3");
+		Assert.assertEquals(1, Challenge.zMapy(m).opakovani());
+		Assert.assertEquals(Sablony.od360Domova(), Challenge.zMapy(m));
+	}
 }

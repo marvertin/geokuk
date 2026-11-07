@@ -175,4 +175,32 @@ public class FormularDefiniceTest {
 		Assert.assertEquals(ZdrojPravidel.STATOR, nova.zdroj());
 	}
 
+
+	@Test
+	public void maticeSOpakovanimZachovaOpakovaniAZmeniJeJenVeVetsiVariante() {
+		final Challenge puvodni = Sablony.maticeDT().sNazvem("Moje matice").sOpakovanim(4);
+		final Challenge stejne = FormularDefinice.sestav(puvodni, "Moje matice", ZdrojPravidel.PGC, DruhStredu.DOMOV, null, null, oblast(null), ZdrojeNalezu.ZAPNUTE);
+		Assert.assertEquals("starší volání opakování nepřepíše", 4, stejne.opakovani());
+		Assert.assertEquals(puvodni, stejne);
+		final Challenge jine = FormularDefinice.sestav(puvodni, "Moje matice", ZdrojPravidel.PGC, DruhStredu.DOMOV, null, null, oblast(null), ZdrojeNalezu.ZAPNUTE, 2);
+		Assert.assertEquals(2, jine.opakovani());
+		Assert.assertEquals(Challenge.Typ.DT_MATICE, jine.typ());
+		try {
+			FormularDefinice.sestav(puvodni, "Moje matice", ZdrojPravidel.PGC, DruhStredu.DOMOV, null, null, oblast(null), ZdrojeNalezu.ZAPNUTE, Challenge.NEJVETSI_OPAKOVANI + 1);
+			Assert.fail();
+		} catch (final ChallengeChyba e) {
+			// očekáváno
+		}
+	}
+
+	@Test
+	public void nova360aKopieSektoruMajiOpakovaniJednaAVetsiJeChyba() {
+		Assert.assertEquals(1, sestav(DruhStredu.DOMOV, null, null).opakovani());
+		try {
+			FormularDefinice.sestav(null, "Moje", ZdrojPravidel.PGC, DruhStredu.DOMOV, null, null, oblast(null), ZdrojeNalezu.ZAPNUTE, 2);
+			Assert.fail();
+		} catch (final ChallengeChyba e) {
+			// očekáváno
+		}
+	}
 }
