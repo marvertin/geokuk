@@ -83,6 +83,11 @@ public class JPlanovacVrstvyTest {
 		return new Coord(moumer, new Wgs(lat, lon).toMou(), new Dimension(W, H), 0);
 	}
 
+	/** Výřez, ve kterém leží oba kandidáti z {@link TvarPlanovaceTest#vysledek()} mimo lištu plánovače nahoře. */
+	private static Coord mapaSKandidaty() {
+		return mapa(50.015, 14.0, 14);
+	}
+
 	private static BitSet obsazene(final int od, final int do_) {
 		final BitSet b = new BitSet(360);
 		b.set(od, do_);
@@ -231,10 +236,10 @@ public class JPlanovacVrstvyTest {
 	public void bezPrepinaceStitkuSeKandidatiNekresli() throws Exception {
 		zobraz(TvarPlanovaceTest.vysledek(), 50.0, 14.0);
 		model.setKresliStitky(false);
-		nakresli(nad, mapa(50.01, 14.0, 14));
+		nakresli(nad, mapaSKandidaty());
 		Assert.assertEquals(0, nad.posledniZnacek());
 		model.setKresliStitky(true);
-		nakresli(nad, mapa(50.01, 14.0, 14));
+		nakresli(nad, mapaSKandidaty());
 		Assert.assertEquals(2, nad.posledniZnacek());
 	}
 
@@ -363,7 +368,7 @@ public class JPlanovacVrstvyTest {
 		zobraz(TvarPlanovaceTest.vysledek(), 50.0, 14.0);
 		pod.setStavba(fronta::add);
 		nad.setStavba(fronta::add);
-		final Coord c = mapa(50.01, 14.0, 14);
+		final Coord c = mapaSKandidaty();
 		BufferedImage img = nakresli(nad, c);
 		Assert.assertEquals("podklad se ještě staví", 0, img.getRGB(W / 2, H / 2) >>> 24);
 		Assert.assertEquals("stavba je jedna pro obě vrstvy", 1, fronta.size());
@@ -402,7 +407,7 @@ public class JPlanovacVrstvyTest {
 	@Test
 	public void selhaniStavbyPodkladuNerozbijeKresleniAZalogujeSeJednou() throws Exception {
 		zobraz(TvarPlanovaceTest.vysledek(), 50.0, 14.0);
-		nakresli(nad, mapa(50.01, 14.0, 14));
+		nakresli(nad, mapaSKandidaty());
 		Assert.assertEquals("nejdřív se kreslí", 2, nad.posledniZnacek());
 		final List<VysledekSektoru.KandidatKes> k = new ArrayList<>();
 		k.add(null);
@@ -431,7 +436,7 @@ public class JPlanovacVrstvyTest {
 		};
 		n.inject(model);
 		n.setStavba(fronta::add);
-		final Coord c = mapa(50.01, 14.0, 14);
+		final Coord c = mapaSKandidaty();
 		nakresli(n, c);
 		nakresli(n, c);
 		nakresli(n, c);

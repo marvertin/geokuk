@@ -173,7 +173,7 @@ public class JChallengeDialogTest {
 	@Test
 	public void zapnutiSeProjeviVModelu() throws Exception {
 		naEdt(() -> {
-			final AbstractButton zapnuto = tlacitko("Zapnuto v plánovači");
+			final AbstractButton zapnuto = tlacitko("Aktivní challenge");
 			Assert.assertFalse(model.jeAktivni(seznam().getSelectedValue()));
 			zapnuto.doClick();
 			Assert.assertTrue(model.jeAktivni(Sablony.od360Domova()));
@@ -256,7 +256,7 @@ public class JChallengeDialogTest {
 			Assert.assertEquals("Přejmenované DT", ulozena.nazev());
 			Assert.assertEquals("typ zůstal", Challenge.Typ.DT_MATICE, ulozena.typ());
 			Assert.assertEquals("střed zůstal", Challenge.Stred.souradnice(50, 14), ulozena.stred());
-			final AbstractButton zapnuto = tlacitko("Zapnuto v plánovači");
+			final AbstractButton zapnuto = tlacitko("Aktivní challenge");
 			zapnuto.doClick();
 			Assert.assertTrue(model.jeAktivni(ulozena));
 			tlacitko("Vytvořit kopii…");
@@ -282,7 +282,7 @@ public class JChallengeDialogTest {
 			Assert.assertFalse("úpravy ne", tlacitko("Uložit změny").isEnabled());
 			Assert.assertFalse(pole(0).isEnabled());
 			Assert.assertTrue("smazat ano", tlacitko("Smazat").isEnabled());
-			final AbstractButton zapnuto = tlacitko("Zapnuto v plánovači");
+			final AbstractButton zapnuto = tlacitko("Aktivní challenge");
 			Assert.assertTrue("vypnout ano", zapnuto.isEnabled());
 			Assert.assertTrue(zapnuto.isSelected());
 			zapnuto.doClick();
@@ -309,7 +309,7 @@ public class JChallengeDialogTest {
 			Assert.assertEquals(Challenge.Typ.DT_MATICE, kopie.typ());
 			Assert.assertEquals("Matice D/T (vlastní)", kopie.nazev());
 			Assert.assertTrue(tlacitko("Uložit změny").isEnabled());
-			tlacitko("Zapnuto v plánovači").doClick();
+			tlacitko("Aktivní challenge").doClick();
 			Assert.assertTrue(model.jeAktivni(kopie));
 		});
 	}

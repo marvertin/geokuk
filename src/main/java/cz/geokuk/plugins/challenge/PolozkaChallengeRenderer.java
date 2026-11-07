@@ -29,11 +29,10 @@ final class PolozkaChallengeRenderer extends DefaultListCellRenderer {
 		final Challenge c = (Challenge) v;
 		final ChallengeModel m = model.get();
 		final JLabel s = (JLabel) super.getListCellRendererComponent(l, c.nazev(), i, sel, fokus);
-		final String predpona = m != null && m.jeAktivni(c) ? "● " : "   ";
-		final String pripona = (m != null && m.jeSablona(c) ? "  (šablona)" : "") + (m != null && !m.jeVUi(c) ? "  (nedostupný)" : "");
+		final String pripona = (m != null && m.jeAktivni(c) ? "  (aktivní)" : "") + (m != null && m.jeSablona(c) ? "  (šablona)" : "") + (m != null && !m.jeVUi(c) ? "  (nedostupný)" : "");
 		final FontMetrics fm = s.getFontMetrics(s.getFont());
-		final int volno = l.getWidth() - s.getInsets().left - s.getInsets().right - fm.stringWidth(predpona) - fm.stringWidth(pripona);
-		s.setText(predpona + (l.getWidth() > 0 ? ZkraceniTextu.zkrat(c.nazev(), fm, volno) : c.nazev()) + pripona);
+		final int volno = l.getWidth() - s.getInsets().left - s.getInsets().right - fm.stringWidth(pripona);
+		s.setText((l.getWidth() > 0 ? ZkraceniTextu.zkrat(c.nazev(), fm, volno) : c.nazev()) + pripona);
 		// Šířku seznamu určuje okno, ne délka názvu.
 		s.setPreferredSize(new Dimension(1, s.getPreferredSize().height));
 		s.setToolTipText("<html>" + escape(c.nazev()) + "<br>" + escape(FormularDefinice.souhrn(c)) + "</html>");

@@ -31,7 +31,7 @@ final class TextyPopupuPlanovace {
 	}
 
 	static String nadpis(final Challenge c) {
-		return "Challenge " + c.nazev();
+		return c.nazev();
 	}
 
 	static String souhrn(final VysledekSektoru v) {

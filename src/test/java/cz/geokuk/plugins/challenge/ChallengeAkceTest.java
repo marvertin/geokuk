@@ -114,7 +114,7 @@ public class ChallengeAkceTest {
 		model.setZapnuto(true);
 		kandidati.onSlectedChange(true);
 		kandidati.onSlectedChange(false);
-		Assert.assertEquals(java.util.Arrays.asList("Challenge: jen kandidáti – Zapnuto", "Challenge: jen kandidáti – Vypnuto"), zpravy);
+		Assert.assertEquals(java.util.Arrays.asList("Plánovač: jen kandidáti – Zapnuto", "Plánovač: jen kandidáti – Vypnuto"), zpravy);
 	}
 
 	@Test
@@ -136,8 +136,8 @@ public class ChallengeAkceTest {
 			skok.setPlanovac(() -> null);
 			skok.actionPerformed(null);
 		}
-		Assert.assertEquals(java.util.Arrays.asList("Challenge – žádný kandidát na sever", "Challenge – žádný kandidát na východ", "Challenge – žádný kandidát na jih",
-				"Challenge – žádný kandidát na západ"), zpravy);
+		Assert.assertEquals(java.util.Arrays.asList("Plánovač – žádný kandidát na sever", "Plánovač – žádný kandidát na východ", "Plánovač – žádný kandidát na jih",
+				"Plánovač – žádný kandidát na západ"), zpravy);
 	}
 
 	@Test
@@ -209,7 +209,7 @@ public class ChallengeAkceTest {
 		Assert.assertEquals("na severu je kandidát, mapa se na něj vystředí", 1, vystredeno.size());
 		Assert.assertTrue("bez zprávy", zpravy.isEmpty());
 		jih.actionPerformed(new ActionEvent(this, 0, ""));
-		Assert.assertEquals("na jihu nikdo", java.util.Collections.singletonList("Challenge – žádný kandidát na jih"), zpravy);
+		Assert.assertEquals("na jihu nikdo", java.util.Collections.singletonList("Plánovač – žádný kandidát na jih"), zpravy);
 		Assert.assertEquals(1, vystredeno.size());
 	}
 

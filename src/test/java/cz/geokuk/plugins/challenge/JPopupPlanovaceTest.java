@@ -171,7 +171,7 @@ public class JPopupPlanovaceTest {
 		Assert.assertEquals(java.util.Arrays.asList("213°  2 kandidáti  nejbližší 2,8 km", "47°  1 kandidát  nejbližší 6,2 km", "305°  0 kandidátů  –"), radky);
 		Assert.assertEquals("1 sektor je na hraně (±0,05°), počítá se jako nejistý.", o.nejiste.getText());
 		Assert.assertTrue(o.dalsi.isEnabled());
-		Assert.assertTrue(o.nadpis.getText(), o.nadpis.getText().startsWith("Challenge "));
+		Assert.assertFalse("nadpis je jen název challenge", o.nadpis.getText().startsWith("Challenge "));
 		Assert.assertEquals("Typ: 360°    Pravidla: " + TextyPopupuPlanovace.pravidla(aktivni().zdroj()), o.typ.getText());
 		Assert.assertTrue(o.typ.getText(), o.typ.getText().endsWith("Pravidla: Project-GC") || o.typ.getText().endsWith("Pravidla: Stator"));
 		Assert.assertFalse("zkratka PGC se nepíše", o.typ.getText().contains("PGC"));

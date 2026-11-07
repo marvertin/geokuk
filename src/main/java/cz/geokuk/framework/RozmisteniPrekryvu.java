@@ -36,7 +36,7 @@ public final class RozmisteniPrekryvu {
 	public static final int VYSKA_PRUHU = 28;
 	/** Možné šířky pruhu plánovače od nejširší; užší stupeň se použije, když se širší nevejde. */
 	/** Šířky lišty plánovače podle stupně: plná s texty, s ikonami a nejužší. */
-	public static final int PRUH_PLNY = 600, PRUH_IKONY = 328, PRUH_UZKY = 234;
+	public static final int PRUH_PLNY = 664, PRUH_IKONY = 368, PRUH_UZKY = 274;
 	/** Šířka úchytu, který zůstane z lišty, když je plánovač vypnutý. */
 	public static final int PRUH_UCHYT = 34;
 	/** Ukazatel výkonu leží pod pruhem plánovače, když je pruh vidět. */

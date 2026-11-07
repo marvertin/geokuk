@@ -28,10 +28,10 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	private static final int VYSKA_PRVKU = 20;
 	private static final int SIRKA_UCHYTU = 26;
 	private static final int SIRKA_VYBERU = 62;
-	private static final int SIRKA_ODZNAKU = 40;
+	private static final int SIRKA_ODZNAKU = 80;
 	private static final int SIRKA_SIPKY = 24;
 	private static final int SIRKA_IKONY = 26;
-	private static final int SIRKA_KANDIDATU = 116, SIRKA_SEKTORU = 84, SIRKA_STITKU = 72, SIRKA_NASTAVENI = 104;
+	private static final int SIRKA_KANDIDATU = 124, SIRKA_SEKTORU = 88, SIRKA_STITKU = 72, SIRKA_NASTAVENI = 116;
 	private static final Color CERVENA = new Color(200, 40, 40);
 	private static final javax.swing.border.Border RAMECEK = BorderFactory.createEtchedBorder();
 	static final String TIP_ZPET = "Předchozí chybějící; Shift+šipky skočí na kandidáta ve směru šipky";
@@ -77,14 +77,14 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	public JPruhPlanovace() {
 		setOpaque(false);
 		setLayout(null);
-		uchyt.setToolTipText("Plánovač challenge – zapnout");
+		uchyt.setToolTipText(TIP_UCHYTU_ZAPNOUT);
 		zpet.setToolTipText(TIP_ZPET);
 		dal.setToolTipText(TIP_DAL);
 		odznak.setToolTipText(popisChybejicich(Challenge.Typ.SEKTORY_360));
 		kandidati.setToolTipText(popisKandidatu(Challenge.Typ.SEKTORY_360));
 		sektory.setToolTipText("Sektory na mapě: prstenec, klín chybějícího sektoru a čára ke kandidátovi");
 		stitky.setToolTipText("Štítky u kandidátů: číslo sektoru nebo políčko D/T");
-		nastaveni.setToolTipText("Plánovač challenge… – definice, kopie a úpravy");
+		nastaveni.setToolTipText(TIP_NASTAVENI);
 		chip.setToolTipText("Vybrat challenge");
 		sektory.setSelected(true);
 		stitky.setSelected(true);
@@ -173,6 +173,42 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	/** Sektory (prstenec, klín, čára) má jen challenge 360°. */
 	static boolean maSektory(final Challenge.Typ typ) {
 		return typ == Challenge.Typ.SEKTORY_360;
+	}
+
+	static final String TIP_UCHYTU_ZAPNOUT = "<html><b>Plánovač challenge</b> – zapnout<br>Ukáže, které sektory nebo políčka challenge vám chybí,<br>a na mapě keše, které je doplní. Menu Kešoidy › Plánovač challenge.</html>";
+	static final String TIP_UCHYTU_VYPNOUT = "<html><b>Plánovač challenge</b> – vypnout</html>";
+	static final String TIP_NASTAVENI = "Nastavení plánovače… – seznam challenge, výběr aktivní, kopie šablon a úprava vlastních";
+
+	/** Kolik políček challenge má: 360 sektorů, u políček podle výsledku. */
+	private int celkem(final Challenge c) {
+		if (c.typ() == Challenge.Typ.SEKTORY_360) {
+			return 360;
+		}
+		final VysledekPolicek v = model == null ? null : model.vysledekPolicek(c);
+		return v == null ? 0 : v.celkem();
+	}
+
+	/** Tooltip odznaku: „Chybí 193 sektorů z 360 – klik ukáže podrobnosti“. */
+	static String tipOdznaku(final Challenge.Typ typ, final int chybi, final int celkem) {
+		final String co;
+		switch (typ) {
+		case DT_MATICE:
+			co = tvar(chybi, "políčko", "políčka", "políček");
+			break;
+		case KALENDAR:
+			co = tvar(chybi, "den", "dny", "dní");
+			break;
+		default:
+			co = tvar(chybi, "sektor", "sektory", "sektorů");
+		}
+		return "Chybí " + chybi + " " + co + (celkem > 0 ? " z " + celkem : "") + " – klik ukáže podrobnosti";
+	}
+
+	private static String tvar(final int n, final String jeden, final String dvaAzCtyri, final String jinak) {
+		if (n == 1) {
+			return jeden;
+		}
+		return n >= 2 && n <= 4 ? dvaAzCtyri : jinak;
 	}
 
 	/** Co počítá odznak: chybějící sektory, políčka nebo dny podle typu challenge. */
@@ -345,12 +381,12 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		zapnuto = model != null && model.jeZapnuto();
 		final StavPruhu stav = model == null ? StavPruhu.SKRYTY : model.stavPruhu();
 		final boolean maChallenge = stav.jeViditelny();
-		uchyt.setToolTipText(zapnuto ? "Plánovač challenge – vypnout" : "Plánovač challenge – zapnout");
+		uchyt.setToolTipText(zapnuto ? TIP_UCHYTU_VYPNOUT : TIP_UCHYTU_ZAPNOUT);
 		nastavText(chip, (maChallenge ? stav.stitekTypu() + " " : "") + "▾");
 		chip.setToolTipText(maChallenge ? "Challenge: " + stav.challenge().nazev() + " – vybrat jinou" : "Vybrat challenge");
 		if (maChallenge) {
-			odznak.nastav(stav.badge() < 0 ? "…" : Integer.toString(stav.badge()));
-			odznak.setToolTipText(popisChybejicich(stav.typ()) + " – " + stav.challenge().nazev());
+			odznak.nastav("chybí " + (stav.badge() < 0 ? "…" : Integer.toString(stav.badge())));
+			odznak.setToolTipText(stav.badge() < 0 ? popisChybejicich(stav.typ()) + " – počítá se" : tipOdznaku(stav.typ(), stav.badge(), celkem(stav.challenge())));
 			kandidati.setToolTipText(popisKandidatu(stav.typ()) + " (F4)");
 		} else {
 			odznak.nastav("–");
@@ -416,7 +452,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		if (model == null) {
 			return m;
 		}
-		final JLabel nadpis = new JLabel("Aktivní challenge:");
+		final JLabel nadpis = new JLabel("Challenge:");
 		nadpis.setBorder(BorderFactory.createEmptyBorder(2, 6, 2, 6));
 		nadpis.setFont(nadpis.getFont().deriveFont(Font.BOLD));
 		m.add(nadpis);
@@ -426,7 +462,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 			if (!model.jeVUi(c)) {
 				continue;
 			}
-			final JRadioButtonMenuItem polozka = new JRadioButtonMenuItem(StitkyPruhu.typ(c.typ()) + "   " + c.nazev() + (model.jeSablona(c) ? "   (šablona)" : ""));
+			final JRadioButtonMenuItem polozka = new JRadioButtonMenuItem(c.nazev() + (model.jeSablona(c) ? "   (šablona)" : ""));
 			polozka.setSelected(c.equals(zobrazena));
 			polozka.addActionListener(e -> vyber(c));
 			skupina.add(polozka);
@@ -452,7 +488,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		kopie.setToolTipText("Vlastní kopie vybrané šablony k úpravě v dialogu plánovače");
 		kopie.addActionListener(e -> kopiruj());
 		m.add(kopie);
-		final JMenuItem planovac = new JMenuItem("Plánovač challenge…", new Ozubene());
+		final JMenuItem planovac = new JMenuItem("Nastavení plánovače…", new Ozubene());
 		planovac.addActionListener(e -> otevriNastaveni());
 		m.add(planovac);
 		return m;

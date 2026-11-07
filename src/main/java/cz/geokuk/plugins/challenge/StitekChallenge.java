@@ -5,7 +5,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 
-/** Oranžový štítek „Challenge: jen kandidáti“ ve stavovém řádku; barva textu se přizpůsobí pozadí tématu, aby byl čitelný. */
+/** Oranžový štítek „Plánovač: jen kandidáti“ ve stavovém řádku; barva textu se přizpůsobí pozadí tématu, aby byl čitelný. */
 public class StitekChallenge extends JLabel {
 
 	private static final long serialVersionUID = 1L;

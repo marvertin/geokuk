@@ -238,7 +238,7 @@ public class JPopupPlanovace extends JSlide0 implements AfterInjectInit {
 
 		/** Název challenge může být dlouhý (šablony mají GC kód a anglický název): zkrátí se „…“ a plný je v tooltipu. */
 		final cz.geokuk.util.gui.JZkracenyLabel nadpis = new cz.geokuk.util.gui.JZkracenyLabel(NEJVETSI_SIRKA_NADPISU);
-		final JButton nastaveni = new JButton("Nastavení…");
+		final JButton nastaveni = new JButton("Nastavení plánovače…");
 		final JLabel typ = new JLabel();
 		final JLabel stred = new JLabel();
 		final JLabel souhrn = new JLabel();

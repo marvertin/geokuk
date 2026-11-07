@@ -125,7 +125,7 @@ public class JListaPlanovaceTest {
 	@Test
 	public void planovacChallengeOtevreDialog() {
 		priprav(1280);
-		polozka(pruh.sestavVyber(), "Plánovač challenge…").doClick();
+		polozka(pruh.sestavVyber(), "Nastavení plánovače…").doClick();
 		Assert.assertEquals(1, nastaveni);
 	}
 

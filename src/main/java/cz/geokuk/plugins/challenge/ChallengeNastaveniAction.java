@@ -11,8 +11,8 @@ public class ChallengeNastaveniAction extends DialogOpeningAction0 {
 	private static final long serialVersionUID = 1L;
 
 	public ChallengeNastaveniAction() {
-		super("Plánovač challenge...");
-		putValue(SHORT_DESCRIPTION, "Seznam challenge, jejich zapnutí a úprava vlastních definic.");
+		super("Nastavení plánovače…");
+		putValue(SHORT_DESCRIPTION, "Seznam challenge, výběr aktivní, kopie šablon a úprava vlastních.");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_P);
 	}
 

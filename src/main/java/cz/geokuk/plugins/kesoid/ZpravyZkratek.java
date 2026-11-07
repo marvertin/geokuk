@@ -64,12 +64,12 @@ public final class ZpravyZkratek {
 
 	/** F4: filtr plánovače challenge „jen kandidáti“. */
 	public static String challengeJenKandidati(final boolean zapnuto) {
-		return akceStav("Challenge: jen kandidáti", zapnuto, null);
+		return akceStav("Plánovač: jen kandidáti", zapnuto, null);
 	}
 
 	/** Shift+šipka, když ve směru šipky žádný kandidát challenge není; {@code smer} je třeba „na sever“. */
 	public static String challengeZadnyKandidat(final String smer) {
-		return "Challenge – žádný kandidát " + smer;
+		return "Plánovač – žádný kandidát " + smer;
 	}
 
 	/** Ctrl+1 až Ctrl+4 u zdroje, který nemá žádné načtené soubory a proto jde vypnutý. */

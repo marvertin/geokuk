@@ -64,7 +64,7 @@ public class PolozkaChallengeRendererTest {
 						Assert.assertTrue(s.getText(), s.getText().endsWith("(šablona)"));
 						Assert.assertEquals("šířku seznamu určuje okno, ne název", 1, s.getPreferredSize().width);
 						Assert.assertTrue("tooltip má plný název: " + s.getToolTipText(), s.getToolTipText().contains(c.nazev().replace("&", "&amp;")));
-						if (fm.stringWidth("   " + c.nazev() + "  (šablona)") > sirka) {
+						if (fm.stringWidth(c.nazev() + (m.jeAktivni(c) ? "  (aktivní)" : "") + "  (šablona)") > sirka - s.getInsets().left - s.getInsets().right) {
 							Assert.assertTrue(s.getText(), s.getText().contains("…"));
 						} else {
 							Assert.assertTrue("vejde se: " + s.getText(), s.getText().contains(c.nazev()));
@@ -94,12 +94,12 @@ public class PolozkaChallengeRendererTest {
 	}
 
 	@Test
-	public void zapnutaAVlastniPolozkaMaZnackuAKratkyNazevBezZkraceni() {
+	public void aktivniAVlastniPolozkaMaPopisekAKratkyNazevBezZkraceni() {
 		final ChallengeModel m = model();
 		final Challenge c = m.ulozVlastni(new Challenge("Moje", Challenge.Typ.SEKTORY_360, Challenge.Stred.domov(), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.PGC));
 		m.aktivuj(c);
 		final JLabel s = polozka(m, c, 290);
-		Assert.assertEquals("● Moje", s.getText());
+		Assert.assertEquals("Moje  (aktivní)", s.getText());
 		Assert.assertFalse(s.getText().contains("…"));
 	}
 }

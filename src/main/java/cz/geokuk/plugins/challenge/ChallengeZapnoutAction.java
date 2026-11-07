@@ -9,8 +9,8 @@ public class ChallengeZapnoutAction extends ToggleAction0 {
 	private transient ChallengeModel model;
 
 	public ChallengeZapnoutAction() {
-		super("Lišta challenge");
-		putValue(SHORT_DESCRIPTION, "Zapne plánovač challenge: lišta na mapě s výběrem challenge, počtem chybějících a přechodem na další chybějící.");
+		super("Zapnout plánovač");
+		putValue(SHORT_DESCRIPTION, "Na mapě vlevo nahoře ukáže plánovač; vypnutý zůstane jen jeho ikona ◎.");
 	}
 
 	public void inject(final ChallengeModel model) {

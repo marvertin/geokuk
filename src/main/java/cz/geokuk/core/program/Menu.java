@@ -127,8 +127,8 @@ public class Menu extends MenuStrujce {
 
 	private void sestavSubmenuChallenge() {
 		final JMenu hlavni = menu;
-		final JMenu challenge = new JMenu("Challenge");
-		challenge.setToolTipText("Plánovač challenge: lišta na mapě, další a předchozí chybějící, jen kandidáti, kreslení sektorů a štítků.");
+		final JMenu challenge = new JMenu("Plánovač challenge");
+		challenge.setToolTipText("Ukáže, které sektory nebo políčka challenge vám chybí, a na mapě keše, které je doplní.");
 		hlavni.add(challenge);
 		menu = challenge;
 		item(akce.challengeZapnoutAction);
