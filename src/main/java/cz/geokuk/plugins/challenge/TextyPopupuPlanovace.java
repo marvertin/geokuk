@@ -103,6 +103,17 @@ final class TextyPopupuPlanovace {
 		}
 	}
 
+	/** Střed „domov“ se souřadnicemi; když domov není nastavený (výchozí bod programu), řekne to. */
+	static String stredDomov(final cz.geokuk.core.coordinates.Wgs domov) {
+		if (domov == null || cz.geokuk.core.coord.VyrezModel.DEFAULTNI_DOMACI_SOURADNICE.equals(domov)) {
+			return "domov není nastavený";
+		}
+		return "domov " + domov;
+	}
+
+	static final String TIP_ZMENY_DOMOVA = "Uloží zvolenou pozici na mapě jako domov";
+	static final String TIP_ZMENY_DOMOVA_BEZ_POZICE = "Klikněte na mapu, kde je domov, a pak zvolte Změnit domov…";
+
 	/** U kolika sektorů leží nalezená keš u hranice se sousedním sektorem; prázdný text, když u žádného. */
 	static String nejiste(final VysledekSektoru v) {
 		int n = 0;

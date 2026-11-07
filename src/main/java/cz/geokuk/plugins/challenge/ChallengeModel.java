@@ -73,6 +73,7 @@ public class ChallengeModel extends Model0 {
 			ukladaniZakazano = n.neznamyFormat;
 			kresliSektory = nactiPrepinac(KRESLI_SEKTORY);
 			kresliStitky = nactiPrepinac(KRESLI_STITKY);
+			radaZobrazena = "true".equals(uloziste.get().get(RADA_ZOBRAZENA));
 		} catch (final RuntimeException e) {
 			log.warn("Nastavení challenge nejde načíst, použijí se výchozí hodnoty a ukládání se vypne: {}", e.toString());
 			seznam = new ChallengeSeznam();
@@ -80,6 +81,7 @@ public class ChallengeModel extends Model0 {
 			ukladaniZakazano = true;
 			kresliSektory = true;
 			kresliStitky = true;
+			radaZobrazena = true;
 		}
 		vysledky.clear();
 		vysledkyPolicek.clear();
@@ -137,6 +139,32 @@ public class ChallengeModel extends Model0 {
 		this.zapnuto = zapnuto;
 		uloz();
 		ohlas(ChallengeZmenenyEvent.Druh.ZAPNUTO, null);
+	}
+
+	// --- Jednorázová rada u úchytu
+
+	private static final String RADA_ZOBRAZENA = "rada.zobrazena";
+	/** Rada u úchytu už byla vidět; do načtení nastavení platí, ať se neukáže předčasně. */
+	private volatile boolean radaZobrazena = true;
+
+	public boolean jeRadaZobrazena() {
+		return radaZobrazena;
+	}
+
+	/** Zapamatuje, že rada byla vidět; další start ji už neukáže. Při zakázaném ukládání platí jen do konce běhu. */
+	public void setRadaZobrazena() {
+		if (radaZobrazena) {
+			return;
+		}
+		radaZobrazena = true;
+		if (ukladaniZakazano) {
+			return;
+		}
+		try {
+			uloziste.get().put(RADA_ZOBRAZENA, "true");
+		} catch (final RuntimeException e) {
+			log.warn("Nastavení challenge nejde uložit: {}", e.toString());
+		}
 	}
 
 	// --- Kreslení na mapě

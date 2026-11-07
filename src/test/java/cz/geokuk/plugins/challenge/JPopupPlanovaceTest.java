@@ -528,4 +528,135 @@ public class JPopupPlanovaceTest {
 		Assert.assertEquals(-1, o.seznam.getSelectedIndex());
 		Assert.assertEquals(PosunVyberu.ZADNY_SEKTOR, model.vybranySektor(aktivni360()));
 	}
+
+	/** Domov s pozicí na mapě: akce „Jsem doma“ z menu, domov v nastavení bez preferencí. */
+	private static final class Doma {
+		final cz.geokuk.core.coordinates.Wgs[] hc = { cz.geokuk.core.coord.VyrezModel.DEFAULTNI_DOMACI_SOURADNICE };
+		final cz.geokuk.plugins.refbody.RefbodyModel refbody = new cz.geokuk.plugins.refbody.RefbodyModel() {
+			@Override
+			public cz.geokuk.core.coordinates.Wgs getHc() {
+				return hc[0];
+			}
+
+			@Override
+			public void setHc(final cz.geokuk.core.coordinates.Wgs novy) {
+				hc[0] = novy;
+			}
+		};
+		final cz.geokuk.plugins.refbody.TadyJsemDomaAction akce = new cz.geokuk.plugins.refbody.TadyJsemDomaAction();
+		final cz.geokuk.core.coord.PoziceModel pozice = new cz.geokuk.core.coord.PoziceModel();
+
+		Doma() {
+			akce.inject(refbody);
+			pozice.inject(new EventFirer() {
+				@Override
+				public void fire(final Event0<?> event) {
+					if (event instanceof cz.geokuk.core.coord.PoziceChangedEvent) {
+						akce.onEvent((cz.geokuk.core.coord.PoziceChangedEvent) event);
+					}
+				}
+			});
+			pozice.clearPozice();
+		}
+	}
+
+	private void aktivujDomov() throws Exception {
+		model.deaktivuj(aktivni());
+		model.aktivuj(Sablony.od360Domova());
+		SwingUtilities.invokeAndWait(() -> {});
+	}
+
+	/** U středu „domov“ jsou souřadnice domova a odkaz Změnit domov…; bez nastaveného domova to řádek řekne. */
+	@Test
+	public void stredDomovUkazeSouradniceAOdkaz() throws Exception {
+		priprav();
+		final Doma d = new Doma();
+		popup.inject(d.refbody);
+		aktivujDomov();
+		popup.prepni();
+		final JPopupPlanovace.Obsah o = popup.obsah;
+		Assert.assertEquals("Střed: domov není nastavený", o.stred.getText());
+		Assert.assertTrue(o.zmenitDomov.isVisible());
+		Assert.assertEquals("Změnit domov…", o.zmenitDomov.getText());
+		d.hc[0] = new cz.geokuk.core.coordinates.Wgs(50.0542, 14.39);
+		popup.onEvent(new cz.geokuk.plugins.refbody.DomaciSouradniceSeZmenilyEvent(d.hc[0]));
+		Assert.assertEquals("Střed: domov " + d.hc[0], o.stred.getText());
+		Assert.assertTrue(o.stred.getText(), o.stred.getText().startsWith("Střed: domov N50°"));
+	}
+
+	/** U středu z listingu odkaz na domov není; u D/T není celý řádek středu. */
+	@Test
+	public void odkazNaDomovJenUStreduDomov() throws Exception {
+		priprav();
+		popup.prepni();
+		Assert.assertEquals("Střed: výchozí bod GC4PCQB", popup.obsah.stred.getText());
+		Assert.assertFalse(popup.obsah.zmenitDomov.isVisible());
+	}
+
+	/** Změnit domov… je dostupný jen s pozicí na mapě (jinak tooltip řekne, co udělat); klik zavře popup a uloží pozici jako domov akcí „Jsem doma“. */
+	@Test
+	public void zmenitDomovUloziPoziciAkciJsemDoma() throws Exception {
+		priprav();
+		final Doma d = new Doma();
+		popup.inject(d.refbody);
+		popup.setZmenaDomova(d.akce);
+		aktivujDomov();
+		popup.prepni();
+		final javax.swing.JButton odkaz = popup.obsah.zmenitDomov;
+		Assert.assertFalse("bez pozice nedostupný", odkaz.isEnabled());
+		Assert.assertEquals(TextyPopupuPlanovace.TIP_ZMENY_DOMOVA_BEZ_POZICE, odkaz.getToolTipText());
+		odkaz.doClick();
+		Assert.assertTrue("nedostupný odkaz nic neudělá", popup.jeOtevreno());
+		final cz.geokuk.core.coordinates.Wgs misto = new cz.geokuk.core.coordinates.Wgs(50.08, 14.42);
+		d.pozice.setPozice(misto);
+		Assert.assertTrue("s pozicí dostupný", odkaz.isEnabled());
+		Assert.assertEquals(TextyPopupuPlanovace.TIP_ZMENY_DOMOVA, odkaz.getToolTipText());
+		odkaz.doClick();
+		Assert.assertFalse("klik zavře popup", popup.jeOtevreno());
+		Assert.assertEquals(misto.lat, d.hc[0].lat, 1e-6);
+		Assert.assertEquals(misto.lon, d.hc[0].lon, 1e-6);
+		d.pozice.clearPozice();
+		Assert.assertFalse("po zrušení pozice zase nedostupný", odkaz.isEnabled());
+	}
+
+	@Test
+	public void textStreduDomova() {
+		Assert.assertEquals("domov není nastavený", TextyPopupuPlanovace.stredDomov(null));
+		Assert.assertEquals("domov není nastavený", TextyPopupuPlanovace.stredDomov(cz.geokuk.core.coord.VyrezModel.DEFAULTNI_DOMACI_SOURADNICE));
+		final cz.geokuk.core.coordinates.Wgs w = new cz.geokuk.core.coordinates.Wgs(50.0542, 14.39);
+		Assert.assertEquals("domov " + w, TextyPopupuPlanovace.stredDomov(w));
+	}
+
+	/** Klik se spustí jen u dostupné akce, i kdyby tlačítko zůstalo dostupné (akce se mezitím vypnula bez ohlášení). */
+	@Test
+	public void zmenitDomovNespustiNedostupnouAkci() throws Exception {
+		priprav();
+		aktivujDomov();
+		final int[] spusteno = { 0 };
+		final boolean[] dostupna = { true };
+		final javax.swing.Action akce = new javax.swing.AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isEnabled() {
+				return dostupna[0];
+			}
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				spusteno[0]++;
+			}
+		};
+		popup.setZmenaDomova(akce);
+		popup.prepni();
+		Assert.assertTrue(popup.obsah.zmenitDomov.isEnabled());
+		dostupna[0] = false;
+		popup.obsah.zmenitDomov.doClick();
+		Assert.assertEquals("nedostupná akce se nespustí", 0, spusteno[0]);
+		Assert.assertTrue("popup zůstane otevřený", popup.jeOtevreno());
+		dostupna[0] = true;
+		popup.obsah.zmenitDomov.doClick();
+		Assert.assertEquals(1, spusteno[0]);
+		Assert.assertFalse(popup.jeOtevreno());
+	}
 }

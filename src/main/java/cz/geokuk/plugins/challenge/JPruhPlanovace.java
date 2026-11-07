@@ -80,6 +80,14 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	private transient java.util.function.Supplier<? extends java.util.Collection<Rectangle>> prekazky = java.util.Collections::emptyList;
 	private Stupen stupen = Stupen.PLNY;
 	private boolean zapnuto;
+	/** Text jednorázové rady vedle vypnutého úchytu. */
+	static final String TEXT_RADY = "◀ Plánovač challenge: ukáže, co vám v challenge chybí";
+	/** Rada vedle vypnutého úchytu: ukáže se jednou, při prvním startu s vypnutým plánovačem. */
+	final JPanel rada = new JPanel(new BorderLayout(4, 0));
+	private final JLabel textRady = new JLabel(TEXT_RADY);
+	final JButton zavritRadu = new JButton("✕");
+	private boolean radaVidet;
+	static final int REZERVA_RADY = 8;
 
 	public JPruhPlanovace() {
 		setOpaque(false);
@@ -140,6 +148,54 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 			}
 		});
 		nastaveni.addActionListener(e -> otevriNastaveni());
+		textRady.setToolTipText(TIP_UCHYTU_ZAPNOUT);
+		zavritRadu.setToolTipText("Zavřít radu");
+		zavritRadu.setFocusable(false);
+		zavritRadu.setMargin(new Insets(0, 4, 0, 4));
+		zavritRadu.addActionListener(e -> skryjRadu());
+		rada.add(textRady, BorderLayout.CENTER);
+		rada.add(zavritRadu, BorderLayout.EAST);
+		rada.setVisible(false);
+		obnovVzhledRady();
+		add(rada);
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (rada != null) {
+			obnovVzhledRady();
+		}
+	}
+
+	/** Barvy rady jako tooltip vzhledu (vlastní kopie, ať je updateUI rady nepřepíše): odliší se od lišty i od mapy ve světlém i tmavém skinu. */
+	private void obnovVzhledRady() {
+		final Color pozadi = kopie(UIManager.getColor("ToolTip.background"));
+		final Color popredi = kopie(UIManager.getColor("ToolTip.foreground"));
+		rada.setOpaque(true);
+		rada.setBackground(pozadi);
+		textRady.setForeground(popredi);
+		rada.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(popredi == null ? Color.GRAY : popredi), BorderFactory.createEmptyBorder(1, 6, 1, 2)));
+	}
+
+	private static Color kopie(final Color c) {
+		return c == null ? null : new Color(c.getRGB(), true);
+	}
+
+	private void skryjRadu() {
+		radaVidet = false;
+		revalidate();
+		repaint();
+	}
+
+	/** Obdélník rady vpravo od vypnutého úchytu ve výšce lišty, nebo prázdný, když se nevejde. */
+	Rectangle oblastRady() {
+		final Dimension d = rada.getPreferredSize();
+		final int x = RozmisteniPrekryvu.OKRAJ + RozmisteniPrekryvu.PRUH_UCHYT + MEZERA;
+		final int vyska = Math.min(d.height, RozmisteniPrekryvu.VYSKA_PRUHU);
+		// Rezerva: při zvětšení (125–150 %) je vykreslený text o pár pixelů širší než změřený.
+		final Rectangle r = new Rectangle(x, RozmisteniPrekryvu.OKRAJ + (RozmisteniPrekryvu.VYSKA_PRUHU - vyska) / 2, d.width + REZERVA_RADY, vyska);
+		return r.x + r.width <= RozmisteniPrekryvu.OKRAJ + RozmisteniPrekryvu.volnaSirkaPruhu(getWidth(), prekazky.get()) ? r : new Rectangle(x, r.y, 0, 0);
 	}
 
 	public void inject(final ChallengeModel model) {
@@ -324,7 +380,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 
 	@Override
 	public boolean contains(final int x, final int y) {
-		return isVisible() && oblastPruhu().contains(x, y);
+		return isVisible() && (oblastPruhu().contains(x, y) || rada.isVisible() && rada.getBounds().contains(x, y));
 	}
 
 	@Override
@@ -336,6 +392,12 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		for (int i = 0; i < c.length; i++) {
 			c[i].setBounds(r[i]);
 			c[i].setVisible(i == UCHYT || (zapnuto && !r[i].isEmpty()));
+		}
+		final Rectangle mistoRady = radaVidet && !zapnuto ? oblastRady() : new Rectangle();
+		rada.setBounds(mistoRady);
+		rada.setVisible(!mistoRady.isEmpty());
+		if (rada.isVisible() && model != null) {
+			model.setRadaZobrazena();
 		}
 		final boolean texty = stupen == Stupen.PLNY;
 		nastavText(kandidati, texty ? "jen kandidáti" : "");
@@ -404,6 +466,16 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 
 	private void obnov() {
 		zapnuto = model != null && model.jeZapnuto();
+		if (model != null && !model.jeRadaZobrazena()) {
+			// Kdo má plánovač zapnutý, ho už zná; ostatním se rada ukáže jednou (zapamatuje se v doLayout, až se opravdu vejde).
+			radaVidet = !zapnuto;
+			if (zapnuto) {
+				model.setRadaZobrazena();
+			}
+		}
+		if (zapnuto) {
+			radaVidet = false;
+		}
 		final StavPruhu stav = model == null ? StavPruhu.SKRYTY : model.stavPruhu();
 		final boolean maChallenge = stav.jeViditelny();
 		uchyt.setToolTipText(zapnuto ? TIP_UCHYTU_VYPNOUT : TIP_UCHYTU_ZAPNOUT);
