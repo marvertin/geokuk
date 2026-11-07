@@ -74,6 +74,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		final Coord coord;
 		final Indexator<Wpt> indexator;
 		final double meritkoIkon;
+		final String policko;
 		int veVyrezu;
 		int pocet;
 		/** Pravý okraj ikony a její svislý střed vůči bodu keše. */
@@ -83,7 +84,8 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		int[] x = new int[0];
 		int[] y = new int[0];
 
-		Vyber(final TvarPlanovace tvar, final Coord coord, final Indexator<Wpt> indexator, final double meritkoIkon) {
+		Vyber(final TvarPlanovace tvar, final Coord coord, final Indexator<Wpt> indexator, final double meritkoIkon, final String policko) {
+			this.policko = policko;
 			this.tvar = tvar;
 			this.coord = coord;
 			this.indexator = indexator;
@@ -332,10 +334,11 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		Vyber v = vyber;
 		final Indexator<Wpt> indexator = indexatorKesi;
 		final double meritko = meritkoIkon;
-		if (v != null && v.tvar == t && v.coord.equals(c) && v.indexator == indexator && v.meritkoIkon == meritko) {
+		final String policko = model == null || t.stitkyPolicek == null ? null : model.vybranePolicko(t.prehled.challenge());
+		if (v != null && v.tvar == t && v.coord.equals(c) && v.indexator == indexator && v.meritkoIkon == meritko && java.util.Objects.equals(v.policko, policko)) {
 			return v;
 		}
-		v = new Vyber(t, c, indexator, meritko);
+		v = new Vyber(t, c, indexator, meritko, policko);
 		final int w = c.getWidth();
 		final int h = c.getHeight();
 		int n = 0;
@@ -345,6 +348,9 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		double[] vz = new double[256];
 		final Point p = new Point();
 		for (int i = 0; i < t.pozice.length; i++) {
+			if (policko != null && !policko.equals(t.stitkyPolicek[i])) {
+				continue;
+			}
 			PixelyMapy.transform(c, t.pozice[i], p);
 			if (p.x < -OKRAJ_VYREZU || p.y < -OKRAJ_VYREZU || p.x > w + OKRAJ_VYREZU || p.y > h + OKRAJ_VYREZU) {
 				continue;

@@ -111,6 +111,28 @@ public class JPlanovacVrstvyTest {
 	}
 
 	@Test
+	public void vybranePolickoDtMaStitkyJenSvychKandidatu() throws Exception {
+		final Challenge dt = model.ulozVlastni(new Challenge("DT", Challenge.Typ.DT_MATICE, Challenge.Stred.domov(), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.PGC));
+		model.aktivuj(dt);
+		model.setZapnuto(true);
+		final java.util.List<KandidatPolicka> kandidati = new ArrayList<>();
+		kandidati.add(new KandidatPolicka("GC1", 50.001, 14.001, "D3/T4", "D3/T4", null, 150));
+		kandidati.add(new KandidatPolicka("GC2", 50.002, 13.998, "D3/T4", "D3/T4", null, 250));
+		kandidati.add(new KandidatPolicka("GC3", 49.998, 14.002, "D1/T1", "D1/T1", null, 250));
+		model.nastavVysledekPolicek(dt, new VysledekPolicek(81, java.util.Arrays.asList("D3/T4", "D1/T1"), kandidati), 50.0, 14.0);
+		SwingUtilities.invokeAndWait(() -> {});
+		final Coord c = mapa(50.0, 14.0, 14);
+		nakresli(nad, c);
+		Assert.assertEquals("bez výběru políčka mají štítky všichni kandidáti", 3, nad.obdelnikyStitkuKandidatu().size());
+		SwingUtilities.invokeAndWait(() -> model.setVybranePolicko(dt, "D3/T4"));
+		nakresli(nad, c);
+		Assert.assertEquals("s vybraným políčkem jen jeho kandidáti", 2, nad.obdelnikyStitkuKandidatu().size());
+		SwingUtilities.invokeAndWait(() -> model.setVybranePolicko(dt, null));
+		nakresli(nad, c);
+		Assert.assertEquals("po zrušení výběru zase všichni", 3, nad.obdelnikyStitkuKandidatu().size());
+	}
+
+	@Test
 	public void prstenecMaSplnenySektorZelenyAChybejiciCerveny() throws Exception {
 		zobraz(new VysledekSektoru(obsazene(0, 180), new BitSet(360), new VysledekSektoru.Kandidati[360], 180, new ArrayList<>()), 50.0, 14.0);
 		final Coord c = mapa(50.0, 14.0, 13);

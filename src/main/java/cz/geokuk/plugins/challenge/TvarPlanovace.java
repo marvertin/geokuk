@@ -24,6 +24,8 @@ final class TvarPlanovace {
 	final GeometrieSektoru.Model model;
 	final Mou[] pozice;
 	final String[] texty;
+	/** Štítek políčka každého kandidáta; null u sektorů. */
+	final String[] stitkyPolicek;
 	/** Vybraný sektor: štítek, poloha kandidáta a sektor; jinak null / -1. */
 	final String popisVybraneho;
 	final Mou vybranyPozice;
@@ -52,6 +54,7 @@ final class TvarPlanovace {
 			final List<VysledekSektoru.KandidatKes> k = ((VysledekSektoru) zdroj).vsichniKandidati();
 			pozice = new Mou[k.size()];
 			texty = new String[k.size()];
+			stitkyPolicek = null;
 			for (int i = 0; i < pozice.length; i++) {
 				zkontrolujZruseni(i, zruseno);
 				final VysledekSektoru.KandidatKes x = k.get(i);
@@ -62,9 +65,11 @@ final class TvarPlanovace {
 			final List<KandidatPolicka> k = ((VysledekPolicek) zdroj).kandidati();
 			pozice = new Mou[k.size()];
 			texty = new String[k.size()];
+			stitkyPolicek = new String[k.size()];
 			for (int i = 0; i < pozice.length; i++) {
 				zkontrolujZruseni(i, zruseno);
 				final KandidatPolicka x = k.get(i);
+				stitkyPolicek[i] = x.stitek();
 				pozice[i] = PixelyMapy.mou(x.lat(), x.lon());
 				texty[i] = x.text();
 			}
