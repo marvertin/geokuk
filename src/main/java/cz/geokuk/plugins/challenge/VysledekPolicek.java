@@ -3,7 +3,9 @@ package cz.geokuk.plugins.challenge;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map;
 import java.util.Objects;
 
@@ -70,6 +72,31 @@ public final class VysledekPolicek {
 	/** Štítky chybějících políček v pořadí podle challenge (matice: D, pak T; kalendář: nejbližší den první). */
 	public List<String> stitkyChybejicich() {
 		return stitky;
+	}
+
+	private volatile Map<String, Integer> pocty;
+
+	/** Kolik kandidátů výsledek nese pro políčko; 0 pro políčko bez kandidátů nebo neznámý štítek. Nejvýš limit na políčko, takže plné políčko znamená „aspoň tolik“. */
+	public int pocetKandidatu(final String stitek) {
+		final Integer n = pocetKandidatuPoPolickach().get(stitek);
+		return n == null ? 0 : n;
+	}
+
+	/** Počty kandidátů podle štítků chybějících políček v pořadí {@link #stitkyChybejicich()}; neměnná. */
+	public Map<String, Integer> pocetKandidatuPoPolickach() {
+		Map<String, Integer> m = pocty;
+		if (m == null) {
+			final Map<String, Integer> nove = new LinkedHashMap<>();
+			for (final String s : stitky) {
+				nove.put(s, 0);
+			}
+			for (final KandidatPolicka k : kandidati) {
+				nove.merge(k.stitek(), 1, Integer::sum);
+			}
+			m = Collections.unmodifiableMap(nove);
+			pocty = m;
+		}
+		return m;
 	}
 
 	/** Všichni kandidáti pro chybějící políčka. */

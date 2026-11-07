@@ -22,6 +22,8 @@ public class ChallengeZmenenyEvent extends Event0<ChallengeModel> {
 		JEN_KANDIDATI,
 		/** Změnil se vybraný kandidát některé challenge. */
 		KANDIDAT,
+		/** Změnilo se vybrané políčko D/T matice některé challenge. */
+		POLICKO,
 		/** Změnila se challenge zobrazená v pruhu na mapě. */
 		ZOBRAZENA,
 		/** Změnilo se, co se z challenge kreslí na mapě (sektory, štítky); výsledek zůstává. */

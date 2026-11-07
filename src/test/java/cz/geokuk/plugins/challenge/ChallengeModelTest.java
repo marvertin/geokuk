@@ -193,6 +193,172 @@ public class ChallengeModelTest {
 		Assert.assertEquals("po prvním uložení jen jedna", "B", uloziste.get("aktivni"));
 	}
 
+	private Challenge dtAktivni(final String nazev) {
+		final Challenge c = model.ulozVlastni(new Challenge(nazev, Typ.DT_MATICE, Stred.souradnice(50, 14), OblastDef.zadna(), ZdrojPravidel.PGC));
+		model.aktivuj(c);
+		return c;
+	}
+
+	private static VysledekPolicek policka(final String... chybejici) {
+		final List<KandidatPolicka> k = new ArrayList<>();
+		for (final String s : chybejici) {
+			k.add(new KandidatPolicka("GC_" + s, 50, 14, s, s, null));
+		}
+		return new VysledekPolicek(81, java.util.Arrays.asList(chybejici), k);
+	}
+
+	@Test
+	public void vybranePolickoSeVybiraJenZChybejicichAOhlasi() throws Exception {
+		final Challenge c = dtAktivni("DT");
+		Assert.assertNull(model.vybranePolicko(c));
+		model.setVybranePolicko(c, "D1/T1");
+		pockejNaEdt();
+		Assert.assertNull("bez výsledku nejde vybrat", model.vybranePolicko(c));
+		model.nastavVysledekPolicek(c, policka("D1/T1", "D2/T1"));
+		pockejNaEdt();
+		udalosti.clear();
+		model.setVybranePolicko(c, "D4/T4");
+		pockejNaEdt();
+		Assert.assertNull("splněné nebo neznámé políčko se ignoruje", model.vybranePolicko(c));
+		Assert.assertEquals(0, udalosti.size());
+		model.setVybranePolicko(c, "D2/T1");
+		pockejNaEdt();
+		Assert.assertEquals("D2/T1", model.vybranePolicko(c));
+		Assert.assertEquals(Collections.singletonList(Druh.POLICKO), druhy());
+		model.setVybranePolicko(c, "D2/T1");
+		pockejNaEdt();
+		Assert.assertEquals("beze změny se neohlásí", 1, udalosti.size());
+		model.setVybranePolicko(c, null);
+		pockejNaEdt();
+		Assert.assertNull(model.vybranePolicko(c));
+		Assert.assertEquals(java.util.Arrays.asList(Druh.POLICKO, Druh.POLICKO), druhy());
+	}
+
+	@Test
+	public void vybranePolickoBezKandidatuSeNevybereAKdyzPrijdeOKandidatyZrusi() throws Exception {
+		final Challenge c = dtAktivni("DT");
+		final List<KandidatPolicka> k = Collections.singletonList(new KandidatPolicka("GC1", 50, 14, "D1/T1", "D1/T1", null));
+		model.nastavVysledekPolicek(c, new VysledekPolicek(81, java.util.Arrays.asList("D1/T1", "D2/T1"), k));
+		pockejNaEdt();
+		model.setVybranePolicko(c, "D2/T1");
+		pockejNaEdt();
+		Assert.assertNull("chybí, ale nemá kandidáty", model.vybranePolicko(c));
+		model.setVybranePolicko(c, "D1/T1");
+		pockejNaEdt();
+		Assert.assertEquals("D1/T1", model.vybranePolicko(c));
+		udalosti.clear();
+		model.nastavVysledekPolicek(c, new VysledekPolicek(81, java.util.Arrays.asList("D1/T1", "D2/T1"), Collections.<KandidatPolicka> emptyList()));
+		pockejNaEdt();
+		Assert.assertNull("kandidáti zmizeli", model.vybranePolicko(c));
+		Assert.assertEquals(java.util.Arrays.asList(Druh.VYSLEDEK, Druh.POLICKO), druhy());
+	}
+
+	@Test
+	public void vybranePolickoJeJenUMaticeAUAktivni() throws Exception {
+		final Challenge sektory = model.ulozVlastni(vlastni("Sektory"));
+		model.aktivuj(sektory);
+		model.setVybranePolicko(sektory, "D1/T1");
+		pockejNaEdt();
+		Assert.assertNull("360° políčka nemá", model.vybranePolicko(sektory));
+		final Challenge neaktivni = model.ulozVlastni(new Challenge("Nea", Typ.DT_MATICE, Stred.souradnice(50, 14), OblastDef.zadna(), ZdrojPravidel.PGC));
+		model.setVybranePolicko(neaktivni, "D1/T1");
+		pockejNaEdt();
+		Assert.assertNull(model.vybranePolicko(neaktivni));
+	}
+
+	@Test
+	public void vybranePolickoSeRusiPriZmeneChallengeAKdyzPrestaneChybet() throws Exception {
+		Challenge c = dtAktivni("DT");
+		model.nastavVysledekPolicek(c, policka("D1/T1", "D2/T1"));
+		pockejNaEdt();
+		model.setVybranePolicko(c, "D1/T1");
+		pockejNaEdt();
+		udalosti.clear();
+		model.nastavVysledekPolicek(c, policka("D1/T1"));
+		pockejNaEdt();
+		Assert.assertEquals("pořád chybí, výběr zůstane", "D1/T1", model.vybranePolicko(c));
+		Assert.assertEquals(Collections.singletonList(Druh.VYSLEDEK), druhy());
+		udalosti.clear();
+		model.nastavVysledekPolicek(c, policka("D2/T1"));
+		pockejNaEdt();
+		Assert.assertNull("políčko se splnilo", model.vybranePolicko(c));
+		Assert.assertEquals(java.util.Arrays.asList(Druh.VYSLEDEK, Druh.POLICKO), druhy());
+		model.setVybranePolicko(c, "D2/T1");
+		pockejNaEdt();
+		c = model.ulozVlastni(new Challenge("DT", Typ.DT_MATICE, Stred.souradnice(51, 15), OblastDef.zadna(), ZdrojPravidel.PGC));
+		Assert.assertNull("nová definice výběr zruší", model.vybranePolicko(c));
+		model.aktivuj(c);
+		model.nastavVysledekPolicek(c, policka("D2/T1"));
+		pockejNaEdt();
+		model.setVybranePolicko(c, "D2/T1");
+		pockejNaEdt();
+		model.deaktivuj(c);
+		Assert.assertNull("vypnutí výběr zruší", model.vybranePolicko(c));
+	}
+
+	@Test
+	public void vybranePolickoPrezijePrejmenovaniAZrusiSeSmazanim() throws Exception {
+		final Challenge c = dtAktivni("DT");
+		model.nastavVysledekPolicek(c, policka("D1/T1"));
+		pockejNaEdt();
+		model.setVybranePolicko(c, "D1/T1");
+		pockejNaEdt();
+		final Challenge nova = model.prejmenuj(c, "Jiny");
+		Assert.assertEquals("D1/T1", model.vybranePolicko(nova));
+		Assert.assertNull(model.vybranePolicko(c));
+		model.smazVlastni(nova);
+		Assert.assertNull(model.vybranePolicko(nova));
+	}
+
+	@Test
+	public void vyberPolickaZrusiVybranehoKandidataZJinehoPolicka() throws Exception {
+		final Challenge c = dtAktivni("DT");
+		model.nastavVysledekPolicek(c, policka("D1/T1", "D2/T1"));
+		pockejNaEdt();
+		model.nastavVybranyKandidat(c, new VybranyKandidat("GC_D1/T1", 50, 14, -1, 10, "D1/T1"));
+		pockejNaEdt();
+		udalosti.clear();
+		model.setVybranePolicko(c, "D1/T1");
+		pockejNaEdt();
+		Assert.assertNotNull("kandidát je v políčku", model.vybranyKandidat(c));
+		model.setVybranePolicko(c, "D2/T1");
+		pockejNaEdt();
+		Assert.assertNull("kandidát je z jiného políčka", model.vybranyKandidat(c));
+		Assert.assertEquals(java.util.Arrays.asList(Druh.POLICKO, Druh.KANDIDAT, Druh.POLICKO), druhy());
+	}
+
+	@Test
+	public void nactenoNastaveniVyberPolickaVynuluje() throws Exception {
+		final Challenge c = dtAktivni("DT");
+		model.nastavVysledekPolicek(c, policka("D1/T1"));
+		pockejNaEdt();
+		model.setVybranePolicko(c, "D1/T1");
+		pockejNaEdt();
+		model.initAfterInject();
+		Assert.assertNull(model.vybranePolicko(c));
+	}
+
+	@Test
+	public void pocetKandidatuPoPolickach() {
+		final List<KandidatPolicka> k = new ArrayList<>();
+		k.add(new KandidatPolicka("A", 50, 14, "D1/T1", "D1/T1", null));
+		k.add(new KandidatPolicka("B", 50, 14, "D1/T1", "D1/T1", null));
+		k.add(new KandidatPolicka("C", 50, 14, "D3/T2", "D3/T2", null));
+		final VysledekPolicek v = new VysledekPolicek(81, java.util.Arrays.asList("D1/T1", "D2/T1", "D3/T2"), k);
+		Assert.assertEquals(2, v.pocetKandidatu("D1/T1"));
+		Assert.assertEquals("chybí, ale nemá kandidáty", 0, v.pocetKandidatu("D2/T1"));
+		Assert.assertEquals(1, v.pocetKandidatu("D3/T2"));
+		Assert.assertEquals("neznámý štítek", 0, v.pocetKandidatu("D9/T9"));
+		Assert.assertEquals("pořadí jako chybějící", java.util.Arrays.asList("D1/T1", "D2/T1", "D3/T2"), new ArrayList<>(v.pocetKandidatuPoPolickach().keySet()));
+		Assert.assertSame("neměnná a sdílená", v.pocetKandidatuPoPolickach(), v.pocetKandidatuPoPolickach());
+		try {
+			v.pocetKandidatuPoPolickach().put("X", 1);
+			Assert.fail();
+		} catch (final UnsupportedOperationException e) {
+			// očekáváno
+		}
+	}
+
 	@Test
 	public void vysledekSeUkladaJenProAktivniAOhlasiVEdt() throws Exception {
 		final Challenge moje = model.ulozVlastni(vlastni("Moje"));

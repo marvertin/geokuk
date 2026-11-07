@@ -3,6 +3,7 @@ package cz.geokuk.plugins.challenge;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -32,6 +33,8 @@ public class ChallengeModel extends Model0 {
 	private volatile PrehledChallenge prehled;
 	private final Map<String, StavPredpoctu> stavy = new ConcurrentHashMap<>();
 	private final Map<String, VybranyKandidat> kandidati = new ConcurrentHashMap<>();
+	/** Štítek vybraného políčka D/T podle klíče challenge; neukládá se. */
+	private final Map<String, String> policka = new ConcurrentHashMap<>();
 	private volatile String jenKandidatiPro;
 	/** Klíč challenge zobrazené v pruhu; neukládá se, bez ní nebo při neaktivní je to první aktivní. */
 	private volatile String zobrazena;
@@ -81,6 +84,7 @@ public class ChallengeModel extends Model0 {
 		zobrazena = null;
 		stavy.clear();
 		kandidati.clear();
+		policka.clear();
 		jenKandidatiPro = null;
 		fire(new ChallengeZmenenyEvent(ChallengeZmenenyEvent.Druh.NACTENO, null));
 	}
@@ -205,6 +209,7 @@ public class ChallengeModel extends Model0 {
 		stredy.remove(klic(c));
 		stavy.remove(klic(c));
 		kandidati.remove(klic(c));
+		policka.remove(klic(c));
 		uloz();
 		ohlas(ChallengeZmenenyEvent.Druh.DEFINICE, c);
 		return c;
@@ -236,6 +241,7 @@ public class ChallengeModel extends Model0 {
 		}
 		prenes(stavy, staryKlic, klic(nova));
 		prenes(kandidati, staryKlic, klic(nova));
+		prenes(policka, staryKlic, klic(nova));
 		if (staryKlic.equals(jenKandidatiPro)) {
 			jenKandidatiPro = klic(nova);
 		}
@@ -268,6 +274,7 @@ public class ChallengeModel extends Model0 {
 		stredy.remove(klic(c));
 		stavy.remove(klic(c));
 		kandidati.remove(klic(c));
+		policka.remove(klic(c));
 		if (klic(c).equals(jenKandidatiPro)) {
 			jenKandidatiPro = null;
 			ohlas(ChallengeZmenenyEvent.Druh.JEN_KANDIDATI, null);
@@ -351,7 +358,52 @@ public class ChallengeModel extends Model0 {
 			}
 			stredy.put(klic(c), new double[] { stredLat, stredLon });
 			vysledkyPolicek.put(klic(c), vysledek);
+			final String vybrane = policka.get(klic(c));
+			final boolean zruseno = vybrane != null && vysledek.pocetKandidatu(vybrane) == 0;
+			if (zruseno) {
+				policka.remove(klic(c));
+			}
 			ohlas(ChallengeZmenenyEvent.Druh.VYSLEDEK, c);
+			if (zruseno) {
+				ohlas(ChallengeZmenenyEvent.Druh.POLICKO, c);
+			}
+		});
+	}
+
+	/** Štítek vybraného políčka D/T matice (například „D4/T1“); null = všechna políčka. */
+	public String vybranePolicko(final Challenge c) {
+		return policka.get(klic(c));
+	}
+
+	/**
+	 * Vybere políčko D/T matice aktivní challenge (null = všechna). Vybrat lze jen chybějící políčko, které má podle posledního výsledku kandidáty; jiné se ignoruje. Vybraný kandidát mimo
+	 * nové políčko se zruší. Z kteréhokoli vlákna.
+	 */
+	public void setVybranePolicko(final Challenge c, final String stitek) {
+		naEdt(() -> {
+			if (!seznam.jeAktivni(c.nazev()) || c.typ() != Challenge.Typ.DT_MATICE) {
+				return;
+			}
+			if (stitek != null) {
+				final VysledekPolicek v = vysledkyPolicek.get(klic(c));
+				if (v == null || v.pocetKandidatu(stitek) == 0) {
+					return;
+				}
+			}
+			if (Objects.equals(stitek, policka.get(klic(c)))) {
+				return;
+			}
+			if (stitek == null) {
+				policka.remove(klic(c));
+			} else {
+				policka.put(klic(c), stitek);
+				final VybranyKandidat vybrany = kandidati.get(klic(c));
+				if (vybrany != null && !stitek.equals(vybrany.stitek())) {
+					kandidati.remove(klic(c));
+					ohlas(ChallengeZmenenyEvent.Druh.KANDIDAT, c);
+				}
+			}
+			ohlas(ChallengeZmenenyEvent.Druh.POLICKO, c);
 		});
 	}
 

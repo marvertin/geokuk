@@ -19,7 +19,7 @@ public final class FiltrKandidatu implements Predicate<Kesoid> {
 		}
 	}
 
-	/** Filtr pro zadanou challenge podle jejího posledního výsledku; null, dokud výsledek není (pak se nefiltruje). */
+	/** Filtr pro zadanou challenge podle jejího posledního výsledku, u matice D/T zúžený na vybrané políčko; null, dokud výsledek není (pak se nefiltruje). */
 	static FiltrKandidatu pro(final ChallengeModel model, final Challenge c) {
 		final Set<String> ids = new HashSet<>();
 		if (c.typ() == Challenge.Typ.SEKTORY_360) {
@@ -35,8 +35,11 @@ public final class FiltrKandidatu implements Predicate<Kesoid> {
 			if (v == null) {
 				return null;
 			}
+			final String policko = model.vybranePolicko(c);
 			for (final KandidatPolicka k : v.kandidati()) {
-				ids.add(k.id());
+				if (policko == null || policko.equals(k.stitek())) {
+					ids.add(k.id());
+				}
 			}
 		}
 		return new FiltrKandidatu(ids);

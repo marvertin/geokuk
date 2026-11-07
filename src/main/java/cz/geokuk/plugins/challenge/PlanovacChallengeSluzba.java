@@ -82,6 +82,7 @@ public class PlanovacChallengeSluzba implements AfterInjectInit {
 		}
 		switch (event.druh()) {
 		case JEN_KANDIDATI:
+		case POLICKO:
 		case VYSLEDEK:
 		case AKTIVNI:
 		case DEFINICE:

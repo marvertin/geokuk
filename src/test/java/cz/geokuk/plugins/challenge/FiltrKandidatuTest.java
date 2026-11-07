@@ -96,6 +96,33 @@ public class FiltrKandidatuTest {
 	}
 
 	@Test
+	public void vybranePolickoZuziFiltrNaKandidatyPolickaAZruseniHoVrati() throws Exception {
+		final Challenge dt = model.ulozVlastni(new Challenge("DT", Challenge.Typ.DT_MATICE, Challenge.Stred.domov(), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.PGC));
+		model.aktivuj(dt);
+		final List<KandidatPolicka> k = new ArrayList<>();
+		k.add(new KandidatPolicka("GC1AAA", 50, 14, "D3/T4", "D3/T4", null));
+		k.add(new KandidatPolicka("GC2BBB", 50, 14, "D3/T4", "D3/T4", null));
+		k.add(new KandidatPolicka("GC3CCC", 50, 14, "D4/T1", "D4/T1", null));
+		model.nastavVysledekPolicek(dt, new VysledekPolicek(81, java.util.Arrays.asList("D3/T4", "D4/T1"), k));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("bez výběru všichni", 3, FiltrKandidatu.pro(model, dt).pocet());
+		model.setVybranePolicko(dt, "D3/T4");
+		SwingUtilities.invokeAndWait(() -> {});
+		final FiltrKandidatu f = FiltrKandidatu.pro(model, dt);
+		Assert.assertEquals(2, f.pocet());
+		Assert.assertTrue(f.test(kes("GC1AAA")));
+		Assert.assertTrue(f.test(kes("gc2bbb")));
+		Assert.assertFalse("jiné políčko", f.test(kes("GC3CCC")));
+		model.setVybranePolicko(dt, "D4/T1");
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertTrue(FiltrKandidatu.pro(model, dt).test(kes("GC3CCC")));
+		Assert.assertFalse(FiltrKandidatu.pro(model, dt).test(kes("GC1AAA")));
+		model.setVybranePolicko(dt, null);
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals(3, FiltrKandidatu.pro(model, dt).pocet());
+	}
+
+	@Test
 	public void rovnostPodleMnozinyKandidatu() throws Exception {
 		model.aktivuj(Sablony.cesko360());
 		vysledek360("GC1AAA");
@@ -141,7 +168,7 @@ public class FiltrKandidatuTest {
 		for (final ChallengeZmenenyEvent.Druh druh : ChallengeZmenenyEvent.Druh.values()) {
 			org.mockito.Mockito.clearInvocations(kesoidModel);
 			sluzba.onEvent(new ChallengeZmenenyEvent(druh, Sablony.cesko360()));
-			final boolean obnovuje = druh == ChallengeZmenenyEvent.Druh.JEN_KANDIDATI || druh == ChallengeZmenenyEvent.Druh.VYSLEDEK || druh == ChallengeZmenenyEvent.Druh.AKTIVNI
+			final boolean obnovuje = druh == ChallengeZmenenyEvent.Druh.JEN_KANDIDATI || druh == ChallengeZmenenyEvent.Druh.POLICKO || druh == ChallengeZmenenyEvent.Druh.VYSLEDEK || druh == ChallengeZmenenyEvent.Druh.AKTIVNI
 					|| druh == ChallengeZmenenyEvent.Druh.DEFINICE || druh == ChallengeZmenenyEvent.Druh.NACTENO;
 			verify(kesoidModel, times(obnovuje ? 1 : 0)).setDoplnkovyFiltr(null);
 		}
