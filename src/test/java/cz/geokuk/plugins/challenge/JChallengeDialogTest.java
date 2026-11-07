@@ -314,6 +314,47 @@ public class JChallengeDialogTest {
 		});
 	}
 
+	/** „Kolikrát splnit“ je jen u D/T; u šablony jen ke čtení s radou, u kopie se uloží do definice. */
+	@Test
+	public void kolikratSplnitJenUDtAUlozeniDoDefinice() throws Exception {
+		naEdt(() -> {
+			Challenge sablona = null;
+			for (final Challenge c : dialog.polozky()) {
+				if (c.typ() == Challenge.Typ.DT_MATICE) {
+					sablona = c;
+				}
+			}
+			seznam().setSelectedValue(Sablony.od360Domova(), true);
+			Assert.assertFalse("u 360° řádek není", dialog.opakovani.getParent().isVisible());
+			seznam().setSelectedValue(sablona, true);
+			Assert.assertTrue(dialog.opakovani.getParent().isVisible());
+			Assert.assertFalse("šablona jen ke čtení", dialog.opakovani.isEnabled());
+			Assert.assertEquals("šablona: 1×, pro jiný počet vytvořte kopii", dialog.popisOpakovani.getText());
+			tlacitko("Vytvořit kopii…").doClick();
+			final Challenge kopie = seznam().getSelectedValue();
+			Assert.assertTrue(dialog.opakovani.isEnabled());
+			Assert.assertEquals("každé políčko 1–9×", dialog.popisOpakovani.getText());
+			dialog.opakovani.setValue(3);
+			tlacitko("Uložit změny").doClick();
+			Assert.assertEquals(3, seznam().getSelectedValue().opakovani());
+			Assert.assertEquals(kopie.nazev(), seznam().getSelectedValue().nazev());
+			Assert.assertEquals(3, dialog.opakovani.getValue());
+		});
+	}
+
+	/** U 360° se „Kolikrát splnit“ neuloží, ani když by číselník měl jinou hodnotu (je skrytý). */
+	@Test
+	public void kolikratSplnitSeU360Neuklada() throws Exception {
+		naEdt(() -> {
+			final Challenge c = model.ulozVlastni(new Challenge("Moje 360", Challenge.Typ.SEKTORY_360, Challenge.Stred.domov(), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.STATOR));
+			seznam().setSelectedValue(c, true);
+			dialog.opakovani.setValue(3);
+			tlacitko("Uložit změny").doClick();
+			Assert.assertTrue("bez chyby: " + chyba(), chyba().trim().isEmpty());
+			Assert.assertEquals(1, seznam().getSelectedValue().opakovani());
+		});
+	}
+
 	@Test
 	public void poOtevreniJeVybranaChallengeZobrazenaVPruhu() throws Exception {
 		SwingUtilities.invokeAndWait(() -> {

@@ -34,6 +34,8 @@ public class JMaticeDT extends JComponent {
 	private final Set<String> chybejici = new HashSet<>();
 	private final Map<String, Integer> pocty = new HashMap<>();
 	private transient VysledekPolicek vysledek;
+	/** Kolikrát splnit každé políčko (násobnost); 1 = jednou. */
+	private int cil = 1;
 	private String vybrane;
 	private int fokusD = 0, fokusT = 0;
 	private transient Consumer<String> naVyber = s -> {};
@@ -74,6 +76,7 @@ public class JMaticeDT extends JComponent {
 		chybejici.clear();
 		pocty.clear();
 		vysledek = v;
+		cil = v == null ? 1 : Math.max(1, v.cil());
 		if (v != null) {
 			chybejici.addAll(v.stitkyChybejicich());
 			pocty.putAll(v.pocetKandidatuPoPolickach());
@@ -137,7 +140,45 @@ public class JMaticeDT extends JComponent {
 		return vysledek != null && vysledek.jePlne(stitek);
 	}
 
+	/** Znak v políčku: „✓“, u N = 1 počet kandidátů nebo „–“, s násobností nálezy z cíle („1/3“). */
+	String znak(final String stitek) {
+		switch (stav(stitek)) {
+		case SPLNENO:
+			return "✓";
+		case BEZ_KANDIDATU:
+			return cil > 1 ? nalezyZCile(stitek) : "–";
+		default:
+			return cil > 1 ? nalezyZCile(stitek) : pocet(stitek);
+		}
+	}
+
+	/** S násobností ukazuje políčko nálezy; kandidáty značí tečka vpravo nahoře. */
+	boolean maTecku(final String stitek) {
+		return cil > 1 && stav(stitek) == Stav.S_KANDIDATY;
+	}
+
+	/** Nálezy políčka z cíle („1/3“), jen s násobností. */
+	String nalezyZCile(final String stitek) {
+		return Math.min(nalezu(stitek), cil) + "/" + cil;
+	}
+
+	private int nalezu(final String stitek) {
+		return vysledek == null ? 0 : Math.max(0, vysledek.pocetNalezu(stitek));
+	}
+
 	String popis(final String stitek) {
+		if (cil > 1) {
+			final String nalezy = stitek + " – " + TextyPopupuPlanovace.nalezu(nalezu(stitek)) + ", cíl " + cil;
+			switch (stav(stitek)) {
+			case SPLNENO:
+				return nalezy + ", splněno";
+			case BEZ_KANDIDATU:
+				return nalezy + ", nemá kandidáty";
+			default:
+				final int n = pocty.getOrDefault(stitek, 0);
+				return nalezy + ", " + (jePlne(stitek) ? n + "+ kandidátů" : TextyPopupuPlanovace.kandidatu(n));
+			}
+		}
 		switch (stav(stitek)) {
 		case SPLNENO:
 			return stitek + " – splněno";
@@ -285,21 +326,19 @@ public class JMaticeDT extends JComponent {
 		Color fg;
 		String znak;
 		Font f = pismo;
+		znak = znak(s);
 		switch (st) {
 		case SPLNENO:
 			bg = smichej(pozadi, text, 0.10);
 			fg = smichej(text, pozadi, 0.35);
-			znak = "✓";
 			break;
 		case BEZ_KANDIDATU:
 			bg = pozadi;
 			fg = smichej(text, pozadi, 0.45);
-			znak = "–";
 			break;
 		default:
 			bg = UIManager.getColor("Button.background");
 			fg = text;
-			znak = pocet(s);
 			f = tucne;
 		}
 		if (vyb) {
@@ -330,6 +369,9 @@ public class JMaticeDT extends JComponent {
 		g.setFont(f);
 		g.setColor(fg);
 		stred(g, znak, r);
+		if (maTecku(s)) {
+			g.fillOval(r.x + r.width - 8, r.y + 3, 4, 4);
+		}
 	}
 
 	private static void stred(final Graphics2D g, final String s, final Rectangle r) {

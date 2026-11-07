@@ -172,6 +172,49 @@ public class JPruhPolickoTest {
 		return null;
 	}
 
+	/** S násobností ukazuje odznak chybějící nálezy, ne políčka. */
+	@Test
+	public void odznakSNasobnostiPocitaNalezy() throws Exception {
+		priprav(1280);
+		final Challenge c = model.ulozVlastni(new Challenge("DT3", Challenge.Typ.DT_MATICE, Challenge.Stred.domov(), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.PGC).sOpakovanim(3));
+		model.aktivuj(c);
+		model.nastavVysledekPolicek(c, JPopupPlanovaceTest.nasobny());
+		SwingUtilities.invokeAndWait(() -> {});
+		AbstractButton odznak = null;
+		for (final Component k : pruh.getComponents()) {
+			if (k instanceof AbstractButton && ((AbstractButton) k).getText().startsWith("chybí")) {
+				odznak = (AbstractButton) k;
+			}
+		}
+		Assert.assertNotNull("odznak na liště", odznak);
+		Assert.assertEquals("chybí 239", odznak.getText());
+		Assert.assertEquals("Chybí 239 nálezů v 80 políčkách z 81 – klik ukáže podrobnosti", odznak.getToolTipText());
+	}
+
+	/** Práh násobnosti: už při N = 2 počítá odznak nálezy. */
+	@Test
+	public void odznakSNasobnostiDvaPocitaNalezy() throws Exception {
+		priprav(1280);
+		final Challenge c = model.ulozVlastni(new Challenge("DT2", Challenge.Typ.DT_MATICE, Challenge.Stred.domov(), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.PGC).sOpakovanim(2));
+		model.aktivuj(c);
+		final int[] nalezu = new int[81];
+		nalezu[0] = 1;
+		final java.util.List<String> chybi = new java.util.ArrayList<>();
+		for (int i = 0; i < 81; i++) {
+			chybi.add(VypocetMatice.stitek(i / 9, i % 9));
+		}
+		model.nastavVysledekPolicek(c, new VysledekPolicek(81, chybi, java.util.Collections.<KandidatPolicka> emptyList(), 50, 2, nalezu));
+		SwingUtilities.invokeAndWait(() -> {});
+		AbstractButton odznak = null;
+		for (final Component k : pruh.getComponents()) {
+			if (k instanceof AbstractButton && ((AbstractButton) k).getText().startsWith("chybí")) {
+				odznak = (AbstractButton) k;
+			}
+		}
+		Assert.assertNotNull("odznak na liště", odznak);
+		Assert.assertEquals("81 × 2 − 1 nález", "chybí 161", odznak.getText());
+	}
+
 	@Test
 	public void plnePolickoMa50Plus() {
 		Assert.assertEquals("<html>Zrušit výběr políčka D1/T1 (Esc)<br>na mapě jen jeho kandidáti (50+ kandidátů)</html>", JPruhPlanovace.tipPolicka("D1/T1", 50, true, true));

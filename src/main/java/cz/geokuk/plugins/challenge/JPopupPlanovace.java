@@ -502,14 +502,15 @@ public class JPopupPlanovace extends JSlide0 implements AfterInjectInit {
 				return;
 			}
 			souhrn.setText(TextyPopupuPlanovace.souhrn(p));
-			postup.setMaximum(Math.max(1, p.celkem()));
-			postup.setValue(p.celkem() - p.pocetChybejicich());
+			postup.setMaximum(Math.max(1, p.celkemNalezu()));
+			postup.setValue(p.splnenoNalezu());
 			postup.setString(TextyPopupuPlanovace.procenta(p));
 			if (c.typ() == Challenge.Typ.DT_MATICE) {
 				matice.nastav(p);
 				matice.setVybrane(vybranePolicko);
 				nadpisSeznamu.setText(TextyPopupuPlanovace.vybranePolicko(vybranePolicko, vybranePolicko == null ? 0 : p.pocetKandidatu(vybranePolicko),
-						vybranePolicko != null && p.jePlne(vybranePolicko), jenKandidati));
+						vybranePolicko != null && p.jePlne(vybranePolicko), jenKandidati, vybranePolicko == null ? 0 : p.pocetNalezu(vybranePolicko), p.cil()));
+				legenda.setText(p.cil() > 1 ? TextyPopupuPlanovace.legendaMatice(p.cil()) : TextyPopupuPlanovace.LEGENDA_MATICE);
 				vsechnaPolicka.setVisible(vybranePolicko != null);
 				dalsi.setEnabled(p.pocetKandidatuPoPolickach().values().stream().anyMatch(n -> n > 0));
 				return;

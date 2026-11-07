@@ -139,7 +139,13 @@ public class TextyPopupuPlanovaceTest {
 			}
 		}
 		final VysledekPolicek p = new VysledekPolicek(81, chybejici, java.util.Collections.<KandidatPolicka> emptyList(), 50, 3, nalezu);
-		assertEquals("Splněno 3 z 81 × 3 (1 %), chybí 240", TextyPopupuPlanovace.souhrn(p));
+		assertEquals("Splněno 3 z 243 nálezů (1 %); chybí 240 nálezů v 81 políčkách", TextyPopupuPlanovace.souhrn(p));
+		assertEquals("Chybí 240 nálezů v 81 políčkách z 81 – klik ukáže podrobnosti", TextyPopupuPlanovace.tipOdznakuNalezu(p));
+		assertEquals("Vybrané políčko: D1/T1 – 2 z 3 nálezů, 5 kandidátů", TextyPopupuPlanovace.vybranePolicko("D1/T1", 5, false, true, 2, 3));
+		assertEquals("Vybrané políčko: D1/T1 – 0 z 3 nálezů, 1 kandidát, na mapě všechny keše (F4)", TextyPopupuPlanovace.vybranePolicko("D1/T1", 1, false, false, 0, 3));
+		assertEquals("1 nález", TextyPopupuPlanovace.nalezu(1));
+		assertEquals("3 nálezy", TextyPopupuPlanovace.nalezu(3));
+		assertEquals("v 1 políčku", TextyPopupuPlanovace.vPolickach(1));
 		assertEquals("1 %", TextyPopupuPlanovace.procenta(p));
 	}
 }

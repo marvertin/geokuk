@@ -30,6 +30,11 @@ public class JChallengeDialog extends JMyDialog0 {
 	private final JTextField kod = new JTextField(9);
 	private final JComboBox<FormularDefinice.Oblast> oblast = new JComboBox<>(FormularDefinice.oblasti().toArray(new FormularDefinice.Oblast[0]));
 	private final JComboBox<String> nalezy = new JComboBox<>(new String[] { "Ze zapnutých zdrojů", "Ze všech zdrojů" });
+	/** Kolikrát splnit každé políčko matice D/T. */
+	final JSpinner opakovani = new JSpinner(new SpinnerNumberModel(1, 1, Challenge.NEJVETSI_OPAKOVANI, 1));
+	final JLabel popisOpakovani = new JLabel();
+	/** Pole „Kolikrát splnit“ jen u D/T. */
+	private final java.util.List<Component> poleMatice = new java.util.ArrayList<>();
 	private final JButton uloz = new JButton("Uložit změny");
 	private final JLabel chyba = new JLabel(" ");
 	private boolean plnim;
@@ -106,6 +111,10 @@ public class JChallengeDialog extends JMyDialog0 {
 		radek(f, r++, popisekOblasti, oblast);
 		poleSektoru.addAll(java.util.Arrays.asList(popisekPravidel, pravidla, popisekStredu, stredDomov, stredSouradnicePanel, ukazkaSouradnic, stredListingPanel, popisekOblasti, oblast));
 		radek(f, r++, new JLabel("Nálezy"), nalezy);
+		final JLabel popisekOpakovani = new JLabel("Kolikrát splnit");
+		final JPanel opakovaniPanel = panel(opakovani, popisOpakovani);
+		radek(f, r++, popisekOpakovani, opakovaniPanel);
+		poleMatice.addAll(java.util.Arrays.asList(popisekOpakovani, opakovaniPanel));
 		chyba.setForeground(new Color(180, 30, 30));
 		radek(f, r++, null, chyba);
 		radek(f, r++, null, uloz);
@@ -194,7 +203,7 @@ public class JChallengeDialog extends JMyDialog0 {
 		plnim = true;
 		try {
 			final boolean uprava = c != null && !jeSablona(c) && !jeNedostupny(c);
-			for (final JComponent k : new JComponent[] { nazev, pravidla, stredDomov, stredSouradnice, stredListing, oblast, nalezy, uloz }) {
+			for (final JComponent k : new JComponent[] { nazev, pravidla, stredDomov, stredSouradnice, stredListing, oblast, nalezy, opakovani, uloz }) {
 				k.setEnabled(uprava);
 			}
 			aktivni.setEnabled(c != null && (!jeNedostupny(c) || model.jeAktivni(c)));
@@ -209,6 +218,11 @@ public class JChallengeDialog extends JMyDialog0 {
 			for (final Component k : poleSektoru) {
 				k.setVisible(c.typ() == Challenge.Typ.SEKTORY_360 || jeNedostupny(c));
 			}
+			for (final Component k : poleMatice) {
+				k.setVisible(c.typ() == Challenge.Typ.DT_MATICE);
+			}
+			opakovani.setValue(c.opakovani());
+			popisOpakovani.setText(jeSablona(c) ? "šablona: " + c.opakovani() + "×, pro jiný počet vytvořte kopii" : "každé políčko 1–" + Challenge.NEJVETSI_OPAKOVANI + "×");
 			aktivni.setSelected(model != null && model.jeAktivni(c));
 			nazev.setText(c.nazev());
 			pravidla.setSelectedIndex(c.zdroj() == ZdrojPravidel.PGC ? 0 : 1);
@@ -281,7 +295,8 @@ public class JChallengeDialog extends JMyDialog0 {
 		try {
 			final DruhStredu druh = stredSouradnice.isSelected() ? DruhStredu.SOURADNICE : stredListing.isSelected() ? DruhStredu.LISTING : DruhStredu.DOMOV;
 			final Challenge nova = FormularDefinice.sestav(c, nazev.getText(), pravidla.getSelectedIndex() == 0 ? ZdrojPravidel.PGC : ZdrojPravidel.STATOR, druh, souradnice.getText(), kod.getText(),
-					(FormularDefinice.Oblast) oblast.getSelectedItem(), nalezy.getSelectedIndex() == 0 ? ZdrojeNalezu.ZAPNUTE : ZdrojeNalezu.VSECHNY);
+					(FormularDefinice.Oblast) oblast.getSelectedItem(), nalezy.getSelectedIndex() == 0 ? ZdrojeNalezu.ZAPNUTE : ZdrojeNalezu.VSECHNY,
+					c.typ() == Challenge.Typ.DT_MATICE ? (Integer) opakovani.getValue() : 1);
 			Challenge ulozena = c;
 			if (!nova.nazev().trim().equals(c.nazev())) {
 				ulozena = model.prejmenuj(c, nova.nazev());

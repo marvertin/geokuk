@@ -284,7 +284,7 @@ public class OpakovaniMaticeTest {
 		final List<VstupDT> kese = new ArrayList<>(nalezy(0, 0, 3));
 		kese.addAll(nalezy(1, 1, 1));
 		final VysledekPolicek v = spocti(3, kese);
-		Assert.assertEquals("Splněno 4 z 81 × 3 (2 %), chybí 239", TextyPopupuPlanovace.souhrn(v));
+		Assert.assertEquals("Splněno 4 z 243 nálezů (2 %); chybí 239 nálezů v 80 políčkách", TextyPopupuPlanovace.souhrn(v));
 		Assert.assertEquals("2 %", TextyPopupuPlanovace.procenta(v));
 		final VysledekPolicek jedna = spocti(1, kese);
 		Assert.assertEquals("Splněno 2 z 81 (2 %), chybí 79", TextyPopupuPlanovace.souhrn(jedna));

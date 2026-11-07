@@ -10,6 +10,21 @@ final class TextyPopupuPlanovace {
 
 	private TextyPopupuPlanovace() {}
 
+	/** „1 nález“, „2 nálezy“, „5 nálezů“. */
+	static String nalezu(final int n) {
+		return n + " " + tvar(n, "nález", "nálezy", "nálezů");
+	}
+
+	/** „v 1 políčku“, „v 77 políčkách“. */
+	static String vPolickach(final int n) {
+		return "v " + n + " " + (n == 1 ? "políčku" : "políčkách");
+	}
+
+	/** Tooltip odznaku u matice D/T s násobností: „Chybí 186 nálezů v 77 políčkách z 81 – klik ukáže podrobnosti“. */
+	static String tipOdznakuNalezu(final VysledekPolicek p) {
+		return "Chybí " + nalezu(p.chybiNalezu()) + " " + vPolickach(p.pocetChybejicich()) + " z " + p.celkem() + " – klik ukáže podrobnosti";
+	}
+
 	/** „1 kandidát“, „2 kandidáti“, „5 kandidátů“. */
 	static String kandidatu(final int n) {
 		return n + " " + tvar(n, "kandidát", "kandidáti", "kandidátů");
@@ -45,7 +60,7 @@ final class TextyPopupuPlanovace {
 
 	static String souhrn(final VysledekPolicek p) {
 		if (p.cil() > 1) {
-			return "Splněno " + p.splnenoNalezu() + " z " + p.celkem() + " × " + p.cil() + " (" + procenta(p) + "), chybí " + p.chybiNalezu();
+			return "Splněno " + p.splnenoNalezu() + " z " + p.celkemNalezu() + " nálezů (" + procenta(p) + "); chybí " + nalezu(p.chybiNalezu()) + " " + vPolickach(p.pocetChybejicich());
 		}
 		return "Splněno " + (p.celkem() - p.pocetChybejicich()) + " z " + p.celkem() + " (" + procenta(p) + "), chybí " + p.pocetChybejicich();
 	}
@@ -128,15 +143,26 @@ final class TextyPopupuPlanovace {
 
 	/** Řádek nad maticí D/T: vybrané políčko s počtem kandidátů, nebo výzva ke kliknutí. */
 	static String vybranePolicko(final String stitek, final int kandidatu, final boolean plne, final boolean jenKandidati) {
+		return vybranePolicko(stitek, kandidatu, plne, jenKandidati, 0, 1);
+	}
+
+	/** Totéž s násobností: u cíle nad 1 i „1 z 3 nálezů“. */
+	static String vybranePolicko(final String stitek, final int kandidatu, final boolean plne, final boolean jenKandidati, final int nalezu, final int cil) {
 		if (stitek == null) {
 			return "Obtížnost × terén – klik na políčko s kandidáty nechá na mapě jen je:";
 		}
 		final String pocet = plne ? kandidatu + "+ kandidátů" : kandidatu(kandidatu);
-		return "Vybrané políčko: " + stitek + " – " + pocet + (jenKandidati ? "" : ", na mapě všechny keše (F4)");
+		final String nalezy = cil > 1 ? Math.min(nalezu, cil) + " z " + cil + " nálezů, " : "";
+		return "Vybrané políčko: " + stitek + " – " + nalezy + pocet + (jenKandidati ? "" : ", na mapě všechny keše (F4)");
 	}
 
 	/** Legenda pod maticí D/T. */
 	static final String LEGENDA_MATICE = "✓ splněno · číslo = počet kandidátů · – chybí, bez kandidátů";
+
+	/** Legenda matice s násobností: políčko ukazuje nálezy z cíle, tečka znamená kandidáty. */
+	static String legendaMatice(final int cil) {
+		return "✓ splněno " + cil + "× · 1/" + cil + " = nálezy z cíle · tečka = má kandidáty";
+	}
 
 	/** Nápověda pod seznamem chybějících. */
 	static String napovedaSeznamu(final Challenge.Typ typ) {

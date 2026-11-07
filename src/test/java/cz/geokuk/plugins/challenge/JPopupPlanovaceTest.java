@@ -340,6 +340,46 @@ public class JPopupPlanovaceTest {
 		Assert.assertFalse("splněná matice nemá kam dál", o.dalsi.isEnabled());
 	}
 
+	/** D/T s cílem 3: D1/T1 má 1 nález a 5 kandidátů, D2/T1 je splněné (4 nálezy), ostatní bez nálezů a bez kandidátů. */
+	static VysledekPolicek nasobny() {
+		final int[] nalezu = new int[81];
+		nalezu[VypocetMatice.indexStitku("D1/T1")] = 1;
+		nalezu[VypocetMatice.indexStitku("D2/T1")] = 4;
+		final java.util.List<String> chybi = new java.util.ArrayList<>();
+		for (int i = 0; i < 81; i++) {
+			if (nalezu[i] < 3) {
+				chybi.add(VypocetMatice.stitek(i / 9, i % 9));
+			}
+		}
+		final java.util.List<KandidatPolicka> k = new java.util.ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			k.add(new KandidatPolicka("GC" + i, 50, 14, "D1/T1", "D1/T1", null));
+		}
+		return new VysledekPolicek(81, chybi, k, 50, 3, nalezu);
+	}
+
+	/** S násobností počítá souhrn a ukazatel postupu nálezy; řádek nad maticí i nálezy vybraného políčka. */
+	@Test
+	public void nasobnostVPopupuPocitaNalezy() throws Exception {
+		priprav();
+		final Challenge c = model.ulozVlastni(new Challenge("DT3", Challenge.Typ.DT_MATICE, Challenge.Stred.domov(), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.PGC).sOpakovanim(3));
+		model.aktivuj(c);
+		model.setZobrazena(c);
+		SwingUtilities.invokeAndWait(() -> {});
+		popup.prepni();
+		final JPopupPlanovace.Obsah o = popup.obsah;
+		model.nastavVysledekPolicek(c, nasobny());
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("Splněno 4 z 243 nálezů (2 %); chybí 239 nálezů v 80 políčkách", o.souhrn.getText());
+		Assert.assertEquals(243, o.postup.getMaximum());
+		Assert.assertEquals(4, o.postup.getValue());
+		Assert.assertEquals(TextyPopupuPlanovace.legendaMatice(3), o.legenda.getText());
+		Assert.assertEquals("1/3", o.matice.nalezyZCile("D1/T1"));
+		SwingUtilities.invokeAndWait(() -> popup.vyberPolicko("D1/T1"));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("Vybrané políčko: D1/T1 – 1 z 3 nálezů, 5 kandidátů", o.nadpisSeznamu.getText());
+	}
+
 	/** Výběr políčka u 360° nic nezmění: políčka má jen matice D/T. */
 	@Test
 	public void vyberPolickaU360NicNedela() throws Exception {

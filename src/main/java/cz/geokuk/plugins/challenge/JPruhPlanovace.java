@@ -410,8 +410,15 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		nastavText(chip, (maChallenge ? stav.stitekTypu() + " " : "") + "▾");
 		chip.setToolTipText(maChallenge ? "Challenge: " + stav.challenge().nazev() + " – vybrat jinou" : "Vybrat challenge");
 		if (maChallenge) {
-			odznak.nastav("chybí " + (stav.badge() < 0 ? "…" : Integer.toString(stav.badge())));
-			odznak.setToolTipText(stav.badge() < 0 ? popisChybejicich(stav.typ()) + " – počítá se" : tipOdznaku(stav.typ(), stav.badge(), celkem(stav.challenge())));
+			final VysledekPolicek nasobna = stav.typ() == Challenge.Typ.DT_MATICE && model != null ? model.vysledekPolicek(stav.challenge()) : null;
+			if (nasobna != null && nasobna.cil() > 1) {
+				// S násobností odznak počítá chybějící nálezy, ne políčka.
+				odznak.nastav("chybí " + nasobna.chybiNalezu());
+				odznak.setToolTipText(TextyPopupuPlanovace.tipOdznakuNalezu(nasobna));
+			} else {
+				odznak.nastav("chybí " + (stav.badge() < 0 ? "…" : Integer.toString(stav.badge())));
+				odznak.setToolTipText(stav.badge() < 0 ? popisChybejicich(stav.typ()) + " – počítá se" : tipOdznaku(stav.typ(), stav.badge(), celkem(stav.challenge())));
+			}
 			kandidati.setToolTipText(popisKandidatu(stav.typ()) + " (F4)");
 			zpet.setToolTipText(ChallengeAkce.tipPosunu(stav.typ(), false));
 			dal.setToolTipText(ChallengeAkce.tipPosunu(stav.typ(), true));

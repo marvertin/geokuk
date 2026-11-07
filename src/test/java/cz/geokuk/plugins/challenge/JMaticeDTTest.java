@@ -38,6 +38,56 @@ public class JMaticeDTTest {
 
 	private final List<String> vybrana = new ArrayList<>();
 
+	/** S násobností 3 ukazuje políčko nálezy z cíle a tooltip i počet nálezů; splněné je až při 3 nálezech. */
+	@Test
+	public void nasobnostUkazujeNalezyZCile() {
+		final int[] nalezu = new int[81];
+		nalezu[VypocetMatice.indexStitku("D1/T1")] = 1;
+		nalezu[VypocetMatice.indexStitku("D2/T1")] = 4;
+		final List<String> chybi = new ArrayList<>();
+		for (int i = 0; i < 81; i++) {
+			if (nalezu[i] < 3) {
+				chybi.add(VypocetMatice.stitek(i / 9, i % 9));
+			}
+		}
+		final List<KandidatPolicka> k = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			k.add(new KandidatPolicka("A" + i, 50, 14, "D1/T1", "", null));
+		}
+		final JMaticeDT m = new JMaticeDT();
+		m.nastav(new VysledekPolicek(81, chybi, k, 50, 3, nalezu));
+		Assert.assertEquals("1/3", m.nalezyZCile("D1/T1"));
+		Assert.assertEquals(JMaticeDT.Stav.S_KANDIDATY, m.stav("D1/T1"));
+		Assert.assertEquals("D1/T1 – 1 nález, cíl 3, 5 kandidátů", m.popis("D1/T1"));
+		Assert.assertEquals(JMaticeDT.Stav.SPLNENO, m.stav("D2/T1"));
+		Assert.assertEquals("skutečný počet je vidět i nad cílem", "D2/T1 – 4 nálezy, cíl 3, splněno", m.popis("D2/T1"));
+		Assert.assertEquals(JMaticeDT.Stav.BEZ_KANDIDATU, m.stav("D5/T5"));
+		Assert.assertEquals("0/3", m.nalezyZCile("D5/T5"));
+		Assert.assertEquals("D5/T5 – 0 nálezů, cíl 3, nemá kandidáty", m.popis("D5/T5"));
+		Assert.assertEquals("nálezy nad cílem se omezí na cíl", "3/3", m.nalezyZCile("D2/T1"));
+		Assert.assertEquals("s násobností i bez kandidátů nálezy, ne pomlčka", "0/3", m.znak("D5/T5"));
+		Assert.assertEquals("1/3", m.znak("D1/T1"));
+		Assert.assertEquals("✓", m.znak("D2/T1"));
+		Assert.assertTrue("tečka u políčka s kandidáty", m.maTecku("D1/T1"));
+		Assert.assertFalse(m.maTecku("D5/T5"));
+		Assert.assertFalse(m.maTecku("D2/T1"));
+		m.setSize(m.getPreferredSize());
+		final java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(m.getWidth(), m.getHeight(), java.awt.image.BufferedImage.TYPE_INT_RGB);
+		final java.awt.Graphics2D g = img.createGraphics();
+		m.paint(g);
+		g.dispose();
+	}
+
+	/** Bez násobnosti ukazuje políčko počet kandidátů nebo „–“ a nemá tečku. */
+	@Test
+	public void bezNasobnostiPocetAPomlckaBezTecky() {
+		final JMaticeDT m = matice();
+		Assert.assertEquals("3", m.znak("D1/T1"));
+		Assert.assertEquals("–", m.znak("D5/T5"));
+		Assert.assertEquals("✓", m.znak("D2/T2"));
+		Assert.assertFalse("N = 1 bez tečky", m.maTecku("D1/T1"));
+	}
+
 	@Test
 	public void zahlaviPoPulkach() {
 		final String[] ocekavane = { "1", "1,5", "2", "2,5", "3", "3,5", "4", "4,5", "5" };
