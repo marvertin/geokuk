@@ -67,11 +67,21 @@ public class JChallengeDialogTest {
 		return vysledek;
 	}
 
+	/** Viditelné tlačítko s textem; „Vytvořit kopii…“ je u seznamu i v radě u šablony. */
 	private AbstractButton tlacitko(final String text) {
+		AbstractButton skryte = null;
 		for (final AbstractButton b : najdi(dialog.getContentPane(), AbstractButton.class, new ArrayList<AbstractButton>())) {
 			if (text.equals(b.getText())) {
-				return b;
+				if (viditelne(b)) {
+					return b;
+				}
+				if (skryte == null) {
+					skryte = b;
+				}
 			}
+		}
+		if (skryte != null) {
+			return skryte;
 		}
 		throw new AssertionError("tlačítko " + text);
 	}
@@ -112,6 +122,23 @@ public class JChallengeDialogTest {
 			Assert.assertFalse("šablonu nejde uložit", tlacitko("Uložit změny").isEnabled());
 			Assert.assertFalse("šablonu nejde smazat", tlacitko("Smazat").isEnabled());
 			Assert.assertFalse("název šablony nejde měnit", pole(0).isEnabled());
+		});
+	}
+
+	/** U šablony rada nad formulářem s vlastním tlačítkem kopie; u vlastní definice rada není. */
+	@Test
+	public void radaUSablonyVytvoriKopii() throws Exception {
+		naEdt(() -> {
+			Assert.assertTrue("rada u šablony", viditelne(dialog.radaSablony));
+			final JLabel text = najdi(dialog.radaSablony, JLabel.class, new ArrayList<JLabel>()).get(0);
+			Assert.assertEquals("Šablonu nelze upravit; vytvořte kopii.", text.getText());
+			final AbstractButton kopie = najdi(dialog.radaSablony, AbstractButton.class, new ArrayList<AbstractButton>()).get(0);
+			Assert.assertEquals("Vytvořit kopii…", kopie.getText());
+			kopie.doClick();
+			Assert.assertEquals(1, model.vlastni().size());
+			Assert.assertEquals("360° od domova (vlastní)", seznam().getSelectedValue().nazev());
+			Assert.assertFalse("u vlastní definice rada není", dialog.radaSablony.isVisible());
+			Assert.assertTrue(tlacitko("Uložit změny").isEnabled());
 		});
 	}
 
@@ -314,7 +341,7 @@ public class JChallengeDialogTest {
 		});
 	}
 
-	/** „Kolikrát splnit“ je jen u D/T; u šablony jen ke čtení s radou, u kopie se uloží do definice. */
+	/** „Kolikrát splnit“ je jen u D/T; u šablony jen ke čtení, u kopie se uloží do definice. */
 	@Test
 	public void kolikratSplnitJenUDtAUlozeniDoDefinice() throws Exception {
 		naEdt(() -> {
@@ -329,7 +356,7 @@ public class JChallengeDialogTest {
 			seznam().setSelectedValue(sablona, true);
 			Assert.assertTrue(dialog.opakovani.getParent().isVisible());
 			Assert.assertFalse("šablona jen ke čtení", dialog.opakovani.isEnabled());
-			Assert.assertEquals("šablona: 1×, pro jiný počet vytvořte kopii", dialog.popisOpakovani.getText());
+			Assert.assertEquals("šablona: 1×", dialog.popisOpakovani.getText());
 			tlacitko("Vytvořit kopii…").doClick();
 			final Challenge kopie = seznam().getSelectedValue();
 			Assert.assertTrue(dialog.opakovani.isEnabled());

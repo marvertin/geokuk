@@ -20,6 +20,9 @@ public class JChallengeDialog extends JMyDialog0 {
 	private final JList<Challenge> seznam = new JList<>(seznamModel);
 	private final JCheckBox aktivni = new JCheckBox("Aktivní challenge");
 	private final JButton kopie = new JButton("Vytvořit kopii…");
+	/** U šablony nad formulářem: proč nejde upravit a tlačítko kopie hned u toho. */
+	final JPanel radaSablony = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+	private final JButton kopieSablony = new JButton("Vytvořit kopii…");
 	private final JButton smazat = new JButton("Smazat");
 	private final JTextField nazev = new JTextField(24);
 	private final JComboBox<String> pravidla = new JComboBox<>(new String[] { "Project-GC (koule)", "Stator (elipsoid)" });
@@ -93,6 +96,9 @@ public class JChallengeDialog extends JMyDialog0 {
 		final JPanel f = new JPanel(new GridBagLayout());
 		int r = 0;
 		radek(f, r++, aktivni, null);
+		radaSablony.add(new JLabel("Šablonu nelze upravit; vytvořte kopii."));
+		radaSablony.add(kopieSablony);
+		radek(f, r++, radaSablony, null);
 		radek(f, r++, new JLabel("Název"), nazev);
 		final JLabel popisekPravidel = new JLabel("Pravidla");
 		pravidla.setToolTipText("<html>Project-GC: koule, bez Lab a Locationless, jen nálezy s logem na gc.com.<br>Stator: elipsoid WGS84, včetně Lab, bez Locationless.</html>");
@@ -124,6 +130,7 @@ public class JChallengeDialog extends JMyDialog0 {
 
 		aktivni.addActionListener(e -> prepniAktivni());
 		kopie.addActionListener(e -> vytvorKopii());
+		kopieSablony.addActionListener(e -> vytvorKopii());
 		smazat.addActionListener(e -> smaz());
 		uloz.addActionListener(e -> ulozZmeny());
 		stredDomov.addActionListener(e -> povolStred());
@@ -209,6 +216,7 @@ public class JChallengeDialog extends JMyDialog0 {
 			aktivni.setEnabled(c != null && (!jeNedostupny(c) || model.jeAktivni(c)));
 			kopie.setEnabled(c != null && !jeNedostupny(c));
 			smazat.setEnabled(c != null && !jeSablona(c));
+			radaSablony.setVisible(jeSablona(c));
 			chyba.setText(" ");
 			if (c == null) {
 				aktivni.setSelected(false);
@@ -222,7 +230,7 @@ public class JChallengeDialog extends JMyDialog0 {
 				k.setVisible(c.typ() == Challenge.Typ.DT_MATICE);
 			}
 			opakovani.setValue(c.opakovani());
-			popisOpakovani.setText(jeSablona(c) ? "šablona: " + c.opakovani() + "×, pro jiný počet vytvořte kopii" : "každé políčko 1–" + Challenge.NEJVETSI_OPAKOVANI + "×");
+			popisOpakovani.setText(jeSablona(c) ? "šablona: " + c.opakovani() + "×" : "každé políčko 1–" + Challenge.NEJVETSI_OPAKOVANI + "×");
 			aktivni.setSelected(model != null && model.jeAktivni(c));
 			nazev.setText(c.nazev());
 			pravidla.setSelectedIndex(c.zdroj() == ZdrojPravidel.PGC ? 0 : 1);

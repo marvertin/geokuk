@@ -89,7 +89,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		dal.setToolTipText(ChallengeAkce.tipPosunu(Challenge.Typ.SEKTORY_360, true));
 		odznak.setToolTipText(popisChybejicich(Challenge.Typ.SEKTORY_360));
 		kandidati.setToolTipText(popisKandidatu(Challenge.Typ.SEKTORY_360));
-		sektory.setToolTipText("Sektory na mapě: prstenec, klín chybějícího sektoru a čára ke kandidátovi");
+		sektory.setToolTipText("Sektory na mapě: prstenec, klín sektoru vybraného kandidáta a čára k němu");
 		stitky.setToolTipText("Štítky u kandidátů: číslo sektoru nebo políčko D/T");
 		nastaveni.setToolTipText(TIP_NASTAVENI);
 		chip.setToolTipText("Vybrat challenge");

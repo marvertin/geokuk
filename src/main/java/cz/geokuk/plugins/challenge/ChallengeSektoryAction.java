@@ -10,7 +10,7 @@ public class ChallengeSektoryAction extends ToggleAction0 {
 
 	public ChallengeSektoryAction() {
 		super("Sektory na mapě");
-		putValue(SHORT_DESCRIPTION, "Kreslí u zobrazené challenge sektory: prstenec, klín chybějícího sektoru a čáru ke kandidátovi.");
+		putValue(SHORT_DESCRIPTION, "Kreslí u zobrazené challenge sektory: prstenec, klín sektoru vybraného kandidáta a čáru k němu.");
 		setSelected(true);
 	}
 
