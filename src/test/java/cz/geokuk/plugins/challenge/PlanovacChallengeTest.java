@@ -623,6 +623,33 @@ public class PlanovacChallengeTest {
 	}
 
 	@Test
+	public void dalsiAPredchoziAKandidatVeSmeruZustavajiVeVybranemPolicku() throws Exception {
+		napojNaModel();
+		final Challenge c = dtChallenge("DT");
+		planovac.keseNacteny(dtData());
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "výsledek D/T");
+		final String policko = VypocetMatice.stitek(8, 8);
+		javax.swing.SwingUtilities.invokeAndWait(() -> model.setVybranePolicko(c, policko));
+		Assert.assertEquals(policko, model.vybranePolicko(c));
+		for (int i = 0; i < 3; i++) {
+			Assert.assertEquals("v políčku je jediný kandidát", "K3", f4(c, false).id());
+		}
+		Assert.assertNull("předchozí v kole s jedním kandidátem", f4(c, true));
+		stredMapy = new Wgs(50.0, 14.0);
+		final VybranyKandidat[] skok = new VybranyKandidat[1];
+		javax.swing.SwingUtilities.invokeAndWait(() -> model.nastavVybranyKandidat(c, null));
+		javax.swing.SwingUtilities.invokeAndWait(() -> skok[0] = planovac.kandidatVeSmeru(c, SmerSkoku.SEVER));
+		Assert.assertEquals("K1 je blíž, ale je v jiném políčku", "K3", skok[0].id());
+		javax.swing.SwingUtilities.invokeAndWait(() -> {
+			model.setVybranePolicko(c, null);
+			model.nastavVybranyKandidat(c, null);
+		});
+		javax.swing.SwingUtilities.invokeAndWait(() -> skok[0] = planovac.kandidatVeSmeru(c, SmerSkoku.SEVER));
+		Assert.assertEquals("K1", skok[0].id());
+	}
+
+	@Test
 	public void malyPosunStreduMapyNepocitaZnovuAVelkyAno() throws Exception {
 		napojNaModel();
 		final Challenge dt = dtChallenge("DT");

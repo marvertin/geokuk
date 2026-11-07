@@ -254,6 +254,28 @@ public class ChallengeModelTest {
 	}
 
 	@Test
+	public void vybranePolickoUKalendareA360NicNezmeni() throws Exception {
+		final Challenge kalendar = model.ulozVlastni(new Challenge("Kal", Typ.KALENDAR, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC));
+		model.aktivuj(kalendar);
+		model.nastavVysledekPolicek(kalendar, policka("14. 3.", "15. 3."));
+		pockejNaEdt();
+		udalosti.clear();
+		model.setVybranePolicko(kalendar, "14. 3.");
+		pockejNaEdt();
+		Assert.assertNull("kalendář políčka nevybírá", model.vybranePolicko(kalendar));
+		Assert.assertEquals(0, udalosti.size());
+		final Challenge sektory = model.ulozVlastni(vlastni("Sektory"));
+		model.aktivuj(sektory);
+		model.nastavVysledekPolicek(sektory, policka("D1/T1"));
+		pockejNaEdt();
+		udalosti.clear();
+		model.setVybranePolicko(sektory, "D1/T1");
+		pockejNaEdt();
+		Assert.assertNull("360° políčka nemá ani s výsledkem políček", model.vybranePolicko(sektory));
+		Assert.assertEquals(0, udalosti.size());
+	}
+
+	@Test
 	public void vybranePolickoJeJenUMaticeAUAktivni() throws Exception {
 		final Challenge sektory = model.ulozVlastni(vlastni("Sektory"));
 		model.aktivuj(sektory);

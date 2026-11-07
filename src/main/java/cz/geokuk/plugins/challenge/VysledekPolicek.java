@@ -16,12 +16,19 @@ public final class VysledekPolicek {
 	private final List<String> stitky;
 	private final List<KandidatPolicka> kandidati;
 	private final Object vstup;
+	private final int limitKandidatu;
 
 	VysledekPolicek(final int celkem, final List<String> chybejici, final List<KandidatPolicka> kandidati) {
-		this(celkem, chybejici, kandidati, null);
+		this(celkem, chybejici, kandidati, 0);
 	}
 
-	private VysledekPolicek(final int celkem, final List<String> chybejici, final List<KandidatPolicka> kandidati, final Object vstup) {
+	/** {@code limitKandidatu}: nejvíc kandidátů na políčko, které výpočet ponechal; 0 = neznámý. */
+	VysledekPolicek(final int celkem, final List<String> chybejici, final List<KandidatPolicka> kandidati, final int limitKandidatu) {
+		this(celkem, chybejici, kandidati, null, limitKandidatu);
+	}
+
+	private VysledekPolicek(final int celkem, final List<String> chybejici, final List<KandidatPolicka> kandidati, final Object vstup, final int limitKandidatu) {
+		this.limitKandidatu = limitKandidatu;
 		this.celkem = celkem;
 		this.stitky = Collections.unmodifiableList(new ArrayList<>(chybejici));
 		this.kandidati = Collections.unmodifiableList(new ArrayList<>(kandidati));
@@ -33,7 +40,7 @@ public final class VysledekPolicek {
 	 * pokračuje v kole; výsledek bez označení je vlastním vstupem.
 	 */
 	VysledekPolicek sVstupem(final Object klic) {
-		return new VysledekPolicek(celkem, stitky, kandidati, Objects.requireNonNull(klic, "klic"));
+		return new VysledekPolicek(celkem, stitky, kandidati, Objects.requireNonNull(klic, "klic"), limitKandidatu);
 	}
 
 	Object vstup() {
@@ -80,6 +87,11 @@ public final class VysledekPolicek {
 	public int pocetKandidatu(final String stitek) {
 		final Integer n = pocetKandidatuPoPolickach().get(stitek);
 		return n == null ? 0 : n;
+	}
+
+	/** Políčko má tolik kandidátů, kolik výpočet nejvýš ponechává; skutečný počet nenalezených keší může být větší („50+“). Při neznámém limitu vždy false. */
+	public boolean jePlne(final String stitek) {
+		return limitKandidatu > 0 && pocetKandidatu(stitek) >= limitKandidatu;
 	}
 
 	/** Počty kandidátů podle štítků chybějících políček v pořadí {@link #stitkyChybejicich()}; neměnná. */

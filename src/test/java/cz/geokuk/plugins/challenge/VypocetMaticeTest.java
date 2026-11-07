@@ -311,4 +311,19 @@ public class VypocetMaticeTest {
 		VypocetMatice.spocti(PravidlaTypu.proMatici(), 90, 180, kese);
 		VypocetMatice.spocti(PravidlaTypu.proMatici(), -90, -180, kese);
 	}
+
+	@Test
+	public void policeNaLimituJePlneJinakNe() {
+		final VysledekPolicek v = VypocetMatice.spocti(PravidlaTypu.proMatici().sMaxKandidatu(2), 50, 14,
+				Arrays.asList(new K(2, 2, false).id("A"), new K(2, 2, false).id("B"), new K(2, 2, false).id("C"), new K(3, 3, false).id("D")));
+		final String plne = VypocetMatice.stitek(2, 2);
+		final String ne = VypocetMatice.stitek(3, 3);
+		Assert.assertEquals(2, v.pocetKandidatu(plne));
+		Assert.assertTrue("na limitu", v.jePlne(plne));
+		Assert.assertEquals(1, v.pocetKandidatu(ne));
+		Assert.assertFalse("pod limitem", v.jePlne(ne));
+		Assert.assertFalse("bez kandidátů", v.jePlne(VypocetMatice.stitek(5, 5)));
+		Assert.assertTrue("plné zůstane plné i s označením vstupu", v.sVstupem(new Object()).jePlne(plne));
+		Assert.assertFalse("neznámý limit není nikdy plné", new VysledekPolicek(81, Arrays.asList(plne), v.kandidati()).jePlne(plne));
+	}
 }

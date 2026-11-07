@@ -224,4 +224,17 @@ public class SkokVeSmeruTest {
 		Assert.assertFalse(SkokVeSmeru.jeVKuzelu(314.999999, 0));
 		Assert.assertTrue(SkokVeSmeru.jeVKuzelu(44.999999, 0));
 	}
+
+	@Test
+	public void vPolickuSeHledaJenMeziKandidatyPolicka() {
+		final Bod bliz = GeometrieSektoru.bod(LAT, LON, 0, 1000, Model.KOULE);
+		final Bod dal = GeometrieSektoru.bod(LAT, LON, 10, 3000, Model.KOULE);
+		final VysledekPolicek v = new VysledekPolicek(81, java.util.Arrays.asList("D1/T1", "D2/T2"),
+				java.util.Arrays.asList(new KandidatPolicka("BLIZ", bliz.lat, bliz.lon, "D1/T1", "D1/T1", null), new KandidatPolicka("DAL", dal.lat, dal.lon, "D2/T2", "D2/T2", null)));
+		Assert.assertEquals("BLIZ", SkokVeSmeru.proPolicka(v, null, LAT, LON, SEVER, null).id());
+		Assert.assertEquals("DAL", SkokVeSmeru.proPolicka(v, "D2/T2", LAT, LON, SEVER, null).id());
+		Assert.assertEquals("BLIZ", SkokVeSmeru.proPolicka(v, "D1/T1", LAT, LON, SEVER, null).id());
+		Assert.assertNull("v políčku nikdo v kuželu není", SkokVeSmeru.proPolicka(v, "D2/T2", LAT, LON, JIH, null));
+		Assert.assertNull("políčko bez kandidátů", SkokVeSmeru.proPolicka(v, "D9/T9", LAT, LON, SEVER, null));
+	}
 }

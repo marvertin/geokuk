@@ -53,7 +53,7 @@ public final class VypocetMatice {
 				}
 			}
 		}
-		return new VysledekPolicek(PULEK * PULEK, chybejici, kandidati);
+		return new VysledekPolicek(PULEK * PULEK, chybejici, kandidati, pravidla.maxKandidatu());
 	}
 
 	/** Štítek políčka z pořadí po půlkách, například „D4/T1“ nebo „D1,5/T2,5“. */

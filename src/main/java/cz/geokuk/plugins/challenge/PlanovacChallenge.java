@@ -386,7 +386,7 @@ public final class PlanovacChallenge {
 		synchronized (this) {
 			d = dalsiPolicko.computeIfAbsent(c.nazev(), k -> new DalsiPolicko());
 		}
-		final KandidatPolicka k = d.dalsi(v, stred.lat, stred.lon);
+		final KandidatPolicka k = d.dalsi(v, model.vybranePolicko(c), stred.lat, stred.lon);
 		if (k == null) {
 			return null;
 		}
@@ -430,7 +430,7 @@ public final class PlanovacChallenge {
 		synchronized (this) {
 			d = dalsiPolicko.get(c.nazev());
 		}
-		final KandidatPolicka k = d == null ? null : d.predchozi(v);
+		final KandidatPolicka k = d == null ? null : d.predchozi(v, model.vybranePolicko(c));
 		if (k == null) {
 			return null;
 		}
@@ -459,7 +459,7 @@ public final class PlanovacChallenge {
 			k = v == null ? null : SkokVeSmeru.proSektory(v, lat, lon, smer.azimut(), vynechat);
 		} else {
 			final VysledekPolicek v = model.vysledekPolicek(c);
-			k = v == null ? null : SkokVeSmeru.proPolicka(v, lat, lon, smer.azimut(), vynechat);
+			k = v == null ? null : SkokVeSmeru.proPolicka(v, model.vybranePolicko(c), lat, lon, smer.azimut(), vynechat);
 		}
 		if (k != null) {
 			model.nastavVybranyKandidat(c, k);

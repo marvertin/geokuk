@@ -107,12 +107,20 @@ public final class SkokVeSmeru {
 
 	/** Kandidát chybějícího políčka D/T (nebo dne kalendáře) ve směru; viz {@link #proSektory}. */
 	public static VybranyKandidat proPolicka(final VysledekPolicek vysledek, final double lat, final double lon, final double azimutSmeru, final String vynechat) {
+		return proPolicka(vysledek, null, lat, lon, azimutSmeru, vynechat);
+	}
+
+	/** Jako {@link #proPolicka(VysledekPolicek, double, double, double, String)} jen z políčka se zadaným štítkem (null = ze všech). */
+	public static VybranyKandidat proPolicka(final VysledekPolicek vysledek, final String policko, final double lat, final double lon, final double azimutSmeru,
+			final String vynechat) {
 		zkontroluj(lat, lon, azimutSmeru);
 		final Nejlepsi n = new Nejlepsi(lat, lon, azimutSmeru, vynechat);
 		final List<KandidatPolicka> kandidati = vysledek.kandidati();
 		for (int i = 0; i < kandidati.size(); i++) {
 			final KandidatPolicka k = kandidati.get(i);
-			n.zvaz(k.id(), -1, k.lat(), k.lon(), k.popis());
+			if (policko == null || policko.equals(k.stitek())) {
+				n.zvaz(k.id(), -1, k.lat(), k.lon(), k.popis());
+			}
 		}
 		return n.vysledek();
 	}

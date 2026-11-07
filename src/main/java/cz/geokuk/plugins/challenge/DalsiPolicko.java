@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -17,12 +18,21 @@ public final class DalsiPolicko {
 	/** Vybraní v tomto kole v pořadí výběru, kvůli „předchozímu“. */
 	private final List<KandidatPolicka> poradi = new ArrayList<>();
 	private Object vstup;
+	private String policko;
 
-	/** Další kandidát; null, když kandidáti nejsou. */
+	/** Další kandidát ze všech políček; viz {@link #dalsi(VysledekPolicek, String, double, double)}. */
 	public synchronized KandidatPolicka dalsi(final VysledekPolicek vysledek, final double lat, final double lon) {
+		return dalsi(vysledek, null, lat, lon);
+	}
+
+	/**
+	 * Další kandidát jen z políčka se zadaným štítkem (null = ze všech); null, když tam kandidáti nejsou. Změna políčka začne kolo znovu.
+	 */
+	public synchronized KandidatPolicka dalsi(final VysledekPolicek vysledek, final String policko, final double lat, final double lon) {
 		final Object klic = vysledek == null ? null : vysledek.vstup();
-		if (klic != vstup) {
+		if (klic != vstup || !Objects.equals(policko, this.policko)) {
 			vstup = klic;
+			this.policko = policko;
 			vybrane.clear();
 			poradi.clear();
 		}
@@ -34,13 +44,16 @@ public final class DalsiPolicko {
 			final String posledni = poradi.isEmpty() ? null : poradi.get(poradi.size() - 1).id();
 			vybrane.clear();
 			poradi.clear();
-			if (posledni != null && vysledek.kandidati().size() > 1) {
+			if (posledni != null && pocetVPolicku(vysledek) > 1) {
 				vybrane.add(posledni);
 				k = nejlepsi(vysledek, lat, lon);
 				vybrane.clear();
 			} else {
 				k = nejlepsi(vysledek, lat, lon);
 			}
+		}
+		if (k == null) {
+			return null;
 		}
 		vybrane.add(k.id());
 		poradi.add(k);
@@ -49,7 +62,12 @@ public final class DalsiPolicko {
 
 	/** Předchozí vybraný kandidát v tomto kole; null, když před posledním vybraným žádný není. Aktuální se tím vrátí mezi nevybrané. */
 	public synchronized KandidatPolicka predchozi(final VysledekPolicek vysledek) {
-		if (vysledek == null || vysledek.vstup() != vstup || poradi.size() < 2) {
+		return predchozi(vysledek, null);
+	}
+
+	/** Jako {@link #predchozi(VysledekPolicek)} v políčku se zadaným štítkem; po změně políčka není kam se vrátit. */
+	public synchronized KandidatPolicka predchozi(final VysledekPolicek vysledek, final String policko) {
+		if (vysledek == null || vysledek.vstup() != vstup || !Objects.equals(policko, this.policko) || poradi.size() < 2) {
 			return null;
 		}
 		vybrane.remove(poradi.remove(poradi.size() - 1).id());
@@ -61,11 +79,19 @@ public final class DalsiPolicko {
 				.thenComparingDouble(k -> Geodezie.vzdalenostKoule(lat, lon, k.lat(), k.lon()));
 		KandidatPolicka nejlepsi = null;
 		for (final KandidatPolicka k : v.kandidati()) {
-			if (!vybrane.contains(k.id()) && (nejlepsi == null || poradi.compare(k, nejlepsi) < 0)) {
+			if (vPolicku(k) && !vybrane.contains(k.id()) && (nejlepsi == null || poradi.compare(k, nejlepsi) < 0)) {
 				nejlepsi = k;
 			}
 		}
 		return nejlepsi;
+	}
+
+	private boolean vPolicku(final KandidatPolicka k) {
+		return policko == null || policko.equals(k.stitek());
+	}
+
+	private int pocetVPolicku(final VysledekPolicek v) {
+		return policko == null ? v.kandidati().size() : v.pocetKandidatu(policko);
 	}
 
 	/** Začne kolo znovu. */

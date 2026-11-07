@@ -170,4 +170,55 @@ public class DalsiPolickoTest {
 		Assert.assertEquals("B", d.dalsi(v, 50.0, 14).id());
 		Assert.assertEquals("A", d.dalsi(v, 50.1, 14).id());
 	}
+
+	private static KandidatPolicka kp(final String id, final double lat, final String policko) {
+		return new KandidatPolicka(id, lat, 14, policko, policko, null);
+	}
+
+	private static VysledekPolicek dvaPolicka() {
+		return new VysledekPolicek(81, Arrays.asList("D1/T1", "D2/T2"),
+				Arrays.asList(kp("A1", 50.0, "D1/T1"), kp("A2", 50.2, "D1/T1"), kp("B1", 50.1, "D2/T2"), kp("B2", 50.3, "D2/T2"), kp("B3", 50.4, "D2/T2")));
+	}
+
+	@Test
+	public void vPolickuSeVybiraJenZNehoACyklujeVNem() {
+		final VysledekPolicek v = dvaPolicka();
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertEquals("B1", d.dalsi(v, "D2/T2", 50.0, 14).id());
+		Assert.assertEquals("B2", d.dalsi(v, "D2/T2", 50.0, 14).id());
+		Assert.assertEquals("B3", d.dalsi(v, "D2/T2", 50.0, 14).id());
+		Assert.assertEquals("po kole znovu, ale ne na tom, kde se stojí (nejblíž je B2)", "B2", d.dalsi(v, "D2/T2", 50.4, 14).id());
+	}
+
+	@Test
+	public void zmenaPolickaZacneKoloZnovuANullJsouVsechnaPolicka() {
+		final VysledekPolicek v = dvaPolicka();
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertEquals("A1", d.dalsi(v, "D1/T1", 50.0, 14).id());
+		Assert.assertEquals("A2", d.dalsi(v, "D1/T1", 50.0, 14).id());
+		Assert.assertEquals("jiné políčko, nové kolo", "B1", d.dalsi(v, "D2/T2", 50.0, 14).id());
+		Assert.assertEquals("A1", d.dalsi(v, null, 50.0, 14).id());
+		Assert.assertEquals("B1", d.dalsi(v, null, 50.0, 14).id());
+		Assert.assertEquals("zpět na políčko, kolo začíná znovu", "A1", d.dalsi(v, "D1/T1", 50.0, 14).id());
+	}
+
+	@Test
+	public void policeBezKandidatuDaNull() {
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertNull(d.dalsi(dvaPolicka(), "D9/T9", 50, 14));
+		Assert.assertEquals("a další volání s existujícím políčkem funguje", "A1", d.dalsi(dvaPolicka(), "D1/T1", 50, 14).id());
+	}
+
+	@Test
+	public void jedinyKandidatPolickaSeVraciVzdyAPredchoziHlidaPolicko() {
+		final VysledekPolicek v = new VysledekPolicek(81, Arrays.asList("D1/T1", "D2/T2"), Arrays.asList(kp("A1", 50.0, "D1/T1"), kp("B1", 50.1, "D2/T2"), kp("B2", 50.2, "D2/T2")));
+		final DalsiPolicko d = new DalsiPolicko();
+		Assert.assertEquals("A1", d.dalsi(v, "D1/T1", 50, 14).id());
+		Assert.assertEquals("A1", d.dalsi(v, "D1/T1", 50, 14).id());
+		Assert.assertEquals("B1", d.dalsi(v, "D2/T2", 50, 14).id());
+		Assert.assertEquals("B2", d.dalsi(v, "D2/T2", 50, 14).id());
+		Assert.assertNull("jiné políčko než poslední kolo", d.predchozi(v, "D1/T1"));
+		Assert.assertEquals("B1", d.predchozi(v, "D2/T2").id());
+		Assert.assertNull("bez políčka je to jiné kolo", d.predchozi(v));
+	}
 }
