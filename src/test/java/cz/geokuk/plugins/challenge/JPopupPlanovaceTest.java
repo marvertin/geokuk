@@ -168,8 +168,8 @@ public class JPopupPlanovaceTest {
 		for (int i = 0; i < o.radky.size(); i++) {
 			radky.add(o.radky.get(i));
 		}
-		Assert.assertEquals(java.util.Arrays.asList("213°  2 kandidáti  nejbližší 2,8 km", "47°  1 kandidát  nejbližší 6,2 km", "305°  0 kandidátů  –"), radky);
-		Assert.assertEquals("1 sektor je na hraně (±0,05°), počítá se jako nejistý.", o.nejiste.getText());
+		Assert.assertEquals(java.util.Arrays.asList("213°  2 kandidáti  nejbližší 2,8 km od středu", "47°  1 kandidát  nejbližší 6,2 km od středu", "305°  0 kandidátů  –"), radky);
+		Assert.assertTrue(o.nejiste.getText(), o.nejiste.getText().contains("U 1 sektoru leží nalezená keš do 0,05° od hranice"));
 		Assert.assertTrue(o.dalsi.isEnabled());
 		Assert.assertFalse("nadpis je jen název challenge", o.nadpis.getText().startsWith("Challenge "));
 		Assert.assertEquals("Typ: 360°    Pravidla: " + TextyPopupuPlanovace.pravidla(aktivni().zdroj()), o.typ.getText());
@@ -334,7 +334,7 @@ public class JPopupPlanovaceTest {
 		Assert.assertEquals(360, o.postup.getMaximum());
 		Assert.assertTrue(o.stred.isVisible());
 		Assert.assertEquals(TextyPopupuPlanovace.nadpisSeznamu(Challenge.Typ.SEKTORY_360), o.nadpisSeznamu.getText());
-		Assert.assertEquals(java.util.Collections.singletonList("47°  1 kandidát  nejbližší 6,2 km"), radky(o));
+		Assert.assertEquals(java.util.Collections.singletonList("47°  1 kandidát  nejbližší 6,2 km od středu"), radky(o));
 	}
 
 	private Challenge aktivni360() {

@@ -53,7 +53,7 @@ public class TextyPopupuPlanovaceTest {
 	@Test
 	public void radkySektoru() {
 		final VysledekSektoru v = vysledek(new int[] { 213, 305 }, new int[0], new double[][] { { 213, 4000, 2790, 3000, 5000, 6000 } });
-		assertEquals("213°  5 kandidátů  nejbližší 2,8 km", TextyPopupuPlanovace.radekSektoru(213, v.kandidati(213)));
+		assertEquals("213°  5 kandidátů  nejbližší 2,8 km od středu", TextyPopupuPlanovace.radekSektoru(213, v.kandidati(213)));
 		assertEquals("305°  0 kandidátů  –", TextyPopupuPlanovace.radekSektoru(305, v.kandidati(305)));
 		assertEquals("10°  0 kandidátů  –", TextyPopupuPlanovace.radekSektoru(10, null));
 	}
@@ -72,9 +72,9 @@ public class TextyPopupuPlanovaceTest {
 	@Test
 	public void nejisteSektory() {
 		assertEquals("", TextyPopupuPlanovace.nejiste(vysledek(new int[] { 1 }, new int[0], new double[0][])));
-		assertEquals("1 sektor je na hraně (±0,05°), počítá se jako nejistý.", TextyPopupuPlanovace.nejiste(vysledek(new int[] { 1 }, new int[] { 7 }, new double[0][])));
-		assertEquals("3 sektory jsou na hraně (±0,05°), počítají se jako nejisté.", TextyPopupuPlanovace.nejiste(vysledek(new int[] { 1 }, new int[] { 1, 2, 3 }, new double[0][])));
-		assertEquals("5 sektorů je na hraně (±0,05°), počítají se jako nejisté.", TextyPopupuPlanovace.nejiste(vysledek(new int[] { 1 }, new int[] { 1, 2, 3, 4, 5 }, new double[0][])));
+		assertEquals("U 1 sektoru leží nalezená keš do 0,05° od hranice se sousedním sektorem, takže není jisté, do kterého patří. Na mapě má šedý čárkovaný prstenec.", TextyPopupuPlanovace.nejiste(vysledek(new int[] { 1 }, new int[] { 7 }, new double[0][])));
+		assertEquals("U 3 sektorů leží nalezená keš do 0,05° od hranice se sousedním sektorem, takže není jisté, do kterého patří. Na mapě mají šedý čárkovaný prstenec.", TextyPopupuPlanovace.nejiste(vysledek(new int[] { 1 }, new int[] { 1, 2, 3 }, new double[0][])));
+		assertEquals("U 5 sektorů leží nalezená keš do 0,05° od hranice se sousedním sektorem, takže není jisté, do kterého patří. Na mapě mají šedý čárkovaný prstenec.", TextyPopupuPlanovace.nejiste(vysledek(new int[] { 1 }, new int[] { 1, 2, 3, 4, 5 }, new double[0][])));
 	}
 
 	@Test

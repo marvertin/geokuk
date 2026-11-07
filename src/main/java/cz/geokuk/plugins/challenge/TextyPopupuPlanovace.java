@@ -23,10 +23,10 @@ final class TextyPopupuPlanovace {
 		return String.format(Locale.forLanguageTag("cs"), "%.1f km", metru / 1000);
 	}
 
-	/** „213°  5 kandidátů  nejbližší 2,8 km“; bez kandidátů s pomlčkou místo vzdálenosti. */
+	/** „213°  5 kandidátů  nejbližší 2,8 km od středu“; bez kandidátů s pomlčkou místo vzdálenosti. */
 	static String radekSektoru(final int sektor, final VysledekSektoru.Kandidati k) {
 		final int pocet = k == null ? 0 : k.pocet();
-		final String nejblizsi = pocet == 0 ? "–" : "nejbližší " + vzdalenost(k.nejblizsiVzdalenost());
+		final String nejblizsi = pocet == 0 ? "–" : "nejbližší " + vzdalenost(k.nejblizsiVzdalenost()) + " od středu";
 		return sektor + "°  " + kandidatu(pocet) + "  " + nejblizsi;
 	}
 
@@ -85,7 +85,7 @@ final class TextyPopupuPlanovace {
 		}
 	}
 
-	/** Kolik sektorů je na hraně; prázdný text, když žádný. */
+	/** U kolika sektorů leží nalezená keš u hranice se sousedním sektorem; prázdný text, když u žádného. */
 	static String nejiste(final VysledekSektoru v) {
 		int n = 0;
 		for (int s = 0; s < 360; s++) {
@@ -96,8 +96,9 @@ final class TextyPopupuPlanovace {
 		if (n == 0) {
 			return "";
 		}
-		final String sektoru = n + " " + tvar(n, "sektor je", "sektory jsou", "sektorů je");
-		return sektoru + " na hraně (±0,05°), " + (n == 1 ? "počítá se jako nejistý." : "počítají se jako nejisté.");
+		return "U " + n + " " + tvar(n, "sektoru", "sektorů", "sektorů")
+				+ " leží nalezená keš do 0,05° od hranice se sousedním sektorem, takže není jisté, do kterého patří. Na mapě "
+				+ (n == 1 ? "má" : "mají") + " šedý čárkovaný prstenec.";
 	}
 
 	/** Chybějící sektory: s kandidáty od nejbližšího, za nimi sektory bez kandidátů vzestupně. */
