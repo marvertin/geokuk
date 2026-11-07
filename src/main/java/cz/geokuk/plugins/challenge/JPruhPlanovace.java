@@ -32,14 +32,20 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	private static final int SIRKA_SIPKY = 24;
 	private static final int SIRKA_IKONY = 26;
 	private static final int SIRKA_KANDIDATU = 124, SIRKA_SEKTORU = 88, SIRKA_STITKU = 72, SIRKA_NASTAVENI = 116;
+	/** Tlačítko vybraného políčka D/T; vejde se i „D4,5/T4,5 ✕“. */
+	static final int SIRKA_POLICKA = 92;
+	/** O kolik je lišta s tlačítkem vybraného políčka širší (tlačítko a mezera skupiny před ním). */
+	static final int PRIDAVEK_POLICKA = SIRKA_POLICKA + MEZERA_SKUPIN;
 	private static final Color CERVENA = new Color(200, 40, 40);
 	private static final javax.swing.border.Border RAMECEK = BorderFactory.createEtchedBorder();
 	/** Prodleva, po které se výběr challenge otevře při najetí myší na jeho tlačítko. */
 	static final int PRODLEVA_VYBERU_MS = 500;
 
 	/** Pořadí prvků v poli z {@link #rozloz}. */
-	static final int UCHYT = 0, VYBER = 1, ODZNAK = 2, ZPET = 3, DAL = 4, KANDIDATI = 5, SEKTORY = 6, STITKY = 7, NASTAVENI = 8;
-	private static final int POCET = 9;
+	static final int UCHYT = 0, VYBER = 1, ODZNAK = 2, ZPET = 3, DAL = 4, KANDIDATI = 5, SEKTORY = 6, STITKY = 7, NASTAVENI = 8, POLICKO = 9;
+	private static final int POCET = 10;
+	/** Pořadí prvků zleva: vybrané políčko je poslední, ať ostatní prvky při výběru a zrušení nepoposkočí. */
+	private static final int[] ZLEVA = { UCHYT, VYBER, ODZNAK, ZPET, DAL, KANDIDATI, SEKTORY, STITKY, NASTAVENI, POLICKO };
 
 	/** Stupeň lišty podle její šířky. */
 	enum Stupen {
@@ -62,6 +68,10 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	private final transient Prepinac sektory = new Prepinac(new Klin());
 	private final transient Prepinac stitky = new Prepinac(new Stitek());
 	private final transient JButton nastaveni = new JButton(new Ozubene());
+	private final transient JButton policko = new JButton();
+	/** Políčko D/T vybrané v modelu, null když žádné nebo challenge není D/T. */
+	private String vybranePolicko;
+	private transient java.util.function.BooleanSupplier jinyPopupOtevreny = () -> false;
 	private final transient Timer prodlevaVyberu = new Timer(PRODLEVA_VYBERU_MS, e -> otevriVyber());
 	private transient ChallengeModel model;
 	private transient Runnable naKlikOdznaku;
@@ -85,7 +95,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		chip.setToolTipText("Vybrat challenge");
 		sektory.setSelected(true);
 		stitky.setSelected(true);
-		for (final AbstractButton b : new AbstractButton[] { uchyt, chip, odznak, zpet, dal, kandidati, sektory, stitky, nastaveni }) {
+		for (final AbstractButton b : new AbstractButton[] { uchyt, chip, odznak, zpet, dal, kandidati, sektory, stitky, nastaveni, policko }) {
 			b.setFocusable(false);
 			b.setMargin(new Insets(0, 2, 0, 2));
 			add(b);
@@ -120,6 +130,8 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 				model.setKresliStitky(stitky.isSelected());
 			}
 		});
+		policko.addActionListener(e -> zrusPolicko());
+		pridejEsc();
 		zpet.addActionListener(e -> prejdi(false));
 		dal.addActionListener(e -> prejdi(true));
 		odznak.addActionListener(e -> {
@@ -229,10 +241,15 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	}
 
 	/**
-	 * Obdélníky prvků lišty v souřadnicích mapy pro danou šířku zapnuté lišty, v pořadí {@link #UCHYT} až {@link #NASTAVENI}. Prvek, který se na tomto stupni neukazuje, má
+	 * Obdélníky prvků lišty v souřadnicích mapy pro danou šířku zapnuté lišty, v pořadí {@link #UCHYT} až {@link #POLICKO}. Prvek, který se na tomto stupni neukazuje, má
 	 * prázdný obdélník.
 	 */
 	static Rectangle[] rozloz(final int sirkaPruhu) {
+		return rozloz(sirkaPruhu, false);
+	}
+
+	/** Totéž s tlačítkem vybraného políčka na konci lišty; {@code sirkaPruhu} je šířka lišty bez něj. */
+	static Rectangle[] rozloz(final int sirkaPruhu, final boolean sPolickem) {
 		final Stupen s = Stupen.pro(sirkaPruhu);
 		final int[] sirky = new int[POCET];
 		sirky[UCHYT] = SIRKA_UCHYTU;
@@ -244,15 +261,16 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		sirky[SEKTORY] = s == Stupen.PLNY ? SIRKA_SEKTORU : s == Stupen.IKONY ? SIRKA_IKONY : 0;
 		sirky[STITKY] = s == Stupen.PLNY ? SIRKA_STITKU : s == Stupen.IKONY ? SIRKA_IKONY : 0;
 		sirky[NASTAVENI] = s == Stupen.PLNY ? SIRKA_NASTAVENI : SIRKA_IKONY;
+		sirky[POLICKO] = sPolickem && s != Stupen.UZKY ? SIRKA_POLICKA : 0;
 		final Rectangle[] r = new Rectangle[POCET];
 		final int y = RozmisteniPrekryvu.OKRAJ + (RozmisteniPrekryvu.VYSKA_PRUHU - VYSKA_PRVKU) / 2;
 		int x = RozmisteniPrekryvu.OKRAJ + PODSTAVEC;
-		for (int i = 0; i < POCET; i++) {
+		for (final int i : ZLEVA) {
 			if (sirky[i] == 0) {
 				r[i] = new Rectangle(x, y, 0, 0);
 				continue;
 			}
-			if (i == KANDIDATI || i == NASTAVENI) {
+			if (i == KANDIDATI || i == NASTAVENI || i == POLICKO) {
 				x += MEZERA_SKUPIN - MEZERA;
 			}
 			r[i] = new Rectangle(x, y, sirky[i], VYSKA_PRVKU);
@@ -276,16 +294,30 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		return oblastOdznaku(getWidth(), prekazky.get());
 	}
 
-	/** Šířka zapnuté lišty v souřadnicích mapy. */
+	/** Šířka zapnuté lišty v souřadnicích mapy bez tlačítka vybraného políčka. */
 	private int sirkaListy() {
 		return RozmisteniPrekryvu.sirkaPruhu(RozmisteniPrekryvu.volnaSirkaPruhu(getWidth(), prekazky.get()));
+	}
+
+	/** Tlačítko vybraného políčka je vidět: políčko je vybrané, lišta není nejužší a s tlačítkem se vejde do volné šířky. */
+	private boolean sPolickem() {
+		if (vybranePolicko == null) {
+			return false;
+		}
+		final int sirka = sirkaListy();
+		return Stupen.pro(sirka) != Stupen.UZKY && sirka + PRIDAVEK_POLICKA <= RozmisteniPrekryvu.volnaSirkaPruhu(getWidth(), prekazky.get());
+	}
+
+	/** Šířka zapnuté lišty včetně tlačítka vybraného políčka, je-li vidět. */
+	private int sirkaListySPolickem() {
+		return sirkaListy() + (sPolickem() ? PRIDAVEK_POLICKA : 0);
 	}
 
 	/** Obdélník lišty (zapnuté) nebo úchytu (vypnuté) v souřadnicích mapy. */
 	Rectangle oblastPruhu() {
 		final Rectangle r = RozmisteniPrekryvu.pruhPlanovace(0, zapnuto);
 		if (zapnuto) {
-			r.width = sirkaListy();
+			r.width = sirkaListySPolickem();
 		}
 		return r;
 	}
@@ -298,7 +330,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	@Override
 	public void doLayout() {
 		final int sirka = sirkaListy();
-		final Rectangle[] r = rozloz(sirka);
+		final Rectangle[] r = rozloz(sirka, sPolickem());
 		final Component[] c = prvky();
 		stupen = Stupen.pro(sirka);
 		for (int i = 0; i < c.length; i++) {
@@ -314,7 +346,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	}
 
 	private Component[] prvky() {
-		return new Component[] { uchyt, chip, odznak, zpet, dal, kandidati, sektory, stitky, nastaveni };
+		return new Component[] { uchyt, chip, odznak, zpet, dal, kandidati, sektory, stitky, nastaveni, policko };
 	}
 
 	private static void nastavText(final AbstractButton b, final String text) {
@@ -393,12 +425,74 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 			b.setEnabled(maChallenge);
 		}
 		sektory.setEnabled(maChallenge && maSektory(stav.typ()));
+		obnovPolicko(maChallenge ? stav.challenge() : null, maChallenge && stav.jenKandidati());
 		if (!isVisible()) {
 			setVisible(true);
 		}
 		UkazatelVykonu.setPodPruhem(true);
 		revalidate();
 		repaint();
+	}
+
+	/** Tlačítko „D3/T4 ✕“: jen u D/T s vybraným políčkem; při vypnutém zobrazení jen kandidátů (F4) zašedlé, ale klikací. */
+	private void obnovPolicko(final Challenge c, final boolean jenKandidati) {
+		vybranePolicko = c != null && c.typ() == Challenge.Typ.DT_MATICE && model != null ? model.vybranePolicko(c) : null;
+		if (vybranePolicko == null) {
+			return;
+		}
+		final VysledekPolicek v = model.vysledekPolicek(c);
+		final int n = v == null ? 0 : v.pocetKandidatu(vybranePolicko);
+		nastavText(policko, vybranePolicko + " ✕");
+		policko.setToolTipText(tipPolicka(vybranePolicko, n, v != null && v.jePlne(vybranePolicko), jenKandidati));
+		chip.setToolTipText(chip.getToolTipText() + "; vybrané políčko " + vybranePolicko);
+		policko.setForeground(jenKandidati ? UIManager.getColor("Button.foreground") : zasedly());
+	}
+
+	/** Tooltip tlačítka vybraného políčka. */
+	static String tipPolicka(final String stitek, final int kandidatu, final boolean plne, final boolean jenKandidati) {
+		final String pocet = plne ? kandidatu + "+ kandidátů" : TextyPopupuPlanovace.kandidatu(kandidatu);
+		final String stav = jenKandidati ? "na mapě jen jeho kandidáti (" + pocet + ")" : "na mapě všechny keše, F4 ukáže jen jeho kandidáty (" + pocet + ")";
+		return "<html>Zrušit výběr políčka " + stitek + " (Esc)<br>" + stav + "</html>";
+	}
+
+	/** Esc zruší výběr políčka, jen když je políčko vybrané a žádný popup nečeká na Esc sám. */
+	private void pridejEsc() {
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "zrusPolickoPlanovace");
+		getActionMap().put("zrusPolickoPlanovace", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isEnabled() {
+				return vybranePolicko != null && !jinyPopupOtevreny.getAsBoolean();
+			}
+
+			@Override
+			public void actionPerformed(final java.awt.event.ActionEvent e) {
+				zrusPolicko();
+			}
+		});
+	}
+
+	/** Je otevřený popup, který Esc zavírá (popup plánovače, popupy stavového řádku); Esc pak výběr políčka nezruší. */
+	public void setJinyPopupOtevreny(final java.util.function.BooleanSupplier jinyPopupOtevreny) {
+		this.jinyPopupOtevreny = jinyPopupOtevreny;
+	}
+
+	/** Barva textu mezi textem a pozadím tlačítka: výběr platí, ale filtr je vypnutý. */
+	private static Color zasedly() {
+		final Color t = UIManager.getColor("Button.foreground");
+		final Color p = UIManager.getColor("Button.background");
+		if (t == null || p == null) {
+			return Color.GRAY;
+		}
+		return new Color((t.getRed() + p.getRed()) / 2, (t.getGreen() + p.getGreen()) / 2, (t.getBlue() + p.getBlue()) / 2);
+	}
+
+	private void zrusPolicko() {
+		final Challenge c = challenge();
+		if (c != null && model != null) {
+			model.setVybranePolicko(c, null);
+		}
 	}
 
 	private void prepniZapnuti() {

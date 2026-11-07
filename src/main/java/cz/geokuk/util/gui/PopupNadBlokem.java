@@ -18,6 +18,8 @@ public class PopupNadBlokem {
 	/** Jak dlouho smí být myš mimo blok i popup, než se popup zavře. */
 	public static final int PRODLEVA_ZAVRENI_MS = 500;
 	private static final int KROK_HLIDANI_MS = 50;
+	/** Otevřené popupy (jen ve vlákně Swingu); jiné akce na Esc tak poznají, že Esc patří popupu. */
+	private static final java.util.Set<PopupNadBlokem> OTEVRENE = java.util.Collections.newSetFromMap(new java.util.WeakHashMap<>());
 
 	private final JComponent blok;
 	private final Runnable predUkazanim;
@@ -68,6 +70,11 @@ public class PopupNadBlokem {
 		});
 	}
 
+	/** Je otevřený některý popup nad blokem stavového řádku (Esc ho zavře). Ve vlákně Swingu. */
+	public static boolean jeNejakyOtevreny() {
+		return !OTEVRENE.isEmpty();
+	}
+
 	public void setPoZavreni(final Runnable poZavreni) {
 		this.poZavreni = poZavreni;
 	}
@@ -109,6 +116,7 @@ public class PopupNadBlokem {
 		}
 		obsahPopupu = obsah;
 		popup.show();
+		OTEVRENE.add(this);
 		// Kotva je dole: po sbalení oddílu klesne horní okraj a myš, která na šipku klikla, by byla nad popupem.
 		predZmensenim = predtim;
 		mimoOd = -1;
@@ -179,6 +187,7 @@ public class PopupNadBlokem {
 		if (popup != null) {
 			popup.hide();
 			popup = null;
+			OTEVRENE.remove(this);
 			obsahPopupu = null;
 			predZmensenim = null;
 		}

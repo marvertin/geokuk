@@ -115,6 +115,7 @@ public class JMainFrame extends JFrame implements SlideListProvider {
 			final cz.geokuk.plugins.challenge.JPruhPlanovace pruhPlanovace = new cz.geokuk.plugins.challenge.JPruhPlanovace();
 			final cz.geokuk.plugins.challenge.JPopupPlanovace popupPlanovace = new cz.geokuk.plugins.challenge.JPopupPlanovace();
 			pruhPlanovace.setNaKlikOdznaku(popupPlanovace::prepni);
+			pruhPlanovace.setJinyPopupOtevreny(() -> popupPlanovace.jeOtevreno() || cz.geokuk.util.gui.PopupNadBlokem.jeNejakyOtevreny());
 			final JKachlovnikPresCele kachlovnik = new JKachlovnikPresCele();
 			final JComponent odkazRady = new JOdkazRadySlide(kachlovnik);
 			final JKachlovnik kachlovnikTras = new JKachlovnikTras();
