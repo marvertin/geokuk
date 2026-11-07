@@ -381,6 +381,155 @@ public class ChallengeModelTest {
 		}
 	}
 
+	private static VysledekSektoru sKandidaty(final int... sektory) {
+		final VysledekSektoru.Kandidati[] k = new VysledekSektoru.Kandidati[360];
+		for (final int s : sektory) {
+			k[s] = new VysledekSektoru.Kandidati(s);
+			k[s].pridej("GC" + s, 100);
+		}
+		return new VysledekSektoru(new BitSet(360), new BitSet(360), k, 0);
+	}
+
+	@Test
+	public void vybranySektorSeVybiraJenZeSektoruSKandidatyAOhlasi() throws Exception {
+		final Challenge c = model.ulozVlastni(vlastni("Moje"));
+		model.aktivuj(c);
+		Assert.assertEquals(-1, model.vybranySektor(c));
+		model.setVybranySektor(c, 10);
+		pockejNaEdt();
+		Assert.assertEquals("bez výsledku nejde", -1, model.vybranySektor(c));
+		model.nastavVysledek(c, sKandidaty(10, 200));
+		pockejNaEdt();
+		udalosti.clear();
+		for (final int neplatny : new int[] { 11, -2, 360 }) {
+			model.setVybranySektor(c, neplatny);
+			pockejNaEdt();
+			Assert.assertEquals(-1, model.vybranySektor(c));
+		}
+		Assert.assertEquals(0, udalosti.size());
+		model.setVybranySektor(c, 10);
+		pockejNaEdt();
+		Assert.assertEquals(10, model.vybranySektor(c));
+		model.setVybranySektor(c, 10);
+		pockejNaEdt();
+		Assert.assertEquals("beze změny se neohlásí", Collections.singletonList(Druh.POLICKO), druhy());
+		model.setVybranySektor(c, -1);
+		pockejNaEdt();
+		Assert.assertEquals(-1, model.vybranySektor(c));
+		Assert.assertEquals(java.util.Arrays.asList(Druh.POLICKO, Druh.POLICKO), druhy());
+	}
+
+	@Test
+	public void vybranySektorLzeVybratNaObouOkrajichKruznice() throws Exception {
+		final Challenge c = model.ulozVlastni(vlastni("Moje"));
+		model.aktivuj(c);
+		final VysledekSektoru.Kandidati[] k = new VysledekSektoru.Kandidati[360];
+		k[0] = new VysledekSektoru.Kandidati(0);
+		k[0].pridej("GC0", 1);
+		k[359] = new VysledekSektoru.Kandidati(359);
+		k[359].pridej("GC359", 1);
+		k[7] = new VysledekSektoru.Kandidati(7);
+		model.nastavVysledek(c, new VysledekSektoru(new BitSet(360), new BitSet(360), k, 0));
+		pockejNaEdt();
+		model.setVybranySektor(c, 0);
+		pockejNaEdt();
+		Assert.assertEquals(0, model.vybranySektor(c));
+		model.setVybranySektor(c, 359);
+		pockejNaEdt();
+		Assert.assertEquals(359, model.vybranySektor(c));
+		model.setVybranySektor(c, 7);
+		pockejNaEdt();
+		Assert.assertEquals("sektor s prázdnými kandidáty nejde", 359, model.vybranySektor(c));
+	}
+
+	@Test
+	public void vybranySektorSeRusiKdyzPrijdeOKandidatyAPriZmeneChallenge() throws Exception {
+		final Challenge c = model.ulozVlastni(vlastni("Moje"));
+		model.aktivuj(c);
+		model.nastavVysledek(c, sKandidaty(10, 200));
+		pockejNaEdt();
+		model.setVybranySektor(c, 200);
+		pockejNaEdt();
+		udalosti.clear();
+		model.nastavVysledek(c, sKandidaty(10, 200, 300));
+		pockejNaEdt();
+		Assert.assertEquals("kandidáty má dál", 200, model.vybranySektor(c));
+		Assert.assertEquals(Collections.singletonList(Druh.VYSLEDEK), druhy());
+		udalosti.clear();
+		model.nastavVysledek(c, sKandidaty(10));
+		pockejNaEdt();
+		Assert.assertEquals("zmizeli kandidáti", -1, model.vybranySektor(c));
+		Assert.assertEquals(java.util.Arrays.asList(Druh.VYSLEDEK, Druh.POLICKO), druhy());
+		model.setVybranySektor(c, 10);
+		pockejNaEdt();
+		final Challenge nova = model.prejmenuj(c, "Jina");
+		Assert.assertEquals("přejmenování výběr přenese", 10, model.vybranySektor(nova));
+		model.deaktivuj(nova);
+		Assert.assertEquals("vypnutí výběr zruší", -1, model.vybranySektor(nova));
+		model.aktivuj(nova);
+		model.nastavVysledek(nova, sKandidaty(10));
+		pockejNaEdt();
+		model.setVybranySektor(nova, 10);
+		pockejNaEdt();
+		model.initAfterInject();
+		Assert.assertEquals("načtení nastavení výběr zruší", -1, model.vybranySektor(nova));
+	}
+
+	@Test
+	public void vybranySektorMaJenAktivni360() throws Exception {
+		final Challenge dt = dtAktivni("DT");
+		model.setVybranySektor(dt, 10);
+		pockejNaEdt();
+		Assert.assertEquals("matice sektory nemá", -1, model.vybranySektor(dt));
+		final Challenge neaktivni = model.ulozVlastni(vlastni("Nea"));
+		model.setVybranySektor(neaktivni, 10);
+		pockejNaEdt();
+		Assert.assertEquals(-1, model.vybranySektor(neaktivni));
+	}
+
+	@Test
+	public void sipkyPosouvajiSektoryPoKruziniAVyberVNemModelu() throws Exception {
+		final Challenge c = model.ulozVlastni(vlastni("Moje"));
+		model.aktivuj(c);
+		Assert.assertEquals("bez výsledku", -1, model.dalsiSektor(c, true));
+		model.nastavVysledek(c, sKandidaty(5, 120, 359));
+		pockejNaEdt();
+		Assert.assertEquals(5, model.dalsiSektor(c, true));
+		pockejNaEdt();
+		Assert.assertEquals(5, model.vybranySektor(c));
+		Assert.assertEquals(120, model.dalsiSektor(c, true));
+		pockejNaEdt();
+		Assert.assertEquals(359, model.dalsiSektor(c, true));
+		pockejNaEdt();
+		Assert.assertEquals("přes konec", 5, model.dalsiSektor(c, true));
+		pockejNaEdt();
+		Assert.assertEquals("zpět přes začátek", 359, model.dalsiSektor(c, false));
+		pockejNaEdt();
+		Assert.assertEquals(359, model.vybranySektor(c));
+		Assert.assertNull("keš se nevybírá", model.vybranyKandidat(c));
+	}
+
+	@Test
+	public void sipkyPosouvajiPolickaMaticePoRadcichAVyberVNemModelu() throws Exception {
+		final Challenge c = dtAktivni("DT");
+		Assert.assertNull("bez výsledku", model.dalsiPolicko(c, true));
+		model.nastavVysledekPolicek(c, new VysledekPolicek(81, java.util.Arrays.asList("D1/T1", "D1/T1,5", "D2/T2"),
+				java.util.Arrays.asList(new KandidatPolicka("A", 50, 14, "D1/T1", "D1/T1", null), new KandidatPolicka("C", 50, 14, "D2/T2", "D2/T2", null))));
+		pockejNaEdt();
+		Assert.assertEquals("D1/T1", model.dalsiPolicko(c, true));
+		pockejNaEdt();
+		Assert.assertEquals("D1/T1", model.vybranePolicko(c));
+		Assert.assertEquals("D1/T1,5 nemá kandidáty", "D2/T2", model.dalsiPolicko(c, true));
+		pockejNaEdt();
+		Assert.assertEquals("přes konec", "D1/T1", model.dalsiPolicko(c, true));
+		pockejNaEdt();
+		Assert.assertEquals("D2/T2", model.dalsiPolicko(c, false));
+		pockejNaEdt();
+		Assert.assertEquals("D2/T2", model.vybranePolicko(c));
+		Assert.assertNull("360° políčka nemá", model.dalsiPolicko(model.ulozVlastni(vlastni("Sektory")), true));
+		Assert.assertEquals("360° matice nemá sektory", -1, model.dalsiSektor(c, true));
+	}
+
 	@Test
 	public void vysledekSeUkladaJenProAktivniAOhlasiVEdt() throws Exception {
 		final Challenge moje = model.ulozVlastni(vlastni("Moje"));

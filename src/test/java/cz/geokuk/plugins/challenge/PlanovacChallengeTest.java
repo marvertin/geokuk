@@ -650,6 +650,25 @@ public class PlanovacChallengeTest {
 	}
 
 	@Test
+	public void predchoziVeVybranemPolickuVraciKandidataStejnehoPolickaAPoZmenePolickaNic() throws Exception {
+		napojNaModel();
+		final Challenge c = dtChallenge("DT");
+		planovac.keseNacteny(dtData());
+		zapni(c);
+		pockej(() -> model.vysledekPolicek(c) != null, "výsledek D/T");
+		final String dvaKandidati = VypocetMatice.stitek(3, 5);
+		javax.swing.SwingUtilities.invokeAndWait(() -> model.setVybranePolicko(c, dvaKandidati));
+		final String prvni = f4(c, false).id();
+		final String druhy = f4(c, false).id();
+		Assert.assertNotEquals("dva různí kandidáti políčka", prvni, druhy);
+		final VybranyKandidat zpet = f4(c, true);
+		Assert.assertNotNull("předchozí ze stejného políčka", zpet);
+		Assert.assertEquals(prvni, zpet.id());
+		javax.swing.SwingUtilities.invokeAndWait(() -> model.setVybranePolicko(c, VypocetMatice.stitek(8, 8)));
+		Assert.assertNull("po změně políčka není kam se vrátit", f4(c, true));
+	}
+
+	@Test
 	public void malyPosunStreduMapyNepocitaZnovuAVelkyAno() throws Exception {
 		napojNaModel();
 		final Challenge dt = dtChallenge("DT");

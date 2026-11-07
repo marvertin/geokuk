@@ -35,6 +35,8 @@ public class ChallengeModel extends Model0 {
 	private final Map<String, VybranyKandidat> kandidati = new ConcurrentHashMap<>();
 	/** Štítek vybraného políčka D/T podle klíče challenge; neukládá se. */
 	private final Map<String, String> policka = new ConcurrentHashMap<>();
+	/** Vybraný sektor 360° podle klíče challenge; neukládá se. */
+	private final Map<String, Integer> sektory = new ConcurrentHashMap<>();
 	private volatile String jenKandidatiPro;
 	/** Klíč challenge zobrazené v pruhu; neukládá se, bez ní nebo při neaktivní je to první aktivní. */
 	private volatile String zobrazena;
@@ -85,6 +87,7 @@ public class ChallengeModel extends Model0 {
 		stavy.clear();
 		kandidati.clear();
 		policka.clear();
+		sektory.clear();
 		jenKandidatiPro = null;
 		fire(new ChallengeZmenenyEvent(ChallengeZmenenyEvent.Druh.NACTENO, null));
 	}
@@ -210,6 +213,7 @@ public class ChallengeModel extends Model0 {
 		stavy.remove(klic(c));
 		kandidati.remove(klic(c));
 		policka.remove(klic(c));
+		sektory.remove(klic(c));
 		uloz();
 		ohlas(ChallengeZmenenyEvent.Druh.DEFINICE, c);
 		return c;
@@ -242,6 +246,7 @@ public class ChallengeModel extends Model0 {
 		prenes(stavy, staryKlic, klic(nova));
 		prenes(kandidati, staryKlic, klic(nova));
 		prenes(policka, staryKlic, klic(nova));
+		prenes(sektory, staryKlic, klic(nova));
 		if (staryKlic.equals(jenKandidatiPro)) {
 			jenKandidatiPro = klic(nova);
 		}
@@ -275,6 +280,7 @@ public class ChallengeModel extends Model0 {
 		stavy.remove(klic(c));
 		kandidati.remove(klic(c));
 		policka.remove(klic(c));
+		sektory.remove(klic(c));
 		if (klic(c).equals(jenKandidatiPro)) {
 			jenKandidatiPro = null;
 			ohlas(ChallengeZmenenyEvent.Druh.JEN_KANDIDATI, null);
@@ -425,8 +431,85 @@ public class ChallengeModel extends Model0 {
 			}
 			stredy.put(klic(c), new double[] { stredLat, stredLon });
 			vysledky.put(klic(c), vysledek);
+			final Integer vybrany = sektory.get(klic(c));
+			final boolean zruseno = vybrany != null && !maKandidaty(vysledek, vybrany);
+			if (zruseno) {
+				sektory.remove(klic(c));
+			}
 			ohlas(ChallengeZmenenyEvent.Druh.VYSLEDEK, c);
+			if (zruseno) {
+				ohlas(ChallengeZmenenyEvent.Druh.POLICKO, c);
+			}
 		});
+	}
+
+	private static boolean maKandidaty(final VysledekSektoru v, final int sektor) {
+		final VysledekSektoru.Kandidati k = v.kandidati(sektor);
+		return k != null && k.pocet() > 0;
+	}
+
+	/** Vybraný sektor 0 až 359 aktivní 360° challenge, nebo -1, když žádný není vybrán. */
+	public int vybranySektor(final Challenge c) {
+		final Integer s = sektory.get(klic(c));
+		return s == null ? PosunVyberu.ZADNY_SEKTOR : s;
+	}
+
+	/**
+	 * Vybere sektor aktivní 360° challenge (-1 = žádný). Vybrat lze jen chybějící sektor, který má podle posledního výsledku kandidáty; jiný se ignoruje. Ohlásí se stejnou
+	 * událostí jako výběr políčka. Z kteréhokoli vlákna.
+	 */
+	public void setVybranySektor(final Challenge c, final int sektor) {
+		naEdt(() -> {
+			if (!seznam.jeAktivni(c.nazev()) || c.typ() != Challenge.Typ.SEKTORY_360) {
+				return;
+			}
+			if (sektor != PosunVyberu.ZADNY_SEKTOR) {
+				final VysledekSektoru v = vysledky.get(klic(c));
+				if (sektor < 0 || sektor > 359 || v == null || !maKandidaty(v, sektor)) {
+					return;
+				}
+			}
+			final Integer stary = sektory.get(klic(c));
+			if (stary == null ? sektor == PosunVyberu.ZADNY_SEKTOR : stary == sektor) {
+				return;
+			}
+			if (sektor == PosunVyberu.ZADNY_SEKTOR) {
+				sektory.remove(klic(c));
+			} else {
+				sektory.put(klic(c), sektor);
+			}
+			ohlas(ChallengeZmenenyEvent.Druh.POLICKO, c);
+		});
+	}
+
+	/**
+	 * Posune výběr u 360° na další (vpřed) nebo předchozí chybějící sektor s kandidáty po kružnici a vrátí ho; -1, když žádný není nebo challenge není 360°. Nevybírá keš
+	 * a nevystřeďuje mapu. Volat ve vlákně Swingu.
+	 */
+	public int dalsiSektor(final Challenge c, final boolean dopredu) {
+		final VysledekSektoru v = c.typ() == Challenge.Typ.SEKTORY_360 ? vysledky.get(klic(c)) : null;
+		if (v == null) {
+			return PosunVyberu.ZADNY_SEKTOR;
+		}
+		final int novy = PosunVyberu.dalsiSektor(v, vybranySektor(c), dopredu);
+		setVybranySektor(c, novy);
+		return novy;
+	}
+
+	/**
+	 * Posune výběr u matice D/T na další (vpřed) nebo předchozí chybějící políčko s kandidáty po řádcích a vrátí jeho štítek; null, když žádné není nebo challenge není matice.
+	 * Nevybírá keš a nevystřeďuje mapu. Volat ve vlákně Swingu.
+	 */
+	public String dalsiPolicko(final Challenge c, final boolean dopredu) {
+		final VysledekPolicek v = c.typ() == Challenge.Typ.DT_MATICE ? vysledkyPolicek.get(klic(c)) : null;
+		if (v == null) {
+			return null;
+		}
+		final String nove = PosunVyberu.dalsiPolicko(v, vybranePolicko(c), dopredu);
+		if (nove != null) {
+			setVybranePolicko(c, nove);
+		}
+		return nove;
 	}
 
 	/**
