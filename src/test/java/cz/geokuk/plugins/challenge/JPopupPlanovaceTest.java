@@ -171,6 +171,7 @@ public class JPopupPlanovaceTest {
 		Assert.assertEquals("jen sektory s kandidáty, po kružnici", java.util.Arrays.asList("47°  1 kandidát  nejbližší 6,2 km od středu", "213°  2 kandidáti  nejbližší 2,8 km od středu"), radky);
 		Assert.assertEquals("+ 1 sektor bez kandidátů", o.bezKandidatu.getText());
 		Assert.assertTrue(o.nejiste.getText(), o.nejiste.getText().contains("U 1 sektoru leží nalezená keš do 0,05° od hranice"));
+		Assert.assertTrue(o.nejiste.isVisible());
 		Assert.assertTrue(o.dalsi.isEnabled());
 		Assert.assertEquals("▶ Další sektor", o.dalsi.getText());
 		Assert.assertEquals(TextyPopupuPlanovace.napovedaSeznamu(Challenge.Typ.SEKTORY_360), o.napoveda.getText());
@@ -299,6 +300,7 @@ public class JPopupPlanovaceTest {
 		final JPopupPlanovace.Obsah o = popup.obsah;
 		Assert.assertEquals("Typ: D/T", o.typ.getText());
 		Assert.assertTrue("bez výsledku průběh", o.souhrn.getText().startsWith("Počítá se"));
+		Assert.assertFalse("bez výsledku matice není (ukázala by vše splněné)", o.matice.isVisible());
 		Assert.assertFalse(o.dalsi.isEnabled());
 		model.nastavVysledekPolicek(c, new VysledekPolicek(81, java.util.Arrays.asList("D1/T1", "D5/T5"), java.util.Collections.emptyList()));
 		SwingUtilities.invokeAndWait(() -> {});
@@ -306,27 +308,77 @@ public class JPopupPlanovaceTest {
 		Assert.assertEquals(81, o.postup.getMaximum());
 		Assert.assertEquals(79, o.postup.getValue());
 		Assert.assertEquals("98 %", o.postup.getString());
-		Assert.assertEquals(TextyPopupuPlanovace.nadpisSeznamu(Challenge.Typ.DT_MATICE), o.nadpisSeznamu.getText());
-		Assert.assertTrue("bez kandidátů žádné řádky", radky(o).isEmpty());
-		Assert.assertEquals("+ 2 políčka bez kandidátů", o.bezKandidatu.getText());
+		Assert.assertTrue("matice místo seznamu", o.matice.isVisible());
+		Assert.assertTrue(o.legenda.isVisible());
+		Assert.assertEquals(TextyPopupuPlanovace.vybranePolicko(null, 0, false, false), o.nadpisSeznamu.getText());
+		Assert.assertEquals(JMaticeDT.Stav.BEZ_KANDIDATU, o.matice.stav("D5/T5"));
+		Assert.assertEquals(JMaticeDT.Stav.SPLNENO, o.matice.stav("D2/T2"));
 		Assert.assertFalse("střed je jen u 360°", o.stred.isVisible());
-		Assert.assertEquals(" ", o.nejiste.getText());
+		Assert.assertFalse("prázdné upozornění nezabírá místo", o.nejiste.isVisible());
+		Assert.assertFalse(o.omezeniStitku.isVisible());
 		Assert.assertEquals("▶ Další políčko", o.dalsi.getText());
 		Assert.assertFalse("bez kandidátů není kam jít", o.dalsi.isEnabled());
-		model.nastavVysledekPolicek(c, new VysledekPolicek(81, java.util.Arrays.asList("D1/T1", "D5/T5"), java.util.Collections.singletonList(new KandidatPolicka("GC5", 50, 14, "D5/T5", "D5/T5", null))));
+		Assert.assertFalse(o.vsechnaPolicka.isVisible());
+		model.nastavVysledekPolicek(c, new VysledekPolicek(81, java.util.Arrays.asList("D1/T1", "D5/T5"), java.util.Collections.singletonList(new KandidatPolicka("GC5", 50, 14, "D5/T5", "D5/T5", null)), 50));
 		SwingUtilities.invokeAndWait(() -> {});
 		Assert.assertTrue(o.dalsi.isEnabled());
+		Assert.assertEquals("1", o.matice.pocet("D5/T5"));
 		o.dalsi.doClick();
 		SwingUtilities.invokeAndWait(() -> {});
 		Assert.assertEquals("▶ vybere políčko s kandidáty", "D5/T5", model.vybranePolicko(c));
-		Assert.assertEquals(java.util.Collections.singletonList("D5/T5"), radky(o));
-		Assert.assertEquals("+ 1 políčko bez kandidátů", o.bezKandidatu.getText());
-		Assert.assertEquals("vybrané políčko je vybraný řádek", 0, o.seznam.getSelectedIndex());
+		Assert.assertEquals("D5/T5", o.matice.vybrane());
+		Assert.assertNull("▶ filtr nezapíná", model.jenKandidatiPro());
+		Assert.assertEquals("Vybrané políčko: D5/T5 – 1 kandidát, na mapě všechny keše (F4)", o.nadpisSeznamu.getText());
+		Assert.assertTrue(o.vsechnaPolicka.isVisible());
+		o.vsechnaPolicka.doClick();
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertNull("✕ Všechna políčka zruší výběr", model.vybranePolicko(c));
+		Assert.assertNull(o.matice.vybrane());
 		model.nastavVysledekPolicek(c, new VysledekPolicek(81, java.util.Collections.emptyList(), java.util.Collections.emptyList()));
 		SwingUtilities.invokeAndWait(() -> {});
 		Assert.assertEquals("Splněno 81 z 81 (100 %), chybí 0", o.souhrn.getText());
 		Assert.assertFalse("splněná matice nemá kam dál", o.dalsi.isEnabled());
-		Assert.assertEquals(0, o.radky.size());
+	}
+
+	/** Výběr políčka u 360° nic nezmění: políčka má jen matice D/T. */
+	@Test
+	public void vyberPolickaU360NicNedela() throws Exception {
+		priprav();
+		popup.prepni();
+		vysledek(TextyPopupuPlanovaceTest.vysledek(new int[] { 47 }, new int[0], new double[][] { { 47, 6200 } }));
+		SwingUtilities.invokeAndWait(() -> popup.vyberPolicko("D1/T1"));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertNull(model.vybranePolicko(aktivni360()));
+		Assert.assertNull("filtr se nezapne", model.jenKandidatiPro());
+	}
+
+	/** Klik na políčko matice ho vybere a zapne „jen kandidáti“; F4 pak filtr vypne a výběr nechá; druhý klik výběr zruší. */
+	@Test
+	public void klikNaPolickoMaticeVyberePolickoAZapneFiltr() throws Exception {
+		priprav();
+		final Challenge c = aktivujPolicka(Challenge.Typ.DT_MATICE);
+		popup.prepni();
+		final JPopupPlanovace.Obsah o = popup.obsah;
+		final java.util.List<KandidatPolicka> k = new java.util.ArrayList<>();
+		for (int i = 0; i < 50; i++) {
+			k.add(new KandidatPolicka("GC" + i, 50, 14, "D3/T4", "D3/T4", null));
+		}
+		model.nastavVysledekPolicek(c, new VysledekPolicek(81, java.util.Arrays.asList("D3/T4"), k, 50));
+		SwingUtilities.invokeAndWait(() -> {});
+		SwingUtilities.invokeAndWait(() -> popup.vyberPolicko("D3/T4"));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("D3/T4", model.vybranePolicko(c));
+		Assert.assertEquals("klik zapne jen kandidáty", c, model.jenKandidatiPro());
+		Assert.assertEquals("plné políčko", "Vybrané políčko: D3/T4 – 50+ kandidátů", o.nadpisSeznamu.getText());
+		Assert.assertTrue(o.kandidati.isSelected());
+		SwingUtilities.invokeAndWait(() -> model.setJenKandidatiPro(null));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("F4 výběr políčka nechá", "D3/T4", model.vybranePolicko(c));
+		Assert.assertEquals("Vybrané políčko: D3/T4 – 50+ kandidátů, na mapě všechny keše (F4)", o.nadpisSeznamu.getText());
+		SwingUtilities.invokeAndWait(() -> popup.vyberPolicko(null));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertNull(model.vybranePolicko(c));
+		Assert.assertEquals(TextyPopupuPlanovace.vybranePolicko(null, 0, false, false), o.nadpisSeznamu.getText());
 	}
 
 	@Test
@@ -404,12 +456,12 @@ public class JPopupPlanovaceTest {
 		vysledek(TextyPopupuPlanovaceTest.vysledek(new int[] { 47, 213, 305 }, new int[0], new double[][] { { 213, 2800, 3000 }, { 47, 6200 } }));
 		final Challenge c = aktivni360();
 		Assert.assertEquals(-1, o.seznam.getSelectedIndex());
-		popup.klikNaRadek(o.polozky.get(1));
+		SwingUtilities.invokeAndWait(() -> popup.klikNaRadek(o.polozky.get(1)));
 		SwingUtilities.invokeAndWait(() -> {});
 		Assert.assertEquals(213, model.vybranySektor(c));
 		Assert.assertEquals(1, o.seznam.getSelectedIndex());
 		Assert.assertNull("keš se nevybírá", model.vybranyKandidat(c));
-		popup.klikNaRadek(o.polozky.get(1));
+		SwingUtilities.invokeAndWait(() -> popup.klikNaRadek(o.polozky.get(1)));
 		SwingUtilities.invokeAndWait(() -> {});
 		Assert.assertEquals("druhý klik výběr zruší", PosunVyberu.ZADNY_SEKTOR, model.vybranySektor(c));
 		Assert.assertEquals(-1, o.seznam.getSelectedIndex());

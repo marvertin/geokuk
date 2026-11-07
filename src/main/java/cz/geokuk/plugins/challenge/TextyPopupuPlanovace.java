@@ -126,11 +126,24 @@ final class TextyPopupuPlanovace {
 		return "Chybějící " + co + ", které žádná nenalezená keš na mapě nedoplní. Seznam i ◀ ▶ je přeskakují.";
 	}
 
+	/** Řádek nad maticí D/T: vybrané políčko s počtem kandidátů, nebo výzva ke kliknutí. */
+	static String vybranePolicko(final String stitek, final int kandidatu, final boolean plne, final boolean jenKandidati) {
+		if (stitek == null) {
+			return "Obtížnost × terén – klik na políčko s kandidáty nechá na mapě jen je:";
+		}
+		final String pocet = plne ? kandidatu + "+ kandidátů" : kandidatu(kandidatu);
+		return "Vybrané políčko: " + stitek + " – " + pocet + (jenKandidati ? "" : ", na mapě všechny keše (F4)");
+	}
+
+	/** Legenda pod maticí D/T. */
+	static final String LEGENDA_MATICE = "✓ splněno · číslo = počet kandidátů · – chybí, bez kandidátů";
+
 	/** Nápověda pod seznamem chybějících. */
 	static String napovedaSeznamu(final Challenge.Typ typ) {
-		final String co = typ == Challenge.Typ.DT_MATICE ? "políčko" : "sektor";
-		final String skok = typ == Challenge.Typ.DT_MATICE ? "další keš ve směru" : "keš ve směru a její sektor";
-		return "Řádek: vybrat " + co + " · ◀ ▶ předchozí / další " + co + " · Shift+šipky: " + skok;
+		if (typ == Challenge.Typ.DT_MATICE) {
+			return "Políčko: na mapě jen jeho kandidáti · ◀ ▶ předchozí / další políčko · Shift+šipky: další keš ve směru";
+		}
+		return "Řádek: vybrat sektor · ◀ ▶ předchozí / další sektor · Shift+šipky: keš ve směru a její sektor";
 	}
 
 	/** Tooltip řádku seznamu: klik vybere, druhý klik na vybraný výběr zruší. */
