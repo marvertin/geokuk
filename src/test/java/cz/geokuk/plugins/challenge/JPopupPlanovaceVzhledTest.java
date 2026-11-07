@@ -46,7 +46,7 @@ public class JPopupPlanovaceVzhledTest {
 			chybi[i] = 200 + i;
 		}
 		o.nastav(Sablony.cesko360(), TextyPopupuPlanovaceTest.vysledek(chybi, new int[] { 200, 201, 202 }, new double[][] { { 213, 2800, 4000, 5000, 6000, 7000 }, { 214, 3400 } }),
-				StavPredpoctu.NEBEZI, false);
+				StavPredpoctu.NEBEZI, false, PosunVyberu.ZADNY_SEKTOR);
 		o.setSize(o.getPreferredSize());
 		o.doLayout();
 		rozloz(o);

@@ -1,20 +1,18 @@
 package cz.geokuk.plugins.challenge;
 
 import java.awt.event.ActionEvent;
-import java.util.function.Supplier;
 
 import cz.geokuk.framework.Action0;
 
-/** Předchozí chybějící. */
+/** Předchozí sektor nebo políčko zobrazené challenge (◀ ▶); název a popis podle typu challenge. */
 public class ChallengePredchoziAction extends Action0 {
 
 	private static final long serialVersionUID = 1L;
 	private transient ChallengeModel model;
-	private transient Supplier<PlanovacChallenge> planovac = () -> null;
 
 	public ChallengePredchoziAction() {
-		super("Předchozí chybějící");
-		putValue(SHORT_DESCRIPTION, "Vrátí se k předchozí vybrané keši.");
+		super(ChallengeAkce.nazevPosunu(Challenge.Typ.SEKTORY_360, false));
+		putValue(SHORT_DESCRIPTION, ChallengeAkce.tipPosunu(Challenge.Typ.SEKTORY_360, false));
 		setEnabled(false);
 	}
 
@@ -22,21 +20,18 @@ public class ChallengePredchoziAction extends Action0 {
 		this.model = model;
 	}
 
-	public void inject(final PlanovacChallengeSluzba sluzba) {
-		planovac = sluzba::planovac;
-	}
-
 	public void onEvent(final ChallengeZmenenyEvent event) {
-		setEnabled(ChallengeAkce.dostupne(event.getModel()));
-	}
-
-	/** Plánovač pro testy, kde není celý program. */
-	void setPlanovac(final Supplier<PlanovacChallenge> planovac) {
-		this.planovac = planovac;
+		final ChallengeModel m = event.getModel();
+		setEnabled(ChallengeAkce.dostupne(m));
+		final Challenge c = m == null ? null : m.zobrazena();
+		if (c != null) {
+			putValue(NAME, ChallengeAkce.nazevPosunu(c.typ(), false));
+			putValue(SHORT_DESCRIPTION, ChallengeAkce.tipPosunu(c.typ(), false));
+		}
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		ChallengeAkce.prejdi(model, planovac.get(), false);
+		ChallengeAkce.posun(model, false);
 	}
 }

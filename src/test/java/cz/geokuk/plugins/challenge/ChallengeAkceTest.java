@@ -175,15 +175,100 @@ public class ChallengeAkceTest {
 		SwingUtilities.invokeAndWait(() -> {});
 	}
 
+	/** Chybí 10°, 20° a 30°; kandidáty mají 10° a 20°. */
+	private void pripravSektory(final Challenge c) throws Exception {
+		model.aktivuj(c);
+		model.setZapnuto(true);
+		model.nastavVysledek(c, TextyPopupuPlanovaceTest.vysledek(new int[] { 10, 20, 30 }, new int[0], new double[][] { { 10, 1000 }, { 20, 2000 } }));
+		SwingUtilities.invokeAndWait(() -> {});
+	}
+
 	@Test
-	public void prejdiVolaPlanovacSHlavniChallengeAVystredi() throws Exception {
-		priravVysledek();
+	public void posunJdePoSektorechSKandidatyBezVyberuKeseABezVystredeni() throws Exception {
+		pripravSektory(Sablony.cesko360());
+		Assert.assertEquals("10°", posun(true));
+		Assert.assertEquals("20°", posun(true));
+		Assert.assertEquals("30° nemá kandidáty, kružnice se uzavře", "10°", posun(true));
+		Assert.assertEquals("20°", posun(false));
+		Assert.assertEquals(20, model.vybranySektor(Sablony.cesko360()));
+		Assert.assertNull("keš se nevybírá", model.vybranyKandidat(Sablony.cesko360()));
+		Assert.assertTrue("mapa se nevystřeďuje", vystredeno.isEmpty());
+	}
+
+	/** Posun ve vlákně Swingu jako z tlačítka nebo menu. */
+	private String posun(final boolean dopredu) throws Exception {
+		final String[] r = new String[1];
+		SwingUtilities.invokeAndWait(() -> r[0] = ChallengeAkce.posun(model, dopredu));
+		return r[0];
+	}
+
+	/** Kandidáti v 10° (GC10, sever od středu 50/14) a 20° (GC20); oba sektory chybí a mají kandidáty. */
+	private void pripravSektorySKesemi() throws Exception {
+		model.aktivuj(Sablony.cesko360());
+		model.setZapnuto(true);
+		final java.util.BitSet obsazene = new java.util.BitSet(360);
+		obsazene.set(0, 360);
+		final VysledekSektoru.Kandidati[] k = new VysledekSektoru.Kandidati[360];
+		for (final int s : new int[] { 10, 20 }) {
+			obsazene.clear(s);
+			k[s] = new VysledekSektoru.Kandidati(s);
+			k[s].pridej("GC" + s, 1000 * s);
+		}
+		final java.util.List<VysledekSektoru.KandidatKes> kese = java.util.Arrays.asList(new VysledekSektoru.KandidatKes("GC10", 50.01, 14.0, 10),
+				new VysledekSektoru.KandidatKes("GC20", 49.99, 14.0, 20));
+		model.nastavVysledek(Sablony.cesko360(), new VysledekSektoru(obsazene, new java.util.BitSet(360), k, 358, kese));
+		SwingUtilities.invokeAndWait(() -> {});
+	}
+
+	@Test
+	public void skokVeSmeruVybereIJehoSektorAPosunKesNecha() throws Exception {
+		pripravSektorySKesemi();
 		final PlanovacChallenge p = planovac();
-		Assert.assertEquals("GC1", ChallengeAkce.prejdi(model, p, true).id());
-		Assert.assertEquals("GC2", ChallengeAkce.prejdi(model, p, true).id());
-		Assert.assertEquals(2, vystredeno.size());
-		Assert.assertEquals("GC1", ChallengeAkce.prejdi(model, p, false).id());
-		Assert.assertEquals("GC1", vystredeno.get(2).id());
+		final VybranyKandidat[] k = new VybranyKandidat[1];
+		SwingUtilities.invokeAndWait(() -> k[0] = ChallengeAkce.skoc(model, p, SmerSkoku.SEVER));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("GC10", k[0].id());
+		Assert.assertEquals("Shift+šipka vybere i sektor keše", 10, model.vybranySektor(Sablony.cesko360()));
+		Assert.assertEquals("▶ jde z vybraného sektoru dál", "20°", posun(true));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("◀ ▶ vybranou keš nechají", "GC10", model.vybranyKandidat(Sablony.cesko360()).id());
+		Assert.assertEquals(20, model.vybranySektor(Sablony.cesko360()));
+	}
+
+	/** Kandidát v sektoru 0° (přímo na sever): Shift+šipka vybere i sektor 0. */
+	@Test
+	public void skokNaKandidataVSektoruNulaVybereSektorNula() throws Exception {
+		model.aktivuj(Sablony.cesko360());
+		model.setZapnuto(true);
+		final java.util.BitSet obsazene = new java.util.BitSet(360);
+		obsazene.set(1, 360);
+		final VysledekSektoru.Kandidati[] k = new VysledekSektoru.Kandidati[360];
+		k[0] = new VysledekSektoru.Kandidati(0);
+		k[0].pridej("GC0", 1000);
+		model.nastavVysledek(Sablony.cesko360(),
+				new VysledekSektoru(obsazene, new java.util.BitSet(360), k, 359, java.util.Collections.singletonList(new VysledekSektoru.KandidatKes("GC0", 50.01, 14.0, 0))));
+		SwingUtilities.invokeAndWait(() -> {});
+		final PlanovacChallenge p = planovac();
+		final VybranyKandidat[] v = new VybranyKandidat[1];
+		SwingUtilities.invokeAndWait(() -> v[0] = ChallengeAkce.skoc(model, p, SmerSkoku.SEVER));
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("GC0", v[0].id());
+		Assert.assertEquals(0, model.vybranySektor(Sablony.cesko360()));
+	}
+
+	@Test
+	public void nazevATooltipPosunuPodleTypu() {
+		Assert.assertEquals("Další sektor", ChallengeAkce.nazevPosunu(Challenge.Typ.SEKTORY_360, true));
+		Assert.assertEquals("Předchozí políčko", ChallengeAkce.nazevPosunu(Challenge.Typ.DT_MATICE, false));
+		Assert.assertEquals("Další sektor s kandidáty po kružnici; Shift+šipky skočí na kandidáta ve směru šipky", ChallengeAkce.tipPosunu(Challenge.Typ.SEKTORY_360, true));
+		Assert.assertEquals("Předchozí políčko s kandidáty po řádcích matice; Shift+šipky skočí na kandidáta ve směru šipky", ChallengeAkce.tipPosunu(Challenge.Typ.DT_MATICE, false));
+		Assert.assertEquals("Další sektor", dalsi.getValue(Action.NAME));
+		final Challenge dt = model.ulozVlastni(new Challenge("DT", Challenge.Typ.DT_MATICE, Challenge.Stred.domov(), Challenge.OblastDef.zadna(), Challenge.ZdrojPravidel.PGC));
+		model.aktivuj(dt);
+		model.setZapnuto(true);
+		Assert.assertEquals("Další políčko", dalsi.getValue(Action.NAME));
+		Assert.assertEquals("Předchozí políčko", predchozi.getValue(Action.NAME));
+		Assert.assertEquals(ChallengeAkce.tipPosunu(Challenge.Typ.DT_MATICE, true), dalsi.getValue(Action.SHORT_DESCRIPTION));
 	}
 
 	@Test
@@ -214,35 +299,26 @@ public class ChallengeAkceTest {
 	}
 
 	@Test
-	public void akceVolajiPlanovacPriStisku() throws Exception {
-		priravVysledek();
-		final PlanovacChallenge p = planovac();
-		dalsi.setPlanovac(() -> p);
-		predchozi.setPlanovac(() -> p);
-		dalsi.actionPerformed(new ActionEvent(this, 0, ""));
-		dalsi.actionPerformed(new ActionEvent(this, 0, ""));
-		Assert.assertEquals(java.util.Arrays.asList("GC1", "GC2"), ids());
-		predchozi.actionPerformed(new ActionEvent(this, 0, ""));
-		Assert.assertEquals(java.util.Arrays.asList("GC1", "GC2", "GC1"), ids());
-	}
-
-	private java.util.List<String> ids() {
-		final java.util.List<String> l = new java.util.ArrayList<>();
-		for (final VybranyKandidat k : vystredeno) {
-			l.add(k.id());
-		}
-		return l;
+	public void akcePosunouVyberPriStisku() throws Exception {
+		pripravSektory(Sablony.cesko360());
+		SwingUtilities.invokeAndWait(() -> {
+			dalsi.actionPerformed(new ActionEvent(this, 0, ""));
+			dalsi.actionPerformed(new ActionEvent(this, 0, ""));
+		});
+		Assert.assertEquals(20, model.vybranySektor(Sablony.cesko360()));
+		SwingUtilities.invokeAndWait(() -> predchozi.actionPerformed(new ActionEvent(this, 0, "")));
+		Assert.assertEquals(10, model.vybranySektor(Sablony.cesko360()));
 	}
 
 	@Test
 	public void bezChallengeBezPlanovaceNeboBezModeluNicNeudelaANespadne() throws Exception {
-		Assert.assertNull("bez aktivní challenge", ChallengeAkce.prejdi(model, planovac(), true));
+		Assert.assertNull("bez aktivní challenge", posun(true));
+		Assert.assertNull("bez modelu", ChallengeAkce.posun(null, false));
 		priravVysledek();
-		Assert.assertNull("bez plánovače", ChallengeAkce.prejdi(model, null, true));
-		Assert.assertNull("bez modelu", ChallengeAkce.prejdi(null, planovac(), false));
+		Assert.assertNull("bez sektorů s kandidáty není kam", posun(true));
 		dalsi.actionPerformed(new ActionEvent(this, 0, ""));
 		predchozi.actionPerformed(new ActionEvent(this, 0, ""));
-		Assert.assertTrue("akce bez plánovače nic nevystředí", vystredeno.isEmpty());
+		Assert.assertTrue("nic se nevystředí", vystredeno.isEmpty());
 	}
 
 	@Test
@@ -281,13 +357,9 @@ public class ChallengeAkceTest {
 		model.aktivuj(Sablony.cesko360());
 		model.aktivuj(Sablony.praha360());
 		model.setZapnuto(true);
-		final java.util.List<VysledekSektoru.KandidatKes> kandidati2 = new java.util.ArrayList<>();
-		kandidati2.add(new VysledekSektoru.KandidatKes("GC9", 50.01, 14.0, 10));
-		model.nastavVysledek(Sablony.praha360(), new VysledekSektoru(new java.util.BitSet(360), new java.util.BitSet(360), new VysledekSektoru.Kandidati[360], 0, kandidati2));
+		model.nastavVysledek(Sablony.praha360(), TextyPopupuPlanovaceTest.vysledek(new int[] { 7 }, new int[0], new double[][] { { 7, 500 } }));
 		SwingUtilities.invokeAndWait(() -> {});
-		final PlanovacChallenge p = planovac();
-		Assert.assertEquals("další jde na aktivní challenge", "GC9", ChallengeAkce.prejdi(model, p, true).id());
-		// Vybraného kandidáta zapíše plánovač ve vlákně Swingu; model se dál mění až po něm.
+		Assert.assertEquals("další jde na aktivní challenge", "7°", posun(true));
 		SwingUtilities.invokeAndWait(() -> {});
 		Assert.assertFalse("filtr ještě není zapnutý", kandidati.isSelected());
 		model.setJenKandidatiPro(Sablony.praha360());

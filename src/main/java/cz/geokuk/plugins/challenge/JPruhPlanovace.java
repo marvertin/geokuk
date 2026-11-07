@@ -34,8 +34,6 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	private static final int SIRKA_KANDIDATU = 124, SIRKA_SEKTORU = 88, SIRKA_STITKU = 72, SIRKA_NASTAVENI = 116;
 	private static final Color CERVENA = new Color(200, 40, 40);
 	private static final javax.swing.border.Border RAMECEK = BorderFactory.createEtchedBorder();
-	static final String TIP_ZPET = "Předchozí chybějící; Shift+šipky skočí na kandidáta ve směru šipky";
-	static final String TIP_DAL = "Další chybějící; Shift+šipky skočí na kandidáta ve směru šipky";
 	/** Prodleva, po které se výběr challenge otevře při najetí myší na jeho tlačítko. */
 	static final int PRODLEVA_VYBERU_MS = 500;
 
@@ -66,7 +64,6 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	private final transient JButton nastaveni = new JButton(new Ozubene());
 	private final transient Timer prodlevaVyberu = new Timer(PRODLEVA_VYBERU_MS, e -> otevriVyber());
 	private transient ChallengeModel model;
-	private transient PlanovacChallengeSluzba sluzba;
 	private transient Runnable naKlikOdznaku;
 	private transient Runnable naNastaveni;
 	private transient JPopupMenu vyber;
@@ -78,8 +75,8 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 		setOpaque(false);
 		setLayout(null);
 		uchyt.setToolTipText(TIP_UCHYTU_ZAPNOUT);
-		zpet.setToolTipText(TIP_ZPET);
-		dal.setToolTipText(TIP_DAL);
+		zpet.setToolTipText(ChallengeAkce.tipPosunu(Challenge.Typ.SEKTORY_360, false));
+		dal.setToolTipText(ChallengeAkce.tipPosunu(Challenge.Typ.SEKTORY_360, true));
 		odznak.setToolTipText(popisChybejicich(Challenge.Typ.SEKTORY_360));
 		kandidati.setToolTipText(popisKandidatu(Challenge.Typ.SEKTORY_360));
 		sektory.setToolTipText("Sektory na mapě: prstenec, klín chybějícího sektoru a čára ke kandidátovi");
@@ -135,10 +132,6 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 
 	public void inject(final ChallengeModel model) {
 		this.model = model;
-	}
-
-	public void inject(final PlanovacChallengeSluzba sluzba) {
-		this.sluzba = sluzba;
 	}
 
 	/** Nastavení otevírá dialog plánovače přes jeho akci. */
@@ -388,6 +381,8 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 			odznak.nastav("chybí " + (stav.badge() < 0 ? "…" : Integer.toString(stav.badge())));
 			odznak.setToolTipText(stav.badge() < 0 ? popisChybejicich(stav.typ()) + " – počítá se" : tipOdznaku(stav.typ(), stav.badge(), celkem(stav.challenge())));
 			kandidati.setToolTipText(popisKandidatu(stav.typ()) + " (F4)");
+			zpet.setToolTipText(ChallengeAkce.tipPosunu(stav.typ(), false));
+			dal.setToolTipText(ChallengeAkce.tipPosunu(stav.typ(), true));
 		} else {
 			odznak.nastav("–");
 		}
@@ -430,7 +425,7 @@ public class JPruhPlanovace extends JSlide0 implements AfterInjectInit {
 	}
 
 	private void prejdi(final boolean dopredu) {
-		ChallengeAkce.prejdi(model, sluzba == null ? null : sluzba.planovac(), dopredu);
+		ChallengeAkce.posun(model, dopredu);
 	}
 
 	private void otevriNastaveni() {
