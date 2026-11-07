@@ -172,7 +172,7 @@ public class JPlanovacVrstvyTest {
 	}
 
 	@Test
-	public void kandidatiMajiKrouzekAStitekBezPrekryvuANejvicDveStaZnacek() throws Exception {
+	public void kandidatiMajiNejvicDveStaStitkuAPocetyVeVyrezuSeHlasiModelu() throws Exception {
 		final List<VysledekSektoru.KandidatKes> k = new ArrayList<>();
 		for (int i = 0; i < 500; i++) {
 			k.add(new VysledekSektoru.KandidatKes("GC" + i, 50.0 + (i % 25 - 12) * 0.0002, 14.0 + (i / 25 - 10) * 0.0003, 150 + i % 100, 1000, false));
@@ -180,13 +180,51 @@ public class JPlanovacVrstvyTest {
 		zobraz(new VysledekSektoru(obsazene(0, 100), new BitSet(360), new VysledekSektoru.Kandidati[360], 100, k), 50.0, 14.0);
 		nakresli(nad, mapa(50.0, 14.0, 15));
 		Assert.assertEquals(TvarPlanovace.NEJVIC_ZNACEK, nad.posledniZnacek());
-		final List<Rectangle> r = nad.obdelnikyStitku();
-		Assert.assertTrue("štítky se kreslí", r.size() > 20);
-		for (int i = 0; i < r.size(); i++) {
-			for (int j = i + 1; j < r.size(); j++) {
-				Assert.assertFalse("štítky se nepřekrývají: " + r.get(i) + " " + r.get(j), r.get(i).intersects(r.get(j)));
-			}
+		Assert.assertEquals(TvarPlanovace.NEJVIC_ZNACEK, nad.obdelnikyStitkuKandidatu().size());
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertTrue("model ví, kolik kandidátů je ve výřezu: " + model.kandidatuVeVyrezu(), model.kandidatuVeVyrezu() > TvarPlanovace.NEJVIC_ZNACEK);
+	}
+
+	@Test
+	public void stitekKandidataStojiPevneVpravoOdIkonyBezVyhybaniStitkum() throws Exception {
+		final List<VysledekSektoru.KandidatKes> k = new ArrayList<>();
+		k.add(new VysledekSektoru.KandidatKes("GC1", 50.0, 14.0, 150, 1000, false));
+		k.add(new VysledekSektoru.KandidatKes("GC2", 50.0, 14.0, 151, 1000, false));
+		zobraz(new VysledekSektoru(obsazene(0, 100), new BitSet(360), new VysledekSektoru.Kandidati[360], 100, k), 50.01, 14.0);
+		final Coord c = mapa(50.0, 14.0, 16);
+		nakresli(nad, c);
+		final java.awt.Point p = PixelyMapy.transform(c, PixelyMapy.mou(50.0, 14.0), new java.awt.Point());
+		final List<Rectangle> r = nad.obdelnikyStitkuKandidatu();
+		Assert.assertEquals(2, r.size());
+		for (final Rectangle q : r) {
+			Assert.assertEquals("těsně vpravo od ikony (polovina neznámé ikony 8 + mezera 2)", p.x + 8 + 2, q.x);
+			Assert.assertEquals("svisle na středu ikony", p.y, q.y + q.height / 2, 1);
 		}
+		Assert.assertEquals("štítky na sebe leží (x)", r.get(0).x, r.get(1).x);
+		Assert.assertEquals("štítky na sebe leží (y)", r.get(0).y, r.get(1).y);
+	}
+
+	@Test
+	public void odstupStitkuSeSkalujeSeZvetsenimIkon() throws Exception {
+		final List<VysledekSektoru.KandidatKes> k = new ArrayList<>();
+		k.add(new VysledekSektoru.KandidatKes("GC1", 50.0, 14.0, 150, 1000, false));
+		zobraz(new VysledekSektoru(obsazene(0, 100), new BitSet(360), new VysledekSektoru.Kandidati[360], 100, k), 50.01, 14.0);
+		final Coord c = mapa(50.0, 14.0, 16);
+		final java.awt.Point p = PixelyMapy.transform(c, PixelyMapy.mou(50.0, 14.0), new java.awt.Point());
+		nad.onEvent(new cz.geokuk.plugins.kesoid.mvc.ZvetseniIkonEvent(200));
+		nakresli(nad, c);
+		Assert.assertEquals("při dvojnásobných ikonách: polovina ikony 16 + mezera 4", p.x + 16 + 4, nad.obdelnikyStitkuKandidatu().get(0).x);
+	}
+
+	@Test
+	public void stitkyStreduAVybranehoSektoruLeziNadStitkyKandidatu() throws Exception {
+		final List<VysledekSektoru.KandidatKes> k = new ArrayList<>();
+		k.add(new VysledekSektoru.KandidatKes("GC1", 50.0, 14.0, 150, 1000, false));
+		zobraz(new VysledekSektoru(obsazene(0, 100), new BitSet(360), new VysledekSektoru.Kandidati[360], 100, k), 50.0, 14.0);
+		final Coord c = mapa(50.0, 14.0, 16);
+		final BufferedImage img = nakresli(nad, c);
+		final java.awt.Point s = PixelyMapy.transform(c, PixelyMapy.mou(50.0, 14.0), new java.awt.Point());
+		Assert.assertEquals("v průniku štítku kandidáta a štítku středu je vidět štítek středu (kreslí se nad ním)", AkcentPlanovace.pozadiStitku().getRGB(), img.getRGB(s.x + 15, s.y - 5));
 	}
 
 	@Test
@@ -482,6 +520,47 @@ public class JPlanovacVrstvyTest {
 			}
 		}
 		return false;
+	}
+
+	@Test
+	public void stitekKandidataMaVyplnAkcentuBezKrouzkuAHalaNadIkonou() throws Exception {
+		final List<VysledekSektoru.KandidatKes> k = new ArrayList<>();
+		k.add(new VysledekSektoru.KandidatKes("GC1", 50.0, 14.0, 150, 1000, false));
+		zobraz(new VysledekSektoru(obsazene(0, 100), new BitSet(360), new VysledekSektoru.Kandidati[360], 100, k), 50.01, 14.0);
+		final Coord c = mapa(50.0, 14.0, 16);
+		final BufferedImage img = nakresli(nad, c);
+		final java.awt.Point p = PixelyMapy.transform(c, PixelyMapy.mou(50.0, 14.0), new java.awt.Point());
+		for (int dy = -6; dy <= 6; dy++) {
+			for (int dx = -6; dx <= 6; dx++) {
+				Assert.assertEquals("nad místem keše nic není (kroužek ani halo): " + dx + "," + dy, 0, img.getRGB(p.x + dx, p.y + dy) >>> 24);
+			}
+		}
+		Assert.assertEquals(1, nad.obdelnikyStitkuKandidatu().size());
+		final Rectangle stitek = nad.obdelnikyStitkuKandidatu().get(0);
+		Assert.assertEquals("výplň štítku je akcent", AkcentPlanovace.barva().getRGB(), img.getRGB(stitek.x + 1, stitek.y + stitek.height / 2));
+	}
+
+	@Test
+	public void bilyTextNaZvyraznenemStitkuMaVeTrechTematechKontrast() {
+		final javax.swing.plaf.metal.MetalTheme[] temata = { new DefaultMetalTheme(), new OceanTheme(), new cz.geokuk.core.lookandfeel.CharcoalTheme() };
+		final javax.swing.LookAndFeel puvodni = UIManager.getLookAndFeel();
+		final javax.swing.plaf.metal.MetalTheme puvodniTema = MetalLookAndFeel.getCurrentTheme();
+		try {
+			for (final javax.swing.plaf.metal.MetalTheme t : temata) {
+				MetalLookAndFeel.setCurrentTheme(t);
+				UIManager.setLookAndFeel(new MetalLookAndFeel());
+				Assert.assertTrue(t.getName() + " bílý text na akcentu " + kontrast(Color.WHITE, AkcentPlanovace.barva()), kontrast(Color.WHITE, AkcentPlanovace.barva()) >= 4.5);
+			}
+		} catch (final Exception e) {
+			throw new AssertionError(e);
+		} finally {
+			MetalLookAndFeel.setCurrentTheme(puvodniTema);
+			try {
+				UIManager.setLookAndFeel(puvodni);
+			} catch (final Exception e) {
+				// bez vlivu na test
+			}
+		}
 	}
 
 	@Test

@@ -178,6 +178,20 @@ public class JPopupPlanovaceTest {
 	}
 
 	@Test
+	public void popupPiseOStropuStitkuNaMapeJenKdyzSeUplatni() throws Exception {
+		priprav();
+		popup.prepni();
+		final JPopupPlanovace.Obsah o = popup.obsah;
+		Assert.assertEquals(" ", o.omezeniStitku.getText());
+		model.nahlasStitkyNaMape(200, 1234);
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals("Štítky na mapě: 200 nejbližších z 1\u00a0234", o.omezeniStitku.getText());
+		model.nahlasStitkyNaMape(150, 150);
+		SwingUtilities.invokeAndWait(() -> {});
+		Assert.assertEquals(" ", o.omezeniStitku.getText());
+	}
+
+	@Test
 	public void jenKandidatiPrepinaFiltrModelu() throws Exception {
 		priprav();
 		popup.prepni();

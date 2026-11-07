@@ -102,4 +102,11 @@ public class TextyPopupuPlanovaceTest {
 		assertEquals("Chybějící dny:", TextyPopupuPlanovace.nadpisSeznamu(Challenge.Typ.KALENDAR));
 		assertEquals("Chybějící sektory (podle vzdálenosti nejbližšího kandidáta):", TextyPopupuPlanovace.nadpisSeznamu(Challenge.Typ.SEKTORY_360));
 	}
+
+	@Test
+	public void omezeniStitkuSeUkazeJenKdyzSeUplatniStrop() {
+		assertEquals(" ", TextyPopupuPlanovace.omezeniStitku(-1));
+		assertEquals(" ", TextyPopupuPlanovace.omezeniStitku(200));
+		assertEquals("Štítky na mapě: 200 nejbližších z 1\u00a0234", TextyPopupuPlanovace.omezeniStitku(1234));
+	}
 }

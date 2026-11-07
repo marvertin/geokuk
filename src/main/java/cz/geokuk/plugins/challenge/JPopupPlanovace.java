@@ -198,6 +198,7 @@ public class JPopupPlanovace extends JSlide0 implements AfterInjectInit {
 
 	void obnov() {
 		final Challenge c = challenge();
+		obsah.omezeniStitku.setText(model == null ? " " : TextyPopupuPlanovace.omezeniStitku(model.kandidatuVeVyrezu()));
 		if (c != null) {
 			final boolean jenKandidati = model.stavPruhu().jenKandidati();
 			if (c.typ() == Challenge.Typ.SEKTORY_360) {
@@ -246,6 +247,7 @@ public class JPopupPlanovace extends JSlide0 implements AfterInjectInit {
 		final DefaultListModel<String> radky = new DefaultListModel<>();
 		final JList<String> seznam = new JList<>(radky);
 		final JLabel nejiste = new JLabel();
+		final JLabel omezeniStitku = new JLabel(" ");
 		final JButton dalsi = new JButton("▶ Další chybějící");
 		final JToggleButton kandidati = new JToggleButton("Zobrazit jen kandidáty  F4");
 
@@ -291,6 +293,8 @@ public class JPopupPlanovace extends JSlide0 implements AfterInjectInit {
 			g.fill = GridBagConstraints.HORIZONTAL;
 			g.gridy++;
 			add(nejiste, g);
+			g.gridy++;
+			add(omezeniStitku, g);
 			final JPanel tlacitka = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 			tlacitka.setOpaque(false);
 			tlacitka.add(dalsi);

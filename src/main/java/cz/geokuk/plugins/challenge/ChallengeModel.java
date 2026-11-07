@@ -188,6 +188,29 @@ public class ChallengeModel extends Model0 {
 		ohlas(ChallengeZmenenyEvent.Druh.ZOBRAZENI, null);
 	}
 
+	private volatile int stitkuNaMape = -1;
+	private volatile int kandidatuVeVyrezu = -1;
+
+	/** Kolik štítků kandidátů vrstva na mapě ukázala z kolika kandidátů ve výřezu; z EDT po kreslení, ohlásí se jen změna. */
+	public void nahlasStitkyNaMape(final int zobrazeno, final int veVyrezu) {
+		if (stitkuNaMape == zobrazeno && kandidatuVeVyrezu == veVyrezu) {
+			return;
+		}
+		stitkuNaMape = zobrazeno;
+		kandidatuVeVyrezu = veVyrezu;
+		ohlas(ChallengeZmenenyEvent.Druh.ZOBRAZENI, null);
+	}
+
+	/** Kolik štítků kandidátů je na mapě, nebo -1, když se ještě nekreslilo. */
+	public int stitkuNaMape() {
+		return stitkuNaMape;
+	}
+
+	/** Kolik kandidátů bylo při posledním kreslení ve výřezu, nebo -1. */
+	public int kandidatuVeVyrezu() {
+		return kandidatuVeVyrezu;
+	}
+
 	// --- Definice
 
 	public List<Challenge> sablony() {

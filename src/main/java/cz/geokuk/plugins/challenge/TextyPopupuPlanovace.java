@@ -62,6 +62,14 @@ final class TextyPopupuPlanovace {
 		}
 	}
 
+	/** Když strop štítků na mapě zkrátil kandidáty ve výřezu: „Štítky na mapě: 200 nejbližších z 1 234“; jinak mezera. */
+	static String omezeniStitku(final int veVyrezu) {
+		if (veVyrezu <= TvarPlanovace.NEJVIC_ZNACEK) {
+			return " ";
+		}
+		return String.format(Locale.ROOT, "Štítky na mapě: %d nejbližších z %,d", TvarPlanovace.NEJVIC_ZNACEK, veVyrezu).replace(',', '\u00a0');
+	}
+
 	static String pravidla(final Challenge.ZdrojPravidel z) {
 		return z == Challenge.ZdrojPravidel.STATOR ? "Stator" : "Project-GC";
 	}
