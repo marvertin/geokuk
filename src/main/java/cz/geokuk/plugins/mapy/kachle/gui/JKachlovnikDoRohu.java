@@ -1,6 +1,7 @@
 package cz.geokuk.plugins.mapy.kachle.gui;
 
 import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 import cz.geokuk.plugins.mapy.kachle.podklady.Priority;
 
 public class JKachlovnikDoRohu extends JKachlovnik {
@@ -12,7 +13,7 @@ public class JKachlovnikDoRohu extends JKachlovnik {
 	}
 
 	@Override
-	public void setKachloType(final EKaType aKachloSet) {
+	public void setKachloType(final KaType aKachloSet) {
 		// nehezké takto přepsat metodu
 		super.setKachloType(EKaType.OPHOTO_M);
 	}

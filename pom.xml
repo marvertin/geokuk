@@ -55,12 +55,16 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>tmate</id>
-			<url>http://maven.tmatesoft.com/content/repositories/releases</url>
-		</repository>
-	</repositories>
+<!--	<repositories>-->
+<!--		<repository>-->
+<!--			<id>maven2</id>-->
+<!--			<url>https://repo1.maven.org/maven2/</url>-->
+<!--		</repository>-->
+<!--		<repository>-->
+<!--			<id>tmate</id>-->
+<!--			<url>https://maven.tmatesoft.com/content/repositories/releases</url>-->
+<!--		</repository>-->
+<!--	</repositories>-->
 
 	<dependencies>
 	
@@ -153,7 +157,24 @@
 		    <artifactId>reflections</artifactId>
 		    <version>0.9.10</version>
 		</dependency>
-				
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.15.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.25</version>
+		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

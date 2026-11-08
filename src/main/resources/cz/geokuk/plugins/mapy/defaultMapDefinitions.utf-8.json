@@ -1,0 +1,155 @@
+[
+  {
+    "name": "osm", "ignore": true, "alt": "OSM", "tileUrl": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "subdomains": "abc",
+    "attribution": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>"
+  },
+  {
+    "name": "ocmde", "ignore": false, "alt": "OSM German Style", "tileUrl": "https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png",
+    "subdomains": "abc",
+    "attribution": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>"
+  },
+  {
+    "name": "ocm", "ignore": false, "alt": "OpenCycleMap", "tileUrl": "https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png"
+  },
+  {
+    "name": "googlemaps", "ignore": false, "alt": "Google Maps", "tileUrl": "https://mt.google.com/vt?&x={x}&y={y}&z={z}",
+    "maxZoom": 22, "subdomains": "1234", "tileSize": 256,
+    "attribution": "<a href='https://maps.google.com/'>Google</a> Maps"
+  },
+  {
+    "name": "googlemapssat", "ignore": false, "alt": "Google Satellite", "tileUrl": "https://mt.google.com/vt?lyrs=s&x={x}&y={y}&z={z}",
+    "maxZoom": 22, "subdomains": "1234", "tileSize": 256,
+    "attribution": "<a href='https://maps.google.com/'>Google</a> Maps Satellite"
+  },
+  {
+    "name": "googlehybr", "ignore": false, "alt": "Google Maps Hybrid", "tileUrl": "http://mt0.google.com/vt/lyrs=s,m@110&hl=en&x={x}&y={y}&z={z}",
+    "minZoom": 0, "maxZoom": 20, "tileSize": 256, "attribution": "Google Maps"
+  },
+  {
+    "name": "TURIST_M", "ignore": true, "alt": "Mapy.cz turistická", "tileUrl": "http://mapserver.mapy.cz/wturist-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 18, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg' /> © Seznam.cz, a.si &amp; spol."
+  },
+  {
+    "name": "WTURIST_WINTER_M", "ignore": true, "alt": "Mapy.cz zimní", "tileUrl": "http://mapserver.mapy.cz/wturist_winter-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 18, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg' /> © Seznam.cz, a.si &amp; spol."
+  },
+  {
+    "name": "BASE_M", "ignore": true, "alt": "Mapy.cz základní", "tileUrl": "http://mapserver.mapy.cz/base-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 18, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg' /> © Seznam.cz,a.s, © Přispěvatelé <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>, © NASA"
+  },
+  {
+    "name": "BASE_M_TRAF_DOWN", "ignore": true, "alt": "Mapy.cz dopravní", "tileUrl": "http://mapserver.mapy.cz/base-m/{z}-{x}-{y}?s=0.2&dm=Luminosity",
+    "minZoom": 5, "maxZoom": 18, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg' /> © Seznam.cz,a.s, © Přispěvatelé <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>, © NASA"
+  },
+  {
+    "name": "OPHOTO_M", "ignore": true, "alt": "Mapy.cz letecká", "tileUrl": "http://mapserver.mapy.cz/ophoto-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 20, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg' /> © Seznam.cz,a.s, © GEODIS BRNO,s.r.o."
+  },
+  {
+    "name": "OPHOTO1415_M", "ignore": true, "alt": "Mapy.cz letecká 2015", "tileUrl": "//mapserver.mapy.cz/ophoto1415-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 19,
+    "attribution": "© <a href='http://www.seznam.cz' target='_blank'>Seznam.cz, a.s.</a>, © <a href='http://eox.at/' target='_blank'>EOX IT Services GmbH</a>, © <a href='http://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a>"
+  },
+  {
+    "name": "OPHOTO1012_M", "ignore": true, "alt": "Mapy.cz letecká 2012", "tileUrl": "//mapserver.mapy.cz/ophoto1012-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 19,
+    "attribution": "© <a href='http://www.seznam.cz' target='_blank'>Seznam.cz, a.s.</a>, © GEODIS BRNO,s.r.o."
+  },
+  {
+    "name": "OPHOTO0406_M", "ignore": true, "alt": "Mapy.cz letecká 2006", "tileUrl": "http://mapserver.mapy.cz/ophoto0406-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 19, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg' /> © Seznam.cz,a.s, © GEODIS BRNO,s.r.o."
+  },
+  {
+    "name": "OPHOTO0203_M", "ignore": true, "alt": "Mapy.cz letecká 2003", "tileUrl": "http://mapserver.mapy.cz/ophoto0203-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 19, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg' /> © Seznam.cz,a.s, © GEODIS BRNO,s.r.o."
+  },
+  {
+    "name": "text_m", "ignore": true, "alt": "Mapy.cz textová", "tileUrl": "http://mapserver.mapy.cz/april17-m/{z}-{x}-{y} ",
+    "minZoom": 5, "maxZoom": 18, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg ' /> © Seznam.cz,a.s, © Přispěvatelé <a href='http://www.openstreetmap.org/copyright '>OpenStreetMap</a>, © NASA"
+  },
+  {
+    "name": "ZEMEPIS_M", "ignore": true, "alt": "Mapy.cz zeměpisná", "tileUrl": "http://mapserver.mapy.cz/zemepis-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 18, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg' /> © Seznam.cz,a.s, © Přispěvatelé <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>, © NASA"
+  },
+  {
+    "name": "ARMY2_M", "ignore": true, "alt": "Mapy.cz 2. vojenské mapování", "tileUrl": "http://mapserver.mapy.cz/army2-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 15, "subdomains": "1234",
+    "attribution": "<img src='http://mapy.cz/img/logo-small.svg' /> © 2nd Military Survey, © Datový podklad MŽP ČR, © Laboratoř geoinformatiky UJEP"
+  },
+  {
+    "name": "bingmap", "ignore": true, "alt": "Bing Maps", "tileUrl": "https://ecn.t{s}.tiles.virtualearth.net/tiles/r{q}?g=864&mkt=en-gb&lbl=l1&stl=h&shading=hill&n=z",
+    "minZoom": 1, "maxZoom": 20, "subdomains": "0123",
+    "attribution": "<a href='https://www.bing.com/maps/'>Bing</a> map data copyright Microsoft and its suppliers"
+  },
+  {
+    "name": "bingaerial", "ignore": true, "alt": "Bing Aerial View", "tileUrl": "https://ecn.t{s}.tiles.virtualearth.net/tiles/a{q}?g=737&n=z",
+    "minZoom": 1, "maxZoom": 20, "subdomains": "0123",
+    "attribution": "<a href='https://www.bing.com/maps/'>Bing</a> map data copyright Microsoft and its suppliers"
+  },
+  {
+    "name": "esriimagy", "ignore": false, "alt": "Esri WorldImagery", "tileUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+  },
+  {
+    "name": "esriworld", "ignore": false, "alt": "Esri WorldStreetMap", "tileUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+    "attribution": "Tiles &copy; Esri"
+  },
+  {
+    "name": "esritopo", "ignore": false, "alt": "Esri WorldTopoMap", "tileUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+    "attribution": "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community"
+  },
+  {
+    "name": "mtbmap_cz", "ignore": false, "alt": "MTBmap.cz", "tileUrl": "http://tile.mtbmap.cz/mtbmap_tiles/{z}/{x}/{y}.png",
+    "minZoom": 1, "maxZoom": 18
+  },
+  {
+    "name": "cuzktop", "ignore": true, "alt": "ČUZK - Topografická", "tileUrl": "http://ags.cuzk.cz/arcgis/services/zmwm/MapServer/WMSServer",
+    "minZoom": 10, "maxZoom": 19, "format": "image/png", "crs": "EPSG:3857", "layers": "0", "transparent": false, "overlay": false,
+    "attribution": "© Český úřad zeměměřický a katastrální"
+  },
+  {
+    "name": "cuzksat", "ignore": true, "alt": "ČUZK - Satelitní", "tileUrl": "http://ags.cuzk.cz/arcgis/services/ortofoto_wm/MapServer/WMSServer",
+    "minZoom": 10, "maxZoom": 20, "format": "image/png", "crs": "EPSG:3857", "layers": "0", "transparent": false, "overlay": false,
+    "attribution": "© Český úřad zeměměřický a katastrální"
+  },
+  {
+    "name": "cuzkater", "ignore": true, "alt": "ČUZK - Jen terén", "tileUrl": "http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer",
+    "minZoom": 10, "maxZoom": 20, "format": "image/png", "crs": "EPSG:4326", "layers": "dmr5g:GrayscaleHillshade", "transparent": false, "overlay": false,
+    "attribution": "© Český úřad zeměměřický a katastrální"
+  },
+  {
+    "name": "cuzklidar", "ignore": true, "alt": "ČUZK - LIDAR", "tileUrl": "http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer",
+    "minZoom": 10, "maxZoom": 20, "format": "image/png", "crs": "EPSG:4326", "layers": "dmr5g:GrayscaleHillshade", "transparent": false, "overlay": false,
+    "attribution": "© Český úřad zeměměřický a katastrální"
+  },
+  {
+    "name": "googlelabels", "ignore": true, "alt": "Google labels", "tileUrl": "http://mt1.google.com/vt/lyrs=h@218000000&hl=en&src=app&x={x}&y={y}&z={z}&s=",
+    "overlay": true,
+    "attribution": "<a href='http://maps.google.com/'>Google Maps</a>"
+  },
+  {
+    "name": "popisky_m", "ignore": true, "alt": "Mapy.cz, popisky",     "tileUrl": "//mapserver.mapy.cz/hybrid-sparse-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 20, "overlay": true,
+    "attribution": "© <a href='http://www.seznam.cz' target='_blank'>Seznam.cz, a.s.</a>"
+  },
+  {
+    "name": "popisky-a-cesty_m", "ignore": true, "alt": "Mapy.cz, popisky a cesty", "tileUrl": "//mapserver.mapy.cz/hybrid-base-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 20, "overlay": true,
+    "attribution": "© <a href='http://www.seznam.cz' target='_blank'>Seznam.cz, a.s.</a>"
+  },
+  {
+    "name": "popisky-a-cyklotrasy_m", "ignore": true, "alt": "Mapy.cz, popisky a cyklotrasy", "tileUrl": "//mapserver.mapy.cz/hybrid-turist-m/{z}-{x}-{y}",
+    "minZoom": 5, "maxZoom": 20, "overlay": true,
+    "attribution": "© <a href='http://www.seznam.cz' target='_blank'>Seznam.cz, a.s.</a>"
+  }
+]

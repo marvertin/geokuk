@@ -34,7 +34,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 
 	private static final Pocitadlo pocitKachliVKachlovniku2 = new PocitadloMalo("#kachlí v kachlovníku", "");
 
-	private EKaType katype = null;
+	private KaType katype = null;
 
 	private KachleModel kachleModel;
 
@@ -86,11 +86,7 @@ public abstract class JKachlovnik extends JSingleSlide0 implements AfterEventRec
 		init(true);
 	}
 
-	/**
-	 * @param aKachloTypes
-	 *            the kachloTypes to set
-	 */
-	public void setKachloType(final EKaType katype) {
+	public void setKachloType(final KaType katype) {
 		if (this.katype == katype) {
 			return;
 		}

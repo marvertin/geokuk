@@ -1,15 +1,15 @@
 package cz.geokuk.plugins.mapy;
 
 import cz.geokuk.framework.ToggleAction0;
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 
 public abstract class MapyAction0 extends ToggleAction0 {
 
 	private static final long serialVersionUID = 8106696486908484270L;
 	private MapyModel mapyModel;
-	private final EKaType katype;
+	private final KaType katype;
 
-	public MapyAction0(final EKaType katype) {
+	public MapyAction0(final KaType katype) {
 		super(katype.getNazev());
 		this.katype = katype;
 		putValue(SHORT_DESCRIPTION, katype.getPopis());
@@ -29,7 +29,7 @@ public abstract class MapyAction0 extends ToggleAction0 {
 		this.mapyModel = mapyModel;
 	}
 
-	protected EKaType getKaType() {
+	protected KaType getKaType() {
 		return katype;
 	}
 

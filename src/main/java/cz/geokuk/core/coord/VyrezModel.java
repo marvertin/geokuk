@@ -9,7 +9,7 @@ import cz.geokuk.core.coordinates.*;
 import cz.geokuk.core.program.FPref;
 import cz.geokuk.framework.Model0;
 import cz.geokuk.plugins.mapy.ZmenaMapNastalaEvent;
-import cz.geokuk.plugins.mapy.kachle.data.EKaType;
+import cz.geokuk.plugins.mapy.kachle.data.KaType;
 import cz.geokuk.util.lang.FMath;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +27,7 @@ public class VyrezModel extends Model0 {
 
 	private PoziceModel poziceModel;
 
-	private EKaType podkladMap;
+	private KaType podkladMap;
 
 	private Coord moord = Coord.prozatimniInicializacni();
 
@@ -155,6 +155,9 @@ public class VyrezModel extends Model0 {
 	}
 
 	private int nastavitelneMeritkoZChteneho(int moumer, final boolean autoMeritko) {
+		if (podkladMap == null) {
+			return 0;
+		}
 		moumer = FMath.fit(moumer, podkladMap.getMinMoumer(), autoMeritko ? podkladMap.getMaxAutoMoumer() : podkladMap.getMaxMoumer());
 		return moumer;
 	}

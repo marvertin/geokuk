@@ -82,7 +82,7 @@ class KachleDBManager implements KachleManager {
 		try {
 			final ISqlJetTable table = database.getTable(TABLE_NAME);
 			database.beginTransaction(SqlJetTransactionMode.READ_ONLY);
-			cursor = table.lookup(table.getPrimaryKeyIndexName(), ki.getLoc().getFromSzUnsignedX(), ki.getLoc().getFromSzUnsignedY(), ki.getLoc().getMoumer(), ki.typToString());
+			cursor = table.lookup(table.getPrimaryKeyIndexName(), ki.getLoc().getFromSzUnsignedX(), ki.getLoc().getFromSzUnsignedY(), ki.getLoc().getMoumer(), ki.typToId());
 			if (cursor.eof()) {
 				return null;
 			}
@@ -133,8 +133,8 @@ class KachleDBManager implements KachleManager {
 				final KaLoc kaloc = ki.getLoc();
 				final int kx = kaloc.getFromSzUnsignedX();
 				final int ky = kaloc.getFromSzUnsignedY();
-				log.debug("Adding {} {} {} {}", kx, ky, kaloc.getMoumer(), ki.typToString());
-				database.getTable(TABLE_NAME).insertOr(SqlJetConflictAction.REPLACE, kx, ky, kaloc.getMoumer(), ki.typToString(), dataToSave);
+				log.debug("Adding {} {} {} {}", kx, ky, kaloc.getMoumer(), ki.typToId());
+				database.getTable(TABLE_NAME).insertOr(SqlJetConflictAction.REPLACE, kx, ky, kaloc.getMoumer(), ki.typToId(), dataToSave);
 			}
 		} catch (final SqlJetException e) {
 			log.error("A database error has occurred!", e);
