@@ -30,6 +30,8 @@ final class TvarPlanovace {
 	final String popisVybraneho;
 	final Mou vybranyPozice;
 	final int vybranySektor;
+	/** Poloměr kružnice v metrech; 0, když se nekreslí. */
+	final double polomerKruznice;
 	private static final double MAX_KLIN_M = 15_000_000;
 	private static final double KLIN_USEK_M = 25_000;
 	private static final int KLIN_USEKU_MAX = 48;
@@ -52,6 +54,7 @@ final class TvarPlanovace {
 			popisStredu = null;
 		}
 		final Object zdroj = prehled.zdroj();
+		polomerKruznice = zdroj instanceof VysledekSektoru && stredWgs != null ? polomerKruznice((VysledekSektoru) zdroj) : 0;
 		if (zdroj instanceof VysledekSektoru) {
 			final List<VysledekSektoru.KandidatKes> k = ((VysledekSektoru) zdroj).vsichniKandidati();
 			pozice = new Mou[k.size()];
@@ -103,19 +106,23 @@ final class TvarPlanovace {
 		}
 	}
 
-	/** Poloměr prstence v metrech pro dané měřítko: 1–2–5 × 10^n, ať prstenec zabere asi 0,2 až 0,6 menšího rozměru mapy. */
-	static double polomerPrstence(final Coord coord) {
-		final double px = 0.375 * Math.min(coord.getWidth(), coord.getHeight());
-		final double m = px / coord.getPixluNaMetr();
-		final double dekada = Math.pow(10, Math.floor(Math.log10(m)));
-		final double[] kroky = { 1, 2, 5, 10 };
-		double nejlepsi = dekada;
-		for (final double k : kroky) {
-			if (Math.abs(Math.log(k * dekada / m)) < Math.abs(Math.log(nejlepsi / m))) {
-				nejlepsi = k * dekada;
+	/** Nejmenší poloměr kružnice, když nejsou kandidáti; a nejmenší vůbec. */
+	static final double MIN_POLOMER_M = 1000;
+	/** Poloměr kružnice bez kandidátů: 1–2–5 × 10ⁿ, tady 5 km. */
+	static final double POLOMER_BEZ_KANDIDATU_M = 5000;
+
+	/**
+	 * Pevný poloměr kružnice v metrech, nezávislý na zvětšení mapy: vzdálenost nejvzdálenějšího z nejbližších kandidátů chybějících sektorů, aspoň 1 km; bez kandidátů 5 km.
+	 */
+	static double polomerKruznice(final VysledekSektoru v) {
+		double nejvic = 0;
+		for (final int s : v.chybejici()) {
+			final VysledekSektoru.Kandidati k = v.kandidati(s);
+			if (k != null && k.pocet() > 0) {
+				nejvic = Math.max(nejvic, k.nejblizsiVzdalenost());
 			}
 		}
-		return nejlepsi;
+		return nejvic > 0 ? Math.max(MIN_POLOMER_M, nejvic) : POLOMER_BEZ_KANDIDATU_M;
 	}
 
 	/** Úseky prstence stejného stavu pro daný poloměr; pamatuje si poslední poloměr. */

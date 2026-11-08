@@ -186,6 +186,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 				kresliZvyrazneni(g, c, t, pismo, vyber);
 			}
 			kresliStred(g, c, t, tucne);
+			kresliPopisekKruznice(g, c, t, tucne);
 			if (kesoidyViditelne()) {
 				kresliStitekVybraneKese(g, c, t, tucne, vyber);
 			}
@@ -193,6 +194,73 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		} finally {
 			g.dispose();
 		}
+	}
+
+	/** Okraje okna, ke kterým se popisek kružnice nepřibližuje: po stranách, nahoře kvůli liště a dole kvůli měřítku. */
+	static final int OKRAJ_POPISKU_BOK = 64;
+	static final int OKRAJ_POPISKU_NAHORE = 70;
+	static final int OKRAJ_POPISKU_DOLE = 40;
+
+	static boolean jeVOblastiPopisku(final int x, final int y, final int w, final int h) {
+		return x >= OKRAJ_POPISKU_BOK && y >= OKRAJ_POPISKU_NAHORE && x <= w - OKRAJ_POPISKU_BOK && y <= h - OKRAJ_POPISKU_DOLE;
+	}
+
+	private transient String textPopiskuKruznice;
+	private transient Rectangle popisekKruznice;
+
+	String textPopiskuKruznice() {
+		return textPopiskuKruznice;
+	}
+
+	Rectangle popisekKruznice() {
+		return popisekKruznice;
+	}
+
+	/** Popisek poloměru stojí na bodě kružnice nejblíž středu okna, jen když je kružnice v okně vidět. */
+	private void kresliPopisekKruznice(final Graphics2D g, final Coord c, final TvarPlanovace t, final Font tucne) {
+		textPopiskuKruznice = null;
+		popisekKruznice = null;
+		if (t.stred == null || !kresliSektory() || t.polomerKruznice <= 0) {
+			return;
+		}
+		final Point bod = nejblizsiBodKruznice(c, t);
+		if (bod != null) {
+			final String text = TextyKresleni.popisekKruznice(t.polomerKruznice);
+			final int pocet = pocetObdelniku;
+			umistiOkoloBodu(g, tucne, text, bod.x, bod.y, 6, false);
+			if (pocetObdelniku > pocet) {
+				textPopiskuKruznice = text;
+				popisekKruznice = new Rectangle(ox[pocet], oy[pocet], ow[pocet], oh[pocet]);
+			}
+		}
+	}
+
+	/** Poloměr kružnice do textu středu, když kružnice v okně nemá popisek; jinak NaN. */
+	double polomerVTextuStredu(final Coord c, final TvarPlanovace t) {
+		return kresliSektory() && t.polomerKruznice > 0 && nejblizsiBodKruznice(c, t) == null ? t.polomerKruznice : Double.NaN;
+	}
+
+	/** Vrchol kružnice v okně nejblíž jeho středu, nebo null, když v okně žádný není. */
+	static Point nejblizsiBodKruznice(final Coord c, final TvarPlanovace t) {
+		final int w = c.getWidth();
+		final int h = c.getHeight();
+		Point nejlepsi = null;
+		double nejmene = Double.MAX_VALUE;
+		final Point p = new Point();
+		for (final GeometrieSektoru.Usek u : t.prstenec(t.polomerKruznice)) {
+			for (final GeometrieSektoru.Bod b : u.body()) {
+				PixelyMapy.transform(c, PixelyMapy.mou(b.lat, b.lon), p);
+				if (!jeVOblastiPopisku(p.x, p.y, w, h)) {
+					continue;
+				}
+				final double d = Math.hypot(p.x - w / 2.0, p.y - h / 2.0);
+				if (d < nejmene) {
+					nejmene = d;
+					nejlepsi = new Point(p);
+				}
+			}
+		}
+		return nejlepsi;
 	}
 
 	private void kresliStred(final Graphics2D g, final Coord c, final TvarPlanovace t, final Font tucne) {
@@ -214,7 +282,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 			final FontMetrics fm = g.getFontMetrics();
 			g.drawString("S", s.x - fm.stringWidth("S") / 2, s.y + (fm.getAscent() - fm.getDescent()) / 2);
 			zapis(s.x - r - 3, s.y - r - 3, 2 * r + 6, 2 * r + 6);
-			umistiOkoloBodu(g, tucne, TextyKresleni.stred(t.popisStredu), s.x, s.y, r + 4, false);
+			umistiOkoloBodu(g, tucne, TextyKresleni.stred(t.popisStredu, polomerVTextuStredu(c, t)), s.x, s.y, r + 4, false);
 			return;
 		}
 		kresliSipku(g, c, t, tucne, s, akcent);
@@ -237,7 +305,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		final double k = Math.min(tx, ty);
 		final double ang = Math.atan2(dy, dx);
 		final Wgs stredMapy = c.getMoustred().toWgs();
-		final String text = TextyKresleni.stredMimoVyrez(t.popisStredu, Wgs.vzdalenost(stredMapy, t.stredWgs));
+		final String text = TextyKresleni.stredMimoVyrez(t.popisStredu, Wgs.vzdalenost(stredMapy, t.stredWgs), polomerVTextuStredu(c, t));
 		final Dimension rozmer = rozmerStitku(g, tucne, text);
 		// Poloha na obvodu okna: nejdřív ve směru středu, jinak nejbližší volná kolem dokola; když žádná není volná, ta s nejmenším překryvem.
 		final double obvodSirka = w - 2.0 * OKRAJ_SIPKY;

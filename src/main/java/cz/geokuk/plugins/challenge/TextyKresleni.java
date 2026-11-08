@@ -46,8 +46,18 @@ final class TextyKresleni {
 		return "Střed: " + popis;
 	}
 
-	/** Šipka u okraje mapy: „Střed: domov · 25 km“. */
-	static String stredMimoVyrez(final String popis, final double metru) {
-		return stred(popis) + " · " + vzdalenost(metru);
+	/** Štítek středu, když kružnice v okně není vidět: „Střed: domov · kružnice 144 km“. */
+	static String stred(final String popis, final double polomerKruznice) {
+		return Double.isNaN(polomerKruznice) ? stred(popis) : stred(popis) + " · kružnice " + vzdalenost(polomerKruznice);
+	}
+
+	/** Šipka u okraje mapy: „Střed: domov · 25 km“, případně s poloměrem kružnice: „Střed: domov · 25 km · kružnice 144 km“. */
+	static String stredMimoVyrez(final String popis, final double metru, final double polomerKruznice) {
+		return stred(popis) + " · " + vzdalenost(metru) + (Double.isNaN(polomerKruznice) ? "" : " · kružnice " + vzdalenost(polomerKruznice));
+	}
+
+	/** Popisek na kružnici: „2,9 km“. */
+	static String popisekKruznice(final double polomerKruznice) {
+		return vzdalenost(polomerKruznice);
 	}
 }

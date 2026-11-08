@@ -91,15 +91,49 @@ public class TvarPlanovaceTest {
 	}
 
 	@Test
-	public void polomerPrstenceJeRadou125AZabereCtvrtAzPulkuOkna() {
-		for (int moumer = 8; moumer <= 18; moumer++) {
-			final Coord c = new Coord(moumer, new Wgs(50, 14).toMou(), new Dimension(1280, 720), 0);
-			final double r = TvarPlanovace.polomerPrstence(c);
-			final double mantisa = r / Math.pow(10, Math.floor(Math.log10(r)));
-			Assert.assertTrue("1, 2 nebo 5: " + r, Math.abs(mantisa - 1) < 1e-9 || Math.abs(mantisa - 2) < 1e-9 || Math.abs(mantisa - 5) < 1e-9);
-			final double px = r * c.getPixluNaMetr();
-			Assert.assertTrue(moumer + ": " + px + " px", px >= 0.2 * 720 && px <= 0.62 * 720);
+	public void polomerKruzniceJeVzdalenostNejvzdalenejsihoZNejblizsichKandidatuBezZavislostiNaZoomu() {
+		final TvarPlanovace t = TvarPlanovace.z(PrehledChallenge.zeSektoru(sektory(), vysledekSKandidaty(), 50.0, 14.0), null);
+		Assert.assertEquals(7400, t.polomerKruznice, 1e-9);
+	}
+
+	@Test
+	public void polomerKruzniceBezKandidatuJeVychoziAMinimumJeKilometr() {
+		final BitSet ob = new BitSet(360);
+		ob.set(0, 200);
+		final TvarPlanovace bez = TvarPlanovace.z(PrehledChallenge.zeSektoru(sektory(), new VysledekSektoru(ob, new BitSet(360), new VysledekSektoru.Kandidati[360], 200, new ArrayList<>()), 50.0, 14.0), null);
+		Assert.assertEquals(5000, bez.polomerKruznice, 1e-9);
+		final VysledekSektoru.Kandidati[] k = new VysledekSektoru.Kandidati[360];
+		k[250] = new VysledekSektoru.Kandidati(250);
+		k[250].pridej("GC1", 300);
+		final TvarPlanovace blizko = TvarPlanovace.z(PrehledChallenge.zeSektoru(sektory(), new VysledekSektoru(ob, new BitSet(360), k, 200, new ArrayList<>()), 50.0, 14.0), null);
+		Assert.assertEquals("aspoň kilometr", TvarPlanovace.MIN_POLOMER_M, blizko.polomerKruznice, 1e-9);
+	}
+
+	/** Chybějící sektory 150 (nejbližší kandidát 1,2 km, další 9 km), 151 (3,4 km) a 250 (7,4 km). */
+	private static VysledekSektoru vysledekSKandidaty() {
+		final BitSet ob = new BitSet(360);
+		ob.set(0, 360);
+		for (final int s : new int[] { 150, 151, 250 }) {
+			ob.clear(s);
 		}
+		final VysledekSektoru.Kandidati[] k = new VysledekSektoru.Kandidati[360];
+		k[150] = new VysledekSektoru.Kandidati(150);
+		k[150].pridej("GC1", 9000);
+		k[150].pridej("GC2", 1200);
+		k[151] = new VysledekSektoru.Kandidati(151);
+		k[151].pridej("GC3", 3400);
+		k[250] = new VysledekSektoru.Kandidati(250);
+		k[250].pridej("GC4", 7400);
+		return new VysledekSektoru(ob, new BitSet(360), k, 357, new ArrayList<>());
+	}
+
+	@Test
+	public void textyStreduSPolomeremKruznice() {
+		Assert.assertEquals("Střed: domov · kružnice 144 km", TextyKresleni.stred("domov", 144_000));
+		Assert.assertEquals("Střed: domov", TextyKresleni.stred("domov", Double.NaN));
+		Assert.assertEquals("Střed: domov · 25 km · kružnice 2,9 km", TextyKresleni.stredMimoVyrez("domov", 25_300, 2900));
+		Assert.assertEquals("2,9 km", TextyKresleni.popisekKruznice(2900));
+		Assert.assertEquals("144 km", TextyKresleni.popisekKruznice(144_000));
 	}
 
 	@Test
@@ -112,7 +146,7 @@ public class TvarPlanovaceTest {
 		Assert.assertEquals("5 kandidátů", TextyKresleni.kandidatu(5));
 		Assert.assertEquals("Sektor 213° · 5 kandidátů · 2,8 km", TextyKresleni.vybranySektor(213, 5, 2800));
 		Assert.assertEquals("Střed: GC56R49", TextyKresleni.stred("GC56R49"));
-		Assert.assertEquals("Střed: domov · 25 km", TextyKresleni.stredMimoVyrez("domov", 25_300));
+		Assert.assertEquals("Střed: domov · 25 km", TextyKresleni.stredMimoVyrez("domov", 25_300, Double.NaN));
 	}
 
 	@Test

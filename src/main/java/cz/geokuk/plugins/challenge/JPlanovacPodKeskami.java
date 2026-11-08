@@ -37,7 +37,7 @@ public class JPlanovacPodKeskami extends JVrstvaPlanovace {
 			this.tvar = tvar;
 			this.coord = coord;
 			this.sektor = sektor;
-			final double polomer = TvarPlanovace.polomerPrstence(coord);
+			final double polomer = tvar.polomerKruznice;
 			final Point p = new Point();
 			for (final GeometrieSektoru.Usek u : tvar.prstenec(polomer)) {
 				useky.add(cesta(coord, u.body(), p, false));
