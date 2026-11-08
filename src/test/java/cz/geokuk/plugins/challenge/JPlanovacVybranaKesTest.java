@@ -248,7 +248,7 @@ public class JPlanovacVybranaKesTest {
 	}
 
 	@Test
-	public void stitkyMajiJenKeseVybranehoSektoruVpravoOdIkony() throws Exception {
+	public void stitkyMajiJenKeseVybranehoSektoruVlevoOdIkony() throws Exception {
 		zobraz360(250);
 		final Kes vybrana = kesVAzimutu("GC1", 100.5, 2000, 2, 2);
 		final Kes stejny = kesVAzimutu("GC2", 100.3, 1200, 3, 3);
@@ -263,9 +263,9 @@ public class JPlanovacVybranaKesTest {
 		final Point p = PixelyMapy.transform(c, stejny.getMainWpt().getMou(), new Point());
 		boolean nalezen = false;
 		for (final Rectangle q : r) {
-			nalezen |= q.x == p.x + 8 + 2 && Math.abs(q.y + q.height / 2 - p.y) <= 1;
+			nalezen |= q.x + q.width == p.x - 8 - 2 && Math.abs(q.y + q.height / 2 - p.y) <= 1;
 		}
-		Assert.assertTrue("štítek těsně vpravo od ikony: " + r + " u " + p, nalezen);
+		Assert.assertTrue("štítek těsně vlevo od ikony: " + r + " u " + p, nalezen);
 	}
 
 	@Test
@@ -304,7 +304,7 @@ public class JPlanovacVybranaKesTest {
 		nakresli(nad, mapa);
 		Assert.assertEquals("novější je sektor vybraný v plánovači: štítek má keš sektoru 250", 1, nad.obdelnikyStitkuZvyrazneni().size());
 		final Point p250 = PixelyMapy.transform(mapa, jiny.getMainWpt().getMou(), new Point());
-		Assert.assertEquals(p250.x + 10, nad.obdelnikyStitkuZvyrazneni().get(0).x);
+		Assert.assertEquals(p250.x - 10, nad.obdelnikyStitkuZvyrazneni().get(0).x + nad.obdelnikyStitkuZvyrazneni().get(0).width);
 		final Kes dalsi = kesVAzimutu("GC3", 100.4, 900, 2, 2);
 		nad.setIndexatorKesi(index(vybrana, jiny, dalsi));
 		SwingUtilities.invokeAndWait(() -> model.setVybranaKes(vybrana(dalsi)));
@@ -312,7 +312,7 @@ public class JPlanovacVybranaKesTest {
 		final Point p100 = PixelyMapy.transform(mapa, dalsi.getMainWpt().getMou(), new Point());
 		boolean nalezen = false;
 		for (final Rectangle q : nad.obdelnikyStitkuZvyrazneni()) {
-			nalezen |= q.x == p100.x + 10;
+			nalezen |= q.x + q.width == p100.x - 10;
 		}
 		Assert.assertTrue("po novém výběru keše platí její sektor 100: " + nad.obdelnikyStitkuZvyrazneni(), nalezen);
 		Assert.assertEquals(2, nad.obdelnikyStitkuZvyrazneni().size());
@@ -362,7 +362,7 @@ public class JPlanovacVybranaKesTest {
 		Assert.assertEquals("štítek mají keše stejného políčka D3/T4 (vybraná a stejná), jiná ne", 2, nad.obdelnikyStitkuZvyrazneni().size());
 		Assert.assertEquals("D3/T4", model.prehled().stitekPolicka(4, 6));
 		final Point p = PixelyMapy.transform(c, stejna.getMainWpt().getMou(), new Point());
-		final Rectangle r = nad.obdelnikyStitkuZvyrazneni().get(0).x == p.x + 10 ? nad.obdelnikyStitkuZvyrazneni().get(0) : nad.obdelnikyStitkuZvyrazneni().get(1);
+		final Rectangle r = (nad.obdelnikyStitkuZvyrazneni().get(0).x + nad.obdelnikyStitkuZvyrazneni().get(0).width) == p.x - 10 ? nad.obdelnikyStitkuZvyrazneni().get(0) : nad.obdelnikyStitkuZvyrazneni().get(1);
 		Assert.assertEquals("výplň štítku je akcent", AkcentPlanovace.barva().getRGB(), img.getRGB(r.x + 1, r.y + r.height / 2));
 	}
 

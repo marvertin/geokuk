@@ -24,10 +24,25 @@ public class IkonaKeseTest {
 
 	@Test
 	public void tretiPrvekPoleJeHorniOkrajIkony() {
-		final int[] o = new int[3];
+		final int[] o = new int[4];
 		IkonaKese.okraje(null, new Mou(1000, 1000), 1, o);
 		Assert.assertEquals(-8, o[2]);
 		IkonaKese.okraje(null, new Mou(1000, 1000), 2, o);
 		Assert.assertEquals(-16, o[2]);
+	}
+
+	@Test
+	public void okrajeZeSkutecneIkonyJsouVlevoVpravoNahoreASvislyStred() {
+		final cz.geokuk.plugins.kesoid.Wpt wpt = new cz.geokuk.plugins.kesoid.Wpt();
+		final cz.geokuk.plugins.kesoid.mapicon.Sklivec sklivec = new cz.geokuk.plugins.kesoid.mapicon.Sklivec();
+		// 10 × 6 px, střed obrázku v bodě keše, posunutý o 2 doprava a 1 dolů: x od -3 do 7, y od -2 do 4
+		sklivec.imaganti.add(new cz.geokuk.api.mapicon.Imagant(new java.awt.image.BufferedImage(10, 6, java.awt.image.BufferedImage.TYPE_INT_ARGB), 2, 1));
+		wpt.setSklivec(sklivec);
+		final int[] o = new int[4];
+		IkonaKese.okraje(wpt, 1, o);
+		Assert.assertEquals("pravý okraj", 7, o[0]);
+		Assert.assertEquals("svislý střed", 1, o[1]);
+		Assert.assertEquals("horní okraj", -2, o[2]);
+		Assert.assertEquals("levý okraj", -3, o[3]);
 	}
 }

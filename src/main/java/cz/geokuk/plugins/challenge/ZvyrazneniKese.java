@@ -31,7 +31,7 @@ final class ZvyrazneniKese {
 	int pocet;
 	int[] x = new int[0];
 	int[] y = new int[0];
-	int[] ikonaVpravo = new int[0];
+	int[] ikonaVlevo = new int[0];
 	int[] ikonaStredY = new int[0];
 	String[] text = new String[0];
 
@@ -88,16 +88,16 @@ final class ZvyrazneniKese {
 		z.pocet = kolik;
 		z.x = new int[kolik];
 		z.y = new int[kolik];
-		z.ikonaVpravo = new int[kolik];
+		z.ikonaVlevo = new int[kolik];
 		z.ikonaStredY = new int[kolik];
 		z.text = new String[kolik];
-		final int[] okraje = new int[2];
+		final int[] okraje = new int[4];
 		for (int q = 0; q < kolik; q++) {
 			final int i = poradi[q];
 			z.x[q] = xs[i];
 			z.y[q] = ys[i];
 			IkonaKese.okraje(wpts[i], meritko, okraje);
-			z.ikonaVpravo[q] = okraje[0];
+			z.ikonaVlevo[q] = okraje[3];
 			z.ikonaStredY[q] = okraje[1];
 			z.text[q] = vyber.sektor >= 0 ? TEXTY_SEKTORU[vyber.sektor] : vyber.stitek;
 		}

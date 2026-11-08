@@ -213,7 +213,7 @@ public class JPlanovacVrstvyTest {
 	}
 
 	@Test
-	public void stitekKandidataStojiPevneVpravoOdIkonyBezVyhybaniStitkum() throws Exception {
+	public void stitekKandidataStojiPevneVlevoOdIkonyBezVyhybaniStitkum() throws Exception {
 		final List<VysledekSektoru.KandidatKes> k = new ArrayList<>();
 		k.add(new VysledekSektoru.KandidatKes("GC1", 50.0, 14.0, 150, 1000, false));
 		k.add(new VysledekSektoru.KandidatKes("GC2", 50.0, 14.0, 151, 1000, false));
@@ -224,10 +224,10 @@ public class JPlanovacVrstvyTest {
 		final List<Rectangle> r = nad.obdelnikyStitkuKandidatu();
 		Assert.assertEquals(2, r.size());
 		for (final Rectangle q : r) {
-			Assert.assertEquals("těsně vpravo od ikony (polovina neznámé ikony 8 + mezera 2)", p.x + 8 + 2, q.x);
+			Assert.assertEquals("těsně vlevo od ikony (polovina neznámé ikony 8 + mezera 2)", p.x - 8 - 2, q.x + q.width);
 			Assert.assertEquals("svisle na středu ikony", p.y, q.y + q.height / 2, 1);
 		}
-		Assert.assertEquals("štítky na sebe leží (x)", r.get(0).x, r.get(1).x);
+		Assert.assertEquals("štítky na sebe leží (pravý okraj)", r.get(0).x + r.get(0).width, r.get(1).x + r.get(1).width);
 		Assert.assertEquals("štítky na sebe leží (y)", r.get(0).y, r.get(1).y);
 	}
 
@@ -240,7 +240,8 @@ public class JPlanovacVrstvyTest {
 		final java.awt.Point p = PixelyMapy.transform(c, PixelyMapy.mou(50.0, 14.0), new java.awt.Point());
 		nad.onEvent(new cz.geokuk.plugins.kesoid.mvc.ZvetseniIkonEvent(200));
 		nakresli(nad, c);
-		Assert.assertEquals("při dvojnásobných ikonách: polovina ikony 16 + mezera 4", p.x + 16 + 4, nad.obdelnikyStitkuKandidatu().get(0).x);
+		final Rectangle r = nad.obdelnikyStitkuKandidatu().get(0);
+		Assert.assertEquals("při dvojnásobných ikonách: polovina ikony 16 + mezera 4 vlevo", p.x - 16 - 4, r.x + r.width);
 	}
 
 	@Test

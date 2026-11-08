@@ -18,11 +18,12 @@ final class IkonaKese {
 	private IkonaKese() {
 	}
 
-	/** Pravý okraj ikony vůči bodu keše a svislý střed ikony vůči bodu, ve značkách při daném zvětšení ikon; {@code vysledek[0]} je pravý okraj, {@code vysledek[1]} svislý střed; má-li pole třetí prvek, je v něm horní okraj ikony. */
+	/** Pravý okraj ikony vůči bodu keše a svislý střed ikony vůči bodu, ve značkách při daném zvětšení ikon; {@code vysledek[0]} je pravý okraj, {@code vysledek[1]} svislý střed; má-li pole třetí prvek, je v něm horní okraj ikony a ve čtvrtém levý okraj. */
 	static void okraje(final Indexator<Wpt> indexator, final Mou mou, final double meritko, final int[] vysledek) {
 		vysledek[0] = (int) Math.ceil(NEZNAMA_POLOVINA * meritko);
 		vysledek[1] = 0;
 		nastavNahore(vysledek, -(int) Math.ceil(NEZNAMA_POLOVINA * meritko));
+		nastavVlevo(vysledek, -(int) Math.ceil(NEZNAMA_POLOVINA * meritko));
 		if (indexator == null) {
 			return;
 		}
@@ -37,11 +38,13 @@ final class IkonaKese {
 		vysledek[0] = (int) Math.ceil(NEZNAMA_POLOVINA * meritko);
 		vysledek[1] = 0;
 		nastavNahore(vysledek, -(int) Math.ceil(NEZNAMA_POLOVINA * meritko));
+		nastavVlevo(vysledek, -(int) Math.ceil(NEZNAMA_POLOVINA * meritko));
 		final Sklivec sklivec = wpt.getSklivec();
 		if (sklivec == null) {
 			return;
 		}
 		int pravy = Integer.MIN_VALUE;
+		int levy = Integer.MAX_VALUE;
 		int nahore = Integer.MAX_VALUE;
 		int dole = Integer.MIN_VALUE;
 		for (final Imagant i : sklivec.imaganti) {
@@ -50,6 +53,7 @@ final class IkonaKese {
 			}
 			final Imagant z = i.zvetseny(meritko);
 			pravy = Math.max(pravy, z.getXpos() + z.getImage().getWidth());
+			levy = Math.min(levy, z.getXpos());
 			nahore = Math.min(nahore, z.getYpos());
 			dole = Math.max(dole, z.getYpos() + z.getImage().getHeight());
 		}
@@ -57,6 +61,13 @@ final class IkonaKese {
 			vysledek[0] = pravy;
 			vysledek[1] = nahore + (dole - nahore) / 2;
 			nastavNahore(vysledek, nahore);
+			nastavVlevo(vysledek, levy);
+		}
+	}
+
+	private static void nastavVlevo(final int[] vysledek, final int vlevo) {
+		if (vysledek.length > 3) {
+			vysledek[3] = vlevo;
 		}
 	}
 

@@ -82,7 +82,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		int veVyrezu;
 		int pocet;
 		/** Pravý okraj ikony a její svislý střed vůči bodu keše. */
-		int[] ikonaVpravo = new int[0];
+		int[] ikonaVlevo = new int[0];
 		int[] ikonaStredY = new int[0];
 		int[] index = new int[0];
 		int[] x = new int[0];
@@ -394,7 +394,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		v.index = new int[kolik];
 		v.x = new int[kolik];
 		v.y = new int[kolik];
-		v.ikonaVpravo = new int[kolik];
+		v.ikonaVlevo = new int[kolik];
 		v.ikonaStredY = new int[kolik];
 		if (kolik > 0) {
 			final double[] serazene = Arrays.copyOf(vz, n);
@@ -412,13 +412,13 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 					poradi[j] = i;
 				}
 			}
-			final int[] okraje = new int[2];
+			final int[] okraje = new int[4];
 			for (int q = 0; q < m; q++) {
 				v.index[q] = idx[poradi[q]];
 				v.x[q] = xs[poradi[q]];
 				v.y[q] = ys[poradi[q]];
 				IkonaKese.okraje(indexator, t.pozice[v.index[q]], meritko, okraje);
-				v.ikonaVpravo[q] = okraje[0];
+				v.ikonaVlevo[q] = okraje[3];
 				v.ikonaStredY[q] = okraje[1];
 			}
 			v.pocet = m;
@@ -427,7 +427,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 		return v;
 	}
 
-	/** Štítky keší zvýrazněného sektoru nebo políčka: výplň v akcentu, vždy těsně vpravo od ikony, nad štítky kandidátů. */
+	/** Štítky keší zvýrazněného sektoru nebo políčka: výplň v akcentu, vždy těsně vlevo od ikony, nad štítky kandidátů. */
 	private void kresliZvyrazneni(final Graphics2D g, final Coord c, final TvarPlanovace t, final Font pismo, final VyberZvyrazneni vyber) {
 		if (vyber.jeNic() || vyber.sektor >= 0 && !kresliSektory()) {
 			return;
@@ -458,7 +458,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 				continue;
 			}
 			final Dimension d = rozmerStitku(g, pismo, z.text[q]);
-			stitkyZvyrazneniKresleni.add(nakresliStitek(g, pismo, z.text[q], z.x[q] + z.ikonaVpravo[q] + mezera, z.y[q] + z.ikonaStredY[q] - d.height / 2, AkcentPlanovace.barva(), true));
+			stitkyZvyrazneniKresleni.add(nakresliStitek(g, pismo, z.text[q], z.x[q] + z.ikonaVlevo[q] - mezera - d.width, z.y[q] + z.ikonaStredY[q] - d.height / 2, AkcentPlanovace.barva(), true));
 		}
 	}
 
@@ -506,7 +506,7 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 			}
 			final String text = t.texty[v.index[q]];
 			final Dimension d = rozmerStitku(g, pismo, text);
-			final Rectangle r = nakresliStitek(g, pismo, text, v.x[q] + v.ikonaVpravo[q] + mezera, v.y[q] + v.ikonaStredY[q] - d.height / 2, AkcentPlanovace.barva(), true);
+			final Rectangle r = nakresliStitek(g, pismo, text, v.x[q] + v.ikonaVlevo[q] - mezera - d.width, v.y[q] + v.ikonaStredY[q] - d.height / 2, AkcentPlanovace.barva(), true);
 			stitkyKandidatuKresleni.add(r);
 			zobrazeno++;
 		}
