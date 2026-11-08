@@ -61,7 +61,7 @@ public class TvarPlanovaceTest {
 		Assert.assertEquals(150, t.vybranySektor);
 		Assert.assertNotNull(t.vybranyPozice);
 		Assert.assertTrue(t.popisVybraneho, t.popisVybraneho.startsWith("Sektor 150° · 1 kandidát"));
-		Assert.assertFalse(t.klin(2000).isEmpty());
+		Assert.assertFalse(t.klinZaOkno(t.vybranySektor, 2000).isEmpty());
 	}
 
 	@Test
@@ -123,5 +123,28 @@ public class TvarPlanovaceTest {
 		Assert.assertEquals(b.yy, a.yy);
 		Assert.assertEquals(PixelyMapy.mou(85, 0).yy, PixelyMapy.mou(89.9, 0).yy);
 		Assert.assertEquals(PixelyMapy.mou(-85, 0).yy, PixelyMapy.mou(-90, 0).yy);
+	}
+
+	@Test
+	public void klinZaOknoJeOdStreduPoCelemOkneAPocetBoduJeOmezeny() {
+		final TvarPlanovace t = TvarPlanovace.z(PrehledChallenge.zeSektoru(sektory(), vysledek(), 50.0, 14.0), null);
+		final Coord blizko = new Coord(14, new Wgs(50.0, 14.0).toMou(), new Dimension(1280, 720), 0);
+		final Coord daleko = new Coord(5, new Wgs(50.0, 14.0).toMou(), new Dimension(1280, 720), 0);
+		final double rBlizko = t.polomerZaOknem(blizko);
+		final double rDaleko = t.polomerZaOknem(daleko);
+		Assert.assertTrue("za rohem okna při zoomu 14: " + rBlizko, rBlizko > 4_000 && rBlizko < 12_000);
+		Assert.assertTrue("při oddálení roste: " + rDaleko, rDaleko > 100 * rBlizko);
+		final List<GeometrieSektoru.Bod> k = t.klinZaOkno(213, rDaleko);
+		Assert.assertEquals("začíná a končí ve středu", 50.0, k.get(0).lat, 1e-9);
+		Assert.assertEquals(50.0, k.get(k.size() - 1).lat, 1e-9);
+		Assert.assertTrue("body nezávisí na vzdálenosti nad pár desítek: " + k.size(), k.size() < 130);
+		double nejdal = 0;
+		for (final GeometrieSektoru.Bod b : k) {
+			nejdal = Math.max(nejdal, Geodezie.vzdalenostKoule(50.0, 14.0, b.lat, b.lon));
+		}
+		Assert.assertEquals("vnější oblouk je ve vzdálenosti za oknem", rDaleko, nejdal, rDaleko * 0.01);
+		Assert.assertTrue(t.klinZaOkno(-1, rDaleko).isEmpty());
+		Assert.assertTrue(t.klinZaOkno(360, rDaleko).isEmpty());
+		Assert.assertTrue(t.klinZaOkno(5, 0).isEmpty());
 	}
 }

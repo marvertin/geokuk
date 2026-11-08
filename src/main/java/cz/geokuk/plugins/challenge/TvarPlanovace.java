@@ -30,10 +30,11 @@ final class TvarPlanovace {
 	final String popisVybraneho;
 	final Mou vybranyPozice;
 	final int vybranySektor;
+	private static final double MAX_KLIN_M = 15_000_000;
+	private static final double KLIN_USEK_M = 25_000;
+	private static final int KLIN_USEKU_MAX = 48;
 	private double polomerPrstence = Double.NaN;
 	private List<GeometrieSektoru.Usek> prstenec;
-	private List<GeometrieSektoru.Bod> klin;
-	private int klinSektor = -1;
 
 	private TvarPlanovace(final PrehledChallenge prehled, final VybranyKandidat vybrany, final java.util.function.BooleanSupplier zruseno) {
 		this.prehled = prehled;
@@ -121,7 +122,6 @@ final class TvarPlanovace {
 	List<GeometrieSektoru.Usek> prstenec(final double polomer) {
 		if (prstenec == null || polomer != polomerPrstence) {
 			polomerPrstence = polomer;
-			klin = null;
 			final Object zdroj = prehled.zdroj();
 			prstenec = stredWgs == null || !(zdroj instanceof VysledekSektoru) ? java.util.Collections.<GeometrieSektoru.Usek>emptyList()
 					: GeometrieSektoru.prstenec((VysledekSektoru) zdroj, stredWgs.lat, stredWgs.lon, polomer, model);
@@ -129,19 +129,39 @@ final class TvarPlanovace {
 		return prstenec;
 	}
 
-	/** Klín vybraného sektoru až k prstenci daného poloměru, nebo prázdný. */
-	List<GeometrieSektoru.Bod> klin(final double polomer) {
-		return klin(vybranySektor, polomer);
+	/** Nejvzdálenější roh okna od středu challenge v metrech s rezervou; klín delší než tohle už v okně nic nepřidá. */
+	double polomerZaOknem(final Coord coord) {
+		if (stredWgs == null) {
+			return 0;
+		}
+		final int w = coord.getWidth();
+		final int h = coord.getHeight();
+		double nejvic = 0;
+		for (final int[] roh : new int[][] { { 0, 0 }, { w, 0 }, { 0, h }, { w, h } }) {
+			final Wgs wgs = coord.transform(new java.awt.Point(roh[0], roh[1])).toWgs();
+			nejvic = Math.max(nejvic, Geodezie.vzdalenostKoule(stredWgs.lat, stredWgs.lon, wgs.lat, wgs.lon));
+		}
+		return Math.min(MAX_KLIN_M, nejvic * 1.15 + 1000);
 	}
 
-	/** Klín sektoru {@code sektor} (0 až 359; záporný = žádný) až k prstenci daného poloměru; pamatuje si poslední. */
-	List<GeometrieSektoru.Bod> klin(final int sektor, final double polomer) {
-		prstenec(polomer);
-		if (klin == null || klinSektor != sektor) {
-			klinSektor = sektor;
-			klin = stredWgs == null || sektor < 0 || sektor > 359 ? java.util.Collections.<GeometrieSektoru.Bod>emptyList()
-					: GeometrieSektoru.klin(stredWgs.lat, stredWgs.lon, sektor, 0, polomer, model);
+	/**
+	 * Klín sektoru od středu až za okraj okna: dva geodetické paprsky po úsecích a oblouk ve vzdálenosti za oknem; sektor 0 až 359, jinak prázdný. Počet bodů nezávisí na zvětšení
+	 * mapy, jen na vzdálenosti za oknem.
+	 */
+	List<GeometrieSektoru.Bod> klinZaOkno(final int sektor, final double polomer) {
+		if (stredWgs == null || sektor < 0 || sektor > 359 || !(polomer > 0)) {
+			return java.util.Collections.<GeometrieSektoru.Bod>emptyList();
 		}
-		return klin;
+		final int useku = Math.max(1, Math.min(KLIN_USEKU_MAX, (int) Math.ceil(polomer / KLIN_USEK_M)));
+		final List<GeometrieSektoru.Bod> body = new java.util.ArrayList<>();
+		for (int i = 0; i <= useku; i++) {
+			body.add(GeometrieSektoru.bod(stredWgs.lat, stredWgs.lon, sektor, polomer * i / useku, model));
+		}
+		final List<GeometrieSektoru.Bod> oblouk = GeometrieSektoru.oblouk(stredWgs.lat, stredWgs.lon, sektor, sektor + 1, polomer, model);
+		body.addAll(oblouk.subList(1, oblouk.size()));
+		for (int i = useku - 1; i >= 0; i--) {
+			body.add(GeometrieSektoru.bod(stredWgs.lat, stredWgs.lon, sektor + 1, polomer * i / useku, model));
+		}
+		return body;
 	}
 }

@@ -457,8 +457,8 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 			if (kryjeVNekterou(misto)) {
 				continue;
 			}
-			final Dimension d = rozmerStitku(g, pismo, z.text[q]);
-			stitkyZvyrazneniKresleni.add(nakresliStitek(g, pismo, z.text[q], z.x[q] + z.ikonaVlevo[q] - mezera - d.width, z.y[q] + z.ikonaStredY[q] - d.height / 2, AkcentPlanovace.barva(), true));
+			final Dimension d = rozmerStitku(g, pismo.deriveFont(Font.BOLD), z.text[q]);
+			stitkyZvyrazneniKresleni.add(nakresliStitekClena(g, pismo, z.text[q], z.x[q] + z.ikonaVlevo[q] - mezera - d.width, z.y[q] + z.ikonaStredY[q] - d.height / 2));
 		}
 	}
 
@@ -562,6 +562,31 @@ public class JPlanovacNadKeskami extends JVrstvaPlanovace {
 			oh[pocetObdelniku] = h;
 			pocetObdelniku++;
 		}
+	}
+
+	/** Plná výplň štítku člena zvýrazněného sektoru nebo políčka; jiná barva než štítky kandidátů, ať je na první pohled vidět, kdo do výběru patří. */
+	static final Color BARVA_CLENA = new Color(0xFFC21A);
+	private static final Color TEXT_CLENA = new Color(0x20190A);
+	/** Tmavý vnější okraj, ať se žlutá výplň neslévá s mapou. */
+	private static final Color OKRAJ_CLENA = new Color(0x4A3000);
+
+	private Rectangle nakresliStitekClena(final Graphics2D g, final Font f, final String text, final int x, final int y) {
+		g.setFont(f.deriveFont(Font.BOLD));
+		final FontMetrics fm = g.getFontMetrics();
+		final int w = fm.stringWidth(text) + 8;
+		final int h = fm.getHeight() + 2;
+		final RoundRectangle2D.Double tvar = new RoundRectangle2D.Double(x, y, w, h, 4, 4);
+		g.setColor(BARVA_CLENA);
+		g.fill(tvar);
+		g.setColor(OKRAJ_CLENA);
+		g.setStroke(new BasicStroke(3.4f));
+		g.draw(tvar);
+		g.setColor(Color.WHITE);
+		g.setStroke(new BasicStroke(1.4f));
+		g.draw(tvar);
+		g.setColor(TEXT_CLENA);
+		g.drawString(text, x + 4, y + 1 + fm.getAscent());
+		return new Rectangle(x, y, w, h);
 	}
 
 	/** Zvýrazněný štítek (kandidát challenge) má výplň v akcentu a bílý text, bez lemu; ostatní štítky barvy a lem tooltipu. */

@@ -1,5 +1,6 @@
 package cz.geokuk.plugins.challenge;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
@@ -248,6 +249,98 @@ public class JPlanovacVybranaKesTest {
 	}
 
 	@Test
+	public void klinMaVidetelnyPasIKdyzJeSektorUzky() throws Exception {
+		zobraz360(250);
+		final Kes vybrana = kesVAzimutu("GC1", 100.5, 2000, 2, 2);
+		nad.setIndexatorKesi(index(vybrana));
+		vyber(vybrana);
+		final Coord c = mapa(14);
+		final BufferedImage img = nakresli(pod, c);
+		final Point osa = naPaprsku(c, 100.5, 150);
+		final Point mimoOsu = new Point(osa.x, osa.y + 3);
+		Assert.assertTrue("pás klínu je široký aspoň několik pixelů, ne jen čára: " + (img.getRGB(mimoOsu.x, mimoOsu.y) >>> 24), (img.getRGB(mimoOsu.x, mimoOsu.y) >>> 24) > 40);
+		Assert.assertTrue("na obě strany", (img.getRGB(osa.x, osa.y - 3) >>> 24) > 40);
+		Assert.assertEquals("a nepokračuje daleko od osy", 0, img.getRGB(osa.x, osa.y + 12) >>> 24);
+	}
+
+	@Test
+	public void klinPokracujeZaKruznicIAzZaOkno() throws Exception {
+		zobraz360(250);
+		final Kes vybrana = kesVAzimutu("GC1", 100.5, 2000, 2, 2);
+		nad.setIndexatorKesi(index(vybrana));
+		vyber(vybrana);
+		final Coord blizko = mapa(14);
+		final BufferedImage img = nakresli(pod, blizko);
+		final Point daleko = naPaprsku(blizko, 100.5, 600);
+		Assert.assertTrue("klín dosahuje k okraji okna i za prstenec (600 px od středu): " + daleko, neprazdneKolem(img, daleko.x, daleko.y));
+		// okno 40 km od středu na ose sektoru: klín prochází oknem, střed ani prstenec v něm nejsou
+		final Wgs okno = new Wgs(STRED_LAT + 40_000 * Math.cos(Math.toRadians(100.5)) / 111_000.0, STRED_LON + 40_000 * Math.sin(Math.toRadians(100.5)) / (111_000.0 * Math.cos(Math.toRadians(STRED_LAT))));
+		final Coord vzdalene = new Coord(14, okno.toMou(), new Dimension(W, H), 0);
+		final BufferedImage img2 = nakresli(pod, vzdalene);
+		Assert.assertTrue("vzdálený klín je v okně vidět na ose", neprazdneKolem(img2, W / 2, H / 2));
+		Assert.assertFalse("a mimo osu ne", neprazdneKolem(img2, W / 2, H / 2 - 100));
+	}
+
+	/** Klín vybraného sektoru 30 km od středu na jeho ose: okno je v něm a střed ani prstenec v okně nejsou; v Mercatorově mapě u pólu je klín široký, tam se jeho šířka nekontroluje. */
+	private void klinSeVidiVOkneNaOse(final double lat, final double lon, final int sektor, final boolean uzky) throws Exception {
+		final GeometrieSektoru.Bod kandidat = GeometrieSektoru.bod(lat, lon, sektor + 0.5, 3000, GeometrieSektoru.Model.KOULE);
+		final BitSet ob = obsazene();
+		ob.clear(sektor);
+		final VysledekSektoru.Kandidati[] poSektorech = new VysledekSektoru.Kandidati[360];
+		poSektorech[sektor] = new VysledekSektoru.Kandidati(sektor);
+		poSektorech[sektor].pridej("GC1", 3000);
+		final List<VysledekSektoru.KandidatKes> kandidati = new ArrayList<>();
+		kandidati.add(new VysledekSektoru.KandidatKes("GC1", kandidat.lat, kandidat.lon, sektor, 3000, false));
+		final Challenge c = model.ulozVlastni(new Challenge("A", Typ.SEKTORY_360, Stred.domov(), OblastDef.zadna(), ZdrojPravidel.PGC));
+		model.aktivuj(c);
+		model.setZapnuto(true);
+		model.nastavVysledek(c, new VysledekSektoru(ob, new BitSet(360), poSektorech, 359, kandidati), lat, lon);
+		SwingUtilities.invokeAndWait(() -> model.setVybranySektor(c, sektor));
+		final GeometrieSektoru.Bod okno = GeometrieSektoru.bod(lat, lon, sektor + 0.5, 30_000, GeometrieSektoru.Model.KOULE);
+		final Coord coord = new Coord(14, new Wgs(okno.lat, okno.lon).toMou(), new Dimension(W, H), 0);
+		final BufferedImage img = nakresli(pod, coord);
+		Assert.assertTrue("klín je v okně na ose: sektor " + sektor + " u " + lat + "," + lon, neprazdneKolem(img, W / 2, H / 2));
+		if (uzky) {
+			Assert.assertFalse("a mimo osu ne", neprazdneKolem(img, W / 2, H / 2 - 150) && neprazdneKolem(img, W / 2, H / 2 + 150));
+		}
+	}
+
+	@Test
+	public void klinPrechazejiciPresAntimeridianSeVidi() throws Exception {
+		klinSeVidiVOkneNaOse(50.0, 179.95, 90, true);
+	}
+
+	@Test
+	public void klinPrechazejiciPresZapadniAntimeridianSeVidi() throws Exception {
+		klinSeVidiVOkneNaOse(50.0, -179.95, 270, true);
+	}
+
+	@Test
+	public void klinBlizkoSeverniemuPoluSeVidi() throws Exception {
+		klinSeVidiVOkneNaOse(84.5, 14.0, 0, false);
+	}
+
+	@Test
+	public void klinPresPolAOddalenaMapaSeNakresliBezVyjimky() throws Exception {
+		klinSeVidiVOkneNaOse(84.5, 14.0, 0, false);
+		for (final int zoom : new int[] { 2, 3, 5, 8 }) {
+			final BufferedImage img = nakresli(pod, new Coord(zoom, new Wgs(84.5, 14.0).toMou(), new Dimension(W, H), 0));
+			int pixelu = 0;
+			for (int y = 0; y < H; y += 2) {
+				for (int x = 0; x < W; x += 2) {
+					pixelu += img.getRGB(x, y) >>> 24 != 0 ? 1 : 0;
+				}
+			}
+			Assert.assertTrue("klín nebo prstenec se u pólu nakreslil, zoom " + zoom + ": " + pixelu, pixelu > 20);
+		}
+	}
+
+	@Test
+	public void klinBlizkoJiznimuPoluSeVidi() throws Exception {
+		klinSeVidiVOkneNaOse(-84.5, 14.0, 180, false);
+	}
+
+	@Test
 	public void stitkyMajiJenKeseVybranehoSektoruVlevoOdIkony() throws Exception {
 		zobraz360(250);
 		final Kes vybrana = kesVAzimutu("GC1", 100.5, 2000, 2, 2);
@@ -363,7 +456,12 @@ public class JPlanovacVybranaKesTest {
 		Assert.assertEquals("D3/T4", model.prehled().stitekPolicka(4, 6));
 		final Point p = PixelyMapy.transform(c, stejna.getMainWpt().getMou(), new Point());
 		final Rectangle r = (nad.obdelnikyStitkuZvyrazneni().get(0).x + nad.obdelnikyStitkuZvyrazneni().get(0).width) == p.x - 10 ? nad.obdelnikyStitkuZvyrazneni().get(0) : nad.obdelnikyStitkuZvyrazneni().get(1);
-		Assert.assertEquals("výplň štítku je akcent", AkcentPlanovace.barva().getRGB(), img.getRGB(r.x + 1, r.y + r.height / 2));
+		Assert.assertEquals("výplň štítku člena je jiná než akcent kandidátů", JPlanovacNadKeskami.BARVA_CLENA.getRGB(), img.getRGB(r.x + 3, r.y + 3));
+		final int okraj = img.getRGB(r.x - 1, r.y + r.height / 2);
+		Assert.assertTrue("štítek člena má tmavý vnější okraj proti žluté mapě: " + Integer.toHexString(okraj), (okraj >>> 24) > 100 && ((okraj >> 16) & 0xff) < 140);
+		final Color a = AkcentPlanovace.barva();
+		final Color m = JPlanovacNadKeskami.BARVA_CLENA;
+		Assert.assertTrue("člen je výrazně jiné barvy než kandidáti", Math.abs(a.getRed() - m.getRed()) + Math.abs(a.getGreen() - m.getGreen()) + Math.abs(a.getBlue() - m.getBlue()) > 250);
 	}
 
 	@Test
