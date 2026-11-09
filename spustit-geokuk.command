@@ -7,7 +7,7 @@ if ! geokuk_java_home=$(/usr/libexec/java_home -v 25 2>/dev/null); then
   exit 1
 fi
 geokuk_java="$geokuk_java_home/bin/java"
-"$geokuk_java" -Xmx2g -jar target/geokuk-5.1.0.jar
+"$geokuk_java" -Xmx2g -jar target/geokuk-5.2.0.jar
 geokuk_status=$?
 if (( geokuk_status != 0 )); then
   print "GeoKuk skončil s chybou ($geokuk_status)."

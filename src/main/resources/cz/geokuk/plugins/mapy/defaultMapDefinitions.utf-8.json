@@ -1,6 +1,6 @@
 [
   {
-    "name": "osm", "ignore": false, "alt": "OSM", "tileUrl": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "name": "osm", "ignore": false, "alt": "OSM", "tileUrl": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     "subdomains": "abc",
     "attribution": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>"
   },
