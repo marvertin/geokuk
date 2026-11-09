@@ -121,13 +121,13 @@ public class KachleZiskavac {
 										pocitDownloadWebError.inc();
 										onImageFailure(t);
 									}
-								});
+								}, MoreExecutors.directExecutor());
 							} else { // v offline režimu nesmíme downloadovat a musíme poslat prázdný obrázek
 								onImageLoaded(downloader.fejkovyObrazek(EPraznyObrazek.OFFLINE));
 							}
 						}
 
-					});
+					}, MoreExecutors.directExecutor());
 				}
 			}
 		}
