@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.EnumMap;
 
 import javax.imageio.ImageIO;
@@ -46,7 +47,14 @@ public class KachloDownloader {
 		// FIXME: Tady by to chtělo vyřešit přesměrování (kódy 3xx).
 		//        Většinou sice stačí jen změnit protokol z http: na https:, ale co s tím prostý uživatel udělá, že.
 		//
-		final DataHoldingInputStream dhis = new DataHoldingInputStream(url.openStream());
+		final URLConnection conn = url.openConnection();
+		final String host = url.getHost();
+		if ("mapy.cz".equalsIgnoreCase(host) || host.toLowerCase(java.util.Locale.ROOT).endsWith(".mapy.cz")) {
+			conn.setRequestProperty("Referer", "https://en.mapy.com/");
+		} else if ("openstreetmap.org".equalsIgnoreCase(host) || host.toLowerCase(java.util.Locale.ROOT).endsWith(".openstreetmap.org")) {
+			conn.setRequestProperty("User-Agent", "Geokuk");
+		}
+		final DataHoldingInputStream dhis = new DataHoldingInputStream(conn.getInputStream());
 		final Image img;
 		try (InputStream stm = new BufferedInputStream(dhis)) {
 			img = ImageIO.read(stm);

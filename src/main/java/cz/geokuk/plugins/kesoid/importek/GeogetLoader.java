@@ -144,7 +144,7 @@ public class GeogetLoader extends Nacitac0 {
 				groundspeak.encodedHints = rs.getString("hint");
 
 				final byte[] shortDescBytes = rs.getBytes("shortdesc");
-				if (shortDescBytes != null) {
+				if (shortDescBytes != null && shortDescBytes.length > 0) {
 					try (InputStream is = new InflaterInputStream(new ByteArrayInputStream(shortDescBytes))) {
 						groundspeak.shortDescription = CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
 					}
